@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Tax
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tax\Model;
 
 class ClassTest extends \PHPUnit_Framework_TestCase
@@ -40,15 +36,20 @@ class ClassTest extends \PHPUnit_Framework_TestCase
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
 
+    /**
+     * @magentoDbIsolation enabled
+     */
     public function testCheckClassCanBeDeletedCustomerClassAssertException()
     {
         /** @var $model \Magento\Tax\Model\ClassModel */
-        $model = $this->_objectManager->create('Magento\Tax\Model\ClassModel')->getCollection()
-            ->setClassTypeFilter(\Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_CUSTOMER)
-            ->getFirstItem();
+        $model = $this->_objectManager->create(
+            'Magento\Tax\Model\ClassModel'
+        )->getCollection()->setClassTypeFilter(
+            \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_CUSTOMER
+        )->getFirstItem();
 
-        $this->setExpectedException('Magento\Core\Exception');
-        $model->checkClassCanBeDeleted();
+        $this->setExpectedException('Magento\Framework\Exception\CouldNotDeleteException');
+        $model->delete();
     }
 
     /**
@@ -57,43 +58,61 @@ class ClassTest extends \PHPUnit_Framework_TestCase
     public function testCheckClassCanBeDeletedProductClassAssertException()
     {
         /** @var $model \Magento\Tax\Model\ClassModel */
-        $model = $this->_objectManager->create('Magento\Tax\Model\ClassModel')->getCollection()
-            ->setClassTypeFilter(\Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_PRODUCT)
-            ->getFirstItem();
+        $model = $this->_objectManager->create(
+            'Magento\Tax\Model\ClassModel'
+        )->getCollection()->setClassTypeFilter(
+            \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_PRODUCT
+        )->getFirstItem();
 
-        $this->_objectManager->create('Magento\Catalog\Model\Product')
-            ->setTypeId('simple')->setAttributeSetId(4)
-            ->setName('Simple Product')->setSku(uniqid())->setPrice(10)
-            ->setMetaTitle('meta title')->setMetaKeyword('meta keyword')->setMetaDescription('meta description')
-            ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
-            ->setStatus(\Magento\Catalog\Model\Product\Status::STATUS_ENABLED)
-            ->setTaxClassId($model->getId())
-            ->save();
+        $this->_objectManager->create(
+            'Magento\Catalog\Model\Product'
+        )->setTypeId(
+            'simple'
+        )->setAttributeSetId(
+            4
+        )->setName(
+            'Simple Product'
+        )->setSku(
+            uniqid()
+        )->setPrice(
+            10
+        )->setMetaTitle(
+            'meta title'
+        )->setMetaKeyword(
+            'meta keyword'
+        )->setMetaDescription(
+            'meta description'
+        )->setVisibility(
+            \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
+        )->setStatus(
+            \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
+        )->setTaxClassId(
+            $model->getId()
+        )->save();
 
-        $this->setExpectedException('Magento\Core\Exception');
-        $model->checkClassCanBeDeleted();
+        $this->setExpectedException('Magento\Framework\Exception\CouldNotDeleteException');
+        $model->delete();
     }
 
     /**
+     * @magentoDbIsolation enabled
      * @dataProvider classesDataProvider
      */
     public function testCheckClassCanBeDeletedPositiveResult($classType)
     {
         /** @var $model \Magento\Tax\Model\ClassModel */
         $model = $this->_objectManager->create('Magento\Tax\Model\ClassModel');
-        $model->setClassName('TaxClass' . uniqid())
-            ->setClassType($classType)
-            ->isObjectNew(true);
+        $model->setClassName('TaxClass' . uniqid())->setClassType($classType)->isObjectNew(true);
         $model->save();
 
-        $this->assertTrue($model->checkClassCanBeDeleted());
+        $model->delete();
     }
 
     public function classesDataProvider()
     {
         return array(
             array(\Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_CUSTOMER),
-            array(\Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_PRODUCT),
+            array(\Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_PRODUCT)
         );
     }
 
@@ -103,18 +122,20 @@ class ClassTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckClassCanBeDeletedCustomerClassUsedInTaxRule()
     {
-        /** @var $registry \Magento\Core\Model\Registry */
-        $registry = $this->_objectManager->get('Magento\Core\Model\Registry');
+        /** @var $registry \Magento\Framework\Registry */
+        $registry = $this->_objectManager->get('Magento\Framework\Registry');
         /** @var $taxRule \Magento\Tax\Model\Calculation\Rule */
         $taxRule = $registry->registry('_fixture/Magento_Tax_Model_Calculation_Rule');
         $customerClasses = $taxRule->getCustomerTaxClasses();
 
         /** @var $model \Magento\Tax\Model\ClassModel */
-        $model = $this->_objectManager->create('Magento\Tax\Model\ClassModel')
-            ->load($customerClasses[0]);
-        $this->setExpectedException('Magento\Core\Exception', 'You cannot delete this tax class because it is used in' .
-            ' Tax Rules. You have to delete the rules it is used in first.');
-        $model->checkClassCanBeDeleted();
+        $model = $this->_objectManager->create('Magento\Tax\Model\ClassModel')->load($customerClasses[0]);
+        $this->setExpectedException(
+            'Magento\Framework\Exception\CouldNotDeleteException',
+            'You cannot delete this tax class because it is used in' .
+            ' Tax Rules. You have to delete the rules it is used in first.'
+        );
+        $model->delete();
     }
 
     /**
@@ -123,17 +144,19 @@ class ClassTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckClassCanBeDeletedProductClassUsedInTaxRule()
     {
-        /** @var $registry \Magento\Core\Model\Registry */
-        $registry = $this->_objectManager->get('Magento\Core\Model\Registry');
+        /** @var $registry \Magento\Framework\Registry */
+        $registry = $this->_objectManager->get('Magento\Framework\Registry');
         /** @var $taxRule \Magento\Tax\Model\Calculation\Rule */
         $taxRule = $registry->registry('_fixture/Magento_Tax_Model_Calculation_Rule');
         $productClasses = $taxRule->getProductTaxClasses();
 
         /** @var $model \Magento\Tax\Model\ClassModel */
-        $model = $this->_objectManager->create('Magento\Tax\Model\ClassModel')
-            ->load($productClasses[0]);
-        $this->setExpectedException('Magento\Core\Exception', 'You cannot delete this tax class because it is used in' .
-            ' Tax Rules. You have to delete the rules it is used in first.');
-        $model->checkClassCanBeDeleted();
+        $model = $this->_objectManager->create('Magento\Tax\Model\ClassModel')->load($productClasses[0]);
+        $this->setExpectedException(
+            'Magento\Framework\Exception\CouldNotDeleteException',
+            'You cannot delete this tax class because it is used in' .
+            ' Tax Rules. You have to delete the rules it is used in first.'
+        );
+        $model->delete();
     }
 }

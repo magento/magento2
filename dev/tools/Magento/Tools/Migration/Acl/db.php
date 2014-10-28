@@ -18,30 +18,30 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category   Tools
- * @package    acl_db
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 $rootDir = realpath(__DIR__ . '/../../../..');
 require $rootDir . '/app/autoload.php';
-\Magento\Autoload\IncludePath::addIncludePath(array($rootDir . '/lib', $rootDir . '/dev'));
+(new \Magento\Framework\Autoload\IncludePath())->addIncludePath(array($rootDir . '/lib', $rootDir . '/dev'));
 $defaultReportFile = 'report.log';
 
 try {
-    $options = new \Zend_Console_Getopt(array(
-        'file=s' => "File containing json encoded acl identifier map (old => new)",
-        'mode|w' => "Application mode.  Preview mode is default. If set to 'write' - database is updated.",
-        'output|f-w' => "Report output type. Report is flushed to console by default."
-        . "If set to 'file', report is written to file /log/report.log",
-        'dbprovider=w' => "Database adapter class name. Default: \Magento\Db\Adapter\Pdo\Mysql",
-        'dbhost=s' => "Database server host",
-        'dbuser=s' => "Database server user",
-        'dbpassword=s' => "Database server password",
-        'dbname=s' => "Database name",
-        'dbtable=s' => "Table containing resource ids",
-    ));
+    $options = new \Zend_Console_Getopt(
+        array(
+            'file=s' => "File containing json encoded acl identifier map (old => new)",
+            'mode|w' => "Application mode.  Preview mode is default. If set to 'write' - database is updated.",
+            'output|f-w' => "Report output type. Report is flushed to console by default." .
+            "If set to 'file', report is written to file /log/report.log",
+            'dbprovider=w' => "Database adapter class name. Default: \Magento\Framework\DB\Adapter\Pdo\Mysql",
+            'dbhost=s' => "Database server host",
+            'dbuser=s' => "Database server user",
+            'dbpassword=s' => "Database server password",
+            'dbname=s' => "Database name",
+            'dbtable=s' => "Table containing resource ids"
+        )
+    );
 
     $fileReader = new \Magento\Tools\Migration\Acl\Db\FileReader();
 
@@ -54,7 +54,7 @@ try {
             'host' => $options->getOption('dbhost'),
             'username' => $options->getOption('dbuser'),
             'password' => $options->getOption('dbpassword'),
-            'dbname' => $options->getOption('dbname'),
+            'dbname' => $options->getOption('dbname')
         ),
         $options->getOption('dbprovider')
     );

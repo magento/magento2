@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_DesignEditor
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,13 +27,12 @@
  */
 namespace Magento\DesignEditor\Block\Adminhtml\Editor\Form;
 
-class Renderer extends \Magento\Backend\Block\Template
-    implements \Magento\Data\Form\Element\Renderer\RendererInterface
+class Renderer extends \Magento\Backend\Block\Template implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {
     /**
      * Form element to render
      *
-     * @var \Magento\Data\Form\Element\AbstractElement
+     * @var \Magento\Framework\Data\Form\Element\AbstractElement
      */
     protected $_element;
 
@@ -49,7 +46,7 @@ class Renderer extends \Magento\Backend\Block\Template
     /**
      * Get element renderer bound to
      *
-     * @return \Magento\Data\Form\Element\AbstractElement
+     * @return \Magento\Framework\Data\Form\Element\AbstractElement
      */
     public function getElement()
     {
@@ -59,10 +56,10 @@ class Renderer extends \Magento\Backend\Block\Template
     /**
      * Render form element as HTML
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
-    public function render(\Magento\Data\Form\Element\AbstractElement $element)
+    public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         $this->_element = $element;
         return $this->toHtml();

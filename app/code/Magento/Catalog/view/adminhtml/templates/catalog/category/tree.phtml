@@ -1,0 +1,538 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<div class="categories-side-col">
+    <div class="sidebar-actions">
+        <?php if ($this->getRoot()): ?>
+            <?php echo $this->getAddRootButtonHtml() ?><br/>
+            <?php echo $this->getAddSubButtonHtml() ?>
+        <?php endif; ?>
+    </div>
+    <div class="tree-actions">
+        <?php if ($this->getRoot()): ?>
+        <?php //echo $this->getCollapseButtonHtml() ?>
+        <?php //echo $this->getExpandButtonHtml() ?>
+        <a href="#"
+           onclick="tree.collapseTree(); return false;"><?php echo __('Collapse All'); ?></a>
+        <span class="separator">|</span> <a href="#"
+                                            onclick="tree.expandTree(); return false;"><?php echo __('Expand All'); ?></a>
+        <?php endif; ?>
+    </div>
+<?php if ($this->getRoot()): ?>
+    <div class="tree-holder">
+        <div id="tree-div" style="width:100%; overflow:auto;"></div>
+    </div>
+</div>
+<div data-id="information-dialog-tree" style="display: none;">
+    <span class="messages"><?php echo __('This operation can take much time'); ?><span>
+</div>
+<script type="text/javascript">
+var tree;
+require(["jquery", "jquery/ui", "prototype", "mage/adminhtml/form", "mage/translate"], function(jQuery){
+
+/**
+ * Fix ext compatibility with prototype 1.6
+ */
+Ext.lib.Event.getTarget = function (e) {
+    var ee = e.browserEvent || e;
+    return ee.target ? Event.element(ee) : null;
+};
+
+Ext.tree.TreePanel.Enhanced = function (el, config) {
+    Ext.tree.TreePanel.Enhanced.superclass.constructor.call(this, el, config);
+};
+
+Ext.extend(Ext.tree.TreePanel.Enhanced, Ext.tree.TreePanel, {
+
+    loadTree:function (config, firstLoad) {
+        var parameters = config['parameters'];
+        var data = config['data'];
+
+        this.storeId = parameters['store_id'];
+
+        if (this.storeId != 0 && $('add_root_category_button')) {
+            $('add_root_category_button').hide();
+        }
+
+        if ((typeof parameters['root_visible']) != 'undefined') {
+            this.rootVisible = parameters['root_visible'] * 1;
+        }
+
+        var root = new Ext.tree.TreeNode(parameters);
+
+        this.nodeHash = {};
+        this.setRootNode(root);
+
+        if (firstLoad) {
+            this.addListener('click', this.categoryClick);
+            this.addListener('beforenodedrop', categoryMove.createDelegate(this));
+        }
+
+        this.loader.buildCategoryTree(root, data);
+        this.el.dom.innerHTML = '';
+        // render the tree
+        this.render();
+        if (parameters['expanded']) {
+            this.expandAll();
+        } else {
+            root.expand();
+        }
+
+        var selectedNode = this.getNodeById(parameters['category_id']);
+        if (selectedNode) {
+            this.currentNodeId = parameters['category_id'];
+        }
+        this.selectCurrentNode();
+
+        // Temporary solution will be replaced after refactoring of tree functionality
+        jQuery('body').off('tabsactivate.tree').on('tabsactivate.tree', jQuery.proxy(function (e, ui) {
+            this.activeTab = jQuery(ui.newTab).find('a').prop('id');
+        }, this))
+    },
+
+    request:function (url, params) {
+        if (!params) {
+            if (this.activeTab) {
+                var params = {active_tab_id:this.activeTab};
+            }
+            else {
+                var params = {};
+            }
+        }
+        if (!params.form_key) {
+            params.form_key = FORM_KEY;
+        }
+        var result = new Ajax.Request(
+                url + (url.match(new RegExp('\\?')) ? '&isAjax=true' : '?isAjax=true' ),
+                {
+                    parameters:params,
+                    method:'post'
+                }
+        );
+
+        return result;
+    },
+
+    selectCurrentNode:function () {
+        if (this.currentNodeId) {
+            var selectedNode = this.getNodeById(this.currentNodeId);
+            if ((typeof selectedNode.attributes.path) != 'undefined') {
+                var path = selectedNode.attributes.path;
+                if (!this.storeId) {
+                    path = '0/' + path;
+                }
+                this.selectPath(path);
+            } else {
+                this.getSelectionModel().select(selectedNode);
+            }
+        }
+    },
+
+    collapseTree:function () {
+        this.collapseAll();
+
+        this.selectCurrentNode();
+
+        if (!this.collapsed) {
+            this.collapsed = true;
+            this.loader.dataUrl = '<?php echo $this->getLoadTreeUrl(false) ?>';
+            this.request(this.loader.dataUrl, false);
+        }
+    },
+
+    expandTree:function () {
+        this.expandAll();
+        if (this.collapsed) {
+            this.collapsed = false;
+            this.loader.dataUrl = '<?php echo $this->getLoadTreeUrl(true) ?>';
+            this.request(this.loader.dataUrl, false);
+        }
+    },
+
+    categoryClick:function (node, e) {
+        var baseUrl = '<?php echo $this->getEditUrl() ?>';
+        var urlExt = (this.storeId ? 'store/' + this.storeId + '/' : '') + 'id/' + node.id + '/';
+        var url = parseSidUrl(baseUrl, urlExt);
+
+        this.currentNodeId = node.id;
+        if (!this.useAjax) {
+            setLocation(url);
+            return;
+        }
+        if (this.activeTab) {
+            var params = {active_tab_id:this.activeTab};
+        }
+        updateContent(url, params);
+    }
+});
+
+function reRenderTree(switcherParams) {
+    // re-render tree by store switcher
+    if (tree && switcherParams) {
+        var url;
+        if (switcherParams.useConfirm) {
+            if (!confirm("<?php echo __('Please confirm site switching. All data that hasn\'t been saved will be lost.') ?>")) {
+                return false;
+            }
+        }
+
+        if ($('add_root_category_button')) {
+            if (!switcherParams.scopeId) {
+                $('add_root_category_button').show();
+            }
+            else {
+                $('add_root_category_button').hide();
+            }
+        }
+
+        if (tree.useAjax) {
+            // retain current selected category id
+            url = tree.switchTreeUrl + switcherParams.scopeParams + 'id/' + tree.currentNodeId + '/';
+            // load from cache
+            // load from ajax
+            // add form key
+            var params = {
+                form_key : FORM_KEY
+            };
+            new Ajax.Request(url + (url.match(new RegExp('\\?')) ? '&isAjax=true' : '?isAjax=true' ), {
+                parameters:params,
+                method:'post',
+                onComplete:function (transport) {
+                    var response = eval('(' + transport.responseText + ')');
+                    if (!response['parameters']) {
+                        return false;
+                    }
+
+                    _renderNewTree(response, switcherParams.scopeParams);
+                }
+            });
+        } else {
+            var baseUrl = '<?php echo $this->getEditUrl() ?>';
+            var urlExt = switcherParams.scopeParams + 'id/' + tree.currentNodeId + '/';
+            url = parseSidUrl(baseUrl, urlExt);
+            setLocation(url);
+        }
+    }
+    // render default tree
+    else {
+        _renderNewTree();
+    }
+}
+
+function _renderNewTree(config, scopeParams) {
+    if (!config) {
+        var config = defaultLoadTreeParams;
+    }
+    if (tree) {
+        tree.purgeListeners();
+        tree.el.dom.innerHTML = '';
+    }
+    tree = new Ext.tree.TreePanel.Enhanced('tree-div', newTreeParams);
+    tree.loadTree(config, true);
+
+    // try to select current category
+    var selectedNode = tree.getNodeById(config.parameters.category_id);
+    if (selectedNode) {
+        tree.currentNodeId = config.parameters.category_id;
+    }
+    tree.selectCurrentNode();
+
+    // update content area
+    var url = tree.editUrl;
+    if (scopeParams) {
+        url = url + scopeParams;
+    }
+    <?php if ($this->isClearEdit()): ?>
+        if (selectedNode) {
+            url = url + 'id/' + config.parameters.category_id;
+        }
+        <?php endif;?>
+    //updateContent(url); //commented since ajax requests replaced with http ones to load a category
+}
+
+Ext.onReady(function () {
+    categoryLoader = new Ext.tree.TreeLoader({
+        dataUrl:'<?php echo $this->getLoadTreeUrl() ?>'
+    });
+
+    categoryLoader.createNode = function (config) {
+        var node;
+        var _node = Object.clone(config);
+        if (config.children && !config.children.length) {
+            delete(config.children);
+            node = new Ext.tree.AsyncTreeNode(config);
+        } else {
+            node = new Ext.tree.TreeNode(config);
+        }
+
+        return node;
+    };
+
+    categoryLoader.buildCategoryTree = function (parent, config) {
+        if (!config) return null;
+
+        if (parent && config && config.length) {
+            for (var i = 0; i < config.length; i++) {
+                var node;
+                var _node = Object.clone(config[i]);
+                if (_node.children && !_node.children.length) {
+                    delete(_node.children);
+                    node = new Ext.tree.AsyncTreeNode(_node);
+                } else {
+                    node = new Ext.tree.TreeNode(config[i]);
+                }
+                parent.appendChild(node);
+                node.loader = node.getOwnerTree().loader;
+                if (_node.children) {
+                    this.buildCategoryTree(node, _node.children);
+                }
+            }
+        }
+    };
+
+    categoryLoader.buildHash = function (node) {
+        var hash = {};
+
+        hash = this.toArray(node.attributes);
+
+        if (node.childNodes.length > 0 || (node.loaded == false && node.loading == false)) {
+            hash['children'] = new Array;
+
+            for (var i = 0, len = node.childNodes.length; i < len; i++) {
+                if (!hash['children']) {
+                    hash['children'] = new Array;
+                }
+                hash['children'].push(this.buildHash(node.childNodes[i]));
+            }
+        }
+
+        return hash;
+    };
+
+    categoryLoader.toArray = function (attributes) {
+        var data = {form_key:FORM_KEY};
+        for (var key in attributes) {
+            var value = attributes[key];
+            data[key] = value;
+        }
+
+        return data;
+    };
+
+    categoryLoader.on("beforeload", function (treeLoader, node) {
+        treeLoader.baseParams.id = node.attributes.id;
+        treeLoader.baseParams.store = node.attributes.store;
+        treeLoader.baseParams.form_key = FORM_KEY;
+    });
+
+    categoryLoader.on("load", function (treeLoader, node, config) {
+        varienWindowOnload();
+    });
+
+    scopeSwitcherHandler = reRenderTree;
+
+    newTreeParams = {
+        animate:false,
+        loader:categoryLoader,
+        enableDD:true,
+        containerScroll:true,
+        selModel:new Ext.tree.CheckNodeMultiSelectionModel(),
+        rootVisible:'<?php echo $this->getRoot()->getIsVisible() ?>',
+        useAjax: <?php echo $this->getUseAjax() ?>,
+        switchTreeUrl:'<?php echo $this->getSwitchTreeUrl() ?>',
+        editUrl:'<?php echo $this->getEditUrl() ?>',
+        currentNodeId: <?php echo (int)$this->getCategoryId() ?>
+    };
+
+    defaultLoadTreeParams = {
+        parameters:{
+            text:'<?php echo htmlentities($this->getRoot()->getName()) ?>',
+            draggable:false,
+        allowDrop   : <?php if ($this->getRoot()->getIsVisible()): ?>true<?php else : ?>false<?php endif; ?>,
+            id: <?php echo (int)$this->getRoot()->getId() ?>,
+            expanded: <?php echo (int)$this->getIsWasExpanded() ?>,
+            store_id: <?php echo (int)$this->getStore()->getId() ?>,
+            category_id: <?php echo (int)$this->getCategoryId() ?>
+        },
+        data: <?php echo $this->getTreeJson() ?>
+    };
+
+    reRenderTree();
+});
+
+function addNew(url, isRoot) {
+    if (isRoot) {
+        tree.currentNodeId = tree.root.id;
+    }
+
+    if (/store\/\d+/.test(url)) {
+        url = url.replace(/store\/\d+/, "store/" + tree.storeId);
+    }
+    else {
+        url += "store/" + tree.storeId + "/";
+    }
+
+    url += 'parent/' + tree.currentNodeId;
+    updateContent(url);
+}
+
+var mageDialog = (function($) {
+    var self = {dialogOpened: false, callback: []};
+
+    self.callback = {ok: [], cancel: []};
+    self.createDialog = function () {
+        var onEvent = function (type, dialog) {
+            self.callback[type].forEach(function(call) {
+                call();
+            });
+            $(dialog).dialog( "close" );
+        };
+        var _resetState = function() {
+            self.dialogOpened = false;
+            self.callback = {ok: [], cancel: []};
+            delete self.dialog;
+        };
+        self.dialog = $('[data-id="information-dialog-category"]').dialog({
+            autoOpen:   false,
+            modal:      true,
+            dialogClass: 'popup-window',
+            resizable: false,
+            title: $.mage.__('Warning message'),
+            buttons: [
+                {text: $.mage.__('Ok'), click: function() { onEvent('ok', this); }},
+                {text: $.mage.__('Cancel'), click: function() { onEvent('cancel', this); } }
+            ],
+            open: function () {
+                self.dialogOpened = true;
+            },
+            close: function(event, ui) {
+                $(this).dialog('destroy');
+                _resetState();
+            }
+        });
+    };
+
+    return {
+        onOk: function(call) {
+            self.callback.ok.push(call);
+            return this;
+        },
+        onCancel: function(call) {
+            self.callback.cancel.push(call);
+            return this;
+        },
+        show: function() {
+            if (self.dialog == undefined) {
+                self.createDialog();
+            }
+            if (self.dialogOpened ==  false) {
+                self.dialog.dialog('open');
+            }
+            return this;
+        }
+    };
+})(jQuery);
+
+function categoryMove(obj) {
+    var data = {id:obj.dropNode.id, form_key:FORM_KEY};
+
+    data.point = obj.point;
+    switch (obj.point) {
+        case 'above' :
+            data.pid = obj.target.parentNode.id;
+            data.paid = obj.dropNode.parentNode.id;
+            if (obj.target.previousSibling) {
+                data.aid = obj.target.previousSibling.id;
+            } else {
+                data.aid = 0;
+            }
+            break;
+        case 'below' :
+            data.pid = obj.target.parentNode.id;
+            data.aid = obj.target.id;
+            break;
+        case 'append' :
+            data.pid = obj.target.id;
+            data.paid = obj.dropNode.parentNode.id;
+            if (obj.target.lastChild) {
+                data.aid = obj.target.lastChild.id;
+            } else {
+                data.aid = 0;
+            }
+            break;
+        default :
+            obj.cancel = true;
+            return obj;
+    }
+
+    var success = function (o) {
+        try {
+            if (o.responseText) {
+                if (o.responseText === 'SUCCESS') {
+                    jQuery(obj.tree.container.dom).trigger('categoryMove.tree');
+                } else {
+                    alert(o.responseText);
+                    location.reload();
+                }
+            }
+        }
+        catch (e) {
+        }
+    };
+
+    var failure = function (o) {
+        if (window.console) {
+            console.log(o.statusText);
+        } else {
+            alert(o.statusText);
+        }
+        location.reload();
+    };
+
+    var pd = [];
+    for (var key in data) {
+        pd.push(encodeURIComponent(key), "=", encodeURIComponent(data[key]), "&");
+    }
+    pd.splice(pd.length - 1, 1);
+    mageDialog.onOk(function() {
+        new Ajax.Request(
+            '<?php echo $this->getMoveUrl() ?>',
+            {
+                method:'POST',
+                parameters:pd.join(""),
+                onSuccess:success,
+                onFailure: failure,
+                onCreate: function() { jQuery('body').loader('show'); },
+                onComplete: function() { jQuery('body').loader('hide'); }
+            }
+        );
+    }).onCancel(function() {
+        reRenderTree();
+    }).show();
+}
+    window.addNew = addNew;
+
+});
+</script>
+<?php endif; ?>

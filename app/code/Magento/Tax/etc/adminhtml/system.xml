@@ -19,13 +19,11 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Tax
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/system_file.xsd">
     <system>
         <section id="tax" translate="label" sortOrder="303" showInDefault="1" showInWebsite="1" showInStore="1">
             <class>separator-top</class>
@@ -36,15 +34,15 @@
                 <label>Tax Classes</label>
                 <field id="shipping_tax_class" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Tax Class for Shipping</label>
-                    <source_model>Magento\Tax\Model\Config\Source\TaxClass\Product</source_model>
+                    <source_model>Magento\Tax\Model\TaxClass\Source\Product</source_model>
                 </field>
                 <field id="default_product_tax_class" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Default Tax Class for Product</label>
-                    <source_model>Magento\Tax\Model\Config\Source\TaxClass\Product</source_model>
+                    <source_model>Magento\Tax\Model\TaxClass\Source\Product</source_model>
                 </field>
                 <field id="default_customer_tax_class" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Default Tax Class for Customer</label>
-                    <source_model>Magento\Tax\Model\Config\Source\TaxClass\Customer</source_model>
+                    <source_model>Magento\Tax\Model\TaxClass\Source\Customer</source_model>
                 </field>
             </group>
             <group id="calculation" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -56,6 +54,7 @@
                 <field id="based_on" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Tax Calculation Based On</label>
                     <source_model>Magento\Tax\Model\Config\Source\Basedon</source_model>
+                    <backend_model>Magento\Tax\Model\Config\Notification</backend_model>
                 </field>
                 <field id="price_includes_tax" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Catalog Prices</label>
@@ -72,15 +71,22 @@
                 <field id="apply_after_discount" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Apply Customer Tax</label>
                     <source_model>Magento\Tax\Model\System\Config\Source\Apply</source_model>
+                    <backend_model>Magento\Tax\Model\Config\Notification</backend_model>
                 </field>
                 <field id="discount_tax" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Apply Discount On Prices</label>
                     <source_model>Magento\Tax\Model\System\Config\Source\PriceType</source_model>
+                    <backend_model>Magento\Tax\Model\Config\Notification</backend_model>
                     <comment>Apply discount on price including tax is calculated based on store tax, if "Apply Tax after Discount" is selected.</comment>
                 </field>
                 <field id="apply_tax_on" translate="label comment" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Apply Tax On</label>
                     <source_model>Magento\Tax\Model\Config\Source\Apply\On</source_model>
+                </field>
+                <field id="cross_border_trade_enabled" translate="label comment" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Enable Cross Border Trade</label>
+                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <comment>When catalog price includes tax, enable this setting will fix the price no matter what the customer's tax rate is.</comment>
                 </field>
             </group>
             <group id="defaults" translate="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -103,10 +109,12 @@
                 <field id="type" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Display Product Prices In Catalog</label>
                     <source_model>Magento\Tax\Model\System\Config\Source\Tax\Display\Type</source_model>
+                    <backend_model>Magento\Tax\Model\Config\Notification</backend_model>
                 </field>
                 <field id="shipping" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Display Shipping Prices</label>
                     <source_model>Magento\Tax\Model\System\Config\Source\Tax\Display\Type</source_model>
+                    <backend_model>Magento\Tax\Model\Config\Notification</backend_model>
                 </field>
             </group>
             <group id="cart_display" translate="label" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -114,14 +122,17 @@
                 <field id="price" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Display Prices</label>
                     <source_model>Magento\Tax\Model\System\Config\Source\Tax\Display\Type</source_model>
+                    <backend_model>Magento\Tax\Model\Config\Notification</backend_model>
                 </field>
                 <field id="subtotal" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Display Subtotal</label>
                     <source_model>Magento\Tax\Model\System\Config\Source\Tax\Display\Type</source_model>
+                    <backend_model>Magento\Tax\Model\Config\Notification</backend_model>
                 </field>
                 <field id="shipping" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Display Shipping Amount</label>
                     <source_model>Magento\Tax\Model\System\Config\Source\Tax\Display\Type</source_model>
+                    <backend_model>Magento\Tax\Model\Config\Notification</backend_model>
                 </field>
                 <field id="grandtotal" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Include Tax In Grand Total</label>
@@ -141,14 +152,17 @@
                 <field id="price" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Display Prices</label>
                     <source_model>Magento\Tax\Model\System\Config\Source\Tax\Display\Type</source_model>
+                    <backend_model>Magento\Tax\Model\Config\Notification</backend_model>
                 </field>
                 <field id="subtotal" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Display Subtotal</label>
                     <source_model>Magento\Tax\Model\System\Config\Source\Tax\Display\Type</source_model>
+                    <backend_model>Magento\Tax\Model\Config\Notification</backend_model>
                 </field>
                 <field id="shipping" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Display Shipping Amount</label>
                     <source_model>Magento\Tax\Model\System\Config\Source\Tax\Display\Type</source_model>
+                    <backend_model>Magento\Tax\Model\Config\Notification</backend_model>
                 </field>
                 <field id="grandtotal" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Include Tax In Grand Total</label>

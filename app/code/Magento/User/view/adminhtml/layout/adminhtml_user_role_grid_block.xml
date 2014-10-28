@@ -23,12 +23,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <referenceBlock name="adminhtml.user.role.container">
         <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.role.grid" as="grid">
             <arguments>
                 <argument name="id" xsi:type="string">roleGrid</argument>
-                <argument name="dataSource" xsi:type="object">Magento\User\Model\Resource\Role\Grid\Collection</argument>
+                <argument name="dataSource" xsi:type="object">Magento\Authorization\Model\Resource\Role\Grid\Collection</argument>
                 <argument name="save_parameters_in_session" xsi:type="string">1</argument>
                 <argument name="default_sort" xsi:type="string">role_id</argument>
                 <argument name="default_dir" xsi:type="string">asc</argument>
@@ -50,9 +50,9 @@
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="role_id">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">ID</argument>
-                        <argument name="width" xsi:type="string">50px</argument>
-                        <argument name="align" xsi:type="string">right</argument>
                         <argument name="index" xsi:type="string">role_id</argument>
+                        <argument name="column_css_class" xsi:type="string">col-id</argument>
+                        <argument name="header_css_class" xsi:type="string">col-id</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="role_name">
@@ -66,4 +66,4 @@
             </block>
         </block>
     </referenceBlock>
-</layout>
+</page>

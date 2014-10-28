@@ -23,14 +23,15 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <update handle="page_one_column"/>
+<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <referenceBlock name="page.main.title">
+        <block class="Magento\Checkout\Block\Onepage\Success" name="checkout.success.print.button" template="button.phtml"/>
         <action method="setPageTitle">
-            <argument translate="true" name="title" xsi:type="string">Your order has been received.</argument>
+            <argument translate="true" name="title" xsi:type="string">Thank you for your purchase!</argument>
         </action>
     </referenceBlock>
     <referenceContainer name="content">
-        <block class="Magento\Checkout\Block\Onepage\Success" name="checkout.success" template="success.phtml"/>
+        <block class="Magento\Checkout\Block\Onepage\Success" name="checkout.success" template="success.phtml" cacheable="false"/>
     </referenceContainer>
-</layout>
+    <container name="order.success.additional.info" label="Order Success Additional Info"/>
+</page>

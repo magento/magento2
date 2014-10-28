@@ -18,21 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Report\Filter\Form;
 
 /**
  * Sales Adminhtml report filter form for coupons report
  *
- * @category   Magento
- * @package    Magento_Sales
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Adminhtml\Report\Filter\Form;
-
 class Coupon extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
 {
     /**
@@ -43,22 +38,24 @@ class Coupon extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
     protected $_renderDependentElement = false;
 
     /**
+     * Rule factory
+     *
      * @var \Magento\SalesRule\Model\Resource\Report\RuleFactory
      */
     protected $_reportRule;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Data\FormFactory $formFactory
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Sales\Model\Order\ConfigFactory $orderConfig
      * @param \Magento\SalesRule\Model\Resource\Report\RuleFactory $reportRule
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Data\FormFactory $formFactory,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Sales\Model\Order\ConfigFactory $orderConfig,
         \Magento\SalesRule\Model\Resource\Report\RuleFactory $reportRule,
         array $data = array()
@@ -70,43 +67,41 @@ class Coupon extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
     /**
      * Prepare form
      *
-     * @return \Magento\Sales\Block\Adminhtml\Report\Filter\Form\Coupon
+     * @return $this
      */
     protected function _prepareForm()
     {
         parent::_prepareForm();
 
-        /** @var \Magento\Data\Form\Element\Fieldset $fieldset */
+        /** @var \Magento\Framework\Data\Form\Element\Fieldset $fieldset */
         $fieldset = $this->getForm()->getElement('base_fieldset');
 
-        if (is_object($fieldset) && $fieldset instanceof \Magento\Data\Form\Element\Fieldset) {
+        if (is_object($fieldset) && $fieldset instanceof \Magento\Framework\Data\Form\Element\Fieldset) {
 
-            $fieldset->addField('price_rule_type', 'select', array(
-                'name'    => 'price_rule_type',
-                'options' => array(
-                    __('Any'),
-                    __('Specified')
-                ),
-                'label'   => __('Shopping Cart Price Rule'),
-            ));
+            $fieldset->addField(
+                'price_rule_type',
+                'select',
+                array(
+                    'name' => 'price_rule_type',
+                    'options' => array(__('Any'), __('Specified')),
+                    'label' => __('Shopping Cart Price Rule')
+                )
+            );
 
             $rulesList = $this->_reportRule->create()->getUniqRulesNamesList();
 
             $rulesListOptions = array();
 
             foreach ($rulesList as $key => $ruleName) {
-                $rulesListOptions[] = array(
-                    'label' => $ruleName,
-                    'value' => $key,
-                    'title' => $ruleName
-                );
+                $rulesListOptions[] = array('label' => $ruleName, 'value' => $key, 'title' => $ruleName);
             }
 
-            $fieldset->addField('rules_list', 'multiselect', array(
-                'name'      => 'rules_list',
-                'values'    => $rulesListOptions,
-                'display'   => 'none'
-            ), 'price_rule_type');
+            $fieldset->addField(
+                'rules_list',
+                'multiselect',
+                array('name' => 'rules_list', 'values' => $rulesListOptions, 'display' => 'none'),
+                'price_rule_type'
+            );
 
             $this->_renderDependentElement = true;
         }
@@ -117,8 +112,8 @@ class Coupon extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
     /**
      * Processing block html after rendering
      *
-     * @param   string $html
-     * @return  string
+     * @param string $html
+     * @return string
      */
     protected function _afterToHtml($html)
     {
@@ -132,12 +127,21 @@ class Coupon extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
              * without core logic changes, that's why the code below was moved inside method '_afterToHtml'.
              */
             /** @var $formAfterBlock \Magento\Backend\Block\Widget\Form\Element\Dependence */
-            $formAfterBlock = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Form\Element\Dependence',
+            $formAfterBlock = $this->getLayout()->createBlock(
+                'Magento\Backend\Block\Widget\Form\Element\Dependence',
                 'adminhtml.block.widget.form.element.dependence'
             );
-            $formAfterBlock->addFieldMap($htmlIdPrefix . 'price_rule_type', 'price_rule_type')
-                ->addFieldMap($htmlIdPrefix . 'rules_list', 'rules_list')
-                ->addFieldDependence('rules_list', 'price_rule_type', '1');
+            $formAfterBlock->addFieldMap(
+                $htmlIdPrefix . 'price_rule_type',
+                'price_rule_type'
+            )->addFieldMap(
+                $htmlIdPrefix . 'rules_list',
+                'rules_list'
+            )->addFieldDependence(
+                'rules_list',
+                'price_rule_type',
+                '1'
+            );
             $html = $html . $formAfterBlock->toHtml();
         }
 

@@ -18,20 +18,17 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Oauth
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Integration\Model\Resource\Oauth;
 
 /**
  * oAuth nonce resource model
  *
  * @author Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Integration\Model\Resource\Oauth;
-
-class Nonce extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Nonce extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Initialize resource model
@@ -55,7 +52,8 @@ class Nonce extends \Magento\Core\Model\Resource\Db\AbstractDb
             $adapter = $this->_getWriteAdapter();
 
             return $adapter->delete(
-                $this->getMainTable(), $adapter->quoteInto('timestamp <= ?', time() - $minutes * 60, \Zend_Db::INT_TYPE)
+                $this->getMainTable(),
+                $adapter->quoteInto('timestamp <= ?', time() - $minutes * 60, \Zend_Db::INT_TYPE)
             );
         } else {
             return 0;
@@ -72,9 +70,15 @@ class Nonce extends \Magento\Core\Model\Resource\Db\AbstractDb
     public function selectByCompositeKey($nonce, $consumerId)
     {
         $adapter = $this->_getReadAdapter();
-        $select = $adapter->select()
-            ->from($this->getMainTable())
-            ->where('nonce = ?', $nonce)->where('consumer_id = ?', $consumerId);
+        $select = $adapter->select()->from(
+            $this->getMainTable()
+        )->where(
+            'nonce = ?',
+            $nonce
+        )->where(
+            'consumer_id = ?',
+            $consumerId
+        );
         $row = $adapter->fetchRow($select);
         return $row ? $row : array();
     }

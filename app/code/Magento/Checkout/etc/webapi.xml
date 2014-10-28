@@ -1,0 +1,172 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../app/code/Magento/Webapi/etc/webapi.xsd">
+    <route url="/V1/carts/" method="POST">
+        <service class="Magento\Checkout\Service\V1\Cart\WriteServiceInterface" method="create"/>
+        <resources>
+            <resource ref="Magento_Sales::create" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId" method="PUT">
+        <service class="Magento\Checkout\Service\V1\Cart\WriteServiceInterface" method="assignCustomer"/>
+        <resources>
+            <resource ref="Magento_Sales::create" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/items" method="GET">
+        <service class="Magento\Checkout\Service\V1\Item\ReadServiceInterface" method="getList"/>
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/items" method="POST">
+        <service class="Magento\Checkout\Service\V1\Item\WriteServiceInterface" method="addItem"/>
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/items/:itemId" method="PUT">
+        <service class="Magento\Checkout\Service\V1\Item\WriteServiceInterface" method="updateItem"/>
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/items/:itemId" method="DELETE">
+        <service class="Magento\Checkout\Service\V1\Item\WriteServiceInterface" method="removeItem"/>
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId" method="GET">
+        <service class="Magento\Checkout\Service\V1\Cart\ReadServiceInterface" method="getCart"/>
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+        </resources>
+    </route>
+    <route url="/V1/customer/:customerId/cart" method="GET">
+        <service class="Magento\Checkout\Service\V1\Cart\ReadServiceInterface" method="getCartForCustomer"/>
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+        </resources>
+    </route>
+    <route url="/V1/carts" method="PUT">
+        <service class="Magento\Checkout\Service\V1\Cart\ReadServiceInterface" method="getCartList"/>
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/shipping-address" method="GET">
+        <service class="Magento\Checkout\Service\V1\Address\Shipping\ReadServiceInterface" method="getAddress"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/shipping-address" method="POST">
+        <service class="Magento\Checkout\Service\V1\Address\Shipping\WriteServiceInterface" method="setAddress"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/billing-address" method="GET">
+        <service class="Magento\Checkout\Service\V1\Address\Billing\ReadServiceInterface" method="getAddress"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/billing-address" method="POST">
+        <service class="Magento\Checkout\Service\V1\Address\Billing\WriteServiceInterface" method="setAddress"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/selected-shipping-method" method="PUT">
+        <service class="Magento\Checkout\Service\V1\ShippingMethod\WriteServiceInterface" method="setMethod"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/selected-shipping-method" method="GET">
+        <service class="Magento\Checkout\Service\V1\ShippingMethod\ReadServiceInterface" method="getMethod"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/shipping-methods" method="GET">
+        <service class="Magento\Checkout\Service\V1\ShippingMethod\ReadServiceInterface" method="getList"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/coupons" method="GET">
+        <service class="Magento\Checkout\Service\V1\Coupon\ReadServiceInterface" method="get"/>
+        <resources>
+            <resource ref="Magento_SalesRule::quote" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/coupons" method="PUT">
+        <service class="Magento\Checkout\Service\V1\Coupon\WriteServiceInterface" method="set"/>
+        <resources>
+            <resource ref="Magento_SalesRule::quote" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/coupons" method="DELETE">
+        <service class="Magento\Checkout\Service\V1\Coupon\WriteServiceInterface" method="delete"/>
+        <resources>
+            <resource ref="Magento_SalesRule::quote" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/selected-payment-methods" method="GET">
+        <service class="Magento\Checkout\Service\V1\PaymentMethod\ReadServiceInterface" method="getPayment"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/selected-payment-methods" method="PUT">
+        <service class="Magento\Checkout\Service\V1\PaymentMethod\WriteServiceInterface" method="set"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/payment-methods" method="GET">
+        <service class="Magento\Checkout\Service\V1\PaymentMethod\ReadServiceInterface" method="getList"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/totals" method="GET">
+        <service class="Magento\Checkout\Service\V1\Cart\TotalsServiceInterface" method="getTotals"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/order" method="PUT">
+        <service class="Magento\Checkout\Service\V1\Cart\WriteServiceInterface" method="order"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+</routes>

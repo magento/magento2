@@ -23,28 +23,41 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
-    <type name="Magento\Catalog\Model\Session">
-        <param name="sessionName">
-            <value>frontend</value>
-        </param>
-    </type>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <type name="Magento\Catalog\Model\Resource\Category\Collection">
-        <param name="fetchStrategy">
-            <instance type="Magento\Data\Collection\Db\FetchStrategy\Cache" />
-        </param>
+        <arguments>
+            <argument name="fetchStrategy" xsi:type="object">Magento\Framework\Data\Collection\Db\FetchStrategy\Cache</argument>
+        </arguments>
     </type>
     <type name="Magento\Sales\Model\Convert\Quote">
         <plugin name="copy_quote_files_to_order" type="Magento\Catalog\Model\Plugin\QuoteItemProductOption"/>
     </type>
-    <virtualType name="compareProductInitSession" type="Magento\Core\App\Action\Plugin\Session">
-        <param name="cookieCheckActions">
-            <value>
-                <compareProductAdd>add</compareProductAdd>
-            </value>
-        </param>
+    <type name="Magento\Catalog\Model\Indexer\AbstractFlatState">
+        <arguments>
+            <argument name="isAvailable" xsi:type="boolean">true</argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Catalog\Block\ShortcutButtons\InCatalog" type="Magento\Catalog\Block\ShortcutButtons">
+        <arguments>
+            <argument name="isCatalogProduct" xsi:type="boolean">true</argument>
+        </arguments>
     </virtualType>
-    <type name="Magento\Catalog\Controller\Product\Compare">
-        <plugin name="sessionInitializer" type="compareProductInitSession" />
+    <virtualType name="Magento\Catalog\Block\ShortcutButtons\InCatalog\PositionAfter" type="Magento\Catalog\Block\ShortcutButtons">
+        <arguments>
+            <argument name="isCatalogProduct" xsi:type="boolean">true</argument>
+            <argument name="orPosition" xsi:type="const">Magento\Catalog\Block\ShortcutButtons::POSITION_AFTER</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Catalog\Model\Indexer\Product\Flat\State">
+        <arguments>
+            <argument name="isAvailable" xsi:type="boolean">true</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Action\Action">
+        <plugin name="catalog-app-action-dispatchController-context-plugin" type="Magento\Catalog\Model\App\Action\ContextPlugin" sortOrder="10"/>
+    </type>
+    <type name="Magento\Framework\View\Layout">
+        <plugin name="catalog-session-depersonalize"
+                type="Magento\Catalog\Model\Layout\DepersonalizePlugin" sortOrder="10"/>
     </type>
 </config>

@@ -1,0 +1,183 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/**
+ * Install configuration template
+ *
+ * @see \Magento\Install\Block\Config
+ * @var $this \Magento\Install\Block\Config
+ */
+?>
+<div class="page-head">
+    <h3><?php echo __('Configuration') ?></h3>
+</div>
+<?php echo $this->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
+<?php if ($this->getInstaller()->getServerCheckStatus()): ?>
+<form action="<?php echo $this->getPostUrl() ?>" method="post" id="form-validate">
+
+    <!--    database connection    -->
+    <?php echo $this->getLayout()->getBlock('database')->toHtml() ?>
+
+    <fieldset class="group-select">
+        <legend><?php echo __('Web access options') ?></legend>
+        <h4 class="legend"><?php echo __('Web access options') ?></h4>
+        <ul>
+            <li>
+                <label for="base_url"><?php echo __('Base URL') ?> <span class="required">*</span></label><br/>
+                <input type="text" name="config[unsecure_base_url]" id="base_url"
+                       value="<?php echo $this->getFormData()->getUnsecureBaseUrl() ?>"
+                       title="<?php echo __('Base URL') ?>" data-validate="{required:true,'validate-url':true}"
+                       class="input-text"/>
+            </li>
+            <li>
+                <label for="backend_frontname"><?php echo __('Admin Path') ?> <span
+                    class="required">*</span></label><br/>
+                <input type="text" name="config[backend_frontname]" id="backend_frontname"
+                       value="<?php echo $this->getFormData()->getBackendFrontname() ?>"
+                       title="<?php echo __('Admin Path') ?>" data-validate="{required:true,'validate-data':true}"
+                       class="input-text"/>
+
+                <p style="margin-top:4px; line-height:1.3em; color:#666;">
+                    <small><?php echo __('This is the additional path used after your base URL to access your store Admin (e.g, Admin).') ?></small>
+                </p>
+            </li>
+            <li>
+                <input type="checkbox" name="config[enable_charts]" id="enable_charts"
+                       value="1" <?php if ($this->getFormData()->getEnableCharts()): ?>checked="checked"<?php endif; ?> />
+                <label for="enable_charts"><?php echo __('Enable Charts') ?></label><br/>
+
+                <p style="margin-top:4px; line-height:1.3em; color:#666;">
+                    <small><?php echo __('Enable this option if you want to see the charts on your dashboard.') ?></small>
+                </p>
+            </li>
+            <li>
+                <input type="checkbox" name="skip_base_url_validation" id="skip_base_url_validation"
+                       value="1" <?php if ($this->getSkipBaseUrlValidation()): ?>checked="checked"<?php endif; ?> />
+                <label
+                    for="skip_base_url_validation"><?php echo __('Skip Base URL Validation Before the Next Step') ?></label><br/>
+
+                <p style="margin-top:4px; line-height:1.3em; color:#666;">
+                    <small><?php echo __('Check this box only if it is not possible to automatically validate the Base URL.') ?></small>
+                </p>
+            </li>
+            <li>
+                <input type="checkbox" name="config[use_rewrites]" id="use_rewrites"
+                       value="1" <?php if ($this->getFormData()->getUseRewrites()): ?>checked="checked"<?php endif; ?> />
+                <label for="use_rewrites"><?php echo __('Use Web Server (Apache) Rewrites') ?></label><br/>
+
+                <p style="margin-top:4px; line-height:1.3em; color:#666;">
+                    <small>
+                        <?php echo __('You could enable this option to use web server rewrites functionality for improved Search Engine Optimization.') ?>
+                        <br/>
+                        <strong><?php echo __('Please make sure that <code>mod_rewrite</code> is enabled in Apache configuration.') ?></strong>
+                    </small>
+                </p>
+            </li>
+            <li>
+                <input type="checkbox" name="config[use_secure]" id="use_secure"
+                       value="1" <?php if ($this->getFormData()->getUseSecure()): ?>checked="checked"<?php endif ?> />
+                <label for="use_secure"><?php echo __('Use Secure URLs (SSL)') ?></label><br/>
+
+                <p style="margin-top:4px; line-height:1.3em; color:#666;">
+                    <small><?php echo __('Enable this option only if you have SSL available.') ?></small>
+                </p>
+            </li>
+        </ul>
+        <ul id="use_secure_options" <?php if (!$this->getFormData()->getUseSecure()): ?>style="display:none"<?php endif ?>>
+            <li>
+                <label for="secure_base_url"><?php echo __('Secure Base URL') ?> <span class="required">*</span></label><br/>
+                <input type="text" name="config[secure_base_url]" id="secure_base_url"
+                       value="<?php echo $this->getFormData()->getSecureBaseUrl() ?>"
+                       title="<?php echo __('Secure Base URL') ?>"
+                       data-validate="{required:true,'validate-url':true}" class="input-text"/>
+
+                <p style="margin-top:4px; line-height:1.3em; color:#666;">
+                    <small><?php echo __('Provide a complete base URL for SSL connection. For example: %1.', '<strong>https://www.mydomain.com/magento/</strong>') ?></small>
+                </p>
+            </li>
+            <li>
+                <input type="checkbox" name="config[use_secure_admin]" id="use_secure_admin"
+                       value="1" <?php if ($this->getFormData()->getUseSecureAdmin()): ?>checked="checked"<?php endif; ?> />
+                <label for="use_secure_admin"><?php echo __('Run admin interface with SSL') ?></label><br/>
+            </li>
+            <li>
+                <input type="checkbox" name="skip_url_validation" id="skip_url_validation"
+                       value="1" <?php if ($this->getSkipUrlValidation()): ?>checked="checked"<?php endif; ?> />
+                <label
+                    for="skip_url_validation"><?php echo __('Skip Secure URL validation before next step') ?></label><br/>
+
+                <p style="margin-top:4px; line-height:1.3em; color:#666;">
+                    <small><?php echo __('Check this box only if it is not possible to automatically validate Secure URL, for example if HTTP authentication is required.') ?></small>
+                </p>
+            </li>
+        </ul>
+    </fieldset>
+
+    <fieldset class="group-select">
+        <legend><?php echo __('Session Storage Options') ?></legend>
+        <h4 class="legend"><?php echo __('Session Storage Options') ?></h4>
+        <ul>
+            <li>
+                <div class="input-box">
+                    <label for="password"><?php echo __('Save Session Data In') ?></label><br/>
+                    <?php echo $this->getSessionSaveSelect() ?>
+                </div>
+            </li>
+        </ul>
+    </fieldset>
+
+    <div class="button-set">
+        <p class="required">* <?php echo __('Required Fields') ?></p>
+        <button class="form-button" type="submit"><span><?php echo __('Continue') ?></span></button>
+    </div>
+</form>
+<script type="text/javascript">
+require([
+    "jquery",
+    "Magento_Install/js/install"
+], function($){
+
+    $.mage.install.configureForm('#form-validate', '#use_secure', '#use_secure_options');
+
+});
+</script>
+<?php else: ?>
+<div><?php echo __('Please set all required settings before clicking "Continue".') ?></div>
+<div class="button-set">
+    <button id="btn-continue" class="form-button" type="button">
+        <span><?php echo __('Continue') ?></span></button>
+    <script type="text/javascript">
+require([
+    "jquery",
+    "Magento_Install/js/install"
+], function($){
+
+    $.mage.install.configureContinue(
+        '#btn-continue', '<?php echo $this->getUrl('*/*/*', array('_current' => true)) ?>'
+    );
+
+});
+</script>
+</div>
+<?php endif; ?>

@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -39,11 +36,13 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $layer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('\Magento\Catalog\Model\Layer\Category');
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Catalog\Model\Layer\Filter\Item', array(
             'data' => array(
                 'filter' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Layer\Filter\Category'),
+            ->create('Magento\Catalog\Model\Layer\Filter\Category', array('layer' => $layer)),
                 'value'  => array('valuePart1', 'valuePart2'),
             )
         ));
@@ -57,13 +56,14 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Core\Exception
+     * @expectedException \Magento\Framework\Model\Exception
      */
     public function testGetFilterException()
     {
         /** @var $model \Magento\Catalog\Model\Layer\Filter\Item */
-        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Layer\Filter\Item');
+        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Layer\Filter\Item'
+        );
         $model->getFilter();
     }
 
@@ -77,11 +77,12 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         /** @var $request \Magento\TestFramework\Request */
         $request = $objectManager->get('Magento\TestFramework\Request');
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\App\Action\Action',
+            'Magento\Framework\App\Action\Action',
             array(
                 'request' => $request,
-                'response' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                    ->get('Magento\TestFramework\Response'),
+                'response' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                    'Magento\TestFramework\Response'
+                )
             )
         );
         $this->assertStringEndsWith('/?cat%5B0%5D=valuePart1&cat%5B1%5D=valuePart2', $this->_model->getUrl());
@@ -95,20 +96,22 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $request \Magento\TestFramework\Request */
-        $request = $objectManager->create('Magento\App\RequestInterface');
+        $request = $objectManager->create('Magento\Framework\App\RequestInterface');
 
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\RequestInterface')
-            ->setRoutingInfo(array(
-                'requested_route'      => 'x',
-                'requested_controller' => 'y',
-                'requested_action'     => 'z',
-            ));
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\App\RequestInterface'
+        )->setRoutingInfo(
+            array('requested_route' => 'x', 'requested_controller' => 'y', 'requested_action' => 'z')
+        );
 
         $request->setParam('cat', 4);
         $this->_model->getFilter()->apply(
             $request,
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-                ->createBlock('Magento\View\Element\Text')
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                'Magento\Framework\View\LayoutInterface'
+            )->createBlock(
+                'Magento\Framework\View\Element\Text'
+            )
         );
 
         $this->assertStringEndsWith('/x/y/z/?cat=3', $this->_model->getRemoveUrl());

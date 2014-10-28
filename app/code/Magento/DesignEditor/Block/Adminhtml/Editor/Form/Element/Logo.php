@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_DesignEditor
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,8 +27,7 @@
  */
 namespace Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element;
 
-class Logo
-    extends \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Composite\AbstractComposite
+class Logo extends \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Composite\AbstractComposite
 {
     /**
      * Control type
@@ -40,22 +37,20 @@ class Logo
     /**
      * Add form elements
      *
-     * @return \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Logo
+     * @return $this
      */
     protected function _addFields()
     {
         $uploaderData = $this->getComponent('logo-uploader');
-        $uploaderTitle = $this->_escape(sprintf('%s {%s: url(%s)}',
-            $uploaderData['selector'],
-            $uploaderData['attribute'],
-            $uploaderData['value']
-        ));
+        $uploaderTitle = $this->_escape(
+            sprintf('%s {%s: url(%s)}', $uploaderData['selector'], $uploaderData['attribute'], $uploaderData['value'])
+        );
         $uploaderId = $this->getComponentId('logo-uploader');
-        $this->addField($uploaderId, 'logo-uploader', array(
-            'name'     => $uploaderId,
-            'title'    => $uploaderTitle,
-            'label'    => null
-        ));
+        $this->addField(
+            $uploaderId,
+            'logo-uploader',
+            array('name' => $uploaderId, 'title' => $uploaderTitle, 'label' => null)
+        );
 
         return $this;
     }
@@ -63,7 +58,7 @@ class Logo
     /**
      * Add element types used in composite font element
      *
-     * @return \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Logo
+     * @return $this
      */
     protected function _addElementTypes()
     {

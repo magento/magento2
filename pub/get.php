@@ -20,11 +20,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category   Magento
- * @package    Magento
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
+use Magento\Framework\App\Cache\Frontend\Factory;
+use Magento\Framework\Module\Declaration\Reader\Filesystem;
 
 require dirname(__DIR__) . '/app/bootstrap.php';
 
@@ -68,7 +69,10 @@ if ($mediaDirectory) {
     }
 
     if (is_readable($request->getFilePath())) {
-        $transfer = new \Magento\File\Transfer\Adapter\Http();
+        $transfer = new \Magento\Framework\File\Transfer\Adapter\Http(
+            new \Magento\Framework\Controller\Response\Http,
+            new \Magento\Framework\File\Mime
+        );
         $transfer->send($request->getFilePath());
         exit;
     }
@@ -76,16 +80,20 @@ if ($mediaDirectory) {
 // Materialize file in application
 $params = $_SERVER;
 if (empty($mediaDirectory)) {
-    $params[\Magento\Core\Model\App::PARAM_ALLOWED_MODULES] = array('Magento_Core');
-    $params[\Magento\Core\Model\App::PARAM_CACHE_OPTIONS]['frontend_options']['disable_save'] = true;
+    $params[Filesystem::PARAM_ALLOWED_MODULES] = ['Magento_Core'];
+    $params[Factory::PARAM_CACHE_FORCED_OPTIONS] = ['frontend_options' => ['disable_save' => true]];
 }
-
-$entryPoint = new \Magento\App\EntryPoint\EntryPoint(dirname(__DIR__), $params);
-$entryPoint->run('Magento\Core\App\Media', array(
-    'request' => $request,
-    'workingDirectory' => __DIR__,
-    'mediaDirectory' => $mediaDirectory,
-    'configCacheFile' => $configCacheFile,
-    'isAllowed' => $isAllowed,
-    'relativeFileName' => $relativeFilename,
-));
+$bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $params);
+/** @var \Magento\Core\App\Media $app */
+$app = $bootstrap->createApplication(
+    'Magento\Core\App\Media',
+    [
+        'request' => $request,
+        'workingDirectory' => __DIR__,
+        'mediaDirectory' => $mediaDirectory,
+        'configCacheFile' => $configCacheFile,
+        'isAllowed' => $isAllowed,
+        'relativeFileName' => $relativeFilename,
+    ]
+);
+$bootstrap->run($app);

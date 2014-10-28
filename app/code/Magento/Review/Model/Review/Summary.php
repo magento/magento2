@@ -18,30 +18,28 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Review
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Review\Model\Review;
 
 /**
  * Review summary
+ *
+ * @codeCoverageIgnore
  */
-
-namespace Magento\Review\Model\Review;
-
-class Summary extends \Magento\Core\Model\AbstractModel
+class Summary extends \Magento\Framework\Model\AbstractModel
 {
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Review\Model\Resource\Review\Summary $resource
      * @param \Magento\Review\Model\Resource\Review\Summary\Collection $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\Review\Model\Resource\Review\Summary $resource,
         \Magento\Review\Model\Resource\Review\Summary\Collection $resourceCollection,
         array $data = array()
@@ -49,16 +47,31 @@ class Summary extends \Magento\Core\Model\AbstractModel
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
+    /**
+     * Get entity primary key value
+     *
+     * @return int
+     */
     public function getEntityPkValue()
     {
         return $this->_getData('entity_pk_value');
     }
 
+    /**
+     * Get rating summary data
+     *
+     * @return string
+     */
     public function getRatingSummary()
     {
         return $this->_getData('rating_summary');
     }
 
+    /**
+     * Get count of reviews
+     *
+     * @return int
+     */
     public function getReviewsCount()
     {
         return $this->_getData('reviews_count');

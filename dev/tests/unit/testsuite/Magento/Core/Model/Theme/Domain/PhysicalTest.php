@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -35,15 +32,10 @@ class PhysicalTest extends \PHPUnit_Framework_TestCase
     public function testCreateVirtualTheme()
     {
         $physicalTheme = $this->getMock('Magento\Core\Model\Theme', array('__wakeup'), array(), '', false, false);
-        $physicalTheme->setData(array(
-            'parent_id' => 10,
-            'theme_title' => 'Test Theme'
-        ));
+        $physicalTheme->setData(array('parent_id' => 10, 'theme_title' => 'Test Theme'));
 
         $copyService = $this->getMock('Magento\Theme\Model\CopyService', array('copy'), array(), '', false, false);
-        $copyService->expects($this->once())
-            ->method('copy')
-            ->will($this->returnValue($copyService));
+        $copyService->expects($this->once())->method('copy')->will($this->returnValue($copyService));
 
         $virtualTheme = $this->getMock(
             'Magento\Core\Model\Theme',
@@ -53,47 +45,40 @@ class PhysicalTest extends \PHPUnit_Framework_TestCase
             false,
             false
         );
-        $virtualTheme->expects($this->once())
-            ->method('getThemeImage')
-            ->will($this->returnValue($virtualTheme));
+        $virtualTheme->expects($this->once())->method('getThemeImage')->will($this->returnValue($virtualTheme));
 
-        $virtualTheme->expects($this->once())
-            ->method('createPreviewImageCopy')
-            ->will($this->returnValue($virtualTheme));
+        $virtualTheme->expects(
+            $this->once()
+        )->method(
+            'createPreviewImageCopy'
+        )->will(
+            $this->returnValue($virtualTheme)
+        );
 
-        $virtualTheme->expects($this->once())
-            ->method('save')
-            ->will($this->returnValue($virtualTheme));
+        $virtualTheme->expects($this->once())->method('save')->will($this->returnValue($virtualTheme));
 
         $themeFactory = $this->getMock('Magento\Core\Model\ThemeFactory', array('create'), array(), '', false, false);
-        $themeFactory->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($virtualTheme));
+        $themeFactory->expects($this->once())->method('create')->will($this->returnValue($virtualTheme));
 
         $themeCollection = $this->getMock(
             'Magento\Core\Model\Resource\Theme\Collection',
             array('addTypeFilter', 'addAreaFilter', 'addFilter', 'count'),
-            array(), '', false, false
+            array(),
+            '',
+            false,
+            false
         );
 
-        $themeCollection->expects($this->any())
-            ->method('addTypeFilter')
-            ->will($this->returnValue($themeCollection));
+        $themeCollection->expects($this->any())->method('addTypeFilter')->will($this->returnValue($themeCollection));
 
-        $themeCollection->expects($this->any())
-            ->method('addAreaFilter')
-            ->will($this->returnValue($themeCollection));
+        $themeCollection->expects($this->any())->method('addAreaFilter')->will($this->returnValue($themeCollection));
 
-        $themeCollection->expects($this->any())
-            ->method('addFilter')
-            ->will($this->returnValue($themeCollection));
+        $themeCollection->expects($this->any())->method('addFilter')->will($this->returnValue($themeCollection));
 
-        $themeCollection->expects($this->once())
-            ->method('count')
-            ->will($this->returnValue(1));
+        $themeCollection->expects($this->once())->method('count')->will($this->returnValue(1));
 
         $domainModel = new \Magento\Core\Model\Theme\Domain\Physical(
-            $this->getMock('Magento\View\Design\ThemeInterface', array(), array(), '', false, false),
+            $this->getMock('Magento\Framework\View\Design\ThemeInterface', array(), array(), '', false, false),
             $themeFactory,
             $copyService,
             $themeCollection

@@ -18,22 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Backend\Block\System\Cache;
 
 /**
  * Cache management form page
  *
- * @category    Magento
- * @package     Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backend\Block\System\Cache;
-
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
@@ -42,16 +36,16 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_coreData;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Data\FormFactory $formFactory
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Data\FormFactory $formFactory
+     * @param \Magento\Core\Helper\Data $coreData
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Data\FormFactory $formFactory,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Core\Helper\Data $coreData,
         array $data = array()
     ) {
@@ -62,36 +56,42 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Initialize cache management form
      *
-     * @return \Magento\Backend\Block\System\Cache\Form
+     * @return $this
      */
     public function initForm()
     {
-        /** @var \Magento\Data\Form $form */
+        /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
 
-        $fieldset = $form->addFieldset('cache_enable', array(
-            'legend' => __('Cache Control')
-        ));
+        $fieldset = $form->addFieldset('cache_enable', array('legend' => __('Cache Control')));
 
-        $fieldset->addField('all_cache', 'select', array(
-            'name'=>'all_cache',
-            'label'=>'<strong>'.__('All Cache').'</strong>',
-            'value'=>1,
-            'options'=>array(
-                '' => __('No change'),
-                'refresh' => __('Refresh'),
-                'disable' => __('Disable'),
-                'enable' => __('Enable'),
-            ),
-        ));
+        $fieldset->addField(
+            'all_cache',
+            'select',
+            array(
+                'name' => 'all_cache',
+                'label' => '<strong>' . __('All Cache') . '</strong>',
+                'value' => 1,
+                'options' => array(
+                    '' => __('No change'),
+                    'refresh' => __('Refresh'),
+                    'disable' => __('Disable'),
+                    'enable' => __('Enable')
+                )
+            )
+        );
 
         foreach ($this->_coreData->getCacheTypes() as $type => $label) {
-            $fieldset->addField('enable_'.$type, 'checkbox', array(
-                'name'    => 'enable['.$type.']',
-                'label'   => __($label),
-                'value'   => 1,
-                'checked' => (int)$this->_cacheState->isEnabled($type),
-            ));
+            $fieldset->addField(
+                'enable_' . $type,
+                'checkbox',
+                array(
+                    'name' => 'enable[' . $type . ']',
+                    'label' => __($label),
+                    'value' => 1,
+                    'checked' => (int)$this->_cacheState->isEnabled($type)
+                )
+            );
         }
         $this->setForm($form);
         return $this;

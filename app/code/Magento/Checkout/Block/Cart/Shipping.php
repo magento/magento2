@@ -18,13 +18,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Checkout
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Checkout\Block\Cart;
+
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
 {
@@ -53,42 +52,49 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
     protected $_directoryBlock;
 
     /**
-     * @var \Magento\Tax\Helper\Data
+     * @var \Magento\Sales\Model\Quote\Address\CarrierFactoryInterface
      */
-    protected $_taxHelper;
+    protected $_carrierFactory;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Catalog\Helper\Data $catalogData
+     * @var PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Directory\Block\Data $directoryBlock
-     * @param \Magento\Tax\Helper\Data $taxHelper
+     * @param \Magento\Sales\Model\Quote\Address\CarrierFactoryInterface $carrierFactory
+     * @param PriceCurrencyInterface $priceCurrency
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Catalog\Helper\Data $catalogData,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Directory\Block\Data $directoryBlock,
-        \Magento\Tax\Helper\Data $taxHelper,
+        \Magento\Sales\Model\Quote\Address\CarrierFactoryInterface $carrierFactory,
+        PriceCurrencyInterface $priceCurrency,
         array $data = array()
     ) {
-        $this->_taxHelper = $taxHelper;
+        $this->priceCurrency = $priceCurrency;
         $this->_directoryBlock = $directoryBlock;
-        parent::__construct($context, $catalogData, $customerSession, $checkoutSession, $data);
+        $this->_carrierFactory = $carrierFactory;
+        parent::__construct($context, $customerSession, $checkoutSession, $data);
+        $this->_isScopePrivate = true;
     }
 
     /**
      * Get config
      *
      * @param string $path
-     * @return mixed
+     * @return string|null
      */
     public function getConfig($path)
     {
-        return $this->_storeConfig->getConfig($path);
+        return $this->_scopeConfig->getValue($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
     /**
@@ -130,11 +136,15 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      * Get Carrier Name
      *
      * @param string $carrierCode
-     * @return mixed
+     * @return string
      */
     public function getCarrierName($carrierCode)
     {
-        if ($name = $this->_storeConfig->getConfig('carriers/'.$carrierCode.'/title')) {
+        if ($name = $this->_scopeConfig->getValue(
+            'carriers/' . $carrierCode . '/title',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        )
+        ) {
             return $name;
         }
         return $carrierCode;
@@ -207,20 +217,17 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      */
     public function getCityActive()
     {
-        return (bool)$this->_storeConfig->getConfig('carriers/dhl/active')
-            || (bool)$this->_storeConfig->getConfig('carriers/dhlint/active');
+        return false;
     }
 
     /**
-     * Show State in Shipping Estimation
+     * Show State in Shipping Estimation. Result updated using plugins
      *
      * @return bool
      */
     public function getStateActive()
     {
-        return (bool)$this->_storeConfig->getConfig('carriers/dhl/active')
-            || (bool)$this->_storeConfig->getConfig('carriers/tablerate/active')
-            || (bool)$this->_storeConfig->getConfig('carriers/dhlint/active');
+        return false;
     }
 
     /**
@@ -231,24 +238,12 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      */
     public function formatPrice($price)
     {
-        return $this->getQuote()->getStore()->convertPrice($price, true);
-    }
-
-    /**
-     * Get Shipping Price
-     *
-     * @param float $price
-     * @param bool $flag
-     * @return float
-     */
-    public function getShippingPrice($price, $flag)
-    {
-        return $this->formatPrice($this->_taxHelper->getShippingPrice(
+        return $this->priceCurrency->convertAndFormat(
             $price,
-            $flag,
-            $this->getAddress(),
-            $this->getQuote()->getCustomerTaxClassId()
-        ));
+            true,
+            PriceCurrencyInterface::DEFAULT_PRECISION,
+            $this->getQuote()->getStore()
+        );
     }
 
     /**
@@ -264,7 +259,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
             foreach ($this->_rates as $rateGroup) {
                 if (!empty($rateGroup)) {
                     foreach ($rateGroup as $rate) {
-                        $this->_carriers[] = $rate->getCarrierInstance();
+                        $this->_carriers[] = $this->_carrierFactory->get($rate->getCarrier());
                     }
                 }
             }
@@ -315,5 +310,19 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
             }
         }
         return false;
+    }
+
+    /**
+     * Get shipping price html
+     *
+     * @param \Magento\Sales\Model\Quote\Address\Rate $shippingRate
+     * @return string
+     */
+    public function getShippingPriceHtml(\Magento\Sales\Model\Quote\Address\Rate $shippingRate)
+    {
+        /** @var \Magento\Checkout\Block\Shipping\Price $block */
+        $block = $this->getLayout()->getBlock('checkout.shipping.price');
+        $block->setShippingRate($shippingRate);
+        return $block->toHtml();
     }
 }

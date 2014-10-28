@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Adminhtml
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,13 +25,11 @@
 /**
  * Adminhtml JavaScript helper
  *
- * @category   Magento
- * @package    Magento_Adminhtml
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Backend\Helper;
 
-class Js extends \Magento\Core\Helper\Js
+class Js
 {
     /**
      * Decode serialized grid data
@@ -55,10 +51,10 @@ class Js extends \Magento\Core\Helper\Js
      */
     public function decodeGridSerializedInput($encoded)
     {
-        $isSimplified = (false === strpos($encoded, '='));
+        $isSimplified = false === strpos($encoded, '=');
         $result = array();
         parse_str($encoded, $decoded);
-        foreach($decoded as $key => $value) {
+        foreach ($decoded as $key => $value) {
             if (is_numeric($key)) {
                 if ($isSimplified) {
                     $result[] = $key;

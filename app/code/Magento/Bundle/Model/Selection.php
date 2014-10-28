@@ -18,17 +18,14 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Bundle
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Bundle\Model;
 
 /**
  * Bundle Selection Model
  *
- * @method \Magento\Bundle\Model\Resource\Selection _getResource()
- * @method \Magento\Bundle\Model\Resource\Selection getResource()
  * @method int getOptionId()
  * @method \Magento\Bundle\Model\Selection setOptionId(int $value)
  * @method int getParentProductId()
@@ -47,36 +44,30 @@
  * @method \Magento\Bundle\Model\Selection setSelectionQty(float $value)
  * @method int getSelectionCanChangeQty()
  * @method \Magento\Bundle\Model\Selection setSelectionCanChangeQty(int $value)
- *
- * @category    Magento
- * @package     Magento_Bundle
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Bundle\Model;
-
-class Selection extends \Magento\Core\Model\AbstractModel
+class Selection extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * Catalog data
      *
      * @var \Magento\Catalog\Helper\Data
      */
-    protected $_catalogData = null;
+    protected $_catalogData;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Bundle\Model\Resource\Selection $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Bundle\Model\Resource\Selection $resource,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_catalogData = $catalogData;
@@ -85,6 +76,8 @@ class Selection extends \Magento\Core\Model\AbstractModel
 
     /**
      * Initialize resource model
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -95,9 +88,9 @@ class Selection extends \Magento\Core\Model\AbstractModel
     /**
      * Processing object before save data
      *
-     * @return \Magento\Bundle\Model\Selection
+     * @return $this
      */
-    protected function _beforeSave()
+    protected function _afterSave()
     {
         if (!$this->_catalogData->isPriceGlobal() && $this->getWebsiteId()) {
             $this->getResource()->saveSelectionPrice($this);
@@ -107,6 +100,6 @@ class Selection extends \Magento\Core\Model\AbstractModel
                 $this->unsSelectionPriceType();
             }
         }
-        parent::_beforeSave();
+        parent::_afterSave();
     }
 }

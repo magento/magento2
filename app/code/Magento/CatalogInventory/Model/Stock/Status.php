@@ -18,34 +18,39 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_CatalogInventory
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\CatalogInventory\Model\Stock;
+
+use Magento\CatalogInventory\Model\Stock;
+use Magento\Catalog\Model\Product\Type\AbstractType;
+use Magento\Catalog\Model\Product\Type;
+use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 
 /**
  * CatalogInventory Stock Status per website Model
  *
- * @method \Magento\CatalogInventory\Model\Resource\Stock\Status _getResource()
- * @method \Magento\CatalogInventory\Model\Resource\Stock\Status getResource()
  * @method int getProductId()
- * @method \Magento\CatalogInventory\Model\Stock\Status setProductId(int $value)
+ * @method Status setProductId(int $value)
  * @method int getWebsiteId()
- * @method \Magento\CatalogInventory\Model\Stock\Status setWebsiteId(int $value)
+ * @method Status setWebsiteId(int $value)
  * @method int getStockId()
- * @method \Magento\CatalogInventory\Model\Stock\Status setStockId(int $value)
+ * @method Status setStockId(int $value)
  * @method float getQty()
- * @method \Magento\CatalogInventory\Model\Stock\Status setQty(float $value)
+ * @method Status setQty(float $value)
  * @method int getStockStatus()
- * @method \Magento\CatalogInventory\Model\Stock\Status setStockStatus(int $value)
+ * @method Status setStockStatus(int $value)
  */
-namespace Magento\CatalogInventory\Model\Stock;
-
-class Status extends \Magento\Core\Model\AbstractModel
+class Status extends \Magento\Framework\Model\AbstractModel
 {
-    const STATUS_OUT_OF_STOCK       = 0;
-    const STATUS_IN_STOCK           = 1;
+    /**#@+
+     * Stock Status values
+     */
+    const STATUS_OUT_OF_STOCK = 0;
+
+    const STATUS_IN_STOCK = 1;
+    /**#@-*/
 
     /**
      * Product Type Instances cache
@@ -69,55 +74,52 @@ class Status extends \Magento\Core\Model\AbstractModel
     protected $_catalogInventoryData;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Type
+     * @var Type
      */
     protected $_productType;
 
     /**
      * Store model manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * Stock item factory
      *
-     * @var \Magento\CatalogInventory\Model\Stock\ItemFactory
+     * @var ItemFactory
      */
     protected $_stockItemFactory;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Catalog\Model\Product\Type $productType
-     * @param \Magento\Catalog\Model\Product\Status $productStatus
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param Type $productType
      * @param \Magento\Catalog\Model\Product\Website $productWebsite
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\CatalogInventory\Model\Stock\ItemFactory $stockItemFactory
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param ItemFactory $stockItemFactory
      * @param \Magento\CatalogInventory\Helper\Data $catalogInventoryData
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Catalog\Model\Product\Type $productType,
-        \Magento\Catalog\Model\Product\Status $productStatus,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        Type $productType,
         \Magento\Catalog\Model\Product\Website $productWebsite,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\CatalogInventory\Model\Stock\ItemFactory $stockItemFactory,
+        \Magento\Framework\StoreManagerInterface $storeManager,
+        ItemFactory $stockItemFactory,
         \Magento\CatalogInventory\Helper\Data $catalogInventoryData,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
 
         $this->_catalogInventoryData = $catalogInventoryData;
         $this->_productType = $productType;
-        $this->_productStatus = $productStatus;
         $this->_productWebsite = $productWebsite;
         $this->_storeManager = $storeManager;
         $this->_stockItemFactory = $stockItemFactory;
@@ -126,6 +128,7 @@ class Status extends \Magento\Core\Model\AbstractModel
     /**
      * Init resource model
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -141,7 +144,7 @@ class Status extends \Magento\Core\Model\AbstractModel
     public function getProductTypeInstances()
     {
         if (empty($this->_productTypes)) {
-            $productEmulator     = new \Magento\Object();
+            $productEmulator = new \Magento\Framework\Object();
 
             foreach (array_keys($this->_productType->getTypes()) as $typeId) {
                 $productEmulator->setTypeId($typeId);
@@ -155,7 +158,7 @@ class Status extends \Magento\Core\Model\AbstractModel
      * Retrieve Product Type Instance By Product Type
      *
      * @param string $productType
-     * @return \Magento\Catalog\Model\Product\Type\AbstractType
+     * @return AbstractType|bool
      */
     public function getProductTypeInstance($productType)
     {
@@ -169,12 +172,15 @@ class Status extends \Magento\Core\Model\AbstractModel
     /**
      * Retrieve website models
      *
+     * @param int|null $websiteId
      * @return array
      */
     public function getWebsites($websiteId = null)
     {
         if (is_null($this->_websites)) {
-            $this->_websites = $this->getResource()->getWebsiteStores();
+            /** @var \Magento\CatalogInventory\Model\Resource\Stock\Status $resource */
+            $resource = $this->getResource();
+            $this->_websites = $resource->getWebsiteStores();
         }
 
         $websites = $this->_websites;
@@ -186,65 +192,21 @@ class Status extends \Magento\Core\Model\AbstractModel
     }
 
     /**
-     * Retrieve Default website store Id
-     *
-     * @param int $websiteId
-     * @return int
-     */
-    public function getWebsiteDefaultStoreId($websiteId)
-    {
-        $websites = $this->getWebsites();
-        if (isset($websites[$websiteId])) {
-            return $websites[$websiteId];
-        }
-        return 0;
-    }
-
-    /**
-     * Retrieve Product Status Enabled Constant
-     *
-     * @return int
-     */
-    public function getProductStatusEnabled()
-    {
-        return \Magento\Catalog\Model\Product\Status::STATUS_ENABLED;
-    }
-
-    /**
-     * Change Stock Item status process
-     *
-     * @param \Magento\CatalogInventory\Model\Stock\Item $item
-     * @return \Magento\CatalogInventory\Model\Stock\Status
-     */
-    public function changeItemStatus(\Magento\CatalogInventory\Model\Stock\Item $item)
-    {
-        $productId  = $item->getProductId();
-        if (!$productType = $item->getProductTypeId()) {
-            $productType    = $this->getProductType($productId);
-        }
-
-        $status     = (int)$item->getIsInStock();
-        $qty        = (int)$item->getQty();
-
-        $this->_processChildren($productId, $productType, $qty, $status, $item->getStockId());
-        $this->_processParents($productId, $item->getStockId());
-
-        return $this;
-    }
-
-    /**
      * Assign Stock Status to Product
      *
      * @param \Magento\Catalog\Model\Product $product
      * @param int $stockId
      * @param int $stockStatus
-     * @return \Magento\CatalogInventory\Model\Stock\Status
+     * @return $this
      */
-    public function assignProduct(\Magento\Catalog\Model\Product $product, $stockId = 1, $stockStatus = null)
-    {
+    public function assignProduct(
+        \Magento\Catalog\Model\Product $product,
+        $stockId = Stock::DEFAULT_STOCK_ID,
+        $stockStatus = null
+    ) {
         if (is_null($stockStatus)) {
             $websiteId = $product->getStore()->getWebsiteId();
-            $status = $this->getProductStatus($product->getId(), $websiteId, $stockId);
+            $status = $this->getProductStockStatus($product->getId(), $websiteId, $stockId);
             $stockStatus = isset($status[$product->getId()]) ? $status[$product->getId()] : null;
         }
 
@@ -257,13 +219,15 @@ class Status extends \Magento\Core\Model\AbstractModel
      * Rebuild stock status for all products
      *
      * @param int $websiteId
-     * @return \Magento\CatalogInventory\Model\Stock\Status
+     * @return $this
      */
     public function rebuild($websiteId = null)
     {
         $lastProductId = 0;
         while (true) {
-            $productCollection = $this->getResource()->getProductCollection($lastProductId);
+            /** @var \Magento\CatalogInventory\Model\Resource\Stock\Status $resource */
+            $resource = $this->getResource();
+            $productCollection = $resource->getProductCollection($lastProductId);
             if (!$productCollection) {
                 break;
             }
@@ -283,7 +247,7 @@ class Status extends \Magento\Core\Model\AbstractModel
      * @param int $productId
      * @param string $productType
      * @param int $websiteId
-     * @return \Magento\CatalogInventory\Model\Stock\Status
+     * @return $this
      */
     public function updateStatus($productId, $productType = null, $websiteId = null)
     {
@@ -291,14 +255,14 @@ class Status extends \Magento\Core\Model\AbstractModel
             $productType = $this->getProductType($productId);
         }
 
-        /** @var \Magento\CatalogInventory\Model\Stock\Item $item */
+        /** @var Item $item */
         $item = $this->_stockItemFactory->create()->loadByProduct($productId);
 
-        $status  = self::STATUS_IN_STOCK;
-        $qty     = 0;
+        $status = self::STATUS_IN_STOCK;
+        $qty = 0;
         if ($item->getId()) {
             $status = $item->getIsInStock();
-            $qty    = $item->getQty();
+            $qty = $item->getQty();
         }
 
         $this->_processChildren($productId, $productType, $qty, $status, $item->getStockId(), $websiteId);
@@ -316,15 +280,14 @@ class Status extends \Magento\Core\Model\AbstractModel
      * @param int $status
      * @param int $stockId
      * @param int $websiteId
-     *
-     * @return \Magento\CatalogInventory\Model\Stock\Status
+     * @return $this
      */
     protected function _processChildren(
         $productId,
         $productType,
         $qty = 0,
         $status = self::STATUS_IN_STOCK,
-        $stockId = 1,
+        $stockId = Stock::DEFAULT_STOCK_ID,
         $websiteId = null
     ) {
         if ($status == self::STATUS_OUT_OF_STOCK) {
@@ -332,15 +295,16 @@ class Status extends \Magento\Core\Model\AbstractModel
             return $this;
         }
 
-        $statuses   = array();
-        $websites   = $this->getWebsites($websiteId);
+        $statuses = array();
+        $websites = $this->getWebsites($websiteId);
 
         foreach (array_keys($websites) as $websiteId) {
-            /* @var $website \Magento\Core\Model\Website */
+            /* @var $website \Magento\Store\Model\Website */
             $statuses[$websiteId] = $status;
         }
 
-        if (!$typeInstance = $this->getProductTypeInstance($productType)) {
+        $typeInstance = $this->getProductTypeInstance($productType);
+        if (!$typeInstance) {
             return $this;
         }
 
@@ -352,26 +316,25 @@ class Status extends \Magento\Core\Model\AbstractModel
             }
             $childrenWebsites = $this->_productWebsite->getWebsites($childrenIds);
             foreach ($websites as $websiteId => $storeId) {
-                $childrenStatus = $this->_productStatus->getProductStatus($childrenIds, $storeId);
-                $childrenStock  = $this->getProductStatus($childrenIds, $websiteId, $stockId);
-
+                $childrenStatus = $this->getProductStatus($childrenIds, $storeId);
+                $childrenStock = $this->getProductStockStatus($childrenIds, $websiteId, $stockId);
                 $websiteStatus = $statuses[$websiteId];
                 foreach ($requiredChildrenIds as $groupedChildrenIds) {
                     $optionStatus = false;
                     foreach ($groupedChildrenIds as $childId) {
                         if (isset($childrenStatus[$childId])
-                            and isset($childrenWebsites[$childId])
-                            and in_array($websiteId, $childrenWebsites[$childId])
-                            and $childrenStatus[$childId] == $this->getProductStatusEnabled()
-                            and isset($childrenStock[$childId])
-                            and $childrenStock[$childId] == self::STATUS_IN_STOCK
+                            && isset($childrenWebsites[$childId])
+                            && in_array($websiteId, $childrenWebsites[$childId])
+                            && $childrenStatus[$childId] == ProductStatus::STATUS_ENABLED
+                            && isset($childrenStock[$childId])
+                            && $childrenStock[$childId] == self::STATUS_IN_STOCK
                         ) {
                             $optionStatus = true;
                         }
                     }
                     $websiteStatus = $websiteStatus && $optionStatus;
                 }
-                $statuses[$websiteId] = (int)$websiteStatus;
+                $statuses[$websiteId] = (int) $websiteStatus;
             }
         }
 
@@ -388,13 +351,13 @@ class Status extends \Magento\Core\Model\AbstractModel
      * @param int $productId
      * @param int $stockId
      * @param int $websiteId
-     * @return \Magento\CatalogInventory\Model\Stock\Status
+     * @return $this
      */
-    protected function _processParents($productId, $stockId = 1, $websiteId = null)
+    protected function _processParents($productId, $stockId = Stock::DEFAULT_STOCK_ID, $websiteId = null)
     {
         $parentIds = array();
         foreach ($this->getProductTypeInstances() as $typeInstance) {
-            /* @var $typeInstance \Magento\Catalog\Model\Product\Type\AbstractType */
+            /* @var $typeInstance AbstractType */
             $parentIds = array_merge($parentIds, $typeInstance->getParentIdsByChild($productId));
         }
 
@@ -403,19 +366,17 @@ class Status extends \Magento\Core\Model\AbstractModel
         }
 
         $productTypes = $this->getProductsType($parentIds);
-        /** @var \Magento\CatalogInventory\Model\Stock\Item $item */
+        /** @var Item $item */
         $item = $this->_stockItemFactory->create();
 
         foreach ($parentIds as $parentId) {
             $parentType = isset($productTypes[$parentId]) ? $productTypes[$parentId] : null;
-            $item->setData(array('stock_id' => $stockId))
-                ->setOrigData()
-                ->loadByProduct($parentId);
-            $status  = self::STATUS_IN_STOCK;
-            $qty     = 0;
+            $item->setData(array('stock_id' => $stockId))->setOrigData()->loadByProduct($parentId);
+            $status = self::STATUS_IN_STOCK;
+            $qty = 0;
             if ($item->getId()) {
                 $status = $item->getIsInStock();
-                $qty    = $item->getQty();
+                $qty = $item->getQty();
             }
 
             $this->_processChildren($parentId, $parentType, $qty, $status, $item->getStockId(), $websiteId);
@@ -433,38 +394,48 @@ class Status extends \Magento\Core\Model\AbstractModel
      * @param int $qty
      * @param int $stockId
      * @param int|null $websiteId
-     * @return \Magento\CatalogInventory\Model\Stock\Status
+     * @return $this
      */
-    public function saveProductStatus($productId, $status, $qty = 0, $stockId = 1, $websiteId = null)
-    {
-        $this->getResource()->saveProductStatus($this, $productId, $status, $qty, $stockId, $websiteId);
+    public function saveProductStatus(
+        $productId,
+        $status,
+        $qty = 0,
+        $stockId = Stock::DEFAULT_STOCK_ID,
+        $websiteId = null
+    ) {
+        /** @var \Magento\CatalogInventory\Model\Resource\Stock\Status $resource */
+        $resource = $this->getResource();
+        $resource->saveProductStatus($this, $productId, $status, $qty, $stockId, $websiteId);
         return $this;
+    }
+
+    /**
+     * Retrieve Product(s) stock status
+     *
+     * @param int[] $productIds
+     * @param int $websiteId
+     * @param int $stockId
+     * @return array
+     */
+    public function getProductStockStatus($productIds, $websiteId, $stockId = Stock::DEFAULT_STOCK_ID)
+    {
+        /** @var \Magento\CatalogInventory\Model\Resource\Stock\Status $resource */
+        $resource = $this->getResource();
+        return $resource->getProductStockStatus($productIds, $websiteId, $stockId);
     }
 
     /**
      * Retrieve Product(s) status
      *
-     * @param int|array $productIds
-     * @param int $websiteId
-     * @param int $stockId
+     * @param int|int[] $productIds
+     * @param int $storeId
      * @return array
      */
-    public function getProductStatus($productIds, $websiteId, $stockId = 1)
+    public function getProductStatus($productIds, $storeId = null)
     {
-        return $this->getResource()->getProductStatus($productIds, $websiteId, $stockId);
-    }
-
-    /**
-     * Retrieve Product(s) Data array
-     *
-     * @param int|array $productIds
-     * @param int $websiteId
-     * @param int $stockId
-     * @return array
-     */
-    public function getProductData($productIds, $websiteId, $stockId = 1)
-    {
-        return $this->getResource()->getProductData($productIds, $websiteId, $stockId);
+        /** @var \Magento\CatalogInventory\Model\Resource\Stock\Status $resource */
+        $resource = $this->getResource();
+        return $resource->getProductStatus($productIds, $storeId);
     }
 
     /**
@@ -475,7 +446,9 @@ class Status extends \Magento\Core\Model\AbstractModel
      */
     public function getProductType($productId)
     {
-        $types = $this->getResource()->getProductsType($productId);
+        /** @var \Magento\CatalogInventory\Model\Resource\Stock\Status $resource */
+        $resource = $this->getResource();
+        $types = $resource->getProductsType($productId);
         if (isset($types[$productId])) {
             return $types[$productId];
         }
@@ -491,7 +464,9 @@ class Status extends \Magento\Core\Model\AbstractModel
      */
     public function getProductsType($productIds)
     {
-        return $this->getResource()->getProductsType($productIds);
+        /** @var \Magento\CatalogInventory\Model\Resource\Stock\Status $resource */
+        $resource = $this->getResource();
+        return $resource->getProductsType($productIds);
     }
 
     /**
@@ -500,16 +475,16 @@ class Status extends \Magento\Core\Model\AbstractModel
      * @param   \Magento\Catalog\Model\Resource\Product\Collection $productCollection
      * @param   int|null $websiteId
      * @param   int|null $stockId
-     * @return  \Magento\CatalogInventory\Model\Stock\Status
+     * @return  $this
      */
     public function addStockStatusToProducts($productCollection, $websiteId = null, $stockId = null)
     {
         if ($stockId === null) {
-            $stockId = \Magento\CatalogInventory\Model\Stock::DEFAULT_STOCK_ID;
+            $stockId = Stock::DEFAULT_STOCK_ID;
         }
         if ($websiteId === null) {
             $websiteId = $this->_storeManager->getStore()->getWebsiteId();
-            if ((int)$websiteId == 0 && $productCollection->getStoreId()) {
+            if ((int) $websiteId == 0 && $productCollection->getStoreId()) {
                 $websiteId = $this->_storeManager->getStore($productCollection->getStoreId())->getWebsiteId();
             }
         }
@@ -519,18 +494,12 @@ class Status extends \Magento\Core\Model\AbstractModel
         }
 
         if (!empty($productIds)) {
-            $stockStatuses = $this->_getResource()->getProductStatus($productIds, $websiteId, $stockId);
+            $stockStatuses = $this->getProductStockStatus($productIds, $websiteId, $stockId);
             foreach ($stockStatuses as $productId => $status) {
                 if ($product = $productCollection->getItemById($productId)) {
                     $product->setIsSalable($status);
                 }
             }
-        }
-
-        /* back compatible stock item */
-        foreach ($productCollection as $product) {
-            $object = new \Magento\Object(array('is_in_stock' => $product->getData('is_salable')));
-            $product->setStockItem($object);
         }
 
         return $this;
@@ -539,32 +508,14 @@ class Status extends \Magento\Core\Model\AbstractModel
     /**
      * Add stock status to prepare index select
      *
-     * @param \Magento\DB\Select $select
-     * @param \Magento\Core\Model\Website $website
-     * @return \Magento\CatalogInventory\Model\Stock\Status
+     * @param \Magento\Framework\DB\Select $select
+     * @param \Magento\Store\Model\Website $website
+     * @return $this
      */
-    public function addStockStatusToSelect(\Magento\DB\Select $select, \Magento\Core\Model\Website $website)
+    public function addStockStatusToSelect(\Magento\Framework\DB\Select $select, \Magento\Store\Model\Website $website)
     {
-        $this->_getResource()->addStockStatusToSelect($select, $website);
-        return $this;
-    }
-
-    /**
-     * Add stock status limitation to catalog product price index select object
-     *
-     * @param \Magento\DB\Select $select
-     * @param string|Zend_Db_Expr $entityField
-     * @param string|Zend_Db_Expr $websiteField
-     * @return \Magento\CatalogInventory\Model\Stock\Status
-     */
-    public function prepareCatalogProductIndexSelect(\Magento\DB\Select $select, $entityField, $websiteField)
-    {
-        if ($this->_catalogInventoryData->isShowOutOfStock()) {
-            return $this;
-        }
-
-        $this->_getResource()->prepareCatalogProductIndexSelect($select, $entityField, $websiteField);
-
+        $resource = $this->_getResource();
+        $resource->addStockStatusToSelect($select, $website);
         return $this;
     }
 
@@ -572,11 +523,12 @@ class Status extends \Magento\Core\Model\AbstractModel
      * Add only is in stock products filter to product collection
      *
      * @param \Magento\Catalog\Model\Resource\Product\Collection $collection
-     * @return \Magento\CatalogInventory\Model\Stock\Status
+     * @return $this
      */
     public function addIsInStockFilterToCollection($collection)
     {
-        $this->_getResource()->addIsInStockFilterToCollection($collection);
+        $resource = $this->_getResource();
+        $resource->addIsInStockFilterToCollection($collection);
         return $this;
     }
 
@@ -585,17 +537,11 @@ class Status extends \Magento\Core\Model\AbstractModel
      *
      * @return array
      */
-    static public function getAllOptions()
+    public static function getAllOptions()
     {
         return array(
-            array(
-                'value' => \Magento\CatalogInventory\Model\Stock::STOCK_IN_STOCK,
-                'label' => __('In Stock'),
-            ),
-            array(
-                'value' => \Magento\CatalogInventory\Model\Stock::STOCK_OUT_OF_STOCK,
-                'label' => __('Out of Stock')
-            ),
+            array('value' => Stock::STOCK_IN_STOCK, 'label' => __('In Stock')),
+            array('value' => Stock::STOCK_OUT_OF_STOCK, 'label' => __('Out of Stock'))
         );
     }
 }

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Widget\Model;
 
 class NamespaceResolver
@@ -34,14 +33,14 @@ class NamespaceResolver
     protected $_moduleNamespaces;
 
     /**
-     * @var \Magento\Module\ModuleListInterface
+     * @var \Magento\Framework\Module\ModuleListInterface
      */
     protected $_moduleList;
 
     /**
-     * @param \Magento\Module\ModuleListInterface $moduleList
+     * @param \Magento\Framework\Module\ModuleListInterface $moduleList
      */
-    public function __construct(\Magento\Module\ModuleListInterface $moduleList)
+    public function __construct(\Magento\Framework\Module\ModuleListInterface $moduleList)
     {
         $this->_moduleList = $moduleList;
     }
@@ -65,8 +64,10 @@ class NamespaceResolver
             }
         }
 
-        $explodeString = (strpos($name, \Magento\Autoload\IncludePath::NS_SEPARATOR) === false) ?
-            '_' :  \Magento\Autoload\IncludePath::NS_SEPARATOR;
+        $explodeString = strpos(
+            $name,
+            \Magento\Framework\Autoload\IncludePath::NS_SEPARATOR
+        ) === false ? '_' : \Magento\Framework\Autoload\IncludePath::NS_SEPARATOR;
         $name = explode($explodeString, strtolower($name));
 
         $partsNum = count($name);
@@ -90,4 +91,4 @@ class NamespaceResolver
         }
         return '';
     }
-} 
+}

@@ -18,15 +18,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Checkout
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Checkout\Block;
 
-class Success extends \Magento\View\Element\Template
+class Success extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var \Magento\Sales\Model\OrderFactory
@@ -34,12 +31,12 @@ class Success extends \Magento\View\Element\Template
     protected $_orderFactory;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         array $data = array()
     ) {
@@ -53,7 +50,7 @@ class Success extends \Magento\View\Element\Template
     public function getRealOrderId()
     {
         /** @var \Magento\Sales\Model\Order $order */
-        $order = $this->_orderFactory()->create()->load($this->getLastOrderId());
+        $order = $this->_orderFactory->create()->load($this->getLastOrderId());
         return $order->getIncrementId();
     }
 }

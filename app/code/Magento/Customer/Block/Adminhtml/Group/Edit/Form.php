@@ -18,21 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Customer\Block\Adminhtml\Group\Edit;
+
+use Magento\Customer\Controller\RegistryConstants;
 
 /**
  * Adminhtml customer groups edit form
- *
- * @category   Magento
- * @package    Magento_Customer
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Customer\Block\Adminhtml\Group\Edit;
-
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
@@ -41,86 +36,121 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_taxCustomer;
 
     /**
+     * @var \Magento\Customer\Service\V1\CustomerGroupServiceInterface
+     */
+    protected $_groupService;
+
+    /**
+     * @var \Magento\Customer\Service\V1\Data\CustomerGroupBuilder
+     */
+    protected $_groupBuilder;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Data\FormFactory $formFactory
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Tax\Model\TaxClass\Source\Customer $taxCustomer
+     * @param \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService
+     * @param \Magento\Customer\Service\V1\Data\CustomerGroupBuilder $groupBuilder
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Data\FormFactory $formFactory,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Tax\Model\TaxClass\Source\Customer $taxCustomer,
+        \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService,
+        \Magento\Customer\Service\V1\Data\CustomerGroupBuilder $groupBuilder,
         array $data = array()
     ) {
         $this->_taxCustomer = $taxCustomer;
+        $this->_groupService = $groupService;
+        $this->_groupBuilder = $groupBuilder;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
     /**
      * Prepare form for render
+     *
+     * @return void
      */
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
 
-        /** @var \Magento\Data\Form $form */
+        /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
 
-        $customerGroup = $this->_coreRegistry->registry('current_group');
+        $groupId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_GROUP_ID);
+        /** @var \Magento\Customer\Service\V1\Data\CustomerGroup $customerGroup */
+        if (is_null($groupId)) {
+            $customerGroup = $this->_groupBuilder->create();
+        } else {
+            $customerGroup = $this->_groupService->getGroup($groupId);
+        }
 
-        $fieldset = $form->addFieldset('base_fieldset', array('legend'=>__('Group Information')));
+        $fieldset = $form->addFieldset('base_fieldset', array('legend' => __('Group Information')));
 
-        $validateClass = sprintf('required-entry validate-length maximum-length-%d',
-            \Magento\Customer\Model\Group::GROUP_CODE_MAX_LENGTH);
-        $name = $fieldset->addField('customer_group_code', 'text',
+        $validateClass = sprintf(
+            'required-entry validate-length maximum-length-%d',
+            \Magento\Customer\Service\V1\CustomerGroupServiceInterface::GROUP_CODE_MAX_LENGTH
+        );
+        $name = $fieldset->addField(
+            'customer_group_code',
+            'text',
             array(
-                'name'  => 'code',
+                'name' => 'code',
                 'label' => __('Group Name'),
                 'title' => __('Group Name'),
-                'note'  => __('Maximum length must be less then %1 symbols',
-                    \Magento\Customer\Model\Group::GROUP_CODE_MAX_LENGTH),
+                'note' => __(
+                    'Maximum length must be less then %1 symbols',
+                    \Magento\Customer\Service\V1\CustomerGroupServiceInterface::GROUP_CODE_MAX_LENGTH
+                ),
                 'class' => $validateClass,
-                'required' => true,
+                'required' => true
             )
         );
 
-        if ($customerGroup->getId()==0 && $customerGroup->getCustomerGroupCode() ) {
+        if ($customerGroup->getId() == 0 && $customerGroup->getCode()) {
             $name->setDisabled(true);
         }
 
-        $fieldset->addField('tax_class_id', 'select',
+        $fieldset->addField(
+            'tax_class_id',
+            'select',
             array(
-                'name'  => 'tax_class',
+                'name' => 'tax_class',
                 'label' => __('Tax Class'),
                 'title' => __('Tax Class'),
                 'class' => 'required-entry',
                 'required' => true,
-                'values' => $this->_taxCustomer->toOptionArray()
+                'values' => $this->_taxCustomer->toOptionArray(false)
             )
         );
 
         if (!is_null($customerGroup->getId())) {
             // If edit add id
-            $form->addField('id', 'hidden',
-                array(
-                    'name'  => 'id',
-                    'value' => $customerGroup->getId(),
-                )
-            );
+            $form->addField('id', 'hidden', array('name' => 'id', 'value' => $customerGroup->getId()));
         }
 
-        if ( $this->_backendSession->getCustomerGroupData() ) {
+        if ($this->_backendSession->getCustomerGroupData()) {
             $form->addValues($this->_backendSession->getCustomerGroupData());
             $this->_backendSession->setCustomerGroupData(null);
         } else {
-            $form->addValues($customerGroup->getData());
+            // TODO: need to figure out how the DATA can work with forms
+            $form->addValues(
+                array(
+                    'id' => $customerGroup->getId(),
+                    'customer_group_code' => $customerGroup->getCode(),
+                    'tax_class_id' => $customerGroup->getTaxClassId()
+                )
+            );
         }
 
         $form->setUseContainer(true);
         $form->setId('edit_form');
         $form->setAction($this->getUrl('customer/*/save'));
+        $form->setMethod('post');
         $this->setForm($form);
     }
 }

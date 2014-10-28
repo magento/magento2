@@ -18,24 +18,17 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Catalog\Model\Resource\Category\Attribute;
 
 /**
  * Catalog category EAV additional attribute resource collection
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Resource\Category\Attribute;
-
-class Collection
-    extends \Magento\Eav\Model\Resource\Entity\Attribute\Collection
+class Collection extends \Magento\Eav\Model\Resource\Entity\Attribute\Collection
 {
     /**
      * Entity factory
@@ -46,21 +39,21 @@ class Collection
 
     /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\Logger $logger
-     * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
-     * @param mixed $connection
-     * @param \Magento\Core\Model\Resource\Db\AbstractDb $resource
+     * @param \Zend_Db_Adapter_Abstract $connection
+     * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
-        \Magento\Logger $logger,
-        \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Logger $logger,
+        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
         $connection = null,
-        \Magento\Core\Model\Resource\Db\AbstractDb $resource = null
+        \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         $this->_eavEntityFactory = $eavEntityFactory;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
@@ -70,18 +63,19 @@ class Collection
      * Main select object initialization.
      * Joins catalog/eav_attribute table
      *
-     * @return \Magento\Catalog\Model\Resource\Category\Attribute\Collection
+     * @return $this
      */
     protected function _initSelect()
     {
-        $this->getSelect()->from(array('main_table' => $this->getResource()->getMainTable()))
-            ->where(
-                'main_table.entity_type_id=?',
-                $this->_eavEntityFactory->create()->setType(\Magento\Catalog\Model\Category::ENTITY)->getTypeId()
-            )->join(
-                array('additional_table' => $this->getTable('catalog_eav_attribute')),
-                'additional_table.attribute_id = main_table.attribute_id'
-            );
+        $this->getSelect()->from(
+            array('main_table' => $this->getResource()->getMainTable())
+        )->where(
+            'main_table.entity_type_id=?',
+            $this->_eavEntityFactory->create()->setType(\Magento\Catalog\Model\Category::ENTITY)->getTypeId()
+        )->join(
+            array('additional_table' => $this->getTable('catalog_eav_attribute')),
+            'additional_table.attribute_id = main_table.attribute_id'
+        );
         return $this;
     }
 
@@ -89,7 +83,7 @@ class Collection
      * Specify attribute entity type filter
      *
      * @param int $typeId
-     * @return \Magento\Catalog\Model\Resource\Category\Attribute\Collection
+     * @return $this
      */
     public function setEntityTypeFilter($typeId)
     {

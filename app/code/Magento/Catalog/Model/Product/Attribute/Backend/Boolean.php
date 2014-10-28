@@ -18,28 +18,23 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
 /**
  * Product attribute for enable/disable option
  *
- * @category   Magento
- * @package    Magento_Catalog
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Product\Attribute\Backend;
-
 class Boolean extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
      * Set attribute default value if value empty
      *
-     * @param \Magento\Object $object
-     * @return \Magento\Catalog\Model\Product\Attribute\Backend\Boolean
+     * @param \Magento\Framework\Object $object
+     * @return $this
      */
     public function beforeSave($object)
     {

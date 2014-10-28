@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Newsletter
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,42 +27,48 @@
  */
 namespace Magento\Newsletter\Block\Adminhtml\Subscriber\Grid\Filter;
 
-class Website
-    extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
+use Magento\Store\Model\Resource\Website\Collection;
+
+class Website extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
 {
+    /**
+     * Website collection
+     *
+     * @var Collection
+     */
     protected $_websiteCollection = null;
 
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\Core\Model\Resource\Website\CollectionFactory
+     * @var \Magento\Store\Model\Resource\Website\CollectionFactory
      */
     protected $_websitesFactory;
 
     /**
      * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\Core\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Core\Model\Resource\Website\CollectionFactory $websitesFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Framework\DB\Helper $resourceHelper
+     * @param \Magento\Store\Model\Resource\Website\CollectionFactory $websitesFactory
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
-        \Magento\Core\Model\Resource\Helper $resourceHelper,
-        \Magento\Core\Model\Resource\Website\CollectionFactory $websitesFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Framework\DB\Helper $resourceHelper,
+        \Magento\Store\Model\Resource\Website\CollectionFactory $websitesFactory,
+        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Framework\Registry $registry,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
@@ -73,15 +77,20 @@ class Website
         parent::__construct($context, $resourceHelper, $data);
     }
 
+    /**
+     * Get options for grid filter
+     *
+     * @return array
+     */
     protected function _getOptions()
     {
         $result = $this->getCollection()->toOptionArray();
-        array_unshift($result, array('label'=>null, 'value'=>null));
+        array_unshift($result, array('label' => null, 'value' => null));
         return $result;
     }
 
     /**
-     * @return \Magento\Core\Model\Resource\Website\Collection|null
+     * @return Collection|null
      */
     public function getCollection()
     {
@@ -94,6 +103,11 @@ class Website
         return $this->_websiteCollection;
     }
 
+    /**
+     * Get options for grid filter
+     *
+     * @return null|array
+     */
     public function getCondition()
     {
         $id = $this->getValue();

@@ -1,0 +1,94 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+
+<?php /* @var $this \Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Bundle */ ?>
+<?php $options = $this->decorateArray($this->getOptions()); ?>
+<?php if (count($options)): ?>
+<fieldset id="catalog_product_composite_configure_fields_bundle" class="fieldset bundle<?php echo $this->getIsLastFieldset() ? ' last-fieldset' : '' ?>">
+    <legend class="legend"><span><?php echo __('Bundle Items') ?></span></legend><br />
+    <div class="fields options">
+        <?php foreach ($options as $option) : ?>
+            <?php if ($option->getSelections()) : ?>
+                <?php echo $this->getOptionHtml($option); ?>
+            <?php endif; ?>
+        <?php endforeach; ?>
+    </div>
+</fieldset>
+
+<script type="text/javascript">
+require([
+    "Magento_Catalog/catalog/product/composite/configure"
+], function(){
+    BundleControl = Class.create();
+    
+    BundleControl.prototype = {
+        initialize: function (config) {
+            this.config = config;
+        },
+
+        changeSelection: function (selection) {
+            if (selection.multiple) {
+                return;
+            }
+            var parts = selection.id.split('-'), optionId = parts[2],
+                showQtyInput = selection.value && selection.value != 'none',
+                options = this.config.options[optionId],
+                selectionOptions = options && options.selections && options.selections[selection.value] || {};
+
+            selectionOptions.can_change_qty = Number(selectionOptions.can_change_qty) && showQtyInput;
+            this.updateQtyInput(optionId, selectionOptions);
+        },
+
+        updateQtyInput: function(optionId, selectionOptions) {
+            var elem = $('bundle-option-' + optionId + '-qty-input'),
+                default_qty = Number(selectionOptions.default_qty);
+            if (!elem) {
+                return;
+            }
+            if (selectionOptions.can_change_qty) {
+                elem.removeClassName('qty-disabled');
+                elem.disabled = false;
+                elem.value = default_qty || 1;
+            } else {
+                elem.addClassName('qty-disabled');
+                elem.disabled = true;
+                elem.value = default_qty || 0;
+            }
+        },
+
+        updateForDefaults: function () {
+            for (var optionId in this.config.options) {
+                var selection = $('bundle-option-' + optionId);
+                if (selection) {
+                    this.changeSelection(selection);
+                }
+            }
+        }
+    };
+    ProductConfigure.bundleControl = new BundleControl(<?php echo $this->getJsonConfig() ?>);
+});
+</script>
+
+<?php endif; ?>

@@ -18,23 +18,17 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Paypal
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Model\Resource\Report\Settlement\Options;
 
 /**
  * Transaction Events Types Options
  *
- * @category    Magento
- * @package     Magento_Paypal
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Paypal\Model\Resource\Report\Settlement\Options;
-
-class TransactionEvents
-    implements \Magento\Core\Model\Option\ArrayInterface
+class TransactionEvents implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var \Magento\Paypal\Model\Report\Settlement\Row
@@ -50,9 +44,7 @@ class TransactionEvents
     }
 
     /**
-     *  Get full list of codes with their description
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function toOptionArray()
     {

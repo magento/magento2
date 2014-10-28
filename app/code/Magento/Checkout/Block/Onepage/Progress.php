@@ -18,48 +18,66 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Checkout
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Checkout\Block\Onepage;
+
+use Magento\Customer\Model\Address\Config as AddressConfig;
+use Magento\Customer\Service\V1\CustomerAccountServiceInterface as CustomerAccountService;
+use Magento\Customer\Service\V1\CustomerAddressServiceInterface as CustomerAddressService;
+use Magento\Sales\Model\Quote\Address;
 
 /**
  * One page checkout status
  *
- * @category   Magento
- * @package    Magento_Checkout
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Checkout\Block\Onepage;
-
 class Progress extends \Magento\Checkout\Block\Onepage\AbstractOnepage
 {
+    /**
+     * @return Address
+     */
     public function getBilling()
     {
         return $this->getQuote()->getBillingAddress();
     }
 
+    /**
+     * @return Address
+     */
     public function getShipping()
     {
         return $this->getQuote()->getShippingAddress();
     }
 
+    /**
+     * @return string
+     */
     public function getShippingMethod()
     {
         return $this->getQuote()->getShippingAddress()->getShippingMethod();
     }
 
+    /**
+     * @return string
+     */
     public function getShippingDescription()
     {
         return $this->getQuote()->getShippingAddress()->getShippingDescription();
     }
 
+    /**
+     * @return float
+     */
     public function getShippingAmount()
     {
         return $this->getQuote()->getShippingAddress()->getShippingAmount();
     }
 
+    /**
+     * @return string
+     */
     public function getPaymentHtml()
     {
         return $this->getChildHtml('payment_info');
@@ -69,14 +87,15 @@ class Progress extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      * Get is step completed. if is set 'toStep' then all steps after him is not completed.
      *
      * @param string $currentStep
-     *  @see: \Magento\Checkout\Block\Onepage\AbstractOnepage::_getStepCodes() for allowed values
      * @return bool
+     *
+     *  @see: \Magento\Checkout\Block\Onepage\AbstractOnepage::_getStepCodes() for allowed values
      */
     public function isStepComplete($currentStep)
     {
         $stepsRevertIndex = array_flip($this->_getStepCodes());
 
-        $toStep = $this->getRequest()->getParam('toStep');
+        $toStep = $this->getNextStep();
 
         if (empty($toStep) || !isset($stepsRevertIndex[$currentStep])) {
             return $this->getCheckout()->getStepData($currentStep, 'complete');
@@ -90,22 +109,15 @@ class Progress extends \Magento\Checkout\Block\Onepage\AbstractOnepage
     }
 
     /**
-     * Get quote shipping price including tax
-     * @return float
+     * Return selected shipping rate
+     *
+     * @return false|Address\Rate
      */
-    public function getShippingPriceInclTax()
+    public function getShippingRate()
     {
-        $inclTax = $this->getQuote()->getShippingAddress()->getShippingInclTax();
-        return $this->formatPrice($inclTax);
-    }
+        $address = $this->getQuote()->getShippingAddress();
+        $rate = $address->getShippingRateByCode($address->getShippingMethod());
 
-    public function getShippingPriceExclTax()
-    {
-        return $this->formatPrice($this->getQuote()->getShippingAddress()->getShippingAmount());
-    }
-
-    public function formatPrice($price)
-    {
-        return $this->getQuote()->getStore()->formatPrice($price);
+        return $rate;
     }
 }

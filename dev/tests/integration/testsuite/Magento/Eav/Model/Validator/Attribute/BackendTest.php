@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -50,8 +47,11 @@ class BackendTest extends \PHPUnit_Framework_TestCase
     public function testIsValid()
     {
         /** @var $entity \Magento\Customer\Model\Customer */
-        $entity = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Model\Customer')->load(1);
+        $entity = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Customer\Model\Customer'
+        )->load(
+            1
+        );
 
         $this->assertTrue($this->_model->isValid($entity));
         $this->assertEmpty($this->_model->getMessages());
@@ -60,9 +60,9 @@ class BackendTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->_model->isValid($entity));
         $this->assertArrayHasKey('email', $this->_model->getMessages());
 
-        $entity->setData('store_id', null);
+        $entity->setData('firstname', null);
         $this->assertFalse($this->_model->isValid($entity));
         $this->assertArrayHasKey('email', $this->_model->getMessages());
-        $this->assertArrayHasKey('store_id', $this->_model->getMessages());
+        $this->assertArrayHasKey('firstname', $this->_model->getMessages());
     }
 }

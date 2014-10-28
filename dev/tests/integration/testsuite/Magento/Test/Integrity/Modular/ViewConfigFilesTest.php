@@ -18,14 +18,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Integrity\Modular;
+
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 class ViewConfigFilesTest extends \PHPUnit_Framework_TestCase
 {
@@ -35,11 +33,14 @@ class ViewConfigFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function testViewConfigFile($file)
     {
-        $domConfig = new \Magento\Config\Dom($file);
+        $domConfig = new \Magento\Framework\Config\Dom($file);
+        /** @var \Magento\Framework\Filesystem $filesystem */
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\Filesystem'
+        );
         $result = $domConfig->validate(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                ->get('Magento\Filesystem')->getPath(\Magento\Filesystem::LIB)
-                . '/Magento/Config/etc/view.xsd',
+            $filesystem->getDirectoryRead(DirectoryList::LIB_INTERNAL)
+                ->getAbsolutePath('Magento/Framework/Config/etc/view.xsd'),
             $errors
         );
         $message = "Invalid XML-file: {$file}\n";
@@ -55,9 +56,11 @@ class ViewConfigFilesTest extends \PHPUnit_Framework_TestCase
     public function viewConfigFileDataProvider()
     {
         $result = array();
-        $files = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Module\Dir\Reader')
-            ->getConfigurationFiles('view.xml');
+        $files = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\Module\Dir\Reader'
+        )->getConfigurationFiles(
+            'view.xml'
+        );
         foreach ($files as $file) {
             $result[] = array($file);
         }

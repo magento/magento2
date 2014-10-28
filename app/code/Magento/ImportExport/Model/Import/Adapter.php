@@ -18,46 +18,44 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_ImportExport
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ImportExport\Model\Import;
+
+use Magento\Framework\Filesystem\Directory\Write;
+use Magento\ImportExport\Model\Import\AbstractSource;
 
 /**
  * Import adapter model
  *
- * @category    Magento
- * @package     Magento_ImportExport
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\ImportExport\Model\Import;
-
 class Adapter
 {
     /**
      * Adapter factory. Checks for availability, loads and create instance of import adapter object.
      *
      * @param string $type Adapter type ('csv', 'xml' etc.)
-     * @param \Magento\Filesystem\Directory\Write $directory
+     * @param Write $directory
      * @param mixed $options OPTIONAL Adapter constructor options
-     * @throws \Exception
-     * @return \Magento\ImportExport\Model\Import\AbstractSource
+     * @return AbstractSource
+     * @throws \Magento\Framework\Model\Exception
      */
     public static function factory($type, $directory, $options = null)
     {
         if (!is_string($type) || !$type) {
-            throw new \Magento\Core\Exception(__('The adapter type must be a non empty string.'));
+            throw new \Magento\Framework\Model\Exception(__('The adapter type must be a non empty string.'));
         }
         $adapterClass = 'Magento\ImportExport\Model\Import\Source\\' . ucfirst(strtolower($type));
 
         if (!class_exists($adapterClass)) {
-            throw new \Magento\Core\Exception("'{$type}' file extension is not supported");
+            throw new \Magento\Framework\Model\Exception("'{$type}' file extension is not supported");
         }
         $adapter = new $adapterClass($options, $directory);
 
-        if (! $adapter instanceof \Magento\ImportExport\Model\Import\AbstractSource) {
-            throw new \Magento\Core\Exception(
+        if (!$adapter instanceof AbstractSource) {
+            throw new \Magento\Framework\Model\Exception(
                 __('Adapter must be an instance of \Magento\ImportExport\Model\Import\AbstractSource')
             );
         }
@@ -68,8 +66,8 @@ class Adapter
      * Create adapter instance for specified source file.
      *
      * @param string $source Source file path.
-     * @param \Magento\Filesystem\Directory\Write $directory
-     * @return \Magento\ImportExport\Model\Import\AbstractSource
+     * @param Write $directory
+     * @return AbstractSource
      */
     public static function findAdapterFor($source, $directory)
     {

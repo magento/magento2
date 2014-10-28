@@ -23,29 +23,38 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
-    <preference for="Magento\Authz\Model\UserLocatorInterface" type="Magento\Webapi\Model\Authz\UserLocator"/>
-    <type name="Magento\Webapi\Model\Authz\UserLocator">
-        <param name="request">
-            <instance type="Magento\Webapi\Controller\Soap\Request"/>
-        </param>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Magento\Authorization\Model\UserContextInterface" type="Magento\Authorization\Model\CompositeUserContext"/>
+    <type name="Magento\Webapi\Model\Authorization\OauthUserContext">
+        <arguments>
+            <argument name="request" xsi:type="object">Magento\Webapi\Controller\Soap\Request</argument>
+        </arguments>
     </type>
-    <preference for="Magento\App\FrontControllerInterface" type="Magento\Webapi\Controller\Soap" />
+    <type name="Magento\Authorization\Model\CompositeUserContext">
+        <arguments>
+            <argument name="userContexts" xsi:type="array">
+                <item name="tokenUserContext" xsi:type="array">
+                    <item name="type" xsi:type="object">Magento\Webapi\Model\Authorization\TokenUserContext</item>
+                    <item name="sortOrder" xsi:type="string">10</item>
+                </item>
+                <item name="guestUserContext" xsi:type="array">
+                    <item name="type" xsi:type="object">Magento\Webapi\Model\Authorization\GuestUserContext</item>
+                    <item name="sortOrder" xsi:type="string">100</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Framework\App\FrontControllerInterface" type="Magento\Webapi\Controller\Soap" />
+    <preference for="Magento\Framework\Model\ActionValidator\RemoveAction" type="Magento\Framework\Model\ActionValidator\RemoveAction\Allowed" />
     <type name="Magento\Webapi\Controller\Rest\Router\Route" shared="false" />
     <type name="Magento\Webapi\Controller\Soap">
-        <param name="soapServer">
-            <instance type="Magento\Webapi\Model\Soap\Server\Proxy"/>
-        </param>
-        <param name="errorProcessor">
-            <instance type="Magento\Webapi\Controller\ErrorProcessor\Proxy"/>
-        </param>
+        <arguments>
+            <argument name="soapServer" xsi:type="object">Magento\Webapi\Model\Soap\Server\Proxy</argument>
+            <argument name="errorProcessor" xsi:type="object">Magento\Webapi\Controller\ErrorProcessor\Proxy</argument>
+        </arguments>
     </type>
-    <type name="Magento\Webapi\Controller\Soap\Handler">
-        <param name="authorizationService">
-            <instance type="Magento\Authz\Service\AuthorizationV1Interface\Proxy" />
-        </param>
-    </type>
-    <type name="Magento\Authz\Service\AuthorizationV1">
-        <plugin name="webapiSoapAuthorizationV1" type="Magento\Webapi\Model\Plugin\AuthorizationServiceV1" />
+    <preference for="Magento\Framework\Authorization\RoleLocator" type="Magento\Webapi\Model\WebapiRoleLocator" />
+    <type name="Magento\Framework\Authorization">
+        <plugin name="guestAuthorization" type="Magento\Webapi\Model\Plugin\GuestAuthorization" />
     </type>
 </config>

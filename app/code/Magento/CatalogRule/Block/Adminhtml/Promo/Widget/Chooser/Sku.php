@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_CatalogRule
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,11 +25,12 @@
 /**
  * Adminhtml sales order create search products block
  *
- * @category   Magento
- * @package    Magento_CatalogRule
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\CatalogRule\Block\Adminhtml\Promo\Widget\Chooser;
+
+use Magento\Backend\Block\Widget\Grid;
+use Magento\Backend\Block\Widget\Grid\Column;
 
 class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -57,7 +56,6 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Catalog\Model\ProductFactory $catalogProduct
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $eavAttSetCollection
@@ -67,7 +65,6 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Url $urlModel,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Catalog\Model\ProductFactory $catalogProduct,
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $eavAttSetCollection,
@@ -79,9 +76,12 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->_cpCollection = $cpCollection;
         $this->_eavAttSetCollection = $eavAttSetCollection;
         $this->_catalogProduct = $catalogProduct;
-        parent::__construct($context, $urlModel, $backendHelper, $data);
+        parent::__construct($context, $backendHelper, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -89,13 +89,13 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
         if ($this->getRequest()->getParam('current_grid_id')) {
             $this->setId($this->getRequest()->getParam('current_grid_id'));
         } else {
-            $this->setId('skuChooserGrid_'.$this->getId());
+            $this->setId('skuChooserGrid_' . $this->getId());
         }
 
         $form = $this->getJsFormObject();
-        $this->setRowClickCallback("$form.chooserGridRowClick.bind($form)");
-        $this->setCheckboxCheckCallback("$form.chooserGridCheckboxCheck.bind($form)");
-        $this->setRowInitCallback("$form.chooserGridRowInit.bind($form)");
+        $this->setRowClickCallback("{$form}.chooserGridRowClick.bind({$form})");
+        $this->setCheckboxCheckCallback("{$form}.chooserGridCheckboxCheck.bind({$form})");
+        $this->setRowInitCallback("{$form}.chooserGridRowInit.bind({$form})");
         $this->setDefaultSort('sku');
         $this->setUseAjax(true);
         if ($this->getRequest()->getParam('collapse')) {
@@ -103,6 +103,10 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
         }
     }
 
+    /**
+     * @param Column $column
+     * @return $this
+     */
     protected function _addColumnFilterToCollection($column)
     {
         // Set custom filter for in product flag
@@ -112,9 +116,9 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
                 $selected = '';
             }
             if ($column->getFilter()->getValue()) {
-                $this->getCollection()->addFieldToFilter('sku', array('in'=>$selected));
+                $this->getCollection()->addFieldToFilter('sku', array('in' => $selected));
             } else {
-                $this->getCollection()->addFieldToFilter('sku', array('nin'=>$selected));
+                $this->getCollection()->addFieldToFilter('sku', array('nin' => $selected));
             }
         } else {
             parent::_addColumnFilterToCollection($column);
@@ -125,13 +129,17 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Prepare Catalog Product Collection for attribute SKU in Promo Conditions SKU chooser
      *
-     * @return \Magento\CatalogRule\Block\Adminhtml\Promo\Widget\Chooser\Sku
+     * @return $this
      */
     protected function _prepareCollection()
     {
-        $collection = $this->_cpCollection->create()
-            ->setStoreId(0)
-            ->addAttributeToSelect('name', 'type_id', 'attribute_set_id');
+        $collection = $this->_cpCollection->create()->setStoreId(
+            0
+        )->addAttributeToSelect(
+            'name',
+            'type_id',
+            'attribute_set_id'
+        );
 
         $this->setCollection($collection);
 
@@ -141,80 +149,84 @@ class Sku extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Define Cooser Grid Columns and filters
      *
-     * @return \Magento\CatalogRule\Block\Adminhtml\Promo\Widget\Chooser\Sku
+     * @return $this
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('in_products', array(
-            'header_css_class' => 'a-center',
-            'type'      => 'checkbox',
-            'name'      => 'in_products',
-            'values'    => $this->_getSelectedProducts(),
-            'align'     => 'center',
-            'index'     => 'sku',
-            'use_index' => true,
-        ));
-
-        $this->addColumn('entity_id', array(
-            'header'    => __('ID'),
-            'sortable'  => true,
-            'width'     => '60px',
-            'index'     => 'entity_id'
-        ));
-
-        $this->addColumn('type',
+        $this->addColumn(
+            'in_products',
             array(
-                'header'=> __('Type'),
+                'header_css_class' => 'a-center',
+                'type' => 'checkbox',
+                'name' => 'in_products',
+                'values' => $this->_getSelectedProducts(),
+                'align' => 'center',
+                'index' => 'sku',
+                'use_index' => true
+            )
+        );
+
+        $this->addColumn(
+            'entity_id',
+            array('header' => __('ID'), 'sortable' => true, 'width' => '60px', 'index' => 'entity_id')
+        );
+
+        $this->addColumn(
+            'type',
+            array(
+                'header' => __('Type'),
                 'width' => '60px',
                 'index' => 'type_id',
-                'type'  => 'options',
-                'options' => $this->_catalogType->getOptionArray(),
-        ));
+                'type' => 'options',
+                'options' => $this->_catalogType->getOptionArray()
+            )
+        );
 
-        $sets = $this->_eavAttSetCollection->create()
-            ->setEntityTypeFilter($this->_catalogProduct->create()->getResource()->getTypeId())
-            ->load()
-            ->toOptionHash();
+        $sets = $this->_eavAttSetCollection->create()->setEntityTypeFilter(
+            $this->_catalogProduct->create()->getResource()->getTypeId()
+        )->load()->toOptionHash();
 
-        $this->addColumn('set_name',
+        $this->addColumn(
+            'set_name',
             array(
-                'header'=> __('Attribute Set'),
+                'header' => __('Attribute Set'),
                 'width' => '100px',
                 'index' => 'attribute_set_id',
-                'type'  => 'options',
-                'options' => $sets,
-        ));
+                'type' => 'options',
+                'options' => $sets
+            )
+        );
 
-        $this->addColumn('chooser_sku', array(
-            'header'    => __('SKU'),
-            'name'      => 'chooser_sku',
-            'width'     => '80px',
-            'index'     => 'sku'
-        ));
-        $this->addColumn('chooser_name', array(
-            'header'    => __('Product'),
-            'name'      => 'chooser_name',
-            'index'     => 'name'
-        ));
+        $this->addColumn(
+            'chooser_sku',
+            array('header' => __('SKU'), 'name' => 'chooser_sku', 'width' => '80px', 'index' => 'sku')
+        );
+        $this->addColumn(
+            'chooser_name',
+            array('header' => __('Product'), 'name' => 'chooser_name', 'index' => 'name')
+        );
 
         return parent::_prepareColumns();
     }
 
+    /**
+     * @return string
+     */
     public function getGridUrl()
     {
-        return $this->getUrl('catalog_rule/*/chooser', array(
-            '_current'          => true,
-            'current_grid_id'   => $this->getId(),
-            'collapse'          => null
-        ));
+        return $this->getUrl(
+            'catalog_rule/*/chooser',
+            array('_current' => true, 'current_grid_id' => $this->getId(), 'collapse' => null)
+        );
     }
 
+    /**
+     * @return mixed
+     */
     protected function _getSelectedProducts()
     {
         $products = $this->getRequest()->getPost('selected', array());
 
         return $products;
     }
-
 }
-

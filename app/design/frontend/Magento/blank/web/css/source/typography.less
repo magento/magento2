@@ -1,0 +1,67 @@
+// /**
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+//  When you are not using .magento_reset() mixin you can include typography mixins by calling directly
+//  .typography-all();
+
+.font-face(
+    @family-name: 'Open Sans',
+    @font-path: '@{baseDir}fonts/opensans/light/opensans-300',
+    @font-weight: 300,
+    @font-style: normal
+);
+
+.font-face(
+    @family-name: 'Open Sans',
+    @font-path: '@{baseDir}fonts/opensans/regular/opensans-400',
+    @font-weight: 400,
+    @font-style: normal
+);
+
+.font-face(
+    @family-name: 'Open Sans',
+    @font-path: '@{baseDir}fonts/opensans/semibold/opensans-600',
+    @font-weight: 600,
+    @font-style: normal
+);
+
+.font-face(
+    @family-name: 'Open Sans',
+    @font-path: '@{baseDir}fonts/opensans/bold/opensans-700',
+    @font-weight: 700,
+    @font-style: normal
+);
+
+//
+//    Desktop
+//--------------------------------------
+.responsive(@break) when (@break = @screen-m) {
+    h1 {
+        font-size: @h1-font-size-desktop;
+    }
+}
+
+.items {
+    .list-reset-styles();
+}

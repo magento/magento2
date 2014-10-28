@@ -23,19 +23,16 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
-    <type name="downloadable" label="Downloadable Product" modelInstance="Magento\Downloadable\Model\Product\Type" composite="false" isQty="true" canUseQtyDecimals="false">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Catalog/etc/product_types.xsd">
+    <type name="downloadable" label="Downloadable Product" modelInstance="Magento\Downloadable\Model\Product\Type" composite="false" isQty="true" canUseQtyDecimals="false" sortOrder="60">
         <priceModel instance="Magento\Downloadable\Model\Product\Price" />
         <indexerModel instance="Magento\Downloadable\Model\Resource\Indexer\Price" />
+        <customAttributes>
+            <attribute name="refundable" value="false"/>
+            <attribute name="is_real_product" value="false"/>
+        </customAttributes>
     </type>
-    <type name="configurable">
-        <allowProductTypes>
-            <type name="downloadable" />
-        </allowProductTypes>
-    </type>
-    <type name="grouped">
-        <allowProductTypes>
-            <type name="downloadable" />
-        </allowProductTypes>
-    </type>
+    <composableTypes>
+        <type name="downloadable" />
+    </composableTypes>
 </config>

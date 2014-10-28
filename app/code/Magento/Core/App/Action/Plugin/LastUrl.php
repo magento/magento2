@@ -35,12 +35,12 @@ class LastUrl
     const SESSION_NAMESPACE = 'frontend';
 
     /**
-     * @var \Magento\Core\Model\Session
+     * @var \Magento\Framework\Session\Generic
      */
     protected $_session;
 
     /**
-     * @var \Magento\Core\Model\Url
+     * @var \Magento\Framework\UrlInterface
      */
     protected $_url;
 
@@ -52,10 +52,10 @@ class LastUrl
     protected $_sessionNamespace = self::SESSION_NAMESPACE;
 
     /**
-     * @param \Magento\Core\Model\Session $session
-     * @param \Magento\Core\Model\Url $url
+     * @param \Magento\Framework\Session\Generic $session
+     * @param \Magento\Framework\UrlInterface $url
      */
-    public function __construct(\Magento\Core\Model\Session $session, \Magento\Core\Model\Url $url)
+    public function __construct(\Magento\Framework\Session\Generic $session, \Magento\Framework\UrlInterface $url)
     {
         $this->_session = $session;
         $this->_url = $url;
@@ -64,13 +64,19 @@ class LastUrl
     /**
      * Process request
      *
-     * @param array $arguments
-     * @param \Magento\Code\Plugin\InvocationChain $invocationChain
+     * @param \Magento\Framework\App\Action\Action $subject
+     * @param callable $proceed
+     * @param \Magento\Framework\App\RequestInterface $request
+     *
      * @return mixed
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundDispatch(array $arguments, \Magento\Code\Plugin\InvocationChain $invocationChain)
-    {
-        $result = $invocationChain->proceed($arguments);
+    public function aroundDispatch(
+        \Magento\Framework\App\Action\Action $subject,
+        \Closure $proceed,
+        \Magento\Framework\App\RequestInterface $request
+    ) {
+        $result = $proceed($request);
         $this->_session->setLastUrl($this->_url->getUrl('*/*/*', array('_current' => true)));
         return $result;
     }

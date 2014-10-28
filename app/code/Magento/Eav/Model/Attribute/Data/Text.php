@@ -18,50 +18,48 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Eav
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Eav\Model\Attribute\Data;
 
+use Magento\Framework\App\RequestInterface;
 
 /**
  * EAV Entity Attribute Text Data Model
  *
- * @category    Magento
- * @package     Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Eav\Model\Attribute\Data;
-
 class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
 {
     /**
-     * @var \Magento\Core\Helper\String
+     * @var \Magento\Framework\Stdlib\String
      */
     protected $_string;
 
     /**
-     * @param \Magento\Core\Model\LocaleInterface $locale
-     * @param \Magento\Logger $logger
-     * @param \Magento\Stdlib\String $stringHelper
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param \Magento\Framework\Stdlib\String $stringHelper
      */
     public function __construct(
-        \Magento\Core\Model\LocaleInterface $locale,
-        \Magento\Logger $logger,
-        \Magento\Stdlib\String $stringHelper
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Framework\Logger $logger,
+        \Magento\Framework\Locale\ResolverInterface $localeResolver,
+        \Magento\Framework\Stdlib\String $stringHelper
     ) {
-        parent::__construct($locale, $logger);
+        parent::__construct($localeDate, $logger, $localeResolver);
         $this->_string = $stringHelper;
     }
 
     /**
      * Extract data from request and return value
      *
-     * @param \Magento\App\RequestInterface $request
+     * @param RequestInterface $request
      * @return array|string
      */
-    public function extractValue(\Magento\App\RequestInterface $request)
+    public function extractValue(RequestInterface $request)
     {
         $value = $this->_getRequestValue($request);
         return $this->_applyInputFilter($value);
@@ -72,13 +70,13 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
      * Return true or array of errors
      *
      * @param array|string $value
-     * @return boolean|array
+     * @return bool|array
      */
     public function validateValue($value)
     {
-        $errors     = array();
-        $attribute  = $this->getAttribute();
-        $label      = __($attribute->getStoreLabel());
+        $errors = array();
+        $attribute = $this->getAttribute();
+        $label = __($attribute->getStoreLabel());
 
         if ($value === false) {
             // try to load original value and validate it
@@ -121,7 +119,7 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
      * Export attribute value to entity model
      *
      * @param array|string $value
-     * @return \Magento\Eav\Model\Attribute\Data\Text
+     * @return $this
      */
     public function compactValue($value)
     {
@@ -135,7 +133,7 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
      * Restore attribute value from SESSION to entity model
      *
      * @param array|string $value
-     * @return \Magento\Eav\Model\Attribute\Data\Text
+     * @return $this
      */
     public function restoreValue($value)
     {

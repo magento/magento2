@@ -19,19 +19,18 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Ogone
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Core/etc/config.xsd">
     <default>
         <payment>
             <ogone>
                 <model>Magento\Ogone\Model\Api</model>
                 <title>Ogone</title>
-                <secret_key backend_model="Magento\Backend\Model\Config\Backend\Encrypted" />
+                <secret_key_in backend_model="Magento\Backend\Model\Config\Backend\Encrypted" />
+                <secret_key_out backend_model="Magento\Backend\Model\Config\Backend\Encrypted" />
                 <payment_action>authorize</payment_action>
                 <hashing_algorithm>sha256</hashing_algorithm>
                 <template>ogone</template>

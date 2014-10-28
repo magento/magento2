@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Newsletter
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,8 +25,6 @@
 /**
  * Newsletter subscribers grid block
  *
- * @category   Magento
- * @package    Magento_Newsletter
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Newsletter\Block\Adminhtml\Subscriber;
@@ -42,20 +38,18 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Newsletter\Model\QueueFactory $queueFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Url $urlModel,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Newsletter\Model\QueueFactory $queueFactory,
         array $data = array()
     ) {
         $this->_queueFactory = $queueFactory;
-        parent::__construct($context, $urlModel, $backendHelper, $data);
+        parent::__construct($context, $backendHelper, $data);
     }
 
     /**
@@ -67,8 +61,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
     {
 
         if ($this->getRequest()->getParam('queue', false)) {
-            $this->getCollection()->useQueue($this->_queueFactory->create()
-                ->load($this->getRequest()->getParam('queue'))
+            $this->getCollection()->useQueue(
+                $this->_queueFactory->create()->load($this->getRequest()->getParam('queue'))
             );
         }
 

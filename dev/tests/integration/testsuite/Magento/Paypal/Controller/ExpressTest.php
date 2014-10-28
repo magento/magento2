@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Paypal\Controller;
 
 class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
@@ -32,11 +31,13 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testReviewAction()
     {
-        $quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Sales\Model\Quote');
+        $quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Quote');
         $quote->load('test01', 'reserved_order_id');
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Checkout\Model\Session')
-            ->setQuoteId($quote->getId());
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Checkout\Model\Session'
+        )->setQuoteId(
+            $quote->getId()
+        );
 
         $this->dispatch('paypal/express/review');
 
@@ -57,12 +58,17 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
         $order = $this->_objectManager->create('Magento\Sales\Model\Order');
         $order->load('100000002', 'increment_id');
         $session = $this->_objectManager->get('Magento\Checkout\Model\Session');
-        $session->setLastRealOrderId($order->getRealOrderId())
-            ->setLastOrderId($order->getId())
-            ->setLastQuoteId($order->getQuoteId())
-            ->setQuoteId($order->getQuoteId());
-        /** @var $paypalSession \Magento\Session\Generic */
-        $paypalSession = $this->_objectManager->get('Magento\Session\Generic');
+        $session->setLastRealOrderId(
+            $order->getRealOrderId()
+        )->setLastOrderId(
+            $order->getId()
+        )->setLastQuoteId(
+            $order->getQuoteId()
+        )->setQuoteId(
+            $order->getQuoteId()
+        );
+        /** @var $paypalSession \Magento\Framework\Session\Generic */
+        $paypalSession = $this->_objectManager->get('Magento\Framework\Session\Generic');
         $paypalSession->setExpressCheckoutToken('token');
 
         $this->dispatch('paypal/express/cancel');
@@ -71,5 +77,67 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertEquals('canceled', $order->getState());
         $this->assertEquals($session->getQuote()->getGrandTotal(), $quote->getGrandTotal());
         $this->assertEquals($session->getQuote()->getItemsCount(), $quote->getItemsCount());
+    }
+
+    /**
+     * Test ensures only that customer data was copied to quote correctly.
+     *
+     * Note that test does not verify communication during remote calls to PayPal.
+     *
+     * @magentoDataFixture Magento/Sales/_files/quote.php
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     */
+    public function testStartActionCustomerToQuote()
+    {
+        $fixtureCustomerId = 1;
+        $fixtureCustomerEmail = 'customer@example.com';
+        $fixtureCustomerFirstname = 'Firstname';
+        $fixtureQuoteReserveId = 'test01';
+
+        /** Preconditions */
+        /** @var \Magento\Customer\Model\Session $customerSession */
+        $customerSession = $this->_objectManager->get('Magento\Customer\Model\Session');
+        /** @var \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerService */
+        $customerService = $this->_objectManager->get('Magento\Customer\Service\V1\CustomerAccountServiceInterface');
+        $customerData = $customerService->getCustomer($fixtureCustomerId);
+        $customerSession->setCustomerDataObject($customerData);
+
+        /** @var \Magento\Sales\Model\Quote $quote */
+        $quote = $this->_objectManager->create('Magento\Sales\Model\Quote');
+        $quote->load($fixtureQuoteReserveId, 'reserved_order_id');
+
+        /** @var \Magento\Checkout\Model\Session $checkoutSession */
+        $checkoutSession = $this->_objectManager->get('Magento\Checkout\Model\Session');
+        $checkoutSession->setQuoteId($quote->getId());
+
+        /** Preconditions check */
+        $this->assertNotEquals(
+            $fixtureCustomerEmail,
+            $quote->getCustomerEmail(),
+            "Precondition failed: customer email in quote is invalid."
+        );
+        $this->assertNotEquals(
+            $fixtureCustomerFirstname,
+            $quote->getCustomerFirstname(),
+            "Precondition failed: customer first name in quote is invalid."
+        );
+
+        /** Execute SUT */
+        $this->dispatch('paypal/express/start');
+
+        /** Check if customer data was copied to quote correctly */
+        /** @var \Magento\Sales\Model\Quote $updatedQuote */
+        $updatedQuote = $this->_objectManager->create('Magento\Sales\Model\Quote');
+        $updatedQuote->load($fixtureQuoteReserveId, 'reserved_order_id');
+        $this->assertEquals(
+            $fixtureCustomerEmail,
+            $updatedQuote->getCustomerEmail(),
+            "Customer email in quote is invalid."
+        );
+        $this->assertEquals(
+            $fixtureCustomerFirstname,
+            $updatedQuote->getCustomerFirstname(),
+            "Customer first name in quote is invalid."
+        );
     }
 }

@@ -18,25 +18,19 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Customer\Controller;
+
+use Magento\Framework\App\RequestInterface;
 
 /**
  * Customer address controller
  *
- * @category   Magento
- * @package    Magento_Customer
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-namespace Magento\Customer\Controller;
-
-use Magento\App\Action\NotFoundException;
-use Magento\App\RequestInterface;
-
-class Address extends \Magento\App\Action\Action
+class Address extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var \Magento\Customer\Model\Session
@@ -44,48 +38,57 @@ class Address extends \Magento\App\Action\Action
     protected $_customerSession;
 
     /**
-     * @var \Magento\Customer\Model\AddressFactory
-     */
-    protected $_addressFactory;
-
-    /**
-     * @var \Magento\Customer\Model\Address\FormFactory
-     */
-    protected $_addressFormFactory;
-
-    /**
-     * Customer data
-     *
-     * @var \Magento\Customer\Helper\Data
-     */
-    protected $_customerData;
-
-    /**
      * @var \Magento\Core\App\Action\FormKeyValidator
      */
     protected $_formKeyValidator;
 
     /**
-     * @param \Magento\App\Action\Context $context
+     * @var \Magento\Customer\Service\V1\CustomerAddressServiceInterface
+     */
+    protected $_addressService;
+
+    /**
+     * @var \Magento\Customer\Model\Metadata\FormFactory
+     */
+    protected $_formFactory;
+
+    /**
+     * @var \Magento\Customer\Service\V1\Data\RegionBuilder
+     */
+    protected $_regionBuilder;
+
+    /**
+     * @var \Magento\Customer\Service\V1\Data\AddressBuilder
+     */
+    protected $_addressBuilder;
+
+    /**
+     * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Customer\Model\AddressFactory $addressFactory
-     * @param \Magento\Customer\Model\Address\FormFactory $addressFormFactory
-     * @param \Magento\Customer\Helper\Data $customerData
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
+     * @param \Magento\Customer\Service\V1\CustomerAddressServiceInterface $addressService
+     * @param \Magento\Customer\Model\Metadata\FormFactory $formFactory
+     * @param \Magento\Customer\Service\V1\Data\RegionBuilder $regionBuilder
+     * @param \Magento\Customer\Service\V1\Data\AddressBuilder $addressBuilder
+     * @internal param \Magento\Customer\Helper\Data $customerData
+     * @internal param \Magento\Customer\Model\AddressFactory $addressFactory
+     * @internal param \Magento\Customer\Model\Address\FormFactory $addressFormFactory
      */
     public function __construct(
-        \Magento\App\Action\Context $context,
+        \Magento\Framework\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Customer\Model\AddressFactory $addressFactory,
-        \Magento\Customer\Model\Address\FormFactory $addressFormFactory,
-        \Magento\Customer\Helper\Data $customerData,
-        \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
+        \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
+        \Magento\Customer\Service\V1\CustomerAddressServiceInterface $addressService,
+        \Magento\Customer\Model\Metadata\FormFactory $formFactory,
+        \Magento\Customer\Service\V1\Data\RegionBuilder $regionBuilder,
+        \Magento\Customer\Service\V1\Data\AddressBuilder $addressBuilder
     ) {
         $this->_customerSession = $customerSession;
-        $this->_addressFactory = $addressFactory;
-        $this->_addressFormFactory = $addressFormFactory;
-        $this->_customerData = $customerData;
         $this->_formKeyValidator = $formKeyValidator;
+        $this->_addressService = $addressService;
+        $this->_formFactory = $formFactory;
+        $this->_regionBuilder = $regionBuilder;
+        $this->_addressBuilder = $addressBuilder;
         parent::__construct($context);
     }
 
@@ -103,7 +106,7 @@ class Address extends \Magento\App\Action\Action
      * Check customer authentication
      *
      * @param RequestInterface $request
-     * @return \Magento\App\ResponseInterface
+     * @return \Magento\Framework\App\ResponseInterface
      */
     public function dispatch(RequestInterface $request)
     {
@@ -114,194 +117,14 @@ class Address extends \Magento\App\Action\Action
     }
 
     /**
-     * Customer addresses list
-     */
-    public function indexAction()
-    {
-        if (count($this->_getSession()->getCustomer()->getAddresses())) {
-            $this->_view->loadLayout();
-            $this->_view->getLayout()->initMessages();
-
-            $block = $this->_view->getLayout()->getBlock('address_book');
-            if ($block) {
-                $block->setRefererUrl($this->_redirect->getRefererUrl());
-            }
-            $this->_view->renderLayout();
-        } else {
-            $this->getResponse()->setRedirect($this->_buildUrl('*/*/new'));
-        }
-    }
-
-    public function editAction()
-    {
-        $this->_forward('form');
-    }
-
-    public function newAction()
-    {
-        $this->_forward('form');
-    }
-
-    /**
-     * Address book form
-     */
-    public function formAction()
-    {
-        $this->_view->loadLayout();
-        $this->_view->getLayout()->initMessages();
-        $navigationBlock = $this->_view->getLayout()->getBlock('customer_account_navigation');
-        if ($navigationBlock) {
-            $navigationBlock->setActive('customer/address');
-        }
-        $this->_view->renderLayout();
-    }
-
-    /**
-     * Process address form save
-     */
-    public function formPostAction()
-    {
-        if (!$this->_formKeyValidator->validate($this->getRequest())) {
-            return $this->_redirect('*/*/');
-        }
-
-        if (!$this->getRequest()->isPost()) {
-            $this->_getSession()->setAddressFormData($this->getRequest()->getPost());
-            $this->getResponse()->setRedirect($this->_redirect->error($this->_buildUrl('*/*/edit')));
-            return;
-        }
-
-        try {
-            $address = $this->_extractAddress();
-            $this->_validateAddress($address);
-            $address->save();
-
-            // set in VAT observer
-            if ($address->getVatValidationResult()) {
-                $validationMessage = $this->_customerData->getVatValidationUserMessage(
-                    $address,
-                    $this->_getSession()->getCustomer()->getDisableAutoGroupChange(),
-                    $address->getVatValidationResult()
-                );
-                $validationMessage->getIsError()
-                    ? $this->messageManager->addError($validationMessage->getMessage())
-                    : $this->messageManager->addSuccess($validationMessage->getMessage());
-            }
-
-            $this->messageManager->addSuccess(__('The address has been saved.'));
-            $url = $this->_buildUrl('*/*/index', array('_secure'=>true));
-            $this->getResponse()->setRedirect($this->_redirect->success($url));
-            return;
-        } catch (\Magento\Core\Exception $e) {
-            $this->messageManager->addException($e, $e->getMessage());
-        } catch (\Magento\Validator\ValidatorException $e) {
-            foreach ($e->getMessages() as $messages) {
-                foreach ($messages as $message) {
-                    $this->messageManager->addError($message);
-                }
-            }
-        } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('Cannot save address.'));
-        }
-
-        $this->_getSession()->setAddressFormData($this->getRequest()->getPost());
-        $url = $this->_buildUrl('*/*/edit', array('id' => $address->getId()));
-        $this->getResponse()->setRedirect($this->_redirect->error($url));
-    }
-
-    /**
-     * Do address validation using validate methods in models
-     *
-     * @param \Magento\Customer\Model\Address $address
-     * @throws \Magento\Validator\ValidatorException
-     */
-    protected function _validateAddress($address)
-    {
-        $addressErrors = $address->validate();
-        if (is_array($addressErrors) && count($addressErrors) > 0) {
-            throw new \Magento\Validator\ValidatorException(array($addressErrors));
-        }
-    }
-
-    /**
-     * Extract address from request
-     *
-     * @return \Magento\Customer\Model\Address
-     */
-    protected function _extractAddress()
-    {
-        $customer = $this->_getSession()->getCustomer();
-        /* @var \Magento\Customer\Model\Address $address */
-        $address  = $this->_createAddress();
-        $addressId = $this->getRequest()->getParam('id');
-        if ($addressId) {
-            $existsAddress = $customer->getAddressById($addressId);
-            if ($existsAddress->getId() && $existsAddress->getCustomerId() == $customer->getId()) {
-                $address->load($existsAddress->getId());
-            }
-        }
-        /* @var \Magento\Customer\Model\Form $addressForm */
-        $addressForm = $this->_createAddressForm();
-        $addressForm->setFormCode('customer_address_edit')
-            ->setEntity($address);
-        $addressData = $addressForm->extractData($this->getRequest());
-        $addressForm->compactData($addressData);
-        $address->setCustomerId($customer->getId())
-            ->setIsDefaultBilling($this->getRequest()->getParam('default_billing', false))
-            ->setIsDefaultShipping($this->getRequest()->getParam('default_shipping', false));
-        return $address;
-    }
-
-    public function deleteAction()
-    {
-        $addressId = $this->getRequest()->getParam('id', false);
-
-        if ($addressId) {
-            $address = $this->_createAddress();
-            $address->load($addressId);
-
-            // Validate address_id <=> customer_id
-            if ($address->getCustomerId() != $this->_getSession()->getCustomerId()) {
-                $this->messageManager->addError(__('The address does not belong to this customer.'));
-                $this->getResponse()->setRedirect($this->_buildUrl('*/*/index'));
-                return;
-            }
-
-            try {
-                $address->delete();
-                $this->messageManager->addSuccess(__('The address has been deleted.'));
-            } catch (\Exception $e){
-                $this->messageManager->addException($e, __('An error occurred while deleting the address.'));
-            }
-        }
-        $this->getResponse()->setRedirect($this->_buildUrl('*/*/index'));
-    }
-
-    /**
      * @param string $route
      * @param array $params
      * @return string
      */
     protected function _buildUrl($route = '', $params = array())
     {
-        /** @var \Magento\Core\Model\Url $urlBuilder */
-        $urlBuilder = $this->_objectManager->create('Magento\Core\Model\Url');
+        /** @var \Magento\Framework\UrlInterface $urlBuilder */
+        $urlBuilder = $this->_objectManager->create('Magento\Framework\UrlInterface');
         return $urlBuilder->getUrl($route, $params);
-    }
-
-    /**
-     * @return \Magento\Customer\Model\Address
-     */
-    protected function _createAddress()
-    {
-        return $this->_addressFactory->create();
-    }
-
-    /**
-     * @return \Magento\Customer\Model\Address\Form
-     */
-    protected function _createAddressForm()
-    {
-        return $this->_addressFormFactory->create();
     }
 }

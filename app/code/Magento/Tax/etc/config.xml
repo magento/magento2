@@ -19,13 +19,11 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Tax
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Core/etc/config.xsd">
     <default>
         <tax>
             <classes>
@@ -33,7 +31,7 @@
             </classes>
             <calculation>
                 <algorithm>TOTAL_BASE_CALCULATION</algorithm>
-                <apply_after_discount>0</apply_after_discount>
+                <apply_after_discount>1</apply_after_discount>
                 <discount_tax>0</discount_tax>
                 <based_on>shipping</based_on>
                 <price_includes_tax>0</price_includes_tax>
@@ -68,6 +66,9 @@
                 <full_summary>0</full_summary>
                 <zero_tax>0</zero_tax>
             </sales_display>
+            <notification>
+                <url>http://www.magentocommerce.com/knowledge-base/entry/magento-ce-18-ee-113-tax-calc</url>
+            </notification>
         </tax>
     </default>
 </config>

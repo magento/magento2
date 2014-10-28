@@ -1,0 +1,596 @@
+// /**
+////  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+// *
+// * @category design
+// * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+// * @license http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+// */
+
+//  # Tabs and accordions
+//
+//  To set up tabs and accordions Magento UI library provides 2 types of mixins: <code>.data-tabs-base()</code> and <code>.data-accordion-base()</code>. These mixins reset markup elements default styles and add minimal required css setup to make these elements work properly.
+//
+//  # Tabs
+//
+//  The <code>.data-tabs()</code> mixin is used to setup tabs parameters.
+//
+//  ```html
+//  <dl class="example-sections-1" data-sections="tabs">
+//    <dt class="item title active" data-section="title">
+//        <a class="switch" data-toggle="switch" href="#product.info.description">Details</a>
+//    </dt>
+//    <dd class="item content active" data-section="content">
+//        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+//    </dd>
+//
+//    <dt class="item title" data-section="title">
+//        <a class="switch" data-toggle="switch" href="#product_tags">Tags</a>
+//    </dt>
+//    <dd class="item content" data-section="content">
+//        <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+//    </dd>
+//
+//    <dt class="item title" data-section="title">
+//        <a class="switch" data-toggle="switch" href="#product_reviews">Reviews</a>
+//    </dt>
+//    <dd class="item content" data-section="content">
+//        <p>It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+//    </dd>
+//  </dl>
+//  ```
+
+.example-sections-1 {
+    .data-tabs();
+}
+
+//  # Tabs mixin variables
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Allowed values</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@_tab-control-font-family</th>
+//            <td class="vars_value">@font-family-base</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Tabs font family</td>
+//        </tr>
+//        <tr>
+//            <th>@_tab-control-font-size</th>
+//            <td class="vars_value">@font-size-base</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Tabs font size</td>
+//        </tr>
+//        <tr>
+//            <th>@_tab-control-font-style</th>
+//            <td class="vars_value">@font-style-base</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Tabs font style</td>
+//        </tr>
+//        <tr>
+//            <th>@_tab-control-font-weight</th>
+//            <td class="vars_value">@font-weight-base</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Tabs font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@_tab-control-line-height</th>
+//            <td class="vars_value">@tab-control-height</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Tabs line height</td>
+//        </tr>
+//        <tr>
+//            <th colspan="4" class="vars_section">Tabs controls settings</th>
+//        </tr>
+//        <tr>
+//            <th>@_tab-control-bg</th>
+//            <td class="vars_value">@panel-bg</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Current tab background</td>
+//        </tr>
+//        <tr>
+//            <th>@_tab-control-color</th>
+//            <td class="vars_value">@link-color</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Current tab text color</td>
+//        </tr>
+//        <tr>
+//            <th>@_tab-control-text-decoration</th>
+//            <td class="vars_value">none</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Current tab text-decoration</td>
+//        </tr>
+//        <tr>
+//            <th>@_tab-control-color-visited</th>
+//            <td class="vars_value">@link-color</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Tab visited link color</td>
+//        </tr>
+//        <tr>
+//            <th>@_tab-control-text-decoration-visited</th>
+//            <td class="vars_value">none</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Tab visited link text-decoration</td>
+//        </tr>
+//        <tr>
+//            <th>@_tab-control-bg-hover</th>
+//            <td class="vars_value">lighten(@tab-control-bg, 5%)</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Hovered tab background</td>
+//        </tr>
+//        <tr>
+//            <th>@_tab-control-color-hover</th>
+//            <td class="vars_value">@link-color-hover</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Hovered tab text color</td>
+//        </tr>
+//        <tr>
+//            <th>@_tab-control-text-decoration-hover</th>
+//            <td class="vars_value">@tab-control-text-decoration</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Hovered tab text-decoration</td>
+//        </tr>
+//        <tr>
+//            <th>@_tab-control-bg-active</th>
+//            <td class="vars_value">lighten(@tab-control-bg, 15%)</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Active tab background</td>
+//        </tr>
+//        <tr>
+//            <th>@_tab-control-color-active</th>
+//            <td class="vars_value">@link-color-active</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Active tab text color</td>
+//        </tr>
+//        <tr>
+//            <th>@_tab-control-text-decoration-active</th>
+//            <td class="vars_value">@tab-control-text-decoration</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Active tab text-decoration</td>
+//        </tr>
+//        <tr>
+//            <th>@_tab-control-height</th>
+//            <td class="vars_value">@indent-l-base</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Height of tab control</td>
+//        </tr>
+//        <tr>
+//            <th>@_tab-control-margin-right</th>
+//            <td class="vars_value">@indent-xs-base</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Right margin of tab title block</td>
+//        </tr>
+//        <tr>
+//            <th>@_tab-control-padding-top</th>
+//            <td class="vars_value">@indent-xs-base</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Tab control padding top</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_tab-control-padding-right</th>
+//            <td class="vars_value">@indent-xl-base</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Tab control padding right</td>
+//        </tr>
+//        <tr>
+//            <th>@_tab-control-padding-bottom</th>
+//            <td class="vars_value">@tab-control-padding-bottom</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Tab control padding bottom</td>
+//        </tr>
+//        <tr>
+//            <th>@_tab-control-padding-left</th>
+//            <td class="vars_value">@tab-control-padding-left</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Tab control padding left</td>
+//        </tr>
+//        <tr>
+//            <th colspan="4" class="vars_section">Tab content settings</th>
+//        </tr>
+//        <tr>
+//            <th>@_tab-content-bg</th>
+//            <td class="vars_value">@tab-control-bg-active</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Tab content background</td>
+//        </tr>
+//        <tr>
+//            <th>@_tab-content-border</th>
+//            <td class="vars_value">@tab-control-border-width solid @tab-control-border-color</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Tab content border</td>
+//        </tr>
+//        <tr>
+//            <th>@_tab-content-border-top-status</th>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">true | false</td>
+//            <td>Tab content border top status. When set to 'true' the content has only top border. When set to 'false' the content has all 4 borders</td>
+//        </tr>
+//        <tr>
+//            <th>@_tab-content-margin-top</th>
+//            <td class="vars_value">@tab-control-height + @tab-control-border-width + @tab-control-padding-top + @tab-control-padding-bottom</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Tab content top margin (it is the sum of tabs height and top border width)</td>
+//        </tr>
+//        <tr>
+//            <th>@_tab-content-padding</th>
+//            <td class="vars_value">@indent-base</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Tab content padding</td>
+//        </tr>
+//    </table>
+//  </pre>
+//
+//  # Tabs with content top border
+//
+//  To set up tabs with only top content border use variable:
+//  ```css
+//  @_tab-content-border: true
+//  ```
+//
+//  ```html
+//  <dl class="example-sections-2" data-sections="tabs">
+//    <dt class="item title active" data-section="title">
+//        <a class="switch" data-toggle="switch" href="#product.info.description">Details</a>
+//    </dt>
+//    <dd class="item content active" data-section="content">
+//        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+//    </dd>
+//
+//    <dt class="item title" data-section="title">
+//        <a class="switch" data-toggle="switch" href="#product_tags">Tags</a>
+//    </dt>
+//    <dd class="item content" data-section="content">
+//        <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+//    </dd>
+//
+//    <dt class="item title" data-section="title">
+//        <a class="switch" data-toggle="switch" href="#product_reviews">Reviews</a>
+//    </dt>
+//    <dd class="item content" data-section="content">
+//        <p>It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+//    </dd>
+//  </dl>
+//  ```
+
+.example-sections-2 {
+    .data-tabs(
+        @_tab-content-border-top-status: true
+    );
+}
+
+//  # Accordion
+//
+//  The <code>.data-accordion()</code> mixin is used to setup accordion parameters. Accordion has the same markup as tabs.
+//
+//  ```html
+//  <dl class="example-sections-3" data-sections="tabs">
+//    <dt class="item title active" data-section="title">
+//        <a class="switch" data-toggle="switch" href="#product.info.description">Details</a>
+//    </dt>
+//    <dd class="item content active" data-section="content">
+//        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+//    </dd>
+//    <dt class="item title" data-section="title">
+//        <a class="switch" data-toggle="switch" href="#product_tags">Tags</a>
+//    </dt>
+//    <dd class="item content" data-section="content">
+//        <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+//    </dd>
+//
+//    <dt class="item title" data-section="title">
+//        <a class="switch" data-toggle="switch" href="#product_reviews">Reviews</a>
+//    </dt>
+//    <dd class="item content" data-section="content">
+//        <p>It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+//    </dd>
+//  </dl>
+//  ```
+
+.example-sections-3 {
+    .data-accordion();
+}
+
+//  # Accordion mixin variables
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Allowed values</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@_accordion-control-font-family</th>
+//            <td class="vars_value">@tab-control-font-family</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Accordion font family</td>
+//        </tr>
+//        <tr>
+//            <th>@_accordion-control-font-size</th>
+//            <td class="vars_value">@font-size-l</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Accordion font size</td>
+//        </tr>
+//        <tr>
+//            <th>@_accordion-control-font-style</th>
+//            <td class="vars_value">@tab-control-font-style</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Accordion font style</td>
+//        </tr>
+//        <tr>
+//            <th>@_accordion-control-font-weight</th>
+//            <td class="vars_value">@tab-control-font-weight</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Accordion font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@_accordion-control-line-height</th>
+//            <td class="vars_value">@accordion-control-height</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Accordion line height</td>
+//        </tr>
+//        <tr>
+//            <th colspan="4" class="vars_section">Accordion tabs controls settings</th>
+//        </tr>
+//        <tr>
+//            <th>@_accordion-control-border</th>
+//            <td class="vars_value">@tab-control-border-width solid @tab-control-border-color</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Accordion control border</td>
+//        </tr>
+//        <tr>
+//            <th>@_accordion-control-bg</th>
+//            <td class="vars_value">@tab-control-bg</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Accordion control background</td>
+//        </tr>
+//        <tr>
+//            <th>@_accordion-control-color</th>
+//            <td class="vars_value">@tab-control-color</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Accordion control color</td>
+//        </tr>
+//        <tr>
+//            <th>@_accordion-control-text-decoration</th>
+//            <td class="vars_value">@tab-control-text-decoration</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Accordion control text decoration</td>
+//        </tr>
+//        <tr>
+//            <th>@_accordion-control-color-visited</th>
+//            <td class="vars_value">@accordion-control-color</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Accordion control visited link color</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_accordion-control-text-decoration-visited</th>
+//            <td class="vars_value">@accordion-control-text-decoration</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Accordion control visited link text-decoration</td>
+//        </tr>
+//        <tr>
+//            <th>@_accordion-control-bg-hover</th>
+//            <td class="vars_value">@tab-control-bg-hover</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Hovered accordion control background</td>
+//        </tr>
+//        <tr>
+//            <th>@_accordion-control-color-hover</th>
+//            <td class="vars_value">@tab-control-color-hover</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Hovered accordion control text color</td>
+//        </tr>
+//        <tr>
+//            <th>@_accordion-control-text-decoration-hover</th>
+//            <td class="vars_value">@tab-control-text-decoration-hover</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Hovered accordion control text-decoration</td>
+//        </tr>
+//        <tr>
+//            <th>@_accordion-control-bg-active</th>
+//            <td class="vars_value">@tab-control-bg-active</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Active accordion control background</td>
+//        </tr>
+//        <tr>
+//            <th>@_accordion-control-color-active</th>
+//            <td class="vars_value">@tab-control-color-active</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Active accordion control text color</td>
+//        </tr>
+//        <tr>
+//            <th>@_accordion-control-text-decoration-active</th>
+//            <td class="vars_value">@tab-control-text-decoration-active</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Active accordion control text-decoration</td>
+//        </tr>
+//        <tr>
+//            <th>@_accordion-control-height</th>
+//            <td class="vars_value">@indent-xl-base</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Height of accordion control</td>
+//        </tr>
+//        <tr>
+//            <th>@_accordion-control-margin-bottom</th>
+//            <td class="vars_value">@accordion-control-margin-bottom</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Bottom margin of the accordion control</td>
+//        </tr>
+//        <tr>
+//            <th>@_accordion-control-padding-top</th>
+//            <td class="vars_value">@tab-control-padding-top</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Accordion tab control padding top</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_accordion-control-padding-right</th>
+//            <td class="vars_value">@indent-base</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Accordion tab control padding right</td>
+//        </tr>
+//        <tr>
+//            <th>@_accordion-control-padding-bottom</th>
+//            <td class="vars_value">@tab-control-padding-bottom</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Accordion tab control padding bottom</td>
+//        </tr>
+//        <tr>
+//            <th>@_accordion-control-padding-left</th>
+//            <td class="vars_value">@accordion-control-padding-right</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Accordion tab control padding left</td>
+//        </tr>
+//        <tr>
+//            <th colspan="4" class="vars_section">Accordion content settings</th>
+//        </tr>
+//        <tr>
+//            <th>@_accordion-content-bg</th>
+//            <td class="vars_value">@tab-control-bg-active</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Accordion tab content background</td>
+//        </tr>
+//        <tr>
+//            <th>@_accordion-content-border</th>
+//            <td class="vars_value">@tab-content-border</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Accordion tab content border</td>
+//        </tr>
+//        <tr>
+//            <th>@_accordion-content-margin</th>
+//            <td class="vars_value">0</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Accordion tab content margin</td>
+//        </tr>
+//        <tr>
+//            <th>@_accordion-content-padding</th>
+//            <td class="vars_value">@tab-content-padding-top @tab-content-padding-right @tab-content-padding-bottom @tab-content-padding-left</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Accordion tab content padding</td>
+//        </tr>
+//    </table>
+//  </pre>
+
+//  # Responsive tabs
+//
+//  Since tabs and accordion have same markup, they can transform one into other by means of CSS and JavaScript. This can be used for responsive web design. For instance, for mobile version there is an accordion, for desctop version it is transformed to tabs. To implement this approach, use the  <code>.data-accordion()</code> mixin for mobile version, and the <code>.data-tabs()</code> mixin for desctop version.
+//
+//  ```html
+//  <dl class="example-sections-4" data-sections="tabs">
+//    <dt class="item title active" data-section="title">
+//        <a class="switch" data-toggle="switch" href="#product.info.description">Details</a>
+//    </dt>
+//    <dd class="item content active" data-section="content">
+//        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+//    </dd>
+//    <dt class="item title" data-section="title">
+//        <a class="switch" data-toggle="switch" href="#product_tags">Tags</a>
+//    </dt>
+//    <dd class="item content" data-section="content">
+//        <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+//    </dd>
+//
+//    <dt class="item title" data-section="title">
+//        <a class="switch" data-toggle="switch" href="#product_reviews">Reviews</a>
+//    </dt>
+//    <dd class="item content" data-section="content">
+//        <p>It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+//    </dd>
+//  </dl>
+//  ```
+
+@media only screen and (max-width: 99999px) {
+    .example-sections-4 {
+        .data-tabs();
+    }
+}
+
+@media only screen and (max-width: @screen-m) {
+    .example-sections-4 {
+        .data-accordion();
+    }
+}
+
+//  # Tabs Base
+//
+//  The <code>.data-tabs-base()</code> mixin sets basic tabs styles.
+//
+//  ```html
+//  <dl class="example-sections-5" data-sections="tabs">
+//    <dt class="item title active" data-section="title">
+//        <a class="switch" data-toggle="switch" href="#">Details</a>
+//    </dt>
+//    <dd class="item content active" data-section="content">
+//        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+//    </dd>
+//
+//    <dt class="item title" data-section="title">
+//        <a class="switch" data-toggle="switch" href="#">Tags</a>
+//    </dt>
+//    <dd class="item content" data-section="content">
+//        <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+//    </dd>
+//
+//    <dt class="item title" data-section="title">
+//        <a class="switch" data-toggle="switch" href="#">Reviews</a>
+//    </dt>
+//    <dd class="item content" data-section="content">
+//        <p>It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+//    </dd>
+//  </dl>
+//  ```
+
+.example-sections-5 {
+    .data-tabs-base();
+}
+
+//  # Accordion Base
+//
+//  The <code>.data-accordion-base()</code> mixin sets basic accordion styles.
+//  Data accordion uses the same markup as data tabs.
+//
+//  ```html
+//  <dl class="example-sections-6" data-sections="tabs">
+//    <dt class="item title active" data-section="title">
+//        <a class="switch" data-toggle="switch" href="#">Details</a>
+//    </dt>
+//    <dd class="item content active" data-section="content">
+//        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+//    </dd>
+//    <dt class="item title" data-section="title">
+//        <a class="switch" data-toggle="switch" href="#">Tags</a>
+//    </dt>
+//    <dd class="item content" data-section="content">
+//        <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+//    </dd>
+//
+//    <dt class="item title" data-section="title">
+//        <a class="switch" data-toggle="switch" href="#">Reviews</a>
+//    </dt>
+//    <dd class="item content" data-section="content">
+//        <p>It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+//    </dd>
+//  </dl>
+//  ```
+
+.example-sections-6 {
+    .data-accordion-base();
+}

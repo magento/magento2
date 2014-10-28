@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Block\Product;
 
 /**
@@ -50,21 +46,25 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->_block = $objectManager->create('Magento\Catalog\Block\Product\View');
         $this->_product = $objectManager->create('Magento\Catalog\Model\Product');
         $this->_product->load(1);
-        $objectManager->get('Magento\Core\Model\Registry')->unregister('product');
-        $objectManager->get('Magento\Core\Model\Registry')->register('product', $this->_product);
+        $objectManager->get('Magento\Framework\Registry')->unregister('product');
+        $objectManager->get('Magento\Framework\Registry')->register('product', $this->_product);
     }
 
     public function testSetLayout()
     {
-        /** @var $layout \Magento\Core\Model\Layout */
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
-        $headBlock = $layout->createBlock('Magento\View\Element\Template', 'head');
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        /** @var $layout \Magento\Framework\View\Layout */
+        $layout = $objectManager->get('Magento\Framework\View\LayoutInterface');
+        /** @var $pageConfig \Magento\Framework\View\Page\Config */
+        $pageConfig = $objectManager->get('Magento\Framework\View\Page\Config');
+
         $layout->addBlock($this->_block);
 
-        $this->assertNotEmpty($headBlock->getTitle());
-        $this->assertEquals($this->_product->getMetaTitle(), $headBlock->getTitle());
-        $this->assertEquals($this->_product->getMetaKeyword(), $headBlock->getKeywords());
-        $this->assertEquals($this->_product->getMetaDescription(), $headBlock->getDescription());
+        $this->assertNotEmpty($pageConfig->getTitle());
+        $this->assertEquals($this->_product->getMetaTitle(), $pageConfig->getTitle());
+        $this->assertEquals($this->_product->getMetaKeyword(), $pageConfig->getKeywords());
+        $this->assertEquals($this->_product->getMetaDescription(), $pageConfig->getDescription());
     }
 
     public function testGetProduct()
@@ -74,7 +74,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Core\Model\Registry')->unregister('product');
+        $objectManager->get('Magento\Framework\Registry')->unregister('product');
         $this->_block->setProductId(1);
         $this->assertEquals($this->_product->getId(), $this->_block->getProduct()->getId());
     }
@@ -92,7 +92,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
     public function testGetJsonConfig()
     {
-        $config = (array) json_decode($this->_block->getJsonConfig());
+        $config = (array)json_decode($this->_block->getJsonConfig());
         $this->assertNotEmpty($config);
         $this->assertArrayHasKey('productId', $config);
         $this->assertEquals(1, $config['productId']);

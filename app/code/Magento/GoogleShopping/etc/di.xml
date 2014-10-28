@@ -23,22 +23,22 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
-    <virtualType name="Magento\GoogleShopping\Model\Resource\Helper" type="Magento\Core\Model\Resource\Helper">
-        <param name="modulePrefix">
-            <value>Core</value>
-        </param>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <virtualType name="Magento\GoogleShopping\Model\Resource\Helper" type="Magento\Framework\DB\Helper">
+        <arguments>
+            <argument name="modulePrefix" xsi:type="string">Core</argument>
+        </arguments>
     </virtualType>
     <type name="Magento\GoogleShopping\Model\Resource\Item\Collection">
-        <param name="resourceHelper">
-            <instance type="Magento\GoogleShopping\Model\Resource\Helper" />
-        </param>
+        <arguments>
+            <argument name="resourceHelper" xsi:type="object">Magento\GoogleShopping\Model\Resource\Helper</argument>
+        </arguments>
     </type>
-    <type name="Magento\Module\Updater\SetupFactory">
-        <param name="resourceTypes">
-            <value>
-                <googleshopping_setup>Magento\GoogleShopping\Model\Resource\Setup</googleshopping_setup>
-            </value>
-        </param>
+    <type name="Magento\Framework\Module\Updater\SetupFactory">
+        <arguments>
+            <argument name="resourceTypes" xsi:type="array">
+                <item name="googleshopping_setup" xsi:type="string">Magento\GoogleShopping\Model\Resource\Setup</item>
+            </argument>
+        </arguments>
     </type>
 </config>

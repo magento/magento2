@@ -18,12 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Layer\Filter;
 
 /**
@@ -45,30 +42,38 @@ class Attribute extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
     /**
      * Magento string lib
      *
-     * @var \Magento\Stdlib\String
+     * @var \Magento\Framework\Stdlib\String
      */
     protected $string;
 
     /**
-     * @param \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Model\Layer $catalogLayer
+     * @var \Magento\Framework\Filter\StripTags
+     */
+    protected $tagFilter;
+
+    /**
+     * @param ItemFactory $filterItemFactory
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Catalog\Model\Layer $layer
      * @param \Magento\Catalog\Model\Resource\Layer\Filter\AttributeFactory $filterAttributeFactory
-     * @param \Magento\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Filter\StripTags $tagFilter
      * @param array $data
      */
     public function __construct(
         \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Layer $catalogLayer,
+        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Catalog\Model\Layer $layer,
         \Magento\Catalog\Model\Resource\Layer\Filter\AttributeFactory $filterAttributeFactory,
-        \Magento\Stdlib\String $string,
+        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Filter\StripTags $tagFilter,
         array $data = array()
     ) {
         $this->_resource = $filterAttributeFactory->create();
         $this->string = $string;
-        parent::__construct($filterItemFactory, $storeManager, $catalogLayer, $data);
         $this->_requestVar = 'attribute';
+        $this->tagFilter = $tagFilter;
+        parent::__construct($filterItemFactory, $storeManager, $layer, $data);
     }
 
     /**
@@ -96,10 +101,9 @@ class Attribute extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * Apply attribute option filter to product collection
      *
      * @param   \Zend_Controller_Request_Abstract $request
-     * @param   \Magento\Object $filterBlock
-     * @return  \Magento\Catalog\Model\Layer\Filter\Attribute
+     * @return  $this
      */
-    public function apply(\Zend_Controller_Request_Abstract $request, $filterBlock)
+    public function apply(\Zend_Controller_Request_Abstract $request)
     {
         $filter = $request->getParam($this->_requestVar);
         if (is_array($filter)) {
@@ -147,17 +151,16 @@ class Attribute extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
                 if ($this->_getIsFilterableAttribute($attribute) == self::OPTIONS_ONLY_WITH_RESULTS) {
                     if (!empty($optionsCount[$option['value']])) {
                         $data[] = array(
-                            'label' => $option['label'],
+                            'label' => $this->tagFilter->filter($option['label']),
                             'value' => $option['value'],
-                            'count' => $optionsCount[$option['value']],
+                            'count' => $optionsCount[$option['value']]
                         );
                     }
-                }
-                else {
+                } else {
                     $data[] = array(
-                        'label' => $option['label'],
+                        'label' => $this->tagFilter->filter($option['label']),
                         'value' => $option['value'],
-                        'count' => isset($optionsCount[$option['value']]) ? $optionsCount[$option['value']] : 0,
+                        'count' => isset($optionsCount[$option['value']]) ? $optionsCount[$option['value']] : 0
                     );
                 }
             }

@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Test
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -35,7 +32,7 @@ class Factory
     /**
      * @var array
      */
-    static protected $_instances = array();
+    protected static $_instances = array();
 
     /**
      * Retrieves singleton instance of helper
@@ -43,7 +40,7 @@ class Factory
      * @param string $name
      * @return mixed
      */
-    static public function getHelper($name)
+    public static function getHelper($name)
     {
         if (!isset(self::$_instances[$name])) {
             $className = preg_replace('/[^_]*$/', ucfirst($name), __CLASS__, 1);
@@ -60,7 +57,7 @@ class Factory
      * @param mixed $helper
      * @return mixed
      */
-    static public function setHelper($name, $helper)
+    public static function setHelper($name, $helper)
     {
         $old = isset(self::$_instances[$name]) ? self::$_instances[$name] : null;
         self::$_instances[$name] = $helper;

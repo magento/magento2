@@ -18,23 +18,22 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Backend\Model\Config\Source\Web;
 
-class Redirect implements \Magento\Core\Model\Option\ArrayInterface
+class Redirect implements \Magento\Framework\Option\ArrayInterface
 {
-
+    /**
+     * @return array
+     */
     public function toOptionArray()
     {
         return array(
-            array('value' => 0, 'label'=>__('No')),
-            array('value' => 1, 'label'=>__('Yes (302 Found)')),
-            array('value' => 301, 'label'=>__('Yes (301 Moved Permanently)')),
+            array('value' => 0, 'label' => __('No')),
+            array('value' => 1, 'label' => __('Yes (302 Found)')),
+            array('value' => 301, 'label' => __('Yes (301 Moved Permanently)'))
         );
     }
-
 }

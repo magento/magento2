@@ -1,0 +1,6 @@
+"product/dataSet";"catalogRule/dataSet";"salesRule/dataSet";"config/dataSet";"constraint"
+"with_one_custom_option_and_category";"-";"-";"cross_border_enabled_price_incl_tax";"assertTaxWithCrossBorderApplied"
+"product_with_category";"-";"cart_rule";"cross_border_enabled_price_incl_tax";"assertTaxWithCrossBorderApplied"
+"product_with_category";"catalog_price_rule_priority_0";"-";"cross_border_enabled_price_incl_tax";"assertTaxWithCrossBorderApplied"
+"product_with_special_price_and_category";"-";"-";"cross_border_enabled_price_incl_tax";"assertTaxWithCrossBorderApplied"
+"product_with_category";"-";"-";"cross_border_enabled_price_excl_tax";"assertTaxWithCrossBorderNotApplied"

@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Checkout
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,12 +25,8 @@
 require __DIR__ . '/../../../Magento/Catalog/_files/products.php';
 
 /** @var $quote \Magento\Sales\Model\Quote */
-$quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Sales\Model\Quote');
-$quote->setStoreId(1)
-    ->setIsActive(false)
-    ->setIsMultiShipping(false)
-    ->addProduct($product->load($product->getId()), 2);
+$quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Quote');
+$quote->setStoreId(1)->setIsActive(false)->setIsMultiShipping(false)->addProduct($product->load($product->getId()), 2);
 
 $quote->getPayment()->setMethod('checkmo');
 

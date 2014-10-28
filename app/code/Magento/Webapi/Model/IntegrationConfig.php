@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Magento
  *
@@ -22,10 +21,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Webapi\Model;
 
-use \Magento\Webapi\Model\Cache\TypeIntegration;
+use Magento\Webapi\Model\Cache\TypeIntegration;
 
 /**
  * Integration Api Config Model.
@@ -37,7 +35,7 @@ class IntegrationConfig
     const CACHE_ID = 'integration-api';
 
     /**
-     * @var \Magento\App\Cache\Type\Config
+     * @var \Magento\Framework\App\Cache\Type\Config
      */
     protected $_configCacheType;
 
@@ -53,15 +51,12 @@ class IntegrationConfig
      */
     protected $_integrations;
 
-
     /**
      * @param Cache\TypeIntegration $configCacheType
      * @param Config\Integration\Reader $configReader
      */
-    public function __construct(
-        Cache\TypeIntegration $configCacheType,
-        Config\Integration\Reader $configReader
-    ) {
+    public function __construct(Cache\TypeIntegration $configCacheType, Config\Integration\Reader $configReader)
+    {
         $this->_configCacheType = $configCacheType;
         $this->_configReader = $configReader;
     }

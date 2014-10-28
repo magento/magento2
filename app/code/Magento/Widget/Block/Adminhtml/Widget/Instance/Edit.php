@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Widget
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,8 +25,6 @@
 /**
  * Widget Instance edit container
  *
- * @category    Magento
- * @package     Magento_Widget
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance;
@@ -38,18 +34,18 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Backend\Block\Widget\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Backend\Block\Widget\Context $context,
+        \Magento\Framework\Registry $registry,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
@@ -59,6 +55,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Internal constructor
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -82,21 +79,21 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * Prepare layout.
      * Adding save_and_continue button
      *
-     * @return \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit
+     * @return $this
      */
     protected function _preparelayout()
     {
         if ($this->getWidgetInstance()->isCompleteToCreate()) {
-            $this->_addButton(
+            $this->buttonList->add(
                 'save_and_edit_button',
                 array(
-                    'label'     => __('Save and Continue Edit'),
-                    'class'     => 'save',
-                    'data_attribute'  => array(
+                    'label' => __('Save and Continue Edit'),
+                    'class' => 'save',
+                    'data_attribute' => array(
                         'mage-init' => array(
-                            'button' => array('event' => 'saveAndContinueEdit', 'target' => '#edit_form'),
-                        ),
-                    ),
+                            'button' => array('event' => 'saveAndContinueEdit', 'target' => '#edit_form')
+                        )
+                    )
                 ),
                 100
             );
@@ -127,7 +124,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getValidationUrl()
     {
-        return $this->getUrl('adminhtml/*/validate', array('_current'=>true));
+        return $this->getUrl('adminhtml/*/validate', array('_current' => true));
     }
 
     /**
@@ -137,6 +134,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getSaveUrl()
     {
-        return $this->getUrl('adminhtml/*/save', array('_current'=>true, 'back'=>null));
+        return $this->getUrl('adminhtml/*/save', array('_current' => true, 'back' => null));
     }
 }

@@ -18,23 +18,25 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Newsletter
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-$template = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Newsletter\Model\Template');
-$template->setTemplateCode('fixture_tpl')
-    ->setTemplateText('<p>Follow this link to unsubscribe</p>
+$template = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Newsletter\Model\Template');
+$template->setTemplateCode(
+    'fixture_tpl'
+)->setTemplateText(
+    '<p>Follow this link to unsubscribe</p>
 <!-- This tag is for unsubscribe link  -->
-<p><a href="{{var subscriber.getUnsubscriptionLink()}}">{{var subscriber.getUnsubscriptionLink()}}</a></p>')
-    ->setTemplateType(2)
-    ->setTemplateSubject('Subject')
-    ->setTemplateSenderName('CustomerSupport')
-    ->setTemplateSenderEmail('support@example.com')
-    ->setTemplateActual(1)
-    ->save()
-;
+<p><a href="{{var subscriber.getUnsubscriptionLink()}}">{{var subscriber.getUnsubscriptionLink()}}</a></p>'
+)->setTemplateType(
+    2
+)->setTemplateSubject(
+    'Subject'
+)->setTemplateSenderName(
+    'CustomerSupport'
+)->setTemplateSenderEmail(
+    'support@example.com'
+)->setTemplateActual(
+    1
+)->save();

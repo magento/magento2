@@ -18,25 +18,30 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Order\Create\Totals;
 
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Subtotal Total Row Renderer
  *
  * @author Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Adminhtml\Order\Create\Totals;
-
 class Subtotal extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\DefaultTotals
 {
+    /**
+     * Template
+     *
+     * @var string
+     */
     protected $_template = 'order/create/totals/subtotal.phtml';
 
     /**
+     * Tax config
+     *
      * @var \Magento\Tax\Model\Config
      */
     protected $_taxConfig;
@@ -47,6 +52,7 @@ class Subtotal extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defaul
      * @param \Magento\Sales\Model\AdminOrder\Create $orderCreate
      * @param \Magento\Sales\Helper\Data $salesData
      * @param \Magento\Sales\Model\Config $salesConfig
+     * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Tax\Model\Config $taxConfig
      * @param array $data
      */
@@ -54,13 +60,14 @@ class Subtotal extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals\Defaul
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Model\Session\Quote $sessionQuote,
         \Magento\Sales\Model\AdminOrder\Create $orderCreate,
+        PriceCurrencyInterface $priceCurrency,
         \Magento\Sales\Helper\Data $salesData,
         \Magento\Sales\Model\Config $salesConfig,
         \Magento\Tax\Model\Config $taxConfig,
         array $data = array()
     ) {
         $this->_taxConfig = $taxConfig;
-        parent::__construct($context, $sessionQuote, $orderCreate, $salesData, $salesConfig, $data);
+        parent::__construct($context, $sessionQuote, $orderCreate, $priceCurrency, $salesData, $salesConfig, $data);
     }
 
     /**

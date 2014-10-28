@@ -18,20 +18,22 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/** @var $filesystemCollection \Magento\Core\Model\Theme\Collection */
-$filesystemCollection = $this->_themeFactory->create();
-$filesystemCollection->addDefaultPattern('*');
+/** @var $this \Magento\Core\Model\Resource\Setup */
 
-/** @var $theme \Magento\View\Design\ThemeInterface */
-foreach ($this->_themeResourceFactory->create() as $theme) {
-    $themeType = $filesystemCollection->hasTheme($theme)
-        ? \Magento\View\Design\ThemeInterface::TYPE_PHYSICAL
-        : \Magento\View\Design\ThemeInterface::TYPE_VIRTUAL;
+$fileCollection = $this->createThemeFactory();
+$fileCollection->addDefaultPattern('*');
+$fileCollection->setItemObjectClass('Magento\Core\Model\Theme\Data');
+
+$resourceCollection = $this->createThemeResourceFactory();
+$resourceCollection->setItemObjectClass('Magento\Core\Model\Theme\Data');
+/** @var $theme \Magento\Framework\View\Design\ThemeInterface */
+foreach ($resourceCollection as $theme) {
+    $themeType = $fileCollection->hasTheme($theme)
+        ? \Magento\Framework\View\Design\ThemeInterface::TYPE_PHYSICAL
+        : \Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL;
     $theme->setType($themeType)->save();
 }

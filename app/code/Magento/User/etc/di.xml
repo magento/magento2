@@ -23,35 +23,20 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
-    <type name="Magento\User\Model\Role" shared="false" />
-    <preference for="Magento\Backend\App\ConfigInterface" type="Magento\Backend\App\Config" />
-    <type name="Magento\User\Model\Resource\Rules">
-        <param name="rootResource">
-            <instance type="Magento\Core\Model\Acl\RootResource\Proxy" />
-        </param>
-        <param name="aclCache">
-            <instance type="Magento\Core\Model\Acl\Cache\Proxy" />
-        </param>
-    </type>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <type name="Magento\User\Model\Resource\User">
-        <param name="aclCache">
-            <instance type="Magento\Core\Model\Acl\Cache\Proxy" />
-        </param>
+        <arguments>
+            <argument name="aclCache" xsi:type="object">Magento\Framework\Acl\Cache\Proxy</argument>
+        </arguments>
     </type>
-    <type name="Magento\Module\Updater\SetupFactory">
-        <param name="resourceTypes">
-            <value>
-                <user_setup>Magento\User\Model\Resource\Setup</user_setup>
-            </value>
-        </param>
+    <type name="Magento\Framework\Module\Updater\SetupFactory">
+        <arguments>
+            <argument name="resourceTypes" xsi:type="array">
+                <item name="user_setup" xsi:type="string">Magento\Framework\Module\Setup</item>
+            </argument>
+        </arguments>
     </type>
-    <type name="Magento\Acl\Builder">
-        <param name="ruleLoader">
-            <instance type="Magento\User\Model\Acl\Loader\Rule" />
-        </param>
-        <param name="roleLoader">
-            <instance type="Magento\User\Model\Acl\Loader\Role" />
-        </param>
+    <type name="Magento\Authorization\Model\Role">
+        <plugin name="updateRoleUsersAcl" type="Magento\User\Model\Plugin\AuthorizationRole" sortOrder="20"/>
     </type>
 </config>

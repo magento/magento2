@@ -19,13 +19,11 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Core/etc/config.xsd">
     <default>
         <catalog>
             <navigation>
@@ -48,6 +46,9 @@
                 <parse_url_directives>1</parse_url_directives>
             </frontend>
             <product>
+                <flat>
+                    <max_index_count>64</max_index_count>
+                </flat>
                 <default_tax_group>2</default_tax_group>
             </product>
             <seo>
@@ -64,14 +65,6 @@
                 <time_format>12h</time_format>
                 <forbidden_extensions>php,exe</forbidden_extensions>
             </custom_options>
-            <layered_navigation>
-                <price_range_calculation>auto</price_range_calculation>
-                <price_range_step>100</price_range_step>
-                <price_range_max_intervals>10</price_range_max_intervals>
-                <one_price_interval>0</one_price_interval>
-                <interval_division_limit>9</interval_division_limit>
-                <display_product_count>1</display_product_count>
-            </layered_navigation>
         </catalog>
         <system>
             <media_storage_configuration>
@@ -81,14 +74,5 @@
                 </allowed_resources>
             </media_storage_configuration>
         </system>
-        <sales>
-            <msrp>
-                <enabled>0</enabled>
-                <apply_for_all>0</apply_for_all>
-                <display_price_type>1</display_price_type>
-                <explanation_message>Our price is lower than the manufacturer's "minimum advertised price." As a result, we cannot show you the price in catalog or the product page. &lt;br /&gt;&lt;br /&gt; You have no obligation to purchase the product once you know the price. You can simply remove the item from your cart.</explanation_message>
-                <explanation_message_whats_this>Our price is lower than the manufacturer's "minimum advertised price." As a result, we cannot show you the price in catalog or the product page. &lt;br /&gt;&lt;br /&gt; You have no obligation to purchase the product once you know the price. You can simply remove the item from your cart.</explanation_message_whats_this>
-            </msrp>
-        </sales>
     </default>
 </config>

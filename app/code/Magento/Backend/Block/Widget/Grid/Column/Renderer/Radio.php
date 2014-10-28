@@ -18,25 +18,26 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
 /**
  * Grid radiogroup column renderer
  *
- * @category   Magento
- * @package    Magento_Backend
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
-
-class Radio
-    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+class Radio extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
+    /**
+     * @var int
+     */
     protected $_defaultWidth = 55;
+
+    /**
+     * @var array
+     */
     protected $_values;
 
     /**
@@ -81,20 +82,21 @@ class Radio
         }
         return $this->_values;
     }
+
     /**
      * Renders grid column
      *
-     * @param   \Magento\Object $row
+     * @param   \Magento\Framework\Object $row
      * @return  string
      */
-    public function render(\Magento\Object $row)
+    public function render(\Magento\Framework\Object $row)
     {
         $values = $this->_getValues();
-        $value  = $row->getData($this->getColumn()->getIndex());
+        $value = $row->getData($this->getColumn()->getIndex());
         if (is_array($values)) {
             $checked = in_array($value, $values) ? ' checked="checked"' : '';
         } else {
-            $checked = ($value === $this->getColumn()->getValue()) ? ' checked="checked"' : '';
+            $checked = $value === $this->getColumn()->getValue() ? ' checked="checked"' : '';
         }
         $html = '<input type="radio" name="' . $this->getColumn()->getHtmlName() . '" ';
         $html .= 'value="' . $row->getId() . '" class="radio"' . $checked . '/>';

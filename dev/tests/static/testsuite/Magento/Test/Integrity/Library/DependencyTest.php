@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Integrity\Library;
 
 use Magento\TestFramework\Integrity\Library\Injectable;
@@ -33,7 +32,6 @@ use Zend\Code\Reflection\FileReflection;
 /**
  * Test check if Magento library components contain incorrect dependencies to application layer
  *
- * @package Magento\Test
  */
 class DependencyTest extends \PHPUnit_Framework_TestCase
 {
@@ -54,44 +52,37 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
         return array('Magento');
     }
 
-    /**
-     * Test check dependencies in library from application
-     *
-     * @test
-     * @dataProvider libraryDataProvider
-     */
-    public function testCheckDependencies($file)
+    public function testCheckDependencies()
     {
-        $fileReflection = new FileReflection($file);
-        $tokens   = new Tokens($fileReflection->getContents(), new ParserFactory());
-        $tokens->parseContent();
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * @param string $file
+             */
+            function ($file) {
+                $fileReflection = new FileReflection($file);
+                $tokens = new Tokens($fileReflection->getContents(), new ParserFactory());
+                $tokens->parseContent();
 
-        $dependencies = array_merge(
-            (new Injectable())->getDependencies($fileReflection),
-            $tokens->getDependencies()
+                $dependencies = array_merge(
+                    (new Injectable())->getDependencies($fileReflection),
+                    $tokens->getDependencies()
+                );
+
+                $pattern = '#^(\\\\|)' . implode('|', $this->getForbiddenNamespaces()) . '\\\\#';
+                foreach ($dependencies as $dependency) {
+                    $filePath = BP . '/lib/internal/' . str_replace('\\', '/', $dependency) . '.php';
+                    if (preg_match($pattern, $dependency) && !file_exists($filePath)) {
+                        $this->errors[$fileReflection->getFileName()][] = $dependency;
+                    }
+                }
+
+                if (!empty($this->errors)) {
+                    $this->fail($this->getFailMessage());
+                }
+            },
+            $this->libraryDataProvider()
         );
-
-        foreach ($dependencies as $dependency) {
-            if (preg_match('#^(\\\\|)' . implode('|', $this->getForbiddenNamespaces()) . '\\\\#', $dependency)
-                && !file_exists(BP . '/lib/' . str_replace('\\', '/', $dependency) . '.php')
-            ) {
-                $this->errors[$fileReflection->getFileName()][] = $dependency;
-            }
-        }
-
-        if ($this->hasErrors()) {
-            $this->fail($this->getFailMessage());
-        }
-    }
-
-    /**
-     * Check if error not empty
-     *
-     * @return bool
-     */
-    protected function hasErrors()
-    {
-        return !empty($this->errors);
     }
 
     /**
@@ -111,8 +102,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
     {
         $failMessage = '';
         foreach ($this->errors as $class => $dependencies) {
-            $failMessage .= $class . ' depends for non-library '
-                . (count($dependencies) > 1 ? 'classes ' : 'class ');
+            $failMessage .= $class . ' depends for non-library ' . (count($dependencies) > 1 ? 'classes ' : 'class ');
             foreach ($dependencies as $dependency) {
                 $failMessage .= $dependency . ' ';
             }
@@ -128,10 +118,10 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      */
     public function libraryDataProvider()
     {
-        // @TODO: remove this code when class Magento\Data\Collection will fixed
-        include_once BP . '/app/code/Magento/Core/Model/Option/ArrayInterface.php';
+        // @TODO: remove this code when class Magento\Framework\Data\Collection will fixed
+        include_once BP . '/lib/internal/Magento/Framework/Option/ArrayInterface.php';
         $blackList = file(__DIR__ . '/_files/blacklist.txt', FILE_IGNORE_NEW_LINES);
-        $dataProvider = Files::init()->getClassFiles(false, false, false, false, false, true, true);
+        $dataProvider = Files::init()->getClassFiles(false, false, false, true, true);
 
         foreach ($dataProvider as $key => $data) {
             $file = str_replace(BP . '/', '', $data[0]);

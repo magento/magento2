@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    tests
- * @package     static
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,9 +26,6 @@
  * Class to test composed JsHint test.
  * Used to ensure, that Magento coding standard rules (sniffs) really do what they are intended to do.
  *
- * @category    Magento
- * @package     Magento
- * @subpackage  static_tests
  */
 namespace Magento\Test\Js\Exemplar;
 
@@ -44,7 +39,7 @@ class JsHintTest extends \PHPUnit_Framework_TestCase
     public static function setUpBeforeClass()
     {
         $reportFile = __DIR__ . '/../../../tmp/js_report.txt';
-        $fileName = BP . '/pub/lib/mage/mage.js';
+        $fileName = BP . '/lib/web/mage/mage.js';
         self::$_cmd = new \Magento\TestFramework\Inspection\JsHint\Command($fileName, $reportFile);
     }
 

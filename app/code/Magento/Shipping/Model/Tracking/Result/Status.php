@@ -18,39 +18,23 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Shipping
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Shipping\Model\Tracking\Result;
 
 /**
  * Fields:
- * - carrier: fedex
- * - carrierTitle: Federal Express
- * - tracking: 749011111111
- * - status: delivered
- * - service: home delivery
- * - delivery date: 2007-11-23
- * - delivery time: 16:01:00
- * - delivery location: Frontdoor
- * - signedby: lindy
- *
- * Fields:
- * -carrier: ups cgi
- * -popup: 1
- * -url: http://wwwapps.ups.com/WebTracking/processInputRequest?HTMLVersion=5.0&error_carried=true&tracknums_displayed=5&TypeOfInquiryNumber=T&loc=en_US&InquiryNumber1=$tracking
- *
- * Fields:
- * -carrier: usps
- * -tracksummary: Your item was delivered at 6:50 am on February 6 in Los Angeles CA 90064
+ * - carrier: carrier code
+ * - carrierTitle: carrier title
  */
-namespace Magento\Shipping\Model\Tracking\Result;
-
 class Status extends \Magento\Shipping\Model\Tracking\Result\AbstractResult
 {
-    public function getAllData(){
+    /**
+     * @return array
+     */
+    public function getAllData()
+    {
         return $this->_data;
     }
 }

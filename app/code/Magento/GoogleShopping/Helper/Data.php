@@ -18,46 +18,41 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_GoogleShopping
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\GoogleShopping\Helper;
 
 /**
  * Google Content Data Helper
  *
- * @category   Magento
- * @package    Magento_GoogleShopping
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\GoogleShopping\Helper;
-
-class Data extends \Magento\App\Helper\AbstractHelper
+class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Magento string lib
      *
-     * @var \Magento\Stdlib\String
+     * @var \Magento\Framework\Stdlib\String
      */
     protected $string;
 
     /**
      * Store manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @param \Magento\App\Helper\Context $context
-     * @param \Magento\Stdlib\String $string
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\Helper\Context $context
+     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
-        \Magento\Stdlib\String $string,
-        \Magento\Core\Model\StoreManagerInterface $storeManager
+        \Magento\Framework\App\Helper\Context $context,
+        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\StoreManagerInterface $storeManager
     ) {
         $this->string = $string;
         $this->_storeManager = $storeManager;
@@ -79,8 +74,8 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Remove characters and words not allowed by Google Content in title and content (description).
      *
-     * (to avoid "Expected response code 200, got 400.
-     * Reason: There is a problem with the character encoding of this attribute")
+     * To avoid "Expected response code 200, got 400.
+     * Reason: There is a problem with the character encoding of this attribute"
      *
      * @param string $string
      * @return string
@@ -119,9 +114,13 @@ class Data extends \Magento\App\Helper\AbstractHelper
             }
 
             if (strip_tags($row) == $row) {
-                $row = preg_replace('/@ (.*)/', __("See '\\1'"), $row);
+                $row = preg_replace('/@ (.*)/', __('See \'\1\''), $row);
                 if (!is_null($product)) {
-                    $row .= ' ' . __("for product '%1' (in '%2' store)", $product->getName(), $this->_storeManager->getStore($product->getStoreId())->getName());
+                    $row .= ' ' . __(
+                        "for product '%1' (in '%2' store)",
+                        $product->getName(),
+                        $this->_storeManager->getStore($product->getStoreId())->getName()
+                    );
                 }
                 $result[] = $row;
                 continue;

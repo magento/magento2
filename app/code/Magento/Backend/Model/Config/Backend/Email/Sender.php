@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,27 +27,25 @@
  */
 namespace Magento\Backend\Model\Config\Backend\Email;
 
-class Sender extends \Magento\Core\Model\Config\Value
+class Sender extends \Magento\Framework\App\Config\Value
 {
     /**
      * Check sender name validity
      *
-     * @return \Magento\Backend\Model\Config\Backend\Email\Sender
-     * @throws \Magento\Core\Exception
+     * @return $this
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function _beforeSave()
     {
         $value = $this->getValue();
         if (!preg_match("/^[\S ]+$/", $value)) {
-            throw new \Magento\Core\Exception(
+            throw new \Magento\Framework\Model\Exception(
                 __('The sender name "%1" is not valid. Please use only visible characters and spaces.', $value)
             );
         }
 
         if (strlen($value) > 255) {
-            throw new \Magento\Core\Exception(
-                __('Maximum sender name length is 255. Please correct your settings.')
-            );
+            throw new \Magento\Framework\Model\Exception(__('Maximum sender name length is 255. Please correct your settings.'));
         }
         return $this;
     }

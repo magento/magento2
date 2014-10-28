@@ -18,30 +18,29 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-/**
- * Adminhtml sales order edit address block
- *
- * @category    Magento
- * @package     Magento_Sales
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Sales\Block\Adminhtml\Order\Address;
 
-class Form
-    extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+
+/**
+ * Adminhtml sales order address block
+ */
+class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
 {
+    /**
+     * Address form template
+     *
+     * @var string
+     */
     protected $_template = 'order/address/form.phtml';
 
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
@@ -49,30 +48,31 @@ class Form
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Model\Session\Quote $sessionQuote
      * @param \Magento\Sales\Model\AdminOrder\Create $orderCreate
-     * @param \Magento\Data\FormFactory $formFactory
+     * @param PriceCurrencyInterface $priceCurrency
+     * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Customer\Model\AddressFactory $addressFactory
-     * @param \Magento\Customer\Model\FormFactory $customerFormFactory
-     * @param \Magento\Backend\Helper\Addresses $adminhtmlAddresses
+     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
+     * @param \Magento\Customer\Model\Metadata\FormFactory $customerFormFactory
      * @param \Magento\Customer\Helper\Data $customerHelper
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Customer\Service\V1\CustomerAddressServiceInterface $addressService
+     * @param \Magento\Customer\Helper\Address $addressHelper
+     * @param \Magento\Framework\Registry $registry
      * @param array $data
-     * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Model\Session\Quote $sessionQuote,
         \Magento\Sales\Model\AdminOrder\Create $orderCreate,
-        \Magento\Data\FormFactory $formFactory,
+        PriceCurrencyInterface $priceCurrency,
+        \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Json\EncoderInterface $jsonEncoder,
-        \Magento\Customer\Model\AddressFactory $addressFactory,
-        \Magento\Customer\Model\FormFactory $customerFormFactory,
-        \Magento\Backend\Helper\Addresses $adminhtmlAddresses,
+        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
+        \Magento\Customer\Model\Metadata\FormFactory $customerFormFactory,
         \Magento\Customer\Helper\Data $customerHelper,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Customer\Service\V1\CustomerAddressServiceInterface $addressService,
+        \Magento\Customer\Helper\Address $addressHelper,
+        \Magento\Framework\Registry $registry,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
@@ -80,13 +80,14 @@ class Form
             $context,
             $sessionQuote,
             $orderCreate,
+            $priceCurrency,
             $formFactory,
             $coreData,
             $jsonEncoder,
-            $addressFactory,
             $customerFormFactory,
-            $adminhtmlAddresses,
             $customerHelper,
+            $addressService,
+            $addressHelper,
             $data
         );
     }
@@ -104,14 +105,16 @@ class Form
     /**
      * Define form attributes (id, method, action)
      *
-     * @return \Magento\Sales\Block\Adminhtml\Order\Create\Billing\Address
+     * @return $this
      */
     protected function _prepareForm()
     {
         parent::_prepareForm();
         $this->_form->setId('edit_form');
         $this->_form->setMethod('post');
-        $this->_form->setAction($this->getUrl('sales/*/addressSave', array('address_id'=>$this->_getAddress()->getId())));
+        $this->_form->setAction(
+            $this->getUrl('sales/*/addressSave', array('address_id' => $this->_getAddress()->getId()))
+        );
         $this->_form->setUseContainer(true);
         return $this;
     }

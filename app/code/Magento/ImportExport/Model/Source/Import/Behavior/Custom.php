@@ -18,46 +18,30 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_ImportExport
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-/**
- * Import behavior source model used for customers' components import entities.
- * Source model used in new import entities in Magento 2.0.
- *
- * @category    Magento
- * @package     Magento_ImportExport
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\ImportExport\Model\Source\Import\Behavior;
 
-class Custom
-    extends \Magento\ImportExport\Model\Source\Import\AbstractBehavior
+/**
+ * Import behavior source model
+ */
+class Custom extends \Magento\ImportExport\Model\Source\Import\AbstractBehavior
 {
     /**
-     * Get possible behaviours
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function toArray()
     {
         return array(
-            \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE
-                => __('Add/Update Complex Data'),
-            \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE
-                => __('Delete Entities'),
-            \Magento\ImportExport\Model\Import::BEHAVIOR_CUSTOM
-                => __('Custom Action'),
+            \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE => __('Add/Update Complex Data'),
+            \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE => __('Delete Entities'),
+            \Magento\ImportExport\Model\Import::BEHAVIOR_CUSTOM => __('Custom Action')
         );
     }
 
     /**
-     * Get current behaviour code
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getCode()
     {

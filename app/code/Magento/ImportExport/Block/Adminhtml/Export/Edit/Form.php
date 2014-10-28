@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_ImportExport
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,8 +25,6 @@
 /**
  * Export edit form block
  *
- * @category    Magento
- * @package     Magento_ImportExport
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\ImportExport\Block\Adminhtml\Export\Edit;
@@ -47,16 +43,16 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Data\FormFactory $formFactory
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\ImportExport\Model\Source\Export\EntityFactory $entityFactory
      * @param \Magento\ImportExport\Model\Source\Export\FormatFactory $formatFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Data\FormFactory $formFactory,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\ImportExport\Model\Source\Export\EntityFactory $entityFactory,
         \Magento\ImportExport\Model\Source\Export\FormatFactory $formatFactory,
         array $data = array()
@@ -69,35 +65,45 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Prepare form before rendering HTML.
      *
-     * @return \Magento\ImportExport\Block\Adminhtml\Export\Edit\Form
+     * @return $this
      */
     protected function _prepareForm()
     {
-        /** @var \Magento\Data\Form $form */
-        $form = $this->_formFactory->create(array(
-            'data' => array(
-                'id'     => 'edit_form',
-                'action' => $this->getUrl('adminhtml/*/getFilter'),
-                'method' => 'post',
-            ))
+        /** @var \Magento\Framework\Data\Form $form */
+        $form = $this->_formFactory->create(
+            array(
+                'data' => array(
+                    'id' => 'edit_form',
+                    'action' => $this->getUrl('adminhtml/*/getFilter'),
+                    'method' => 'post'
+                )
+            )
         );
 
         $fieldset = $form->addFieldset('base_fieldset', array('legend' => __('Export Settings')));
-        $fieldset->addField('entity', 'select', array(
-            'name'     => 'entity',
-            'title'    => __('Entity Type'),
-            'label'    => __('Entity Type'),
-            'required' => false,
-            'onchange' => 'varienExport.getFilter();',
-            'values'   => $this->_entityFactory->create()->toOptionArray()
-        ));
-        $fieldset->addField('file_format', 'select', array(
-            'name'     => 'file_format',
-            'title'    => __('Export File Format'),
-            'label'    => __('Export File Format'),
-            'required' => false,
-            'values'   => $this->_formatFactory->create()->toOptionArray()
-        ));
+        $fieldset->addField(
+            'entity',
+            'select',
+            array(
+                'name' => 'entity',
+                'title' => __('Entity Type'),
+                'label' => __('Entity Type'),
+                'required' => false,
+                'onchange' => 'varienExport.getFilter();',
+                'values' => $this->_entityFactory->create()->toOptionArray()
+            )
+        );
+        $fieldset->addField(
+            'file_format',
+            'select',
+            array(
+                'name' => 'file_format',
+                'title' => __('Export File Format'),
+                'label' => __('Export File Format'),
+                'required' => false,
+                'values' => $this->_formatFactory->create()->toOptionArray()
+            )
+        );
 
         $form->setUseContainer(true);
         $this->setForm($form);

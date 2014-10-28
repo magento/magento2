@@ -1,0 +1,25 @@
+Cancel,Cancel
+Price,Price
+ID,ID
+SKU,SKU
+Qty,Qty
+Name,Name
+Availability,Availability
+"In stock","In stock"
+"Out of stock","Out of stock"
+Availability:,Availability:
+"No options of this product are available.","No options of this product are available."
+"Excl. Tax:","Excl. Tax:"
+"Incl. Tax:","Incl. Tax:"
+"Product Name","Product Name"
+"Associated Products","Associated Products"
+"Grouped Products","Grouped Products"
+"We cannot process the item.","We cannot process the item."
+"Please specify the quantity of product(s).","Please specify the quantity of product(s)."
+"There are no grouped products.","There are no grouped products."
+"Default Qty","Default Qty"
+"Starting at:","Starting at:"
+"Grouped product items","Grouped product items"
+"Add Selected Products","Add Selected Products"
+"Add Products to Group","Add Products to Group"
+"Grouped Product Image","Grouped Product Image"

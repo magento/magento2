@@ -18,64 +18,43 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model\Resource\Order;
 
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Sales\Model\Resource\Attribute;
+use Magento\Framework\App\Resource as AppResource;
+use Magento\Sales\Model\Increment as SalesIncrement;
+use Magento\Sales\Model\Resource\Entity as SalesResource;
+use Magento\Sales\Model\Resource\Order\Shipment\Grid as ShipmentGrid;
 
 /**
  * Flat sales order shipment resource
  *
- * @category    Magento
- * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Model\Resource\Order;
-
-class Shipment extends \Magento\Sales\Model\Resource\Order\AbstractOrder
+class Shipment extends SalesResource
 {
     /**
      * Event prefix
      *
      * @var string
      */
-    protected $_eventPrefix                  = 'sales_order_shipment_resource';
-
-    /**
-     * Is grid available
-     *
-     * @var bool
-     */
-    protected $_grid                         = true;
-
-    /**
-     * Use increment id
-     *
-     * @var bool
-     */
-    protected $_useIncrementId               = true;
-
-    /**
-     * Entity type for increment id
-     *
-     * @var string
-     */
-    protected $_entityTypeForIncrementId     = 'shipment';
+    protected $_eventPrefix = 'sales_order_shipment_resource';
 
     /**
      * Fields that should be serialized before persistence
      *
      * @var array
      */
-    protected $_serializableFields   = array(
-        'packages' => array(array(), array())
-    );
+    protected $_serializableFields = ['packages' => [[], []]];
 
     /**
      * Model initialization
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -83,37 +62,21 @@ class Shipment extends \Magento\Sales\Model\Resource\Order\AbstractOrder
     }
 
     /**
-     * Init virtual grid records for entity
+     * Constructor
      *
-     * @return \Magento\Sales\Model\Resource\Order\Shipment
+     * @param AppResource $resource
+     * @param DateTime $dateTime
+     * @param Attribute $attribute
+     * @param SalesIncrement $salesIncrement
+     * @param ShipmentGrid $gridAggregator
      */
-    protected function _initVirtualGridColumns()
-    {
-        parent::_initVirtualGridColumns();
-        $adapter          = $this->getReadConnection();
-        $checkedFirstname = $adapter->getIfNullSql('{{table}}.firstname', $adapter->quote(''));
-        $checkedLastname  = $adapter->getIfNullSql('{{table}}.lastname', $adapter->quote(''));
-        $concatName       = $adapter->getConcatSql(array($checkedFirstname, $adapter->quote(' '), $checkedLastname));
-
-        $this->addVirtualGridColumn(
-            'shipping_name',
-            'sales_flat_order_address',
-            array('shipping_address_id' => 'entity_id'),
-            $concatName
-        )
-        ->addVirtualGridColumn(
-            'order_increment_id',
-            'sales_flat_order',
-            array('order_id' => 'entity_id'),
-            'increment_id'
-        )
-        ->addVirtualGridColumn(
-            'order_created_at',
-            'sales_flat_order',
-            array('order_id' => 'entity_id'),
-            'created_at'
-        );
-
-        return $this;
+    public function __construct(
+        AppResource $resource,
+        DateTime $dateTime,
+        Attribute $attribute,
+        SalesIncrement $salesIncrement,
+        ShipmentGrid $gridAggregator
+    ) {
+        parent::__construct($resource, $dateTime, $attribute, $salesIncrement, $gridAggregator);
     }
 }

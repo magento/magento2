@@ -20,8 +20,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Widget
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -30,9 +28,9 @@ namespace Magento\Widget\Model\Widget;
 class Config
 {
     /**
-     * @var \Magento\View\Url
+     * @var \Magento\Framework\View\Asset\Repository
      */
-    protected $_viewUrl;
+    protected $_assetRepo;
 
     /**
      * @var \Magento\Widget\Model\Widget
@@ -40,7 +38,7 @@ class Config
     protected $_widget;
 
     /**
-     * @var \Magento\Backend\Model\Url
+     * @var \Magento\Backend\Model\UrlInterface
      */
     protected $_backendUrl;
 
@@ -55,38 +53,38 @@ class Config
     protected $_widgetFactory;
 
     /**
-     * @param \Magento\Backend\Model\Url $backendUrl
+     * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param \Magento\Core\Helper\Data $coreHelper
-     * @param \Magento\View\Url $viewUrl
+     * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Widget\Model\WidgetFactory $widgetFactory
      */
     public function __construct(
-        \Magento\Backend\Model\Url $backendUrl,
+        \Magento\Backend\Model\UrlInterface $backendUrl,
         \Magento\Core\Helper\Data $coreHelper,
-        \Magento\View\Url $viewUrl,
+        \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Widget\Model\WidgetFactory $widgetFactory
     ) {
         $this->_backendUrl = $backendUrl;
         $this->_coreHelper = $coreHelper;
-        $this->_viewUrl = $viewUrl;
+        $this->_assetRepo = $assetRepo;
         $this->_widgetFactory = $widgetFactory;
     }
 
     /**
      * Return config settings for widgets insertion plugin based on editor element config
      *
-     * @param \Magento\Object $config
+     * @param \Magento\Framework\Object $config
      * @return array
      */
     public function getPluginSettings($config)
     {
-        $url = $this->_viewUrl->getViewFileUrl(
+        $url = $this->_assetRepo->getUrl(
             'mage/adminhtml/wysiwyg/tiny_mce/plugins/magentowidget/editor_plugin.js'
         );
         $settings = array(
-            'widget_plugin_src'   => $url,
+            'widget_plugin_src' => $url,
             'widget_placeholders' => $this->_widgetFactory->create()->getPlaceholderImageUrls(),
-            'widget_window_url'   => $this->getWidgetWindowUrl($config)
+            'widget_window_url' => $this->getWidgetWindowUrl($config)
         );
 
         return $settings;
@@ -95,7 +93,7 @@ class Config
     /**
      * Return Widgets Insertion Plugin Window URL
      *
-     * @param \Magento\Object $config Editor element config
+     * @param \Magento\Framework\Object $config Editor element config
      * @return string
      */
     public function getWidgetWindowUrl($config)
@@ -122,7 +120,7 @@ class Config
     /**
      * Encode list of widget types into query param
      *
-     * @param array $widgets List of widgets
+     * @param string[]|string $widgets List of widgets
      * @return string Query param value
      */
     public function encodeWidgetsToQuery($widgets)
@@ -136,12 +134,11 @@ class Config
      * Decode URL query param and return list of widgets
      *
      * @param string $queryParam Query param value to decode
-     * @return array Array of widget types
+     * @return string[] Array of widget types
      */
     public function decodeWidgetsFromQuery($queryParam)
     {
         $param = $this->_coreHelper->urlDecode($queryParam);
         return preg_split('/\s*\,\s*/', $param, 0, PREG_SPLIT_NO_EMPTY);
     }
-
 }

@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\Theme;
 
 class FileTest extends \PHPUnit_Framework_TestCase
@@ -48,16 +44,16 @@ class FileTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_model = $objectManager->create('Magento\Core\Model\Theme\File');
-        /** @var $themeModel \Magento\View\Design\ThemeInterface */
-        $themeModel = $objectManager->create('Magento\View\Design\ThemeInterface');
+        /** @var $themeModel \Magento\Framework\View\Design\ThemeInterface */
+        $themeModel = $objectManager->create('Magento\Framework\View\Design\ThemeInterface');
         $this->_theme = $themeModel->getCollection()->getFirstItem();
         $this->_data = array(
             'file_path' => 'main.css',
             'file_type' => 'css',
-            'content'   => 'content files',
-            'order'     => 0,
-            'theme'     => $this->_theme,
-            'theme_id'  => $this->_theme->getId(),
+            'content' => 'content files',
+            'order' => 0,
+            'theme' => $this->_theme,
+            'theme_id' => $this->_theme->getId()
         );
     }
 

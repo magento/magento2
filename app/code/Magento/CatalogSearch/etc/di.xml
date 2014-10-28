@@ -23,10 +23,100 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
-    <type name="Magento\CatalogSearch\Block\Layer">
-        <param name="catalogLayer">
-            <instance type="Magento\CatalogSearch\Model\Layer\Proxy" />
-        </param>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Magento\Framework\Search\Adapter\Mysql\Field\ResolverInterface" type="Magento\CatalogSearch\Model\Adapter\Mysql\Field\Resolver" />
+    <preference for="Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface" type="Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider"/>
+    <preference for="Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface" type="Magento\CatalogSearch\Model\Adapter\Mysql\Filter\Preprocessor" />
+    <type name="Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderContainer">
+        <arguments>
+            <argument name="dataProviders" xsi:type="array">
+                <item name="catalogsearch_fulltext" xsi:type="object">Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Module\Setup\Migration">
+        <arguments>
+            <argument name="compositeModules" xsi:type="array">
+                <item name="catalogsearch" xsi:type="string">Magento_CatalogSearch</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="advancedSearchFilterList" type="Magento\Catalog\Model\Layer\FilterList">
+        <arguments>
+            <argument name="filterableAttributes" xsi:type="object">Magento\CatalogSearch\Model\Layer\Advanced\FilterableAttributeList</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\CatalogSearch\Model\Layer\Advanced\FilterableAttributeList">
+        <arguments>
+            <argument name="layer" xsi:type="object">Magento\CatalogSearch\Model\Layer\Advanced</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product">
+        <plugin name="catalogsearchFulltextProduct" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product"/>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Action">
+        <plugin name="catalogsearchFulltextMassAction" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product\Action"/>
+    </type>
+    <type name="Magento\Store\Model\Resource\Store">
+        <plugin name="catalogsearchFulltextIndexerStoreView" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Store\View" />
+    </type>
+    <type name="Magento\Store\Model\Resource\Group">
+        <plugin name="catalogsearchFulltextIndexerStoreGroup" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Store\Group"/>
+    </type>
+    <type name="Magento\Catalog\Model\Resource\Attribute">
+        <plugin name="catalogsearchFulltextIndexerAttribute" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Attribute"/>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\AbstractPlugin">
+        <arguments>
+            <argument name="indexer" xsi:type="object" shared="false">Magento\Indexer\Model\IndexerInterface</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Search\EntityMetadata" />
+    <virtualType name="Magento\Framework\Search\ProductEntityMetadata" type="Magento\Framework\Search\EntityMetadata">
+        <arguments>
+            <argument name="entityId" xsi:type="string">entity_id</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\Search\Adapter\Mysql\DocumentFactory">
+        <arguments>
+            <argument name="entityMetadata" xsi:type="object">Magento\Framework\Search\ProductEntityMetadata</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder">
+        <arguments>
+            <argument name="entityMetadata" xsi:type="object">Magento\Framework\Search\ProductEntityMetadata</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Search\Request\Config\FilesystemReader">
+        <plugin name="catalogSearchDynamicFields"  type="Magento\CatalogSearch\Model\Search\ReaderPlugin" />
+    </type>
+    <type name="Magento\Framework\Search\Dynamic\IntervalFactory">
+        <arguments>
+            <argument name="configPath" xsi:type="const">\Magento\CatalogSearch\Model\Resource\EngineProvider::CONFIG_ENGINE_PATH</argument>
+            <argument name="intervals" xsi:type="array">
+                <item name="Magento\CatalogSearch\Model\Resource\Fulltext\Engine" xsi:type="string">Magento\CatalogSearch\Model\Price\Interval</item>
+            </argument>
+            <argument name="scope" xsi:type="const">\Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Backend\Controller\Adminhtml\Index\GlobalSearch">
+        <arguments>
+            <argument name="searchModules" xsi:type="array">
+                <item name="products" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\CatalogSearch\Model\Search\Catalog</item>
+                    <item name="acl" xsi:type="string">Magento_Catalog::catalog</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Search\Model\SearchCollectionInterface" type="Magento\CatalogSearch\Model\Resource\Search\Collection" />
+    <type name="Magento\Catalog\Model\Layer\Search\Context">
+        <arguments>
+            <argument name="collectionProvider" xsi:type="object">Magento\CatalogSearch\Model\Layer\Search\ItemCollectionProvider</argument>
+            <argument name="stateKey" xsi:type="object">Magento\CatalogSearch\Model\Layer\Search\StateKey</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Layer\Search\CollectionFilter">
+        <plugin name="searchQuery" type="Magento\CatalogSearch\Model\Layer\Search\Plugin\CollectionFilter" />
     </type>
 </config>

@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Block\Product;
 
 /**
@@ -41,10 +37,19 @@ class NewTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')
-            ->loadArea(\Magento\Core\Model\App\Area::AREA_FRONTEND);
-        $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-            ->createBlock('Magento\Catalog\Block\Product\NewProduct');
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea(\Magento\Framework\App\Area::AREA_FRONTEND);
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\App\Http\Context'
+        )->setValue(
+            \Magento\Customer\Helper\Data::CONTEXT_GROUP,
+            \Magento\Customer\Service\V1\CustomerGroupServiceInterface::NOT_LOGGED_IN_ID,
+            \Magento\Customer\Service\V1\CustomerGroupServiceInterface::NOT_LOGGED_IN_ID
+        );
+        $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\View\LayoutInterface'
+        )->createBlock(
+            'Magento\Catalog\Block\Product\NewProduct'
+        );
     }
 
     public function testGetCacheKeyInfo()
@@ -59,22 +64,27 @@ class NewTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(1, array_shift($keys));
         $this->assertEquals(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-                ->getStore()->getId(),
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                'Magento\Framework\StoreManagerInterface'
+            )->getStore()->getId(),
             $info[1]
         );
 
         $this->assertSame(2, array_shift($keys));
 
-        $themeModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\View\DesignInterface')
-            ->getDesignTheme();
+        $themeModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\View\DesignInterface'
+        )->getDesignTheme();
 
         $this->assertEquals($themeModel->getId() ?: null, $info[2]);
 
         $this->assertSame(3, array_shift($keys));
-        $this->assertEquals(\Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Customer\Model\Session')->getCustomerGroupId(), $info[3]);
+        $this->assertEquals(
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                'Magento\Customer\Model\Session'
+            )->getCustomerGroupId(),
+            $info[3]
+        );
 
         $this->assertSame('template', array_shift($keys));
 
@@ -88,8 +98,10 @@ class NewTest extends \PHPUnit_Framework_TestCase
 
     public function testSetGetProductsCount()
     {
-        $this->assertEquals(\Magento\Catalog\Block\Product\NewProduct::DEFAULT_PRODUCTS_COUNT,
-            $this->_block->getProductsCount());
+        $this->assertEquals(
+            \Magento\Catalog\Block\Product\NewProduct::DEFAULT_PRODUCTS_COUNT,
+            $this->_block->getProductsCount()
+        );
         $this->_block->setProductsCount(100);
         $this->assertEquals(100, $this->_block->getProductsCount());
     }
@@ -100,14 +112,16 @@ class NewTest extends \PHPUnit_Framework_TestCase
 
         $this->_block->setProductsCount(5);
         $this->_block->setTemplate('product/widget/new/content/new_list.phtml');
-        $this->_block->setLayout(\Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\View\LayoutInterface'));
+        $this->_block->setLayout(
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\View\LayoutInterface')
+        );
 
         $html = $this->_block->toHtml();
         $this->assertNotEmpty($html);
         $this->assertContains('New Product', $html);
         $this->assertInstanceOf(
-            'Magento\Catalog\Model\Resource\Product\Collection', $this->_block->getProductCollection()
+            'Magento\Catalog\Model\Resource\Product\Collection',
+            $this->_block->getProductCollection()
         );
     }
 }

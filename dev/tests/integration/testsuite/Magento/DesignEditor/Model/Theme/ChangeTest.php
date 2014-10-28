@@ -37,8 +37,9 @@ class ChangeTest extends \PHPUnit_Framework_TestCase
     public function testCrud()
     {
         /** @var $changeModel \Magento\DesignEditor\Model\Theme\Change */
-        $changeModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\DesignEditor\Model\Theme\Change');
+        $changeModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\DesignEditor\Model\Theme\Change'
+        );
         $changeModel->setData($this->_getChangeValidData());
 
         $crud = new \Magento\TestFramework\Entity($changeModel, array('change_time' => '2012-06-10 20:00:01'));
@@ -52,15 +53,13 @@ class ChangeTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getChangeValidData()
     {
-        /** @var $theme \Magento\View\Design\ThemeInterface */
-        /** @var $themeModel \Magento\View\Design\ThemeInterface */
-        $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\View\Design\ThemeInterface');
+        /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
+        /** @var $themeModel \Magento\Framework\View\Design\ThemeInterface */
+        $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Framework\View\Design\ThemeInterface'
+        );
         $themeModel = $theme->getCollection()->getFirstItem();
 
-        return array(
-            'theme_id' => $themeModel->getId(),
-            'change_time' => '2013-04-10 23:34:19',
-        );
+        return array('theme_id' => $themeModel->getId(), 'change_time' => '2013-04-10 23:34:19');
     }
 }

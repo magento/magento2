@@ -18,12 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Sales\Model\Resource\Quote;
 
 /**
@@ -36,35 +33,26 @@ class Payment extends \Magento\Sales\Model\Resource\AbstractResource
      *
      * @var array
      */
-    protected $_serializableFields   = array(
-        'additional_information' => array(null, array())
-    );
+    protected $_serializableFields = array('additional_information' => array(null, array()));
 
     /**
-     * @var \Magento\Sales\Model\Payment\Method\Converter
-     */
-    protected $_paymentConverter;
-
-    /**
-     * @param \Magento\App\Resource $resource
-     * @param \Magento\Stdlib\DateTime $dateTime
-     * @param \Magento\Sales\Model\Payment\Method\Converter $paymentConverter
+     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      */
     public function __construct(
-        \Magento\App\Resource $resource,
-        \Magento\Stdlib\DateTime $dateTime,
-        \Magento\Sales\Model\Payment\Method\Converter $paymentConverter
+        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Stdlib\DateTime $dateTime
     ) {
-        $this->_paymentConverter = $paymentConverter;
         parent::__construct($resource, $dateTime);
     }
 
     /**
      * Main table and field initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
-        $this->_converter = $this->_paymentConverter;
         $this->_init('sales_flat_quote_payment', 'payment_id');
     }
 }

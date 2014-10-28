@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category   Magento
- * @package    Mage
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -33,21 +31,21 @@
  */
 
 return array(
-        'c',
-        'l',
-        'sc',
-        'cat_pro',
-        'table_name',
-        'rule_customer',
-        'sales_flat_',
-        'catalog_product_link_attribute_',
-        'catalog_category_flat_',
-        'catalog_category_entity_',
-        'catalog_product_flat_',
-        'catalog_product_entity_',
-        'price_index',
-        'invitation',
-        'entity_attribute',
-        'directory_currency',
-        'sales_bestsellers_aggregated_'
-    );
+    'c',
+    'l',
+    'sc',
+    'cat_pro',
+    'table_name',
+    'rule_customer',
+    'sales_flat_',
+    'catalog_product_link_attribute_',
+    'catalog_category_flat_',
+    'catalog_category_entity_',
+    'catalog_product_flat_',
+    'catalog_product_entity_',
+    'price_index',
+    'invitation',
+    'entity_attribute',
+    'directory_currency',
+    'sales_bestsellers_aggregated_'
+);

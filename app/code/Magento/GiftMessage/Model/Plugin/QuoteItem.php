@@ -23,6 +23,9 @@
  */
 namespace Magento\GiftMessage\Model\Plugin;
 
+use Closure;
+use Magento\Sales\Model\Order\Item;
+
 class QuoteItem
 {
     /**
@@ -33,30 +36,28 @@ class QuoteItem
     /**
      * @param \Magento\GiftMessage\Helper\Message $helper
      */
-    public function __construct(
-        \Magento\GiftMessage\Helper\Message $helper
-    ) {
+    public function __construct(\Magento\GiftMessage\Helper\Message $helper)
+    {
         $this->_helper = $helper;
     }
 
     /**
-     * @param array $arguments
-     * @param \Magento\Code\Plugin\InvocationChain $invocationChain
-     * @return \Magento\Sales\Model\Order\Item|mixed
+     * @param \Magento\Sales\Model\Convert\Quote $subject
+     * @param Closure $proceed
+     * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
+     * @return Item
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundItemToOrderItem(array $arguments, \Magento\Code\Plugin\InvocationChain $invocationChain)
-    {
-        /** @var $orderItem \Magento\Sales\Model\Order\Item */
-        $orderItem = $invocationChain->proceed($arguments);
-        $quoteItem = reset($arguments);
+    public function aroundItemToOrderItem(
+        \Magento\Sales\Model\Convert\Quote $subject,
+        Closure $proceed,
+        \Magento\Sales\Model\Quote\Item\AbstractItem $item
+    ) {
+        /** @var $orderItem Item */
+        $orderItem = $proceed($item);
+        $isAvailable = $this->_helper->isMessagesAvailable('item', $item, $item->getStoreId());
 
-        $isAvailable = $this->_helper->isMessagesAvailable(
-            'item',
-            $quoteItem,
-            $quoteItem->getStoreId()
-        );
-
-        $orderItem->setGiftMessageId($quoteItem->getGiftMessageId());
+        $orderItem->setGiftMessageId($item->getGiftMessageId());
         $orderItem->setGiftMessageAvailable($isAvailable);
         return $orderItem;
     }

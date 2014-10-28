@@ -18,46 +18,84 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backup
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backup\Helper;
+
+use Magento\Framework\Filesystem;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\MaintenanceMode;
 
 class DataTest extends \PHPUnit_Framework_TestCase
 {
-    public function testInvalidateIndexer()
+    /**
+     * @var \Magento\Backup\Helper\Data
+     */
+    protected $helper;
+
+    /**
+     * @var \Magento\Framework\Filesystem | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $filesystem;
+
+    public function setUp()
     {
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-
-        $process = $this->getMockBuilder('Magento\Index\Model\Process')
-            ->disableOriginalConstructor()
+        $this->filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')->disableOriginalConstructor()
             ->getMock();
-        $process->expects($this->once())
-            ->method('changeStatus')
-            ->with(\Magento\Index\Model\Process::STATUS_REQUIRE_REINDEX);
-        $iterator = $this->returnValue(new \ArrayIterator(array($process)));
 
-        $collection = $this->getMockBuilder('Magento\Index\Model\Resource\Process\Collection')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $collection->expects($this->at(0))->method('getIterator')
-            ->will($iterator);
+        $this->filesystem->expects($this->any())
+            ->method('getDirectoryRead')
+            ->will($this->returnCallback(function ($code) {
+                $dir = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\ReadInterface');
+                $dir->expects($this->any())
+                    ->method('getAbsolutePath')
+                    ->will($this->returnCallback(function ($path) use ($code) {
+                        $path = empty($path) ? $path : '/' . $path;
+                        return rtrim($code, '/') . $path;
+                    }));
+                return $dir;
+            }));
 
-        $processFactory = $this->getMockBuilder('Magento\Index\Model\Resource\Process\CollectionFactory')
-            ->setMethods(array('create'))
-            ->disableOriginalConstructor()
-            ->getMock();
-        $processFactory->expects($this->any())
-            ->method('create')
-            ->will($this->returnValue($collection));
+        $this->helper = (new \Magento\TestFramework\Helper\ObjectManager($this))
+            ->getObject('Magento\Backup\Helper\Data', [
+                'filesystem' => $this->filesystem,
+            ]);
+    }
 
-        $object = $helper->getObject('Magento\Backup\Helper\Data', array(
-            'processFactory' => $processFactory
-        ));
-        $object->invalidateIndexer();
+    public function testGetBackupIgnorePaths()
+    {
+        $this->assertEquals(
+            [
+                '.git',
+                '.svn',
+                MaintenanceMode::FLAG_DIR . '/' . MaintenanceMode::FLAG_FILENAME,
+                DirectoryList::SESSION,
+                DirectoryList::CACHE,
+                DirectoryList::LOG,
+                DirectoryList::VAR_DIR . '/full_page_cache',
+                DirectoryList::VAR_DIR . '/locks',
+                DirectoryList::VAR_DIR . '/report',
+            ],
+            $this->helper->getBackupIgnorePaths()
+        );
+    }
+
+    public function testGetRollbackIgnorePaths()
+    {
+        $this->assertEquals(
+            [
+                '.svn',
+                '.git',
+                'var/' . MaintenanceMode::FLAG_FILENAME,
+                DirectoryList::SESSION,
+                DirectoryList::LOG,
+                DirectoryList::VAR_DIR . '/locks',
+                DirectoryList::VAR_DIR . '/report',
+                DirectoryList::ROOT . '/errors',
+                DirectoryList::ROOT . '/index.php',
+            ],
+            $this->helper->getRollbackIgnorePaths()
+        );
     }
 }

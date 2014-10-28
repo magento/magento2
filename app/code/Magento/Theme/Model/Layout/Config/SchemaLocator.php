@@ -25,29 +25,25 @@
  */
 namespace Magento\Theme\Model\Layout\Config;
 
-class SchemaLocator implements \Magento\Config\SchemaLocatorInterface
+use Magento\Framework\Filesystem;
+use Magento\Framework\App\Filesystem\DirectoryList;
+
+class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
     /**
      * Path to corresponding XSD file with validation rules for merged config
      *
      * @var string
      */
-    protected $_schema = null;
+    protected $_schema;
 
     /**
-     * Path to corresponding XSD file with validation rules for separate config files
-     *
-     * @var string
+     * @param Filesystem $appFilesystem
      */
-    protected $_perFileSchema = null;
-
-    /**
-     * @param \Magento\Module\Dir\Reader $moduleReader
-     */
-    public function __construct(\Magento\Module\Dir\Reader $moduleReader)
+    public function __construct(Filesystem $appFilesystem)
     {
-        $this->_schema =  $moduleReader->getModuleDir('etc', 'Magento_Theme') . '/page_layouts.xsd';
-        $this->_perFileSchema =  $moduleReader->getModuleDir('etc', 'Magento_Theme') . '/page_layouts_file.xsd';
+        $this->_schema = $appFilesystem->getDirectoryRead(DirectoryList::LIB_INTERNAL)->getAbsolutePath()
+            . '/Magento/Framework/View/PageLayout/etc/layouts.xsd';
     }
 
     /**
@@ -67,6 +63,6 @@ class SchemaLocator implements \Magento\Config\SchemaLocatorInterface
      */
     public function getPerFileSchema()
     {
-        return $this->_perFileSchema;
+        return $this->_schema;
     }
 }

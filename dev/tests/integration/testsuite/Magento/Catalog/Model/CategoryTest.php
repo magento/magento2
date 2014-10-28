@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model;
 
 /**
@@ -42,21 +38,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     protected static $_objectManager;
 
     /**
-     * Default flat category indexer mode
-     *
-     * @var string
-     */
-    protected static $_indexerMode;
-
-    /**
-     * List of index tables to create/delete
-     *
-     * @var array
-     */
-    protected static $_indexerTables = array();
-
-    /**
-     * @var \Magento\Core\Model\Store
+     * @var \Magento\Store\Model\Store
      */
     protected $_store;
 
@@ -72,98 +54,26 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         if (\Magento\TestFramework\Helper\Bootstrap::getInstance()->getDbVendorName() != 'mysql') {
             self::markTestIncomplete('Bug MAGETWO-8513');
         }
-
-        // get list of not existing tables
-        /** @var $application \Magento\Core\Model\App */
-        $application = self::$_objectManager->get('Magento\Core\Model\App');
-        /** @var $categoryResource \Magento\Catalog\Model\Resource\Category\Flat */
-        $categoryResource = self::$_objectManager->create('Magento\Catalog\Model\Resource\Category\Flat');
-        /** @var $setupModel \Magento\Core\Model\Resource\Setup */
-        $setupModel = self::$_objectManager->create('Magento\Core\Model\Resource\Setup',
-            array(
-                'resourceName' => \Magento\Core\Model\Resource\Setup::DEFAULT_SETUP_CONNECTION,
-                'moduleName' => 'Magento_Core',
-            )
-        );
-        $stores = $application->getStores();
-        /** @var $store \Magento\Core\Model\Store */
-        foreach ($stores as $store) {
-            $tableName = $categoryResource->getMainStoreTable($store->getId());
-            if (!$setupModel->getConnection()->isTableExists($tableName)) {
-                self::$_indexerTables[] = $tableName;
-            }
-        }
-
-        // create flat tables
-        /** @var $indexer \Magento\Catalog\Model\Category\Indexer\Flat */
-        $indexer = self::$_objectManager->create('Magento\Catalog\Model\Category\Indexer\Flat');
-        $indexer->reindexAll();
-
-        // set real time indexer mode
-        $process = self::_getCategoryIndexerProcess();
-        self::$_indexerMode = $process->getMode();
-        $process->setMode(\Magento\Index\Model\Process::MODE_REAL_TIME);
-        $process->save();
     }
 
     public static function tearDownAfterClass()
     {
-        // revert default indexer mode
-        $process = self::_getCategoryIndexerProcess();
-        $process->setMode(self::$_indexerMode);
-        $process->save();
-
-        // remove flat tables
-        /** @var $setupModel \Magento\Core\Model\Resource\Setup */
-        $setupModel = self::$_objectManager->create('Magento\Core\Model\Resource\Setup',
-            array(
-                'resourceName' => \Magento\Core\Model\Resource\Setup::DEFAULT_SETUP_CONNECTION,
-                'moduleName' => 'Magento_Core',
-            )
-        );
-        foreach (self::$_indexerTables as $tableName) {
-            if ($setupModel->getConnection()->isTableExists($tableName)) {
-                $setupModel->getConnection()->dropTable($tableName);
-            }
-        }
-
         self::$_objectManager = null;
-        self::$_indexerMode   = null;
-        self::$_indexerTables = null;
-    }
-
-    /**
-     * @static
-     * @return \Magento\Index\Model\Process
-     */
-    protected static function _getCategoryIndexerProcess()
-    {
-        /** @var $process \Magento\Index\Model\Process */
-        $process = self::$_objectManager->create('Magento\Index\Model\Process');
-        $process->load(\Magento\Catalog\Helper\Category\Flat::CATALOG_CATEGORY_FLAT_PROCESS_CODE, 'indexer_code');
-        return $process;
     }
 
     protected function setUp()
     {
-        /** @var $application \Magento\Core\Model\App */
-        $application  = self::$_objectManager->get('Magento\Core\Model\App');
-        $this->_store = $application->getStore();
+        /** @var $storeManager \Magento\Framework\StoreManagerInterface */
+        $storeManager = self::$_objectManager->get('Magento\Framework\StoreManagerInterface');
+        $this->_store = $storeManager->getStore();
         $this->_model = self::$_objectManager->create('Magento\Catalog\Model\Category');
     }
 
     public function testGetUrlInstance()
     {
         $instance = $this->_model->getUrlInstance();
-        $this->assertInstanceOf('Magento\Core\Model\Url', $instance);
+        $this->assertInstanceOf('Magento\Framework\Url', $instance);
         $this->assertSame($instance, $this->_model->getUrlInstance());
-    }
-
-    public function testGetUrlRewrite()
-    {
-        $rewrite = $this->_model->getUrlRewrite();
-        $this->assertInstanceOf('Magento\Core\Model\Url\Rewrite', $rewrite);
-        $this->assertSame($rewrite, $this->_model->getUrlRewrite());
     }
 
     public function testGetTreeModel()
@@ -218,10 +128,12 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetStoreIds()
     {
-        $this->_model->load(3); /* id from fixture */
+        $this->_model->load(3);
+        /* id from fixture */
         $this->assertContains(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-                ->getStore()->getId(),
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                'Magento\Framework\StoreManagerInterface'
+            )->getStore()->getId(),
             $this->_model->getStoreIds()
         );
     }
@@ -229,8 +141,9 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     public function testSetGetStoreId()
     {
         $this->assertEquals(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-                ->getStore()->getId(),
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                'Magento\Framework\StoreManagerInterface'
+            )->getStore()->getId(),
             $this->_model->getStoreId()
         );
         $this->_model->setStoreId(1000);
@@ -240,12 +153,12 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDataFixture Magento/Core/_files/store.php
      * @magentoAppIsolation enabled
+     * @magentoConfigFixture current_store catalog/frontend/flat_catalog_product 1
      */
     public function testSetStoreIdWithNonNumericValue()
     {
-        /** @var $store \Magento\Core\Model\Store */
-        $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Store');
+        /** @var $store \Magento\Store\Model\Store */
+        $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Store\Model\Store');
         $store->load('fixturestore');
 
         $this->assertNotEquals($this->_model->getStoreId(), $store->getId());
@@ -373,40 +286,11 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
 
     public function testValidate()
     {
+        $this->_model->addData(array(
+            "include_in_menu" => false,
+            "is_active" => false,
+            'name' => 'test'
+        ));
         $this->assertNotEmpty($this->_model->validate());
-    }
-
-    /**
-     * @magentoConfigFixture current_store catalog/frontend/flat_catalog_category 1
-     * @magentoDbIsolation enabled
-     */
-    public function testSaveWithFlatIndexer()
-    {
-        $categoryName = 'Indexer Category Name ' . uniqid();
-
-        /** @var $parentCategory \Magento\Catalog\Model\Category */
-        $parentCategory = self::$_objectManager->create('Magento\Catalog\Model\Category');
-        $parentCategory->load($this->_store->getRootCategoryId());
-
-        // init category model with EAV entity resource model
-        $resourceModel = self::$_objectManager->create('Magento\Catalog\Model\Resource\Category');
-        $this->_model  = self::$_objectManager->create('Magento\Catalog\Model\Category',
-            array('resource' => $resourceModel)
-        );
-        $this->_model->setName($categoryName)
-            ->setParentId($parentCategory->getId())
-            ->setPath($parentCategory->getPath())
-            ->setLevel(2)
-            ->setPosition(1)
-            ->setAvailableSortBy('name')
-            ->setDefaultSortBy('name')
-            ->setIsActive(true)
-            ->save();
-
-        // check if category record exists in flat table
-        /** @var $collection \Magento\Catalog\Model\Resource\Category\Flat\Collection */
-        $collection = self::$_objectManager->create('Magento\Catalog\Model\Resource\Category\Flat\Collection');
-        $collection->addFieldToFilter('name', $categoryName);
-        $this->assertCount(1, $collection->getItems());
     }
 }

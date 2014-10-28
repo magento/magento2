@@ -20,12 +20,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    tests
- * @package     static
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Legacy;
 
 class PhtmlTemplateTest extends \PHPUnit_Framework_TestCase
@@ -46,10 +43,12 @@ class PhtmlTemplateTest extends \PHPUnit_Framework_TestCase
              * @param string $file
              */
             function ($file) {
-                $this->assertNotRegexp('/this->_[^_]+\S*\(/iS',
+                $this->assertNotRegexp(
+                    '/this->_[^_]+\S*\(/iS',
                     file_get_contents($file),
                     'Access to protected and private members of Block class is ' .
-                    'obsolete in phtml templates. Use only public members.');
+                    'obsolete in phtml templates. Use only public members.'
+                );
             },
             \Magento\TestFramework\Utility\Files::init()->getPhtmlFiles()
         );

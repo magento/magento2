@@ -18,23 +18,17 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Catalog\Model\Resource\Product;
 
 /**
  * Catalog product link resource model
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Resource\Product;
-
-class Link extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Link extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Product Link Attributes Table
@@ -46,24 +40,24 @@ class Link extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Catalog product relation
      *
-     * @var \Magento\Catalog\Model\Resource\Product\Relation
+     * @var Relation
      */
     protected $_catalogProductRelation;
 
     /**
-     * @param \Magento\App\Resource $resource
-     * @param \Magento\Catalog\Model\Resource\Product\Relation $catalogProductRelation
+     * @param \Magento\Framework\App\Resource $resource
+     * @param Relation $catalogProductRelation
      */
-    public function __construct(
-        \Magento\App\Resource $resource,
-        \Magento\Catalog\Model\Resource\Product\Relation $catalogProductRelation
-    ) {
+    public function __construct(\Magento\Framework\App\Resource $resource, Relation $catalogProductRelation)
+    {
         $this->_catalogProductRelation = $catalogProductRelation;
         parent::__construct($resource);
     }
 
     /**
      * Define main table name and attributes table
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -77,7 +71,7 @@ class Link extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param \Magento\Catalog\Model\Product $product
      * @param array $data
      * @param int $typeId
-     * @return \Magento\Catalog\Model\Resource\Product\Link
+     * @return $this
      */
     public function saveProductLinks($product, $data, $typeId)
     {
@@ -86,29 +80,28 @@ class Link extends \Magento\Core\Model\Resource\Db\AbstractDb
         }
 
         $attributes = $this->getAttributesByType($typeId);
-        $adapter    = $this->_getWriteAdapter();
+        $adapter = $this->_getWriteAdapter();
 
-        $bind   = array(
-            ':product_id'    => (int)$product->getId(),
-            ':link_type_id'  => (int)$typeId
+        $bind = array(':product_id' => (int)$product->getId(), ':link_type_id' => (int)$typeId);
+        $select = $adapter->select()->from(
+            $this->getMainTable(),
+            array('linked_product_id', 'link_id')
+        )->where(
+            'product_id = :product_id'
+        )->where(
+            'link_type_id = :link_type_id'
         );
-        $select = $adapter->select()
-            ->from($this->getMainTable(), array('linked_product_id', 'link_id'))
-            ->where('product_id = :product_id')
-            ->where('link_type_id = :link_type_id');
 
-        $links   = $adapter->fetchPairs($select, $bind);
+        $links = $adapter->fetchPairs($select, $bind);
 
         $deleteIds = array();
-        foreach($links as $linkedProductId => $linkId) {
+        foreach ($links as $linkedProductId => $linkId) {
             if (!isset($data[$linkedProductId])) {
                 $deleteIds[] = (int)$linkId;
             }
         }
         if (!empty($deleteIds)) {
-            $adapter->delete($this->getMainTable(), array(
-                'link_id IN (?)' => $deleteIds,
-            ));
+            $adapter->delete($this->getMainTable(), array('link_id IN (?)' => $deleteIds));
         }
 
         foreach ($data as $linkedProductId => $linkInfo) {
@@ -118,9 +111,9 @@ class Link extends \Magento\Core\Model\Resource\Db\AbstractDb
                 unset($links[$linkedProductId]);
             } else {
                 $bind = array(
-                    'product_id'        => $product->getId(),
+                    'product_id' => $product->getId(),
                     'linked_product_id' => $linkedProductId,
-                    'link_type_id'      => $typeId
+                    'link_type_id' => $typeId
                 );
                 $adapter->insert($this->getMainTable(), $bind);
                 $linkId = $adapter->lastInsertId($this->getMainTable());
@@ -130,19 +123,21 @@ class Link extends \Magento\Core\Model\Resource\Db\AbstractDb
                 $attributeTable = $this->getAttributeTypeTable($attributeInfo['type']);
                 if ($attributeTable) {
                     if (isset($linkInfo[$attributeInfo['code']])) {
-                        $value = $this->_prepareAttributeValue($attributeInfo['type'],
-                            $linkInfo[$attributeInfo['code']]);
+                        $value = $this->_prepareAttributeValue(
+                            $attributeInfo['type'],
+                            $linkInfo[$attributeInfo['code']]
+                        );
                         $bind = array(
                             'product_link_attribute_id' => $attributeInfo['id'],
-                            'link_id'                   => $linkId,
-                            'value'                     => $value
+                            'link_id' => $linkId,
+                            'value' => $value
                         );
                         $adapter->insertOnDuplicate($attributeTable, $bind, array('value'));
                     } else {
-                        $adapter->delete($attributeTable, array(
-                            'link_id = ?'                   => $linkId,
-                            'product_link_attribute_id = ?' => $attributeInfo['id']
-                        ));
+                        $adapter->delete(
+                            $attributeTable,
+                            array('link_id = ?' => $linkId, 'product_link_attribute_id = ?' => $attributeInfo['id'])
+                        );
                     }
                 }
             }
@@ -163,7 +158,7 @@ class Link extends \Magento\Core\Model\Resource\Db\AbstractDb
         if ($type == 'int') {
             $value = (int)$value;
         } elseif ($type == 'decimal') {
-            $value = (float)sprintf('%F', $value);
+            $value = (double)sprintf('%F', $value);
         }
         return $value;
     }
@@ -177,13 +172,13 @@ class Link extends \Magento\Core\Model\Resource\Db\AbstractDb
     public function getAttributesByType($typeId)
     {
         $adapter = $this->_getReadAdapter();
-        $select = $adapter->select()
-            ->from($this->_attributesTable, array(
-                'id'    => 'product_link_attribute_id',
-                'code'  => 'product_link_attribute_code',
-                'type'  => 'data_type'
-            ))
-            ->where('link_type_id = ?', $typeId);
+        $select = $adapter->select()->from(
+            $this->_attributesTable,
+            array('id' => 'product_link_attribute_id', 'code' => 'product_link_attribute_code', 'type' => 'data_type')
+        )->where(
+            'link_type_id = ?',
+            $typeId
+        );
         return $adapter->fetchAll($select);
     }
 
@@ -210,23 +205,17 @@ class Link extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     public function getChildrenIds($parentId, $typeId)
     {
-        $adapter     = $this->_getReadAdapter();
+        $adapter = $this->_getReadAdapter();
         $childrenIds = array();
-        $bind        = array(
-            ':product_id'    => (int)$parentId,
-            ':link_type_id'  => (int)$typeId
+        $bind = array(':product_id' => (int)$parentId, ':link_type_id' => (int)$typeId);
+        $select = $adapter->select()->from(
+            array('l' => $this->getMainTable()),
+            array('linked_product_id')
+        )->where(
+            'product_id = :product_id'
+        )->where(
+            'link_type_id = :link_type_id'
         );
-        $select = $adapter->select()
-            ->from(array('l' => $this->getMainTable()), array('linked_product_id'))
-            ->where('product_id = :product_id')
-            ->where('link_type_id = :link_type_id');
-        if ($typeId == \Magento\Catalog\Model\Product\Link::LINK_TYPE_GROUPED) {
-            $select->join(
-                array('e' => $this->getTable('catalog_product_entity')),
-                'e.entity_id = l.linked_product_id AND e.required_options = 0',
-                array()
-            );
-        }
 
         $childrenIds[$typeId] = array();
         $result = $adapter->fetchAll($select, $bind);
@@ -242,16 +231,22 @@ class Link extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param int|array $childId
      * @param int $typeId
-     * @return array
+     * @return string[]
      */
     public function getParentIdsByChild($childId, $typeId)
     {
-        $parentIds  = array();
-        $adapter    = $this->_getReadAdapter();
-        $select = $adapter->select()
-            ->from($this->getMainTable(), array('product_id', 'linked_product_id'))
-            ->where('linked_product_id IN(?)', $childId)
-            ->where('link_type_id = ?', $typeId);
+        $parentIds = array();
+        $adapter = $this->_getReadAdapter();
+        $select = $adapter->select()->from(
+            $this->getMainTable(),
+            array('product_id', 'linked_product_id')
+        )->where(
+            'linked_product_id IN(?)',
+            $childId
+        )->where(
+            'link_type_id = ?',
+            $typeId
+        );
 
         $result = $adapter->fetchAll($select);
         foreach ($result as $row) {
@@ -259,41 +254,5 @@ class Link extends \Magento\Core\Model\Resource\Db\AbstractDb
         }
 
         return $parentIds;
-    }
-
-    /**
-     * Save grouped product relations
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @param array $data
-     * @param int $typeId
-     * @return \Magento\Catalog\Model\Resource\Product\Link
-     */
-    public function saveGroupedLinks($product, $data, $typeId)
-    {
-        $adapter = $this->_getWriteAdapter();
-        // check for change relations
-        $bind    = array(
-            'product_id'    => (int)$product->getId(),
-            'link_type_id'  => (int)$typeId
-        );
-        $select = $adapter->select()
-            ->from($this->getMainTable(), array('linked_product_id'))
-            ->where('product_id = :product_id')
-            ->where('link_type_id = :link_type_id');
-        $old = $adapter->fetchCol($select, $bind);
-        $new = array_keys($data);
-
-        if (array_diff($old, $new) || array_diff($new, $old)) {
-            $product->setIsRelationsChanged(true);
-        }
-
-        // save product links attributes
-        $this->saveProductLinks($product, $data, $typeId);
-
-        // Grouped product relations should be added to relation table
-        $this->_catalogProductRelation->processRelations($product->getId(), $new);
-
-        return $this;
     }
 }

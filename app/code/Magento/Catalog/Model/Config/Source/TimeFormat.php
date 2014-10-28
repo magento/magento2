@@ -18,21 +18,23 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Config\Source;
 
-class TimeFormat implements \Magento\Core\Model\Option\ArrayInterface
+class TimeFormat implements \Magento\Framework\Option\ArrayInterface
 {
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
     public function toOptionArray()
     {
         return array(
             array('value' => '12h', 'label' => __('12h AM/PM')),
-            array('value' => '24h', 'label' => __('24h')),
+            array('value' => '24h', 'label' => __('24h'))
         );
     }
 }

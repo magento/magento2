@@ -18,58 +18,72 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Bundle
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Bundle\Block\Checkout\Cart\Item;
+
+use Magento\Bundle\Helper\Catalog\Product\Configuration;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Shopping cart item render block
  *
- * @category    Magento
- * @package     Magento_Bundle
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Bundle\Block\Checkout\Cart\Item;
-
 class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
 {
+    /**
+     * @var Configuration
+     */
     protected $_configurationHelper = null;
 
     /**
      * Bundle catalog product configuration
      *
-     * @var \Magento\Bundle\Helper\Catalog\Product\Configuration
+     * @var Configuration
      */
     protected $_bundleProdConfigur = null;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Catalog\Helper\Product\Configuration $productConfig
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param \Magento\Core\Helper\Url $urlHelper
-     * @param \Magento\Message\ManagerInterface $messageManager
-     * @param \Magento\Bundle\Helper\Catalog\Product\Configuration $bundleProdConfigur
+     * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param PriceCurrencyInterface $priceCurrency
+     * @param Configuration $bundleProdConfigur
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Catalog\Helper\Product\Configuration $productConfig,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Core\Helper\Url $urlHelper,
-        \Magento\Message\ManagerInterface $messageManager,
-        \Magento\Bundle\Helper\Catalog\Product\Configuration $bundleProdConfigur,
+        \Magento\Framework\Message\ManagerInterface $messageManager,
+        PriceCurrencyInterface $priceCurrency,
+        Configuration $bundleProdConfigur,
         array $data = array()
     ) {
         $this->_bundleProdConfigur = $bundleProdConfigur;
         parent::__construct(
-            $context, $productConfig, $checkoutSession, $imageHelper, $urlHelper, $messageManager, $data
+            $context,
+            $productConfig,
+            $checkoutSession,
+            $imageHelper,
+            $urlHelper,
+            $messageManager,
+            $priceCurrency,
+            $data
         );
+        $this->_isScopePrivate = true;
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -82,6 +96,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
      * Returns array of options objects.
      * Each option object will contain array of selections objects
      *
+     * @param bool $useCache
      * @return array
      */
     protected function _getBundleOptions($useCache = true)
@@ -93,7 +108,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
      * Obtain final price of selection in a bundle product
      *
      * @param \Magento\Catalog\Model\Product $selectionProduct
-     * @return decimal
+     * @return float
      */
     protected function _getSelectionFinalPrice($selectionProduct)
     {
@@ -106,7 +121,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
      * Get selection quantity
      *
      * @param int $selectionId
-     * @return decimal
+     * @return float
      */
     protected function _getSelectionQty($selectionId)
     {
@@ -138,10 +153,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
         $baseMessages = $quoteItem->getMessage(false);
         if ($baseMessages) {
             foreach ($baseMessages as $message) {
-                $messages[] = array(
-                    'text' => $message,
-                    'type' => $quoteItem->getHasError() ? 'error' : 'notice'
-                );
+                $messages[] = array('text' => $message, 'type' => $quoteItem->getHasError() ? 'error' : 'notice');
             }
         }
 

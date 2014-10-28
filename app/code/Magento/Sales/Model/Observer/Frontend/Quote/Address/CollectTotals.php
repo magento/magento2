@@ -21,24 +21,19 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Sales\Model\Observer\Frontend\Quote\Address;
 
 class CollectTotals
 {
     /**
-     * Customer address
-     *
      * @var \Magento\Customer\Helper\Address
      */
-    protected $customerAddress;
+    protected $customerAddressHelper;
 
     /**
-     * Customer data
-     *
      * @var \Magento\Customer\Helper\Data
      */
-    protected $customerData;
+    protected $customerHelper;
 
     /**
      * @var VatValidator
@@ -46,62 +41,76 @@ class CollectTotals
     protected $vatValidator;
 
     /**
-     * @param \Magento\Customer\Helper\Address $customerAddress
-     * @param \Magento\Customer\Helper\Data $customerData
+     * @var \Magento\Customer\Service\V1\Data\CustomerBuilder
+     */
+    protected $customerBuilder;
+
+    /**
+     * Initialize dependencies.
+     *
+     * @param \Magento\Customer\Helper\Address $customerAddressHelper
+     * @param \Magento\Customer\Helper\Data $customerHelper
      * @param VatValidator $vatValidator
+     * @param \Magento\Customer\Service\V1\Data\CustomerBuilder $customerBuilder
      */
     public function __construct(
-        \Magento\Customer\Helper\Address $customerAddress,
-        \Magento\Customer\Helper\Data $customerData,
-        VatValidator $vatValidator
+        \Magento\Customer\Helper\Address $customerAddressHelper,
+        \Magento\Customer\Helper\Data $customerHelper,
+        VatValidator $vatValidator,
+        \Magento\Customer\Service\V1\Data\CustomerBuilder $customerBuilder
     ) {
-        $this->customerData = $customerData;
-        $this->customerAddress = $customerAddress;
+        $this->customerHelper = $customerHelper;
+        $this->customerAddressHelper = $customerAddressHelper;
         $this->vatValidator = $vatValidator;
+        $this->customerBuilder = $customerBuilder;
     }
 
     /**
      * Handle customer VAT number if needed on collect_totals_before event of quote address
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
+     * @return void
      */
-    public function dispatch(\Magento\Event\Observer $observer)
+    public function dispatch(\Magento\Framework\Event\Observer $observer)
     {
         /** @var \Magento\Sales\Model\Quote\Address $quoteAddress */
         $quoteAddress = $observer->getQuoteAddress();
-
         /** @var \Magento\Sales\Model\Quote $quote */
         $quote = $quoteAddress->getQuote();
+        $customerData = $quote->getCustomerData();
+        $storeId = $customerData->getStoreId();
 
-        /** @var \Magento\Customer\Model\Customer $customer */
-        $customer = $quote->getCustomer();
-
-        /** @var \Magento\Core\Model\Store $store */
-        $store = $customer->getStore();
-
-        if ($customer->getDisableAutoGroupChange() || false == $this->vatValidator->isEnabled($quoteAddress, $store)) {
+        if (($customerData->getCustomAttribute('disable_auto_group_change')
+                && $customerData->getCustomAttribute('disable_auto_group_change')->getValue())
+            || false == $this->vatValidator->isEnabled($quoteAddress, $storeId)
+        ) {
             return;
         }
 
         $customerCountryCode = $quoteAddress->getCountryId();
-        $customerVatNumber   = $quoteAddress->getVatId();
+        $customerVatNumber = $quoteAddress->getVatId();
         $groupId = null;
-
-        if (empty($customerVatNumber) || false == $this->customerData->isCountryInEU($customerCountryCode)) {
-            $groupId = $customer->getId()
-                ? $this->customerData->getDefaultCustomerGroupId($store)
-                : \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID;
+        if (empty($customerVatNumber) || false == $this->customerHelper->isCountryInEU($customerCountryCode)) {
+            $groupId = $customerData->getId() ? $this->customerHelper->getDefaultCustomerGroupId(
+                $storeId
+            ) : \Magento\Customer\Service\V1\CustomerGroupServiceInterface::NOT_LOGGED_IN_ID;
         } else {
             // Magento always has to emulate group even if customer uses default billing/shipping address
-            $groupId = $this->customerData->getCustomerGroupIdBasedOnVatNumber(
-                $customerCountryCode, $this->vatValidator->validate($quoteAddress, $store), $store
+            $groupId = $this->customerHelper->getCustomerGroupIdBasedOnVatNumber(
+                $customerCountryCode,
+                $this->vatValidator->validate($quoteAddress, $storeId),
+                $storeId
             );
         }
 
         if ($groupId) {
             $quoteAddress->setPrevQuoteCustomerGroupId($quote->getCustomerGroupId());
-            $customer->setGroupId($groupId);
             $quote->setCustomerGroupId($groupId);
+            $customerData = $this->customerBuilder->mergeDataObjectWithArray(
+                $customerData,
+                array('group_id' => $groupId)
+            );
+            $quote->setCustomerData($customerData);
         }
     }
 }

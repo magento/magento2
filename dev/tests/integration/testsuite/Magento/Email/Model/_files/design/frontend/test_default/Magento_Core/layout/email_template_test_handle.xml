@@ -19,16 +19,13 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     design
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
-    <block class="Magento\View\Element\Template" name="sample_email_content" template="Magento_Core::sample_email_content.phtml"/>
-    <block class="Magento\View\Element\Text" name="ignored_email_content">
+    <block class="Magento\Framework\View\Element\Template" name="sample_email_content" template="Magento_Core::sample_email_content.phtml"/>
+    <block class="Magento\Framework\View\Element\Text" name="ignored_email_content">
         <action method="setText">
             <argument name="text" xsi:type="string">Ignored e-mail content, only the first block is used</argument>
         </action>

@@ -21,16 +21,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Ogone\Model;
 
 class ApiTest extends \PHPUnit_Framework_TestCase
 {
-    protected function setUp()
-    {
-        $this->markTestSkipped('Api tests were skipped');
-    }
-
     /**
      * Test protected method, which converts Magento internal charset (UTF-8) to the one, understandable
      * by Ogone (ISO-8859-1), and then encodes html entities
@@ -42,17 +36,25 @@ class ApiTest extends \PHPUnit_Framework_TestCase
         $sourceString = 'Ë£';
 
         // Test protected method via reflection
-        $storeManager = $this->getMock('Magento\Core\Model\StoreManagerInterface', array(), array(), '', false);
-        $locale = $this->getMock('Magento\Core\Model\LocaleInterface', array(), array(), '', false);
-        $urlBuilder = $this->getMock('Magento\UrlInterface', array(), array(), '', false);
-        $eventManager = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
-        $coreString = $this->getMock('Magento\Core\Helper\String', array(), array(), '', false);
+        $storeManager = $this->getMock('Magento\Framework\StoreManagerInterface', array(), array(), '', false);
+        $localeResolver = $this->getMock('\Magento\Framework\Locale\ResolverInterface', array(), array(), '', false);
+        $urlBuilder = $this->getMock('Magento\Framework\UrlInterface', array(), array(), '', false);
+        $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', array(), array(), '', false);
+        $string = $this->getMock('\Magento\Framework\Stdlib\String', array(), array(), '', false);
         $config = $this->getMock('Magento\Ogone\Model\Config', array(), array(), '', false);
         $paymentDataMock = $this->getMock('Magento\Payment\Helper\Data', array(), array(), '', false);
-        $coreStoreConfig = $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false);
+        $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $loggerFactory = $this->getMock('\Magento\Framework\Logger\AdapterFactory', array(), array(), '', false);
         $object = new \Magento\Ogone\Model\Api(
-            $storeManager, $locale, $urlBuilder, $eventManager,
-            $coreString, $coreStoreConfig, $config, $paymentDataMock
+            $eventManager,
+            $paymentDataMock,
+            $scopeConfig,
+            $loggerFactory,
+            $storeManager,
+            $localeResolver,
+            $urlBuilder,
+            $string,
+            $config
         );
 
         $method = new \ReflectionMethod('Magento\Ogone\Model\Api', '_translate');

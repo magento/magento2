@@ -23,20 +23,21 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
-    <module name="Magento_Webapi" version="1.0.0.4" active="true">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Module/etc/module.xsd">
+    <module name="Magento_Webapi" schema_version="1.0.0.4" active="true">
         <sequence>
             <module name="Magento_Core"/>
+            <module name="Magento_Store"/>
             <module name="Magento_Integration"/>
-            <module name="Magento_Service"/>
             <module name="Magento_Backend"/>
         </sequence>
         <depends>
+            <module name="Magento_Store"/>
+            <module name="Magento_Authorization"/>
             <module name="Magento_Core"/>
             <module name="Magento_Integration"/>
-            <module name="Magento_Service"/>
             <module name="Magento_Backend"/>
-            <module name="Magento_User"/>
+            <module name="Magento_User" type="soft"/>
         </depends>
     </module>
 </config>

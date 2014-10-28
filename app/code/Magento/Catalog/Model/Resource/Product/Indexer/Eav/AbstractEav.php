@@ -18,43 +18,36 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Catalog\Model\Resource\Product\Indexer\Eav;
 
 /**
  * Catalog Product Eav Attributes abstract indexer resource model
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Resource\Product\Indexer\Eav;
-
-abstract class AbstractEav
-    extends \Magento\Catalog\Model\Resource\Product\Indexer\AbstractIndexer
+abstract class AbstractEav extends \Magento\Catalog\Model\Resource\Product\Indexer\AbstractIndexer
 {
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Event\ManagerInterface
+     * @var \Magento\Framework\Event\ManagerInterface
      */
     protected $_eventManager = null;
 
     /**
      * Construct
      *
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Event\ManagerInterface $eventManager
+        \Magento\Framework\Event\ManagerInterface $eventManager
     ) {
         $this->_eventManager = $eventManager;
         parent::__construct($resource, $eavConfig);
@@ -63,8 +56,8 @@ abstract class AbstractEav
     /**
      * Rebuild all index data
      *
-     *
-     * @return \Magento\Catalog\Model\Resource\Product\Indexer\Eav\AbstractEav
+     * @return $this
+     * @throws \Exception
      */
     public function reindexAll()
     {
@@ -91,7 +84,7 @@ abstract class AbstractEav
      *
      *
      * @param int|array $processIds
-     * @return \Magento\Catalog\Model\Resource\Product\Indexer\Eav\AbstractEav
+     * @return $this
      * @throws \Exception
      */
     public function reindexEntities($processIds)
@@ -108,7 +101,7 @@ abstract class AbstractEav
         if ($parentIds) {
             $processIds = array_unique(array_merge($processIds, $parentIds));
         }
-        $childIds  = $this->getRelationsByParent($processIds);
+        $childIds = $this->getRelationsByParent($processIds);
         if ($childIds) {
             $processIds = array_unique(array_merge($processIds, $childIds));
         }
@@ -141,7 +134,7 @@ abstract class AbstractEav
      *
      * @param int $attributeId
      * @param bool $isIndexable
-     * @return \Magento\Catalog\Model\Resource\Product\Indexer\Eav\AbstractEav
+     * @return $this
      */
     public function reindexAttribute($attributeId, $isIndexable = true)
     {
@@ -165,21 +158,21 @@ abstract class AbstractEav
      *
      * @param array $entityIds      the entity ids limitation
      * @param int $attributeId      the attribute id limitation
+     * @return $this
      */
     abstract protected function _prepareIndex($entityIds = null, $attributeId = null);
 
     /**
      * Remove Not Visible products from temporary data index
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Indexer\Eav\AbstractEav
+     * @return $this
      */
     protected function _removeNotVisibleEntityFromIndex()
     {
-        $write      = $this->_getWriteAdapter();
-        $idxTable   = $this->getIdxTable();
+        $write = $this->_getWriteAdapter();
+        $idxTable = $this->getIdxTable();
 
-        $select = $write->select()
-            ->from($idxTable, null);
+        $select = $write->select()->from($idxTable, null);
 
         $condition = $write->quoteInto('=?', \Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE);
         $this->_addAttributeToSelect(
@@ -199,27 +192,28 @@ abstract class AbstractEav
     /**
      * Prepare data index for product relations
      *
-     * @param array $parentIds  the parent entity ids limitation
-     * @return \Magento\Catalog\Model\Resource\Product\Indexer\Eav\AbstractEav
+     * @param array $parentIds the parent entity ids limitation
+     * @return $this
      */
     protected function _prepareRelationIndex($parentIds = null)
     {
-        $write      = $this->_getWriteAdapter();
-        $idxTable   = $this->getIdxTable();
+        $write = $this->_getWriteAdapter();
+        $idxTable = $this->getIdxTable();
 
-        $select = $write->select()
-            ->from(array('l' => $this->getTable('catalog_product_relation')), 'parent_id')
-            ->join(
-                array('cs' => $this->getTable('core_store')),
-                '',
-                array())
-            ->join(
-                array('i' => $idxTable),
-                'l.child_id = i.entity_id AND cs.store_id = i.store_id',
-                array('attribute_id', 'store_id', 'value'))
-            ->group(array(
-                'l.parent_id', 'i.attribute_id', 'i.store_id', 'i.value'
-            ));
+        $select = $write->select()->from(
+            array('l' => $this->getTable('catalog_product_relation')),
+            'parent_id'
+        )->join(
+            array('cs' => $this->getTable('store')),
+            '',
+            array()
+        )->join(
+            array('i' => $idxTable),
+            'l.child_id = i.entity_id AND cs.store_id = i.store_id',
+            array('attribute_id', 'store_id', 'value')
+        )->group(
+            array('l.parent_id', 'i.attribute_id', 'i.store_id', 'i.value')
+        );
         if (!is_null($parentIds)) {
             $select->where('l.parent_id IN(?)', $parentIds);
         }
@@ -227,15 +221,21 @@ abstract class AbstractEav
         /**
          * Add additional external limitation
          */
-        $this->_eventManager->dispatch('prepare_catalog_product_index_select', array(
-            'select'        => $select,
-            'entity_field'  => new \Zend_Db_Expr('l.parent_id'),
-            'website_field' => new \Zend_Db_Expr('cs.website_id'),
-            'store_field'   => new \Zend_Db_Expr('cs.store_id')
-        ));
+        $this->_eventManager->dispatch(
+            'prepare_catalog_product_index_select',
+            array(
+                'select' => $select,
+                'entity_field' => new \Zend_Db_Expr('l.parent_id'),
+                'website_field' => new \Zend_Db_Expr('cs.website_id'),
+                'store_field' => new \Zend_Db_Expr('cs.store_id')
+            )
+        );
 
-        $query = $write->insertFromSelect($select, $idxTable, array(),
-            \Magento\DB\Adapter\AdapterInterface::INSERT_IGNORE
+        $query = $write->insertFromSelect(
+            $select,
+            $idxTable,
+            array(),
+            \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_IGNORE
         );
         $write->query($query);
 
@@ -263,7 +263,8 @@ abstract class AbstractEav
      * Remove index data from index by attribute id
      *
      * @param int $attributeId
-     * @return \Magento\Catalog\Model\Resource\Product\Indexer\Eav\AbstractEav
+     * @return $this
+     * @throws \Exception
      */
     protected function _removeAttributeIndexData($attributeId)
     {
@@ -285,7 +286,7 @@ abstract class AbstractEav
      * Synchronize temporary index table with index table by attribute id
      *
      * @param int $attributeId
-     * @return \Magento\Catalog\Model\Resource\Product\Indexer\Eav\AbstractEav
+     * @return $this
      * @throws \Exception
      */
     protected function _synchronizeAttributeIndexData($attributeId)

@@ -25,25 +25,28 @@
  */
 namespace Magento\Webapi\Controller\Rest\Request\Deserializer;
 
-class Json implements
-    \Magento\Webapi\Controller\Rest\Request\DeserializerInterface
+use \Magento\Framework\App\State;
+
+class Json implements \Magento\Webapi\Controller\Rest\Request\DeserializerInterface
 {
-    /** @var \Magento\Core\Helper\Data */
+    /**
+     * @var \Magento\Core\Helper\Data
+     */
     protected $_helper;
 
-    /** @var \Magento\Core\Model\App */
-    protected $_app;
+    /**
+     * @var State
+     */
+    protected $_appState;
 
     /**
-     * Initialize dependencies.
-     *
      * @param \Magento\Core\Helper\Data $helper
-     * @param \Magento\Core\Model\App $app
+     * @param \Magento\Framework\App\State $appState
      */
-    public function __construct(\Magento\Core\Helper\Data $helper, \Magento\Core\Model\App $app)
+    public function __construct(\Magento\Core\Helper\Data $helper, State $appState)
     {
         $this->_helper = $helper;
-        $this->_app = $app;
+        $this->_appState = $appState;
     }
 
     /**
@@ -57,15 +60,14 @@ class Json implements
     public function deserialize($encodedBody)
     {
         if (!is_string($encodedBody)) {
-            throw new \InvalidArgumentException(sprintf(
-                '"%s" data type is invalid. String is expected.',
-                gettype($encodedBody)
-            ));
+            throw new \InvalidArgumentException(
+                sprintf('"%s" data type is invalid. String is expected.', gettype($encodedBody))
+            );
         }
         try {
             $decodedBody = $this->_helper->jsonDecode($encodedBody);
         } catch (\Zend_Json_Exception $e) {
-            if (!$this->_app->isDeveloperMode()) {
+            if ($this->_appState->getMode() !== State::MODE_DEVELOPER) {
                 throw new \Magento\Webapi\Exception(__('Decoding error.'));
             } else {
                 throw new \Magento\Webapi\Exception(

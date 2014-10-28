@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Centinel
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,7 +27,7 @@
  */
 namespace Magento\Centinel\Block;
 
-class Authentication extends \Magento\View\Element\Template
+class Authentication extends \Magento\Framework\View\Element\Template
 {
     /**
      * Checkout session
@@ -41,37 +39,38 @@ class Authentication extends \Magento\View\Element\Template
     /**
      * Strage for identifiers of related blocks
      *
-     * @var array
+     * @var string[]
      */
     protected $_relatedBlocks = array();
 
     /**
      * Flag - authentication start mode
-     * @see self::setAuthenticationStartMode
      *
      * @var bool
+     * @see self::setAuthenticationStartMode
      */
     protected $_authenticationStartMode = false;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Checkout\Model\Session $checkoutSession,
         array $data = array()
     ) {
         $this->_checkoutSession = $checkoutSession;
         parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
     }
 
     /**
      * Add identifier of related block
      *
      * @param string $blockId
-     * @return \Magento\Centinel\Block\Authentication
+     * @return $this
      */
     public function addRelatedBlock($blockId)
     {
@@ -82,7 +81,7 @@ class Authentication extends \Magento\View\Element\Template
     /**
      * Return identifiers of related blocks
      *
-     * @return array
+     * @return string[]
      */
     public function getRelatedBlocks()
     {

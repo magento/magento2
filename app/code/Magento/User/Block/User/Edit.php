@@ -18,44 +18,45 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_User
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\User\Block\User;
+
 /**
  * User edit page
  *
- * @category   Magento
- * @package    Magento_User
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\User\Block\User;
-
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Backend\Block\Widget\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Backend\Block\Widget\Context $context,
+        \Magento\Framework\Registry $registry,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
         parent::__construct($context, $data);
     }
 
+    /**
+     * Class constructor
+     *
+     * @return void
+     */
     protected function _construct()
     {
         $this->_objectId = 'user_id';
@@ -64,10 +65,29 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
         parent::_construct();
 
-        $this->_updateButton('save', 'label', __('Save User'));
-        $this->_updateButton('delete', 'label', __('Delete User'));
+        $this->buttonList->update('save', 'label', __('Save User'));
+        $this->buttonList->update('delete', 'label', __('Delete User'));
+
+        $objId = $this->getRequest()->getParam($this->_objectId);
+
+        if (!empty($objId)) {
+            $deleteConfirmMsg = __("Are you sure you want to revoke the user\'s tokens?");
+            $this->addButton(
+                'invalidate',
+                array(
+                    'label' => __('Force Sign-In'),
+                    'class' => 'invalidate-token',
+                    'onclick' => 'deleteConfirm(\'' . $deleteConfirmMsg . '\', \'' . $this->getInvalidateUrl() . '\')',
+                )
+            );
+        }
+
+
     }
 
+    /**
+     * @return string
+     */
     public function getHeaderText()
     {
         if ($this->_coreRegistry->registry('permissions_user')->getId()) {
@@ -78,4 +98,23 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         }
     }
 
+    /**
+     * Return validation url for edit form
+     *
+     * @return string
+     */
+    public function getValidationUrl()
+    {
+        return $this->getUrl('adminhtml/*/validate', array('_current' => true));
+    }
+
+    /**
+     * Return invalidate url for edit form
+     *
+     * @return string
+     */
+    public function getInvalidateUrl()
+    {
+        return $this->getUrl('adminhtml/*/invalidatetoken', array('_current' => true));
+    }
 }

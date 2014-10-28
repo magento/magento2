@@ -18,78 +18,83 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Customer\Block\Adminhtml\Edit\Tab\Newsletter\Grid\Renderer;
 
 /**
  * Adminhtml newsletter queue grid block action item renderer
- *
- * @category   Magento
- * @package    Magento_Customer
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Customer\Block\Adminhtml\Edit\Tab\Newsletter\Grid\Renderer;
-
 class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
      * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Framework\Registry $registry,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
         parent::__construct($context, $data);
     }
 
-    public function render(\Magento\Object $row)
+    /**
+     * @param \Magento\Framework\Object $row
+     * @return string
+     */
+    public function render(\Magento\Framework\Object $row)
     {
         $actions = array();
 
         $actions[] = array(
-            '@'	=>  array(
-                'href'  => $this->getUrl('newsletter/template/preview',
+            '@' => array(
+                'href' => $this->getUrl(
+                    'newsletter/template/preview',
                     array(
-                        'id'        => $row->getTemplateId(),
-                        'subscriber'=> $this->_coreRegistry->registry('subscriber')->getId()
+                        'id' => $row->getTemplateId(),
+                        'subscriber' => $this->_coreRegistry->registry('subscriber')->getId()
                     )
                 ),
-                'target'=>	'_blank'
+                'target' => '_blank'
             ),
-            '#'	=> __('View')
+            '#' => __('View')
         );
 
         return $this->_actionsToHtml($actions);
     }
 
+    /**
+     * @param string $value
+     * @return string
+     */
     protected function _getEscapedValue($value)
     {
-        return addcslashes(htmlspecialchars($value),'\\\'');
+        return addcslashes(htmlspecialchars($value), '\\\'');
     }
 
+    /**
+     * @param array $actions
+     * @return string
+     */
     protected function _actionsToHtml(array $actions)
     {
         $html = array();
-        $attributesObject = new \Magento\Object();
+        $attributesObject = new \Magento\Framework\Object();
         foreach ($actions as $action) {
             $attributesObject->setData($action['@']);
             $html[] = '<a ' . $attributesObject->serialize() . '>' . $action['#'] . '</a>';
         }
         return implode('<span class="separator">&nbsp;|&nbsp;</span>', $html);
     }
-
 }

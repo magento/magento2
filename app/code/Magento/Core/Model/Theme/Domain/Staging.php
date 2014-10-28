@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,12 +27,12 @@
  */
 namespace Magento\Core\Model\Theme\Domain;
 
-class Staging implements \Magento\View\Design\Theme\Domain\StagingInterface
+class Staging implements \Magento\Framework\View\Design\Theme\Domain\StagingInterface
 {
     /**
      * Staging theme model instance
      *
-     * @var \Magento\View\Design\ThemeInterface
+     * @var \Magento\Framework\View\Design\ThemeInterface
      */
     protected $_theme;
 
@@ -44,11 +42,11 @@ class Staging implements \Magento\View\Design\Theme\Domain\StagingInterface
     protected $_themeCopyService;
 
     /**
-     * @param \Magento\View\Design\ThemeInterface $theme
+     * @param \Magento\Framework\View\Design\ThemeInterface $theme
      * @param \Magento\Theme\Model\CopyService $themeCopyService
      */
     public function __construct(
-        \Magento\View\Design\ThemeInterface $theme,
+        \Magento\Framework\View\Design\ThemeInterface $theme,
         \Magento\Theme\Model\CopyService $themeCopyService
     ) {
         $this->_theme = $theme;
@@ -58,7 +56,7 @@ class Staging implements \Magento\View\Design\Theme\Domain\StagingInterface
     /**
      * Copy changes from 'staging' theme
      *
-     * @return \Magento\View\Design\Theme\Domain\StagingInterface
+     * @return \Magento\Framework\View\Design\Theme\Domain\StagingInterface
      */
     public function updateFromStagingTheme()
     {

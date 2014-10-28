@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Wishlist
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -31,7 +29,7 @@
  */
 namespace Magento\Wishlist\Model;
 
-class Observer extends \Magento\Core\Model\AbstractModel
+class Observer
 {
     /**
      * Wishlist data
@@ -51,71 +49,60 @@ class Observer extends \Magento\Core\Model\AbstractModel
     protected $_customerSession;
 
     /**
-     * @var \Magento\Wishlist\Model\WishlistFactory
+     * @var WishlistFactory
      */
     protected $_wishlistFactory;
 
     /**
-     * @var \Magento\Message\ManagerInterface
+     * @var \Magento\Framework\Message\ManagerInterface
      */
     protected $messageManager;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
      * @param \Magento\Wishlist\Helper\Data $wishlistData
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Wishlist\Model\WishlistFactory $wishlistFactory
-     * @param \Magento\Message\ManagerInterface $messageManager
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
-     * @param array $data
+     * @param WishlistFactory $wishlistFactory
+     * @param \Magento\Framework\Message\ManagerInterface $messageManager
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
         \Magento\Wishlist\Helper\Data $wishlistData,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Wishlist\Model\WishlistFactory $wishlistFactory,
-        \Magento\Message\ManagerInterface $messageManager,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        WishlistFactory $wishlistFactory,
+        \Magento\Framework\Message\ManagerInterface $messageManager
     ) {
         $this->_wishlistData = $wishlistData;
         $this->_checkoutSession = $checkoutSession;
         $this->_customerSession = $customerSession;
         $this->_wishlistFactory = $wishlistFactory;
         $this->messageManager = $messageManager;
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
     /**
      * Get customer wishlist model instance
      *
      * @param   int $customerId
-     * @return  \Magento\Wishlist\Model\Wishlist || false
+     * @return  Wishlist|false
      */
     protected function _getWishlist($customerId)
     {
         if (!$customerId) {
             return false;
         }
-        return $this->_wishlistFactory->create()->loadByCustomer($customerId, true);
+        return $this->_wishlistFactory->create()->loadByCustomerId($customerId, true);
     }
 
     /**
      * Check move quote item to wishlist request
      *
-     * @param   \Magento\Event\Observer $observer
-     * @return  \Magento\Wishlist\Model\Observer
+     * @param   \Magento\Framework\Event\Observer $observer
+     * @return  $this
      */
     public function processCartUpdateBefore($observer)
     {
         $cart = $observer->getEvent()->getCart();
-        $data = $observer->getEvent()->getInfo();
+        $data = $observer->getEvent()->getInfo()->toArray();
         $productIds = array();
 
         $wishlist = $this->_getWishlist($cart->getQuote()->getCustomerId());
@@ -129,7 +116,7 @@ class Observer extends \Magento\Core\Model\AbstractModel
         foreach ($data as $itemId => $itemInfo) {
             if (!empty($itemInfo['wishlist'])) {
                 if ($item = $cart->getQuote()->getItemById($itemId)) {
-                    $productId  = $item->getProductId();
+                    $productId = $item->getProductId();
                     $buyRequest = $item->getBuyRequest();
 
                     if (isset($itemInfo['qty']) && is_numeric($itemInfo['qty'])) {
@@ -150,6 +137,10 @@ class Observer extends \Magento\Core\Model\AbstractModel
         return $this;
     }
 
+    /**
+     * @param \Magento\Framework\Event\Observer $observer
+     * @return void
+     */
     public function processAddToCart($observer)
     {
         $request = $observer->getEvent()->getRequest();
@@ -168,16 +159,15 @@ class Observer extends \Magento\Core\Model\AbstractModel
 
             if ($this->_customerSession->isLoggedIn()) {
                 $wishlist = $this->_wishlistFactory->create()
-                        ->loadByCustomer($this->_customerSession->getCustomer(), true);
-            } else if ($sharedWishlist) {
+                    ->loadByCustomerId($this->_customerSession->getCustomerId(), true);
+            } elseif ($sharedWishlist) {
                 $wishlist = $this->_wishlistFactory->create()->loadByCode($sharedWishlist);
             } else {
                 return;
             }
 
-            $wishlist->getItemCollection()->load();
-
-            foreach ($wishlist->getItemCollection() as $wishlistItem) {
+            $wishlists = $wishlist->getItemCollection()->load();
+            foreach ($wishlists as $wishlistItem) {
                 if ($wishlistItem->getId() == $wishlistId) {
                     $wishlistItem->delete();
                 }
@@ -203,10 +193,10 @@ class Observer extends \Magento\Core\Model\AbstractModel
     /**
      * Customer login processing
      *
-     * @param \Magento\Event\Observer $observer
-     * @return \Magento\Wishlist\Model\Observer
+     * @param \Magento\Framework\Event\Observer $observer
+     * @return $this
      */
-    public function customerLogin(\Magento\Event\Observer $observer)
+    public function customerLogin(\Magento\Framework\Event\Observer $observer)
     {
         $this->_wishlistData->calculate();
 
@@ -216,10 +206,10 @@ class Observer extends \Magento\Core\Model\AbstractModel
     /**
      * Customer logout processing
      *
-     * @param \Magento\Event\Observer $observer
-     * @return \Magento\Wishlist\Model\Observer
+     * @param \Magento\Framework\Event\Observer $observer
+     * @return $this
      */
-    public function customerLogout(\Magento\Event\Observer $observer)
+    public function customerLogout(\Magento\Framework\Event\Observer $observer)
     {
         $this->_customerSession->setWishlistItemCount(0);
 

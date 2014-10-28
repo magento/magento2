@@ -18,27 +18,24 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_CatalogInventory
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\CatalogInventory\Model;
+
+use Magento\CatalogInventory\Model\Stock\Item;
+use Magento\Framework\Event\Observer as EventObserver;
+use Magento\Sales\Model\Quote\Item as QuoteItem;
+
 /**
  * Catalog inventory module observer
  */
-namespace Magento\CatalogInventory\Model;
-
 class Observer
 {
     /**
-     * Product qty's checked
-     * data is valid if you check quote item qty and use singleton instance
-     *
-     * @var array
+     * @var Item[]
      */
-    protected $_checkedQuoteItems = array();
-
     protected $_itemsForReindex = array();
 
     /**
@@ -66,7 +63,7 @@ class Observer
     /**
      * Stock model factory
      *
-     * @var \Magento\CatalogInventory\Model\StockFactory
+     * @var StockFactory
      */
     protected $_stockFactory;
 
@@ -78,14 +75,7 @@ class Observer
     protected $_stockStatusFactory;
 
     /**
-     * Construct
-     * 
-     * @var \Magento\Index\Model\Indexer
-     */
-    protected $_indexer;
-
-    /**
-     * @var \Magento\CatalogInventory\Model\Stock
+     * @var Stock
      */
     protected $_stock;
 
@@ -100,94 +90,130 @@ class Observer
     protected $_resourceStock;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Resource\Indexer\Stock
+     * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor
      */
-    protected $_resourceIndexerStock;
+    protected $_stockIndexerProcessor;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Indexer\Price
+     * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface
      */
-    protected $_indexerPrice;
+    protected $typeConfig;
 
     /**
-     * @param \Magento\Catalog\Model\Resource\Product\Indexer\Price $indexerPrice
-     * @param \Magento\CatalogInventory\Model\Resource\Indexer\Stock $resourceIndexerStock
-     * @param \Magento\CatalogInventory\Model\Resource\Stock $resourceStock
-     * @param \Magento\Index\Model\Indexer $indexer
-     * @param \Magento\CatalogInventory\Model\Stock $stock
-     * @param \Magento\CatalogInventory\Model\Stock\Status $stockStatus
+     * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor
+     */
+    protected $_priceIndexer;
+
+    /**
+     * @var \Magento\CatalogInventory\Service\V1\StockItemService
+     */
+    protected $stockItemService;
+
+    /**
+     * @var \Magento\CatalogInventory\Service\V1\Data\StockItemBuilder
+     */
+    protected $stockItemBuilder;
+
+    /**
+     * @var \Magento\CatalogInventory\Model\Stock\ItemRegistry
+     */
+    protected $stockItemRegistry;
+
+    /**
+     * @var array
+     */
+    protected $paramListToCheck = [
+        'use_config_min_qty' => [
+            'item' => 'stock_data/min_qty',
+            'config' => 'stock_data/use_config_min_qty',
+        ],
+        'use_config_min_sale_qty' => [
+            'item' => 'stock_data/min_sale_qty',
+            'config' => 'stock_data/use_config_min_sale_qty',
+        ],
+        'use_config_max_sale_qty' => [
+            'item' => 'stock_data/max_sale_qty',
+            'config' => 'stock_data/use_config_max_sale_qty',
+        ],
+        'use_config_backorders' => [
+            'item' => 'stock_data/backorders',
+            'config' => 'stock_data/use_config_backorders',
+        ],
+        'use_config_notify_stock_qty' => [
+            'item' => 'stock_data/notify_stock_qty',
+            'config' => 'stock_data/use_config_notify_stock_qty',
+        ],
+        'use_config_enable_qty_inc' => [
+            'item' => 'stock_data/enable_qty_increments',
+            'config' => 'stock_data/use_config_enable_qty_inc',
+        ],
+        'use_config_qty_increments' => [
+            'item' => 'stock_data/qty_increments',
+            'config' => 'stock_data/use_config_qty_increments',
+        ],
+    ];
+
+    /**
+     * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $priceIndexer
+     * @param \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexerProcessor
+     * @param Resource\Stock $resourceStock
+     * @param Stock $stock
+     * @param Stock\Status $stockStatus
      * @param \Magento\CatalogInventory\Helper\Data $catalogInventoryData
-     * @param \Magento\CatalogInventory\Model\Stock\ItemFactory $stockItemFactory
-     * @param \Magento\CatalogInventory\Model\StockFactory $stockFactory
-     * @param \Magento\CatalogInventory\Model\Stock\StatusFactory $stockStatusFactory
+     * @param Stock\ItemFactory $stockItemFactory
+     * @param StockFactory $stockFactory
+     * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
+     * @param \Magento\CatalogInventory\Service\V1\Data\StockItemBuilder $stockItemBuilder
+     * @param Stock\ItemRegistry $stockItemRegistry
      */
     public function __construct(
-        \Magento\Catalog\Model\Resource\Product\Indexer\Price $indexerPrice,
-        \Magento\CatalogInventory\Model\Resource\Indexer\Stock $resourceIndexerStock,
+        \Magento\Catalog\Model\Indexer\Product\Price\Processor $priceIndexer,
+        \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexerProcessor,
         \Magento\CatalogInventory\Model\Resource\Stock $resourceStock,
-        \Magento\Index\Model\Indexer $indexer,
-        \Magento\CatalogInventory\Model\Stock $stock,
+        Stock $stock,
         \Magento\CatalogInventory\Model\Stock\Status $stockStatus,
         \Magento\CatalogInventory\Helper\Data $catalogInventoryData,
         \Magento\CatalogInventory\Model\Stock\ItemFactory $stockItemFactory,
-        \Magento\CatalogInventory\Model\StockFactory $stockFactory,
-        \Magento\CatalogInventory\Model\Stock\StatusFactory $stockStatusFactory
+        StockFactory $stockFactory,
+        \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService,
+        \Magento\CatalogInventory\Service\V1\Data\StockItemBuilder $stockItemBuilder,
+        \Magento\CatalogInventory\Model\Stock\ItemRegistry $stockItemRegistry
     ) {
-        $this->_indexerPrice = $indexerPrice;
-        $this->_resourceIndexerStock = $resourceIndexerStock;
+        $this->_priceIndexer = $priceIndexer;
+        $this->_stockIndexerProcessor = $stockIndexerProcessor;
         $this->_resourceStock = $resourceStock;
-        $this->_indexer = $indexer;
         $this->_stock = $stock;
         $this->_stockStatus = $stockStatus;
         $this->_catalogInventoryData = $catalogInventoryData;
         $this->_stockItemFactory = $stockItemFactory;
         $this->_stockFactory = $stockFactory;
-        $this->_stockStatusFactory = $stockStatusFactory;
+        $this->stockItemService = $stockItemService;
+        $this->stockItemBuilder = $stockItemBuilder;
+        $this->stockItemRegistry = $stockItemRegistry;
     }
 
     /**
      * Add stock information to product
      *
-     * @param   \Magento\Event\Observer $observer
-     * @return  \Magento\CatalogInventory\Model\Observer
+     * @param EventObserver $observer
+     * @return $this
      */
     public function addInventoryData($observer)
     {
         $product = $observer->getEvent()->getProduct();
         if ($product instanceof \Magento\Catalog\Model\Product) {
-            $productId = intval($product->getId());
-            if (!isset($this->_stockItemsArray[$productId])) {
-                $this->_stockItemsArray[$productId] = $this->_stockItemFactory->create();
-            }
-            $productStockItem = $this->_stockItemsArray[$productId];
-            $productStockItem->assignProduct($product);
+            $stockItem = $this->stockItemRegistry->retrieve($product->getId());
+            $this->_stockStatus->assignProduct($product, $stockItem->getStockId(), $product->getStockStatus());
         }
         return $this;
     }
 
     /**
-     * Remove stock information from static variable
-     *
-     * @param   \Magento\Event\Observer $observer
-     * @return  \Magento\CatalogInventory\Model\Observer
-     */
-    public function removeInventoryData($observer)
-    {
-        $product = $observer->getEvent()->getProduct();
-        if (($product instanceof \Magento\Catalog\Model\Product)
-            && $product->getId()
-            && isset($this->_stockItemsArray[$product->getId()])) {
-            unset($this->_stockItemsArray[$product->getId()]);
-        }
-        return $this;
-    }
-
-    /**
-     * Add information about producs stock status to collection
+     * Add information about product stock status to collection
      * Used in for product collection after load
      *
-     * @param   \Magento\Event\Observer $observer
-     * @return  \Magento\CatalogInventory\Model\Observer
+     * @param EventObserver $observer
+     * @return $this
      */
     public function addStockStatusToCollection($observer)
     {
@@ -195,7 +221,7 @@ class Observer
         if ($productCollection->hasFlag('require_stock_items')) {
             $this->_stockFactory->create()->addItemsToProducts($productCollection);
         } else {
-            $this->_stockStatusFactory->create()->addStockStatusToProducts($productCollection);
+            $this->_stockStatus->addStockStatusToProducts($productCollection);
         }
         return $this;
     }
@@ -203,8 +229,8 @@ class Observer
     /**
      * Add Stock items to product collection
      *
-     * @param   \Magento\Event\Observer $observer
-     * @return  \Magento\CatalogInventory\Model\Observer
+     * @param EventObserver $observer
+     * @return $this
      */
     public function addInventoryDataToCollection($observer)
     {
@@ -216,8 +242,8 @@ class Observer
     /**
      * Saving product inventory data. Product qty calculated dynamically.
      *
-     * @param   \Magento\Event\Observer $observer
-     * @return  \Magento\CatalogInventory\Model\Observer
+     * @param EventObserver $observer
+     * @return $this
      */
     public function saveInventoryData($observer)
     {
@@ -230,433 +256,52 @@ class Observer
             return $this;
         }
 
-        $item = $product->getStockItem();
-        if (!$item) {
-            $item = $this->_stockItemFactory->create();
-        }
-        $this->_prepareItemForSave($item, $product);
-        $item->save();
-        return $this;
-    }
-
-    /**
-     * Copy product inventory data (used for product duplicate functionality)
-     *
-     * @param   \Magento\Event\Observer $observer
-     * @return  \Magento\CatalogInventory\Model\Observer
-     */
-    public function copyInventoryData($observer)
-    {
-        /** @var \Magento\Catalog\Model\Product $currentProduct */
-        $currentProduct = $observer->getEvent()->getCurrentProduct();
-        /** @var \Magento\Catalog\Model\Product $newProduct */
-        $newProduct = $observer->getEvent()->getNewProduct();
-
-        $newProduct->unsStockItem();
-        $stockData = array(
-            'use_config_min_qty'        => 1,
-            'use_config_min_sale_qty'   => 1,
-            'use_config_max_sale_qty'   => 1,
-            'use_config_backorders'     => 1,
-            'use_config_notify_stock_qty'=> 1
-        );
-        if ($currentStockItem = $currentProduct->getStockItem()) {
-            $stockData += array(
-                'use_config_enable_qty_inc'  => $currentStockItem->getData('use_config_enable_qty_inc'),
-                'enable_qty_increments'             => $currentStockItem->getData('enable_qty_increments'),
-                'use_config_qty_increments'         => $currentStockItem->getData('use_config_qty_increments'),
-                'qty_increments'                    => $currentStockItem->getData('qty_increments'),
-            );
-        }
-        $newProduct->setStockData($stockData);
-
+        $this->saveStockItemData($product);
         return $this;
     }
 
     /**
      * Prepare stock item data for save
      *
-     * @param \Magento\CatalogInventory\Model\Stock\Item $item
      * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\CatalogInventory\Model\Observer
+     * @return $this
      */
-    protected function _prepareItemForSave($item, $product)
+    protected function saveStockItemData($product)
     {
-        $item->addData($product->getStockData())
-            ->setProduct($product)
-            ->setProductId($product->getId())
-            ->setStockId($item->getStockId());
-        if (!is_null($product->getData('stock_data/min_qty'))
-            && is_null($product->getData('stock_data/use_config_min_qty'))) {
-            $item->setData('use_config_min_qty', false);
+        $stockItemData = $product->getStockData();
+        $stockItemData['product_id'] = $product->getId();
+        /**
+         * @todo Should be refactored together with \Magento\CatalogInventory\Model\Stock\Item::getStockId
+         */
+        $stockItemData['stock_id'] = \Magento\CatalogInventory\Model\Stock\Item::DEFAULT_STOCK_ID;
+
+        foreach ($this->paramListToCheck as $dataKey => $configPath) {
+            if (null !== $product->getData($configPath['item']) && null === $product->getData($configPath['config'])) {
+                $stockItemData[$dataKey] = false;
+            }
         }
-        if (!is_null($product->getData('stock_data/min_sale_qty'))
-            && is_null($product->getData('stock_data/use_config_min_sale_qty'))) {
-            $item->setData('use_config_min_sale_qty', false);
-        }
-        if (!is_null($product->getData('stock_data/max_sale_qty'))
-            && is_null($product->getData('stock_data/use_config_max_sale_qty'))) {
-            $item->setData('use_config_max_sale_qty', false);
-        }
-        if (!is_null($product->getData('stock_data/backorders'))
-            && is_null($product->getData('stock_data/use_config_backorders'))) {
-            $item->setData('use_config_backorders', false);
-        }
-        if (!is_null($product->getData('stock_data/notify_stock_qty'))
-            && is_null($product->getData('stock_data/use_config_notify_stock_qty'))) {
-            $item->setData('use_config_notify_stock_qty', false);
-        }
+
         $originalQty = $product->getData('stock_data/original_inventory_qty');
-        if (strlen($originalQty)>0) {
-            $item->setQtyCorrection($item->getQty()-$originalQty);
-        }
-        if (!is_null($product->getData('stock_data/enable_qty_increments'))
-            && is_null($product->getData('stock_data/use_config_enable_qty_inc'))) {
-            $item->setData('use_config_enable_qty_inc', false);
-        }
-        if (!is_null($product->getData('stock_data/qty_increments'))
-            && is_null($product->getData('stock_data/use_config_qty_increments'))) {
-            $item->setData('use_config_qty_increments', false);
-        }
-        return $this;
-
-    }
-
-    /**
-     * Removes error statuses from quote and item, set by this observer
-     *
-     * @param \Magento\Sales\Model\Quote\Item $item
-     * @param int $code
-     * @return \Magento\CatalogInventory\Model\Observer
-     */
-    protected function _removeErrorsFromQuoteAndItem($item, $code)
-    {
-        if ($item->getHasError()) {
-            $params = array(
-                'origin' => 'cataloginventory',
-                'code' => $code
-            );
-            $item->removeErrorInfosByParams($params);
+        if (strlen($originalQty) > 0) {
+            $stockItemData['qty_correction'] = (isset($stockItemData['qty']) ? $stockItemData['qty'] : 0)
+                - $originalQty;
         }
 
-        $quote = $item->getQuote();
-        $quoteItems = $quote->getItemsCollection();
-        $canRemoveErrorFromQuote = true;
-
-        foreach ($quoteItems as $quoteItem) {
-            if ($quoteItem->getItemId() == $item->getItemId()) {
-                continue;
-            }
-
-            $errorInfos = $quoteItem->getErrorInfos();
-            foreach ($errorInfos as $errorInfo) {
-                if ($errorInfo['code'] == $code) {
-                    $canRemoveErrorFromQuote = false;
-                    break;
-                }
-            }
-
-            if (!$canRemoveErrorFromQuote) {
-                break;
-            }
-        }
-
-        if ($quote->getHasError() && $canRemoveErrorFromQuote) {
-            $params = array(
-                'origin' => 'cataloginventory',
-                'code' => $code
-            );
-            $quote->removeErrorInfosByParams(null, $params);
-        }
+        $stockItemDo = $this->stockItemService->getStockItem($product->getId());
+        $this->stockItemService->saveStockItem(
+            $this->stockItemBuilder->mergeDataObjectWithArray($stockItemDo, $stockItemData)
+        );
 
         return $this;
-    }
-
-    /**
-     * Check product inventory data when quote item quantity declaring
-     *
-     * @param  \Magento\Event\Observer $observer
-     * @return \Magento\CatalogInventory\Model\Observer
-     * @throws \Magento\Core\Exception
-     */
-    public function checkQuoteItemQty($observer)
-    {
-        $quoteItem = $observer->getEvent()->getItem();
-        /* @var $quoteItem \Magento\Sales\Model\Quote\Item */
-        if (!$quoteItem || !$quoteItem->getProductId() || !$quoteItem->getQuote()
-            || $quoteItem->getQuote()->getIsSuperMode()) {
-            return $this;
-        }
-
-        /**
-         * Get Qty
-         */
-        $qty = $quoteItem->getQty();
-
-        /**
-         * Check if product in stock. For composite products check base (parent) item stosk status
-         */
-        $stockItem = $quoteItem->getProduct()->getStockItem();
-        $parentStockItem = false;
-        if ($quoteItem->getParentItem()) {
-            $parentStockItem = $quoteItem->getParentItem()->getProduct()->getStockItem();
-        }
-        if ($stockItem) {
-            if (!$stockItem->getIsInStock() || ($parentStockItem && !$parentStockItem->getIsInStock())) {
-                $quoteItem->addErrorInfo(
-                    'cataloginventory',
-                    \Magento\CatalogInventory\Helper\Data::ERROR_QTY,
-                    __('This product is out of stock.')
-                );
-                $quoteItem->getQuote()->addErrorInfo(
-                    'stock',
-                    'cataloginventory',
-                    \Magento\CatalogInventory\Helper\Data::ERROR_QTY,
-                    __('Some of the products are currently out of stock.')
-                );
-                return $this;
-            } else {
-                // Delete error from item and its quote, if it was set due to item out of stock
-                $this->_removeErrorsFromQuoteAndItem($quoteItem, \Magento\CatalogInventory\Helper\Data::ERROR_QTY);
-            }
-        }
-
-        /**
-         * Check item for options
-         */
-        if (($options = $quoteItem->getQtyOptions()) && $qty > 0) {
-            $qty = $quoteItem->getProduct()->getTypeInstance()->prepareQuoteItemQty($qty, $quoteItem->getProduct());
-            $quoteItem->setData('qty', $qty);
-
-            if ($stockItem) {
-                $result = $stockItem->checkQtyIncrements($qty);
-                if ($result->getHasError()) {
-                    $quoteItem->addErrorInfo(
-                        'cataloginventory',
-                        \Magento\CatalogInventory\Helper\Data::ERROR_QTY_INCREMENTS,
-                        $result->getMessage()
-                    );
-
-                    $quoteItem->getQuote()->addErrorInfo(
-                        $result->getQuoteMessageIndex(),
-                        'cataloginventory',
-                        \Magento\CatalogInventory\Helper\Data::ERROR_QTY_INCREMENTS,
-                        $result->getQuoteMessage()
-                    );
-                } else {
-                    // Delete error from item and its quote, if it was set due to qty problems
-                    $this->_removeErrorsFromQuoteAndItem(
-                        $quoteItem,
-                        \Magento\CatalogInventory\Helper\Data::ERROR_QTY_INCREMENTS
-                    );
-                }
-            }
-
-            foreach ($options as $option) {
-                $optionValue = $option->getValue();
-                /* @var $option \Magento\Sales\Model\Quote\Item\Option */
-                $optionQty = $qty * $optionValue;
-                $increaseOptionQty = ($quoteItem->getQtyToAdd() ? $quoteItem->getQtyToAdd() : $qty) * $optionValue;
-
-                $stockItem = $option->getProduct()->getStockItem();
-
-                if ($quoteItem->getProductType() == \Magento\Catalog\Model\Product\Type::TYPE_CONFIGURABLE) {
-                    $stockItem->setProductName($quoteItem->getName());
-                }
-
-                /* @var $stockItem \Magento\CatalogInventory\Model\Stock\Item */
-                if (!$stockItem instanceof \Magento\CatalogInventory\Model\Stock\Item) {
-                    throw new \Magento\Core\Exception(__('The stock item for Product in option is not valid.'));
-                }
-
-                /**
-                 * define that stock item is child for composite product
-                 */
-                $stockItem->setIsChildItem(true);
-                /**
-                 * don't check qty increments value for option product
-                 */
-                $stockItem->setSuppressCheckQtyIncrements(true);
-
-                $qtyForCheck = $this->_getQuoteItemQtyForCheck(
-                    $option->getProduct()->getId(),
-                    $quoteItem->getId(),
-                    $increaseOptionQty
-                );
-
-                $result = $stockItem->checkQuoteItemQty($optionQty, $qtyForCheck, $optionValue);
-
-                if (!is_null($result->getItemIsQtyDecimal())) {
-                    $option->setIsQtyDecimal($result->getItemIsQtyDecimal());
-                }
-
-                if ($result->getHasQtyOptionUpdate()) {
-                    $option->setHasQtyOptionUpdate(true);
-                    $quoteItem->updateQtyOption($option, $result->getOrigQty());
-                    $option->setValue($result->getOrigQty());
-                    /**
-                     * if option's qty was updates we also need to update quote item qty
-                     */
-                    $quoteItem->setData('qty', intval($qty));
-                }
-                if (!is_null($result->getMessage())) {
-                    $option->setMessage($result->getMessage());
-                    $quoteItem->setMessage($result->getMessage());
-                }
-                if (!is_null($result->getItemBackorders())) {
-                    $option->setBackorders($result->getItemBackorders());
-                }
-
-                if ($result->getHasError()) {
-                    $option->setHasError(true);
-
-                    $quoteItem->addErrorInfo(
-                        'cataloginventory',
-                        \Magento\CatalogInventory\Helper\Data::ERROR_QTY,
-                        $result->getMessage()
-                    );
-
-                    $quoteItem->getQuote()->addErrorInfo(
-                        $result->getQuoteMessageIndex(),
-                        'cataloginventory',
-                        \Magento\CatalogInventory\Helper\Data::ERROR_QTY,
-                        $result->getQuoteMessage()
-                    );
-                } else {
-                    // Delete error from item and its quote, if it was set due to qty lack
-                    $this->_removeErrorsFromQuoteAndItem($quoteItem, \Magento\CatalogInventory\Helper\Data::ERROR_QTY);
-                }
-
-                $stockItem->unsIsChildItem();
-            }
-        } else {
-            /* @var $stockItem \Magento\CatalogInventory\Model\Stock\Item */
-            if (!$stockItem instanceof \Magento\CatalogInventory\Model\Stock\Item) {
-                throw new \Magento\Core\Exception(__('The stock item for Product is not valid.'));
-            }
-
-            /**
-             * When we work with subitem (as subproduct of bundle or configurable product)
-             */
-            if ($quoteItem->getParentItem()) {
-                $rowQty = $quoteItem->getParentItem()->getQty() * $qty;
-                /**
-                 * we are using 0 because original qty was processed
-                 */
-                $qtyForCheck = $this->_getQuoteItemQtyForCheck(
-                    $quoteItem->getProduct()->getId(),
-                    $quoteItem->getId(),
-                    0
-                );
-            } else {
-                $increaseQty = $quoteItem->getQtyToAdd() ? $quoteItem->getQtyToAdd() : $qty;
-                $rowQty = $qty;
-                $qtyForCheck = $this->_getQuoteItemQtyForCheck(
-                    $quoteItem->getProduct()->getId(),
-                    $quoteItem->getId(),
-                    $increaseQty
-                );
-            }
-
-            $productTypeCustomOption = $quoteItem->getProduct()->getCustomOption('product_type');
-            if (!is_null($productTypeCustomOption)) {
-                // Check if product related to current item is a part of grouped product
-                if ($productTypeCustomOption->getValue() == \Magento\Catalog\Model\Product\Type\Grouped::TYPE_CODE) {
-                    $stockItem->setProductName($quoteItem->getProduct()->getName());
-                    $stockItem->setIsChildItem(true);
-                }
-            }
-
-            $result = $stockItem->checkQuoteItemQty($rowQty, $qtyForCheck, $qty);
-
-            if ($stockItem->hasIsChildItem()) {
-                $stockItem->unsIsChildItem();
-            }
-
-            if (!is_null($result->getItemIsQtyDecimal())) {
-                $quoteItem->setIsQtyDecimal($result->getItemIsQtyDecimal());
-                if ($quoteItem->getParentItem()) {
-                    $quoteItem->getParentItem()->setIsQtyDecimal($result->getItemIsQtyDecimal());
-                }
-            }
-
-            /**
-             * Just base (parent) item qty can be changed
-             * qty of child products are declared just during add process
-             * exception for updating also managed by product type
-             */
-            if ($result->getHasQtyOptionUpdate()
-                && (!$quoteItem->getParentItem()
-                    || $quoteItem->getParentItem()->getProduct()->getTypeInstance()
-                        ->getForceChildItemQtyChanges($quoteItem->getParentItem()->getProduct())
-                )
-            ) {
-                $quoteItem->setData('qty', $result->getOrigQty());
-            }
-
-            if (!is_null($result->getItemUseOldQty())) {
-                $quoteItem->setUseOldQty($result->getItemUseOldQty());
-            }
-            if (!is_null($result->getMessage())) {
-                $quoteItem->setMessage($result->getMessage());
-            }
-
-            if (!is_null($result->getItemBackorders())) {
-                $quoteItem->setBackorders($result->getItemBackorders());
-            }
-
-            if ($result->getHasError()) {
-                $quoteItem->addErrorInfo(
-                    'cataloginventory',
-                    \Magento\CatalogInventory\Helper\Data::ERROR_QTY,
-                    $result->getMessage()
-                );
-
-                $quoteItem->getQuote()->addErrorInfo(
-                    $result->getQuoteMessageIndex(),
-                    'cataloginventory',
-                    \Magento\CatalogInventory\Helper\Data::ERROR_QTY,
-                    $result->getQuoteMessage()
-                );
-            } else {
-                // Delete error from item and its quote, if it was set due to qty lack
-                $this->_removeErrorsFromQuoteAndItem($quoteItem, \Magento\CatalogInventory\Helper\Data::ERROR_QTY);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Get product qty includes information from all quote items
-     * Need be used only in sungleton mode
-     *
-     * @param int   $productId
-     * @param int   $quoteItemId
-     * @param float $itemQty
-     * @return int
-     */
-    protected function _getQuoteItemQtyForCheck($productId, $quoteItemId, $itemQty)
-    {
-        $qty = $itemQty;
-        if (isset($this->_checkedQuoteItems[$productId]['qty']) &&
-            !in_array($quoteItemId, $this->_checkedQuoteItems[$productId]['items'])) {
-                $qty += $this->_checkedQuoteItems[$productId]['qty'];
-        }
-
-        $this->_checkedQuoteItems[$productId]['qty'] = $qty;
-        $this->_checkedQuoteItems[$productId]['items'][] = $quoteItemId;
-
-        return $qty;
     }
 
     /**
      * Subtract qtys of quote item products after multishipping checkout
      *
-     * @param \Magento\Event\Observer $observer
-     * @return \Magento\CatalogInventory\Model\Observer
+     * @param EventObserver $observer
+     * @return $this
      */
-    public function checkoutAllSubmitAfter(\Magento\Event\Observer $observer)
+    public function checkoutAllSubmitAfter(EventObserver $observer)
     {
         $quote = $observer->getEvent()->getQuote();
         if (!$quote->getInventoryProcessed()) {
@@ -672,16 +317,17 @@ class Observer
      * Used before order placing to make order save/place transaction smaller
      * Also called after every successful order placement to ensure subtraction of inventory
      *
-     * @param \Magento\Event\Observer $observer
+     * @param EventObserver $observer
+     * @return $this
      */
-    public function subtractQuoteInventory(\Magento\Event\Observer $observer)
+    public function subtractQuoteInventory(EventObserver $observer)
     {
         $quote = $observer->getEvent()->getQuote();
 
         // Maybe we've already processed this quote in some event during order placement
         // e.g. call in event 'sales_model_service_quote_submit_before' and later in 'checkout_submit_all_after'
         if ($quote->getInventoryProcessed()) {
-            return;
+            return $this;
         }
         $items = $this->_getProductsQty($quote->getAllItems());
 
@@ -696,14 +342,20 @@ class Observer
 
     /**
      * Revert quote items inventory data (cover not success order place case)
-     * @param $observer
+     *
+     * @param EventObserver $observer
+     * @return void
      */
     public function revertQuoteInventory($observer)
     {
         $quote = $observer->getEvent()->getQuote();
         $items = $this->_getProductsQty($quote->getAllItems());
         $this->_stock->revertProductsSale($items);
-
+        $productIds = array_keys($items);
+        if (!empty($productIds)) {
+            $this->_stockIndexerProcessor->reindexList($productIds);
+            $this->_priceIndexer->reindexList($productIds);
+        }
         // Clear flag, so if order placement retried again with success - it will be processed
         $quote->setInventoryProcessed(false);
     }
@@ -718,25 +370,25 @@ class Observer
      *  )
      * )
      *
-     * @param \Magento\Sales\Model\Quote\Item $quoteItem
+     * @param QuoteItem $quoteItem
      * @param array &$items
+     * @return void
      */
     protected function _addItemToQtyArray($quoteItem, &$items)
     {
         $productId = $quoteItem->getProductId();
-        if (!$productId)
+        if (!$productId) {
             return;
+        }
         if (isset($items[$productId])) {
             $items[$productId]['qty'] += $quoteItem->getTotalQty();
         } else {
             $stockItem = null;
             if ($quoteItem->getProduct()) {
-                $stockItem = $quoteItem->getProduct()->getStockItem();
+                /** @var Item $stockItem */
+                $stockItem = $this->stockItemRegistry->retrieve($quoteItem->getProduct()->getId());
             }
-            $items[$productId] = array(
-                'item' => $stockItem,
-                'qty'  => $quoteItem->getTotalQty()
-            );
+            $items[$productId] = array('item' => $stockItem, 'qty' => $quoteItem->getTotalQty());
         }
     }
 
@@ -756,7 +408,7 @@ class Observer
     {
         $items = array();
         foreach ($relatedItems as $item) {
-            $productId  = $item->getProductId();
+            $productId = $item->getProductId();
             if (!$productId) {
                 continue;
             }
@@ -775,7 +427,8 @@ class Observer
     /**
      * Refresh stock index for specific stock items after successful order placement
      *
-     * @param $observer
+     * @param EventObserver $observer
+     * @return $this
      */
     public function reindexQuoteInventory($observer)
     {
@@ -784,7 +437,7 @@ class Observer
         $productIds = array();
         foreach ($quote->getAllItems() as $item) {
             $productIds[$item->getProductId()] = $item->getProductId();
-            $children   = $item->getChildrenItems();
+            $children = $item->getChildrenItems();
             if ($children) {
                 foreach ($children as $childItem) {
                     $productIds[$childItem->getProductId()] = $childItem->getProductId();
@@ -793,7 +446,7 @@ class Observer
         }
 
         if (count($productIds)) {
-            $this->_resourceIndexerStock->reindexProducts($productIds);
+            $this->_stockIndexerProcessor->reindexList($productIds);
         }
 
         // Reindex previously remembered items
@@ -803,9 +456,12 @@ class Observer
             $productIds[] = $item->getProductId();
         }
 
-        $this->_indexerPrice->reindexProductIds($productIds);
+        if (!empty($productIds)) {
+            $this->_priceIndexer->reindexList($productIds);
+        }
 
-        $this->_itemsForReindex = array(); // Clear list of remembered items - we don't need it anymore
+        $this->_itemsForReindex = array();
+        // Clear list of remembered items - we don't need it anymore
 
         return $this;
     }
@@ -813,46 +469,44 @@ class Observer
     /**
      * Return creditmemo items qty to stock
      *
-     * @param \Magento\Event\Observer $observer
+     * @param EventObserver $observer
+     * @return void
      */
     public function refundOrderInventory($observer)
     {
         /* @var $creditmemo \Magento\Sales\Model\Order\Creditmemo */
         $creditmemo = $observer->getEvent()->getCreditmemo();
-        $items = array();
+        $itemsToUpdate = [];
         foreach ($creditmemo->getAllItems() as $item) {
-            /* @var $item \Magento\Sales\Model\Order\Creditmemo\Item */
-            $return = false;
-            if ($item->hasBackToStock()) {
-                if ($item->getBackToStock() && $item->getQty()) {
-                    $return = true;
-                }
-            } elseif ($this->_catalogInventoryData->isAutoReturnEnabled()) {
-                $return = true;
-            }
-            if ($return) {
-                $parentOrderId = $item->getOrderItem()->getParentItemId();
+            $qty = $item->getQty();
+            if (($item->getBackToStock() && $qty) || $this->_catalogInventoryData->isAutoReturnEnabled()) {
+                $productId = $item->getProductId();
+                $parentItemId = $item->getOrderItem()->getParentItemId();
                 /* @var $parentItem \Magento\Sales\Model\Order\Creditmemo\Item */
-                $parentItem = $parentOrderId ? $creditmemo->getItemByOrderId($parentOrderId) : false;
-                $qty = $parentItem ? ($parentItem->getQty() * $item->getQty()) : $item->getQty();
-                if (isset($items[$item->getProductId()])) {
-                    $items[$item->getProductId()]['qty'] += $qty;
+                $parentItem = $parentItemId ? $creditmemo->getItemByOrderId($parentItemId) : false;
+                $qty = $parentItem ? $parentItem->getQty() * $qty : $qty;
+                if (isset($itemsToUpdate[$productId]['qty'])) {
+                    $itemsToUpdate[$productId]['qty'] += $qty;
                 } else {
-                    $items[$item->getProductId()] = array(
-                        'qty' => $qty,
-                        'item'=> null,
-                    );
+                    $itemsToUpdate[$productId] = ['qty' => $qty, 'item' => null];
                 }
             }
         }
-        $this->_stock->revertProductsSale($items);
+
+        if (!empty($itemsToUpdate)) {
+            $this->_stock->revertProductsSale($itemsToUpdate);
+
+            $updatedItemIds = array_keys($itemsToUpdate);
+            $this->_stockIndexerProcessor->reindexList($updatedItemIds);
+            $this->_priceIndexer->reindexList($updatedItemIds);
+        }
     }
 
     /**
      * Cancel order item
      *
-     * @param   \Magento\Event\Observer $observer
-     * @return  \Magento\CatalogInventory\Model\Observer
+     * @param   EventObserver $observer
+     * @return  $this
      */
     public function cancelOrderItem($observer)
     {
@@ -861,20 +515,19 @@ class Observer
         $children = $item->getChildrenItems();
         $qty = $item->getQtyOrdered() - max($item->getQtyShipped(), $item->getQtyInvoiced()) - $item->getQtyCanceled();
 
-        if ($item->getId() && ($productId = $item->getProductId()) && empty($children) && $qty) {
-            $this->_stock->backItemQty($productId, $qty);
+        if ($item->getId() && $item->getProductId() && empty($children) && $qty) {
+            $this->_stock->backItemQty($item->getProductId(), $qty);
         }
-
+        $this->_priceIndexer->reindexRow($item->getProductId());
         return $this;
     }
 
     /**
      * Update items stock status and low stock date.
      *
-     * @param \Magento\Event\Observer $observer
-     * @return  \Magento\CatalogInventory\Model\Observer
+     * @return $this
      */
-    public function updateItemsStockUponConfigChange($observer)
+    public function updateItemsStockUponConfigChange()
     {
         $this->_resourceStock->updateSetOutOfStock();
         $this->_resourceStock->updateSetInStock();
@@ -885,10 +538,10 @@ class Observer
     /**
      * Update Only product status observer
      *
-     * @param \Magento\Event\Observer $observer
-     * @return \Magento\CatalogInventory\Model\Observer
+     * @param EventObserver $observer
+     * @return $this
      */
-    public function productStatusUpdate(\Magento\Event\Observer $observer)
+    public function productStatusUpdate(EventObserver $observer)
     {
         $productId = $observer->getEvent()->getProductId();
         $this->_stockStatus->updateStatus($productId);
@@ -898,10 +551,10 @@ class Observer
     /**
      * Catalog Product website update
      *
-     * @param \Magento\Event\Observer $observer
-     * @return \Magento\CatalogInventory\Model\Observer
+     * @param EventObserver $observer
+     * @return $this
      */
-    public function catalogProductWebsiteUpdate(\Magento\Event\Observer $observer)
+    public function catalogProductWebsiteUpdate(EventObserver $observer)
     {
         $websiteIds = $observer->getEvent()->getWebsiteIds();
         $productIds = $observer->getEvent()->getProductIds();
@@ -918,13 +571,13 @@ class Observer
     /**
      * Add stock status to prepare index select
      *
-     * @param \Magento\Event\Observer $observer
-     * @return \Magento\CatalogInventory\Model\Observer
+     * @param EventObserver $observer
+     * @return $this
      */
-    public function addStockStatusToPrepareIndexSelect(\Magento\Event\Observer $observer)
+    public function addStockStatusToPrepareIndexSelect(EventObserver $observer)
     {
-        $website    = $observer->getEvent()->getWebsite();
-        $select     = $observer->getEvent()->getSelect();
+        $website = $observer->getEvent()->getWebsite();
+        $select = $observer->getEvent()->getSelect();
 
         $this->_stockStatus->addStockStatusToSelect($select, $website);
 
@@ -932,39 +585,10 @@ class Observer
     }
 
     /**
-     * Add stock status limitation to catalog product price index select object
-     *
-     * @param \Magento\Event\Observer $observer
-     * @return \Magento\CatalogInventory\Model\Observer
-     */
-    public function prepareCatalogProductIndexSelect(\Magento\Event\Observer $observer)
-    {
-        $select     = $observer->getEvent()->getSelect();
-        $entity     = $observer->getEvent()->getEntityField();
-        $website    = $observer->getEvent()->getWebsiteField();
-
-        $this->_stockStatus->prepareCatalogProductIndexSelect($select, $entity, $website);
-
-        return $this;
-    }
-
-    /**
-     * Reindex all events of product-massAction type
-     *
-     * @param \Magento\Event\Observer $observer
-     */
-    public function reindexProductsMassAction($observer)
-    {
-        $this->_indexer->indexEvents(
-            \Magento\Catalog\Model\Product::ENTITY, \Magento\Index\Model\Event::TYPE_MASS_ACTION
-        );
-    }
-
-    /**
      * Detects whether product status should be shown
      *
-     * @param \Magento\Event\Observer $observer
-     * @return \Magento\CatalogInventory\Model\Observer
+     * @param EventObserver $observer
+     * @return $this
      */
     public function displayProductStatusInfo($observer)
     {

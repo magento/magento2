@@ -25,99 +25,104 @@
  */
 namespace Magento\Rss\App\Action\Plugin;
 
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Backend\App\AbstractAction;
+
+/**
+ * Class Authentication
+ * @package Magento\Rss\App\Action\Plugin
+ */
 class Authentication extends \Magento\Backend\App\Action\Plugin\Authentication
 {
     /**
-     * @var \Magento\HTTP\Authentication
+     * @var \Magento\Framework\HTTP\Authentication
      */
-    protected $_httpAuthentication;
+    protected $httpAuthentication;
 
     /**
-     * @var \Magento\Logger
+     * @var \Magento\Framework\Logger
      */
-    protected $_logger;
+    protected $logger;
 
     /**
-     * @var \Magento\AuthorizationInterface
+     * @var \Magento\Framework\AuthorizationInterface
      */
-    protected $_authorization;
+    protected $authorization;
 
     /**
      * @var array
      */
-    protected $_aclResources = array(
+    protected $aclResources = array(
         'authenticate' => 'Magento_Rss::rss',
-        'catalog' => array(
-            'notifystock' => 'Magento_Catalog::products',
-            'review' => 'Magento_Review::reviews_all'
-        ),
-        'order' => 'Magento_Sales::sales_order'
+        'feed' => 'Magento_Rss::rss'
     );
 
     /**
      * @param \Magento\Backend\Model\Auth $auth
-     * @param \Magento\Backend\Model\Url $url
-     * @param \Magento\App\ResponseInterface $response
-     * @param \Magento\App\ActionFlag $actionFlag
-     * @param \Magento\Message\ManagerInterface $messageManager
-     * @param \Magento\HTTP\Authentication $httpAuthentication
-     * @param \Magento\Logger $logger
-     * @param \Magento\AuthorizationInterface $authorization
+     * @param \Magento\Backend\Model\UrlInterface $url
+     * @param ResponseInterface $response
+     * @param \Magento\Framework\App\ActionFlag $actionFlag
+     * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param \Magento\Framework\HTTP\Authentication $httpAuthentication
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\AuthorizationInterface $authorization
      */
     public function __construct(
         \Magento\Backend\Model\Auth $auth,
-        \Magento\Backend\Model\Url $url,
-        \Magento\App\ResponseInterface $response,
-        \Magento\App\ActionFlag $actionFlag,
-        \Magento\Message\ManagerInterface $messageManager,
-        \Magento\HTTP\Authentication $httpAuthentication,
-        \Magento\Logger $logger,
-        \Magento\AuthorizationInterface $authorization
+        \Magento\Backend\Model\UrlInterface $url,
+        ResponseInterface $response,
+        \Magento\Framework\App\ActionFlag $actionFlag,
+        \Magento\Framework\Message\ManagerInterface $messageManager,
+        \Magento\Framework\HTTP\Authentication $httpAuthentication,
+        \Magento\Framework\Logger $logger,
+        \Magento\Framework\AuthorizationInterface $authorization
     ) {
-        $this->_httpAuthentication = $httpAuthentication;
-        $this->_logger = $logger;
-        $this->_authorization = $authorization;
+        $this->httpAuthentication = $httpAuthentication;
+        $this->logger = $logger;
+        $this->authorization = $authorization;
         parent::__construct($auth, $url, $response, $actionFlag, $messageManager);
     }
 
     /**
      * Replace standard admin login form with HTTP Basic authentication
      *
-     * @param array $arguments
-     * @param \Magento\Code\Plugin\InvocationChain $invocationChain
-     * @return mixed
+     * @param AbstractAction $subject
+     * @param callable $proceed
+     * @param RequestInterface $request
+     * @return ResponseInterface
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundDispatch(array $arguments, \Magento\Code\Plugin\InvocationChain $invocationChain)
+    public function aroundDispatch(AbstractAction $subject, \Closure $proceed, RequestInterface $request)
     {
-        /** @var \Magento\App\RequestInterface $request */
-        $request = $arguments[0];
-        $resource = isset($this->_aclResources[$request->getControllerName()])
-            ? (isset($this->_aclResources[$request->getControllerName()][$request->getActionName()])
-                ? $this->_aclResources[$request->getControllerName()][$request->getActionName()]
-                : $this->_aclResources[$request->getControllerName()])
+        $resource = isset($this->aclResources[$request->getControllerName()])
+            ? isset($this->aclResources[$request->getControllerName()][$request->getActionName()])
+                ? $this->aclResources[$request->getControllerName()][$request->getActionName()]
+                : $this->aclResources[$request->getControllerName()]
             : null;
+
         if (!$resource) {
-            return parent::aroundDispatch($arguments, $invocationChain);
+            return parent::aroundDispatch($subject, $proceed, $request);
         }
 
         $session = $this->_auth->getAuthStorage();
 
         // Try to login using HTTP-authentication
         if (!$session->isLoggedIn()) {
-            list($login, $password) = $this->_httpAuthentication->getCredentials();
+            list($login, $password) = $this->httpAuthentication->getCredentials();
             try {
                 $this->_auth->login($login, $password);
             } catch (\Magento\Backend\Model\Auth\Exception $e) {
-                $this->_logger->logException($e);
+                $this->logger->logException($e);
             }
         }
 
         // Verify if logged in and authorized
-        if (!$session->isLoggedIn() || !$this->_authorization->isAllowed($resource)) {
-            $this->_httpAuthentication->setAuthenticationFailed('RSS Feeds');
+        if (!$session->isLoggedIn() || !$this->authorization->isAllowed($resource)) {
+            $this->httpAuthentication->setAuthenticationFailed('RSS Feeds');
             return $this->_response;
         }
 
-        return parent::aroundDispatch($arguments, $invocationChain);
+        return parent::aroundDispatch($subject, $proceed, $request);
     }
 }

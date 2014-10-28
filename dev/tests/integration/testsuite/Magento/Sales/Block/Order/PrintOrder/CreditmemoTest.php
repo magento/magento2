@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Sales\Block\Order\PrintOrder;
 
 class CreditmemoTest extends \PHPUnit_Framework_TestCase
@@ -34,23 +30,26 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTotalsHtml()
     {
-        $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Sales\Model\Order');
+        $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order');
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Core\Model\Registry')->register('current_order', $order);
-        $payment = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Sales\Model\Order\Payment');
+        $objectManager->get('Magento\Framework\Registry')->register('current_order', $order);
+        $payment = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Sales\Model\Order\Payment'
+        );
         $payment->setMethod('checkmo');
         $order->setPayment($payment);
 
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
+        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\View\LayoutInterface'
+        );
         $block = $layout->createBlock('Magento\Sales\Block\Order\PrintOrder\Creditmemo', 'block');
-        $childBlock = $layout->addBlock('Magento\View\Element\Text', 'creditmemo_totals', 'block');
+        $childBlock = $layout->addBlock('Magento\Framework\View\Element\Text', 'creditmemo_totals', 'block');
 
         $expectedHtml = '<b>Any html</b>';
-        $creditmemo = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Sales\Model\Order\Creditmemo');
+        $creditmemo = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Sales\Model\Order\Creditmemo'
+        );
         $this->assertEmpty($childBlock->getCreditmemo());
         $this->assertNotEquals($expectedHtml, $block->getTotalsHtml($creditmemo));
 

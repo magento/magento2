@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,51 +25,54 @@
 /**
  * Adminhtml page
  *
- * @category    Magento
- * @package     Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Backend\Block;
 
 class Page extends \Magento\Backend\Block\Template
 {
-    protected $_template = 'admin/page.phtml';
+    /**
+     * @var \Magento\Framework\Locale\ResolverInterface
+     */
+    protected $_localeResolver;
+
+    /**
+     * @param Template\Context $context
+     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Framework\Locale\ResolverInterface $localeResolver,
+        array $data = array()
+    ) {
+        parent::__construct($context, $data);
+        $this->_localeResolver = $localeResolver;
+    }
 
     /**
      * Class constructor
      *
+     * @return void
      */
     protected function _construct()
     {
         parent::_construct();
 
-        $this->addBodyClass($this->_request->getFullActionName('-'));
+        $this->pageConfig->addBodyClass($this->_request->getFullActionName('-'));
     }
 
     /**
      * Get current language
      *
-     * @return unknown
+     * @return string
      */
     public function getLang()
     {
         if (!$this->hasData('lang')) {
-            $this->setData('lang', substr($this->_locale->getLocaleCode(), 0, 2));
+            $this->setData('lang', substr($this->_localeResolver->getLocaleCode(), 0, 2));
         }
         return $this->getData('lang');
-    }
-
-    /**
-     * Add CSS class to page body tag
-     *
-     * @param string $className
-     * @return \Magento\Backend\Block\Page
-     */
-    public function addBodyClass($className)
-    {
-        $className = preg_replace('#[^a-z0-9]+#', '-', strtolower($className));
-        $this->setBodyClass($this->getBodyClass() . ' ' . $className);
-        return $this;
     }
 
     /**

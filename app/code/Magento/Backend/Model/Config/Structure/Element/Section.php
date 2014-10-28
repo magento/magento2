@@ -18,35 +18,31 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Config\Structure\Element;
 
-class Section
-    extends \Magento\Backend\Model\Config\Structure\Element\AbstractComposite
+class Section extends AbstractComposite
 {
     /**
      * Authorization service
      *
-     * @var \Magento\AuthorizationInterface
+     * @var \Magento\Framework\AuthorizationInterface
      */
     protected $_authorization;
 
     /**
-     * @param \Magento\Core\Model\App $application
-     * @param \Magento\Backend\Model\Config\Structure\Element\Iterator $childrenIterator
-     * @param \Magento\AuthorizationInterface $authorization
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param Iterator $childrenIterator
+     * @param \Magento\Framework\AuthorizationInterface $authorization
      */
     public function __construct(
-        \Magento\Core\Model\App $application,
-        \Magento\Backend\Model\Config\Structure\Element\Iterator $childrenIterator,
-        \Magento\AuthorizationInterface $authorization
+        \Magento\Framework\StoreManagerInterface $storeManager,
+        Iterator $childrenIterator,
+        \Magento\Framework\AuthorizationInterface $authorization
     ) {
-        parent::__construct($application, $childrenIterator);
+        parent::__construct($storeManager, $childrenIterator);
         $this->_authorization = $authorization;
     }
 

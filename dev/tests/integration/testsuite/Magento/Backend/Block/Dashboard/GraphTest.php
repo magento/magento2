@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Adminhtml
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Block\Dashboard;
 
 /**
@@ -41,8 +37,8 @@ class GraphTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\View\LayoutInterface $layout */
-        $layout = $objectManager->get('Magento\View\LayoutInterface');
+        /** @var \Magento\Framework\View\LayoutInterface $layout */
+        $layout = $objectManager->get('Magento\Framework\View\LayoutInterface');
         $this->_block = $layout->createBlock('Magento\Backend\Block\Dashboard\Graph');
         $this->_block->setDataHelper($objectManager->get('Magento\Backend\Helper\Dashboard\Order'));
     }

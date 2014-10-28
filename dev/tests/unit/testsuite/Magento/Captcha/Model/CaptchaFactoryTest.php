@@ -33,7 +33,7 @@ class CaptchaFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock('Magento\ObjectManager', array(), array(), '', false);
+        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManager', array(), array(), '', false);
         $this->_model = new \Magento\Captcha\Model\CaptchaFactory($this->_objectManagerMock);
     }
 
@@ -43,10 +43,15 @@ class CaptchaFactoryTest extends \PHPUnit_Framework_TestCase
 
         $defaultCaptchaMock = $this->getMock('Magento\Captcha\Model\DefaultModel', array(), array(), '', false);
 
-        $this->_objectManagerMock->expects($this->once())
-            ->method('create')
-            ->with($this->equalTo('Magento\Captcha\Model\\' . ucfirst($captchaType)))
-            ->will($this->returnValue($defaultCaptchaMock));
+        $this->_objectManagerMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            $this->equalTo('Magento\Captcha\Model\\' . ucfirst($captchaType))
+        )->will(
+            $this->returnValue($defaultCaptchaMock)
+        );
 
         $this->assertEquals($defaultCaptchaMock, $this->_model->create($captchaType, 'form_id'));
     }
@@ -55,16 +60,24 @@ class CaptchaFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $captchaType = 'wrong_instance';
 
-        $defaultCaptchaMock = $this->getMock('stdClass', array(), array(), '', false);
+        $defaultCaptchaMock = $this->getMock('stdClass');
 
-        $this->_objectManagerMock->expects($this->once())
-            ->method('create')
-            ->with($this->equalTo('Magento\Captcha\Model\\' . ucfirst($captchaType)))
-            ->will($this->returnValue($defaultCaptchaMock));
+        $this->_objectManagerMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            $this->equalTo('Magento\Captcha\Model\\' . ucfirst($captchaType))
+        )->will(
+            $this->returnValue($defaultCaptchaMock)
+        );
 
-        $this->setExpectedException('InvalidArgumentException',
-            'Magento\Captcha\Model\\' . ucfirst($captchaType) .
-            ' does not implement \Magento\Captcha\Model\ModelInterface');
+        $this->setExpectedException(
+            'InvalidArgumentException',
+            'Magento\Captcha\Model\\' . ucfirst(
+                $captchaType
+            ) . ' does not implement \Magento\Captcha\Model\ModelInterface'
+        );
 
         $this->assertEquals($defaultCaptchaMock, $this->_model->create($captchaType, 'form_id'));
     }

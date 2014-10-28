@@ -1,0 +1,109 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<script type="text/javascript">
+require(['prototype'], function(){
+
+//<![CDATA[
+    // Temporary Class will be replaced after refactoring of import/export functionality
+    VarienExport = Class.create();
+    VarienExport.prototype = {
+        initialize: function() {
+            /**
+             * Previous selected entity for grid
+             * @type {string}
+             */
+            this.previousGridEntity = '';
+        },
+
+        /**
+         *  Handle value change in entity type selector
+         */
+        modifyFilterGrid: function() {
+            if ($('entity') && $F('entity') && $F('entity') != 'catalog_product') {
+                    $$('col:first-child').each(function(el) {
+                        el.show();
+                    });
+                    $$('th.no-link:first-child').each(function(el) {
+                        el.show();
+                    });
+                    $$('td.a-center').each(function(el) {
+                        el.show();
+                    });
+            }
+        },
+
+        /**
+         * Post form data and process response via AJAX
+         */
+        getFilter: function() {
+            if ($('entity') && $F('entity')) {
+                var url    = "<?php echo $this->getUrl('*/*/getFilter') ?>";
+                var entity = $F('entity');
+                if (entity != this.previousGridEntity) {
+                    this.previousGridEntity = entity;
+                    url += ((url.slice(-1) != '/') ? '/' : '') + 'entity/' + entity;
+                    new Ajax.Request(url, {
+                        method:      'post',
+                        evalScripts: true,
+                        onComplete:  function(transport) {
+                            var responseText = transport.responseText.replace(/>\s+</g, '><');
+                            $('export_filter_grid_container').update(responseText);
+                            this.modifyFilterGrid();
+                            $('export_filter_container').show();
+                        }.bind(this)
+                    });
+                } else {
+                    this.modifyFilterGrid();
+                }
+            } else {
+                $('export_filter_container').hide();
+            }
+        }
+    };
+
+    /**
+     * Continue export process after filter settings
+     *
+     * return void
+     */
+    getFile = function() {
+        if ($('entity') && $F('entity')) {
+            var form      = $('export_filter_form');
+            var oldAction = form.action;
+            var url = oldAction + ((oldAction.slice(-1) != '/') ? '/' : '') + 'entity/' + $F('entity')
+                + '/file_format/' + $F('file_format');
+            form.action = url;
+            form.submit();
+            form.action   = oldAction;
+        } else {
+            alert('Invalid data');
+        }
+    };
+
+    varienExport = new VarienExport();
+//]]>
+
+});
+</script>

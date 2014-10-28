@@ -19,8 +19,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    design
- * @package     default_default
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -29,7 +27,7 @@
     <referenceContainer name="content">
         <block class="Magento\Backend\Block\Widget\Grid" name="admin.test.grid" Output="1">
             <arguments>
-                <dataSource type="object">Magento\Data\Collection</dataSource>
+                <dataSource type="object">Magento\Framework\Data\Collection</dataSource>
             </arguments>
             <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" as="grid.columnSet" name="admin.test.grid.columnSet" Output="1">
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="product_name" Output="1">

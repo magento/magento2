@@ -1,0 +1,83 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * @var $this \Magento\CurrencySymbol\Block\Adminhtml\System\Currencysymbol
+ */
+?>
+
+<?php $this->getCurrencySymbolsData();?>
+
+<form id="currency-symbols-form" action="<?php echo $this->getFormActionUrl() ?>" method="post">
+    <input name="form_key" type="hidden" value="<?php echo $this->getFormKey() ?>" />
+
+    <div class="grid">
+        <table class="data">
+            <thead>
+                <tr class="headings">
+                    <th class="no-link col-currency"><span><label><?php echo __('Currency'); ?></label></span></th>
+                    <th class="no-link col-symbol"><span><label class="required"><?php echo __('Symbol'); ?></label></span></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($this->getCurrencySymbolsData() as $code => $data): ?>
+                <tr>
+                    <td class="col-currency">
+                        <label class="label" for="custom_currency_symbol<?php echo $code; ?>"><?php echo $code; ?> (<?php echo $data['displayName']; ?>)</label>
+                    </td>
+                    <td class="col-symbol">
+                        <div class="control">
+                            <input id="custom_currency_symbol<?php echo $code; ?>" class=" required-entry input-text" type="text" value="<?php echo $this->escapeQuote($data['displaySymbol']); ?>"<?php echo $data['inherited'] ? ' disabled="disabled"' : '';?> name="custom_currency_symbol[<?php echo $code; ?>]">
+                            <input id="custom_currency_symbol_inherit<?php echo $code; ?>" class="checkbox config-inherit" type="checkbox" onclick="toggleUseDefault(<?php echo '\'' . $code . '\',\'' . $this->escapeQuote($data['parentSymbol'], true) . '\''; ?>)"<?php echo $data['inherited'] ? ' checked="checked"' : ''; ?> value="1" name="inherit_custom_currency_symbol[<?php echo $code; ?>]">
+                            <label class="label" for="custom_currency_symbol_inherit<?php echo $code; ?>"><?php echo $this->getInheritText(); ?></label>
+                        </div>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</form>
+<script type="text/javascript">
+require(['jquery', "mage/mage"], function(jQuery){
+
+    jQuery('#currency-symbols-form').mage('form').mage('validation');
+
+    function toggleUseDefault(code, value)
+    {
+        checkbox = $('custom_currency_symbol_inherit'+code);
+        input = $('custom_currency_symbol'+code);
+        if (checkbox.checked) {
+            input.value = value;
+            input.disabled = true;
+        } else {
+            input.disabled = false;
+        }
+    }
+
+    window.toggleUseDefault = toggleUseDefault;
+});
+</script>
+

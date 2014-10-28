@@ -1,0 +1,194 @@
+// /**
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+//
+//    PayPal checkout button
+//--------------------------------------
+.paypal {
+    &.after:after {
+        content: "- " attr(data-label) " -";
+        display: block;
+        margin: 0 5px 10px;
+        text-transform: uppercase;
+    }
+    &.before:before {
+        content: "- " attr(data-label) " -";
+        display: block;
+        margin: 10px 5px;
+        text-align: center;
+        text-transform: uppercase;
+    }
+}
+
+.product-info-main,
+.block-minicart {
+     .paypal img {
+         display: block;
+     }
+}
+.product-info-main {
+    img {
+        margin: 0 auto;
+    }
+}
+
+.form-new-agreement {
+    .actions-toolbar {
+        &:extend(.abstract-reset-left-margin all);
+    }
+}
+
+//
+//    PayPal Review Order page
+//--------------------------------------
+.paypal-review {
+    .block {
+        &:extend(.abstract-account-blocks all);
+        .actions-toolbar {
+            .action.primary {
+                &:extend(.abstract-revert-secondary-color all);
+            }
+        }
+    }
+
+    .paypa-review-title {
+        > strong {
+            .heading(h3);
+            display: inline-block;
+        }
+    }
+
+    .items-qty {
+        &:extend(.abstract-reset-list all);
+        .item {
+            white-space: nowrap;
+        }
+        .title {
+            &:after {
+                content: ": ";
+            }
+        }
+    }
+
+    .paypal-review-title {
+        > strong {
+            .heading(h3);
+            display: inline-block;
+        }
+    }
+
+    .table-paypal-review-items {
+        thead {
+            th {
+                border-bottom: 1px solid @border-color-base;
+            }
+        }
+        tbody {
+            tr:last-child td {
+                border-bottom: 1px solid @border-color-base;
+            }
+        }
+        tfoot {
+            tr:first-child td {
+                border-top: @table-border-width @table-border-style @table-border-color;
+            }
+        }
+        .table-caption(@_table-caption-hide: true);
+    }
+
+    .actions-toolbar {
+        margin-top: @indent-s-base;
+    }
+    .item-options {
+        dt {
+            display: inline-block;
+            &:after {
+                content: ": ";
+            }
+        }
+        dd {
+            margin: 0;
+        }
+    }
+}
+
+//
+//    Mobile
+//--------------------------------------
+.responsive-smaller(@break) when (@break = @screen-m) {
+    .paypal-review .table-paypal-review-items {
+        &:extend(.abstract-table-vertical-mobile all);
+    }
+}
+
+//
+//    Desktop
+//--------------------------------------
+.responsive(@break) when (@break = @screen-m) {
+    .paypal-review {
+        .block-content {
+            &:extend(.abstract-add-clearfix-desktop all);
+            .box-order-shipping-address,
+            .box-order-shipping-method,
+            .box-order-shipping-method + .box-order-billing-address {
+                .box-sizing();
+                float: left;
+                width: 33%;
+            }
+            .box-order-shipping-address {
+                padding: 0 5%;
+                width: 34%;
+            }
+        }
+        .column.main & {
+            .actions-toolbar {
+                &:extend(.abstract-reset-left-margin-desktop all);
+            }
+        }
+        .table-paypal-review-items {
+            .col {
+                &.price,
+                &.qty {
+                    text-align: center;
+                }
+                &.item {
+                    width: 60%;
+                }
+            }
+        }
+        .col.subtotal,
+        .mark,
+        .amount {
+            text-align: right;
+        }
+    }
+
+    //  Billing Agreement
+    .form-new-agreement {
+        .fieldset .legend,
+        .actions-toolbar {
+            &:extend(.abstract-reset-left-margin-desktop all);
+        }
+    }
+}

@@ -18,23 +18,19 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Order\Email\Items\Order;
 
+use Magento\Sales\Model\Order\Item as OrderItem;
 
 /**
  * Sales Order Email items default renderer
  *
- * @category   Magento
- * @package    Magento_Sales
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Order\Email\Items\Order;
-
-class DefaultOrder extends \Magento\View\Element\Template
+class DefaultOrder extends \Magento\Framework\View\Element\Template
 {
     /**
      * Retrieve current order model instance
@@ -46,6 +42,9 @@ class DefaultOrder extends \Magento\View\Element\Template
         return $this->getItem()->getOrder();
     }
 
+    /**
+     * @return array
+     */
     public function getItemOptions()
     {
         $result = array();
@@ -64,31 +63,59 @@ class DefaultOrder extends \Magento\View\Element\Template
         return $result;
     }
 
+    /**
+     * @param string|array $value
+     * @return string
+     */
     public function getValueHtml($value)
     {
         if (is_array($value)) {
-            return sprintf('%d', $value['qty']) . ' x ' . $this->escapeHtml($value['title']) . " "
-                . $this->getItem()->getOrder()->formatPrice($value['price']);
+            return sprintf(
+                '%d',
+                $value['qty']
+            ) . ' x ' . $this->escapeHtml(
+                $value['title']
+            ) . " " . $this->getItem()->getOrder()->formatPrice(
+                $value['price']
+            );
         } else {
             return $this->escapeHtml($value);
         }
     }
 
+    /**
+     * @param mixed $item
+     * @return mixed
+     */
     public function getSku($item)
     {
-        if ($item->getProductOptionByCode('simple_sku'))
+        if ($item->getProductOptionByCode('simple_sku')) {
             return $item->getProductOptionByCode('simple_sku');
-        else
+        } else {
             return $item->getSku();
+        }
     }
 
     /**
      * Return product additional information block
      *
-     * @return \Magento\View\Element\AbstractBlock
+     * @return \Magento\Framework\View\Element\AbstractBlock
      */
     public function getProductAdditionalInformationBlock()
     {
         return $this->getLayout()->getBlock('additional.product.info');
+    }
+
+    /**
+     * Get the html for item price
+     *
+     * @param OrderItem $item
+     * @return string
+     */
+    public function getItemPrice(OrderItem $item)
+    {
+        $block = $this->getLayout()->getBlock('item_price');
+        $block->setItem($item);
+        return $block->toHtml();
     }
 }

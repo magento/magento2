@@ -18,22 +18,17 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Model\Search;
 
 /**
  * Search Order Model
  *
- * @category    Magento
- * @package     Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backend\Model\Search;
-
-class Order extends \Magento\Object
+class Order extends \Magento\Framework\Object
 {
     /**
      * Adminhtml data
@@ -62,7 +57,7 @@ class Order extends \Magento\Object
     /**
      * Load search results
      *
-     * @return \Magento\Backend\Model\Search\Order
+     * @return $this
      */
     public function load()
     {
@@ -74,34 +69,38 @@ class Order extends \Magento\Object
 
         $query = $this->getQuery();
         //TODO: add full name logic
-        $collection = $this->_collectionFactory->create()
-            ->addAttributeToSelect('*')
-            ->addAttributeToSearchFilter(array(
-                array('attribute' => 'increment_id',       'like'=>$query.'%'),
-                array('attribute' => 'billing_firstname',  'like'=>$query.'%'),
-                array('attribute' => 'billing_lastname',   'like'=>$query.'%'),
-                array('attribute' => 'billing_telephone',  'like'=>$query.'%'),
-                array('attribute' => 'billing_postcode',   'like'=>$query.'%'),
-
-                array('attribute' => 'shipping_firstname', 'like'=>$query.'%'),
-                array('attribute' => 'shipping_lastname',  'like'=>$query.'%'),
-                array('attribute' => 'shipping_telephone', 'like'=>$query.'%'),
-                array('attribute' => 'shipping_postcode',  'like'=>$query.'%'),
-            ))
-            ->setCurPage($this->getStart())
-            ->setPageSize($this->getLimit())
-            ->load();
+        $collection = $this->_collectionFactory->create()->addAttributeToSelect(
+            '*'
+        )->addAttributeToSearchFilter(
+            array(
+                array('attribute' => 'increment_id', 'like' => $query . '%'),
+                array('attribute' => 'billing_firstname', 'like' => $query . '%'),
+                array('attribute' => 'billing_lastname', 'like' => $query . '%'),
+                array('attribute' => 'billing_telephone', 'like' => $query . '%'),
+                array('attribute' => 'billing_postcode', 'like' => $query . '%'),
+                array('attribute' => 'shipping_firstname', 'like' => $query . '%'),
+                array('attribute' => 'shipping_lastname', 'like' => $query . '%'),
+                array('attribute' => 'shipping_telephone', 'like' => $query . '%'),
+                array('attribute' => 'shipping_postcode', 'like' => $query . '%')
+            )
+        )->setCurPage(
+            $this->getStart()
+        )->setPageSize(
+            $this->getLimit()
+        )->load();
 
         foreach ($collection as $order) {
             $result[] = array(
-                'id'                => 'order/1/'.$order->getId(),
-                'type'              => __('Order'),
-                'name'              => __('Order #%1', $order->getIncrementId()),
-                'description'       => $order->getBillingFirstname().' '.$order->getBillingLastname(),
-                'form_panel_title'  => __('Order #%1 (%2)',
+                'id' => 'order/1/' . $order->getId(),
+                'type' => __('Order'),
+                'name' => __('Order #%1', $order->getIncrementId()),
+                'description' => $order->getBillingFirstname() . ' ' . $order->getBillingLastname(),
+                'form_panel_title' => __(
+                    'Order #%1 (%2)',
                     $order->getIncrementId(),
-                    $order->getBillingFirstname() . ' ' . $order->getBillingLastname()),
-                'url' => $this->_adminhtmlData->getUrl('sales/order/view', array('order_id' => $order->getId())),
+                    $order->getBillingFirstname() . ' ' . $order->getBillingLastname()
+                ),
+                'url' => $this->_adminhtmlData->getUrl('sales/order/view', array('order_id' => $order->getId()))
             );
         }
 

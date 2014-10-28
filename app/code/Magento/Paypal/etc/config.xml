@@ -19,15 +19,14 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Paypal
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Core/etc/config.xsd">
     <default>
         <paypal>
+            <bncode>Magento_Cart_Community</bncode>
             <style>
                 <logo>nowAccepting_150x60</logo>
             </style>
@@ -63,7 +62,13 @@
                 <order_valid_period>29</order_valid_period>
                 <child_authorization_number>1</child_authorization_number>
                 <verify_peer>1</verify_peer>
+                <skip_order_review_step>1</skip_order_review_step>
             </paypal_express>
+            <paypal_express_bml>
+                <model>Magento\Paypal\Model\Bml</model>
+                <title>Bill Me Later</title>
+                <group>paypal</group>
+            </paypal_express_bml>
             <paypal_direct>
                 <model>Magento\Paypal\Model\Direct</model>
                 <title>PayPal Payments Pro</title>
@@ -81,7 +86,7 @@
                 <group>paypal</group>
                 <verify_peer>1</verify_peer>
             </paypal_standard>
-            <paypaluk_express>
+            <payflow_express>
                 <title>PayPal Express Checkout Payflow Edition</title>
                 <payment_action>Authorization</payment_action>
                 <line_items_enabled>1</line_items_enabled>
@@ -89,16 +94,14 @@
                 <visible_on_product>1</visible_on_product>
                 <group>paypal</group>
                 <verify_peer>1</verify_peer>
-            </paypaluk_express>
-            <paypaluk_direct>
-                <title>PayPal Direct Payment Payflow Edition</title>
-                <payment_action>Authorization</payment_action>
-                <cctypes>VI,MC,AE</cctypes>
-                <useccv>1</useccv>
+                <model>Magento\Paypal\Model\PayflowExpress</model>
+            </payflow_express>
+            <payflow_express_bml>
+                <model>Magento\Paypal\Model\Payflow\Bml</model>
+                <title>Bill Me Later</title>
                 <group>paypal</group>
-                <verify_peer>1</verify_peer>
-            </paypaluk_direct>
-            <verisign>
+            </payflow_express_bml>
+            <payflowpro>
                 <model>Magento\Paypal\Model\Payflowpro</model>
                 <title>Payflow Pro</title>
                 <payment_action>Authorization</payment_action>
@@ -110,7 +113,7 @@
                 <pwd backend_model="Magento\Backend\Model\Config\Backend\Encrypted" />
                 <group>paypal</group>
                 <verify_peer>1</verify_peer>
-            </verisign>
+            </payflowpro>
             <paypal_billing_agreement>
                 <active>1</active>
                 <allow_billing_agreement_wizard>1</allow_billing_agreement_wizard>

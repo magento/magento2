@@ -18,49 +18,31 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Catalog\Model\Resource\Product;
 
 /**
  * Catalog Product Website Resource Model
- *
- * @category    Magento
- * @package     Magento_Catalog
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Resource\Product;
-
-class Website extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Website extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Store manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * Catalog product
-     *
-     * @var \Magento\Catalog\Model\Resource\Product
-     */
-    protected $_productResource;
-
-    /**
-     * @param \Magento\App\Resource $resource
-     * @param \Magento\Catalog\Model\Resource\Product $productResource
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\App\Resource $resource,
-        \Magento\Catalog\Model\Resource\Product $productResource,
-        \Magento\Core\Model\StoreManagerInterface $storeManager
+        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\StoreManagerInterface $storeManager
     ) {
-        $this->_productResource = $productResource;
         $this->_storeManager = $storeManager;
         parent::__construct($resource);
     }
@@ -68,6 +50,7 @@ class Website extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Initialize connection and define resource table
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -79,21 +62,19 @@ class Website extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param array $websiteIds
      * @param array $productIds
-     * @return \Magento\Catalog\Model\Resource\Product\Website
+     * @return $this
      * @throws \Exception
      */
     public function removeProducts($websiteIds, $productIds)
     {
-        if (!is_array($websiteIds) || !is_array($productIds)
-            || count($websiteIds) == 0 || count($productIds) == 0)
-        {
+        if (!is_array($websiteIds) || !is_array($productIds) || count($websiteIds) == 0 || count($productIds) == 0) {
             return $this;
         }
 
-        $adapter   = $this->_getWriteAdapter();
+        $adapter = $this->_getWriteAdapter();
         $whereCond = array(
             $adapter->quoteInto('website_id IN(?)', $websiteIds),
-           $adapter->quoteInto('product_id IN(?)', $productIds)
+            $adapter->quoteInto('product_id IN(?)', $productIds)
         );
         $whereCond = join(' AND ', $whereCond);
 
@@ -114,14 +95,12 @@ class Website extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param array $websiteIds
      * @param array $productIds
-     * @return \Magento\Catalog\Model\Resource\Product\Website
+     * @return $this
      * @throws \Exception
      */
     public function addProducts($websiteIds, $productIds)
     {
-        if (!is_array($websiteIds) || !is_array($productIds)
-            || count($websiteIds) == 0 || count($productIds) == 0)
-        {
+        if (!is_array($websiteIds) || !is_array($productIds) || count($websiteIds) == 0 || count($productIds) == 0) {
             return $this;
         }
 
@@ -135,20 +114,12 @@ class Website extends \Magento\Core\Model\Resource\Db\AbstractDb
                     if (!$productId) {
                         continue;
                     }
-                    $this->_getWriteAdapter()->insert($this->getMainTable(), array(
-                        'product_id' => (int) $productId,
-                        'website_id' => (int) $websiteId
-                    ));
-                }
-
-                // Refresh product enabled index
-                $storeIds = $this->_storeManager->getWebsite($websiteId)->getStoreIds();
-                foreach ($storeIds as $storeId) {
-                    $store = $this->_storeManager->getStore($storeId);
-                    $this->_productResource->refreshEnabledIndex($store, $productIds);
+                    $this->_getWriteAdapter()->insert(
+                        $this->getMainTable(),
+                        array('product_id' => (int)$productId, 'website_id' => (int)$websiteId)
+                    );
                 }
             }
-
             $this->_getWriteAdapter()->commit();
         } catch (\Exception $e) {
             $this->_getWriteAdapter()->rollBack();
@@ -165,10 +136,14 @@ class Website extends \Magento\Core\Model\Resource\Db\AbstractDb
      */
     public function getWebsites($productIds)
     {
-        $select = $this->_getReadAdapter()->select()
-            ->from($this->getMainTable(), array('product_id', 'website_id'))
-            ->where('product_id IN (?)', $productIds);
-        $rowset  = $this->_getReadAdapter()->fetchAll($select);
+        $select = $this->_getReadAdapter()->select()->from(
+            $this->getMainTable(),
+            array('product_id', 'website_id')
+        )->where(
+            'product_id IN (?)',
+            $productIds
+        );
+        $rowset = $this->_getReadAdapter()->fetchAll($select);
 
         $result = array();
         foreach ($rowset as $row) {

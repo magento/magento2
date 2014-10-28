@@ -25,14 +25,18 @@
 /** @var \Magento\TestFramework\Application $this */
 
 /**
- * @var \Magento\Core\Model\Config\Value $configData
+ * @var \Magento\Framework\App\Config\ValueInterface $configData
  */
-$configData = $this->getObjectManager()->create('Magento\Core\Model\Config\Value');
-$configData->setPath('carriers/flatrate/active')
-    ->setScope(\Magento\Core\Model\Config::SCOPE_DEFAULT)
-    ->setScopeId(0)
-    ->setValue(1)
-    ->save();
+$configData = $this->getObjectManager()->create('Magento\Framework\App\Config\ValueInterface');
+$configData->setPath(
+    'carriers/flatrate/active'
+)->setScope(
+    \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT
+)->setScopeId(
+    0
+)->setValue(
+    1
+)->save();
 
-$this->getObjectManager()->get('Magento\App\CacheInterface')
-    ->clean(array(\Magento\Core\Model\Config::CACHE_TAG));
+$this->getObjectManager()->get('Magento\Framework\App\CacheInterface')
+    ->clean(array(\Magento\Framework\App\Config::CACHE_TAG));

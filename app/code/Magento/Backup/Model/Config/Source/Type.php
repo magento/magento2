@@ -18,22 +18,17 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backup
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backup\Model\Config\Source;
 
 /**
  * Backups types' source model for system configuration
  *
- * @category   Magento
- * @package    Magento_Backup
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backup\Model\Config\Source;
-
-class Type implements \Magento\Core\Model\Option\ArrayInterface
+class Type implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * Backup data
@@ -45,25 +40,19 @@ class Type implements \Magento\Core\Model\Option\ArrayInterface
     /**
      * @param \Magento\Backup\Helper\Data $backupData
      */
-    public function __construct(
-        \Magento\Backup\Helper\Data $backupData
-    ) {
+    public function __construct(\Magento\Backup\Helper\Data $backupData)
+    {
         $this->_backupData = $backupData;
     }
 
     /**
-     * return possible options
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function toOptionArray()
     {
         $backupTypes = array();
-        foreach($this->_backupData->getBackupTypes() as $type => $label) {
-            $backupTypes[] = array(
-                'label' => $label,
-                'value' => $type,
-            );
+        foreach ($this->_backupData->getBackupTypes() as $type => $label) {
+            $backupTypes[] = array('label' => $label, 'value' => $type);
         }
         return $backupTypes;
     }

@@ -18,16 +18,13 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test;
 
-use Magento\App\State;
+use Magento\Framework\App\Bootstrap;
+use Magento\Framework\App\State;
 
 class ApplicationTest extends \PHPUnit_Framework_TestCase
 {
@@ -40,24 +37,21 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     {
         $dbInstance = $this->getMockForAbstractClass('Magento\TestFramework\Db\AbstractDb', array(), '', false);
         $installDir = '/install/dir';
-        $appMode = \Magento\App\State::MODE_DEVELOPER;
-        $directoryList = new \Magento\Filesystem\DirectoryList(BP);
-        $filesystem = new \Magento\Filesystem(
+        $appMode = \Magento\Framework\App\State::MODE_DEVELOPER;
+        $directoryList = new \Magento\Framework\App\Filesystem\DirectoryList(BP);
+        $driverPool = new \Magento\Framework\Filesystem\DriverPool;
+        $filesystem = new \Magento\Framework\Filesystem(
             $directoryList,
-            new \Magento\Filesystem\Directory\ReadFactory(),
-            new \Magento\Filesystem\Directory\WriteFactory(),
-            new \Magento\Filesystem\File\ReadFactory(
-                new \Magento\Filesystem\DriverFactory($directoryList)
-            ),
-            new \Magento\Filesystem\File\WriteFactory(
-                new \Magento\Filesystem\DriverFactory($directoryList)
-            )
+            new \Magento\Framework\Filesystem\Directory\ReadFactory($driverPool),
+            new \Magento\Framework\Filesystem\Directory\WriteFactory($driverPool),
+            new \Magento\Framework\Filesystem\File\ReadFactory($driverPool),
+            new \Magento\Framework\Filesystem\File\WriteFactory($driverPool)
         );
 
         $object = new \Magento\TestFramework\Application(
             $dbInstance,
             $installDir,
-            new \Magento\Simplexml\Element('<data/>'),
+            new \Magento\Framework\Simplexml\Element('<data/>'),
             '',
             array(),
             $appMode,
@@ -69,12 +63,14 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
 
         $initParams = $object->getInitParams();
         $this->assertInternalType('array', $initParams, 'Wrong initialization parameters type');
-        $this->assertArrayHasKey(\Magento\Filesystem::PARAM_APP_DIRS, $initParams,
-            'Directories are not configured');
-        $this->assertArrayHasKey(State::PARAM_MODE, $initParams,
-            'Application mode is not configured');
+        $this->assertArrayHasKey(
+            Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS,
+            $initParams,
+            'Directories are not configured'
+        );
+        $this->assertArrayHasKey(State::PARAM_MODE, $initParams, 'Application mode is not configured');
         $this->assertEquals(
-            \Magento\App\State::MODE_DEVELOPER,
+            \Magento\Framework\App\State::MODE_DEVELOPER,
             $initParams[State::PARAM_MODE],
             'Wrong application mode configured'
         );

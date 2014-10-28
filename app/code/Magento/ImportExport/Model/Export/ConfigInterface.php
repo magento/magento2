@@ -40,9 +40,10 @@ interface ConfigInterface
     public function getFileFormats();
 
     /**
-     * Retrieve import product types configuration
+     * Retrieve import entity types configuration
      *
+     * @param string $entity
      * @return array
      */
-    public function getProductTypes();
+    public function getEntityTypes($entity);
 }

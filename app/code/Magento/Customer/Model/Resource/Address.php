@@ -25,6 +25,8 @@
  */
 namespace Magento\Customer\Model\Resource;
 
+use \Magento\Framework\Exception\InputException;
+
 class Address extends \Magento\Eav\Model\Entity\AbstractEntity
 {
     /**
@@ -38,39 +40,51 @@ class Address extends \Magento\Eav\Model\Entity\AbstractEntity
     protected $_customerFactory;
 
     /**
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Eav\Model\Entity\Attribute\Set $attrSetEntity
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Validator\UniversalFactory $universalFactory
+     * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Core\Model\Validator\Factory $validatorFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Entity\Attribute\Set $attrSetEntity,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
-        \Magento\Validator\UniversalFactory $universalFactory,
+        \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Core\Model\Validator\Factory $validatorFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         $data = array()
     ) {
         $this->_validatorFactory = $validatorFactory;
         $this->_customerFactory = $customerFactory;
-        parent::__construct($resource, $eavConfig, $attrSetEntity, $locale, $resourceHelper, $universalFactory, $data);
+        parent::__construct(
+            $resource,
+            $eavConfig,
+            $attrSetEntity,
+            $localeFormat,
+            $resourceHelper,
+            $universalFactory,
+            $data
+        );
     }
 
     /**
      * Resource initialization.
+     *
+     * @return void
      */
     protected function _construct()
     {
         $resource = $this->_resource;
-        $this->setType('customer_address')->setConnection(
+        $this->setType(
+            'customer_address'
+        )->setConnection(
             $resource->getConnection('customer_read'),
             $resource->getConnection('customer_write')
         );
@@ -79,10 +93,10 @@ class Address extends \Magento\Eav\Model\Entity\AbstractEntity
     /**
      * Set default shipping to address
      *
-     * @param \Magento\Object $address
-     * @return \Magento\Customer\Model\Resource\Address
+     * @param \Magento\Framework\Object $address
+     * @return $this
      */
-    protected function _afterSave(\Magento\Object $address)
+    protected function _afterSave(\Magento\Framework\Object $address)
     {
         if ($address->getIsCustomerSaveTransaction()) {
             return $this;
@@ -104,10 +118,10 @@ class Address extends \Magento\Eav\Model\Entity\AbstractEntity
     /**
      * Check customer address before saving
      *
-     * @param \Magento\Object $address
-     * @return \Magento\Customer\Model\Resource\Address
+     * @param \Magento\Framework\Object $address
+     * @return $this
      */
-    protected function _beforeSave(\Magento\Object $address)
+    protected function _beforeSave(\Magento\Framework\Object $address)
     {
         parent::_beforeSave($address);
 
@@ -119,15 +133,21 @@ class Address extends \Magento\Eav\Model\Entity\AbstractEntity
     /**
      * Validate customer address entity
      *
-     * @param \Magento\Customer\Model\Customer $address
-     * @throws \Magento\Validator\ValidatorException when validation failed
+     * @param \Magento\Framework\Object $address
+     * @return void
+     * @throws \Magento\Framework\Validator\ValidatorException When validation failed
      */
     protected function _validate($address)
     {
         $validator = $this->_validatorFactory->createValidator('customer_address', 'save');
 
         if (!$validator->isValid($address)) {
-            throw new \Magento\Validator\ValidatorException($validator->getMessages());
+            throw new \Magento\Framework\Validator\ValidatorException(
+                InputException::DEFAULT_MESSAGE,
+                [],
+                null,
+                $validator->getMessages()
+            );
         }
     }
 

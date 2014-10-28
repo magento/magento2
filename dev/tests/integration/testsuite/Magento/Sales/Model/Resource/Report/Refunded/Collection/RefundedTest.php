@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Sales\Model\Resource\Report\Refunded\Collection;
 
 class RefundedTest extends \PHPUnit_Framework_TestCase
@@ -33,13 +32,10 @@ class RefundedTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Sales\Model\Resource\Report\Refunded\Collection\Refunded');
-        $this->_collection
-            ->setPeriod('day')
-            ->setDateRange(null, null)
-            ->addStoreFilter(array(1))
-        ;
+        $this->_collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Sales\Model\Resource\Report\Refunded\Collection\Refunded'
+        );
+        $this->_collection->setPeriod('day')->setDateRange(null, null)->addStoreFilter(array(1));
     }
 
     /**
@@ -49,12 +45,7 @@ class RefundedTest extends \PHPUnit_Framework_TestCase
     public function testGetItems()
     {
         $expectedResult = array(
-            array(
-                'orders_count' => 1,
-                'refunded' => 100,
-                'online_refunded' => 80,
-                'offline_refunded' => 20,
-            ),
+            array('orders_count' => 1, 'refunded' => 100, 'online_refunded' => 80, 'offline_refunded' => 20)
         );
         $actualResult = array();
         /** @var \Magento\Reports\Model\Item $reportItem */

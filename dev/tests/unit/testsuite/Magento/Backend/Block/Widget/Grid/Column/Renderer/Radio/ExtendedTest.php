@@ -45,11 +45,17 @@ class ExtendedTest extends \PHPUnit_Framework_TestCase
         $context = $this->getMock('\Magento\Backend\Block\Context', array(), array(), '', false);
         $this->_converter = $this->getMock(
             '\Magento\Backend\Block\Widget\Grid\Column\Renderer\Options\Converter',
-            array('toFlatArray'), array(), '', false
+            array('toFlatArray'),
+            array(),
+            '',
+            false
         );
         $this->_column = $this->getMock(
             'Magento\Backend\Block\Widget\Grid\Column',
-            array('getValues', 'getIndex', 'getHtmlName'), array(), '', false
+            array('getValues', 'getIndex', 'getHtmlName'),
+            array(),
+            '',
+            false
         );
         $this->_object = new Extended($context, $this->_converter);
         $this->_object->setColumn($this->_column);
@@ -62,14 +68,12 @@ class ExtendedTest extends \PHPUnit_Framework_TestCase
      */
     public function testRender(array $rowData, $expectedResult)
     {
-        $selectedFlatArray = array(
-            1 => 'One',
-        );
+        $selectedFlatArray = array(1 => 'One');
         $this->_column->expects($this->once())->method('getValues')->will($this->returnValue($selectedFlatArray));
         $this->_column->expects($this->once())->method('getIndex')->will($this->returnValue('label'));
         $this->_column->expects($this->once())->method('getHtmlName')->will($this->returnValue('test[]'));
         $this->_converter->expects($this->never())->method('toFlatArray');
-        $this->assertEquals($expectedResult, $this->_object->render(new \Magento\Object($rowData)));
+        $this->assertEquals($expectedResult, $this->_object->render(new \Magento\Framework\Object($rowData)));
     }
 
     public function renderDataProvider()
@@ -82,7 +86,7 @@ class ExtendedTest extends \PHPUnit_Framework_TestCase
             'not checked' => array(
                 array('id' => 2, 'label' => 'Two'),
                 '<input type="radio" name="test[]" value="2" class="radio"/>'
-            ),
+            )
         );
     }
 }

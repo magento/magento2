@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\I18n\Code;
 
 use Magento\Tools\I18n\Code\Dictionary;
@@ -46,10 +45,9 @@ class Factory
         } else {
             switch (pathinfo($filename, \PATHINFO_EXTENSION)) {
                 case 'csv':
+                default:
                     $writer = new Dictionary\Writer\Csv($filename);
                     break;
-                default:
-                    throw new \InvalidArgumentException(sprintf('Writer for "%s" is not exist.', $filename));
             }
         }
         return $writer;
@@ -88,7 +86,8 @@ class Factory
             $data['phrase'],
             $data['translation'],
             isset($data['context_type']) ? $data['context_type'] : null,
-            isset($data['context_value']) ? $data['context_value'] : null
+            isset($data['context_value']) ? $data['context_value'] : null,
+            isset($data['quote']) ? $data['quote'] : null
         );
     }
 }

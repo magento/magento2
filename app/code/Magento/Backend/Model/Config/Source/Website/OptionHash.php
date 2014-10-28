@@ -18,30 +18,36 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Config\Source\Website;
 
-class OptionHash
-    implements \Magento\Core\Model\Option\ArrayInterface
+use Magento\Store\Model\System\Store;
+use Magento\Framework\Option\ArrayInterface;
+
+class OptionHash implements ArrayInterface
 {
     /**
      * System Store Model
      *
-     * @var \Magento\Core\Model\System\Store
+     * @var Store
      */
     protected $_systemStore;
 
     /**
-     * @param \Magento\Core\Model\System\Store
+     * @var bool True if the default website (Admin) should be included
      */
-    public function __construct(\Magento\Core\Model\System\Store $systemStore)
+    protected $_withDefaultWebsite;
+
+    /**
+     * @param Store $systemStore
+     * @param bool $withDefaultWebsite
+     */
+    public function __construct(Store $systemStore, $withDefaultWebsite = false)
     {
         $this->_systemStore = $systemStore;
+        $this->_withDefaultWebsite = $withDefaultWebsite;
     }
 
     /**
@@ -51,8 +57,6 @@ class OptionHash
      */
     public function toOptionArray()
     {
-        return $this->_systemStore->getWebsiteOptionHash();
+        return $this->_systemStore->getWebsiteOptionHash($this->_withDefaultWebsite);
     }
 }
-
-

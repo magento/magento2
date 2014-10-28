@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -37,11 +34,7 @@ class StaticProperties
      *
      * @var array
      */
-    protected static $_cleanableFolders = array(
-        '/app/code/',
-        '/dev/tests/',
-        '/lib/',
-    );
+    protected static $_cleanableFolders = array('/app/code/', '/dev/tests/', '/lib/internal/');
 
     /**
      * Classes to exclude from static variables cleaning
@@ -50,12 +43,12 @@ class StaticProperties
      */
     protected static $_classesToSkip = array(
         'Mage',
-        'Magento\App\ObjectManager',
+        'Magento\Framework\App\ObjectManager',
         'Magento\TestFramework\Helper\Bootstrap',
         'Magento\TestFramework\Event\Magento',
         'Magento\TestFramework\Event\PhpUnit',
         'Magento\TestFramework\Annotation\AppIsolation',
-        'Magento\Phrase',
+        'Magento\Framework\Phrase'
     );
 
     /**
@@ -73,8 +66,10 @@ class StaticProperties
 
         // 2. do not process blacklisted classes from integration framework
         foreach (self::$_classesToSkip as $notCleanableClass) {
-            if ($reflectionClass->getName() == $notCleanableClass
-                || is_subclass_of($reflectionClass->getName(), $notCleanableClass)
+            if ($reflectionClass->getName() == $notCleanableClass || is_subclass_of(
+                $reflectionClass->getName(),
+                $notCleanableClass
+            )
             ) {
                 return false;
             }
@@ -109,7 +104,7 @@ class StaticProperties
                 foreach ($staticProperties as $staticProperty) {
                     $staticProperty->setAccessible(true);
                     $value = $staticProperty->getValue();
-                    if (is_object($value) || (is_array($value) && is_object(current($value)))) {
+                    if (is_object($value) || is_array($value) && is_object(current($value))) {
                         $staticProperty->setValue(null);
                     }
                     unset($value);

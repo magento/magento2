@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Block\Widget\Grid\Column;
 
 class MultistoreTest extends \PHPUnit_Framework_TestCase
@@ -41,7 +37,7 @@ class MultistoreTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_storeManagerMock = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
+        $this->_storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', array(), array(), '', false);
 
         $arguments = array(
             'storeManager' => $this->_storeManagerMock,
@@ -49,8 +45,10 @@ class MultistoreTest extends \PHPUnit_Framework_TestCase
         );
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_model = $objectManagerHelper->getObject('Magento\Backend\Block\Widget\Grid\Column\Multistore',
-            $arguments);
+        $this->_model = $objectManagerHelper->getObject(
+            'Magento\Backend\Block\Widget\Grid\Column\Multistore',
+            $arguments
+        );
     }
 
     protected function tearDown()

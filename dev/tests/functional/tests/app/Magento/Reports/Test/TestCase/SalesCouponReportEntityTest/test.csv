@@ -1,0 +1,5 @@
+"order/dataSet";"viewsReport/report_type";"viewsReport/period_type";"viewsReport/from";"viewsReport/to";"viewsReport/show_order_statuses";"viewsReport/order_statuses";"viewsReport/show_empty_rows";"viewsReport/price_rule_type";"viewsReport/rules_list";"constraint";"issue"
+"with_coupon";"Order Created Date";"Year";"m/d/Y";"m/d/Y";"Any";"-";"No";"Any";"-";"assertCouponReportResult";""
+"with_coupon";"Order Created Date";"Month";"m/d/Y";"m/d/Y";"Specified";"Processing";"No";"Any";"-";"assertCouponReportResult";""
+"with_coupon";"Order Updated Date";"Day";"m/d/Y";"m/d/Y";"Any";"-";"No";"Specified";"%rule_name%";"assertCouponReportResult";"Bug: MAGETWO-28201"
+"with_coupon";"Order Updated Date";"Day";"m/d/Y 12:00 a-1 day";"m/d/Y 12:00 a+1 day";"Specified";"Processing";"Yes";"Specified";"%rule_name%";"assertCouponReportResult";"Bug: MAGETWO-28201"

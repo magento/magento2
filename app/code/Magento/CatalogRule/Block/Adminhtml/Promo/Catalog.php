@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_CatalogRule
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,29 +25,30 @@
 /**
  * Catalog price rules
  *
- * @category    Magento
- * @category   Magento
- * @package    Magento_CatalogRule
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
 namespace Magento\CatalogRule\Block\Adminhtml\Promo;
 
 class Catalog extends \Magento\Backend\Block\Widget\Grid\Container
 {
+    /**
+     * @return void
+     */
     protected function _construct()
     {
-        $this->_addButton('apply_rules', array(
-            'label'     => __('Apply Rules'),
-            'onclick'   => "location.href='".$this->getUrl('catalog_rule/*/applyRules')."'",
-            'class'     => 'apply',
-        ));
-
         $this->_blockGroup = 'Magento_CatalogRule';
         $this->_controller = 'adminhtml_promo_catalog';
         $this->_headerText = __('Catalog Price Rules');
         $this->_addButtonLabel = __('Add New Rule');
         parent::_construct();
 
+        $this->buttonList->add(
+            'apply_rules',
+            array(
+                'label' => __('Apply Rules'),
+                'onclick' => "location.href='" . $this->getUrl('catalog_rule/*/applyRules') . "'",
+                'class' => 'apply'
+            )
+        );
     }
 }

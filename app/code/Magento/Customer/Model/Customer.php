@@ -18,54 +18,75 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Model;
+
+use Magento\Customer\Model\Config\Share;
+use Magento\Customer\Model\Resource\Address\CollectionFactory;
+use Magento\Customer\Model\Resource\Customer as ResourceCustomer;
+use Magento\Customer\Service\V1\Data\CustomerBuilder;
+use Magento\Customer\Service\V1\Data\Customer as CustomerData;
 
 /**
  * Customer model
  *
  * @method int getWebsiteId() getWebsiteId()
+ * @method Customer setWebsiteId(int)
  * @method int getStoreId() getStoreId()
  * @method string getEmail() getEmail()
- * @method \Magento\Customer\Model\Resource\Customer _getResource()
+ * @method ResourceCustomer _getResource()
  * @method mixed getDisableAutoGroupChange()
- * @method \Magento\Customer\Model\Customer setDisableAutoGroupChange($value)
- * @method \Magento\Customer\Model\Customer setGroupId($value)
+ * @method Customer setDisableAutoGroupChange($value)
+ * @method Customer setGroupId($value)
+ * @method Customer setDefaultBilling($value)
+ * @method Customer setDefaultShipping($value)
+ * @method Customer setPasswordHash($string)
+ * @method string getPasswordHash()
+ * @method string getConfirmation()
  */
-class Customer extends \Magento\Core\Model\AbstractModel
+class Customer extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * Configuration paths for email templates and identities
      */
     const XML_PATH_REGISTER_EMAIL_TEMPLATE = 'customer/create_account/email_template';
+
     const XML_PATH_REGISTER_EMAIL_IDENTITY = 'customer/create_account/email_identity';
+
     const XML_PATH_REMIND_EMAIL_TEMPLATE = 'customer/password/remind_email_template';
+
     const XML_PATH_FORGOT_EMAIL_TEMPLATE = 'customer/password/forgot_email_template';
+
     const XML_PATH_FORGOT_EMAIL_IDENTITY = 'customer/password/forgot_email_identity';
 
     const XML_PATH_RESET_PASSWORD_TEMPLATE = 'customer/password/reset_password_template';
 
-    const XML_PATH_DEFAULT_EMAIL_DOMAIN         = 'customer/create_account/email_domain';
-    const XML_PATH_IS_CONFIRM                   = 'customer/create_account/confirm';
-    const XML_PATH_CONFIRM_EMAIL_TEMPLATE       = 'customer/create_account/email_confirmation_template';
-    const XML_PATH_CONFIRMED_EMAIL_TEMPLATE     = 'customer/create_account/email_confirmed_template';
-    const XML_PATH_GENERATE_HUMAN_FRIENDLY_ID   = 'customer/create_account/generate_human_friendly_id';
+    const XML_PATH_IS_CONFIRM = 'customer/create_account/confirm';
+
+    const XML_PATH_CONFIRM_EMAIL_TEMPLATE = 'customer/create_account/email_confirmation_template';
+
+    const XML_PATH_CONFIRMED_EMAIL_TEMPLATE = 'customer/create_account/email_confirmed_template';
+
+    const XML_PATH_GENERATE_HUMAN_FRIENDLY_ID = 'customer/create_account/generate_human_friendly_id';
 
     /**
      * Codes of exceptions related to customer model
      */
-    const EXCEPTION_EMAIL_NOT_CONFIRMED       = 1;
+    const EXCEPTION_EMAIL_NOT_CONFIRMED = 1;
+
     const EXCEPTION_INVALID_EMAIL_OR_PASSWORD = 2;
-    const EXCEPTION_EMAIL_EXISTS              = 3;
+
+    const EXCEPTION_EMAIL_EXISTS = 3;
+
     const EXCEPTION_INVALID_RESET_PASSWORD_LINK_TOKEN = 4;
 
     const SUBSCRIBED_YES = 'yes';
-    const SUBSCRIBED_NO  = 'no';
+
+    const SUBSCRIBED_NO = 'no';
+
+    const ENTITY = 'customer';
 
     /**
      * Model event prefix
@@ -103,7 +124,7 @@ class Customer extends \Magento\Core\Model\AbstractModel
     protected $_addressesCollection;
 
     /**
-     * Is model deleteable
+     * Is model deletable
      *
      * @var boolean
      */
@@ -117,19 +138,13 @@ class Customer extends \Magento\Core\Model\AbstractModel
     protected $_isReadonly = false;
 
     /**
-     * Confirmation requirement flag
-     *
-     * @var boolean
+     * @var \Magento\Framework\StoreManagerInterface
      */
-    private static $_isConfirmationRequired;
-
-    /** @var \Magento\Email\Model\Sender */
-    protected $_sender;
-
-    /** @var \Magento\Core\Model\StoreManagerInterface */
     protected $_storeManager;
 
-    /** @var \Magento\Eav\Model\Config */
+    /**
+     * @var \Magento\Eav\Model\Config
+     */
     protected $_config;
 
     /**
@@ -140,124 +155,120 @@ class Customer extends \Magento\Core\Model\AbstractModel
     protected $_customerData = null;
 
     /**
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
-     * @var \Magento\Customer\Model\Config\Share
+     * @var Share
      */
     protected $_configShare;
 
     /**
-     * @var \Magento\Customer\Model\AddressFactory
+     * @var AddressFactory
      */
     protected $_addressFactory;
 
     /**
-     * @var \Magento\Customer\Model\Resource\Address\CollectionFactory
+     * @var CollectionFactory
      */
     protected $_addressesFactory;
 
     /**
-     * @var \Magento\Email\Model\Template\MailerFactory
+     * @var \Magento\Framework\Mail\Template\TransportBuilder
      */
-    protected $_mailerFactory;
+    protected $_transportBuilder;
 
     /**
-     * @var \Magento\Email\Model\InfoFactory
-     */
-    protected $_emailInfoFactory;
-
-    /**
-     * @var \Magento\Customer\Model\GroupFactory
-     */
-    protected $_groupFactory;
-
-    /**
-     * @var \Magento\Customer\Model\AttributeFactory
+     * @var AttributeFactory
      */
     protected $_attributeFactory;
 
     /**
-     * @var \Magento\Encryption\EncryptorInterface
+     * @var \Magento\Customer\Service\V1\CustomerGroupServiceInterface
+     */
+    protected $_groupService;
+
+    /**
+     * @var \Magento\Framework\Encryption\EncryptorInterface
      */
     protected $_encryptor;
 
     /**
-     * @var \Magento\Math\Random
+     * @var \Magento\Framework\Math\Random
      */
     protected $mathRandom;
 
     /**
-     * @var \Magento\Stdlib\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime
      */
     protected $dateTime;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @var CustomerBuilder
+     */
+    protected $_customerDataBuilder;
+
+    /**
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Customer\Helper\Data $customerData
-     * @param \Magento\Email\Model\Sender $sender
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Config $config
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Customer\Model\Resource\Customer $resource
-     * @param \Magento\Customer\Model\Config\Share $configShare
-     * @param \Magento\Customer\Model\AddressFactory $addressFactory
-     * @param \Magento\Customer\Model\Resource\Address\CollectionFactory $addressesFactory
-     * @param \Magento\Email\Model\Template\MailerFactory $mailerFactory
-     * @param \Magento\Email\Model\InfoFactory $emailInfoFactory
-     * @param \Magento\Customer\Model\GroupFactory $groupFactory
-     * @param \Magento\Customer\Model\AttributeFactory $attributeFactory
-     * @param \Magento\Encryption\EncryptorInterface $encryptor
-     * @param \Magento\Math\Random $mathRandom
-     * @param \Magento\Stdlib\DateTime $dateTime
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param Resource\Customer $resource
+     * @param Config\Share $configShare
+     * @param AddressFactory $addressFactory
+     * @param Resource\Address\CollectionFactory $addressesFactory
+     * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
+     * @param \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService
+     * @param AttributeFactory $attributeFactory
+     * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param CustomerBuilder $customerDataBuilder
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\Customer\Helper\Data $customerData,
-        \Magento\Email\Model\Sender $sender,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Config $config,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Customer\Model\Resource\Customer $resource,
         \Magento\Customer\Model\Config\Share $configShare,
         \Magento\Customer\Model\AddressFactory $addressFactory,
         \Magento\Customer\Model\Resource\Address\CollectionFactory $addressesFactory,
-        \Magento\Email\Model\Template\MailerFactory $mailerFactory,
-        \Magento\Email\Model\InfoFactory $emailInfoFactory,
-        \Magento\Customer\Model\GroupFactory $groupFactory,
-        \Magento\Customer\Model\AttributeFactory $attributeFactory,
-        \Magento\Encryption\EncryptorInterface $encryptor,
-        \Magento\Math\Random $mathRandom,
-        \Magento\Stdlib\DateTime $dateTime,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
+        \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService,
+        AttributeFactory $attributeFactory,
+        \Magento\Framework\Encryption\EncryptorInterface $encryptor,
+        \Magento\Framework\Stdlib\DateTime $dateTime,
+        CustomerBuilder $customerDataBuilder,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_customerData = $customerData;
-        $this->_coreStoreConfig = $coreStoreConfig;
-        $this->_sender = $sender;
+        $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
         $this->_config = $config;
         $this->_configShare = $configShare;
         $this->_addressFactory = $addressFactory;
         $this->_addressesFactory = $addressesFactory;
-        $this->_mailerFactory = $mailerFactory;
-        $this->_emailInfoFactory = $emailInfoFactory;
-        $this->_groupFactory = $groupFactory;
+        $this->_transportBuilder = $transportBuilder;
+        $this->_groupService = $groupService;
         $this->_attributeFactory = $attributeFactory;
         $this->_encryptor = $encryptor;
-        $this->mathRandom = $mathRandom;
         $this->dateTime = $dateTime;
+        $this->_customerDataBuilder = $customerDataBuilder;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
     /**
      * Initialize customer model
+     *
+     * @return void
      */
     public function _construct()
     {
@@ -267,7 +278,7 @@ class Customer extends \Magento\Core\Model\AbstractModel
     /**
      * Retrieve customer sharing configuration model
      *
-     * @return \Magento\Customer\Model\Config\Share
+     * @return Share
      */
     public function getSharingConfig()
     {
@@ -279,26 +290,28 @@ class Customer extends \Magento\Core\Model\AbstractModel
      *
      * @param  string $login
      * @param  string $password
-     * @throws \Magento\Core\Exception
-     * @return boolean
-     *
+     * @return bool
+     * @throws \Magento\Framework\Model\Exception
      */
     public function authenticate($login, $password)
     {
         $this->loadByEmail($login);
         if ($this->getConfirmation() && $this->isConfirmationRequired()) {
-            throw new \Magento\Core\Exception(__('This account is not confirmed.'), self::EXCEPTION_EMAIL_NOT_CONFIRMED);
+            throw new \Magento\Framework\Model\Exception(
+                __('This account is not confirmed.'),
+                self::EXCEPTION_EMAIL_NOT_CONFIRMED
+            );
         }
         if (!$this->validatePassword($password)) {
-            throw new \Magento\Core\Exception(
+            throw new \Magento\Framework\Model\Exception(
                 __('Invalid login or password.'),
                 self::EXCEPTION_INVALID_EMAIL_OR_PASSWORD
             );
         }
-        $this->_eventManager->dispatch('customer_customer_authenticated', array(
-           'model'    => $this,
-           'password' => $password,
-        ));
+        $this->_eventManager->dispatch(
+            'customer_customer_authenticated',
+            array('model' => $this, 'password' => $password)
+        );
 
         return true;
     }
@@ -307,7 +320,7 @@ class Customer extends \Magento\Core\Model\AbstractModel
      * Load customer by email
      *
      * @param   string $customerEmail
-     * @return  \Magento\Customer\Model\Customer
+     * @return  $this
      */
     public function loadByEmail($customerEmail)
     {
@@ -315,11 +328,10 @@ class Customer extends \Magento\Core\Model\AbstractModel
         return $this;
     }
 
-
     /**
      * Processing object before save data
      *
-     * @return \Magento\Customer\Model\Customer
+     * @return $this
      */
     protected function _beforeSave()
     {
@@ -335,10 +347,28 @@ class Customer extends \Magento\Core\Model\AbstractModel
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function _afterSave()
+    {
+        $customerData = (array)$this->getData();
+        $customerData[CustomerData::ID] = $this->getId();
+        $dataObject = $this->_customerDataBuilder->populateWithArray($customerData)->create();
+        $customerOrigData = (array)$this->getOrigData();
+        $customerOrigData[CustomerData::ID] = $this->getId();
+        $origDataObject = $this->_customerDataBuilder->populateWithArray($customerOrigData)->create();
+        $this->_eventManager->dispatch(
+            'customer_save_after_data_object',
+            array('customer_data_object' => $dataObject, 'orig_customer_data_object' => $origDataObject)
+        );
+        return parent::_afterSave();
+    }
+
+    /**
      * Change customer password
      *
      * @param   string $newPassword
-     * @return  \Magento\Customer\Model\Customer
+     * @return  $this
      */
     public function changePassword($newPassword)
     {
@@ -362,7 +392,7 @@ class Customer extends \Magento\Core\Model\AbstractModel
         if ($this->_config->getAttribute('customer', 'middlename')->getIsVisible() && $this->getMiddlename()) {
             $name .= ' ' . $this->getMiddlename();
         }
-        $name .=  ' ' . $this->getLastname();
+        $name .= ' ' . $this->getLastname();
         if ($this->_config->getAttribute('customer', 'suffix')->getIsVisible() && $this->getSuffix()) {
             $name .= ' ' . $this->getSuffix();
         }
@@ -372,10 +402,10 @@ class Customer extends \Magento\Core\Model\AbstractModel
     /**
      * Add address to address collection
      *
-     * @param   \Magento\Customer\Model\Address $address
-     * @return  \Magento\Customer\Model\Customer
+     * @param   Address $address
+     * @return  $this
      */
-    public function addAddress(\Magento\Customer\Model\Address $address)
+    public function addAddress(Address $address)
     {
         $this->getAddressesCollection()->addItem($address);
         return $this;
@@ -385,7 +415,7 @@ class Customer extends \Magento\Core\Model\AbstractModel
      * Retrieve customer address by address id
      *
      * @param   int $addressId
-     * @return  \Magento\Customer\Model\Address
+     * @return  Address
      */
     public function getAddressById($addressId)
     {
@@ -396,7 +426,7 @@ class Customer extends \Magento\Core\Model\AbstractModel
      * Getting customer address object from collection by identifier
      *
      * @param int $addressId
-     * @return \Magento\Customer\Model\Address
+     * @return Address
      */
     public function getAddressItemById($addressId)
     {
@@ -421,9 +451,11 @@ class Customer extends \Magento\Core\Model\AbstractModel
     public function getAddressesCollection()
     {
         if ($this->_addressesCollection === null) {
-            $this->_addressesCollection = $this->getAddressCollection()
-                ->setCustomerFilter($this)
-                ->addAttributeToSelect('*');
+            $this->_addressesCollection = $this->getAddressCollection()->setCustomerFilter(
+                $this
+            )->addAttributeToSelect(
+                '*'
+            );
             foreach ($this->_addressesCollection as $address) {
                 $address->setCustomer($this);
             }
@@ -435,7 +467,7 @@ class Customer extends \Magento\Core\Model\AbstractModel
     /**
      * Retrieve customer address array
      *
-     * @return array
+     * @return \Magento\Framework\Object[]
      */
     public function getAddresses()
     {
@@ -445,14 +477,12 @@ class Customer extends \Magento\Core\Model\AbstractModel
     /**
      * Retrieve all customer attributes
      *
-     * @return array
+     * @return Attribute[]
      */
     public function getAttributes()
     {
         if ($this->_attributes === null) {
-            $this->_attributes = $this->_getResource()
-            ->loadAllAttributes($this)
-            ->getSortedAttributes();
+            $this->_attributes = $this->_getResource()->loadAllAttributes($this)->getSortedAttributes();
         }
         return $this->_attributes;
     }
@@ -476,7 +506,7 @@ class Customer extends \Magento\Core\Model\AbstractModel
      * Set plain and hashed password
      *
      * @param string $password
-     * @return \Magento\Customer\Model\Customer
+     * @return $this
      */
     public function setPassword($password)
     {
@@ -488,24 +518,13 @@ class Customer extends \Magento\Core\Model\AbstractModel
     /**
      * Hash customer password
      *
-     * @param   string $password
-     * @param   int    $salt
-     * @return  string
+     * @param string $password
+     * @param bool|int|string $salt
+     * @return string
      */
-    public function hashPassword($password, $salt = null)
+    public function hashPassword($password, $salt = true)
     {
-        return $this->_encryptor->getHash($password, !is_null($salt) ? $salt : 2);
-    }
-
-    /**
-     * Retrieve random password
-     *
-     * @param   int $length
-     * @return  string
-     */
-    public function generatePassword($length = 6)
-    {
-        return $this->mathRandom->getRandomString($length);
+        return $this->_encryptor->getHash($password, $salt);
     }
 
     /**
@@ -522,7 +541,6 @@ class Customer extends \Magento\Core\Model\AbstractModel
         }
         return $this->_encryptor->validateHash($password, $hash);
     }
-
 
     /**
      * Encrypt password
@@ -550,7 +568,7 @@ class Customer extends \Magento\Core\Model\AbstractModel
      * Retrieve default address by type(attribute)
      *
      * @param   string $attributeCode address type attribute code
-     * @return  \Magento\Customer\Model\Address
+     * @return  Address|false
      */
     public function getPrimaryAddress($attributeCode)
     {
@@ -562,7 +580,7 @@ class Customer extends \Magento\Core\Model\AbstractModel
     /**
      * Get customer default billing address
      *
-     * @return \Magento\Customer\Model\Address
+     * @return Address
      */
     public function getPrimaryBillingAddress()
     {
@@ -572,7 +590,7 @@ class Customer extends \Magento\Core\Model\AbstractModel
     /**
      * Get customer default billing address
      *
-     * @return \Magento\Customer\Model\Address
+     * @return Address
      */
     public function getDefaultBillingAddress()
     {
@@ -582,7 +600,7 @@ class Customer extends \Magento\Core\Model\AbstractModel
     /**
      * Get default customer shipping address
      *
-     * @return \Magento\Customer\Model\Address
+     * @return Address
      */
     public function getPrimaryShippingAddress()
     {
@@ -592,7 +610,7 @@ class Customer extends \Magento\Core\Model\AbstractModel
     /**
      * Get default customer shipping address
      *
-     * @return \Magento\Customer\Model\Address
+     * @return Address
      */
     public function getDefaultShippingAddress()
     {
@@ -619,7 +637,7 @@ class Customer extends \Magento\Core\Model\AbstractModel
     /**
      * Retrieve all customer default addresses
      *
-     * @return array
+     * @return Address[]
      */
     public function getPrimaryAddresses()
     {
@@ -645,7 +663,7 @@ class Customer extends \Magento\Core\Model\AbstractModel
     /**
      * Retrieve not default addresses
      *
-     * @return array
+     * @return Address[]
      */
     public function getAdditionalAddresses()
     {
@@ -662,15 +680,15 @@ class Customer extends \Magento\Core\Model\AbstractModel
     /**
      * Check if address is primary
      *
-     * @param \Magento\Customer\Model\Address $address
+     * @param Address $address
      * @return boolean
      */
-    public function isAddressPrimary(\Magento\Customer\Model\Address $address)
+    public function isAddressPrimary(Address $address)
     {
         if (!$address->getId()) {
             return false;
         }
-        return ($address->getId() == $this->getDefaultBilling()) || ($address->getId() == $this->getDefaultShipping());
+        return $address->getId() == $this->getDefaultBilling() || $address->getId() == $this->getDefaultShipping();
     }
 
     /**
@@ -679,26 +697,27 @@ class Customer extends \Magento\Core\Model\AbstractModel
      * @param string $type
      * @param string $backUrl
      * @param string $storeId
-     * @throws \Magento\Core\Exception
-     * @return \Magento\Customer\Model\Customer
+     * @return $this
+     * @throws \Magento\Framework\Model\Exception
      */
     public function sendNewAccountEmail($type = 'registered', $backUrl = '', $storeId = '0')
     {
-        $types = array(
-            'registered'     => self::XML_PATH_REGISTER_EMAIL_TEMPLATE,  // welcome email, when confirmation is disabled
-            'confirmed'      => self::XML_PATH_CONFIRMED_EMAIL_TEMPLATE, // welcome email, when confirmation is enabled
-            'confirmation'   => self::XML_PATH_CONFIRM_EMAIL_TEMPLATE,   // email with confirmation link
-        );
+        $types = $this->getTemplateTypes();
+
         if (!isset($types[$type])) {
-            throw new \Magento\Core\Exception(__('Wrong transactional account email type'));
+            throw new \Magento\Framework\Model\Exception(__('Wrong transactional account email type'));
         }
 
         if (!$storeId) {
             $storeId = $this->_getWebsiteStoreId($this->getSendemailStoreId());
         }
 
-        $this->_sendEmailTemplate($types[$type], self::XML_PATH_REGISTER_EMAIL_IDENTITY,
-            array('customer' => $this, 'back_url' => $backUrl), $storeId);
+        $this->_sendEmailTemplate(
+            $types[$type],
+            self::XML_PATH_REGISTER_EMAIL_IDENTITY,
+            array('customer' => $this, 'back_url' => $backUrl, 'store' => $this->getStore()),
+            $storeId
+        );
 
         return $this;
     }
@@ -713,12 +732,13 @@ class Customer extends \Magento\Core\Model\AbstractModel
         if ($this->canSkipConfirmation()) {
             return false;
         }
-        if (self::$_isConfirmationRequired === null) {
-            $storeId = $this->getStoreId() ? $this->getStoreId() : null;
-            self::$_isConfirmationRequired = (bool)$this->_coreStoreConfig->getConfig(self::XML_PATH_IS_CONFIRM, $storeId);
-        }
+        $storeId = $this->getStoreId() ? $this->getStoreId() : null;
 
-        return self::$_isConfirmationRequired;
+        return (bool)$this->_scopeConfig->getValue(
+            self::XML_PATH_IS_CONFIRM,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
     }
 
     /**
@@ -734,12 +754,16 @@ class Customer extends \Magento\Core\Model\AbstractModel
     /**
      * Send email with new customer password
      *
-     * @return \Magento\Customer\Model\Customer
+     * @return $this
      */
     public function sendPasswordReminderEmail()
     {
-        $this->_sendEmailTemplate(self::XML_PATH_REMIND_EMAIL_TEMPLATE, self::XML_PATH_FORGOT_EMAIL_IDENTITY,
-            array('customer' => $this), $this->getStoreId());
+        $this->_sendEmailTemplate(
+            self::XML_PATH_REMIND_EMAIL_TEMPLATE,
+            self::XML_PATH_FORGOT_EMAIL_IDENTITY,
+            array('customer' => $this, 'store' => $this->getStore()),
+            $this->getStoreId()
+        );
 
         return $this;
     }
@@ -751,29 +775,32 @@ class Customer extends \Magento\Core\Model\AbstractModel
      * @param string $sender configuration path of email identity
      * @param array $templateParams
      * @param int|null $storeId
-     * @return \Magento\Customer\Model\Customer
+     * @return $this
      */
     protected function _sendEmailTemplate($template, $sender, $templateParams = array(), $storeId = null)
     {
-        /** @var $mailer \Magento\Email\Model\Template\Mailer */
-        $mailer = $this->_createMailer();
-        $emailInfo = $this->_createEmailInfo();
-        $emailInfo->addTo($this->getEmail(), $this->getName());
-        $mailer->addEmailInfo($emailInfo);
+        /** @var \Magento\Framework\Mail\TransportInterface $transport */
+        $transport = $this->_transportBuilder->setTemplateIdentifier(
+            $this->_scopeConfig->getValue($template, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId)
+        )->setTemplateOptions(
+            array('area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $storeId)
+        )->setTemplateVars(
+            $templateParams
+        )->setFrom(
+            $this->_scopeConfig->getValue($sender, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId)
+        )->addTo(
+            $this->getEmail(),
+            $this->getName()
+        )->getTransport();
+        $transport->sendMessage();
 
-        // Set all required params and send emails
-        $mailer->setSender($this->_coreStoreConfig->getConfig($sender, $storeId));
-        $mailer->setStoreId($storeId);
-        $mailer->setTemplateId($this->_coreStoreConfig->getConfig($template, $storeId));
-        $mailer->setTemplateParams($templateParams);
-        $mailer->send();
         return $this;
     }
 
     /**
      * Send email with reset password confirmation link
      *
-     * @return \Magento\Customer\Model\Customer
+     * @return $this
      */
     public function sendPasswordResetConfirmationEmail()
     {
@@ -782,8 +809,11 @@ class Customer extends \Magento\Core\Model\AbstractModel
             $storeId = $this->_getWebsiteStoreId();
         }
 
-        $this->_sendEmailTemplate(self::XML_PATH_FORGOT_EMAIL_TEMPLATE, self::XML_PATH_FORGOT_EMAIL_IDENTITY,
-            array('customer' => $this), $storeId
+        $this->_sendEmailTemplate(
+            self::XML_PATH_FORGOT_EMAIL_TEMPLATE,
+            self::XML_PATH_FORGOT_EMAIL_IDENTITY,
+            array('customer' => $this, 'store' => $this->getStore()),
+            $storeId
         );
 
         return $this;
@@ -792,7 +822,7 @@ class Customer extends \Magento\Core\Model\AbstractModel
     /**
      * Send email to when password is resetting
      *
-     * @return \Magento\Customer\Model\Customer
+     * @return $this
      */
     public function sendPasswordResetNotificationEmail()
     {
@@ -801,14 +831,29 @@ class Customer extends \Magento\Core\Model\AbstractModel
             $storeId = $this->_getWebsiteStoreId();
         }
 
-        $this->_sender->send(
+        /** @var \Magento\Framework\Mail\TransportInterface $transport */
+        $transport = $this->_transportBuilder->setTemplateIdentifier(
+            $this->_scopeConfig->getValue(
+                self::XML_PATH_RESET_PASSWORD_TEMPLATE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $storeId
+            )
+        )->setTemplateOptions(
+            array('area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $storeId)
+        )->setTemplateVars(
+            array('customer' => $this, 'store' => $this->getStore())
+        )->setFrom(
+            $this->_scopeConfig->getValue(
+                self::XML_PATH_FORGOT_EMAIL_IDENTITY,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $storeId
+            )
+        )->addTo(
             $this->getEmail(),
-            $this->getName(),
-            self::XML_PATH_RESET_PASSWORD_TEMPLATE,
-            self::XML_PATH_FORGOT_EMAIL_IDENTITY,
-            array('customer' => $this),
-            $storeId
-        );
+            $this->getName()
+        )->getTransport();
+        $transport->sendMessage();
+
         return $this;
     }
 
@@ -821,7 +866,11 @@ class Customer extends \Magento\Core\Model\AbstractModel
     {
         if (!$this->hasData('group_id')) {
             $storeId = $this->getStoreId() ? $this->getStoreId() : $this->_storeManager->getStore()->getId();
-            $groupId = $this->_coreStoreConfig->getConfig(\Magento\Customer\Model\Group::XML_PATH_DEFAULT_ID, $storeId);
+            $groupId = $this->_scopeConfig->getValue(
+                \Magento\Customer\Service\V1\CustomerGroupServiceInterface::XML_PATH_DEFAULT_ID,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $storeId
+            );
             $this->setData('group_id', $groupId);
         }
         return $this->getData('group_id');
@@ -835,33 +884,16 @@ class Customer extends \Magento\Core\Model\AbstractModel
     public function getTaxClassId()
     {
         if (!$this->getData('tax_class_id')) {
-            $this->setTaxClassId($this->_createCustomerGroup()->getTaxClassId($this->getGroupId()));
+            $groupTaxClassId = $this->_groupService->getGroup($this->getGroupId())->getTaxClassId();
+            $this->setData('tax_class_id', $groupTaxClassId);
         }
         return $this->getData('tax_class_id');
     }
 
     /**
-     * Check store availability for customer
-     *
-     * @param   \Magento\Core\Model\Store | int $store
-     * @return  bool
-     */
-    public function isInStore($store)
-    {
-        if ($store instanceof \Magento\Core\Model\Store) {
-            $storeId = $store->getId();
-        } else {
-            $storeId = $store;
-        }
-
-        $availableStores = $this->getSharedStoreIds();
-        return in_array($storeId, $availableStores);
-    }
-
-    /**
      * Retrieve store where customer was created
      *
-     * @return \Magento\Core\Model\Store
+     * @return \Magento\Store\Model\Store
      */
     public function getStore()
     {
@@ -872,6 +904,7 @@ class Customer extends \Magento\Core\Model\AbstractModel
      * Retrieve shared store ids
      *
      * @return array
+     * @deprecated Use \Magento\Customer\Helper\Data::getSharedStoreIds
      */
     public function getSharedStoreIds()
     {
@@ -894,7 +927,7 @@ class Customer extends \Magento\Core\Model\AbstractModel
     /**
      * Retrieve shared website ids
      *
-     * @return array
+     * @return int[]
      */
     public function getSharedWebsiteIds()
     {
@@ -916,10 +949,10 @@ class Customer extends \Magento\Core\Model\AbstractModel
     /**
      * Set store to customer
      *
-     * @param \Magento\Core\Model\Store $store
-     * @return \Magento\Customer\Model\Customer
+     * @param \Magento\Store\Model\Store $store
+     * @return $this
      */
-    public function setStore(\Magento\Core\Model\Store $store)
+    public function setStore(\Magento\Store\Model\Store $store)
     {
         $this->setStoreId($store->getId());
         $this->setWebsiteId($store->getWebsite()->getId());
@@ -931,7 +964,7 @@ class Customer extends \Magento\Core\Model\AbstractModel
      * For existing customer password + confirmation will be validated only when password is set
      * (i.e. its change is requested)
      *
-     * @return bool|array
+     * @return bool|string[]
      */
     public function validate()
     {
@@ -974,7 +1007,7 @@ class Customer extends \Magento\Core\Model\AbstractModel
     /**
      * Unset subscription
      *
-     * @return \Magento\Customer\Model\Customer
+     * @return $this
      */
     public function unsetSubscription()
     {
@@ -986,6 +1019,8 @@ class Customer extends \Magento\Core\Model\AbstractModel
 
     /**
      * Clean all addresses
+     *
+     * @return void
      */
     public function cleanAllAddresses()
     {
@@ -995,8 +1030,8 @@ class Customer extends \Magento\Core\Model\AbstractModel
     /**
      * Add error
      *
-     * @param $error
-     * @return \Magento\Customer\Model\Customer
+     * @param mixed $error
+     * @return $this
      */
     public function addError($error)
     {
@@ -1017,7 +1052,7 @@ class Customer extends \Magento\Core\Model\AbstractModel
     /**
      * Reset errors array
      *
-     * @return \Magento\Customer\Model\Customer
+     * @return $this
      */
     public function resetErrors()
     {
@@ -1027,10 +1062,12 @@ class Customer extends \Magento\Core\Model\AbstractModel
 
     /**
      * Prepare customer for delete
+     *
+     * @return $this
      */
     protected function _beforeDelete()
     {
-        $this->_protectFromNonAdmin();
+        //TODO : Revisit and figure handling permissions in MAGETWO-11084 Implementation: Service Context Provider
         return parent::_beforeDelete();
     }
 
@@ -1051,7 +1088,7 @@ class Customer extends \Magento\Core\Model\AbstractModel
     /**
      * Reset all model data
      *
-     * @return \Magento\Customer\Model\Customer
+     * @return $this
      */
     public function reset()
     {
@@ -1063,7 +1100,7 @@ class Customer extends \Magento\Core\Model\AbstractModel
     }
 
     /**
-     * Checks model is deleteable
+     * Checks model is deletable
      *
      * @return boolean
      */
@@ -1073,10 +1110,10 @@ class Customer extends \Magento\Core\Model\AbstractModel
     }
 
     /**
-     * Set is deleteable flag
+     * Set is deletable flag
      *
      * @param boolean $value
-     * @return \Magento\Customer\Model\Customer
+     * @return $this
      */
     public function setIsDeleteable($value)
     {
@@ -1098,7 +1135,7 @@ class Customer extends \Magento\Core\Model\AbstractModel
      * Set is readonly flag
      *
      * @param boolean $value
-     * @return \Magento\Customer\Model\Customer
+     * @return $this
      */
     public function setIsReadonly($value)
     {
@@ -1113,12 +1150,25 @@ class Customer extends \Magento\Core\Model\AbstractModel
      */
     public function canSkipConfirmation()
     {
-        return $this->getId() && $this->hasSkipConfirmationIfEmail()
-        && strtolower($this->getSkipConfirmationIfEmail()) === strtolower($this->getEmail());
+        if (!$this->getId()) {
+            return false;
+        }
+
+        /* If an email was used to start the registration process and it is the same email as the one
+           used to register, then this can skip confirmation.
+           */
+        $skipConfirmationIfEmail = $this->_registry->registry("skip_confirmation_if_email");
+        if (!$skipConfirmationIfEmail) {
+            return false;
+        }
+
+        return strtolower($skipConfirmationIfEmail) === strtolower($this->getEmail());
     }
 
     /**
      * Clone current object
+     *
+     * @return void
      */
     public function __clone()
     {
@@ -1178,14 +1228,14 @@ class Customer extends \Magento\Core\Model\AbstractModel
      *
      * Stores new reset password link token
      *
-     * @throws \Magento\Core\Exception
      * @param string $passwordLinkToken
-     * @return \Magento\Customer\Model\Customer
+     * @return $this
+     * @throws \Magento\Framework\Model\Exception
      */
     public function changeResetPasswordLinkToken($passwordLinkToken)
     {
         if (!is_string($passwordLinkToken) || empty($passwordLinkToken)) {
-            throw new \Magento\Core\Exception(
+            throw new \Magento\Framework\Model\Exception(
                 __('Invalid password reset token.'),
                 self::EXCEPTION_INVALID_RESET_PASSWORD_LINK_TOKEN
             );
@@ -1225,7 +1275,7 @@ class Customer extends \Magento\Core\Model\AbstractModel
     }
 
     /**
-     * @return \Magento\Customer\Model\Address
+     * @return Address
      */
     protected function _createAddressInstance()
     {
@@ -1241,34 +1291,28 @@ class Customer extends \Magento\Core\Model\AbstractModel
     }
 
     /**
-     * @return \Magento\Email\Model\Template\Mailer
-     */
-    protected function _createMailer()
-    {
-        return $this->_mailerFactory->create();
-    }
-
-    /**
-     * @return \Magento\Email\Model\Info
-     */
-    protected function _createEmailInfo()
-    {
-        return $this->_emailInfoFactory->create();
-    }
-
-    /**
-     * @return \Magento\Customer\Model\Group
-     */
-    protected function _createCustomerGroup()
-    {
-        return $this->_groupFactory->create();
-    }
-
-    /**
      * @return \Magento\Customer\Model\Attribute
      */
     protected function _createCustomerAttribute()
     {
         return $this->_attributeFactory->create();
+    }
+
+    /**
+     * @return array
+     */
+    protected function getTemplateTypes()
+    {
+        /**
+         * 'registered'   welcome email, when confirmation is disabled
+         * 'confirmed'    welcome email, when confirmation is enabled
+         * 'confirmation' email with confirmation link
+         */
+        $types = array(
+            'registered'   => self::XML_PATH_REGISTER_EMAIL_TEMPLATE,
+            'confirmed'    => self::XML_PATH_CONFIRMED_EMAIL_TEMPLATE,
+            'confirmation' => self::XML_PATH_CONFIRM_EMAIL_TEMPLATE,
+        );
+        return $types;
     }
 }

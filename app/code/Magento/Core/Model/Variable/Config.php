@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,8 +25,6 @@
 /**
  * Variable Wysiwyg Plugin Config
  *
- * @category    Magento
- * @package     Magento_Core
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Core\Model\Variable;
@@ -36,29 +32,29 @@ namespace Magento\Core\Model\Variable;
 class Config
 {
     /**
-     * @var \Magento\View\Url
+     * @var \Magento\Framework\View\Asset\Repository
      */
-    protected $_viewUrl;
+    protected $_assetRepo;
 
     /**
-     * @var \Magento\Backend\Model\Url
+     * @var \Magento\Backend\Model\UrlInterface
      */
     protected $_url;
 
     /**
-     * @param \Magento\View\Url $viewUrl
-     * @param \Magento\Backend\Model\Url $url
+     * @param \Magento\Framework\View\Asset\Repository $assetRepo
+     * @param \Magento\Backend\Model\UrlInterface $url
      */
-    public function __construct(\Magento\View\Url $viewUrl, \Magento\Backend\Model\Url $url)
+    public function __construct(\Magento\Framework\View\Asset\Repository $assetRepo, \Magento\Backend\Model\UrlInterface $url)
     {
-        $this->_viewUrl = $viewUrl;
+        $this->_assetRepo = $assetRepo;
         $this->_url = $url;
     }
 
     /**
      * Prepare variable wysiwyg config
      *
-     * @param \Magento\Object $config
+     * @param \Magento\Framework\Object $config
      * @return array
      */
     public function getWysiwygPluginSettings($config)
@@ -66,17 +62,22 @@ class Config
         $variableConfig = array();
         $onclickParts = array(
             'search' => array('html_id'),
-            'subject' => 'MagentovariablePlugin.loadChooser(\'' . $this->getVariablesWysiwygActionUrl()
-                . '\', \'{{html_id}}\');'
+            'subject' => 'MagentovariablePlugin.loadChooser(\'' .
+            $this->getVariablesWysiwygActionUrl() .
+            '\', \'{{html_id}}\');'
         );
-        $variableWysiwyg = array(array('name' => 'magentovariable',
-            'src' => $this->getWysiwygJsPluginSrc(),
-            'options' => array(
-                'title' => __('Insert Variable...'),
-                'url' => $this->getVariablesWysiwygActionUrl(),
-                'onclick' => $onclickParts,
-                'class'   => 'add-variable plugin'
-        )));
+        $variableWysiwyg = array(
+            array(
+                'name' => 'magentovariable',
+                'src' => $this->getWysiwygJsPluginSrc(),
+                'options' => array(
+                    'title' => __('Insert Variable...'),
+                    'url' => $this->getVariablesWysiwygActionUrl(),
+                    'onclick' => $onclickParts,
+                    'class' => 'add-variable plugin'
+                )
+            )
+        );
         $configPlugins = $config->getData('plugins');
         $variableConfig['plugins'] = array_merge($configPlugins, $variableWysiwyg);
         return $variableConfig;
@@ -90,7 +91,7 @@ class Config
     public function getWysiwygJsPluginSrc()
     {
         $editorPluginJs = 'mage/adminhtml/wysiwyg/tiny_mce/plugins/magentovariable/editor_plugin.js';
-        return $this->_viewUrl->getViewFileUrl($editorPluginJs);
+        return $this->_assetRepo->getUrl($editorPluginJs);
     }
 
     /**

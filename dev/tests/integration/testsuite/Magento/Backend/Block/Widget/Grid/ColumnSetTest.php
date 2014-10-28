@@ -18,14 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Backend\Block\Widget\Grid;
 
 /**
@@ -52,21 +47,33 @@ class ColumnSetTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->_columnMock = $this->getMock('Magento\Backend\Block\Widget\Grid\Column',
+        $this->_columnMock = $this->getMock(
+            'Magento\Backend\Block\Widget\Grid\Column',
             array('setSortable', 'setRendererType', 'setFilterType', 'addHeaderCssClass', 'setGrid'),
-            array(), '', false
+            array(),
+            '',
+            false
         );
-        $this->_layoutMock = $this->getMock('Magento\Core\Model\Layout', array(), array(), '', false);
-        $this->_layoutMock->expects($this->any())->method('getChildBlocks')->will($this->returnValue(
-            array($this->_columnMock)
-        ));
+        $this->_layoutMock = $this->getMock('Magento\Framework\View\Layout', array(), array(), '', false);
+        $this->_layoutMock->expects(
+            $this->any()
+        )->method(
+            'getChildBlocks'
+        )->will(
+            $this->returnValue(array($this->_columnMock))
+        );
 
-        $context = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\View\Element\Template\Context', array('layout' => $this->_layoutMock));
-        $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-            ->createBlock(
-                'Magento\Backend\Block\Widget\Grid\ColumnSet', '', array('context' => $context)
-            );
+        $context = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Framework\View\Element\Template\Context',
+            array('layout' => $this->_layoutMock)
+        );
+        $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\View\LayoutInterface'
+        )->createBlock(
+            'Magento\Backend\Block\Widget\Grid\ColumnSet',
+            '',
+            array('context' => $context)
+        );
         $this->_block->setTemplate(null);
     }
 

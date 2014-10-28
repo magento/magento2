@@ -18,12 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Tax
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tax\Model\Sales\Pdf;
 
 class Shipping extends \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal
@@ -68,7 +65,7 @@ class Shipping extends \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal
         $amount = $this->getOrder()->formatPriceTxt($this->getAmount());
         $amountInclTax = $this->getSource()->getShippingInclTax();
         if (!$amountInclTax) {
-            $amountInclTax = $this->getAmount()+$this->getSource()->getShippingTaxAmount();
+            $amountInclTax = $this->getAmount() + $this->getSource()->getShippingTaxAmount();
         }
         $amountInclTax = $this->getOrder()->formatPriceTxt($amountInclTax);
         $fontSize = $this->getFontSize() ? $this->getFontSize() : 7;
@@ -76,28 +73,32 @@ class Shipping extends \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal
         if ($this->_taxConfig->displaySalesShippingBoth($store)) {
             $totals = array(
                 array(
-                    'amount'    => $this->getAmountPrefix().$amount,
-                    'label'     => __('Shipping (Excl. Tax)') . ':',
+                    'amount' => $this->getAmountPrefix() . $amount,
+                    'label' => __('Shipping (Excl. Tax)') . ':',
                     'font_size' => $fontSize
                 ),
                 array(
-                    'amount'    => $this->getAmountPrefix().$amountInclTax,
-                    'label'     => __('Shipping (Incl. Tax)') . ':',
+                    'amount' => $this->getAmountPrefix() . $amountInclTax,
+                    'label' => __('Shipping (Incl. Tax)') . ':',
                     'font_size' => $fontSize
-                ),
+                )
             );
         } elseif ($this->_taxConfig->displaySalesShippingInclTax($store)) {
-            $totals = array(array(
-                'amount'    => $this->getAmountPrefix().$amountInclTax,
-                'label'     => __($this->getTitle()) . ':',
-                'font_size' => $fontSize
-            ));
+            $totals = array(
+                array(
+                    'amount' => $this->getAmountPrefix() . $amountInclTax,
+                    'label' => __($this->getTitle()) . ':',
+                    'font_size' => $fontSize
+                )
+            );
         } else {
-            $totals = array(array(
-                'amount'    => $this->getAmountPrefix().$amount,
-                'label'     => __($this->getTitle()) . ':',
-                'font_size' => $fontSize
-            ));
+            $totals = array(
+                array(
+                    'amount' => $this->getAmountPrefix() . $amount,
+                    'label' => __($this->getTitle()) . ':',
+                    'font_size' => $fontSize
+                )
+            );
         }
 
         return $totals;

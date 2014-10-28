@@ -18,18 +18,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Resource\Translate;
 
 /**
  * Backend string translate resource model
  */
-class String extends \Magento\Core\Model\Resource\Translate\String
+class String extends \Magento\Translation\Model\Resource\String
 {
     /**
      * Get current store id
@@ -39,6 +36,6 @@ class String extends \Magento\Core\Model\Resource\Translate\String
      */
     protected function _getStoreId()
     {
-        return \Magento\Core\Model\Store::DEFAULT_STORE_ID;
+        return \Magento\Store\Model\Store::DEFAULT_STORE_ID;
     }
 }

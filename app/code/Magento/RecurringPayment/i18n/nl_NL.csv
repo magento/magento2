@@ -1,0 +1,142 @@
+Cancel,Cancel
+Back,Back
+Quantity,Quantity
+SKU,SKU
+No,No
+Action,Action
+Store,Store
+"-- Please Select --","-- Please Select --"
+Yes,Yes
+Status,Status
+"Are you sure you want to do this?","Are you sure you want to do this?"
+Order,Order
+"Shipping Amount","Shipping Amount"
+"Tax Amount","Tax Amount"
+View,View
+Active,Active
+Canceled,Canceled
+Day,Day
+Month,Month
+Year,Year
+"Start Date","Start Date"
+"Product Name","Product Name"
+"Payment Information","Payment Information"
+"Order #","Order #"
+"Billing Address","Billing Address"
+"Shipping Address","Shipping Address"
+"Payment Method","Payment Method"
+Created,Created
+Currency,Currency
+Date,Date
+"Bill-to Name","Bill-to Name"
+"Ship-to Name","Ship-to Name"
+"Order Total","Order Total"
+"Purchase Point","Purchase Point"
+Updated,Updated
+Billing,Billing
+"Order Status","Order Status"
+Pending,Pending
+Expired,Expired
+Activate,Activate
+"Related Orders","Related Orders"
+"Recurring Billing Payments (beta)","Recurring Billing Payments (beta)"
+Schedule,Schedule
+"Customer Can Define Start Date","Customer Can Define Start Date"
+"Select whether buyer can define the date when billing for the payment begins.","Select whether buyer can define the date when billing for the payment begins."
+"Trial Period","Trial Period"
+"-- Not Selected --","-- Not Selected --"
+"Initial Fees","Initial Fees"
+Suspend,Suspend
+"Get Update","Get Update"
+"Recurring Payment # %1","Recurring Payment # %1"
+"Invalid parent block for this block","Invalid parent block for this block"
+"Purchased Date","Purchased Date"
+"Grand Total (Base)","Grand Total (Base)"
+"Grand Total (Purchased)","Grand Total (Purchased)"
+"Purchased Item","Purchased Item"
+"Payment State","Payment State"
+"Subscriber Name","Subscriber Name"
+"Internal Reference ID","Internal Reference ID"
+"Schedule Description","Schedule Description"
+"Maximum Payment Failures","Maximum Payment Failures"
+"Auto Bill on Next Cycle","Auto Bill on Next Cycle"
+"Billing Period Unit","Billing Period Unit"
+"Billing Frequency","Billing Frequency"
+"Maximum Billing Cycles","Maximum Billing Cycles"
+"Billing Amount","Billing Amount"
+"Trial Billing Period Unit","Trial Billing Period Unit"
+"Trial Billing Frequency","Trial Billing Frequency"
+"Maximum Trial Billing Cycles","Maximum Trial Billing Cycles"
+"Trial Billing Amount","Trial Billing Amount"
+"Initial Fee","Initial Fee"
+"Allow Initial Fee Failure","Allow Initial Fee Failure"
+"Payment Reference ID","Payment Reference ID"
+"Original order item that recurring payment corresponds to","Original order item that recurring payment corresponds to"
+"Full name of the person receiving the product or service paid for by the recurring payment.","Full name of the person receiving the product or service paid for by the recurring payment."
+"This is the date when billing for the payment begins.","This is the date when billing for the payment begins."
+"Enter a short description of the recurring payment. ' 'By default, this description will match the product name.","Enter a short description of the recurring payment. ' 'By default, this description will match the product name."
+"This is the number of scheduled payments ' 'that can fail before the payment is automatically suspended.","This is the number of scheduled payments ' 'that can fail before the payment is automatically suspended."
+"Use this to automatically bill the outstanding balance amount in the next billing cycle ' '(if there were failed payments).","Use this to automatically bill the outstanding balance amount in the next billing cycle ' '(if there were failed payments)."
+"This is the unit for billing during the subscription period.","This is the unit for billing during the subscription period."
+"This is the number of billing periods that make up one billing cycle.","This is the number of billing periods that make up one billing cycle."
+"This is the number of billing cycles for the payment period.","This is the number of billing cycles for the payment period."
+"The initial, non-recurring payment amount is due immediately when the payment is created.","The initial, non-recurring payment amount is due immediately when the payment is created."
+"This sets whether to suspend the payment if the initial fee fails or, ' 'instead, add it to the outstanding balance.","This sets whether to suspend the payment if the initial fee fails or, ' 'instead, add it to the outstanding balance."
+"Customer Name","Customer Name"
+"Recurring Billing Payments","Recurring Billing Payments"
+"Payment #%1","Payment #%1"
+"The payment state has been updated.","The payment state has been updated."
+"We could not update the payment.","We could not update the payment."
+"You updated the payment.","You updated the payment."
+"The payment has no changes.","The payment has no changes."
+"The payment you specified does not exist.","The payment you specified does not exist."
+"We couldn't update the payment.","We couldn't update the payment."
+"The payment has been updated.","The payment has been updated."
+"We can't find the payment you specified.","We can't find the payment you specified."
+"Wrong state: ""%1""","Wrong state: ""%1"""
+"This payment state cannot be changed to ""%1"".","This payment state cannot be changed to ""%1""."
+"Trial ","Trial "
+"Payment type","Payment type"
+"Trial period payment","Trial period payment"
+"Recurring Payment Initial Fee","Recurring Payment Initial Fee"
+"Initial period payment","Initial period payment"
+Week,Week
+"Two Weeks","Two Weeks"
+"Trial Payment","Trial Payment"
+"The start date is undefined.","The start date is undefined."
+"The start date has an invalid format.","The start date has an invalid format."
+"The schedule description must be provided.","The schedule description must be provided."
+"The billing period unit is not defined or wrong.","The billing period unit is not defined or wrong."
+"The period frequency is wrong.","The period frequency is wrong."
+"The trial billing period unit is wrong.","The trial billing period unit is wrong."
+"The trial period frequency is wrong.","The trial period frequency is wrong."
+"The trial period max cycles is wrong.","The trial period max cycles is wrong."
+"The trial billing amount is wrong.","The trial billing amount is wrong."
+"We found a wrong or empty billing amount specified.","We found a wrong or empty billing amount specified."
+"The wrong %1 is specified.","The wrong %1 is specified."
+"The currency code is undefined.","The currency code is undefined."
+"The payment method code is undefined.","The payment method code is undefined."
+"The payment is invalid:\n%1.","The payment is invalid:\n%1."
+"The recurring payment start date has invalid format.","The recurring payment start date has invalid format."
+"Billing Period","Billing Period"
+"An internal reference ID is required to save the payment.","An internal reference ID is required to save the payment."
+"%1 %2 cycle.","%1 %2 cycle."
+"Repeats %1 time(s)","Repeats %1 time(s)"
+"Repeats until suspended or canceled.","Repeats until suspended or canceled."
+"Not Initialized","Not Initialized"
+Suspended,Suspended
+"No information available.","No information available."
+"Recurring Payment Start Date","Recurring Payment Start Date"
+"Your recurring payments:","Your recurring payments:"
+"Payment # %1: ""%2"".","Payment # %1: ""%2""."
+"About This Payment:","About This Payment:"
+"Back to Recurring Billing Payments","Back to Recurring Billing Payments"
+"Recurring Payment View","Recurring Payment View"
+Reference,Reference
+"Payment Schedule","Payment Schedule"
+Payments,Payments
+"Recurring Payment","Recurring Payment"
+"Recurring Payments","Recurring Payments"
+"There are no recurring payments yet.","There are no recurring payments yet."
+"Orders Based on This Payment","Orders Based on This Payment"
+"There are no orders yet.","There are no orders yet."

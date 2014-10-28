@@ -29,14 +29,13 @@ use Magento\Integration\Model\Config\Converter;
 /**
  * Class to manage integrations installed from config file
  *
- * @package Magento\Integration\Model
  */
 class Manager
 {
     /**
      * Integration service
      *
-     * @var \Magento\Integration\Service\IntegrationV1Interface
+     * @var \Magento\Integration\Service\V1\IntegrationInterface
      */
     protected $_integrationService;
 
@@ -49,11 +48,11 @@ class Manager
 
     /**
      * @param Config $integrationConfig
-     * @param \Magento\Integration\Service\IntegrationV1Interface $integrationService
+     * @param \Magento\Integration\Service\V1\IntegrationInterface $integrationService
      */
     public function __construct(
         Config $integrationConfig,
-        \Magento\Integration\Service\IntegrationV1Interface $integrationService
+        \Magento\Integration\Service\V1\IntegrationInterface $integrationService
     ) {
         $this->_integrationService = $integrationService;
         $this->_integrationConfig = $integrationConfig;
@@ -97,7 +96,6 @@ class Manager
             } else {
                 $this->_integrationService->create($integrationData);
             }
-
         }
         return $integrationNames;
     }

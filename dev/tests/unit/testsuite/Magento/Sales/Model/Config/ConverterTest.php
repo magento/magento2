@@ -18,12 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Cron
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Sales\Model\Config;
 
 class ConverterTest extends \PHPUnit_Framework_TestCase
@@ -70,34 +67,19 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                     'item1' => array(
                         'instance' => 'instance1',
                         'sort_order' => '1',
-                        'renderers' => array(
-                            'renderer1' => 'instance1',
-                        )
+                        'renderers' => array('renderer1' => 'instance1')
                     )
                 ),
                 'group2' => array(
-                    'item1' => array(
-                        'instance' => 'instance1',
-                        'sort_order' => '1',
-                        'renderers' => array()
-                    )
+                    'item1' => array('instance' => 'instance1', 'sort_order' => '1', 'renderers' => array())
                 )
             ),
             'section2' => array(
                 'group1' => array(
-                    'item1' => array(
-                        'instance' => 'instance1',
-                        'sort_order' => '1',
-                        'renderers' => array()
-                    )
+                    'item1' => array('instance' => 'instance1', 'sort_order' => '1', 'renderers' => array())
                 )
             ),
-            'order' => array(
-                'available_product_types' => array(
-                    'type1',
-                    'type2'
-                ),
-            )
+            'order' => array('available_product_types' => array('type1', 'type2'))
         );
 
         $xmlFile = __DIR__ . '/_files/sales_valid.xml';

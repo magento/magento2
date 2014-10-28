@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Adminhtml
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,26 +25,24 @@
 /**
  * Sitemap grid link column renderer
  *
- * @category   Magento
- * @package    Magento_Sitemap
  */
 namespace Magento\Sitemap\Block\Adminhtml\Grid\Renderer;
 
 class Time extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
-     * @var \Magento\Core\Model\Date
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
     protected $_date;
 
     /**
      * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\Core\Model\Date $date
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
-        \Magento\Core\Model\Date $date,
+        \Magento\Framework\Stdlib\DateTime\DateTime $date,
         array $data = array()
     ) {
         $this->_date = $date;
@@ -56,13 +52,12 @@ class Time extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
     /**
      * Prepare link to display in grid
      *
-     * @param \Magento\Object $row
+     * @param \Magento\Framework\Object $row
      * @return string
      */
-    public function render(\Magento\Object $row)
+    public function render(\Magento\Framework\Object $row)
     {
-        $time =  date('Y-m-d H:i:s', strtotime($row->getSitemapTime()) + $this->_date->getGmtOffset());
+        $time = date('Y-m-d H:i:s', strtotime($row->getSitemapTime()) + $this->_date->getGmtOffset());
         return $time;
     }
-
 }

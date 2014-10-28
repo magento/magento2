@@ -1,0 +1,73 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php if ($_entity = $this->getEntity()): ?>
+<div id="comments_block">
+    <div class="field-row">
+        <label class="normal" for="history_comment"><?php echo __('Comment Text') ?></label>
+        <textarea name="comment[comment]" rows="3" cols="5" id="history_comment"></textarea>
+    </div>
+    <div class="clearfix">
+        <div class="actions">
+            <?php echo $this->getChildHtml('submit_button') ?>
+        </div>
+        <div class="order-history-comments-options">
+            <?php if ($this->canSendCommentEmail()): ?>
+                <input name="comment[is_customer_notified]" type="checkbox" id="history_notify" value="1" /><label class="normal" for="history_notify"><?php echo __('Notify Customer by Email') ?></label><br />
+            <?php endif; ?>
+            <input name="comment[is_visible_on_front]" type="checkbox" id="history_visible" value="1" /><label class="normal" for="history_visible"> <?php echo __('Visible on Frontend') ?></label>
+        </div>
+    </div>
+    <ul class="note-list">
+    <?php foreach ($_entity->getCommentsCollection(true) as $_comment): ?>
+        <li>
+            <span class="note-list-date"><?php echo $this->formatDate($_comment->getCreatedAtDate(), 'medium') ?></span>
+            <span class="note-list-time"><?php echo $this->formatTime($_comment->getCreatedAtDate(), 'medium') ?></span>
+            <span class="note-list-customer">
+                <?php echo __('Customer') ?>
+                <?php if ($_comment->getIsCustomerNotified()): ?>
+                    <span class="note-list-customer-notified"><?php echo __('Notified') ?></span>
+                <?php else: ?>
+                    <span class="note-list-customer-not-notified"><?php echo __('Not Notified') ?></span>
+                <?php endif; ?>
+            </span>
+            <div class="note-list-comment"><?php echo $this->escapeHtml($_comment->getComment(), array('b','br','strong','i','u')) ?></div>
+        </li>
+    <?php endforeach; ?>
+    </ul>
+</div>
+<script type="text/javascript">
+require(['prototype'], function(){
+
+submitComment = function() {
+    submitAndReloadArea($('comments_block').parentNode, '<?php echo $this->getSubmitUrl() ?>')
+}
+
+if ($('submit_comment_button')) {
+    $('submit_comment_button').observe('click', submitComment);
+}
+
+});
+</script>
+<?php endif; ?>

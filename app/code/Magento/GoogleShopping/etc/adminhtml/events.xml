@@ -23,8 +23,8 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
-    <event name="catalog_product_save_after">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
+    <event name="catalog_product_save_commit_after">
         <observer name="googleshopping_observer" instance="Magento\GoogleShopping\Model\Observer" method="saveProductItem" />
     </event>
     <event name="catalog_product_delete_before">

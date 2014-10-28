@@ -18,25 +18,26 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
 /**
  * Grid checkbox column renderer
  *
- * @category   Magento
- * @package    Magento_Backend
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
-
-class Checkbox
-    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
+    /**
+     * @var int
+     */
     protected $_defaultWidth = 55;
+
+    /**
+     * @var array
+     */
     protected $_values;
 
     /**
@@ -85,24 +86,24 @@ class Checkbox
     /**
      * Renders grid column
      *
-     * @param   \Magento\Object $row
+     * @param   \Magento\Framework\Object $row
      * @return  string
      */
-    public function render(\Magento\Object $row)
+    public function render(\Magento\Framework\Object $row)
     {
         $values = $this->_getValues();
-        $value  = $row->getData($this->getColumn()->getIndex());
+        $value = $row->getData($this->getColumn()->getIndex());
         if (is_array($values)) {
             $checked = in_array($value, $values) ? ' checked="checked"' : '';
         } else {
-            $checked = ($value === $this->getColumn()->getValue()) ? ' checked="checked"' : '';
+            $checked = $value === $this->getColumn()->getValue() ? ' checked="checked"' : '';
         }
 
         $disabledValues = $this->getColumn()->getDisabledValues();
         if (is_array($disabledValues)) {
             $disabled = in_array($value, $disabledValues) ? ' disabled="disabled"' : '';
         } else {
-            $disabled = ($value === $this->getColumn()->getDisabledValue()) ? ' disabled="disabled"' : '';
+            $disabled = $value === $this->getColumn()->getDisabledValue() ? ' disabled="disabled"' : '';
         }
 
         $this->setDisabled($disabled);
@@ -110,7 +111,7 @@ class Checkbox
         if ($this->getNoObjectId() || $this->getColumn()->getUseIndex()) {
             $v = $value;
         } else {
-            $v = ($row->getId() != "") ? $row->getId():$value;
+            $v = $row->getId() != "" ? $row->getId() : $value;
         }
 
         return $this->_getCheckboxHtml($v, $checked);
@@ -126,7 +127,9 @@ class Checkbox
         $html = '<input type="checkbox" ';
         $html .= 'name="' . $this->getColumn()->getFieldName() . '" ';
         $html .= 'value="' . $this->escapeHtml($value) . '" ';
-        $html .= 'class="'. ($this->getColumn()->getInlineCss() ? $this->getColumn()->getInlineCss() : 'checkbox') .'"';
+        $html .= 'class="' .
+            ($this->getColumn()->getInlineCss() ? $this->getColumn()->getInlineCss() : 'checkbox') .
+            '"';
         $html .= $checked . $this->getDisabled() . '/>';
         return $html;
     }
@@ -155,7 +158,7 @@ class Checkbox
         $html .= 'name="' . $this->getColumn()->getFieldName() . '" ';
         $html .= 'onclick="' . $this->getColumn()->getGrid()->getJsObjectName() . '.checkCheckboxes(this)" ';
         $html .= 'class="checkbox"' . $checked . $disabled . ' ';
-        $html .= 'title="'.__('Select All') . '"/>';
+        $html .= 'title="' . __('Select All') . '"/>';
         return $html;
     }
 }

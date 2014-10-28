@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Reports
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -34,30 +32,21 @@ $installer->startSetup();
  * Report Event Types default data
  */
 $eventTypeData = array(
-    array(
-        'event_type_id' => \Magento\Reports\Model\Event::EVENT_PRODUCT_VIEW,
-        'event_name'    => 'catalog_product_view'
-    ),
-    array(
-        'event_type_id' => \Magento\Reports\Model\Event::EVENT_PRODUCT_SEND,
-        'event_name'    => 'sendfriend_product'
-    ),
+    array('event_type_id' => \Magento\Reports\Model\Event::EVENT_PRODUCT_VIEW, 'event_name' => 'catalog_product_view'),
+    array('event_type_id' => \Magento\Reports\Model\Event::EVENT_PRODUCT_SEND, 'event_name' => 'sendfriend_product'),
     array(
         'event_type_id' => \Magento\Reports\Model\Event::EVENT_PRODUCT_COMPARE,
-        'event_name'    => 'catalog_product_compare_add_product'
+        'event_name' => 'catalog_product_compare_add_product'
     ),
     array(
         'event_type_id' => \Magento\Reports\Model\Event::EVENT_PRODUCT_TO_CART,
-        'event_name'    => 'checkout_cart_add_product'
+        'event_name' => 'checkout_cart_add_product'
     ),
     array(
         'event_type_id' => \Magento\Reports\Model\Event::EVENT_PRODUCT_TO_WISHLIST,
-        'event_name'    => 'wishlist_add_product'
+        'event_name' => 'wishlist_add_product'
     ),
-    array(
-        'event_type_id' => \Magento\Reports\Model\Event::EVENT_WISHLIST_SHARE,
-        'event_name'    => 'wishlist_share'
-    )
+    array('event_type_id' => \Magento\Reports\Model\Event::EVENT_WISHLIST_SHARE, 'event_name' => 'wishlist_share')
 );
 
 foreach ($eventTypeData as $row) {
@@ -75,29 +64,7 @@ $installer->endSetup();
 /** @var $cms \Magento\Cms\Model\Page */
 $cms = $installer->getPage()->load('home', 'identifier');
 
-$reportLayoutUpdate    = '<!--<referenceContainer name="content">
-        <block class="Magento\Catalog\Block\Product\NewProduct" name="home.catalog.product.new" alias="product_new" template="product/new.phtml" after="cms_page">
-            <action method="addPriceBlockType">
-                <argument name="type" xsi:type="string">bundle</argument>
-                <argument name="block" xsi:type="string">Magento\Bundle\Block\Catalog\Product\Price</argument>
-                <argument name="template" xsi:type="string">catalog/product/price.phtml</argument>
-            </action>
-        </block>
-        <block class="Magento\Reports\Block\Product\Viewed" name="home.reports.product.viewed" alias="product_viewed" template="home_product_viewed.phtml" after="product_new">
-            <action method="addPriceBlockType">
-                <argument name="type" xsi:type="string">bundle</argument>
-                <argument name="block" xsi:type="string">Magento\Bundle\Block\Catalog\Product\Price</argument>
-                <argument name="template" xsi:type="string">catalog/product/price.phtml</argument>
-            </action>
-        </block>
-        <block class="Magento\Reports\Block\Product\Compared" name="home.reports.product.compared" template="home_product_compared.phtml" after="product_viewed">
-            <action method="addPriceBlockType">
-                <argument name="type" xsi:type="string">bundle</argument>
-                <argument name="block" xsi:type="string">Magento\Bundle\Block\Catalog\Product\Price</argument>
-                <argument name="template" xsi:type="string">catalog/product/price.phtml</argument>
-            </action>
-        </block>
-    </referenceContainer>
+$reportLayoutUpdate = '<!--
     <referenceContainer name="right">
         <action method="unsetChild"><argument name="alias" xsi:type="string">right.reports.product.viewed</argument></action>
         <action method="unsetChild"><argument name="alias" xsi:type="string">right.reports.product.compared</argument></action>

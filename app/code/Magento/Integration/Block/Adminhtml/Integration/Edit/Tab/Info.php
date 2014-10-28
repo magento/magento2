@@ -18,12 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Integration
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Integration\Block\Adminhtml\Integration\Edit\Tab;
 
 use Magento\Integration\Controller\Adminhtml\Integration;
@@ -32,33 +29,38 @@ use Magento\Integration\Model\Integration as IntegrationModel;
 /**
  * Main Integration info edit form
  *
- * @category   Magento
- * @package    Magento_Integration
  */
-class Info extends \Magento\Backend\Block\Widget\Form\Generic
-    implements \Magento\Backend\Block\Widget\Tab\TabInterface
+class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**#@+
      * Form elements names.
      */
     const HTML_ID_PREFIX = 'integration_properties_';
+
     const DATA_ID = 'integration_id';
+
     const DATA_NAME = 'name';
+
     const DATA_EMAIL = 'email';
+
     const DATA_ENDPOINT = 'endpoint';
+
     const DATA_IDENTITY_LINK_URL = 'identity_link_url';
+
     const DATA_SETUP_TYPE = 'setup_type';
+
     const DATA_CONSUMER_ID = 'consumer_id';
+
     /**#@-*/
 
     /**
      * Set form id prefix, declare fields for integration info
      *
-     * @return \Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info
+     * @return $this
      */
     protected function _prepareForm()
     {
-        /** @var \Magento\Data\Form $form */
+        /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix(self::HTML_ID_PREFIX);
         $integrationData = $this->_coreRegistry->registry(Integration::REGISTRY_KEY_CURRENT_INTEGRATION);
@@ -112,8 +114,9 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Add fieldset with general integration information.
      *
-     * @param \Magento\Data\Form $form
+     * @param \Magento\Framework\Data\Form $form
      * @param array $integrationData
+     * @return void
      */
     protected function _addGeneralFieldset($form, $integrationData)
     {
@@ -181,8 +184,9 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Add fieldset with integration details. This fieldset is available for existing integrations only.
      *
-     * @param \Magento\Data\Form $form
+     * @param \Magento\Framework\Data\Form $form
      * @param array $integrationData
+     * @return void
      */
     protected function _addDetailsFieldset($form, $integrationData)
     {

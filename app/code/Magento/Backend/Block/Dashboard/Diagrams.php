@@ -18,27 +18,26 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Dashboard;
 
 /**
  * Adminhtml dashboard diagram tabs
  *
- * @category   Magento
- * @package    Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Backend\Block\Dashboard;
-
 class Diagrams extends \Magento\Backend\Block\Widget\Tabs
 {
-
+    /**
+     * @var string
+     */
     protected $_template = 'Magento_Backend::widget/tabshoriz.phtml';
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -46,18 +45,27 @@ class Diagrams extends \Magento\Backend\Block\Widget\Tabs
         $this->setDestElementId('diagram_tab_content');
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareLayout()
     {
-        $this->addTab('orders', array(
-            'label'     => __('Orders'),
-            'content'   => $this->getLayout()->createBlock('Magento\Backend\Block\Dashboard\Tab\Orders')->toHtml(),
-            'active'    => true
-        ));
+        $this->addTab(
+            'orders',
+            array(
+                'label' => __('Orders'),
+                'content' => $this->getLayout()->createBlock('Magento\Backend\Block\Dashboard\Tab\Orders')->toHtml(),
+                'active' => true
+            )
+        );
 
-        $this->addTab('amounts', array(
-            'label'     => __('Amounts'),
-            'content'   => $this->getLayout()->createBlock('Magento\Backend\Block\Dashboard\Tab\Amounts')->toHtml(),
-        ));
+        $this->addTab(
+            'amounts',
+            array(
+                'label' => __('Amounts'),
+                'content' => $this->getLayout()->createBlock('Magento\Backend\Block\Dashboard\Tab\Amounts')->toHtml()
+            )
+        );
         return parent::_prepareLayout();
     }
 }

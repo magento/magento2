@@ -18,22 +18,17 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_GoogleShopping
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\GoogleShopping\Model;
 
 /**
  * Google Content Config model
  *
- * @category   Magento
- * @package    Magento_GoogleShopping
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\GoogleShopping\Model;
-
-class Config extends \Magento\Object
+class Config extends \Magento\Framework\Object
 {
     /**
      * Config values cache
@@ -45,35 +40,35 @@ class Config extends \Magento\Object
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
      * Store manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\Encryption\EncryptorInterface
+     * @var \Magento\Framework\Encryption\EncryptorInterface
      */
     protected $_encryptor;
 
     /**
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Encryption\EncryptorInterface $encryptor
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Encryption\EncryptorInterface $encryptor,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         array $data = array()
     ) {
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
         $this->_encryptor = $encryptor;
         parent::__construct($data);
@@ -89,7 +84,7 @@ class Config extends \Magento\Object
     public function getConfigData($key, $storeId = null)
     {
         if (!isset($this->_config[$key][$storeId])) {
-            $value = $this->_coreStoreConfig->getConfig('google/googleshopping/' . $key, $storeId);
+            $value = $this->_scopeConfig->getValue('google/googleshopping/' . $key, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId);
             $this->_config[$key][$storeId] = $value;
         }
         return $this->_config[$key][$storeId];
@@ -125,7 +120,7 @@ class Config extends \Magento\Object
      */
     public function getAccountPassword($storeId = null)
     {
-        return $this->_encryptor->decrypt($this->getConfigData('password', $storeId));
+        return $this->getConfigData('password', $storeId);
     }
 
     /**
@@ -198,7 +193,11 @@ class Config extends \Magento\Object
      */
     public function isValidDefaultCurrencyCode($storeId = null)
     {
-        return $this->_storeManager->getStore($storeId)->getDefaultCurrencyCode() == $this->getTargetCurrency($storeId);
+        return $this->_storeManager->getStore(
+            $storeId
+        )->getDefaultCurrencyCode() == $this->getTargetCurrency(
+            $storeId
+        );
     }
 
     /**
@@ -279,7 +278,7 @@ class Config extends \Magento\Object
     /**
      * Get array of base attribute names
      *
-     * @return array
+     * @return string[]
      */
     public function getBaseAttributes()
     {

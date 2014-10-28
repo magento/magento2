@@ -31,16 +31,9 @@ return array(
         )
     ),
     'TestIntegration2' => array(
-        'resources' => array(
-            'Magento_Catalog::product_read',
-            'Magento_SalesRule::config_promo'
-        )
+        'resources' => array('Magento_Catalog::product_read', 'Magento_SalesRule::config_promo')
     ),
     'TestIntegration3' => array(
-        'resources' => array(
-            'Magento_Catalog::product_read',
-            'Magento_Sales::create',
-            'Magento_SalesRule::quote'
-        )
-    ),
+        'resources' => array('Magento_Catalog::product_read', 'Magento_Sales::create', 'Magento_SalesRule::quote')
+    )
 );

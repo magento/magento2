@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\TestFramework\Utility;
 
 /**
@@ -42,18 +41,14 @@ class AggregateInvoker
      *
      * @var array
      */
-    protected $_options = array(
-        'verbose' => false,
-    );
+    protected $_options = array('verbose' => false);
 
     /**
      * @param \PHPUnit_Framework_TestCase $testCase
      * @param array $options
      */
-    public function __construct(
-        \PHPUnit_Framework_TestCase $testCase,
-        array $options = array()
-    ) {
+    public function __construct($testCase, array $options = array())
+    {
         $this->_testCase = $testCase;
         $this->_options = $options + $this->_options;
     }
@@ -67,34 +62,52 @@ class AggregateInvoker
      */
     public function __invoke(callable $callback, array $dataSource)
     {
-        $exceptionDumper = function (\Exception $exception, $dataSet) {
-            $dataSet = $exception instanceof \PHPUnit_Framework_AssertionFailedError
-                && !$exception instanceof \PHPUnit_Framework_IncompleteTestError
-                && !$exception instanceof \PHPUnit_Framework_SkippedTestError
-                || $this->_options['verbose']
-                ? 'Data set: ' . var_export($dataSet, true) . PHP_EOL : '';
-            return $dataSet . $exception->getMessage() . PHP_EOL
-                . \PHPUnit_Util_Filter::getFilteredStacktrace($exception);
-        };
         $results = [
             'PHPUnit_Framework_IncompleteTestError' => [],
             'PHPUnit_Framework_SkippedTestError' => [],
             'PHPUnit_Framework_AssertionFailedError' => [],
         ];
         $passed = 0;
-        foreach ($dataSource as $dataSet) {
+        foreach ($dataSource as $dataSetName => $dataSet) {
             try {
                 call_user_func_array($callback, $dataSet);
                 $passed++;
             } catch (\PHPUnit_Framework_IncompleteTestError $exception) {
-                $results[get_class($exception)][] = $exceptionDumper($exception, $dataSet);
+                $results[get_class($exception)][] = $this->prepareMessage($exception, $dataSetName, $dataSet);
             } catch (\PHPUnit_Framework_SkippedTestError $exception) {
-                $results[get_class($exception)][] = $exceptionDumper($exception, $dataSet);
+                $results[get_class($exception)][] = $this->prepareMessage($exception, $dataSetName, $dataSet);
             } catch (\PHPUnit_Framework_AssertionFailedError $exception) {
-                $results['PHPUnit_Framework_AssertionFailedError'][] = $exceptionDumper($exception, $dataSet);
+                $results['PHPUnit_Framework_AssertionFailedError'][] = $this->prepareMessage(
+                    $exception,
+                    $dataSetName,
+                    $dataSet
+                );
             }
         }
         $this->processResults($results, $passed);
+    }
+
+    /**
+     * @param \Exception $exception
+     * @param string $dataSetName
+     * @param mixed $dataSet
+     * @return string
+     */
+    protected function prepareMessage(\Exception $exception, $dataSetName, $dataSet)
+    {
+        if (!is_string($dataSetName)) {
+            $dataSetName = var_export($dataSet, true);
+        }
+        if ($exception instanceof \PHPUnit_Framework_AssertionFailedError
+            && !$exception instanceof \PHPUnit_Framework_IncompleteTestError
+            && !$exception instanceof \PHPUnit_Framework_SkippedTestError
+            || $this->_options['verbose']) {
+            $dataSetName = 'Data set: ' . $dataSetName . PHP_EOL;
+        } else {
+            $dataSetName = '';
+        }
+        return $dataSetName . $exception->getMessage() . PHP_EOL
+        . \PHPUnit_Util_Filter::getFilteredStacktrace($exception);
     }
 
     /**
@@ -114,16 +127,19 @@ class AggregateInvoker
         );
         if ($results['PHPUnit_Framework_AssertionFailedError']) {
             $this->_testCase->fail(
-                $totalCountsMessage . PHP_EOL
-                . implode(PHP_EOL, $results['PHPUnit_Framework_AssertionFailedError'])
+                $totalCountsMessage . PHP_EOL . implode(PHP_EOL, $results['PHPUnit_Framework_AssertionFailedError'])
             );
         }
         if (!$results['PHPUnit_Framework_IncompleteTestError'] && !$results['PHPUnit_Framework_SkippedTestError']) {
             return;
         }
-        $message = $totalCountsMessage . PHP_EOL
-            . implode(PHP_EOL, $results['PHPUnit_Framework_IncompleteTestError']) . PHP_EOL
-            . implode(PHP_EOL, $results['PHPUnit_Framework_SkippedTestError']);
+        $message = $totalCountsMessage . PHP_EOL . implode(
+            PHP_EOL,
+            $results['PHPUnit_Framework_IncompleteTestError']
+        ) . PHP_EOL . implode(
+            PHP_EOL,
+            $results['PHPUnit_Framework_SkippedTestError']
+        );
         if ($results['PHPUnit_Framework_IncompleteTestError']) {
             $this->_testCase->markTestIncomplete($message);
         } elseif ($results['PHPUnit_Framework_SkippedTestError']) {

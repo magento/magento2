@@ -1,0 +1,710 @@
+// /**
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+//
+//    List default styles reset
+//--------------------------------------
+.abstract-reset-list {
+    .list-reset-styles();
+    > li {
+        margin: 0;
+    }
+}
+
+//
+//    Link as a button
+//--------------------------------------
+.abstract-action-link-button {
+    .button();
+    .link-as-button();
+    border-radius: @button-border-radius;
+    &:active,
+    &:focus {
+        box-shadow: none;
+    }
+}
+
+//
+//    Product options list
+//--------------------------------------
+.abstract-product-options-list {
+    dt:after {
+        content: ': ';
+    }
+    dt {
+        float: left;
+        clear: left;
+        margin: 0 10px 5px 0;
+    }
+    dd {
+        float: left;
+        display: inline-block;
+        margin: 0 0 5px;
+    }
+}
+
+//
+//    Button reset width, floats, margins
+//--------------------------------------
+.abstract-button-responsive {
+    .button-responsive();
+}
+
+.responsive(@break) when (@break = @screen-m) {
+    .abstract-button-desktop {
+        width: auto;
+    }
+}
+
+.responsive-smaller(@break) when (@break = @screen-m) {
+    .abstract-button-responsive-smaller {
+        .button-responsive();
+    }
+}
+
+//
+//    Blocks in 2 columns
+//--------------------------------------
+.responsive(@break) when (@break = @screen-m) {
+    .abstract-blocks-2columns {
+        width: 48.8%;
+        &:nth-child(odd) {
+            float: left;
+            clear: left;
+        }
+        &:nth-child(even) {
+            float: right;
+        }
+    }
+}
+
+//
+//    Reset image alignment in container
+//--------------------------------------
+.abstract-reset-image-wrapper {
+    height: auto;
+    padding: 0!important;
+    .product-image-photo {
+        position: static;
+    }
+}
+
+//
+//    Title for login blocks
+//--------------------------------------
+.abstract-login-block-title {
+    strong {
+        font-weight: 500;
+    }
+    padding-bottom: 12px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid @color-secondary;
+}
+
+//
+//    Account blocks
+//--------------------------------------
+.abstract-account-blocks {
+    .block-title {
+        > strong {
+            .heading(h3);
+        }
+        margin-bottom: 15px;
+        > .action {
+            margin-left: 15px;
+        }
+    }
+    .box-title {
+        > span {
+            .heading(h4);
+        }
+        display: inline-block;
+        margin: 0 0 5px;
+        > .action {
+            font-weight: 400;
+            margin-left: 15px;
+        }
+    }
+    .block-content {
+        p:last-child {
+            margin-bottom: 0;
+        }
+        .box {
+            margin-bottom: @indent-base;
+        }
+    }
+}
+
+//
+//    Account pages: order table summary
+//--------------------------------------
+.abstract-account-summary {
+    tr:first-child td {
+        border-top: @table-border-width @table-border-style @table-border-color;
+    }
+}
+
+//
+//    Simple Dropdown
+//--------------------------------------
+.abstract-dropdown-simple {
+    .dropdown(
+        @_dropdown-list-item-padding: 5px 5px 5px 23px,
+        @_dropdown-list-min-width: 200px,
+        @_icon-font-margin: 0 0 0 5px,
+        @_icon-font-vertical-align: middle
+    );
+}
+
+//
+//    Input quantity
+//--------------------------------------
+.abstract-input-qty {
+    .form-element-size(@_width: 47px);
+    text-align: center;
+}
+
+//
+//    Marging for blocks & widgets
+//--------------------------------------
+.abstract-margin-for-blocks-and-widgets {
+    margin-bottom: @indent-xl-base;
+}
+
+//
+//    Remove button for blocks
+//--------------------------------------
+.abstract-remove-button-for-blocks {
+    .icon-font(
+        @icon-remove,
+        @_icon-font-size: 26px,
+        @_icon-font-line-height: 15px,
+        @_icon-font-text-hide: true,
+        @_icon-font-color: #303030,
+        @_icon-font-color-hover: #303030,
+        @_icon-font-color-active: #303030
+    );
+}
+
+//
+//    Product link
+//--------------------------------------
+.abstract-product-link {
+    .link(
+        @_link-color: #303030,
+        @_link-color-hover: #303030,
+        @_link-color-active: #303030,
+        @_link-color-visited: #303030
+    );
+}
+
+//
+//   Reset left margin
+//--------------------------------------
+.abstract-reset-left-margin {
+    margin-left: 0;
+}
+
+.responsive(@break) when (@break = @screen-m) {
+    .abstract-reset-left-margin-desktop {
+        margin-left: 0;
+    }
+}
+
+//
+//    Action with icon remove with text
+//--------------------------------------
+.abstract-action-remove {
+    .button-reset();
+    .link();
+    cursor: pointer;
+    width: auto;
+    line-height: normal;
+    position: absolute;
+    top: 31px; // 6px
+    left: 10px;
+    margin-left: 50%; // margin-left: @form-field-type-inline-label-width + 50%;
+}
+
+//
+//    Action with icon remove with text for desktop
+//--------------------------------------
+.responsive(@break) when (@break = @screen-m) {
+    .abstract-action-remove-desktop when not (@form-field-type-inline-label-width = false) and not (@form-field-type-inline-label-width = '') {
+        top: 6px;
+        margin-left: @form-field-type-inline-label-width + 50%;
+    }
+}
+
+//
+//    Add Recipient
+//--------------------------------------
+.abstract-add-recipients {
+    .recipients {
+        margin-bottom: 50px;
+        .field {
+             .control {
+                width: 50%;
+            }
+        }
+        .additional {
+            margin-top: 55px;
+            position: relative;
+            .action.remove {
+                &:extend(.abstract-action-remove all);
+            }
+        }
+        .actions-toolbar {
+            > .secondary {
+                .action.add {
+                    margin-top: @indent-l-base;
+                }
+                float: left;
+            }
+        }
+        .fields {
+            .actions-toolbar {
+                margin: 0;
+            }
+        }
+        .message {
+            margin: @indent-l-base 0 0 0;
+        }
+    }
+}
+
+//
+//    Add Recipient for desktop
+//--------------------------------------
+.responsive(@break) when (@break = @screen-m) {
+    .abstract-add-recipients-desktop {
+        .recipients {
+            .additional {
+                .action.remove {
+                    &:extend(.abstract-action-remove-desktop all);
+                }
+            }
+        }
+    }
+}
+
+//
+//    Margin for forms
+//--------------------------------------
+.responsive(@break) when (@break = @screen-m) {
+    .abstract-margin-for-forms-desktop when not (@form-field-type-inline-label-width = false) and not (@form-field-type-inline-label-width = '') {
+        margin-left: @form-field-type-inline-label-width;
+    }
+}
+
+//
+//    Visually hidden / show visually hidden
+//--------------------------------------
+.abstract-visually-hidden {
+    .visually-hidden();
+}
+
+.responsive-smaller(@break) when (@break = @screen-s) {
+    .abstract-visually-hidden-mobile {
+        .visually-hidden();
+    }
+}
+
+.responsive-smaller(@break) when (@break = @screen-m) {
+    .abstract-visually-hidden-mobile-m {
+        .visually-hidden();
+    }
+}
+
+.responsive(@break) when (@break = @screen-s) {
+    .abstract-visually-hidden-desktop-s {
+        .visually-hidden();
+    }
+}
+
+.responsive(@break) when (@break = @screen-m) {
+    .abstract-visually-hidden-desktop {
+        .visually-hidden();
+    }
+}
+
+//
+//    Clearfix
+//--------------------------------------
+.abstract-add-clearfix {
+    .clearfix();
+}
+
+.responsive(@break) when (@break = @screen-m) {
+    .abstract-add-clearfix-desktop {
+        .clearfix();
+    }
+}
+
+.responsive-smaller(@break) when (@break = @screen-s) {
+    .abstract-add-clearfix-mobile {
+        .clearfix();
+    }
+}
+
+//
+//    Box-sizing
+//--------------------------------------
+.abstract-add-box-sizing {
+    .box-sizing();
+}
+
+.responsive(@break) when (@break = @screen-m) {
+    .abstract-add-box-sizing-desktop {
+        .box-sizing();
+    }
+}
+
+//
+//    Revert field type
+//--------------------------------------
+.responsive(@break) when (@break = @screen-m) {
+    .abstract-revert-field-type-desktop {
+        .fieldset {
+            > .field,
+            .fields > .field {
+                .form-field-type-revert(@_type: block);
+                &:not(:first-child):last-of-type {
+                    margin-bottom: 0;
+                }
+            }
+        }
+    }
+}
+
+//
+//    Settings icons
+//--------------------------------------
+.abstract-navigation-icon {
+    .icon-font(
+        @_icon-font-content: @icon-down,
+        @_icon-font-size: 34px,
+        @_icon-font-line-height: 1.2,
+        @_icon-font-position: after,
+        @_icon-font-display: block
+    );
+    &:after {
+        position: absolute;
+        right: 5px;
+        top: 0;
+    }
+}
+
+//
+//    Split button
+//--------------------------------------
+.abstract-split-button {
+    .dropdown-split(
+        @_options-selector : ~".items",
+        @_dropdown-split-button-border-radius-fix: true
+    );
+    vertical-align: middle;
+}
+
+//
+//    Action addto
+//--------------------------------------
+.abstract-action-addto-product {
+    &:extend(.abstract-action-link-button all);
+    .button-s();
+}
+
+.abstract-actions-addto-gridlist {
+    .icon-font(
+        @_icon-font-content: '',
+        @_icon-font-size: 29px,
+        @_icon-font-color: @addto-color,
+        @_icon-font-color-hover: @addto-hover-color,
+        @_icon-font-text-hide: true,
+        @_icon-font-vertical-align: middle,
+        @_icon-font-line-height: 24px
+    );
+}
+
+//
+//    Large button
+//--------------------------------------
+.abstract-button-l {
+    .button-l();
+}
+
+//
+//   Button as a link
+//--------------------------------------
+.abstract-action-button-as-link {
+    .button-as-link();
+    border-radius: 0;
+    font-weight: @font-weight-base;
+    font-size: inherit;
+}
+
+//
+//   Button revert secondary color
+//--------------------------------------
+.abstract-revert-secondary-color {
+    .button-revert-secondary-color();
+}
+
+//
+//   Button revert secondary size
+//--------------------------------------
+.abstract-revert-secondary-size {
+    .button-revert-secondary-size();
+}
+
+//
+//    Box-tocart block
+//--------------------------------------
+.abstract-box-tocart {
+    margin: @indent-s-base 0;
+}
+
+//
+//    Vertical Table
+//--------------------------------------
+.responsive-smaller(@break) when (@break = @screen-m) {
+    .abstract-table-vertical-mobile {
+        .table-responsive();
+        tbody > tr {
+            > td {
+                padding-left: 0;
+                padding-right: 0;
+            }
+            &:not(:last-child) {
+                td:last-child {
+                    padding-bottom: @indent-base;
+                }
+            }
+        }
+    }
+}
+
+//
+//    Excl/Incl tax
+//--------------------------------------
+.abstract-adjustment-incl-excl-tax {
+    .price-including-tax,
+    .price-excluding-tax,
+    .weee {
+        display: inline-block;
+        .font-size(14);
+        white-space: nowrap;
+    }
+    .price-including-tax + .price-excluding-tax {
+        display: inline-block;
+        .font-size(11);
+        &:before {
+            content: "("attr(data-label)": ";
+        }
+        &:after {
+            content:")";
+        }
+    }
+}
+
+//
+//    Cart tax total
+//--------------------------------------
+.abstract-tax-total {
+    cursor: pointer;
+    position: relative;
+    padding-right: 12px;
+    .icon-font(
+        @icon-down,
+        @_icon-font-size: 26px,
+        @_icon-font-line-height: 10px,
+        @_icon-font-margin: 3px 0 0 0,
+        @_icon-font-position: after
+    );
+    &:after {
+        position: absolute;
+        right: -10px;
+        top: 3px;
+    }
+    &-expanded {
+        .icon-font-symbol(
+            @_icon-font-content: @icon-up,
+            @_icon-font-position: after
+        );
+    }
+}
+
+.abstract-tax-total-expanded {
+    .icon-font-symbol(
+        @_icon-font-content: @icon-up,
+        @_icon-font-position: after
+    );
+}
+
+//
+//    Checkout shipping methods title
+//--------------------------------------
+.abstract-methods-shipping-title {
+    .font-size(14);
+    margin: 20px 0 15px;
+    font-weight: @font-weight-bold;
+}
+
+//
+//    Checkout order review price
+//--------------------------------------
+.abstract-checkout-cart-price {
+}
+
+//
+//    Checkout order product name
+//--------------------------------------
+.abstract-checkout-product-name {
+}
+
+//
+//    Checkout order product name
+//--------------------------------------
+.abstract-product-items-summary {
+    td {
+        text-align: left;
+    }
+}
+
+//
+//    Mobile checkout order product name
+//--------------------------------------
+.responsive-smaller(@break) when (@break = @screen-m) {
+    .abstract-product-items-summary {
+        tbody {
+            .col {
+                padding: @indent-s-base 0 0;
+                &:last-child {
+                    padding-bottom: @indent-s-base
+                }
+            }
+        }
+        tfoot {
+            .mark {
+                padding-bottom: @indent-xs-base;
+                text-align: left;
+            }
+            .amount {
+                padding-top: 0;
+                text-align: left;
+            }
+        }
+    }
+}
+
+//
+//    Add colon
+//--------------------------------------
+.abstract-colon {
+    &:after {
+        content: ": ";
+    }
+}
+
+//
+//    Icon - create add
+//--------------------------------------
+.abstract-icon-add {
+    .icon-font(
+        @_icon-font-content: @icon-expand,
+        @_icon-font-size: 10px,
+        @_icon-font-line-height: 10px,
+        @_icon-font-vertical-align: middle
+    );
+}
+
+.responsive-smaller(@break) when (@break = @screen-m) {
+    .abstract-icon-add-mobile {
+        .icon-font(
+            @_icon-font-content: @icon-expand,
+            @_icon-font-size: 10px,
+            @_icon-font-line-height: 10px,
+            @_icon-font-vertical-align: middle,
+            @_icon-font-margin: 0 5px 0 0,
+            @_icon-font-display: block
+        );
+    }
+}
+
+//
+//    Dropdown items - create new
+//--------------------------------------
+.abstract-dropdown-items-new {
+    .items .item:last-child {
+        &:hover {
+            background: @dropdown-list-item-hover;
+        }
+    }
+    .action.new {
+        &:extend(.abstract-icon-add all);
+        &:before {
+            margin-left: -17px;
+            margin-right: 5px;
+        }
+    }
+}
+
+//
+//    Abstract toggle title block
+//--------------------------------------
+.responsive-smaller(@break) when (@break = @screen-m) {
+    .abstract-toggling-title-mobile {
+        border-top: @border-width-base solid @border-color-base;
+        border-bottom: @border-width-base solid @border-color-base;
+        cursor: pointer;
+        margin-bottom: 0;
+        padding: 10px 40px 10px @layout-width-xs-indent;
+        position: relative;
+        .icon-font(
+            @_icon-font-content: @icon-down,
+            @_icon-font-size: 28px,
+            @_icon-font-text-hide: false,
+            @_icon-font-position: after,
+            @_icon-font-display: block
+        );
+        &:after {
+            position: absolute;
+            right: 10px;
+            top: 0;
+        }
+        &.active {
+            .icon-font-symbol(
+                @_icon-font-content: @icon-up,
+                @_icon-font-position: after
+            );
+        }
+    }
+}
+
+//
+//    Abstract no display
+//--------------------------------------
+.abstract-no-display {
+    display: none;
+}

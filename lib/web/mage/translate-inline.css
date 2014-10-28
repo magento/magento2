@@ -1,0 +1,67 @@
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+.trnslate-inline-area [data-translate],
+.trnslate-inline-area .translate-inline {
+	outline:  dotted 1px red!important;
+}
+* html .translate-inline,
+*+html .translate-inline{
+	border:  dotted 1px red !important;
+}
+.translate-inline-script, .translate-inline-title {
+	background: yellow;
+	color: black;
+	font-weight: bold;
+}
+#translate-inline-trig {
+	position: absolute;
+	left: -1000px; 
+	opacity: .8;
+	filter: alpha(opacity=80);
+	cursor: pointer; 
+	margin-top: 10px;
+	z-index: 2000;
+}
+
+.data.table.translate table {
+	width: 100%;
+}
+.data.table.translate td {
+	background: none;
+	padding: 5px 5px 5px 0;
+	text-align: left;
+}
+.data.table.translate th.label {
+	border: none;
+	font-weight: bold;
+	text-align: left;
+	padding: 5px 5px 5px 0;
+	width: 150px;
+}
+.data.table.translate td.value .input-text {
+	width: 98%;
+}
+p.accent {
+	color: #d12c01;
+}

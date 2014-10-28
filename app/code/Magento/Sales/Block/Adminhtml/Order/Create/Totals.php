@@ -18,25 +18,32 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Order\Create;
+
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Adminhtml sales order create totals block
  *
- * @category   Magento
- * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Sales\Block\Adminhtml\Order\Create;
-
 class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
+    /**
+     * Total renderers
+     *
+     * @var array
+     */
     protected $_totalRenderers;
+
+    /**
+     * Default renderer
+     *
+     * @var string
+     */
     protected $_defaultRenderer = 'Magento\Sales\Block\Adminhtml\Order\Create\Totals\DefaultTotals';
 
     /**
@@ -47,6 +54,8 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     protected $_salesData = null;
 
     /**
+     * Sales config
+     *
      * @var \Magento\Sales\Model\Config
      */
     protected $_salesConfig;
@@ -55,6 +64,7 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Model\Session\Quote $sessionQuote
      * @param \Magento\Sales\Model\AdminOrder\Create $orderCreate
+     * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Sales\Helper\Data $salesData
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param array $data
@@ -63,39 +73,66 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Model\Session\Quote $sessionQuote,
         \Magento\Sales\Model\AdminOrder\Create $orderCreate,
+        PriceCurrencyInterface $priceCurrency,
         \Magento\Sales\Helper\Data $salesData,
         \Magento\Sales\Model\Config $salesConfig,
         array $data = array()
     ) {
         $this->_salesData = $salesData;
         $this->_salesConfig = $salesConfig;
-        parent::__construct($context, $sessionQuote, $orderCreate, $data);
+        parent::__construct($context, $sessionQuote, $orderCreate, $priceCurrency, $data);
     }
 
+    /**
+     * Constructor
+     *
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
         $this->setId('sales_order_create_totals');
     }
 
+    /**
+     * Get totals
+     *
+     * @return array
+     */
     public function getTotals()
     {
         return $this->getQuote()->getTotals();
     }
 
+    /**
+     * Get header text
+     *
+     * @return string
+     */
     public function getHeaderText()
     {
         return __('Order Totals');
     }
 
+    /**
+     * Get header css class
+     *
+     * @return string
+     */
     public function getHeaderCssClass()
     {
         return 'head-money';
     }
 
+    /**
+     * Get total renderer
+     *
+     * @param string $code
+     * @return bool|\Magento\Framework\View\Element\BlockInterface
+     */
     protected function _getTotalRenderer($code)
     {
-        $blockName = $code.'_total_renderer';
+        $blockName = $code . '_total_renderer';
         $block = $this->getLayout()->getBlock($blockName);
         if (!$block) {
             $configRenderer = $this->_salesConfig->getTotalsRenderer('quote', 'totals', $code);
@@ -114,15 +151,34 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
         return $block;
     }
 
+    /**
+     * Render total
+     *
+     * @param \Magento\Framework\Object $total
+     * @param string|null $area
+     * @param int $colspan
+     * @return mixed
+     */
     public function renderTotal($total, $area = null, $colspan = 1)
     {
-        return $this->_getTotalRenderer($total->getCode())
-            ->setTotal($total)
-            ->setColspan($colspan)
-            ->setRenderingArea(is_null($area) ? -1 : $area)
-            ->toHtml();
+        return $this->_getTotalRenderer(
+            $total->getCode()
+        )->setTotal(
+            $total
+        )->setColspan(
+            $colspan
+        )->setRenderingArea(
+            is_null($area) ? -1 : $area
+        )->toHtml();
     }
 
+    /**
+     * Render totals
+     *
+     * @param null $area
+     * @param int $colspan
+     * @return string
+     */
     public function renderTotals($area = null, $colspan = 1)
     {
         $html = '';
@@ -135,6 +191,11 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
         return $html;
     }
 
+    /**
+     * Check allow to send new order confirmation email
+     *
+     * @return bool
+     */
     public function canSendNewOrderConfirmationEmail()
     {
         return $this->_salesData->canSendNewOrderConfirmationEmail($this->getQuote()->getStoreId());

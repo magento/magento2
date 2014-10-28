@@ -1,0 +1,63 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/**
+ * Product view template
+ *
+ * @var $this \Magento\Catalog\Block\Product\View
+ */
+?>
+<?php $_helper = $this->helper('Magento\Catalog\Helper\Output'); ?>
+<?php $_product = $this->getProduct(); ?>
+
+<script type="text/javascript">
+require([
+    "jquery",
+    "mage/mage"
+], function($){
+    $(document).ready(function() {
+        $('#product_addtocart_form').mage('priceOption', {"priceConfig":<?php echo $this->getJsonConfig() ?>});
+    });
+});
+</script>
+<div class="product-add-form">
+    <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post"
+          id="product_addtocart_form"<?php if ($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
+        <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
+        <input type="hidden" name="related_product" id="related-products-field" value="" />
+        <?php echo $this->getChildHtml('form_top'); ?>
+        <?php if (!$this->hasOptions()):?>
+            <?php echo $this->getChildHtml('product_info_form_content'); ?>
+        <?php else:?>
+            <?php if ($_product->isSaleable() && $this->getOptionsContainer() == 'container1'):?>
+                <?php echo $this->getChildChildHtml('options_container') ?>
+            <?php endif;?>
+        <?php endif; ?>
+
+        <?php if ($_product->isSaleable() && $this->hasOptions() && $this->getOptionsContainer() == 'container2'):?>
+            <?php echo $this->getChildChildHtml('options_container') ?>
+        <?php endif;?>
+        <?php echo $this->getChildHtml('form_bottom'); ?>
+    </form>
+</div>

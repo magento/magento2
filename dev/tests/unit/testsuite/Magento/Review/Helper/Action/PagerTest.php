@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Review
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Review\Helper\Action;
 
 class PagerTest extends \PHPUnit_Framework_TestCase
@@ -37,20 +33,35 @@ class PagerTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $sessionMock = $this->getMockBuilder('Magento\Backend\Model\Session')
-            ->disableOriginalConstructor()
-            ->setMethods(array('setData', 'getData'))
-            ->getMock();
-        $sessionMock->expects($this->any())
-            ->method('setData')
-            ->with($this->equalTo('search_result_idsreviews'), $this->anything());
-        $sessionMock->expects($this->any())
-            ->method('getData')
-            ->with($this->equalTo('search_result_idsreviews'))
-            ->will($this->returnValue(array(3,2,6,5)));
+        $sessionMock = $this->getMockBuilder(
+            'Magento\Backend\Model\Session'
+        )->disableOriginalConstructor()->setMethods(
+            array('setData', 'getData')
+        )->getMock();
+        $sessionMock->expects(
+            $this->any()
+        )->method(
+            'setData'
+        )->with(
+            $this->equalTo('search_result_idsreviews'),
+            $this->anything()
+        );
+        $sessionMock->expects(
+            $this->any()
+        )->method(
+            'getData'
+        )->with(
+            $this->equalTo('search_result_idsreviews')
+        )->will(
+            $this->returnValue(array(3, 2, 6, 5))
+        );
 
         $contextMock = $this->getMock(
-            'Magento\App\Helper\Context', array('getTranslator', 'getModuleManager', 'getRequest'), array(), '', false
+            'Magento\Framework\App\Helper\Context',
+            array('getModuleManager', 'getRequest'),
+            array(),
+            '',
+            false
         );
         $this->_helper = new \Magento\Review\Helper\Action\Pager($contextMock, $sessionMock);
         $this->_helper->setStorageId('reviews');

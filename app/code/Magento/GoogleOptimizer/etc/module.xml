@@ -23,18 +23,18 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
-    <module name="Magento_GoogleOptimizer" version="2.0.0.0" active="true">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Module/etc/module.xsd">
+    <module name="Magento_GoogleOptimizer" schema_version="2.0.0.0" active="true">
         <sequence>
             <module name="Magento_GoogleAnalytics"/>
             <module name="Magento_Catalog"/>
             <module name="Magento_Cms"/>
         </sequence>
         <depends>
+            <module name="Magento_Store"/>
             <module name="Magento_GoogleAnalytics"/>
             <module name="Magento_Catalog"/>
             <module name="Magento_Cms"/>
-            <module name="Magento_Core"/>
             <module name="Magento_Backend"/>
         </depends>
     </module>

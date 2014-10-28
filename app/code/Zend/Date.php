@@ -12,8 +12,6 @@
  * obtain it through the world-wide-web, please send an email
  * to license@zend.com so we can send you a copy immediately.
  *
- * @category  Zend
- * @package   Zend_Date
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd     New BSD License
  * @version   $Id: Date.php 22713 2010-07-29 11:41:56Z thomas $
@@ -31,8 +29,6 @@
  * This class replaces default Zend_Date because of problem described in Jira ticket MAGE-4872
  * The only difference between current class and original one is overwritten implementation of mktime method
  *
- * @category  Zend
- * @package   Zend_Date
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd     New BSD License
  */

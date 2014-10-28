@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_ImportExport
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -30,8 +27,7 @@
  */
 namespace Magento\ImportExport\Model\Source\Import\Behavior;
 
-class CustomTest
-    extends \Magento\ImportExport\Model\Source\Import\AbstractBehaviorTestCase
+class CustomTest extends \Magento\ImportExport\Model\Source\Import\AbstractBehaviorTestCase
 {
     /**
      * Expected behavior group code
@@ -48,7 +44,7 @@ class CustomTest
     protected $_expectedBehaviors = array(
         \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE,
         \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
-        \Magento\ImportExport\Model\Import::BEHAVIOR_CUSTOM,
+        \Magento\ImportExport\Model\Import::BEHAVIOR_CUSTOM
     );
 
     protected function setUp()

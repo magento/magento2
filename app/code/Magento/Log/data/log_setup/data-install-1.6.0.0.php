@@ -18,29 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Log
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 $installer = $this;
-/* @var $installer \Magento\Core\Model\Resource\Setup */
+/* @var $installer \Magento\Framework\Module\Setup */
 
 $data = array(
-    array(
-        'type_id'     => 1,
-        'type_code'   => 'hour',
-        'period'      => 1,
-        'period_type' => 'HOUR',
-    ),
-
-    array(
-        'type_id'     => 2,
-        'type_code'   => 'day',
-        'period'      => 1,
-        'period_type' => 'DAY',
-    ),
+    array('type_id' => 1, 'type_code' => 'hour', 'period' => 1, 'period_type' => 'HOUR'),
+    array('type_id' => 2, 'type_code' => 'day', 'period' => 1, 'period_type' => 'DAY')
 );
 
 foreach ($data as $bind) {

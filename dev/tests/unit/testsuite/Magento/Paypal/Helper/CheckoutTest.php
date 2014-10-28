@@ -50,14 +50,16 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_session = $this->getMockBuilder('Magento\Checkout\Model\Session')
-            ->disableOriginalConstructor()
-            ->setMethods(array('getLastRealOrder', 'replaceQuote', 'unsLastRealOrderId', '__wakeup'))
-            ->getMock();
-        $this->_quoteFactory = $this->getMockBuilder('Magento\Sales\Model\QuoteFactory')
-            ->disableOriginalConstructor()
-            ->setMethods(array('create', '__wakeup'))
-            ->getMock();
+        $this->_session = $this->getMockBuilder(
+            'Magento\Checkout\Model\Session'
+        )->disableOriginalConstructor()->setMethods(
+            array('getLastRealOrder', 'replaceQuote', 'unsLastRealOrderId', '__wakeup')
+        )->getMock();
+        $this->_quoteFactory = $this->getMockBuilder(
+            'Magento\Sales\Model\QuoteFactory'
+        )->disableOriginalConstructor()->setMethods(
+            array('create', '__wakeup')
+        )->getMock();
 
         $this->_checkout = new \Magento\Paypal\Helper\Checkout($this->_session, $this->_quoteFactory);
     }
@@ -71,13 +73,12 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getOrderMock($hasOrderId, $mockMethods = array())
     {
-        $order = $this->getMockBuilder('Magento\Sales\Model\Order')
-            ->disableOriginalConstructor()
-            ->setMethods(array_merge(array('getId', '__wakeup'), $mockMethods))
-            ->getMock();
-        $order->expects($this->once())
-            ->method('getId')
-            ->will($this->returnValue($hasOrderId ? 'order id' : null));
+        $order = $this->getMockBuilder(
+            'Magento\Sales\Model\Order'
+        )->disableOriginalConstructor()->setMethods(
+            array_merge(array('getId', '__wakeup'), $mockMethods)
+        )->getMock();
+        $order->expects($this->once())->method('getId')->will($this->returnValue($hasOrderId ? 'order id' : null));
         return $order;
     }
 
@@ -91,24 +92,27 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
     {
         $comment = 'Some test comment';
         $order = $this->_getOrderMock($hasOrderId, array('registerCancellation', 'save'));
-        $order->setData('state', $isOrderCancelled ? \Magento\Sales\Model\Order::STATE_CANCELED : 'some another state');
+        $order->setData(
+            'state',
+            $isOrderCancelled ? \Magento\Sales\Model\Order::STATE_CANCELED : 'some another state'
+        );
         if ($expectedResult) {
-            $order->expects($this->once())
-                ->method('registerCancellation')
-                ->with($this->equalTo($comment))
-                ->will($this->returnSelf());
-            $order->expects($this->once())
-                ->method('save');
+            $order->expects(
+                $this->once()
+            )->method(
+                'registerCancellation'
+            )->with(
+                $this->equalTo($comment)
+            )->will(
+                $this->returnSelf()
+            );
+            $order->expects($this->once())->method('save');
         } else {
-            $order->expects($this->never())
-                ->method('registerCancellation');
-            $order->expects($this->never())
-                ->method('save');
+            $order->expects($this->never())->method('registerCancellation');
+            $order->expects($this->never())->method('save');
         }
 
-        $this->_session->expects($this->any())
-            ->method('getLastRealOrder')
-            ->will($this->returnValue($order));
+        $this->_session->expects($this->any())->method('getLastRealOrder')->will($this->returnValue($order));
         $this->assertEquals($expectedResult, $this->_checkout->cancelCurrentOrder($comment));
     }
 
@@ -121,86 +125,7 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
             array(true, false, true),
             array(true, true, false),
             array(false, true, false),
-            array(false, false, false),
-        );
-    }
-
-    /**
-     * @param bool $hasOrderId
-     * @param bool $hasQuoteId
-     * @dataProvider restoreQuoteDataProvider
-     */
-    public function testRestoreQuote($hasOrderId, $hasQuoteId)
-    {
-        $quote = $this->getMockBuilder('Magento\Sales\Model\Quote')
-            ->disableOriginalConstructor()
-            ->setMethods(array('getId', 'save', 'setIsActive', 'setReservedOrderId', 'load', '__wakeup'))
-            ->getMock();
-        $order = $this->_getOrderMock($hasOrderId);
-        $this->_session->expects($this->once())
-            ->method('getLastRealOrder')
-            ->will($this->returnValue($order));
-
-        if ($hasOrderId) {
-            $quoteId = 'quote id';
-            $order->setQuoteId($quoteId);
-            $this->_quoteFactory->expects($this->once())
-                ->method('create')
-                ->will($this->returnValue($quote));
-            $quote->expects($this->once())
-                ->method('getId')
-                ->will($this->returnValue($hasQuoteId ? 'some quote id' : null));
-            $quote->expects($this->any())
-                ->method('load')
-                ->with($this->equalTo($quoteId))
-                ->will($this->returnValue($quote));
-            if ($hasQuoteId) {
-                $quote->expects($this->once())
-                    ->method('setIsActive')
-                    ->with($this->equalTo(1))
-                    ->will($this->returnSelf());
-                $quote->expects($this->once())
-                    ->method('setReservedOrderId')
-                    ->with($this->isNull())
-                    ->will($this->returnSelf());
-                $quote->expects($this->once())
-                    ->method('save');
-                $this->_session->expects($this->once())
-                    ->method('replaceQuote')
-                    ->with($quote)
-                    ->will($this->returnSelf());
-            } else {
-                $quote->expects($this->never())
-                    ->method('setIsActive');
-                $quote->expects($this->never())
-                    ->method('setReservedOrderId');
-                $quote->expects($this->never())
-                    ->method('save');
-            }
-        }
-        if ($hasOrderId && $hasQuoteId) {
-            $this->_session->expects($this->once())
-                ->method('unsLastRealOrderId');
-        } else {
-            $this->_session->expects($this->never())
-                ->method('replaceQuote');
-            $this->_session->expects($this->never())
-                ->method('unsLastRealOrderId');
-        }
-        $result = $this->_checkout->restoreQuote();
-        $this->assertEquals($result, $hasOrderId && $hasQuoteId);
-    }
-
-    /**
-     * @return array
-     */
-    public function restoreQuoteDataProvider()
-    {
-        return array(
-            array(true, true),
-            array(true, false),
-            array(false, true),
-            array(false, false),
+            array(false, false, false)
         );
     }
 }

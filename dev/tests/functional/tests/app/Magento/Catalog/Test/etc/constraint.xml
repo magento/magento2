@@ -1,0 +1,461 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<constraint>
+    <assertProductInGrid module="Magento_Catalog">
+        <severeness>high</severeness>
+        <require>
+            <productGrid class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex" />
+            <product class="Mtf\Fixture\FixtureInterface" />
+        </require>
+    </assertProductInGrid>
+    <assertProductSaveMessage module="Magento_Catalog">
+        <severeness>low</severeness>
+        <require>
+            <productPage class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit" />
+        </require>
+    </assertProductSaveMessage>
+    <assertProductOutOfStock module="Magento_Catalog">
+        <severeness>low</severeness>
+        <require>
+            <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView" />
+            <product class="Mtf\Fixture\FixtureInterface" />
+        </require>
+    </assertProductOutOfStock>
+    <assertProductInStock module="Magento_Catalog">
+        <severeness>low</severeness>
+        <require>
+            <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView" />
+            <product class="Mtf\Fixture\FixtureInterface" />
+        </require>
+    </assertProductInStock>
+    <assertProductVisibleInCategory module="Magento_Catalog">
+        <severeness>low</severeness>
+        <require>
+            <catalogCategoryView class="Magento\Catalog\Test\Page\Category\CatalogCategoryView" />
+            <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
+            <category class="Magento\Catalog\Test\Fixture\CatalogCategory" />
+            <product class="Mtf\Fixture\FixtureInterface" />
+        </require>
+    </assertProductVisibleInCategory>
+    <assertProductNotVisibleInCategory module="Magento_Catalog">
+        <severeness>low</severeness>
+        <require>
+            <catalogCategoryView class="Magento\Catalog\Test\Page\Category\CatalogCategoryView" />
+            <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
+            <category class="Magento\Catalog\Test\Fixture\CatalogCategory" />
+            <product class="Mtf\Fixture\FixtureInterface" />
+        </require>
+    </assertProductNotVisibleInCategory>
+    <assertProductSearchableBySku module="Magento_Catalog">
+        <severeness>low</severeness>
+        <require>
+            <catalogSearchResult class="Magento\CatalogSearch\Test\Page\CatalogsearchResult" />
+            <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
+            <product class="Mtf\Fixture\FixtureInterface" />
+        </require>
+    </assertProductSearchableBySku>
+    <assertProductInCategory module="Magento_Catalog">
+        <severeness>low</severeness>
+        <require>
+            <catalogCategoryView class="Magento\Catalog\Test\Page\Category\CatalogCategoryView" />
+            <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
+            <product class="Mtf\Fixture\FixtureInterface" />
+            <category class="Magento\Catalog\Test\Fixture\CatalogCategory" />
+        </require>
+    </assertProductInCategory>
+    <assertProductInCart module="Magento_Catalog">
+        <severeness>low</severeness>
+        <require>
+            <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView" />
+            <product class="Mtf\Fixture\FixtureInterface" />
+            <checkoutCart class="Magento\Checkout\Test\Page\CheckoutCart" />
+        </require>
+    </assertProductInCart>
+    <assertProductPage module="Magento_Catalog">
+        <severeness>middle</severeness>
+        <require>
+            <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView" />
+            <product class="Mtf\Fixture\FixtureInterface" />
+        </require>
+    </assertProductPage>
+    <assertProductGroupedPriceOnProductPage module="Magento_Catalog">
+        <severeness>low</severeness>
+        <require>
+            <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView" />
+            <product class="Mtf\Fixture\FixtureInterface" />
+        </require>
+    </assertProductGroupedPriceOnProductPage>
+    <assertProductSpecialPriceOnProductPage module="Magento_Catalog">
+        <severeness>low</severeness>
+        <require>
+            <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView" />
+            <product class="Mtf\Fixture\FixtureInterface" />
+        </require>
+    </assertProductSpecialPriceOnProductPage>
+    <assertProductTierPriceOnProductPage module="Magento_Catalog">
+        <severeness>low</severeness>
+        <require>
+            <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView" />
+            <product class="Mtf\Fixture\FixtureInterface" />
+        </require>
+    </assertProductTierPriceOnProductPage>
+    <assertProductCustomOptionsOnProductPage module="Magento_Catalog">
+        <severeness>low</severeness>
+        <require>
+            <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView" />
+            <product class="Mtf\Fixture\FixtureInterface" />
+        </require>
+    </assertProductCustomOptionsOnProductPage>
+    <assertProductForm module="Magento_Catalog">
+        <severeness>low</severeness>
+        <require>
+            <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView" />
+            <product class="Mtf\Fixture\FixtureInterface" />
+        </require>
+    </assertProductForm>
+    <assertAddToCartButtonAbsent module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertAddToCartButtonAbsent>
+    <assertAddToCartButtonPresent module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertAddToCartButtonPresent>
+    <assertProductIsNotDisplayingOnFrontend module="Magento_Catalog">
+        <severeness>high</severeness>
+        <require>
+            <catalogCategoryView class="Magento\Catalog\Test\Page\Category\CatalogCategoryView" />
+            <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
+            <product class="Mtf\Fixture\FixtureInterface" />
+            <category class="Magento\Catalog\Test\Fixture\CatalogCategory" />
+            <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView" />
+            <catalogSearchResult class="Magento\CatalogSearch\Test\Page\CatalogsearchResult" />
+        </require>
+    </assertProductIsNotDisplayingOnFrontend>
+    <assertProductSkuAutoGenerated module="Magento_Catalog">
+        <severeness>low</severeness>
+        <require>
+            <productGrid class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex" />
+            <product class="Mtf\Fixture\FixtureInterface" />
+        </require>
+    </assertProductSkuAutoGenerated>
+    <assertProductGroupedPriceOnProductPage module="Magento_Catalog">
+        <severeness>low</severeness>
+        <require>
+            <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView"  />
+            <product class="Mtf\Fixture\FixtureInterface" />
+        </require>
+    </assertProductGroupedPriceOnProductPage>
+    <assertProductAttributeSaveMessage module="Magento_Catalog">
+        <severeness>high</severeness>
+        <require>
+            <attributeIndex class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductAttributeIndex" />
+        </require>
+    </assertProductAttributeSaveMessage>
+    <assertProductAttributeInGrid module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertProductAttributeInGrid>
+    <assertAttributeOnAttributeForm module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertAttributeOnAttributeForm>
+    <assertAddedProductAttributeOnProductForm module="Magento_Catalog">
+        <severeness>low</severeness>
+        <require>
+            <productTemplate class="Magento\Catalog\Test\Fixture\CatalogProductTemplate" />
+            <attribute class="Magento\Catalog\Test\Fixture\CatalogProductAttribute" />
+            <productAttribute class="Magento\Catalog\Test\Fixture\CatalogProductAttribute" />
+            <productEdit class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit" />
+            <productGrid class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex" />
+            <productSetEdit class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductSetEdit" />
+            <productSet class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductSetIndex" />
+            <fixtureFactory class="Mtf\Fixture\FixtureFactory" />
+        </require>
+    </assertAddedProductAttributeOnProductForm>
+    <assertProductAttributeIsRequired module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertProductAttributeIsRequired>
+    <assertAttributeSearchableByLabel module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertAttributeSearchableByLabel>
+    <assertProductAttributeIsUnique module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertProductAttributeIsUnique>
+    <assertProductAttributeDisplayingOnSearchForm module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertProductAttributeDisplayingOnSearchForm>
+    <assertProductAttributeIsComparable module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertProductAttributeIsComparable>
+    <assertProductAttributeDisplayingOnFrontend module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertProductAttributeDisplayingOnFrontend>
+    <assertProductAttributeIsHtmlAllowed module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertProductAttributeIsHtmlAllowed>
+    <assertProductAttributeIsFilterable module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertProductAttributeIsFilterable>
+    <assertProductAttributeIsFilterableInSearch module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertProductAttributeIsFilterableInSearch>
+    <assertAttributeOptionsOnProductForm module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertAttributeOptionsOnProductForm>
+    <assertProductAttributeIsUsedPromoRules module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertProductAttributeIsUsedPromoRules>
+    <assertProductAttributeUsedSortOnFrontend module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertProductAttributeUsedSortOnFrontend>
+    <assertProductAttributeIsGlobal module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertProductAttributeIsGlobal>
+    <assertCrossSellsProductsSection module="Magento_Catalog">
+        <severeness>middle</severeness>
+        <require>
+            <product1 class="Magento\Catalog\Test\Fixture\CatalogProductSimple" />
+            <product2 class="Magento\Catalog\Test\Fixture\CatalogProductSimple" />
+            <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
+            <catalogCategoryView class="Magento\Catalog\Test\Page\Category\CatalogCategoryView" />
+            <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView" />
+            <checkoutCart class="Magento\Checkout\Test\Page\CheckoutCart" />
+        </require>
+    </assertCrossSellsProductsSection>
+    <assertProductAttributeSuccessDeleteMessage module="Magento_Catalog">
+        <severeness>high</severeness>
+    </assertProductAttributeSuccessDeleteMessage>
+    <assertNoCrossSellsProductsSection module="Magento_Catalog">
+        <severeness>middle</severeness>
+    </assertNoCrossSellsProductsSection>
+    <assertRelatedProductsSection module="Magento_Catalog">
+        <severeness>middle</severeness>
+        <require>
+            <product1 class="Magento\Catalog\Test\Fixture\CatalogProductSimple" />
+            <product2 class="Magento\Catalog\Test\Fixture\CatalogProductSimple" />
+            <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
+            <catalogCategoryView class="Magento\Catalog\Test\Page\Category\CatalogCategoryView" />
+            <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView" />
+        </require>
+    </assertRelatedProductsSection>
+    <assertProductAttributeAbsenceInGrid module="Magento_Catalog">
+        <severeness>high</severeness>
+    </assertProductAttributeAbsenceInGrid>
+    <assertNoRelatedProductsSection module="Magento_Catalog">
+        <severeness>middle</severeness>
+    </assertNoRelatedProductsSection>
+    <assertUpSellsProductsSection module="Magento_Catalog">
+        <severeness>middle</severeness>
+        <require>
+            <product1 class="Magento\Catalog\Test\Fixture\CatalogProductSimple" />
+            <product2 class="Magento\Catalog\Test\Fixture\CatalogProductSimple" />
+            <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
+            <catalogCategoryView class="Magento\Catalog\Test\Page\Category\CatalogCategoryView" />
+            <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView" />
+        </require>
+    </assertUpSellsProductsSection>
+    <assertProductAttributeAbsenceInSearchOnProductForm module="Magento_Catalog">
+        <severeness>high</severeness>
+    </assertProductAttributeAbsenceInSearchOnProductForm>
+    <assertNoUpSellsProductsSection module="Magento_Catalog">
+        <severeness>middle</severeness>
+    </assertNoUpSellsProductsSection>
+    <assertCategorySaveMessage module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertCategorySaveMessage>
+    <assertCategoryForm module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertCategoryForm>
+    <assertCategoryPage module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertCategoryPage>
+    <assertCategoryForAssignedProducts module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertCategoryForAssignedProducts>
+    <assertCategoryIsNotActive module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertCategoryIsNotActive>
+    <assertCategoryIsNotIncludeInMenu module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertCategoryIsNotIncludeInMenu>
+    <assertCategorySuccessDeleteMessage module="Magento_Catalog">
+        <severeness>low</severeness>
+        <require>
+            <categoryEdit class="Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryEdit" />
+        </require>
+    </assertCategorySuccessDeleteMessage>
+    <assertCategoryAbsenceOnFrontend module="Magento_Catalog">
+        <severeness>low</severeness>
+        <require>
+            <browser class="Mtf\Client\Browser" />
+            <categoryView class="Magento\Catalog\Test\Page\Category\CatalogCategoryView" />
+            <category class="Magento\Catalog\Test\Fixture\CatalogCategory" />
+        </require>
+    </assertCategoryAbsenceOnFrontend>
+    <assertCategoryAbsenceOnBackend module="Magento_Catalog">
+        <severeness>low</severeness>
+        <require>
+            <category class="Magento\Catalog\Test\Fixture\CatalogCategory" />
+            <catalogCategoryIndex class="Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryIndex" />
+        </require>
+    </assertCategoryAbsenceOnBackend>
+    <assertProductTemplateSuccessSaveMessage module="Magento_Catalog">
+        <severeness>high</severeness>
+        <require>
+            <productSetIndex class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductSetIndex" />
+        </require>
+    </assertProductTemplateSuccessSaveMessage>
+    <assertProductTemplateForm module="Magento_Catalog">
+        <severeness>high</severeness>
+        <require>
+            <productSet class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductSetIndex" />
+            <productSetEdit class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductSetEdit" />
+            <attributeSet class="Magento\Catalog\Test\Fixture\CatalogAttributeSet" />
+            <productAttribute class="Magento\Catalog\Test\Fixture\CatalogProductAttribute" />
+        </require>
+    </assertProductTemplateForm>
+    <assertProductTemplateInGrid module="Magento_Catalog">
+        <severeness>high</severeness>
+        <require>
+            <productSet class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductSetIndex" />
+            <attributeSet class="Magento\Catalog\Test\Fixture\CatalogAttributeSet" />
+        </require>
+    </assertProductTemplateInGrid>
+    <assertProductTemplateOnProductForm module="Magento_Catalog">
+        <severeness>high</severeness>
+        <require>
+            <fixtureFactory class="Mtf\Fixture\FixtureFactory" />
+            <attributeSet class="Magento\Catalog\Test\Fixture\CatalogAttributeSet" />
+            <productEdit class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit" />
+            <productGrid class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex" />
+            <newProductPage class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew" />
+            <productAttribute class="Magento\Catalog\Test\Fixture\CatalogProductAttribute" />
+        </require>
+    </assertProductTemplateOnProductForm>
+    <assertAbsenceDeleteAttributeButton module="Magento_Catalog">
+        <severeness>high</severeness>
+        <require>
+            <attributeNew class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductAttributeNew" />
+        </require>
+    </assertAbsenceDeleteAttributeButton>
+    <assertProductSuccessDeleteMessage module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertProductSuccessDeleteMessage>
+    <assertProductNotInGrid module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertProductNotInGrid>
+    <assertProductCompareItemsLink module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertProductCompareItemsLink>
+    <assertProductComparePage module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertProductComparePage>
+    <assertProductCompareBlockOnCmsPage module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertProductCompareBlockOnCmsPage>
+    <assertProductCompareSuccessAddMessage module="Magento_Catalog">
+        <severeness>high</severeness>
+    </assertProductCompareSuccessAddMessage>
+    <assertProductCompareSuccessRemoveMessage module="Magento_Catalog">
+        <severeness>high</severeness>
+    </assertProductCompareSuccessRemoveMessage>
+    <assertProductCompareSuccessRemoveAllProductsMessage module="Magento_Catalog">
+        <severeness>high</severeness>
+    </assertProductCompareSuccessRemoveAllProductsMessage>
+    <assertProductCompareItemsLinkIsAbsent module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertProductCompareItemsLinkIsAbsent>
+    <assertProductCompareRemoveLastProductMessage module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertProductCompareRemoveLastProductMessage>
+    <assertProductIsNotVisibleInCompareBlock module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertProductIsNotVisibleInCompareBlock>
+    <assertProductCompareSuccessRemoveMessage module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertProductCompareSuccessRemoveMessage>
+    <assertProductIsNotVisibleInComparePage module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertProductIsNotVisibleInComparePage>
+    <assertProductAttributeAbsenceInTemplateGroups module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertProductAttributeAbsenceInTemplateGroups>
+    <assertProductAttributeAbsenceInUnassignedAttributes module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertProductAttributeAbsenceInUnassignedAttributes>
+    <assertProductDuplicateMessage module="Magento_Catalog">
+        <severeness>high</severeness>
+        <require>
+            <productPage class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit" />
+        </require>
+    </assertProductDuplicateMessage>
+    <assertProductDuplicatedInGrid module="Magento_Catalog">
+        <severeness>low</severeness>
+        <require>
+            <product class="Mtf\Fixture\FixtureInterface" />
+            <productGrid class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex" />
+        </require>
+    </assertProductDuplicatedInGrid>
+    <assertProductDuplicateIsNotDisplayingOnFrontend module="Magento_Catalog">
+        <severeness>high</severeness>
+    </assertProductDuplicateIsNotDisplayingOnFrontend>
+    <assertProductDuplicateForm module="Magento_Catalog">
+        <severeness>high</severeness>
+    </assertProductDuplicateForm>
+    <assertProductForm module="Magento_Catalog">
+        <severeness>high</severeness>
+    </assertProductForm>
+    <assertProductTemplateGroupOnProductForm module="Magento_Catalog">
+        <severeness>high</severeness>
+    </assertProductTemplateGroupOnProductForm>
+    <assertProductCompareSuccessRemoveAllProductsMessage module="Magento_Catalog">
+        <severeness>high</severeness>
+    </assertProductCompareSuccessRemoveAllProductsMessage>
+    <assertProductCompareItemsLinkIsAbsent module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertProductCompareItemsLinkIsAbsent>
+    <assertProductCompareRemoveLastProductMessage module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertProductCompareRemoveLastProductMessage>
+    <assertProductIsNotVisibleInCompareBlock module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertProductIsNotVisibleInCompareBlock>
+    <assertUsedSuperAttributeImpossibleDeleteMessages module="Magento_Catalog">
+        <severeness>high</severeness>
+        <require>
+            <newPage class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductAttributeNew" />
+        </require>
+    </assertUsedSuperAttributeImpossibleDeleteMessages>
+    <assertProductTemplateSuccessDeleteMessage module="Magento_Catalog">
+        <severeness>high</severeness>
+    </assertProductTemplateSuccessDeleteMessage>
+    <assertProductTemplateNotInGrid module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertProductTemplateNotInGrid>
+    <assertProductNotSearchableBySku module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertProductNotSearchableBySku>
+    <assertCategoryRedirect module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertCategoryRedirect>
+</constraint>

@@ -18,21 +18,21 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category   Magento
- * @package    tools
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Tools\Migration\System\Configuration\Mapper;
 
-require_once realpath(__DIR__ . '/../../../../../../../../../../')
-    . '/tools/Magento/Tools/Migration/System/Configuration/Mapper/AbstractMapper.php';
-require_once realpath(__DIR__ . '/../../../../../../../../../../')
-    . '/tools/Magento/Tools/Migration/System/Configuration/Mapper/Field.php';
-require_once realpath(__DIR__ . '/../../../../../../../../../../')
-    . '/tools/Magento/Tools/Migration/System/Configuration/Mapper/Group.php';
 
+require_once realpath(
+    __DIR__ . '/../../../../../../../../../../'
+) . '/tools/Magento/Tools/Migration/System/Configuration/Mapper/AbstractMapper.php';
+require_once realpath(
+    __DIR__ . '/../../../../../../../../../../'
+) . '/tools/Magento/Tools/Migration/System/Configuration/Mapper/Field.php';
+require_once realpath(
+    __DIR__ . '/../../../../../../../../../../'
+) . '/tools/Magento/Tools/Migration/System/Configuration/Mapper/Group.php';
 /**
  * Test case for \Magento\Tools\Migration\System\Configuration\Mapper\Group
  */
@@ -50,8 +50,12 @@ class GroupTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_fieldMapperMock = $this->getMock('Magento\Tools\Migration\System\Configuration\Mapper\Field',
-            array(), array(), '', false
+        $this->_fieldMapperMock = $this->getMock(
+            'Magento\Tools\Migration\System\Configuration\Mapper\Field',
+            array(),
+            array(),
+            '',
+            false
         );
 
         $this->_object = new \Magento\Tools\Migration\System\Configuration\Mapper\Group($this->_fieldMapperMock);
@@ -78,59 +82,48 @@ class GroupTest extends \PHPUnit_Framework_TestCase
                 'clone_model' => array('#text' => 'some model'),
                 'help_url' => array('#text' => 'some url'),
                 'hide_in_single_store_mode' => array('#text' => 'mode'),
-                'expanded' => array('#text' => 'yes'),
+                'expanded' => array('#text' => 'yes')
             ),
             'group_2' => array(),
-            'group_3' => array(
-                'fields' => array(
-                    'label' => 'label'
-                )
-            ),
+            'group_3' => array('fields' => array('label' => 'label'))
         );
 
 
         $expected = array(
             array(
                 'nodeName' => 'group',
-                '@attributes' => array(
-                    'id' => 'group_1',
-                    'sortOrder' => 10,
-                    'type' => 'text',
-                ),
+                '@attributes' => array('id' => 'group_1', 'sortOrder' => 10, 'type' => 'text'),
                 'parameters' => array(
                     array('name' => 'class', '#text' => 'css class'),
-                    array('name' => 'label','#text' => 'group label'),
-                    array('name' => 'comment','#cdata-section' => 'group comment'),
+                    array('name' => 'label', '#text' => 'group label'),
+                    array('name' => 'comment', '#cdata-section' => 'group comment'),
                     array('name' => 'resource', '#text' => 'acl'),
                     array('name' => 'fieldset_css', '#text' => 'some css class'),
                     array('name' => 'clone_fields', '#text' => 'some fields'),
                     array('name' => 'clone_model', '#text' => 'some model'),
                     array('name' => 'help_url', '#text' => 'some url'),
                     array('name' => 'hide_in_single_store_mode', '#text' => 'mode'),
-                    array('name' => 'expanded', '#text' => 'yes'),
+                    array('name' => 'expanded', '#text' => 'yes')
                 )
             ),
+            array('nodeName' => 'group', '@attributes' => array('id' => 'group_2'), 'parameters' => array()),
             array(
                 'nodeName' => 'group',
-                '@attributes' => array(
-                    'id' => 'group_2',
-                ),
-                'parameters' => array ()
-            ),
-            array(
-                'nodeName' => 'group',
-                '@attributes' => array(
-                    'id' => 'group_3',
-                ),
+                '@attributes' => array('id' => 'group_3'),
                 'parameters' => array(),
-                'subConfig' => array(
-                    'label' => 'label'
-                )
+                'subConfig' => array('label' => 'label')
             )
         );
 
-        $this->_fieldMapperMock->expects($this->once())
-            ->method('transform')->with(array('label' => 'label'))->will($this->returnArgument(0));
+        $this->_fieldMapperMock->expects(
+            $this->once()
+        )->method(
+            'transform'
+        )->with(
+            array('label' => 'label')
+        )->will(
+            $this->returnArgument(0)
+        );
 
         $actual = $this->_object->transform($config);
         $this->assertEquals($expected, $actual);

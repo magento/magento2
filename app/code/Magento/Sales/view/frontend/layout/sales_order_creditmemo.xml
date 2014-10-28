@@ -23,16 +23,21 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <update handle="sales_order_creditmemo_renderers" />
     <update handle="customer_account"/>
+    <update handle="sales_order_item_price"/>
+    <referenceContainer name="page.main.title">
+        <block class="Magento\Sales\Block\Order\Info" name="order.status" template="order/order_status.phtml" />
+        <block class="Magento\Sales\Block\Order\Info" name="order.date" template="order/order_date.phtml" />
+        <container name="order.actions.container" htmlTag="div" htmlClass="actions-toolbar order-actions-toolbar">
+            <block class="Magento\Sales\Block\Order\Info\Buttons" as="buttons" name="sales.order.info.buttons" cacheable="false"/>
+        </container>
+    </referenceContainer>
     <referenceContainer name="content">
-        <block class="Magento\Sales\Block\Order\Info" as="info" name="sales.order.info">
-            <block class="Magento\Sales\Block\Order\Info\Buttons" as="buttons" name="sales.order.info.buttons"/>
-        </block>
-        <block class="Magento\Sales\Block\Order\Creditmemo" name="sales.order.creditmemo" after="sales.order.info">
+        <block class="Magento\Sales\Block\Order\Creditmemo" name="sales.order.creditmemo" cacheable="false">
             <block class="Magento\Sales\Block\Order\Creditmemo\Items" name="creditmemo_items" template="order/creditmemo/items.phtml">
-                <block class="Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer" as="default" template="order/creditmemo/items/renderer/default.phtml"/>
-                <block class="Magento\Sales\Block\Order\Item\Renderer\Grouped" as="grouped" template="order/creditmemo/items/renderer/default.phtml"/>
+                <block class="Magento\Framework\View\Element\RendererList" name="sales.order.creditmemo.renderers" as="renderer.list" />
                 <block class="Magento\Sales\Block\Order\Creditmemo\Totals" name="creditmemo_totals" template="order/totals.phtml">
                     <arguments>
                         <argument name="label_properties" xsi:type="string">colspan="6" class="mark"</argument>
@@ -44,6 +49,9 @@
             </block>
         </block>
     </referenceContainer>
+    <referenceContainer name="sales.order.info.buttons">
+        <block class="Magento\Sales\Block\Order\Info\Buttons\Rss" as="buttons.rss" name="sales.order.info.buttons.rss" cacheable="false"/>
+    </referenceContainer>
     <update handle="sales_order_info_links"/>
-    <block class="Magento\View\Element\Template" name="additional.product.info" template="Magento_Core::template.phtml"/>
-</layout>
+    <block class="Magento\Framework\View\Element\Template" name="additional.product.info" template="Magento_Core::template.phtml"/>
+</page>

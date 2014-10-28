@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -48,12 +45,12 @@ class DataFixture
      * Constructor
      *
      * @param string $fixtureBaseDir
-     * @throws \Magento\Exception
+     * @throws \Magento\Framework\Exception
      */
     public function __construct($fixtureBaseDir)
     {
         if (!is_dir($fixtureBaseDir)) {
-            throw new \Magento\Exception("Fixture base directory '$fixtureBaseDir' does not exist.");
+            throw new \Magento\Framework\Exception("Fixture base directory '{$fixtureBaseDir}' does not exist.");
         }
         $this->_fixtureBaseDir = realpath($fixtureBaseDir);
     }
@@ -65,7 +62,8 @@ class DataFixture
      * @param \Magento\TestFramework\Event\Param\Transaction $param
      */
     public function startTestTransactionRequest(
-        \PHPUnit_Framework_TestCase $test, \Magento\TestFramework\Event\Param\Transaction $param
+        \PHPUnit_Framework_TestCase $test,
+        \Magento\TestFramework\Event\Param\Transaction $param
     ) {
         /* Start transaction before applying first fixture to be able to revert them all further */
         if ($this->_getFixtures('method', $test)) {
@@ -86,7 +84,8 @@ class DataFixture
      * @param \Magento\TestFramework\Event\Param\Transaction $param
      */
     public function endTestTransactionRequest(
-        \PHPUnit_Framework_TestCase $test, \Magento\TestFramework\Event\Param\Transaction $param
+        \PHPUnit_Framework_TestCase $test,
+        \Magento\TestFramework\Event\Param\Transaction $param
     ) {
         /* Isolate other tests from test-specific fixtures */
         if ($this->_appliedFixtures && $this->_getFixtures('method', $test)) {
@@ -118,7 +117,7 @@ class DataFixture
      * @param string $scope 'class' or 'method'
      * @param \PHPUnit_Framework_TestCase $test
      * @return array
-     * @throws \Magento\Exception
+     * @throws \Magento\Framework\Exception
      */
     protected function _getFixtures($scope, \PHPUnit_Framework_TestCase $test)
     {
@@ -128,7 +127,9 @@ class DataFixture
             foreach ($annotations[$scope]['magentoDataFixture'] as $fixture) {
                 if (strpos($fixture, '\\') !== false) {
                     // usage of a single directory separator symbol streamlines search across the source code
-                    throw new \Magento\Exception('Directory separator "\\" is prohibited in fixture declaration.');
+                    throw new \Magento\Framework\Exception(
+                        'Directory separator "\\" is prohibited in fixture declaration.'
+                    );
                 }
                 $fixtureMethod = array(get_class($test), $fixture);
                 if (is_callable($fixtureMethod)) {
@@ -152,11 +153,10 @@ class DataFixture
             if (is_callable($fixture)) {
                 call_user_func($fixture);
             } else {
-                require($fixture);
+                require $fixture;
             }
         } catch (\Exception $e) {
             echo 'Error in fixture: ', json_encode($fixture), PHP_EOL, $e;
-            //throw $e;
         }
     }
 
@@ -164,7 +164,7 @@ class DataFixture
      * Execute fixture scripts if any
      *
      * @param array $fixtures
-     * @throws \Magento\Exception
+     * @throws \Magento\Framework\Exception
      */
     protected function _applyFixtures(array $fixtures)
     {

@@ -18,29 +18,29 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Paypal
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Block\Express\Review;
+
+use Magento\Sales\Model\Order\Address;
 
 /**
  * Paypal Express Onepage checkout block
  *
- * @category   Magento
- * @package    Magento_Paypal
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Paypal\Block\Express\Review;
-
 class Details extends \Magento\Checkout\Block\Cart\Totals
 {
+    /**
+     * @var Address
+     */
     protected $_address;
 
     /**
      * Return review shipping address
      *
-     * @return \Magento\Sales\Model\Order\Address
+     * @return Address
      */
     public function getAddress()
     {

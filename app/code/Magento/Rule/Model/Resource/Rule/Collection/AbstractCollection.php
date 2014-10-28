@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Rule
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,14 +25,11 @@
 /**
  * Abstract Rule entity resource collection model
  *
- * @category Magento
- * @package Magento_Rule
  * @author Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Rule\Model\Resource\Rule\Collection;
 
-abstract class AbstractCollection
-    extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Store associated with rule entities information map
@@ -61,16 +56,16 @@ abstract class AbstractCollection
     /**
      * Quote rule environment
      *
-     * @deprecated after 1.6.1.0
-     *
      * @var \Magento\Rule\Model\Environment
+     *
+     * @deprecated after 1.6.1.0
      */
     protected $_env;
 
     /**
      * Add website ids to rules data
      *
-     * @return \Magento\Rule\Model\Resource\Rule\Collection\AbstractCollection
+     * @return $this
      */
     protected function _afterLoad()
     {
@@ -89,12 +84,11 @@ abstract class AbstractCollection
      * Init flag for adding rule website ids to collection result
      *
      * @param bool|null $flag
-     *
-     * @return \Magento\Rule\Model\Resource\Rule\Collection\AbstractCollection
+     * @return $this
      */
     public function addWebsitesToResult($flag = null)
     {
-        $flag = ($flag === null) ? true : $flag;
+        $flag = $flag === null ? true : $flag;
         $this->setFlag('add_websites_to_result', $flag);
         return $this;
     }
@@ -102,22 +96,25 @@ abstract class AbstractCollection
     /**
      * Limit rules collection by specific websites
      *
-     * @param int|array|\Magento\Core\Model\Website $websiteId
-     *
-     * @return \Magento\Rule\Model\Resource\Rule\Collection\AbstractCollection
+     * @param int|int[]|\Magento\Store\Model\Website $websiteId
+     * @return $this
      */
     public function addWebsiteFilter($websiteId)
     {
         $entityInfo = $this->_getAssociatedEntityInfo('website');
         if (!$this->getFlag('is_website_table_joined')) {
             $this->setFlag('is_website_table_joined', true);
-            if ($websiteId instanceof \Magento\Core\Model\Website) {
+            if ($websiteId instanceof \Magento\Store\Model\Website) {
                 $websiteId = $websiteId->getId();
             }
 
-            $subSelect = $this->getConnection()->select()
-                ->from(array('website' => $this->getTable($entityInfo['associations_table'])), '')
-                ->where('website.' . $entityInfo['entity_id_field'] . ' IN (?)', $websiteId);
+            $subSelect = $this->getConnection()->select()->from(
+                array('website' => $this->getTable($entityInfo['associations_table'])),
+                ''
+            )->where(
+                'website.' . $entityInfo['entity_id_field'] . ' IN (?)',
+                $websiteId
+            );
             $this->getSelect()->exists(
                 $subSelect,
                 'main_table.' . $entityInfo['rule_id_field'] . ' = website.' . $entityInfo['rule_id_field']
@@ -130,9 +127,8 @@ abstract class AbstractCollection
      * Provide support for website id filter
      *
      * @param string $field
-     * @param mixed $condition
-     *
-     * @return \Magento\Rule\Model\Resource\Rule\Collection\AbstractCollection
+     * @param null|string|array $condition
+     * @return $this
      */
     public function addFieldToFilter($field, $condition = null)
     {
@@ -144,13 +140,12 @@ abstract class AbstractCollection
         return $this;
     }
 
-   /**
-    * Filter collection to only active or inactive rules
-    *
-    * @param int $isActive
-    *
-    * @return \Magento\Rule\Model\Resource\Rule\Collection\AbstractCollection
-    */
+    /**
+     * Filter collection to only active or inactive rules
+     *
+     * @param int $isActive
+     * @return $this
+     */
     public function addIsActiveFilter($isActive = 1)
     {
         if (!$this->getFlag('is_active_filter')) {
@@ -166,7 +161,7 @@ abstract class AbstractCollection
      *
      * @param string $entityType
      *
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Framework\Model\Exception
      * @return array
      */
     protected function _getAssociatedEntityInfo($entityType)
@@ -175,24 +170,21 @@ abstract class AbstractCollection
             return $this->_associatedEntitiesMap[$entityType];
         }
 
-        throw new \Magento\Core\Exception(
-            __('There is no information about associated entity type "%1".', $entityType), 0
+        throw new \Magento\Framework\Model\Exception(
+            __('There is no information about associated entity type "%1".', $entityType),
+            0
         );
     }
-
-
-
-
 
     /**
      * Set environment for all rules in collection
      *
-     * @deprecated after 1.6.2.0
-     *
      * @param \Magento\Rule\Model\Environment $env
-     * @return \Magento\Rule\Model\Resource\Rule\Collection\AbstractCollection
+     * @return $this
+     *
+     * @deprecated after 1.6.2.0
      */
-    public function setEnv( $env = null)
+    public function setEnv($env = null)
     {
         $this->_env = $env;
         return $this;
@@ -201,9 +193,9 @@ abstract class AbstractCollection
     /**
      * Retrieve environment for the rules in collection
      *
-     * @deprecated after 1.6.2.0
+     * @return $this
      *
-     * @return \Magento\Rule\Model\Resource\Rule\Collection\AbstractCollection
+     * @deprecated after 1.6.2.0
      */
     public function getEnv()
     {
@@ -213,9 +205,9 @@ abstract class AbstractCollection
     /**
      * Set filter for the collection based on the environment
      *
-     * @deprecated after 1.6.2.0
+     * @return $this
      *
-     * @return \Magento\Rule\Model\Resource\Rule\Collection\AbstractCollection
+     * @deprecated after 1.6.2.0
      */
     public function setActiveFilter()
     {
@@ -225,9 +217,9 @@ abstract class AbstractCollection
     /**
      * Process the quote with all the rules in collection
      *
-     * @deprecated after 1.6.2.0
+     * @return $this
      *
-     * @return \Magento\Rule\Model\Resource\Rule\Collection\AbstractCollection
+     * @deprecated after 1.6.2.0
      */
     public function process()
     {

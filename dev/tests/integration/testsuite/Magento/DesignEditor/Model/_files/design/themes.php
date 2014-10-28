@@ -18,24 +18,30 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_DesignEditor
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-\Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
-    \Magento\Filesystem::PARAM_APP_DIRS => array(
-        \Magento\Filesystem::THEMES => array('path' => dirname(__DIR__) . '/design')
-    )
-));
+use Magento\Framework\App\Bootstrap;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
-\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')
-    ->loadAreaPart(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE, \Magento\Core\Model\App\Area::PART_CONFIG);
+\Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
+    array(
+        Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => array(
+            DirectoryList::THEMES => array('path' => dirname(__DIR__) . '/design')
+        )
+    )
+);
+\Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->get('Magento\Framework\App\State')
+    ->setAreaCode(\Magento\Framework\View\DesignInterface::DEFAULT_AREA);
+
+\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\AreaList')
+    ->getArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
+    ->load(\Magento\Framework\App\Area::PART_CONFIG);
 
 /** @var $registration \Magento\Core\Model\Theme\Registration */
-$registration = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Core\Model\Theme\Registration');
+$registration = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    'Magento\Core\Model\Theme\Registration'
+);
 $registration->register('*/*/theme.xml');
-

@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,15 +26,12 @@
 /**
  * System configuration shipping methods allow all countries select
  *
- * @category   Magento
- * @package    Magento_Backend
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Backend\Block\System\Config\Form\Field\Select;
 
-class Allowspecific extends \Magento\Data\Form\Element\Select
+class Allowspecific extends \Magento\Framework\Data\Form\Element\Select
 {
-
     /**
      * Add additional Javascript code
      *
@@ -44,13 +39,9 @@ class Allowspecific extends \Magento\Data\Form\Element\Select
      */
     public function getAfterElementHtml()
     {
-        $javaScript = "
-            <script type=\"text/javascript\">
-                Event.observe('{$this->getHtmlId()}', 'change', function(){
-                    specific=$('{$this->getHtmlId()}').value;
-                    $('{$this->_getSpecificCountryElementId()}').disabled = (!specific || specific!=1);
-                });
-            </script>";
+        $javaScript = "\n            <script type=\"text/javascript\">\n                Event.observe('{$this->getHtmlId()}', 'change', function(){\n                    specific=\$('{$this
+            ->getHtmlId()}').value;\n                    \$('{$this
+            ->_getSpecificCountryElementId()}').disabled = (!specific || specific!=1);\n                });\n            </script>";
         return $javaScript . parent::getAfterElementHtml();
     }
 
@@ -73,5 +64,4 @@ class Allowspecific extends \Magento\Data\Form\Element\Select
     {
         return substr($this->getId(), 0, strrpos($this->getId(), 'allowspecific')) . 'specificcountry';
     }
-
 }

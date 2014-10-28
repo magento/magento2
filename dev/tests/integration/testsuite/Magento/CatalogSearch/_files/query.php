@@ -18,23 +18,24 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_CatalogSearch
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-/** @var $query \Magento\CatalogSearch\Model\Query */
-$query = $objectManager->create('Magento\CatalogSearch\Model\Query');
+/** @var $query \Magento\Search\Model\Query */
+$query = $objectManager->create('Magento\Search\Model\Query');
 $query->setStoreId(1);
-$query
-    ->setQueryText('query_text')
-    ->setNumResults(1)
-    ->setPopularity(1)
-    ->setDisplayInTerms(1)
-    ->setIsActive(1)
-    ->setIsProcessed(1)
-    ->save();
+$query->setQueryText(
+    'query_text'
+)->setNumResults(
+    1
+)->setPopularity(
+    1
+)->setDisplayInTerms(
+    1
+)->setIsActive(
+    1
+)->setIsProcessed(
+    1
+)->save();

@@ -23,15 +23,13 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Catalog/etc/catalog_attributes.xsd">
     <group name="catalog_category">
         <attribute name="name"/>
-        <attribute name="url_key"/>
         <attribute name="is_active"/>
     </group>
     <group name="catalog_product">
         <attribute name="name"/>
-        <attribute name="url_key"/>
         <attribute name="price"/>
         <attribute name="special_price"/>
         <attribute name="special_from_date"/>
@@ -69,7 +67,6 @@
         <attribute name="media_gallery_content" />
         <attribute name="group_price" />
         <attribute name="tier_price" />
-        <attribute name="recurring_profileinit_may_fail" />
         <attribute name="gift_message_available" />
         <attribute name="inventory_manage_stock" />
     </group>

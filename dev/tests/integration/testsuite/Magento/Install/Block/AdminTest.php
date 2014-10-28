@@ -31,22 +31,19 @@ class AdminTest extends \PHPUnit_Framework_TestCase
             'username' => 'admin',
             'email' => 'admin@example.com',
             'firstname' => 'First',
-            'lastname' => 'Last',
+            'lastname' => 'Last'
         );
-        $omit = array(
-            'password' => 'password_with_1_number',
-            'password_confirmation' => 'password_with_1_number',
-        );
+        $omit = array('password' => 'password_with_1_number', 'password_confirmation' => 'password_with_1_number');
 
-        /** @var $session \Magento\Session\Generic */
+        /** @var $session \Magento\Framework\Session\Generic */
         $session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Install\Model\Session');
         $session->setAdminData(array_merge($preserve, $omit));
 
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->setAreaCode('install');
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\State')
+            ->setAreaCode('install');
 
-        /** @var $layout \Magento\View\LayoutInterface */
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Layout');
+        /** @var $layout \Magento\Framework\View\LayoutInterface */
+        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Framework\View\Layout');
         /** @var $block \Magento\Install\Block\Admin */
         $block = $layout->createBlock('Magento\Install\Block\Admin');
         $output = $block->toHtml();

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Email\Model;
 
 /**
@@ -32,26 +31,20 @@ namespace Magento\Email\Model;
 class BackendTemplate extends Template
 {
     /**
-     * @var \Magento\Core\Model\Config
-     */
-    protected $_coreConfig;
-
-    /**
      * @var \Magento\Backend\Model\Config\Structure
      */
     private $_structure;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\View\DesignInterface $design
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\View\DesignInterface $design
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Core\Model\App\Emulation $appEmulation
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Filesystem $filesystem
-     * @param \Magento\View\Url $viewUrl
-     * @param \Magento\View\FileSystem $viewFileSystem
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\Config $coreConfig
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Framework\View\Asset\Repository $assetRepo
+     * @param \Magento\Framework\View\FileSystem $viewFileSystem
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Email\Model\Template\FilterFactory $emailFilterFactory
      * @param \Magento\Email\Model\Template\Config $emailConfig
      * @param \Magento\Backend\Model\Config\Structure $structure
@@ -60,16 +53,15 @@ class BackendTemplate extends Template
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\View\DesignInterface $design,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\View\DesignInterface $design,
+        \Magento\Framework\Registry $registry,
         \Magento\Core\Model\App\Emulation $appEmulation,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Filesystem $filesystem,
-        \Magento\View\Url $viewUrl,
-        \Magento\View\FileSystem $viewFileSystem,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\Config $coreConfig,
+        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Framework\Filesystem $filesystem,
+        \Magento\Framework\View\Asset\Repository $assetRepo,
+        \Magento\Framework\View\FileSystem $viewFileSystem,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Email\Model\Template\FilterFactory $emailFilterFactory,
         \Magento\Email\Model\Template\Config $emailConfig,
         \Magento\Backend\Model\Config\Structure $structure,
@@ -82,10 +74,9 @@ class BackendTemplate extends Template
             $appEmulation,
             $storeManager,
             $filesystem,
-            $viewUrl,
+            $assetRepo,
             $viewFileSystem,
-            $coreStoreConfig,
-            $coreConfig,
+            $scopeConfig,
             $emailFilterFactory,
             $emailConfig,
             $data
@@ -105,7 +96,7 @@ class BackendTemplate extends Template
             return array();
         }
 
-        $configData = $this->_coreConfig->getValue(null, 'default');
+        $configData = $this->_scopeConfig->getValue(null, \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT);
         $paths = $this->_findEmailTemplateUsages($templateCode, $configData, '');
         return $paths;
     }
@@ -124,10 +115,7 @@ class BackendTemplate extends Template
         foreach ($data as $key => $value) {
             $configPath = $path ? $path . '/' . $key : $key;
             if (is_array($value)) {
-                $output = array_merge(
-                    $output,
-                    $this->_findEmailTemplateUsages($code, $value, $configPath)
-                );
+                $output = array_merge($output, $this->_findEmailTemplateUsages($code, $value, $configPath));
             } else {
                 if ($value == $code) {
                     $output[] = array('path' => $configPath);
@@ -149,8 +137,10 @@ class BackendTemplate extends Template
             return array();
         }
 
-        $templatePaths = $this->_structure
-            ->getFieldPathsByAttribute('source_model', 'Magento\Backend\Model\Config\Source\Email\Template');
+        $templatePaths = $this->_structure->getFieldPathsByAttribute(
+            'source_model',
+            'Magento\Backend\Model\Config\Source\Email\Template'
+        );
 
         if (!count($templatePaths)) {
             return array();

@@ -18,12 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Block\Product;
 
 /**
@@ -46,7 +43,7 @@ namespace Magento\Catalog\Block\Product;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Image extends \Magento\View\Element\Template
+class Image extends \Magento\Framework\View\Element\Template
 {
     /**
      * Template image only
@@ -68,12 +65,12 @@ class Image extends \Magento\View\Element\Template
     protected $_productImageView;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Catalog\Model\Product\Image\View $productImageView
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Catalog\Model\Product\Image\View $productImageView,
         array $data = array()
     ) {
@@ -104,9 +101,10 @@ class Image extends \Magento\View\Element\Template
     protected function _initTemplate()
     {
         if (null === $this->getTemplate()) {
-            $template = $this->getProductImageView()->isWhiteBorders()
-                ? $this->_templateImage
-                : $this->_templateWithBorders;
+            $template = $this->getProductImageView()
+                ->isWhiteBorders() ? $this
+                ->_templateImage : $this
+                ->_templateWithBorders;
             $this->setTemplate($template);
         }
         return $this;

@@ -17,8 +17,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    mage.js
- * @package     test
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -125,7 +123,7 @@ TranslateInlineTest.prototype.testDestroy = function() {
                 data:{
                     id: 'translate-form-id'
                 }
-            },
+            }
         },
         translateInline = jQuery('[data-role="translate-dialog"]').translateInline(options),
         editTrigger = jQuery('#edit-trigger-id').editTrigger(),

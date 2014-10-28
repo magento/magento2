@@ -18,44 +18,42 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
+use Magento\Framework\Model\Exception;
 
-class Cache extends \Magento\Backend\App\Action
+class Cache extends Action
 {
     /**
-     * @var \Magento\App\Cache\TypeListInterface
+     * @var \Magento\Framework\App\Cache\TypeListInterface
      */
-    private $_cacheTypeList;
+    protected $_cacheTypeList;
 
     /**
-     * @var \Magento\App\Cache\StateInterface
+     * @var \Magento\Framework\App\Cache\StateInterface
      */
-    private $_cacheState;
+    protected $_cacheState;
 
     /**
-     * @var \Magento\App\Cache\Frontend\Pool
+     * @var \Magento\Framework\App\Cache\Frontend\Pool
      */
-    private $_cacheFrontendPool;
+    protected $_cacheFrontendPool;
 
     /**
      * @param Action\Context $context
-     * @param \Magento\App\Cache\TypeListInterface $cacheTypeList
-     * @param \Magento\App\Cache\StateInterface $cacheState
-     * @param \Magento\App\Cache\Frontend\Pool $cacheFrontendPool
+     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
+     * @param \Magento\Framework\App\Cache\StateInterface $cacheState
+     * @param \Magento\Framework\App\Cache\Frontend\Pool $cacheFrontendPool
      */
     public function __construct(
         Action\Context $context,
-        \Magento\App\Cache\TypeListInterface $cacheTypeList,
-        \Magento\App\Cache\StateInterface $cacheState,
-        \Magento\App\Cache\Frontend\Pool $cacheFrontendPool
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
+        \Magento\Framework\App\Cache\StateInterface $cacheState,
+        \Magento\Framework\App\Cache\Frontend\Pool $cacheFrontendPool
     ) {
         parent::__construct($context);
         $this->_cacheTypeList = $cacheTypeList;
@@ -64,147 +62,11 @@ class Cache extends \Magento\Backend\App\Action
     }
 
     /**
-     * Display cache management grid
-     */
-    public function indexAction()
-    {
-        $this->_title->add(__('Cache Management'));
-
-        $this->_view->loadLayout();
-        $this->_setActiveMenu('Magento_Adminhtml::system_cache');
-        $this->_view->renderLayout();
-    }
-
-    /**
-     * Flush cache storage
-     */
-    public function flushAllAction()
-    {
-        $this->_eventManager->dispatch('adminhtml_cache_flush_all');
-        /** @var $cacheFrontend \Magento\Cache\FrontendInterface */
-        foreach ($this->_cacheFrontendPool as $cacheFrontend) {
-            $cacheFrontend->getBackend()->clean();
-        }
-        $this->messageManager->addSuccess(
-            __("You flushed the cache storage.")
-        );
-        $this->_redirect('adminhtml/*');
-    }
-
-    /**
-     * Flush all magento cache
-     */
-    public function flushSystemAction()
-    {
-        /** @var $cacheFrontend \Magento\Cache\FrontendInterface */
-        foreach ($this->_cacheFrontendPool as $cacheFrontend) {
-            $cacheFrontend->clean();
-        }
-        $this->_eventManager->dispatch('adminhtml_cache_flush_system');
-        $this->messageManager->addSuccess(__("The Magento cache storage has been flushed."));
-        $this->_redirect('adminhtml/*');
-    }
-
-    /**
-     * Mass action for cache enabling
-     */
-    public function massEnableAction()
-    {
-        try {
-            $types = $this->getRequest()->getParam('types');
-            $updatedTypes = 0;
-            if (!is_array($types)) {
-                $types = array();
-            }
-            $this->_validateTypes($types);
-            foreach ($types as $code) {
-                if (!$this->_cacheState->isEnabled($code)) {
-                    $this->_cacheState->setEnabled($code, true);
-                    $updatedTypes++;
-                }
-            }
-            if ($updatedTypes > 0) {
-                $this->_cacheState->persist();
-                $this->messageManager->addSuccess(
-                    __("%1 cache type(s) enabled.", $updatedTypes)
-                );
-            }
-        } catch (\Magento\Core\Exception $e) {
-            $this->messageManager->addError($e->getMessage());
-        } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('An error occurred while enabling cache.'));
-        }
-        $this->_redirect('adminhtml/*');
-    }
-
-    /**
-     * Mass action for cache disabling
-     */
-    public function massDisableAction()
-    {
-        try {
-            $types = $this->getRequest()->getParam('types');
-            $updatedTypes = 0;
-            if (!is_array($types)) {
-                $types = array();
-            }
-            $this->_validateTypes($types);
-            foreach ($types as $code) {
-                if ($this->_cacheState->isEnabled($code)) {
-                    $this->_cacheState->setEnabled($code, false);
-                    $updatedTypes++;
-                }
-                $this->_cacheTypeList->cleanType($code);
-            }
-            if ($updatedTypes > 0) {
-                $this->_cacheState->persist();
-                $this->messageManager->addSuccess(
-                    __("%1 cache type(s) disabled.", $updatedTypes)
-                );
-            }
-        } catch (\Magento\Core\Exception $e) {
-            $this->messageManager->addError($e->getMessage());
-        } catch (\Exception $e) {
-            $this->messageManager->addException(
-                $e,
-                __('An error occurred while disabling cache.')
-            );
-        }
-        $this->_redirect('adminhtml/*');
-    }
-
-    /**
-     * Mass action for cache refresh
-     */
-    public function massRefreshAction()
-    {
-        try {
-            $types = $this->getRequest()->getParam('types');
-            $updatedTypes = 0;
-            if (!is_array($types)) {
-                $types = array();
-            }
-            $this->_validateTypes($types);
-            foreach ($types as $type) {
-                $this->_cacheTypeList->cleanType($type);
-                $this->_eventManager->dispatch('adminhtml_cache_refresh_type', array('type' => $type));
-                $updatedTypes++;
-            }
-            if ($updatedTypes > 0) {
-                $this->messageManager->addSuccess(__("%1 cache type(s) refreshed.", $updatedTypes));
-            }
-        } catch (\Magento\Core\Exception $e) {
-            $this->messageManager->addError($e->getMessage());
-        } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('An error occurred while refreshing cache.'));
-        }
-        $this->_redirect('adminhtml/*');
-    }
-
-    /**
      * Check whether specified cache types exist
      *
      * @param array $types
+     * @return void
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function _validateTypes(array $types)
     {
@@ -214,51 +76,8 @@ class Cache extends \Magento\Backend\App\Action
         $allTypes = array_keys($this->_cacheTypeList->getTypes());
         $invalidTypes = array_diff($types, $allTypes);
         if (count($invalidTypes) > 0) {
-            throw new \Magento\Core\Exception(__("Specified cache type(s) don't exist: " . join(', ', $invalidTypes)));
+            throw new Exception(__("Specified cache type(s) don't exist: " . join(', ', $invalidTypes)));
         }
-    }
-
-    /**
-     * Clean JS/css files cache
-     */
-    public function cleanMediaAction()
-    {
-        try {
-            $this->_objectManager->get('Magento\View\Asset\MergeService')
-                ->cleanMergedJsCss();
-            $this->_eventManager->dispatch('clean_media_cache_after');
-            $this->messageManager->addSuccess(__('The JavaScript/CSS cache has been cleaned.'));
-        } catch (\Magento\Core\Exception $e) {
-            $this->messageManager->addError($e->getMessage());
-        } catch (\Exception $e) {
-            $this->messageManager->addException(
-                $e,
-                __('An error occurred while clearing the JavaScript/CSS cache.')
-            );
-        }
-        $this->_redirect('adminhtml/*');
-    }
-
-    /**
-     * Clean JS/css files cache
-     */
-    public function cleanImagesAction()
-    {
-        try {
-            $this->_objectManager->create('Magento\Catalog\Model\Product\Image')->clearCache();
-            $this->_eventManager->dispatch('clean_catalog_images_cache_after');
-            $this->messageManager->addSuccess(
-                __('The image cache was cleaned.')
-            );
-        } catch (\Magento\Core\Exception $e) {
-            $this->messageManager->addError($e->getMessage());
-        } catch (\Exception $e) {
-            $this->messageManager->addException(
-                $e,
-                __('An error occurred while clearing the image cache.')
-            );
-        }
-        $this->_redirect('adminhtml/*');
     }
 
     /**

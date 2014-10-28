@@ -18,37 +18,39 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
 /**
  * Store grid column filter
  */
-namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
-
-class Store
-    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+class Store extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
+    /**
+     * @var bool
+     */
     protected $_skipAllStoresLabel = false;
+
+    /**
+     * @var bool
+     */
     protected $_skipEmptyStoresLabel = false;
 
     /**
-     * @var \Magento\Core\Model\System\Store
+     * @var \Magento\Store\Model\System\Store
      */
     protected $_systemStore;
 
     /**
      * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\Core\Model\System\Store $systemStore
+     * @param \Magento\Store\Model\System\Store $systemStore
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
-        \Magento\Core\Model\System\Store $systemStore,
+        \Magento\Store\Model\System\Store $systemStore,
         array $data = array()
     ) {
         $this->_systemStore = $systemStore;
@@ -58,7 +60,7 @@ class Store
     /**
      * Retrieve System Store model
      *
-     * @return \Magento\Core\Model\System\Store
+     * @return \Magento\Store\Model\System\Store
      */
     protected function _getStoreModel()
     {
@@ -72,9 +74,11 @@ class Store
      */
     protected function _getShowAllStoresLabelFlag()
     {
-        return $this->getColumn()->getData('skipAllStoresLabel')
-            ? $this->getColumn()->getData('skipAllStoresLabel')
-            : $this->_skipAllStoresLabel;
+        return $this->getColumn()->getData(
+            'skipAllStoresLabel'
+        ) ? $this->getColumn()->getData(
+            'skipAllStoresLabel'
+        ) : $this->_skipAllStoresLabel;
     }
 
     /**
@@ -84,18 +88,20 @@ class Store
      */
     protected function _getShowEmptyStoresLabelFlag()
     {
-        return $this->getColumn()->getData('skipEmptyStoresLabel')
-            ? $this->getColumn()->getData('skipEmptyStoresLabel')
-            : $this->_skipEmptyStoresLabel;
+        return $this->getColumn()->getData(
+            'skipEmptyStoresLabel'
+        ) ? $this->getColumn()->getData(
+            'skipEmptyStoresLabel'
+        ) : $this->_skipEmptyStoresLabel;
     }
 
     /**
      * Render row store views
      *
-     * @param \Magento\Object $row
+     * @param \Magento\Framework\Object $row
      * @return string
      */
-    public function render(\Magento\Object $row)
+    public function render(\Magento\Framework\Object $row)
     {
         $out = '';
         $skipAllStoresLabel = $this->_getShowAllStoresLabelFlag();
@@ -142,10 +148,10 @@ class Store
     /**
      * Render row store views for export
      *
-     * @param \Magento\Object $row
+     * @param \Magento\Framework\Object $row
      * @return string
      */
-    public function renderExport(\Magento\Object $row)
+    public function renderExport(\Magento\Framework\Object $row)
     {
         $out = '';
         $skipAllStoresLabel = $this->_getShowAllStoresLabelFlag();

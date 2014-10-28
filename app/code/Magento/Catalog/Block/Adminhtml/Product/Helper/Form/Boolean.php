@@ -18,35 +18,24 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Adminhtml
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 
 /**
  * Product form boolean field helper
  *
- * @category   Magento
- * @package    Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
-
-class Boolean extends \Magento\Data\Form\Element\Select
+class Boolean extends \Magento\Framework\Data\Form\Element\Select
 {
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
-        $this->setValues(array(
-            array(
-                'label' => __('No'),
-                'value' => 0,
-            ),
-            array(
-                'label' => __('Yes'),
-                'value' => 1,
-            ),
-        ));
+        $this->setValues(array(array('label' => __('No'), 'value' => 0), array('label' => __('Yes'), 'value' => 1)));
     }
 }

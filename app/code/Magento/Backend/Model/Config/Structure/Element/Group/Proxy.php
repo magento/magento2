@@ -18,20 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Config\Structure\Element\Group;
 
-class Proxy
-    extends \Magento\Backend\Model\Config\Structure\Element\Group
+class Proxy extends \Magento\Backend\Model\Config\Structure\Element\Group
 {
     /**
      * Object manager
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
@@ -41,9 +37,9 @@ class Proxy
     protected $_subject;
 
     /**
-     * @param \Magento\ObjectManager $objectManger
+     * @param \Magento\Framework\ObjectManager $objectManger
      */
-    public function __construct(\Magento\ObjectManager $objectManger)
+    public function __construct(\Magento\Framework\ObjectManager $objectManger)
     {
         $this->_objectManager = $objectManger;
     }
@@ -66,6 +62,7 @@ class Proxy
      *
      * @param array $data
      * @param string $scope
+     * @return void
      */
     public function setData(array $data, $scope)
     {
@@ -136,6 +133,8 @@ class Proxy
     /**
      * Check whether element should be displayed
      *
+     * @param string $websiteCode
+     * @param string $storeCode
      * @return bool
      */
     public function isVisible($websiteCode = '', $storeCode = '')
@@ -152,7 +151,6 @@ class Proxy
     {
         return $this->_getSubject()->getClass();
     }
-
 
     /**
      * Check whether element has visible child elements
@@ -187,7 +185,7 @@ class Proxy
     /**
      * Retrieve clone model
      *
-     * @return \Magento\Core\Model\AbstractModel
+     * @return \Magento\Framework\Model\AbstractModel
      */
     public function getCloneModel()
     {
@@ -197,9 +195,10 @@ class Proxy
     /**
      * Populate form fieldset with group data
      *
-     * @param \Magento\Data\Form\Element\Fieldset $fieldset
+     * @param \Magento\Framework\Data\Form\Element\Fieldset $fieldset
+     * @return void
      */
-    public function populateFieldset(\Magento\Data\Form\Element\Fieldset $fieldset)
+    public function populateFieldset(\Magento\Framework\Data\Form\Element\Fieldset $fieldset)
     {
         $this->_getSubject()->populateFieldset($fieldset);
     }
@@ -256,4 +255,3 @@ class Proxy
         return $this->_getSubject()->getDependencies($storeCode);
     }
 }
-

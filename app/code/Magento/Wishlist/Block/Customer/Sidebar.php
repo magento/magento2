@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Wishlist
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,13 +26,11 @@
 /**
  * Wishlist sidebar block
  *
- * @category   Magento
- * @package    Magento_Wishlist
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Wishlist\Block\Customer;
 
-class Sidebar extends \Magento\Wishlist\Block\AbstractBlock
+class Sidebar extends \Magento\Wishlist\Block\AbstractBlock implements \Magento\Framework\View\Block\IdentityInterface
 {
     /**
      * Retrieve block title
@@ -50,14 +46,11 @@ class Sidebar extends \Magento\Wishlist\Block\AbstractBlock
      * Add sidebar conditions to collection
      *
      * @param  \Magento\Wishlist\Model\Resource\Item\Collection $collection
-     * @return \Magento\Wishlist\Block\Customer\Wishlist
+     * @return $this
      */
     protected function _prepareCollection($collection)
     {
-        $collection->setCurPage(1)
-            ->setPageSize(3)
-            ->setInStockFilter(true)
-            ->setOrder('added_at');
+        $collection->setCurPage(1)->setPageSize(3)->setInStockFilter(true)->setOrder('added_at');
 
         return $this;
     }
@@ -84,7 +77,7 @@ class Sidebar extends \Magento\Wishlist\Block\AbstractBlock
      */
     public function getCanDisplayWishlist()
     {
-        return $this->_getCustomerSession()->isLoggedIn();
+        return $this->httpContext->getValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH);
     }
 
     /**
@@ -121,5 +114,22 @@ class Sidebar extends \Magento\Wishlist\Block\AbstractBlock
     public function hasWishlistItems()
     {
         return $this->getItemCount() > 0;
+    }
+
+    /**
+     * Return identifiers for produced content
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        $identities = array();
+        if ($this->getItemCount()) {
+            foreach ($this->getWishlistItems() as $item) {
+                /** @var $item \Magento\Wishlist\Model\Item */
+                $identities = array_merge($identities, $item->getProduct()->getIdentities());
+            }
+        }
+        return $identities;
     }
 }

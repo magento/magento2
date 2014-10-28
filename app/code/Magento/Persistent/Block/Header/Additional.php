@@ -18,43 +18,64 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Persistent
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Persistent\Block\Header;
+
+use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
 
 /**
  * Remember Me block
  *
- * @category    Magento
- * @package     Magento_Persistent
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Persistent\Block\Header;
-
-class Additional extends \Magento\View\Element\Html\Link
+class Additional extends \Magento\Framework\View\Element\Html\Link
 {
     /**
-     * Persistent session
-     *
-     * @var \Magento\Persistent\Helper\Session
+     * @var \Magento\Customer\Helper\View
      */
-    protected $_persistentSession = null;
+    protected $_customerViewHelper;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Persistent\Helper\Session $persistentSession
+     * @var \Magento\Persistent\Helper\Session
+     */
+    protected $_persistentSessionHelper;
+
+    /**
+     * @var CustomerAccountServiceInterface
+     */
+    protected $_customerAccountService;
+
+    /**
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Customer\Helper\View $customerViewHelper
+     * @param \Magento\Persistent\Helper\Session $persistentSessionHelper
+     * @param CustomerAccountServiceInterface $customerAccountService
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Persistent\Helper\Session $persistentSession,
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Customer\Helper\View $customerViewHelper,
+        \Magento\Persistent\Helper\Session $persistentSessionHelper,
+        CustomerAccountServiceInterface $customerAccountService,
         array $data = array()
     ) {
-        $this->_persistentSession = $persistentSession;
+        $this->_customerViewHelper = $customerViewHelper;
+        $this->_persistentSessionHelper = $persistentSessionHelper;
+        $this->_customerAccountService =  $customerAccountService;
         parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
+    }
+
+    /**
+     * Retrieve unset cookie link
+     *
+     * @return string
+     */
+    public function getHref()
+    {
+        return $this->getUrl('persistent/index/unsetCookie');
     }
 
     /**
@@ -64,11 +85,14 @@ class Additional extends \Magento\View\Element\Html\Link
      */
     protected function _toHtml()
     {
-        $text = __('(Not %1?)', $this->escapeHtml($this->_persistentSession->getCustomer()->getName()));
-
-        $this->setAnchorText($text);
-        $this->setHref($this->getUrl('persistent/index/unsetCookie'));
-
-        return parent::_toHtml();
+        $persistentName = $this->_escaper->escapeHtml(
+            $this->_customerViewHelper->getCustomerName(
+                $this->_customerAccountService->getCustomer(
+                    $this->_persistentSessionHelper->getSession()->getCustomerId()
+                )
+            )
+        );
+        return '<span><a ' . $this->getLinkAttributes() . ' >' . $this->escapeHtml(__('(Not %1?)', $persistentName))
+        . '</a></span>';
     }
 }

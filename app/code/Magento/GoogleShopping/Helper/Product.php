@@ -18,22 +18,17 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_GoogleShopping
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\GoogleShopping\Helper;
 
 /**
  * Google Content Product Helper
  *
- * @category   Magento
- * @package    Magento_GoogleShopping
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\GoogleShopping\Helper;
-
-class Product extends \Magento\App\Helper\AbstractHelper
+class Product extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Product attributes cache
@@ -65,9 +60,9 @@ class Product extends \Magento\App\Helper\AbstractHelper
             }
         }
 
-        return isset($this->_productAttributes[$product->getId()][$attributeId])
-            ? $this->_productAttributes[$product->getId()][$attributeId]
-            : null;
+        return isset(
+            $this->_productAttributes[$product->getId()][$attributeId]
+        ) ? $this->_productAttributes[$product->getId()][$attributeId] : null;
     }
 
     /**

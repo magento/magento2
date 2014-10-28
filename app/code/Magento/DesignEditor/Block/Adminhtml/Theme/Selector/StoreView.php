@@ -18,12 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_DesignEditor
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\DesignEditor\Block\Adminhtml\Theme\Selector;
 
 /**
@@ -38,7 +35,7 @@ class StoreView extends \Magento\Backend\Block\Template
     /**
      * Website collection
      *
-     * @var \Magento\Core\Model\Resource\Website\Collection
+     * @var \Magento\Store\Model\Resource\Website\Collection
      */
     protected $_websiteCollection;
 
@@ -54,14 +51,14 @@ class StoreView extends \Magento\Backend\Block\Template
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Resource\Website\Collection $websiteCollection
+     * @param \Magento\Store\Model\Resource\Website\Collection $websiteCollection
      * @param \Magento\Theme\Model\Config\Customization $customizationConfig
      * @param \Magento\Core\Helper\Data $coreHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Resource\Website\Collection $websiteCollection,
+        \Magento\Store\Model\Resource\Website\Collection $websiteCollection,
         \Magento\Theme\Model\Config\Customization $customizationConfig,
         \Magento\Core\Helper\Data $coreHelper,
         array $data = array()
@@ -76,7 +73,7 @@ class StoreView extends \Magento\Backend\Block\Template
     /**
      * Get website collection with stores and store-views joined
      *
-     * @return \Magento\Core\Model\Resource\Website\Collection
+     * @return \Magento\Store\Model\Resource\Website\Collection
      */
     public function getCollection()
     {
@@ -86,7 +83,7 @@ class StoreView extends \Magento\Backend\Block\Template
     /**
      * Get website, stores and store-views
      *
-     * @return \Magento\Core\Model\Resource\Website\Collection
+     * @return \Magento\Store\Model\Resource\Website\Collection
      */
     public function getWebsiteStructure()
     {
@@ -94,7 +91,7 @@ class StoreView extends \Magento\Backend\Block\Template
         $website = null;
         $store = null;
         $storeView = null;
-        /** @var $row \Magento\Core\Model\Website */
+        /** @var $row \Magento\Store\Model\Website */
         foreach ($this->getCollection() as $row) {
             $website = $row->getName();
             $store = $row->getGroupTitle();
@@ -120,19 +117,17 @@ class StoreView extends \Magento\Backend\Block\Template
     {
         /** @var $assignSaveButton \Magento\Backend\Block\Widget\Button */
         $assignSaveButton = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button');
-        $assignSaveButton->setData(array(
-            'label'     => __('Assign'),
-            'class'     => 'action-save primary',
-            'data_attribute' => array(
-                'mage-init' => array(
-                    'button' => array(
-                        'event' => 'assign-confirm',
-                        'target' => 'body',
-                        'eventData' => array()
-                    ),
-                ),
+        $assignSaveButton->setData(
+            array(
+                'label' => __('Assign'),
+                'class' => 'action-save primary',
+                'data_attribute' => array(
+                    'mage-init' => array(
+                        'button' => array('event' => 'assign-confirm', 'target' => 'body', 'eventData' => array())
+                    )
+                )
             )
-        ));
+        );
 
         return $assignSaveButton->toHtml();
     }
@@ -159,16 +154,16 @@ class StoreView extends \Magento\Backend\Block\Template
         $storesByThemes = array();
         foreach ($this->_customizationConfig->getStoresByThemes() as $themeId => $stores) {
             /* NOTE
-                We filter out themes not included to $assignedThemeIds array so we only get actually "assigned"
-                themes. So if theme is assigned to store or website and used by store-view only via config fall-back
-                mechanism it will not get to the resulting $storesByThemes array.
-            */
+               We filter out themes not included to $assignedThemeIds array so we only get actually "assigned"
+               themes. So if theme is assigned to store or website and used by store-view only via config fall-back
+               mechanism it will not get to the resulting $storesByThemes array.
+               */
             if (!in_array($themeId, $assignedThemeIds)) {
                 continue;
             }
 
             $storesByThemes[$themeId] = array();
-            /** @var $store \Magento\Core\Model\Store */
+            /** @var $store \Magento\Store\Model\Store */
             foreach ($stores as $store) {
                 $storesByThemes[$themeId][] = (int)$store->getId();
             }
@@ -187,13 +182,13 @@ class StoreView extends \Magento\Backend\Block\Template
         $isMultipleMode = false;
         $tmpStore = null;
         foreach ($this->_customizationConfig->getStoresByThemes() as $stores) {
-            /** @var $store \Magento\Core\Model\Store */
+            /** @var $store \Magento\Store\Model\Store */
             foreach ($stores as $store) {
                 if ($tmpStore === null) {
                     $tmpStore = $store->getId();
                 } elseif ($tmpStore != $store->getId()) {
                     $isMultipleMode = true;
-                    break(2);
+                    break 2;
                 }
             }
         }
@@ -209,15 +204,16 @@ class StoreView extends \Magento\Backend\Block\Template
     public function getOptionsJson()
     {
         $options = array();
-        $options['storesByThemes']    = $this->_getStoresByThemes();
-        $options['assignUrl']         = $this->getUrl('adminhtml/*/assignThemeToStore', array(
-            'theme_id' => $this->getThemeId()
-        ));
-        $options['afterAssignUrl']    = $this->getUrl('adminhtml/*/index');
+        $options['storesByThemes'] = $this->_getStoresByThemes();
+        $options['assignUrl'] = $this->getUrl(
+            'adminhtml/*/assignThemeToStore',
+            array('theme_id' => $this->getThemeId())
+        );
+        $options['afterAssignUrl'] = $this->getUrl('adminhtml/*/index');
         $options['hasMultipleStores'] = $this->_hasMultipleStores();
 
-        $options['actionOnAssign']   = $this->getData('actionOnAssign');
-        $options['afterAssignOpen']  = false;
+        $options['actionOnAssign'] = $this->getData('actionOnAssign');
+        $options['afterAssignOpen'] = false;
 
         /** @var $helper \Magento\Core\Helper\Data */
         $helper = $this->_coreHelper;

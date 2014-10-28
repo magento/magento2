@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Paypal\Controller;
 
 /**
@@ -31,36 +30,29 @@ class HostedproTest extends \Magento\TestFramework\TestCase\AbstractController
 {
     public function testCancelActionIsContentGenerated()
     {
-        $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Sales\Model\Order');
+        $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order');
         $order->load('100000001', 'increment_id');
         $order->getPayment()->setMethod(\Magento\Paypal\Model\Config::METHOD_HOSTEDPRO);
 
-        $quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Sales\Model\Quote')
-            ->setStoreId($order->getStoreId())
-            ->save();
+        $quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Sales\Model\Quote'
+        )->setStoreId(
+            $order->getStoreId()
+        )->save();
 
         $order->setQuoteId($quote->getId());
         $order->save();
 
         $session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Checkout\Model\Session');
-        $session->setLastRealOrderId($order->getRealOrderId())
-            ->setLastQuoteId($order->getQuoteId());
+        $session->setLastRealOrderId($order->getRealOrderId())->setLastQuoteId($order->getQuoteId());
 
         $this->dispatch('paypal/hostedpro/cancel');
         $this->assertContains(
             "parent.jQuery('#checkoutSteps').trigger('gotoSection', 'payment');",
             $this->getResponse()->getBody()
         );
-        $this->assertContains(
-            "parent.jQuery('#checkout-review-submit').show();",
-            $this->getResponse()->getBody()
-        );
-        $this->assertContains(
-            "parent.jQuery('#iframe-warning').hide();",
-            $this->getResponse()->getBody()
-        );
+        $this->assertContains("parent.jQuery('#checkout-review-submit').show();", $this->getResponse()->getBody());
+        $this->assertContains("parent.jQuery('#iframe-warning').hide();", $this->getResponse()->getBody());
     }
 
     /**
@@ -76,8 +68,7 @@ class HostedproTest extends \Magento\TestFramework\TestCase\AbstractController
         $quote = $this->_objectManager->create('Magento\Sales\Model\Quote');
         $quote->load('test02', 'reserved_order_id');
         $session->setQuoteId($quote->getId());
-        $session->setPaypalStandardQuoteId($quote->getId())
-            ->setLastRealOrderId('100000002');
+        $session->setPaypalStandardQuoteId($quote->getId())->setLastRealOrderId('100000002');
         $this->dispatch('paypal/hostedpro/cancel');
 
         $order->load('100000002', 'increment_id');

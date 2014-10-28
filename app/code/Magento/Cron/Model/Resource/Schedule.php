@@ -18,27 +18,22 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Cron
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Cron\Model\Resource;
 
 /**
  * Schedule resource
  *
- * @category    Magento
- * @package     Magento_Cron
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Cron\Model\Resource;
-
-class Schedule extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Schedule extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Initialize resource
      *
+     * @return void
      */
     public function _construct()
     {
@@ -50,10 +45,10 @@ class Schedule extends \Magento\Core\Model\Resource\Db\AbstractDb
      * and return true. Otherwise, return false and do not change the job.
      * This method is used to implement locking for cron jobs.
      *
-     * @param unknown_type $scheduleId
-     * @param String $newStatus
-     * @param String $currentStatus
-     * @return unknown
+     * @param string $scheduleId
+     * @param string $newStatus
+     * @param string $currentStatus
+     * @return bool
      */
     public function trySetJobStatusAtomic($scheduleId, $newStatus, $currentStatus)
     {

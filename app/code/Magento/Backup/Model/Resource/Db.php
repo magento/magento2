@@ -21,28 +21,27 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backup\Model\Resource;
 
 /**
  * Database backup resource model
  */
-namespace Magento\Backup\Model\Resource;
-
 class Db
 {
     /**
      * Database connection adapter
      *
-     * @var \Magento\DB\Adapter\Pdo\Mysql
+     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql
      */
     protected $_write;
 
     /**
-     * tables Foreign key data array
+     * Tables foreign key data array
      * [tbl_name] = array(create foreign key strings)
      *
      * @var array
      */
-    protected $_foreignKeys    = array();
+    protected $_foreignKeys = array();
 
     /**
      * Backup resource helper
@@ -55,11 +54,11 @@ class Db
      * Initialize Backup DB resource model
      *
      * @param \Magento\Backup\Model\Resource\HelperFactory $resHelperFactory
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      */
     public function __construct(
         \Magento\Backup\Model\Resource\HelperFactory $resHelperFactory,
-        \Magento\App\Resource $resource
+        \Magento\Framework\App\Resource $resource
     ) {
         $this->_resourceHelper = $resHelperFactory->create();
         $this->_write = $resource->getConnection('backup_write');
@@ -68,6 +67,7 @@ class Db
     /**
      * Clear data
      *
+     * @return void
      */
     public function clear()
     {
@@ -118,7 +118,7 @@ class Db
         $fkScript = '';
         if (!$tableName) {
             $tables = $this->getTables();
-            foreach($tables as $table) {
+            foreach ($tables as $table) {
                 $tableFkScript = $this->_resourceHelper->getTableForeignKeysSql($table);
                 if (!empty($tableFkScript)) {
                     $fkScript .= "\n" . $tableFkScript;
@@ -134,21 +134,20 @@ class Db
      * Retrieve table status
      *
      * @param string $tableName
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object|bool
      */
     public function getTableStatus($tableName)
     {
         $row = $this->_write->showTableStatus($tableName);
 
         if ($row) {
-            $statusObject = new \Magento\Object();
+            $statusObject = new \Magento\Framework\Object();
             $statusObject->setIdFieldName('name');
             foreach ($row as $field => $value) {
                 $statusObject->setData(strtolower($field), $value);
             }
 
-            $cntRow = $this->_write->fetchRow(
-                    $this->_write->select()->from($tableName, 'COUNT(1) as rows'));
+            $cntRow = $this->_write->fetchRow($this->_write->select()->from($tableName, 'COUNT(1) as rows'));
             $statusObject->setRows($cntRow['rows']);
 
             return $statusObject;
@@ -158,11 +157,11 @@ class Db
     }
 
     /**
-     * Retrieve table partical data SQL insert
+     * Retrieve table partial data SQL insert
      *
      * @param string $tableName
-     * @param int $count
-     * @param int $offset
+     * @param null|int $count
+     * @param null|int $offset
      * @return string
      */
     public function getTableDataSql($tableName, $count = null, $offset = null)
@@ -173,27 +172,25 @@ class Db
     /**
      * Enter description here...
      *
-     * @param string|array|Zend_Db_Expr $tableName
+     * @param string|array|\Zend_Db_Expr $tableName
      * @param bool $addDropIfExists
      * @return string
      */
     public function getTableCreateScript($tableName, $addDropIfExists = false)
     {
-        return $this->_resourceHelper->getTableCreateScript($tableName, $addDropIfExists);;
+        return $this->_resourceHelper->getTableCreateScript($tableName, $addDropIfExists);
     }
 
     /**
      * Retrieve table header comment
      *
-     * @param unknown_type $tableName
+     * @param string $tableName
      * @return string
      */
     public function getTableHeader($tableName)
     {
         $quotedTableName = $this->_write->quoteIdentifier($tableName);
-        return "\n--\n"
-            . "-- Table structure for table {$quotedTableName}\n"
-            . "--\n\n";
+        return "\n--\n" . "-- Table structure for table {$quotedTableName}\n" . "--\n\n";
     }
 
     /**
@@ -253,7 +250,7 @@ class Db
     /**
      * Start transaction mode
      *
-     * @return \Magento\Backup\Model\Resource\Db
+     * @return $this
      */
     public function beginTransaction()
     {
@@ -265,7 +262,7 @@ class Db
     /**
      * Commit transaction
      *
-     * @return \Magento\Backup\Model\Resource\Db
+     * @return $this
      */
     public function commitTransaction()
     {
@@ -277,7 +274,7 @@ class Db
     /**
      * Rollback transaction
      *
-     * @return \Magento\Backup\Model\Resource\Db
+     * @return $this
      */
     public function rollBackTransaction()
     {
@@ -289,10 +286,11 @@ class Db
     /**
      * Run sql code
      *
-     * @param $command
-     * @return \Magento\Backup\Model\Resource\Db
+     * @param string $command
+     * @return $this
      */
-    public function runCommand($command){
+    public function runCommand($command)
+    {
         $this->_write->query($command);
         return $this;
     }

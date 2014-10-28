@@ -1,0 +1,292 @@
+// /**
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+// rating-vote mixin
+.mixin-rating-vote(
+    @_icon-count: @rating-icon-count,
+    @_icon-content: @rating-icon-content,
+    @_icon-font: @rating-icon-font,
+    @_icon-font-size: @rating-icon-font-size,
+    @_icon-letter-spacing: @rating-icon-letter-spacing,
+    @_icon-color: @rating-icon-color,
+    @_icon-color-active: @rating-icon-color-active
+) {
+    overflow: hidden;
+    &:before {
+        ._rating-icon-defalt(
+            @_icon-font,
+            @_icon-font-size,
+            @_icon-letter-spacing,
+            @_icon-color
+        );
+        .mixin-rating-icons-content(
+            @_icon-count,
+            @_icon-content
+        );
+        position: absolute;
+        z-index: 1;
+        display: block;
+    }
+    input[type="radio"] {
+        .visually-hidden();
+        &:focus,
+        &:checked {
+            + label {
+                &:before {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+    label {
+        position: absolute;
+        display: block;
+        cursor: pointer;
+        span {
+            .visually-hidden();
+        }
+        &:before {
+            ._rating-icon-defalt(
+                @_icon-font,
+                @_icon-font-size,
+                @_icon-letter-spacing,
+                @_icon-color-active
+            );
+            opacity: 0;
+        }
+        &:hover {
+            &:before {
+                opacity: 1;
+            }
+            ~ label {
+                &:before {
+                    opacity: 0;
+                }
+            }
+        }
+    }
+    ._rating-iteration(
+        @_icon-content,
+        @_icon-count
+    );
+}
+
+// rating-summary mixin
+.mixin-rating-summary(
+    @_icon-count: @rating-icon-count,
+    @_icon-content: @rating-icon-content,
+    @_icon-font: @rating-icon-font,
+    @_icon-font-size: @rating-icon-font-size,
+    @_icon-letter-spacing: @rating-icon-letter-spacing,
+    @_icon-color: @rating-icon-color,
+    @_icon-color-active: @rating-icon-color-active,
+    @_label-hide: @rating-label-hide
+) {
+    white-space: nowrap;
+    overflow: hidden;
+    ._rating-label-hide(@_label-hide);
+    .rating-result {
+        width: (@_icon-font-size * @_icon-count) + ceil(@_icon-letter-spacing * (@_icon-count - 1));
+        &:before {
+            position: absolute;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            width: 100%;
+            ._rating-summary-icon-default(
+                @_icon-font,
+                @_icon-font-size,
+                @_icon-letter-spacing,
+                @_icon-count,
+                @_icon-content,
+                @_icon-color
+            );
+        }
+
+        //width: @_width;
+        display: inline-block;
+        vertical-align: middle;
+        position: relative;
+        > span {
+            display: block;
+            overflow: hidden;
+            &:before {
+                position: relative;
+                z-index: 2;
+                ._rating-summary-icon-default(
+                    @_icon-font,
+                    @_icon-font-size,
+                    @_icon-letter-spacing,
+                    @_icon-count,
+                    @_icon-content,
+                    @_icon-color-active
+                );
+            }
+
+            span {
+                .visually-hidden();
+            }
+        }
+    }
+}
+
+.mixin-rating-summary-label-hide() {
+    .label {
+        .visually-hidden();
+    }
+}
+
+// Internal use mixins
+._rating-label-hide(@_label-hide) when (@_label-hide = true) {
+    .mixin-rating-summary-label-hide();
+}
+
+._rating-iteration(
+    @_icon-content,
+    @_icon-count
+) {
+    .loopingClass (@_index) when (@_index > 0) {
+        .rating-@{_index} {
+            z-index: @_icon-count - (@_index - 2);
+            &:before {
+               .mixin-rating-icons-content(@_index, @_icon-content);
+            }
+        }
+        // next iteration
+        .loopingClass(@_index - 1);
+    }
+    .loopingClass (0) {}
+    .loopingClass (@_icon-count);
+}
+
+._rating-icon-defalt(
+    @_icon-font,
+    @_icon-font-size,
+    @_icon-letter-spacing,
+    @_icon-color
+) {
+    letter-spacing: @_icon-letter-spacing;
+    font-family: @_icon-font;
+    font-style: normal;
+    font-size: @_icon-font-size;
+    line-height: @_icon-font-size;
+    height: @_icon-font-size;
+    speak: none;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    color: @_icon-color;
+    vertical-align: top;
+}
+
+._rating-summary-icon-default(
+    @_icon-font,
+    @_icon-font-size,
+    @_icon-letter-spacing,
+    @_icon-count,
+    @_icon-content,
+    @_icon-color
+) {
+    display: block;
+    font-family: @_icon-font;
+    .mixin-rating-icons-content(@_icon-count, @_icon-content);
+    font-style: normal;
+    font-size: @_icon-font-size;
+    line-height: @_icon-font-size;
+    height: @_icon-font-size;
+    letter-spacing: @_icon-letter-spacing;
+    speak: none;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    color: @_icon-color;
+}
+
+.mixin-rating-icons-content(
+    @_icon-count: @rating-icon-count,
+    @_icon-content: @rating-icon-content
+) when (@_icon-count = 10) {
+    content: @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content;
+}
+
+.mixin-rating-icons-content(
+    @_icon-count: @rating-icon-count,
+    @_icon-content: @rating-icon-content
+) when (@_icon-count = 9) {
+    content: @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content;
+}
+
+.mixin-rating-icons-content(
+    @_icon-count: @rating-icon-count,
+    @_icon-content: @rating-icon-content
+) when (@_icon-count = 8) {
+    content: @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content;
+}
+
+.mixin-rating-icons-content(
+    @_icon-count: @rating-icon-count,
+    @_icon-content: @rating-icon-content
+) when (@_icon-count = 7) {
+    content: @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content;
+}
+
+.mixin-rating-icons-content(
+    @_icon-count: @rating-icon-count,
+    @_icon-content: @rating-icon-content
+) when (@_icon-count = 6) {
+    content: @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content;
+}
+
+.mixin-rating-icons-content(
+    @_icon-count: @rating-icon-count,
+    @_icon-content: @rating-icon-content
+) when (@_icon-count = 5) {
+    content: @_icon-content @_icon-content @_icon-content @_icon-content @_icon-content;
+}
+
+.mixin-rating-icons-content(
+    @_icon-count: @rating-icon-count,
+    @_icon-content: @rating-icon-content
+) when (@_icon-count = 4) {
+    content: @_icon-content @_icon-content @_icon-content @_icon-content;
+}
+
+.mixin-rating-icons-content(
+    @_icon-count: @rating-icon-count,
+    @_icon-content: @rating-icon-content
+) when (@_icon-count = 3) {
+    content: @_icon-content @_icon-content @_icon-content;
+}
+
+.mixin-rating-icons-content(
+    @_icon-count: @rating-icon-count,
+    @_icon-content: @rating-icon-content
+) when (@_icon-count = 2) {
+    content: @_icon-content @_icon-content;
+}
+
+.mixin-rating-icons-content(
+    @_icon-count: @rating-icon-count,
+    @_icon-content: @rating-icon-content
+) when (@_icon-count = 1) {
+    content: @_icon-content;
+}

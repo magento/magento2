@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -30,9 +28,8 @@
  */
 namespace Magento\Backend\Model\Config\Source;
 
-class Yesnocustom implements \Magento\Core\Model\Option\ArrayInterface
+class Yesnocustom implements \Magento\Framework\Option\ArrayInterface
 {
-
     /**
      * Options getter
      *
@@ -41,10 +38,9 @@ class Yesnocustom implements \Magento\Core\Model\Option\ArrayInterface
     public function toOptionArray()
     {
         return array(
-            array('value' => 1, 'label'=>__('Yes')),
-            array('value' => 0, 'label'=>__('No')),
-            array('value' => 2, 'label'=>__('Specified'))
+            array('value' => 1, 'label' => __('Yes')),
+            array('value' => 0, 'label' => __('No')),
+            array('value' => 2, 'label' => __('Specified'))
         );
     }
-
 }

@@ -1,0 +1,82 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+
+<?php /* @var $this \Magento\Framework\View\Element\Template */ ?>
+<div <?php echo $this->getGridHtmlClass() ? ' class="' . $this->getGridHtmlClass() . '"' : '' ?><?php echo $this->getGridHtmlCss() ? ' style="' . $this->getGridHtmlCss() . '"' : '' ?>>
+
+    <?php if ($caption = $this->getGridCaption()): ?>
+        <div class="title"><strong><?php echo $this->escapeHtml($caption) ?></strong></div>
+    <?php endif; ?>
+
+    <?php $gridElements = $this->getGridElements(); ?>
+    <?php if ($gridElements): ?>
+        <div class="table-wrapper recurring-payments">
+            <table id="<?php echo $this->getGridHtmlId() ?>" class="data table table-recurring-payments">
+                <caption class="table caption"><?php echo __('Recurring Payments') ?></caption>
+                <thead>
+                <tr>
+                    <?php foreach ($this->getGridColumns() as $column):
+                        $nobr = $this->getObjectData($column, 'is_nobr') ? '<span>%s</span>' : '%s';
+                        $title = $this->getObjectData($column, 'title');
+                        ?>
+                        <th scope="col" class="col title"><?php echo $title ? sprintf($nobr, $this->escapeHtml($title)) : '&nbsp;' ?></th>
+                    <?php endforeach; ?>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($gridElements as $row): ?>
+                    <tr>
+                        <?php foreach ($this->getGridColumns() as $column):
+                            $nobr = $this->getObjectData($column, 'is_nobr') ? '<span>%s</span>' : '%s';
+                            $index = $this->getObjectData($column, 'index');
+                            $value = $this->getObjectData($row, $index);
+                            $linkUrl = $this->getObjectData($row, "{$index}_link_url");
+                            $linkAnchorText = $this->getObjectData($row, "{$index}_link_text");
+                            $linkText = $linkUrl ? ($linkAnchorText ? $linkAnchorText : $value) : '';
+                            $linkFormat = $linkUrl ? '<a href="%s">%s</a>' : '';
+                            $title = $this->getObjectData($column, 'title');
+                            ?>
+                            <td data-th="<?php echo $title ? $this->escapeHtml($title) : '&nbsp;' ?>" <?php echo $this->getObjectData($row, 'is_amount') ? ' class="col qty"' : '' ?>>
+                                <?php
+                                if ($linkFormat) {
+                                    echo sprintf($nobr, sprintf($linkFormat, $this->escapeHtml($linkUrl), $this->escapeHtml($linkText)));
+                                } else {
+                                    echo sprintf($nobr, $this->escapeHtml($value));
+                                }
+                                ?>
+                            </td>
+                        <?php endforeach; ?>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+        <?php if ($this->getChildHtml('pager')): ?>
+            <div class="toolbar recurring-payments-toolbar bottom"><?php echo $this->getChildHtml('pager'); ?></div>
+        <?php endif;?>
+    <?php else: ?>
+        <div class="message info empty"><span><?php echo $this->escapeHtml($this->getEmptyGridMessage()); ?></span></div>
+    <?php endif; ?>
+</div>

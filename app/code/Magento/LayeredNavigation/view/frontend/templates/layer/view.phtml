@@ -1,0 +1,63 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Category layered navigation
+ *
+ * @var $this \Magento\LayeredNavigation\Block\Navigation
+ */
+?>
+
+<?php if($this->canShowBlock()): ?>
+    <div class="block filter">
+        <div class="block-title filter-title">
+            <strong><?php echo __('Shop By') ?></strong>
+        </div>
+
+        <div class="block-content filter-content">
+            <?php echo $this->getChildHtml('state') ?>
+
+            <?php if ($this->getLayer()->getState()->getFilters()): ?>
+                <div class="block-actions filter-actions">
+                    <a href="<?php echo $this->getClearUrl() ?>" class="action clear filter-clear"><span><?php echo __('Clear All') ?></span></a>
+                </div>
+            <?php endif; ?>
+            <?php $wrapOptions = false; ?>
+            <?php foreach ($this->getFilters() as $filter): ?>
+                <?php if(!$wrapOptions): ?>
+                    <strong class="block-subtitle filter-subtitle"><?php echo __('Shopping Options') ?></strong>
+                    <dl class="filter-options" id="narrow-by-list">
+                <?php $wrapOptions = true; endif; ?>
+                    <?php if ($filter->getItemsCount()): ?>
+                        <dt class="filter-options-title"><?php echo $this->escapeHtml(__($filter->getName())) ?></dt>
+                        <dd class="filter-options-content"><?php echo $this->getChildBlock('renderer')->render($filter); ?></dd>
+                    <?php endif; ?>
+            <?php endforeach; ?>
+            <?php if($wrapOptions): ?>
+                </dl>
+            <?php endif; ?>
+        </div>
+    </div>
+<?php endif; ?>

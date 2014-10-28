@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Checkout
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,8 +25,7 @@
 require __DIR__ . '/../../../Magento/Bundle/_files/product.php';
 
 /** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Catalog\Model\Product');
+$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
 $product->load(3);
 
 /** @var $typeInstance \Magento\Bundle\Model\Product\Type */
@@ -49,15 +45,12 @@ foreach ($optionCollection as $option) {
     $bundleOptionsQty[$option->getId()] = 1;
 }
 
-$requestInfo = new \Magento\Object(array(
-    'qty' => 1,
-    'bundle_option' => $bundleOptions,
-    'bundle_option_qty' => $bundleOptionsQty
-));
+$requestInfo = new \Magento\Framework\Object(
+    array('qty' => 1, 'bundle_option' => $bundleOptions, 'bundle_option_qty' => $bundleOptionsQty)
+);
 
 /** @var $cart \Magento\Checkout\Model\Cart */
-$cart = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Checkout\Model\Cart');
+$cart = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Checkout\Model\Cart');
 $cart->addProduct($product, $requestInfo);
 $cart->save();
 

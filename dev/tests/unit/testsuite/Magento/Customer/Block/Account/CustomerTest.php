@@ -21,29 +21,60 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Block\Account;
 
 class CustomerTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetCustomerName()
     {
-        $customer = $this->getMock('Magento\Customer\Model\Customer', array(), array(), '', false);
-        $customer->expects($this->once())->method('getName')->will($this->returnValue('John Doe'));
+        $customerName = 'John Doe';
 
-        $escapedName = new \stdClass();
-        $escaper = $this->getMock('Magento\Escaper', array(), array(), '', false);
-        $escaper
-            ->expects($this->once())->method('escapeHtml')->with('John Doe')->will($this->returnValue($escapedName));
+        $customer = $this->getMockBuilder('Magento\Customer\Service\V1\Data\Customer')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $context = $this->getMock('Magento\View\Element\Template\Context', array(), array(), '', false);
-        $context->expects($this->once())->method('getEscaper')->will($this->returnValue($escaper));
+        $customerServiceMock = $this->getMockBuilder(
+            '\Magento\Customer\Service\V1\CustomerAccountServiceInterface'
+        )->disableOriginalConstructor()->getMock();
+        $customerServiceMock->expects($this->any())->method('getCustomer')->will($this->returnValue($customer));
 
-        $session = $this->getMock('Magento\Customer\Model\Session', array(), array(), '', false);
-        $session->expects($this->once())->method('getCustomer')->will($this->returnValue($customer));
+        $viewHelperMock = $this->getMockBuilder(
+            'Magento\Customer\Helper\View'
+        )->disableOriginalConstructor()->getMock();
+        $viewHelperMock->expects($this->any())->method('getCustomerName')->will($this->returnValue($customerName));
 
-        $block = new \Magento\Customer\Block\Account\Customer($context, $session);
+        $escaperMock = $this->getMockBuilder('Magento\Framework\Escaper')->disableOriginalConstructor()->getMock();
+        $escaperMock->expects(
+            $this->any()
+        )->method(
+            'escapeHtml'
+        )->with(
+            $customerName
+        )->will(
+            $this->returnValue($customerName)
+        );
 
-        $this->assertSame($escapedName, $block->getCustomerName());
+        $contextMock = $this->getMockBuilder(
+            'Magento\Framework\View\Element\Template\Context'
+        )->disableOriginalConstructor()->getMock();
+        $contextMock->expects($this->any())->method('getEscaper')->will($this->returnValue($escaperMock));
+
+        $httpContextMock = $this->getMockBuilder('Magento\Framework\App\Http\Context')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $currentCustomer = $this->getMockBuilder('Magento\Customer\Helper\Session\CurrentCustomer')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $block = new \Magento\Customer\Block\Account\Customer(
+            $contextMock,
+            $customerServiceMock,
+            $viewHelperMock,
+            $httpContextMock,
+            $currentCustomer
+        );
+
+        $this->assertSame($customerName, $block->getCustomerName());
     }
 }

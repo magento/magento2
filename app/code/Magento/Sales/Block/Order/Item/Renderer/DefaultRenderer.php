@@ -18,23 +18,24 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Sales\Block\Order\Item\Renderer;
+
+use Magento\Sales\Model\Order\Item as OrderItem;
+use Magento\Sales\Model\Order\Invoice\Item as InvoiceItem;
+use Magento\Sales\Model\Order\CreditMemo\Item as CreditMemoItem;
 
 /**
  * Order item render block
  */
-class DefaultRenderer extends \Magento\View\Element\Template
+class DefaultRenderer extends \Magento\Framework\View\Element\Template
 {
     /**
      * Magento string lib
      *
-     * @var \Magento\Stdlib\String
+     * @var \Magento\Framework\Stdlib\String
      */
     protected $string;
 
@@ -44,14 +45,14 @@ class DefaultRenderer extends \Magento\View\Element\Template
     protected $_productOptionFactory;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Stdlib\String $string
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Framework\Stdlib\String $string
      * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Stdlib\String $string,
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Framework\Stdlib\String $string,
         \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
         array $data = array()
     ) {
@@ -60,12 +61,19 @@ class DefaultRenderer extends \Magento\View\Element\Template
         parent::__construct($context, $data);
     }
 
-    public function setItem(\Magento\Object $item)
+    /**
+     * @param \Magento\Framework\Object $item
+     * @return $this
+     */
+    public function setItem(\Magento\Framework\Object $item)
     {
         $this->setData('item', $item);
         return $this;
     }
 
+    /**
+     * @return array|null
+     */
     public function getItem()
     {
         return $this->_getData('item');
@@ -81,7 +89,9 @@ class DefaultRenderer extends \Magento\View\Element\Template
         return $this->getOrderItem()->getOrder();
     }
 
-
+    /**
+     * @return array|null
+     */
     public function getOrderItem()
     {
         if ($this->getItem() instanceof \Magento\Sales\Model\Order\Item) {
@@ -91,6 +101,9 @@ class DefaultRenderer extends \Magento\View\Element\Template
         }
     }
 
+    /**
+     * @return array
+     */
     public function getItemOptions()
     {
         $result = array();
@@ -173,7 +186,7 @@ class DefaultRenderer extends \Magento\View\Element\Template
         $result = array('value' => $truncatedValue);
 
         if ($this->string->strlen($optionValue) > 55) {
-            $result['value'] = $result['value'] . ' <a href="#" class="dots" onclick="return false">...</a>';
+            $result['value'] = $result['value'] . ' <a href="#" class="dots tooltip toggle" onclick="return false">...</a>';
             $optionValue = nl2br($optionValue);
             $result = array_merge($result, array('full_view' => $optionValue));
         }
@@ -194,7 +207,7 @@ class DefaultRenderer extends \Magento\View\Element\Template
     /**
      * Return product additional information block
      *
-     * @return \Magento\View\Element\AbstractBlock
+     * @return \Magento\Framework\View\Element\AbstractBlock
      */
     public function getProductAdditionalInformationBlock()
     {
@@ -210,5 +223,70 @@ class DefaultRenderer extends \Magento\View\Element\Template
     public function prepareSku($sku)
     {
         return $this->escapeHtml($this->string->splitInjection($sku));
+    }
+
+    /**
+     * Return item unit price html
+     *
+     * @param OrderItem|InvoiceItem|CreditmemoItem $item child item in case of bundle product
+     * @return string
+     */
+    public function getItemPriceHtml($item = null)
+    {
+        $block = $this->getLayout()->getBlock('item_unit_price');
+        if (!$item) {
+            $item = $this->getItem();
+        }
+        $block->setItem($item);
+        return $block->toHtml();
+    }
+
+    /**
+     * Return item row total html
+     *
+     * @param OrderItem|InvoiceItem|CreditmemoItem $item child item in case of bundle product
+     * @return string
+     */
+    public function getItemRowTotalHtml($item = null)
+    {
+        $block = $this->getLayout()->getBlock('item_row_total');
+        if (!$item) {
+            $item = $this->getItem();
+        }
+        $block->setItem($item);
+        return $block->toHtml();
+    }
+
+    /**
+     * Return the total amount minus discount
+     *
+     * @param OrderItem|InvoiceItem|CreditmemoItem $item
+     * @return mixed
+     */
+    public function getTotalAmount($item)
+    {
+        $totalAmount = $item->getRowTotal()
+            + $item->getTaxAmount()
+            + $item->getHiddenTaxAmount()
+            + $item->getWeeeTaxAppliedRowAmount()
+            - $item->getDiscountAmount();
+
+        return $totalAmount;
+    }
+
+    /**
+     * Return HTML for item total after discount
+     *
+     * @param OrderItem|InvoiceItem|CreditmemoItem $item child item in case of bundle product
+     * @return string
+     */
+    public function getItemRowTotalAfterDiscountHtml($item = null)
+    {
+        $block = $this->getLayout()->getBlock('item_row_total_after_discount');
+        if (!$item) {
+            $item = $this->getItem();
+        }
+        $block->setItem($item);
+        return $block->toHtml();
     }
 }

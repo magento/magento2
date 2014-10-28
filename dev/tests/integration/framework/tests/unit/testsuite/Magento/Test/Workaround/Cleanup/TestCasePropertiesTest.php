@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -46,7 +43,7 @@ class TestCasePropertiesTest extends \PHPUnit_Framework_TestCase
         array('name' => '_testPropertyObject', 'is_static' => false),
         array('name' => 'testPublicStatic', 'is_static' => true),
         array('name' => '_testProtectedStatic', 'is_static' => true),
-        array('name' => '_testPrivateStatic', 'is_static' => true),
+        array('name' => '_testPrivateStatic', 'is_static' => true)
     );
 
     public function testEndTestSuiteDestruct()
@@ -61,9 +58,7 @@ class TestCasePropertiesTest extends \PHPUnit_Framework_TestCase
         $testClass = $testSuite->testAt(0);
 
         $propertyObjectMock = $this->getMock('stdClass', array('__destruct'));
-        $propertyObjectMock
-            ->expects($this->once())
-            ->method('__destruct');
+        $propertyObjectMock->expects($this->atLeastOnce())->method('__destruct');
         $testClass->setPropertyObject($propertyObjectMock);
 
         foreach ($this->_fixtureProperties as $property) {

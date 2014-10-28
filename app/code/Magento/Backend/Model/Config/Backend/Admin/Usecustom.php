@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -30,52 +28,42 @@
  */
 namespace Magento\Backend\Model\Config\Backend\Admin;
 
-class Usecustom extends \Magento\Core\Model\Config\Value
+class Usecustom extends \Magento\Framework\App\Config\Value
 {
     /**
      * Writer of configuration storage
      *
-     * @var \Magento\Core\Model\Config\Storage\WriterInterface
+     * @var \Magento\Framework\App\Config\Storage\WriterInterface
      */
     protected $_configWriter;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Config $config
-     * @param \Magento\Core\Model\Config\Storage\WriterInterface $configWriter
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Config\Storage\WriterInterface $configWriter
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Config $config,
-        \Magento\Core\Model\Config\Storage\WriterInterface $configWriter,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\App\Config\Storage\WriterInterface $configWriter,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_configWriter = $configWriter;
-        parent::__construct(
-            $context,
-            $registry,
-            $storeManager,
-            $config,
-            $resource,
-            $resourceCollection,
-            $data
-        );
+        parent::__construct($context, $registry, $config, $resource, $resourceCollection, $data);
     }
 
     /**
      * Validate custom url
      *
-     * @return \Magento\Backend\Model\Config\Backend\Admin\Usecustom
-     * @throws \Magento\Core\Exception
+     * @return $this
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function _beforeSave()
     {
@@ -83,9 +71,7 @@ class Usecustom extends \Magento\Core\Model\Config\Value
         if ($value == 1) {
             $customUrl = $this->getData('groups/url/fields/custom/value');
             if (empty($customUrl)) {
-                throw new \Magento\Core\Exception(
-                    __('Please specify the admin custom URL.')
-                );
+                throw new \Magento\Framework\Model\Exception(__('Please specify the admin custom URL.'));
             }
         }
 
@@ -95,7 +81,7 @@ class Usecustom extends \Magento\Core\Model\Config\Value
     /**
      * Delete custom admin url from configuration if "Use Custom Admin Url" option disabled
      *
-     * @return \Magento\Backend\Model\Config\Backend\Admin\Usecustom
+     * @return $this
      */
     protected function _afterSave()
     {
@@ -103,14 +89,14 @@ class Usecustom extends \Magento\Core\Model\Config\Value
 
         if (!$value) {
             $this->_configWriter->delete(
-                \Magento\Backend\Model\Config\Backend\Admin\Custom::XML_PATH_SECURE_BASE_URL,
-                \Magento\Backend\Model\Config\Backend\Admin\Custom::CONFIG_SCOPE,
-                \Magento\Backend\Model\Config\Backend\Admin\Custom::CONFIG_SCOPE_ID
+                Custom::XML_PATH_SECURE_BASE_URL,
+                Custom::CONFIG_SCOPE,
+                Custom::CONFIG_SCOPE_ID
             );
             $this->_configWriter->delete(
-                \Magento\Backend\Model\Config\Backend\Admin\Custom::XML_PATH_UNSECURE_BASE_URL,
-                \Magento\Backend\Model\Config\Backend\Admin\Custom::CONFIG_SCOPE,
-                \Magento\Backend\Model\Config\Backend\Admin\Custom::CONFIG_SCOPE_ID
+                Custom::XML_PATH_UNSECURE_BASE_URL,
+                Custom::CONFIG_SCOPE,
+                Custom::CONFIG_SCOPE_ID
             );
         }
 

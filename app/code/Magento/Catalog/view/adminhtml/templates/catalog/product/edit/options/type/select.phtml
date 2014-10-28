@@ -1,0 +1,85 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php /** @var $this \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type\Select */ ?>
+<script id="custom-option-select-type-template" type="text/x-jquery-tmpl">
+    <div id="product_option_${option_id}_type_${group}" class="fieldset">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th class="col-draggable">&nbsp;</th>
+                    <th class="col-name required"><?php echo __('Title') ?><span class="required">*</span></th>
+                    <?php if ($this->getCanReadPrice() !== false) : ?>
+                    <th class="col-price"><?php echo __('Price') ?></th>
+                    <th class="col-price-type"><?php echo __('Price Type') ?></th>
+                    <?php endif; ?>
+                    <th class="col-sku"><?php echo __('SKU') ?></th>
+                    <th class="col-actions">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody id="select_option_type_row_${option_id}"></tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="6"><?php echo $this->getAddButtonHtml() ?>
+                        <input name="validation_${option_id}_result" class="required-option-select-type-rows" type="hidden" value="">
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</script>
+<script id="custom-option-select-type-row-template" type="text/x-jquery-tmpl">
+    <tr id="product_option_${id}_select_${select_id}">
+        <td class="col-draggable">
+            <div data-role="draggable-handle" class="draggable-handle"
+                 title="<?php echo __('Sort Custom Option'); ?>"></div>
+            <input name="product[options][${id}][values][${select_id}][sort_order]" type="hidden" value="${sort_order}">
+        </td>
+        <td class="col-name select-opt-title">
+            <input name="product[options][${id}][values][${select_id}][option_type_id]" type="hidden" value="${option_type_id}">
+            <input id="product_option_${id}_select_${select_id}_is_delete" name="product[options][${id}][values][${select_id}][is_delete]" type="hidden" value="">
+            <input id="product_option_${id}_select_${select_id}_title" {{if typeof(scopeTitleDisabled) != 'undefined' && scopeTitleDisabled != null}} disabled="disabled" {{/if}} name="product[options][${id}][values][${select_id}][title]" class="required-entry input-text select-type-title {{if typeof(scopeTitleDisabled) != 'undefined' && scopeTitleDisabled != null}} disabled {{/if}}" type="text" value="${title}" data-store-label="${title}">{{html checkboxScopeTitle}}
+        </td>
+        <?php if ($this->getCanReadPrice() !== false) : ?>
+        <td class="col-price select-opt-price">
+            <input id="product_option_${id}_select_${select_id}_price"
+                   {{if typeof(scopePriceDisabled) != 'undefined' && scopePriceDisabled != null}} disabled="disabled" {{/if}}
+                   name="product[options][${id}][values][${select_id}][price]"
+                   class="input-text validate-number product-option-price"
+                   type="text" value="${price}" data-store-label="${price}"
+                <?php if ($this->getCanEditPrice() === false) : ?>
+                   disabled="disabled"
+                <?php endif; ?>>
+        </td>
+        <td class="col-price-type select-opt-price-type"><?php echo $this->getPriceTypeSelectHtml('{{if typeof(scopePriceDisabled) != "undefined" && scopePriceDisabled != null}} disabled="disabled" {{/if}}') ?>{{html checkboxScopePrice}}</td>
+        <?php else : ?>
+        <input id="product_option_${id}_select_${select_id}_price" name="product[options][${id}][values][${select_id}][price]" type="hidden">
+        <input id="product_option_${id}_select_${select_id}_price_type" name="product[options][${id}][values][${select_id}][price_type]" type="hidden">
+        <?php endif; ?>
+        <td class="col-sku">
+            <input name="product[options][${id}][values][${select_id}][sku]" class="input-text" type="text" value="${sku}">
+        </td>
+        <td class="col-actions col-delete"> <?php echo $this->getDeleteButtonHtml() ?></td>
+    </tr>
+</script>

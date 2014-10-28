@@ -1,0 +1,135 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<fixture class="Magento\Review\Test\Fixture\ReviewInjectable">
+    <module>Magento_Review</module>
+    <type>composite</type>
+    <entities>
+        <review>review</review>
+        <review_detail>review_detail</review_detail>
+    </entities>
+    <collection>Magento\Review\Model\Resource\Review\Collection</collection>
+    <fields>
+        <review_id>
+            <attribute_code>review_id</attribute_code>
+            <backend_type>bigint</backend_type>
+            <is_required></is_required>
+            <default_value>0</default_value>
+            <input></input>
+        </review_id>
+        <created_at>
+            <attribute_code>created_at</attribute_code>
+            <backend_type>timestamp</backend_type>
+            <is_required></is_required>
+            <default_value>CURRENT_TIMESTAMP</default_value>
+            <input></input>
+        </created_at>
+        <entity_id>
+            <attribute_code>entity_id</attribute_code>
+            <backend_type>smallint</backend_type>
+            <is_required></is_required>
+            <default_value>0</default_value>
+            <input></input>
+            <source>Magento\Review\Test\Fixture\ReviewInjectable\EntityId</source>
+        </entity_id>
+        <entity_pk_value>
+            <attribute_code>entity_pk_value</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required></is_required>
+            <default_value>0</default_value>
+            <input></input>
+        </entity_pk_value>
+        <status_id>
+            <attribute_code>status_id</attribute_code>
+            <backend_type>smallint</backend_type>
+            <is_required></is_required>
+            <default_value>0</default_value>
+            <input></input>
+        </status_id>
+        <detail_id>
+            <attribute_code>detail_id</attribute_code>
+            <backend_type>bigint</backend_type>
+            <is_required>1</is_required>
+            <default_value></default_value>
+            <input></input>
+        </detail_id>
+        <store_id>
+            <attribute_code>store_id</attribute_code>
+            <backend_type>smallint</backend_type>
+            <is_required></is_required>
+            <default_value>0</default_value>
+            <input></input>
+        </store_id>
+        <title>
+            <attribute_code>title</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required></is_required>
+            <default_value></default_value>
+            <input></input>
+        </title>
+        <detail>
+            <attribute_code>detail</attribute_code>
+            <backend_type>text</backend_type>
+            <is_required></is_required>
+            <default_value></default_value>
+            <input></input>
+        </detail>
+        <nickname>
+            <attribute_code>nickname</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required></is_required>
+            <default_value></default_value>
+            <input></input>
+        </nickname>
+        <customer_id>
+            <attribute_code>customer_id</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required></is_required>
+            <default_value></default_value>
+            <input></input>
+        </customer_id>
+        <type>
+            <attribute_code>type</attribute_code>
+            <backend_type>string</backend_type>
+            <is_required></is_required>
+            <default_value></default_value>
+            <input></input>
+        </type>
+        <select_stores>
+            <attribute_code>select_stores</attribute_code>
+            <backend_type>virtual</backend_type>
+            <is_required>1</is_required>
+            <default_value>0</default_value>
+            <input>multiselectgrouplist</input>
+        </select_stores>
+        <ratings>
+            <attribute_code>ratings</attribute_code>
+            <backend_type>virtual</backend_type>
+            <source>Magento\Review\Test\Fixture\ReviewInjectable\Ratings</source>
+        </ratings>
+    </fields>
+    <repository_class>Magento\Review\Test\Repository\ReviewInjectable</repository_class>
+    <handler_interface>Magento\Review\Test\Handler\ReviewInjectable\ReviewInjectableInterface</handler_interface>
+</fixture>

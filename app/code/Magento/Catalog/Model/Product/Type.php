@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,32 +27,34 @@
  */
 namespace Magento\Catalog\Model\Product;
 
+use Magento\Catalog\Model\Product;
+
 class Type
 {
     /**#@+
      * Available product types
      */
-    const TYPE_SIMPLE       = 'simple';
-    const TYPE_BUNDLE       = 'bundle';
-    const TYPE_CONFIGURABLE = 'configurable';
-    const TYPE_GROUPED      = 'grouped';
-    const TYPE_VIRTUAL      = 'virtual';
+    const TYPE_SIMPLE = 'simple';
+
+    const TYPE_BUNDLE = 'bundle';
+
+    const TYPE_VIRTUAL = 'virtual';
     /**#@-*/
 
     /**
      * Default product type
      */
-    const DEFAULT_TYPE      = 'simple';
+    const DEFAULT_TYPE = 'simple';
 
     /**
      * Default product type model
      */
-    const DEFAULT_TYPE_MODEL    = 'Magento\Catalog\Model\Product\Type\Simple';
+    const DEFAULT_TYPE_MODEL = 'Magento\Catalog\Model\Product\Type\Simple';
 
     /**
      * Default price model
      */
-    const DEFAULT_PRICE_MODEL   = 'Magento\Catalog\Model\Product\Type\Price';
+    const DEFAULT_PRICE_MODEL = 'Magento\Catalog\Model\Product\Type\Price';
 
     /**
      * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface
@@ -104,20 +104,28 @@ class Type
     protected $_priceFactory;
 
     /**
+     * @var \Magento\Framework\Pricing\PriceInfo\Factory
+     */
+    protected $_priceInfoFactory;
+
+    /**
      * Construct
      *
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $config
      * @param \Magento\Catalog\Model\Product\Type\Pool $productTypePool
      * @param \Magento\Catalog\Model\Product\Type\Price\Factory $priceFactory
+     * @param \Magento\Framework\Pricing\PriceInfo\Factory $priceInfoFactory
      */
     public function __construct(
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $config,
         \Magento\Catalog\Model\Product\Type\Pool $productTypePool,
-        \Magento\Catalog\Model\Product\Type\Price\Factory $priceFactory
+        \Magento\Catalog\Model\Product\Type\Price\Factory $priceFactory,
+        \Magento\Framework\Pricing\PriceInfo\Factory $priceInfoFactory
     ) {
         $this->_config = $config;
         $this->_productTypePool = $productTypePool;
         $this->_priceFactory = $priceFactory;
+        $this->_priceInfoFactory = $priceInfoFactory;
     }
 
     /**
@@ -168,6 +176,17 @@ class Type
     }
 
     /**
+     * Get Product Price Info object
+     *
+     * @param Product $saleableItem
+     * @return \Magento\Framework\Pricing\PriceInfoInterface
+     */
+    public function getPriceInfo(Product $saleableItem)
+    {
+        return $this->_priceInfoFactory->create($saleableItem);
+    }
+
+    /**
      * Get product type labels array
      *
      * @return array
@@ -200,14 +219,8 @@ class Type
      */
     public function getAllOptions()
     {
-        $res = array();
-        $res[] = array('value' => '', 'label' => '');
-        foreach ($this->getOptionArray() as $index => $value) {
-            $res[] = array(
-               'value' => $index,
-               'label' => $value
-            );
-        }
+        $res = $this->getOptions();
+        array_unshift($res, ['value' => '', 'label' => '']);
         return $res;
     }
 
@@ -218,12 +231,9 @@ class Type
      */
     public function getOptions()
     {
-        $res = array();
+        $res = [];
         foreach ($this->getOptionArray() as $index => $value) {
-            $res[] = array(
-               'value' => $index,
-               'label' => $value
-            );
+            $res[] = ['value' => $index, 'label' => $value];
         }
         return $res;
     }

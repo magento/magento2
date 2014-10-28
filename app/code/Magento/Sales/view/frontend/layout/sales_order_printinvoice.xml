@@ -23,12 +23,13 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <update handle="sales_order_print_invoice_renderers" />
+    <update handle="sales_order_item_price"/>
     <referenceContainer name="content">
         <block class="Magento\Sales\Block\Order\PrintOrder\Invoice" name="sales.order.print.invoice" template="order/print/invoice.phtml">
-            <block class="Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer" as="default" template="order/invoice/items/renderer/default.phtml"/>
-            <block class="Magento\Sales\Block\Order\Item\Renderer\Grouped" as="grouped" template="order/invoice/items/renderer/default.phtml"/>
-            <block class="Magento\Sales\Block\Order\Invoice\Totals" name="invoice_totals" template="order/totals.phtml">
+            <block class="Magento\Framework\View\Element\RendererList" name="sales.order.print.invoice.renderers" as="renderer.list" />
+            <block class="Magento\Sales\Block\Order\Invoice\Totals" name="invoice_totals" template="order/totals.phtml" cacheable="false">
                 <arguments>
                     <argument name="label_properties" xsi:type="string">colspan="4" class="mark"</argument>
                     <argument name="value_properties" xsi:type="string">class="amount"</argument>
@@ -37,5 +38,5 @@
             </block>
         </block>
     </referenceContainer>
-    <block class="Magento\View\Element\Template" name="additional.product.info" template="Magento_Core::template.phtml"/>
-</layout>
+    <block class="Magento\Framework\View\Element\Template" name="additional.product.info" template="Magento_Core::template.phtml"/>
+</page>

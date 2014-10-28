@@ -19,8 +19,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Install
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -38,6 +36,5 @@
     <filesystem_prerequisites>
         <directory alias="etc" recursive="true" />
         <directory alias="media" recursive="false" existence="true" writable="true" />
-        <directory alias="lib" recursive="true" existence="true" writable="true" />
     </filesystem_prerequisites>
 </install_wizard>

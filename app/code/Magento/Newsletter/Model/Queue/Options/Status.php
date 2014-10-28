@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Newsletter
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,14 +25,11 @@
 /**
  * Newsletter Queue statuses option array
  *
- * @category   Magento
- * @package    Magento_Newsletter
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-
 namespace Magento\Newsletter\Model\Queue\Options;
 
-class Status implements \Magento\Core\Model\Option\ArrayInterface
+class Status implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * Return statuses option array
@@ -44,11 +39,11 @@ class Status implements \Magento\Core\Model\Option\ArrayInterface
     public function toOptionArray()
     {
         return array(
-            \Magento\Newsletter\Model\Queue::STATUS_SENT 	=> __('Sent'),
-            \Magento\Newsletter\Model\Queue::STATUS_CANCEL	=> __('Cancelled'),
-            \Magento\Newsletter\Model\Queue::STATUS_NEVER 	=> __('Not Sent'),
+            \Magento\Newsletter\Model\Queue::STATUS_SENT => __('Sent'),
+            \Magento\Newsletter\Model\Queue::STATUS_CANCEL => __('Cancelled'),
+            \Magento\Newsletter\Model\Queue::STATUS_NEVER => __('Not Sent'),
             \Magento\Newsletter\Model\Queue::STATUS_SENDING => __('Sending'),
-            \Magento\Newsletter\Model\Queue::STATUS_PAUSE 	=> __('Paused'),
+            \Magento\Newsletter\Model\Queue::STATUS_PAUSE => __('Paused')
         );
     }
 }

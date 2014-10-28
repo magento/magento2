@@ -18,21 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Reports
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Reports\Block\Adminhtml\Product;
 
 /**
  * Adminhtml products report grid block
  *
- * @category   Magento
- * @package    Magento_Reports
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Reports\Block\Adminhtml\Product;
-
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
@@ -42,22 +37,23 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Reports\Model\Resource\Product\CollectionFactory $collectionFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Url $urlModel,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Reports\Model\Resource\Product\CollectionFactory $collectionFactory,
         array $data = array()
     ) {
         $this->_collectionFactory = $collectionFactory;
-        parent::__construct($context, $urlModel, $backendHelper, $data);
+        parent::__construct($context, $backendHelper, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -66,9 +62,11 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->setDefaultDir('desc');
     }
 
+    /**
+     * @return \Magento\Backend\Block\Widget\Grid
+     */
     protected function _prepareCollection()
     {
-
         $collection = $this->_collectionFactory->create();
         $collection->getEntity()->setStore(0);
 
@@ -77,65 +75,75 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         return parent::_prepareCollection();
     }
 
+    /**
+     * @return void
+     */
     protected function _afterLoadCollection()
     {
         $totalObj = new \Magento\Reports\Model\Totals();
         $this->setTotals($totalObj->countTotals($this));
     }
 
+    /**
+     * @return \Magento\Backend\Block\Widget\Grid\Extended
+     */
     protected function _prepareColumns()
     {
-        $this->addColumn('entity_id', array(
-            'header'    =>__('ID'),
-            'width'     =>'50px',
-            'index'     =>'entity_id',
-            'total'     =>'Total'
-        ));
+        $this->addColumn(
+            'entity_id',
+            array('header' => __('ID'), 'width' => '50px', 'index' => 'entity_id', 'total' => 'Total')
+        );
 
-        $this->addColumn('name', array(
-            'header'    =>__('Name'),
-            'index'     =>'name'
-        ));
+        $this->addColumn('name', array('header' => __('Name'), 'index' => 'name'));
 
-        $this->addColumn('viewed', array(
-            'header'    =>__('Viewed'),
-            'width'     =>'50px',
-            'align'     =>'right',
-            'index'     =>'viewed',
-            'total'     =>'sum'
-        ));
+        $this->addColumn(
+            'viewed',
+            array(
+                'header' => __('Viewed'),
+                'width' => '50px',
+                'align' => 'right',
+                'index' => 'viewed',
+                'total' => 'sum'
+            )
+        );
 
-        $this->addColumn('added', array(
-            'header'    =>__('Added'),
-            'width'     =>'50px',
-            'align'     =>'right',
-            'index'     =>'added',
-            'total'     =>'sum'
-        ));
+        $this->addColumn(
+            'added',
+            array('header' => __('Added'), 'width' => '50px', 'align' => 'right', 'index' => 'added', 'total' => 'sum')
+        );
 
-        $this->addColumn('purchased', array(
-            'header'    =>__('Purchased'),
-            'width'     =>'50px',
-            'align'     =>'right',
-            'index'     =>'purchased',
-            'total'     =>'sum'
-        ));
+        $this->addColumn(
+            'purchased',
+            array(
+                'header' => __('Purchased'),
+                'width' => '50px',
+                'align' => 'right',
+                'index' => 'purchased',
+                'total' => 'sum'
+            )
+        );
 
-        $this->addColumn('fulfilled', array(
-            'header'    =>__('Fulfilled'),
-            'width'     =>'50px',
-            'align'     =>'right',
-            'index'     =>'fulfilled',
-            'total'     =>'sum'
-        ));
+        $this->addColumn(
+            'fulfilled',
+            array(
+                'header' => __('Fulfilled'),
+                'width' => '50px',
+                'align' => 'right',
+                'index' => 'fulfilled',
+                'total' => 'sum'
+            )
+        );
 
-        $this->addColumn('revenue', array(
-            'header'    =>__('Revenue'),
-            'width'     =>'50px',
-            'align'     =>'right',
-            'index'     =>'revenue',
-            'total'     =>'sum'
-        ));
+        $this->addColumn(
+            'revenue',
+            array(
+                'header' => __('Revenue'),
+                'width' => '50px',
+                'align' => 'right',
+                'index' => 'revenue',
+                'total' => 'sum'
+            )
+        );
 
         $this->setCountTotals(true);
 
@@ -144,6 +152,4 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
         return parent::_prepareColumns();
     }
-
 }
-

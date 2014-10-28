@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Bundle
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -33,39 +30,35 @@
 require __DIR__ . '/../../../Magento/Catalog/_files/products.php';
 
 /** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Catalog\Model\Product');
-$product->setTypeId('bundle')
-    ->setId(3)
-    ->setAttributeSetId(4)
-    ->setWebsiteIds(array(1))
-    ->setName('Bundle Product')
-    ->setSku('bundle-product')
-    ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
-    ->setStatus(\Magento\Catalog\Model\Product\Status::STATUS_ENABLED)
-    ->setStockData(array(
-        'use_config_manage_stock'   => 1,
-        'qty'                       => 100,
-        'is_qty_decimal'            => 0,
-        'is_in_stock'               => 1,
-    ))
-    ->setBundleOptionsData(array(
-        array(
-            'title'    => 'Bundle Product Items',
-            'type'     => 'select',
-            'required' => 1,
-            'delete'   => '',
-        ),
-    ))
-    ->setBundleSelectionsData(array(
-        array(
-            array(
-                'product_id'               => 1, // fixture product
-                'selection_qty'            => 1,
-                'selection_can_change_qty' => 1,
-                'delete'                   => '',
-            ),
-        ),
-    ))
-    ->save()
-;
+$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+$product->setTypeId(
+    'bundle'
+)->setId(
+    3
+)->setAttributeSetId(
+    4
+)->setWebsiteIds(
+    array(1)
+)->setName(
+    'Bundle Product'
+)->setSku(
+    'bundle-product'
+)->setVisibility(
+    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
+)->setStatus(
+    \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
+)->setStockData(
+    ['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1]
+)->setBundleOptionsData(
+    [
+        [
+            'title' => 'Bundle Product Items',
+            'default_title' => 'Bundle Product Items',
+            'type' => 'select', 'required' => 1,
+            'delete' => ''
+        ]
+    ]
+)->setBundleSelectionsData(
+    [[['product_id' => 1, 'selection_qty' => 1, 'selection_can_change_qty' => 1, 'delete' => '']]]
+    // fixture product
+)->save();

@@ -18,14 +18,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Layer\Filter\Price;
+
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Test class for \Magento\Catalog\Model\Layer\Filter\Price.
@@ -34,13 +32,6 @@ namespace Magento\Catalog\Model\Layer\Filter\Price;
  */
 class AlgorithmBaseTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * Algorithm model
-     *
-     * @var \Magento\Catalog\Model\Layer\Filter\Price\Algorithm
-     */
-    protected $_model;
-
     /**
      * Layer model
      *
@@ -55,39 +46,49 @@ class AlgorithmBaseTest extends \PHPUnit_Framework_TestCase
      */
     protected $_filter;
 
-    protected function setUp()
-    {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Layer\Filter\Price\Algorithm');
-        $this->_layer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Layer');
-        $this->_filter = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Layer\Filter\Price');
-        $this->_filter
-            ->setLayer($this->_layer)
-            ->setAttributeModel(new \Magento\Object(array('attribute_code' => 'price')));
-    }
+    /**
+     * @var \Magento\Catalog\Model\Resource\Layer\Filter\Price
+     */
+    protected $priceResource;
 
     /**
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @magentoConfigFixture current_store catalog/search/engine Magento\CatalogSearch\Model\Resource\Fulltext\Engine
      * @dataProvider pricesSegmentationDataProvider
      */
     public function testPricesSegmentation($categoryId, $intervalsNumber, $intervalItems)
     {
-        $this->_layer->setCurrentCategory($categoryId);
-        $collection = $this->_layer->getProductCollection();
+        $layer = Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Layer\Category');
+        $priceResource = Bootstrap::getObjectManager()
+            ->create('Magento\Catalog\Model\Resource\Layer\Filter\Price', ['layer' => $layer]);
+        $interval = Bootstrap::getObjectManager()
+            ->create('Magento\CatalogSearch\Model\Price\Interval', ['resource' => $priceResource]);
+        $objectManager = $this->getMockBuilder('Magento\Framework\ObjectManager\ObjectManager')
+                ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $objectManager->expects($this->once())->method('create')->willReturn($interval);
+        $intervalFactory = Bootstrap::getObjectManager()
+            ->create('Magento\Framework\Search\Dynamic\IntervalFactory', ['objectManager' => $objectManager]);
+        $model = Bootstrap::getObjectManager()
+            ->create('Magento\Framework\Search\Dynamic\Algorithm', ['intervalFactory' => $intervalFactory]);
+
+        $layer->setCurrentCategory($categoryId);
+        $collection = $layer->getProductCollection();
 
         $memoryUsedBefore = memory_get_usage();
-        $this->_model->setPricesModel($this->_filter)->setStatistics(
+        $model->setStatistics(
             $collection->getMinPrice(),
             $collection->getMaxPrice(),
             $collection->getPriceStandardDeviation(),
             $collection->getSize()
         );
         if (!is_null($intervalsNumber)) {
-            $this->assertEquals($intervalsNumber, $this->_model->getIntervalsNumber());
+            $this->assertEquals($intervalsNumber, $model->getIntervalsNumber());
         }
 
-        $items = $this->_model->calculateSeparators();
+        $items = $model->calculateSeparators();
         $this->assertEquals(array_keys($intervalItems), array_keys($items));
 
         for ($i = 0; $i < count($intervalItems); ++$i) {
@@ -103,7 +104,7 @@ class AlgorithmBaseTest extends \PHPUnit_Framework_TestCase
 
     public function pricesSegmentationDataProvider()
     {
-        $testCases = include(__DIR__ . '/_files/_algorithm_base_data.php');
+        $testCases = include __DIR__ . '/_files/_algorithm_base_data.php';
         $result = array();
         foreach ($testCases as $index => $testCase) {
             $result[] = array(

@@ -1,0 +1,250 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../app/code/Magento/Webapi/etc/webapi.xsd">
+    <route url="/V1/order/:id" method="GET">
+        <service class="Magento\Sales\Service\V1\OrderReadInterface" method="get"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/orders" method="PUT">
+        <service class="Magento\Sales\Service\V1\OrderReadInterface" method="search"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/order/:id/status" method="GET">
+        <service class="Magento\Sales\Service\V1\OrderReadInterface" method="getStatus"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/order/:id/cancel" method="POST">
+        <service class="Magento\Sales\Service\V1\OrderWriteInterface" method="cancel"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/order/:id/email" method="POST">
+        <service class="Magento\Sales\Service\V1\OrderWriteInterface" method="email"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/order/:id/hold" method="POST">
+        <service class="Magento\Sales\Service\V1\OrderWriteInterface" method="hold"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/order/:id/unhold" method="POST">
+        <service class="Magento\Sales\Service\V1\OrderWriteInterface" method="unHold"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/order/:id/comment" method="POST">
+        <service class="Magento\Sales\Service\V1\OrderWriteInterface" method="statusHistoryAdd"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/order/:id/comments" method="GET">
+        <service class="Magento\Sales\Service\V1\OrderReadInterface" method="commentsList"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/order/:id" method="PUT">
+        <service class="Magento\Sales\Service\V1\OrderWriteInterface" method="addressUpdate"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/invoice/:id" method="GET">
+        <service class="Magento\Sales\Service\V1\InvoiceReadInterface" method="get"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/invoices" method="PUT">
+        <service class="Magento\Sales\Service\V1\InvoiceReadInterface" method="search"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/invoice/:id/comments" method="GET">
+        <service class="Magento\Sales\Service\V1\InvoiceReadInterface" method="commentsList"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/invoice/:id/email" method="POST">
+        <service class="Magento\Sales\Service\V1\InvoiceWriteInterface" method="email"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/invoice/:id/void" method="POST">
+        <service class="Magento\Sales\Service\V1\InvoiceWriteInterface" method="void"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/invoice/:id/capture" method="POST">
+        <service class="Magento\Sales\Service\V1\InvoiceWriteInterface" method="capture"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/invoice/comment" method="POST">
+        <service class="Magento\Sales\Service\V1\InvoiceWriteInterface" method="addComment"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/invoice/" method="POST">
+        <service class="Magento\Sales\Service\V1\InvoiceWriteInterface" method="create"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/creditmemo/:id/comments" method="GET">
+        <service class="Magento\Sales\Service\V1\CreditmemoReadInterface" method="commentsList"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/creditmemos" method="PUT">
+        <service class="Magento\Sales\Service\V1\CreditmemoReadInterface" method="search"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/creditmemo/:id" method="GET">
+        <service class="Magento\Sales\Service\V1\CreditmemoReadInterface" method="get"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/creditmemo/:id" method="PUT">
+        <service class="Magento\Sales\Service\V1\CreditmemoWriteInterface" method="cancel"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/creditmemo/:id/email" method="POST">
+        <service class="Magento\Sales\Service\V1\CreditmemoWriteInterface" method="email"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/creditmemo/comment" method="POST">
+        <service class="Magento\Sales\Service\V1\CreditmemoWriteInterface" method="addComment"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/creditmemo" method="POST">
+        <service class="Magento\Sales\Service\V1\CreditmemoWriteInterface" method="create"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/shipment/:id" method="GET">
+        <service class="Magento\Sales\Service\V1\ShipmentReadInterface" method="get"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/shipments" method="PUT">
+        <service class="Magento\Sales\Service\V1\ShipmentReadInterface" method="search"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/shipment/:id/comments" method="GET">
+        <service class="Magento\Sales\Service\V1\ShipmentReadInterface" method="commentsList"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/shipment/comment" method="POST">
+        <service class="Magento\Sales\Service\V1\ShipmentWriteInterface" method="addComment"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/shipment/:id/email" method="POST">
+        <service class="Magento\Sales\Service\V1\ShipmentWriteInterface" method="email"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/shipment/track" method="POST">
+        <service class="Magento\Sales\Service\V1\ShipmentWriteInterface" method="addTrack"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/shipment/track/:id" method="DELETE">
+        <service class="Magento\Sales\Service\V1\ShipmentWriteInterface" method="removeTrack"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/shipment/" method="POST">
+        <service class="Magento\Sales\Service\V1\ShipmentWriteInterface" method="create"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/shipment/:id/label" method="GET">
+        <service class="Magento\Sales\Service\V1\ShipmentReadInterface" method="getLabel"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/order/" method="POST">
+        <service class="Magento\Sales\Service\V1\OrderWriteInterface" method="create"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/transactions/:id" method="GET">
+        <service class="Magento\Sales\Service\V1\TransactionReadInterface" method="get"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/transactions" method="PUT">
+        <service class="Magento\Sales\Service\V1\TransactionReadInterface" method="search"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+</routes>

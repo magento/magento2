@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,6 +26,9 @@
  * Test class for \Magento\TestFramework\Helper\Bootstrap.
  */
 namespace Magento\Test\Helper;
+
+use Magento\Framework\App\Bootstrap;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 class BootstrapTest extends \PHPUnit_Framework_TestCase
 {
@@ -53,26 +53,35 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_fixtureInitParams = array(
-        \Magento\Filesystem::PARAM_APP_DIRS => array(
-            \Magento\Filesystem::CONFIG     => array('path' => __DIR__),
-            \Magento\Filesystem::VAR_DIR    => array('path' => __DIR__)
+        Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => array(
+            DirectoryList::CONFIG => array('path' => __DIR__),
+            DirectoryList::VAR_DIR => array('path' => __DIR__)
         )
     );
 
     protected function setUp()
     {
         $this->_application = $this->getMock(
-            'Magento\TestFramework\Application', array('getInstallDir', 'getInitParams', 'reinitialize', 'run'),
-            array(), '', false
+            'Magento\TestFramework\Application',
+            array('getInstallDir', 'getInitParams', 'reinitialize', 'run'),
+            array(),
+            '',
+            false
         );
         $this->_bootstrap = $this->getMock(
-            'Magento\TestFramework\Bootstrap', array('getApplication', 'getDbVendorName'), array(), '', false
+            'Magento\TestFramework\Bootstrap',
+            array('getApplication', 'getDbVendorName'),
+            array(),
+            '',
+            false
         );
-        $this->_bootstrap
-            ->expects($this->any())
-            ->method('getApplication')
-            ->will($this->returnValue($this->_application))
-        ;
+        $this->_bootstrap->expects(
+            $this->any()
+        )->method(
+            'getApplication'
+        )->will(
+            $this->returnValue($this->_application)
+        );
         $this->_object = new \Magento\TestFramework\Helper\Bootstrap($this->_bootstrap);
     }
 
@@ -84,7 +93,7 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Exception
+     * @expectedException \Magento\Framework\Exception
      * @expectedExceptionMessage Helper instance is not defined yet.
      */
     public function testGetInstanceEmptyProhibited()
@@ -108,7 +117,7 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @depends testSetInstanceFirstAllowed
-     * @expectedException \Magento\Exception
+     * @expectedException \Magento\Framework\Exception
      * @expectedExceptionMessage Helper instance cannot be redefined.
      */
     public function testSetInstanceChangeProhibited()
@@ -120,7 +129,9 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
     {
         if (!function_exists('xdebug_get_headers')) {
             $this->assertFalse(
-                \Magento\TestFramework\Helper\Bootstrap::canTestHeaders(), 'Expected inability to test headers.');
+                \Magento\TestFramework\Helper\Bootstrap::canTestHeaders(),
+                'Expected inability to test headers.'
+            );
             return;
         }
         $expectedHeader = 'SomeHeader: header-value';
@@ -133,9 +144,11 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
 
         /* Determine whether header-related functions can be in fact called with no error */
         $expectedCanTest = true;
-        set_error_handler(function () use (&$expectedCanTest) {
-            $expectedCanTest = false;
-        });
+        set_error_handler(
+            function () use (&$expectedCanTest) {
+                $expectedCanTest = false;
+            }
+        );
         header($expectedHeader);
         setcookie('SomeCookie', 'cookie-value');
         restore_error_handler();
@@ -151,41 +164,31 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAppInstallDir()
     {
-        $this->_application
-            ->expects($this->once())
-            ->method('getInstallDir')
-            ->will($this->returnValue(__DIR__))
-        ;
+        $this->_application->expects($this->once())->method('getInstallDir')->will($this->returnValue(__DIR__));
         $this->assertEquals(__DIR__, $this->_object->getAppInstallDir());
     }
 
     public function testGetAppInitParams()
     {
-        $this->_application
-            ->expects($this->once())
-            ->method('getInitParams')
-            ->will($this->returnValue($this->_fixtureInitParams))
-        ;
+        $this->_application->expects(
+            $this->once()
+        )->method(
+            'getInitParams'
+        )->will(
+            $this->returnValue($this->_fixtureInitParams)
+        );
         $this->assertEquals($this->_fixtureInitParams, $this->_object->getAppInitParams());
     }
 
     public function testGetDbVendorName()
     {
-        $this->_bootstrap
-            ->expects($this->once())
-            ->method('getDbVendorName')
-            ->will($this->returnValue('mysql'))
-        ;
+        $this->_bootstrap->expects($this->once())->method('getDbVendorName')->will($this->returnValue('mysql'));
         $this->assertEquals('mysql', $this->_object->getDbVendorName());
     }
 
     public function testReinitialize()
     {
-        $this->_application
-            ->expects($this->once())
-            ->method('reinitialize')
-            ->with($this->_fixtureInitParams)
-        ;
+        $this->_application->expects($this->once())->method('reinitialize')->with($this->_fixtureInitParams);
         $this->_object->reinitialize($this->_fixtureInitParams);
     }
 

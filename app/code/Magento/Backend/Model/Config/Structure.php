@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -60,7 +58,7 @@ class Structure implements \Magento\Backend\Model\Config\Structure\SearchInterfa
     /**
      * Provider of current config scope
      *
-     * @var \Magento\Backend\Model\Config\ScopeDefiner
+     * @var ScopeDefiner
      */
     protected $_scopeDefiner;
 
@@ -75,13 +73,13 @@ class Structure implements \Magento\Backend\Model\Config\Structure\SearchInterfa
      * @param \Magento\Backend\Model\Config\Structure\Data $structureData
      * @param \Magento\Backend\Model\Config\Structure\Element\Iterator\Tab $tabIterator
      * @param \Magento\Backend\Model\Config\Structure\Element\FlyweightFactory $flyweightFactory
-     * @param \Magento\Backend\Model\Config\ScopeDefiner $scopeDefiner
+     * @param ScopeDefiner $scopeDefiner
      */
     public function __construct(
         \Magento\Backend\Model\Config\Structure\Data $structureData,
         \Magento\Backend\Model\Config\Structure\Element\Iterator\Tab $tabIterator,
         \Magento\Backend\Model\Config\Structure\Element\FlyweightFactory $flyweightFactory,
-        \Magento\Backend\Model\Config\ScopeDefiner $scopeDefiner
+        ScopeDefiner $scopeDefiner
     ) {
         $this->_data = $structureData->get();
         $this->_tabIterator = $tabIterator;
@@ -136,7 +134,7 @@ class Structure implements \Magento\Backend\Model\Config\Structure\SearchInterfa
     /**
      * Find element by path parts
      *
-     * @param array $pathParts
+     * @param string[] $pathParts
      * @return \Magento\Backend\Model\Config\Structure\ElementInterface|null
      */
     public function getElementByPathParts(array $pathParts)
@@ -164,7 +162,7 @@ class Structure implements \Magento\Backend\Model\Config\Structure\SearchInterfa
     /**
      * Create empty element data
      *
-     * @param array $pathParts
+     * @param string[] $pathParts
      * @return array
      */
     protected function _createEmptyElement(array $pathParts)
@@ -200,9 +198,15 @@ class Structure implements \Magento\Backend\Model\Config\Structure\SearchInterfa
             foreach ($section['children'] as $group) {
                 if (isset($group['children'])) {
                     $path = $section['id'] . '/' . $group['id'];
-                    $result = array_merge($result, $this->_getGroupFieldPathsByAttribute(
-                        $group['children'], $path, $attributeName, $attributeValue
-                    ));
+                    $result = array_merge(
+                        $result,
+                        $this->_getGroupFieldPathsByAttribute(
+                            $group['children'],
+                            $path,
+                            $attributeName,
+                            $attributeValue
+                        )
+                    );
                 }
             }
         }
@@ -224,7 +228,10 @@ class Structure implements \Magento\Backend\Model\Config\Structure\SearchInterfa
         foreach ($fields as $field) {
             if (isset($field['children'])) {
                 $result += $this->_getGroupFieldPathsByAttribute(
-                    $field['children'], $parentPath . '/' . $field['id'], $attributeName, $attributeValue
+                    $field['children'],
+                    $parentPath . '/' . $field['id'],
+                    $attributeName,
+                    $attributeValue
                 );
             } else if (isset($field[$attributeName]) && $field[$attributeName] == $attributeValue) {
                 $result[] = $parentPath . '/' . $field['id'];

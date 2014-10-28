@@ -18,15 +18,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Config\Source;
 
-class Website implements \Magento\Core\Model\Option\ArrayInterface
+class Website implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var array
@@ -34,14 +31,14 @@ class Website implements \Magento\Core\Model\Option\ArrayInterface
     protected $_options;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      */
-    public function __construct(\Magento\Core\Model\StoreManagerInterface $storeManager)
+    public function __construct(\Magento\Framework\StoreManagerInterface $storeManager)
     {
         $this->_storeManager = $storeManager;
     }
@@ -56,8 +53,8 @@ class Website implements \Magento\Core\Model\Option\ArrayInterface
             foreach ($this->_storeManager->getWebsites() as $website) {
                 $id = $website->getId();
                 $name = $website->getName();
-                if ($id!=0) {
-                    $this->_options[] = array('value'=>$id, 'label'=>$name);
+                if ($id != 0) {
+                    $this->_options[] = array('value' => $id, 'label' => $name);
                 }
             }
         }

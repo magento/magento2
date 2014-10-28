@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Captcha
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,13 +25,11 @@
 /**
  * Captcha image model
  *
- * @category   Magento
- * @package    Magento_Captcha
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Captcha\Model\Config;
 
-class Font implements \Magento\Core\Model\Option\ArrayInterface
+class Font implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * Captcha data
@@ -45,9 +41,8 @@ class Font implements \Magento\Core\Model\Option\ArrayInterface
     /**
      * @param \Magento\Captcha\Helper\Data $captchaData
      */
-    public function __construct(
-        \Magento\Captcha\Helper\Data $captchaData
-    ) {
+    public function __construct(\Magento\Captcha\Helper\Data $captchaData)
+    {
         $this->_captchaData = $captchaData;
     }
 

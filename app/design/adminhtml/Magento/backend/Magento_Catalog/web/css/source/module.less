@@ -1,0 +1,170 @@
+// /**
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+.catalog-category-edit {
+    .col-2-left-layout:before {
+        display: none;
+    }
+}
+.category-content {
+    .ui-tabs-panel .fieldset {
+        padding-top: 40px;
+        .legend {
+            display: none;
+        }
+    }
+}
+
+//
+//    Product Massaction page
+//--------------------------------------
+
+// Attributes
+.attributes-edit-form {
+    .field {
+        &:not(.field-weight) {
+            .addon {
+                display: block;
+                position: relative;
+                input[type="text"] {
+                    border-width: 1px;
+                }
+                .addafter {
+                    display: block;
+                    border: 0;
+                    height: auto;
+                    width: auto;
+                }
+                input:focus ~ .addafter {
+                    box-shadow: none;
+                }
+            }
+        }
+    }
+
+    .with-addon .textarea {
+        margin: 0;
+    }
+
+    .attribute-change-checkbox {
+        display: block;
+        margin-top: 5px;
+        .label {
+            float: none;
+            padding: 0;
+            width: auto;
+        }
+        .checkbox {
+            margin-right: 5px;
+            width: auto;
+        }
+    }
+
+    .field-price,
+    .field-special_price,
+    .field-gift_wrapping_price,
+    .field-msrp,
+    .field-gift_wrapping_price {
+        .addon > input {
+            padding-left: 23px;
+        }
+        .addafter {
+            > strong {
+                left: 5px;
+                position: absolute;
+                top: 3px;
+            }
+        }
+    }
+
+    .field.type-price,
+    .field-price,
+    .field-special_price,
+    .field-msrp,
+    .field-weight {
+        input:focus + label {
+            box-shadow: none;
+        }
+    }
+
+    .field-special_from_date,
+    .field-special_to_date,
+    .field-news_from_date,
+    .field-news_to_date,
+    .field-custom_design_from,
+    .field-custom_design_to {
+        > .control .input-text {
+            border-width: 1px;
+            width: 130px;
+        }
+    }
+
+    .field-weight {
+        .fields-group-2 {
+            .control {
+                padding-right: 27px;
+                .addafter + .addafter {
+                    border-width: 1px 1px 1px 0;
+                    border-style: solid;
+                    height: 28px;
+                    right: 0;
+                    position: absolute;
+                    top: 0;
+                }
+                .addafter strong {
+                    line-height: 28px;
+                }
+                > input:focus + .addafter + .addafter {
+                    box-shadow: 0 0 8px rgba(82, 168, 236, 0.6);
+                }
+            }
+        }
+    }
+
+    .field-gift_message_available,
+    .field-gift_wrapping_available {
+        .addon {
+            > input[type="checkbox"] {
+                width: auto;
+                margin-right: 5px;
+            }
+        }
+    }
+
+    .fieldset > .addafter {
+        display: none;
+    }
+
+}
+
+// Inventory
+.advanced-inventory-edit {
+    .field.choice {
+        display: block;
+        margin: 3px 0 0;
+        .label {
+            padding-top: 1px;
+        }
+    }
+}

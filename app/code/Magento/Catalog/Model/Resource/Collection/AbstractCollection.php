@@ -18,23 +18,17 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Catalog\Model\Resource\Collection;
 
 /**
  * Catalog EAV collection resource abstract model
  * Implement using different stores for retrieve attribute values
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Resource\Collection;
-
 class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
 {
     /**
@@ -47,36 +41,36 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
     /**
      * Store manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\Logger $logger
-     * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param mixed $connection
-     * 
+     * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Zend_Db_Adapter_Abstract $connection
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
-        \Magento\Logger $logger,
-        \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Logger $logger,
+        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
-        \Magento\Validator\UniversalFactory $universalFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Validator\UniversalFactory $universalFactory,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         $connection = null
     ) {
         $this->_storeManager = $storeManager;
@@ -97,8 +91,8 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
     /**
      * Set store scope
      *
-     * @param int|string|\Magento\Core\Model\Store $store
-     * @return \Magento\Catalog\Model\Resource\Collection\AbstractCollection
+     * @param int|string|\Magento\Store\Model\Store $store
+     * @return $this
      */
     public function setStore($store)
     {
@@ -109,12 +103,12 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
     /**
      * Set store scope
      *
-     * @param int|string|\Magento\Core\Model\Store $storeId
-     * @return \Magento\Catalog\Model\Resource\Collection\AbstractCollection
+     * @param int|string|\Magento\Store\Model\Store $storeId
+     * @return $this
      */
     public function setStoreId($storeId)
     {
-        if ($storeId instanceof \Magento\Core\Model\Store) {
+        if ($storeId instanceof \Magento\Store\Model\Store) {
             $storeId = $storeId->getId();
         }
         $this->_storeId = (int)$storeId;
@@ -141,7 +135,7 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
      */
     public function getDefaultStoreId()
     {
-        return \Magento\Core\Model\Store::DEFAULT_STORE_ID;
+        return \Magento\Store\Model\Store::DEFAULT_STORE_ID;
     }
 
     /**
@@ -160,53 +154,56 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
 
         if ($storeId) {
 
-            $adapter        = $this->getConnection();
-            $entityIdField  = $this->getEntity()->getEntityIdField();
-            $joinCondition  = array(
+            $adapter = $this->getConnection();
+            $entityIdField = $this->getEntity()->getEntityIdField();
+            $joinCondition = array(
                 't_s.attribute_id = t_d.attribute_id',
                 't_s.entity_id = t_d.entity_id',
                 $adapter->quoteInto('t_s.store_id = ?', $storeId)
             );
-            $select = $adapter->select()
-                ->from(array('t_d' => $table), array($entityIdField, 'attribute_id'))
-                ->joinLeft(
-                    array('t_s' => $table),
-                    implode(' AND ', $joinCondition),
-                    array())
-                ->where('t_d.entity_type_id = ?', $this->getEntity()->getTypeId())
-                ->where("t_d.{$entityIdField} IN (?)", array_keys($this->_itemsById))
-                ->where('t_d.attribute_id IN (?)', $attributeIds)
-                ->where('t_d.store_id = ?', 0);
+            $select = $adapter->select()->from(
+                array('t_d' => $table),
+                array($entityIdField, 'attribute_id')
+            )->joinLeft(
+                array('t_s' => $table),
+                implode(' AND ', $joinCondition),
+                array()
+            )->where(
+                't_d.entity_type_id = ?',
+                $this->getEntity()->getTypeId()
+            )->where(
+                "t_d.{$entityIdField} IN (?)",
+                array_keys($this->_itemsById)
+            )->where(
+                't_d.attribute_id IN (?)',
+                $attributeIds
+            )->where(
+                't_d.store_id = ?',
+                $adapter->getIfNullSql('t_s.store_id', \Magento\Store\Model\Store::DEFAULT_STORE_ID)
+            );
         } else {
-            $select = parent::_getLoadAttributesSelect($table)
-                ->where('store_id = ?', $this->getDefaultStoreId());
+            $select = parent::_getLoadAttributesSelect($table)->where('store_id = ?', $this->getDefaultStoreId());
         }
 
         return $select;
     }
 
     /**
-     * @param \Magento\DB\Select $select
+     * @param \Magento\Framework\DB\Select $select
      * @param string $table
      * @param string $type
-     * @return \Magento\DB\Select
+     * @return \Magento\Framework\DB\Select
      */
     protected function _addLoadAttributesSelectValues($select, $table, $type)
     {
         $storeId = $this->getStoreId();
         if ($storeId) {
-            $adapter        = $this->getConnection();
-            $valueExpr      = $adapter->getCheckSql(
-                't_s.value_id IS NULL',
-                't_d.value',
-                't_s.value'
-            );
+            $adapter = $this->getConnection();
+            $valueExpr = $adapter->getCheckSql('t_s.value_id IS NULL', 't_d.value', 't_s.value');
 
-            $select->columns(array(
-                'default_value' => 't_d.value',
-                'store_value'   => 't_s.value',
-                'value'         => $valueExpr
-            ));
+            $select->columns(
+                array('default_value' => 't_d.value', 'store_value' => 't_s.value', 'value' => $valueExpr)
+            );
         } else {
             $select = parent::_addLoadAttributesSelectValues($select, $table, $type);
         }
@@ -240,33 +237,35 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
              * if value for store is null - we use default value
              */
             $defCondition = '(' . implode(') AND (', $condition) . ')';
-            $defAlias     = $tableAlias . '_default';
-            $defAlias     = $this->getConnection()->getTableName($defAlias);
-            $defFieldAlias= str_replace($tableAlias, $defAlias, $fieldAlias);
-            $tableAlias   = $this->getConnection()->getTableName($tableAlias);
+            $defAlias = $tableAlias . '_default';
+            $defAlias = $this->getConnection()->getTableName($defAlias);
+            $defFieldAlias = str_replace($tableAlias, $defAlias, $fieldAlias);
+            $tableAlias = $this->getConnection()->getTableName($tableAlias);
 
             $defCondition = str_replace($tableAlias, $defAlias, $defCondition);
-            $defCondition.= $adapter->quoteInto(
-                " AND " . $adapter->quoteColumnAs("$defAlias.store_id", null) . " = ?",
-                $this->getDefaultStoreId());
+            $defCondition .= $adapter->quoteInto(
+                " AND " . $adapter->quoteColumnAs("{$defAlias}.store_id", null) . " = ?",
+                $this->getDefaultStoreId()
+            );
 
-            $this->getSelect()->$method(
+            $this->getSelect()->{$method}(
                 array($defAlias => $attribute->getBackend()->getTable()),
                 $defCondition,
                 array()
             );
 
             $method = 'joinLeft';
-            $fieldAlias = $this->getConnection()->getCheckSql("{$tableAlias}.value_id > 0",
-                $fieldAlias, $defFieldAlias);
+            $fieldAlias = $this->getConnection()->getCheckSql(
+                "{$tableAlias}.value_id > 0",
+                $fieldAlias,
+                $defFieldAlias
+            );
             $this->_joinAttributes[$fieldCode]['condition_alias'] = $fieldAlias;
-            $this->_joinAttributes[$fieldCode]['attribute']       = $attribute;
+            $this->_joinAttributes[$fieldCode]['attribute'] = $attribute;
         } else {
             $storeId = $this->getDefaultStoreId();
         }
-        $condition[] = $adapter->quoteInto(
-            $adapter->quoteColumnAs("$tableAlias.store_id", null) . ' = ?', $storeId
-        );
+        $condition[] = $adapter->quoteInto($adapter->quoteColumnAs("{$tableAlias}.store_id", null) . ' = ?', $storeId);
         return parent::_joinAttributeToSelect($method, $attribute, $tableAlias, $condition, $fieldCode, $fieldAlias);
     }
 }

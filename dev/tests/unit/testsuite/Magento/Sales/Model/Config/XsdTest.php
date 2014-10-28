@@ -18,18 +18,13 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Sales\Model\Config;
 
 class XsdTest extends \PHPUnit_Framework_TestCase
 {
-
     protected $_xsdFile;
 
     public function setUp()
@@ -56,9 +51,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
      */
     public function validXmlFileDataProvider()
     {
-        return array(
-            array('sales_valid.xml')
-        );
+        return array(array('sales_valid.xml'));
     }
 
     /**
@@ -93,20 +86,20 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                 array(
                     "Element 'section', attribute 'wrongName': The attribute 'wrongName' is not allowed.\n",
                     "Element 'section': The attribute 'name' is required but missing.\n",
-                    "Element 'wrongGroup': This element is not expected. Expected is ( group ).\n",
+                    "Element 'wrongGroup': This element is not expected. Expected is ( group ).\n"
                 )
             ),
             array(
                 'sales_invalid_duplicates.xml',
                 array(
                     "Element 'renderer': Duplicate key-sequence ['r1']" .
-                        " in unique identity-constraint 'uniqueRendererName'.\n",
+                    " in unique identity-constraint 'uniqueRendererName'.\n",
                     "Element 'item': Duplicate key-sequence ['i1'] in unique identity-constraint 'uniqueItemName'.\n",
                     "Element 'group': Duplicate key-sequence ['g1'] in unique identity-constraint 'uniqueGroupName'.\n",
                     "Element 'section': Duplicate key-sequence ['s1']" .
-                        " in unique identity-constraint 'uniqueSectionName'.\n",
+                    " in unique identity-constraint 'uniqueSectionName'.\n",
                     "Element 'available_product_type': Duplicate key-sequence ['a1']" .
-                        " in unique identity-constraint 'uniqueProductTypeName'.\n"
+                    " in unique identity-constraint 'uniqueProductTypeName'.\n"
                 )
             ),
             array(
@@ -115,17 +108,15 @@ class XsdTest extends \PHPUnit_Framework_TestCase
                     "Element 'section': The attribute 'name' is required but missing.\n",
                     "Element 'group': The attribute 'name' is required but missing.\n",
                     "Element 'item': The attribute 'name' is required but missing.\n",
-                    "Element 'item': The attribute 'instance' is required but missing.\n",
-                    "Element 'item': The attribute 'sort_order' is required but missing.\n",
                     "Element 'renderer': The attribute 'name' is required but missing.\n",
                     "Element 'renderer': The attribute 'instance' is required but missing.\n",
-                    "Element 'available_product_type': The attribute 'name' is required but missing.\n",
+                    "Element 'available_product_type': The attribute 'name' is required but missing.\n"
                 )
             ),
             array(
                 'sales_invalid_root_node.xml',
-                array("Element 'wrong': This element is not expected. Expected is one of ( section, order ).\n",)
-            ),
+                array("Element 'wrong': This element is not expected. Expected is one of ( section, order ).\n")
+            )
         );
     }
 }

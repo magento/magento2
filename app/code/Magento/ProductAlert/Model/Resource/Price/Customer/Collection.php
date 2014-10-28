@@ -18,31 +18,24 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_ProductAlert
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\ProductAlert\Model\Resource\Price\Customer;
 
 /**
  * ProductAlert Price Customer collection
  *
- * @category    Magento
- * @package     Magento_ProductAlert
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\ProductAlert\Model\Resource\Price\Customer;
-
-class Collection
-    extends \Magento\Customer\Model\Resource\Customer\Collection
+class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
 {
     /**
-     * join productalert price data to customer collection
+     * Join productalert price data to customer collection
      *
      * @param int $productId
      * @param int $websiteId
-     * @return \Magento\ProductAlert\Model\Resource\Price\Customer\Collection
+     * @return $this
      */
     public function join($productId, $websiteId)
     {

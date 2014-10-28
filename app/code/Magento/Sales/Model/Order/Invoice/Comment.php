@@ -18,11 +18,10 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model\Order\Invoice;
 
 /**
  * @method \Magento\Sales\Model\Resource\Order\Invoice\Comment _getResource()
@@ -38,8 +37,6 @@
  * @method string getCreatedAt()
  * @method \Magento\Sales\Model\Order\Invoice\Comment setCreatedAt(string $value)
  */
-namespace Magento\Sales\Model\Order\Invoice;
-
 class Comment extends \Magento\Sales\Model\AbstractModel
 {
     /**
@@ -50,38 +47,38 @@ class Comment extends \Magento\Sales\Model\AbstractModel
     protected $_invoice;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Core\Model\LocaleInterface $coreLocale
-     * @param \Magento\Stdlib\DateTime $dateTime
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Core\Model\LocaleInterface $coreLocale,
-        \Magento\Stdlib\DateTime $dateTime,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Framework\Stdlib\DateTime $dateTime,
+        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        parent::__construct(
-            $context, $registry, $coreLocale, $dateTime, $resource, $resourceCollection, $data
-        );
+        parent::__construct($context, $registry, $localeDate, $dateTime, $resource, $resourceCollection, $data);
         $this->_storeManager = $storeManager;
     }
 
     /**
      * Initialize resource model
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -91,8 +88,8 @@ class Comment extends \Magento\Sales\Model\AbstractModel
     /**
      * Declare invoice instance
      *
-     * @param   \Magento\Sales\Model\Order\Invoice $invoice
-     * @return  \Magento\Sales\Model\Order\Invoice\Comment
+     * @param \Magento\Sales\Model\Order\Invoice $invoice
+     * @return $this
      */
     public function setInvoice(\Magento\Sales\Model\Order\Invoice $invoice)
     {
@@ -113,7 +110,7 @@ class Comment extends \Magento\Sales\Model\AbstractModel
     /**
      * Get store object
      *
-     * @return \Magento\Core\Model\Store
+     * @return \Magento\Store\Model\Store
      */
     public function getStore()
     {
@@ -126,7 +123,7 @@ class Comment extends \Magento\Sales\Model\AbstractModel
     /**
      * Before object save
      *
-     * @return \Magento\Sales\Model\Order\Invoice\Comment
+     * @return $this
      */
     protected function _beforeSave()
     {

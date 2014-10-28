@@ -1,0 +1,67 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php if($this->getProductData()->getId()): ?>
+<div class="product-review">
+    <div class="page-title">
+        <h1><?php echo __('Review Details') ?></h1>
+    </div>
+    <div class="product-img-box">
+        <a href="<?php echo $this->getProductData()->getProductUrl() ?>"><img src="<?php echo $this->getBaseImageUrl($this->getProductData()); ?>" height="<?php echo $this->getBaseImageSize()?>" width="<?php echo $this->getBaseImageSize()?>" alt="<?php echo $this->escapeHtml($this->getProductData()->getName()) ?>" class="product-image" /></a>
+        <?php if( $this->getRating() && $this->getRating()->getSize()): ?>
+          <p><?php echo __('Average Customer Rating') ?>:</p>
+          <?php echo $this->getReviewsSummaryHtml($this->getProductData()) ?>
+        <?php endif; ?>
+    </div>
+    <div class="details">
+        <h3 class="product-name"><?php echo $this->escapeHtml($this->getProductData()->getName()) ?></h3>
+        <?php if( $this->getRating() && $this->getRating()->getSize()): ?>
+            <h4><?php echo __('Product Rating:') ?></h4>
+
+            <table class="data-table review-summary-table">
+            <?php foreach ($this->getRating() as $_rating): ?>
+            <?php if($_rating->getPercent()): ?>
+                <tr>
+                    <td class="label"><?php echo __($this->escapeHtml($_rating->getRatingCode())) ?></td>
+                    <td class="value">
+                        <div class="rating-box">
+                            <div class="rating" style="width:<?php echo ceil($_rating->getPercent()) ?>%;"></div>
+                        </div></td>
+                </tr>
+            <?php endif; ?>
+            <?php endforeach; ?>
+            </table>
+        <?php endif; ?>
+        <p class="date"><?php echo __('Product Review (submitted on %1):', $this->dateFormat($this->getReviewData()->getCreatedAt())) ?></p>
+        <p><?php echo nl2br($this->escapeHtml($this->getReviewData()->getDetail())) ?></p>
+    </div>
+    <div class="actions">
+        <div class="secondary">
+            <a class="action back" href="<?php echo $this->getBackUrl() ?>">
+                <span><?php echo __('Back to Product Reviews') ?></a></span>
+            </a>
+        </div>
+    </div>
+</div>
+<?php endif; ?>

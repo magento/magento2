@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <referenceBlock name="adminhtml.sitemap.container">
         <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.sitemap.container.grid" as="grid">
             <arguments>
@@ -44,8 +44,9 @@
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="sitemap_id">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">ID</argument>
-                        <argument name="width" xsi:type="string">50px</argument>
                         <argument name="index" xsi:type="string">sitemap_id</argument>
+                        <argument name="column_css_class" xsi:type="string">col-id</argument>
+                        <argument name="header_css_class" xsi:type="string">col-id</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="sitemap_filename">
@@ -69,9 +70,10 @@
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="sitemap_time">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Last Generated</argument>
-                        <argument name="width" xsi:type="string">150px</argument>
                         <argument name="index" xsi:type="string">sitemap_time</argument>
                         <argument name="type" xsi:type="string">datetime</argument>
+                        <argument name="column_css_class" xsi:type="string">col-date</argument>
+                        <argument name="header_css_class" xsi:type="string">col-date</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Backend\Block\Widget\Grid\Column\Multistore" as="store_id">
@@ -88,11 +90,10 @@
                         <argument name="header" xsi:type="string" translate="true">Action</argument>
                         <argument name="filter" xsi:type="string">0</argument>
                         <argument name="sortable" xsi:type="string">0</argument>
-                        <argument name="width" xsi:type="string">100px</argument>
                         <argument name="renderer" xsi:type="string">Magento\Sitemap\Block\Adminhtml\Grid\Renderer\Action</argument>
                     </arguments>
                 </block>
             </block>
         </block>
     </referenceBlock>
-</layout>
+</page>

@@ -18,20 +18,17 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Block\Widget;
 
-class AbstractWidget extends \Magento\View\Element\Template
+class AbstractWidget extends \Magento\Framework\View\Element\Template
 {
     /**
-     * @var \Magento\Eav\Model\Config
+     * @var \Magento\Customer\Service\V1\CustomerMetadataServiceInterface
      */
-    protected $_eavConfig;
+    protected $customerMetadataService;
 
     /**
      * @var \Magento\Customer\Helper\Address
@@ -39,27 +36,35 @@ class AbstractWidget extends \Magento\View\Element\Template
     protected $_addressHelper;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Eav\Model\Config $eavConfig
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Helper\Address $addressHelper
+     * @param \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $customerMetadataService
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Eav\Model\Config $eavConfig,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Helper\Address $addressHelper,
+        \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $customerMetadataService,
         array $data = array()
     ) {
         $this->_addressHelper = $addressHelper;
-        $this->_eavConfig = $eavConfig;
+        $this->customerMetadataService = $customerMetadataService;
         parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
     }
 
+    /**
+     * @param string $key
+     * @return null|string
+     */
     public function getConfig($key)
     {
         return $this->_addressHelper->getConfig($key);
     }
 
+    /**
+     * @return string
+     */
     public function getFieldIdFormat()
     {
         if (!$this->hasData('field_id_format')) {
@@ -68,6 +73,9 @@ class AbstractWidget extends \Magento\View\Element\Template
         return $this->getData('field_id_format');
     }
 
+    /**
+     * @return string
+     */
     public function getFieldNameFormat()
     {
         if (!$this->hasData('field_name_format')) {
@@ -76,11 +84,19 @@ class AbstractWidget extends \Magento\View\Element\Template
         return $this->getData('field_name_format');
     }
 
+    /**
+     * @param string $field
+     * @return string
+     */
     public function getFieldId($field)
     {
         return sprintf($this->getFieldIdFormat(), $field);
     }
 
+    /**
+     * @param string $field
+     * @return string
+     */
     public function getFieldName($field)
     {
         return sprintf($this->getFieldNameFormat(), $field);
@@ -90,10 +106,14 @@ class AbstractWidget extends \Magento\View\Element\Template
      * Retrieve customer attribute instance
      *
      * @param string $attributeCode
-     * @return \Magento\Customer\Model\Attribute|false
+     * @return \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata|null
      */
     protected function _getAttribute($attributeCode)
     {
-        return $this->_eavConfig->getAttribute('customer', $attributeCode);
+        try {
+            return $this->customerMetadataService->getAttributeMetadata($attributeCode);
+        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            return null;
+        }
     }
 }

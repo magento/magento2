@@ -18,58 +18,53 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_GiftMessage
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\GiftMessage\Block\Adminhtml\Product\Helper\Form;
 
 /**
  * Adminhtml additional helper block for product configuration
  *
- * @category   Magento
- * @package    Magento_GiftMessage
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\GiftMessage\Block\Adminhtml\Product\Helper\Form;
-
-class Config
-    extends \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Config
+class Config extends \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Config
 {
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
-     * @param \Magento\Data\Form\Element\Factory $factoryElement
-     * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
-     * @param \Magento\Escaper $escaper
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\Framework\Data\Form\Element\Factory $factoryElement
+     * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
+     * @param \Magento\Framework\Escaper $escaper
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param array $data
      */
     public function __construct(
-        \Magento\Data\Form\Element\Factory $factoryElement,
-        \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
-        \Magento\Escaper $escaper,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\Framework\Data\Form\Element\Factory $factoryElement,
+        \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection,
+        \Magento\Framework\Escaper $escaper,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         $data = array()
     ) {
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
     }
 
     /**
      * Get config value data
      *
-     * @return mixed
+     * @return string|null
      */
     protected function _getValueFromConfig()
     {
-        return $this->_coreStoreConfig->getConfig(
-            \Magento\GiftMessage\Helper\Message::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ITEMS
+        return $this->_scopeConfig->getValue(
+            \Magento\GiftMessage\Helper\Message::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ITEMS,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 }

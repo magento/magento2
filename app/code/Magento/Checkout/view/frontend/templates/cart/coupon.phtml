@@ -1,0 +1,59 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<div class="block discount" id="block-discount" data-mage-init='{"collapsible":{"openedState": "active", "saveState": false}}'>
+    <div class="title" data-role="title"><strong><?php echo __('Discount Codes') ?></strong></div>
+    <div class="content" data-role="content">
+        <form id="discount-coupon-form"
+              action="<?php echo $this->getUrl('checkout/cart/couponPost') ?>"
+              method="post"
+              data-mage-init='{"discountCode":{"couponCodeSelector": "#coupon_code",
+                                               "removeCouponSelector": "#remove-coupon",
+                                               "applyButton": "button.action.apply",
+                                               "cancelButton": "button.action.cancel"}}'>
+            <fieldset class="fieldset coupon<?php strlen($this->getCouponCode()) ? ' applied' : ''?>">
+                <input type="hidden" name="remove" id="remove-coupon" value="0" />
+                <div class="field">
+                    <label for="coupon_code" class="label"><span><?php echo __('Enter your code') ?></span></label>
+                    <div class="control">
+                        <input type="text" class="input-text" id="coupon_code" name="coupon_code" value="<?php echo $this->escapeHtml($this->getCouponCode()) ?>" placeholder="<?php echo $this->escapeHtml(__('Enter your code'));?>" />
+                    </div>
+                </div>
+                <div class="actions-toolbar">
+                    <?php if(!strlen($this->getCouponCode())): ?>
+                    <div class="primary">
+                        <button class="action apply primary" type="button" value="<?php echo __('Apply Coupon') ?>">
+                            <span><?php echo __('Apply Coupon') ?></span>
+                        </button>
+                    </div>
+                    <?php else: ?>
+                        <div class="secondary">
+                            <button  type="button" class="action cancel" value="<?php echo __('Cancel Coupon') ?>"><span><?php echo __('Cancel Coupon') ?></span></button>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>

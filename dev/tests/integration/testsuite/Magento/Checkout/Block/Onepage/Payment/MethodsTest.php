@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Checkout
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -40,8 +37,11 @@ class MethodsTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-            ->createBlock('Magento\Checkout\Block\Onepage\Payment\Methods');
+        $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\View\LayoutInterface'
+        )->createBlock(
+            'Magento\Checkout\Block\Onepage\Payment\Methods'
+        );
     }
 
     /**
@@ -51,12 +51,17 @@ class MethodsTest extends \PHPUnit_Framework_TestCase
     {
         $expectedTitle = 'Free Method';
         $expectedLabel = 'Label After Html';
-        $method = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Payment\Model\Method\Free');
+        $method = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Payment\Model\Method\Free'
+        );
 
-        $block = $this->_block->getLayout()->createBlock('Magento\View\Element\Text')
-            ->setMethodTitle($expectedTitle)
-            ->setMethodLabelAfterHtml($expectedLabel);
+        $block = $this->_block->getLayout()->createBlock(
+            'Magento\Framework\View\Element\Text'
+        )->setMethodTitle(
+            $expectedTitle
+        )->setMethodLabelAfterHtml(
+            $expectedLabel
+        );
 
         $this->assertEquals('No Payment Information Required', $this->_block->getMethodTitle($method));
         $this->_block->setChild('payment.method.free', $block);

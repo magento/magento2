@@ -1,0 +1,66 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<fixture>
+    <bundleProduct module="Magento_Bundle">
+        <type>eav</type>
+        <entity_type>catalog_product</entity_type>
+        <product_type>bundle</product_type>
+        <collection>Magento\Catalog\Model\Resource\Product\Collection</collection>
+        <identifier>sku</identifier>
+        <fields>
+            <id>
+                <attribute_code>id</attribute_code>
+                <backend_type>virtual</backend_type>
+            </id>
+            <bundle_selections>
+                <attribute_code>bundle_selections</attribute_code>
+                <backend_type>virtual</backend_type>
+                <is_required>1</is_required>
+                <group>bundle</group>
+                <fixture>Magento\Bundle\Test\Fixture\Bundle\BundleSelections</fixture>
+            </bundle_selections>
+        </fields>
+        <data_set>
+            <sku />
+            <name />
+            <short_description />
+            <description />
+            <tax_class_id />
+            <sku_type />
+            <weight_type />
+            <price_type />
+            <shipment_type />
+            <bundle_selections />
+        </data_set>
+        <data_config>
+            <create_url_params>
+                <type>bundle</type>
+                <set>4</set>
+            </create_url_params>
+            <input_prefix>product</input_prefix>
+        </data_config>
+    </bundleProduct>
+</fixture>

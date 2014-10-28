@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Persistent
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -36,13 +34,6 @@ class Session extends \Magento\Core\Helper\Data
      * @var \Magento\Persistent\Model\Session
      */
     protected $_sessionModel;
-
-    /**
-     * Persistent customer
-     *
-     * @var null|\Magento\Customer\Model\Customer
-     */
-    protected $_customer;
 
     /**
      * Is "Remember Me" checked
@@ -66,13 +57,6 @@ class Session extends \Magento\Core\Helper\Data
     protected $_sessionFactory;
 
     /**
-     * Customer factory
-     *
-     * @var \Magento\Customer\Model\CustomerFactory
-     */
-    protected $_customerFactory;
-
-    /**
      * Checkout session
      *
      * @var \Magento\Checkout\Model\Session
@@ -80,39 +64,37 @@ class Session extends \Magento\Core\Helper\Data
     protected $_checkoutSession;
 
     /**
-     * @param \Magento\App\Helper\Context $context
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Locale $locale
-     * @param \Magento\App\State $appState
+     * @param \Magento\Framework\App\Helper\Context $context
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\State $appState
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param Data $persistentData
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Persistent\Model\SessionFactory $sessionFactory
      * @param bool $dbCompatibleMode
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Locale $locale,
-        \Magento\App\State $appState,
+        \Magento\Framework\App\Helper\Context $context,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Framework\App\State $appState,
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         \Magento\Persistent\Helper\Data $persistentData,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Persistent\Model\SessionFactory $sessionFactory,
         $dbCompatibleMode = true
     ) {
         $this->_persistentData = $persistentData;
         $this->_checkoutSession = $checkoutSession;
-        $this->_customerFactory = $customerFactory;
         $this->_sessionFactory = $sessionFactory;
+
         parent::__construct(
             $context,
-            $coreStoreConfig,
+            $scopeConfig,
             $storeManager,
-            $locale,
             $appState,
+            $priceCurrency,
             $dbCompatibleMode
         );
     }
@@ -181,23 +163,10 @@ class Session extends \Magento\Core\Helper\Data
      * Set "Remember Me" checked or not
      *
      * @param bool $checked
+     * @return void
      */
     public function setRememberMeChecked($checked = true)
     {
         $this->_isRememberMeChecked = $checked;
-    }
-
-    /**
-     * Return persistent customer
-     *
-     * @return \Magento\Customer\Model\Customer|bool
-     */
-    public function getCustomer()
-    {
-        if (is_null($this->_customer)) {
-            $customerId = $this->getSession()->getCustomerId();
-            $this->_customer = $this->_customerFactory->create()->load($customerId);
-        }
-        return $this->_customer;
     }
 }

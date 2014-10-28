@@ -23,4 +23,4 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout label="All Empty Layout Pages" design_abstraction="page_layout"/>
+<page label="All Empty Layout Pages" design_abstraction="page_layout"/>

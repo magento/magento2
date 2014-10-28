@@ -18,30 +18,27 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Eav
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Eav\Model\Entity\Attribute\Backend;
+
+use Magento\Eav\Exception as EavException;
 
 class Datetime extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
-    protected $_locale;
+    protected $_localeDate;
 
     /**
-     * @param \Magento\Logger $logger
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      */
-    public function __construct(
-        \Magento\Logger $logger,
-        \Magento\Core\Model\LocaleInterface $locale
-    ) {
-        $this->_locale = $locale;
+    public function __construct(\Magento\Framework\Logger $logger, \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate)
+    {
+        $this->_localeDate = $localeDate;
         parent::__construct($logger);
     }
 
@@ -51,19 +48,19 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
      * Should set (bool, string) correct type for empty value from html form,
      * necessary for further process, else date string
      *
-     * @param \Magento\Object $object
-     * @throws \Magento\Eav\Exception
-     * @return \Magento\Eav\Model\Entity\Attribute\Backend\Datetime
+     * @param \Magento\Framework\Object $object
+     * @throws EavException
+     * @return $this
      */
     public function beforeSave($object)
     {
         $attributeName = $this->getAttribute()->getName();
-        $_formated     = $object->getData($attributeName . '_is_formated');
+        $_formated = $object->getData($attributeName . '_is_formated');
         if (!$_formated && $object->hasData($attributeName)) {
             try {
                 $value = $this->formatDate($object->getData($attributeName));
             } catch (\Exception $e) {
-                throw new \Magento\Eav\Exception(__('Invalid date'));
+                throw new EavException(__('Invalid date'));
             }
 
             if (is_null($value)) {
@@ -83,8 +80,8 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
      * string format used from input fields (all date input fields need apply locale settings)
      * int value can be declared in code (this meen whot we use valid date)
      *
-     * @param   string | int $date
-     * @return  string
+     * @param string|int $date
+     * @return string
      */
     public function formatDate($date)
     {
@@ -93,22 +90,20 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
         }
         // unix timestamp given - simply instantiate date object
         if (preg_match('/^[0-9]+$/', $date)) {
-            $date = new \Zend_Date((int)$date);
-        }
-        // international format
-        else if (preg_match('#^\d{4}-\d{2}-\d{2}( \d{2}:\d{2}:\d{2})?$#', $date)) {
-            $zendDate = new \Zend_Date();
+            $date = new \Magento\Framework\Stdlib\DateTime\Date((int)$date);
+            // international format
+        } elseif (preg_match('#^\d{4}-\d{2}-\d{2}( \d{2}:\d{2}:\d{2})?$#', $date)) {
+            $zendDate = new \Magento\Framework\Stdlib\DateTime\Date();
             $date = $zendDate->setIso($date);
-        }
-        // parse this date in current locale, do not apply GMT offset
-        else {
-            $date = $this->_locale->date(
+            // parse this date in current locale, do not apply GMT offset
+        } else {
+            $date = $this->_localeDate->date(
                 $date,
-                $this->_locale->getDateFormat(\Magento\Core\Model\LocaleInterface::FORMAT_TYPE_SHORT),
+                $this->_localeDate->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT),
                 null,
                 false
             );
         }
-        return $date->toString(\Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
+        return $date->toString(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
     }
 }

@@ -18,15 +18,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Config\Source\Locale\Currency;
 
-class All implements \Magento\Core\Model\Option\ArrayInterface
+class All implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var array
@@ -34,16 +31,16 @@ class All implements \Magento\Core\Model\Option\ArrayInterface
     protected $_options;
 
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Framework\Locale\ListsInterface
      */
-    protected $_locale;
+    protected $_localeLists;
 
     /**
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Framework\Locale\ListsInterface $localeLists
      */
-    public function __construct(\Magento\Core\Model\LocaleInterface $locale)
+    public function __construct(\Magento\Framework\Locale\ListsInterface $localeLists)
     {
-        $this->_locale = $locale;
+        $this->_localeLists = $localeLists;
     }
 
     /**
@@ -53,11 +50,11 @@ class All implements \Magento\Core\Model\Option\ArrayInterface
     public function toOptionArray($isMultiselect = false)
     {
         if (!$this->_options) {
-            $this->_options = $this->_locale->getOptionAllCurrencies();
+            $this->_options = $this->_localeLists->getOptionAllCurrencies();
         }
         $options = $this->_options;
         if (!$isMultiselect) {
-            array_unshift($options, array('value'=>'', 'label'=>''));
+            array_unshift($options, array('value' => '', 'label' => ''));
         }
 
         return $options;

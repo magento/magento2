@@ -30,7 +30,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Status\Collection
     /**
      * Join order states table
      *
-     * @return \Magento\Sales\Model\Resource\Status\Collection
+     * @return $this
      */
     protected function _initSelect()
     {

@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Wishlist
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Wishlist\Controller;
 
 class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
@@ -35,21 +31,34 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
     protected $_customerSession;
 
     /**
-     * @var \Magento\Message\ManagerInterface
+     * @var \Magento\Framework\Message\ManagerInterface
      */
     protected $_messages;
+
+    /**
+     * @var \Magento\Customer\Helper\View
+     */
+    protected $_customerViewHelper;
 
     protected function setUp()
     {
         parent::setUp();
-        $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
-        $this->_customerSession = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Customer\Model\Session', array($logger));
-        $this->_customerSession->login('customer@example.com', 'password');
+        $logger = $this->getMock('Magento\Framework\Logger', array(), array(), '', false);
+        $this->_customerSession = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Customer\Model\Session',
+            array($logger)
+        );
+        $service = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Customer\Service\V1\CustomerAccountService'
+        );
+        $customer = $service->authenticate('customer@example.com', 'password');
+        $this->_customerSession->setCustomerDataAsLoggedIn($customer);
 
-        $this->_messages = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Message\ManagerInterface');
+        $this->_customerViewHelper = $this->_objectManager->create('Magento\Customer\Helper\View');
 
+        $this->_messages = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\Message\ManagerInterface'
+        );
     }
 
     protected function tearDown()
@@ -105,7 +114,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testAllcartAction()
     {
-        $formKey = $this->_objectManager->get('Magento\Data\Form\FormKey')->getFormKey();
+        $formKey = $this->_objectManager->get('Magento\Framework\Data\Form\FormKey')->getFormKey();
         $this->getRequest()->setParam('form_key', $formKey);
         $this->dispatch('wishlist/index/allcart');
 
@@ -116,7 +125,54 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertEquals(0, $quoteCount);
         $this->assertSessionMessages(
             $this->contains('You can buy this product only in increments of 5 for "Simple Product".'),
-            \Magento\Message\MessageInterface::TYPE_ERROR
+            \Magento\Framework\Message\MessageInterface::TYPE_ERROR
+        );
+    }
+
+    /**
+     * @magentoDataFixture Magento/Wishlist/_files/wishlist.php
+     */
+    public function testSendAction()
+    {
+        $this->_objectManager->configure(
+            [
+                'Magento\Wishlist\Controller\Index\Send' => [
+                    'arguments' => [
+                        'transportBuilder' => [
+                            'instance' => 'Magento\TestFramework\Mail\Template\TransportBuilderMock'
+                        ]
+                    ]
+                ],
+                'preferences' => [
+                    'Magento\Framework\Mail\TransportInterface' => 'Magento\TestFramework\Mail\TransportInterfaceMock'
+                ]
+            ]
+        );
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()
+            ->loadArea(\Magento\Framework\App\Area::AREA_FRONTEND);
+
+        $request = [
+            'form_key' => $this->_objectManager->get('Magento\Framework\Data\Form\FormKey')->getFormKey(),
+            'emails' => 'test@tosend.com',
+            'message' => 'message',
+            'rss_url' => null // no rss
+        ];
+
+        $this->getRequest()->setPost($request);
+
+        $this->_objectManager->get('Magento\Framework\Registry')->register(
+            'wishlist',
+            $this->_objectManager->get('Magento\Wishlist\Model\Wishlist')->loadByCustomerId(1)
+        );
+        $this->dispatch('wishlist/index/send');
+
+        /** @var \Magento\TestFramework\Mail\Template\TransportBuilderMock $transportBuilder */
+        $transportBuilder = $this->_objectManager->get('Magento\TestFramework\Mail\Template\TransportBuilderMock');
+
+        $this->assertStringMatchesFormat(
+            '%AThank you, %A'
+            . $this->_customerViewHelper->getCustomerName($this->_customerSession->getCustomerDataObject()) . '%A',
+            $transportBuilder->getSentMessage()->getBodyHtml()->getContent()
         );
     }
 }

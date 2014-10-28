@@ -1,0 +1,3 @@
+"catalogSearch/data/query_text/value";"catalogSearch/data/num_results";"constraint"
+"catalogProductSimple::getName";"-";"assertSuggestSearchingResult"
+"catalogProductSimple::getSku";"1";"assertSuggestSearchingResult"

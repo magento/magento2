@@ -18,18 +18,18 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Paypal
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Model\System\Config\Backend;
+
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\DirectoryList;
 
 /**
  * Backend model for saving certificate file in case of using certificate based authentication
  */
-namespace Magento\Paypal\Model\System\Config\Backend;
-
-class Cert extends \Magento\Core\Model\Config\Value
+class Cert extends \Magento\Framework\App\Config\Value
 {
     /**
      * @var \Magento\Paypal\Model\CertFactory
@@ -37,50 +37,48 @@ class Cert extends \Magento\Core\Model\Config\Value
     protected $_certFactory;
 
     /**
-     * @var \Magento\Encryption\EncryptorInterface
+     * @var \Magento\Framework\Encryption\EncryptorInterface
      */
     protected $_encryptor;
 
     /**
-     * @var \Magento\Filesystem\Directory\ReadInterface
+     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
      */
     protected $_tmpDirectory;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Config $config
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Paypal\Model\CertFactory $certFactory
-     * @param \Magento\Encryption\EncryptorInterface $encryptor
-     * @param \Magento\Filesystem $filesystem
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Config $config,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Paypal\Model\CertFactory $certFactory,
-        \Magento\Encryption\EncryptorInterface $encryptor,
-        \Magento\Filesystem $filesystem,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Encryption\EncryptorInterface $encryptor,
+        \Magento\Framework\Filesystem $filesystem,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_certFactory = $certFactory;
         $this->_encryptor = $encryptor;
-        $this->_tmpDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::SYS_TMP);
-        parent::__construct($context, $registry, $storeManager, $config, $resource, $resourceCollection, $data);
+        $this->_tmpDirectory = $filesystem->getDirectoryRead(DirectoryList::SYS_TMP);
+        parent::__construct($context, $registry, $config, $resource, $resourceCollection, $data);
     }
 
     /**
      * Process additional data before save config
      *
-     * @return \Magento\Paypal\Model\System\Config\Backend\Cert
-     * @throws \Magento\Core\Exception
+     * @return $this
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function _beforeSave()
     {
@@ -98,13 +96,11 @@ class Cert extends \Magento\Core\Model\Config\Value
         );
         if ($tmpPath && $this->_tmpDirectory->isExist($tmpPath)) {
             if (!$this->_tmpDirectory->stat($tmpPath)['size']) {
-                throw new \Magento\Core\Exception(__('The PayPal certificate file is empty.'));
+                throw new \Magento\Framework\Model\Exception(__('The PayPal certificate file is empty.'));
             }
             $this->setValue($_FILES['groups']['name'][$this->getGroupId()]['fields'][$this->getField()]['value']);
             $content = $this->_encryptor->encrypt($this->_tmpDirectory->readFile($tmpPath));
-            $this->_certFactory->create()->loadByWebsite($this->getScopeId())
-                ->setContent($content)
-                ->save();
+            $this->_certFactory->create()->loadByWebsite($this->getScopeId())->setContent($content)->save();
         }
         return $this;
     }
@@ -112,7 +108,7 @@ class Cert extends \Magento\Core\Model\Config\Value
     /**
      * Process object after delete data
      *
-     * @return \Magento\Paypal\Model\System\Config\Backend\Cert
+     * @return $this
      */
     protected function _afterDelete()
     {

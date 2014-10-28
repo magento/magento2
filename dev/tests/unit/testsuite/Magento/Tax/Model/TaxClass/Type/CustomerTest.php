@@ -18,48 +18,59 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Tax
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tax\Model\TaxClass\Type;
 
 class CustomerTest extends \PHPUnit_Framework_TestCase
 {
-    public function testGetAssignedObjects()
+    public function testIsAssignedToObjects()
     {
-        $collectionMock = $this->getMockBuilder('Magento\Core\Model\Resource\Db\Collection\AbstractCollection')
-            ->setMethods(array(
-                'addFieldToFilter'
-            ))
-            ->disableOriginalConstructor()
-            ->getMock();
-        $collectionMock->expects($this->once())
-            ->method('addFieldToFilter')
-            ->with($this->equalTo('tax_class_id'), $this->equalTo(5))
-            ->will($this->returnSelf());
-
-        $customerGroupMock = $this->getMockBuilder('Magento\Customer\Model\Group')
-            ->setMethods(array('getCollection', '__wakeup'))
-            ->disableOriginalConstructor()
-            ->getMock();
-        $customerGroupMock->expects($this->once())
-            ->method('getCollection')
-            ->will($this->returnValue($collectionMock));
-
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+
+        $searchResultsMock  = $this->getMockBuilder('Magento\Framework\Service\V1\Data\SearchResults')
+            ->setMethods(['getItems'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $searchResultsMock->expects($this->once())
+            ->method('getItems')
+            ->will($this->returnValue(['randomValue']));
+
+        $filterBuilder = $objectManagerHelper
+            ->getObject('\Magento\Framework\Service\V1\Data\FilterBuilder');
+        $filterGroupBuilder = $objectManagerHelper
+            ->getObject('\Magento\Framework\Service\V1\Data\Search\FilterGroupBuilder');
+        $searchCriteriaBuilder = $objectManagerHelper->getObject(
+            'Magento\Framework\Service\V1\Data\SearchCriteriaBuilder',
+            [
+                'filterGroupBuilder' => $filterGroupBuilder
+            ]
+        );
+        $expectedSearchCriteria = $searchCriteriaBuilder
+            ->addFilter([$filterBuilder->setField('tax_class_id')->setValue(5)->create()])
+            ->create();
+
+        $customerGroupServiceMock = $this->getMockBuilder('Magento\Customer\Service\V1\CustomerGroupService')
+            ->setMethods(['searchGroups'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $customerGroupServiceMock->expects($this->once())
+            ->method('searchGroups')
+            ->with($this->equalTo($expectedSearchCriteria))
+            ->will($this->returnValue($searchResultsMock));
+
         /** @var $model \Magento\Tax\Model\TaxClass\Type\Customer */
         $model = $objectManagerHelper->getObject(
             'Magento\Tax\Model\TaxClass\Type\Customer',
-            array(
-                'modelCustomerGroup' => $customerGroupMock,
-                'data' => array('id' => 5)
-            )
+            [
+                'groupService' => $customerGroupServiceMock,
+                'filterBuilder' => $filterBuilder,
+                'searchCriteriaBuilder' => $searchCriteriaBuilder,
+                'data' => ['id' => 5]
+            ]
         );
-        $this->assertEquals($collectionMock, $model->getAssignedToObjects());
-    }
 
+        $this->assertTrue($model->isAssignedToObjects());
+    }
 }

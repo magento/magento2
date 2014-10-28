@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:x="urn:schemas-microsoft-com:office:excel"
+    xmlns:x2="http://schemas.microsoft.com/office/excel/2003/xml"
+    xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+    xmlns:o="urn:schemas-microsoft-com:office:office"
+    xmlns:html="http://www.w3.org/TR/REC-html40"
+    xmlns:c="urn:schemas-microsoft-com:office:component:spreadsheet"
+>
+    <OfficeDocumentSettings xmlns="urn:schemas-microsoft-com:office:office"></OfficeDocumentSettings>
+    <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel"></ExcelWorkbook>
+    <Worksheet ss:Name="Sheet 1">
+        <Table>
+            <Row>
+                <Cell><Data ss:Type="String">HeaderID</Data></Cell>
+                <Cell><Data ss:Type="String">HeaderName</Data></Cell>
+                <Cell><Data ss:Type="String">HeaderEmail</Data></Cell>
+                <Cell><Data ss:Type="String">HeaderGroup</Data></Cell>
+                <Cell><Data ss:Type="String">HeaderPhone</Data></Cell>
+                <Cell><Data ss:Type="String">Header+Phone</Data></Cell>
+                <Cell><Data ss:Type="String">HeaderZIP</Data></Cell>
+                <Cell><Data ss:Type="String">Header0ZIP</Data></Cell>
+                <Cell><Data ss:Type="String">HeaderCountry</Data></Cell>
+                <Cell><Data ss:Type="String">HeaderRegion</Data></Cell>
+            </Row>
+            <Row>
+                <Cell><Data ss:Type="String">ID</Data></Cell>
+                <Cell><Data ss:Type="String">Name</Data></Cell>
+                <Cell><Data ss:Type="String">Email</Data></Cell>
+                <Cell><Data ss:Type="String">Group</Data></Cell>
+                <Cell><Data ss:Type="String">Telephone</Data></Cell>
+                <Cell><Data ss:Type="String">+Telephone</Data></Cell>
+                <Cell><Data ss:Type="String">ZIP</Data></Cell>
+                <Cell><Data ss:Type="String">0ZIP</Data></Cell>
+                <Cell><Data ss:Type="String">Country</Data></Cell>
+                <Cell><Data ss:Type="String">State/Province</Data></Cell>
+            </Row>
+            <Row>
+                <Cell><Data ss:Type="Number">1</Data></Cell>
+                <Cell><Data ss:Type="String">Jon Doe</Data></Cell>
+                <Cell><Data ss:Type="String">jon.doe@magento.com</Data></Cell>
+                <Cell><Data ss:Type="String">General</Data></Cell>
+                <Cell><Data ss:Type="String">310-111-1111</Data></Cell>
+                <Cell><Data ss:Type="String">+310-111-1111</Data></Cell>
+                <Cell><Data ss:Type="Number">90232</Data></Cell>
+                <Cell><Data ss:Type="String">090232</Data></Cell>
+                <Cell><Data ss:Type="String">United States</Data></Cell>
+                <Cell><Data ss:Type="String">California</Data></Cell>
+            </Row>
+            <Row>
+                <Cell><Data ss:Type="String">FooterID</Data></Cell>
+                <Cell><Data ss:Type="String">FooterName</Data></Cell>
+                <Cell><Data ss:Type="String">FooterEmail</Data></Cell>
+                <Cell><Data ss:Type="String">FooterGroup</Data></Cell>
+                <Cell><Data ss:Type="String">FooterPhone</Data></Cell>
+                <Cell><Data ss:Type="String">Footer+Phone</Data></Cell>
+                <Cell><Data ss:Type="String">FooterZIP</Data></Cell>
+                <Cell><Data ss:Type="String">Footer0ZIP</Data></Cell>
+                <Cell><Data ss:Type="String">FooterCountry</Data></Cell>
+                <Cell><Data ss:Type="String">FooterRegion</Data></Cell>
+            </Row>
+        </Table>
+    </Worksheet>
+</Workbook>

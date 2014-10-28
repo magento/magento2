@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Newsletter
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,8 +25,6 @@
 /**
  * Newsletter template preview block
  *
- * @category   Magento
- * @package    Magento_Newsletter
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Newsletter\Block\Adminhtml\Template;
@@ -62,6 +58,11 @@ class Preview extends \Magento\Backend\Block\Widget
         parent::__construct($context, $data);
     }
 
+    /**
+     * Get html code
+     *
+     * @return string
+     */
     protected function _toHtml()
     {
         /* @var $template \Magento\Newsletter\Model\Template */
@@ -80,7 +81,7 @@ class Preview extends \Magento\Backend\Block\Widget
             $storeId = $this->_storeManager->getDefaultStoreView()->getId();
         }
 
-        \Magento\Profiler::start("newsletter_template_proccessing");
+        \Magento\Framework\Profiler::start("newsletter_template_proccessing");
         $vars = array();
 
         $vars['subscriber'] = $this->_subscriberFactory->create();
@@ -100,7 +101,7 @@ class Preview extends \Magento\Backend\Block\Widget
             $templateProcessed = "<pre>" . htmlspecialchars($templateProcessed) . "</pre>";
         }
 
-        \Magento\Profiler::stop("newsletter_template_proccessing");
+        \Magento\Framework\Profiler::stop("newsletter_template_proccessing");
 
         return $templateProcessed;
     }

@@ -23,8 +23,11 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <referenceContainer name="right">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <referenceBlock name="head.components">
+        <block class="Magento\Framework\View\Element\Js\Components" name="sales_page_head_components" template="Magento_Sales::js/components.phtml"/>
+    </referenceBlock>
+    <referenceContainer name="sidebar.additional">
         <block class="Magento\Sales\Block\Reorder\Sidebar" name="sale.reorder.sidebar" as="reorder" template="reorder/sidebar.phtml"/>
     </referenceContainer>
     <referenceBlock name="footer_links">
@@ -35,4 +38,4 @@
             </arguments>
         </block>
     </referenceBlock>
-</layout>
+</page>

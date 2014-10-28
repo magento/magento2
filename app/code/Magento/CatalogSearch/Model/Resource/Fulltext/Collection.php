@@ -18,30 +18,24 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_CatalogSearch
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\CatalogSearch\Model\Resource\Fulltext;
 
+use Magento\Framework\DB\Select;
 
 /**
  * Fulltext Collection
- *
- * @category    Magento
- * @package     Magento_CatalogSearch
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\CatalogSearch\Model\Resource\Fulltext;
-
 class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
 {
     /**
      * Catalog search data
      *
-     * @var \Magento\CatalogSearch\Helper\Data
+     * @var \Magento\Search\Model\QueryFactory
      */
-    protected $_catalogSearchData = null;
+    protected $queryFactory = null;
 
     /**
      * Catalog search fulltext
@@ -51,55 +45,71 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     protected $_catalogSearchFulltext;
 
     /**
+     * @var \Magento\Framework\Search\Request\Builder
+     */
+    private $requestBuilder;
+
+    /**
+     * @var \Magento\Search\Model\SearchEngine
+     */
+    private $searchEngine;
+
+    /** @var  string */
+    private $queryText;
+
+    /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\Logger $logger
-     * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
      * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Catalog\Helper\Product\Flat $catalogProductFlat
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
      * @param \Magento\Catalog\Model\Resource\Url $catalogUrl
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Stdlib\DateTime $dateTime
-     * @param \Magento\CatalogSearch\Helper\Data $catalogSearchData
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param \Magento\Search\Model\QueryFactory $catalogSearchData
      * @param \Magento\CatalogSearch\Model\Fulltext $catalogSearchFulltext
-     * @param mixed $connection
-     * 
+     * @param \Magento\Framework\Search\Request\Builder $requestBuilder
+     * @param \Magento\Search\Model\SearchEngine $searchEngine
+     * @param \Zend_Db_Adapter_Abstract $connection
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
-        \Magento\Logger $logger,
-        \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Logger $logger,
+        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
         \Magento\Catalog\Model\Resource\Helper $resourceHelper,
-        \Magento\Validator\UniversalFactory $universalFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Catalog\Helper\Product\Flat $catalogProductFlat,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\Framework\Validator\UniversalFactory $universalFactory,
+        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
         \Magento\Catalog\Model\Resource\Url $catalogUrl,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Stdlib\DateTime $dateTime,
-        \Magento\CatalogSearch\Helper\Data $catalogSearchData,
+        \Magento\Framework\Stdlib\DateTime $dateTime,
+        \Magento\Search\Model\QueryFactory $catalogSearchData,
         \Magento\CatalogSearch\Model\Fulltext $catalogSearchFulltext,
+        \Magento\Framework\Search\Request\Builder $requestBuilder,
+        \Magento\Search\Model\SearchEngine $searchEngine,
         $connection = null
     ) {
         $this->_catalogSearchFulltext = $catalogSearchFulltext;
-        $this->_catalogSearchData = $catalogSearchData;
+        $this->queryFactory = $catalogSearchData;
         parent::__construct(
             $entityFactory,
             $logger,
@@ -111,48 +121,59 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
             $resourceHelper,
             $universalFactory,
             $storeManager,
-            $catalogData,
-            $catalogProductFlat,
-            $coreStoreConfig,
+            $moduleManager,
+            $catalogProductFlatState,
+            $scopeConfig,
             $productOptionFactory,
             $catalogUrl,
-            $locale,
+            $localeDate,
             $customerSession,
             $dateTime,
             $connection
         );
-    }
-
-    /**
-     * Retrieve query model object
-     *
-     * @return \Magento\CatalogSearch\Model\Query
-     */
-    protected function _getQuery()
-    {
-        return $this->_catalogSearchData->getQuery();
+        $this->requestBuilder = $requestBuilder;
+        $this->searchEngine = $searchEngine;
     }
 
     /**
      * Add search query filter
      *
      * @param string $query
-     * @return \Magento\CatalogSearch\Model\Resource\Fulltext\Collection
+     * @return $this
      */
     public function addSearchFilter($query)
     {
-        $this->_catalogSearchFulltext->prepareResult();
-
-        $this->getSelect()->joinInner(
-            array('search_result' => $this->getTable('catalogsearch_result')),
-            $this->getConnection()->quoteInto(
-                'search_result.product_id=e.entity_id AND search_result.query_id=?',
-                $this->_getQuery()->getId()
-            ),
-            array('relevance' => 'relevance')
-        );
-
+        $this->queryText = trim($this->queryText .' ' . $query);
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _renderFiltersBefore()
+    {
+        if ($this->queryText) {
+            $this->requestBuilder->bindDimension('scope', $this->getStoreId());
+            $this->requestBuilder->bind('search_term', $this->queryText);
+            $this->requestBuilder->setRequestName('quick_search_container');
+            $queryRequest = $this->requestBuilder->create();
+
+            $queryResponse = $this->searchEngine->search($queryRequest);
+            $ids = [0];
+            /** @var \Magento\Framework\Search\Document $document */
+            foreach ($queryResponse as $document) {
+                $ids[] = $document->getId();
+            }
+            $this->addIdFilter($ids);
+
+            $this->getSelect()
+                ->columns(
+                    [
+                        'relevance' => new \Zend_Db_Expr($this->_conn->quoteInto('FIELD(e.entity_id, ?)', $ids))
+                    ]
+                );
+        }
+        return parent::_renderFiltersBefore();
     }
 
     /**
@@ -160,9 +181,9 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      *
      * @param string $attribute
      * @param string $dir
-     * @return \Magento\CatalogSearch\Model\Resource\Fulltext\Collection
+     * @return $this
      */
-    public function setOrder($attribute, $dir = 'desc')
+    public function setOrder($attribute, $dir = Select::SQL_DESC)
     {
         if ($attribute == 'relevance') {
             $this->getSelect()->order("relevance {$dir}");
@@ -175,7 +196,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     /**
      * Stub method for campatibility with other search engines
      *
-     * @return \Magento\CatalogSearch\Model\Resource\Fulltext\Collection
+     * @return $this
      */
     public function setGeneralDefaultQuery()
     {

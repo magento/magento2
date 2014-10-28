@@ -23,22 +23,50 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Magento\Tax\Service\V1\TaxRateServiceInterface"
+                type="Magento\Tax\Service\V1\TaxRateService"/>
+    <preference for="Magento\Tax\Service\V1\TaxRuleServiceInterface"
+                type="Magento\Tax\Service\V1\TaxRuleService"/>
+    <preference for="Magento\Tax\Service\V1\TaxCalculationServiceInterface"
+                type="Magento\Tax\Service\V1\TaxCalculationService"/>
+    <preference for="Magento\Tax\Service\V1\TaxClassServiceInterface" type="Magento\Tax\Service\V1\TaxClassService" />
+    <preference for="Magento\Tax\Service\V1\OrderTaxServiceInterface" type="Magento\Tax\Service\V1\OrderTaxService" />
     <type name="Magento\Tax\Helper\Data">
-        <param name="taxConfig">
-            <instance type="Magento\Tax\Model\Config\Proxy" />
-        </param>
+        <arguments>
+            <argument name="taxConfig" xsi:type="object">Magento\Tax\Model\Config\Proxy</argument>
+        </arguments>
     </type>
-    <type name="Magento\Module\Updater\SetupFactory">
-        <param name="resourceTypes">
-            <value>
-                <tax_setup>Magento\Tax\Model\Resource\Setup</tax_setup>
-            </value>
-        </param>
+    <type name="Magento\Framework\Module\Updater\SetupFactory">
+        <arguments>
+            <argument name="resourceTypes" xsi:type="array">
+                <item name="tax_setup" xsi:type="string">Magento\Tax\Model\Resource\Setup</item>
+            </argument>
+        </arguments>
     </type>
     <type name="Magento\Tax\Model\Resource\Calculation">
-        <param name="taxData">
-            <instance type="Magento\Tax\Helper\Data\Proxy" />
-        </param>
+        <arguments>
+            <argument name="taxData" xsi:type="object">Magento\Tax\Helper\Data\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Pricing\Adjustment\Collection">
+        <arguments>
+            <argument name="adjustments" xsi:type="array">
+                <item name="tax" xsi:type="const">Magento\Tax\Pricing\Adjustment::ADJUSTMENT_CODE</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Pricing\Adjustment\Pool">
+        <arguments>
+            <argument name="adjustments" xsi:type="array">
+                <item name="tax" xsi:type="array">
+                    <item name="className" xsi:type="string">Magento\Tax\Pricing\Adjustment</item>
+                    <item name="sortOrder" xsi:type="string">20</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\ConfigurableProduct\Pricing\Price\AttributePrice">
+        <plugin name="prepareAdjustmentConfig" type="Magento\Tax\Pricing\Price\Plugin\AttributePrice" sortOrder="10"/>
     </type>
 </config>

@@ -20,8 +20,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Tools
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -71,11 +69,19 @@ foreach ($layouts as $file) {
 }
 
 // modules in configuration and layouts
-$configs = \Magento\TestFramework\Utility\Files::init()->getConfigFiles('*.xml',
-    array('wsdl.xml', 'wsdl2.xml', 'wsi.xml'), false);
+$configs = \Magento\TestFramework\Utility\Files::init()->getConfigFiles(
+    '*.xml',
+    array('wsdl.xml', 'wsdl2.xml', 'wsi.xml'),
+    false
+);
 foreach (array_merge($layouts, $configs) as $file) {
-    $modules = array_unique(\Magento\TestFramework\Utility\Classes::getXmlAttributeValues(simplexml_load_file($file),
-            '//@module', 'module'));
+    $modules = array_unique(
+        \Magento\TestFramework\Utility\Classes::getXmlAttributeValues(
+            simplexml_load_file($file),
+            '//@module',
+            'module'
+        )
+    );
     $factoryNames = array_filter($modules, 'isFactoryName');
     if (!$factoryNames) {
         continue;
@@ -83,7 +89,7 @@ foreach (array_merge($layouts, $configs) as $file) {
     $search = array();
     $replace = array();
     foreach ($factoryNames as $factoryName) {
-        list($module,$name) = getModuleName($factoryName);
+        list($module, $name) = getModuleName($factoryName);
         if ($module) {
             $search[] = 'module="' . $factoryName . '"';
             $replace[] = 'module="' . implode('\\', array_map('ucfirst', explode('_', $module))) . '"';
@@ -103,8 +109,16 @@ foreach (array_merge($layouts, $configs) as $file) {
  */
 function isFactoryName($class)
 {
-    return (false !== strpos($class, '/') || preg_match('/^([A-Za-z\\d])+((_[A-Za-z\\d]+))+?$/', $class)
-        || preg_match('/^[a-z\d]+(_[A-Za-z\d]+)?$/', $class));
+    return false !== strpos(
+        $class,
+        '/'
+    ) || preg_match(
+        '/^([A-Za-z\\d])+((_[A-Za-z\\d]+))+?$/',
+        $class
+    ) || preg_match(
+        '/^[a-z\d]+(_[A-Za-z\d]+)?$/',
+        $class
+    );
 }
 
 /**
@@ -144,6 +158,7 @@ function getModuleName($factoryName)
  * @param string $suffix
  * @param array &$search
  * @param array &$replace
+ * @return void
  */
 function addReplace($factoryName, $module, $name, $pattern, $suffix, &$search, &$replace)
 {
@@ -171,6 +186,7 @@ function addReplace($factoryName, $module, $name, $pattern, $suffix, &$search, &
  * @param array $search
  * @param array $replace
  * @param mixed $output
+ * @return void
  */
 function replaceAndOutput($file, $search, $replace, $output)
 {

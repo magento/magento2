@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
 
 /**
@@ -33,8 +32,11 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(
             'Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Labels',
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-                ->createBlock('Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Labels')
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                'Magento\Framework\View\LayoutInterface'
+            )->createBlock(
+                'Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Labels'
+            )
         );
     }
 }

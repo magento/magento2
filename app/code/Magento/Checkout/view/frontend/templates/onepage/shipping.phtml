@@ -1,0 +1,143 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<form class="form shipping address" id="co-shipping-form" data-hasrequired="<?php echo __('* Required Fields') ?>">
+
+<?php if ($this->customerHasAddresses()): ?>
+   <div class="field addresses">
+       <label class="label" for="shipping-address-select"><span><?php echo __('Select a shipping address from your address book or enter a new address.') ?></span></label>
+       <div class="control"><?php echo $this->getAddressesHtmlSelect('shipping') ?></div>
+   </div>
+<?php endif ?>
+    <fieldset class="fieldset address" id="shipping-new-address-form"<?php if ($this->customerHasAddresses()): ?> style="display:none;"<?php endif ?>>
+        <input type="hidden" name="shipping[address_id]" value="<?php echo $this->getAddress()->getId() ?>" id="shipping:address_id" />
+        <?php echo $this->getLayout()->createBlock('Magento\Customer\Block\Widget\Name')->setObject($this->getAddress())->setFieldIdFormat('shipping:%s')->setFieldNameFormat('shipping[%s]')->toHtml() ?>
+        <div class="field company">
+            <label class="label" for="shipping:company"><span><?php echo __('Company') ?></span></label>
+            <div class="control">
+                <input type="text" id="shipping:company" name="shipping[company]" value="<?php echo $this->escapeHtml($this->getAddress()->getCompany()) ?>" title="<?php echo __('Company') ?>" class="input-text <?php echo $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('company') ?>" />
+            </div>
+        </div>
+        <?php if ($this->helper('Magento\Customer\Helper\Address')->isVatAttributeVisible()) : ?>
+        <div class="field taxvat">
+            <label class="label" for="shipping:vat_id"><span><?php echo __('VAT Number'); ?></span></label>
+            <div class="control">
+                <input type="text" id="shipping:vat_id" name="shipping[vat_id]" value="<?php echo $this->escapeHtml($this->getAddress()->getVatId()); ?>" title="<?php echo __('VAT Number'); ?>" class="input-text <?php echo $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('vat_id') ?>" />
+            </div>
+        </div>
+        <?php endif; ?>
+        <?php $_streetValidationClass = $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('street'); ?>
+        <div class="field street required">
+            <label class="label" for="shipping:street1"><span><?php echo __('Address') ?></span></label>
+            <div class="control">
+                <input type="text" title="<?php echo __('Street Address') ?>" name="shipping[street][]" id="shipping:street1" value="<?php echo $this->escapeHtml($this->getAddress()->getStreet(1)) ?>" class="input-text <?php echo $_streetValidationClass ?>" />
+                <div class="nested">
+                <?php $_streetValidationClass = trim(str_replace('required-entry', '', $_streetValidationClass)); ?>
+                <?php for ($_i = 2, $_n = $this->helper('Magento\Customer\Helper\Address')->getStreetLines(); $_i <= $_n; $_i++): ?>
+                     <div class="field additional no-label">
+                        <div class="control">
+                            <input type="text" title="<?php echo __('Street Address %1', $_i) ?>" name="shipping[street][]" id="shipping:street<?php echo $_i ?>" value="<?php echo $this->escapeHtml($this->getAddress()->getStreet($_i)) ?>" class="input-text <?php echo $_streetValidationClass ?>" />
+                        </div>
+                    </div>
+                <?php endfor; ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="field city required">
+            <label class="label" for="shipping:city"><span><?php echo __('City') ?></span></label>
+            <div class="control">
+                <input type="text" title="<?php echo __('City') ?>" name="shipping[city]" value="<?php echo $this->escapeHtml($this->getAddress()->getCity()) ?>" class="input-text <?php echo $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('city') ?>" id="shipping:city" />
+            </div>
+        </div>
+        <div class="field region required">
+            <label class="label" for="shipping:region"><span><?php echo __('State/Province') ?></span></label>
+            <div class="control">
+                <select id="shipping:region_id" name="shipping[region_id]" title="<?php echo __('State/Province') ?>" class="validate-select" style="display:none;">
+                    <option value=""><?php echo __('Please select region, state or province') ?></option>
+                </select>
+                <input type="text" id="shipping:region" name="shipping[region]" value="<?php echo $this->escapeHtml($this->getAddress()->getRegion()) ?>" title="<?php echo __('State/Province') ?>" class="input-text <?php echo $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('region') ?>" style="display:none;" />
+            </div>
+        </div>
+        <div class="field zip required">
+            <label class="label" for="shipping:postcode"><span><?php echo __('Zip/Postal Code') ?></span></label>
+            <div class="control">
+                <input type="text" title="<?php echo __('Zip/Postal Code') ?>" name="shipping[postcode]" id="shipping:postcode" value="<?php echo $this->escapeHtml($this->getAddress()->getPostcode()) ?>" class="input-text validate-zip-international <?php echo $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('postcode') ?>" />
+            </div>
+        </div>
+        <div class="field country required">
+            <label class="label" for="shipping:country_id"><span><?php echo __('Country') ?></span></label>
+            <div class="control">
+                <?php echo $this->getCountryHtmlSelect('shipping') ?>
+            </div>
+        </div>
+        <div class="field telephone required">
+            <label class="label" for="shipping:telephone"><span><?php echo __('Phone Number') ?></span></label>
+            <div class="control">
+                <input type="text" name="shipping[telephone]" value="<?php echo $this->escapeHtml($this->getAddress()->getTelephone()) ?>" title="<?php echo __('Telephone') ?>" class="input-text <?php echo $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('telephone') ?>" id="shipping:telephone" />
+            </div>
+        </div>
+        <div class="field fax">
+            <label class="label" for="shipping:fax"><span><?php echo __('Fax') ?></span></label>
+            <div class="control">
+                <input type="text" name="shipping[fax]" value="<?php echo $this->escapeHtml($this->getAddress()->getFax()) ?>" title="<?php echo __('Fax') ?>" class="input-text <?php echo $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('fax') ?>" id="shipping:fax" />
+            </div>
+        </div>
+
+        <?php if ($this->isCustomerLoggedIn() && $this->customerHasAddresses()):?>
+            <div class="field choice save">
+                <input type="checkbox" name="shipping[save_in_address_book]" value="1" title="<?php echo __('Save in address book') ?>" id="shipping:save_in_address_book" <?php if ($this->getAddress()->getSaveInAddressBook()):?> checked="checked"<?php endif;?> class="checkbox" />
+                <label class="label" for="shipping:save_in_address_book"><span><?php echo __('Save in address book') ?></span></label>
+            </div>
+        <?php else:?>
+            <input type="hidden" name="shipping[save_in_address_book]" value="1" />
+        <?php endif;?>
+    </fieldset>
+    <div class="choice field">
+            <input type="checkbox" name="shipping[same_as_billing]" id="shipping:same_as_billing" value="1"<?php if($this->getAddress()->getSameAsBilling()): ?> checked="checked"<?php endif; ?> class="checkbox" />
+        <label class="label" for="shipping:same_as_billing"><span><?php echo __('Use Billing Address') ?></span></label>
+    </div>
+    <div class="actions" id="shipping-buttons-container">
+        <div class="primary"><button data-role="opc-continue" type="button" class="button action continue"><span><?php echo __('Continue') ?></span></button></div>
+        <div class="secondary"><a href="#" class="action back"><span><?php echo __('Back') ?></span></a></div>
+    </div>
+</form>
+<script type="text/javascript">
+require([
+    "jquery",
+    "mage/mage"
+], function($){
+
+    $('#shipping\\:country_id').mage('regionUpdater', {
+        optionalRegionAllowed: <?php echo ($this->getConfig('general/region/display_all')? 'true' : 'false'); ?>,
+        regionListId: '#shipping\\\:region_id',
+        regionInputId: '#shipping\\\:region',
+        postcodeId: '#shipping\\\:postcode',
+        regionJson: <?php echo $this->helper('Magento\Directory\Helper\Data')->getRegionJson() ?>,
+        defaultRegion: "<?php echo $this->getAddress()->getRegionId() ?>",
+        countriesWithOptionalZip: <?php echo $this->helper('Magento\Directory\Helper\Data')->getCountriesWithOptionalZip(true) ?>
+    });
+
+});
+</script>

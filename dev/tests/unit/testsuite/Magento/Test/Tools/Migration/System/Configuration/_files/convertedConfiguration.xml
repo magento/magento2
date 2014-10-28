@@ -19,8 +19,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category  Dummy
- * @package   Module_Dummy
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -41,7 +39,7 @@
                 <comment><![CDATA[group comment]]></comment>
                 <fieldset_css>some css class</fieldset_css>
                 <clone_fields>1</clone_fields>
-                <clone_model>Magento_Some_Model_Name</clone_model>
+                <clone_model>Magento\Some\Model\Name</clone_model>
                 <help_url>some_url</help_url>
                 <hide_in_single_store_mode>1</hide_in_single_store_mode>
                 <expanded>1</expanded>
@@ -52,9 +50,9 @@
                     <validate>validate_test</validate>
                     <can_be_empty>1</can_be_empty>
                     <if_module_enabled>Magento_Backend</if_module_enabled>
-                    <frontend_model>Magento_Some_Model_Name</frontend_model>
-                    <backend_model>Magento_Some_Model_Name</backend_model>
-                    <source_model>Magento_Some_Model_Name</source_model>
+                    <frontend_model>Magento\Some\Model\Name</frontend_model>
+                    <backend_model>Magento\Some\Model\Name</backend_model>
+                    <source_model>Magento\Some\Model\Name</source_model>
                     <config_path>config/path/test</config_path>
                     <base_url>some_url</base_url>
                     <upload_dir>some_directory</upload_dir>

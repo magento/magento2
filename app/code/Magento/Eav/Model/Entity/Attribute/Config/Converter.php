@@ -25,7 +25,7 @@
  */
 namespace Magento\Eav\Model\Entity\Attribute\Config;
 
-class Converter implements \Magento\Config\ConverterInterface
+class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
      * Convert config
@@ -50,7 +50,9 @@ class Converter implements \Magento\Config\ConverterInterface
                 $attributeFields = array();
                 foreach ($entityAttribute->getElementsByTagName('field') as $fieldData) {
                     $locked = $fieldData->attributes->getNamedItem('locked')->nodeValue == "true" ? true : false;
-                    $attributeFields[$fieldData->attributes->getNamedItem('code')->nodeValue] = array(
+                    $attributeFields[$fieldData->attributes->getNamedItem(
+                        'code'
+                    )->nodeValue] = array(
                         'code' => $fieldData->attributes->getNamedItem('code')->nodeValue,
                         'locked' => $locked
                     );

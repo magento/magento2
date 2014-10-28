@@ -18,19 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_DesignEditor
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DesignEditor\Block\Adminhtml\Editor;
 
 /**
  * Editor toolbar
  *
- * @method \Magento\DesignEditor\Block\Adminhtml\Editor\Container setTheme(\Magento\View\Design\ThemeInterface $theme)
+ * @method \Magento\DesignEditor\Block\Adminhtml\Editor\Container setTheme(\Magento\Framework\View\Design\ThemeInterface $theme)
  */
-namespace Magento\DesignEditor\Block\Adminhtml\Editor;
-
 class Container extends \Magento\Backend\Block\Widget\Container
 {
     /**
@@ -42,14 +39,19 @@ class Container extends \Magento\Backend\Block\Widget\Container
 
     /**
      * Add elements in layout
+     *
+     * @return void
      */
     protected function _prepareLayout()
     {
-        $this->addButton('back_button', array(
-            'label'   => __('Back'),
-            'onclick' => 'setLocation(\'' . $this->getUrl('adminhtml/*') . '\')',
-            'class'   => 'back'
-        ));
+        $this->addButton(
+            'back_button',
+            array(
+                'label' => __('Back'),
+                'onclick' => 'setLocation(\'' . $this->getUrl('adminhtml/*') . '\')',
+                'class' => 'back'
+            )
+        );
 
         parent::_prepareLayout();
     }
@@ -67,7 +69,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
     /**
      * @param string $url
      *
-     * @return \Magento\DesignEditor\Block\Adminhtml\Editor\Container
+     * @return $this
      */
     public function setFrameUrl($url)
     {

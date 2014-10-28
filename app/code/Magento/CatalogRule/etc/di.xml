@@ -23,29 +23,41 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <type name="Magento\CatalogRule\Model\Resource\Rule">
-        <param name="eventManager">
-            <instance type="Magento\Event\Manager\Proxy" />
-        </param>
+        <arguments>
+            <argument name="eventManager" xsi:type="object">Magento\Framework\Event\Manager\Proxy</argument>
+        </arguments>
     </type>
     <type name="Magento\CatalogRule\Model\Resource\Rule\Collection" shared="false" />
     <type name="Magento\CatalogRule\Model\Observer">
-        <param name="resourceRule">
-            <instance type="Magento\CatalogRule\Model\Resource\Rule\Proxy" />
-        </param>
-        <param name="customerSession">
-            <instance type="Magento\Customer\Model\Session\Proxy" />
-        </param>
-        <param name="backendSession">
-            <instance type="Magento\Backend\Model\Session\Proxy" />
-        </param>
+        <arguments>
+            <argument name="resourceRule" xsi:type="object">Magento\CatalogRule\Model\Resource\Rule\Proxy</argument>
+            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+            <argument name="backendSession" xsi:type="object">Magento\Backend\Model\Session\Proxy</argument>
+        </arguments>
     </type>
-    <type name="Magento\Module\Updater\SetupFactory">
-        <param name="resourceTypes">
-            <value>
-                <catalogrule_setup>Magento\Core\Model\Resource\Setup\Generic</catalogrule_setup>
-            </value>
-        </param>
+    <type name="Magento\Catalog\Model\Product\PriceModifier\Composite">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="catalog_rule" xsi:type="string">Magento\CatalogRule\Model\Product\PriceModifier</item>
+            </argument>
+        </arguments>
     </type>
+    <type name="Magento\Framework\Module\Setup\Migration">
+        <arguments>
+            <argument name="compositeModules" xsi:type="array">
+                <item name="catalogrule" xsi:type="string">Magento_CatalogRule</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <virtualType name="Magento\Catalog\Pricing\Price\Pool" type="Magento\Framework\Pricing\Price\Pool">
+        <arguments>
+            <argument name="prices" xsi:type="array">
+                <item name="catalog_rule_price" xsi:type="string">Magento\CatalogRule\Pricing\Price\CatalogRulePrice</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
 </config>

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Bundle\Block\Catalog\Product\View\Type;
 
 class BundleTest extends \PHPUnit_Framework_TestCase
@@ -44,7 +43,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
 
     public function testGetOptionHtmlNoRenderer()
     {
-        $option = $this->getMock('\Magento\Bundle\Model\Option', ['getType', '__wakeup'], [], '', false);
+        $option = $this->getMock('\Magento\Bundle\Model\Option', array('getType', '__wakeup'), array(), '', false);
         $option->expects($this->exactly(2))->method('getType')->will($this->returnValue('checkbox'));
 
         $this->assertEquals(
@@ -55,20 +54,25 @@ class BundleTest extends \PHPUnit_Framework_TestCase
 
     public function testGetOptionHtml()
     {
-        $option = $this->getMock('\Magento\Bundle\Model\Option', ['getType', '__wakeup'], [], '', false);
+        $option = $this->getMock('\Magento\Bundle\Model\Option', array('getType', '__wakeup'), array(), '', false);
         $option->expects($this->exactly(1))->method('getType')->will($this->returnValue('checkbox'));
 
         $optionBlock = $this->getMock(
             '\Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Checkbox',
-            ['setOption', 'toHtml', 'getPriceBlockTypes'],
-            [],
+            array('setOption', 'toHtml'),
+            array(),
             '',
             false
         );
         $optionBlock->expects($this->any())->method('setOption')->will($this->returnValue($optionBlock));
-        $optionBlock->expects($this->any())->method('getPriceBlockTypes')->will($this->returnValue([]));
         $optionBlock->expects($this->any())->method('toHtml')->will($this->returnValue('option html'));
-        $layout = $this->getMock('\Magento\Core\Model\Layout', ['getChildName', 'getBlock'], [], '', false);
+        $layout = $this->getMock(
+            'Magento\Framework\View\Layout',
+            array('getChildName', 'getBlock'),
+            array(),
+            '',
+            false
+        );
         $layout->expects($this->any())->method('getChildName')->will($this->returnValue('name'));
         $layout->expects($this->any())->method('getBlock')->will($this->returnValue($optionBlock));
         $this->_bundleBlock->setLayout($layout);

@@ -23,6 +23,6 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout>
+<page>
     <container name="product.info.configurable.extra" as="product_type_data_extra" label="Configurable Product Extra Info"/>
-</layout>
+</page>

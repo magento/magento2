@@ -18,44 +18,48 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Customer\Block\Adminhtml\Edit;
+
+use Magento\Customer\Controller\RegistryConstants;
 
 /**
  * Admin customer left menu
  */
-namespace Magento\Customer\Block\Adminhtml\Edit;
-
 class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Json\EncoderInterface $jsonEncoder
+     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Backend\Model\Auth\Session $authSession
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Json\EncoderInterface $jsonEncoder,
+        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Backend\Model\Auth\Session $authSession,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Framework\Registry $registry,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
         parent::__construct($context, $jsonEncoder, $authSession, $data);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -64,70 +68,102 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
         $this->setTitle(__('Customer Information'));
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function _beforeToHtml()
     {
-        \Magento\Profiler::start('customer/tabs');
+        \Magento\Framework\Profiler::start('customer/tabs');
 
-        $this->addTab('account', array(
-            'label'     => __('Account Information'),
-            'content'   => $this->getLayout()
-                ->createBlock('Magento\Customer\Block\Adminhtml\Edit\Tab\Account')->initForm()->toHtml(),
-            'active'    => $this->_coreRegistry->registry('current_customer')->getId() ? false : true
-        ));
+        $this->addTab(
+            'account',
+            array(
+                'label' => __('Account Information'),
+                'content' => $this->getLayout()->createBlock(
+                    'Magento\Customer\Block\Adminhtml\Edit\Tab\Account'
+                )->initForm()->toHtml(),
+                'active' => $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID) ? false : true
+            )
+        );
 
-        $this->addTab('addresses', array(
-            'label'     => __('Addresses'),
-            'content'   => $this->getLayout()
-                ->createBlock('Magento\Customer\Block\Adminhtml\Edit\Tab\Addresses')->initForm()->toHtml(),
-        ));
-
+        $this->addTab(
+            'addresses',
+            array(
+                'label' => __('Addresses'),
+                'content' => $this->getLayout()->createBlock(
+                    'Magento\Customer\Block\Adminhtml\Edit\Tab\Addresses'
+                )->initForm()->toHtml()
+            )
+        );
 
         // load: Orders, Shopping Cart, Wishlist, Product Reviews, Product Tags - with ajax
 
-        if ($this->_coreRegistry->registry('current_customer')->getId()) {
+        if ($this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID)) {
 
             if ($this->_authorization->isAllowed('Magento_Sales::actions_view')) {
-                $this->addTab('orders', array(
-                    'label'     => __('Orders'),
-                    'class'     => 'ajax',
-                    'url'       => $this->getUrl('customer/*/orders', array('_current' => true)),
-                 ));
+                $this->addTab(
+                    'orders',
+                    array(
+                        'label' => __('Orders'),
+                        'class' => 'ajax',
+                        'url' => $this->getUrl('customer/*/orders', array('_current' => true))
+                    )
+                );
             }
 
-            $this->addTab('cart', array(
-                'label'     => __('Shopping Cart'),
-                'class'     => 'ajax',
-                'url'       => $this->getUrl('customer/*/carts', array('_current' => true)),
-            ));
+            $this->addTab(
+                'cart',
+                array(
+                    'label' => __('Shopping Cart'),
+                    'class' => 'ajax',
+                    'url' => $this->getUrl('customer/*/carts', array('_current' => true))
+                )
+            );
 
-            $this->addTab('wishlist', array(
-                'label'     => __('Wishlist'),
-                'class'     => 'ajax',
-                'url'       => $this->getUrl('customer/*/wishlist', array('_current' => true)),
-            ));
+            $this->addTab(
+                'wishlist',
+                array(
+                    'label' => __('Wishlist'),
+                    'class' => 'ajax',
+                    'url' => $this->getUrl('customer/*/wishlist', array('_current' => true))
+                )
+            );
 
             if ($this->_authorization->isAllowed('Magento_Newsletter::subscriber')) {
-                $this->addTab('newsletter', array(
-                    'label'     => __('Newsletter'),
-                    'content'   => $this->getLayout()
-                        ->createBlock('Magento\Customer\Block\Adminhtml\Edit\Tab\Newsletter')->initForm()->toHtml()
-                ));
+                $this->addTab(
+                    'newsletter',
+                    array(
+                        'label' => __('Newsletter'),
+                        'content' => $this->getLayout()->createBlock(
+                            'Magento\Customer\Block\Adminhtml\Edit\Tab\Newsletter'
+                        )->initForm()->toHtml()
+                    )
+                );
             }
 
-            if ($this->_authorization->isAllowed('Magento_Review::reviews_all')) {
-                $this->addTab('reviews', array(
-                    'label'     => __('Product Reviews'),
-                    'class'     => 'ajax',
-                    'url'       => $this->getUrl('customer/*/productReviews', array('_current' => true)),
-                ));
+            $reviewOutput = $this->isOutputEnabled('Magento_Review');
+            if ($this->_authorization->isAllowed('Magento_Review::reviews_all') && $reviewOutput) {
+                $this->addTab(
+                    'reviews',
+                    array(
+                        'label' => __('Product Reviews'),
+                        'class' => 'ajax',
+                        'url' => $this->getUrl('customer/*/productReviews', array('_current' => true))
+                    )
+                );
             }
         }
 
         $this->_updateActiveTab();
-        \Magento\Profiler::stop('customer/tabs');
+        \Magento\Framework\Profiler::stop('customer/tabs');
         return parent::_beforeToHtml();
     }
 
+    /**
+     * Update and set the active tab.
+     *
+     * @return void
+     */
     protected function _updateActiveTab()
     {
         $tabId = $this->getRequest()->getParam('tab');

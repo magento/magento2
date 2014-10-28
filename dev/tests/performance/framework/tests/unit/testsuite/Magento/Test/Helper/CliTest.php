@@ -18,19 +18,14 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     performance_tests
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Helper;
 
 /**
  * Class CliTest
  *
- * @package Magento\Test\Helper
  */
 class CliTest extends \PHPUnit_Framework_TestCase
 {
@@ -44,7 +39,8 @@ class CliTest extends \PHPUnit_Framework_TestCase
     /**
      * Param constants
      */
-    const TEST_OPTION_NAME  = 'name';
+    const TEST_OPTION_NAME = 'name';
+
     const TEST_OPTION_VALUE = 'test_option_value';
 
     /**
@@ -53,17 +49,14 @@ class CliTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
 
-        $this->_getOpt =  $this->getMock(
-            'Zend_Console_Getopt',
-            array('getOption'),
-            array(array())
+        $this->_getOpt = $this->getMock('Zend_Console_Getopt', array('getOption'), array(array()));
+        $this->_getOpt->expects(
+            $this->any()
+        )->method(
+            'getOption'
+        )->will(
+            $this->returnValueMap(array(array(self::TEST_OPTION_NAME, self::TEST_OPTION_VALUE), array('xxx', null)))
         );
-        $this->_getOpt->expects($this->any())->method('getOption')->will($this->returnValueMap(
-            array(
-                array(self::TEST_OPTION_NAME, self::TEST_OPTION_VALUE),
-                array('xxx', null),
-            )
-        ));
 
         \Magento\TestFramework\Helper\Cli::setOpt($this->_getOpt);
     }
@@ -86,13 +79,7 @@ class CliTest extends \PHPUnit_Framework_TestCase
             self::TEST_OPTION_VALUE,
             \Magento\TestFramework\Helper\Cli::getOption(self::TEST_OPTION_NAME)
         );
-        $this->assertEquals(
-            null,
-            \Magento\TestFramework\Helper\Cli::getOption('xxx')
-        );
-        $this->assertEquals(
-            'default',
-            \Magento\TestFramework\Helper\Cli::getOption('xxx', 'default')
-        );
+        $this->assertEquals(null, \Magento\TestFramework\Helper\Cli::getOption('xxx'));
+        $this->assertEquals('default', \Magento\TestFramework\Helper\Cli::getOption('xxx', 'default'));
     }
 }

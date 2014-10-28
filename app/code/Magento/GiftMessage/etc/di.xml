@@ -23,12 +23,21 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
-    <type name="Magento\Module\Updater\SetupFactory">
-        <param name="resourceTypes">
-            <value>
-                <giftmessage_setup>Magento\GiftMessage\Model\Resource\Setup</giftmessage_setup>
-            </value>
-        </param>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\Module\Updater\SetupFactory">
+        <arguments>
+            <argument name="resourceTypes" xsi:type="array">
+                <item name="giftmessage_setup" xsi:type="string">Magento\GiftMessage\Model\Resource\Setup</item>
+            </argument>
+        </arguments>
     </type>
+    <type name="Magento\Framework\Module\Setup\Migration">
+        <arguments>
+            <argument name="compositeModules" xsi:type="array">
+                <item name="giftmessage" xsi:type="string">Magento_GiftMessage</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\GiftMessage\Service\V1\ReadServiceInterface" type="Magento\GiftMessage\Service\V1\ReadService"/>
+    <preference for="Magento\GiftMessage\Service\V1\WriteServiceInterface" type="Magento\GiftMessage\Service\V1\WriteService"/>
 </config>

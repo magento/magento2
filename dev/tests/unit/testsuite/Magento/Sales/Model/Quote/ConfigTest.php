@@ -37,19 +37,28 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_attributeConfig = $this->getMock('Magento\Catalog\Model\Attribute\Config', array(), array(), '', false);
+        $this->_attributeConfig = $this->getMock(
+            'Magento\Catalog\Model\Attribute\Config',
+            array(),
+            array(),
+            '',
+            false
+        );
         $this->_model = new \Magento\Sales\Model\Quote\Config($this->_attributeConfig);
     }
 
     public function testGetProductAttributes()
     {
         $attributes = array('attribute_one', 'attribute_two');
-        $this->_attributeConfig
-            ->expects($this->once())
-            ->method('getAttributeNames')
-            ->with('sales_quote_item')
-            ->will($this->returnValue($attributes))
-        ;
+        $this->_attributeConfig->expects(
+            $this->once()
+        )->method(
+            'getAttributeNames'
+        )->with(
+            'sales_quote_item'
+        )->will(
+            $this->returnValue($attributes)
+        );
         $this->assertEquals($attributes, $this->_model->getProductAttributes());
     }
 }

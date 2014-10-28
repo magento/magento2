@@ -18,24 +18,23 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Backend\Model\Config\Source\Design;
 
-class Robots implements \Magento\Core\Model\Option\ArrayInterface
+class Robots implements \Magento\Framework\Option\ArrayInterface
 {
+    /**
+     * @return array
+     */
     public function toOptionArray()
     {
         return array(
-            array('value'=>'INDEX,FOLLOW', 'label'=>'INDEX, FOLLOW'),
-            array('value'=>'NOINDEX,FOLLOW', 'label'=>'NOINDEX, FOLLOW'),
-            array('value'=>'INDEX,NOFOLLOW', 'label'=>'INDEX, NOFOLLOW'),
-            array('value'=>'NOINDEX,NOFOLLOW', 'label'=>'NOINDEX, NOFOLLOW'),
+            array('value' => 'INDEX,FOLLOW', 'label' => 'INDEX, FOLLOW'),
+            array('value' => 'NOINDEX,FOLLOW', 'label' => 'NOINDEX, FOLLOW'),
+            array('value' => 'INDEX,NOFOLLOW', 'label' => 'INDEX, NOFOLLOW'),
+            array('value' => 'NOINDEX,NOFOLLOW', 'label' => 'NOINDEX, NOFOLLOW')
         );
     }
 }

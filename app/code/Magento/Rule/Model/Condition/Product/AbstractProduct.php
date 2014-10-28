@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Rule
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,8 +25,6 @@
 /**
  * Abstract Rule product condition data model
  *
- * @category Magento
- * @package Magento_Rule
  * @author Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Rule\Model\Condition\Product;
@@ -73,9 +69,9 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     protected $_config;
 
     /**
-     * @var \Magento\Catalog\Model\Product
+     * @var \Magento\Catalog\Model\ProductFactory
      */
-    protected $_product;
+    protected $_productFactory;
 
     /**
      * @var \Magento\Catalog\Model\Resource\Product
@@ -88,28 +84,36 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     protected $_attrSetCollection;
 
     /**
+     * @var \Magento\Framework\Locale\FormatInterface
+     */
+    protected $_localeFormat;
+
+    /**
      * @param \Magento\Rule\Model\Condition\Context $context
      * @param \Magento\Backend\Helper\Data $backendData
      * @param \Magento\Eav\Model\Config $config
-     * @param \Magento\Catalog\Model\Product $product
+     * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Model\Resource\Product $productResource
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection $attrSetCollection
+     * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param array $data
      */
     public function __construct(
         \Magento\Rule\Model\Condition\Context $context,
         \Magento\Backend\Helper\Data $backendData,
         \Magento\Eav\Model\Config $config,
-        \Magento\Catalog\Model\Product $product,
+        \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Model\Resource\Product $productResource,
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection $attrSetCollection,
+        \Magento\Framework\Locale\FormatInterface $localeFormat,
         array $data = array()
     ) {
         $this->_backendData = $backendData;
         $this->_config = $config;
-        $this->_product = $product;
+        $this->_productFactory = $productFactory;
         $this->_productResource = $productResource;
         $this->_attrSetCollection = $attrSetCollection;
+        $this->_localeFormat = $localeFormat;
         parent::__construct($context, $data);
     }
 
@@ -140,11 +144,9 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     {
         try {
             $obj = $this->_config->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $this->getAttribute());
-        }
-        catch (\Exception $e) {
-            $obj = new \Magento\Object();
-            $obj->setEntity($this->_product)
-                ->setFrontendInput('text');
+        } catch (\Exception $e) {
+            $obj = new \Magento\Framework\Object();
+            $obj->setEntity($this->_productFactory->create())->setFrontendInput('text');
         }
         return $obj;
     }
@@ -152,7 +154,8 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     /**
      * Add special attributes
      *
-     * @param array $attributes
+     * @param array &$attributes
+     * @return void
      */
     protected function _addSpecialAttributes(array &$attributes)
     {
@@ -163,7 +166,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     /**
      * Load attribute options
      *
-     * @return \Magento\CatalogRule\Model\Rule\Condition\Product
+     * @return $this
      */
     public function loadAttributeOptions()
     {
@@ -172,8 +175,9 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         $attributes = array();
         foreach ($productAttributes as $attribute) {
             /* @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
-            if (!$attribute->isAllowedForRuleCondition()
-                || !$attribute->getDataUsingMethod($this->_isUsedForRuleProperty)
+            if (!$attribute->isAllowedForRuleCondition() || !$attribute->getDataUsingMethod(
+                $this->_isUsedForRuleProperty
+            )
             ) {
                 continue;
             }
@@ -194,7 +198,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      *  'value_select_options' - normal select array: array(array('value' => $value, 'label' => $label), ...)
      *  'value_option' - hashed array: array($value => $label, ...),
      *
-     * @return \Magento\CatalogRule\Model\Rule\Condition\Product
+     * @return $this
      */
     protected function _prepareValueOptions()
     {
@@ -213,7 +217,16 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
                 ->setEntityTypeFilter($entityTypeId)
                 ->load()
                 ->toOptionArray();
-        } else if (is_object($this->getAttributeObject())) {
+        } elseif ($this->getAttribute() === 'type_id') {
+            foreach ($selectReady as $value => $label) {
+                if (is_array($label) && isset($label['value'])) {
+                    $selectOptions[] = $label;
+                } else {
+                    $selectOptions[] = array('value' => $value, 'label' => $label);
+                }
+            }
+            $selectReady = null;
+        } elseif (is_object($this->getAttributeObject())) {
             $attributeObject = $this->getAttributeObject();
             if ($attributeObject->usesSource()) {
                 if ($attributeObject->getFrontendInput() == 'multiselect') {
@@ -249,13 +262,13 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     /**
      * Retrieve value by option
      *
-     * @param mixed $option
+     * @param string|null $option
      * @return string
      */
     public function getValueOption($option = null)
     {
         $this->_prepareValueOptions();
-        return $this->getData('value_option' . (!is_null($option) ? '/'.$option : ''));
+        return $this->getData('value_option' . (!is_null($option) ? '/' . $option : ''));
     }
 
     /**
@@ -281,14 +294,17 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         switch ($this->getAttribute()) {
             case 'sku':
             case 'category_ids':
-                $image = $this->_viewUrl->getViewFileUrl('images/rule_chooser_trigger.gif');
+                $image = $this->_assetRepo->getUrl('images/rule_chooser_trigger.gif');
                 break;
         }
 
         if (!empty($image)) {
-            $html = '<a href="javascript:void(0)" class="rule-chooser-trigger"><img src="' . $image
-                . '" alt="" class="v-middle rule-chooser-trigger" title="'
-                . __('Open Chooser') . '" /></a>';
+            $html = '<a href="javascript:void(0)" class="rule-chooser-trigger"><img src="' .
+                $image .
+                '" alt="" class="v-middle rule-chooser-trigger" title="' .
+                __(
+                    'Open Chooser'
+                ) . '" /></a>';
         }
         return $html;
     }
@@ -296,7 +312,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     /**
      * Retrieve attribute element
      *
-     * @return \Magento\Data\Form\Element\AbstractElement
+     * @return \Magento\Framework\Data\Form\Element\AbstractElement
      */
     public function getAttributeElement()
     {
@@ -309,7 +325,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * Collect validated attributes
      *
      * @param \Magento\Catalog\Model\Resource\Product\Collection $productCollection
-     * @return \Magento\CatalogRule\Model\Rule\Condition\Product
+     * @return $this
      */
     public function collectValidatedAttributes($productCollection)
     {
@@ -394,7 +410,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     /**
      * Retrieve value element
      *
-     * @return \Magento\Data\Form\Element\AbstractElement
+     * @return \Magento\Framework\Data\Form\Element\AbstractElement
      */
     public function getValueElement()
     {
@@ -402,7 +418,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         if (is_object($this->getAttributeObject())) {
             switch ($this->getAttributeObject()->getFrontendInput()) {
                 case 'date':
-                    $element->setImage($this->_viewUrl->getViewFileUrl('images/grid-cal.gif'));
+                    $element->setImage($this->_assetRepo->getUrl('images/grid-cal.gif'));
                     break;
                 default:
                     break;
@@ -463,7 +479,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * Load array
      *
      * @param array $arr
-     * @return \Magento\CatalogRule\Model\Rule\Condition\Product
+     * @return $this
      */
     public function loadArray($arr)
     {
@@ -473,24 +489,31 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         $isContainsOperator = !empty($arr['operator']) && in_array($arr['operator'], array('{}', '!{}'));
         if ($attribute && $attribute->getBackendType() == 'decimal' && !$isContainsOperator) {
             if (isset($arr['value'])) {
-                if (!empty($arr['operator'])
-                    && in_array($arr['operator'], array('!()', '()'))
-                    && false !== strpos($arr['value'], ',')
+                if (!empty($arr['operator']) && in_array(
+                    $arr['operator'],
+                    array('!()', '()')
+                ) && false !== strpos(
+                    $arr['value'],
+                    ','
+                )
                 ) {
 
                     $tmp = array();
                     foreach (explode(',', $arr['value']) as $value) {
-                        $tmp[] = $this->_locale->getNumber($value);
+                        $tmp[] = $this->_localeFormat->getNumber($value);
                     }
-                    $arr['value'] =  implode(',', $tmp);
+                    $arr['value'] = implode(',', $tmp);
                 } else {
-                    $arr['value'] =  $this->_locale->getNumber($arr['value']);
+                    $arr['value'] = $this->_localeFormat->getNumber($arr['value']);
                 }
             } else {
                 $arr['value'] = false;
             }
-            $arr['is_value_parsed'] = isset($arr['is_value_parsed'])
-                ? $this->_locale->getNumber($arr['is_value_parsed']) : false;
+            $arr['is_value_parsed'] = isset(
+                $arr['is_value_parsed']
+            ) ? $this->_localeFormat->getNumber(
+                $arr['is_value_parsed']
+            ) : false;
         }
 
         return parent::loadArray($arr);
@@ -499,10 +522,10 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     /**
      * Validate product attribute value for condition
      *
-     * @param \Magento\Object $object
+     * @param \Magento\Framework\Object $object
      * @return bool
      */
-    public function validate(\Magento\Object $object)
+    public function validate(\Magento\Framework\Object $object)
     {
         $attrCode = $this->getAttribute();
 
@@ -528,7 +551,8 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
 
             return parent::validate($object);
         } else {
-            $result = false; // any valid value will set it to TRUE
+            $result = false;
+            // any valid value will set it to TRUE
             // remember old attribute state
             $oldAttrValue = $object->hasData($attrCode) ? $object->getData($attrCode) : null;
 
@@ -556,6 +580,107 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
 
             return (bool)$result;
         }
+    }
+
+    /**
+     * Get argument value to bind
+     *
+     * @return array|float|int|mixed|string|\Zend_Db_Expr
+     */
+    public function getBindArgumentValue()
+    {
+        if ($this->getAttribute() == 'category_ids') {
+            return new \Zend_Db_Expr(
+                $this->_productResource->getReadConnection()
+                ->select()
+                ->from(
+                    $this->_productResource->getTable('catalog_category_product'),
+                    array('product_id')
+                )->where(
+                    'category_id IN (?)',
+                    $this->getValueParsed()
+                )->__toString()
+            );
+
+        }
+        return parent::getBindArgumentValue();
+    }
+
+    /**
+     * Get field by attribute
+     *
+     * @return string
+     */
+    public function getMappedSqlField()
+    {
+
+        return ($this->getAttribute() == 'category_ids') ? 'e.entity_id' : parent::getMappedSqlField();
+    }
+
+    /**
+     * Validate product by entity ID
+     *
+     * @param int $productId
+     * @return bool
+     */
+    public function validateByEntityId($productId)
+    {
+        if ('category_ids' == $this->getAttribute()) {
+            $result = $this->validateAttribute($this->_getAvailableInCategories($productId));
+        } elseif ('attribute_set_id' == $this->getAttribute()) {
+            $result = $this->validateAttribute($this->_getAttributeSetId($productId));
+        } else {
+            $product = $this->_productFactory->create()->load($productId);
+            $result = $this->validate($product);
+            unset($product);
+        }
+        return $result;
+    }
+
+    /**
+     * Retrieve category ids where product is available
+     *
+     * @param int $productId
+     * @return array
+     */
+    protected function _getAvailableInCategories($productId)
+    {
+        return $this->_productResource->getReadConnection()
+            ->fetchCol(
+                $this->_productResource->getReadConnection()
+                    ->select()
+                    ->distinct()
+                    ->from(
+                        $this->_productResource->getTable('catalog_category_product'),
+                        array('category_id')
+                    )->where(
+                        'product_id = ?',
+                        $productId
+                    )
+            );
+    }
+
+    /**
+     * Get attribute set id for product
+     *
+     * @param int $productId
+     * @return string
+     */
+    protected function _getAttributeSetId($productId)
+    {
+        return $this->_productResource->getReadConnection()
+            ->fetchOne(
+                $this->_productResource->getReadConnection()
+                    ->select()
+                    ->distinct()
+                    ->from(
+                        $this->_productResource->getTable('catalog_product_entity'),
+                        array('attribute_set_id')
+                    )->where(
+                        'entity_id = ?',
+                        $productId
+                    )
+            );
     }
 
     /**

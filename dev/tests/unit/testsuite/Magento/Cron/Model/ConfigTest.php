@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Cron
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -45,9 +43,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_configData = $this->getMockBuilder('Magento\Cron\Model\Config\Data')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_configData = $this->getMockBuilder(
+            'Magento\Cron\Model\Config\Data'
+        )->disableOriginalConstructor()->getMock();
         $this->_config = new \Magento\Cron\Model\Config($this->_configData);
     }
 
@@ -57,11 +55,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetJobs()
     {
         $jobList = array(
-            'jobname1' => array(
-                'instance' => 'TestInstance',
-                'method' => 'testMethod',
-                'schedule' => '* * * * *'
-            )
+            'jobname1' => array('instance' => 'TestInstance', 'method' => 'testMethod', 'schedule' => '* * * * *')
         );
         $this->_configData->expects($this->once())->method('getJobs')->will($this->returnValue($jobList));
         $result = $this->_config->getJobs();

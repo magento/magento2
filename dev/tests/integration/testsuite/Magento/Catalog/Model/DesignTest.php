@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -39,8 +36,9 @@ class DesignTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Design');
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Design'
+        );
     }
 
     /**
@@ -49,8 +47,9 @@ class DesignTest extends \PHPUnit_Framework_TestCase
     public function testApplyCustomDesign($theme)
     {
         $this->_model->applyCustomDesign($theme);
-        $design = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\View\DesignInterface');
+        $design = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\View\DesignInterface'
+        );
         $this->assertEquals('package', $design->getDesignTheme()->getPackageCode());
         $this->assertEquals('theme', $design->getDesignTheme()->getThemeCode());
     }
@@ -60,8 +59,9 @@ class DesignTest extends \PHPUnit_Framework_TestCase
      */
     public function getThemeModel()
     {
-        $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\View\Design\ThemeInterface');
+        $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Framework\View\Design\ThemeInterface'
+        );
         $theme->setData($this->_getThemeData());
         return array(array($theme));
     }
@@ -72,15 +72,15 @@ class DesignTest extends \PHPUnit_Framework_TestCase
     protected function _getThemeData()
     {
         return array(
-            'theme_title'          => 'Magento Theme',
-            'theme_code'           => 'theme',
-            'package_code'         => 'package',
-            'theme_path'           => 'package/theme',
-            'theme_version'        => '2.0.0.0',
-            'parent_theme'         => null,
-            'is_featured'          => true,
-            'preview_image'        => '',
-            'theme_directory'      => __DIR__ . '_files/design/frontend/default/default'
+            'theme_title' => 'Magento Theme',
+            'theme_code' => 'theme',
+            'package_code' => 'package',
+            'theme_path' => 'package/theme',
+            'theme_version' => '0.1.0',
+            'parent_theme' => null,
+            'is_featured' => true,
+            'preview_image' => '',
+            'theme_directory' => __DIR__ . '_files/design/frontend/default/default'
         );
     }
 }

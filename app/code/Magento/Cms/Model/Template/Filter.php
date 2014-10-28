@@ -18,22 +18,14 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Cms
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Cms\Model\Template;
 
 /**
  * Cms Template Filter Model
- *
- * @category    Magento
- * @package     Magento_Cms
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Cms\Model\Template;
-
 class Filter extends \Magento\Email\Model\Template\Filter
 {
     /**
@@ -41,13 +33,13 @@ class Filter extends \Magento\Email\Model\Template\Filter
      *
      * @var bool
      */
-    protected $_useSessionInUrl = null;
+    protected $_useSessionInUrl;
 
     /**
      * Setter whether SID is allowed in store directive
      *
      * @param bool $flag
-     * @return \Magento\Cms\Model\Template\Filter
+     * @return $this
      */
     public function setUseSessionInUrl($flag)
     {

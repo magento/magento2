@@ -18,27 +18,27 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
-class DraggableHandle
-    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+class DraggableHandle extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * Render grid row
      *
-     * @param \Magento\Object $row
+     * @param \Magento\Framework\Object $row
      * @return string
      */
-    public function render(\Magento\Object $row)
+    public function render(\Magento\Framework\Object $row)
     {
-        return '<span class="' . $this->getColumn()->getInlineCss() . '"></span>'
-            . '<input type="hidden" name="entity_id" value="' . $row->getData($this->getColumn()->getIndex()) . '"/>'
-            . '<input type="hidden" name="position" value=""/>';
+        return '<span class="' .
+            $this->getColumn()->getInlineCss() .
+            '"></span>' .
+            '<input type="hidden" name="entity_id" value="' .
+            $row->getData(
+                $this->getColumn()->getIndex()
+            ) . '"/>' . '<input type="hidden" name="position" value=""/>';
     }
 }

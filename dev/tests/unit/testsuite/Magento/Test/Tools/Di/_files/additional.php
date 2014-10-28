@@ -22,7 +22,4 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-return array(
-    'Some_Model_Proxy',
-    'Some_Model_EntityFactory',
-);
+return array('Some_Model_Proxy', 'Some_Model_EntityFactory');

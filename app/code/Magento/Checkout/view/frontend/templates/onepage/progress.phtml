@@ -1,0 +1,104 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+/* @var $this \Magento\Checkout\Block\Onepage\Progress */
+?>
+<div class="opc-block-progress<?php if ($this->isStepComplete('billing')): ?> active<?php endif; ?><?php if ($this->isStepComplete('payment')): ?> order-review-step<?php endif; ?>">
+    <div class="title">
+        <strong><?php echo __('Your Checkout Progress') ?></strong>
+    </div>
+    <div class="content">
+        <dl class="items">
+        <?php if ($this->getCheckout()->getStepData('billing', 'is_show')): ?>
+        <?php if ($this->isStepComplete('billing')): ?>
+            <dt class="item-title complete">
+                <span><?php echo __('Billing Address') ?></span>
+                <a href="#billing" data-goto-section="billing" class="action billing"><?php echo __('Change') ?></a>
+            </dt>
+            <dd class="item-content complete">
+                <address><?php echo $this->getBilling()->format('html') ?></address>
+            </dd>
+        <?php else: ?>
+            <dt class="item-title">
+                <?php echo __('Billing Address') ?>
+            </dt>
+        <?php endif; ?>
+        <?php endif; ?>
+
+        <?php if ($this->getCheckout()->getStepData('shipping', 'is_show')): ?>
+        <?php if ($this->isStepComplete('shipping')): ?>
+            <dt class="item-title complete">
+                <span><?php echo __('Shipping Address') ?></span>
+                <a href="#payment" data-goto-section="shipping" class="action shipping address"><?php echo __('Change') ?></a>
+            </dt>
+            <dd class="item-content complete">
+                <address><?php echo $this->getShipping()->format('html') ?></address>
+            </dd>
+        <?php else: ?>
+            <dt class="item-title">
+                <span><?php echo __('Shipping Address') ?></span>
+            </dt>
+        <?php endif; ?>
+        <?php endif; ?>
+
+        <?php if ($this->getCheckout()->getStepData('shipping_method', 'is_show')): ?>
+        <?php if ($this->isStepComplete('shipping_method')): ?>
+            <dt class="item-title complete">
+                <span><?php echo __('Shipping Method') ?></span>
+                <a href="#shipping_method" data-goto-section="shipping_method" class="action shipping method"><?php echo __('Change') ?></a>
+            </dt>
+            <dd class="item-content complete">
+                <?php if ($this->getShippingMethod()): ?>
+                    <?php echo $this->escapeHtml($this->getShippingDescription()) ?>
+
+                    <?php echo $this->getShippingPriceHtml($this->getShippingRate()) ?>
+
+                <?php else: ?>
+                    <?php echo __('Shipping method has not been selected yet') ?>
+                <?php endif; ?>
+            </dd>
+        <?php else: ?>
+            <dt class="item-title">
+                <span><?php echo __('Shipping Method') ?></span>
+            </dt>
+        <?php endif; ?>
+        <?php endif; ?>
+
+        <?php if ($this->getCheckout()->getStepData('payment', 'is_show')): ?>
+        <?php if ($this->isStepComplete('payment')): ?>
+            <dt class="item-title complete">
+                <span><?php echo __('Payment Method') ?></span>
+                <a href="#payment" data-goto-section="payment" class="action payment method"><?php echo __('Change') ?></a>
+            </dt>
+            <dd class="item-content complete">
+                <?php echo $this->getPaymentHtml() ?>
+            </dd>
+        <?php else: ?>
+            <dt class="item-title">
+                <span><?php echo __('Payment Method') ?></span>
+            </dt>
+        <?php endif; ?>
+        <?php endif; ?>
+        </dl>
+    </div>
+</div>

@@ -1,0 +1,61 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/** @var $this \Magento\Backend\Block\GlobalSearch */
+?>
+<div class="search-global miniform">
+    <form action="#" id="form-search">
+        <div class="field search-global-field">
+            <label class="label" for="search-global"><span><?php echo __('Search')?></span></label>
+            <div class="control">
+                <input  type="text"
+                        class="search-global-input"
+                        id="search-global"
+                        placeholder="<?php echo __('Search')?>"
+                        name="query"
+                        data-mage-init='<?php echo $this->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode($this->getWidgetInitOptions()))?>'>
+            </div>
+        </div>
+        <div class="actions search-global-actions">
+            <button type="submit" class="action search-global-action" title="<?php echo __('Search') ?>"><span><?php echo __('Search') ?></span></button>
+        </div>
+    </form>
+    <script data-template="search-suggest" type="text/x-jquery-tmpl">
+        <ul class="dropdown-menu search-global-menu">
+        {{if items.length}}
+            {{each items}}
+            <li class="item"
+                {{html optionData($value)}}
+                >
+                <a href="${$value.url}" class="title">${$value.name}</a>
+                <div class="type">${$value.type}</div>
+                ${$value.description || ""}
+            </li>
+            {{/each}}
+        {{else}}
+            <li><span class="mage-suggest-no-records"><?php echo __('No records found.') ?></span></li>
+        {{/if}}
+        </ul>
+    </script>
+</div>

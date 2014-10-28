@@ -18,18 +18,28 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Checkout
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Checkout\Block\Cart;
+
+use Magento\Framework\View\Element\BlockInterface;
 
 class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
 {
+    /**
+     * @var array
+     */
     protected $_totalRenderers;
+
+    /**
+     * @var string
+     */
     protected $_defaultRenderer = 'Magento\Checkout\Block\Total\DefaultTotal';
+
+    /**
+     * @var array
+     */
     protected $_totals = null;
 
     /**
@@ -38,26 +48,27 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
     protected $_salesConfig;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Catalog\Helper\Data $catalogData
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Catalog\Helper\Data $catalogData,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Sales\Model\Config $salesConfig,
         array $data = array()
     ) {
         $this->_salesConfig = $salesConfig;
-        parent::__construct($context, $catalogData, $customerSession, $checkoutSession, $data);
-
+        parent::__construct($context, $customerSession, $checkoutSession, $data);
+        $this->_isScopePrivate = true;
     }
 
+    /**
+     * @return array
+     */
     public function getTotals()
     {
         if (is_null($this->_totals)) {
@@ -66,12 +77,20 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
         return $this->_totals;
     }
 
+    /**
+     * @param array $value
+     * @return $this
+     */
     public function setTotals($value)
     {
         $this->_totals = $value;
         return $this;
     }
 
+    /**
+     * @param string $code
+     * @return BlockInterface
+     */
     protected function _getTotalRenderer($code)
     {
         $blockName = $code . '_total_renderer';
@@ -93,17 +112,27 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
         return $block;
     }
 
+    /**
+     * @param mixed $total
+     * @param int|null $area
+     * @param int $colspan
+     * @return string
+     */
     public function renderTotal($total, $area = null, $colspan = 1)
     {
         $code = $total->getCode();
         if ($total->getAs()) {
             $code = $total->getAs();
         }
-        return $this->_getTotalRenderer($code)
-            ->setTotal($total)
-            ->setColspan($colspan)
-            ->setRenderingArea(is_null($area) ? -1 : $area)
-            ->toHtml();
+        return $this->_getTotalRenderer(
+            $code
+        )->setTotal(
+            $total
+        )->setColspan(
+            $colspan
+        )->setRenderingArea(
+            is_null($area) ? -1 : $area
+        )->toHtml();
     }
 
     /**
@@ -116,7 +145,7 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
     public function renderTotals($area = null, $colspan = 1)
     {
         $html = '';
-        foreach($this->getTotals() as $total) {
+        foreach ($this->getTotals() as $total) {
             if ($total->getArea() != $area && $area != -1) {
                 continue;
             }
@@ -132,7 +161,7 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
      */
     public function needDisplayBaseGrandtotal()
     {
-        $quote  = $this->getQuote();
+        $quote = $this->getQuote();
         if ($quote->getBaseCurrencyCode() != $quote->getQuoteCurrencyCode()) {
             return true;
         }

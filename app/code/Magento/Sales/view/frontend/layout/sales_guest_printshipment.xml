@@ -23,10 +23,11 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <update handle="sales_order_print_shipment_renderers" />
     <referenceContainer name="content">
         <block class="Magento\Sales\Block\Order\PrintOrder\Shipment" name="sales.order.print.shipment" template="order/print/shipment.phtml">
-            <block class="Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer" as="default" template="order/shipment/items/renderer/default.phtml"/>
+            <block class="Magento\Framework\View\Element\RendererList" name="sales.order.print.shipment.renderers" as="renderer.list" />
         </block>
     </referenceContainer>
-</layout>
+</page>

@@ -23,40 +23,67 @@
  */
 namespace Magento\Test\Integrity\Modular;
 
+use Magento\Framework\Filesystem;
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class IndexerConfigFilesTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Index\Model\Indexer\Config\Reader
+     * Configuration acl file list
+     *
+     * @var array
      */
-    protected $_model;
+    protected $fileList = array();
 
-    public function setUp()
+    /**
+     * Path to scheme file
+     *
+     * @var string
+     */
+    protected $schemeFile;
+
+    protected function setUp()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var $filesystem \Magento\Filesystem */
-        $filesystem = $objectManager->get('Magento\Filesystem');
-        $modulesDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::MODULES);
-        $fileIteratorFactory = $objectManager->get('Magento\Config\FileIteratorFactory');
-        $xmlFiles = $fileIteratorFactory->create(
-            $modulesDirectory,
-            $modulesDirectory->search('/*/*/etc/{*/indexers.xml,indexers.xml}')
+        /** @var Filesystem $filesystem */
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\Filesystem'
         );
-
-        $validationStateMock = $this->getMock('Magento\Config\ValidationStateInterface');
-        $validationStateMock->expects($this->any())->method('isValidated')
-            ->will($this->returnValue(true));
-        $fileResolverMock = $this->getMock('Magento\Config\FileResolverInterface');
-        $fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($xmlFiles));
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-
-        $this->_model = $objectManager->create('Magento\Index\Model\Indexer\Config\Reader', array(
-            'fileResolver' => $fileResolverMock,
-            'validationState' => $validationStateMock,
-        ));
+        $this->schemeFile = $filesystem->getDirectoryRead(DirectoryList::APP)
+            ->getAbsolutePath('code/Magento/Indexer/etc/indexer.xsd');
     }
 
-    public function testImportXmlFiles()
+    /**
+     * Test each acl configuration file
+     * @param string $file
+     * @dataProvider indexerConfigFileDataProvider
+     */
+    public function testIndexerConfigFile($file)
     {
-        $this->_model->read('global');
+        $domConfig = new \Magento\Framework\Config\Dom(file_get_contents($file));
+        $result = $domConfig->validate($this->schemeFile, $errors);
+        $message = "Invalid XML-file: {$file}\n";
+        foreach ($errors as $error) {
+            $message .= "{$error}\n";
+        }
+        $this->assertTrue($result, $message);
+    }
+
+    /**
+     * @return array
+     */
+    public function indexerConfigFileDataProvider()
+    {
+        /** @var Filesystem $filesystem */
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\Filesystem'
+        );
+        $fileList = glob(
+            $filesystem->getDirectoryRead(DirectoryList::APP)->getAbsolutePath() . '/*/*/*/etc/indexer.xml'
+        );
+        $dataProviderResult = array();
+        foreach ($fileList as $file) {
+            $dataProviderResult[$file] = array($file);
+        }
+        return $dataProviderResult;
     }
 }

@@ -21,10 +21,9 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\Di\Code\Scanner;
 
-use \Magento\Tools\Di\Compiler\Log\Log;
+use Magento\Tools\Di\Compiler\Log\Log;
 
 class PhpScanner implements ScannerInterface
 {
@@ -140,7 +139,7 @@ class PhpScanner implements ScannerInterface
         $classes = array();
         for ($tokenOffset = $tokenIterator + 1; $tokenOffset < $count; ++$tokenOffset) {
             if ($tokens[$tokenOffset] === '{') {
-                $classes[]= $namespace . "\\" . $tokens[$tokenIterator + 2][1];
+                $classes[] = $namespace . "\\" . $tokens[$tokenIterator + 2][1];
             }
         }
         return $classes;
@@ -154,12 +153,12 @@ class PhpScanner implements ScannerInterface
      */
     protected function _getDeclaredClasses($file)
     {
-        $classes = array ();
+        $classes = array();
         $namespace = "";
         $tokens = token_get_all(file_get_contents($file));
         $count = count($tokens);
 
-        for ($tokenIterator = 0; $tokenIterator < $count; $tokenIterator ++) {
+        for ($tokenIterator = 0; $tokenIterator < $count; $tokenIterator++) {
             if ($tokens[$tokenIterator][0] === T_NAMESPACE) {
                 $namespace .= $this->_fetchNamespace($tokenIterator, $count, $tokens);
             }

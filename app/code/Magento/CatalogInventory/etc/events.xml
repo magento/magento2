@@ -23,27 +23,21 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
     <event name="catalog_block_product_status_display">
         <observer name="inventory" instance="Magento\CatalogInventory\Model\Observer" method="displayProductStatusInfo" />
     </event>
     <event name="catalog_product_load_after">
         <observer name="inventory" instance="Magento\CatalogInventory\Model\Observer" method="addInventoryData" />
     </event>
-    <event name="catalog_product_clear">
-        <observer name="inventory" instance="Magento\CatalogInventory\Model\Observer" method="removeInventoryData" />
-    </event>
     <event name="catalog_product_collection_load_after">
         <observer name="inventory" instance="Magento\CatalogInventory\Model\Observer" method="addStockStatusToCollection" />
-    </event>
-    <event name="catalog_product_prepare_index_select">
-        <observer name="inventory" instance="Magento\CatalogInventory\Model\Observer" method="prepareCatalogProductIndexSelect" />
     </event>
     <event name="sales_quote_item_collection_products_after_load">
         <observer name="inventory" instance="Magento\CatalogInventory\Model\Observer" method="addInventoryDataToCollection" />
     </event>
     <event name="sales_quote_item_qty_set_after">
-        <observer name="inventory" instance="Magento\CatalogInventory\Model\Observer" method="checkQuoteItemQty" />
+        <observer name="inventory" instance="Magento\CatalogInventory\Model\Quote\Item\QuantityValidator" method="validate" />
     </event>
     <event name="checkout_submit_all_after">
         <observer name="inventory" instance="Magento\CatalogInventory\Model\Observer" method="checkoutAllSubmitAfter" />
@@ -57,7 +51,7 @@
     <event name="sales_model_service_quote_submit_failure">
         <observer name="inventory" instance="Magento\CatalogInventory\Model\Observer" method="revertQuoteInventory" />
     </event>
-    <event name="paypal_payment_cancel">
+    <event name="restore_quote">
         <observer name="inventory" instance="Magento\CatalogInventory\Model\Observer" method="revertQuoteInventory" />
     </event>
     <event name="sales_order_item_cancel">
@@ -69,19 +63,7 @@
     <event name="catalog_product_save_after">
         <observer name="inventory" instance="Magento\CatalogInventory\Model\Observer" method="saveInventoryData" />
     </event>
-    <event name="catalog_model_product_duplicate">
-        <observer name="inventory" instance="Magento\CatalogInventory\Model\Observer" method="copyInventoryData" />
-    </event>
     <event name="admin_system_config_changed_section_cataloginventory">
         <observer name="inventory" instance="Magento\CatalogInventory\Model\Observer" method="updateItemsStockUponConfigChange" />
-    </event>
-    <event name="prepare_catalog_product_index_select">
-        <observer name="cataloginventory" instance="Magento\CatalogInventory\Model\Observer" method="prepareCatalogProductIndexSelect" />
-    </event>
-    <event name="end_index_events_cataloginventory_stock_item_save">
-        <observer name="cataloginventory" instance="Magento\CatalogInventory\Model\Observer" method="reindexProductsMassAction" />
-    </event>
-    <event name="end_process_event_cataloginventory_stock_item_save">
-        <observer name="cataloginventory" instance="Magento\CatalogInventory\Model\Observer" method="reindexProductsMassAction" />
     </event>
 </config>

@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,27 +27,26 @@
  */
 namespace Magento\Sales\Block\Widget\Guest;
 
-class Form
-    extends \Magento\View\Element\Template
-    implements \Magento\Widget\Block\BlockInterface
+class Form extends \Magento\Framework\View\Element\Template implements \Magento\Widget\Block\BlockInterface
 {
     /**
-     * @var \Magento\Customer\Model\Session
+     * @var \Magento\Framework\App\Http\Context
      */
-    protected $_customerSession;
+    protected $httpContext;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Framework\App\Http\Context $httpContext
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Framework\App\Http\Context $httpContext,
         array $data = array()
     ) {
-        $this->_customerSession = $customerSession;
+        $this->httpContext = $httpContext;
         parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
     }
 
     /**
@@ -59,7 +56,7 @@ class Form
      */
     public function isEnable()
     {
-        return !($this->_customerSession->isLoggedIn());
+        return !($this->httpContext->getValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH));
     }
 
     /**
@@ -69,14 +66,17 @@ class Form
      */
     public function getTypeSelectHtml()
     {
-        $select = $this->getLayout()->createBlock('Magento\View\Element\Html\Select')
-            ->setData(array(
-                'id'    => 'quick_search_type_id',
-                'class' => 'select guest-select',
-            ))
-            ->setName('oar_type')
-            ->setOptions($this->_getFormOptions())
-            ->setExtraParams('onchange="showIdentifyBlock(this.value);"');
+        $select = $this->getLayout()->createBlock(
+            'Magento\Framework\View\Element\Html\Select'
+        )->setData(
+            array('id' => 'quick_search_type_id', 'class' => 'select guest-select')
+        )->setName(
+            'oar_type'
+        )->setOptions(
+            $this->_getFormOptions()
+        )->setExtraParams(
+            'onchange="showIdentifyBlock(this.value);"'
+        );
         return $select->getHtml();
     }
 
@@ -90,14 +90,8 @@ class Form
         $options = $this->getData('identifymeby_options');
         if (is_null($options)) {
             $options = array();
-            $options[] = array(
-                'value' => 'email',
-                'label' => 'Email Address'
-            );
-            $options[] = array(
-                'value' => 'zip',
-                'label' => 'ZIP Code'
-            );
+            $options[] = array('value' => 'email', 'label' => 'Email Address');
+            $options[] = array('value' => 'zip', 'label' => 'ZIP Code');
             $this->setData('identifymeby_options', $options);
         }
 

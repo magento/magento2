@@ -18,113 +18,179 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\Catalog\Model;
 
-/**
- * Class \Magento\Catalog\Model\ObserverTest
- *
- * @SuppressWarnings(PHPMD.LongVariable)
- */
+use Magento\TestFramework\Helper\ObjectManager;
+
 class ObserverTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\TestFramework\Helper\ObjectManager
-     */
-    protected $_objectHelper;
-
-    /**
-     * @var \Magento\Event\Observer
+     * @var \Magento\Catalog\Model\Observer
      */
     protected $_observer;
 
     /**
-     * @var \Magento\Catalog\Model\Observer
+     * @var \Magento\Catalog\Helper\Category
      */
-    protected $_model;
+    protected $_catalogCategory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Category
      */
-    protected $_requestMock;
+    protected $_category;
 
-    protected function setUp()
+    /**
+     * @var \Magento\Catalog\Model\Category
+     */
+    protected $_childrenCategory;
+
+    /**
+     * @var \Magento\Catalog\Model\Indexer\Category\Flat\State
+     */
+    protected $_categoryFlatState;
+
+    /**
+     * @var \Magento\Framework\StoreManagerInterface
+     */
+    protected $_storeManager;
+
+    public function setUp()
     {
-        $this->_objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_catalogCategory = $this->getMock('Magento\Catalog\Helper\Category', array(), array(), '', false);
-        $this->_catalogData = $this->getMock('Magento\Catalog\Helper\Data', array(), array(), '', false);
-        $urlFactoryMock = $this->getMock('Magento\Catalog\Model\UrlFactory', array(), array(), '', false);
-        $catFlatFactoryMock = $this->getMock('Magento\Catalog\Model\Resource\Category\FlatFactory', array(),
-            array(), '', false);
-        $productFactoryMock = $this->getMock('Magento\Catalog\Model\Resource\ProductFactory', array(),
-            array(), '', false);
-        $this->_catalogCategoryFlat = $this->getMock(
-            'Magento\Catalog\Helper\Category\Flat', array(), array(), '', false
+        $this->_catalogCategory = $this->getMock(
+            '\Magento\Catalog\Helper\Category',
+            ['getStoreCategories', 'getCategoryUrl'],
+            [],
+            '',
+            false
         );
-        $coreConfig = $this->getMock('Magento\Core\Model\Config', array(), array(), '', false);
-        $this->_model = $this->_objectHelper->getObject('Magento\Catalog\Model\Observer', array(
+
+        $this->_categoryFlatState = $this->getMock(
+            '\Magento\Catalog\Model\Indexer\Category\Flat\State',
+            ['isFlatEnabled'],
+            [],
+            '',
+            false
+        );
+
+        $this->_storeManager = $this->getMockBuilder('Magento\Framework\StoreManagerInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->_observer = (new ObjectManager($this))->getObject('\Magento\Catalog\Model\Observer', [
+            'urlFactory' => $this->_getCleanMock('\Magento\Catalog\Model\UrlFactory'),
+            'categoryResource' => $this->_getCleanMock('\Magento\Catalog\Model\Resource\Category'),
+            'catalogProduct' => $this->_getCleanMock('\Magento\Catalog\Model\Resource\Product'),
+            'storeManager' => $this->_storeManager,
+            'catalogLayer' => $this->_getCleanMock('\Magento\Catalog\Model\Layer\Category'),
+            'indexIndexer' => $this->_getCleanMock('\Magento\Index\Model\Indexer'),
             'catalogCategory' => $this->_catalogCategory,
-            'catalogData' => $this->_catalogData,
-            'catalogCategoryFlat' => $this->_catalogCategoryFlat,
-            'coreConfig' => $coreConfig,
-            'urlFactory' => $urlFactoryMock,
-            'flatResourceFactory' => $catFlatFactoryMock,
-            'productResourceFactory' => $productFactoryMock,
-        ));
-        $this->_requestMock = $this->getMock('Magento\App\RequestInterface', array(), array(), '', false);
+            'catalogData' => $this->_getCleanMock('\Magento\Catalog\Helper\Data'),
+            'categoryFlatState' => $this->_categoryFlatState,
+            'productResourceFactory' => $this->_getCleanMock('\Magento\Catalog\Model\Resource\ProductFactory'),
+        ]);
     }
 
-    public function testTransitionProductTypeSimple()
+    /**
+     * Get clean mock by class name
+     *
+     * @param string $className
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function _getCleanMock($className)
     {
-        $product = new \Magento\Object(array('type_id' => 'simple'));
-        $this->_observer = new \Magento\Event\Observer(array('product' => $product, 'request' => $this->_requestMock));
-        $this->_model->transitionProductType($this->_observer);
-        $this->assertEquals('simple', $product->getTypeId());
+        return $this->getMock($className, [], [], '', false);
     }
 
-    public function testTransitionProductTypeVirtual()
+    protected function _preparationData()
     {
-        $product = new \Magento\Object(array('type_id' => 'virtual', 'is_virtual' => ''));
-        $this->_observer = new \Magento\Event\Observer(array('product' => $product, 'request' => $this->_requestMock));
-        $this->_model->transitionProductType($this->_observer);
-        $this->assertEquals('virtual', $product->getTypeId());
+        $this->_childrenCategory = $this->getMock(
+            '\Magento\Catalog\Model\Category',
+            ['getIsActive', '__wakeup'],
+            [],
+            '',
+            false
+        );
+        $this->_childrenCategory->expects($this->once())
+            ->method('getIsActive')
+            ->will($this->returnValue(false));
+
+        $this->_category = $this->getMock(
+            '\Magento\Catalog\Model\Category',
+            ['getIsActive', '__wakeup', 'getName', 'getChildren', 'getUseFlatResource', 'getChildrenNodes'],
+            [],
+            '',
+            false
+        );
+        $this->_category->expects($this->once())
+            ->method('getIsActive')
+            ->will($this->returnValue(true));
+        $this->_category->expects($this->once())
+            ->method('getName')
+            ->will($this->returnValue('Name'));
+
+        $this->_catalogCategory->expects($this->once())
+            ->method('getStoreCategories')
+            ->will($this->returnValue(array($this->_category)));
+        $this->_catalogCategory->expects($this->once())
+            ->method('getCategoryUrl')
+            ->will($this->returnValue('url'));
+
+        $blockMock = $this->_getCleanMock('\Magento\Theme\Block\Html\Topmenu');
+
+        $treeMock = $this->_getCleanMock('\Magento\Framework\Data\Tree');
+
+        $menuMock = $this->getMock('\Magento\Framework\Data\Tree\Node', ['getTree', 'addChild'], [], '', false);
+        $menuMock->expects($this->once())
+            ->method('getTree')
+            ->will($this->returnValue($treeMock));
+
+        $eventMock = $this->getMock('\Magento\Framework\Event', ['getBlock'], [], '', false);
+        $eventMock->expects($this->once())
+            ->method('getBlock')
+            ->will($this->returnValue($blockMock));
+
+        $observerMock = $this->getMock('\Magento\Framework\Event\Observer', ['getEvent', 'getMenu'], [], '', false);
+        $observerMock->expects($this->once())
+            ->method('getEvent')
+            ->will($this->returnValue($eventMock));
+        $observerMock->expects($this->once())
+            ->method('getMenu')
+            ->will($this->returnValue($menuMock));
+
+        return $observerMock;
     }
 
-    public function testTransitionProductTypeSimpleToVirtual()
+    public function testAddCatalogToTopMenuItemsWithoutFlat()
     {
-        $product = new \Magento\Object(array('type_id' => 'simple', 'is_virtual' => ''));
-        $this->_observer = new \Magento\Event\Observer(array('product' => $product, 'request' => $this->_requestMock));
-        $this->_model->transitionProductType($this->_observer);
-        $this->assertEquals('virtual', $product->getTypeId());
+        $observer = $this->_preparationData();
+
+        $this->_category->expects($this->once())
+            ->method('getChildren')
+            ->will($this->returnValue(array($this->_childrenCategory)));
+
+        $this->_observer->addCatalogToTopmenuItems($observer);
     }
 
-    public function testTransitionProductTypeVirtualToSimple()
+    public function testAddCatalogToTopMenuItemsWithFlat()
     {
-        $product = new \Magento\Object(array('type_id' => 'virtual'));
-        $this->_observer = new \Magento\Event\Observer(array('product' => $product, 'request' => $this->_requestMock));
-        $this->_model->transitionProductType($this->_observer);
-        $this->assertEquals('simple', $product->getTypeId());
-    }
+        $observer = $this->_preparationData();
 
-    public function testTransitionProductTypeConfigurableToSimple()
-    {
-        $product = new \Magento\Object(array('type_id' => 'configurable'));
-        $this->_observer = new \Magento\Event\Observer(array('product' => $product, 'request' => $this->_requestMock));
-        $this->_model->transitionProductType($this->_observer);
-        $this->assertEquals('simple', $product->getTypeId());
-    }
+        $this->_category->expects($this->once())
+            ->method('getChildrenNodes')
+            ->will($this->returnValue(array($this->_childrenCategory)));
 
-    public function testTransitionProductTypeConfigurableToVirtual()
-    {
-        $product = new \Magento\Object(array('type_id' => 'configurable', 'is_virtual' => '1'));
-        $this->_observer = new \Magento\Event\Observer(array('product' => $product, 'request' => $this->_requestMock));
-        $this->_model->transitionProductType($this->_observer);
-        $this->assertEquals('virtual', $product->getTypeId());
+        $this->_category->expects($this->once())
+            ->method('getUseFlatResource')
+            ->will($this->returnValue(true));
+
+        $this->_categoryFlatState->expects($this->once())
+            ->method('isFlatEnabled')
+            ->will($this->returnValue(true));
+
+        $this->_observer->addCatalogToTopmenuItems($observer);
     }
 }

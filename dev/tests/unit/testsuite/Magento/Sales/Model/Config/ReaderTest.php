@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Sales\Model\Config;
 
 class ReaderTest extends \PHPUnit_Framework_TestCase
@@ -39,18 +35,18 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $fileResolver = $this->getMockBuilder('Magento\Core\Model\Config\FileResolver')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $converter = $this->getMockBuilder('Magento\Sales\Model\Config\Converter')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $schema = $this->getMockBuilder('Magento\Sales\Model\Config\SchemaLocator')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $validator = $this->getMockBuilder('\Magento\Config\ValidationStateInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $fileResolver = $this->getMockBuilder(
+            'Magento\Framework\App\Config\FileResolver'
+        )->disableOriginalConstructor()->getMock();
+        $converter = $this->getMockBuilder(
+            'Magento\Sales\Model\Config\Converter'
+        )->disableOriginalConstructor()->getMock();
+        $schema = $this->getMockBuilder(
+            'Magento\Sales\Model\Config\SchemaLocator'
+        )->disableOriginalConstructor()->getMock();
+        $validator = $this->getMockBuilder(
+            '\Magento\Framework\Config\ValidationStateInterface'
+        )->disableOriginalConstructor()->getMock();
         $this->_reader = new \Magento\Sales\Model\Config\Reader($fileResolver, $converter, $schema, $validator);
     }
 

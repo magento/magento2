@@ -18,11 +18,10 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Eav
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Eav\Model\Entity\Attribute;
 
 /**
  * Emtity attribute option model
@@ -34,16 +33,14 @@
  * @method int getSortOrder()
  * @method \Magento\Eav\Model\Entity\Attribute\Option setSortOrder(int $value)
  *
- * @category    Magento
- * @package     Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Eav\Model\Entity\Attribute;
-
-class Option extends \Magento\Core\Model\AbstractModel
+class Option extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * Resource initialization
+     *
+     * @return void
      */
     public function _construct()
     {

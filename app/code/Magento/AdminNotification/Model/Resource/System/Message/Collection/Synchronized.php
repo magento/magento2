@@ -17,27 +17,25 @@
  * Do not edit or add to this file if you wish to upgrade Magento to newer
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
- * 
+ *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\AdminNotification\Model\Resource\System\Message\Collection;
 
-class Synchronized
-    extends \Magento\AdminNotification\Model\Resource\System\Message\Collection
+class Synchronized extends \Magento\AdminNotification\Model\Resource\System\Message\Collection
 {
     /**
      * Unread message list
      *
-     * @var \Magento\AdminNotification\Model\System\MessageInterface[]
+     * @var \Magento\Framework\Notification\MessageInterface[]
      */
     protected $_unreadMessages = array();
 
     /**
      * Store new messages in database and remove outdated messages
      *
-     * @return $this|\Magento\Core\Model\Resource\Db\AbstractDb
+     * @return $this|\Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function _afterLoad()
     {
@@ -59,11 +57,9 @@ class Synchronized
         foreach ($removed as $removedItem) {
             $removedItem->delete();
         }
-        foreach ($unread as $unreadItem ) {
+        foreach ($unread as $unreadItem) {
             $item = $this->getNewEmptyItem();
-            $item->setIdentity($unreadItem->getIdentity())
-                ->setSeverity($unreadItem->getSeverity())
-                ->save();
+            $item->setIdentity($unreadItem->getIdentity())->setSeverity($unreadItem->getSeverity())->save();
         }
         if (count($removed) || count($unread)) {
             $this->_unreadMessages = $unread;
@@ -78,7 +74,7 @@ class Synchronized
     /**
      * Retrieve list of unread messages
      *
-     * @return \Magento\AdminNotification\Model\System\MessageInterface[]
+     * @return \Magento\Framework\Notification\MessageInterface[]
      */
     public function getUnread()
     {

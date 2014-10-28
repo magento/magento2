@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Centinel
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -71,14 +69,24 @@ class Visa extends \Magento\Centinel\Model\AbstractState
             }
 
             //Test case 3
-            if ($paResStatus == 'N' && $signatureVerification == 'Y' && $eciFlag == '07' &&
-                $xid != '' && $cavv == '' && $errorNo == '0') {
+            if ($paResStatus == 'N' &&
+                $signatureVerification == 'Y' &&
+                $eciFlag == '07' &&
+                $xid != '' &&
+                $cavv == '' &&
+                $errorNo == '0'
+            ) {
                 return false;
             }
 
             //Test case 4
-            if ($paResStatus == 'A' && $signatureVerification == 'Y' && $eciFlag == '06' &&
-                $xid != '' && $cavv != '' && $errorNo == '0') {
+            if ($paResStatus == 'A' &&
+                $signatureVerification == 'Y' &&
+                $eciFlag == '06' &&
+                $xid != '' &&
+                $cavv != '' &&
+                $errorNo == '0'
+            ) {
                 if ($this->getIsModeStrict()) {
                     return false;
                 } else {
@@ -87,8 +95,13 @@ class Visa extends \Magento\Centinel\Model\AbstractState
             }
 
             //Test case 5
-            if ($paResStatus == 'U' && $signatureVerification == 'Y' && $eciFlag == '07' &&
-                $xid != '' && $cavv == '' && $errorNo == '0') {
+            if ($paResStatus == 'U' &&
+                $signatureVerification == 'Y' &&
+                $eciFlag == '07' &&
+                $xid != '' &&
+                $cavv == '' &&
+                $errorNo == '0'
+            ) {
                 if ($this->getIsModeStrict()) {
                     return false;
                 } else {
@@ -97,24 +110,38 @@ class Visa extends \Magento\Centinel\Model\AbstractState
             }
 
             //Test case 11
-            if ($paResStatus == 'U' && $signatureVerification == '' && $eciFlag == '07' &&
-                $xid == '' && $cavv == '' && $errorNo == '1050') {
+            if ($paResStatus == 'U' &&
+                $signatureVerification == '' &&
+                $eciFlag == '07' &&
+                $xid == '' &&
+                $cavv == '' &&
+                $errorNo == '1050'
+            ) {
                 if ($this->getIsModeStrict()) {
                     return false;
                 } else {
                     return true;
                 }
             }
-
         }
 
         //Test cases 6-10
         if (!$this->getIsModeStrict() && $this->_isLookupSoftSuccessful()) {
-            if ($paResStatus == '' && $signatureVerification == '' && $eciFlag == '' &&
-                $xid == '' && $cavv == '' && $errorNo == '0') {
+            if ($paResStatus == '' &&
+                $signatureVerification == '' &&
+                $eciFlag == '' &&
+                $xid == '' &&
+                $cavv == '' &&
+                $errorNo == '0'
+            ) {
                 return true;
-            } elseif ($paResStatus == false && $signatureVerification == false && $eciFlag == false &&
-                $xid == false && $cavv == false && $errorNo == false) {
+            } elseif ($paResStatus == false &&
+                $signatureVerification == false &&
+                $eciFlag == false &&
+                $xid == false &&
+                $cavv == false &&
+                $errorNo == false
+            ) {
                 return true;
             }
         }
@@ -133,7 +160,8 @@ class Visa extends \Magento\Centinel\Model\AbstractState
         if ($this->getLookupEnrolled() == 'Y' &&
             $this->getLookupAcsUrl() != '' &&
             $this->getLookupPayload() != '' &&
-            $this->getLookupErrorNo() == '0') {
+            $this->getLookupErrorNo() == '0'
+        ) {
             return true;
         }
         return false;

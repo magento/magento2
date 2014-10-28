@@ -18,19 +18,21 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Order\Invoice\Create;
 
 /**
  * Adminhtml invoice items grid
  */
-namespace Magento\Sales\Block\Adminhtml\Order\Invoice\Create;
-
 class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 {
+    /**
+     * Disable submit button
+     *
+     * @var bool
+     */
     protected $_disableSubmitButton = false;
 
     /**
@@ -38,48 +40,48 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      *
      * @var \Magento\Sales\Helper\Data
      */
-    protected $_salesData = null;
+    protected $_salesData;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Sales\Helper\Data $salesData
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService,
+        \Magento\Framework\Registry $registry,
         \Magento\Sales\Helper\Data $salesData,
         array $data = array()
     ) {
         $this->_salesData = $salesData;
-        parent::__construct($context, $productFactory, $registry, $data);
+        parent::__construct($context, $stockItemService, $registry, $data);
     }
 
     /**
      * Prepare child blocks
      *
-     * @return \Magento\Sales\Block\Adminhtml\Order\Invoice\Create\Items
+     * @return $this
      */
     protected function _beforeToHtml()
     {
-        $onclick = "submitAndReloadArea($('invoice_item_container'),'".$this->getUpdateUrl()."')";
-        $this->addChild('update_button', 'Magento\Backend\Block\Widget\Button', array(
-            'class'     => 'update-button',
-            'label'     => __('Update Qty\'s'),
-            'onclick'   => $onclick,
-        ));
+        $onclick = "submitAndReloadArea($('invoice_item_container'),'" . $this->getUpdateUrl() . "')";
+        $this->addChild(
+            'update_button',
+            'Magento\Backend\Block\Widget\Button',
+            array('class' => 'update-button', 'label' => __('Update Qty\'s'), 'onclick' => $onclick)
+        );
         $this->_disableSubmitButton = true;
-        $_submitButtonClass = ' disabled';
+        $submitButtonClass = ' disabled';
         foreach ($this->getInvoice()->getAllItems() as $item) {
             /**
              * @see bug #14839
              */
             if ($item->getQty()/* || $this->getSource()->getData('base_grand_total')*/) {
                 $this->_disableSubmitButton = false;
-                $_submitButtonClass = '';
+                $submitButtonClass = '';
                 break;
             }
         }
@@ -88,12 +90,16 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
         } else {
             $_submitLabel = __('Submit Invoice');
         }
-        $this->addChild('submit_button', 'Magento\Backend\Block\Widget\Button', array(
-            'label'     => $_submitLabel,
-            'class'     => 'save submit-button' . $_submitButtonClass,
-            'onclick'   => 'disableElements(\'submit-button\');$(\'edit_form\').submit()',
-            'disabled'  => $this->_disableSubmitButton
-        ));
+        $this->addChild(
+            'submit_button',
+            'Magento\Backend\Block\Widget\Button',
+            array(
+                'label' => $_submitLabel,
+                'class' => 'save submit-button primary' . $submitButtonClass,
+                'onclick' => 'disableElements(\'submit-button\');$(\'edit_form\').submit()',
+                'disabled' => $this->_disableSubmitButton
+            )
+        );
 
         return parent::_prepareLayout();
     }
@@ -101,7 +107,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
     /**
      * Get is submit button disabled or not
      *
-     * @return boolean
+     * @return bool
      */
     public function getDisableSubmitButton()
     {
@@ -166,19 +172,35 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
         return $totalbarData;
     }
 
+    /**
+     * Format price
+     *
+     * @param float $price
+     * @return string
+     */
     public function formatPrice($price)
     {
         return $this->getInvoice()->getOrder()->formatPrice($price);
     }
 
+    /**
+     * Get update button html
+     *
+     * @return string
+     */
     public function getUpdateButtonHtml()
     {
         return $this->getChildHtml('update_button');
     }
 
+    /**
+     * Get update url
+     *
+     * @return string
+     */
     public function getUpdateUrl()
     {
-        return $this->getUrl('sales/*/updateQty', array('order_id'=>$this->getInvoice()->getOrderId()));
+        return $this->getUrl('sales/*/updateQty', array('order_id' => $this->getInvoice()->getOrderId()));
     }
 
     /**
@@ -196,6 +218,11 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
         return false;
     }
 
+    /**
+     * Check if qty can be edited
+     *
+     * @return bool
+     */
     public function canEditQty()
     {
         if ($this->getInvoice()->getOrder()->getPayment()->canCapture()) {
@@ -206,6 +233,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 
     /**
      * Check if capture operation is allowed in ACL
+     *
      * @return bool
      */
     public function isCaptureAllowed()
@@ -215,6 +243,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 
     /**
      * Check if invoice can be captured
+     *
      * @return bool
      */
     public function canCapture()
@@ -224,6 +253,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 
     /**
      * Check if gateway is associated with invoice order
+     *
      * @return bool
      */
     public function isGatewayUsed()
@@ -231,6 +261,11 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
         return $this->getInvoice()->getOrder()->getPayment()->getMethodInstance()->isGateway();
     }
 
+    /**
+     * Check if new invoice emails can be sent
+     *
+     * @return bool
+     */
     public function canSendInvoiceEmail()
     {
         return $this->_salesData->canSendNewInvoiceEmail($this->getOrder()->getStore()->getId());

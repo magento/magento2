@@ -18,24 +18,25 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Catalog\Model\Config\Source;
 
-class ListMode implements \Magento\Core\Model\Option\ArrayInterface
+class ListMode implements \Magento\Framework\Option\ArrayInterface
 {
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
     public function toOptionArray()
     {
         return array(
-            array('value'=>'grid', 'label'=>__('Grid Only')),
-            array('value'=>'list', 'label'=>__('List Only')),
-            array('value'=>'grid-list', 'label'=>__('Grid (default) / List')),
-            array('value'=>'list-grid', 'label'=>__('List (default) / Grid')),
+            array('value' => 'grid', 'label' => __('Grid Only')),
+            array('value' => 'list', 'label' => __('List Only')),
+            array('value' => 'grid-list', 'label' => __('Grid (default) / List')),
+            array('value' => 'list-grid', 'label' => __('List (default) / Grid'))
         );
     }
 }

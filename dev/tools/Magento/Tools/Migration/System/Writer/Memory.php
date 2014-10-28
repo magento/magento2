@@ -18,12 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category   Magento
- * @package    Tools
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\Migration\System\Writer;
 
 class Memory implements \Magento\Tools\Migration\System\WriterInterface
@@ -31,19 +28,19 @@ class Memory implements \Magento\Tools\Migration\System\WriterInterface
     /**
      * @param string $fileName
      * @param string $contents
+     * @return void
      */
     public function write($fileName, $contents)
     {
-
     }
 
     /**
      * Remove file
      *
-     * @param $fileName
+     * @param string $fileName
+     * @return void
      */
     public function remove($fileName)
     {
-
     }
 }

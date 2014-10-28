@@ -1,0 +1,115 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<tabs>
+    <properties>
+        <class>\Magento\Backend\Test\Block\Widget\Tab</class>
+        <selector>#product_attribute_tabs_main</selector>
+        <strategy>css selector</strategy>
+        <fields>
+            <frontend_label>
+                <selector>[name^='frontend_label']</selector>
+            </frontend_label>
+            <frontend_input>
+                <input>select</input>
+            </frontend_input>
+            <is_required>
+                <input>select</input>
+            </is_required>
+        </fields>
+    </properties>
+    <manage-options>
+        <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Edit\Tab\Options</class>
+        <selector>#product_attribute_tabs_main</selector>
+        <strategy>css selector</strategy>
+    </manage-options>
+    <advanced-properties>
+        <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Edit\Tab\Advanced</class>
+        <selector>#product_attribute_tabs_main</selector>
+        <strategy>css selector</strategy>
+        <fields>
+            <attribute_code>
+            </attribute_code>
+            <is_global>
+                <input>select</input>
+            </is_global>
+            <default_value_text>
+            </default_value_text>
+            <is_unique>
+                <input>select</input>
+            </is_unique>
+            <is_configurable>
+                <input>select</input>
+            </is_configurable>
+        </fields>
+    </advanced-properties>
+    <manage-labels>
+        <class>\Magento\Backend\Test\Block\Widget\Tab</class>
+        <selector>#product_attribute_tabs_labels</selector>
+        <strategy>css selector</strategy>
+        <fields>
+            <manage_frontend_label>
+                <selector>[name^='frontend_label']</selector>
+            </manage_frontend_label>
+        </fields>
+    </manage-labels>
+    <frontend-properties>
+        <class>\Magento\Backend\Test\Block\Widget\Tab</class>
+        <selector>#product_attribute_tabs_front</selector>
+        <strategy>css selector</strategy>
+        <fields>
+            <is_searchable>
+                <input>select</input>
+            </is_searchable>
+            <is_visible_in_advanced_search>
+                <input>select</input>
+            </is_visible_in_advanced_search>
+            <is_comparable>
+                <input>select</input>
+            </is_comparable>
+            <is_filterable>
+                <input>select</input>
+            </is_filterable>
+            <is_filterable_in_search>
+                <input>select</input>
+            </is_filterable_in_search>
+            <is_used_for_promo_rules>
+                <input>select</input>
+            </is_used_for_promo_rules>
+            <is_html_allowed_on_front>
+                <input>select</input>
+            </is_html_allowed_on_front>
+            <is_visible_on_front>
+                <input>select</input>
+            </is_visible_on_front>
+            <used_in_product_listing>
+                <input>select</input>
+            </used_in_product_listing>
+            <used_for_sort_by>
+                <input>select</input>
+            </used_for_sort_by>
+        </fields>
+    </frontend-properties>
+</tabs>

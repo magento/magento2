@@ -18,17 +18,17 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Items;
+
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Creditmemo\Item;
 
 /**
  * Abstract items renderer
  */
-namespace Magento\Sales\Block\Adminhtml\Items;
-
 class AbstractItems extends \Magento\Backend\Block\Template
 {
     /**
@@ -49,35 +49,35 @@ class AbstractItems extends \Magento\Backend\Block\Template
     /**
      * Flag - if it is set method canEditQty will return value of it
      *
-     * @var boolean | null
+     * @var bool|null
      */
-    protected $_canEditQty = null;
+    protected $_canEditQty;
 
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
-     * @var \Magento\Catalog\Model\ProductFactory
+     * @var \Magento\CatalogInventory\Service\V1\StockItemService
      */
-    protected $_productFactory;
+    protected $stockItemService;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
+     * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService,
+        \Magento\Framework\Registry $registry,
         array $data = array()
     ) {
-        $this->_productFactory = $productFactory;
+        $this->stockItemService = $stockItemService;
         $this->_coreRegistry = $registry;
         parent::__construct($context, $data);
     }
@@ -104,14 +104,14 @@ class AbstractItems extends \Magento\Backend\Block\Template
      * Retrieve item renderer block
      *
      * @param string $type
-     * @return \Magento\View\Element\AbstractBlock
+     * @return \Magento\Framework\View\Element\AbstractBlock
      * @throws \RuntimeException
      */
     public function getItemRenderer($type)
     {
         /** @var $renderer \Magento\Sales\Block\Adminhtml\Items\AbstractItems */
         $renderer = $this->getChildBlock($type) ?: $this->getChildBlock(self::DEFAULT_TYPE);
-        if (!$renderer instanceof \Magento\View\Element\BlockInterface) {
+        if (!$renderer instanceof \Magento\Framework\View\Element\BlockInterface) {
             throw new \RuntimeException('Renderer for type "' . $type . '" does not exist.');
         }
         $renderer->setColumnRenders($this->getLayout()->getGroupChildNames($this->getNameInLayout(), 'column'));
@@ -124,7 +124,7 @@ class AbstractItems extends \Magento\Backend\Block\Template
      *
      * @param string $column
      * @param string $compositePart
-     * @return \Magento\View\Element\AbstractBlock
+     * @return \Magento\Framework\View\Element\AbstractBlock
      */
     public function getColumnRenderer($column, $compositePart = '')
     {
@@ -141,10 +141,10 @@ class AbstractItems extends \Magento\Backend\Block\Template
     /**
      * Retrieve rendered item html content
      *
-     * @param \Magento\Object $item
+     * @param \Magento\Framework\Object $item
      * @return string
      */
-    public function getItemHtml(\Magento\Object $item)
+    public function getItemHtml(\Magento\Framework\Object $item)
     {
         if ($item->getOrderItem()) {
             $type = $item->getOrderItem()->getProductType();
@@ -152,25 +152,20 @@ class AbstractItems extends \Magento\Backend\Block\Template
             $type = $item->getProductType();
         }
 
-        return $this->getItemRenderer($type)
-            ->setItem($item)
-            ->setCanEditQty($this->canEditQty())
-            ->toHtml();
+        return $this->getItemRenderer($type)->setItem($item)->setCanEditQty($this->canEditQty())->toHtml();
     }
 
     /**
      * Retrieve rendered item extra info html content
      *
-     * @param \Magento\Object $item
+     * @param \Magento\Framework\Object $item
      * @return string
      */
-    public function getItemExtraInfoHtml(\Magento\Object $item)
+    public function getItemExtraInfoHtml(\Magento\Framework\Object $item)
     {
         $extraInfoBlock = $this->getChildBlock('order_item_extra_info');
         if ($extraInfoBlock) {
-            return $extraInfoBlock
-                ->setItem($item)
-                ->toHtml();
+            return $extraInfoBlock->setItem($item)->toHtml();
         }
         return '';
     }
@@ -178,12 +173,12 @@ class AbstractItems extends \Magento\Backend\Block\Template
     /**
      * Retrieve rendered column html content
      *
-     * @param \Magento\Object $item
+     * @param \Magento\Framework\Object $item
      * @param string $column the column key
      * @param string $field the custom item field
      * @return string
      */
-    public function getColumnHtml(\Magento\Object $item, $column, $field = null)
+    public function getColumnHtml(\Magento\Framework\Object $item, $column, $field = null)
     {
         if ($item->getOrderItem()) {
             $block = $this->getColumnRenderer($column, $item->getOrderItem()->getProductType());
@@ -201,6 +196,11 @@ class AbstractItems extends \Magento\Backend\Block\Template
         return '&nbsp;';
     }
 
+    /**
+     * Get credit memo
+     *
+     * @return mixed
+     */
     public function getCreditmemo()
     {
         return $this->_coreRegistry->registry('current_creditmemo');
@@ -213,8 +213,8 @@ class AbstractItems extends \Magento\Backend\Block\Template
     /**
      * Retrieve available order
      *
-     * @throws \Magento\Core\Exception
-     * @return \Magento\Sales\Model\Order
+     * @throws \Magento\Framework\Model\Exception
+     * @return Order
      */
     public function getOrder()
     {
@@ -237,13 +237,13 @@ class AbstractItems extends \Magento\Backend\Block\Template
             return $this->getItem()->getOrder();
         }
 
-        throw new \Magento\Core\Exception(__('We cannot get the order instance.'));
+        throw new \Magento\Framework\Model\Exception(__('We cannot get the order instance.'));
     }
 
     /**
      * Retrieve price data object
      *
-     * @return \Magento\Sales\Model\Order
+     * @return Order
      */
     public function getPriceDataObject()
     {
@@ -299,12 +299,12 @@ class AbstractItems extends \Magento\Backend\Block\Template
     /**
      * Display base and regular prices with specified rounding precision
      *
-     * @param   float $basePrice
-     * @param   float $price
-     * @param   int $precision
-     * @param   bool $strong
-     * @param   string $separator
-     * @return  string
+     * @param float $basePrice
+     * @param float $price
+     * @param int $precision
+     * @param bool $strong
+     * @param string $separator
+     * @return string
      */
     public function displayRoundedPrices($basePrice, $price, $precision = 2, $strong = false, $separator = '<br />')
     {
@@ -323,63 +323,12 @@ class AbstractItems extends \Magento\Backend\Block\Template
     }
 
     /**
-     * Retrieve include tax html formatted content
-     *
-     * @param \Magento\Object $item
-     * @return string
-     */
-    public function displayPriceInclTax(\Magento\Object $item)
-    {
-        $qty = ($item->getQtyOrdered() ? $item->getQtyOrdered() : ($item->getQty() ? $item->getQty() : 1));
-        $baseTax = $item->getTaxBeforeDiscount()
-            ? $item->getTaxBeforeDiscount()
-            : ($item->getTaxAmount() ? $item->getTaxAmount() : 0);
-        $tax = $item->getBaseTaxBeforeDiscount()
-            ? $item->getBaseTaxBeforeDiscount()
-            : ($item->getBaseTaxAmount() ? $item->getBaseTaxAmount() : 0);
-
-        $basePriceTax = 0;
-        $priceTax = 0;
-
-        if (floatval($qty)) {
-            $basePriceTax = $item->getBasePrice() + $baseTax / $qty;
-            $priceTax = $item->getPrice() + $tax / $qty;
-        }
-
-        return $this->displayPrices(
-            $this->getOrder()->getStore()->roundPrice($basePriceTax),
-            $this->getOrder()->getStore()->roundPrice($priceTax)
-        );
-    }
-
-    /**
-     * Retrieve subtotal price include tax html formated content
-     *
-     * @param \Magento\Object $item
-     * @return string
-     */
-    public function displaySubtotalInclTax($item)
-    {
-        $baseTax = $item->getTaxBeforeDiscount()
-            ? $item->getTaxBeforeDiscount()
-            : ($item->getTaxAmount() ? $item->getTaxAmount() : 0);
-        $tax = $item->getBaseTaxBeforeDiscount()
-            ? $item->getBaseTaxBeforeDiscount()
-            : ($item->getBaseTaxAmount() ? $item->getBaseTaxAmount() : 0);
-
-        return $this->displayPrices(
-            $item->getBaseRowTotal() + $baseTax,
-            $item->getRowTotal() + $tax
-        );
-    }
-
-    /**
      * Retrieve tax calculation html content
      *
-     * @param \Magento\Object $item
+     * @param \Magento\Framework\Object $item
      * @return string
      */
-    public function displayTaxCalculation(\Magento\Object $item)
+    public function displayTaxCalculation(\Magento\Framework\Object $item)
     {
         if ($item->getTaxPercent() && $item->getTaxString() == '') {
             $percents = array($item->getTaxPercent());
@@ -396,12 +345,12 @@ class AbstractItems extends \Magento\Backend\Block\Template
     }
 
     /**
-     * Retrieve tax with persent html content
+     * Retrieve tax with percent html content
      *
-     * @param \Magento\Object $item
+     * @param \Magento\Framework\Object $item
      * @return string
      */
-    public function displayTaxPercent(\Magento\Object $item)
+    public function displayTaxPercent(\Magento\Framework\Object $item)
     {
         if ($item->getTaxPercent()) {
             return sprintf('%s%%', $item->getTaxPercent() + 0);
@@ -433,7 +382,7 @@ class AbstractItems extends \Magento\Backend\Block\Template
      * Setter for flag _canEditQty
      *
      * @param bool $value
-     * @return \Magento\Sales\Block\Adminhtml\Items\AbstractItems
+     * @return $this
      * @see self::_canEditQty
      * @see self::canEditQty
      */
@@ -446,7 +395,7 @@ class AbstractItems extends \Magento\Backend\Block\Template
     /**
      * Check availability to edit quantity of item
      *
-     * @return boolean
+     * @return bool
      */
     public function canEditQty()
     {
@@ -472,6 +421,11 @@ class AbstractItems extends \Magento\Backend\Block\Template
         return true;
     }
 
+    /**
+     * Check capture availability
+     *
+     * @return bool
+     */
     public function canCapture()
     {
         if ($this->_authorization->isAllowed('Magento_Sales::capture')) {
@@ -480,6 +434,12 @@ class AbstractItems extends \Magento\Backend\Block\Template
         return false;
     }
 
+    /**
+     * Retrieve formated price
+     *
+     * @param float $price
+     * @return string
+     */
     public function formatPrice($price)
     {
         return $this->getOrder()->formatPrice($price);
@@ -507,11 +467,16 @@ class AbstractItems extends \Magento\Backend\Block\Template
 
     /**
      * CREDITMEMO
+     *
+     * @return bool
      */
-
     public function canReturnToStock()
     {
-        if ($this->_storeConfig->getConfig(\Magento\CatalogInventory\Model\Stock\Item::XML_PATH_CAN_SUBTRACT)) {
+        $canSubtract = $this->_scopeConfig->getValue(
+            \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_CAN_SUBTRACT,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        if ($canSubtract) {
             return true;
         } else {
             return false;
@@ -520,37 +485,42 @@ class AbstractItems extends \Magento\Backend\Block\Template
 
     /**
      * Whether to show 'Return to stock' checkbox for item
-     * @param \Magento\Sales\Model\Order\Creditmemo\Item $item
+     *
+     * @param Item $item
      * @return bool
      */
     public function canReturnItemToStock($item = null)
     {
-        $canReturnToStock = $this->_storeConfig->getConfig(
-            \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_CAN_SUBTRACT
-        );
-        if (!is_null($item)) {
+        if (null !== $item) {
             if (!$item->hasCanReturnToStock()) {
-                $product = $this->_productFactory->create()->load($item->getOrderItem()->getProductId());
-                if ($product->getId() && $product->getStockItem()->getManageStock()) {
+                $productId = $item->getOrderItem()->getProductId();
+                if ($productId && $this->stockItemService->getManageStock($productId)) {
                     $item->setCanReturnToStock(true);
                 } else {
                     $item->setCanReturnToStock(false);
                 }
             }
             $canReturnToStock = $item->getCanReturnToStock();
+        } else {
+            $canReturnToStock = $this->_scopeConfig->getValue(
+                \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_CAN_SUBTRACT,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
         }
         return $canReturnToStock;
     }
 
     /**
      * Whether to show 'Return to stock' column for item parent
-     * @param \Magento\Sales\Model\Order\Creditmemo\Item $item
+     *
+     * @param Item $item
      * @return bool
      */
     public function canParentReturnToStock($item = null)
     {
-        $canReturnToStock = $this->_storeConfig->getConfig(
-            \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_CAN_SUBTRACT
+        $canReturnToStock = $this->_scopeConfig->getValue(
+            \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_CAN_SUBTRACT,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         if (!is_null($item)) {
             if ($item->getCreditmemo()->getOrder()->hasCanReturnToStock()) {
@@ -565,12 +535,12 @@ class AbstractItems extends \Magento\Backend\Block\Template
     /**
      * Return true if can ship partially
      *
-     * @param \Magento\Sales\Model\Order|null $order
-     * @return boolean
+     * @param Order|null $order
+     * @return bool
      */
     public function canShipPartially($order = null)
     {
-        if (is_null($order) || !$order instanceof \Magento\Sales\Model\Order) {
+        if (is_null($order) || !$order instanceof Order) {
             $order = $this->_coreRegistry->registry('current_shipment')->getOrder();
         }
         $value = $order->getCanShipPartially();
@@ -583,12 +553,12 @@ class AbstractItems extends \Magento\Backend\Block\Template
     /**
      * Return true if can ship items partially
      *
-     * @param \Magento\Sales\Model\Order|null $order
-     * @return boolean
+     * @param Order|null $order
+     * @return bool
      */
     public function canShipPartiallyItem($order = null)
     {
-        if (is_null($order) || !$order instanceof \Magento\Sales\Model\Order) {
+        if (is_null($order) || !$order instanceof Order) {
             $order = $this->_coreRegistry->registry('current_shipment')->getOrder();
         }
         $value = $order->getCanShipPartiallyItem();
@@ -598,6 +568,11 @@ class AbstractItems extends \Magento\Backend\Block\Template
         return true;
     }
 
+    /**
+     * Check is shipment is regular
+     *
+     * @return bool
+     */
     public function isShipmentRegular()
     {
         if (!$this->canShipPartiallyItem() || !$this->canShipPartially()) {

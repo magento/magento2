@@ -18,23 +18,19 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_CatalogInventory
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\CatalogInventory\Block;
+
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Block\IdentityInterface;
 
 /**
  * Product qty increments block
- *
- * @category   Magento
- * @package    Magento_CatalogInventory
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\CatalogInventory\Block;
-
-class Qtyincrements extends \Magento\View\Element\Template
+class Qtyincrements extends Template implements IdentityInterface
 {
     /**
      * Qty Increments cache
@@ -46,21 +42,29 @@ class Qtyincrements extends \Magento\View\Element\Template
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @var \Magento\CatalogInventory\Service\V1\StockItemService
+     */
+    protected $stockItemService;
+
+    /**
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
+        $this->stockItemService = $stockItemService;
         parent::__construct($context, $data);
     }
 
@@ -92,11 +96,21 @@ class Qtyincrements extends \Magento\View\Element\Template
     public function getProductQtyIncrements()
     {
         if ($this->_qtyIncrements === null) {
-            $this->_qtyIncrements = $this->getProduct()->getStockItem()->getQtyIncrements();
+            $this->_qtyIncrements = $this->stockItemService->getQtyIncrements($this->getProduct()->getId());
             if (!$this->getProduct()->isSaleable()) {
                 $this->_qtyIncrements = false;
             }
         }
         return $this->_qtyIncrements;
+    }
+
+    /**
+     * Return identifiers for produced content
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        return $this->getProduct()->getIdentities();
     }
 }

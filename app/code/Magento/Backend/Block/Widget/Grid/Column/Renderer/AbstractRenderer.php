@@ -18,36 +18,42 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
+
+use Magento\Backend\Block\Widget\Grid\Column;
+use Magento\Framework\Object;
 
 /**
  * Backend grid item abstract renderer
- *
- * @category   Magento
- * @package    Magento_Backend
- * @author     Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
-
-abstract class AbstractRenderer
-    extends \Magento\Backend\Block\AbstractBlock
-    implements \Magento\Backend\Block\Widget\Grid\Column\Renderer\RendererInterface
+abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock implements RendererInterface
 {
+    /**
+     * @var int
+     */
     protected $_defaultWidth;
+
+    /**
+     * @var Column
+     */
     protected $_column;
 
+    /**
+     * @param Column $column
+     * @return $this
+     */
     public function setColumn($column)
     {
         $this->_column = $column;
         return $this;
     }
 
-    /** @return \Magento\Backend\Block\Widget\Grid\Column */
+    /**
+     * @return Column
+     */
     public function getColumn()
     {
         return $this->_column;
@@ -56,16 +62,17 @@ abstract class AbstractRenderer
     /**
      * Renders grid column
      *
-     * @param   \Magento\Object $row
+     * @param   Object $row
      * @return  string
      */
-    public function render(\Magento\Object $row)
+    public function render(Object $row)
     {
         if ($this->getColumn()->getEditable()) {
             $value = $this->_getValue($row);
-            return $value
-                   . ($this->getColumn()->getEditOnly() ? '' : ($value != '' ? '' : '&nbsp;'))
-                   . $this->_getInputValueElement($row);
+            return $value . ($this->getColumn()->getEditOnly() ? '' : ($value !=
+                '' ? '' : '&nbsp;')) . $this->_getInputValueElement(
+                    $row
+                );
         }
         return $this->_getValue($row);
     }
@@ -73,19 +80,23 @@ abstract class AbstractRenderer
     /**
      * Render column for export
      *
-     * @param \Magento\Object $row
+     * @param Object $row
      * @return string
      */
-    public function renderExport(\Magento\Object $row)
+    public function renderExport(Object $row)
     {
         return $this->render($row);
     }
 
-    protected function _getValue(\Magento\Object $row)
+    /**
+     * @param Object $row
+     * @return mixed
+     */
+    protected function _getValue(Object $row)
     {
         if ($getter = $this->getColumn()->getGetter()) {
             if (is_string($getter)) {
-                return $row->$getter();
+                return $row->{$getter}();
             } elseif (is_callable($getter)) {
                 return call_user_func($getter, $row);
             }
@@ -94,40 +105,68 @@ abstract class AbstractRenderer
         return $row->getData($this->getColumn()->getIndex());
     }
 
-    public function _getInputValueElement(\Magento\Object $row)
+    /**
+     * @param Object $row
+     * @return string
+     */
+    public function _getInputValueElement(Object $row)
     {
-        return  '<input type="text" class="input-text '
-                . $this->getColumn()->getValidateClass()
-                . '" name="' . $this->getColumn()->getId()
-                . '" value="' . $this->_getInputValue($row) . '"/>';
+        return '<input type="text" class="input-text ' .
+            $this->getColumn()->getValidateClass() .
+            '" name="' .
+            $this->getColumn()->getId() .
+            '" value="' .
+            $this->_getInputValue(
+                $row
+            ) . '"/>';
     }
 
-    protected function _getInputValue(\Magento\Object $row)
+    /**
+     * @param Object $row
+     * @return mixed
+     */
+    protected function _getInputValue(Object $row)
     {
         return $this->_getValue($row);
     }
 
+    /**
+     * @return string
+     */
     public function renderHeader()
     {
         if (false !== $this->getColumn()->getSortable()) {
             $className = 'not-sort';
             $dir = strtolower($this->getColumn()->getDir());
-            $nDir= ($dir=='asc') ? 'desc' : 'asc';
+            $nDir = $dir == 'asc' ? 'desc' : 'asc';
             if ($this->getColumn()->getDir()) {
                 $className = 'sort-arrow-' . $dir;
             }
-            $out = '<a href="#" name="' . $this->getColumn()->getId() . '" title="' . $nDir
-                . '" class="' . $className . '">'.'<label class="sort-title" for='.$this->getColumn()->getHtmlId()
-                .'>'
-                . $this->getColumn()->getHeader().'</label></a>';
+            $out = '<a href="#" name="' .
+                $this->getColumn()->getId() .
+                '" title="' .
+                $nDir .
+                '" class="' .
+                $className .
+                '">' .
+                '<label class="sort-title" for=' .
+                $this->getColumn()->getHtmlId() .
+                '>' .
+                $this->getColumn()->getHeader() .
+                '</label></a>';
         } else {
-            $out = '<label for='.$this->getColumn()->getHtmlId().'>'
-                .$this->getColumn()->getHeader()
-                .'</label>';
+            $out = '<label for=' .
+                $this->getColumn()->getHtmlId() .
+                '>' .
+                $this->getColumn()->getHeader() .
+                '</label>';
         }
         return $out;
     }
 
+    /**
+     * @return string
+     */
     public function renderProperty()
     {
         $out = '';
@@ -135,7 +174,7 @@ abstract class AbstractRenderer
 
         if ($this->getColumn()->hasData('width')) {
             $customWidth = $this->getColumn()->getData('width');
-            if ((null === $customWidth) || (preg_match('/^[0-9]+%?$/', $customWidth))) {
+            if (null === $customWidth || preg_match('/^[0-9]+%?$/', $customWidth)) {
                 $width = $customWidth;
             } elseif (preg_match('/^([0-9]+)px$/', $customWidth, $matches)) {
                 $width = (int)$matches[1];
@@ -149,9 +188,11 @@ abstract class AbstractRenderer
         return $out;
     }
 
+    /**
+     * @return string
+     */
     public function renderCss()
     {
         return $this->getColumn()->getCssClass();
     }
-
 }

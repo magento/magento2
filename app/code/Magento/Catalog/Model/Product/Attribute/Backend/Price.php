@@ -18,22 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
 /**
  * Catalog product price attribute backend model
  *
- * @category   Magento
- * @package    Magento_Catalog
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Product\Attribute\Backend;
-
 class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
@@ -46,7 +40,7 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * Store manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -60,25 +54,25 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * Core config model
      *
-     * @var \Magento\Core\Model\ConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_config;
 
     /**
      * Construct
      *
-     * @param \Magento\Logger $logger
+     * @param \Magento\Framework\Logger $logger
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Core\Model\Config $config
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      */
     public function __construct(
-        \Magento\Logger $logger,
+        \Magento\Framework\Logger $logger,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Core\Model\Config $config
+        \Magento\Framework\App\Config\ScopeConfigInterface $config
     ) {
         $this->_currencyFactory = $currencyFactory;
         $this->_storeManager = $storeManager;
@@ -92,7 +86,7 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * Rewrite for redefine attribute scope
      *
      * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
-     * @return \Magento\Catalog\Model\Product\Attribute\Backend\Price
+     * @return $this
      */
     public function setAttribute($attribute)
     {
@@ -105,7 +99,7 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * Redefine Attribute scope
      *
      * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
-     * @return \Magento\Catalog\Model\Product\Attribute\Backend\Price
+     * @return $this
      */
     public function setScope($attribute)
     {
@@ -122,7 +116,7 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * After Save Attribute manipulation
      *
      * @param \Magento\Catalog\Model\Product $object
-     * @return \Magento\Catalog\Model\Product\Attribute\Backend\Price
+     * @return $this
      */
     public function afterSave($object)
     {
@@ -137,8 +131,10 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         }
 
         if ($this->getAttribute()->getIsGlobal() == \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_WEBSITE) {
-            $baseCurrency = $this->_config->getValue(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
-                'default');
+            $baseCurrency = $this->_config->getValue(
+                \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
+                'default'
+            );
 
             $storeIds = $object->getStoreIds();
             if (is_array($storeIds)) {
@@ -164,7 +160,7 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * Validate
      *
      * @param \Magento\Catalog\Model\Product $object
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Framework\Model\Exception
      * @return bool
      */
     public function validate($object)
@@ -175,9 +171,7 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         }
 
         if (!preg_match('/^\d*(\.|,)?\d{0,4}$/i', $value) || $value < 0) {
-            throw new \Magento\Core\Exception(
-                __('Please enter a number 0 or greater in this field.')
-            );
+            throw new \Magento\Framework\Model\Exception(__('Please enter a number 0 or greater in this field.'));
         }
 
         return true;

@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\I18n\Code;
 
 /**
@@ -38,8 +37,11 @@ class Context
      * Context info
      */
     const CONTEXT_TYPE_MODULE = 'module';
+
     const CONTEXT_TYPE_THEME = 'theme';
-    const CONTEXT_TYPE_PUB = 'pub';
+
+    const CONTEXT_TYPE_LIB = 'lib';
+
     /**#@-*/
 
     /**
@@ -54,16 +56,16 @@ class Context
      */
     public function getContextByPath($path)
     {
-        if (($value = strstr($path, '/app/code/'))) {
+        if ($value = strstr($path, '/app/code/')) {
             $type = self::CONTEXT_TYPE_MODULE;
             $value = explode('/', $value);
             $value = $value[3] . '_' . $value[4];
-        } elseif (($value = strstr($path, '/app/design/'))) {
+        } elseif ($value = strstr($path, '/app/design/')) {
             $type = self::CONTEXT_TYPE_THEME;
             $value = explode('/', $value);
-            $value = $value[3] . '/' . $value[4];
-        } elseif (($value = strstr($path, '/pub/lib/'))) {
-            $type = self::CONTEXT_TYPE_PUB;
+            $value = $value[3] . '/' . $value[4] . '/' . $value[5];
+        } elseif ($value = strstr($path, '/lib/web/')) {
+            $type = self::CONTEXT_TYPE_LIB;
             $value = ltrim($value, '/');
         } else {
             throw new \InvalidArgumentException(sprintf('Invalid path given: "%s".', $path));
@@ -88,8 +90,8 @@ class Context
             case self::CONTEXT_TYPE_THEME:
                 $path = 'app/design/' . $value;
                 break;
-            case self::CONTEXT_TYPE_PUB:
-                $path = 'pub/lib';
+            case self::CONTEXT_TYPE_LIB:
+                $path = 'lib/web';
                 break;
             default:
                 throw new \InvalidArgumentException(sprintf('Invalid context given: "%s".', $type));

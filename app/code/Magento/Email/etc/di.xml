@@ -23,8 +23,10 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Magento\Framework\Mail\TemplateInterface" type="Magento\Email\Model\Template" />
+    <preference for="Magento\Framework\Mail\Template\FactoryInterface" type="Magento\Framework\Mail\Template\Factory" />
+    <preference for="Magento\Framework\Mail\TransportInterface" type="Magento\Framework\Mail\Transport" />
+    <preference for="Magento\Framework\Mail\MessageInterface" type="Magento\Framework\Mail\Message" />
+    <preference for="Magento\Framework\Mail\Template\SenderResolverInterface" type="Magento\Email\Model\Template\SenderResolver" />
 </config>
-
-<!--/var/www/magetwo-firedrakes.localhost/app/code/Magento/Email/etc/di.xml-->
-<!--/var/www/magetwo-firedrakes.localhost/app/etc/code/Magento/Email/etc/di.xml-->

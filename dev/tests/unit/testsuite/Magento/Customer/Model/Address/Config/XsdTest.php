@@ -23,7 +23,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Model\Address\Config;
 
 class XsdTest extends \PHPUnit_Framework_TestCase
@@ -45,7 +44,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
      */
     public function testExemplarXml($fixtureXml, array $expectedErrors)
     {
-        $dom = new \Magento\Config\Dom($fixtureXml, array(), null, '%message%');
+        $dom = new \Magento\Framework\Config\Dom($fixtureXml, array(), null, null, '%message%');
         $actualResult = $dom->validate($this->_schemaFile, $actualErrors);
         $this->assertEquals(empty($expectedErrors), $actualResult);
         $this->assertEquals($expectedErrors, $actualErrors);
@@ -54,10 +53,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
     public function exemplarXmlDataProvider()
     {
         return array(
-            'valid' => array(
-                '<config><format code="code" title="title" /></config>',
-                array()
-            ),
+            'valid' => array('<config><format code="code" title="title" /></config>', array()),
             'valid with optional attributes' => array(
                 '<config><format code="code" title="title" renderer="Some_Renderer" escapeHtml="false" /></config>',
                 array()
@@ -92,9 +88,11 @@ class XsdTest extends \PHPUnit_Framework_TestCase
             ),
             'attribute "escapeHtml" with invalid type' => array(
                 '<config><format code="code" title="title" escapeHtml="invalid" /></config>',
-                array("Element 'format', attribute 'escapeHtml': 'invalid' is not a valid value of the atomic type"
-                    . " 'xs:boolean'.")
-            ),
+                array(
+                    "Element 'format', attribute 'escapeHtml': 'invalid' is not a valid value of the atomic type" .
+                    " 'xs:boolean'."
+                )
+            )
         );
     }
 }

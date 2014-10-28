@@ -23,20 +23,27 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
-    <module name="Magento_Backend" version="2.0.0.0" active="true">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Module/etc/module.xsd">
+    <module name="Magento_Backend" schema_version="2.0.0.0" active="true">
         <sequence>
             <module name="Magento_Directory"/>
         </sequence>
         <depends>
+            <module name="Magento_Store"/>
             <module name="Magento_Directory"/>
             <module name="Magento_Core"/>
             <module name="Magento_Eav"/>
-            <module name="Magento_AdminNotification"/>
             <module name="Magento_Cron"/>
-            <module name="Magento_Sendfriend"/>
             <module name="Magento_Theme"/>
-            <module name="Magento_Weee"/>
+            <module name="Magento_Reports"/>
+            <module name="Magento_Sales"/>
+            <module name="Magento_Catalog"/>
+            <module name="Magento_User"/>
+            <module name="Magento_Backup"/>
+            <module name="Magento_Email"/>
+            <module name="Magento_Customer"/>
+            <module name="Magento_Translation"/>
+            <module name="Magento_RequireJs"/>
         </depends>
     </module>
 </config>

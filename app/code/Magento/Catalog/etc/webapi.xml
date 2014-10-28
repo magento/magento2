@@ -1,0 +1,424 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../app/code/Magento/Webapi/etc/webapi.xsd">
+    <route url="/V1/products" method="POST">
+        <service class="Magento\Catalog\Service\V1\ProductServiceInterface" method="create"/>
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+        </resources>
+    </route>
+    <route url="/V1/products/:id" method="PUT">
+        <service class="Magento\Catalog\Service\V1\ProductServiceInterface" method="update" />
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+        </resources>
+    </route>
+    <route url="/V1/products/:id" method="DELETE">
+        <service class="Magento\Catalog\Service\V1\ProductServiceInterface" method="delete"/>
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+        </resources>
+    </route>
+    <route url="/V1/products" method="GET">
+        <service class="Magento\Catalog\Service\V1\ProductServiceInterface" method="search"/>
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+        </resources>
+    </route>
+    <route url="/V1/products/:id" method="GET">
+        <service class="Magento\Catalog\Service\V1\ProductServiceInterface" method="get"/>
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+        </resources>
+    </route>
+    <route url="/V1/products/attributes/types" method="GET">
+        <service class="Magento\Catalog\Service\V1\Product\Attribute\ReadServiceInterface" method="types"/>
+        <resources>
+            <resource ref="Magento_Catalog::attributes_attributes" />
+        </resources>
+    </route>
+    <route url="/V1/products/attributes/:id" method="GET">
+        <service class="Magento\Catalog\Service\V1\Product\Attribute\ReadServiceInterface" method="info"/>
+        <resources>
+            <resource ref="Magento_Catalog::attributes_attributes" />
+        </resources>
+    </route>
+    <route url="/V1/products/attributes" method="GET">
+        <service class="Magento\Catalog\Service\V1\Product\Attribute\ReadServiceInterface" method="search" />
+        <resources>
+            <resource ref="Magento_Catalog::attributes_attributes" />
+        </resources>
+    </route>
+    <route url="/V1/categories/attributes/:id/options" method="GET">
+        <service class="Magento\Catalog\Service\V1\Category\Attribute\ReadServiceInterface" method="options" />
+        <resources>
+            <resource ref="Magento_Catalog::attributes_attributes" />
+        </resources>
+    </route>
+    <route url="/V1/categories/attributes/:id" method="GET">
+        <service class="Magento\Catalog\Service\V1\Category\Attribute\ReadServiceInterface" method="info" />
+        <resources>
+            <resource ref="Magento_Catalog::attributes_attributes" />
+        </resources>
+    </route>
+    <route url="/V1/categories/attributes" method="GET">
+        <service class="Magento\Catalog\Service\V1\Category\Attribute\ReadServiceInterface" method="search" />
+        <resources>
+            <resource ref="Magento_Catalog::attributes_attributes" />
+        </resources>
+    </route>
+    <route url="/V1/products/attributes" method="POST">
+        <service class="Magento\Catalog\Service\V1\Product\Attribute\WriteServiceInterface" method="create"/>
+        <resources>
+            <resource ref="Magento_Catalog::attributes_attributes" />
+        </resources>
+    </route>
+    <route url="/V1/products/attributes/:id" method="PUT">
+        <service class="Magento\Catalog\Service\V1\Product\Attribute\WriteServiceInterface" method="update"/>
+        <resources>
+            <resource ref="Magento_Catalog::attributes_attributes" />
+        </resources>
+    </route>
+    <route url="/V1/products/attributes/:attributeId" method="DELETE">
+        <service class="Magento\Catalog\Service\V1\Product\Attribute\WriteServiceInterface" method="remove"/>
+        <resources>
+            <resource ref="Magento_Catalog::attributes_attributes" />
+        </resources>
+    </route>
+    <route url="/V1/products/types" method="GET">
+        <service class="Magento\Catalog\Service\V1\ProductTypeServiceInterface" method="getProductTypes"/>
+        <resources>
+            <resource ref="Magento_Catalog::products"/>
+        </resources>
+    </route>
+    <route url="/V1/products/attribute-sets" method="GET">
+        <service class="Magento\Catalog\Service\V1\Product\AttributeSet\ReadServiceInterface" method="getList"/>
+        <resources>
+            <resource ref="Magento_Catalog::sets"/>
+        </resources>
+    </route>
+    <route url="/V1/products/attribute-sets/:attributeSetId" method="GET">
+        <service class="Magento\Catalog\Service\V1\Product\AttributeSet\ReadServiceInterface" method="getInfo"/>
+        <resources>
+            <resource ref="Magento_Catalog::sets"/>
+        </resources>
+    </route>
+    <route url="/V1/products/attribute-sets/:attributeSetId" method="DELETE">
+        <service class="Magento\Catalog\Service\V1\Product\AttributeSet\WriteServiceInterface" method="remove"/>
+        <resources>
+            <resource ref="Magento_Catalog::sets"/>
+        </resources>
+    </route>
+    <route url="/V1/products/attribute-sets" method="POST">
+        <service class="Magento\Catalog\Service\V1\Product\AttributeSet\WriteServiceInterface" method="create"/>
+        <resources>
+            <resource ref="Magento_Catalog::sets"/>
+        </resources>
+    </route>
+    <route url="/V1/products/attribute-sets" method="PUT">
+        <service class="Magento\Catalog\Service\V1\Product\AttributeSet\WriteServiceInterface" method="update"/>
+        <resources>
+            <resource ref="Magento_Catalog::sets"/>
+        </resources>
+    </route>
+    <route url="/V1/products/attribute-sets/:attributeSetId/attributes" method="GET">
+        <service class="Magento\Catalog\Service\V1\Product\AttributeSet\ReadServiceInterface" method="getAttributeList"/>
+        <resources>
+            <resource ref="Magento_Catalog::sets"/>
+        </resources>
+    </route>
+    <route url="/V1/products/attribute-sets/:attributeSetId/attributes" method="POST">
+        <service class="Magento\Catalog\Service\V1\Product\AttributeSet\AttributeServiceInterface" method="addAttribute"/>
+        <resources>
+            <resource ref="Magento_Catalog::sets"/>
+        </resources>
+    </route>
+    <route url="/V1/products/attribute-sets/:attributeSetId/attributes/:attributeId" method="DELETE">
+        <service class="Magento\Catalog\Service\V1\Product\AttributeSet\AttributeServiceInterface" method="deleteAttribute"/>
+        <resources>
+            <resource ref="Magento_Catalog::sets"/>
+        </resources>
+    </route>
+    <route url="/V1/products/attribute-sets/:attributeSetId/groups" method="GET">
+        <service class="Magento\Catalog\Service\V1\Product\AttributeGroup\ReadServiceInterface" method="getList"/>
+        <resources>
+            <resource ref="Magento_Catalog::sets"/>
+        </resources>
+    </route>
+    <route url="/V1/products/attribute-sets/:attributeSetId/groups" method="POST">
+        <service class="Magento\Catalog\Service\V1\Product\AttributeGroup\WriteServiceInterface" method="create"/>
+        <resources>
+            <resource ref="Magento_Catalog::sets"/>
+        </resources>
+    </route>
+    <route url="/V1/products/attribute-sets/:attributeSetId/groups" method="PUT">
+        <service class="Magento\Catalog\Service\V1\Product\AttributeGroup\WriteServiceInterface" method="update"/>
+        <resources>
+            <resource ref="Magento_Catalog::sets"/>
+        </resources>
+    </route>
+    <route url="/V1/products/attribute-sets/:attributeSetId/groups/:groupId" method="DELETE">
+        <service class="Magento\Catalog\Service\V1\Product\AttributeGroup\WriteServiceInterface" method="delete"/>
+        <resources>
+            <resource ref="Magento_Catalog::sets"/>
+        </resources>
+    </route>
+    <route url="/V1/products/links/types" method="GET">
+        <service class="Magento\Catalog\Service\V1\Product\Link\ReadServiceInterface" method="getProductLinkTypes"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/:productSku/links/:type" method="GET">
+        <service class="Magento\Catalog\Service\V1\Product\Link\ReadServiceInterface" method="getLinkedProducts"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/links/:type/attributes" method="GET">
+        <service class="Magento\Catalog\Service\V1\Product\Link\ReadServiceInterface" method="getLinkAttributes"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/:productSku/links/:type" method="POST">
+        <service class="Magento\Catalog\Service\V1\Product\Link\WriteServiceInterface" method="assign"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/:productSku/links/:type/:linkedProductSku" method="DELETE">
+        <service class="Magento\Catalog\Service\V1\Product\Link\WriteServiceInterface" method="remove"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/:productSku/links/:type" method="PUT">
+        <service class="Magento\Catalog\Service\V1\Product\Link\WriteServiceInterface" method="update"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/attributes/:id/options" method="GET">
+        <service class="Magento\Catalog\Service\V1\Product\Attribute\Option\ReadServiceInterface" method="options"/>
+        <resources>
+            <resource ref="Magento_Catalog::attributes_attributes" />
+        </resources>
+    </route>
+    <route url="/V1/products/attributes/:id/options" method="POST">
+        <service class="Magento\Catalog\Service\V1\Product\Attribute\Option\WriteServiceInterface" method="addOption" />
+        <resources>
+            <resource ref="Magento_Catalog::attributes_attributes" />
+        </resources>
+    </route>
+    <route url="/V1/products/attributes/:id/options/:optionId" method="DELETE">
+        <service class="Magento\Catalog\Service\V1\Product\Attribute\Option\WriteServiceInterface" method="removeOption" />
+        <resources>
+            <resource ref="Magento_Catalog::attributes_attributes" />
+        </resources>
+    </route>
+    <route url="/V1/products/media/types/:attributeSetId" method="GET">
+        <service class="Magento\Catalog\Service\V1\Product\Attribute\Media\ReadServiceInterface" method="types"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/:productSku/media/:imageId" method="GET">
+        <service class="Magento\Catalog\Service\V1\Product\Attribute\Media\ReadServiceInterface" method="info"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/:productSku/media" method="POST">
+        <service class="Magento\Catalog\Service\V1\Product\Attribute\Media\WriteServiceInterface" method="create"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/:productSku/media" method="PUT">
+        <service class="Magento\Catalog\Service\V1\Product\Attribute\Media\WriteServiceInterface" method="update"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/:productSku/media/:entryId" method="DELETE">
+        <service class="Magento\Catalog\Service\V1\Product\Attribute\Media\WriteServiceInterface" method="delete"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/:productSku/media" method="GET">
+        <service class="Magento\Catalog\Service\V1\Product\Attribute\Media\ReadServiceInterface" method="getList"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/:productSku/group-prices" method="GET">
+        <service class="Magento\Catalog\Service\V1\Product\GroupPriceServiceInterface" method="getList"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/:productSku/group-prices" method="POST">
+        <service class="Magento\Catalog\Service\V1\Product\GroupPriceServiceInterface" method="set"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/:productSku/group-prices/:customerGroupId" method="DELETE">
+        <service class="Magento\Catalog\Service\V1\Product\GroupPriceServiceInterface" method="delete"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/:productSku/group-prices/:customerGroupId/tiers" method="GET">
+        <service class="Magento\Catalog\Service\V1\Product\TierPriceServiceInterface" method="getList"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/:productSku/group-prices/:customerGroupId/tiers" method="POST">
+        <service class="Magento\Catalog\Service\V1\Product\TierPriceServiceInterface" method="set"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/:productSku/group-prices/:customerGroupId/tiers/:qty" method="DELETE">
+        <service class="Magento\Catalog\Service\V1\Product\TierPriceServiceInterface" method="delete"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/categories/:categoryId" method="DELETE">
+        <service class="Magento\Catalog\Service\V1\Category\WriteServiceInterface" method="delete" />
+        <resources>
+            <resource ref="Magento_Catalog::categories" />
+        </resources>
+    </route>
+    <route url="/V1/categories/:categoryId" method="GET">
+        <service class="Magento\Catalog\Service\V1\Category\ReadServiceInterface" method="info" />
+        <resources>
+            <resource ref="Magento_Catalog::categories" />
+        </resources>
+    </route>
+    <route url="/V1/categories/:categoryId/products" method="GET">
+        <service class="Magento\Catalog\Service\V1\Category\ProductLinks\ReadServiceInterface" method="assignedProducts" />
+        <resources>
+            <resource ref="Magento_Catalog::categories" />
+        </resources>
+    </route>
+    <route url="/V1/categories/:categoryId/products" method="POST">
+        <service class="Magento\Catalog\Service\V1\Category\ProductLinks\WriteServiceInterface" method="assignProduct" />
+        <resources>
+            <resource ref="Magento_Catalog::categories" />
+        </resources>
+    </route>
+    <route url="/V1/categories/:categoryId/products" method="PUT">
+        <service class="Magento\Catalog\Service\V1\Category\ProductLinks\WriteServiceInterface" method="updateProduct" />
+        <resources>
+            <resource ref="Magento_Catalog::categories" />
+        </resources>
+    </route>
+    <route url="/V1/categories/:categoryId/products/:productSku" method="DELETE">
+        <service class="Magento\Catalog\Service\V1\Category\ProductLinks\WriteServiceInterface" method="removeProduct" />
+        <resources>
+            <resource ref="Magento_Catalog::categories" />
+        </resources>
+    </route>
+    <route url="/V1/categories/:categoryId/products" method="PUT">
+        <service class="Magento\Catalog\Service\V1\Category\ProductLinks\WriteServiceInterface" method="updateProduct" />
+        <resources>
+            <resource ref="Magento_Catalog::categories" />
+        </resources>
+    </route>
+    <route url="/V1/categories" method="POST">
+        <service class="Magento\Catalog\Service\V1\Category\WriteServiceInterface" method="create" />
+        <resources>
+            <resource ref="Magento_Catalog::categories" />
+        </resources>
+    </route>
+    <route url="/V1/categories/:categoryId" method="GET">
+        <service class="Magento\Catalog\Service\V1\Category\ReadServiceInterface" method="info" />
+        <resources>
+            <resource ref="Magento_Catalog::categories" />
+        </resources>
+    </route>
+    <route url="/V1/categories" method="GET">
+        <service class="Magento\Catalog\Service\V1\Category\Tree\ReadServiceInterface" method="tree" />
+        <resources>
+            <resource ref="Magento_Catalog::categories" />
+        </resources>
+    </route>
+    <route url="/V1/categories/:categoryId" method="PUT">
+        <service class="Magento\Catalog\Service\V1\Category\WriteServiceInterface" method="update" />
+        <resources>
+            <resource ref="Magento_Catalog::categories" />
+        </resources>
+    </route>
+    <route url="/V1/categories/:categoryId/move" method="PUT">
+        <service class="Magento\Catalog\Service\V1\Category\WriteServiceInterface" method="move" />
+        <resources>
+            <resource ref="Magento_Catalog::categories" />
+        </resources>
+    </route>
+    <route url="/V1/products/options/types" method="GET">
+        <service class="Magento\Catalog\Service\V1\Product\CustomOptions\ReadServiceInterface" method="getTypes"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/:productSku/options" method="GET">
+        <service class="Magento\Catalog\Service\V1\Product\CustomOptions\ReadServiceInterface" method="getList"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/:productSku/options/:optionId" method="GET">
+        <service class="Magento\Catalog\Service\V1\Product\CustomOptions\ReadServiceInterface" method="get"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/:productSku/options" method="POST">
+        <service class="Magento\Catalog\Service\V1\Product\CustomOptions\WriteServiceInterface" method="add"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/:productSku/options/:optionId" method="PUT">
+        <service class="Magento\Catalog\Service\V1\Product\CustomOptions\WriteServiceInterface" method="update"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/:productSku/options/:optionId" method="DELETE">
+        <service class="Magento\Catalog\Service\V1\Product\CustomOptions\WriteServiceInterface" method="remove"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+</routes>

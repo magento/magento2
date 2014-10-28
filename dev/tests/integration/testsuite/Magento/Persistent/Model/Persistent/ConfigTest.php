@@ -25,6 +25,8 @@
  */
 namespace Magento\Persistent\Model\Persistent;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -32,23 +34,24 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected $_model;
 
-    /** @var  \Magento\ObjectManager */
+    /** @var  \Magento\Framework\ObjectManager */
     protected $_objectManager;
 
     public function setUp()
     {
-        $directoryList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(
-                'Magento\Filesystem\DirectoryList',
-                array(
-                    'root' => \Magento\Filesystem::ROOT,
-                    'directories' => array(
-                        \Magento\Filesystem::MODULES => array('path' => dirname(__DIR__))
-                    ),
+        $directoryList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Framework\App\Filesystem\DirectoryList',
+            array(
+                'root' => DirectoryList::ROOT,
+                'config' => array(
+                    DirectoryList::MODULES => array(DirectoryList::PATH => dirname(__DIR__))
                 )
-            );
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Filesystem', array('directoryList' => $directoryList));
+            )
+        );
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Framework\Filesystem',
+            array('directoryList' => $directoryList)
+        );
 
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_model = $this->_objectManager->create(
@@ -79,5 +82,4 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $blocks = $this->_model->getBlockConfigInfo('Magento\Catalog\Block\Product\Compare\ListCompare');
         $this->assertEquals(array(), $blocks);
     }
-
 }

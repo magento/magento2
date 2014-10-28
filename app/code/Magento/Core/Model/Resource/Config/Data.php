@@ -18,27 +18,22 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Core\Model\Resource\Config;
 
 /**
  * Core config data resource model
  *
- * @category    Magento
- * @package     Magento_Core
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Core\Model\Resource\Config;
-
-class Data extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Data extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Define main table
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -48,10 +43,10 @@ class Data extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Convert array to comma separated value
      *
-     * @param \Magento\Core\Model\AbstractModel $object
-     * @return \Magento\Core\Model\Resource\Config\Data
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return $this
      */
-    protected function _beforeSave(\Magento\Core\Model\AbstractModel $object)
+    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
         if (!$object->getId()) {
             $this->_checkUnique($object);
@@ -67,20 +62,25 @@ class Data extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Validate unique configuration data before save
      * Set id to object if exists configuration instead of throw exception
      *
-     * @param \Magento\Core\Model\Config\Value $object
-     * @return \Magento\Core\Model\Resource\Config\Data
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return $this
      */
-    protected function _checkUnique(\Magento\Core\Model\AbstractModel $object)
+    protected function _checkUnique(\Magento\Framework\Model\AbstractModel $object)
     {
-        $select = $this->_getReadAdapter()->select()
-            ->from($this->getMainTable(), array($this->getIdFieldName()))
-            ->where('scope = :scope')
-            ->where('scope_id = :scope_id')
-            ->where('path = :path');
-        $bind   = array(
-            'scope'     => $object->getScope(),
-            'scope_id'  => $object->getScopeId(),
-            'path'      => $object->getPath()
+        $select = $this->_getReadAdapter()->select()->from(
+            $this->getMainTable(),
+            array($this->getIdFieldName())
+        )->where(
+            'scope = :scope'
+        )->where(
+            'scope_id = :scope_id'
+        )->where(
+            'path = :path'
+        );
+        $bind = array(
+            'scope' => $object->getScope(),
+            'scope_id' => $object->getScopeId(),
+            'path' => $object->getPath()
         );
 
         $configId = $this->_getReadAdapter()->fetchOne($select, $bind);
@@ -92,27 +92,20 @@ class Data extends \Magento\Core\Model\Resource\Db\AbstractDb
     }
 
     /**
-     * Clear website data
+     * Clear Scope data
      *
-     * @param $website
+     * @param string $scopeCode
+     * @param int|array $scopeIds
+     * @return void
      */
-    public function clearWebsiteData(\Magento\Core\Model\Website $website)
+    public function clearScopeData($scopeCode, $scopeIds)
     {
+        if (!is_array($scopeIds)) {
+            $scopeIds = array($scopeIds);
+        }
         $this->_getWriteAdapter()->delete(
-            $this->getMainTable(), array('scope = ?' => 'websites', 'scope_id' => $website->getId())
-        );
-        $this->clearStoreData($website->getStoreIds());
-    }
-
-    /**
-     * Clear store data
-     *
-     * @param array $storeIds
-     */
-    public function clearStoreData(array $storeIds)
-    {
-        $this->_getWriteAdapter()->delete(
-            $this->getMainTable(), array('scope = ?' => 'stores', 'scope_id IN (?)' => $storeIds)
+            $this->getMainTable(),
+            array('scope = ?' => $scopeCode, 'scope_id IN (?)' => $scopeIds)
         );
     }
 }

@@ -18,11 +18,10 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_DesignEditor
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Files\Content;
 
 /**
  * Files files block
@@ -31,10 +30,7 @@
  *    setStorage(\Magento\Theme\Model\Wysiwyg\Storage $storage)
  * @method \Magento\Theme\Model\Wysiwyg\Storage getStorage
  */
-namespace Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Files\Content;
-
-class Files
-    extends \Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content\Files
+class Files extends \Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content\Files
 {
     /**
      * @var \Magento\Theme\Helper\Storage
@@ -62,5 +58,4 @@ class Files
     {
         return __($this->_storageHelper->getStorageType());
     }
-
 }

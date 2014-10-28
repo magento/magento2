@@ -1,0 +1,245 @@
+// /**
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+//
+//    Minicart
+//--------------------------------------
+.block-minicart {
+    .items-total {
+        float: left;
+        margin: 0 10px;
+    }
+    .subtotal {
+        margin: 0 10px;
+        text-align: right;
+    }
+    .amount {
+        .price-wrapper:first-child .price {
+            font-size: @font-size-l;
+            font-weight: @font-weight-bold;
+        }
+    }
+    .subtitle {
+        display: none;
+    }
+    .subtitle.empty {
+        display: block;
+        padding: 30px 0 20px;
+        text-align: center;
+        font-size: 14px;
+    }
+    .empty.text {
+        text-align: center;
+    }
+    > .content > .actions {
+        margin-top: 15px;
+        > .secondary {
+            margin: 15px 0;
+            text-align: center;
+        }
+        > .primary {
+            margin: 0 10px;
+            .action.primary {
+                &:extend(.abstract-button-l all);
+                display: block;
+                width: 100%;
+            }
+        }
+        .paypal-logo {
+            margin-top: 15px;
+            text-align: center;
+        }
+    }
+}
+
+.minicart-wrapper {
+    .dropdown(
+        @_toggle-selector: ~".action.showcart",
+        @_options-selector: ~".block-minicart",
+        @_dropdown-toggle-icon-content: @icon-cart,
+        @_dropdown-toggle-active-icon-content: @icon-cart,
+        @_dropdown-list-item-padding: false,
+        @_dropdown-list-item-hover: false,
+        @_icon-font-position: before,
+        @_icon-font-size: 35px,
+        @_icon-font-line-height: 33px,
+        @_icon-font-color: @minicart-icons-color,
+        @_icon-font-color-hover: @color-primary,
+        @_icon-font-color-active: @minicart-icons-color
+    );
+    float: right;
+    .block-minicart {
+        padding: 25px 20px;
+        right: 0;
+        width: 320px;
+        > .title {
+            display: none;
+        }
+        &:after {
+            left: auto;
+            right: 25px;
+        }
+        &:before {
+            left: auto;
+            right: 26px;
+        }
+    }
+    .product.actions {
+        text-align: right;
+        > .primary,
+        > .secondary {
+            display: inline;
+            margin-right: @indent-s-base;
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+    }
+    .action.close {
+        display: none;
+    }
+    .action.showcart {
+        .text {
+            &:extend(.abstract-visually-hidden all);
+        }
+        white-space: nowrap;
+        .counter.qty {
+            &.empty {
+               display: none;
+            }
+            background: @color-active;
+            border-radius: 2px;
+            color: @page-bg-color;
+            clip: none;
+            display: inline-block;
+            height: 24px;
+            line-height: 24px;
+            max-width: 2em;
+            min-width: 18px;
+            margin: 3px 0 0;
+            padding: 0 3px;
+            overflow: hidden;
+            text-align: center;
+            white-space: normal;
+        }
+    }
+}
+
+.minilist {
+    .list-reset-styles(0, 0);
+    .item {
+        border-top: 1px solid @color-secondary;
+        padding: 20px 0;
+        z-index: 1;
+    }
+    .item > .product {
+        &:extend(.abstract-add-clearfix all);
+    }
+    .product-image-wrapper {
+        &:extend(.abstract-reset-image-wrapper all);
+    }
+    .product {
+        &.photo {
+            float: left;
+        }
+        &-item-name {
+            display: block;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-weight: @font-weight-base;
+            margin-top: 0;
+            a {
+                color: @link-color;
+            }
+        }
+        &.details {
+            padding-left: 88px;
+            .price {
+                font-weight: @font-weight-bold;
+            }
+        }
+        &.pricing {
+            margin-top: 3px;
+        }
+        &.options {
+            .tooltip.toggle {
+                .icon-font(
+                    @icon-down,
+                    @_icon-font-size: 28px,
+                    @_icon-font-line-height: 28px,
+                    @_icon-font-text-hide: true,
+                    @_icon-font-margin: -3px 0 0 7px,
+                    @_icon-font-position: after
+                );
+            }
+        }
+    }
+    .details-qty {
+        .label:after {
+            content: ":";
+        }
+    }
+    .action {
+         &.edit,
+         &.delete {
+             .icon-font(
+                 @icon-settings,
+                 @_icon-font-size: 28px,
+                 @_icon-font-line-height: 28px,
+                 @_icon-font-text-hide: true,
+                 @_icon-font-color: #303030,
+                 @_icon-font-color-hover: #303030,
+                 @_icon-font-color-active: #303030
+             );
+         }
+         &.delete {
+             .icon-font-symbol(
+                 @_icon-font-content: @icon-trash
+             );
+         }
+    }
+}
+
+//
+//    Mobile
+//--------------------------------------
+.responsive-smaller(@break) when (@break = @screen-xs) {
+    .minicart-wrapper .block-minicart {
+        width: 289px;
+    }
+}
+
+//
+//    Desktop
+//--------------------------------------
+.responsive(@break) when (@break = @screen-m) {
+    .minicart-wrapper {
+        margin-left: 13px;
+        .block-minicart {
+            right: -15px;
+            width: 390px;
+        }
+    }
+}

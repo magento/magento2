@@ -25,27 +25,24 @@
  */
 namespace Magento\Webapi\Controller\Rest\Request\Deserializer;
 
-class Xml implements
-    \Magento\Webapi\Controller\Rest\Request\DeserializerInterface
+use Magento\Framework\App\State;
+
+class Xml implements \Magento\Webapi\Controller\Rest\Request\DeserializerInterface
 {
-    /** @var \Magento\Xml\Parser */
+    /** @var \Magento\Framework\Xml\Parser */
     protected $_xmlParser;
 
-    /** @var \Magento\Core\Model\App */
-    protected $_app;
+    /** @var State */
+    protected $_appState;
 
     /**
-     * Initialize dependencies.
-     *
-     * @param \Magento\Xml\Parser $xmlParser
-     * @param \Magento\Core\Model\App $app
+     * @param \Magento\Framework\Xml\Parser $xmlParser
+     * @param State $appState
      */
-    public function __construct(
-        \Magento\Xml\Parser $xmlParser,
-        \Magento\Core\Model\App $app
-    ) {
+    public function __construct(\Magento\Framework\Xml\Parser $xmlParser, State $appState)
+    {
         $this->_xmlParser = $xmlParser;
-        $this->_app = $app;
+        $this->_appState = $appState;
     }
 
     /**
@@ -83,7 +80,7 @@ class Xml implements
 
         /** Process errors during XML parsing. */
         if ($this->_errorMessage !== null) {
-            if (!$this->_app->isDeveloperMode()) {
+            if ($this->_appState->getMode() !== State::MODE_DEVELOPER) {
                 $exceptionMessage = __('Decoding error.');
             } else {
                 $exceptionMessage = 'Decoding Error: ' . $this->_errorMessage;
@@ -102,6 +99,7 @@ class Xml implements
      * @param string $errorMessage
      * @param string $errorFile
      * @param integer $errorLine
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function handleErrors($errorNumber, $errorMessage, $errorFile, $errorLine)

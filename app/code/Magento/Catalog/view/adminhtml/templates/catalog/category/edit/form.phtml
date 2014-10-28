@@ -1,0 +1,221 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<div class="category-edit-title">
+    <h3 class="title"><?php echo $this->escapeHtml($this->getHeader()) . ($this->getCategoryId() ? ' (' . __('ID: %1', $this->getCategoryId()) . ')' : '') ?></h3>
+</div>
+<div class="page-actions">
+    <?php echo $this->getResetButtonHtml() ?>
+    <?php if ($this->getCategoryId()): ?>
+        <?php echo $this->getDeleteButtonHtml() ?>
+    <?php endif; ?>
+    <?php echo $this->getAdditionalButtonsHtml(); ?>
+    <?php echo $this->getSaveButtonHtml() ?>
+</div>
+<?php if ($this->hasStoreRootCategory()): ?>
+    <?php echo $this->getTabsHtml() ?>
+<?php else: ?>
+<div class="message info">
+    <div><?php echo __('Set root category for this store in the <a href="%1">configuration</a>.', $this->getStoreConfigurationUrl()) ?></div>
+</div>
+<?php endif; ?>
+<iframe name="iframeSave" style="display:none; width:100%;"
+        src="<?php echo $this->getViewFileUrl('blank.html') ?>"></iframe>
+<form target="iframeSave" id="category_edit_form" action="<?php echo $this->getSaveUrl() ?>" method="post"
+      enctype="multipart/form-data">
+    <div class="no-display">
+        <input type="hidden" name="isIframe" value="1"/>
+        <input name="form_key" type="hidden" value="<?php echo $this->getFormKey() ?>"/>
+        <input type="hidden" name="category_products" id="in_category_products" value=""/>
+        <input type="hidden" name="active_tab_id" id="active_tab_id" value=""/>
+    </div>
+    <div id="category_tab_content"></div>
+</form>
+<div data-id="information-dialog-category" style="display: none;">
+    <span class="information-message"><?php echo __('This operation can take much time'); ?><span>
+</div>
+<script type="text/javascript">
+require(['jquery', 'jquery/ui', "mage/mage"], function($){
+    var mageDialog = (function($) {
+        var self = {dialogOpened: false, callback: [], needShow: false};
+
+        self.callback = {ok: [], cancel: []};
+        self.createDialog = function () {
+            var onEvent = function (type, dialog) {
+                self.callback[type].forEach(function(call) {
+                    call();
+                });
+                $(dialog).dialog( "close" );
+            };
+
+            self.dialog = $('[data-id="information-dialog-category"]').dialog({
+                autoOpen:   false,
+                modal:      true,
+                dialogClass: 'popup-window',
+                resizable: false,
+                title: $.mage.__('Warning message'),
+                buttons: [
+                    {text: $.mage.__('Ok'), click: function() { onEvent('ok', this); }},
+                    {text: $.mage.__('Cancel'), click: function() { onEvent('cancel', this); } }
+                ],
+                open: function () {
+                    self.dialogOpened = true;
+                    self.callback.ok.push(function() {
+                        self.needShow = false;
+                    });
+                },
+                close: function(event, ui) {
+                    $(this).dialog('destroy');
+                    self.dialogOpened = false;
+                    self.callback = {ok: [], cancel: []};
+                    delete self.dialog;
+                }
+            });
+        };
+
+        return {
+            needToShow: function() {
+                self.needShow = true &&
+                    !!$('[data-ui-id="tabs-tab-general-information-fieldset-element-hidden-general-id"]').length;
+                return this;
+            },
+            isNeedShow: function() {
+                return self.needShow;
+            },
+            onOk: function(call) {
+                self.callback.ok.push(call);
+                return this;
+            },
+            onCancel: function(call) {
+                self.callback.cancel.push(call);
+                return this;
+            },
+            show: function() {
+                if (self.dialog == undefined) {
+                    self.createDialog();
+                }
+                if (self.dialogOpened ==  false) {
+                    self.dialog.dialog('open');
+                }
+                return this;
+            }
+        };
+    })(jQuery);
+    $(document).on('change', '[data-ui-id="urlkeyrenderer-text-general-url-key"]', function() {
+        mageDialog.needToShow();
+    });
+    $.mage.extend('categoryForm', 'form', 'Magento_Catalog/catalog/category/form');
+    $('#category_edit_form')
+        .mage('categoryForm', {refreshUrl: '<?php echo $this->getRefreshPathUrl() ?>'})
+        .mage('validation', {submitHandler: function(form){
+            if (mageDialog.isNeedShow()) {
+                mageDialog.onOk(function() {
+                    form.submit();
+                    displayLoadingMask();
+                }).show();
+            } else {
+                form.submit();
+                displayLoadingMask();
+            }
+        }});
+});
+
+<?php if(($block = $this->getLayout()->getBlock('category.product.grid')) && ($_gridJsObject=$block->getJsObjectName())): ?>
+require([
+    "mage/adminhtml/grid"
+], function(){
+
+    var categoryProducts = $H(<?php echo $this->getProductsJson() ?>);
+    $('in_category_products').value = Object.toJSON(categoryProducts);
+
+    function registerCategoryProduct(grid, element, checked){
+        if(checked){
+            if(element.positionElement){
+                element.positionElement.disabled = false;
+                categoryProducts.set(element.value, element.positionElement.value);
+            }
+        }
+        else{
+            if(element.positionElement){
+                element.positionElement.disabled = true;
+            }
+            categoryProducts.unset(element.value);
+        }
+        $('in_category_products').value = Object.toJSON(categoryProducts);
+        grid.reloadParams = {'selected_products[]':categoryProducts.keys()};
+    }
+    function categoryProductRowClick(grid, event){
+        var trElement = Event.findElement(event, 'tr');
+        var isInput   = Event.element(event).tagName == 'INPUT';
+        if(trElement){
+            var checkbox = Element.getElementsBySelector(trElement, 'input');
+            if(checkbox[0]){
+                var checked = isInput ? checkbox[0].checked : !checkbox[0].checked;
+                <?php echo $_gridJsObject ?>.setCheckboxChecked(checkbox[0], checked);
+            }
+        }
+    }
+    function positionChange(event){
+        var element = Event.element(event);
+        if(element && element.checkboxElement && element.checkboxElement.checked){
+            categoryProducts.set(element.checkboxElement.value, element.value);
+            $('in_category_products').value = Object.toJSON(categoryProducts);
+        }
+    }
+
+    var tabIndex = 1000;
+    function categoryProductRowInit(grid, row){
+        var checkbox = $(row).getElementsByClassName('checkbox')[0];
+        var position = $(row).getElementsByClassName('input-text')[0];
+        if(checkbox && position){
+            checkbox.positionElement = position;
+            position.checkboxElement = checkbox;
+            position.disabled = !checkbox.checked;
+            position.tabIndex = tabIndex++;
+            Event.observe(position,'keyup',positionChange);
+        }
+    }
+
+
+        <?php echo $_gridJsObject ?>.rowClickCallback = categoryProductRowClick;
+        <?php echo $_gridJsObject ?>.initRowCallback = categoryProductRowInit;
+        <?php echo $_gridJsObject ?>.checkboxCheckCallback = registerCategoryProduct;
+        if(<?php echo $_gridJsObject ?>.rows) {
+            <?php echo $_gridJsObject ?>.rows.each(function(row){categoryProductRowInit(<?php echo $_gridJsObject ?>, row)});
+        }
+});
+<?php endif; ?>
+<?php if($this->isAjax() && ($block = $this->getLayout()->getBlock('tabs')) && ($_tabsJsObject=$block->getJsObjectName())): ?>
+    // Temporary solution, will be replaced after refactoring of manage category functionality
+    <?php $tabsBlock = $this->getLayout()->getBlock('tabs'); ?>
+    require(["jquery","mage/backend/tabs"],function($){
+        var activeAnchor = $('#<?php echo $tabsBlock->getId() ?>').tabs('activeAnchor');
+        if (activeAnchor.length) {
+            $('active_tab_id').value = activeAnchor.prop('id');
+        }
+        $('active_tab_id').tabsJsObject = $('#<?php echo $tabsBlock->getId() ?>');
+    });
+<?php endif; ?>
+
+</script>

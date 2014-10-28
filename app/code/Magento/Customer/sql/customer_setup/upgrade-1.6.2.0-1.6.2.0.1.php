@@ -18,19 +18,21 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/** @var $installer \Magento\Customer\Model\Entity\Setup */
+/** @var $installer \Magento\Customer\Model\Resource\Setup */
 $installer = $this;
 
-$installer->getConnection()->addColumn($installer->getTable('customer_entity'), 'disable_auto_group_change', array(
-    'type' => \Magento\DB\Ddl\Table::TYPE_SMALLINT,
-    'unsigned' => true,
-    'nullable' => false,
-    'default' => '0',
-    'comment' => 'Disable automatic group change based on VAT ID'
-));
+$installer->getConnection()->addColumn(
+    $installer->getTable('customer_entity'),
+    'disable_auto_group_change',
+    array(
+        'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+        'unsigned' => true,
+        'nullable' => false,
+        'default' => '0',
+        'comment' => 'Disable automatic group change based on VAT ID'
+    )
+);

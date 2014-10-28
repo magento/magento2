@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Sales\Model\Observer\Backend;
 
 class CustomerQuoteTest extends \PHPUnit_Framework_TestCase
@@ -29,124 +28,188 @@ class CustomerQuoteTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Sales\Model\Observer\Backend\CustomerQuote
      */
-    protected $_model;
+    protected $customerQuote;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\StoreManagerInterface
      */
-    protected $_quoteMock;
+    protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Model\Config\Share
      */
-    protected $_configMock;
+    protected $configMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|\\Magento\Sales\Model\QuoteFactory
      */
-    protected $_eventMock;
+    protected $quoteFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Event\Observer
      */
-    protected $_storeManagerMock;
+    protected $observerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Event
      */
-    protected $_observerMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_customerMock;
+    protected $eventMock;
 
     protected function setUp()
     {
-        $this->_quoteMock = $this->getMock(
-            'Magento\Sales\Model\Quote',
-            array('setWebsite', 'loadByCustomer', 'getId', 'setCustomerGroupId', 'collectTotals', '__wakeup'),
-            array(),
-            '',
-            false
+        $this->storeManagerMock = $this->getMockBuilder('Magento\Framework\StoreManagerInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->configMock = $this->getMockBuilder('Magento\Customer\Model\Config\Share')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->quoteFactoryMock = $this->getMockBuilder('\Magento\Sales\Model\QuoteFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $this->observerMock = $this->getMockBuilder('Magento\Framework\Event\Observer')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->eventMock = $this->getMockBuilder('Magento\Framework\Event')
+            ->disableOriginalConstructor()
+            ->setMethods(['getOrigCustomerDataObject', 'getCustomerDataObject'])
+            ->getMock();
+        $this->observerMock->expects($this->any())->method('getEvent')->will($this->returnValue($this->eventMock));
+        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->customerQuote = $objectManager->getObject(
+            'Magento\Sales\Model\Observer\Backend\CustomerQuote',
+            [
+                'storeManager' => $this->storeManagerMock,
+                'config' => $this->configMock,
+                'quoteFactory' => $this->quoteFactoryMock,
+            ]
         );
-        $this->_observerMock = $this->getMock('Magento\Event\Observer', array(), array(), '', false);
-        $this->_storeManagerMock = $this->getMock('Magento\Core\Model\StoreManager', array(), array(), '', false);
-        $this->_configMock = $this->getMock('Magento\Customer\Model\Config\Share', array(), array(), '', false);
-        $this->_eventMock = $this->getMock('Magento\Event', array('getCustomer'), array(), '', false);
-        $this->_customerMock = $this->getMock('Magento\Customer\Model\Customer', array(), array(), '', false);
-        $this->_observerMock->expects($this->any())->method('getEvent')->will($this->returnValue($this->_eventMock));
-        $this->_eventMock
-            ->expects($this->once())
-            ->method('getCustomer')
-            ->will($this->returnValue($this->_customerMock));
-        $this->_model = new \Magento\Sales\Model\Observer\Backend\CustomerQuote(
-            $this->_storeManagerMock,
-            $this->_configMock,
-            $this->_quoteMock
-        );
     }
 
-    public function testDispatchIfCustomerDataEqual()
+    public function testDispatchNoCustomerGroupChange()
     {
-        $this->_customerMock->expects($this->once())->method('getGroupId')->will($this->returnValue(1));
-        $this->_customerMock->expects($this->once())->method('getOrigData')->will($this->returnValue(1));
-        $this->_configMock->expects($this->never())->method('isWebsiteScope');
-        $this->_model->dispatch($this->_observerMock);
-    }
+        $customerDataObjectMock = $this->getMockBuilder('Magento\Customer\Service\V1\Data\Customer')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $customerDataObjectMock->expects($this->any())
+            ->method('getGroupId')
+            ->will($this->returnValue(1));
+        $origCustomerDataObjectMock = $this->getMockBuilder('Magento\Customer\Service\V1\Data\Customer')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $origCustomerDataObjectMock->expects($this->any())
+            ->method('getGroupId')
+            ->will($this->returnValue(1));
+        $this->eventMock->expects($this->any())
+            ->method('getCustomerDataObject')
+            ->will($this->returnValue($customerDataObjectMock));
+        $this->eventMock->expects($this->any())
+            ->method('getOrigCustomerDataObject')
+            ->will($this->returnValue($origCustomerDataObjectMock));
+        $this->quoteFactoryMock->expects($this->never())
+            ->method('create');
 
-    public function testDispatchIfWebsiteScopeEnable()
-    {
-        $this->_customerMock->expects($this->once())->method('getGroupId')->will($this->returnValue(1));
-        $this->_customerMock->expects($this->once())->method('getOrigData')->will($this->returnValue(2));
-        $this->_configMock->expects($this->any())->method('isWebsiteScope')->will($this->returnValue(true));
-        $this->_customerMock->expects($this->any())->method('getWebsiteId');
-        $this->_storeManagerMock->expects($this->never())->method('getWebsites');
-        $this->_model->dispatch($this->_observerMock);
-    }
-
-    public function testDispatchIfWebsiteScopeDisable()
-    {
-        $websiteMock = $this->getMock('Magento\Core\Model\Website', array(), array(), '', false);
-        $this->_customerMock->expects($this->once())->method('getGroupId')->will($this->returnValue(1));
-        $this->_customerMock->expects($this->once())->method('getOrigData')->will($this->returnValue(2));
-        $this->_configMock->expects($this->any())->method('isWebsiteScope')->will($this->returnValue(false));
-        $this->_customerMock->expects($this->never())->method('getWebsiteId');
-        $this->_storeManagerMock
-            ->expects($this->once())
-            ->method('getWebsites')
-            ->will($this->returnValue(array($websiteMock)));
-        $this->_storeManagerMock->expects($this->never())->method('getWebsite');
-        $this->_model->dispatch($this->_observerMock);
+        $this->customerQuote->dispatch($this->observerMock);
     }
 
     /**
-     * @dataProvider dispatchIfArrayExistDataProvider
-     * @param bool $quoteId
+     * @param bool $isWebsiteScope
+     * @param array $websites
+     * @param int $quoteId
+     * @dataProvider dispatchDataProvider
      */
-    public function testDispatchIfArrayExist($quoteId)
+    public function testDispatch($isWebsiteScope,$websites, $quoteId)
     {
-        $websiteMock = $this->getMock('Magento\Core\Model\Website', array(), array(), '', false);
-        $this->_customerMock->expects($this->any())->method('getGroupId')->will($this->returnValue(1));
-        $this->_customerMock->expects($this->once())->method('getOrigData')->will($this->returnValue(2));
-        $this->_configMock->expects($this->any())->method('isWebsiteScope')->will($this->returnValue(true));
-        $this->_customerMock->expects($this->never())->method('getWebsiteId');
-        $this->_storeManagerMock
-            ->expects($this->once())
-            ->method('getWebsite')
-            ->will($this->returnValue(array($websiteMock)));
-        $this->_quoteMock->expects($this->once())->method('setWebsite');
-        $this->_quoteMock->expects($this->once())->method('loadByCustomer')->with($this->_customerMock);
-        $this->_quoteMock->expects(($this->once()))->method('getId')->will($this->returnValue($quoteId));
-        $this->_quoteMock->expects($this->any())->method('save');
-        $this->_model->dispatch($this->_observerMock);
+        $this->configMock->expects($this->once())
+            ->method('isWebsiteScope')
+            ->will($this->returnValue($isWebsiteScope));
+        $customerDataObjectMock = $this->getMockBuilder('Magento\Customer\Service\V1\Data\Customer')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $customerDataObjectMock->expects($this->any())
+            ->method('getGroupId')
+            ->will($this->returnValue(1));
+        $customerDataObjectMock->expects($this->any())
+            ->method('getWebsiteId')
+            ->will($this->returnValue(2));
+        if ($isWebsiteScope) {
+            $websites = $websites[0];
+            $this->storeManagerMock->expects($this->once())
+                ->method('getWebsite')
+                ->with(2)
+                ->will($this->returnValue($websites));
+        } else {
+            $this->storeManagerMock->expects($this->once())
+                ->method('getWebsites')
+                ->will($this->returnValue($websites));
+        }
+        $origCustomerDataObjectMock = $this->getMockBuilder('Magento\Customer\Service\V1\Data\Customer')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $origCustomerDataObjectMock->expects($this->any())
+            ->method('getGroupId')
+            ->will($this->returnValue(2));
+        $this->eventMock->expects($this->any())
+            ->method('getCustomerDataObject')
+            ->will($this->returnValue($customerDataObjectMock));
+        $this->eventMock->expects($this->any())
+            ->method('getOrigCustomerDataObject')
+            ->will($this->returnValue($origCustomerDataObjectMock));
+        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Quote $quoteMock */
+        $quoteMock = $this->getMockBuilder(
+            'Magento\Sales\Model\Quote'
+        )->setMethods(
+                array(
+                    'setWebsite',
+                    'loadByCustomer',
+                    'getId',
+                    'setCustomerGroupId',
+                    'collectTotals',
+                    'save',
+                    '__wakeup'
+                )
+            )->disableOriginalConstructor(
+            )->getMock();
+        $websiteCount = count($websites);
+        $this->quoteFactoryMock->expects($this->exactly($websiteCount))
+            ->method('create')
+            ->will($this->returnValue($quoteMock));
+        $quoteMock->expects($this->exactly($websiteCount))
+            ->method('setWebsite');
+        $quoteMock->expects($this->exactly($websiteCount))
+            ->method('loadByCustomer');
+        $quoteMock->expects($this->exactly($websiteCount))
+            ->method('getId')
+            ->will($this->returnValue($quoteId));
+        if ($quoteId) {
+            $quoteMock->expects($this->exactly($websiteCount))
+                ->method('setCustomerGroupId');
+            $quoteMock->expects($this->exactly($websiteCount))
+                ->method('collectTotals');
+            $quoteMock->expects($this->exactly($websiteCount))
+                ->method('save');
+        } else {
+            $quoteMock->expects($this->never())
+                ->method('setCustomerGroupId');
+            $quoteMock->expects($this->never())
+                ->method('collectTotals');
+            $quoteMock->expects($this->never())
+                ->method('save');
+        }
+        $this->customerQuote->dispatch($this->observerMock);
     }
 
-    public function dispatchIfArrayExistDataProvider()
+    public function dispatchDataProvider()
     {
-        return array(
-            array(true),
-            array(false),
-        );
+        return [
+            [true, ['website1'], 3],
+            [true, ['website1', 'website2'], 3],
+            [false, ['website1'], 3],
+            [false, ['website1', 'website2'], 3],
+            [true, ['website1'], null],
+            [true, ['website1', 'website2'], null],
+            [false, ['website1'], null],
+            [false, ['website1', 'website2'], null],
+        ];
     }
 }

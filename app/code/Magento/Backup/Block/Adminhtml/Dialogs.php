@@ -18,22 +18,17 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Adminhtml
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-/**
- * Adminhtml rollback dialogs block
- *
- * @category   Magento
- * @package    Magento_Adminhtml
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Backup\Block\Adminhtml;
 
-class Dialogs extends \Magento\Backend\Block\Template
+use \Magento\Backend\Block\Template;
+
+/**
+ * Backend rollback dialogs block
+ */
+class Dialogs extends Template
 {
     /**
      * Block's template
@@ -41,21 +36,4 @@ class Dialogs extends \Magento\Backend\Block\Template
      * @var string
      */
     protected $_template = 'Magento_Backup::backup/dialogs.phtml';
-
-    /**
-     * Include backup.js file in page before rendering
-     *
-     * @see \Magento\View\Element\AbstractBlock::_prepareLayout()
-     */
-    protected function _prepareLayout()
-    {
-        $this->getLayout()->getBlock('head')->addChild(
-            'magento-adminhtml-backup-js',
-            'Magento\Theme\Block\Html\Head\Script',
-            array(
-                'file' => 'mage/adminhtml/backup.js'
-            )
-        );
-        parent::_prepareLayout();
-    }
 }

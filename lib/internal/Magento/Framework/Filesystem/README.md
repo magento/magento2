@@ -1,0 +1,3 @@
+The **\Magento\Framework\Filesystem** library provides interface for file system operations, such as read, write, list directories, etc.
+The library includes File, HTTP, HTTPS and Zlib drivers.
+**\Magento\Framework\Filesystem\DirectoryList** class defines list of directories available in the application. The library supports only system temporary directory, while application classes may extend the list in order to define directories used in the application. Paths to pre-defined directories can be customized by configuration, while the list is finite in runtime. Use directory codes represented by the class's constants (or its descendants) to operate with the file system objects.

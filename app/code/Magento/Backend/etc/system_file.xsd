@@ -19,9 +19,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
- * @subpackage  Config
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -148,7 +145,6 @@
                     <xs:element name="frontend_model" type="typeModel" />
                     <xs:element name="clone_model" type="typeModel" />
                     <xs:element name="clone_fields" type="xs:int" />
-                    <xs:element name="expanded" type="xs:int" />
                     <xs:element name="help_url" type="typeUrl" />
                     <xs:element name="more_url" type="typeUrl" />
                     <xs:element name="demo_link" type="typeUrl" />
@@ -235,7 +231,6 @@
         <xs:complexType>
             <xs:simpleContent>
                 <xs:extension base="xs:string">
-                    <xs:attribute name="service_call" type="xs:string" use="required" />
                     <xs:attribute name="idField" type="xs:string" use="optional" />
                     <xs:attribute name="labelField" type="xs:string" use="optional" />
                     <xs:attribute name="includeEmptyValueOption" type="xs:boolean" use="optional" />

@@ -33,9 +33,18 @@ interface ConfigInterface
     public function getEntities();
 
     /**
-     * Retrieve import product types configuration
+     * Retrieve import entity types configuration
      *
+     * @param string $entity
      * @return array
      */
-    public function getProductTypes();
+    public function getEntityTypes($entity);
+
+    /**
+     * Retrieve a list of indexes which are affected by import of the specified entity.
+     *
+     * @param string $entity
+     * @return array
+     */
+    public function getRelatedIndexers($entity);
 }

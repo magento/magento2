@@ -1,0 +1,42 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/** @var $this \Magento\Framework\View\Element\Template */
+
+/** @var $this \Magento\Framework\View\Element\Template */
+$_gridPopupBlock = $this->getChildBlock('catalog.product.group.grid.popup.container')->getChildBlock('grid');
+$_gridPopupBlock->setRowClickCallback('function(){}');
+/** @var $_helper \Magento\Core\Helper\Data */
+$_helper = $this->helper('Magento\Core\Helper\Data');
+?>
+<div id="grouped-product-container" data-mage-init='{"groupedProduct":{"gridPopup":"[data-grid-id=<?php echo $_gridPopupBlock->getId() ?>]"}}'>
+    <div class="no-products-message">
+        <?php echo __('There are no grouped products.')?>
+    </div>
+    <?php echo $this->getChildHtml('list'); ?>
+    <div data-role="add-product-dialog" class="no-display">
+        <?php echo $this->getChildBlock('catalog.product.group.grid.popup.container')->getChildHtml('grid');?>
+    </div>
+    <button type="button" data-role="add-product">Add Products to Group</button>
+</div>

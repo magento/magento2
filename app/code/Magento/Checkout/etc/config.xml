@@ -19,13 +19,11 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Checkout
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Core/etc/config.xsd">
     <default>
         <checkout>
             <options>
@@ -35,8 +33,6 @@
             <cart>
                 <delete_quote_after>30</delete_quote_after>
                 <redirect_to_cart>1</redirect_to_cart>
-                <grouped_product_image>itself</grouped_product_image>
-                <configurable_product_image>parent</configurable_product_image>
             </cart>
             <cart_link>
                 <use_qty>1</use_qty>

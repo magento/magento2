@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Eav
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Eav\Model;
 
 class AttributeFactoryTest extends \PHPUnit_Framework_TestCase
@@ -46,11 +42,15 @@ class AttributeFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        /** @var $objectManagerMock \Magento\ObjectManager */
-        $objectManagerMock = $this->getMock('Magento\ObjectManager');
-        $objectManagerMock->expects($this->any())
-            ->method('create')
-            ->will($this->returnCallback(array($this, 'getModelInstance')));
+        /** @var $objectManagerMock \Magento\Framework\ObjectManager */
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager');
+        $objectManagerMock->expects(
+            $this->any()
+        )->method(
+            'create'
+        )->will(
+            $this->returnCallback(array($this, 'getModelInstance'))
+        );
 
         $this->_factory = new \Magento\Eav\Model\AttributeFactory($objectManagerMock);
     }
@@ -65,9 +65,7 @@ class AttributeFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateAttribute()
     {
-        $this->assertEquals($this->_className,
-            $this->_factory->createAttribute($this->_className, $this->_arguments)
-        );
+        $this->assertEquals($this->_className, $this->_factory->createAttribute($this->_className, $this->_arguments));
     }
 
     public function getModelInstance($className, $arguments)

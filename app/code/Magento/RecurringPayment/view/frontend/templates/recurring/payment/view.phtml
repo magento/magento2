@@ -1,0 +1,120 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php /* @var $this \Magento\RecurringPayment\Block\Payment\View */ ?>
+
+<div class="order recurring details">
+    <div class="actions">
+        <div class="primary">
+            <?php if ($this->getCanCancel()): ?>
+                <button type="button" title="<?php echo __('Cancel') ?>" class="action cancel"
+                        onclick="if( confirm('<?php echo $this->getConfirmationMessage() ?>') ) { window.location.href = '<?php echo $this->getCancelUrl() ?>'; } return false;">
+                    <span><?php echo __('Cancel') ?></span></button>
+            <?php endif; ?>
+            <?php if ($this->getCanSuspend()): ?>
+                <button type="button" title="<?php echo __('Suspend') ?>" class="action suspend"
+                        onclick="if( confirm('<?php echo $this->getConfirmationMessage() ?>') ) { window.location.href = '<?php echo $this->getSuspendUrl() ?>'; } return false;">
+                    <span><?php echo __('Suspend') ?></span></button>
+            <?php endif; ?>
+            <?php if ($this->getCanActivate()): ?>
+                <button type="button" title="<?php echo __('Activate') ?>" class="action activate"
+                        onclick="if( confirm('<?php echo $this->getConfirmationMessage() ?>') ) { window.location.href = '<?php echo $this->getActivateUrl() ?>'; } return false;">
+                    <span><?php echo __('Activate') ?></span></button>
+            <?php endif; ?>
+            <?php if ($this->getCanUpdate()): ?>
+                <button type="button" title="<?php echo __('Get Update') ?>" class="action update"
+                        onclick="if( confirm('<?php echo $this->getConfirmationMessage() ?>') ) { window.location.href = '<?php echo $this->getUpdateUrl() ?>'; } return false;">
+                    <span><?php echo __('Get Update') ?></span></button>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <?php /* info tabs */ ?>
+    <?php $layout = $this->getLayout(); ?>
+    <?php $infoTabs = $this->getGroupChildNames('info_tabs'); ?>
+    <dl class="order info">
+        <dt><?php echo __('About This Payment:') ?></dt>
+        <dd>
+            <ul id="order-info-tabs" class="items">
+                <?php foreach ($infoTabs as $elementName): ?>
+                    <?php $block = $layout->getBlock($elementName); ?>
+                    <?php if (!$block) continue; ?>
+                    <?php if ($this->getObjectData($block, 'is_view_current')): ?>
+                        <li class="nav item current">
+                            <strong><?php echo $this->escapeHtml($this->getObjectData($block, 'view_label')) ?></strong>
+                        </li>
+                    <?php else: ?>
+                        <li class="nav item">
+                            <a href="<?php echo $this->escapeHtml($this->getObjectData($block, 'view_url')) ?>"><?php echo $this->escapeHtml($this->getObjectData($block, 'view_label')) ?></a>
+                        </li>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </ul>
+        </dd>
+    </dl>
+
+    <?php /* info blocks */ ?>
+    <!-- info blocks in 2 columns -->
+    <?php for ($i = 1; $i <= 5; $i++): ?>
+        <?php $infoBlocks = $this->getGroupChildNames("info_blocks_row_{$i}"); ?>
+        <?php if ($infoBlocks): ?>
+            <div class="block view info">
+                <?php for ($j = 1; $j <= 2; $j++): ?>
+                    <?php foreach ($infoBlocks as $elementName): ?>
+                        <?php $block = $layout->getBlock($elementName); ?>
+                        <?php if (!$block) continue; ?>
+                        <?php if ($j == $this->getObjectData($block, 'view_column')): ?>
+                            <div class="box box<?php echo $j ?>">
+                                <strong class="subtitle">
+                                    <span><?php echo $this->escapeHtml($this->getObjectData($block, 'view_label')) ?></span>
+                                </strong>
+
+                                <div class="content">
+                                    <?php $html = $layout->renderElement($elementName); ?>
+                                    <?php echo($html ? $html : __('No information available.')); ?>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                <?php endfor; ?>
+            </div>
+        <?php endif; ?>
+    <?php endfor; ?>
+
+    <!-- table data block -->
+    <?php $table = $this->getChildBlock('table') ?>
+    <?php if ($table): ?>
+        <div class="recurring order details items">
+            <div class="order subtitle caption">
+                <strong><?php echo $this->escapeHtml($this->getObjectData($table, 'view_label')) ?></strong></div>
+            <?php echo $this->getChildHtml('table') ?>
+        </div>
+    <?php endif; ?>
+
+    <div class="actions">
+        <div class="secondary"><a href="<?php echo $this->getBackUrl() ?>"
+                                  class="action back"><span><?php echo __('Back to Recurring Billing Payments') ?></span></a>
+        </div>
+    </div>
+</div>

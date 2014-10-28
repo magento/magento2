@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test;
 
 class MemoryLimitTest extends \PHPUnit_Framework_TestCase
@@ -73,7 +72,12 @@ class MemoryLimitTest extends \PHPUnit_Framework_TestCase
     protected function _createObject($memCap, $leakCap)
     {
         $helper = $this->getMock(
-            'Magento\TestFramework\Helper\Memory', array('getRealMemoryUsage'), array(), '', false);
+            'Magento\TestFramework\Helper\Memory',
+            array('getRealMemoryUsage'),
+            array(),
+            '',
+            false
+        );
         $helper->expects($this->any())->method('getRealMemoryUsage')->will($this->returnValue(1024 * 1024));
         return new \Magento\TestFramework\MemoryLimit($memCap, $leakCap, $helper);
     }

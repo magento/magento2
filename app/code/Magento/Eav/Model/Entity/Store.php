@@ -18,12 +18,10 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Eav
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Eav\Model\Entity;
 
 /**
  * @method \Magento\Eav\Model\Resource\Entity\Store _getResource()
@@ -37,16 +35,14 @@
  * @method string getIncrementLastId()
  * @method \Magento\Eav\Model\Entity\Store setIncrementLastId(string $value)
  *
- * @category    Magento
- * @package     Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Eav\Model\Entity;
-
-class Store extends \Magento\Core\Model\AbstractModel
+class Store extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * Resource initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -58,7 +54,7 @@ class Store extends \Magento\Core\Model\AbstractModel
      *
      * @param int $entityTypeId
      * @param int $storeId
-     * @return \Magento\Eav\Model\Entity\Store
+     * @return $this
      */
     public function loadByEntityStore($entityTypeId, $storeId)
     {

@@ -21,13 +21,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Integrity\Library\PhpParser;
 
 use Magento\TestFramework\Integrity\Library\PhpParser\Uses;
 
 /**
- * @package Magento\Test
  */
 class UsesTest extends \PHPUnit_Framework_TestCase
 {
@@ -78,8 +76,8 @@ class UsesTest extends \PHPUnit_Framework_TestCase
                     5 => array(T_STRING, 'Model'),
                     6 => array(T_NS_SEPARATOR, '\\'),
                     7 => array(T_STRING, 'Object'),
-                    8 => ';',
-                ),
+                    8 => ';'
+                )
             ),
             'several_simple' => array(
                 array(
@@ -102,8 +100,8 @@ class UsesTest extends \PHPUnit_Framework_TestCase
                     16 => array(T_STRING, 'Object2 '),
                     17 => array(T_AS, 'as '),
                     18 => array(T_STRING, 'OtherObject'),
-                    19 => ';',
-                ),
+                    19 => ';'
+                )
             ),
             'several_with_comma_separate' => array(
                 array(
@@ -125,9 +123,9 @@ class UsesTest extends \PHPUnit_Framework_TestCase
                     15 => array(T_STRING, 'Object2 '),
                     16 => array(T_AS, 'as '),
                     17 => array(T_STRING, 'OtherObject'),
-                    18 => ';',
-                ),
-            ),
+                    18 => ';'
+                )
+            )
         );
     }
 
@@ -156,10 +154,7 @@ class UsesTest extends \PHPUnit_Framework_TestCase
             $this->uses->parse($token, $k);
         }
 
-        $this->assertEquals(
-            'Magento\Core\Model\Object2',
-            $this->uses->getClassNameWithNamespace($className)
-        );
+        $this->assertEquals('Magento\Core\Model\Object2', $this->uses->getClassNameWithNamespace($className));
     }
 
     /**
@@ -181,7 +176,7 @@ class UsesTest extends \PHPUnit_Framework_TestCase
                     5 => array(T_STRING, 'Model'),
                     6 => array(T_NS_SEPARATOR, '\\'),
                     7 => array(T_STRING, 'Object2'),
-                    8 => ';',
+                    8 => ';'
                 )
             ),
             'class_from_uses_with_as' => array(
@@ -197,9 +192,9 @@ class UsesTest extends \PHPUnit_Framework_TestCase
                     7 => array(T_STRING, 'Object2 '),
                     8 => array(T_AS, 'as '),
                     9 => array(T_STRING, 'ObjectOther'),
-                    10 => ';',
+                    10 => ';'
                 )
-            ),
+            )
         );
     }
 }

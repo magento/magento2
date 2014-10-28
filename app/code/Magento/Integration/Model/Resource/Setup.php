@@ -21,35 +21,36 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Integration\Model\Resource;
+
+use Magento\Integration\Model\Manager;
 
 /**
  * Resource Setup Model
  */
-class Setup extends \Magento\Core\Model\Resource\Setup
+class Setup extends \Magento\Framework\Module\Setup
 {
     /**
-     * @var  \Magento\Integration\Model\Manager
+     * @var  Manager
      */
     protected $_integrationManager;
 
     /**
      * Construct resource Setup Model
      *
-     * @param \Magento\Core\Model\Resource\Setup\Context $context
-     * @param \Magento\Integration\Model\Manager $integrationManager
+     * @param \Magento\Framework\Module\Setup\Context $context
      * @param string $resourceName
-     * @param $moduleName
+     * @param Manager $integrationManager
+     * @param string $moduleName
      * @param string $connectionName
      *
      */
     public function __construct(
-        \Magento\Core\Model\Resource\Setup\Context $context,
+        \Magento\Framework\Module\Setup\Context $context,
         $resourceName,
-        \Magento\Integration\Model\Manager $integrationManager,
+        Manager $integrationManager,
         $moduleName = 'Magento_Integration',
-        $connectionName = ''
+        $connectionName = \Magento\Framework\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION
     ) {
         $this->_integrationManager = $integrationManager;
         parent::__construct($context, $resourceName, $moduleName, $connectionName);

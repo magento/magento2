@@ -1,0 +1,49 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<table class="data table rss">
+    <tbody>
+        <th colspan="2"><?php echo __('Miscellaneous Feeds') ?></th>
+    <?php foreach($this->getFeeds() as $feed): ?>
+        <?php if (!isset($feed['group'])): ?>
+        <tr>
+            <td class="col feed"><?php echo $feed['label'] ?></td>
+            <td class="col action">
+                <a href="<?php echo $feed['link'] ?>" class="action get"><span><?php echo __('Get Feed'); ?></span></a>
+            </td>
+        </tr>
+        <?php else: ?>
+            <th colspan="2"><?php echo $feed['group'] ?></th>
+            <?php foreach ($feed['feeds'] as $item) :?>
+                <tr>
+                    <td class="col feed"><?php echo $item['label'] ?></td>
+                    <td class="col action">
+                        <a href="<?php echo $item['link'] ?>" class="action get"><span><?php echo __('Get Feed'); ?></span></a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    <?php endforeach; ?>
+    </tbody>
+</table>

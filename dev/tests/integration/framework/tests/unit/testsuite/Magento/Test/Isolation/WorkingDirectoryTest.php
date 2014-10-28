@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -52,7 +49,7 @@ class WorkingDirectoryTest extends \PHPUnit_Framework_TestCase
         $oldWorkingDir = getcwd();
         $newWorkingDir = __DIR__;
         if ($oldWorkingDir == $newWorkingDir) {
-            $this->markTestSkipped("Test requires the current working directory to differ from '$oldWorkingDir'.");
+            $this->markTestSkipped("Test requires the current working directory to differ from '{$oldWorkingDir}'.");
         }
         $this->_object->startTest($this);
         chdir($newWorkingDir);

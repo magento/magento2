@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <referenceBlock name="adminhtml.system.variable.grid.container">
         <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.system.variable.grid" as="grid">
             <arguments>
@@ -44,8 +44,9 @@
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="variable_id">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Variable ID</argument>
-                        <argument name="width" xsi:type="string">1px</argument>
                         <argument name="index" xsi:type="string">variable_id</argument>
+                        <argument name="column_css_class" xsi:type="string">col-id</argument>
+                        <argument name="header_css_class" xsi:type="string">col-id</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="code">
@@ -63,4 +64,4 @@
             </block>
         </block>
     </referenceBlock>
-</layout>
+</page>

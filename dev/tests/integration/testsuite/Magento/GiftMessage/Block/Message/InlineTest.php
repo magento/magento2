@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_GiftMessage
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\GiftMessage\Block\Message;
 
 class InlineTest extends \PHPUnit_Framework_TestCase
@@ -36,8 +32,11 @@ class InlineTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-            ->createBlock('Magento\GiftMessage\Block\Message\Inline');
+        $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\View\LayoutInterface'
+        )->createBlock(
+            'Magento\GiftMessage\Block\Message\Inline'
+        );
     }
 
     /**
@@ -45,15 +44,15 @@ class InlineTest extends \PHPUnit_Framework_TestCase
      */
     public function testThumbnail()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')
-            ->loadArea(\Magento\Core\Model\App\Area::AREA_FRONTEND);
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()
+            ->loadArea(\Magento\Framework\App\Area::AREA_FRONTEND);
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Catalog\Model\Product');
         $product->load(1);
 
         $size = $this->_block->getThumbnailSize();
         $this->assertGreaterThan(1, $size);
-        $this->assertContains('/'.$size, $this->_block->getThumbnailUrl($product));
+        $this->assertContains('/' . $size, $this->_block->getThumbnailUrl($product));
         $this->assertStringEndsWith('magento_image.jpg', $this->_block->getThumbnailUrl($product));
     }
 }

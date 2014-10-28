@@ -18,21 +18,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Product configurational item interface
- *
- * @category   Magento
- * @package    Magento_Catalog
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Model\Product\Configuration\Item;
 
+/**
+ * Product configurational item interface
+ */
 interface ItemInterface
 {
     /**
@@ -40,7 +34,7 @@ interface ItemInterface
      *
      * @return \Magento\Catalog\Model\Product
      */
-    function getProduct();
+    public function getProduct();
 
     /**
      * Get item option by code
@@ -53,11 +47,11 @@ interface ItemInterface
     /**
      * Returns special download params (if needed) for custom option with type = 'file''
      * Return null, if not special params needed'
-     * Or return \Magento\Object with any of the following indexes:
+     * Or return \Magento\Framework\Object with any of the following indexes:
      *  - 'url' - url of controller to give the file
      *  - 'urlParams' - additional parameters for url (custom option id, or item id, for example)
      *
-     * @return null|\Magento\Object
+     * @return null|\Magento\Framework\Object
      */
     public function getFileDownloadParams();
 }

@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -31,6 +29,9 @@ namespace Magento\Backend\Block\System\Config;
 
 class Dwstree extends \Magento\Backend\Block\Widget\Tabs
 {
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -39,7 +40,7 @@ class Dwstree extends \Magento\Backend\Block\Widget\Tabs
     }
 
     /**
-     * @return \Magento\Backend\Block\System\Config\Dwstree
+     * @return $this
      */
     public function initTabs()
     {
@@ -48,22 +49,21 @@ class Dwstree extends \Magento\Backend\Block\Widget\Tabs
         $curWebsite = $this->getRequest()->getParam('website');
         $curStore = $this->getRequest()->getParam('store');
 
-        $this->addTab('default', array(
-            'label'  => __('Default Config'),
-            'url'    => $this->getUrl('*/*/*', array('section'=>$section)),
-            'class' => 'default',
-        ));
+        $this->addTab(
+            'default',
+            array(
+                'label' => __('Default Config'),
+                'url' => $this->getUrl('*/*/*', array('section' => $section)),
+                'class' => 'default'
+            )
+        );
 
-        /** @var $website \Magento\Core\Model\Website */
+        /** @var $website \Magento\Store\Model\Website */
         foreach ($this->_storeManager->getWebsites(true) as $website) {
             $wCode = $website->getCode();
             $wName = $website->getName();
             $wUrl = $this->getUrl('*/*/*', array('section' => $section, 'website' => $wCode));
-            $this->addTab('website_' . $wCode, array(
-                'label' => $wName,
-                'url'   => $wUrl,
-                'class' => 'website',
-            ));
+            $this->addTab('website_' . $wCode, array('label' => $wName, 'url' => $wUrl, 'class' => 'website'));
             if ($curWebsite === $wCode) {
                 if ($curStore) {
                     $this->_addBreadcrumb($wName, '', $wUrl);
@@ -71,17 +71,21 @@ class Dwstree extends \Magento\Backend\Block\Widget\Tabs
                     $this->_addBreadcrumb($wName);
                 }
             }
-            /** @var $store \Magento\Core\Model\Store */
+            /** @var $store \Magento\Store\Model\Store */
             foreach ($website->getStores() as $store) {
                 $sCode = $store->getCode();
                 $sName = $store->getName();
-                $this->addTab('store_' . $sCode, array(
-                    'label' => $sName,
-                    'url'   => $this->getUrl('*/*/*', array(
-                        'section' => $section, 'website' => $wCode, 'store' => $sCode)
-                    ),
-                    'class' => 'store',
-                ));
+                $this->addTab(
+                    'store_' . $sCode,
+                    array(
+                        'label' => $sName,
+                        'url' => $this->getUrl(
+                            '*/*/*',
+                            array('section' => $section, 'website' => $wCode, 'store' => $sCode)
+                        ),
+                        'class' => 'store'
+                    )
+                );
                 if ($curStore === $sCode) {
                     $this->_addBreadcrumb($sName);
                 }

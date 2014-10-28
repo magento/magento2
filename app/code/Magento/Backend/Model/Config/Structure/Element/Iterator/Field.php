@@ -18,16 +18,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Config\Structure\Element\Iterator;
 
-class Field
-    extends \Magento\Backend\Model\Config\Structure\Element\Iterator
+class Field extends \Magento\Backend\Model\Config\Structure\Element\Iterator
 {
     /**
      * Group flyweight
@@ -59,6 +55,7 @@ class Field
      * Init current element
      *
      * @param array $element
+     * @return void
      * @throws \LogicException
      */
     protected function _initFlyweight(array $element)
@@ -66,7 +63,7 @@ class Field
         if (!isset($element[\Magento\Backend\Model\Config\Structure::TYPE_KEY])) {
             throw new \LogicException('System config structure element must contain "type" attribute');
         }
-        switch($element[\Magento\Backend\Model\Config\Structure::TYPE_KEY]) {
+        switch ($element[\Magento\Backend\Model\Config\Structure::TYPE_KEY]) {
             case 'group':
                 $this->_flyweight = $this->_groupFlyweight;
                 break;

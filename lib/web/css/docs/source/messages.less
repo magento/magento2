@@ -1,0 +1,638 @@
+// /**
+////  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+// *
+// * @category design
+// * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+// * @license http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+// */
+
+//  # Messages
+//
+//  Magento UI library provides mixins for styling messages. There are 4 types of messages:
+//  ```css
+//  info
+//  warning
+//  error
+//  success
+//  ```
+//  To configure styles of each type of message, global variables from variables.less are used. To apply the <code>.message()</code> mixin you need to specify the type of message you want to apply styles to.
+//
+//  # Information message
+//
+//  This is an informational message. To apply appropriate style you need to specify the <code>info</code> type to the <code>.message()</code> mixin.
+//
+//  If there is no content on the page, for example on a category page with no products, a special system information message with <code>class=”message info empty”</code> is used. It inherits styles from information message by default. It can be styled to get unique appearance using <code>.message.info.empty</code> class.
+//
+//  ```
+//  <div class="example-message-info">
+//      <div>
+//          Lorem ipsum dolor sit <a href="#">amet</a>, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
+//      </div>
+//  </div>
+//  ```
+
+.example-message-info {
+    .message(info);
+}
+
+//  # Warning message 
+//
+//  This is a warning message. To apply appropriate style you need to specify <code>warning</code> type to the <code>.warning()</code> mixin.
+//
+//  ```
+//  <div class="example-message-warning">
+//      <div>
+//          Lorem ipsum dolor sit <a href="#">amet</a>, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
+//      </div>
+//  </div>
+//  ```
+
+.example-message-warning {
+    .message(warning);
+}
+
+//  # Error message
+//
+//  This is an error message. To apply appropriate style you need to specify <code>error</code> type to the <code>.warning()</code> mixin.
+//
+//  ```
+//  <div class="example-message-error">
+//      <div>
+//          Lorem ipsum dolor sit <a href="#">amet</a>, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
+//      </div>
+//  </div>
+//  ```
+
+.example-message-error {
+    .message(error);
+}
+
+//  # Success message
+//
+//  This is a success message. To apply appropriate style you need to specify <code>success</code> type to the <code>.warning()</code> mixin.
+//
+//  ```
+//  <div class="example-message-success">
+//      <div>
+//          Lorem ipsum dolor sit <a href="#">amet</a>, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
+//      </div>
+//  </div>
+//  ```
+
+.example-message-success {
+    .message(success);
+}
+
+//  # Notice message
+//
+//  This is a notice message. To apply appropriate style you need to specify <code>notice</code> type to the <code>.warning()</code> mixin.
+//
+//  ```
+//  <div class="example-message-notice">
+//      <div>
+//          Lorem ipsum dolor sit <a href="#">amet</a>, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
+//      </div>
+//  </div>
+//  ```
+
+.example-message-notice {
+    .message(notice);
+}
+
+//  # Message with inner icon
+//
+//  To add an inner icon use <code>.message-icon-inner</code> mixin. To apply the <code>.message-icon-inner</code> mixin, you need to specify the type of a message that you want to apply styles to.
+//
+//  ```html
+//  <div class="example-message-1">
+//      <div>
+//          Lorem ipsum dolor sit <a href="#">amet</a>, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
+//      </div>
+//  </div>
+//  ```
+//
+
+.example-message-1 {
+    .message-icon-inner(notice);
+}
+
+//  # Message with lateral icon
+//
+//  To add a lateral icon to a message, you need to use the <code>.message-icon-lateral</code> mixin. This mixin is configured by the following variables:
+//  ```css
+//  @_message-type: error; // info | warning | error | success | notice
+//  @_message-position: right; // left | right
+//  ```
+//
+//  ```html
+//  <div class="example-message-2">
+//      <div>
+//          Lorem ipsum dolor sit <a href="#">amet</a>, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
+//      </div>
+//  </div>
+//  ```
+//  ```html
+//  <div class="example-message-3">
+//      <div>
+//          Lorem ipsum dolor sit <a href="#">amet</a>, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
+//      </div>
+//  </div>
+//  ```
+
+.example-message-2 {
+    .message-icon-lateral(error, right);
+}
+
+.example-message-3 {
+    .message-icon-lateral(success, left);
+}
+
+//  # Custom message style
+//
+//  You can specify your own message type, for example “custom”. To use message mixin for this new type you need to add new variables to variables.less:
+//  ```css
+//    @message-<b>custom</b>-color: #000;
+//    @message-<b>custom</b>-background: #fc0;
+//    @message-<b>custom</b>-link-color: blue;
+//    @message-<b>custom</b>-link-color-hover: darken(@message-custom-link-color, 20%);
+//    @message-<b>custom</b>-link-color-active: darken(@message-custom-link-color, 30%);
+//    @message-<b>custom</b>-border-color: orange;
+//    @message-<b>custom</b>-icon: @icon-settings;
+//    @message-<b>custom</b>-icon-color: #000;
+//    @message-<b>custom</b>-icon-background: #green;
+//  ```
+//  And then call message mixin with your new message type
+//  ```css
+//  .message-icon-lateral(custom, left);
+//  ```
+//
+
+@message-custom-color: #000;
+@message-custom-background: #fc0;
+@message-custom-link-color: blue;
+@message-custom-link-color-hover: darken(@message-custom-link-color, 20%);
+@message-custom-link-color-active: darken(@message-custom-link-color, 30%);
+@message-custom-border-color: orange;
+@message-custom-icon: @icon-settings;
+@message-custom-icon-color-lateral: #000;
+@message-custom-icon-background: #green;
+
+.example-message-4 {
+    .message-icon-lateral(custom, left);
+    border-width: 4px;
+    border-radius: 10px;
+}
+
+// # Messages global variables
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Allowed values</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@message-padding</th>
+//            <td class="vars_value">@indent-s-base @indent-base</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Message padding</td>
+//        </tr>
+//        <tr>
+//            <th>@message-margin</th>
+//            <td class="vars_value">@indent-xs-base 0</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>Message margin</td>
+//        </tr>
+//        <tr>
+//            <th>@message-color</th>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">true | false</td>
+//            <td>Each message type has its own message color</td>
+//        </tr>
+//        <tr>
+//            <th colspan="4" class="vars_section">Messages font style</th>
+//        </tr>
+//        <tr>
+//            <th>@message-font-size</th>
+//            <td class="vars_value">13px</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Message font size</td>
+//        </tr>
+//        <tr>
+//            <th>@message-font-family</th>
+//            <td class="vars_value">@font-family-base</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Message font family</td>
+//        </tr>
+//        <tr>
+//            <th>@message-font-style</th>
+//            <td class="vars_value">@font-style-base</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Message font style</td>
+//        </tr>
+//        <tr>
+//            <th>@message-font-weight</th>
+//            <td class="vars_value">@font-weight-base</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Message font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@message-line-height</th>
+//            <td class="vars_value">1.2em</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Message line height</td>
+//        </tr>
+//        <tr>
+//            <th colspan="4" class="vars_section">Message icon setup</th>
+//        </tr>
+//        <tr>
+//            <th>@message-icon-font-size</th>
+//            <td class="vars_value">ceil(@message-font-size * 2 + 2)</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Message icon font size</td>
+//        </tr>
+//        <tr>
+//            <th>@message-icon-font-line-height</th>
+//            <td class="vars_value">@message-icon-font-size</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Message icon line height</td>
+//        </tr>
+//        <tr>
+//            <th>@message-icon-inner-padding-left</th>
+//            <td class="vars_value">40px</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Message icon padding left</td>
+//        </tr>
+//        <tr>
+//            <th>@message-icon-lateral-width</th>
+//            <td class="vars_value">30px</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Message icon lateral width</td>
+//        </tr>
+//        <tr>
+//            <th>@message-icon-lateral-arrow-size</th>
+//            <td class="vars_value">5px</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Message icon arrow size</td>
+//        </tr>
+//        <tr>
+//            <th colspan="4" class="vars_section">Message border</th>
+//        </tr>
+//        <tr>
+//            <th>@message-border-width</th>
+//            <td class="vars_value">0</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Message border width</td>
+//        </tr>
+//        <tr>
+//            <th>@message-border-color</th>
+//            <td class="vars_value">transparent</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Message border color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-border-style</th>
+//            <td class="vars_value">none</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Message border style</td>
+//        </tr>
+//        <tr>
+//            <th>@message-border-radius</th>
+//            <td class="vars_value">0</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Message border radius</td>
+//        </tr>
+//        <tr>
+//            <th colspan="4" class="vars_section">Information message</th>
+//        </tr>
+//        <tr>
+//            <th>@message-info-color</th>
+//            <td class="vars_value">#6f4400</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Information message text color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-info-background</th>
+//            <td class="vars_value">#fdf0d5</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Information message background</td>
+//        </tr>
+//        <tr>
+//            <th>@message-info-link-color</th>
+//            <td class="vars_value">@link-color</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Information message link color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-info-link-color-hover</th>
+//            <td class="vars_value">@link-color-hover</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Information message hovered link color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-info-link-color-active</th>
+//            <td class="vars_value">@link-color-hover</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Information message active link color </td>
+//        </tr>
+//        <tr>
+//            <th>@message-info-border-color</th>
+//            <td class="vars_value">none</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Information message border color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-info-icon</th>
+//            <td class="vars_value">@icon-warning</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Information message icon symbol code</td>
+//        </tr>
+//        <tr>
+//            <th>@message-info-icon-color-inner</th>
+//            <td class="vars_value">#c07600</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Information message icon symbol color </td>
+//        </tr>
+//        <tr>
+//            <th>@message-info-icon-color-lateral</th>
+//            <td class="vars_value">#fff</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Information message lateral icon symbol color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-info-icon-background</th>
+//            <td class="vars_value">#6f4400</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Information message icon background</td>
+//        </tr>
+//        <tr>
+//            <th colspan="4" class="vars_section">Warning message</th>
+//        </tr>
+//        <tr>
+//            <th>@message-warning-color</th>
+//            <td class="vars_value">@message-info-color</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Warning message text color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-warning-background</th>
+//            <td class="vars_value">@message-info-background</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Warning message background</td>
+//        </tr>
+//        <tr>
+//            <th>@message-warning-link-color</th>
+//            <td class="vars_value">@message-info-link-color</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Warning message link color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-warning-link-color-hover</th>
+//            <td class="vars_value">@message-info-link-color-hover</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Warning message hovered link color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-warning-link-color-active</th>
+//            <td class="vars_value">@message-info-link-color-active</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Warning message active link color </td>
+//        </tr>
+//        <tr>
+//            <th>@message-info-border-color</th>
+//            <td class="vars_value">@message-info-border-color</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Warning message border color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-warning-icon</th>
+//            <td class="vars_value">@message-info-icon</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Warning message icon symbol code</td>
+//        </tr>
+//        <tr>
+//            <th>@message-warning-icon-color-inner</th>
+//            <td class="vars_value">@message-info-icon-color-inner</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Warning message icon symbol color </td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@message-warning-icon-color-lateral</th>
+//            <td class="vars_value" nowrap="nowrap">@message-info-icon-color-lateral</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Warning message lateral icon symbol color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-warning-icon-background</th>
+//            <td class="vars_value">@message-info-icon-background</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Warning message icon background</td>
+//        </tr>
+//        <tr>
+//            <th colspan="4" class="vars_section">Error message</th>
+//        </tr>
+//        <tr>
+//            <th>@message-error-color</th>
+//            <td class="vars_value">#b30000</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Error message text color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-error-background</th>
+//            <td class="vars_value">#fae5e5</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Error message background</td>
+//        </tr>
+//        <tr>
+//            <th>@message-error-link-color</th>
+//            <td class="vars_value">@link-color</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Error message link color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-error-link-color-hover</th>
+//            <td class="vars_value">@link-color-hover</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Error message hovered link color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-error-link-color-active</th>
+//            <td class="vars_value">@link-color-hover</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Error message active link color </td>
+//        </tr>
+//        <tr>
+//            <th>@message-error-border-color</th>
+//            <td class="vars_value">none</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Error message border color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-error-icon</th>
+//            <td class="vars_value">@icon-warning</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Error message icon symbol code</td>
+//        </tr>
+//        <tr>
+//            <th>@message-error-icon-color-inner</th>
+//            <td class="vars_value">#b30000</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Error message icon symbol color </td>
+//        </tr>
+//        <tr>
+//            <th>@message-error-icon-color-lateral</th>
+//            <td class="vars_value">#fff</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Error message lateral icon symbol color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-error-icon-background</th>
+//            <td class="vars_value">#b30000</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Error message icon background</td>
+//        </tr>
+//        <tr>
+//            <th colspan="4" class="vars_section">Success message</th>
+//        </tr>
+//        <tr>
+//            <th>@message-success-color</th>
+//            <td class="vars_value">#006400</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Success message text color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-success-background</th>
+//            <td class="vars_value">#e5efe5</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Success message background</td>
+//        </tr>
+//        <tr>
+//            <th>@message-success-link-color</th>
+//            <td class="vars_value">@link-color</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Success message link color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-success-link-color-hover</th>
+//            <td class="vars_value">@link-color-hover</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Success message hovered link color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-success-link-color-active</th>
+//            <td class="vars_value">@link-color-hover</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Success message active link color </td>
+//        </tr>
+//        <tr>
+//            <th>@message-success-border-color</th>
+//            <td class="vars_value">none</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Success message border color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-success-icon</th>
+//            <td class="vars_value">@icon-checkmark</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Success message icon symbol code</td>
+//        </tr>
+//        <tr>
+//            <th>@message-success-icon-color-inner</th>
+//            <td class="vars_value">#006400</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Success message icon symbol color </td>
+//        </tr>
+//        <tr>
+//            <th>@message-success-icon-color-lateral</th>
+//            <td class="vars_value">#fff</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Success message lateral icon symbol color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-success-icon-background</th>
+//            <td class="vars_value">#006400</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Success message icon background</td>
+//        </tr>
+//        <tr>
+//            <th colspan="4" class="vars_section">Notice message</th>
+//        </tr>
+//        <tr>
+//            <th>@message-notice-color</th>
+//            <td class="vars_value">@message-info-color</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Notice message text color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-notice-background</th>
+//            <td class="vars_value">@message-info-background</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Notice message background</td>
+//        </tr>
+//        <tr>
+//            <th>@message-notice-link-color</th>
+//            <td class="vars_value">@message-info-link-color</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Notice message link color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-notice-link-color-hover</th>
+//            <td class="vars_value">@message-info-link-color-hover</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Notice message hovered link color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-notice-link-color-active</th>
+//            <td class="vars_value">@message-info-link-color-active</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Notice message active link color </td>
+//        </tr>
+//        <tr>
+//            <th>@message-notice-border-color</th>
+//            <td class="vars_value">@message-info-border-color</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Notice message border color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-notice-icon</th>
+//            <td class="vars_value">@message-info-icon</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Notice message icon symbol code</td>
+//        </tr>
+//        <tr>
+//            <th>@message-notice-icon-color-inner</th>
+//            <td class="vars_value">@message-info-icon-color-inner</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Notice message icon symbol color </td>
+//        </tr>
+//        <tr>
+//            <th>@message-notice-icon-color-lateral</th>
+//            <td class="vars_value">@message-info-icon-color-lateral</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Notice message lateral icon symbol color</td>
+//        </tr>
+//        <tr>
+//            <th>@message-notice-icon-background</th>
+//            <td class="vars_value">@message-info-icon-background</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>Notice message icon background</td>
+//        </tr>
+//    </table>
+//  </pre>

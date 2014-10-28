@@ -18,29 +18,30 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Review
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 require __DIR__ . '/../../../Magento/Catalog/_files/multiple_products.php';
 
-$review = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Review\Model\Review',
+$review = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    'Magento\Review\Model\Review',
     array('data' => array('nickname' => 'Nickname', 'title' => 'Review Summary', 'detail' => 'Review text'))
 );
-$review->setEntityId($review->getEntityIdByCode(\Magento\Review\Model\Review::ENTITY_PRODUCT_CODE))
-    ->setEntityPkValue($product->getId()) // the last product from the fixture file included above
-    ->setStatusId(\Magento\Review\Model\Review::STATUS_PENDING)
-    ->setStoreId(
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-            ->getStore()->getId()
+$review->setEntityId(
+    $review->getEntityIdByCode(\Magento\Review\Model\Review::ENTITY_PRODUCT_CODE)
+)->setEntityPkValue(
+    $product->getId()
+)->setStatusId(
+    \Magento\Review\Model\Review::STATUS_PENDING
+)->setStoreId(
+    \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+        'Magento\Framework\StoreManagerInterface'
+    )->getStore()->getId()
+)->setStores(
+    array(
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\StoreManagerInterface'
+        )->getStore()->getId()
     )
-    ->setStores(array(
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-            ->getStore()->getId()
-    ))
-    ->save()
-;
+)->save();

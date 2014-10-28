@@ -23,22 +23,21 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <referenceContainer name="checkout.cart.top_methods">
-        <block class="Magento\Paypal\Block\Express\Shortcut" name="checkout.cart.methods.paypal_express.top" before="-"
-               template="express/shortcut.phtml">
-            <action method="setIsQuoteAllowed">
-                <argument name="value" xsi:type="string">1</argument>
-            </action>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <referenceContainer name="top.container">
+        <block class="Magento\Paypal\Block\Bml\Banners" name="bml.center.logo" template="bml.phtml">
+            <arguments>
+                <argument name="section" xsi:type="string">checkout</argument>
+                <argument name="position" xsi:type="number">0</argument>
+            </arguments>
         </block>
     </referenceContainer>
     <referenceContainer name="checkout.cart.methods">
-        <block class="Magento\Paypal\Block\Express\Shortcut" name="checkout.cart.methods.paypal_express.bottom"
-               before="-" template="express/shortcut.phtml">
-            <action method="setIsQuoteAllowed">
-                <argument name="value" xsi:type="string">1</argument>
-            </action>
+        <block class="Magento\Paypal\Block\Bml\Banners" name="bml.right.logo" after="checkout.cart.methods.onepage.bottom" template="bml.phtml">
+            <arguments>
+                <argument name="section" xsi:type="string">checkout</argument>
+                <argument name="position" xsi:type="number">1</argument>
+            </arguments>
         </block>
     </referenceContainer>
-    <update handle="SHORTCUT_popup"/>
-</layout>
+</page>

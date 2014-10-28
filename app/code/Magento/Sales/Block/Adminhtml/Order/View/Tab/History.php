@@ -18,43 +18,40 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
 
 /**
  * Order history tab
  *
- * @category   Magento
- * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
-
-class History
-    extends \Magento\Backend\Block\Template
-    implements \Magento\Backend\Block\Widget\Tab\TabInterface
+class History extends \Magento\Backend\Block\Template implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
-
+    /**
+     * Template
+     *
+     * @var string
+     */
     protected $_template = 'order/view/tab/history.phtml';
 
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Framework\Registry $registry,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
@@ -75,6 +72,9 @@ class History
      * Compose and get order full history.
      * Consists of the status history comments as well as of invoices, shipments and creditmemos creations
      *
+     * @TODO This method requires refactoring. Need to create separate model for comment history handling
+     * and avoid generating it dynamically
+     *
      * @return array
      */
     public function getFullHistory()
@@ -82,7 +82,7 @@ class History
         $order = $this->getOrder();
 
         $history = array();
-        foreach ($order->getAllStatusHistory() as $orderComment){
+        foreach ($order->getAllStatusHistory() as $orderComment) {
             $history[] = $this->_prepareHistoryItem(
                 $orderComment->getStatusLabel(),
                 $orderComment->getIsCustomerNotified(),
@@ -91,14 +91,14 @@ class History
             );
         }
 
-        foreach ($order->getCreditmemosCollection() as $_memo){
+        foreach ($order->getCreditmemosCollection() as $_memo) {
             $history[] = $this->_prepareHistoryItem(
                 __('Credit memo #%1 created', $_memo->getIncrementId()),
                 $_memo->getEmailSent(),
                 $_memo->getCreatedAtDate()
             );
 
-            foreach ($_memo->getCommentsCollection() as $_comment){
+            foreach ($_memo->getCommentsCollection() as $_comment) {
                 $history[] = $this->_prepareHistoryItem(
                     __('Credit memo #%1 comment added', $_memo->getIncrementId()),
                     $_comment->getIsCustomerNotified(),
@@ -108,14 +108,14 @@ class History
             }
         }
 
-        foreach ($order->getShipmentsCollection() as $_shipment){
+        foreach ($order->getShipmentsCollection() as $_shipment) {
             $history[] = $this->_prepareHistoryItem(
                 __('Shipment #%1 created', $_shipment->getIncrementId()),
                 $_shipment->getEmailSent(),
                 $_shipment->getCreatedAtDate()
             );
 
-            foreach ($_shipment->getCommentsCollection() as $_comment){
+            foreach ($_shipment->getCommentsCollection() as $_comment) {
                 $history[] = $this->_prepareHistoryItem(
                     __('Shipment #%1 comment added', $_shipment->getIncrementId()),
                     $_comment->getIsCustomerNotified(),
@@ -125,14 +125,14 @@ class History
             }
         }
 
-        foreach ($order->getInvoiceCollection() as $_invoice){
+        foreach ($order->getInvoiceCollection() as $_invoice) {
             $history[] = $this->_prepareHistoryItem(
                 __('Invoice #%1 created', $_invoice->getIncrementId()),
                 $_invoice->getEmailSent(),
                 $_invoice->getCreatedAtDate()
             );
 
-            foreach ($_invoice->getCommentsCollection() as $_comment){
+            foreach ($_invoice->getCommentsCollection() as $_comment) {
                 $history[] = $this->_prepareHistoryItem(
                     __('Invoice #%1 comment added', $_invoice->getIncrementId()),
                     $_comment->getIsCustomerNotified(),
@@ -142,7 +142,7 @@ class History
             }
         }
 
-        foreach ($order->getTracksCollection() as $_track){
+        foreach ($order->getTracksCollection() as $_track) {
             $history[] = $this->_prepareHistoryItem(
                 __('Tracking number %1 for %2 assigned', $_track->getNumber(), $_track->getTitle()),
                 false,
@@ -150,7 +150,7 @@ class History
             );
         }
 
-        usort($history, array(__CLASS__, "_sortHistoryByTimestamp"));
+        usort($history, array(__CLASS__, 'sortHistoryByTimestamp'));
         return $history;
     }
 
@@ -181,14 +181,14 @@ class History
      */
     public function getItemTitle(array $item)
     {
-        return (isset($item['title']) ? $this->escapeHtml($item['title']) : '');
+        return isset($item['title']) ? $this->escapeHtml($item['title']) : '';
     }
 
     /**
      * Check whether status history comment is with customer notification
      *
      * @param array $item
-     * @param boolean $isSimpleCheck
+     * @param bool $isSimpleCheck
      * @return bool
      */
     public function isItemNotified(array $item, $isSimpleCheck = true)
@@ -207,8 +207,8 @@ class History
      */
     public function getItemComment(array $item)
     {
-        $allowedTags = array('b','br','strong','i','u');
-        return (isset($item['comment']) ? $this->escapeHtml($item['comment'], $allowedTags) : '');
+        $allowedTags = array('b', 'br', 'strong', 'i', 'u');
+        return isset($item['comment']) ? $this->escapeHtml($item['comment'], $allowedTags) : '';
     }
 
     /**
@@ -216,24 +216,17 @@ class History
      *
      * @param string $label
      * @param bool $notified
-     * @param \Zend_Date $created
+     * @param \Magento\Framework\Stdlib\DateTime\DateInterface $created
      * @param string $comment
      * @return array
      */
     protected function _prepareHistoryItem($label, $notified, $created, $comment = '')
     {
-        return array(
-            'title'      => $label,
-            'notified'   => $notified,
-            'comment'    => $comment,
-            'created_at' => $created
-        );
+        return array('title' => $label, 'notified' => $notified, 'comment' => $comment, 'created_at' => $created);
     }
 
     /**
-     * Get Tab Label
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getTabLabel()
     {
@@ -241,9 +234,7 @@ class History
     }
 
     /**
-     * Get Tab Title
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getTabTitle()
     {
@@ -281,9 +272,7 @@ class History
     }
 
     /**
-     * Can Show Tab
-     *
-     * @return boolean
+     * {@inheritdoc}
      */
     public function canShowTab()
     {
@@ -291,9 +280,7 @@ class History
     }
 
     /**
-     * Is Hidden
-     *
-     * @return boolean
+     * {@inheritdoc}
      */
     public function isHidden()
     {
@@ -304,11 +291,12 @@ class History
      * Customer Notification Applicable check method
      *
      * @param array $historyItem
-     * @return boolean
+     * @return bool
      */
     public function isCustomerNotificationNotApplicable($historyItem)
     {
-        return $historyItem['notified'] == \Magento\Sales\Model\Order\Status\History::CUSTOMER_NOTIFICATION_NOT_APPLICABLE;
+        return $historyItem['notified'] ==
+            \Magento\Sales\Model\Order\Status\History::CUSTOMER_NOTIFICATION_NOT_APPLICABLE;
     }
 
     /**
@@ -318,15 +306,15 @@ class History
      * @param mixed $b
      * @return int
      */
-    private static function _sortHistoryByTimestamp($a, $b)
+    public static function sortHistoryByTimestamp($a, $b)
     {
         $createdAtA = $a['created_at'];
         $createdAtB = $b['created_at'];
 
-        /** @var $createdAta \Zend_Date */
+        /** @var $createdAta \Magento\Framework\Stdlib\DateTime\DateInterface */
         if ($createdAtA->getTimestamp() == $createdAtB->getTimestamp()) {
             return 0;
         }
-        return ($createdAtA->getTimestamp() < $createdAtB->getTimestamp()) ? -1 : 1;
+        return $createdAtA->getTimestamp() < $createdAtB->getTimestamp() ? -1 : 1;
     }
 }

@@ -25,7 +25,7 @@
  */
 namespace Magento\Eav\Model\Entity\Attribute\Config;
 
-class Reader extends \Magento\Config\Reader\Filesystem
+class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**
      * Xml merging attributes
@@ -33,23 +33,30 @@ class Reader extends \Magento\Config\Reader\Filesystem
      * @var array
      */
     protected $_idAttributes = array(
-        'config/entity' => 'type',
-        'config/entity/attribute' => 'code',
-        'config/entity/attribute/field' => 'code'
+        '/config/entity' => 'type',
+        '/config/entity/attribute' => 'code',
+        '/config/entity/attribute/field' => 'code'
     );
 
     /**
-     * @param \Magento\Config\FileResolverInterface $fileResolver
+     * @param \Magento\Framework\Config\FileResolverInterface $fileResolver
      * @param \Magento\Eav\Model\Entity\Attribute\Config\Converter $converter
      * @param \Magento\Eav\Model\Entity\Attribute\Config\SchemaLocator $schemaLocator
-     * @param \Magento\Config\ValidationStateInterface $validationState
+     * @param \Magento\Framework\Config\ValidationStateInterface $validationState
      */
     public function __construct(
-        \Magento\Config\FileResolverInterface $fileResolver,
+        \Magento\Framework\Config\FileResolverInterface $fileResolver,
         \Magento\Eav\Model\Entity\Attribute\Config\Converter $converter,
         \Magento\Eav\Model\Entity\Attribute\Config\SchemaLocator $schemaLocator,
-        \Magento\Config\ValidationStateInterface $validationState
+        \Magento\Framework\Config\ValidationStateInterface $validationState
     ) {
-        parent::__construct($fileResolver, $converter, $schemaLocator, $validationState, 'eav_attributes.xml', array());
+        parent::__construct(
+            $fileResolver,
+            $converter,
+            $schemaLocator,
+            $validationState,
+            'eav_attributes.xml',
+            array()
+        );
     }
 }

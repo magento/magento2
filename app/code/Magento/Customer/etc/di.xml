@@ -23,41 +23,106 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Magento\Customer\Service\V1\CustomerAddressServiceInterface"
+                type="Magento\Customer\Service\V1\CustomerAddressService" />
+    <preference for="Magento\Customer\Service\V1\CustomerGroupServiceInterface"
+                type="Magento\Customer\Service\V1\CustomerGroupService" />
+    <preference for="Magento\Customer\Service\V1\CustomerAccountServiceInterface"
+                type="Magento\Customer\Service\V1\CustomerAccountService" />
+    <preference for="Magento\Customer\Service\V1\CustomerMetadataServiceInterface"
+                type="Magento\Customer\Service\V1\CustomerMetadataServiceCached" />
+    <preference for="Magento\Customer\Service\V1\AddressMetadataServiceInterface"
+                type="Magento\Customer\Service\V1\AddressMetadataServiceCached" />
     <type name="Magento\Customer\Model\Session">
-        <param name="configShare">
-            <instance type="Magento\Customer\Model\Config\Share\Proxy" />
-        </param>
-        <param name="customerData">
-            <instance type="Magento\Customer\Helper\Data\Proxy" />
-        </param>
-        <param name="customerResource">
-            <instance type="Magento\Customer\Model\Resource\Customer\Proxy" />
-        </param>
-        <param name="storage">
-            <instance type="Magento\Customer\Model\Session\Storage" />
-        </param>
+        <arguments>
+            <argument name="configShare" xsi:type="object">Magento\Customer\Model\Config\Share\Proxy</argument>
+            <argument name="customerData" xsi:type="object">Magento\Customer\Helper\Data\Proxy</argument>
+            <argument name="customerResource" xsi:type="object">Magento\Customer\Model\Resource\Customer\Proxy</argument>
+            <argument name="storage" xsi:type="object">Magento\Customer\Model\Session\Storage</argument>
+        </arguments>
     </type>
-    <type name="Magento\Module\Updater\SetupFactory">
-        <param name="resourceTypes">
-            <value>
-                <customer_setup>Magento\Customer\Model\Resource\Setup</customer_setup>
-            </value>
-        </param>
+    <type name="Magento\Framework\Module\Updater\SetupFactory">
+        <arguments>
+            <argument name="resourceTypes" xsi:type="array">
+                <item name="customer_setup" xsi:type="string">Magento\Customer\Model\Resource\Setup</item>
+            </argument>
+        </arguments>
     </type>
     <type name="Magento\Customer\Helper\Address">
-        <param name="addressConfig">
-            <instance type="Magento\Customer\Model\Address\Config\Proxy" />
-        </param>
+        <arguments>
+            <argument name="addressConfig" xsi:type="object">Magento\Customer\Model\Address\Config\Proxy</argument>
+        </arguments>
     </type>
     <type name="Magento\Customer\Model\Config\Share">
-        <param name="customerResource">
-            <instance type="Magento\Customer\Model\Resource\Customer\Proxy" />
-        </param>
+        <arguments>
+            <argument name="customerResource" xsi:type="object">Magento\Customer\Model\Resource\Customer\Proxy</argument>
+        </arguments>
     </type>
     <type name="Magento\Customer\Model\Customer">
-        <param name="customerData">
-            <instance type="Magento\Customer\Helper\Data\Proxy" />
-        </param>
+        <arguments>
+            <argument name="customerData" xsi:type="object">Magento\Customer\Helper\Data\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Service\V1\Data\CustomerGroupBuilder" shared="false" />
+    <type name="Magento\Customer\Service\V1\Data\Eav\AttributeMetadataBuilder" shared="false" />
+    <type name="Magento\Customer\Service\V1\Data\Eav\OptionBuilder" shared="false" />
+    <type name="Magento\Customer\Service\V1\Data\CustomerBuilder" shared="false" />
+    <type name="Magento\Customer\Service\V1\Data\AddressBuilder" shared="false" />
+    <type name="Magento\Customer\Service\V1\Data\RegionBuilder" shared="false" />
+    <!--<type name="Magento\Customer\Service\V1\Data\Response\CreateCustomerAccountResponseBuilder" shared="false" />-->
+    <type name="Magento\Customer\Service\V1\Data\SearchResultsBuilder" shared="false" />
+    <type name="Magento\Eav\Model\Entity\Setup\PropertyMapper\Composite">
+        <arguments>
+            <argument name="propertyMappers" xsi:type="array">
+                <item name="customer" xsi:type="string">Magento\Customer\Model\Resource\Setup\PropertyMapper</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Service\V1\CustomerAccountService">
+        <arguments>
+            <argument name="url" xsi:type="object">Magento\Framework\Url</argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Customer\Service\Config\CustomerMetadataConfig" type="Magento\Framework\Service\Config\MetadataConfig">
+        <arguments>
+            <argument name="attributeMetadataBuilder" xsi:type="object">Magento\Customer\Service\V1\Data\Eav\AttributeMetadataBuilder</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Customer\Service\V1\CustomerMetadataService">
+        <arguments>
+            <argument name="metadataConfig" xsi:type="object">Magento\Customer\Service\Config\CustomerMetadataConfig</argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Customer\Service\Config\AddressMetadataConfig" type="Magento\Framework\Service\Config\MetadataConfig">
+        <arguments>
+            <argument name="attributeMetadataBuilder" xsi:type="object">Magento\Customer\Service\V1\Data\Eav\AttributeMetadataBuilder</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Customer\Service\V1\AddressMetadataService">
+        <arguments>
+            <argument name="metadataConfig" xsi:type="object">Magento\Customer\Service\Config\AddressMetadataConfig</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Model\ActionValidator\RemoveAction">
+        <arguments>
+            <argument name="protectedModels" xsi:type="array">
+                <item name="customer" xsi:type="string">Magento\Customer\Model\Customer</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Model\Address\Config">
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Customer\Model\Address\Config\Reader\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Model\Visitor">
+        <arguments>
+            <argument name="ignoredUserAgents" xsi:type="array">
+                <item name="google1" xsi:type="string">Googlebot/1.0 (googlebot@googlebot.com http://googlebot.com/)</item>
+                <item name="google2" xsi:type="string">Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)</item>
+                <item name="google3" xsi:type="string">Googlebot/2.1 (+http://www.googlebot.com/bot.html)</item>
+            </argument>
+        </arguments>
     </type>
 </config>

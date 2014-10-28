@@ -21,13 +21,14 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Helper;
+
+use Magento\Paypal\Model\Billing\Agreement\MethodInterface;
 
 /**
  * Paypal Data helper
  */
-namespace Magento\Paypal\Helper;
-
-class Data extends \Magento\App\Helper\AbstractHelper
+class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Cache for shouldAskToCreateBillingAgreement()
@@ -37,28 +38,26 @@ class Data extends \Magento\App\Helper\AbstractHelper
     protected static $_shouldAskToCreateBillingAgreement = null;
 
     /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Payment\Helper\Data
      */
-    protected $_coreData;
+    protected $_paymentData;
 
     /**
-     * @var \Magento\Sales\Model\Billing\AgreementFactory
+     * @var \Magento\Paypal\Model\Billing\AgreementFactory
      */
     protected $_agreementFactory;
 
     /**
-     * @param \Magento\App\Helper\Context $context
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Sales\Model\Billing\AgreementFactory $agreementFactory
+     * @param \Magento\Framework\App\Helper\Context $context
+     * @param \Magento\Payment\Helper\Data $paymentData
+     * @param \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Sales\Model\Billing\AgreementFactory $agreementFactory
+        \Magento\Framework\App\Helper\Context $context,
+        \Magento\Payment\Helper\Data $paymentData,
+        \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory
     ) {
-        $this->_coreData = $coreData;
+        $this->_paymentData = $paymentData;
         $this->_agreementFactory = $agreementFactory;
         parent::__construct($context);
     }
@@ -84,25 +83,20 @@ class Data extends \Magento\App\Helper\AbstractHelper
     }
 
     /**
-     * Return backend config for element like JSON
+     * Retrieve available billing agreement methods
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
-     * @return string
+     * @param null|string|bool|int|\Magento\Store\Model\Store $store
+     * @param \Magento\Sales\Model\Quote|null $quote
+     * @return MethodInterface[]
      */
-    public function getElementBackendConfig(\Magento\Data\Form\Element\AbstractElement $element)
+    public function getBillingAgreementMethods($store = null, $quote = null)
     {
-        $config = $element->getFieldConfig();
-        if (!array_key_exists('backend_congif', $config)) {
-            return false;
+        $result = array();
+        foreach ($this->_paymentData->getStoreMethods($store, $quote) as $method) {
+            if ($method instanceof MethodInterface) {
+                $result[] = $method;
+            }
         }
-
-        $config = $config['backend_congif'];
-        if (isset($config['enable_for_countries'])) {
-            $config['enable_for_countries'] = explode(',', str_replace(' ', '', $config['enable_for_countries']));
-        }
-        if (isset($config['disable_for_countries'])) {
-            $config['disable_for_countries'] = explode(',', str_replace(' ', '', $config['disable_for_countries']));
-        }
-        return $this->_coreData->jsonEncode($config);
+        return $result;
     }
 }

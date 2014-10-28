@@ -18,18 +18,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Paypal
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Block\Payment;
 
 /**
  * PayPal common payment info block
  * Uses default templates
  */
-namespace Magento\Paypal\Block\Payment;
-
 class Info extends \Magento\Payment\Block\Info\Cc
 {
     /**
@@ -38,13 +35,13 @@ class Info extends \Magento\Payment\Block\Info\Cc
     protected $_paypalInfoFactory;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Payment\Model\Config $paymentConfig
      * @param \Magento\Paypal\Model\InfoFactory $paypalInfoFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Payment\Model\Config $paymentConfig,
         \Magento\Paypal\Model\InfoFactory $paypalInfoFactory,
         array $data = array()
@@ -68,8 +65,8 @@ class Info extends \Magento\Payment\Block\Info\Cc
     /**
      * Prepare PayPal-specific payment information
      *
-     * @param \Magento\Object|array $transport
-     * @return \Magento\Object
+     * @param \Magento\Framework\Object|array|null $transport
+     * @return \Magento\Framework\Object
      */
     protected function _prepareSpecificInformation($transport = null)
     {

@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -45,20 +43,6 @@ $this->updateAttribute(
     'weight',
     'frontend_input_renderer',
     'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight'
-);
-
-$this->updateAttribute(
-    \Magento\Catalog\Model\Product::ENTITY,
-    'msrp_enabled',
-    'frontend_input_renderer',
-    'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Msrp\Enabled'
-);
-
-$this->updateAttribute(
-    \Magento\Catalog\Model\Product::ENTITY,
-    'msrp_display_actual_price_type',
-    'frontend_input_renderer',
-    'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Msrp\Price'
 );
 
 $this->updateAttribute(

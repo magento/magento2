@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backup
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,29 +25,31 @@
 /**
  * Backup grid item renderer
  *
- * @category   Magento
- * @package    Magento_Backup
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Backup\Block\Adminhtml\Grid\Column\Renderer;
 
-class Download
-    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
+class Download extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
 {
     /**
      * Renders grid column
      *
-     * @param \Magento\Object $row
+     * @param \Magento\Framework\Object $row
      * @return mixed
      */
-    public function _getValue(\Magento\Object $row)
+    public function _getValue(\Magento\Framework\Object $row)
     {
-        $url7zip = __('The archive can be uncompressed with <a href="%1">%2</a> on Windows systems.', 'http://www.7-zip.org/',
-            '7-Zip');
+        $url7zip = __(
+            'The archive can be uncompressed with <a href="%1">%2</a> on Windows systems.',
+            'http://www.7-zip.org/',
+            '7-Zip'
+        );
 
-        return '<a href="' . $this->getUrl('*/*/download',
-            array('time' => $row->getData('time'), 'type' => $row->getData('type'))) . '">' . $row->getData('extension')
-               . '</a> &nbsp; <small>(' . $url7zip . ')</small>';
-
+        return '<a href="' . $this->getUrl(
+            '*/*/download',
+            array('time' => $row->getData('time'), 'type' => $row->getData('type'))
+        ) . '">' . $row->getData(
+            'extension'
+        ) . '</a> &nbsp; <small>(' . $url7zip . ')</small>';
     }
 }

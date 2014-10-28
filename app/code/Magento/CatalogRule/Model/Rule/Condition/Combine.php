@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_CatalogRule
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -56,29 +54,32 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
      */
     public function getNewChildSelectOptions()
     {
-        $productAttributes = $this->_productFactory->create()
-            ->loadAttributeOptions()
-            ->getAttributeOption();
+        $productAttributes = $this->_productFactory->create()->loadAttributeOptions()->getAttributeOption();
         $attributes = array();
         foreach ($productAttributes as $code => $label) {
             $attributes[] = array(
-                'value' => 'Magento\CatalogRule\Model\Rule\Condition\Product|' . $code, 'label' => $label
+                'value' => 'Magento\CatalogRule\Model\Rule\Condition\Product|' . $code,
+                'label' => $label
             );
         }
         $conditions = parent::getNewChildSelectOptions();
-        $conditions = array_merge_recursive($conditions, array(
+        $conditions = array_merge_recursive(
+            $conditions,
             array(
-                'value' => 'Magento\CatalogRule\Model\Rule\Condition\Combine',
-                'label' => __('Conditions Combination')
-            ),
-            array(
-                'label' => __('Product Attribute'),
-                'value' => $attributes
-            ),
-        ));
+                array(
+                    'value' => 'Magento\CatalogRule\Model\Rule\Condition\Combine',
+                    'label' => __('Conditions Combination')
+                ),
+                array('label' => __('Product Attribute'), 'value' => $attributes)
+            )
+        );
         return $conditions;
     }
 
+    /**
+     * @param array $productCollection
+     * @return $this
+     */
     public function collectValidatedAttributes($productCollection)
     {
         foreach ($this->getConditions() as $condition) {

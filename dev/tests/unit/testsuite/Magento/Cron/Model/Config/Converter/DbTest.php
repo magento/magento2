@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Cron
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -45,7 +43,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
      */
     public function testConvertNoJobs()
     {
-        $source = array();
+        $source = [];
         $result = $this->_converter->convert($source);
         $this->assertEmpty($result);
     }
@@ -55,49 +53,53 @@ class DbTest extends \PHPUnit_Framework_TestCase
      */
     public function testConvertConfigParams()
     {
-        $fullJob = array(
-            'schedule' => array(
-                'config_path' => 'config/path',
-                'cron_expr'   => '* * * * *'
-            )
-        );
-        $nullJob = array(
-            'schedule' => array(
-                'config_path' => null,
-                'cron_expr' => null
-            )
-        );
-        $notFullJob = array(
-            'schedule' => ''
-        );
-        $source = array(
-            'crontab' => array(
-                'jobs' => array(
-                    'job_name_1' => $fullJob,
-                    'job_name_2' => $nullJob,
-                    'job_name_3' => $notFullJob,
-                    'job_name_4' => array()
-                )
-            )
-        );
-        $expected = array(
-            'job_name_1' => array('config_path' => 'config/path', 'schedule' => '* * * * *'),
-            'job_name_2' => array('config_path' => null, 'schedule' => null),
-            'job_name_3' => array('schedule' => ''),
-            'job_name_4' => array(''),
-        );
+        $fullJob = ['schedule' => ['config_path' => 'config/path', 'cron_expr' => '* * * * *']];
+        $nullJob = ['schedule' => ['config_path' => null, 'cron_expr' => null]];
+        $notFullJob = ['schedule' => ''];
+        $source = [
+            'crontab' => [
+                'default' => [
+                    'jobs' => [
+                        'job_name_1' => $fullJob,
+                        'job_name_2' => $nullJob,
+                        'job_name_3' => $notFullJob,
+                        'job_name_4' => []
+                    ]
+                ]
+            ]
+        ];
+        $expected = [
+            'default' => [
+                'job_name_1' => ['config_path' => 'config/path', 'schedule' => '* * * * *'],
+                'job_name_2' => ['config_path' => null, 'schedule' => null],
+                'job_name_3' => ['schedule' => ''],
+                'job_name_4' => ['']
+            ]
+        ];
 
         $result = $this->_converter->convert($source);
-        $this->assertEquals($expected['job_name_1']['config_path'], $result['job_name_1']['config_path']);
-        $this->assertEquals($expected['job_name_1']['schedule'], $result['job_name_1']['schedule']);
+        $this->assertEquals(
+            $expected['default']['job_name_1']['config_path'],
+            $result['default']['job_name_1']['config_path']
+        );
+        $this->assertEquals(
+            $expected['default']['job_name_1']['schedule'],
+            $result['default']['job_name_1']['schedule']
+        );
 
-        $this->assertEquals($expected['job_name_2']['config_path'], $result['job_name_2']['config_path']);
-        $this->assertEquals($expected['job_name_2']['schedule'], $result['job_name_2']['schedule']);
+        $this->assertEquals(
+            $expected['default']['job_name_2']['config_path'],
+            $result['default']['job_name_2']['config_path']
+        );
+        $this->assertEquals(
+            $expected['default']['job_name_2']['schedule'],
+            $result['default']['job_name_2']['schedule']
+        );
 
-        $this->assertArrayHasKey('schedule', $result['job_name_3']);
-        $this->assertEmpty($result['job_name_3']['schedule']);
+        $this->assertArrayHasKey('schedule', $result['default']['job_name_3']);
+        $this->assertEmpty($result['default']['job_name_3']['schedule']);
 
-        $this->assertEmpty($result['job_name_4']);
+        $this->assertEmpty($result['default']['job_name_4']);
     }
 
     /**
@@ -105,41 +107,40 @@ class DbTest extends \PHPUnit_Framework_TestCase
      */
     public function testConvertRunConfig()
     {
-        $runFullJob = array(
-            'run' => array('model' => 'Model1::method1')
-        );
-        $runNoMethodJob = array(
-            'run' => array('model' => 'Model2')
-        );
-        $runEmptyMethodJob = array(
-            'run' => array('model' => 'Model3::')
-        );
-        $runNoModelJob = array(
-            'run' => array('model' => '::method1')
-        );
+        $runFullJob = ['run' => ['model' => 'Model1::method1']];
+        $runNoMethodJob = ['run' => ['model' => 'Model2']];
+        $runEmptyMethodJob = ['run' => ['model' => 'Model3::']];
+        $runNoModelJob = ['run' => ['model' => '::method1']];
 
-        $source = array(
-            'crontab' => array(
-                'jobs' => array(
-                    'job_name_1' => $runFullJob,
-                    'job_name_2' => $runNoMethodJob,
-                    'job_name_3' => $runEmptyMethodJob,
-                    'job_name_4' => $runNoModelJob,
-                )
-            )
-        );
-        $expected = array(
-            'job_name_1' => array('instance' => 'Model1', 'method' => 'method1'),
-            'job_name_2' => array(),
-            'job_name_3' => array(),
-            'job_name_4' => array()
-        );
+        $source = [
+            'crontab' => [
+                'default' => [
+                    'jobs' => [
+                        'job_name_1' => $runFullJob,
+                        'job_name_2' => $runNoMethodJob,
+                        'job_name_3' => $runEmptyMethodJob,
+                        'job_name_4' => $runNoModelJob
+                    ]
+                ]
+            ]
+        ];
+        $expected = [
+            'default' => [
+                'job_name_1' => ['instance' => 'Model1', 'method' => 'method1'],
+                'job_name_2' => [],
+                'job_name_3' => [],
+                'job_name_4' => []
+            ]
+        ];
         $result = $this->_converter->convert($source);
-        $this->assertEquals($expected['job_name_1']['instance'], $result['job_name_1']['instance']);
-        $this->assertEquals($expected['job_name_1']['method'], $result['job_name_1']['method']);
+        $this->assertEquals(
+            $expected['default']['job_name_1']['instance'],
+            $result['default']['job_name_1']['instance']
+        );
+        $this->assertEquals($expected['default']['job_name_1']['method'], $result['default']['job_name_1']['method']);
 
-        $this->assertEmpty($result['job_name_2']);
-        $this->assertEmpty($result['job_name_3']);
-        $this->assertEmpty($result['job_name_4']);
+        $this->assertEmpty($result['default']['job_name_2']);
+        $this->assertEmpty($result['default']['job_name_3']);
+        $this->assertEmpty($result['default']['job_name_4']);
     }
 }

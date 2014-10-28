@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,8 +25,6 @@
 /**
  * Config edit page
  *
- * @category   Magento
- * @package    Magento_Backend
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Backend\Block\System\Config;
@@ -78,7 +74,7 @@ class Edit extends \Magento\Backend\Block\Widget
     /**
      * Prepare layout object
      *
-     * @return \Magento\View\Element\AbstractBlock
+     * @return \Magento\Framework\View\Element\AbstractBlock
      */
     protected function _prepareLayout()
     {
@@ -91,16 +87,18 @@ class Edit extends \Magento\Backend\Block\Widget
         $this->setTitle($section->getLabel());
         $this->setHeaderCss($section->getHeaderCss());
 
-        $this->addChild('save_button', 'Magento\Backend\Block\Widget\Button', array(
-            'id' => 'save',
-            'label'     => __('Save Config'),
-            'class' => 'save primary',
-            'data_attribute'  => array(
-                'mage-init' => array(
-                    'button' => array('event' => 'save', 'target' => '#config-edit-form'),
-                ),
-            ),
-        ));
+        $this->getToolbar()->addChild(
+            'save_button',
+            'Magento\Backend\Block\Widget\Button',
+            array(
+                'id' => 'save',
+                'label' => __('Save Config'),
+                'class' => 'save primary',
+                'data_attribute' => array(
+                    'mage-init' => array('button' => array('event' => 'save', 'target' => '#config-edit-form'))
+                )
+            )
+        );
         $block = $this->getLayout()->createBlock($this->_formBlockName);
         $this->setChild('form', $block);
         return parent::_prepareLayout();
@@ -123,6 +121,6 @@ class Edit extends \Magento\Backend\Block\Widget
      */
     public function getSaveUrl()
     {
-        return $this->getUrl('*/system_config_save/index', array('_current' => true));
+        return $this->getUrl('*/system_config/save', array('_current' => true));
     }
 }

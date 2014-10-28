@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\TemplateEngine\Decorator;
 
 class DebugHintsTest extends \PHPUnit_Framework_TestCase
@@ -32,14 +31,19 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
      */
     public function testRender($showBlockHints)
     {
-        $subject = $this->getMock('Magento\View\TemplateEngineInterface');
-        $block = $this->getMock('Magento\View\Element\BlockInterface', array(), array(), 'TestBlock', false);
-        $subject
-            ->expects($this->once())
-            ->method('render')
-            ->with($this->identicalTo($block), 'template.phtml', array('var' => 'val'))
-            ->will($this->returnValue('<div id="fixture"/>'))
-        ;
+        $subject = $this->getMock('Magento\Framework\View\TemplateEngineInterface');
+        $block = $this->getMock('Magento\Framework\View\Element\BlockInterface', array(), array(), 'TestBlock', false);
+        $subject->expects(
+            $this->once()
+        )->method(
+            'render'
+        )->with(
+            $this->identicalTo($block),
+            'template.phtml',
+            array('var' => 'val')
+        )->will(
+            $this->returnValue('<div id="fixture"/>')
+        );
         $model = new DebugHints($subject, $showBlockHints);
         $actualResult = $model->render($block, 'template.phtml', array('var' => 'val'));
         $this->assertSelectEquals('div > div[title="template.phtml"]', 'template.phtml', 1, $actualResult);
@@ -49,9 +53,6 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
 
     public function renderDataProvider()
     {
-        return array(
-            'block hints disabled'  => array(false),
-            'block hints enabled'   => array(true),
-        );
+        return array('block hints disabled' => array(false), 'block hints enabled' => array(true));
     }
 }

@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Reports
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,13 +26,11 @@
 /**
  * Wishlist Report collection
  *
- * @category    Magento
- * @package     Magento_Reports
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Reports\Model\Resource\Wishlist;
 
-class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Wishlist table name
@@ -50,41 +46,42 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
 
     /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\Logger $logger
-     * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Customer\Model\Resource\Customer\CollectionFactory $customerResFactory
      * @param mixed $connection
-     * @param \Magento\Core\Model\Resource\Db\AbstractDb $resource
+     * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
-        \Magento\Logger $logger,
-        \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Logger $logger,
+        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Customer\Model\Resource\Customer\CollectionFactory $customerResFactory,
         $connection = null,
-        \Magento\Core\Model\Resource\Db\AbstractDb $resource = null
+        \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
         $this->_customerResFactory = $customerResFactory;
     }
 
-
     /**
      * Resource initialization
      *
+     * @return void
      */
     protected function _construct()
     {
         $this->_init('Magento\Wishlist\Model\Wishlist', 'Magento\Wishlist\Model\Resource\Wishlist');
         $this->setWishlistTable($this->getTable('wishlist'));
     }
+
     /**
      * Set wishlist table name
      *
      * @param string $value
-     * @return \Magento\Reports\Model\Resource\Wishlist\Collection
+     * @return $this
      */
     public function setWishlistTable($value)
     {
@@ -93,7 +90,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     }
 
     /**
-     * retrieve wishlist table name
+     * Retrieve wishlist table name
      *
      * @return string
      */
@@ -111,22 +108,25 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     {
         /** @var $collection \Magento\Customer\Model\Resource\Customer\Collection */
         $collection = $this->_customerResFactory->create();
-        
+
         $customersSelect = $collection->getSelectCountSql();
 
         $countSelect = clone $customersSelect;
         $countSelect->joinLeft(
-                array('wt' => $this->getWishlistTable()),
-                'wt.customer_id = e.entity_id',
-                array()
-            )
-            ->group('wt.wishlist_id');
+            array('wt' => $this->getWishlistTable()),
+            'wt.customer_id = e.entity_id',
+            array()
+        )->group(
+            'wt.wishlist_id'
+        );
         $count = $collection->count();
-        $resultSelect = $this->getConnection()->select()
-            ->union(array($customersSelect, $count), \Zend_Db_Select::SQL_UNION_ALL);
+        $resultSelect = $this->getConnection()->select()->union(
+            array($customersSelect, $count),
+            \Zend_Db_Select::SQL_UNION_ALL
+        );
         list($customers, $count) = $this->getConnection()->fetchCol($resultSelect);
 
-        return array(($count*100)/$customers, $count);
+        return array($count * 100 / $customers, $count);
     }
 
     /**
@@ -140,12 +140,14 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
         $collection = $this->_customerResFactory->create();
         $countSelect = $collection->getSelectCountSql();
         $countSelect->joinLeft(
-                array('wt' => $this->getWishlistTable()),
-                'wt.customer_id = e.entity_id',
-                array()
-            )
-            ->where('wt.shared > 0')
-            ->group('wt.wishlist_id');
+            array('wt' => $this->getWishlistTable()),
+            'wt.customer_id = e.entity_id',
+            array()
+        )->where(
+            'wt.shared > 0'
+        )->group(
+            'wt.wishlist_id'
+        );
         return $countSelect->getAdapter()->fetchOne($countSelect);
     }
 }

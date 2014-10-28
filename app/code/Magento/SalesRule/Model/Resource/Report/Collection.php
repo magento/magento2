@@ -18,22 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_SalesRule
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\SalesRule\Model\Resource\Report;
 
 /**
  * Sales report coupons collection
  *
- * @category    Magento
- * @package     Magento_SalesRule
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\SalesRule\Model\Resource\Report;
-
 class Collection extends \Magento\Sales\Model\Resource\Report\Collection\AbstractCollection
 {
     /**
@@ -51,14 +45,14 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
     protected $_aggregationTable = 'coupon_aggregated';
 
     /**
-     * array of columns that should be aggregated
+     * Array of columns that should be aggregated
      *
      * @var array
      */
-    protected $_selectedColumns    = array();
+    protected $_selectedColumns = array();
 
     /**
-     * array where rules ids stored
+     * Array where rules ids stored
      *
      * @var array
      */
@@ -66,18 +60,18 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
 
     /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\Logger $logger
-     * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Sales\Model\Resource\Report $resource
      * @param \Magento\SalesRule\Model\Resource\Report\RuleFactory $ruleFactory
      * @param mixed $connection
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
-        \Magento\Logger $logger,
-        \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Logger $logger,
+        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Sales\Model\Resource\Report $resource,
         \Magento\SalesRule\Model\Resource\Report\RuleFactory $ruleFactory,
         $connection = null
@@ -88,7 +82,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
     }
 
     /**
-     * collect columns for collection
+     * Collect columns for collection
      *
      * @return array
      */
@@ -98,24 +92,26 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
         if ('month' == $this->_period) {
             $this->_periodFormat = $adapter->getDateFormatSql('period', '%Y-%m');
         } elseif ('year' == $this->_period) {
-            $this->_periodFormat =
-                $adapter->getDateExtractSql('period', \Magento\DB\Adapter\AdapterInterface::INTERVAL_YEAR);
+            $this->_periodFormat = $adapter->getDateExtractSql(
+                'period',
+                \Magento\Framework\DB\Adapter\AdapterInterface::INTERVAL_YEAR
+            );
         } else {
             $this->_periodFormat = $adapter->getDateFormatSql('period', '%Y-%m-%d');
         }
 
         if (!$this->isTotals() && !$this->isSubTotals()) {
             $this->_selectedColumns = array(
-                'period'                  => $this->_periodFormat,
+                'period' => $this->_periodFormat,
                 'coupon_code',
                 'rule_name',
-                'coupon_uses'             => 'SUM(coupon_uses)',
-                'subtotal_amount'         => 'SUM(subtotal_amount)',
-                'discount_amount'         => 'SUM(discount_amount)',
-                'total_amount'            => 'SUM(total_amount)',
-                'subtotal_amount_actual'  => 'SUM(subtotal_amount_actual)',
-                'discount_amount_actual'  => 'SUM(discount_amount_actual)',
-                'total_amount_actual'     => 'SUM(total_amount_actual)',
+                'coupon_uses' => 'SUM(coupon_uses)',
+                'subtotal_amount' => 'SUM(subtotal_amount)',
+                'discount_amount' => 'SUM(discount_amount)',
+                'total_amount' => 'SUM(total_amount)',
+                'subtotal_amount_actual' => 'SUM(subtotal_amount_actual)',
+                'discount_amount_actual' => 'SUM(discount_amount_actual)',
+                'total_amount_actual' => 'SUM(total_amount_actual)'
             );
         }
 
@@ -124,9 +120,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
         }
 
         if ($this->isSubTotals()) {
-            $this->_selectedColumns =
-                $this->getAggregatedColumns() +
-                    array('period' => $this->_periodFormat);
+            $this->_selectedColumns = $this->getAggregatedColumns() + array('period' => $this->_periodFormat);
         }
 
         return $this->_selectedColumns;
@@ -135,28 +129,30 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
     /**
      * Add selected data
      *
-     * @return \Magento\SalesRule\Model\Resource\Report\Collection
+     * @return $this
      */
-    protected function _initSelect()
+    protected function _applyAggregatedTable()
     {
         $this->getSelect()->from($this->getResource()->getMainTable(), $this->_getSelectedColumns());
         if ($this->isSubTotals()) {
             $this->getSelect()->group($this->_periodFormat);
-        } else if (!$this->isTotals()) {
-            $this->getSelect()->group(array(
-                $this->_periodFormat,
-                'coupon_code'
-            ));
+        } elseif (!$this->isTotals()) {
+            $this->getSelect()->group(
+                array(
+                    $this->_periodFormat,
+                    'coupon_code'
+                )
+            );
         }
 
-        return parent::_initSelect();
+        return parent::_applyAggregatedTable();
     }
 
     /**
      * Add filtering by rules ids
      *
      * @param array $rulesList
-     * @return \Magento\SalesRule\Model\Resource\Report\Collection
+     * @return $this
      */
     public function addRuleFilter($rulesList)
     {
@@ -167,7 +163,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
     /**
      * Apply filtering by rules ids
      *
-     * @return \Magento\SalesRule\Model\Resource\Report\Collection
+     * @return $this
      */
     protected function _applyRulesFilter()
     {

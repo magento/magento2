@@ -18,18 +18,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Webapi\Model\Cache;
 
 /**
  * System / Cache Management / Cache type "Integration Api Configuration"
  */
-class TypeIntegration extends \Magento\Cache\Frontend\Decorator\TagScope
+class TypeIntegration extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
 {
     /**
      * Cache type code unique among all cache types
@@ -42,9 +39,9 @@ class TypeIntegration extends \Magento\Cache\Frontend\Decorator\TagScope
     const CACHE_TAG = 'INTEGRATION_API_CONFIG';
 
     /**
-     * @param \Magento\App\Cache\Type\FrontendPool $cacheFrontendPool
+     * @param \Magento\Framework\App\Cache\Type\FrontendPool $cacheFrontendPool
      */
-    public function __construct(\Magento\App\Cache\Type\FrontendPool $cacheFrontendPool)
+    public function __construct(\Magento\Framework\App\Cache\Type\FrontendPool $cacheFrontendPool)
     {
         parent::__construct($cacheFrontendPool->get(self::TYPE_IDENTIFIER), self::CACHE_TAG);
     }

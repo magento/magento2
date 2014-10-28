@@ -18,29 +18,22 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Customer\Model\Config\Backend\Password\Link;
 
 /**
  * Customer Reset Password Link Expiration period backend model
  *
- * @category   Magento
- * @package    Magento_Customer
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Customer\Model\Config\Backend\Password\Link;
-
-class Expirationperiod
-    extends \Magento\Core\Model\Config\Value
+class Expirationperiod extends \Magento\Framework\App\Config\Value
 {
     /**
      * Validate expiration period value before saving
      *
-     * @return \Magento\Customer\Model\Config\Backend\Password\Link\Expirationperiod
+     * @return $this
      */
     protected function _beforeSave()
     {

@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     performance_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -78,14 +76,14 @@ class Config
      * @param string $testsBaseDir
      * @param string $appBaseDir
      * @throws \InvalidArgumentException
-     * @throws \Magento\Exception
+     * @throws \Magento\Framework\Exception
      */
     public function __construct(array $configData, $testsBaseDir, $appBaseDir)
     {
         $this->_validateData($configData);
 
         if (!is_dir($testsBaseDir)) {
-            throw new \Magento\Exception("Base directory '$testsBaseDir' does not exist.");
+            throw new \Magento\Framework\Exception("Base directory '{$testsBaseDir}' does not exist.");
         }
         $this->_testsBaseDir = $testsBaseDir;
         $this->_reportDir = $this->_getTestsRelativePath($configData['report_dir']);
@@ -117,7 +115,7 @@ class Config
      * Validate high-level configuration structure
      *
      * @param array $configData
-     * @throws \Magento\Exception
+     * @throws \Magento\Framework\Exception
      */
     protected function _validateData(array $configData)
     {
@@ -125,7 +123,7 @@ class Config
         $requiredKeys = array('application', 'scenario', 'report_dir');
         foreach ($requiredKeys as $requiredKeyName) {
             if (empty($configData[$requiredKeyName])) {
-                throw new \Magento\Exception("Configuration array must define '$requiredKeyName' key.");
+                throw new \Magento\Framework\Exception("Configuration array must define '{$requiredKeyName}' key.");
             }
         }
 
@@ -133,7 +131,7 @@ class Config
         $requiredAdminKeys = array('frontname', 'username', 'password');
         foreach ($requiredAdminKeys as $requiredKeyName) {
             if (empty($configData['application']['admin'][$requiredKeyName])) {
-                throw new \Magento\Exception("Admin options array must define '$requiredKeyName' key.");
+                throw new \Magento\Framework\Exception("Admin options array must define '{$requiredKeyName}' key.");
             }
         }
     }
@@ -193,7 +191,9 @@ class Config
 
         // General config validation
         if (!is_array($config)) {
-            throw new \InvalidArgumentException("Configuration of scenario '{$title}' must be represented by an array");
+            throw new \InvalidArgumentException(
+                "Configuration of scenario '{$title}' must be represented by an array"
+            );
         }
 
         // File
@@ -208,8 +208,13 @@ class Config
         // Validate sub arrays
         $subArrays = $this->_validateScenarioSubArrays($title, $config, $commonConfig);
 
-        return new \Magento\TestFramework\Performance\Scenario($title, $file, $subArrays['arguments'],
-            $subArrays['settings'], $subArrays['fixtures']);
+        return new \Magento\TestFramework\Performance\Scenario(
+            $title,
+            $file,
+            $subArrays['arguments'],
+            $subArrays['settings'],
+            $subArrays['fixtures']
+        );
     }
 
     /**
@@ -227,7 +232,7 @@ class Config
         foreach (array('arguments', 'settings', 'fixtures') as $configKey) {
             if (isset($config[$configKey]) && !is_array($config[$configKey])) {
                 throw new \InvalidArgumentException(
-                    "'$configKey' for scenario '{$title}' must be represented by an array"
+                    "'{$configKey}' for scenario '{$title}' must be represented by an array"
                 );
             }
         }
@@ -243,11 +248,7 @@ class Config
         $fixtures = isset($config['fixtures']) ? $config['fixtures'] : array();
         $fixtures = $this->_expandFixtures($fixtures);
 
-        return array(
-            'arguments' => $arguments,
-            'settings' => $settings,
-            'fixtures' => $fixtures,
-        );
+        return array('arguments' => $arguments, 'settings' => $settings, 'fixtures' => $fixtures);
     }
 
     /**
@@ -282,12 +283,13 @@ class Config
     {
         $adminOptions = $this->getAdminOptions();
         return array(
-            \Magento\TestFramework\Performance\Scenario::ARG_HOST            => $this->getApplicationUrlHost(),
-            \Magento\TestFramework\Performance\Scenario::ARG_PATH            => $this->getApplicationUrlPath(),
-            \Magento\TestFramework\Performance\Scenario::ARG_BASEDIR         => $this->getApplicationBaseDir(),
-            \Magento\TestFramework\Performance\Scenario::ARG_ADMIN_FRONTNAME => $adminOptions['frontname'],
-            \Magento\TestFramework\Performance\Scenario::ARG_ADMIN_USERNAME  => $adminOptions['username'],
-            \Magento\TestFramework\Performance\Scenario::ARG_ADMIN_PASSWORD  => $adminOptions['password'],
+            \Magento\TestFramework\Performance\Scenario::ARG_HOST => $this->getApplicationUrlHost(),
+            \Magento\TestFramework\Performance\Scenario::ARG_PATH => $this->getApplicationUrlPath(),
+            \Magento\TestFramework\Performance\Scenario::ARG_BASEDIR => $this->getApplicationBaseDir(),
+            \Magento\TestFramework\Performance\Scenario::ARG_BACKEND_FRONTNAME => $adminOptions['frontname'],
+            \Magento\TestFramework\Performance\Scenario::ARG_ADMIN_USERNAME => $adminOptions['username'],
+            \Magento\TestFramework\Performance\Scenario::ARG_ADMIN_PASSWORD => $adminOptions['password'],
+            'jmeter.save.saveservice.output_format' => 'xml',
         );
     }
 
@@ -304,7 +306,9 @@ class Config
         foreach ($fixtures as $fixtureName) {
             $fixtureFile = realpath($this->_getTestsRelativePath($fixtureName));
             if (!file_exists($fixtureFile)) {
-                throw new \InvalidArgumentException("Fixture '$fixtureName' doesn't exist in {$this->_testsBaseDir}");
+                throw new \InvalidArgumentException(
+                    "Fixture '{$fixtureName}' doesn't exist in {$this->_testsBaseDir}"
+                );
             }
             $result[] = $fixtureFile;
         }

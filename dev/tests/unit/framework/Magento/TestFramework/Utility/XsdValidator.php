@@ -40,7 +40,7 @@ class XsdValidator
         libxml_use_internal_errors(false);
         $result = array();
         foreach ($validationResult as $error) {
-            $result[]= trim($error->message);
+            $result[] = trim($error->message);
         }
         return $result;
     }

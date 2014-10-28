@@ -18,18 +18,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Paypal
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Model\System\Config\Source;
 
 /**
  * Source model for available payment actions
  */
-namespace Magento\Paypal\Model\System\Config\Source;
-
-class PaymentActions implements \Magento\Core\Model\Option\ArrayInterface
+class PaymentActions implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var \Magento\Paypal\Model\ConfigFactory
@@ -45,9 +42,7 @@ class PaymentActions implements \Magento\Core\Model\Option\ArrayInterface
     }
 
     /**
-     * Options getter
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function toOptionArray()
     {

@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Adminhtml
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Reports\Block\Adminhtml\Filter;
 
 /**
@@ -38,13 +34,14 @@ class FormTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepareForm()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\DesignInterface')
-            ->setArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
-            ->setDefaultDesignTheme();
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Core\Model\Layout');
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\View\DesignInterface'
+        )->setArea(
+            \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
+        )->setDefaultDesignTheme();
+        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Framework\View\Layout');
         $block = $layout->addBlock('Magento\Reports\Block\Adminhtml\Filter\Form');
-        $prepareFormMethod = new \ReflectionMethod(
-            'Magento\Reports\Block\Adminhtml\Filter\Form', '_prepareForm');
+        $prepareFormMethod = new \ReflectionMethod('Magento\Reports\Block\Adminhtml\Filter\Form', '_prepareForm');
         $prepareFormMethod->setAccessible(true);
         $prepareFormMethod->invoke($block);
 

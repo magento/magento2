@@ -18,61 +18,52 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Catalog\Model\Product\Attribute\Backend;
+
+use Magento\Catalog\Model\Product;
 
 /**
  * Quantity and Stock Status attribute processing
- *
- * @category   Magento
- * @package    Magento_Catalog
- * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Product\Attribute\Backend;
-
 class Stock extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
-     * Stock item factory
+     * Stock item service
      *
-     * @var \Magento\CatalogInventory\Model\Stock\ItemFactory
+     * @var \Magento\CatalogInventory\Service\V1\StockItemService
      */
-    protected $_stockItemFactory;
+    protected $stockItemService;
 
     /**
      * Construct
      *
-     * @param \Magento\Logger $logger
-     * @param \Magento\CatalogInventory\Model\Stock\ItemFactory $stockItemFactory
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
      */
     public function __construct(
-        \Magento\Logger $logger,
-        \Magento\CatalogInventory\Model\Stock\ItemFactory $stockItemFactory
+        \Magento\Framework\Logger $logger,
+        \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
     ) {
-        $this->_stockItemFactory = $stockItemFactory;
+        $this->stockItemService = $stockItemService;
         parent::__construct($logger);
     }
 
     /**
      * Set inventory data to custom attribute
      *
-     * @param \Magento\Object $object
-     * @return \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+     * @param Product $object
+     * @return $this
      */
     public function afterLoad($object)
     {
-        $item = $this->_stockItemFactory->create();
-        $item->loadByProduct($object);
+        $stockItemDo = $this->stockItemService->getStockItem($object->getId());
         $object->setData(
             $this->getAttribute()->getAttributeCode(),
-            array(
-                'is_in_stock' => $item->getIsInStock(),
-                'qty' => $item->getQty(),
-            )
+            array('is_in_stock' => $stockItemDo->getIsInStock(), 'qty' => $stockItemDo->getQty())
         );
         return parent::afterLoad($object);
     }
@@ -80,8 +71,8 @@ class Stock extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * Prepare inventory data from custom attribute
      *
-     * @param \Magento\Catalog\Model\Product $object
-     * @return \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend|void
+     * @param Product $object
+     * @return void
      */
     public function beforeSave($object)
     {
@@ -99,8 +90,8 @@ class Stock extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * Validate
      *
-     * @param \Magento\Catalog\Model\Product $object
-     * @throws \Magento\Core\Exception
+     * @param Product $object
+     * @throws \Magento\Framework\Model\Exception
      * @return bool
      */
     public function validate($object)
@@ -108,9 +99,7 @@ class Stock extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $attrCode = $this->getAttribute()->getAttributeCode();
         $value = $object->getData($attrCode);
         if (!empty($value['qty']) && !preg_match('/^-?\d*(\.|,)?\d{0,4}$/i', $value['qty'])) {
-            throw new \Magento\Core\Exception(
-                __('Please enter a valid number in this field.')
-            );
+            throw new \Magento\Framework\Model\Exception(__('Please enter a valid number in this field.'));
         }
         return true;
     }

@@ -5,10 +5,12 @@
  * Example - run a particular store or website:
  * --------------------------------------------
  * $params = $_SERVER;
- * $params['MAGE_RUN_CODE'] = 'website2';
- * $params['MAGE_RUN_TYPE'] = 'website';
- * ...
- * $entryPoint = new \Magento\App\EntryPoint\EntryPoint(BP, $params);
+ * $params[StoreManager::PARAM_RUN_CODE] = 'website2';
+ * $params[StoreManager::PARAM_RUN_TYPE] = 'website';
+ * $bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $params);
+ * \/** @var \Magento\Framework\App\Http $app *\/
+ * $app = $bootstrap->createApplication('Magento\Framework\App\Http');
+ * $bootstrap->run($app);
  * --------------------------------------------
  *
  * Magento
@@ -32,10 +34,9 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-require __DIR__ . '/app/bootstrap.php';
 
-\Magento\Profiler::start('magento');
-$entryPoint = new \Magento\App\EntryPoint\EntryPoint(BP, $_SERVER);
-$result = $entryPoint->run('Magento\App\Http');
-\Magento\Profiler::stop('magento');
-return $result;
+require __DIR__ . '/app/bootstrap.php';
+$bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $_SERVER);
+/** @var \Magento\Framework\App\Http $app */
+$app = $bootstrap->createApplication('Magento\Framework\App\Http');
+$bootstrap->run($app);

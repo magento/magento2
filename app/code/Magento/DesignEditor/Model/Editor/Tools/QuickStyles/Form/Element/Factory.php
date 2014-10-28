@@ -18,23 +18,24 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category   Magento
- * @package    Magento_Data
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\DesignEditor\Model\Editor\Tools\QuickStyles\Form\Element;
+
+use Magento\Framework\ObjectManager;
 
 class Factory
 {
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
-    public function __construct(\Magento\ObjectManager $objectManager)
+    /**
+     * @param ObjectManager $objectManager
+     */
+    public function __construct(ObjectManager $objectManager)
     {
         $this->_objectManager = $objectManager;
     }
@@ -44,7 +45,7 @@ class Factory
      *
      * @param string $className
      * @param array $data
-     * @return \Magento\Data\Form\Element\AbstractElement
+     * @return \Magento\Framework\Data\Form\Element\AbstractElement
      */
     public function create($className, array $data = array())
     {

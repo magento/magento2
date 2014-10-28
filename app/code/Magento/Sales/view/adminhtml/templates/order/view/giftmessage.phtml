@@ -1,0 +1,62 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php if($this->canDisplayGiftmessage()): ?>
+<?php $_required = $this->getMessage()->getMessage() != ''?>
+<div id="<?php echo $this->getHtmlId() ?>" class="box-left giftmessage-whole-order-container">
+    <form class="entry-edit form-inline" id="<?php echo $this->getFieldId('form') ?>" action="<?php echo $this->getSaveUrl() ?>">
+        <fieldset>
+            <legend class="legend"><span><?php echo __('Gift Message for the Entire Order'); ?></span></legend>
+            <br />
+
+            <input type="hidden" id="<?php echo $this->getFieldId('type'); ?>" name="<?php echo $this->getFieldName('type'); ?>" value="order" />
+
+            <div class="field field-from-name <?php echo $_required ? 'required' : ''; ?>">
+                <label class="label" for="<?php echo $this->getFieldId('sender'); ?>"><span><?php echo __('From Name'); ?></span></label>
+                <div class="control">
+                    <input class="input-text <?php echo $_required ? 'required-entry' : ''; ?>" type="text" id="<?php echo $this->getFieldId('sender'); ?>" name="<?php echo $this->getFieldName('sender'); ?>" value="<?php echo $this->escapeHtml($this->getMessage()->getSender()); ?>" />
+                </div>
+            </div>
+
+            <div class="field field-to-name <?php echo $_required ? 'required' : ''; ?>">
+                <label class="label" for="<?php echo $this->getFieldId('recipient'); ?>"><span><?php echo __('To Name'); ?></span></label>
+                <div class="control">
+                    <input class="input-text <?php echo $_required ? 'required-entry' : ''; ?>" type="text" id="<?php echo $this->getFieldId('recipient'); ?>" name="<?php echo $this->getFieldName('recipient'); ?>"  value="<?php echo $this->escapeHtml($this->getMessage()->getRecipient()); ?>" />
+                </div>
+            </div>
+
+            <div class="field field-gift-message">
+                <label class="label" for="<?php echo $this->getFieldId('message'); ?>"><span><?php echo __('Gift Message'); ?></span></label>
+                <div class="control">
+                    <textarea id="<?php echo $this->getFieldId('message'); ?>" name="<?php echo $this->getFieldName('message') ?>" rows="2" cols="15"><?php echo $this->escapeHtml($this->getMessage()->getMessage()); ?></textarea>
+                </div>
+            </div>
+
+            <div class="actions">
+                <?php echo $this->getSaveButtonHtml(); ?>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<?php endif ?>

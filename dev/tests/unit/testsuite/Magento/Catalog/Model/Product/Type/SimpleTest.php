@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Product\Type;
 
 class SimpleTest extends \PHPUnit_Framework_TestCase
@@ -37,22 +33,27 @@ class SimpleTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $eventManager = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
+        $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', array(), array(), '', false);
         $coreDataMock = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
         $fileStorageDbMock = $this->getMock('Magento\Core\Helper\File\Storage\Database', array(), array(), '', false);
-        $filesystem = $this->getMockBuilder('Magento\Filesystem')->disableOriginalConstructor()->getMock();
-        $coreRegistry = $this->getMock('Magento\Core\Model\Registry', array(), array(), '', false);
-        $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
+        $filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $coreRegistry = $this->getMock('Magento\Framework\Registry', array(), array(), '', false);
+        $logger = $this->getMock('Magento\Framework\Logger', array(), array(), '', false);
         $productFactoryMock = $this->getMock('Magento\Catalog\Model\ProductFactory', array(), array(), '', false);
-        $this->_model = $objectHelper->getObject('Magento\Catalog\Model\Product\Type\Simple', array(
-            'productFactory' => $productFactoryMock,
-            'eventManager' => $eventManager,
-            'coreData' => $coreDataMock,
-            'fileStorageDb' => $fileStorageDbMock,
-            'filesystem' => $filesystem,
-            'coreRegistry' => $coreRegistry,
-            'logger' => $logger,
-        ));
+        $this->_model = $objectHelper->getObject(
+            'Magento\Catalog\Model\Product\Type\Simple',
+            array(
+                'productFactory' => $productFactoryMock,
+                'eventManager' => $eventManager,
+                'coreData' => $coreDataMock,
+                'fileStorageDb' => $fileStorageDbMock,
+                'filesystem' => $filesystem,
+                'coreRegistry' => $coreRegistry,
+                'logger' => $logger
+            )
+        );
     }
 
     public function testHasWeightTrue()

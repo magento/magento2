@@ -18,22 +18,14 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Cms
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Cms\Model;
 
 /**
  * CMS Observer model
- *
- * @category   Magento
- * @package    Magento_Cms
- * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Cms\Model;
-
 class Observer
 {
     /**
@@ -41,65 +33,68 @@ class Observer
      *
      * @var \Magento\Cms\Helper\Page
      */
-    protected $_cmsPage = null;
+    protected $_cmsPage;
 
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
      * @param \Magento\Cms\Helper\Page $cmsPage
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         \Magento\Cms\Helper\Page $cmsPage,
-        \Magento\Core\Model\Store\Config $coreStoreConfig
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
         $this->_cmsPage = $cmsPage;
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
     }
 
     /**
      * Modify No Route Forward object
      *
-     * @param \Magento\Event\Observer $observer
-     * @return \Magento\Cms\Model\Observer
+     * @param \Magento\Framework\Event\Observer $observer
+     * @return $this
      */
-    public function noRoute(\Magento\Event\Observer $observer)
+    public function noRoute(\Magento\Framework\Event\Observer $observer)
     {
-        $observer->getEvent()->getStatus()
-            ->setLoaded(true)
-            ->setForwardModule('cms')
-            ->setForwardController('index')
-            ->setForwardAction('noroute');
+        $observer->getEvent()->getStatus()->setLoaded(
+            true
+        )->setForwardModule(
+            'cms'
+        )->setForwardController(
+            'index'
+        )->setForwardAction(
+            'noroute'
+        );
         return $this;
     }
 
     /**
      * Modify no Cookies forward object
      *
-     * @param \Magento\Event\Observer $observer
-     * @return \Magento\Cms\Model\Observer
+     * @param \Magento\Framework\Event\Observer $observer
+     * @return $this
      */
-    public function noCookies(\Magento\Event\Observer $observer)
+    public function noCookies(\Magento\Framework\Event\Observer $observer)
     {
         $redirect = $observer->getEvent()->getRedirect();
 
-        $pageId  = $this->_coreStoreConfig->getConfig(\Magento\Cms\Helper\Page::XML_PATH_NO_COOKIES_PAGE);
+        $pageId = $this->_scopeConfig->getValue(
+            \Magento\Cms\Helper\Page::XML_PATH_NO_COOKIES_PAGE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
         $pageUrl = $this->_cmsPage->getPageUrl($pageId);
 
         if ($pageUrl) {
             $redirect->setRedirectUrl($pageUrl);
-        }
-        else {
-            $redirect->setRedirect(true)
-                ->setPath('cms/index/noCookies')
-                ->setArguments(array());
+        } else {
+            $redirect->setRedirect(true)->setPath('cms/index/noCookies')->setArguments(array());
         }
         return $this;
     }
-
 }

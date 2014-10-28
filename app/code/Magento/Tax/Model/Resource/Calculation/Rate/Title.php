@@ -18,26 +18,22 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Tax
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Tax\Model\Resource\Calculation\Rate;
 
 /**
  * Tax Rate Title Collection
  *
- * @category    Magento
- * @package     Magento_Tax
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Tax\Model\Resource\Calculation\Rate;
-
-class Title extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Title extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Resource initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -48,7 +44,7 @@ class Title extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Delete title by rate identifier
      *
      * @param int $rateId
-     * @return \Magento\Tax\Model\Resource\Calculation\Rate\Title
+     * @return $this
      */
     public function deleteByRateId($rateId)
     {

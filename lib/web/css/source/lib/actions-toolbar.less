@@ -1,0 +1,160 @@
+// /**
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+//
+// actions-toolbar
+//--------------------------------------
+.actions-toolbar(
+    @_actions-toolbar-actions-position: @actions-toolbar-actions-position,
+    @_actions-toolbar-actions-reverse: @actions-toolbar-actions-reverse,
+    @_actions-toolbar-margin: @actions-toolbar-margin,
+    @_actions-toolbar-padding: @actions-toolbar-padding,
+    @_actions-toolbar-actions-margin: @actions-toolbar-actions-margin,
+    @_actions-toolbar-primary-actions-margin: @actions-toolbar-primary-actions-margin,
+    @_actions-toolbar-secondary-actions-margin: @actions-toolbar-secondary-actions-margin,
+    @_actions-toolbar-actions-links-margin-top: @actions-toolbar-actions-links-margin-top,
+    @_actions-toolbar-primary-actions-links-margin-top: @actions-toolbar-primary-actions-links-margin-top,
+    @_actions-toolbar-secondary-actions-links-margin-top: @actions-toolbar-secondary-actions-links-margin-top
+) {
+    .clearfix();
+    .css(margin, @_actions-toolbar-margin);
+    .css(padding, @_actions-toolbar-padding);
+    ._actions-toolbar-align(@_actions-toolbar-actions-position);
+    ._actions-toolbar-floats(@_actions-toolbar-actions-position, @_actions-toolbar-actions-reverse);
+    .primary,
+    .secondary {
+        display: inline-block;
+        .action {
+            .css(margin, @_actions-toolbar-actions-margin);
+        }
+        a.action {
+            display: inline-block;
+            .css(margin-top, @_actions-toolbar-actions-links-margin-top);
+        }
+    }
+    .primary {
+        .action {
+            .css(margin, @_actions-toolbar-primary-actions-margin);
+        }
+        a.action {
+            .css(margin-top, @_actions-toolbar-primary-actions-links-margin-top);
+        }
+    }
+    .secondary {
+        .action {
+            .css(margin, @_actions-toolbar-secondary-actions-margin);
+        }
+        a.action {
+            .css(margin-top, @_actions-toolbar-secondary-actions-links-margin-top);
+        }
+    }
+}
+
+//
+// actions-toolbar-clear-floats
+//--------------------------------------
+.actions-toolbar-clear-floats() {
+    .primary,
+    .secondary {
+        display: block;
+        float: none;
+    }
+}
+
+//
+// Internal use mixins
+//--------------------------------------
+._actions-toolbar-align(@_actions-toolbar-actions-position) when not (@_actions-toolbar-actions-position = justify) {
+    .css(text-align, @_actions-toolbar-actions-position);
+}
+
+._actions-toolbar-floats(
+    @_actions-toolbar-actions-position,
+    @_actions-toolbar-actions-reverse
+) when (@_actions-toolbar-actions-position = justify) and (@_actions-toolbar-actions-reverse = false) {
+    .primary {
+        float: left;
+    }
+    .secondary {
+        float: right;
+    }
+}
+
+._actions-toolbar-floats(
+    @_actions-toolbar-actions-position,
+    @_actions-toolbar-actions-reverse
+) when (@_actions-toolbar-actions-position = justify) and (@_actions-toolbar-actions-reverse = true) {
+    .primary {
+        float: right;
+    }
+    .secondary {
+        float: left;
+    }
+}
+
+._actions-toolbar-floats(
+    @_actions-toolbar-actions-position,
+    @_actions-toolbar-actions-reverse
+) when (@_actions-toolbar-actions-position = left) and (@_actions-toolbar-actions-reverse = false) {
+    .primary {
+        float: left;
+    }
+}
+
+._actions-toolbar-floats(
+    @_actions-toolbar-actions-position,
+    @_actions-toolbar-actions-reverse
+) when (@_actions-toolbar-actions-position = left) and (@_actions-toolbar-actions-reverse = true) {
+    .secondary {
+        float: left;
+    }
+}
+
+._actions-toolbar-floats(
+    @_actions-toolbar-actions-position,
+    @_actions-toolbar-actions-reverse
+) when (@_actions-toolbar-actions-position = right) and (@_actions-toolbar-actions-reverse = false) {
+    .secondary {
+        float: right;
+    }
+}
+
+._actions-toolbar-floats(
+    @_actions-toolbar-actions-position,
+    @_actions-toolbar-actions-reverse
+) when (@_actions-toolbar-actions-position = right) and (@_actions-toolbar-actions-reverse = true) {
+    .primary {
+        float: right;
+    }
+}
+
+._actions-toolbar-floats(
+    @_actions-toolbar-actions-position,
+    @_actions-toolbar-actions-reverse
+) when (@_actions-toolbar-actions-position = center) {
+    .primary,
+    .secondary {
+        vertical-align: top;
+    }
+}

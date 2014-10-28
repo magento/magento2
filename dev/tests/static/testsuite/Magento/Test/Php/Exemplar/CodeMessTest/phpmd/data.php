@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    tests
- * @package     static
- * @subpackage  Legacy
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -33,27 +30,27 @@ return array(
     'method length' => array(
         __DIR__ . '/input/method_length.php',
         'file/violation[@beginline=8 and @endline=107 and @rule="ExcessiveMethodLength" and @ruleset="Code Size Rules"
-                    and @package="+global" and @class="Foo" and @method="bar" and @priority=3]',
+                    and @package="+global" and @class="Foo" and @method="bar" and @priority=3]'
     ),
     'parameter list' => array(
         __DIR__ . '/input/parameter_list.php',
         'file/violation[@beginline=8 and @endline=11 and @rule="ExcessiveParameterList" and @ruleset="Code Size Rules"
-                    and @package="+global" and @class="Foo" and @method="bar" and @priority=3]',
+                    and @package="+global" and @class="Foo" and @method="bar" and @priority=3]'
     ),
     'method count' => array(
         __DIR__ . '/input/method_count.php',
         'file/violation[@beginline=6 and @endline=116 and @rule="TooManyMethods" and @ruleset="Code Size Rules"
-                    and @package="+global" and @class="Foo" and @priority=3]',
+                    and @package="+global" and @class="Foo" and @priority=3]'
     ),
     'field count' => array(
         __DIR__ . '/input/field_count.php',
         'file/violation[@beginline=6 and @endline=29 and @rule="TooManyFields" and @ruleset="Code Size Rules"
-                    and @package="+global" and @class="Foo" and @priority=3]',
+                    and @package="+global" and @class="Foo" and @priority=3]'
     ),
     'public count' => array(
         __DIR__ . '/input/public_count.php',
         'file/violation[@beginline=11 and @endline=58 and @rule="ExcessivePublicCount" and @ruleset="Code Size Rules"
-                    and @package="+global" and @class="Foo" and @priority=3]',
+                    and @package="+global" and @class="Foo" and @priority=3]'
     ),
     'prohibited statement' => array(
         __DIR__ . '/input/prohibited_statement.php',
@@ -61,28 +58,28 @@ return array(
             'file/violation[@beginline=7 and @endline=7 and @rule="ExitExpression" and @ruleset="Design Rules"
                         and @priority=1]',
             'file/violation[@beginline=12 and @endline=12 and @rule="EvalExpression" and @ruleset="Design Rules"
-                        and @priority=1]',
-        ),
+                        and @priority=1]'
+        )
     ),
     'prohibited statement goto' => array(
         __DIR__ . '/input/prohibited_statement_goto.php',
         'file/violation[@beginline=10 and @endline=10 and @rule="GotoStatement" and @ruleset="Design Rules"
-                        and @priority=1]',
+                        and @priority=1]'
     ),
     'inheritance depth' => array(
         __DIR__ . '/input/inheritance_depth.php',
         'file/violation[@beginline=15 and @endline=15 and @rule="DepthOfInheritance" and @ruleset="Design Rules"
-                    and @package="+global" and @class="Foo07" and @priority=2]',
+                    and @package="+global" and @class="Foo07" and @priority=2]'
     ),
     'descendant count' => array(
         __DIR__ . '/input/descendant_count.php',
         'file/violation[@beginline=3 and @endline=3 and @rule="NumberOfChildren" and @ruleset="Design Rules"
-                    and @package="+global" and @class="Foo01" and @priority=2]',
+                    and @package="+global" and @class="Foo01" and @priority=2]'
     ),
     'coupling' => array(
         __DIR__ . '/input/coupling.php',
         'file/violation[@beginline=19 and @endline=78 and @rule="CouplingBetweenObjects" and @ruleset="Design Rules"
-                    and @package="+global" and @class="Foo" and @priority=2]',
+                    and @package="+global" and @class="Foo" and @priority=2]'
     ),
     'naming' => array(
         __DIR__ . '/input/naming.php',
@@ -106,8 +103,8 @@ return array(
             'file/violation[@beginline=30 and @endline=30 and @rule="ShortMethodName" and @ruleset="Naming Rules"
                         and @package="+global" and @class="Foo" and @method="_x" and @priority=3]',
             'file/violation[@beginline=36 and @endline=39 and @rule="BooleanGetMethodName" and @ruleset="Naming Rules"
-                        and @package="+global" and @class="Foo" and @method="getBoolValue" and @priority=4]',
-        ),
+                        and @package="+global" and @class="Foo" and @method="getBoolValue" and @priority=4]'
+        )
     ),
     'unused' => array(
         __DIR__ . '/input/unused.php',
@@ -119,7 +116,7 @@ return array(
             'file/violation[@beginline=9 and @endline=9 and @rule="UnusedFormalParameter"
                 and @ruleset="Unused Code Rules" and @priority=3]',
             'file/violation[@beginline=11 and @endline=11 and @rule="UnusedLocalVariable"
-                and @ruleset="Unused Code Rules" and @priority=3]',
-        ),
-    ),
+                and @ruleset="Unused Code Rules" and @priority=3]'
+        )
+    )
 );

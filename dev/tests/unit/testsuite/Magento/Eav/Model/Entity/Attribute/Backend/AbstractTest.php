@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Eav
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Eav\Model\Entity\Attribute\Backend;
 
 class AbstractTest extends \PHPUnit_Framework_TestCase
@@ -56,30 +52,19 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $attribute->expects($this->any())
-            ->method('getAttributeId')
-            ->will($this->returnValue($attributeId));
+        $attribute->expects($this->any())->method('getAttributeId')->will($this->returnValue($attributeId));
 
-        $attribute->expects($this->any())
-            ->method('isStatic')
-            ->will($this->returnValue(false));
+        $attribute->expects($this->any())->method('isStatic')->will($this->returnValue(false));
 
-        $attribute->expects($this->any())
-            ->method('getBackendTable')
-            ->will($this->returnValue('table'));
+        $attribute->expects($this->any())->method('getBackendTable')->will($this->returnValue('table'));
 
         $this->_model->setAttribute($attribute);
 
-        $object = new \Magento\Object();
+        $object = new \Magento\Framework\Object();
         $this->_model->setValueId($valueId);
 
         $this->assertEquals(
-            array(
-                'table' => array(array(
-                    'value_id' => $valueId,
-                    'attribute_id' => $attributeId
-                ))
-            ),
+            array('table' => array(array('value_id' => $valueId, 'attribute_id' => $attributeId))),
             $this->_model->getAffectedFields($object)
         );
     }

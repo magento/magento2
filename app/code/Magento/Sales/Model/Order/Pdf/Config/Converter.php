@@ -25,7 +25,7 @@
  */
 namespace Magento\Sales\Model\Order\Pdf\Config;
 
-class Converter implements \Magento\Config\ConverterInterface
+class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
      * Convert dom node tree to array
@@ -35,10 +35,7 @@ class Converter implements \Magento\Config\ConverterInterface
      */
     public function convert($source)
     {
-        $result = array(
-            'renderers' => array(),
-            'totals' => array(),
-        );
+        $result = array('renderers' => array(), 'totals' => array());
 
         $pageTypes = $source->getElementsByTagName('page');
         foreach ($pageTypes as $pageType) {

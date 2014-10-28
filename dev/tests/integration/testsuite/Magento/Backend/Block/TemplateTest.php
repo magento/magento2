@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Block;
 
 /**
@@ -42,8 +38,11 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-            ->createBlock('Magento\Backend\Block\Template');
+        $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\View\LayoutInterface'
+        )->createBlock(
+            'Magento\Backend\Block\Template'
+        );
     }
 
     /**
@@ -55,17 +54,24 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @magentoAppArea adminhtml
      * @covers \Magento\Backend\Block\Template::isOutputEnabled
+     * @magentoConfigFixture current_store advanced/modules_disable_output/dummy 1
      */
-    public function testIsOutputEnabled()
+    public function testIsOutputEnabledTrue()
     {
         $this->_block->setData('module_name', 'dummy');
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-            ->getStore()->setConfig('advanced/modules_disable_output/dummy', 'true');
-        $this->assertFalse($this->_block->isOutputEnabled());
+        $this->assertFalse($this->_block->isOutputEnabled('dummy'));
+    }
 
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-            ->getStore()->setConfig('advanced/modules_disable_output/dummy', 'false');
+    /**
+     * @magentoAppArea adminhtml
+     * @covers \Magento\Backend\Block\Template::isOutputEnabled
+     * @magentoConfigFixture current_store advanced/modules_disable_output/dummy 0
+     */
+    public function testIsOutputEnabledFalse()
+    {
+        $this->_block->setData('module_name', 'dummy');
         $this->assertTrue($this->_block->isOutputEnabled('dummy'));
     }
 }

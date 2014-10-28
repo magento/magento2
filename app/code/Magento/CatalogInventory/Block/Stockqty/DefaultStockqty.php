@@ -18,23 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_CatalogInventory
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\CatalogInventory\Block\Stockqty;
 
 /**
  * Product stock qty default block
- *
- * @category   Magento
- * @package    Magento_CatalogInventory
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\CatalogInventory\Block\Stockqty;
-
-class DefaultStockqty extends \Magento\CatalogInventory\Block\Stockqty\AbstractStockqty
+class DefaultStockqty extends AbstractStockqty implements \Magento\Framework\View\Block\IdentityInterface
 {
     /**
      * Render block HTML
@@ -47,5 +40,15 @@ class DefaultStockqty extends \Magento\CatalogInventory\Block\Stockqty\AbstractS
             return '';
         }
         return parent::_toHtml();
+    }
+
+    /**
+     * Return identifiers for produced content
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        return $this->getProduct()->getIdentities();
     }
 }

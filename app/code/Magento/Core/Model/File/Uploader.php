@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,13 +26,11 @@
 /**
  * Core file uploader model
  *
- * @category   Magento
- * @package    Magento_Core
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Core\Model\File;
 
-class Uploader extends \Magento\File\Uploader
+class Uploader extends \Magento\Framework\File\Uploader
 {
     /**
      * Flag, that defines should DB processing be skipped
@@ -84,7 +80,7 @@ class Uploader extends \Magento\File\Uploader
      * Save file to storage
      *
      * @param  array $result
-     * @return \Magento\Core\Model\File\Uploader
+     * @return $this
      */
     protected function _afterSave($result)
     {

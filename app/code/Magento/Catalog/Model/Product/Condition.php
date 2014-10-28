@@ -18,33 +18,49 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Product;
 
-class Condition extends \Magento\Object implements \Magento\Catalog\Model\Product\Condition\ConditionInterface
+use Magento\Eav\Model\Entity\Collection\AbstractCollection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
+
+/**
+ * @method string getPkFieldName()
+ * @method Condition setPkFieldName(string $fieldName)
+ * @method string|array getTable()
+ * @method Condition setTable($table)
+ */
+class Condition extends \Magento\Framework\Object implements \Magento\Catalog\Model\Product\Condition\ConditionInterface
 {
+    /**
+     * @param AbstractCollection $collection
+     *
+     * @return $this
+     */
     public function applyToCollection($collection)
     {
         if ($this->getTable() && $this->getPkFieldName()) {
             $collection->joinTable(
                 $this->getTable(),
-                $this->getPkFieldName().'=entity_id',
-                array('affected_product_id'=>$this->getPkFieldName())
+                $this->getPkFieldName() . '=entity_id',
+                array('affected_product_id' => $this->getPkFieldName())
             );
         }
         return $this;
     }
 
+    /**
+     * @param AdapterInterface $dbAdapter
+     *
+     * @return Select|string
+     */
     public function getIdsSelect($dbAdapter)
     {
         if ($this->getTable() && $this->getPkFieldName()) {
-            $select = $dbAdapter->select()
-                ->from($this->getTable(), $this->getPkFieldName());
+            $select = $dbAdapter->select()->from($this->getTable(), $this->getPkFieldName());
             return $select;
         }
         return '';

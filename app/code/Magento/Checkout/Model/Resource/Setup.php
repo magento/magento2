@@ -1,5 +1,7 @@
 <?php
 /**
+ * Checkout Resource Setup Model
+ *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -18,19 +20,8 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Checkout
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- */
-
-
-/**
- * Checkout Resource Setup Model
- *
- * @category    Magento
- * @package     Magento_Checkout
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Checkout\Model\Resource;
 
@@ -42,25 +33,32 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
     protected $_customerAddress;
 
     /**
-     * @param \Magento\Core\Model\Resource\Setup\Context $context
+     * @param \Magento\Eav\Model\Entity\Setup\Context $context
      * @param string $resourceName
-     * @param \Magento\App\CacheInterface $cache
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGrCollFactory
+     * @param \Magento\Framework\App\CacheInterface $cache
+     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGroupCollectionFactory
      * @param \Magento\Customer\Helper\Address $customerAddress
      * @param string $moduleName
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Core\Model\Resource\Setup\Context $context,
+        \Magento\Eav\Model\Entity\Setup\Context $context,
         $resourceName,
-        \Magento\App\CacheInterface $cache,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGrCollFactory,
+        \Magento\Framework\App\CacheInterface $cache,
+        \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGroupCollectionFactory,
         \Magento\Customer\Helper\Address $customerAddress,
         $moduleName = 'Magento_Checkout',
-        $connectionName = ''
+        $connectionName = \Magento\Framework\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION
     ) {
         $this->_customerAddress = $customerAddress;
-        parent::__construct($context, $resourceName, $cache, $attrGrCollFactory, $moduleName, $connectionName);
+        parent::__construct(
+            $context,
+            $resourceName,
+            $cache,
+            $attrGroupCollectionFactory,
+            $moduleName,
+            $connectionName
+        );
     }
 
     /**

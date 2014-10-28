@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -30,7 +27,7 @@
  */
 namespace Magento\Core\Model;
 
-use \Magento\View\Design\ThemeInterface;
+use Magento\Framework\View\Design\ThemeInterface;
 
 class ThemeTest extends \PHPUnit_Framework_TestCase
 {
@@ -47,8 +44,13 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $customizationConfig = $this->getMock('Magento\Theme\Model\Config\Customization', array(), array(), '', false);
-        $customizationFactory = $this->getMock('Magento\View\Design\Theme\CustomizationFactory',
-            array('create'), array(), '', false);
+        $customizationFactory = $this->getMock(
+            'Magento\Framework\View\Design\Theme\CustomizationFactory',
+            array('create'),
+            array(),
+            '',
+            false
+        );
         $resourceCollection = $this->getMock(
             'Magento\Core\Model\Resource\Theme\Collection',
             array(),
@@ -56,16 +58,24 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_imageFactory = $this->getMock('Magento\View\Design\Theme\ImageFactory',
-            array('create'), array(), '', false);
+        $this->_imageFactory = $this->getMock(
+            'Magento\Framework\View\Design\Theme\ImageFactory',
+            array('create'),
+            array(),
+            '',
+            false
+        );
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $arguments = $objectManagerHelper->getConstructArguments('Magento\Core\Model\Theme', array(
-            'customizationFactory' => $customizationFactory,
-            'customizationConfig'  => $customizationConfig,
-            'imageFactory'         => $this->_imageFactory,
-            'resourceCollection'   => $resourceCollection
-        ));
+        $arguments = $objectManagerHelper->getConstructArguments(
+            'Magento\Core\Model\Theme',
+            array(
+                'customizationFactory' => $customizationFactory,
+                'customizationConfig' => $customizationConfig,
+                'imageFactory' => $this->_imageFactory,
+                'resourceCollection' => $resourceCollection
+            )
+        );
 
         $this->_model = $objectManagerHelper->getObject('Magento\Core\Model\Theme', $arguments);
     }
@@ -174,9 +184,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $themeModel \Magento\Core\Model\Theme */
         $themeModel = $this->getMock('Magento\Core\Model\Theme', array('getType', '__wakeup'), array(), '', false);
-        $themeModel->expects($this->once())
-            ->method('getType')
-            ->will($this->returnValue($themeType));
+        $themeModel->expects($this->once())->method('getType')->will($this->returnValue($themeType));
         $this->assertEquals($isDeletable, $themeModel->isDeletable());
     }
 
@@ -210,8 +218,8 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             'string code' => array('theme/code', 'theme/code'),
-            'null code'   => array(null, ''),
-            'number code' => array(10, '10'),
+            'null code' => array(null, ''),
+            'number code' => array(10, '10')
         );
     }
 }

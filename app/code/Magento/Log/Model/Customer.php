@@ -18,11 +18,10 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Log
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Log\Model;
 
 /**
  * Customer log model
@@ -40,33 +39,29 @@
  * @method int getStoreId()
  * @method \Magento\Log\Model\Customer setStoreId(int $value)
  *
- * @category    Magento
- * @package     Magento_Log
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Log\Model;
-
-class Customer extends \Magento\Core\Model\AbstractModel
+class Customer extends \Magento\Framework\Model\AbstractModel
 {
     /**
-     * @var \Magento\Stdlib\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime
      */
     protected $dateTime;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Stdlib\DateTime $dateTime
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Stdlib\DateTime $dateTime,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Stdlib\DateTime $dateTime,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->dateTime = $dateTime;
@@ -75,6 +70,8 @@ class Customer extends \Magento\Core\Model\AbstractModel
 
     /**
      * Define resource model
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -85,16 +82,12 @@ class Customer extends \Magento\Core\Model\AbstractModel
     /**
      * Load last log by customer id
      *
-     * @param \Magento\Customer\Model\Customer|int $customer
+     * @param int $customerId
      * @return \Magento\Log\Model\Customer
      */
-    public function loadByCustomer($customer)
+    public function loadByCustomer($customerId)
     {
-        if ($customer instanceof \Magento\Customer\Model\Customer) {
-            $customer = $customer->getId();
-        }
-
-        return $this->load($customer, 'customer_id');
+        return $this->load($customerId, 'customer_id');
     }
 
     /**

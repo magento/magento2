@@ -1,0 +1,108 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * @var $this \Magento\Theme\Block\Html\Notices
+ */
+?>
+<?php if ($this->displayNoscriptNotice()): ?>
+    <noscript>
+        <div class="message global noscript">
+            <div class="content">
+                <p>
+                    <strong><?php echo __('JavaScript seems to be disabled in your browser.'); ?></strong>
+                    <span><?php echo __('Enable JavaScript in your browser to get the best experience on our website!'); ?></span>
+                </p>
+            </div>
+        </div>
+    </noscript>
+<?php endif; ?>
+<?php if ($this->displayNoLocalStorageNotice()): ?>
+    <div class="notice global site local_storage" style="display: none;">
+        <div class="content">
+            <p>
+                <strong><?php echo __('Local Storage seems to be disabled in your browser.'); ?></strong><br />
+                <?php echo __('Enable Local Storage in your browser to get the best experience on our website!'); ?>
+            </p>
+        </div>
+    </div>
+    <script type="text/javascript">
+require(['jquery'], function(jQuery){
+
+        // <![CDATA[
+        (function($) {
+            var test = 'test';
+            try {
+                localStorage.setItem(test, test);
+                localStorage.removeItem(test);
+            } catch(e) {
+                $(".notice.global.site.local_storage").show();
+            }
+        })(jQuery);
+        // ]]>
+    
+});
+</script>
+<?php endif; ?>
+<?php if ($this->displayDemoNotice()): ?>
+    <div class="message global demo">
+        <div class="content">
+            <p><?php echo __('This is demo store. All orders will not be transferred.') ?></p>
+        </div>
+    </div>
+<?php endif; ?>
+<?php if ($this->helper('Magento\Store\Helper\Cookie')->isUserNotAllowSaveCookie()): ?>
+    <div class="message global cookie" id="notice-cookie-block" style="display: none">
+        <div class="content">
+            <p>
+                <strong><?php echo __('We use cookies to make your experience better.') ?></strong>
+                <span><?php echo __('To comply with the new e-Privacy directive, we need to ask for your consent to set the cookies.') ?></span>
+                <?php echo __('<a href="%1">Learn more</a>.', $this->getPrivacyPolicyLink()) ?></p>
+            <div class="actions">
+                <button id="btn-cookie-allow" class="action allow primary">
+                    <span><?php echo __('Allow Cookies');?></span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+require([
+    "jquery",
+    "mage/mage"
+], function($){
+
+// <![CDATA[
+    $('#notice-cookie-block').mage('cookieBlock', {
+        cookieAllowButtonSelector: '#btn-cookie-allow',
+        cookieName: '<?php echo \Magento\Store\Helper\Cookie::IS_USER_ALLOWED_SAVE_COOKIE ?>',
+        cookieValue: '<?php echo $this->helper('Magento\Store\Helper\Cookie')->getAcceptedSaveCookiesWebsiteIds() ?>',
+        cookieLifetime: <?php echo $this->helper('Magento\Store\Helper\Cookie')->getCookieRestrictionLifetime()?>,
+        noCookiesUrl: '<?php echo $this->getUrl('cms/index/noCookies') ?>'
+    });
+// ]]>
+    
+});
+</script>
+<?php endif; ?>

@@ -23,12 +23,8 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <referenceBlock name="head">
-        <block class="Magento\Theme\Block\Html\Head\Css" name="magento-paypal-styles-css">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Paypal::styles.css</argument>
-            </arguments>
-        </block>
-    </referenceBlock>
-</layout>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Magento_Paypal::styles.css"/>
+    </head>
+</page>

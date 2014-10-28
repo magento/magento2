@@ -23,26 +23,14 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <referenceContainer name="right">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <referenceBlock name="top.links">
+        <block class="Magento\Catalog\Block\Product\Compare\Link" name="catalog.compare.link" before="-" template="Magento_Catalog::product/compare/link.phtml"/>
+    </referenceBlock>
+    <referenceContainer name="sidebar.additional">
         <block class="Magento\Catalog\Block\Product\Compare\Sidebar" name="catalog.compare.sidebar" template="product/compare/sidebar.phtml"/>
     </referenceContainer>
-    <block class="Magento\Catalog\Block\Product\Price\Template" name="catalog_product_price_template"/>
-    <referenceBlock name="catalog_product_price_template">
-        <action method="addPriceBlockType">
-            <argument name="type" xsi:type="string">msrp</argument>
-            <argument name="block" xsi:type="string">Magento\Catalog\Block\Product\Price</argument>
-            <argument name="template" xsi:type="string">product/price_msrp.phtml</argument>
-        </action>
-        <action method="addPriceBlockType">
-            <argument name="type" xsi:type="string">msrp_item</argument>
-            <argument name="block" xsi:type="string">Magento\Catalog\Block\Product\Price</argument>
-            <argument name="template" xsi:type="string">product/price_msrp_item.phtml</argument>
-        </action>
-        <action method="addPriceBlockType">
-            <argument name="type" xsi:type="string">msrp_noform</argument>
-            <argument name="block" xsi:type="string">Magento\Catalog\Block\Product\Price</argument>
-            <argument name="template" xsi:type="string">product/price_msrp_noform.phtml</argument>
-        </action>
-    </referenceBlock>
-</layout>
+    <referenceContainer name="after.body.start">
+        <block class="Magento\Framework\View\Element\Js\Components" name="head.components" as="components" template="Magento_Catalog::js/components.phtml"/>
+    </referenceContainer>
+</page>

@@ -18,14 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Widget
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
 
 /**
@@ -43,36 +38,29 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $config = $this->getMockBuilder('Magento\View\Layout\PageType\Config')
-                            ->setMethods(array('getPageTypes'))
-                            ->disableOriginalConstructor()
-                            ->getMock();
+        $config = $this->getMockBuilder(
+            'Magento\Framework\View\Layout\PageType\Config'
+        )->setMethods(
+            array('getPageTypes')
+        )->disableOriginalConstructor()->getMock();
         $pageTypeValues = array(
             'wishlist_index_index' => array(
                 'label' => 'Customer My Account My Wish List',
                 'id' => 'wishlist_index_index'
             ),
-            'cms_index_nocookies' => array(
-                'label' => 'CMS No-Cookies Page',
-                'id' => 'cms_index_nocookies'
-            ),
-            'cms_index_defaultindex' => array(
-                'label' => 'CMS Home Default Page',
-                'id' => 'cms_index_defaultindex'
-            ),
+            'cms_index_nocookies' => array('label' => 'CMS No-Cookies Page', 'id' => 'cms_index_nocookies'),
+            'cms_index_defaultindex' => array('label' => 'CMS Home Default Page', 'id' => 'cms_index_defaultindex')
         );
-        $config->expects($this->any())
-              ->method('getPageTypes')
-              ->will($this->returnValue($pageTypeValues));
+        $config->expects($this->any())->method('getPageTypes')->will($this->returnValue($pageTypeValues));
 
         $this->_block = new \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Layout(
-            $objectManager->get('Magento\View\Element\Template\Context'),
+            $objectManager->get('Magento\Framework\View\Element\Template\Context'),
             $config,
             array(
-                'name'  => 'page_type',
-                'id'    => 'page_types_select',
+                'name' => 'page_type',
+                'id' => 'page_types_select',
                 'class' => 'page-types-select',
-                'title' => 'Page Types Select',
+                'title' => 'Page Types Select'
             )
         );
     }

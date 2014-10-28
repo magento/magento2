@@ -34,15 +34,14 @@ class JobTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $eventManager = $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false);
-        $eventManager->expects($this->once())
-            ->method('dispatch')
-            ->with($this->equalTo('catalogrule_apply_all'));
+        $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', array(), array(), '', false);
+        $eventManager->expects($this->once())->method('dispatch')->with($this->equalTo('catalogrule_apply_all'));
 
         /** @var $jobModel \Magento\CatalogRule\Model\Rule\Job */
-        $jobModel = $objectManagerHelper->getObject('Magento\CatalogRule\Model\Rule\Job', array(
-            'eventManager' => $eventManager,
-        ));
+        $jobModel = $objectManagerHelper->getObject(
+            'Magento\CatalogRule\Model\Rule\Job',
+            array('eventManager' => $eventManager)
+        );
 
         $jobModel->applyAll();
     }

@@ -18,25 +18,40 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Tax
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tax\Helper;
 
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * Tax helper
+     *
+     * @var \Magento\Tax\Helper\Data
+     */
+    private $helper;
+
+    /**
+     * Object Manager
+     *
+     * @var \Magento\Framework\ObjectManager
+     */
+    private $objectManager;
+
+    public function setUp()
+    {
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var $helper \Magento\Tax\Helper\Data */
+        $this->helper = $this->objectManager->get('Magento\Tax\Helper\Data');
+    }
+
+    /**
      * @magentoConfigFixture default_store tax/classes/default_customer_tax_class 1
      */
     public function testGetDefaultCustomerTaxClass()
     {
-        /** @var $helper \Magento\Tax\Helper\Data */
-        $helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Tax\Helper\Data');
-        $this->assertEquals(1, $helper->getDefaultCustomerTaxClass());
+        $this->assertEquals(1, $this->helper->getDefaultCustomerTaxClass());
     }
 
     /**
@@ -44,9 +59,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDefaultProductTaxClass()
     {
-        /** @var $helper \Magento\Tax\Helper\Data */
-        $helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Tax\Helper\Data');
-        $this->assertEquals(1, $helper->getDefaultProductTaxClass());
+        $this->assertEquals(1, $this->helper->getDefaultProductTaxClass());
     }
-
 }

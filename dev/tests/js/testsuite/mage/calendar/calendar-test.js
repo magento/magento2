@@ -17,8 +17,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    mage.calendar
- * @package     test
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -66,7 +64,7 @@ CalendarTest.prototype.testEnableAMPM = function() {
 CalendarTest.prototype.testDisableAMPM = function() {
     /*:DOC += <input type="text" id="calendar" /> */
     var calendar = $('#calendar').calendar({timeFormat: 'hh:mm'});
-    assertEquals(true, calendar.calendar('option', 'ampm') != true);
+    assertTrue(!calendar.calendar('option', 'ampm'));
     calendar.calendar('destroy');
 };
 CalendarTest.prototype.testWithServerTimezoneOffset = function() {
@@ -77,20 +75,20 @@ CalendarTest.prototype.testWithServerTimezoneOffset = function() {
     currentDate.setTime((serverTimezoneSeconds + currentDate.getTimezoneOffset() * 60) * 1000);
     assertEquals(true, currentDate.toString() === calendar.calendar('getTimezoneDate').toString());
     calendar.calendar('destroy');
-}
+};
 CalendarTest.prototype.testWithoutServerTimezoneOffset = function() {
     /*:DOC += <input type="text" id="calendar" /> */
     var calendar = $('#calendar').calendar(),
         currentDate = new Date();
     assertEquals(true, currentDate.toString() === calendar.calendar('getTimezoneDate').toString());
     calendar.calendar('destroy');
-}
+};
 CalendarTest.prototype.testInitDateTimePicker = function() {
     /*:DOC += <input type="text" id="calendar" /> */
     var calendar = $('#calendar').calendar();
     assertEquals(true, calendar.hasClass('hasDatepicker'));
     calendar.calendar('destroy');
-}
+};
 CalendarTest.prototype.testDateTimeMapping = function() {
     /*:DOC += <input type="text" id="calendar" /> */
     var calendar = $('#calendar').calendar({dateFormat: 'M/d/yy', timeFormat: 'h:mm a'});
@@ -101,11 +99,11 @@ CalendarTest.prototype.testDateTimeMapping = function() {
     assertEquals('MM/DD/yy', calendar.calendar('option', 'dateFormat'));
     assertEquals('hh:mm', calendar.calendar('option', 'timeFormat'));
     calendar.calendar('destroy');
-}
+};
 CalendarTest.prototype.testDestroy = function() {
     /*:DOC += <input type="text" id="calendar" /> */
     var calendar = $('#calendar').calendar(),
         calendarExist = calendar.is(':mage-calendar');
     calendar.calendar('destroy');
     assertEquals(true, calendarExist != calendar.is(':mage-calendar'));
-}
+};

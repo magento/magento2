@@ -1,0 +1,246 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+
+<?php
+/**
+ * @see \Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable
+ */
+?>
+<script type="text/javascript">
+require([
+    'jquery',
+    'mage/mage',
+    'prototype'
+], function(jQuery){
+
+//<![CDATA[>
+var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
+                                '<div id="{{id}}" class="file-row file-row-narrow">' +
+                                    '<span class="file-info">' +
+                                        '<span class="file-info-name">{{name}}</span>' +
+                                        ' ' +
+                                        '<span class="file-info-size">({{size}})</span>' +
+                                    '</span>' +
+                                    '<div class="progressbar-container">' +
+                                        '<div class="progressbar upload-progress" style="width: 0%;"></div>' +
+                                    '</div>' +
+                                    '<div class="clear"></div>' +
+                                '</div>' +
+                            '</div>' +
+                                '<div class="no-display" id="[[idName]]-template-progress">' +
+                                '{{percent}}% {{uploaded}} / {{total}}' +
+                                '</div>';
+
+    var fileListTemplate = '<span class="file-info">' +
+                                '<span class="file-info-name">{{name}}</span>' +
+                                ' ' +
+                                '<span class="file-info-size">({{size}})</span>' +
+                            '</span>';
+
+    window.Downloadable = {
+        uploaderObj : $H({}),
+        objCount : 0,
+        setUploaderObj : function(type, key, obj){
+            if (!this.uploaderObj.get(type)) {
+                this.uploaderObj.set(type, $H({}));
+            }
+            this.uploaderObj.get(type).set(key, obj);
+        },
+        getUploaderObj : function(type, key){
+            try {
+                return this.uploaderObj.get(type).get(key);
+            } catch (e) {
+                try {
+                    console.log(e);
+                } catch (e2) {
+                    alert(e.name + '\n' + e.message);
+                }
+            }
+        },
+        unsetUploaderObj : function(type, key){
+            try {
+                this.uploaderObj.get(type).unset(key);
+            } catch (e) {
+                try {
+                    console.log(e);
+                } catch (e2) {
+                    alert(e.name + '\n' + e.message);
+                }
+            }
+        },
+        massUploadByType : function(type){
+            try {
+                this.uploaderObj.get(type).each(function(item){
+                    container = item.value.container.up('tr');
+                    if (container.visible() && !container.hasClassName('no-display')) {
+                        item.value.upload();
+                    } else {
+                        Downloadable.unsetUploaderObj(type, item.key);
+                    }
+                });
+            } catch (e) {
+                try {
+                    console.log(e);
+                } catch (e2) {
+                    alert(e.name + '\n' + e.message);
+                }
+            }
+        }
+    };
+
+    Downloadable.FileUploader = Class.create();
+    Downloadable.FileUploader.prototype = {
+        type : null,
+        key : null, //key, identifier of uploader obj
+        elmContainer : null, //insert Flex object and templates to elmContainer
+        fileValueName : null, //name of field of JSON data of saved file
+        fileValue : null,
+        idName : null, //id name of elements for unique uploader
+        uploaderText: uploaderTemplate,
+        uploaderSyntax : /(^|.|\r|\n)(\[\[(\w+)\]\])/,
+        uploaderObj : $H({}),
+        config : null,
+        initialize: function (type, key, elmContainer, fileValueName, fileValue ,idName, config) {
+            this.type = type;
+            this.key = key;
+            this.elmContainer = elmContainer;
+            this.fileValueName = fileValueName;
+            this.fileValue = fileValue;
+            this.idName = idName;
+            this.config = config;
+            uploaderTemplate = new Template(this.uploaderText, this.uploaderSyntax);
+            <?php if (!$this->isReadonly()):?>
+            Element.insert(
+                elmContainer,
+                {'top' : uploaderTemplate.evaluate({
+                        'idName' : this.idName,
+                        'fileValueName' : this.fileValueName,
+                        'uploaderObj' : 'Downloadable.getUploaderObj(\''+this.type+'\', \''+this.key+'\')'
+                    })
+                }
+            );
+            if ($(this.idName+'_save')) {
+                $(this.idName+'_save').value = this.fileValue.toJSON
+                   ? this.fileValue.toJSON()
+                   : Object.toJSON(this.fileValue);
+            }
+            Downloadable.setUploaderObj(
+                this.type,
+                this.key,
+                null
+            );
+            new Downloadable.FileList(this.idName, null);
+            <?php endif;?>
+        }
+    }
+
+    Downloadable.FileList = Class.create();
+    Downloadable.FileList.prototype = {
+        file: [],
+        containerId: '',
+        container: null,
+        uploader: null,
+        fileListTemplate: fileListTemplate,
+        templatePattern : /(^|.|\r|\n)({{(\w+)}})/,
+        listTemplate : null,
+        initialize: function (containerId, uploader) {
+            this.containerId  = containerId,
+            this.container = $(this.containerId);
+            this.uploader = uploader;
+            this.file = this.getElement('save').value.evalJSON();
+            this.listTemplate = new Template(this.fileListTemplate, this.templatePattern);
+            this.updateFiles();
+        },
+        handleFileRemoveAll: function(fileId) {
+            $(this.containerId+'-new').hide();
+            $(this.containerId+'-old').show();
+        },
+        handleFileSelect: function() {
+            $(this.containerId+'_type').checked = true;
+        },
+        getElement: function (name) {
+            return $(this.containerId + '_' + name);
+        },
+        handleUploadComplete: function (file) {
+            if (file.error) {
+                return;
+            }
+
+            var newFile = {};
+            newFile.file = file.file;
+            newFile.name = file.name;
+            newFile.size = file.size;
+            newFile.status = 'new';
+            this.file[0] = newFile;
+            this.updateFiles();
+        },
+        updateFiles: function() {
+            this.getElement('save').value = this.file.toJSON
+                ? this.file.toJSON()
+                : Object.toJSON(this.file);
+            this.file.each(function(row){
+                row.size = byteConvert(row.size);
+                $(this.containerId + '-old').innerHTML = this.listTemplate.evaluate(row);
+                $(this.containerId + '-new').hide();
+                $(this.containerId + '-old').show();
+            }.bind(this));
+        }
+    }
+
+    var alertAlreadyDisplayed = false;
+
+    window.fileListTemplate = fileListTemplate;
+    window.uploaderTemplate = uploaderTemplate;
+
+    window.alertAlreadyDisplayed = alertAlreadyDisplayed;
+
+	jQuery.mage.extend('validation', 'validation', 'Magento_Downloadable/product/validation-rules');
+//]]>
+
+});
+</script>
+
+<div id="alert_messages_block"><?php echo $this->getMessageHtml() ?></div>
+
+<div class="entry-edit">
+<?php echo $this->getChildHtml('accordion') ?>
+</div>
+<div style="display:none">
+    <div id="custom-advice-container"></div>
+</div>
+<?php if ($this->isReadonly()): ?>
+<script type="text/javascript">
+require(['prototype'], function(){
+
+$(<?= $this->getContentTabId(); ?>).select('input', 'select', 'textarea', 'button').each(function (item){
+    item.disabled = true;
+    if (item.tagName.toLowerCase() == 'button') {
+        item.addClassName('disabled');
+    }
+});
+
+});
+</script>
+<?php endif; ?>

@@ -18,27 +18,26 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Sitemap\Model\Config\Source;
 
-class Frequency implements \Magento\Core\Model\Option\ArrayInterface
+class Frequency implements \Magento\Framework\Option\ArrayInterface
 {
+    /**
+     * {@inheritdoc}
+     */
     public function toOptionArray()
     {
         return array(
-            array('value'=>'always', 'label'=>__('Always')),
-            array('value'=>'hourly', 'label'=>__('Hourly')),
-            array('value'=>'daily', 'label'=>__('Daily')),
-            array('value'=>'weekly', 'label'=>__('Weekly')),
-            array('value'=>'monthly', 'label'=>__('Monthly')),
-            array('value'=>'yearly', 'label'=>__('Yearly')),
-            array('value'=>'never', 'label'=>__('Never')),
+            array('value' => 'always', 'label' => __('Always')),
+            array('value' => 'hourly', 'label' => __('Hourly')),
+            array('value' => 'daily', 'label' => __('Daily')),
+            array('value' => 'weekly', 'label' => __('Weekly')),
+            array('value' => 'monthly', 'label' => __('Monthly')),
+            array('value' => 'yearly', 'label' => __('Yearly')),
+            array('value' => 'never', 'label' => __('Never'))
         );
     }
 }

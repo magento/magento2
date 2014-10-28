@@ -23,14 +23,16 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <block class="Magento\View\Element\Template" name="root" output="1">
-        <action method="setTemplate">
-            <argument name="template" xsi:type="string">Magento_Install::page.phtml</argument>
-        </action>
-        <block class="Magento\Backend\Block\Page\Copyright" name="copyright" as="copyright"/>
-        <container name="left" as="left" label="Left Column"/>
-        <container name="content" as="content" label="Content"/>
-    </block>
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/layout_generic.xsd">
+    <container name="root">
+        <block class="Magento\Framework\View\Element\Template" name="page.block">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">Magento_Install::page.phtml</argument>
+            </action>
+            <block class="Magento\Backend\Block\Page\Copyright" name="copyright" as="copyright"/>
+            <container name="left" as="left" label="Left Column"/>
+            <container name="content" as="content" label="Content"/>
+        </block>
+    </container>
     <block class="Magento\Install\Block\Db\Main" name="database" as="database"/>
 </layout>

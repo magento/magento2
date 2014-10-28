@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -30,11 +28,9 @@ class Validator
     /**
      * The list of required params
      *
-     * @var array
+     * @var string[]
      */
-    protected $_required = array(
-        'id', 'title', 'resource'
-    );
+    protected $_required = array('id', 'title', 'resource');
 
     /**
      * List of created item ids
@@ -50,6 +46,9 @@ class Validator
      */
     protected $_validators = array();
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $idValidator = new \Zend_Validate();
@@ -79,10 +78,12 @@ class Validator
         $this->_validators['dependsOnConfig'] = $configDepValidator;
         $this->_validators['toolTip'] = $tooltipValidator;
     }
+
     /**
      * Validate menu item params
      *
-     * @param $data
+     * @param array $data
+     * @return void
      * @throws \InvalidArgumentException
      * @throws \BadMethodCallException
      */
@@ -95,17 +96,23 @@ class Validator
         }
 
         if (array_search($data['id'], $this->_ids) !== false) {
-            throw new \InvalidArgumentException('Item with id ' . $data ['id'] . ' already exists');
+            throw new \InvalidArgumentException('Item with id ' . $data['id'] . ' already exists');
         }
 
         foreach ($data as $param => $value) {
-            if (!is_null($data[$param])
-                && isset($this->_validators[$param])
-                && !$this->_validators[$param]->isValid($value)
+            if (!is_null(
+                $data[$param]
+            ) && isset(
+                $this->_validators[$param]
+            ) && !$this->_validators[$param]->isValid(
+                $value
+            )
             ) {
                 throw new \InvalidArgumentException(
-                    "Param " . $param . " doesn't pass validation: "
-                        . implode('; ', $this->_validators[$param]->getMessages())
+                    "Param " . $param . " doesn't pass validation: " . implode(
+                        '; ',
+                        $this->_validators[$param]->getMessages()
+                    )
                 );
             }
         }
@@ -117,6 +124,7 @@ class Validator
      *
      * @param string $param
      * @param mixed $value
+     * @return void
      * @throws \InvalidArgumentException
      */
     public function validateParam($param, $value)
@@ -127,8 +135,10 @@ class Validator
 
         if (!is_null($value) && isset($this->_validators[$param]) && !$this->_validators[$param]->isValid($value)) {
             throw new \InvalidArgumentException(
-                'Param ' . $param . ' doesn\'t pass validation: '
-                    . implode('; ', $this->_validators[$param]->getMessages())
+                'Param ' . $param . ' doesn\'t pass validation: ' . implode(
+                    '; ',
+                    $this->_validators[$param]->getMessages()
+                )
             );
         }
     }

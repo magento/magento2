@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Eav
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Eav\Model\Entity\Attribute\Source;
 
 class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
@@ -46,7 +42,7 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     /**
      * @var \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory
      */
-    protected $_attrOptCollFactory;
+    protected $_attrOptionCollectionFactory;
 
     /**
      * @var \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory
@@ -55,16 +51,16 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 
     /**
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptCollFactory
+     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $attrOptionFactory
      */
     public function __construct(
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptCollFactory,
+        \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $attrOptionFactory
     ) {
         $this->_coreData = $coreData;
-        $this->_attrOptCollFactory = $attrOptCollFactory;
+        $this->_attrOptionCollectionFactory = $attrOptionCollectionFactory;
         $this->_attrOptionFactory = $attrOptionFactory;
     }
 
@@ -85,15 +81,17 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
             $this->_optionsDefault = array();
         }
         if (!isset($this->_options[$storeId])) {
-            $collection = $this->_attrOptCollFactory->create()
-                ->setPositionOrder('asc')
-                ->setAttributeFilter($this->getAttribute()->getId())
-                ->setStoreFilter($this->getAttribute()->getStoreId())
-                ->load();
-            $this->_options[$storeId]        = $collection->toOptionArray();
+            $collection = $this->_attrOptionCollectionFactory->create()->setPositionOrder(
+                'asc'
+            )->setAttributeFilter(
+                $this->getAttribute()->getId()
+            )->setStoreFilter(
+                $this->getAttribute()->getStoreId()
+            )->load();
+            $this->_options[$storeId] = $collection->toOptionArray();
             $this->_optionsDefault[$storeId] = $collection->toOptionArray('default_value');
         }
-        $options = ($defaultValues ? $this->_optionsDefault[$storeId] : $this->_options[$storeId]);
+        $options = $defaultValues ? $this->_optionsDefault[$storeId] : $this->_options[$storeId];
         if ($withEmpty) {
             array_unshift($options, array('label' => '', 'value' => ''));
         }
@@ -102,10 +100,32 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     }
 
     /**
+     * Retrieve Option values array by ids
+     *
+     * @param string|array $ids
+     * @param bool $withEmpty Add empty option to array
+     * @return array
+     */
+    public function getSpecificOptions($ids, $withEmpty = true)
+    {
+        $options = $this->_attrOptionCollectionFactory->create()
+            ->setPositionOrder('asc')
+            ->setAttributeFilter($this->getAttribute()->getId())
+            ->addFieldToFilter('main_table.option_id', array('in' => $ids))
+            ->setStoreFilter($this->getAttribute()->getStoreId())
+            ->load()
+            ->toOptionArray();
+        if ($withEmpty) {
+            array_unshift($options, array('label' => '', 'value' => ''));
+        }
+        return $options;
+    }
+
+    /**
      * Get a text for option value
      *
      * @param string|integer $value
-     * @return string
+     * @return array|string|bool
      */
     public function getOptionText($value)
     {
@@ -115,7 +135,7 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
             $value = explode(',', $value);
         }
 
-        $options = $this->getAllOptions(false);
+        $options = $this->getSpecificOptions($value, false);
 
         if ($isMultiple) {
             $values = array();
@@ -141,34 +161,38 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * @param \Magento\Eav\Model\Entity\Collection\AbstractCollection $collection
      * @param string $dir
      *
-     * @return \Magento\Eav\Model\Entity\Attribute\Source\Table
+     * @return $this
      */
-    public function addValueSortToCollection($collection, $dir = \Magento\DB\Select::SQL_ASC)
+    public function addValueSortToCollection($collection, $dir = \Magento\Framework\DB\Select::SQL_ASC)
     {
-        $valueTable1    = $this->getAttribute()->getAttributeCode() . '_t1';
-        $valueTable2    = $this->getAttribute()->getAttributeCode() . '_t2';
-        $collection->getSelect()
-            ->joinLeft(
-                array($valueTable1 => $this->getAttribute()->getBackend()->getTable()),
-                "e.entity_id={$valueTable1}.entity_id"
-                . " AND {$valueTable1}.attribute_id='{$this->getAttribute()->getId()}'"
-                . " AND {$valueTable1}.store_id=0",
-                array())
-            ->joinLeft(
-                array($valueTable2 => $this->getAttribute()->getBackend()->getTable()),
-                "e.entity_id={$valueTable2}.entity_id"
-                . " AND {$valueTable2}.attribute_id='{$this->getAttribute()->getId()}'"
-                . " AND {$valueTable2}.store_id='{$collection->getStoreId()}'",
-                array()
-            );
-        $valueExpr = $collection->getSelect()->getAdapter()
-            ->getCheckSql("{$valueTable2}.value_id > 0", "{$valueTable2}.value", "{$valueTable1}.value");
+        $valueTable1 = $this->getAttribute()->getAttributeCode() . '_t1';
+        $valueTable2 = $this->getAttribute()->getAttributeCode() . '_t2';
+        $collection->getSelect()->joinLeft(
+            array($valueTable1 => $this->getAttribute()->getBackend()->getTable()),
+            "e.entity_id={$valueTable1}.entity_id" .
+            " AND {$valueTable1}.attribute_id='{$this->getAttribute()->getId()}'" .
+            " AND {$valueTable1}.store_id=0",
+            array()
+        )->joinLeft(
+            array($valueTable2 => $this->getAttribute()->getBackend()->getTable()),
+            "e.entity_id={$valueTable2}.entity_id" .
+            " AND {$valueTable2}.attribute_id='{$this->getAttribute()->getId()}'" .
+            " AND {$valueTable2}.store_id='{$collection->getStoreId()}'",
+            array()
+        );
+        $valueExpr = $collection->getSelect()->getAdapter()->getCheckSql(
+            "{$valueTable2}.value_id > 0",
+            "{$valueTable2}.value",
+            "{$valueTable1}.value"
+        );
 
-        $this->_attrOptionFactory->create()
-            ->addOptionValueToCollection($collection, $this->getAttribute(), $valueExpr);
+        $this->_attrOptionFactory->create()->addOptionValueToCollection(
+            $collection,
+            $this->getAttribute(),
+            $valueExpr
+        );
 
-        $collection->getSelect()
-            ->order("{$this->getAttribute()->getAttributeCode()} {$dir}");
+        $collection->getSelect()->order("{$this->getAttribute()->getAttributeCode()} {$dir}");
 
         return $this;
     }
@@ -178,51 +202,32 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      *
      * @return array
      */
-    public function getFlatColums()
+    public function getFlatColumns()
     {
         $columns = array();
         $attributeCode = $this->getAttribute()->getAttributeCode();
         $isMulti = $this->getAttribute()->getFrontend()->getInputType() == 'multiselect';
 
-        if ($this->_coreData->useDbCompatibleMode()) {
-            $columns[$attributeCode] = array(
-                'type'      => $isMulti ? 'varchar(255)' : 'int',
-                'unsigned'  => false,
-                'is_null'   => true,
-                'default'   => null,
-                'extra'     => null
+        $type = $isMulti ? \Magento\Framework\DB\Ddl\Table::TYPE_TEXT : \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER;
+        $columns[$attributeCode] = array(
+            'type' => $type,
+            'length' => $isMulti ? '255' : null,
+            'unsigned' => false,
+            'nullable' => true,
+            'default' => null,
+            'extra' => null,
+            'comment' => $attributeCode . ' column'
+        );
+        if (!$isMulti) {
+            $columns[$attributeCode . '_value'] = array(
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                'length' => 255,
+                'unsigned' => false,
+                'nullable' => true,
+                'default' => null,
+                'extra' => null,
+                'comment' => $attributeCode . ' column'
             );
-            if (!$isMulti) {
-                $columns[$attributeCode . '_value'] = array(
-                    'type'      => 'varchar(255)',
-                    'unsigned'  => false,
-                    'is_null'   => true,
-                    'default'   => null,
-                    'extra'     => null
-                );
-            }
-        } else {
-            $type = ($isMulti) ? \Magento\DB\Ddl\Table::TYPE_TEXT : \Magento\DB\Ddl\Table::TYPE_INTEGER;
-            $columns[$attributeCode] = array(
-                'type'      => $type,
-                'length'    => $isMulti ? '255' : null,
-                'unsigned'  => false,
-                'nullable'   => true,
-                'default'   => null,
-                'extra'     => null,
-                'comment'   => $attributeCode . ' column'
-            );
-            if (!$isMulti) {
-                $columns[$attributeCode . '_value'] = array(
-                    'type'      => \Magento\DB\Ddl\Table::TYPE_TEXT,
-                    'length'    => 255,
-                    'unsigned'  => false,
-                    'nullable'  => true,
-                    'default'   => null,
-                    'extra'     => null,
-                    'comment'   => $attributeCode . ' column'
-                );
-            }
         }
 
         return $columns;
@@ -238,18 +243,15 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
         $indexes = array();
 
         $index = sprintf('IDX_%s', strtoupper($this->getAttribute()->getAttributeCode()));
-        $indexes[$index] = array(
-            'type'      => 'index',
-            'fields'    => array($this->getAttribute()->getAttributeCode())
-        );
+        $indexes[$index] = array('type' => 'index', 'fields' => array($this->getAttribute()->getAttributeCode()));
 
-        $sortable   = $this->getAttribute()->getUsedForSortBy();
+        $sortable = $this->getAttribute()->getUsedForSortBy();
         if ($sortable && $this->getAttribute()->getFrontend()->getInputType() != 'multiselect') {
             $index = sprintf('IDX_%s_VALUE', strtoupper($this->getAttribute()->getAttributeCode()));
 
             $indexes[$index] = array(
-                'type'      => 'index',
-                'fields'    => array($this->getAttribute()->getAttributeCode() . '_value')
+                'type' => 'index',
+                'fields' => array($this->getAttribute()->getAttributeCode() . '_value')
             );
         }
 
@@ -260,7 +262,7 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * Retrieve Select For Flat Attribute update
      *
      * @param int $store
-     * @return \Magento\DB\Select|null
+     * @return \Magento\Framework\DB\Select|null
      */
     public function getFlatUpdateSelect($store)
     {

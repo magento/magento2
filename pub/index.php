@@ -23,11 +23,19 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
+use Magento\Framework\App\Bootstrap;
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 require __DIR__ . '/../app/bootstrap.php';
-\Magento\Profiler::start('magento');
 $params = $_SERVER;
-$params[\Magento\Filesystem::PARAM_APP_DIRS][\Magento\Filesystem::PUB] = array('uri' => '');
-$entryPoint = new \Magento\App\EntryPoint\EntryPoint(BP, $params);
-$result = $entryPoint->run('Magento\App\Http');
-\Magento\Profiler::stop('magento');
-return $result;
+$params[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS] = [
+    DirectoryList::PUB => [DirectoryList::URL_PATH => ''],
+    DirectoryList::MEDIA => [DirectoryList::URL_PATH => 'media'],
+    DirectoryList::STATIC_VIEW => [DirectoryList::URL_PATH => 'static'],
+    DirectoryList::UPLOAD => [DirectoryList::URL_PATH => 'media/upload'],
+];
+$bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $params);
+/** @var \Magento\Framework\App\Http $app */
+$app = $bootstrap->createApplication('Magento\Framework\App\Http');
+$bootstrap->run($app);

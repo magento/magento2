@@ -1,0 +1,61 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Currency switcher
+ *
+ * @see \Magento\Directory\Block\Currency
+ */
+?>
+<?php if ($this->getCurrencyCount() > 1): ?>
+<?php $currencies = $this->getCurrencies(); ?>
+<?php $currentCurrencyCode = $this->getCurrentCurrencyCode(); ?>
+<?php $id = $this->getIdModifier() ? '-' . $this->getIdModifier() : ''?>
+<div class="switcher currency switcher-currency" id="switcher-currency<?php echo $id?>">
+    <strong class="label switcher-label"><span><?php echo __('Currency') ?></span></strong>
+    <div class="actions dropdown options switcher-options">
+        <div class="action toggle switcher-trigger" id="switcher-currency-trigger<?php echo $id?>">
+            <strong class="language-<?php echo $this->escapeHtml($this->getCurrentCurrencyCode()) ?>">
+                <span><?php echo $this->escapeHtml($currentCurrencyCode) ?> - <?php echo @$this->escapeHtml($currencies[$currentCurrencyCode]) ?></span>
+            </strong>
+        </div>
+        <ul class="dropdown switcher-dropdown" data-mage-init='{"dropdownDialog":{
+            "appendTo":"#switcher-currency<?php echo $id?> > .options",
+            "triggerTarget":"#switcher-currency-trigger<?php echo $id?>",
+            "closeOnMouseLeave": false,
+            "triggerClass":"active",
+            "parentClass":"active",
+            "buttons":null}}'>
+            <?php foreach ($currencies as $_code => $_name): ?>
+                <?php if($_code != $currentCurrencyCode): ?>
+                    <li class="currency-<?php echo $_code ?> switcher-option">
+                        <a href="#" data-post='<?php echo $this->getSwitchCurrencyPostData($_code); ?>'><?php echo $_code ?> - <?php echo $_name ?></a>
+                    </li>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+</div>
+<?php endif; ?>

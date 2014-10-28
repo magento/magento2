@@ -18,21 +18,14 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Cms
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Cms\Block\Adminhtml\Page;
 
 /**
  * Adminhtml cms pages grid
- *
- * @category   Magento
- * @package    Magento_Cms
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Cms\Block\Adminhtml\Page;
-
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
@@ -46,34 +39,35 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_cmsPage;
 
     /**
-     * @var \Magento\Theme\Model\Layout\Source\Layout
+     * @var \Magento\Core\Model\PageLayout\Config\Builder
      */
-    protected $_pageLayout;
+    protected $pageLayoutBuilder;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Theme\Model\Layout\Source\Layout $pageLayout
      * @param \Magento\Cms\Model\Page $cmsPage
      * @param \Magento\Cms\Model\Resource\Page\CollectionFactory $collectionFactory
+     * @param \Magento\Core\Model\PageLayout\Config\Builder $pageLayoutBuilder
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Url $urlModel,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Theme\Model\Layout\Source\Layout $pageLayout,
         \Magento\Cms\Model\Page $cmsPage,
         \Magento\Cms\Model\Resource\Page\CollectionFactory $collectionFactory,
+        \Magento\Core\Model\PageLayout\Config\Builder $pageLayoutBuilder,
         array $data = array()
     ) {
         $this->_collectionFactory = $collectionFactory;
-        $this->_cmsPage = $cmsPage;
-        $this->_pageLayout = $pageLayout;
-        parent::__construct($context, $urlModel, $backendHelper, $data);
+         $this->_cmsPage = $cmsPage;
+        $this->pageLayoutBuilder = $pageLayoutBuilder;
+        parent::__construct($context, $backendHelper, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -82,6 +76,11 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->setDefaultDir('ASC');
     }
 
+    /**
+     * Prepare collection
+     *
+     * @return \Magento\Backend\Block\Widget\Grid
+     */
     protected function _prepareCollection()
     {
         $collection = $this->_collectionFactory->create();
@@ -92,84 +91,113 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         return parent::_prepareCollection();
     }
 
+    /**
+     * Prepare columns
+     *
+     * @return \Magento\Backend\Block\Widget\Grid\Extended
+     */
     protected function _prepareColumns()
     {
-        $baseUrl = $this->getUrl();
+        $this->addColumn('title', array('header' => __('Title'), 'index' => 'title'));
 
-        $this->addColumn('title', array(
-            'header'    => __('Title'),
-            'align'     => 'left',
-            'index'     => 'title',
-        ));
+        $this->addColumn('identifier', array('header' => __('URL Key'), 'index' => 'identifier'));
 
-        $this->addColumn('identifier', array(
-            'header'    => __('URL Key'),
-            'align'     => 'left',
-            'index'     => 'identifier'
-        ));
-
-        $this->addColumn('root_template', array(
-            'header'    => __('Layout'),
-            'index'     => 'root_template',
-            'type'      => 'options',
-            'options'   => $this->_pageLayout->getOptions(),
-        ));
+        $this->addColumn(
+            'page_layout',
+            array(
+                'header' => __('Layout'),
+                'index' => 'page_layout',
+                'type' => 'options',
+                'options' => $this->pageLayoutBuilder->getPageLayoutsConfig()->getOptions()
+            )
+        );
 
         /**
          * Check is single store mode
          */
         if (!$this->_storeManager->isSingleStoreMode()) {
-            $this->addColumn('store_id', array(
-                'header'        => __('Store View'),
-                'index'         => 'store_id',
-                'type'          => 'store',
-                'store_all'     => true,
-                'store_view'    => true,
-                'sortable'      => false,
-                'filter_condition_callback'
-                                => array($this, '_filterStoreCondition'),
-            ));
+            $this->addColumn(
+                'store_id',
+                array(
+                    'header' => __('Store View'),
+                    'index' => 'store_id',
+                    'type' => 'store',
+                    'store_all' => true,
+                    'store_view' => true,
+                    'sortable' => false,
+                    'filter_condition_callback' => array($this, '_filterStoreCondition')
+                )
+            );
         }
 
-        $this->addColumn('is_active', array(
-            'header'    => __('Status'),
-            'index'     => 'is_active',
-            'type'      => 'options',
-            'options'   => $this->_cmsPage->getAvailableStatuses()
-        ));
+        $this->addColumn(
+            'is_active',
+            array(
+                'header' => __('Status'),
+                'index' => 'is_active',
+                'type' => 'options',
+                'options' => $this->_cmsPage->getAvailableStatuses()
+            )
+        );
 
-        $this->addColumn('creation_time', array(
-            'header'    => __('Created'),
-            'index'     => 'creation_time',
-            'type'      => 'datetime',
-        ));
+        $this->addColumn(
+            'creation_time',
+            array(
+                'header' => __('Created'),
+                'index' => 'creation_time',
+                'type' => 'datetime',
+                'header_css_class' => 'col-date',
+                'column_css_class' => 'col-date'
+            )
+        );
 
-        $this->addColumn('update_time', array(
-            'header'    => __('Modified'),
-            'index'     => 'update_time',
-            'type'      => 'datetime',
-        ));
+        $this->addColumn(
+            'update_time',
+            array(
+                'header' => __('Modified'),
+                'index' => 'update_time',
+                'type' => 'datetime',
+                'header_css_class' => 'col-date',
+                'column_css_class' => 'col-date'
+            )
+        );
 
-        $this->addColumn('page_actions', array(
-            'header'    => __('Action'),
-            'width'     => 10,
-            'sortable'  => false,
-            'filter'    => false,
-            'renderer'  => 'Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action',
-        ));
+        $this->addColumn(
+            'page_actions',
+            array(
+                'header' => __('Action'),
+                'sortable' => false,
+                'filter' => false,
+                'renderer' => 'Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action',
+                'header_css_class' => 'col-action',
+                'column_css_class' => 'col-action'
+            )
+        );
 
         return parent::_prepareColumns();
     }
 
+    /**
+     * After load collection
+     *
+     * @return void
+     */
     protected function _afterLoadCollection()
     {
         $this->getCollection()->walk('afterLoad');
         parent::_afterLoadCollection();
     }
 
-    protected function _filterStoreCondition($collection, $column)
+    /**
+     * Filter store condition
+     *
+     * @param \Magento\Framework\Data\Collection $collection
+     * @param \Magento\Framework\Object $column
+     * @return void
+     */
+    protected function _filterStoreCondition($collection, \Magento\Framework\Object $column)
     {
-        if (!$value = $column->getFilter()->getValue()) {
+        if (!($value = $column->getFilter()->getValue())) {
             return;
         }
 
@@ -179,6 +207,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Row click url
      *
+     * @param \Magento\Framework\Object $row
      * @return string
      */
     public function getRowUrl($row)

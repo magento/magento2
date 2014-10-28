@@ -1,0 +1,104 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+/* @var $this \Magento\Wishlist\Block\Share\Wishlist */
+$imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
+?>
+
+<?php if ($this->hasWishlistItems()): ?>
+    <form class="form shared wishlist" action="<?php echo $this->getUrl('*/*/update') ?>" method="post">
+        <div class="wishlist table-wrapper">
+            <table class="table data wishlist" id="wishlist-table">
+                <thead>
+                <tr>
+                    <th class="col product"><?php echo __('Product') ?></th>
+                    <th class="col comment"><?php echo __('Comment') ?></th>
+                    <th class="col actions"><?php echo __('Add to Cart') ?></th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach($this->getWishlistItems() as $item): ?>
+                    <?php
+                    $product = $item->getProduct();
+                    $isVisibleProduct = $product->isVisibleInSiteVisibility();
+                    ?>
+                    <tr>
+                        <td class="col product">
+                            <a class="product photo" href="<?php echo $this->getProductUrl($item) ?>" title="<?php echo $this->escapeHtml($product->getName()) ?>">
+                                <?php echo $imageBlock->init($product, 'customer_shared_wishlist')->toHtml() ?>
+                            </a>
+                            <strong class="product name">
+                                <a href="<?php echo $this->getProductUrl($item) ?>">
+                                    <?php echo $this->escapeHtml($product->getName()) ?>
+                                </a>
+                            </strong>
+                            <?php
+                                echo $this->getProductPriceHtml(
+                                    $product,
+                                    \Magento\Catalog\Pricing\Price\ConfiguredPriceInterface::CONFIGURED_PRICE_CODE,
+                                    \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
+                                    ['item' => $item]
+                                );
+                            ?>
+                            <?php echo $this->getDetailsHtml($item) ?>
+                        </td>
+                        <td class="col comment"><?php echo $this->getEscapedDescription($item) ?></td>
+                        <td class="col actions" data-role="add-to-links">
+                            <?php if ($product->isSaleable()): ?>
+                                <?php if ($isVisibleProduct): ?>
+                                    <button type="button" title="<?php echo __('Add to Cart') ?>" onclick="location.assign('<?php echo $this->getSharedItemAddToCartUrl($item) ?>')" class="action tocart">
+                                        <span><?php echo __('Add to Cart') ?></span>
+                                    </button>
+                                <?php endif ?>
+                            <?php endif; ?>
+                            <a href="#" data-post='<?php echo $this->getAddToWishlistParams($item); ?>'  onclick="location.assign(this.href); return false;" class="action towishlist" data-action="add-to-wishlist">
+                                <span><?php echo __('Add to Wishlist') ?></span>
+                            </a>
+                        </td>
+                    </tr>
+                <?php endforeach ?>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="actions-toolbar">
+            <?php if($this->isSaleable()):?>
+                <div class="primary">
+                    <button type="button" 
+                            title="<?php echo __('Add All to Cart') ?>" 
+                            onclick="location.assign('<?php echo $this->getUrl('*/*/allcart', array('_current'=>true)) ?>')"
+                            class="action tocart primary">
+                        <span><?php echo __('Add All to Cart') ?></span>
+                    </button>
+                </div>
+            <?php endif;?>
+            <div class="secondary">
+                <a href="<?php echo $this->escapeUrl($this->getBackUrl()) ?>" class="action back">
+                    <span><?php echo __('Back') ?></span>
+                </a>
+            </div>
+        </div>
+    </form>
+<?php else: ?>
+    <p><?php echo __('Wish List is empty now.') ?></p>
+<?php endif ?>

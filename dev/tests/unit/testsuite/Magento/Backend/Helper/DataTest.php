@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Helper;
 
 class DataTest extends \PHPUnit_Framework_TestCase
@@ -37,35 +33,64 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_configMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $_frontResolverMock;
 
     protected function setUp()
     {
-        $this->_configMock = $this->getMock('Magento\Core\Model\Config', array(), array(), '', false, false);
-        $this->_frontResolverMock
-            = $this->getMock('\Magento\Backend\App\Area\FrontNameResolver', array(), array(), '', false);
+        $this->_frontResolverMock = $this->getMock(
+            '\Magento\Backend\App\Area\FrontNameResolver',
+            array(),
+            array(),
+            '',
+            false
+        );
         $this->_helper = new \Magento\Backend\Helper\Data(
-            $this->getMock('Magento\App\Helper\Context', array(), array(), '', false, false),
-            $this->getMock('\Magento\App\Route\Config', array(), array(), '', false),
-            $this->getMock('Magento\Core\Model\App', array(), array(), '', false),
+            $this->getMock('Magento\Framework\App\Helper\Context', array(), array(), '', false, false),
+            $this->getMock('\Magento\Framework\App\Route\Config', array(), array(), '', false),
+            $this->getMock('Magento\Framework\Locale\ResolverInterface'),
             $this->getMock('\Magento\Backend\Model\Url', array(), array(), '', false),
             $this->getMock('\Magento\Backend\Model\Auth', array(), array(), '', false),
             $this->_frontResolverMock,
-            $this->getMock('\Magento\Math\Random', array(), array(), '', false)
+            $this->getMock('\Magento\Framework\Math\Random', array(), array(), '', false),
+            $this->getMock('\Magento\Framework\App\RequestInterface')
         );
     }
 
     public function testGetAreaFrontNameLocalConfigCustomFrontName()
     {
-        $this->_frontResolverMock->expects($this->once())
-            ->method('getFrontName')
-            ->will($this->returnValue('custom_backend'));
+        $this->_frontResolverMock->expects(
+            $this->once()
+        )->method(
+            'getFrontName'
+        )->will(
+            $this->returnValue('custom_backend')
+        );
 
         $this->assertEquals('custom_backend', $this->_helper->getAreaFrontName());
+    }
+
+    /**
+     * @param array $inputString
+     * @param array $expected
+     *
+     * @dataProvider getPrepareFilterStringValuesDataProvider
+     */
+    public function testPrepareFilterStringValues(array $inputString, array $expected)
+    {
+        $inputString = base64_encode(http_build_query($inputString));
+
+        $actual = $this->_helper->prepareFilterString($inputString);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function getPrepareFilterStringValuesDataProvider()
+    {
+        return array(
+            'both_spaces_value' => array(
+                array('field' => ' value '),
+                array('field' => 'value')
+            )
+        );
     }
 }

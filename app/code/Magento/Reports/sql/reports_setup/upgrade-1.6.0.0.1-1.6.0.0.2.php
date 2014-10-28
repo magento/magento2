@@ -18,13 +18,11 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Reports
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/** @var $installer \Magento\Core\Model\Resource\Setup */
+/** @var $installer \Magento\Framework\Module\Setup */
 $installer = $this;
 /*
  * Rename incorrectly named tables in early magento 2 development version
@@ -32,9 +30,9 @@ $installer = $this;
 $installer->startSetup();
 
 $aggregationTablesToRename = array(
-    'reports_viewed_aggregated_daily'   => \Magento\Reports\Model\Resource\Report\Product\Viewed::AGGREGATION_DAILY,
-    'reports_viewed_aggregated_monthly' => \Magento\Reports\Model\Resource\Report\Product\Viewed::AGGREGATION_MONTHLY,
-    'reports_viewed_aggregated_yearly'  => \Magento\Reports\Model\Resource\Report\Product\Viewed::AGGREGATION_YEARLY,
+    'reports_viewed_aggregated_daily' => 'report_viewed_product_aggregated_daily',
+    'reports_viewed_aggregated_monthly' => 'report_viewed_product_aggregated_monthly',
+    'reports_viewed_aggregated_yearly' => 'report_viewed_product_aggregated_yearly'
 );
 
 foreach ($aggregationTablesToRename as $wrongName => $rightName) {

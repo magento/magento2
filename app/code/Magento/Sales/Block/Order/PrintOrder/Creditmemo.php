@@ -18,23 +18,22 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Order\PrintOrder;
+
+use Magento\Framework\View\Element\AbstractBlock;
 
 /**
  * Sales order details block
  */
-namespace Magento\Sales\Block\Order\PrintOrder;
-
 class Creditmemo extends \Magento\Sales\Block\Items\AbstractItems
 {
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
@@ -44,14 +43,14 @@ class Creditmemo extends \Magento\Sales\Block\Items\AbstractItems
     protected $_paymentHelper;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Payment\Helper\Data $paymentHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\Payment\Helper\Data $paymentHelper,
         array $data = array()
     ) {
@@ -60,15 +59,13 @@ class Creditmemo extends \Magento\Sales\Block\Items\AbstractItems
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _prepareLayout()
     {
-        if ($headBlock = $this->getLayout()->getBlock('head')) {
-            $headBlock->setTitle(__('Order # %1', $this->getOrder()->getRealOrderId()));
-        }
-        $this->setChild(
-            'payment_info',
-            $this->_paymentHelper->getInfoBlock($this->getOrder()->getPayment())
-        );
+        $this->pageConfig->setTitle(__('Order # %1', $this->getOrder()->getRealOrderId()));
+        $this->setChild('payment_info', $this->_paymentHelper->getInfoBlock($this->getOrder()->getPayment()));
     }
 
     /**
@@ -95,17 +92,27 @@ class Creditmemo extends \Magento\Sales\Block\Items\AbstractItems
         return $this->getChildHtml('payment_info');
     }
 
+    /**
+     * @return array|null
+     */
     public function getOrder()
     {
         return $this->_coreRegistry->registry('current_order');
     }
 
+    /**
+     * @return array|null
+     */
     public function getCreditmemo()
     {
         return $this->_coreRegistry->registry('current_creditmemo');
     }
 
-    protected function _prepareItem(\Magento\View\Element\AbstractBlock $renderer)
+    /**
+     * @param AbstractBlock $renderer
+     * @return $this
+     */
+    protected function _prepareItem(AbstractBlock $renderer)
     {
         $renderer->setPrintStatus(true);
         return parent::_prepareItem($renderer);

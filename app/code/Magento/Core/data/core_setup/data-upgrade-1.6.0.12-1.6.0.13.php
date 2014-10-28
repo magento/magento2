@@ -18,17 +18,20 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/** @var $themeDbCollection \Magento\Core\Model\Resource\Theme\Collection */
-$themeDbCollection = $this->_themeResourceFactory->create();
+$fileCollection = $this->createThemeFactory();
+$fileCollection->addDefaultPattern('*');
+$fileCollection->setItemObjectClass('Magento\Core\Model\Theme\Data');
 
-/** @var $theme \Magento\View\Design\ThemeInterface */
-foreach ($this->_themeFactory->create()->addDefaultPattern('*') as $theme) {
+/** @var $themeDbCollection \Magento\Core\Model\Resource\Theme\Collection */
+$themeDbCollection = $this->createThemeResourceFactory();
+$themeDbCollection->setItemObjectClass('Magento\Core\Model\Theme\Data');
+
+/** @var $theme \Magento\Framework\View\Design\ThemeInterface */
+foreach ($fileCollection as $theme) {
     $dbTheme = $themeDbCollection->getThemeByFullPath($theme->getFullPath());
     $dbTheme->setCode($theme->getCode());
     $dbTheme->save();

@@ -18,34 +18,44 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_GiftMessage
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\GiftMessage\Block\Message;
 
+use Magento\GiftMessage\Model\Message;
 
 /**
  * Gift message inline edit form
  *
- * @category   Magento
- * @package    Magento_GiftMessage
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\GiftMessage\Block\Message;
-
-class Inline extends \Magento\View\Element\Template
+class Inline extends \Magento\Framework\View\Element\Template
 {
+    /**
+     * @var mixed
+     */
     protected $_entity = null;
-    protected $_type   = null;
+
+    /**
+     * @var string|null
+     */
+    protected $_type = null;
+
+    /**
+     * @var Message|null
+     */
     protected $_giftMessage = null;
 
+    /**
+     * @var string
+     */
     protected $_template = 'inline.phtml';
 
     /**
      * Gift message message
      *
-     * @var \Magento\GiftMessage\Helper\Message
+     * @var \Magento\GiftMessage\Helper\Message|null
      */
     protected $_giftMessageMessage = null;
 
@@ -60,30 +70,46 @@ class Inline extends \Magento\View\Element\Template
     protected $_imageHelper;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @var \Magento\Framework\App\Http\Context
+     */
+    protected $httpContext;
+
+    /**
+     * Checkout type. 'onepage_checkout' and 'multishipping_address' are standard types
+     *
+     * @var string
+     */
+    protected $checkoutType;
+
+    /**
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\GiftMessage\Helper\Message $giftMessageMessage
      * @param \Magento\Catalog\Helper\Image $imageHelper
+     * @param \Magento\Framework\App\Http\Context $httpContext
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\GiftMessage\Helper\Message $giftMessageMessage,
         \Magento\Catalog\Helper\Image $imageHelper,
+        \Magento\Framework\App\Http\Context $httpContext,
         array $data = array()
     ) {
         $this->_imageHelper = $imageHelper;
         $this->_giftMessageMessage = $giftMessageMessage;
         $this->_customerSession = $customerSession;
         parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
+        $this->httpContext = $httpContext;
     }
 
     /**
      * Set entity
      *
-     * @param $entity
-     * @return \Magento\GiftMessage\Block\Message\Inline
+     * @param mixed $entity
+     * @return $this
      */
     public function setEntity($entity)
     {
@@ -94,7 +120,7 @@ class Inline extends \Magento\View\Element\Template
     /**
      * Get entity
      *
-     * @return \Magento\GiftMessage\Block\Message\Inline
+     * @return mixed
      */
     public function getEntity()
     {
@@ -105,7 +131,7 @@ class Inline extends \Magento\View\Element\Template
      * Set type
      *
      * @param string $type
-     * @return \Magento\GiftMessage\Block\Message\Inline
+     * @return $this
      */
     public function setType($type)
     {
@@ -124,6 +150,28 @@ class Inline extends \Magento\View\Element\Template
     }
 
     /**
+     * Define checkout type
+     *
+     * @param $type string
+     * @return $this
+     */
+    public function setCheckoutType($type)
+    {
+        $this->checkoutType = $type;
+        return $this;
+    }
+
+    /**
+     * Return checkout type. Typical values are 'onepage_checkout' and 'multishipping_address'
+     *
+     * @return string|null
+     */
+    public function getCheckoutType()
+    {
+        return $this->checkoutType;
+    }
+
+    /**
      * Check if entity has gift message
      *
      * @return bool
@@ -136,13 +184,11 @@ class Inline extends \Magento\View\Element\Template
     /**
      * Init message
      *
-     * @return \Magento\GiftMessage\Block\Message\Inline
+     * @return $this
      */
     protected function _initMessage()
     {
-        $this->_giftMessage = $this->_giftMessageMessage->getGiftMessage(
-            $this->getEntity()->getGiftMessageId()
-        );
+        $this->_giftMessage = $this->_giftMessageMessage->getGiftMessage($this->getEntity()->getGiftMessageId());
         return $this;
     }
 
@@ -153,7 +199,7 @@ class Inline extends \Magento\View\Element\Template
      */
     public function getDefaultFrom()
     {
-        if ($this->_customerSession->isLoggedIn()) {
+        if ($this->httpContext->getValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH)) {
             return $this->_customerSession->getCustomer()->getName();
         } else {
             return $this->getEntity()->getBillingAddress()->getName();
@@ -180,7 +226,7 @@ class Inline extends \Magento\View\Element\Template
      * @param mixed $entity
      * @return string
      */
-    public function getMessage($entity=null)
+    public function getMessage($entity = null)
     {
         if (is_null($this->_giftMessage)) {
             $this->_initMessage();
@@ -188,9 +234,7 @@ class Inline extends \Magento\View\Element\Template
 
         if ($entity) {
             if (!$entity->getGiftMessage()) {
-                $entity->setGiftMessage(
-                    $this->_giftMessageMessage->getGiftMessage($entity->getGiftMessageId())
-                );
+                $entity->setGiftMessage($this->_giftMessageMessage->getGiftMessage($entity->getGiftMessageId()));
             }
             return $entity->getGiftMessage();
         }
@@ -227,7 +271,7 @@ class Inline extends \Magento\View\Element\Template
     /**
      * Retrieve additional url
      *
-     * @return bool
+     * @return string
      */
     public function getAdditionalUrl()
     {
@@ -235,7 +279,7 @@ class Inline extends \Magento\View\Element\Template
     }
 
     /**
-     * Check if items are available
+     * Check if gift messages for separate items are allowed
      *
      * @return bool
      */
@@ -286,13 +330,13 @@ class Inline extends \Magento\View\Element\Template
      * @param string $defaultValue
      * @return string
      */
-    public function getEscaped($value, $defaultValue='')
+    public function getEscaped($value, $defaultValue = '')
     {
-        return $this->escapeHtml(trim($value)!='' ? $value : $defaultValue);
+        return $this->escapeHtml(trim($value) != '' ? $value : $defaultValue);
     }
 
     /**
-     * Check availability of giftmessages for specified entity
+     * Check availability of giftmessages on order level
      *
      * @return bool
      */
@@ -304,7 +348,7 @@ class Inline extends \Magento\View\Element\Template
     /**
      * Check availability of giftmessages for specified entity item
      *
-     * @param $item
+     * @param \Magento\Framework\Object $item
      * @return bool
      */
     public function isItemMessagesAvailable($item)
@@ -321,8 +365,7 @@ class Inline extends \Magento\View\Element\Template
      */
     public function getThumbnailUrl($product)
     {
-        return (string)$this->_imageHelper->init($product, 'thumbnail')
-            ->resize($this->getThumbnailSize());
+        return (string)$this->_imageHelper->init($product, 'thumbnail')->resize($this->getThumbnailSize());
     }
 
     /**
@@ -333,5 +376,19 @@ class Inline extends \Magento\View\Element\Template
     public function getThumbnailSize()
     {
         return $this->getVar('product_thumbnail_image_size', 'Magento_Catalog');
+    }
+
+    /**
+     * Render HTML code referring to config settings
+     *
+     * @return string
+     */
+    protected function _toHtml()
+    {
+        // render HTML when messages are allowed for order or for items only
+        if ($this->isItemsAvailable() || $this->isMessagesAvailable()) {
+            return parent::_toHtml();
+        }
+        return '';
     }
 }

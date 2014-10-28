@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Tax
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -42,32 +40,34 @@ class Tax extends \Magento\Reports\Model\Resource\Report\AbstractReport
     protected $_updatedAtFactory;
 
     /**
-     * @param \Magento\App\Resource $resource
-     * @param \Magento\Logger $logger
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
-     * @param \Magento\Stdlib\DateTime $dateTime
-     * @param \Magento\Stdlib\DateTime\Timezone\Validator $timezoneValidator
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator
      * @param \Magento\Tax\Model\Resource\Report\Tax\CreatedatFactory $createdAtFactory
      * @param \Magento\Tax\Model\Resource\Report\Tax\UpdatedatFactory $updatedAtFactory
      */
     public function __construct(
-        \Magento\App\Resource $resource,
-        \Magento\Logger $logger,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Logger $logger,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Reports\Model\FlagFactory $reportsFlagFactory,
-        \Magento\Stdlib\DateTime $dateTime,
-        \Magento\Stdlib\DateTime\Timezone\Validator $timezoneValidator,
+        \Magento\Framework\Stdlib\DateTime $dateTime,
+        \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator,
         \Magento\Tax\Model\Resource\Report\Tax\CreatedatFactory $createdAtFactory,
         \Magento\Tax\Model\Resource\Report\Tax\UpdatedatFactory $updatedAtFactory
     ) {
         $this->_createdAtFactory = $createdAtFactory;
         $this->_updatedAtFactory = $updatedAtFactory;
-        parent::__construct($resource, $logger, $locale, $reportsFlagFactory, $dateTime, $timezoneValidator);
+        parent::__construct($resource, $logger, $localeDate, $reportsFlagFactory, $dateTime, $timezoneValidator);
     }
 
     /**
      * Resource initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -79,7 +79,7 @@ class Tax extends \Magento\Reports\Model\Resource\Report\AbstractReport
      *
      * @param mixed $from
      * @param mixed $to
-     * @return \Magento\Tax\Model\Resource\Report\Tax
+     * @return $this
      */
     public function aggregate($from = null, $to = null)
     {

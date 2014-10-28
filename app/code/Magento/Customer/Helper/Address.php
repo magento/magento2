@@ -18,34 +18,46 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Customer\Helper;
+
+use Magento\Directory\Model\Country\Format;
+use Magento\Customer\Service\V1\Data\Eav\AttributeMetadata;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Customer address helper
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Customer\Helper;
-
-class Address extends \Magento\App\Helper\AbstractHelper
+class Address extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * VAT Validation parameters XML paths
      */
     const XML_PATH_VIV_DISABLE_AUTO_ASSIGN_DEFAULT = 'customer/create_account/viv_disable_auto_group_assign_default';
-    const XML_PATH_VIV_ON_EACH_TRANSACTION         = 'customer/create_account/viv_on_each_transaction';
-    const XML_PATH_VAT_VALIDATION_ENABLED          = 'customer/create_account/auto_group_assign';
+
+    const XML_PATH_VIV_ON_EACH_TRANSACTION = 'customer/create_account/viv_on_each_transaction';
+
+    const XML_PATH_VAT_VALIDATION_ENABLED = 'customer/create_account/auto_group_assign';
+
     const XML_PATH_VIV_TAX_CALCULATION_ADDRESS_TYPE = 'customer/create_account/tax_calculation_address_type';
+
     const XML_PATH_VAT_FRONTEND_VISIBILITY = 'customer/create_account/vat_frontend_visibility';
+
+    /**
+     * Possible customer address types
+     */
+    const TYPE_BILLING = 'billing';
+
+    const TYPE_SHIPPING = 'shipping';
 
     /**
      * Array of Customer Address Attributes
      *
-     * @var array
+     * @var AttributeMetadata[]
      */
     protected $_attributes;
 
@@ -54,91 +66,99 @@ class Address extends \Magento\App\Helper\AbstractHelper
      *
      * @var array
      */
-    protected $_config          = array();
+    protected $_config = array();
 
     /**
      * Customer Number of Lines in a Street Address per website
      *
      * @var array
      */
-    protected $_streetLines     = array();
-    protected $_formatTemplate  = array();
+    protected $_streetLines = array();
 
     /**
-     * Block factory
-     *
-     * @var \Magento\View\Element\BlockFactory
+     * @var array
      */
+    protected $_formatTemplate = array();
+
+    /** @var \Magento\Framework\View\Element\BlockFactory */
     protected $_blockFactory;
 
-    /**
-     * @var \Magento\Core\Model\StoreManagerInterface
-     */
+    /** @var \Magento\Framework\StoreManagerInterface */
     protected $_storeManager;
 
-    /**
-     * Core store config
-     *
-     * @var \Magento\Core\Model\Store\Config
-     */
-    protected $_coreStoreConfig;
-    /**
-     * @var \Magento\Eav\Model\Config
-     */
-    protected $_eavConfig;
+    /** @var \Magento\Framework\App\Config\ScopeConfigInterface */
+    protected $_scopeConfig;
 
-    /**
-     * @var \Magento\Customer\Model\Address\Config
-     */
+    /** @var \Magento\Customer\Service\V1\CustomerMetadataServiceInterface */
+    protected $_customerMetadataService;
+
+    /** @var \Magento\Customer\Service\V1\AddressMetadataServiceInterface */
+    protected $_addressMetadataService;
+
+    /** @var \Magento\Customer\Model\Address\Config*/
     protected $_addressConfig;
 
     /**
-     * @param \Magento\App\Helper\Context $context
-     * @param \Magento\View\Element\BlockFactory $blockFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Customer\Model\Address\Config|\Magento\Customer\Model\Address\Config $addressConfig
+     * @param \Magento\Framework\App\Helper\Context $context
+     * @param \Magento\Framework\View\Element\BlockFactory $blockFactory
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $customerMetadataService
+     * @param \Magento\Customer\Service\V1\AddressMetadataServiceInterface $addressMetadataService
+     * @param \Magento\Customer\Model\Address\Config $addressConfig
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
-        \Magento\View\Element\BlockFactory $blockFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Eav\Model\Config $eavConfig,
+        \Magento\Framework\App\Helper\Context $context,
+        \Magento\Framework\View\Element\BlockFactory $blockFactory,
+        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $customerMetadataService,
+        \Magento\Customer\Service\V1\AddressMetadataServiceInterface $addressMetadataService,
         \Magento\Customer\Model\Address\Config $addressConfig
     ) {
-        $this->_coreStoreConfig = $coreStoreConfig;
         $this->_blockFactory = $blockFactory;
         $this->_storeManager = $storeManager;
-        $this->_eavConfig = $eavConfig;
+        $this->_scopeConfig = $scopeConfig;
+        $this->_customerMetadataService = $customerMetadataService;
+        $this->_addressMetadataService = $addressMetadataService;
         $this->_addressConfig = $addressConfig;
         parent::__construct($context);
     }
 
     /**
      * Addresses url
+     *
+     * @return void
      */
     public function getBookUrl()
     {
-
     }
 
+    /**
+     * @return void
+     */
     public function getEditUrl()
     {
-
     }
 
+    /**
+     * @return void
+     */
     public function getDeleteUrl()
     {
-
     }
 
+    /**
+     * @return void
+     */
     public function getCreateUrl()
     {
-
     }
 
+    /**
+     * @param string $renderer
+     * @return \Magento\Framework\View\Element\BlockInterface
+     */
     public function getRenderer($renderer)
     {
         if (is_string($renderer) && $renderer) {
@@ -152,7 +172,7 @@ class Address extends \Magento\App\Helper\AbstractHelper
      * Return customer address config value by key and store
      *
      * @param string $key
-     * @param \Magento\Core\Model\Store|int|string $store
+     * @param \Magento\Store\Model\Store|int|string $store
      * @return string|null
      */
     public function getConfig($key, $store = null)
@@ -160,7 +180,11 @@ class Address extends \Magento\App\Helper\AbstractHelper
         $store = $this->_storeManager->getStore($store);
         $websiteId = $store->getWebsiteId();
         if (!isset($this->_config[$websiteId])) {
-            $this->_config[$websiteId] = $store->getConfig('customer/address', $store);
+            $this->_config[$websiteId] = $this->_scopeConfig->getValue(
+                'customer/address',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $store
+            );
         }
         return isset($this->_config[$websiteId][$key]) ? (string)$this->_config[$websiteId][$key] : null;
     }
@@ -168,28 +192,48 @@ class Address extends \Magento\App\Helper\AbstractHelper
     /**
      * Return Number of Lines in a Street Address for store
      *
-     * @param \Magento\Core\Model\Store|int|string $store
+     * @param \Magento\Store\Model\Store|int|string $store
      * @return int
      */
     public function getStreetLines($store = null)
     {
         $websiteId = $this->_storeManager->getStore($store)->getWebsiteId();
         if (!isset($this->_streetLines[$websiteId])) {
-            $attribute = $this->_eavConfig->getAttribute('customer_address', 'street');
-            $lines = (int)$attribute->getMultilineCount();
+            $attribute = $this->_addressMetadataService->getAttributeMetadata('street');
+
+            $lines = $attribute->getMultilineCount();
             if ($lines <= 0) {
                 $lines = 2;
             }
-            $this->_streetLines[$websiteId] = min(4, $lines);
+            $this->_streetLines[$websiteId] = min($lines, 20);
         }
 
         return $this->_streetLines[$websiteId];
     }
 
+    /**
+     * @param string $code
+     * @return Format|string
+     */
     public function getFormat($code)
     {
         $format = $this->_addressConfig->getFormatByCode($code);
-        return $format->getRenderer() ? $format->getRenderer()->getFormat() : '';
+        return $format->getRenderer() ? $format->getRenderer()->getFormatArray() : '';
+    }
+
+    /**
+     * Retrieve renderer by code
+     *
+     * @param string $code
+     * @return \Magento\Customer\Block\Address\Renderer\RendererInterface|null
+     */
+    public function getFormatTypeRenderer($code)
+    {
+        $formatType = $this->_addressConfig->getFormatByCode($code);
+        if (!$formatType || !$formatType->getRenderer()) {
+            return null;
+        }
+        return $formatType->getRenderer();
     }
 
     /**
@@ -204,45 +248,37 @@ class Address extends \Magento\App\Helper\AbstractHelper
     }
 
     /**
-     * Return array of Customer Address Attributes
-     *
-     * @return array
-     */
-    public function getAttributes()
-    {
-        if (is_null($this->_attributes)) {
-            $this->_attributes = array();
-            $config = $this->_eavConfig;
-            foreach ($config->getEntityAttributeCodes('customer_address') as $attributeCode) {
-                $this->_attributes[$attributeCode] = $config->getAttribute('customer_address', $attributeCode);
-            }
-        }
-        return $this->_attributes;
-    }
-
-    /**
      * Get string with frontend validation classes for attribute
      *
      * @param string $attributeCode
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getAttributeValidationClass($attributeCode)
     {
-        /** @var $attribute \Magento\Customer\Model\Attribute */
-        $attribute = isset($this->_attributes[$attributeCode]) ? $this->_attributes[$attributeCode]
-            : $this->_eavConfig->getAttribute('customer_address', $attributeCode);
-        $class = $attribute ? $attribute->getFrontend()->getClass() : '';
+        $class = '';
 
-        if (in_array($attributeCode, array('firstname', 'middlename', 'lastname', 'prefix', 'suffix', 'taxvat'))) {
-            if ($class && !$attribute->getIsVisible()) {
-                $class = ''; // address attribute is not visible thus its validation rules are not applied
+        try {
+            /** @var $attribute \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata */
+            $attribute = isset($this->_attributes[$attributeCode])
+                ? $this->_attributes[$attributeCode]
+                : $this->_addressMetadataService->getAttributeMetadata($attributeCode);
+            $class = $attribute ? $attribute->getFrontendClass() : '';
+            if (in_array($attributeCode, array('firstname', 'middlename', 'lastname', 'prefix', 'suffix', 'taxvat'))) {
+                if ($class && !$attribute->isVisible()) {
+                    // address attribute is not visible thus its validation rules are not applied
+                    $class = '';
+                }
+
+                /** @var $customerAttribute \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata */
+                $customerAttribute = $this->_customerMetadataService->getAttributeMetadata($attributeCode);
+                $class .= $customerAttribute &&
+                    $customerAttribute->isVisible() ? $customerAttribute->getFrontendClass() : '';
+                $class = implode(' ', array_unique(array_filter(explode(' ', $class))));
             }
-
-            /** @var $customerAttribute \Magento\Customer\Model\Attribute */
-            $customerAttribute = $this->_eavConfig->getAttribute('customer', $attributeCode);
-            $class .= $customerAttribute && $customerAttribute->getIsVisible()
-                ? $customerAttribute->getFrontend()->getClass() : '';
-            $class = implode(' ', array_unique(array_filter(explode(' ', $class))));
+        } catch (NoSuchEntityException $e) {
+            // the attribute does not exist so just return an empty string
         }
 
         return $class;
@@ -259,15 +295,15 @@ class Address extends \Magento\App\Helper\AbstractHelper
      *  Result:
      *   array('street1 street2', 'street3 street4')
      *
-     * @param array $origStreets
-     * @param int   $toCount
-     * @return array
+     * @param string[] $origStreets
+     * @param int $toCount
+     * @return string[]
      */
     public function convertStreetLines($origStreets, $toCount)
     {
         $lines = array();
         if (!empty($origStreets) && $toCount > 0) {
-            $countArgs = (int)floor(count($origStreets)/$toCount);
+            $countArgs = (int)floor(count($origStreets) / $toCount);
             $modulo = count($origStreets) % $toCount;
             $offset = 0;
             $neededLinesCount = 0;
@@ -291,12 +327,16 @@ class Address extends \Magento\App\Helper\AbstractHelper
     /**
      * Check whether VAT ID validation is enabled
      *
-     * @param \Magento\Core\Model\Store|string|int $store
+     * @param \Magento\Store\Model\Store|string|int $store
      * @return bool
      */
     public function isVatValidationEnabled($store = null)
     {
-        return (bool)$this->_coreStoreConfig->getConfig(self::XML_PATH_VAT_VALIDATION_ENABLED, $store);
+        return (bool)$this->_scopeConfig->getValue(
+            self::XML_PATH_VAT_VALIDATION_ENABLED,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
 
     /**
@@ -304,31 +344,42 @@ class Address extends \Magento\App\Helper\AbstractHelper
      *
      * @return bool
      */
-    public function getDisableAutoGroupAssignDefaultValue()
+    public function isDisableAutoGroupAssignDefaultValue()
     {
-        return (bool)$this->_coreStoreConfig->getConfig(self::XML_PATH_VIV_DISABLE_AUTO_ASSIGN_DEFAULT);
+        return (bool)$this->_scopeConfig->getValue(
+            self::XML_PATH_VIV_DISABLE_AUTO_ASSIGN_DEFAULT,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
      * Retrieve 'validate on each transaction' value
      *
-     * @param \Magento\Core\Model\Store|string|int $store
+     * @param \Magento\Store\Model\Store|string|int $store
      * @return bool
      */
-    public function getValidateOnEachTransaction($store = null)
+    public function hasValidateOnEachTransaction($store = null)
     {
-        return (bool)$this->_coreStoreConfig->getConfig(self::XML_PATH_VIV_ON_EACH_TRANSACTION, $store);
+        return (bool)$this->_scopeConfig->getValue(
+            self::XML_PATH_VIV_ON_EACH_TRANSACTION,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
 
     /**
      * Retrieve customer address type on which tax calculation must be based
      *
-     * @param \Magento\Core\Model\Store|string|int|null $store
+     * @param \Magento\Store\Model\Store|string|int|null $store
      * @return string
      */
     public function getTaxCalculationAddressType($store = null)
     {
-        return (string)$this->_coreStoreConfig->getConfig(self::XML_PATH_VIV_TAX_CALCULATION_ADDRESS_TYPE, $store);
+        return (string)$this->_scopeConfig->getValue(
+            self::XML_PATH_VIV_TAX_CALCULATION_ADDRESS_TYPE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
 
     /**
@@ -338,6 +389,9 @@ class Address extends \Magento\App\Helper\AbstractHelper
      */
     public function isVatAttributeVisible()
     {
-        return (bool)$this->_coreStoreConfig->getConfig(self::XML_PATH_VAT_FRONTEND_VISIBILITY);
+        return (bool)$this->_scopeConfig->getValue(
+            self::XML_PATH_VAT_FRONTEND_VISIBILITY,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 }

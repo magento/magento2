@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Newsletter
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,13 +26,11 @@
 /**
  * Newsletter Data Helper
  *
- * @category   Magento
- * @package    Magento_Newsletter
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Newsletter\Helper;
 
-class Data extends \Magento\App\Helper\AbstractHelper
+class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Retrieve subsription confirmation url
@@ -44,12 +40,12 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getConfirmationUrl($subscriber)
     {
-        return $this->_urlBuilder->setStore($subscriber->getStoreId())
-            ->getUrl('newsletter/subscriber/confirm', array(
-                'id'     => $subscriber->getId(),
-                'code'   => $subscriber->getCode(),
-                '_nosid' => true,
-            ));
+        return $this->_urlBuilder->setScope(
+            $subscriber->getStoreId()
+        )->getUrl(
+            'newsletter/subscriber/confirm',
+            array('id' => $subscriber->getId(), 'code' => $subscriber->getCode(), '_nosid' => true)
+        );
     }
 
     /**
@@ -60,11 +56,11 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function getUnsubscribeUrl($subscriber)
     {
-        return $this->_urlBuilder->setStore($subscriber->getStoreId())
-            ->getUrl('newsletter/subscriber/unsubscribe', array(
-                'id'     => $subscriber->getId(),
-                'code'   => $subscriber->getCode(),
-                '_nosid' => true,
-            ));
+        return $this->_urlBuilder->setScope(
+            $subscriber->getStoreId()
+        )->getUrl(
+            'newsletter/subscriber/unsubscribe',
+            array('id' => $subscriber->getId(), 'code' => $subscriber->getCode(), '_nosid' => true)
+        );
     }
 }

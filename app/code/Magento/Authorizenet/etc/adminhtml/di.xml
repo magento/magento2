@@ -23,16 +23,16 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <preference for="Magento\Authorizenet\Helper\HelperInterface" type="Magento\Authorizenet\Helper\Backend" />
-    <type name="Magento\Authorizenet\Model\Directpost\Session">
-        <param name="sessionName">
-            <value>adminhtml</value>
-        </param>
-    </type>
     <type name="Magento\Authorizenet\Model\Directpost">
-        <param name="session">
-            <instance type="Magento\Backend\Model\Session\Quote" />
-        </param>
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Backend\Model\Session\Quote</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Authorizenet\Model\Authorizenet">
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Backend\Model\Session\Quote</argument>
+        </arguments>
     </type>
 </config>

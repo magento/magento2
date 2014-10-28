@@ -18,38 +18,33 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Adminhtml
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sitemap\Block\Adminhtml;
 
 /**
  * Sitemap edit form container
  *
- * @category   Magento
- * @package    Magento_Adminhtml
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sitemap\Block\Adminhtml;
-
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Backend\Block\Widget\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Backend\Block\Widget\Context $context,
+        \Magento\Framework\Registry $registry,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
@@ -58,6 +53,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
     /**
      * Init container
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -67,23 +64,22 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
         parent::_construct();
 
-        $this->_addButton('generate', array(
-            'label'   => __('Save & Generate'),
-            'data_attribute'  => array(
-                'mage-init' => array(
-                    'button' => array(
-                        'event' => 'save',
-                        'target' => '#edit_form',
-                        'eventData' => array(
-                            'action' => array('args' => array(
-                                'generate' => '1'
-                            )),
-                        ),
-                    ),
+        $this->buttonList->add(
+            'generate',
+            array(
+                'label' => __('Save & Generate'),
+                'data_attribute' => array(
+                    'mage-init' => array(
+                        'button' => array(
+                            'event' => 'save',
+                            'target' => '#edit_form',
+                            'eventData' => array('action' => array('args' => array('generate' => '1')))
+                        )
+                    )
                 ),
-            ),
-            'class'   => 'add',
-        ));
+                'class' => 'add'
+            )
+        );
     }
 
     /**

@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
 /**
@@ -41,11 +37,16 @@ class PriceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Product\Attribute\Backend\Price');
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Product\Attribute\Backend\Price'
+        );
         $this->_model->setAttribute(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Eav\Model\Config')
-                ->getAttribute('catalog_product', 'price')
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                'Magento\Eav\Model\Config'
+            )->getAttribute(
+                'catalog_product',
+                'price'
+            )
         );
     }
 
@@ -82,23 +83,22 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     public function testAfterSave()
     {
         /** @var $product \Magento\Catalog\Model\Product */
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Product');
+        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Product'
+        );
         $product->load(1);
         $product->setOrigData();
         $product->setPrice(9.99);
         $product->setStoreId(0);
-
-        $this->_model->setScope($this->_model->getAttribute());
-        $this->_model->afterSave($product);
-
+        $product->save();
         $this->assertEquals(
             '9.99',
             $product->getResource()->getAttributeRawValue(
                 $product->getId(),
                 $this->_model->getAttribute()->getId(),
-                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                    ->get('Magento\Core\Model\StoreManagerInterface')->getStore()->getId()
+                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                    'Magento\Framework\StoreManagerInterface'
+                )->getStore()->getId()
             )
         );
     }

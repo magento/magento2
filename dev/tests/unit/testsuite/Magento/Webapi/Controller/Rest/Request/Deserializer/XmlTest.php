@@ -32,20 +32,17 @@ class XmlTest extends \PHPUnit_Framework_TestCase
     protected $_xmlDeserializer;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $_appMock;
+    protected $_appStateMock;
 
     protected function setUp()
     {
         /** Prepare mocks for SUT constructor. */
-        $this->_xmlParserMock = $this->getMock('Magento\Xml\Parser', array('xmlToArray', 'loadXML'));
-        $this->_appMock = $this->getMockBuilder('Magento\Core\Model\App')
-            ->setMethods(array('isDeveloperMode'))
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_xmlParserMock = $this->getMock('Magento\Framework\Xml\Parser', array('xmlToArray', 'loadXML'));
+        $this->_appStateMock = $this->getMock('Magento\Framework\App\State', array(), array(), '', false);
         /** Initialize SUT. */
         $this->_xmlDeserializer = new \Magento\Webapi\Controller\Rest\Request\Deserializer\Xml(
             $this->_xmlParserMock,
-            $this->_appMock
+            $this->_appStateMock
         );
         parent::setUp();
     }
@@ -54,7 +51,7 @@ class XmlTest extends \PHPUnit_Framework_TestCase
     {
         unset($this->_xmlDeserializer);
         unset($this->_xmlParserMock);
-        unset($this->_appMock);
+        unset($this->_appStateMock);
         parent::tearDown();
     }
 
@@ -108,9 +105,9 @@ class XmlTest extends \PHPUnit_Framework_TestCase
     public function testDeserializeMagentoWebapiExceptionDeveloperModeOn()
     {
         /** Prepare mocks for SUT constructor. */
-        $this->_appMock->expects($this->once())
-            ->method('isDeveloperMode')
-            ->will($this->returnValue(true));
+        $this->_appStateMock->expects($this->once())
+            ->method('getMode')
+            ->will($this->returnValue('developer'));
         $errorMessage = 'End tag for "key1" was omitted.';
         $this->_xmlDeserializer->handleErrors(null, $errorMessage, null, null);
         $this->_xmlParserMock->expects($this->once())->method('loadXML');
@@ -123,16 +120,20 @@ class XmlTest extends \PHPUnit_Framework_TestCase
             $exceptionMessage = 'Decoding Error: End tag for "key1" was omitted.';
             $this->assertInstanceOf('Magento\Webapi\Exception', $e, 'Exception type is invalid');
             $this->assertEquals($exceptionMessage, $e->getMessage(), 'Exception message is invalid');
-            $this->assertEquals(\Magento\Webapi\Exception::HTTP_BAD_REQUEST, $e->getHttpCode(), 'HTTP code is invalid');
+            $this->assertEquals(
+                \Magento\Webapi\Exception::HTTP_BAD_REQUEST,
+                $e->getHttpCode(),
+                'HTTP code is invalid'
+            );
         }
     }
 
     public function testDeserializeMagentoWebapiExceptionDeveloperModeOff()
     {
         /** Prepare mocks for SUT constructor. */
-        $this->_appMock->expects($this->once())
-            ->method('isDeveloperMode')
-            ->will($this->returnValue(false));
+        $this->_appStateMock->expects($this->once())
+            ->method('getMode')
+            ->will($this->returnValue('production'));
         $errorMessage = 'End tag for "key1" was omitted.';
         $this->_xmlDeserializer->handleErrors(null, $errorMessage, null, null);
         $this->_xmlParserMock->expects($this->once())->method('loadXML');
@@ -144,7 +145,11 @@ class XmlTest extends \PHPUnit_Framework_TestCase
         } catch (\Magento\Webapi\Exception $e) {
             $this->assertInstanceOf('Magento\Webapi\Exception', $e, 'Exception type is invalid');
             $this->assertEquals('Decoding error.', $e->getMessage(), 'Exception message is invalid');
-            $this->assertEquals(\Magento\Webapi\Exception::HTTP_BAD_REQUEST, $e->getHttpCode(), 'HTTP code is invalid');
+            $this->assertEquals(
+                \Magento\Webapi\Exception::HTTP_BAD_REQUEST,
+                $e->getHttpCode(),
+                'HTTP code is invalid'
+            );
         }
     }
 }

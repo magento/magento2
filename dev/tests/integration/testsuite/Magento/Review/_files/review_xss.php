@@ -18,29 +18,33 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Review
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 require __DIR__ . '/../../../Magento/Catalog/_files/product_simple_xss.php';
 
-$review = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Review\Model\Review');
-$review->setEntityId($review->getEntityIdByCode(\Magento\Review\Model\Review::ENTITY_PRODUCT_CODE))
-    ->setEntityPkValue(1) // the last product from the fixture file included above
-    ->setStatusId(\Magento\Review\Model\Review::STATUS_PENDING)
-    ->setStoreId(
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-            ->getStore()->getId()
+$review = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Review\Model\Review');
+$review->setEntityId(
+    $review->getEntityIdByCode(\Magento\Review\Model\Review::ENTITY_PRODUCT_CODE)
+)->setEntityPkValue(
+    1
+)->setStatusId(
+    \Magento\Review\Model\Review::STATUS_PENDING
+)->setStoreId(
+    \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+        'Magento\Framework\StoreManagerInterface'
+    )->getStore()->getId()
+)->setStores(
+    array(
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\StoreManagerInterface'
+        )->getStore()->getId()
     )
-    ->setStores(array(
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-            ->getStore()->getId()
-    ))
-    ->setNickname('Nickname')
-    ->setTitle('Review Summary')
-    ->setDetail('Review text')
-    ->save();
+)->setNickname(
+    'Nickname'
+)->setTitle(
+    'Review Summary'
+)->setDetail(
+    'Review text'
+)->save();

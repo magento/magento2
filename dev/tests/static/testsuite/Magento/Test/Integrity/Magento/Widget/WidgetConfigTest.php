@@ -35,8 +35,8 @@ class WidgetConfigTest extends \PHPUnit_Framework_TestCase
              * @param string $configFile
              */
             function ($configFile) {
-                $schema = \Magento\TestFramework\Utility\Files::init()->getPathToSource()
-                    . '/app/code/Magento/Widget/etc/widget.xsd';
+                $schema = \Magento\TestFramework\Utility\Files::init()->getPathToSource() .
+                    '/app/code/Magento/Widget/etc/widget.xsd';
                 $this->_validateFileExpectSuccess($configFile, $schema);
             },
             array_merge(
@@ -49,32 +49,32 @@ class WidgetConfigTest extends \PHPUnit_Framework_TestCase
     public function testSchemaUsingValidXml()
     {
         $xmlFile = __DIR__ . '/_files/widget.xml';
-        $schema = \Magento\TestFramework\Utility\Files::init()->getPathToSource()
-            . '/app/code/Magento/Widget/etc/widget.xsd';
+        $schema = \Magento\TestFramework\Utility\Files::init()->getPathToSource() .
+            '/app/code/Magento/Widget/etc/widget.xsd';
         $this->_validateFileExpectSuccess($xmlFile, $schema);
     }
 
     public function testSchemaUsingInvalidXml()
     {
         $xmlFile = __DIR__ . '/_files/invalid_widget.xml';
-        $schema = \Magento\TestFramework\Utility\Files::init()->getPathToSource()
-            . '/app/code/Magento/Widget/etc/widget.xsd';
+        $schema = \Magento\TestFramework\Utility\Files::init()->getPathToSource() .
+            '/app/code/Magento/Widget/etc/widget.xsd';
         $this->_validateFileExpectFailure($xmlFile, $schema);
     }
 
     public function testFileSchemaUsingXml()
     {
         $xmlFile = __DIR__ . '/_files/widget_file.xml';
-        $schema = \Magento\TestFramework\Utility\Files::init()->getPathToSource()
-            . '/app/code/Magento/Widget/etc/widget_file.xsd';
+        $schema = \Magento\TestFramework\Utility\Files::init()->getPathToSource() .
+            '/app/code/Magento/Widget/etc/widget_file.xsd';
         $this->_validateFileExpectSuccess($xmlFile, $schema);
     }
 
     public function testFileSchemaUsingInvalidXml()
     {
         $xmlFile = __DIR__ . '/_files/invalid_widget.xml';
-        $schema = \Magento\TestFramework\Utility\Files::init()->getPathToSource()
-            . '/app/code/Magento/Widget/etc/widget_file.xsd';
+        $schema = \Magento\TestFramework\Utility\Files::init()->getPathToSource() .
+            '/app/code/Magento/Widget/etc/widget_file.xsd';
         $this->_validateFileExpectFailure($xmlFile, $schema);
     }
 
@@ -90,7 +90,7 @@ class WidgetConfigTest extends \PHPUnit_Framework_TestCase
     {
         $dom = new \DOMDocument();
         $dom->loadXML(file_get_contents($xmlFile));
-        $errors = \Magento\Config\Dom::validateDomDocument($dom, $schemaFile);
+        $errors = \Magento\Framework\Config\Dom::validateDomDocument($dom, $schemaFile);
         if (!$errors) {
             $this->fail('There is a problem with the schema.  A known bad XML file passed validation');
         }
@@ -108,10 +108,14 @@ class WidgetConfigTest extends \PHPUnit_Framework_TestCase
     {
         $dom = new \DOMDocument();
         $dom->loadXML(file_get_contents($xmlFile));
-        $errors = \Magento\Config\Dom::validateDomDocument($dom, $schemaFile);
+        $errors = \Magento\Framework\Config\Dom::validateDomDocument($dom, $schemaFile);
         if ($errors) {
-            $this->fail('There is a problem with the schema.  A known good XML file failed validation: '
-                . PHP_EOL . implode(PHP_EOL . PHP_EOL, $errors));
+            $this->fail(
+                'There is a problem with the schema.  A known good XML file failed validation: ' . PHP_EOL . implode(
+                    PHP_EOL . PHP_EOL,
+                    $errors
+                )
+            );
         }
     }
 }

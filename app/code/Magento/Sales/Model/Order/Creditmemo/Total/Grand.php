@@ -18,33 +18,35 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Sales\Model\Order\Creditmemo\Total;
 
 class Grand extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
 {
+    /**
+     * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
+     * @return $this
+     */
     public function collect(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
     {
-        $grandTotal     = $creditmemo->getGrandTotal();
+        $grandTotal = $creditmemo->getGrandTotal();
         $baseGrandTotal = $creditmemo->getBaseGrandTotal();
 
-        $grandTotal+= $creditmemo->getAdjustmentPositive();
-        $baseGrandTotal+= $creditmemo->getBaseAdjustmentPositive();
+        $grandTotal += $creditmemo->getAdjustmentPositive();
+        $baseGrandTotal += $creditmemo->getBaseAdjustmentPositive();
 
-        $grandTotal-= $creditmemo->getAdjustmentNegative();
-        $baseGrandTotal-= $creditmemo->getBaseAdjustmentNegative();
+        $grandTotal -= $creditmemo->getAdjustmentNegative();
+        $baseGrandTotal -= $creditmemo->getBaseAdjustmentNegative();
 
         $creditmemo->setGrandTotal($grandTotal);
         $creditmemo->setBaseGrandTotal($baseGrandTotal);
 
-        $creditmemo->setAdjustment($creditmemo->getAdjustmentPositive()-$creditmemo->getAdjustmentNegative());
-        $creditmemo->setBaseAdjustment($creditmemo->getBaseAdjustmentPositive()-$creditmemo->getBaseAdjustmentNegative());
+        $creditmemo->setAdjustment($creditmemo->getAdjustmentPositive() - $creditmemo->getAdjustmentNegative());
+        $creditmemo->setBaseAdjustment(
+            $creditmemo->getBaseAdjustmentPositive() - $creditmemo->getBaseAdjustmentNegative()
+        );
 
         return $this;
     }

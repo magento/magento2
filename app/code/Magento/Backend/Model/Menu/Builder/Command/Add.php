@@ -18,36 +18,28 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Model\Menu\Builder\Command;
 
 /**
  * Builder command to add menu items
  */
-namespace Magento\Backend\Model\Menu\Builder\Command;
-
 class Add extends \Magento\Backend\Model\Menu\Builder\AbstractCommand
 {
     /**
      * List of params that command requires for execution
      *
-     * @var array
+     * @var string[]
      */
-    protected $_requiredParams = array(
-        "id",
-        "title",
-        "module",
-        "resource"
-    );
+    protected $_requiredParams = array("id", "title", "module", "resource");
 
     /**
      * Add command as last in the list of callbacks
      *
      * @param \Magento\Backend\Model\Menu\Builder\AbstractCommand $command
-     * @return \Magento\Backend\Model\Menu\Builder\AbstractCommand
+     * @return $this
      * @throws \InvalidArgumentException
      */
     public function chain(\Magento\Backend\Model\Menu\Builder\AbstractCommand $command)

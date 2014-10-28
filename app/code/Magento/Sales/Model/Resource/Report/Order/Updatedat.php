@@ -18,27 +18,22 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Sales\Model\Resource\Report\Order;
 
 /**
  * Order entity resource model with aggregation by updated at
  *
- * @category    Magento
- * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Model\Resource\Report\Order;
-
-class Updatedat extends \Magento\Sales\Model\Resource\Report\Order\Createdat
+class Updatedat extends Createdat
 {
     /**
      * Model initialization
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -48,9 +43,9 @@ class Updatedat extends \Magento\Sales\Model\Resource\Report\Order\Createdat
     /**
      * Aggregate Orders data by order updated at
      *
-     * @param mixed $from
-     * @param mixed $to
-     * @return \Magento\Sales\Model\Resource\Report\Order\Updatedat
+     * @param string|int|\Zend_Date|array|null $from
+     * @param string|int|\Zend_Date|array|null $to
+     * @return $this
      */
     public function aggregate($from = null, $to = null)
     {

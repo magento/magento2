@@ -18,57 +18,50 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Catalog\Model\Resource\Category\Attribute\Frontend;
 
 /**
  * Category image attribute frontend
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Resource\Category\Attribute\Frontend;
-
-class Image
-    extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend
+class Image extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend
 {
     const IMAGE_PATH_SEGMENT = 'catalog/category/';
 
     /**
      * Store manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * Construct
      *
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      */
-    public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager
-    ) {
+    public function __construct(\Magento\Framework\StoreManagerInterface $storeManager)
+    {
         $this->_storeManager = $storeManager;
     }
 
     /**
      * Return image url
      *
-     * @param \Magento\Object $object
+     * @param \Magento\Framework\Object $object
      * @return string|null
      */
     public function getUrl($object)
     {
         $url = false;
         if ($image = $object->getData($this->getAttribute()->getAttributeCode())) {
-            $url = $this->_storeManager->getStore()
-                ->getBaseUrl(\Magento\Core\Model\Store::URL_TYPE_MEDIA) . self::IMAGE_PATH_SEGMENT . $image;
+            $url = $this->_storeManager->getStore()->getBaseUrl(
+                \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
+            ) . self::IMAGE_PATH_SEGMENT . $image;
         }
         return $url;
     }

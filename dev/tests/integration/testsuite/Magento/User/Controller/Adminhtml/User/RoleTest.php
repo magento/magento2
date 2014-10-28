@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_User
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\User\Controller\Adminhtml\User;
 
 /**
@@ -37,7 +33,7 @@ class RoleTest extends \Magento\Backend\Utility\Controller
     public function testEditRoleAction()
     {
         $roleAdmin = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\User\Model\Role');
+            ->create('Magento\Authorization\Model\Role');
         $roleAdmin->load(\Magento\TestFramework\Bootstrap::ADMIN_ROLE_NAME, 'role_name');
 
         $this->getRequest()->setParam('rid', $roleAdmin->getId());
@@ -49,27 +45,22 @@ class RoleTest extends \Magento\Backend\Utility\Controller
     }
 
     /**
-     * @covers \Magento\User\Controller\Adminhtml\User\Role::editrolegridAction
+     * @covers \Magento\User\Controller\Adminhtml\User\Role\Editrolegrid::execute
      */
     public function testEditrolegridAction()
     {
-        $this->getRequest()
-            ->setParam('ajax', true)
-            ->setParam('isAjax', true);
+        $this->getRequest()->setParam('ajax', true)->setParam('isAjax', true);
         $this->dispatch('backend/admin/user_role/editrolegrid');
         $expected = '%a<table %a id="roleUserGrid_table">%a';
         $this->assertStringMatchesFormat($expected, $this->getResponse()->getBody());
     }
 
     /**
-     * @covers \Magento\User\Controller\Adminhtml\User\Role::roleGridAction
+     * @covers \Magento\User\Controller\Adminhtml\User\Role\RoleGrid::execute
      */
     public function testRoleGridAction()
     {
-        $this->getRequest()
-            ->setParam('ajax', true)
-            ->setParam('isAjax', true)
-            ->setParam('user_id', 1);
+        $this->getRequest()->setParam('ajax', true)->setParam('isAjax', true)->setParam('user_id', 1);
         $this->dispatch('backend/admin/user_role/roleGrid');
         $expected = '%a<table %a id="roleGrid_table">%a';
         $this->assertStringMatchesFormat($expected, $this->getResponse()->getBody());

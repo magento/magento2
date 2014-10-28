@@ -23,27 +23,60 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <type name="Magento\Downloadable\Helper\Download">
-        <param name="coreFileStorageDb">
-            <instance type="Magento\Core\Helper\File\Storage\Database\Proxy" />
-        </param>
+        <arguments>
+            <argument name="coreFileStorageDb" xsi:type="object">Magento\Core\Helper\File\Storage\Database\Proxy</argument>
+        </arguments>
     </type>
     <type name="Magento\Catalog\Helper\Product">
-        <param name="typeSwitcherLabel">
-            <value>Virtual / Downloadable</value>
-        </param>
+        <arguments>
+            <argument name="typeSwitcherLabel" xsi:type="string">Virtual / Downloadable</argument>
+        </arguments>
     </type>
-    <type name="Magento\Module\Updater\SetupFactory">
-        <param name="resourceTypes">
-            <value>
-                <downloadable_setup>Magento\Catalog\Model\Resource\Setup</downloadable_setup>
-            </value>
-        </param>
+    <type name="Magento\Framework\Module\Updater\SetupFactory">
+        <arguments>
+            <argument name="resourceTypes" xsi:type="array">
+                <item name="downloadable_setup" xsi:type="string">Magento\Catalog\Model\Resource\Setup</item>
+            </argument>
+        </arguments>
     </type>
-    <type name="Magento\Downloadable\Block\Sales\Order\Email\Items\Downloadable">
-        <param name="urlGenerator">
-            <instance type="Magento\Core\Model\Url\Proxy"/>
-        </param>
+    <type name="Magento\Catalog\Model\Product\CartConfiguration">
+        <plugin name="Downloadable" type="Magento\Downloadable\Model\Product\CartConfiguration\Plugin\Downloadable" />
     </type>
+    <type name="Magento\Catalog\Model\Product\TypeTransitionManager">
+        <plugin name="downloadable_product_transition" type="Magento\Downloadable\Model\Product\TypeTransitionManager\Plugin\Downloadable" />
+        <arguments>
+            <argument name="compatibleTypes" xsi:type="array">
+                <item name="downloadable" xsi:type="const">Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Downloadable\Pricing\Price\Pool" type="Magento\Framework\Pricing\Price\Pool">
+        <arguments>
+            <argument name="prices" xsi:type="array">
+                <item name="link_price" xsi:type="string">Magento\Downloadable\Pricing\Price\LinkPrice</item>
+            </argument>
+            <argument name="target" xsi:type="object">Magento\Catalog\Pricing\Price\Pool</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Downloadable\Pricing\Price\Collection" type="Magento\Framework\Pricing\Price\Collection">
+        <arguments>
+            <argument name="pool" xsi:type="object">Magento\Downloadable\Pricing\Price\Pool</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\Pricing\PriceInfo\Factory">
+        <arguments>
+            <argument name="types" xsi:type="array">
+                <item name="downloadable" xsi:type="array">
+                    <item name="infoClass" xsi:type="string">Magento\Framework\Pricing\PriceInfo\Base</item>
+                    <item name="prices" xsi:type="string">Magento\Downloadable\Pricing\Price\Collection</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="\Magento\Downloadable\Service\V1\DownloadableLink\ReadServiceInterface" type="\Magento\Downloadable\Service\V1\DownloadableLink\ReadService" />
+    <preference for="\Magento\Downloadable\Service\V1\DownloadableLink\WriteServiceInterface" type="\Magento\Downloadable\Service\V1\DownloadableLink\WriteService" />
+    <preference for="\Magento\Downloadable\Service\V1\Data\FileContentUploaderInterface" type="\Magento\Downloadable\Service\V1\Data\FileContentUploader" />
+    <preference for="\Magento\Downloadable\Service\V1\DownloadableSample\WriteServiceInterface" type="\Magento\Downloadable\Service\V1\DownloadableSample\WriteService" />
 </config>

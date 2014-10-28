@@ -18,17 +18,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_GoogleShopping
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/** @var $installer \Magento\Core\Model\Resource\Setup */
+/** @var $installer \Magento\Framework\Module\Setup */
 $installer = $this;
 
-$installer->getConnection()->addColumn($installer->getTable('googleshopping_types'), 'category', array(
-    'TYPE'    => \Magento\DB\Ddl\Table::TYPE_TEXT,
-    'LENGTH'  => 40,
-    'COMMENT' => 'Google product category',
-));
+$installer->getConnection()->addColumn(
+    $installer->getTable('googleshopping_types'),
+    'category',
+    array('TYPE' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT, 'LENGTH' => 40, 'COMMENT' => 'Google product category')
+);

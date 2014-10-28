@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Centinel
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,20 +27,20 @@
  */
 namespace Magento\Centinel\Model;
 
-abstract class AbstractState extends \Magento\Object
+abstract class AbstractState extends \Magento\Framework\Object
 {
     /**
      * Storage data model
      *
-     * @var \Magento\Object
+     * @var \Magento\Framework\Object
      */
     private $_dataStorage = false;
 
     /**
      * Setter for storage data model
      *
-     * @param \Magento\Object $dataStorageModel
-     * @return \Magento\Centinel\Model\AbstractState
+     * @param \Magento\Framework\Object $dataStorageModel
+     * @return $this
      */
     public function setDataStorage($dataStorageModel)
     {
@@ -53,7 +51,7 @@ abstract class AbstractState extends \Magento\Object
     /**
      * Getter for storage data model
      *
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     public function getDataStorage()
     {
@@ -67,13 +65,13 @@ abstract class AbstractState extends \Magento\Object
      * Otherwise it will return value of the attribute specified by $key
      *
      * $index parameter is ignored
-     * @see \Magento\Session\SessionManager::getData()
      *
      * @param string $key
      * @param string|int $index
      * @return mixed
+     * @see \Magento\Framework\Session\SessionManager::getData()
      */
-    public function getData($key='', $index=null)
+    public function getData($key = '', $index = null)
     {
         return $this->getDataStorage()->getData($key);
     }
@@ -81,16 +79,16 @@ abstract class AbstractState extends \Magento\Object
     /**
      * Overwrite data in the object.
      *
-     * $key can be string or array.
+     * Parameter $key can be string or array.
      * If $key is string, the attribute value will be overwritten by $value
      *
      * If $key is an array, it will overwrite all the data in the object.
      *
      * @param string|array $key
      * @param mixed $value
-     * @return \Magento\Centinel\Model\AbstractState
+     * @return $this
      */
-    public function setData($key, $value=null)
+    public function setData($key, $value = null)
     {
         $this->getDataStorage()->setData($key, $value);
         return $this;
@@ -99,8 +97,8 @@ abstract class AbstractState extends \Magento\Object
     /**
      * Save lookup result in state model
      *
-     * @param \Magento\Object $result
-     * @return \Magento\Centinel\Model\AbstractState
+     * @param \Magento\Framework\Object $result
+     * @return $this
      */
     public function setLookupResult($result)
     {
@@ -113,8 +111,8 @@ abstract class AbstractState extends \Magento\Object
     /**
      * Save authenticate result in state model
      *
-     * @param \Magento\Object $result
-     * @return \Magento\Centinel\Model\AbstractState
+     * @param \Magento\Framework\Object $result
+     * @return $this
      */
     public function setAuthenticateResult($result)
     {

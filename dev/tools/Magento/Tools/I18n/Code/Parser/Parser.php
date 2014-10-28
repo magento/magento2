@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\I18n\Code\Parser;
 
 /**
@@ -32,7 +31,8 @@ class Parser extends AbstractParser
     /**
      * Parse one type
      *
-     * @param $options
+     * @param array $options
+     * @return void
      */
     protected function _parseByTypeOptions($options)
     {
@@ -50,14 +50,16 @@ class Parser extends AbstractParser
      * Add phrase
      *
      * @param array $phraseData
+     * @return void
      */
     protected function _addPhrase($phraseData)
     {
         $phraseKey = $phraseData['phrase'];
 
-        $this->_phrases[$phraseKey] = $this->_factory->createPhrase(array(
-            'phrase' => $phraseData['phrase'],
+        $this->_phrases[$phraseKey] = $this->_factory->createPhrase([
+            'phrase'      => $phraseData['phrase'],
             'translation' => $phraseData['phrase'],
-        ));
+            'quote'       => $phraseData['quote']
+        ]);
     }
 }

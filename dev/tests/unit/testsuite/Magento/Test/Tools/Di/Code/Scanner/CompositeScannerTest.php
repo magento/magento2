@@ -21,7 +21,6 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Tools\Di\Code\Scanner;
 
 class CompositeScannerTest extends \PHPUnit_Framework_TestCase
@@ -38,33 +37,34 @@ class CompositeScannerTest extends \PHPUnit_Framework_TestCase
 
     public function testScan()
     {
-        $phpFiles = array(
-            'one/file/php',
-            'two/file/php',
-        );
-        $configFiles = array(
-            'one/file/config',
-            'two/file/config',
-        );
-        $files = array(
-            'php' => $phpFiles,
-            'config' => $configFiles,
-        );
+        $phpFiles = array('one/file/php', 'two/file/php');
+        $configFiles = array('one/file/config', 'two/file/config');
+        $files = array('php' => $phpFiles, 'config' => $configFiles);
 
         $scannerPhp = $this->getMock('Magento\Tools\Di\Code\Scanner\ScannerInterface');
         $scannerXml = $this->getMock('Magento\Tools\Di\Code\Scanner\ScannerInterface');
 
         $scannerPhpExpected = array('Model_OneProxy', 'Model_TwoFactory');
         $scannerXmlExpected = array('Model_OneProxy', 'Model_ThreeFactory');
-        $scannerPhp->expects($this->once())
-            ->method('collectEntities')
-            ->with($phpFiles)
-            ->will($this->returnValue($scannerPhpExpected));
+        $scannerPhp->expects(
+            $this->once()
+        )->method(
+            'collectEntities'
+        )->with(
+            $phpFiles
+        )->will(
+            $this->returnValue($scannerPhpExpected)
+        );
 
-        $scannerXml->expects($this->once())
-            ->method('collectEntities')
-            ->with($configFiles)
-            ->will($this->returnValue($scannerXmlExpected));
+        $scannerXml->expects(
+            $this->once()
+        )->method(
+            'collectEntities'
+        )->with(
+            $configFiles
+        )->will(
+            $this->returnValue($scannerXmlExpected)
+        );
 
         $this->_model->addChild($scannerPhp, 'php');
         $this->_model->addChild($scannerXml, 'config');

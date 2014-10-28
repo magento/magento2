@@ -18,12 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Theme
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab;
 
 /**
@@ -31,17 +28,16 @@ namespace Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab;
  *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
-class Js
-    extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\AbstractTab
+class Js extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\AbstractTab
 {
     /**
      * Create a form element with necessary controls
      *
-     * @return \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Js
+     * @return $this
      */
     protected function _prepareForm()
     {
-        /** @var \Magento\Data\Form $form */
+        /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
         $this->setForm($form);
         $this->_addThemeJsFieldset();
@@ -52,16 +48,16 @@ class Js
     /**
      * Set theme js fieldset
      *
-     * @return \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Js
+     * @return $this
      */
     protected function _addThemeJsFieldset()
     {
         $form = $this->getForm();
-        $themeFieldset = $form->addFieldset('theme_js', array(
-            'legend' => __('Theme Java Script'),
-        ));
+        $themeFieldset = $form->addFieldset('theme_js', array('legend' => __('Theme JavaScript')));
         $customization = $this->_getCurrentTheme()->getCustomization();
-        $customJsFiles = $customization->getFilesByType(\Magento\View\Design\Theme\Customization\File\Js::TYPE);
+        $customJsFiles = $customization->getFilesByType(
+            \Magento\Framework\View\Design\Theme\Customization\File\Js::TYPE
+        );
 
         /** @var $jsFieldsetRenderer \Magento\Backend\Block\Widget\Form\Renderer\Fieldset */
         $jsFieldsetRenderer = $this->getChildBlock('theme_edit_tabs_tab_js_tab_content');
@@ -71,20 +67,24 @@ class Js
 
         $this->_addElementTypes($themeFieldset);
 
-        $themeFieldset->addField('js_files_uploader', 'js_files', array(
-            'name'     => 'js_files_uploader',
-            'label'    => __('Select JS Files to Upload'),
-            'title'    => __('Select JS Files to Upload'),
-            'accept'   => 'application/x-javascript',
-            'multiple' => '',
-            'note'     => $this->_getUploadJsFileNote()
-        ));
+        $themeFieldset->addField(
+            'js_files_uploader',
+            'js_files',
+            array(
+                'name' => 'js_files_uploader',
+                'label' => __('Select JS Files to Upload'),
+                'title' => __('Select JS Files to Upload'),
+                'accept' => 'application/x-javascript',
+                'multiple' => '',
+                'note' => $this->_getUploadJsFileNote()
+            )
+        );
 
-        $themeFieldset->addField('js_uploader_button', 'button', array(
-            'name'     => 'js_uploader_button',
-            'value'    => __('Upload JS Files'),
-            'disabled' => 'disabled',
-        ));
+        $themeFieldset->addField(
+            'js_uploader_button',
+            'button',
+            array('name' => 'js_uploader_button', 'value' => __('Upload JS Files'), 'disabled' => 'disabled')
+        );
 
         $jsFieldset->setRenderer($jsFieldsetRenderer);
         return $this;
@@ -119,7 +119,8 @@ class Js
     public function getJsUploadUrl()
     {
         return $this->getUrl(
-            'adminhtml/system_design_theme/uploadjs', array('id' => $this->_getCurrentTheme()->getId())
+            'adminhtml/system_design_theme/uploadjs',
+            array('id' => $this->_getCurrentTheme()->getId())
         );
     }
 

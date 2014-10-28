@@ -21,21 +21,19 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Reports\Model;
 
 class DateFactory
 {
     /**
-     * @param  string|integer|\Zend_Date|array  $date    OPTIONAL Date value or value of date part to set
+     * @param  string|integer|\Magento\Framework\Stdlib\DateTime\DateInterface|array  $date    OPTIONAL Date value or value of date part to set
      *                                                 ,depending on $part. If null the actual time is set
      * @param  string                          $part    OPTIONAL Defines the input format of $date
      * @param  string|\Zend_Locale              $locale  OPTIONAL Locale for parsing input
-     * @return \Zend_Date
+     * @return \Magento\Framework\Stdlib\DateTime\Date
      */
     public function create($date = null, $part = null, $locale = null)
     {
-        return new \Zend_Date($date, $part, $locale);
+        return new \Magento\Framework\Stdlib\DateTime\Date($date, $part, $locale);
     }
-
-} 
+}

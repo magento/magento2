@@ -19,13 +19,11 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/system_file.xsd">
     <system>
         <tab id="sales" translate="label" sortOrder="400">
             <label>Sales</label>
@@ -101,6 +99,10 @@
                 <field id="amount" translate="label comment" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Minimum Amount</label>
                     <comment>Subtotal after discount</comment>
+                </field>
+                <field id="tax_including" translate="label" sortOrder="15" type="select" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Include Tax to Amount</label>
+                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="description" translate="label comment" sortOrder="20" type="textarea" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Description Message</label>
@@ -375,6 +377,15 @@
                 <field id="put_order_id" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Display Order ID in Header</label>
                     <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+        <section id="rss">
+            <group id="order" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Order</label>
+                <field id="status" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Customer Order Status Notification</label>
+                    <source_model>Magento\Backend\Model\Config\Source\Enabledisable</source_model>
                 </field>
             </group>
         </section>

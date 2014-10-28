@@ -18,17 +18,13 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category   Magento
- * @package    Tools
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\Migration\System\Configuration;
 
 class Mapper
 {
-
     /**
      * @var \Magento\Tools\Migration\System\Configuration\Mapper\Tab
      */
@@ -43,7 +39,8 @@ class Mapper
      * @param \Magento\Tools\Migration\System\Configuration\Mapper\Tab $tabMapper
      * @param \Magento\Tools\Migration\System\Configuration\Mapper\Section $sectionMapper
      */
-    public function __construct(\Magento\Tools\Migration\System\Configuration\Mapper\Tab $tabMapper,
+    public function __construct(
+        \Magento\Tools\Migration\System\Configuration\Mapper\Tab $tabMapper,
         \Magento\Tools\Migration\System\Configuration\Mapper\Section $sectionMapper
     ) {
         $this->_tabMapper = $tabMapper;

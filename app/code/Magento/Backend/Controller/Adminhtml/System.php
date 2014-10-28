@@ -18,43 +18,23 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Controller\Adminhtml;
+
+use Magento\Backend\App\AbstractAction;
 
 /**
  * System admin controller
  *
- * @category   Magento
- * @package    Magento_Backend
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backend\Controller\Adminhtml;
-
-class System extends \Magento\Backend\App\AbstractAction
+class System extends AbstractAction
 {
-    public function indexAction()
-    {
-        $this->_view->loadLayout();
-        $this->_setActiveMenu('Magento_Adminhtml::system');
-        $this->_addBreadcrumb(
-            __('System'),
-            __('System')
-        );
-        $this->_view->renderLayout();
-    }
-
-    public function setStoreAction()
-    {
-        $storeId = (int) $this->getRequest()->getParam('store');
-        if ($storeId) {
-            $this->_session->setStoreId($storeId);
-        }
-        $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));
-    }
-
+    /**
+     * @return bool
+     */
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed('Magento_Adminhtml::system');

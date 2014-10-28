@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -35,14 +33,34 @@ if ($attribute) {
         'input' => 'categories',
         'group' => 'General Information',
         'backend_model' => 'Magento\Catalog\Model\Product\Attribute\Backend\Category',
-        'frontend_input_renderer' => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Category',
+        'frontend_input_renderer' => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Category'
     );
     foreach ($properties as $key => $value) {
-        $this->updateAttribute(
-            $attribute['entity_type_id'],
-            $attribute['attribute_id'],
-            $key,
-            $value
-        );
+        $this->updateAttribute($attribute['entity_type_id'], $attribute['attribute_id'], $key, $value);
     }
 }
+
+$this->addAttribute(
+    \Magento\Catalog\Model\Product::ENTITY,
+    'quantity_and_stock_status',
+    array(
+        'group' => 'General',
+        'type' => 'int',
+        'backend' => 'Magento\Catalog\Model\Product\Attribute\Backend\Stock',
+        'frontend' => '',
+        'label' => 'Quantity',
+        'input' => 'select',
+        'class' => '',
+        'input_renderer' => 'Magento\CatalogInventory\Block\Adminhtml\Form\Field\Stock',
+        'source' => 'Magento\CatalogInventory\Model\Stock\Status',
+        'global' => \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_GLOBAL,
+        'default' => \Magento\CatalogInventory\Model\Stock::STOCK_IN_STOCK,
+        'user_defined' => false,
+        'visible' => true,
+        'required' => false,
+        'searchable' => false,
+        'filterable' => false,
+        'comparable' => false,
+        'unique' => false
+    )
+);

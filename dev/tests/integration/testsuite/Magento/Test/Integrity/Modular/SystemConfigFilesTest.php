@@ -18,14 +18,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Integrity\Modular;
+
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 class SystemConfigFilesTest extends \PHPUnit_Framework_TestCase
 {
@@ -34,33 +32,40 @@ class SystemConfigFilesTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         // disable config caching to not pollute it
-        /** @var $cacheState \Magento\App\Cache\StateInterface */
-        $cacheState = $objectManager->get('Magento\App\Cache\StateInterface');
-        $cacheState->setEnabled(\Magento\App\Cache\Type\Config::TYPE_IDENTIFIER, false);
+        /** @var $cacheState \Magento\Framework\App\Cache\StateInterface */
+        $cacheState = $objectManager->get('Magento\Framework\App\Cache\StateInterface');
+        $cacheState->setEnabled(\Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER, false);
 
-        $modulesDir = $objectManager->get('Magento\Filesystem')->getPath(\Magento\Filesystem::MODULES);
+        /** @var \Magento\Framework\Filesystem $filesystem */
+        $filesystem = $objectManager->get('Magento\Framework\Filesystem');
+        $modulesDir = $filesystem->getDirectoryRead(DirectoryList::MODULES)->getAbsolutePath();
 
         $fileList = glob($modulesDir . '/*/*/etc/adminhtml/system.xml');
 
         $configMock = $this->getMock(
-            'Magento\Module\Dir\Reader', array('getConfigurationFiles', 'getModuleDir'),
-            array(), '', false
+            'Magento\Framework\Module\Dir\Reader',
+            array('getConfigurationFiles', 'getModuleDir'),
+            array(),
+            '',
+            false
         );
-        $configMock->expects($this->any())
-            ->method('getConfigurationFiles')
-            ->will($this->returnValue($fileList))
-        ;
-        $configMock->expects($this->any())
-            ->method('getModuleDir')
-            ->with('etc', 'Magento_Backend')
-            ->will($this->returnValue($modulesDir . '/Magento/Backend/etc'))
-        ;
+        $configMock->expects($this->any())->method('getConfigurationFiles')->will($this->returnValue($fileList));
+        $configMock->expects(
+            $this->any()
+        )->method(
+            'getModuleDir'
+        )->with(
+            'etc',
+            'Magento_Backend'
+        )->will(
+            $this->returnValue($modulesDir . '/Magento/Backend/etc')
+        );
         try {
-            $objectManager->create('Magento\Backend\Model\Config\Structure\Reader', array(
-                'moduleReader' => $configMock,
-                'runtimeValidation' => true,
-            ));
-        } catch (\Magento\Exception $exp) {
+            $objectManager->create(
+                'Magento\Backend\Model\Config\Structure\Reader',
+                array('moduleReader' => $configMock, 'runtimeValidation' => true)
+            );
+        } catch (\Magento\Framework\Exception $exp) {
             $this->fail($exp->getMessage());
         }
     }

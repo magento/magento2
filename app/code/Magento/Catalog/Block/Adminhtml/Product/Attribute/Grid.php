@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Adminhtml
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,13 +25,13 @@
 /**
  * Product attributes grid
  *
- * @category   Magento
- * @package    Magento_Catalog
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute;
 
-class Grid extends \Magento\Eav\Block\Adminhtml\Attribute\Grid\AbstractGrid
+use Magento\Eav\Block\Adminhtml\Attribute\Grid\AbstractGrid;
+
+class Grid extends AbstractGrid
 {
     /**
      * @var \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory
@@ -42,32 +40,29 @@ class Grid extends \Magento\Eav\Block\Adminhtml\Attribute\Grid\AbstractGrid
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $collectionFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Url $urlModel,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $collectionFactory,
         array $data = array()
     ) {
         $this->_collectionFactory = $collectionFactory;
         $this->_module = 'catalog';
-        parent::__construct($context, $urlModel, $backendHelper, $data);
+        parent::__construct($context, $backendHelper, $data);
     }
 
     /**
      * Prepare product attributes grid collection object
      *
-     * @return \Magento\Catalog\Block\Adminhtml\Product\Attribute\Grid
+     * @return $this
      */
     protected function _prepareCollection()
     {
-        $collection = $this->_collectionFactory->create()
-            ->addVisibleFilter();
+        $collection = $this->_collectionFactory->create()->addVisibleFilter();
         $this->setCollection($collection);
 
         return parent::_prepareCollection();
@@ -76,73 +71,69 @@ class Grid extends \Magento\Eav\Block\Adminhtml\Attribute\Grid\AbstractGrid
     /**
      * Prepare product attributes grid columns
      *
-     * @return \Magento\Catalog\Block\Adminhtml\Product\Attribute\Grid
+     * @return $this
      */
     protected function _prepareColumns()
     {
         parent::_prepareColumns();
 
-        $this->addColumnAfter('is_visible', array(
-            'header'=>__('Visible'),
-            'sortable'=>true,
-            'index'=>'is_visible_on_front',
-            'type' => 'options',
-            'options' => array(
-                '1' => __('Yes'),
-                '0' => __('No'),
+        $this->addColumnAfter(
+            'is_visible',
+            array(
+                'header' => __('Visible'),
+                'sortable' => true,
+                'index' => 'is_visible_on_front',
+                'type' => 'options',
+                'options' => array('1' => __('Yes'), '0' => __('No')),
+                'align' => 'center'
             ),
-            'align' => 'center',
-        ), 'frontend_label');
+            'frontend_label'
+        );
 
-        $this->addColumnAfter('is_global', array(
-            'header'=>__('Scope'),
-            'sortable'=>true,
-            'index'=>'is_global',
-            'type' => 'options',
-            'options' => array(
-                \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_STORE =>__('Store View'),
-                \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_WEBSITE =>__('Web Site'),
-                \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_GLOBAL =>__('Global'),
+        $this->addColumnAfter(
+            'is_global',
+            array(
+                'header' => __('Scope'),
+                'sortable' => true,
+                'index' => 'is_global',
+                'type' => 'options',
+                'options' => array(
+                    \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_STORE => __('Store View'),
+                    \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_WEBSITE => __('Web Site'),
+                    \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_GLOBAL => __('Global')
+                ),
+                'align' => 'center'
             ),
-            'align' => 'center',
-        ), 'is_visible');
+            'is_visible'
+        );
 
-        $this->addColumn('is_searchable', array(
-            'header'=>__('Searchable'),
-            'sortable'=>true,
-            'index'=>'is_searchable',
-            'type' => 'options',
-            'options' => array(
-                '1' => __('Yes'),
-                '0' => __('No'),
+        $this->addColumn(
+            'is_searchable',
+            array(
+                'header' => __('Searchable'),
+                'sortable' => true,
+                'index' => 'is_searchable',
+                'type' => 'options',
+                'options' => array('1' => __('Yes'), '0' => __('No')),
+                'align' => 'center'
             ),
-            'align' => 'center',
-        ), 'is_user_defined');
+            'is_user_defined'
+        );
 
-        $this->addColumnAfter('is_filterable', array(
-            'header'=>__('Use in Layered Navigation'),
-            'sortable'=>true,
-            'index'=>'is_filterable',
-            'type' => 'options',
-            'options' => array(
-                '1' => __('Filterable (with results)'),
-                '2' => __('Filterable (no results)'),
-                '0' => __('No'),
-            ),
-            'align' => 'center',
-        ), 'is_searchable');
+        $this->_eventManager->dispatch('product_attribute_grid_build', array('grid' => $this));
 
-        $this->addColumnAfter('is_comparable', array(
-            'header'=>__('Comparable'),
-            'sortable'=>true,
-            'index'=>'is_comparable',
-            'type' => 'options',
-            'options' => array(
-                '1' => __('Yes'),
-                '0' => __('No'),
+        $this->addColumnAfter(
+            'is_comparable',
+            array(
+                'header' => __('Comparable'),
+                'sortable' => true,
+                'index' => 'is_comparable',
+                'type' => 'options',
+                'options' => array('1' => __('Yes'), '0' => __('No')),
+                'align' => 'center'
             ),
-            'align' => 'center',
-        ), 'is_filterable');
+            'is_filterable'
+        );
 
         return $this;
     }

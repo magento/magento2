@@ -25,21 +25,18 @@
  */
 namespace Magento\Core\App;
 
-use Magento\App\State,
-    Magento\AppInterface,
-    Magento\ObjectManager,
-    Magento\Core\Model\File\Storage\Request,
-    Magento\Core\Model\File\Storage\Response;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\State;
+use Magento\Framework\App;
+use Magento\Framework\AppInterface;
+use Magento\Framework\ObjectManager;
+use Magento\Core\Model\File\Storage\Request;
+use Magento\Core\Model\File\Storage\Response;
 
 class Media implements AppInterface
 {
     /**
-     * @var \Magento\App\State
-     */
-    protected $_applicationState;
-
-    /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
@@ -51,7 +48,7 @@ class Media implements AppInterface
     /**
      * Authorization function
      *
-     * @var callable
+     * @var \Closure
      */
     protected $_isAllowed;
 
@@ -89,29 +86,27 @@ class Media implements AppInterface
     protected $_response;
 
     /**
-     * @var \Magento\Filesystem $filesystem
+     * @var \Magento\Framework\Filesystem $filesystem
      */
     protected $filesystem;
 
     /**
-     * @var \Magento\Filesystem\Directory\Read $directory
+     * @var \Magento\Framework\Filesystem\Directory\Read $directory
      */
     protected $directory;
 
     /**
-     * @param State $applicationState
      * @param ObjectManager $objectManager
      * @param Request $request
      * @param Response $response
-     * @param callable $isAllowed
-     * @param $workingDirectory
-     * @param $mediaDirectory
-     * @param $configCacheFile
-     * @param $relativeFileName
-     * @param \Magento\Filesystem $filesytem
+     * @param \Closure $isAllowed
+     * @param string $workingDirectory
+     * @param string $mediaDirectory
+     * @param string $configCacheFile
+     * @param string $relativeFileName
+     * @param \Magento\Framework\Filesystem $filesystem
      */
     public function __construct(
-        State $applicationState,
         ObjectManager $objectManager,
         Request $request,
         Response $response,
@@ -120,9 +115,8 @@ class Media implements AppInterface
         $mediaDirectory,
         $configCacheFile,
         $relativeFileName,
-        \Magento\Filesystem $filesystem
+        \Magento\Framework\Filesystem $filesystem
     ) {
-        $this->_applicationState = $applicationState;
         $this->_objectManager = $objectManager;
         $this->_request = $request;
         $this->_response = $response;
@@ -132,56 +126,58 @@ class Media implements AppInterface
         $this->_configCacheFile = $configCacheFile;
         $this->_relativeFileName = $relativeFileName;
         $this->filesystem = $filesystem;
-        $this->directory = $this->filesystem->getDirectoryRead(\Magento\Filesystem::MEDIA);
+        $this->directory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
     }
 
     /**
-     * Execute application
+     * Run application
      *
-     * @return int
+     * @return \Magento\Framework\App\ResponseInterface
+     * @throws \LogicException
      */
-    public function execute()
+    public function launch()
     {
-        try {
-            if (!$this->_applicationState->isInstalled()) {
-                $this->_response->sendNotFound();
-                return -1;
+        if (!$this->_mediaDirectory) {
+            $config = $this->_objectManager->create(
+                'Magento\Core\Model\File\Storage\Config',
+                array('cacheFile' => $this->_configCacheFile)
+            );
+            $config->save();
+            $this->_mediaDirectory = str_replace($this->_workingDirectory, '', $config->getMediaDirectory());
+            $allowedResources = $config->getAllowedResources();
+            $this->_relativeFileName = str_replace(
+                $this->_mediaDirectory . '/',
+                '',
+                $this->_request->getPathInfo()
+            );
+            $isAllowed = $this->_isAllowed;
+            if (!$isAllowed($this->_relativeFileName, $allowedResources)) {
+                throw new \LogicException('The specified path is not allowed.');
             }
-            if (!$this->_mediaDirectory) {
-                $config = $this->_objectManager->create(
-                    'Magento\Core\Model\File\Storage\Config', array('cacheFile' => $this->_configCacheFile)
-                );
-                $config->save();
-                $this->_mediaDirectory = str_replace($this->_workingDirectory, '', $config->getMediaDirectory());
-                $allowedResources = $config->getAllowedResources();
-                $this->_relativeFileName = str_replace(
-                    $this->_mediaDirectory . '/', '', $this->_request->getPathInfo()
-                );
-                $isAllowed = $this->_isAllowed;
-                if (!$isAllowed($this->_relativeFileName, $allowedResources)) {
-                    $this->_response->sendNotFound();
-                    return -1;
-                }
-            }
-
-            if (0 !== stripos($this->_request->getPathInfo(), $this->_mediaDirectory . '/')) {
-                $this->_response->sendNotFound();
-                return -1;
-            }
-
-            $sync = $this->_objectManager->get('Magento\Core\Model\File\Storage\Synchronization');
-            $sync->synchronize($this->_relativeFileName, $this->_request->getFilePath());
-
-            if ($this->directory->isReadable($this->directory->getRelativePath($this->_request->getFilePath()))) {
-                $this->_response->sendFile($this->_request->getFilePath());
-                return 0;
-            } else {
-                $this->_response->sendNotFound();
-                return -1;
-            }
-        } catch (\Magento\Core\Model\Store\Exception $e) {
-            $this->_response->sendNotFound();
-            return -1;
         }
+
+        if (0 !== stripos($this->_request->getPathInfo(), $this->_mediaDirectory . '/')) {
+            throw new \LogicException('The specified path is not within media directory.');
+        }
+
+        $sync = $this->_objectManager->get('Magento\Core\Model\File\Storage\Synchronization');
+        $sync->synchronize($this->_relativeFileName, $this->_request->getFilePath());
+
+        if ($this->directory->isReadable($this->directory->getRelativePath($this->_request->getFilePath()))) {
+            $this->_response->setFilePath($this->_request->getFilePath());
+        } else {
+            $this->_response->setHttpResponseCode(404);
+        }
+        return $this->_response;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function catchException(App\Bootstrap $bootstrap, \Exception $exception)
+    {
+        $this->_response->setHttpResponseCode(404);
+        $this->_response->sendHeaders();
+        return true;
     }
 }

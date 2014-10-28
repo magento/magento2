@@ -18,21 +18,18 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
+
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Adminhtml sales order create sidebar block
  *
- * @category   Magento
- * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Adminhtml\Order\Create\Sidebar;
-
 class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
     /**
@@ -43,6 +40,8 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
     protected $_sidebarStorageAction = 'add';
 
     /**
+     * Sales config
+     *
      * @var \Magento\Sales\Model\Config
      */
     protected $_salesConfig;
@@ -51,6 +50,7 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Model\Session\Quote $sessionQuote
      * @param \Magento\Sales\Model\AdminOrder\Create $orderCreate
+     * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param array $data
      */
@@ -58,10 +58,11 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Model\Session\Quote $sessionQuote,
         \Magento\Sales\Model\AdminOrder\Create $orderCreate,
+        PriceCurrencyInterface $priceCurrency,
         \Magento\Sales\Model\Config $salesConfig,
         array $data = array()
     ) {
-        parent::__construct($context, $sessionQuote, $orderCreate, $data);
+        parent::__construct($context, $sessionQuote, $orderCreate, $priceCurrency, $data);
         $this->_salesConfig = $salesConfig;
     }
 
@@ -85,6 +86,11 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
         return $this->getCustomerId();
     }
 
+    /**
+     * Retrieve disply item qty availablity
+     *
+     * @return false
+     */
     public function canDisplayItemQty()
     {
         return false;
@@ -93,7 +99,7 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
     /**
      * Retrieve availability removing items in block
      *
-     * @return bool
+     * @return true
      */
     public function canRemoveItems()
     {
@@ -103,8 +109,8 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
     /**
      * Retrieve identifier of block item
      *
-     * @param   \Magento\Object $item
-     * @return  int
+     * @param \Magento\Framework\Object $item
+     * @return int
      */
     public function getIdentifierId($item)
     {
@@ -114,8 +120,8 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
     /**
      * Retrieve item identifier of block item
      *
-     * @param   mixed $item
-     * @return  int
+     * @param \Magento\Framework\Object $item
+     * @return int
      */
     public function getItemId($item)
     {
@@ -125,8 +131,8 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
     /**
      * Retrieve product identifier linked with item
      *
-     * @param   mixed $item
-     * @return  int
+     * @param \Magento\Framework\Object $item
+     * @return int
      */
     public function getProductId($item)
     {
@@ -168,7 +174,7 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
             /*
              * Filtering items by allowed product type
              */
-            foreach($items as $key => $item) {
+            foreach ($items as $key => $item) {
                 if ($item instanceof \Magento\Catalog\Model\Product) {
                     $type = $item->getTypeId();
                 } else if ($item instanceof \Magento\Sales\Model\Order\Item) {
@@ -178,9 +184,9 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
                 } else {
                     $type = '';
                     // Maybe some item, that can give us product via getProduct()
-                    if (($item instanceof \Magento\Object) || method_exists($item, 'getProduct')) {
+                    if ($item instanceof \Magento\Framework\Object || method_exists($item, 'getProduct')) {
                         $product = $item->getProduct();
-                        if ($product && ($product instanceof \Magento\Catalog\Model\Product)) {
+                        if ($product && $product instanceof \Magento\Catalog\Model\Product) {
                             $type = $product->getTypeId();
                         }
                     }
@@ -197,16 +203,42 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
     /**
      * Retrieve item collection
      *
-     * @return mixed
+     * @return false
      */
     public function getItemCollection()
     {
         return false;
     }
 
+    /**
+     * Retrieve disply price availablity
+     *
+     * @return true
+     */
     public function canDisplayPrice()
     {
         return true;
     }
 
+    /**
+     * Get item qty
+     *
+     * @param \Magento\Framework\Object $item
+     * @return int
+     */
+    public function getItemQty(\Magento\Framework\Object $item)
+    {
+        return $item->getQty() * 1 ? $item->getQty() * 1 : 1;
+    }
+
+    /**
+     * Check whether product configuration is required before adding to order
+     *
+     * @param string|int|null $productType
+     * @return false
+     */
+    public function isConfigurationRequired($productType)
+    {
+        return false;
+    }
 }

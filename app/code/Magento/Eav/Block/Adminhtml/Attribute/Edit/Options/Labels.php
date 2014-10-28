@@ -18,39 +18,36 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Eav
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Eav\Block\Adminhtml\Attribute\Edit\Options;
 
 /**
  * Attribute add/edit form options tab
  *
- * @category   Magento
- * @package    Magento_Eav
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Eav\Block\Adminhtml\Attribute\Edit\Options;
-
 class Labels extends \Magento\Backend\Block\Template
 {
-    /** @var \Magento\Core\Model\Registry */
+    /**
+     * @var \Magento\Framework\Registry
+     */
     protected $_registry;
 
     /**
-     * @inheritdoc
+     * @var string
      */
     protected $_template = 'Magento_Catalog::catalog/product/attribute/labels.phtml';
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Framework\Registry $registry,
         array $data = array()
     ) {
         parent::__construct($context, $data);
@@ -60,7 +57,7 @@ class Labels extends \Magento\Backend\Block\Template
     /**
      * Retrieve stores collection with default store
      *
-     * @return \Magento\Core\Model\Resource\Store\Collection
+     * @return \Magento\Store\Model\Resource\Store\Collection
      */
     public function getStores()
     {

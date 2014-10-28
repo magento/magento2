@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    tests
- * @package     static
- * @subpackage  Legacy
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -43,14 +40,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 $obsoleteNodes = array();
                 $obsoleteNodesFiles = glob(__DIR__ . '/_files/obsolete_config_nodes*.php');
                 foreach ($obsoleteNodesFiles as $obsoleteNodesFile) {
-                    $obsoleteNodes = array_merge($obsoleteNodes, include($obsoleteNodesFile));
+                    $obsoleteNodes = array_merge($obsoleteNodes, include $obsoleteNodesFile);
                 }
 
                 $xml = simplexml_load_file($file);
                 foreach ($obsoleteNodes as $xpath => $suggestion) {
                     $this->assertEmpty(
                         $xml->xpath($xpath),
-                        "Nodes identified by XPath '$xpath' are obsolete. $suggestion"
+                        "Nodes identified by XPath '{$xpath}' are obsolete. {$suggestion}"
                     );
                 }
             },

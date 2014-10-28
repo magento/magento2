@@ -23,18 +23,15 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Sales/etc/sales.xsd">
     <section name="quote">
         <group name="totals">
             <item name="nominal" instance="Magento\Sales\Model\Quote\Address\Total\Nominal" sort_order="50"/>
             <item name="subtotal" instance="Magento\Sales\Model\Quote\Address\Total\Subtotal" sort_order="100"/>
             <item name="shipping" instance="Magento\Sales\Model\Quote\Address\Total\Shipping" sort_order="250"/>
-            <item name="msrp" instance="Magento\Sales\Model\Quote\Address\Total\Msrp" sort_order="600"/>
             <item name="grand_total" instance="Magento\Sales\Model\Quote\Address\Total\Grand" sort_order="550"/>
         </group>
         <group name="nominal_totals">
-            <item name="recurring_initial_fee" instance="Magento\Sales\Model\Quote\Address\Total\Nominal\Recurring\Initial" sort_order="10"/>
-            <item name="recurring_trial_payment" instance="Magento\Sales\Model\Quote\Address\Total\Nominal\Recurring\Trial" sort_order="50"/>
             <item name="nominal_subtotal" instance="Magento\Sales\Model\Quote\Address\Total\Nominal\Subtotal" sort_order="250"/>
             <item name="nominal_shipping" instance="Magento\Sales\Model\Quote\Address\Total\Nominal\Shipping" sort_order="1250"/>
         </group>
@@ -62,7 +59,5 @@
     <order>
         <available_product_type name="simple"/>
         <available_product_type name="virtual"/>
-        <available_product_type name="configurable"/>
-        <available_product_type name="grouped"/>
     </order>
 </config>

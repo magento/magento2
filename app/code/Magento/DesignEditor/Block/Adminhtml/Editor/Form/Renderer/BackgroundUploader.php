@@ -18,19 +18,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_DesignEditor
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer;
 
 /**
  * Color-picker form element renderer
  */
-namespace Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer;
-
-class BackgroundUploader
-    extends \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer
+class BackgroundUploader extends \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer
 {
     /**
      * @var \Magento\DesignEditor\Model\Theme\Context
@@ -65,7 +61,8 @@ class BackgroundUploader
      */
     public function getImageUploadUrl()
     {
-        return $this->getUrl('adminhtml/system_design_editor_tools/uploadQuickStyleImage',
+        return $this->getUrl(
+            'adminhtml/system_design_editor_tools/uploadQuickStyleImage',
             array('theme_id' => $this->_themeContext->getEditableTheme()->getId())
         );
     }
@@ -77,7 +74,8 @@ class BackgroundUploader
      */
     public function getImageRemoveUrl()
     {
-        return $this->getUrl('adminhtml/system_design_editor_tools/removeQuickStyleImage',
+        return $this->getUrl(
+            'adminhtml/system_design_editor_tools/removeQuickStyleImage',
             array('theme_id' => $this->_themeContext->getEditableTheme()->getId())
         );
     }

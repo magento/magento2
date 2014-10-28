@@ -18,32 +18,26 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_CatalogInventory
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Minimum product qty backend model
- *
- * @category   Magento
- * @package    Magento_CatalogInventory
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\CatalogInventory\Model\System\Config\Backend;
 
-class Minqty extends \Magento\Core\Model\Config\Value
+/**
+ * Minimum product qty backend model
+ */
+class Minqty extends \Magento\Framework\App\Config\Value
 {
     /**
-    * Validate minimum product qty value
-    *
-    * @return \Magento\CatalogInventory\Model\System\Config\Backend\Minqty
-    */
+     * Validate minimum product qty value
+     *
+     * @return $this
+     */
     protected function _beforeSave()
     {
         parent::_beforeSave();
-        $minQty = (int)$this->getValue() >= 0 ? (int)$this->getValue() : (int)$this->getOldValue();
+        $minQty = (int) $this->getValue() >= 0 ? (int) $this->getValue() : (int) $this->getOldValue();
         $this->setValue((string) $minQty);
         return $this;
     }

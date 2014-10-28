@@ -18,25 +18,24 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Backend\Model\Config\Source\Date;
 
-class Short implements \Magento\Core\Model\Option\ArrayInterface
+class Short implements \Magento\Framework\Option\ArrayInterface
 {
+    /**
+     * @return array
+     */
     public function toOptionArray()
     {
         $arr = array();
-        $arr[] = array('label'=>'', 'value'=>'');
-        $arr[] = array('label'=>strftime('MM/DD/YY (%m/%d/%y)'), 'value'=>'%m/%d/%y');
-        $arr[] = array('label'=>strftime('MM/DD/YYYY (%m/%d/%Y)'), 'value'=>'%m/%d/%Y');
-        $arr[] = array('label'=>strftime('DD/MM/YY (%d/%m/%y)'), 'value'=>'%d/%m/%y');
-        $arr[] = array('label'=>strftime('DD/MM/YYYY (%d/%m/%Y)'), 'value'=>'%d/%m/%Y');
+        $arr[] = array('label' => '', 'value' => '');
+        $arr[] = array('label' => strftime('MM/DD/YY (%m/%d/%y)'), 'value' => '%m/%d/%y');
+        $arr[] = array('label' => strftime('MM/DD/YYYY (%m/%d/%Y)'), 'value' => '%m/%d/%Y');
+        $arr[] = array('label' => strftime('DD/MM/YY (%d/%m/%y)'), 'value' => '%d/%m/%y');
+        $arr[] = array('label' => strftime('DD/MM/YYYY (%d/%m/%Y)'), 'value' => '%d/%m/%Y');
         return $arr;
     }
 }

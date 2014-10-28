@@ -23,16 +23,23 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <type name="Magento\SalesRule\Model\Resource\Rule\Collection" shared="false" />
     <type name="Magento\Sales\Model\Quote\Config">
         <plugin name="append_sales_rule_keys_to_quote" type="Magento\SalesRule\Model\Plugin\QuoteConfigProductAttributes"/>
     </type>
-    <type name="Magento\Module\Updater\SetupFactory">
-        <param name="resourceTypes">
-            <value>
-                <salesrule_setup>Magento\SalesRule\Model\Resource\Setup</salesrule_setup>
-            </value>
-        </param>
+    <type name="Magento\Framework\Module\Setup\Migration">
+        <arguments>
+            <argument name="compositeModules" xsi:type="array">
+                <item name="salesrule" xsi:type="string">Magento_SalesRule</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Rss\RssManagerInterface">
+        <arguments>
+            <argument name="dataProviders" xsi:type="array">
+                <item name="discounts" xsi:type="string">Magento\SalesRule\Block\Rss\Discounts</item>
+            </argument>
+        </arguments>
     </type>
 </config>

@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Centinel
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -30,62 +28,25 @@
  */
 namespace Magento\Centinel\Controller;
 
-class Index extends \Magento\App\Action\Action
+class Index extends \Magento\Framework\App\Action\Action
 {
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\App\Action\Context $context
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Framework\Registry $coreRegistry
      */
     public function __construct(
-        \Magento\App\Action\Context $context,
-        \Magento\Core\Model\Registry $coreRegistry
+        \Magento\Framework\App\Action\Context $context,
+        \Magento\Framework\Registry $coreRegistry
     ) {
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($context);
-    }
-
-    /**
-     * Process autentication start action
-     *
-     */
-    public function authenticationStartAction()
-    {
-        $validator = $this->_getValidator();
-        if ($validator) {
-            $this->_coreRegistry->register('current_centinel_validator', $validator);
-        }
-        $this->_view->loadLayout()->renderLayout();
-    }
-
-    /**
-     * Process autentication complete action
-     *
-     */
-    public function authenticationCompleteAction()
-    {
-        try {
-            $validator = $this->_getValidator();
-            if ($validator) {
-                $request = $this->getRequest();
-
-                $data = new \Magento\Object();
-                $data->setTransactionId($request->getParam('MD'));
-                $data->setPaResPayload($request->getParam('PaRes'));
-
-                $validator->authenticate($data);
-                $this->_coreRegistry->register('current_centinel_validator', $validator);
-            }
-        } catch (\Exception $e) {
-            $this->_coreRegistry->register('current_centinel_validator', false);
-        }
-        $this->_view->loadLayout()->renderLayout();
     }
 
     /**
@@ -93,7 +54,7 @@ class Index extends \Magento\App\Action\Action
      *
      * @return \Magento\Sales\Model\Quote\Payment
      */
-    private function _getPayment()
+    protected function _getPayment()
     {
         return $this->_objectManager->get('Magento\Checkout\Model\Session')->getQuote()->getPayment();
     }
@@ -103,7 +64,7 @@ class Index extends \Magento\App\Action\Action
      *
      * @return \Magento\Centinel\Model\Service
      */
-    private function _getValidator()
+    protected function _getValidator()
     {
         if ($this->_getPayment()->getMethodInstance()->getIsCentinelValidationEnabled()) {
             return $this->_getPayment()->getMethodInstance()->getCentinelValidator();
@@ -111,4 +72,3 @@ class Index extends \Magento\App\Action\Action
         return false;
     }
 }
-

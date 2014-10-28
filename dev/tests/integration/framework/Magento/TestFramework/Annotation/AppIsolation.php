@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -77,7 +74,7 @@ class AppIsolation
      * Handler for 'endTest' event
      *
      * @param \PHPUnit_Framework_TestCase $test
-     * @throws \Magento\Exception
+     * @throws \Magento\Framework\Exception
      */
     public function endTest(\PHPUnit_Framework_TestCase $test)
     {
@@ -88,7 +85,7 @@ class AppIsolation
         if (isset($annotations['method']['magentoAppIsolation'])) {
             $isolation = $annotations['method']['magentoAppIsolation'];
             if ($isolation !== array('enabled') && $isolation !== array('disabled')) {
-                throw new \Magento\Exception(
+                throw new \Magento\Framework\Exception(
                     'Invalid "@magentoAppIsolation" annotation, can be "enabled" or "disabled" only.'
                 );
             }

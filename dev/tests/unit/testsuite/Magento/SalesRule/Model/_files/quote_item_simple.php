@@ -18,14 +18,11 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_SalesRule
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-return array (
+return array(
     'id' => '18',
     'item_id' => '18',
     'quote_id' => '1',
@@ -33,13 +30,13 @@ return array (
     'updated_at' => '2012-07-04 15:02:22',
     'product_id' => '5',
     'store_id' => '1',
-    'parent_item_id' => NULL,
+    'parent_item_id' => null,
     'is_virtual' => '0',
     'sku' => 'sp01',
     'name' => 'Simple Product',
-    'description' => NULL,
+    'description' => null,
     'applied_rule_ids' => '1',
-    'additional_data' => NULL,
+    'additional_data' => null,
     'free_shipping' => '0',
     'is_qty_decimal' => '0',
     'no_discount' => '0',
@@ -47,7 +44,7 @@ return array (
     'qty' => 1,
     'price' => 10,
     'base_price' => '10.0000',
-    'custom_price' => NULL,
+    'custom_price' => null,
     'discount_percent' => '10.0000',
     'discount_amount' => '1.0000',
     'base_discount_amount' => '1.0000',
@@ -59,18 +56,18 @@ return array (
     'row_total_with_discount' => '0.0000',
     'row_weight' => '1.0000',
     'product_type' => 'simple',
-    'base_tax_before_discount' => NULL,
-    'tax_before_discount' => NULL,
-    'original_custom_price' => NULL,
-    'redirect_url' => NULL,
-    'base_cost' => NULL,
+    'base_tax_before_discount' => null,
+    'tax_before_discount' => null,
+    'original_custom_price' => null,
+    'redirect_url' => null,
+    'base_cost' => null,
     'price_incl_tax' => '10.8300',
     'base_price_incl_tax' => '10.8300',
     'row_total_incl_tax' => '10.8300',
     'base_row_total_incl_tax' => '10.8300',
-    'hidden_tax_amount' => NULL,
-    'base_hidden_tax_amount' => NULL,
-    'gift_message_id' => NULL,
+    'hidden_tax_amount' => null,
+    'base_hidden_tax_amount' => null,
+    'gift_message_id' => null,
     'weee_tax_disposition' => '0.0000',
     'weee_tax_row_disposition' => '0.0000',
     'base_weee_tax_disposition' => '0.0000',
@@ -80,14 +77,14 @@ return array (
     'weee_tax_applied_row_amount' => '0.0000',
     'base_weee_tax_applied_amount' => '0.0000',
     'base_weee_tax_applied_row_amnt' => '0.0000',
-    'event_id' => NULL,
-    'gw_id' => NULL,
-    'gw_base_price' => NULL,
-    'gw_price' => NULL,
-    'gw_base_tax_amount' => NULL,
-    'gw_tax_amount' => NULL,
-    'qty_options' => array (),
-    'product' => NULL,
+    'event_id' => null,
+    'gw_id' => null,
+    'gw_base_price' => null,
+    'gw_price' => null,
+    'gw_base_tax_amount' => null,
+    'gw_tax_amount' => null,
+    'qty_options' => array(),
+    'product' => null,
     'tax_class_id' => '2',
     'is_recurring' => '0',
     'has_error' => false,
@@ -95,5 +92,5 @@ return array (
     'base_calculation_price' => 10,
     'calculation_price' => 10,
     'converted_price' => 10,
-    'base_original_price' => 10,
+    'base_original_price' => 10
 );

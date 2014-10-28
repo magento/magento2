@@ -1,7 +1,5 @@
 <?php
 /**
- * Factory of WSDL builders.
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -25,17 +23,20 @@
  */
 namespace Magento\Webapi\Model\Soap\Wsdl;
 
+/**
+ * Factory of WSDL builders.
+ */
 class Factory
 {
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManager $objectManager
      */
-    public function __construct(\Magento\ObjectManager $objectManager)
+    public function __construct(\Magento\Framework\ObjectManager $objectManager)
     {
         $this->_objectManager = $objectManager;
     }
@@ -51,10 +52,7 @@ class Factory
     {
         return $this->_objectManager->create(
             'Magento\Webapi\Model\Soap\Wsdl',
-            array(
-                'name' => $wsdlName,
-                'uri' => $endpointUrl,
-            )
+            array('name' => $wsdlName, 'uri' => $endpointUrl)
         );
     }
 }

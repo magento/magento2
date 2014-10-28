@@ -18,30 +18,27 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Checkout
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Checkout\Block\Onepage\Shipping;
 
 /**
  * One page checkout status
  *
- * @category   Magento
- * @category   Magento
- * @package    Magento_Checkout
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Checkout\Block\Onepage\Shipping;
-
 class Method extends \Magento\Checkout\Block\Onepage\AbstractOnepage
 {
+    /**
+     * @return void
+     */
     protected function _construct()
     {
-        $this->getCheckout()->setStepData('shipping_method', array(
-            'label'     => __('Shipping Method'),
-            'is_show'   => $this->isShow()
-        ));
+        $this->getCheckout()->setStepData(
+            'shipping_method',
+            array('label' => __('Shipping Method'), 'is_show' => $this->isShow())
+        );
         parent::_construct();
     }
 

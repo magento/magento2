@@ -1,0 +1,86 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+?>
+<?php /* @var $this \Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type\Radio */ ?>
+<?php $_option = $this->getOption(); ?>
+<?php $_selections  = $_option->getSelections(); ?>
+<?php $_default = $_option->getDefaultSelection(); ?>
+<?php $_skipSaleableCheck = $this->helper('Magento\Catalog\Helper\Product')->getSkipSaleableCheck(); ?>
+<?php list($_defaultQty, $_canChangeQty) = $this->getDefaultValues(); ?>
+
+<div class="field options<?php if ($_option->getRequired()) echo ' required' ?>">
+    <label class="label"><span><?php echo $this->escapeHtml($_option->getTitle()) ?></span></label>
+    <div class="control">
+        <div class="nested<?php if ($_option->getDecoratedIsLast()):?> last<?php endif; ?>">
+        <?php if ($this->showSingle()): ?>
+            <?php echo $this->getSelectionTitlePrice($_selections[0]) ?>
+            <input type="hidden" name="bundle_option[<?php echo $_option->getId() ?>]"
+                   value="<?php echo $_selections[0]->getSelectionId() ?>"
+                   price="<?php echo $this->getSelectionPrice($_selections[0]) ?>"/>
+        <?php else:?>
+            <?php if (!$_option->getRequired()): ?>
+                <div class="field choice">
+                    <input type="radio"
+                           class="radio"
+                           id="bundle-option-<?php echo $_option->getId() ?>"
+                           name="bundle_option[<?php echo $_option->getId() ?>]"<?php echo ($_default && $_default->isSalable()) ? '' : ' checked="checked" ' ?>
+                           value=""
+                           onclick="ProductConfigure.bundleControl.changeSelection(this)" />
+                    <label class="label"
+                           for="bundle-option-<?php echo $_option->getId() ?>"><span><?php echo __('None') ?></span></label>
+                </div>
+            <?php endif; ?>
+            <?php foreach ($_selections as $_selection): ?>
+                <div class="field choice">
+                    <input type="radio"
+                           class="radio<?php echo $_option->getRequired() ? ' validate-one-required-by-name' : '' ?> change-container-classname"
+                           id="bundle-option-<?php echo $_option->getId() ?>-<?php echo $_selection->getSelectionId() ?>"
+                           name="bundle_option[<?php echo $_option->getId() ?>]"
+                           <?php if ($this->isSelected($_selection)) echo ' checked="checked"' ?><?php if (!$_selection->isSaleable() && !$_skipSaleableCheck) echo ' disabled="disabled"' ?>
+                           value="<?php echo $_selection->getSelectionId() ?>"
+                           onclick="ProductConfigure.bundleControl.changeSelection(this)"
+                           price="<?php echo $this->getSelectionPrice($_selection) ?>"
+                           qtyId="bundle-option-<?php echo $_option->getId() ?>-qty-input" />
+                    <label class="label"
+                           for="bundle-option-<?php echo $_option->getId() ?>-<?php echo $_selection->getSelectionId() ?>"><span><?php echo $this->getSelectionTitlePrice($_selection) ?></span></label>
+                <?php if ($_option->getRequired()): ?>
+                    <?php echo $this->setValidationContainer('bundle-option-'.$_option->getId().'-'.$_selection->getSelectionId(), 'bundle-option-'.$_option->getId().'-container') ?>
+                <?php endif; ?>
+                </div>
+            <?php endforeach; ?>
+            <div id="bundle-option-<?php echo $_option->getId() ?>-container"></div>
+        <?php endif; ?>
+            <div class="field qty">
+                <label class="label"
+                       for="bundle-option-<?php echo $_option->getId() ?>-qty-input"><span><?php echo __('Qty:') ?></span></label>
+                <div class="control"><input <?php if (!$_canChangeQty) echo ' disabled="disabled"' ?>
+                        id="bundle-option-<?php echo $_option->getId() ?>-qty-input"
+                        class="input-text qty<?php if (!$_canChangeQty) echo ' qty-disabled' ?>" type="text"
+                        name="bundle_option_qty[<?php echo $_option->getId() ?>]" value="<?php echo $_defaultQty ?>" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

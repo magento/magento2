@@ -18,18 +18,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Errors
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Framework\Error;
 
- /**
+/**
  * Error processor
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Error_Processor
+class Processor
 {
     const MAGE_ERRORS_LOCAL_XML = 'local.xml';
     const MAGE_ERRORS_DESIGN_XML = 'design.xml';
@@ -135,20 +132,30 @@ class Error_Processor
     /**
      * Internal config object
      *
-     * @var stdClass
+     * @var \stdClass
     */
     protected $_config;
 
-    public function __construct()
+    /**
+     * Http response
+     *
+     * @var \Magento\Framework\App\Response\Http
+     */
+    protected $_response;
+
+    /**
+     * @param \Magento\Framework\App\Response\Http $response
+     */
+    public function __construct(\Magento\Framework\App\Response\Http $response)
     {
+        $this->_response = $response;
         $this->_errorDir  = __DIR__ . '/';
         $this->_reportDir = dirname(dirname($this->_errorDir)) . '/var/report/';
 
         if (!empty($_SERVER['SCRIPT_NAME'])) {
-            if (in_array(basename($_SERVER['SCRIPT_NAME'],'.php'), array('404','503','report'))) {
+            if (in_array(basename($_SERVER['SCRIPT_NAME'], '.php'), array('404', '503', 'report'))) {
                 $this->_scriptName = dirname($_SERVER['SCRIPT_NAME']);
-            }
-            else {
+            } else {
                 $this->_scriptName = $_SERVER['SCRIPT_NAME'];
             }
         }
@@ -169,40 +176,52 @@ class Error_Processor
 
     /**
      * Process no cache error
+     *
+     * @return \Magento\Framework\App\Response\Http
      */
     public function processNoCache()
     {
         $this->pageTitle = 'Error : cached config data is unavailable';
-        $this->_renderPage('nocache.phtml');
+        $this->_response->setBody($this->_renderPage('nocache.phtml'));
+        return $this->_response;
     }
 
     /**
      * Process 404 error
-    */
+     *
+     * @return \Magento\Framework\App\Response\Http
+     */
     public function process404()
     {
         $this->pageTitle = 'Error 404: Not Found';
-        $this->_sendHeaders(404);
-        $this->_renderPage('404.phtml');
+        $this->_response->setHttpResponseCode(404);
+        $this->_response->setBody($this->_renderPage('404.phtml'));
+        return $this->_response;
+
     }
 
     /**
      * Process 503 error
-    */
+     *
+     * @return \Magento\Framework\App\Response\Http
+     */
     public function process503()
     {
         $this->pageTitle = 'Error 503: Service Unavailable';
-        $this->_sendHeaders(503);
-        $this->_renderPage('503.phtml');
+        $this->_response->setHttpResponseCode(503);
+        $this->_response->setBody($this->_renderPage('503.phtml'));
+        return $this->_response;
     }
 
     /**
      * Process report
-    */
+     *
+     * @return \Magento\Framework\App\Response\Http
+     */
     public function processReport()
     {
         $this->pageTitle = 'There has been an error processing your request';
-        $this->_sendHeaders(503);
+        $this->_response->setHttpResponseCode(503);
 
         $this->showErrorMsg = false;
         $this->showSentMsg  = false;
@@ -210,11 +229,12 @@ class Error_Processor
         $this->reportAction = $this->_config->action;
         $this->_setReportUrl();
 
-        if($this->reportAction == 'email') {
+        if ($this->reportAction == 'email') {
             $this->showSendForm = true;
             $this->sendReport();
         }
-        $this->_renderPage('report.phtml');
+        $this->_response->setBody($this->_renderPage('report.phtml'));
+        return $this->_response;
     }
 
     /**
@@ -248,7 +268,9 @@ class Error_Processor
         $isSecure = (!empty($_SERVER['HTTPS'])) && ($_SERVER['HTTPS'] != 'off');
         $url = ($isSecure ? 'https://' : 'http://') . $host;
 
-        if (!empty($_SERVER['SERVER_PORT']) && !in_array($_SERVER['SERVER_PORT'], array(80, 433))) {
+        if (!empty($_SERVER['SERVER_PORT']) && !in_array($_SERVER['SERVER_PORT'], array(80, 433))
+            && !preg_match('/.*?\:[0-9]+$/', $url)
+        ) {
             $url .= ':' . $_SERVER['SERVER_PORT'];
         }
         return  $url;
@@ -257,13 +279,14 @@ class Error_Processor
     /**
      * Retrieve base URL
      *
+     * @param bool $param
      * @return string
      */
     public function getBaseUrl($param = false)
     {
         $path = $this->_scriptName;
 
-        if($param && !$this->_root) {
+        if ($param && !$this->_root) {
             $path = dirname($path);
         }
 
@@ -290,13 +313,15 @@ class Error_Processor
     {
         $documentRoot = '';
         if (!empty($_SERVER['DOCUMENT_ROOT'])) {
-            $documentRoot = rtrim($_SERVER['DOCUMENT_ROOT'],'/');
+            $documentRoot = rtrim($_SERVER['DOCUMENT_ROOT'], '/');
         }
         return dirname($documentRoot . $this->_scriptName) . '/';
     }
 
     /**
      * Prepare config data
+     *
+     * @return void
      */
     protected function _prepareConfig()
     {
@@ -304,7 +329,7 @@ class Error_Processor
         $design = $this->_loadXml(self::MAGE_ERRORS_DESIGN_XML);
 
         //initial settings
-        $config = new stdClass();
+        $config = new \stdClass();
         $config->action         = '';
         $config->subject        = 'Store Debug Information';
         $config->email_address  = '';
@@ -342,8 +367,8 @@ class Error_Processor
     /**
      * Load xml file
      *
-     * @param string $config
-     * return SimpleXMLElement
+     * @param string $xmlFile
+     * @return SimpleXMLElement
      */
     protected function _loadXml($xmlFile)
     {
@@ -352,40 +377,21 @@ class Error_Processor
     }
 
     /**
-     * Send error headers
-     *
-     * @param int $statusCode
-     */
-    protected function _sendHeaders($statusCode)
-    {
-        $serverProtocol = !empty($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0';
-        switch ($statusCode) {
-            case 404:
-                $description = 'Not Found';
-                break;
-            case 503:
-                $description = 'Service Unavailable';
-                break;
-            default:
-                $description = '';
-                break;
-        }
-
-        header(sprintf('%s %s %s', $serverProtocol, $statusCode, $description), true, $statusCode);
-        header(sprintf('Status: %s %s', $statusCode, $description), true, $statusCode);
-    }
-
-    /**
-     * Render page
+     * @param string $template
+     * @return string
      */
     protected function _renderPage($template)
     {
         $baseTemplate = $this->_getTemplatePath('page.phtml');
         $contentTemplate = $this->_getTemplatePath($template);
 
+        $html = '';
         if ($baseTemplate && $contentTemplate) {
+            ob_start();
             require_once $baseTemplate;
+            $html = ob_get_clean();
         }
+        return $html;
     }
 
     /**
@@ -393,7 +399,7 @@ class Error_Processor
      *
      * @param string $file
      * @param array $directories
-     * return $string
+     * @return string
      */
     protected function _getFilePath($file, $directories = null)
     {
@@ -417,7 +423,7 @@ class Error_Processor
      * Find template path
      *
      * @param string $template
-     * return $string
+     * @return string
      */
     protected function _getTemplatePath($template)
     {
@@ -444,6 +450,7 @@ class Error_Processor
      * Set report data
      *
      * @param array $reportData
+     * @return void
      */
     protected function _setReportData($reportData)
     {
@@ -451,8 +458,7 @@ class Error_Processor
 
         if (!isset($reportData['url'])) {
             $this->reportData['url'] = '';
-        }
-        else {
+        } else {
             $this->reportData['url'] = $this->getHostUrl() . $reportData['url'];
         }
 
@@ -465,6 +471,7 @@ class Error_Processor
      * Create report
      *
      * @param array $reportData
+     * @return void
      */
     public function saveReport($reportData)
     {
@@ -486,9 +493,9 @@ class Error_Processor
         $this->_setReportUrl();
 
         if (headers_sent()) {
-            print '<script type="text/javascript">';
-            print "window.location.href = '{$this->reportUrl}';";
-            print '</script>';
+            echo '<script type="text/javascript">';
+            echo "window.location.href = '{$this->reportUrl}';";
+            echo '</script>';
             exit;
         }
     }
@@ -497,6 +504,7 @@ class Error_Processor
      * Get report
      *
      * @param int $reportId
+     * @return void
      */
     public function loadReport($reportId)
     {
@@ -513,6 +521,7 @@ class Error_Processor
     /**
      * Send report
      *
+     * @return void
      */
     public function sendReport()
     {
@@ -572,8 +581,10 @@ class Error_Processor
      */
     protected function _validate()
     {
-        $email = preg_match('/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/',
-            $this->postData['email']);
+        $email = preg_match(
+            '/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/',
+            $this->postData['email']
+        );
         return ($this->postData['firstName'] && $this->postData['lastName'] && $email);
     }
 
@@ -581,9 +592,10 @@ class Error_Processor
      * Skin setter
      *
      * @param string $value
-     * @param stdClass $config
+     * @param \stdClass $config
+     * @return void
      */
-    protected function _setSkin($value, stdClass $config = null)
+    protected function _setSkin($value, \stdClass $config = null)
     {
         if (preg_match('/^[a-z0-9_]+$/i', $value) && is_dir($this->_indexDir . self::ERROR_DIR . '/' . $value)) {
             if (!$config) {
@@ -599,13 +611,14 @@ class Error_Processor
 
     /**
      * Set current report URL from current params
+     *
+     * @return void
      */
     protected function _setReportUrl()
     {
         if ($this->reportId && $this->_config && isset($this->_config->skin)) {
-            $this->reportUrl = "{$this->getBaseUrl(true)}pub/errors/report.php?" . http_build_query(array(
-                'id' => $this->reportId, 'skin' => $this->_config->skin
-            ));
+            $this->reportUrl = "{$this->getBaseUrl(true)}pub/errors/report.php?"
+                . http_build_query(array('id' => $this->reportId, 'skin' => $this->_config->skin));
         }
     }
 }

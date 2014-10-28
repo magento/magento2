@@ -23,16 +23,16 @@
  */
 namespace Magento\Eav\Model\Entity\Attribute;
 
-class Config extends \Magento\Config\Data
+class Config extends \Magento\Framework\Config\Data
 {
     /**
      * @param \Magento\Eav\Model\Entity\Attribute\Config\Reader $reader
-     * @param \Magento\Config\CacheInterface $cache
+     * @param \Magento\Framework\Config\CacheInterface $cache
      * @param string $cacheId
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Attribute\Config\Reader $reader,
-        \Magento\Config\CacheInterface $cache,
+        \Magento\Framework\Config\CacheInterface $cache,
         $cacheId = "eav_attributes"
     ) {
         parent::__construct($reader, $cache, $cacheId);

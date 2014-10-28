@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Webapi\Block\Adminhtml\Integration\Edit\Tab;
 
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
@@ -31,27 +30,27 @@ use Magento\Integration\Model\Integration as IntegrationModel;
 /**
  * Class for handling API section within integration.
  */
-class Webapi extends \Magento\Backend\Block\Widget\Form\Generic
-    implements \Magento\Backend\Block\Widget\Tab\TabInterface
+class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
+    \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
      * Root ACL Resource
      *
-     * @var \Magento\Core\Model\Acl\RootResource
+     * @var \Magento\Framework\Acl\RootResource
      */
     protected $_rootResource;
 
     /**
      * Rules collection factory
      *
-     * @var \Magento\User\Model\Resource\Rules\CollectionFactory
+     * @var \Magento\Authorization\Model\Resource\Rules\CollectionFactory
      */
-    protected $_rulesCollFactory;
+    protected $_rulesCollectionFactory;
 
     /**
      * Acl resource provider
      *
-     * @var \Magento\Acl\Resource\ProviderInterface
+     * @var \Magento\Framework\Acl\Resource\ProviderInterface
      */
     protected $_aclResourceProvider;
 
@@ -64,32 +63,32 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Initialize dependencies.
      *
-     * TODO: Fix excessive number of arguments
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     *
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Core\Model\Acl\RootResource $rootResource
-     * @param \Magento\User\Model\Resource\Rules\CollectionFactory $rulesCollFactory
-     * @param \Magento\Acl\Resource\ProviderInterface $aclResourceProvider
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Data\FormFactory $formFactory
+     * @param \Magento\Framework\Acl\RootResource $rootResource
+     * @param \Magento\Authorization\Model\Resource\Rules\CollectionFactory $rulesCollectionFactory
+     * @param \Magento\Framework\Acl\Resource\ProviderInterface $aclResourceProvider
      * @param \Magento\Webapi\Helper\Data $webapiData
      * @param \Magento\Integration\Helper\Data $integrationData
      * @param array $data
+     *
+     * @todo Fix excessive number of arguments
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Data\FormFactory $formFactory,
-        \Magento\Core\Model\Acl\RootResource $rootResource,
-        \Magento\User\Model\Resource\Rules\CollectionFactory $rulesCollFactory,
-        \Magento\Acl\Resource\ProviderInterface $aclResourceProvider,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Data\FormFactory $formFactory,
+        \Magento\Framework\Acl\RootResource $rootResource,
+        \Magento\Authorization\Model\Resource\Rules\CollectionFactory $rulesCollectionFactory,
+        \Magento\Framework\Acl\Resource\ProviderInterface $aclResourceProvider,
         \Magento\Webapi\Helper\Data $webapiData,
         \Magento\Integration\Helper\Data $integrationData,
         array $data = array()
     ) {
         $this->_rootResource = $rootResource;
-        $this->_rulesCollFactory = $rulesCollFactory;
+        $this->_rulesCollectionFactory = $rulesCollectionFactory;
         $this->_aclResourceProvider = $aclResourceProvider;
         $this->_webapiData = $webapiData;
         $this->_integrationData = $integrationData;
@@ -124,8 +123,9 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic
     public function canShowTab()
     {
         $integrationData = $this->_coreRegistry->registry(IntegrationController::REGISTRY_KEY_CURRENT_INTEGRATION);
-        return !isset($integrationData[Info::DATA_SETUP_TYPE])
-            || ($integrationData[Info::DATA_SETUP_TYPE] != IntegrationModel::TYPE_CONFIG);
+        return !isset(
+            $integrationData[Info::DATA_SETUP_TYPE]
+        ) || $integrationData[Info::DATA_SETUP_TYPE] != IntegrationModel::TYPE_CONFIG;
     }
 
     /**
@@ -140,6 +140,8 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * Class constructor
+     *
+     * @return void
      */
     protected function _construct()
     {

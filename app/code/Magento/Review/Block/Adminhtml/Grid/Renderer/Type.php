@@ -18,36 +18,32 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Review
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Review\Block\Adminhtml\Grid\Renderer;
 
 /**
  * Adminhtml review grid item renderer for item type
  *
- * @category   Magento
- * @package    Magento_Review
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Review\Block\Adminhtml\Grid\Renderer;
-
 class Type extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
-    public function render(\Magento\Object $row)
+    /**
+     * Render review type
+     *
+     * @param \Magento\Framework\Object $row
+     * @return string
+     */
+    public function render(\Magento\Framework\Object $row)
     {
-
-        if (is_null($row->getCustomerId())) {
-            if ($row->getStoreId() == \Magento\Core\Model\Store::DEFAULT_STORE_ID) {
-                return __('Administrator');
-            } else {
-                return __('Guest');
-            }
-        } elseif ($row->getCustomerId() > 0) {
+        if ($row->getCustomerId()) {
             return __('Customer');
         }
-//		return ($row->getCustomerId() ? __('Customer') : __('Guest'));
+        if ($row->getStoreId() == \Magento\Store\Model\Store::DEFAULT_STORE_ID) {
+            return __('Administrator');
+        }
+        return __('Guest');
     }
 }// Class \Magento\Review\Block\Adminhtml\Grid\Renderer\Type END

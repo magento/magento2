@@ -23,24 +23,46 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
-    <type name="Magento\App\AreaList">
-        <param name="areas">
-            <value>
-                <webapi_rest>
-                    <frontName>rest</frontName>
-                </webapi_rest>
-                <webapi_soap>
-                    <frontName>soap</frontName>
-                </webapi_soap>
-            </value>
-        </param>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\App\AreaList">
+        <arguments>
+            <argument name="areas" xsi:type="array">
+                <item name="webapi_rest" xsi:type="array">
+                    <item name="frontName" xsi:type="string">rest</item>
+                </item>
+                <item name="webapi_soap" xsi:type="array">
+                    <item name="frontName" xsi:type="string">soap</item>
+                </item>
+            </argument>
+        </arguments>
     </type>
-    <type name="Magento\Xml\Generator" shared="false" />
-    <type name="Magento\Xml\Parser" shared="false" />
-    <type name="Magento\Code\Scanner\DirectoryScanner" shared="false" />
+    <type name="Magento\Framework\Xml\Generator" shared="false" />
+    <type name="Magento\Framework\Xml\Parser" shared="false" />
+    <type name="Magento\Framework\Code\Scanner\DirectoryScanner" shared="false" />
     <type name="Magento\Server\Reflection" shared="false" />
-    <type name="Magento\Integration\Service\IntegrationV1">
-        <plugin name="webapiIntegrationServiceV1" type="Magento\Webapi\Model\Plugin\IntegrationServiceV1"/>
+    <type name="Magento\Integration\Service\V1\Integration">
+        <plugin name="webapiIntegrationServiceV1" type="Magento\Webapi\Model\Plugin\Service\V1\Integration"/>
+    </type>
+    <type name="Magento\Webapi\Controller\Rest\Request\Deserializer\Factory">
+        <arguments>
+            <argument name="deserializers" xsi:type="array">
+                <item name="application_json" xsi:type="array">
+                    <item name="type" xsi:type="string">application/json</item>
+                    <item name="model" xsi:type="string">Magento\Webapi\Controller\Rest\Request\Deserializer\Json</item>
+                </item>
+                <item name="application_xml" xsi:type="array">
+                    <item name="type" xsi:type="string">application/xml</item>
+                    <item name="model" xsi:type="string">Magento\Webapi\Controller\Rest\Request\Deserializer\Xml</item>
+                </item>
+                <item name="application_xhtml_xml" xsi:type="array">
+                    <item name="type" xsi:type="string">application/xhtml+xml</item>
+                    <item name="model" xsi:type="string">Magento\Webapi\Controller\Rest\Request\Deserializer\Xml</item>
+                </item>
+                <item name="text_xml" xsi:type="array">
+                    <item name="type" xsi:type="string">text/xml</item>
+                    <item name="model" xsi:type="string">Magento\Webapi\Controller\Rest\Request\Deserializer\Xml</item>
+                </item>
+            </argument>
+        </arguments>
     </type>
 </config>

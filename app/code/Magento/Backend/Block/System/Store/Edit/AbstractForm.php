@@ -18,19 +18,14 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Block\System\Store\Edit;
 
 /**
  * Adminhtml store edit form
  *
- * @category    Magento
- * @package     Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
@@ -40,6 +35,7 @@ abstract class AbstractForm extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Class constructor
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -50,32 +46,32 @@ abstract class AbstractForm extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Prepare form data
      *
-     * return \Magento\Backend\Block\Widget\Form
+     * @return \Magento\Backend\Block\Widget\Form
      */
     protected function _prepareForm()
     {
-        /** @var \Magento\Data\Form $form */
-        $form = $this->_formFactory->create(array(
-            'data' => array(
-                'id'        => 'edit_form',
-                'action'    => $this->getData('action'),
-                'method'    => 'post',
-            ))
+        /** @var \Magento\Framework\Data\Form $form */
+        $form = $this->_formFactory->create(
+            array('data' => array('id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post'))
         );
 
         $this->_prepareStoreFieldSet($form);
 
-        $form->addField('store_type', 'hidden', array(
-            'name'      => 'store_type',
-            'no_span'   => true,
-            'value'     => $this->_coreRegistry->registry('store_type')
-        ));
+        $form->addField(
+            'store_type',
+            'hidden',
+            array('name' => 'store_type', 'no_span' => true, 'value' => $this->_coreRegistry->registry('store_type'))
+        );
 
-        $form->addField('store_action', 'hidden', array(
-            'name'      => 'store_action',
-            'no_span'   => true,
-            'value'     => $this->_coreRegistry->registry('store_action')
-        ));
+        $form->addField(
+            'store_action',
+            'hidden',
+            array(
+                'name' => 'store_action',
+                'no_span' => true,
+                'value' => $this->_coreRegistry->registry('store_action')
+            )
+        );
 
         $form->setAction($this->getUrl('adminhtml/*/save'));
         $form->setUseContainer(true);
@@ -89,8 +85,9 @@ abstract class AbstractForm extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Build store type specific fieldset
      *
+     * @param \Magento\Framework\Data\Form $form
+     * @return void
      * @abstract
-     * @param \Magento\Data\Form $form
      */
-    abstract protected function _prepareStoreFieldset(\Magento\Data\Form $form);
+    abstract protected function _prepareStoreFieldset(\Magento\Framework\Data\Form $form);
 }

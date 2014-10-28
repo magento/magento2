@@ -18,12 +18,13 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Model\Product;
 
+use Magento\Catalog\Model\Resource\Product\Link\Collection;
+use Magento\Catalog\Model\Resource\Product\Link\Product\Collection as ProductCollection;
 
 /**
  * Catalog product link model
@@ -37,20 +38,20 @@
  * @method int getLinkTypeId()
  * @method \Magento\Catalog\Model\Product\Link setLinkTypeId(int $value)
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Product;
-
-class Link extends \Magento\Core\Model\AbstractModel
+class Link extends \Magento\Framework\Model\AbstractModel
 {
-    const LINK_TYPE_RELATED     = 1;
-    const LINK_TYPE_GROUPED     = 3;
-    const LINK_TYPE_UPSELL      = 4;
-    const LINK_TYPE_CROSSSELL   = 5;
+    const LINK_TYPE_RELATED = 1;
 
-    protected $_attributeCollection = null;
+    const LINK_TYPE_UPSELL = 4;
+
+    const LINK_TYPE_CROSSSELL = 5;
+
+    /**
+     * @var mixed
+     */
+    protected $_attributes = null;
 
     /**
      * Product collection factory
@@ -67,21 +68,21 @@ class Link extends \Magento\Core\Model\AbstractModel
     protected $_linkCollectionFactory;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\Resource\Product\Link\CollectionFactory $linkCollectionFactory
      * @param \Magento\Catalog\Model\Resource\Product\Link\Product\CollectionFactory $productCollectionFactory
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\Catalog\Model\Resource\Product\Link\CollectionFactory $linkCollectionFactory,
         \Magento\Catalog\Model\Resource\Product\Link\Product\CollectionFactory $productCollectionFactory,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_linkCollectionFactory = $linkCollectionFactory;
@@ -91,24 +92,26 @@ class Link extends \Magento\Core\Model\AbstractModel
 
     /**
      * Initialize resource
+     *
+     * @return void
      */
     protected function _construct()
     {
         $this->_init('Magento\Catalog\Model\Resource\Product\Link');
     }
 
+    /**
+     * @return $this
+     */
     public function useRelatedLinks()
     {
         $this->setLinkTypeId(self::LINK_TYPE_RELATED);
         return $this;
     }
 
-    public function useGroupedLinks()
-    {
-        $this->setLinkTypeId(self::LINK_TYPE_GROUPED);
-        return $this;
-    }
-
+    /**
+     * @return $this
+     */
     public function useUpSellLinks()
     {
         $this->setLinkTypeId(self::LINK_TYPE_UPSELL);
@@ -116,7 +119,7 @@ class Link extends \Magento\Core\Model\AbstractModel
     }
 
     /**
-     * @return \Magento\Catalog\Model\Product\Link
+     * @return $this
      */
     public function useCrossSellLinks()
     {
@@ -137,37 +140,47 @@ class Link extends \Magento\Core\Model\AbstractModel
 
     /**
      * Retrieve linked product collection
+     *
+     * @return ProductCollection
      */
     public function getProductCollection()
     {
-        $collection = $this->_productCollectionFactory->create()
-            ->setLinkModel($this);
+        $collection = $this->_productCollectionFactory->create()->setLinkModel($this);
         return $collection;
     }
 
     /**
      * Retrieve link collection
+     *
+     * @return Collection
      */
     public function getLinkCollection()
     {
-        $collection = $this->_linkCollectionFactory->create()
-            ->setLinkModel($this);
+        $collection = $this->_linkCollectionFactory->create()->setLinkModel($this);
         return $collection;
     }
 
-    public function getAttributes($type=null)
+    /**
+     * @param int $type
+     * @return array
+     */
+    public function getAttributes($type = null)
     {
         if (is_null($type)) {
             $type = $this->getLinkTypeId();
         }
-        return $this->_getResource()->getAttributesByType($type);
+        if (!isset($this->_attributes[$type])) {
+            $this->_attributes[$type] = $this->_getResource()->getAttributesByType($type);
+        }
+
+        return $this->_attributes[$type];
     }
 
     /**
      * Save data for product relations
      *
      * @param   \Magento\Catalog\Model\Product $product
-     * @return  \Magento\Catalog\Model\Product\Link
+     * @return  $this
      */
     public function saveProductRelations($product)
     {
@@ -182,21 +195,6 @@ class Link extends \Magento\Core\Model\AbstractModel
         $data = $product->getCrossSellLinkData();
         if (!is_null($data)) {
             $this->_getResource()->saveProductLinks($product, $data, self::LINK_TYPE_CROSSSELL);
-        }
-        return $this;
-    }
-
-    /**
-     * Save grouped product relation links
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Model\Product\Link
-     */
-    public function saveGroupedLinks($product)
-    {
-        $data = $product->getGroupedLinkData();
-        if (!is_null($data)) {
-            $this->_getResource()->saveGroupedLinks($product, $data, self::LINK_TYPE_GROUPED);
         }
         return $this;
     }

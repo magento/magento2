@@ -19,13 +19,11 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Directory
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/system_file.xsd">
     <system>
         <section id="currency" translate="label" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Currency Setup</label>
@@ -36,7 +34,7 @@
                 <field id="base" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Base Currency</label>
                     <frontend_model>Magento\Directory\Block\Adminhtml\Frontend\Currency\Base</frontend_model>
-                    <source_model>Magento\Backend\Model\Config\Source\Currency</source_model>
+                    <source_model>Magento\Backend\Model\Config\Source\Locale\Currency</source_model>
                     <backend_model>Magento\Backend\Model\Config\Backend\Currency\Base</backend_model>
                     <comment>
                         <![CDATA[Base currency is used for all online payment transactions. If you have more than one store view, the base currency scope is defined by the catalog price scope ("Catalog" > "Price" > "Catalog Price Scope").]]>
@@ -44,12 +42,12 @@
                 </field>
                 <field id="default" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Default Display Currency</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Currency</source_model>
+                    <source_model>Magento\Backend\Model\Config\Source\Locale\Currency</source_model>
                     <backend_model>Magento\Backend\Model\Config\Backend\Currency\DefaultCurrency</backend_model>
                 </field>
                 <field id="allow" translate="label" type="multiselect" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Allowed Currencies</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Currency</source_model>
+                    <source_model>Magento\Backend\Model\Config\Source\Locale\Currency</source_model>
                     <backend_model>Magento\Backend\Model\Config\Backend\Currency\Allow</backend_model>
                     <can_be_empty>1</can_be_empty>
                 </field>

@@ -23,32 +23,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <referenceBlock name="head">
-        <action method="setCanLoadExtJs">
-            <argument name="flag" xsi:type="string">1</argument>
-        </action>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-wysiwyg-widget-js">
-            <arguments>
-                <argument name="file" xsi:type="string">mage/adminhtml/wysiwyg/widget.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="prototype-window-js">
-            <arguments>
-                <argument name="file" xsi:type="string">prototype/window.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Css" name="prototype-windows-themes-default-css">
-            <arguments>
-                <argument name="file" xsi:type="string">prototype/windows/themes/default.css</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Css" name="magento-core-prototype-magento-css">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Core::prototype/magento.css</argument>
-            </arguments>
-        </block>
-    </referenceBlock>
+<page layout="admin-2columns-left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <head>
+        <link src="prototype/window.js"/>
+        <css src="prototype/windows/themes/default.css"/>
+        <css src="Magento_Core::prototype/magento.css"/>
+    </head>
     <referenceContainer name="content">
         <block class="Magento\Widget\Block\Adminhtml\Widget\Instance\Edit" name="widget_instance_edit"/>
     </referenceContainer>
@@ -74,4 +54,4 @@
     <referenceContainer name="js">
         <block class="Magento\Backend\Block\Template" template="Magento_Widget::instance/js.phtml" name="widget_instance_js"/>
     </referenceContainer>
-</layout>
+</page>

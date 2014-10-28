@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -37,9 +34,9 @@ class AuthorizationLinkTest extends \PHPUnit_Framework_TestCase
     protected $_objectManager;
 
     /**
-     * @var \Magento\Customer\Model\Session
+     * \Magento\Framework\App\Http\Context
      */
-    protected $_session;
+    protected $httpContext;
 
     /**
      * @var \Magento\Customer\Helper\Data
@@ -54,21 +51,21 @@ class AuthorizationLinkTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_session = $this->getMockBuilder('Magento\Customer\Model\Session')
+        $this->httpContext = $this->getMockBuilder('\Magento\Framework\App\Http\Context')
             ->disableOriginalConstructor()
-            ->setMethods(array('isLoggedIn'))
+            ->setMethods(array('getValue'))
             ->getMock();
         $this->_helper = $this->getMockBuilder('Magento\Customer\Helper\Data')
             ->disableOriginalConstructor()
             ->setMethods(array('getLogoutUrl', 'getLoginUrl'))
             ->getMock();
 
-        $context = $this->_objectManager->getObject('Magento\View\Element\Template\Context');
+        $context = $this->_objectManager->getObject('Magento\Framework\View\Element\Template\Context');
         $this->_block = $this->_objectManager->getObject(
             'Magento\Customer\Block\Account\AuthorizationLink',
             array(
                 'context' => $context,
-                'session' => $this->_session,
+                'httpContext' => $this->httpContext,
                 'customerHelper' => $this->_helper,
             )
         );
@@ -76,8 +73,8 @@ class AuthorizationLinkTest extends \PHPUnit_Framework_TestCase
 
     public function testGetLabelLoggedIn()
     {
-        $this->_session->expects($this->once())
-            ->method('isLoggedIn')
+        $this->httpContext->expects($this->once())
+            ->method('getValue')
             ->will($this->returnValue(true));
 
         $this->assertEquals('Log Out', $this->_block->getLabel());
@@ -85,8 +82,8 @@ class AuthorizationLinkTest extends \PHPUnit_Framework_TestCase
 
     public function testGetLabelLoggedOut()
     {
-        $this->_session->expects($this->once())
-            ->method('isLoggedIn')
+        $this->httpContext->expects($this->once())
+            ->method('getValue')
             ->will($this->returnValue(false));
 
         $this->assertEquals('Log In', $this->_block->getLabel());
@@ -94,8 +91,8 @@ class AuthorizationLinkTest extends \PHPUnit_Framework_TestCase
 
     public function testGetHrefLoggedIn()
     {
-        $this->_session->expects($this->once())
-            ->method('isLoggedIn')
+        $this->httpContext->expects($this->once())
+            ->method('getValue')
             ->will($this->returnValue(true));
 
         $this->_helper->expects($this->once())->method('getLogoutUrl')->will($this->returnValue('logout url'));
@@ -105,8 +102,8 @@ class AuthorizationLinkTest extends \PHPUnit_Framework_TestCase
 
     public function testGetHrefLoggedOut()
     {
-        $this->_session->expects($this->once())
-            ->method('isLoggedIn')
+        $this->httpContext->expects($this->once())
+            ->method('getValue')
             ->will($this->returnValue(false));
 
         $this->_helper->expects($this->once())->method('getLoginUrl')->will($this->returnValue('login url'));

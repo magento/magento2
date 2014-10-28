@@ -29,6 +29,9 @@ abstract class AbstractConfig extends \PHPUnit_Framework_TestCase
 {
     public function testXmlFiles()
     {
+        if (null === $this->_getXmlName()) {
+            $this->markTestSkipped('No XML validation of files requested');
+        }
         $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
         $invoker(
             /**
@@ -60,6 +63,10 @@ abstract class AbstractConfig extends \PHPUnit_Framework_TestCase
     public function testFileSchemaUsingPartialXml()
     {
         $xmlFile = $this->_getKnownValidPartialXml();
+        if (is_null($xmlFile)) {
+            $this->markTestSkipped('No Partial File');
+            return;
+        }
         $schema = \Magento\TestFramework\Utility\Files::init()->getPathToSource() . $this->_getFileXsd();
         $this->_validateFileExpectSuccess($xmlFile, $schema);
     }
@@ -67,13 +74,21 @@ abstract class AbstractConfig extends \PHPUnit_Framework_TestCase
     public function testFileSchemaUsingInvalidXml($expectedErrors = null)
     {
         $xmlFile = $this->_getKnownInvalidPartialXml();
+        if (is_null($xmlFile)) {
+            $this->markTestSkipped('No Partial File');
+            return;
+        }
         $schema = \Magento\TestFramework\Utility\Files::init()->getPathToSource() . $this->_getFileXsd();
         $this->_validateFileExpectFailure($xmlFile, $schema, $expectedErrors);
     }
 
     public function testSchemaUsingPartialXml($expectedErrors = null)
     {
-        $xmlFile = $this->_getKnownValidPartialXml();;
+        $xmlFile = $this->_getKnownValidPartialXml();
+        if (is_null($xmlFile)) {
+            $this->markTestSkipped('No Partial File');
+            return;
+        }
         $schema = \Magento\TestFramework\Utility\Files::init()->getPathToSource() . $this->_getXsd();
         $this->_validateFileExpectFailure($xmlFile, $schema, $expectedErrors);
     }
@@ -87,22 +102,26 @@ abstract class AbstractConfig extends \PHPUnit_Framework_TestCase
      * @param $schemaFile string schema that should find errors in the known bad xml file.
      * @param $fileSchemaFile string schema that should find errors in the known bad xml file
      */
-    protected function _validateFileExpectSuccess($xmlFile, $schemaFile, $fileSchemaFile=null)
+    protected function _validateFileExpectSuccess($xmlFile, $schemaFile, $fileSchemaFile = null)
     {
         $dom = new \DOMDocument();
         $dom->loadXML(file_get_contents($xmlFile));
-        $errors = \Magento\Config\Dom::validateDomDocument($dom, $schemaFile);
+        $errors = \Magento\Framework\Config\Dom::validateDomDocument($dom, $schemaFile);
         if ($errors) {
             if (!is_null($fileSchemaFile)) {
-                $moreErrors = \Magento\Config\Dom::validateDomDocument($dom, $fileSchemaFile);
+                $moreErrors = \Magento\Framework\Config\Dom::validateDomDocument($dom, $fileSchemaFile);
                 if (empty($moreErrors)) {
                     return;
                 } else {
                     $errors = array_merge($errors, $moreErrors);
                 }
             }
-            $this->fail('There is a problem with the schema.  A known good XML file failed validation: '
-                . PHP_EOL . implode(PHP_EOL . PHP_EOL, $errors));
+            $this->fail(
+                'There is a problem with the schema.  A known good XML file failed validation: ' . PHP_EOL . implode(
+                    PHP_EOL . PHP_EOL,
+                    $errors
+                )
+            );
         }
     }
 
@@ -120,12 +139,12 @@ abstract class AbstractConfig extends \PHPUnit_Framework_TestCase
     {
         $dom = new \DOMDocument();
         $dom->loadXML(file_get_contents($xmlFile));
-        $actualErrors = \Magento\Config\Dom::validateDomDocument($dom, $schemaFile);
+        $actualErrors = \Magento\Framework\Config\Dom::validateDomDocument($dom, $schemaFile);
 
         if (isset($expectedErrors)) {
             $this->assertNotEmpty(
                 $actualErrors,
-                'No schema validation errors found, expected errors: '. PHP_EOL . implode(PHP_EOL, $expectedErrors)
+                'No schema validation errors found, expected errors: ' . PHP_EOL . implode(PHP_EOL, $expectedErrors)
             );
             foreach ($expectedErrors as $expectedError) {
                 $found = false;
@@ -141,7 +160,7 @@ abstract class AbstractConfig extends \PHPUnit_Framework_TestCase
                 }
                 $this->assertTrue(
                     $found,
-                    'Failed asserting that '. $expectedError . " is in: \n" . implode(PHP_EOL, $actualErrors)
+                    'Failed asserting that ' . $expectedError . " is in: \n" . implode(PHP_EOL, $actualErrors)
                 );
             }
             // list of actual errors should now be empty

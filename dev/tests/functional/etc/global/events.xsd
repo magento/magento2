@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * This schema must be used to validate events.xml files
+ *
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="config">
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element type="preset" name="preset">
+                    <xs:unique name="uniqueObserverClass">
+                        <xs:annotation>
+                            <xs:documentation>
+                                Observer class must be unique.
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:selector xpath="observer"/>
+                        <xs:field xpath="@class"/>
+                    </xs:unique>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+        <xs:unique name="uniquePresetName">
+            <xs:annotation>
+                <xs:documentation>
+                    Preset name must be unique.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:selector xpath="preset"/>
+            <xs:field xpath="@name"/>
+        </xs:unique>
+    </xs:element>
+
+    <xs:complexType name="preset">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element type="observer" name="observer">
+                <xs:unique name="uniqueTagName">
+                    <xs:annotation>
+                        <xs:documentation>
+                            Tag name must be unique.
+                        </xs:documentation>
+                    </xs:annotation>
+                    <xs:selector xpath="tag"/>
+                    <xs:field xpath="@name"/>
+                </xs:unique>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="name" use="required"/>
+        <xs:attribute type="xs:string" name="extends" use="optional"/>
+    </xs:complexType>
+
+
+    <xs:complexType name="observer">
+        <xs:annotation>
+            <xs:documentation>
+                Observer node with all attached tags for events inside
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element type="tag" name="tag" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="class" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="tag">
+        <xs:annotation>
+            <xs:documentation>
+                Tag with name to look for
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute type="xs:string" name="name" use="required"/>
+    </xs:complexType>
+
+</xs:schema>

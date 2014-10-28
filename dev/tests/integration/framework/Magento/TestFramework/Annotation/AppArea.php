@@ -38,13 +38,13 @@ class AppArea
      * @var array
      */
     private $_allowedAreas = array(
-        \Magento\Core\Model\App\Area::AREA_GLOBAL,
+        \Magento\Framework\App\Area::AREA_GLOBAL,
         \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
-        \Magento\Core\Model\App\Area::AREA_FRONTEND,
+        \Magento\Framework\App\Area::AREA_FRONTEND,
         'install',
         'webapi_rest',
         'webapi_soap',
-        'cron',
+        'cron'
     );
 
     /**
@@ -60,18 +60,22 @@ class AppArea
      *
      * @param array $annotations
      * @return string
-     * @throws \Magento\Exception
+     * @throws \Magento\Framework\Exception
      */
     protected function _getTestAppArea($annotations)
     {
-        $area = isset($annotations['method'][self::ANNOTATION_NAME])
-                    ? current($annotations['method'][self::ANNOTATION_NAME])
-                    : (isset($annotations['class'][self::ANNOTATION_NAME])
-                        ? current($annotations['class'][self::ANNOTATION_NAME])
-                        : \Magento\TestFramework\Application::DEFAULT_APP_AREA);
+        $area = isset(
+            $annotations['method'][self::ANNOTATION_NAME]
+        ) ? current(
+            $annotations['method'][self::ANNOTATION_NAME]
+        ) : (isset(
+            $annotations['class'][self::ANNOTATION_NAME]
+        ) ? current(
+            $annotations['class'][self::ANNOTATION_NAME]
+        ) : \Magento\TestFramework\Application::DEFAULT_APP_AREA);
 
         if (false == in_array($area, $this->_allowedAreas)) {
-            throw new \Magento\Exception(
+            throw new \Magento\Framework\Exception(
                 'Invalid "@magentoAppArea" annotation, can be "' . implode('", "', $this->_allowedAreas) . '" only.'
             );
         }

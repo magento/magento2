@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Adminhtml
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Widget\Controller\Adminhtml\Widget;
 
 /**
@@ -36,14 +32,14 @@ class InstanceTest extends \Magento\Backend\Utility\Controller
     {
         parent::setUp();
 
-        $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\View\DesignInterface')
-            ->setDefaultDesignTheme()
-            ->getDesignTheme();
+        $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\View\DesignInterface'
+        )->setDefaultDesignTheme()->getDesignTheme();
         $type = 'Magento\Cms\Block\Widget\Page\Link';
         /** @var $model \Magento\Widget\Model\Widget\Instance */
-        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Widget\Model\Widget\Instance');
+        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Widget\Model\Widget\Instance'
+        );
         $code = $model->setType($type)->getWidgetReference('type', $type, 'code');
         $this->getRequest()->setParam('code', $code);
         $this->getRequest()->setParam('theme_id', $theme->getId());
@@ -52,10 +48,7 @@ class InstanceTest extends \Magento\Backend\Utility\Controller
     public function testEditAction()
     {
         $this->dispatch('backend/admin/widget_instance/edit');
-        $this->assertContains(
-            '<option value="cms_page_link" selected="selected">',
-            $this->getResponse()->getBody()
-        );
+        $this->assertContains('<option value="cms_page_link" selected="selected">', $this->getResponse()->getBody());
     }
 
     public function testBlocksAction()

@@ -1,0 +1,93 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php /** @var $this \Magento\Customer\Block\Adminhtml\Edit\Tab\View\Sales */ ?>
+<?php $singleStoreMode = $this->isSingleStoreMode(); ?>
+<div class="entry-edit fieldset-wrapper">
+
+    <div class="fieldset-wrapper-title">
+        <span class="title"><?php echo __('Sales Statistics') ?></span>
+    </div>
+
+    <table class="data-table">
+        <thead>
+        <tr>
+            <?php if (!$singleStoreMode): ?>
+            <th><?php echo __('Web Site') ?></th>
+            <th><?php echo __('Store') ?></th>
+            <th><?php echo __('Store View') ?></th>
+            <?php endif; ?>
+            <th><?php echo __('Lifetime Sales') ?></th>
+            <th class="last"><?php echo __('Average Sale') ?></th>
+        </tr>
+        </thead>
+        <?php if (!$singleStoreMode): ?>
+        <tfoot>
+        <tr>
+            <td colspan="3"><strong><?php echo __('All Store Views') ?></strong></td>
+            <td class="emph"><strong><?php echo $this->formatCurrency($this->getTotals()->getBaseLifetime()) ?></strong></td>
+            <td class="emph last"><strong><?php echo $this->formatCurrency($this->getTotals()->getAvgsale()) ?></strong></td>
+        </tr>
+        </tfoot>
+        <?php endif; ?>
+        <?php if ($this->getRows()): ?>
+        <tbody>
+            <?php $_i = 0; ?>
+            <?php foreach ($this->getRows() as $_websiteId => $_groups): ?>
+            <?php $_websiteRow = false; ?>
+            <?php foreach ($_groups as $_groupId => $_stores): ?>
+                <?php $_groupRow = false; ?>
+                <?php foreach ($_stores as $_row): ?>
+                    <?php if (!$singleStoreMode): ?>
+                        <?php if ($_row->getStoreId() == 0): ?>
+                        <td colspan="3"><?php echo $_row->getStoreName() ?></td>
+                            <?php else: ?>
+                    <tr<?php echo ($_i++ % 2 ? ' class="even"' : '') ?>>
+                            <?php if (!$_websiteRow): ?>
+                                <td rowspan="<?php echo $this->getWebsiteCount($_websiteId) ?>"><?php echo $_row->getWebsiteName() ?></td>
+                                <?php $_websiteRow = true; ?>
+                                <?php endif; ?>
+                            <?php if (!$_groupRow): ?>
+                                <td rowspan="<?php echo count($_stores) ?>"><?php echo $_row->getGroupName() ?></td>
+                                <?php $_groupRow = true; ?>
+                                <?php endif; ?>
+                            <td><?php echo $_row->getStoreName() ?></td>
+                            <?php endif; ?>
+                        <?php else: ?>
+                    <tr>
+                        <?php endif; ?>
+                    <td><?php echo $this->formatCurrency($_row->getLifetime(), $_row->getWebsiteId()) ?></td>
+                    <td><?php echo $this->formatCurrency($_row->getAvgsale(), $_row->getWebsiteId()) ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                <?php endforeach; ?>
+            <?php endforeach; ?>
+        </tbody>
+        <?php else: ?>
+        <tbody>
+        <tr class="hidden"><td colspan="<?php echo !$singleStoreMode ? '5' : '2'; ?>"></td></tr>
+        </tbody>
+        <?php endif; ?>
+    </table>
+</div>

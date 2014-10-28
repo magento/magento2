@@ -41,7 +41,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $path = $basePath . 'menu_merged.xml';
         $domDocument = new \DOMDocument();
         $domDocument->load($path);
-        $expectedData = include($basePath . 'menu_merged.php');
+        $expectedData = include $basePath . 'menu_merged.php';
         $this->assertEquals($expectedData, $this->_model->convert($domDocument));
     }
 }

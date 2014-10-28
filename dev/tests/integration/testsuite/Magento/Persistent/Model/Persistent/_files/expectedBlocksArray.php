@@ -33,6 +33,5 @@ return array(
         'class' => 'Magento\PersistentHistory\Model\Observer',
         'method' => 'emulateViewedProductsBlock',
         'block_type' => 'Magento\Sales\Block\Reorder\Sidebar'
-    ),
+    )
 );
-

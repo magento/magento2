@@ -23,9 +23,9 @@
  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../../../../../../app/code/Magento/Backend/etc/system_file.xsd">
     <system>
-        <section id="advanced" translate="label" module="Magento_Backend" type="text" sortOrder="910" showInDefault="1" showInWebsite="1" showInStore="1">
+        <section id="advanced" translate="label" type="text" sortOrder="910" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Advanced</label>
             <tab>advanced</tab>
             <resource>Magento_Adminhtml::advanced</resource>

@@ -21,11 +21,11 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\I18n\Code\Parser\Adapter;
 
 use Magento\Tools\I18n\Code\Context;
 use Magento\Tools\I18n\Code\Parser\AdapterInterface;
+use Magento\Tools\I18n\Code\Dictionary\Phrase;
 
 /**
  * Abstract parser adapter
@@ -58,6 +58,8 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Template method
+     *
+     * @return void
      */
     abstract protected function _parse();
 
@@ -74,21 +76,27 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param string $phrase
      * @param string|int $line
+     * @return void
      * @throws \InvalidArgumentException
      */
     protected function _addPhrase($phrase, $line = '')
     {
         if (!$phrase) {
-            throw new \InvalidArgumentException(sprintf('Phrase cannot be empty. File: "%s" Line: "%s"',
-                $this->_file, $line));
+            throw new \InvalidArgumentException(
+                sprintf('Phrase cannot be empty. File: "%s" Line: "%s"', $this->_file, $line)
+            );
         }
         if (!isset($this->_phrases[$phrase])) {
-            $phrase = $this->_stripQuotes($phrase);
+            $enclosureCharacter = $this->getEnclosureCharacter($phrase);
+            if (!empty($enclosureCharacter)) {
+                $phrase = $this->trimEnclosure($phrase);
+            }
 
             $this->_phrases[$phrase] = array(
                 'phrase' => $phrase,
                 'file' => $this->_file,
                 'line' => $line,
+                'quote' => $enclosureCharacter
             );
         }
     }
@@ -99,12 +107,9 @@ abstract class AbstractAdapter implements AdapterInterface
      * @param string $phrase
      * @return string
      */
-    protected function _stripQuotes($phrase)
+    protected function _stripFirstAndLastChar($phrase)
     {
-        if ($this->_isFirstAndLastCharIsQuote($phrase)) {
-            $phrase = substr($phrase, 1, strlen($phrase) - 2);
-        }
-        return $phrase;
+        return substr($phrase, 1, strlen($phrase) - 2);
     }
 
     /**
@@ -115,6 +120,42 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     protected function _isFirstAndLastCharIsQuote($phrase)
     {
-        return ($phrase[0] == '"' || $phrase[0] == "'") && $phrase[0] == $phrase[strlen($phrase) - 1];
+        $firstCharacter = $phrase[0];
+        $lastCharacter = $phrase[strlen($phrase) - 1];
+        return $this->isQuote($firstCharacter) && $firstCharacter == $lastCharacter;
+    }
+
+    /**
+     * Get enclosing character if any
+     *
+     * @param string $phrase
+     * @return string
+     */
+    protected function getEnclosureCharacter($phrase)
+    {
+        $quote = '';
+        if ($this->_isFirstAndLastCharIsQuote($phrase)) {
+            $quote = $phrase[0];
+        }
+
+        return $quote;
+    }
+
+    /**
+     * @param string $phrase
+     * @return string
+     */
+    protected function trimEnclosure($phrase)
+    {
+        return $this->_stripFirstAndLastChar($phrase);
+    }
+
+    /**
+     * @param string $char
+     * @return bool
+     */
+    protected function isQuote($char)
+    {
+        return in_array($char, [Phrase::QUOTE_DOUBLE, Phrase::QUOTE_SINGLE]);
     }
 }

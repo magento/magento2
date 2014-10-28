@@ -18,24 +18,18 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Eav
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype;
 
 /**
  * Validator for check input type value
  *
- * @category   Magento
- * @package    Magento_Eav
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype;
-
 class Validator extends \Zend_Validate_InArray
 {
-
     /**
      * Eav data
      *
@@ -46,9 +40,8 @@ class Validator extends \Zend_Validate_InArray
     /**
      * @param \Magento\Eav\Helper\Data $eavData
      */
-    public function __construct(
-        \Magento\Eav\Helper\Data $eavData
-    ) {
+    public function __construct(\Magento\Eav\Helper\Data $eavData)
+    {
         $this->_eavData = $eavData;
         //set data haystack
         $haystack = $this->_eavData->getInputTypesValidatorData();
@@ -58,23 +51,19 @@ class Validator extends \Zend_Validate_InArray
         $this->_initMessageTemplates();
 
         //parent construct with options
-        parent::__construct(array(
-             'haystack' => $haystack,
-             'strict'   => true,
-        ));
+        parent::__construct(array('haystack' => $haystack, 'strict' => true));
     }
 
     /**
      * Initialize message templates with translating
      *
-     * @return \Magento\Core\Model\File\Validator\AvailablePath
+     * @return $this
      */
     protected function _initMessageTemplates()
     {
         if (!$this->_messageTemplates) {
             $this->_messageTemplates = array(
-                self::NOT_IN_ARRAY =>
-                    __('Input type "%value%" not found in the input types list.'),
+                self::NOT_IN_ARRAY => __('Input type "%value%" not found in the input types list.')
             );
         }
         return $this;
@@ -84,12 +73,12 @@ class Validator extends \Zend_Validate_InArray
      * Add input type to haystack
      *
      * @param string $type
-     * @return \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\Validator
+     * @return $this
      */
     public function addInputType($type)
     {
-        if (!in_array((string) $type, $this->_haystack, true)) {
-            $this->_haystack[] = (string) $type;
+        if (!in_array((string)$type, $this->_haystack, true)) {
+            $this->_haystack[] = (string)$type;
         }
         return $this;
     }

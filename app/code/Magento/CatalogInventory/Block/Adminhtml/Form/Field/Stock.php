@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_CatalogInventory
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,19 +27,21 @@
  */
 namespace Magento\CatalogInventory\Block\Adminhtml\Form\Field;
 
-class Stock extends \Magento\Data\Form\Element\Select
+use Magento\Framework\Data\Form;
+
+class Stock extends \Magento\Framework\Data\Form\Element\Select
 {
     const QUANTITY_FIELD_HTML_ID = 'qty';
 
     /**
      * Quantity field element
      *
-     * @var \Magento\Data\Form\Element\Text
+     * @var \Magento\Framework\Data\Form\Element\Text
      */
     protected $_qty;
 
     /**
-     * Is product composite (grouped or configurable)
+     * Is product composite
      *
      * @var bool
      */
@@ -50,22 +50,22 @@ class Stock extends \Magento\Data\Form\Element\Select
     /**
      * Text element factory
      *
-     * @var \Magento\Data\Form\Element\TextFactory
+     * @var \Magento\Framework\Data\Form\Element\TextFactory
      */
     protected $_factoryText;
 
     /**
-     * @param \Magento\Data\Form\Element\Factory $factoryElement
-     * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
-     * @param \Magento\Escaper $escaper
-     * @param \Magento\Data\Form\Element\TextFactory $factoryText
+     * @param \Magento\Framework\Data\Form\Element\Factory $factoryElement
+     * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
+     * @param \Magento\Framework\Escaper $escaper
+     * @param \Magento\Framework\Data\Form\Element\TextFactory $factoryText
      * @param array $data
      */
     public function __construct(
-        \Magento\Data\Form\Element\Factory $factoryElement,
-        \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
-        \Magento\Escaper $escaper,
-        \Magento\Data\Form\Element\TextFactory $factoryText,
+        \Magento\Framework\Data\Form\Element\Factory $factoryElement,
+        \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection,
+        \Magento\Framework\Escaper $escaper,
+        \Magento\Framework\Data\Form\Element\TextFactory $factoryText,
         array $data = array()
     ) {
         $this->_factoryText = $factoryText;
@@ -78,11 +78,11 @@ class Stock extends \Magento\Data\Form\Element\Select
     /**
      * Create quantity field
      *
-     * @return \Magento\Data\Form\Element\Text
+     * @return \Magento\Framework\Data\Form\Element\Text
      */
     protected function _createQtyElement()
     {
-        /** @var \Magento\Data\Form\Element\Text $element */
+        /** @var \Magento\Framework\Data\Form\Element\Text $element */
         $element = $this->_factoryText->create();
         $element->setId(self::QUANTITY_FIELD_HTML_ID)->setName('qty')->addClass('validate-number input-text');
         return $element;
@@ -96,15 +96,17 @@ class Stock extends \Magento\Data\Form\Element\Select
     public function getElementHtml()
     {
         $this->_disableFields();
-        return $this->_qty->getElementHtml() . parent::getElementHtml()
-            . $this->_getJs(self::QUANTITY_FIELD_HTML_ID, $this->getId());
+        return $this->_qty->getElementHtml() . parent::getElementHtml() . $this->_getJs(
+            self::QUANTITY_FIELD_HTML_ID,
+            $this->getId()
+        );
     }
 
     /**
      * Set form to quantity element in addition to current element
      *
-     * @param $form
-     * @return \Magento\Data\Form
+     * @param Form $form
+     * @return Form
      */
     public function setForm($form)
     {
@@ -115,8 +117,8 @@ class Stock extends \Magento\Data\Form\Element\Select
     /**
      * Set value to quantity element in addition to current element
      *
-     * @param $value
-     * @return \Magento\Data\Form\Element\Select
+     * @param array|string $value
+     * @return $this
      */
     public function setValue($value)
     {
@@ -131,6 +133,7 @@ class Stock extends \Magento\Data\Form\Element\Select
      * Set name to quantity element in addition to current element
      *
      * @param string $name
+     * @return void
      */
     public function setName($name)
     {
@@ -139,7 +142,7 @@ class Stock extends \Magento\Data\Form\Element\Select
     }
 
     /**
-     * Get whether product is configurable or grouped
+     * Get whether product is composite
      *
      * @return bool
      */
@@ -154,15 +157,18 @@ class Stock extends \Magento\Data\Form\Element\Select
     /**
      * Disable fields depending on product type
      *
-     * @return \Magento\CatalogInventory\Block\Adminhtml\Form\Field\Stock
+     * @return $this
      */
     protected function _disableFields()
     {
+        if ($this->getDisabled() || $this->_isProductComposite()) {
+            $this->_qty->setDisabled('disabled');
+        }
         if (!$this->_isProductComposite() && $this->_qty->getValue() === null) {
             $this->setDisabled('disabled');
         }
-        if ($this->_isProductComposite()) {
-            $this->_qty->setDisabled('disabled');
+        if ($this->isLocked()) {
+            $this->_qty->lock();
         }
         return $this;
     }
@@ -170,81 +176,87 @@ class Stock extends \Magento\Data\Form\Element\Select
     /**
      * Get js for quantity and in stock synchronisation
      *
-     * @param $quantityFieldId
-     * @param $inStockFieldId
+     * @param string $quantityFieldId
+     * @param string $inStockFieldId
      * @return string
      */
     protected function _getJs($quantityFieldId, $inStockFieldId)
     {
-        // @codingStandardsIgnoreStart
         return "
-            <script>
-                jQuery(function($) {
-                    var qty = $('#{$quantityFieldId}'),
-                        productType = $('#product_type_id').val(),
-                        stockAvailabilityField = $('#{$inStockFieldId}'),
-                        manageStockField = $('#inventory_manage_stock'),
-                        useConfigManageStockField = $('#inventory_use_config_manage_stock');
+            <script type='text/javascript'>
+                require(['jquery'], function(jQuery) {
+                    jQuery(function($) {
+                        var qty = $('#{$quantityFieldId}'),
+                            productType = $('#product_type_id').val(),
+                            stockAvailabilityField = $('#{$inStockFieldId}'),
+                            manageStockField = $('#inventory_manage_stock'),
+                            useConfigManageStockField = $('#inventory_use_config_manage_stock'),
+                            fieldsAssociations = {
+                                '{$quantityFieldId}': 'inventory_qty',
+                                '{$inStockFieldId}': 'inventory_stock_availability'
+                            };
 
-                    var disabler = function(event) {
-                        var hasVariation = $('[data-panel=product-variations]').is('.opened');
-                        if ((productType == 'configurable' && hasVariation)
-                            || productType == 'grouped'
-                            || productType == 'bundle'//@TODO move this check to Magento_Bundle after refactoring as widget
-                            || hasVariation
-                        ) {
-                            return;
-                        }
-                        var manageStockValue = (qty.val() === '') ? 0 : 1;
-                        stockAvailabilityField.prop('disabled', !manageStockValue);
-                        if (manageStockField.val() != manageStockValue && !(event && event.type == 'keyup')) {
-                            if (useConfigManageStockField.val() == 1) {
-                                useConfigManageStockField.removeAttr('checked').val(0);
+                        var disabler = function(event) {
+                            if (typeof(event) === 'undefined') {
+                                return;
                             }
-                            manageStockField.toggleClass('disabled', false).prop('disabled', false);
-                            manageStockField.val(manageStockValue);
-                        }
-                    };
-
-                    //Associated fields
-                    var fieldsAssociations = {
-                        '$quantityFieldId' : 'inventory_qty',
-                        '$inStockFieldId'  : 'inventory_stock_availability'
-                    };
-                    //Fill corresponding field
-                    var filler = function() {
-                        var id = $(this).attr('id');
-                        if ('undefined' !== typeof fieldsAssociations[id]) {
-                            $('#' + fieldsAssociations[id]).val($(this).val());
-                        } else {
-                            $('#' + getKeyByValue(fieldsAssociations, id)).val($(this).val());
-                        }
-
-                        if ($('#inventory_manage_stock').length) {
-                            fireEvent($('#inventory_manage_stock').get(0), 'change');
-                        }
-                    };
-                    //Get key by value from object
-                    var getKeyByValue = function(object, value) {
-                        var returnVal = false;
-                        $.each(object, function(objKey, objValue){
-                            if (value === objValue) {
-                                returnVal = objKey;
+                            var stockBeforeDisable = $.Event('stockbeforedisable', {productType: productType});
+                            $('[data-tab-panel=product-details]').trigger(stockBeforeDisable);
+                            if (stockBeforeDisable.result !== false) {
+                                var manageStockValue = (qty.val() === '') ? 0 : 1,
+                                    stockAssociations = $('#' + fieldsAssociations['{$inStockFieldId}']);
+                                stockAvailabilityField.prop('disabled', !manageStockValue);
+                                stockAssociations.prop('disabled', !manageStockValue);
+                                if ($(event.currentTarget).attr('id') === qty.attr('id') && event.type != 'change') {
+                                    stockAvailabilityField.val(manageStockValue);
+                                    stockAssociations.val(manageStockValue);
+                                }
+                                if (parseInt(manageStockField.val()) != manageStockValue &&
+                                    !(event && event.type == 'keyup')
+                                ) {
+                                    if (useConfigManageStockField.val() == 1) {
+                                        useConfigManageStockField.removeAttr('checked').val(0);
+                                    }
+                                    manageStockField.toggleClass('disabled', false).prop('disabled', false);
+                                    manageStockField.val(manageStockValue);
+                                }
                             }
+                        };
+
+                        //Fill corresponding field
+                        var filler = function() {
+                            var id = $(this).attr('id');
+                            if ('undefined' !== typeof fieldsAssociations[id]) {
+                                $('#' + fieldsAssociations[id]).val($(this).val());
+                            } else {
+                                $('#' + getKeyByValue(fieldsAssociations, id)).val($(this).val());
+                            }
+
+                            if (manageStockField.length) {
+                                fireEvent(manageStockField.get(0), 'change');
+                            }
+                        };
+                        //Get key by value from object
+                        var getKeyByValue = function(object, value) {
+                            var returnVal = false;
+                            $.each(object, function(objKey, objValue) {
+                                if (value === objValue) {
+                                    returnVal = objKey;
+                                }
+                            });
+                            return returnVal;
+                        };
+                        $.each(fieldsAssociations, function(generalTabField, advancedTabField) {
+                            $('#' + generalTabField + ', #' + advancedTabField)
+                                .bind('focus blur change keyup click', filler)
+                                .bind('keyup change blur', disabler);
+                            filler.call($('#' + generalTabField));
+                            filler.call($('#' + advancedTabField));
                         });
-                        return returnVal;
-                    };
-                    $.each(fieldsAssociations, function(generalTabField, advancedTabField) {
-                        $('#' + generalTabField + ', #' + advancedTabField)
-                            .bind('focus blur change keyup click', filler)
-                            .bind('keyup change blur', disabler);
-                        filler.call($('#' + generalTabField));
-                        filler.call($('#' + advancedTabField));
+                        disabler();
                     });
-                    disabler();
-                });
+                })
             </script>
         ";
-        // @codingStandardsIgnoreEnd
     }
 }

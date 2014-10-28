@@ -18,21 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Order\Comments;
 
 /**
  * Invoice view  comments form
  *
- * @category   Magento
- * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Adminhtml\Order\Comments;
-
 class View extends \Magento\Backend\Block\Template
 {
     /**
@@ -58,48 +53,62 @@ class View extends \Magento\Backend\Block\Template
 
     /**
      * Retrieve required options from parent
+     *
+     * @return void
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function _beforeToHtml()
     {
         if (!$this->getParentBlock()) {
-            throw new \Magento\Core\Exception(__('Please correct the parent block for this block.'));
+            throw new \Magento\Framework\Model\Exception(__('Please correct the parent block for this block.'));
         }
         $this->setEntity($this->getParentBlock()->getSource());
         parent::_beforeToHtml();
     }
 
     /**
-     * Prepare child blocks
+     * Preparing global layout
      *
-     * @return \Magento\Sales\Block\Adminhtml\Order\Invoice\Create\Items
+     * @return $this
      */
     protected function _prepareLayout()
     {
-        $this->addChild('submit_button', 'Magento\Backend\Block\Widget\Button', array(
-            'id'      => 'submit_comment_button',
-            'label'   => __('Submit Comment'),
-            'class'   => 'save'
-        ));
+        $this->addChild(
+            'submit_button',
+            'Magento\Backend\Block\Widget\Button',
+            array('id' => 'submit_comment_button', 'label' => __('Submit Comment'), 'class' => 'save')
+        );
         return parent::_prepareLayout();
     }
 
+    /**
+     * Get submit url
+     *
+     * @return string|true
+     */
     public function getSubmitUrl()
     {
-        return $this->getUrl('sales/*/addComment', array('id' => $this->getEntity()->getId()));
+        return $this->getUrl('*/*/addComment', array('id' => $this->getEntity()->getId()));
     }
 
+    /**
+     * @return bool
+     */
     public function canSendCommentEmail()
     {
         switch ($this->getParentType()) {
             case 'invoice':
-                return $this->_salesData
-                    ->canSendInvoiceCommentEmail($this->getEntity()->getOrder()->getStore()->getId());
+                return $this->_salesData->canSendInvoiceCommentEmail(
+                    $this->getEntity()->getOrder()->getStore()->getId()
+                );
             case 'shipment':
-                return $this->_salesData
-                    ->canSendShipmentCommentEmail($this->getEntity()->getOrder()->getStore()->getId());
+                return $this->_salesData->canSendShipmentCommentEmail(
+                    $this->getEntity()->getOrder()->getStore()->getId()
+                );
             case 'creditmemo':
-                return $this->_salesData
-                    ->canSendCreditmemoCommentEmail($this->getEntity()->getOrder()->getStore()->getId());
+                return $this->_salesData->canSendCreditmemoCommentEmail(
+                    $this->getEntity()->getOrder()->getStore()->getId()
+                );
         }
         return true;
     }

@@ -18,47 +18,45 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Adminhtml
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
- * @category   Magento
- * @package    Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main;
+
+use Magento\Backend\Block\Widget\Form;
 
 class Formattribute extends \Magento\Backend\Block\Widget\Form\Generic
 {
+    /**
+     * @return void
+     */
     protected function _prepareForm()
     {
-        /** @var \Magento\Data\Form $form */
+        /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
 
-        $fieldset = $form->addFieldset('set_fieldset', array('legend'=>__('Add New Attribute')));
+        $fieldset = $form->addFieldset('set_fieldset', array('legend' => __('Add New Attribute')));
 
-        $fieldset->addField('new_attribute', 'text',
-                            array(
-                                'label' => __('Name'),
-                                'name' => 'new_attribute',
-                                'required' => true,
-                            )
+        $fieldset->addField(
+            'new_attribute',
+            'text',
+            array('label' => __('Name'), 'name' => 'new_attribute', 'required' => true)
         );
 
-        $fieldset->addField('submit', 'note',
-                            array(
-                                'text' => $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
-                                            ->setData(array(
-                                                'label'     => __('Add Attribute'),
-                                                'onclick'   => 'this.form.submit();',
-                                                                                                'class' => 'add'
-                                            ))
-                                            ->toHtml(),
-                            )
+        $fieldset->addField(
+            'submit',
+            'note',
+            array(
+                'text' => $this->getLayout()->createBlock(
+                    'Magento\Backend\Block\Widget\Button'
+                )->setData(
+                    array('label' => __('Add Attribute'), 'onclick' => 'this.form.submit();', 'class' => 'add')
+                )->toHtml()
+            )
         );
 
         $form->setUseContainer(true);

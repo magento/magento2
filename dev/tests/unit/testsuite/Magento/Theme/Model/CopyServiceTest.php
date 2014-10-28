@@ -18,14 +18,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Theme
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Theme\Model;
+
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 class CopyServiceTest extends \PHPUnit_Framework_TestCase
 {
@@ -96,46 +94,66 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
 
     protected $_dirWriteMock;
 
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $sourceFileOne = $this->getMock(
-            'Magento\Core\Model\Theme\File', array('__wakeup', 'delete'), array(), '', false
+            'Magento\Core\Model\Theme\File',
+            array('__wakeup', 'delete'),
+            array(),
+            '',
+            false
         );
         $sourceFileOne->setData(
             array(
-                'file_path'     => 'fixture_file_path_one',
-                'file_type'     => 'fixture_file_type_one',
-                'content'       => 'fixture_content_one',
-                'sort_order'    => 10,
+                'file_path' => 'fixture_file_path_one',
+                'file_type' => 'fixture_file_type_one',
+                'content' => 'fixture_content_one',
+                'sort_order' => 10
             )
         );
         $sourceFileTwo = $this->getMock(
-            'Magento\Core\Model\Theme\File', array('__wakeup', 'delete'), array(), '', false
+            'Magento\Core\Model\Theme\File',
+            array('__wakeup', 'delete'),
+            array(),
+            '',
+            false
         );
         $sourceFileTwo->setData(
             array(
-                'file_path'     => 'fixture_file_path_two',
-                'file_type'     => 'fixture_file_type_two',
-                'content'       => 'fixture_content_two',
-                'sort_order'    => 20,
+                'file_path' => 'fixture_file_path_two',
+                'file_type' => 'fixture_file_type_two',
+                'content' => 'fixture_content_two',
+                'sort_order' => 20
             )
         );
         $this->_sourceFiles = array($sourceFileOne, $sourceFileTwo);
         $this->_sourceTheme = $this->getMock(
-            'Magento\Core\Model\Theme', array('__wakeup', 'getCustomization'), array(), '', false
+            'Magento\Core\Model\Theme',
+            array('__wakeup', 'getCustomization'),
+            array(),
+            '',
+            false
         );
 
         $this->_targetFiles = array(
             $this->getMock('Magento\Core\Model\Theme\File', array('__wakeup', 'delete'), array(), '', false),
-            $this->getMock('Magento\Core\Model\Theme\File', array('__wakeup', 'delete'), array(), '', false),
+            $this->getMock('Magento\Core\Model\Theme\File', array('__wakeup', 'delete'), array(), '', false)
         );
         $this->_targetTheme = $this->getMock(
-            'Magento\Core\Model\Theme', array('__wakeup', 'getCustomization'), array(), '', false
+            'Magento\Core\Model\Theme',
+            array('__wakeup', 'getCustomization'),
+            array(),
+            '',
+            false
         );
         $this->_targetTheme->setId(123);
 
         $this->_customizationPath = $this->getMock(
-            'Magento\View\Design\Theme\Customization\Path',
+            'Magento\Framework\View\Design\Theme\Customization\Path',
             array(),
             array(),
             '',
@@ -143,47 +161,86 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_fileFactory = $this->getMock(
-            'Magento\View\Design\Theme\FileFactory', array('create'), array(), '', false
-        );
-        $this->_filesystem = $this->getMock(
-            'Magento\Filesystem',
-            array('getDirectoryWrite'),
+            'Magento\Framework\View\Design\Theme\FileFactory',
+            array('create'),
             array(),
             '',
             false
         );
+        $this->_filesystem =
+            $this->getMock('Magento\Framework\Filesystem', array('getDirectoryWrite'), array(), '', false);
         $this->_dirWriteMock = $this->getMock(
-            'Magento\Filesystem\Directory\Write',
-            array('isDirectory', 'search', 'copy', 'delete', 'read', 'copyFile', 'isExist'), array(),
+            'Magento\Framework\Filesystem\Directory\Write',
+            array('isDirectory', 'search', 'copy', 'delete', 'read', 'copyFile', 'isExist'),
+            array(),
             '',
             false
         );
-        $this->_filesystem->expects($this->any())
-            ->method('getDirectoryWrite')
-            ->with(\Magento\Filesystem::MEDIA)
-            ->will($this->returnValue($this->_dirWriteMock));
+        $this->_filesystem->expects(
+            $this->any()
+        )->method(
+            'getDirectoryWrite'
+        )->with(
+            DirectoryList::MEDIA
+        )->will(
+            $this->returnValue($this->_dirWriteMock)
+        );
 
         /* Init \Magento\Core\Model\Resource\Layout\Collection model  */
-        $this->_updateFactory = $this->getMock('Magento\Core\Model\Layout\UpdateFactory', array('create'),
-            array(), '', false);
+        $this->_updateFactory = $this->getMock(
+            'Magento\Core\Model\Layout\UpdateFactory',
+            array('create'),
+            array(),
+            '',
+            false
+        );
         $this->_update = $this->getMock(
-            'Magento\Core\Model\Layout\Update', array('__wakeup', 'getCollection'), array(), '', false
+            'Magento\Core\Model\Layout\Update',
+            array('__wakeup', 'getCollection'),
+            array(),
+            '',
+            false
         );
         $this->_updateFactory->expects($this->at(0))->method('create')->will($this->returnValue($this->_update));
-        $this->_updateCollection = $this->getMock('Magento\Core\Model\Resource\Layout\Collection',
-            array('addThemeFilter', 'delete', 'getIterator'), array(), '', false);
-        $this->_update->expects($this->any())->method('getCollection')
-            ->will($this->returnValue($this->_updateCollection));
+        $this->_updateCollection = $this->getMock(
+            'Magento\Core\Model\Resource\Layout\Collection',
+            array('addThemeFilter', 'delete', 'getIterator'),
+            array(),
+            '',
+            false
+        );
+        $this->_update->expects(
+            $this->any()
+        )->method(
+            'getCollection'
+        )->will(
+            $this->returnValue($this->_updateCollection)
+        );
 
         /* Init Link an Link_Collection model */
         $this->_link = $this->getMock(
-            'Magento\Core\Model\Layout\Link', array('__wakeup', 'getCollection'), array(), '', false
+            'Magento\Core\Model\Layout\Link',
+            array('__wakeup', 'getCollection'),
+            array(),
+            '',
+            false
         );
-        $this->_linkCollection = $this->getMock('Magento\Core\Model\Resource\Layout\Link\Collection',
-            array('addThemeFilter', 'getIterator'), array(), '', false);
+        $this->_linkCollection = $this->getMock(
+            'Magento\Core\Model\Resource\Layout\Link\Collection',
+            array('addThemeFilter', 'getIterator'),
+            array(),
+            '',
+            false
+        );
         $this->_link->expects($this->any())->method('getCollection')->will($this->returnValue($this->_linkCollection));
 
-        $eventManager = $this->getMock('Magento\Event\ManagerInterface', array('dispatch'), array(), '', false);
+        $eventManager = $this->getMock(
+            'Magento\Framework\Event\ManagerInterface',
+            array('dispatch'),
+            array(),
+            '',
+            false
+        );
 
         $this->_object = new \Magento\Theme\Model\CopyService(
             $this->_filesystem,
@@ -216,17 +273,27 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
     public function testCopyLayoutUpdates()
     {
         $customization = $this->getMock(
-            'Magento\View\Design\Theme\Customization',
+            'Magento\Framework\View\Design\Theme\Customization',
             array('getFiles'),
             array(),
             '',
             false
         );
         $customization->expects($this->atLeastOnce())->method('getFiles')->will($this->returnValue(array()));
-        $this->_sourceTheme->expects($this->once())->method('getCustomization')
-            ->will($this->returnValue($customization));
-        $this->_targetTheme->expects($this->once())->method('getCustomization')
-            ->will($this->returnValue($customization));
+        $this->_sourceTheme->expects(
+            $this->once()
+        )->method(
+            'getCustomization'
+        )->will(
+            $this->returnValue($customization)
+        );
+        $this->_targetTheme->expects(
+            $this->once()
+        )->method(
+            'getCustomization'
+        )->will(
+            $this->returnValue($customization)
+        );
 
         $this->_updateCollection->expects($this->once())->method('delete');
         $this->_linkCollection->expects($this->once())->method('addThemeFilter');
@@ -285,38 +352,67 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Magento\Theme\Model\CopyService::_copyDatabaseCustomization
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testCopyDatabaseCustomization()
     {
         $sourceCustom = $this->getMock(
-            'Magento\View\Design\Theme\Customization',
+            'Magento\Framework\View\Design\Theme\Customization',
             array('getFiles'),
             array(),
             '',
             false
         );
         $sourceCustom->expects(
-            $this->atLeastOnce())->method('getFiles')->will($this->returnValue($this->_sourceFiles)
+            $this->atLeastOnce()
+        )->method(
+            'getFiles'
+        )->will(
+            $this->returnValue($this->_sourceFiles)
         );
-        $this->_sourceTheme->expects($this->once())->method('getCustomization')
-            ->will($this->returnValue($sourceCustom));
+        $this->_sourceTheme->expects(
+            $this->once()
+        )->method(
+            'getCustomization'
+        )->will(
+            $this->returnValue($sourceCustom)
+        );
         $targetCustom = $this->getMock(
-            'Magento\View\Design\Theme\Customization',
+            'Magento\Framework\View\Design\Theme\Customization',
             array('getFiles'),
             array(),
             '',
             false
         );
         $targetCustom->expects(
-            $this->atLeastOnce())->method('getFiles')->will($this->returnValue($this->_targetFiles)
+            $this->atLeastOnce()
+        )->method(
+            'getFiles'
+        )->will(
+            $this->returnValue($this->_targetFiles)
         );
-        $this->_targetTheme->expects($this->once())->method('getCustomization')
-            ->will($this->returnValue($targetCustom));
+        $this->_targetTheme->expects(
+            $this->once()
+        )->method(
+            'getCustomization'
+        )->will(
+            $this->returnValue($targetCustom)
+        );
 
-        $this->_linkCollection->expects($this->any())->method('addFieldToFilter')
-            ->will($this->returnValue($this->_linkCollection));
-        $this->_linkCollection->expects($this->any())->method('getIterator')
-            ->will($this->returnValue(new \ArrayIterator(array())));
+        $this->_linkCollection->expects(
+            $this->any()
+        )->method(
+            'addFieldToFilter'
+        )->will(
+            $this->returnValue($this->_linkCollection)
+        );
+        $this->_linkCollection->expects(
+            $this->any()
+        )->method(
+            'getIterator'
+        )->will(
+            $this->returnValue(new \ArrayIterator(array()))
+        );
 
         foreach ($this->_targetFiles as $targetFile) {
             $targetFile->expects($this->once())->method('delete');
@@ -336,28 +432,43 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $newFileOne->expects($this->at(0))->method('setData')->with(array(
-            'theme_id'      => 123,
-            'file_path'     => 'fixture_file_path_one',
-            'file_type'     => 'fixture_file_type_one',
-            'content'       => 'fixture_content_one',
-            'sort_order'    => 10,
-        ));
+        $newFileOne->expects(
+            $this->at(0)
+        )->method(
+            'setData'
+        )->with(
+            array(
+                'theme_id' => 123,
+                'file_path' => 'fixture_file_path_one',
+                'file_type' => 'fixture_file_type_one',
+                'content' => 'fixture_content_one',
+                'sort_order' => 10
+            )
+        );
         $newFileOne->expects($this->at(1))->method('save');
-        $newFileTwo->expects($this->at(0))->method('setData')->with(array(
-            'theme_id'      => 123,
-            'file_path'     => 'fixture_file_path_two',
-            'file_type'     => 'fixture_file_type_two',
-            'content'       => 'fixture_content_two',
-            'sort_order'    => 20,
-        ));
+        $newFileTwo->expects(
+            $this->at(0)
+        )->method(
+            'setData'
+        )->with(
+            array(
+                'theme_id' => 123,
+                'file_path' => 'fixture_file_path_two',
+                'file_type' => 'fixture_file_type_two',
+                'content' => 'fixture_content_two',
+                'sort_order' => 20
+            )
+        );
         $newFileTwo->expects($this->at(1))->method('save');
-        $this->_fileFactory
-            ->expects($this->any())
-            ->method('create')
-            ->with(array())
-            ->will($this->onConsecutiveCalls($newFileOne, $newFileTwo))
-        ;
+        $this->_fileFactory->expects(
+            $this->any()
+        )->method(
+            'create'
+        )->with(
+            array()
+        )->will(
+            $this->onConsecutiveCalls($newFileOne, $newFileTwo)
+        );
 
         $this->_object->copy($this->_sourceTheme, $this->_targetTheme);
     }
@@ -368,47 +479,83 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
     public function testCopyFilesystemCustomization()
     {
         $customization = $this->getMock(
-            'Magento\View\Design\Theme\Customization',
+            'Magento\Framework\View\Design\Theme\Customization',
             array('getFiles'),
             array(),
             '',
             false
         );
         $customization->expects($this->atLeastOnce())->method('getFiles')->will($this->returnValue(array()));
-        $this->_sourceTheme->expects($this->once())->method('getCustomization')
-            ->will($this->returnValue($customization));
-        $this->_targetTheme->expects($this->once())->method('getCustomization')
-            ->will($this->returnValue($customization));
+        $this->_sourceTheme->expects(
+            $this->once()
+        )->method(
+            'getCustomization'
+        )->will(
+            $this->returnValue($customization)
+        );
+        $this->_targetTheme->expects(
+            $this->once()
+        )->method(
+            'getCustomization'
+        )->will(
+            $this->returnValue($customization)
+        );
 
-        $this->_linkCollection->expects($this->any())->method('addFieldToFilter')
-            ->will($this->returnValue($this->_linkCollection));
-        $this->_linkCollection->expects($this->any())->method('getIterator')
-            ->will($this->returnValue(new \ArrayIterator(array())));
+        $this->_linkCollection->expects(
+            $this->any()
+        )->method(
+            'addFieldToFilter'
+        )->will(
+            $this->returnValue($this->_linkCollection)
+        );
+        $this->_linkCollection->expects(
+            $this->any()
+        )->method(
+            'getIterator'
+        )->will(
+            $this->returnValue(new \ArrayIterator(array()))
+        );
 
-        $this->_customizationPath->expects($this->at(0))
-            ->method('getCustomizationPath')
-            ->will($this->returnValue('source/path'));
+        $this->_customizationPath->expects(
+            $this->at(0)
+        )->method(
+            'getCustomizationPath'
+        )->will(
+            $this->returnValue('source/path')
+        );
 
-        $this->_customizationPath->expects($this->at(1))
-            ->method('getCustomizationPath')
-            ->will($this->returnValue('target/path'));
+        $this->_customizationPath->expects(
+            $this->at(1)
+        )->method(
+            'getCustomizationPath'
+        )->will(
+            $this->returnValue('target/path')
+        );
 
-        $this->_dirWriteMock->expects($this->any())
-            ->method('isDirectory')->will($this->returnValueMap(array(
-                array('source/path', true),
-            )));
+        $this->_dirWriteMock->expects(
+            $this->any()
+        )->method(
+            'isDirectory'
+        )->will(
+            $this->returnValueMap(array(array('source/path', true)))
+        );
 
-        $this->_dirWriteMock
-            ->expects($this->any())
-            ->method('read')
-            ->will($this->returnValueMap(array(
-                array('target/path', array()),
-                array('source/path', array('source/path/file_one.jpg', 'source/path/file_two.png'))
-            )));
+        $this->_dirWriteMock->expects(
+            $this->any()
+        )->method(
+            'read'
+        )->will(
+            $this->returnValueMap(
+                array(
+                    array('target/path', array()),
+                    array('source/path', array('source/path/file_one.jpg', 'source/path/file_two.png'))
+                )
+            )
+        );
 
         $expectedCopyEvents = array(
             array('source/path/file_one.jpg', 'target/path/file_one.jpg', null),
-            array('source/path/file_two.png', 'target/path/file_two.png', null),
+            array('source/path/file_two.png', 'target/path/file_two.png', null)
         );
         $actualCopyEvents = array();
         $recordCopyEvent = function () use (&$actualCopyEvents) {

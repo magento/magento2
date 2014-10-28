@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Config\Backend\Image;
 
 class AdapterTest extends \PHPUnit_Framework_TestCase
@@ -37,12 +33,13 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Backend\Model\Config\Backend\Image\Adapter');
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Backend\Model\Config\Backend\Image\Adapter'
+        );
     }
 
     /**
-     * @expectedException \Magento\Core\Exception
+     * @expectedException \Magento\Framework\Model\Exception
      * expectedExceptionMessage  The specified image adapter cannot be used because of some missed dependencies.
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
@@ -58,6 +55,6 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testCorrectSave()
     {
-        $this->_model->setValue(\Magento\Image\Adapter\AdapterInterface::ADAPTER_GD2)->save();
+        $this->_model->setValue(\Magento\Framework\Image\Adapter\AdapterInterface::ADAPTER_GD2)->save();
     }
 }

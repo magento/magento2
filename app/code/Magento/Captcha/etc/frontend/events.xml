@@ -23,8 +23,8 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
-    <event name="controller_action_predispatch_contacts_index_post">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
+    <event name="controller_action_predispatch_contact_index_post">
         <observer name="captcha_contact_us_form" instance="Magento\Captcha\Model\Observer" method="checkContactUsForm" />
     </event>
 </config>

@@ -1,0 +1,124 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+
+<?php if (is_array($this->getChildBlock('diagrams')->getTabsIds())) : ?>
+<script type="text/javascript">
+function changeDiagramsPeriod(periodObj) {
+    periodParam = periodObj.value ? 'period/' + periodObj.value + '/' : '';
+<?php foreach ($this->getChildBlock('diagrams')->getTabsIds() as $tabId): ?>
+    ajaxBlockParam = 'block/tab_<?php echo $tabId ?>/';
+    ajaxBlockUrl = '<?php echo $this->getUrl('adminhtml/*/ajaxBlock', array('_current' => true, 'block' => '', 'period' => '')) ?>' + ajaxBlockParam + periodParam;
+    new Ajax.Request(ajaxBlockUrl, {
+        parameters: {isAjax: 'true', form_key: FORM_KEY},
+        onSuccess: function(transport) {
+            tabContentElementId = '<?php echo $this->getChildBlock('diagrams')->getId() ?>_<?php echo $tabId ?>_content';
+            try {
+                if (transport.responseText.isJSON()) {
+                    var response = transport.responseText.evalJSON()
+                    if (response.error) {
+                        alert(response.message);
+                    }
+                    if(response.ajaxExpired && response.ajaxRedirect) {
+                        setLocation(response.ajaxRedirect);
+                    }
+                } else {
+                    $(tabContentElementId).update(transport.responseText);
+                }
+            }
+            catch (e) {
+                $(tabContentElementId).update(transport.responseText);
+            }
+        }
+    });
+<?php endforeach; ?>
+    ajaxBlockUrl = '<?php echo $this->getUrl('adminhtml/*/ajaxBlock', array('_current' => true, 'block' => 'totals', 'period' => '')) ?>' + periodParam;
+    new Ajax.Request(ajaxBlockUrl, {
+        parameters: {isAjax: 'true', form_key: FORM_KEY},
+        onSuccess: function(transport) {
+            tabContentElementId = 'dashboard_diagram_totals';
+            try {
+                if (transport.responseText.isJSON()) {
+                    var response = transport.responseText.evalJSON()
+                    if (response.error) {
+                        alert(response.message);
+                    }
+                    if(response.ajaxExpired && response.ajaxRedirect) {
+                        setLocation(response.ajaxRedirect);
+                    }
+                } else {
+                    $(tabContentElementId).replace(transport.responseText);
+                }
+            }
+            catch (e) {
+                $(tabContentElementId).replace(transport.responseText);
+            }
+        }
+    });
+}
+
+function toggleCal(id) {
+    $('dashboard_'+id+'_cal_div').toggle();
+    $('dashboard_'+id+'_range_div').toggle();
+}
+</script>
+<?php endif; ?>
+ <div class="dashboard-container">
+     <div class="dashboard-inner">
+         <div class="dashboard-main">
+            <div class="dashboard-diagram-container">
+                <?php echo $this->getChildHtml('diagrams') ?>
+                <?php if (is_array($this->getChildBlock('diagrams')->getTabsIds())) : ?>
+                    <div id="diagram_tab_content" class="dashboard-diagram-tab-content"></div>
+                <?php endif; ?>
+            </div>
+            <?php echo $this->getChildHtml('totals') ?>
+             <div class="dashboard-store-stats">
+                 <?php echo $this->getChildHtml('grids') ?>
+                 <div id="grid_tab_content" class="dashboard-store-stats-content"></div>
+             </div>
+         </div>
+         <div class="dashboard-secondary">
+            <?php echo $this->getChildHtml('sales') ?>
+            <div class="dashboard-item">
+                <header class="dashboard-item-header">
+                    <h3 class="title"><?php echo __('Last 5 Orders') ?></h3>
+                </header>
+                <?php echo $this->getChildHtml('lastOrders'); ?>
+            </div>
+            <div class="dashboard-item">
+                <header class="dashboard-item-header">
+                    <h3 class="title"><?php echo __('Last 5 Search Terms') ?></h3>
+                </header>
+                <?php echo $this->getChildHtml('lastSearches'); ?>
+            </div>
+            <div class="dashboard-item">
+                <header class="dashboard-item-header">
+                    <h3 class="title"><?php echo __('Top 5 Search Terms') ?></h3>
+                </header>
+                <?php echo $this->getChildHtml('topSearches'); ?>
+            </div>
+         </div>
+     </div>
+ </div>

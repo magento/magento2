@@ -31,8 +31,7 @@
 ############################################
 ## adjust memory limit
 
-#    php_value memory_limit 64M
-    php_value memory_limit 128M
+    php_value memory_limit 256M
     php_value max_execution_time 18000
 
 ############################################
@@ -47,7 +46,7 @@
     #php_flag zlib.output_compression on
 
 ###########################################
-# disable user agent verification to not break multiple image upload
+## disable user agent verification to not break multiple image upload
 
     php_flag suhosin.session.cryptua off
 
@@ -55,10 +54,17 @@
 
 <IfModule mod_security.c>
 ###########################################
-# disable POST processing to not break multiple image upload
+## disable POST processing to not break multiple image upload
 
     SecFilterEngine Off
     SecFilterScanPOST Off
+</IfModule>
+
+<IfModule mod_headers.c>
+############################################
+## prevent clickjacking
+
+    Header set X-Frame-Options SAMEORIGIN
 </IfModule>
 
 <IfModule mod_deflate.c>
@@ -119,6 +125,12 @@
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
 ############################################
+## TRACE and TRACK HTTP methods disabled to prevent XSS attacks
+
+    RewriteCond %{REQUEST_METHOD} ^TRAC[EK]
+    RewriteRule .* - [L,R=405]
+
+############################################
 ## always send 404 on missing files in these folders
 
     RewriteCond %{REQUEST_URI} !^/pub/(media|js)/
@@ -160,6 +172,14 @@
 
     Order allow,deny
     Allow from all
+
+###########################################
+## Deny access to release notes to prevent disclosure of the installed Magento version
+
+    <Files RELEASE_NOTES.txt>
+        Order allow,deny
+        Deny from all
+    </Files>
 
 ############################################
 ## If running in cluster environment, uncomment this

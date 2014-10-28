@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Magento\Framework\Module\SomeInterface" type="Magento\Framework\Module\ClassOne" />
+    <type name="Magento\Framework\App\Arguments\Loader">
+        <arguments>
+            <argument name="customFile" xsi:type="init_parameter">Magento\Framework\App\Arguments\Loader::PARAM_CUSTOM_FILE</argument>
+            <argument name="customConfig" xsi:type="object" shared="true">Magento\Core\Model\Config\Storage\Modules</argument>
+            <argument name="customValue" xsi:type="string">someValue</argument>
+            <argument name="customComplexValue" xsi:type="array">
+                <item name="one" xsi:type="string">one</item>
+                <item name="two" xsi:type="string">two</item>
+            </argument>
+        </arguments>
+        <plugin name="one" type="somePluginOne"/>
+        <plugin name="two" type="somePluginTwo" sortOrder="15"/>
+    </type>
+    <virtualType name="Magento\Framework\App\Arguments\LoaderVirtual" type="Magento\Framework\App\Arguments\Loader\Local" shared="false">
+        <arguments>
+            <argument name="customFile" xsi:type="init_parameter">Magento\Framework\App\Arguments\Loader::PARAM_CUSTOM_FILE</argument>
+            <argument name="customConfig" xsi:type="object">Magento\Core\Model\Config\Storage\Modules</argument>
+            <argument name="customValue" xsi:type="string">someValue</argument>
+            <argument name="customComplexValue" xsi:type="array">
+                <item name="one" xsi:type="string">one</item>
+                <item name="two" xsi:type="string">one</item>
+            </argument>
+        </arguments>
+        <plugin name="one" type="somePluginOne" sortOrder="10" />
+        <plugin name="two" type="somePluginTwo"/>
+    </virtualType>
+    <type name="Magento\Framework\Data\Collection\Db\FetchStrategy\Cache">
+        <arguments>
+            <argument name="cacheIdPrefix" xsi:type="string"><![CDATA[collection_]]></argument>
+            <argument name="cacheLifetime" xsi:type="string">86400</argument>
+            <argument name="cacheTags" xsi:type="array">
+                <item name="const" xsi:type="const">Magento\Store\Model\Website::CACHE_TAG</item>
+                <item name="boolFalse" xsi:type="boolean">false</item>
+                <item name="boolTrue" xsi:type="boolean">true</item>
+                <item name="boolOne" xsi:type="boolean">true</item>
+                <item name="boolZero" xsi:type="boolean">false</item>
+                <item name="intValue" xsi:type="number">100500</item>
+                <item name="nullValue" xsi:type="null"/>
+                <item name="stringPattern" xsi:type="string">az-value</item>
+            </argument>
+            <argument name="constParam" xsi:type="const">Magento\Store\Model\Website::CACHE_TAG</argument>
+            <argument name="boolFalseParam" xsi:type="boolean">false</argument>
+            <argument name="boolTrueParam" xsi:type="boolean">true</argument>
+            <argument name="boolOneParam" xsi:type="boolean">true</argument>
+            <argument name="boolZeroParam" xsi:type="boolean">false</argument>
+            <argument name="intValueParam" xsi:type="number">100500</argument>
+            <argument name="nullValueParam" xsi:type="null"/>
+            <argument name="stringPatternParam" xsi:type="string">az-value</argument>
+        </arguments>
+    </type>
+</config>

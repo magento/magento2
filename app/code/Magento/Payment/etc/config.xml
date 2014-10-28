@@ -19,32 +19,13 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Payment
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Core/etc/config.xsd">
     <default>
         <payment>
-            <ccsave>
-                <active>0</active>
-                <cctypes>AE,VI,MC,DI</cctypes>
-                <model>Magento\Payment\Model\Method\Ccsave</model>
-                <order_status>pending</order_status>
-                <title>Credit Card (saved)</title>
-                <allowspecific>0</allowspecific>
-                <group>offline</group>
-            </ccsave>
-            <checkmo>
-                <active>1</active>
-                <model>Magento\Payment\Model\Method\Checkmo</model>
-                <order_status>pending</order_status>
-                <title>Check / Money order</title>
-                <allowspecific>0</allowspecific>
-                <group>offline</group>
-            </checkmo>
             <free>
                 <active>1</active>
                 <model>Magento\Payment\Model\Method\Free</model>
@@ -52,32 +33,12 @@
                 <title>No Payment Information Required</title>
                 <allowspecific>0</allowspecific>
                 <sort_order>1</sort_order>
-                <group>offline</group>
             </free>
-            <purchaseorder>
+            <substitution>
                 <active>0</active>
-                <model>Magento\Payment\Model\Method\Purchaseorder</model>
-                <order_status>pending</order_status>
-                <title>Purchase Order</title>
+                <model>Magento\Payment\Model\Method\Substitution</model>
                 <allowspecific>0</allowspecific>
-                <group>offline</group>
-            </purchaseorder>
-            <banktransfer>
-                <active>0</active>
-                <model>Magento\Payment\Model\Method\Banktransfer</model>
-                <order_status>pending</order_status>
-                <title>Bank Transfer Payment</title>
-                <allowspecific>0</allowspecific>
-                <group>offline</group>
-            </banktransfer>
-            <cashondelivery>
-                <active>0</active>
-                <model>Magento\Payment\Model\Method\Cashondelivery</model>
-                <order_status>pending</order_status>
-                <title>Cash On Delivery</title>
-                <allowspecific>0</allowspecific>
-                <group>offline</group>
-            </cashondelivery>
+            </substitution>
         </payment>
     </default>
 </config>

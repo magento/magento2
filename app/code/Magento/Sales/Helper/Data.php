@@ -18,21 +18,18 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Helper;
+
+use Magento\Store\Model\Store;
 
 /**
  * Sales module base helper
  *
- * @category    Magento
- * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Helper;
-
 class Data extends \Magento\Core\Helper\Data
 {
     /**
@@ -44,16 +41,14 @@ class Data extends \Magento\Core\Helper\Data
      * Check quote amount
      *
      * @param \Magento\Sales\Model\Quote $quote
-     * @param decimal $amount
-     * @return \Magento\Sales\Helper\Data
+     * @param float $amount
+     * @return $this
      */
     public function checkQuoteAmount(\Magento\Sales\Model\Quote $quote, $amount)
     {
-        if (!$quote->getHasError() && ($amount>=self::MAXIMUM_AVAILABLE_NUMBER)) {
+        if (!$quote->getHasError() && $amount >= self::MAXIMUM_AVAILABLE_NUMBER) {
             $quote->setHasError(true);
-            $quote->addMessage(
-                __('This item price or quantity is not valid for checkout.')
-            );
+            $quote->addMessage(__('This item price or quantity is not valid for checkout.'));
         }
         return $this;
     }
@@ -61,18 +56,22 @@ class Data extends \Magento\Core\Helper\Data
     /**
      * Check allow to send new order confirmation email
      *
-     * @param mixed $store
+     * @param null|string|bool|int|Store $store
      * @return bool
      */
     public function canSendNewOrderConfirmationEmail($store = null)
     {
-        return $this->_coreStoreConfig->getConfigFlag(\Magento\Sales\Model\Order::XML_PATH_EMAIL_ENABLED, $store);
+        return $this->_scopeConfig->isSetFlag(
+            \Magento\Sales\Model\Order\Email\Container\OrderIdentity::XML_PATH_EMAIL_ENABLED,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
 
     /**
      * Check allow to send new order email
      *
-     * @param mixed $store
+     * @param null|string|bool|int|Store $store
      * @return bool
      */
     public function canSendNewOrderEmail($store = null)
@@ -83,83 +82,105 @@ class Data extends \Magento\Core\Helper\Data
     /**
      * Check allow to send order comment email
      *
-     * @param mixed $store
+     * @param null|string|bool|int|Store $store
      * @return bool
      */
     public function canSendOrderCommentEmail($store = null)
     {
-        return $this->_coreStoreConfig->getConfigFlag(\Magento\Sales\Model\Order::XML_PATH_UPDATE_EMAIL_ENABLED, $store);
+        return $this->_scopeConfig->isSetFlag(
+            \Magento\Sales\Model\Order\Email\Container\OrderCommentIdentity::XML_PATH_EMAIL_ENABLED,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
 
     /**
      * Check allow to send new shipment email
      *
-     * @param mixed $store
+     * @param null|string|bool|int|Store $store
      * @return bool
      */
     public function canSendNewShipmentEmail($store = null)
     {
-        return $this->_coreStoreConfig
-            ->getConfigFlag(\Magento\Sales\Model\Order\Shipment::XML_PATH_EMAIL_ENABLED, $store);
+        return $this->_scopeConfig->isSetFlag(
+            \Magento\Sales\Model\Order\Email\Container\ShipmentIdentity::XML_PATH_EMAIL_ENABLED,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
 
     /**
      * Check allow to send shipment comment email
      *
-     * @param mixed $store
+     * @param null|string|bool|int|Store $store
      * @return bool
      */
     public function canSendShipmentCommentEmail($store = null)
     {
-        return $this->_coreStoreConfig
-            ->getConfigFlag(\Magento\Sales\Model\Order\Shipment::XML_PATH_UPDATE_EMAIL_ENABLED, $store);
+        return $this->_scopeConfig->isSetFlag(
+            \Magento\Sales\Model\Order\Email\Container\ShipmentCommentIdentity::XML_PATH_EMAIL_ENABLED,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
 
     /**
      * Check allow to send new invoice email
      *
-     * @param mixed $store
+     * @param null|string|bool|int|Store $store
      * @return bool
      */
     public function canSendNewInvoiceEmail($store = null)
     {
-        return $this->_coreStoreConfig
-            ->getConfigFlag(\Magento\Sales\Model\Order\Invoice::XML_PATH_EMAIL_ENABLED, $store);
+        return $this->_scopeConfig->isSetFlag(
+            \Magento\Sales\Model\Order\Email\Container\InvoiceIdentity::XML_PATH_EMAIL_ENABLED,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
 
     /**
      * Check allow to send invoice comment email
      *
-     * @param mixed $store
+     * @param null|string|bool|int|Store $store
      * @return bool
      */
     public function canSendInvoiceCommentEmail($store = null)
     {
-        return $this->_coreStoreConfig
-            ->getConfigFlag(\Magento\Sales\Model\Order\Invoice::XML_PATH_UPDATE_EMAIL_ENABLED, $store);
+        return $this->_scopeConfig->isSetFlag(
+            \Magento\Sales\Model\Order\Email\Container\InvoiceCommentIdentity::XML_PATH_EMAIL_ENABLED,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
 
     /**
      * Check allow to send new creditmemo email
      *
-     * @param mixed $store
+     * @param null|string|bool|int|Store $store
      * @return bool
      */
     public function canSendNewCreditmemoEmail($store = null)
     {
-        return $this->_coreStoreConfig
-            ->getConfigFlag(\Magento\Sales\Model\Order\Creditmemo::XML_PATH_EMAIL_ENABLED, $store);
+        return $this->_scopeConfig->isSetFlag(
+            \Magento\Sales\Model\Order\Email\Container\CreditmemoIdentity::XML_PATH_EMAIL_ENABLED,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
 
     /**
      * Check allow to send creditmemo comment email
      *
-     * @param mixed $store
+     * @param null|string|bool|int|Store $store
      * @return bool
      */
     public function canSendCreditmemoCommentEmail($store = null)
     {
-        return $this->_coreStoreConfig
-            ->getConfigFlag(\Magento\Sales\Model\Order\Creditmemo::XML_PATH_UPDATE_EMAIL_ENABLED, $store);
+        return $this->_scopeConfig->isSetFlag(
+            \Magento\Sales\Model\Order\Email\Container\CreditmemoCommentIdentity::XML_PATH_EMAIL_ENABLED,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
 }

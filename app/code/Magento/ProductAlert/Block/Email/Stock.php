@@ -18,25 +18,23 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_ProductAlert
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ProductAlert\Block\Email;
 
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * ProductAlert email back in stock grid
  *
- * @category   Magento
- * @package    Magento_ProductAlert
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\ProductAlert\Block\Email;
-
 class Stock extends \Magento\ProductAlert\Block\Email\AbstractEmail
 {
-
+    /**
+     * @var string
+     */
     protected $_template = 'email/stock.phtml';
 
     /**
@@ -45,17 +43,21 @@ class Stock extends \Magento\ProductAlert\Block\Email\AbstractEmail
     protected $_imageHelper;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Framework\Filter\Input\MaliciousCode $maliciousCode
+     * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Framework\Filter\Input\MaliciousCode $maliciousCode,
+        PriceCurrencyInterface $priceCurrency,
         \Magento\Catalog\Helper\Image $imageHelper,
         array $data = array()
     ) {
         $this->_imageHelper = $imageHelper;
-        parent::__construct($context, $data);
+        parent::__construct($context, $maliciousCode, $priceCurrency, $data);
     }
 
     /**
@@ -66,8 +68,7 @@ class Stock extends \Magento\ProductAlert\Block\Email\AbstractEmail
      */
     public function getThumbnailUrl($product)
     {
-        return (string)$this->_imageHelper->init($product, 'thumbnail')
-            ->resize($this->getThumbnailSize());
+        return (string)$this->_imageHelper->init($product, 'thumbnail')->resize($this->getThumbnailSize());
     }
 
     /**

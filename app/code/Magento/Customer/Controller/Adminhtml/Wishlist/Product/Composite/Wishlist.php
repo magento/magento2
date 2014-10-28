@@ -18,120 +18,61 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Customer\Controller\Adminhtml\Wishlist\Product\Composite;
+
+use Magento\Framework\Model\Exception as CoreException;
 
 /**
  * Catalog composite product configuration controller
- *
- * @category    Magento
- * @package     Magento_Customer
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Customer\Controller\Adminhtml\Wishlist\Product\Composite;
-
-class Wishlist
-    extends \Magento\Backend\App\Action
+class Wishlist extends \Magento\Backend\App\Action
 {
-     /**
-     * Wishlist we're working with
+    /**
+     * Wishlist we're working with.
      *
      * @var \Magento\Wishlist\Model\Wishlist
      */
     protected $_wishlist = null;
 
     /**
-     * Wishlist item we're working with
+     * Wishlist item we're working with.
      *
      * @var \Magento\Wishlist\Model\Wishlist
      */
     protected $_wishlistItem = null;
 
     /**
-     * Loads wishlist and wishlist item
+     * Loads wishlist and wishlist item.
      *
-     * @return \Magento\Customer\Controller\Adminhtml\Wishlist\Product\Composite\Wishlist
+     * @return $this
+     * @throws CoreException
      */
     protected function _initData()
     {
-        $wishlistItemId = (int) $this->getRequest()->getParam('id');
+        $wishlistItemId = (int)$this->getRequest()->getParam('id');
         if (!$wishlistItemId) {
-            throw new \Magento\Core\Exception(__('No wishlist item ID is defined.'));
+            throw new CoreException(__('No wishlist item ID is defined.'));
         }
 
         /* @var $wishlistItem \Magento\Wishlist\Model\Item */
-        $wishlistItem = $this->_objectManager->create('Magento\Wishlist\Model\Item')
-            ->loadWithOptions($wishlistItemId);
+        $wishlistItem = $this->_objectManager->create('Magento\Wishlist\Model\Item')->loadWithOptions($wishlistItemId);
 
         if (!$wishlistItem->getWishlistId()) {
-            throw new \Magento\Core\Exception(__('Please load the wish list item.'));
+            throw new CoreException(__('Please load the wish list item.'));
         }
 
-        $this->_wishlist = $this->_objectManager->create('Magento\Wishlist\Model\Wishlist')
-            ->load($wishlistItem->getWishlistId());
+        $this->_wishlist = $this->_objectManager->create(
+            'Magento\Wishlist\Model\Wishlist'
+        )->load(
+            $wishlistItem->getWishlistId()
+        );
 
         $this->_wishlistItem = $wishlistItem;
 
         return $this;
-    }
-
-    /**
-     * Ajax handler to response configuration fieldset of composite product in customer's wishlist
-     *
-     * @return \Magento\Customer\Controller\Adminhtml\Wishlist\Product\Composite\Wishlist
-     */
-    public function configureAction()
-    {
-        $configureResult = new \Magento\Object();
-        try {
-            $this->_initData();
-
-            $configureResult->setProductId($this->_wishlistItem->getProductId());
-            $configureResult->setBuyRequest($this->_wishlistItem->getBuyRequest());
-            $configureResult->setCurrentStoreId($this->_wishlistItem->getStoreId());
-            $configureResult->setCurrentCustomerId($this->_wishlist->getCustomerId());
-
-            $configureResult->setOk(true);
-        } catch (\Exception $e) {
-            $configureResult->setError(true);
-            $configureResult->setMessage($e->getMessage());
-        }
-
-        $this->_objectManager->get('Magento\Catalog\Helper\Product\Composite')
-            ->renderConfigureResult($configureResult);
-    }
-
-    /**
-     * IFrame handler for submitted configuration for wishlist item
-     *
-     * @return false
-     */
-    public function updateAction()
-    {
-        // Update wishlist item
-        $updateResult = new \Magento\Object();
-        try {
-            $this->_initData();
-
-            $buyRequest = new \Magento\Object($this->getRequest()->getParams());
-
-            $this->_wishlist
-                ->updateItem($this->_wishlistItem->getId(), $buyRequest)
-                ->save();
-
-            $updateResult->setOk(true);
-        } catch (\Exception $e) {
-            $updateResult->setError(true);
-            $updateResult->setMessage($e->getMessage());
-        }
-        $updateResult->setJsVarName($this->getRequest()->getParam('as_js_varname'));
-        $this->_objectManager->get('Magento\Backend\Model\Session')->setCompositeProductResult($updateResult);
-        $this->_redirect('catalog/product/showUpdateResult');
-
-        return false;
     }
 
     /**

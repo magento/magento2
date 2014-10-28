@@ -19,13 +19,11 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/system_file.xsd">
     <system>
         <tab id="catalog" translate="label" sortOrder="200">
             <label>Catalog</label>
@@ -82,14 +80,12 @@
                 </field>
                 <field id="flat_catalog_category" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Use Flat Catalog Category</label>
-                    <frontend_model>Magento\Catalog\Block\Adminhtml\System\Config\Form\Field\Select\Flatcatalog</frontend_model>
-                    <backend_model>Magento\Catalog\Model\System\Config\Backend\Catalog\Category\Flat</backend_model>
+                    <backend_model>Magento\Catalog\Model\Indexer\Category\Flat\System\Config\Mode</backend_model>
                     <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="flat_catalog_product" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Use Flat Catalog Product</label>
-                    <frontend_model>Magento\Catalog\Block\Adminhtml\System\Config\Form\Field\Select\Flatproduct</frontend_model>
-                    <backend_model>Magento\Catalog\Model\System\Config\Backend\Catalog\Product\Flat</backend_model>
+                    <backend_model>Magento\Catalog\Model\Indexer\Product\Flat\System\Config\Mode</backend_model>
                     <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="default_sort_by" translate="label comment" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -119,26 +115,7 @@
                 </field>
             </group>
             <group id="seo" translate="label" type="text" sortOrder="500" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Search Engine Optimizations</label>
-                <field id="category_url_suffix" translate="label comment" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Category URL Suffix</label>
-                    <backend_model>Magento\Catalog\Model\System\Config\Backend\Catalog\Url\Rewrite\Suffix</backend_model>
-                    <comment>You need to refresh the cache.</comment>
-                </field>
-                <field id="product_url_suffix" translate="label comment" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Product URL Suffix</label>
-                    <backend_model>Magento\Catalog\Model\System\Config\Backend\Catalog\Url\Rewrite\Suffix</backend_model>
-                    <comment>You need to refresh the cache.</comment>
-                </field>
-                <field id="product_use_categories" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Use Categories Path for Product URLs</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
-                    <backend_model>Magento\Catalog\Model\Config\Backend\Seo\Product</backend_model>
-                </field>
-                <field id="save_rewrites_history" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Create Permanent Redirect for URLs if URL Key Changed</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
-                </field>
+                <label>Search Engine Optimization</label>
                 <field id="title_separator" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Page Title Separator</label>
                 </field>
@@ -156,50 +133,9 @@
                 <field id="scope" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Catalog Price Scope</label>
                     <comment><![CDATA[This defines the base currency scope ("Currency Setup" > "Currency Options" > "Base Currency").]]></comment>
+                    <backend_model>Magento\Catalog\Model\Indexer\Product\Price\System\Config\PriceScope</backend_model>
                     <source_model>Magento\Catalog\Model\Config\Source\Price\Scope</source_model>
                     <hide_in_single_store_mode>1</hide_in_single_store_mode>
-                </field>
-            </group>
-            <group id="layered_navigation" translate="label" sortOrder="490" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Layered Navigation</label>
-                <field id="display_product_count" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Display Product Count</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="price_range_calculation" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Price Navigation Step Calculation</label>
-                    <source_model>Magento\Catalog\Model\Config\Source\Price\Step</source_model>
-                </field>
-                <field id="price_range_step" translate="label" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Default Price Navigation Step</label>
-                    <validate>validate-number validate-number-range number-range-0.01-1000000000</validate>
-                    <depends>
-                        <field id="price_range_calculation">manual</field>
-                    </depends>
-                </field>
-                <field id="price_range_max_intervals" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Maximum Number of Price Intervals</label>
-                    <comment>Maximum number of price intervals is 100</comment>
-                    <validate>validate-digits validate-digits-range digits-range-2-100</validate>
-                    <depends>
-                        <field id="price_range_calculation">manual</field>
-                    </depends>
-                </field>
-                <field id="one_price_interval" translate="label comment" type="select" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Display Price Interval as One Price</label>
-                    <comment>This setting will be applied when all prices in the specific price interval are equal.</comment>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
-                    <depends>
-                        <field id="price_range_calculation">improved</field>
-                    </depends>
-                </field>
-                <field id="interval_division_limit" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Interval Division Limit</label>
-                    <comment>Please specify the number of products, that will not be divided into subintervals.</comment>
-                    <validate>validate-digits validate-digits-range digits-range-1-10000</validate>
-                    <depends>
-                        <field id="price_range_calculation">improved</field>
-                    </depends>
                 </field>
             </group>
             <group id="navigation" translate="label" type="text" sortOrder="500" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -263,29 +199,20 @@
                 </field>
             </group>
         </section>
-        <section id="sales">
-            <group id="msrp" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
-                <label>Minimum Advertised Price</label>
-                <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Enable MAP</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+        <section id="rss">
+            <group id="catalog" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Catalog</label>
+                <field id="new" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>New Products</label>
+                    <source_model>Magento\Backend\Model\Config\Source\Enabledisable</source_model>
                 </field>
-                <field id="apply_for_all" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Apply MAP (Default Value)</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
-                    <comment>
-                        <![CDATA[<strong style="color:red">Warning!</strong> Applying MAP by default will hide all product prices on the front end.]]>
-                    </comment>
+                <field id="special" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Special Products</label>
+                    <source_model>Magento\Backend\Model\Config\Source\Enabledisable</source_model>
                 </field>
-                <field id="display_price_type" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Display Actual Price</label>
-                    <source_model>Magento\Catalog\Model\Product\Attribute\Source\Msrp\Type</source_model>
-                </field>
-                <field id="explanation_message" translate="label" type="textarea" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Default Popup Text Message</label>
-                </field>
-                <field id="explanation_message_whats_this" translate="label" type="textarea" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Default "What's This" Text Message</label>
+                <field id="category" translate="label" type="select" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Top Level Category</label>
+                    <source_model>Magento\Backend\Model\Config\Source\Enabledisable</source_model>
                 </field>
             </group>
         </section>

@@ -18,21 +18,18 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Reports
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Reports\Block;
 
 class WidgetTest extends \PHPUnit_Framework_TestCase
 {
     public function testViewedProductsWidget()
     {
-        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Widget\Model\Widget\Instance');
+        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Widget\Model\Widget\Instance'
+        );
         $config = $model->setType('Magento\Reports\Block\Product\Widget\Viewed')->getWidgetConfigAsArray();
 
         $this->assertArrayHasKey('parameters', $config);
@@ -56,15 +53,16 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
             $containers[] = $block['container_name'];
         }
 
-        $this->assertContains('left', $containers);
+        $this->assertContains('sidebar.main', $containers);
         $this->assertContains('content', $containers);
-        $this->assertContains('right', $containers);
+        $this->assertContains('sidebar.additional', $containers);
     }
 
     public function testComparedProductsWidget()
     {
-        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Widget\Model\Widget\Instance');
+        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Widget\Model\Widget\Instance'
+        );
         $config = $model->setType('Magento\Reports\Block\Product\Widget\Compared')->getWidgetConfigAsArray();
 
         $this->assertArrayHasKey('parameters', $config);
@@ -87,9 +85,8 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
             $containers[] = $block['container_name'];
         }
 
-        $this->assertContains('left', $containers);
+        $this->assertContains('sidebar.main', $containers);
         $this->assertContains('content', $containers);
-        $this->assertContains('right', $containers);
+        $this->assertContains('sidebar.additional', $containers);
     }
-
 }

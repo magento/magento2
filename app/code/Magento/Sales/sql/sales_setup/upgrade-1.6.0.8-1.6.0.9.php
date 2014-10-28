@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,23 +26,26 @@
 $installer = $this;
 $installer->startSetup();
 
-$installer->getConnection()
-    ->modifyColumn($installer->getTable('sales_flat_quote_payment'), 'cc_exp_year',
-        array(
-            'type'      => \Magento\DB\Ddl\Table::TYPE_TEXT,
-            'length'      => 255,
-            'nullable'  => true,
-            'default'   => null,
-            'comment'   => 'Cc Exp Year'
-        )
-    )->modifyColumn($installer->getTable('sales_flat_quote_payment'), 'cc_exp_month',
-        array(
-            'type'      => \Magento\DB\Ddl\Table::TYPE_TEXT,
-            'length'      => 255,
-            'nullable'  => true,
-            'default'   => null,
-            'comment'   => 'Cc Exp Month'
-        )
-    );
+$installer->getConnection()->modifyColumn(
+    $installer->getTable('sales_flat_quote_payment'),
+    'cc_exp_year',
+    array(
+        'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+        'length' => 255,
+        'nullable' => true,
+        'default' => null,
+        'comment' => 'Cc Exp Year'
+    )
+)->modifyColumn(
+    $installer->getTable('sales_flat_quote_payment'),
+    'cc_exp_month',
+    array(
+        'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+        'length' => 255,
+        'nullable' => true,
+        'default' => null,
+        'comment' => 'Cc Exp Month'
+    )
+);
 
 $installer->endSetup();

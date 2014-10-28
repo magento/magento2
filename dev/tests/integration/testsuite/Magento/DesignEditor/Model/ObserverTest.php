@@ -39,45 +39,44 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
      */
     public function testCleanJs($area, $designMode, $expectedAssets)
     {
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface');
-        /** @var $headBlock \Magento\Theme\Block\Html\Head */
-        $headBlock = $layout->createBlock('Magento\Theme\Block\Html\Head', 'head');
-        $headBlock->setData('vde_design_mode', $designMode);
+        /** @var \Magento\Framework\Registry $registry */
+        $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\Registry'
+        );
+        $registry->register('vde_design_mode', $designMode);
 
+        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\View\LayoutInterface'
+        );
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        /** @var $pageAssets \Magento\View\Asset\GroupedCollection */
-        $pageAssets = $objectManager->get('Magento\View\Asset\GroupedCollection');
+        /** @var \Magento\Framework\View\Asset\Repository $assetRepo */
+        $assetRepo = $objectManager->create('Magento\Framework\View\Asset\Repository');
+
+        /** @var $pageAssets \Magento\Framework\View\Asset\GroupedCollection */
+        $pageAssets = $objectManager->get('Magento\Framework\View\Asset\GroupedCollection');
 
         $fixtureAssets = array(
-            array('name'   => 'test_css', 'type' => \Magento\View\Publisher::CONTENT_TYPE_CSS,
-                  'params' => array()),
-            array('name'   => 'test_css_vde', 'type' => \Magento\View\Publisher::CONTENT_TYPE_CSS,
-                  'params' => array('flag_name' => 'vde_design_mode')),
-            array('name'   => 'test_js', 'type' => \Magento\View\Publisher::CONTENT_TYPE_JS,
-                  'params' => array()),
-            array('name'   => 'test_js_vde', 'type' => \Magento\View\Publisher::CONTENT_TYPE_JS,
-                  'params' => array('flag_name' => 'vde_design_mode')),
+            array('file' => 'test.css', 'params' => array()),
+            array('file' => 'test_vde.css', 'params' => array('flag_name' => 'vde_design_mode')),
+            array('file' => 'test.js', 'params' => array()),
+            array('file' => 'test_vde.js', 'params' => array('flag_name' => 'vde_design_mode')),
         );
 
         foreach ($fixtureAssets as $asset) {
             $pageAssets->add(
-                $asset['name'],
-                $objectManager->create('Magento\View\Asset\ViewFile', array(
-                    'file' => 'some_file',
-                    'contentType' => $asset['type'],
-                )),
+                $asset['file'],
+                $assetRepo->createAsset($asset['file']),
                 $asset['params']
             );
         }
 
-
-        /** @var \Magento\Config\Scope $configScope */
-        $configScope = $objectManager->get('Magento\Config\ScopeInterface');
+        /** @var \Magento\Framework\Config\Scope $configScope */
+        $configScope = $objectManager->get('Magento\Framework\Config\ScopeInterface');
         $configScope->setCurrentScope($area);
 
-        /** @var $eventManager \Magento\Event\ManagerInterface */
-        $eventManager = $objectManager->get('Magento\Event\ManagerInterface');
+        /** @var $eventManager \Magento\Framework\Event\ManagerInterface */
+        $eventManager = $objectManager->get('Magento\Framework\Event\ManagerInterface');
         $eventManager->dispatch('controller_action_layout_generate_blocks_after', array('layout' => $layout));
 
         $actualAssets = array_keys($pageAssets->getAll());
@@ -90,13 +89,13 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     public function cleanJsDataProvider()
     {
         return array(
-            'vde area - design mode' => array('vde', '1', array('test_css', 'test_css_vde', 'test_js_vde')),
+            'vde area - design mode' => array('vde', '1', array('test.css', 'test_vde.css', 'test_vde.js')),
             'vde area - non design mode' => array('vde', '0',
-                array('test_css', 'test_css_vde', 'test_js', 'test_js_vde')),
+                array('test.css', 'test_vde.css', 'test.js', 'test_vde.js')),
             'default area - design mode' => array('default', '1',
-                array('test_css', 'test_css_vde', 'test_js', 'test_js_vde')),
+                array('test.css', 'test_vde.css', 'test.js', 'test_vde.js')),
             'default area - non design mode' => array('default', '0',
-                array('test_css', 'test_css_vde', 'test_js', 'test_js_vde')),
+                array('test.css', 'test_vde.css', 'test.js', 'test_vde.js')),
         );
     }
 }

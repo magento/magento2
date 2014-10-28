@@ -56,7 +56,7 @@
             </parameter>
         </parameters>
         <containers>
-            <container name="left">
+            <container name="sidebar.main">
                 <template name="default" value="list_default" />
                 <template name="names_only" value="list_names" />
                 <template name="images_only" value="list_images" />
@@ -65,7 +65,7 @@
                 <template name="grid" value="default" />
                 <template name="list" value="list" />
             </container>
-            <container name="right">
+            <container name="sidebar.additional">
                 <template name="default" value="list_default" />
                 <template name="names_only" value="list_names" />
                 <template name="images_only" value="list_images" />
@@ -103,7 +103,7 @@
             </parameter>
         </parameters>
         <containers>
-            <container name="left">
+            <container name="sidebar.main">
                 <template name="default" value="list_default" />
                 <template name="names_only" value="list_names" />
                 <template name="images_only" value="list_images" />
@@ -112,7 +112,7 @@
                 <template name="grid" value="default" />
                 <template name="list" value="list" />
             </container>
-            <container name="right">
+            <container name="sidebar.additional">
                 <template name="default" value="list_default" />
                 <template name="names_only" value="list_names" />
                 <template name="images_only" value="list_images" />

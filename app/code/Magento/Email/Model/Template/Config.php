@@ -33,17 +33,17 @@ class Config
     protected $_dataStorage;
 
     /**
-     * @var \Magento\Module\Dir\Reader
+     * @var \Magento\Framework\Module\Dir\Reader
      */
     protected $_moduleReader;
 
     /**
      * @param \Magento\Email\Model\Template\Config\Data $dataStorage
-     * @param \Magento\Module\Dir\Reader $moduleReader
+     * @param \Magento\Framework\Module\Dir\Reader $moduleReader
      */
     public function __construct(
         \Magento\Email\Model\Template\Config\Data $dataStorage,
-        \Magento\Module\Dir\Reader $moduleReader
+        \Magento\Framework\Module\Dir\Reader $moduleReader
     ) {
         $this->_dataStorage = $dataStorage;
         $this->_moduleReader = $moduleReader;
@@ -117,10 +117,12 @@ class Config
     {
         $data = $this->_dataStorage->get();
         if (!isset($data[$templateId])) {
-            throw new \UnexpectedValueException("Email template '$templateId' is not defined.");
+            throw new \UnexpectedValueException("Email template '{$templateId}' is not defined.");
         }
         if (!isset($data[$templateId][$fieldName])) {
-            throw new \UnexpectedValueException("Field '$fieldName' is not defined for email template '$templateId'.");
+            throw new \UnexpectedValueException(
+                "Field '{$fieldName}' is not defined for email template '{$templateId}'."
+            );
         }
         return $data[$templateId][$fieldName];
     }

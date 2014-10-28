@@ -18,55 +18,69 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Eav
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/** @var $installer \Magento\Core\Model\Resource\Setup\Migration */
-$installer = $this->createMigrationSetup(array('resourceName' => 'core_setup'));
+/** @var $installer \Magento\Framework\Module\Setup\Migration */
+$installer = $this->createMigrationSetup();
 $installer->startSetup();
 
-$installer->appendClassAliasReplace('eav_attribute', 'attribute_model',
-    \Magento\Core\Model\Resource\Setup\Migration::ENTITY_TYPE_MODEL,
-    \Magento\Core\Model\Resource\Setup\Migration::FIELD_CONTENT_TYPE_PLAIN,
+$installer->appendClassAliasReplace(
+    'eav_attribute',
+    'attribute_model',
+    \Magento\Framework\Module\Setup\Migration::ENTITY_TYPE_MODEL,
+    \Magento\Framework\Module\Setup\Migration::FIELD_CONTENT_TYPE_PLAIN,
     array('attribute_id')
 );
-$installer->appendClassAliasReplace('eav_attribute', 'backend_model',
-    \Magento\Core\Model\Resource\Setup\Migration::ENTITY_TYPE_MODEL,
-    \Magento\Core\Model\Resource\Setup\Migration::FIELD_CONTENT_TYPE_PLAIN,
+$installer->appendClassAliasReplace(
+    'eav_attribute',
+    'backend_model',
+    \Magento\Framework\Module\Setup\Migration::ENTITY_TYPE_MODEL,
+    \Magento\Framework\Module\Setup\Migration::FIELD_CONTENT_TYPE_PLAIN,
     array('attribute_id')
 );
-$installer->appendClassAliasReplace('eav_attribute', 'frontend_model',
-    \Magento\Core\Model\Resource\Setup\Migration::ENTITY_TYPE_MODEL,
-    \Magento\Core\Model\Resource\Setup\Migration::FIELD_CONTENT_TYPE_PLAIN,
+$installer->appendClassAliasReplace(
+    'eav_attribute',
+    'frontend_model',
+    \Magento\Framework\Module\Setup\Migration::ENTITY_TYPE_MODEL,
+    \Magento\Framework\Module\Setup\Migration::FIELD_CONTENT_TYPE_PLAIN,
     array('attribute_id')
 );
-$installer->appendClassAliasReplace('eav_attribute', 'source_model',
-    \Magento\Core\Model\Resource\Setup\Migration::ENTITY_TYPE_MODEL,
-    \Magento\Core\Model\Resource\Setup\Migration::FIELD_CONTENT_TYPE_PLAIN,
+$installer->appendClassAliasReplace(
+    'eav_attribute',
+    'source_model',
+    \Magento\Framework\Module\Setup\Migration::ENTITY_TYPE_MODEL,
+    \Magento\Framework\Module\Setup\Migration::FIELD_CONTENT_TYPE_PLAIN,
     array('attribute_id')
 );
 
-$installer->appendClassAliasReplace('eav_entity_type', 'entity_model',
-    \Magento\Core\Model\Resource\Setup\Migration::ENTITY_TYPE_MODEL,
-    \Magento\Core\Model\Resource\Setup\Migration::FIELD_CONTENT_TYPE_PLAIN,
+$installer->appendClassAliasReplace(
+    'eav_entity_type',
+    'entity_model',
+    \Magento\Framework\Module\Setup\Migration::ENTITY_TYPE_MODEL,
+    \Magento\Framework\Module\Setup\Migration::FIELD_CONTENT_TYPE_PLAIN,
     array('entity_type_id')
 );
-$installer->appendClassAliasReplace('eav_entity_type', 'attribute_model',
-    \Magento\Core\Model\Resource\Setup\Migration::ENTITY_TYPE_MODEL,
-    \Magento\Core\Model\Resource\Setup\Migration::FIELD_CONTENT_TYPE_PLAIN,
+$installer->appendClassAliasReplace(
+    'eav_entity_type',
+    'attribute_model',
+    \Magento\Framework\Module\Setup\Migration::ENTITY_TYPE_MODEL,
+    \Magento\Framework\Module\Setup\Migration::FIELD_CONTENT_TYPE_PLAIN,
     array('entity_type_id')
 );
-$installer->appendClassAliasReplace('eav_entity_type', 'increment_model',
-    \Magento\Core\Model\Resource\Setup\Migration::ENTITY_TYPE_MODEL,
-    \Magento\Core\Model\Resource\Setup\Migration::FIELD_CONTENT_TYPE_PLAIN,
+$installer->appendClassAliasReplace(
+    'eav_entity_type',
+    'increment_model',
+    \Magento\Framework\Module\Setup\Migration::ENTITY_TYPE_MODEL,
+    \Magento\Framework\Module\Setup\Migration::FIELD_CONTENT_TYPE_PLAIN,
     array('entity_type_id')
 );
-$installer->appendClassAliasReplace('eav_entity_type', 'entity_attribute_collection',
-    \Magento\Core\Model\Resource\Setup\Migration::ENTITY_TYPE_RESOURCE,
-    \Magento\Core\Model\Resource\Setup\Migration::FIELD_CONTENT_TYPE_PLAIN,
+$installer->appendClassAliasReplace(
+    'eav_entity_type',
+    'entity_attribute_collection',
+    \Magento\Framework\Module\Setup\Migration::ENTITY_TYPE_RESOURCE,
+    \Magento\Framework\Module\Setup\Migration::FIELD_CONTENT_TYPE_PLAIN,
     array('entity_type_id')
 );
 

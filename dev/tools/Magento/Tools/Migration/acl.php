@@ -18,25 +18,23 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category   Tools
- * @package    acl
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-require_once('./Acl/Formatter.php');
-require_once('./Acl/FileManager.php');
-require_once('./Acl/Generator.php');
+require_once './Acl/Formatter.php';
+require_once './Acl/FileManager.php';
+require_once './Acl/Generator.php';
 
 $shortOpts = 'ph';
 $options = getopt($shortOpts);
 try {
     $tool = new \Magento\Tools\Migration\Acl\Generator(
         new \Magento\Tools\Migration\Acl\Formatter(),
-        new \Magento\Tools\Migration\Acl\FileManager(), $options
+        new \Magento\Tools\Migration\Acl\FileManager(),
+        $options
     );
     $tool->run();
 } catch (\Exception $exp) {
     echo $exp->getMessage();
 }
-

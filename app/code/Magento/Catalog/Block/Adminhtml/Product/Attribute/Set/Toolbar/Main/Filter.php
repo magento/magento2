@@ -18,22 +18,18 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Adminhtml
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
- * @category   Magento
- * @package    Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Toolbar\Main;
 
-class Filter
-    extends \Magento\Backend\Block\Widget\Form\Generic
+use Magento\Backend\Block\Widget\Form;
+
+class Filter extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
      * @var \Magento\Eav\Model\Entity\Attribute\SetFactory
@@ -42,15 +38,15 @@ class Filter
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Data\FormFactory $formFactory
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Eav\Model\Entity\Attribute\SetFactory $setFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Data\FormFactory $formFactory,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Eav\Model\Entity\Attribute\SetFactory $setFactory,
         array $data = array()
     ) {
@@ -58,24 +54,26 @@ class Filter
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _prepareForm()
     {
-        /** @var \Magento\Data\Form $form */
+        /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
 
-        $collection = $this->_setFactory->create()
-            ->getResourceCollection()
-            ->load()
-            ->toOptionArray();
+        $collection = $this->_setFactory->create()->getResourceCollection()->load()->toOptionArray();
 
-        $form->addField('set_switcher', 'select',
+        $form->addField(
+            'set_switcher',
+            'select',
             array(
                 'name' => 'set_switcher',
                 'required' => true,
                 'class' => 'left-col-block',
                 'no_span' => true,
                 'values' => $collection,
-                'onchange' => 'this.form.submit()',
+                'onchange' => 'this.form.submit()'
             )
         );
 

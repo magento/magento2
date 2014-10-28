@@ -23,44 +23,11 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <referenceBlock name="head">
-        <block class="Magento\Theme\Block\Html\Head\Css" name="jquery-fileuploader-css-jquery-fileupload-ui-css">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/fileUploader/css/jquery.fileupload-ui.css</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-fileuploader-jquery-iframe-transport-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/fileUploader/jquery.iframe-transport.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-fileuploader-jquery-fileupload-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/fileUploader/jquery.fileupload.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-fileuploader-load-image-min-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/fileUploader/load-image.min.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-fileuploader-canvas-to-blob-min-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/fileUploader/canvas-to-blob.min.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-fileuploader-jquery-fileupload-fp-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/fileUploader/jquery.fileupload-fp.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-cms-js-tiny-mce-form-submit-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Cms::js/tiny_mce_form_submit.js</argument>
-            </arguments>
-        </block>
-    </referenceBlock>
+<page layout="admin-2columns-left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="jquery/fileUploader/css/jquery.fileupload-ui.css"/>
+        <link src="jquery/fileUploader/bootstrap.js"/>
+    </head>
     <update handle="editor"/>
     <referenceContainer name="content">
         <block class="Magento\Cms\Block\Adminhtml\Page\Edit" name="cms_page_edit"/>
@@ -89,4 +56,4 @@
             </action>
         </block>
     </referenceContainer>
-</layout>
+</page>

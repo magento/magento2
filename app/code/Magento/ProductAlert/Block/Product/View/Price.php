@@ -18,12 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_ProductAlert
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\ProductAlert\Block\Product\View;
 
 /**
@@ -35,12 +32,11 @@ class Price extends \Magento\ProductAlert\Block\Product\View
      * Prepare price info
      *
      * @param string $template
-     * @return \Magento\View\Element\Template
+     * @return $this
      */
     public function setTemplate($template)
     {
-        if (!$this->_helper->isPriceAlertAllowed()
-            || !$this->_product || false === $this->_product->getCanShowPrice()
+        if (!$this->_helper->isPriceAlertAllowed() || !$this->_product || false === $this->_product->getCanShowPrice()
         ) {
             $template = '';
         } else {

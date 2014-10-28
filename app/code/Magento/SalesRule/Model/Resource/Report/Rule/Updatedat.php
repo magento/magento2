@@ -18,27 +18,22 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_SalesRule
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\SalesRule\Model\Resource\Report\Rule;
 
 /**
  * Rule report resource model with aggregation by updated at
  *
- * @category    Magento
- * @package     Magento_SalesRule
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\SalesRule\Model\Resource\Report\Rule;
-
 class Updatedat extends \Magento\SalesRule\Model\Resource\Report\Rule\Createdat
 {
     /**
      * Resource Report Rule constructor
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -48,9 +43,9 @@ class Updatedat extends \Magento\SalesRule\Model\Resource\Report\Rule\Createdat
     /**
      * Aggregate Coupons data by order updated at
      *
-     * @param mixed $from
-     * @param mixed $to
-     * @return \Magento\SalesRule\Model\Resource\Report\Rule\Updatedat
+     * @param mixed|null $from
+     * @param mixed|null $to
+     * @return $this
      */
     public function aggregate($from = null, $to = null)
     {

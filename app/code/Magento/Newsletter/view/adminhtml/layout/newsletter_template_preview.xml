@@ -23,12 +23,16 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <referenceBlock name="root">
-        <action method="setTemplate">
-            <argument name="template" xsi:type="string">Magento_Newsletter::preview/iframeswitcher.phtml</argument>
-        </action>
-        <block class="Magento\Newsletter\Block\Adminhtml\Template\Preview\Form" name="preview_form"/>
-        <block class="Magento\Backend\Block\Store\Switcher" name="store_switcher" template="Magento_Newsletter::preview/store.phtml"/>
-    </referenceBlock>
-</layout>
+<page layout="admin-1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <body>
+        <attribute name="id" value="html-body"/>
+        <attribute name="class" value="preview-window"/>
+    </body>
+    <remove name="backend.page"/>
+    <referenceContainer name="root">
+        <block name="preview.page.content" class="Magento\Backend\Block\Page" template="Magento_Newsletter::preview/iframeswitcher.phtml">
+            <block class="Magento\Newsletter\Block\Adminhtml\Queue\Preview\Form" name="preview_form"/>
+            <block class="Magento\Backend\Block\Store\Switcher" name="store_switcher" template="Magento_Backend::store/switcher.phtml" />
+        </block>
+    </referenceContainer>
+</page>

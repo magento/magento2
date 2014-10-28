@@ -1,0 +1,162 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Template for \Magento\Backend\Block\Widget\Grid\ColumnSet
+ * @var $this \Magento\Backend\Block\Widget\Grid\ColumnSet
+ */
+$numColumns = sizeof($this->getColumns());
+?>
+<?php if($this->getCollection()): ?>
+    <?php
+    /* This part is commented to remove all <col> tags from the code. */
+    /* foreach ($this->getColumns() as $_column): ?>
+        <col <?php echo $_column->getHtmlProperty() ?> />
+    <?php endforeach; */ ?>
+    <?php if ($this->isHeaderVisible() || $this->isFilterVisible()): ?>
+        <thead>
+            <?php if ($this->isHeaderVisible()): ?>
+                <tr class="headings">
+                <?php foreach ($this->getColumns() as $_column): ?>
+                <?php /* @var $_column \Magento\Backend\Block\Widget\Grid\Column */ ?>
+                    <th data-column="<?php echo $_column->getId() ?>" <?php echo $_column->getHeaderHtmlProperty() ?>>
+                            <span><?php echo $_column->getHeaderHtml() ?></span>
+                    </th>
+                <?php endforeach; ?>
+                </tr>
+            <?php endif; ?>
+            <?php if ($this->isFilterVisible()): ?>
+                <tr class="filter">
+                <?php $i=0;foreach ($this->getColumns() as $_column): ?>
+                    <th data-column="<?php echo $_column->getId() ?>" <?php echo $_column->getHeaderHtmlProperty() ?>>
+                        <?php echo $_column->getFilterHtml() ?>
+                    </th>
+                <?php endforeach; ?>
+                </tr>
+            <?php endif ?>
+        </thead>
+    <?php endif; ?>
+
+    <tbody>
+        <?php if ($this->getCollection()->getSize() > 0 && !$this->getIsCollapsed()): ?>
+        <?php foreach ($this->getCollection() as $_index => $_item): ?>
+            <?php if ($this->hasMultipleRows($_item)) :?>
+                <?php $this->updateItemByFirstMultiRow($_item); ?>
+                <tr title="<?php echo $this->getRowUrl($_item) ?>" data-role="row"
+                    <?php if ($_class = $this->getRowClass($_item)):?> class="<?php echo $_class; ?>"<?php endif;?>
+                ><?php $i=0; foreach ($this->getColumns() as $_column):
+                      if ($this->shouldRenderCell($_item, $_column)):
+                            $_rowspan = $this->getRowspan($_item, $_column);
+                          ?><td data-column="<?php echo $_column->getId() ?>"
+                                <?php echo ($_rowspan ? 'rowspan="' . $_rowspan . '" ' : '') ?>
+                                class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i==$numColumns?'last':'' ?>"
+                            >
+                                <?php echo (($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
+                            </td><?php
+                            if ($this->shouldRenderEmptyCell($_item, $_column)):?>
+                                <td colspan="<?php echo $this->getEmptyCellColspan($_item)?>" class="last">
+                                <?php echo $this->getEmptyCellLabel()?>
+                                </td><?php
+                            endif;
+                        endif;
+                    endforeach;
+                ?></tr>
+                <?php $_isFirstRow = true; ?>
+                <?php foreach ($this->getMultipleRows($_item) as $_i):?>
+                    <?php if ($_isFirstRow) : ?>
+                        <?php $_isFirstRow = false; continue; ?>
+                    <?php endif; ?>
+                    <tr data-role="row">
+                        <?php $i=0;foreach ($this->getMultipleRowColumns($_i) as $_column):
+                            ?><td data-column="<?php echo $_column->getId() ?>"
+                            class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i==$numColumns-1?'last':'' ?>"
+                        >
+                            <?php echo (($_html = $_column->getRowField($_i)) != '' ? $_html : '&nbsp;') ?>
+                        </td><?php
+                        endforeach; ?>
+                    </tr>
+                <?php endforeach;?>
+
+                <?php if ($this->shouldRenderSubTotal($_item)): ?>
+                    <tr class="subtotals">
+                        <?php $i = 0; foreach ($this->getMultipleRowColumns() as $_column): ?>
+                            <td data-column="<?php echo $_column->getId() ?>"
+                                class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i == $numColumns ? 'last' : '' ?>"
+                            >
+                                <?php echo $_column->hasSubtotalsLabel() ? $_column->getSubtotalsLabel()
+                                    : $_column->getRowField($this->getSubTotals($_item));
+                                ?>
+                            </td>
+                        <?php endforeach; ?>
+                    </tr>
+                <?php endif; ?>
+            <?php else: ?>
+                <tr data-role="row" title="<?php echo $this->getRowUrl($_item) ?>"<?php if ($_class = $this->getRowClass($_item)):?>
+                    class="<?php echo $_class; ?>"<?php endif;?>
+                >
+                    <?php $i=0;foreach ($this->getColumns() as $_column): ?>
+                        <?php if ($this->shouldRenderCell($_item, $_column)):?>
+                            <td data-column="<?php echo $_column->getId() ?>"
+                                class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i==$numColumns ? 'last' : '' ?>"
+                            >
+                                <?php echo (($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
+                            </td>
+                            <?php if ($this->shouldRenderEmptyCell($_item, $_column)):?>
+                                <td data-column="<?php echo $_column->getId() ?>"
+                                    colspan="<?php echo $this->getEmptyCellColspan($_item)?>"
+                                    class="col-no-records <?php echo $this->getEmptyTextClass() ?> last"
+                                >
+                                    <?php echo $this->getEmptyCellLabel()?>
+                                </td>
+                            <?php endif;?>
+                        <?php endif;?>
+                    <?php endforeach; ?>
+                </tr>
+            <?php endif; ?>
+        <?php endforeach; ?>
+        <?php elseif ($this->getEmptyText()): ?>
+            <tr data-role="row">
+                <td class="<?php echo $this->getEmptyTextClass() ?>"
+                    colspan="<?php echo $numColumns ?>"
+                ><?php echo $this->getEmptyText() ?></td>
+            </tr>
+        <?php endif; ?>
+    </tbody>
+
+    <?php if ($this->shouldRenderTotal()): ?>
+    <tfoot>
+        <tr class="totals" data-role="row">
+            <?php foreach ($this->getColumns() as $_column): ?>
+                <th data-column="<?php echo $_column->getId() ?>"
+                    class="<?php echo $_column->getCssProperty() ?>"
+                >
+                    <?php echo ($_column->hasTotalsLabel()) ? $_column->getTotalsLabel()
+                        : $_column->getRowField($this->getTotals()) ?>
+                </th>
+            <?php endforeach; ?>
+        </tr>
+    </tfoot>
+    <?php endif; ?>
+<?php endif ?>

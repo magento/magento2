@@ -19,13 +19,11 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Local
- * @package     Local_Module
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../../../../../../../../app/code/Magento/Backend/etc/menu.xsd">
     <menu>
         <add id="Local_Module::area_config_design_node_email_template" title="Title 1" module="Local_Module" sortOrder="50" parent="Module_Name::area_config_design_node" action="adminhtml/level_one" />
     </menu>

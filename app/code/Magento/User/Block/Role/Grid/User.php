@@ -21,67 +21,82 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\User\Block\Role\Grid;
+
+use Magento\Backend\Block\Widget\Grid\Column;
 
 /**
  * Acl role user grid.
  */
-namespace Magento\User\Block\Role\Grid;
-
 class User extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
      * Factory for user role model
      *
-     * @var \Magento\User\Model\RoleFactory
+     * @var \Magento\Authorization\Model\RoleFactory
      */
     protected $_roleFactory;
 
     /**
-     * @var \Magento\Json\EncoderInterface
+     * @var \Magento\Framework\Json\EncoderInterface
      */
     protected $_jsonEncoder;
 
     /**
+     * @var \Magento\User\Model\Resource\Role\User\CollectionFactory
+     */
+    protected $_userRolesFactory;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Core\Model\Registry $coreRegistry
-     * @param \Magento\User\Model\RoleFactory $roleFactory
+     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Authorization\Model\RoleFactory $roleFactory
+     * @param \Magento\User\Model\Resource\Role\User\CollectionFactory $userRolesFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Url $urlModel,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Json\EncoderInterface $jsonEncoder,
-        \Magento\Core\Model\Registry $coreRegistry,
-        \Magento\User\Model\RoleFactory $roleFactory,
-        array $data = array()
+        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\Authorization\Model\RoleFactory $roleFactory,
+        \Magento\User\Model\Resource\Role\User\CollectionFactory $userRolesFactory,
+        array $data = []
     ) {
-        parent::__construct($context, $urlModel, $backendHelper, $data);
+        parent::__construct($context, $backendHelper, $data);
         $this->_jsonEncoder = $jsonEncoder;
         $this->_coreRegistry = $coreRegistry;
         $this->_roleFactory = $roleFactory;
+        $this->_userRolesFactory = $userRolesFactory;
     }
 
+    /**
+     * Class constructor
+     *
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
         $this->setDefaultSort('role_user_id');
         $this->setDefaultDir('asc');
         $this->setId('roleUserGrid');
-        $this->setDefaultFilter(array('in_role_users'=>1));
         $this->setUseAjax(true);
     }
 
+    /**
+     * @param Column $column
+     * @return $this
+     */
     protected function _addColumnFilterToCollection($column)
     {
         if ($column->getId() == 'in_role_users') {
@@ -90,10 +105,10 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
                 $inRoleIds = 0;
             }
             if ($column->getFilter()->getValue()) {
-                $this->getCollection()->addFieldToFilter('user_id', array('in'=>$inRoleIds));
+                $this->getCollection()->addFieldToFilter('user_id', ['in' => $inRoleIds]);
             } else {
                 if ($inRoleIds) {
-                    $this->getCollection()->addFieldToFilter('user_id', array('nin'=>$inRoleIds));
+                    $this->getCollection()->addFieldToFilter('user_id', ['nin' => $inRoleIds]);
                 }
             }
         } else {
@@ -102,69 +117,70 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareCollection()
     {
         $roleId = $this->getRequest()->getParam('rid');
         $this->_coreRegistry->register('RID', $roleId);
-        $collection = $this->_roleFactory->create()->getUsersCollection();
+        $collection = $this->_userRolesFactory->create();
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareColumns()
     {
-        $this->addColumn('in_role_users', array(
-            'header_css_class' => 'a-center',
-            'type'      => 'checkbox',
-            'name'      => 'in_role_users',
-            'values'    => $this->getUsers(),
-            'align'     => 'center',
-            'index'     => 'user_id'
-        ));
+        $this->addColumn(
+            'in_role_users',
+            [
+                'header_css_class' => 'a-center',
+                'type' => 'checkbox',
+                'name' => 'in_role_users',
+                'values' => $this->getUsers(),
+                'align' => 'center',
+                'index' => 'user_id'
+            ]
+        );
 
-        $this->addColumn('role_user_id', array(
-            'header'    =>__('User ID'),
-            'width'     =>5,
-            'align'     =>'left',
-            'sortable'  =>true,
-            'index'     =>'user_id'
-        ));
+        $this->addColumn(
+            'role_user_id',
+            ['header' => __('User ID'), 'width' => 5, 'align' => 'left', 'sortable' => true, 'index' => 'user_id']
+        );
 
-        $this->addColumn('role_user_username', array(
-            'header'    =>__('User Name'),
-            'align'     =>'left',
-            'index'     =>'username'
-        ));
+        $this->addColumn(
+            'role_user_username',
+            ['header' => __('User Name'), 'align' => 'left', 'index' => 'username']
+        );
 
-        $this->addColumn('role_user_firstname', array(
-            'header'    =>__('First Name'),
-            'align'     =>'left',
-            'index'     =>'firstname'
-        ));
+        $this->addColumn(
+            'role_user_firstname',
+            ['header' => __('First Name'), 'align' => 'left', 'index' => 'firstname']
+        );
 
-        $this->addColumn('role_user_lastname', array(
-            'header'    =>__('Last Name'),
-            'align'     =>'left',
-            'index'     =>'lastname'
-        ));
+        $this->addColumn(
+            'role_user_lastname',
+            ['header' => __('Last Name'), 'align' => 'left', 'index' => 'lastname']
+        );
 
-        $this->addColumn('role_user_email', array(
-            'header'    =>__('Email'),
-            'width'     =>40,
-            'align'     =>'left',
-            'index'     =>'email'
-        ));
+        $this->addColumn(
+            'role_user_email',
+            ['header' => __('Email'), 'width' => 40, 'align' => 'left', 'index' => 'email']
+        );
 
-        $this->addColumn('role_user_is_active', array(
-            'header'    => __('Status'),
-            'index'     => 'is_active',
-            'align'     =>'left',
-            'type'      => 'options',
-            'options'   => array(
-                '1' => __('Active'),
-                '0' => __('Inactive')
-            ),
-        ));
+        $this->addColumn(
+            'role_user_is_active',
+            [
+                'header' => __('Status'),
+                'index' => 'is_active',
+                'align' => 'left',
+                'type' => 'options',
+                'options' => ['1' => __('Active'), '0' => __('Inactive')]
+            ]
+        );
 
         /*
         $this->addColumn('grid_actions',
@@ -187,24 +203,35 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
         return parent::_prepareColumns();
     }
 
+    /**
+     * @return string
+     */
     public function getGridUrl()
     {
         $roleId = $this->getRequest()->getParam('rid');
-        return $this->getUrl('*/*/editrolegrid', array('rid' => $roleId));
+        return $this->getUrl('*/*/editrolegrid', ['rid' => $roleId]);
     }
 
-    public function getUsers($json=false)
+    /**
+     * @param bool $json
+     * @return string|array
+     */
+    public function getUsers($json = false)
     {
-        if ( $this->getRequest()->getParam('in_role_user') != "" ) {
+        if ($this->getRequest()->getParam('in_role_user') != "") {
             return $this->getRequest()->getParam('in_role_user');
         }
-        $roleId = ( $this->getRequest()->getParam('rid') > 0 ) ?
-            $this->getRequest()->getParam('rid') :
-            $this->_coreRegistry->registry('RID');
+        $roleId = $this->getRequest()->getParam(
+            'rid'
+        ) > 0 ? $this->getRequest()->getParam(
+            'rid'
+        ) : $this->_coreRegistry->registry(
+            'RID'
+        );
         $users = $this->_roleFactory->create()->setId($roleId)->getRoleUsers();
         if (sizeof($users) > 0) {
             if ($json) {
-                $jsonUsers = array();
+                $jsonUsers = [];
                 foreach ($users as $usrid) {
                     $jsonUsers[$usrid] = 0;
                 }
@@ -216,9 +243,8 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
             if ($json) {
                 return '{}';
             } else {
-                return array();
+                return [];
             }
         }
     }
 }
-

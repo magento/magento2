@@ -23,12 +23,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<layout>
     <handle id="test">
-        <block class="Magento\View\Element\Template" name="block"/>
+        <block class="Magento\Framework\View\Element\Template" name="block"/>
         <container name="container" label="Container"/>
         <referenceBlock name="block">
-            <block class="Magento\View\Element\Template" name="another.block"/>
+            <block class="Magento\Framework\View\Element\Template" name="another.block"/>
         </referenceBlock>
         <referenceContainer name="container">
             <container name="another.container" label="Container"/>

@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Adminhtml
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,19 +25,15 @@
 /**
  * Catalog fieldset element renderer
  *
- * @category   Magento
- * @package    Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset;
 
-class Element
-    extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element
+class Element extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element
 {
     /**
      * Initialize block template
      */
-
     protected $_template = 'Magento_Catalog::catalog/form/renderer/fieldset/element.phtml';
 
     /**
@@ -80,10 +74,11 @@ class Element
     public function canDisplayUseDefault()
     {
         if ($attribute = $this->getAttribute()) {
-            if (!$attribute->isScopeGlobal()
-                && $this->getDataObject()
-                && $this->getDataObject()->getId()
-                && $this->getDataObject()->getStoreId()) {
+            if (!$attribute->isScopeGlobal() &&
+                $this->getDataObject() &&
+                $this->getDataObject()->getId() &&
+                $this->getDataObject()->getStoreId()
+            ) {
                 return true;
             }
         }
@@ -183,6 +178,6 @@ class Element
      */
     protected function _getDefaultStoreId()
     {
-        return \Magento\Core\Model\Store::DEFAULT_STORE_ID;
+        return \Magento\Store\Model\Store::DEFAULT_STORE_ID;
     }
 }

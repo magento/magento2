@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_GoogleShopping
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,8 +25,6 @@
 /**
  * Content attribute's model
  *
- * @category   Magento
- * @package    Magento_GoogleShopping
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\GoogleShopping\Model\Attribute;
@@ -39,14 +35,14 @@ class Content extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
      * Set current attribute to entry (for specified product)
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @param \Magento\Gdata\Gshopping\Entry $entry
-     * @return \Magento\Gdata\Gshopping\Entry
+     * @param \Magento\Framework\Gdata\Gshopping\Entry $entry
+     * @return \Magento\Framework\Gdata\Gshopping\Entry
      */
     public function convertAttribute($product, $entry)
     {
         $mapValue = $this->getProductAttributeValue($product);
         $description = $this->getGroupAttributeDescription();
-        if (!is_null($description)) {
+        if (!is_null($description) && !is_null($description->getAttributeId())) {
             $mapValue = $description->getProductAttributeValue($product);
         }
 
@@ -57,7 +53,7 @@ class Content extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
         } else {
             $descrText = 'no description';
         }
-        $descrText = $this->_gsData->cleanAtomAttribute($descrText);
+        $descrText = $this->_googleShoppingHelper->cleanAtomAttribute($descrText);
         $entry->setContent($entry->getService()->newContent()->setText($descrText));
 
         return $entry;

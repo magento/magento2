@@ -18,41 +18,48 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Block;
 
 class Cache extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
      * Class constructor
+     *
+     * @return void
      */
     protected function _construct()
     {
         $this->_controller = 'cache';
         $this->_headerText = __('Cache Storage Management');
         parent::_construct();
-        $this->_removeButton('add');
-        $this->_addButton('flush_magento', array(
-            'label'     => __('Flush Magento Cache'),
-            'onclick'   => 'setLocation(\'' . $this->getFlushSystemUrl() .'\')',
-            'class'     => 'delete',
-        ));
+        $this->buttonList->remove('add');
+        $this->buttonList->add(
+            'flush_magento',
+            array(
+                'label' => __('Flush Magento Cache'),
+                'onclick' => 'setLocation(\'' . $this->getFlushSystemUrl() . '\')',
+                'class' => 'primary flush-cache-magento'
+            )
+        );
 
         $message = __('Cache storage may contain additional data. Are you sure that you want flush it?');
-        $this->_addButton('flush_system', array(
-            'label'     => __('Flush Cache Storage'),
-            'onclick'   => 'confirmSetLocation(\''.$message.'\', \'' . $this->getFlushStorageUrl() .'\')',
-            'class'     => 'delete',
-        ));
+        $this->buttonList->add(
+            'flush_system',
+            array(
+                'label' => __('Flush Cache Storage'),
+                'onclick' => 'confirmSetLocation(\'' . $message . '\', \'' . $this->getFlushStorageUrl() . '\')',
+                'class' => 'flush-cache-storage'
+            )
+        );
     }
 
     /**
      * Get url for clean cache storage
+     *
+     * @return string
      */
     public function getFlushStorageUrl()
     {
@@ -61,6 +68,8 @@ class Cache extends \Magento\Backend\Block\Widget\Grid\Container
 
     /**
      * Get url for clean cache storage
+     *
+     * @return string
      */
     public function getFlushSystemUrl()
     {

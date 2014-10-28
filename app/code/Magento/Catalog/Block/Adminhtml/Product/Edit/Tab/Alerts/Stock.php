@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Adminhtml
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,13 +26,14 @@
 /**
  * Sign up for an alert when the product price changes grid
  *
- * @category   Magento
- * @package    Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts;
 
-class Stock extends \Magento\Backend\Block\Widget\Grid\Extended
+use Magento\Backend\Block\Widget\Grid;
+use Magento\Backend\Block\Widget\Grid\Extended;
+
+class Stock extends Extended
 {
     /**
      * Catalog data
@@ -50,7 +49,6 @@ class Stock extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\ProductAlert\Model\StockFactory $stockFactory
      * @param \Magento\Catalog\Helper\Data $catalogData
@@ -58,7 +56,6 @@ class Stock extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Url $urlModel,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\ProductAlert\Model\StockFactory $stockFactory,
         \Magento\Catalog\Helper\Data $catalogData,
@@ -66,9 +63,12 @@ class Stock extends \Magento\Backend\Block\Widget\Grid\Extended
     ) {
         $this->_stockFactory = $stockFactory;
         $this->_catalogData = $catalogData;
-        parent::__construct($context, $urlModel, $backendHelper, $data);
+        parent::__construct($context, $backendHelper, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -81,6 +81,9 @@ class Stock extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->setEmptyText(__('There are no customers for this alert.'));
     }
 
+    /**
+     * @return Grid
+     */
     protected function _prepareCollection()
     {
         $productId = $this->getRequest()->getParam('id');
@@ -89,61 +92,45 @@ class Stock extends \Magento\Backend\Block\Widget\Grid\Extended
             $websiteId = $this->_storeManager->getStore($store)->getWebsiteId();
         }
         if ($this->_catalogData->isModuleEnabled('Magento_ProductAlert')) {
-            $collection = $this->_stockFactory->create()
-                ->getCustomerCollection()
-                ->join($productId, $websiteId);
+            $collection = $this->_stockFactory->create()->getCustomerCollection()->join($productId, $websiteId);
             $this->setCollection($collection);
         }
         return parent::_prepareCollection();
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareColumns()
     {
-        $this->addColumn('firstname', array(
-            'header'    => __('First Name'),
-            'index'     => 'firstname',
-        ));
+        $this->addColumn('firstname', array('header' => __('First Name'), 'index' => 'firstname'));
 
-        $this->addColumn('lastname', array(
-            'header'    => __('Last Name'),
-            'index'     => 'lastname',
-        ));
+        $this->addColumn('lastname', array('header' => __('Last Name'), 'index' => 'lastname'));
 
-        $this->addColumn('email', array(
-            'header'    => __('Email'),
-            'index'     => 'email',
-        ));
+        $this->addColumn('email', array('header' => __('Email'), 'index' => 'email'));
 
-        $this->addColumn('add_date', array(
-            'header'    => __('Subscribe Date'),
-            'index'     => 'add_date',
-            'type'      => 'date'
-        ));
+        $this->addColumn('add_date', array('header' => __('Subscribe Date'), 'index' => 'add_date', 'type' => 'date'));
 
-        $this->addColumn('send_date', array(
-            'header'    => __('Last Notified'),
-            'index'     => 'send_date',
-            'type'      => 'date'
-        ));
+        $this->addColumn(
+            'send_date',
+            array('header' => __('Last Notified'), 'index' => 'send_date', 'type' => 'date')
+        );
 
-        $this->addColumn('send_count', array(
-            'header'    => __('Send Count'),
-            'index'     => 'send_count',
-        ));
+        $this->addColumn('send_count', array('header' => __('Send Count'), 'index' => 'send_count'));
 
         return parent::_prepareColumns();
     }
 
+    /**
+     * @return string
+     */
     public function getGridUrl()
     {
         $productId = $this->getRequest()->getParam('id');
-        $storeId   = $this->getRequest()->getParam('store', 0);
+        $storeId = $this->getRequest()->getParam('store', 0);
         if ($storeId) {
             $storeId = $this->_storeManager->getStore($storeId)->getId();
         }
-        return $this->getUrl('catalog/product/alertsStockGrid', array(
-            'id'    => $productId,
-            'store' => $storeId
-        ));
+        return $this->getUrl('catalog/product/alertsStockGrid', array('id' => $productId, 'store' => $storeId));
     }
 }

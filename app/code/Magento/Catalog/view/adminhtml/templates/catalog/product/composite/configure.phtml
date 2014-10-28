@@ -1,0 +1,51 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+ ?>
+<div id="product_composite_configure" class="product-configure-popup" style="display:none;">
+    <iframe name="product_composite_configure_iframe" id="product_composite_configure_iframe" style="width:0; height:0; border:0px solid #fff; position:absolute; top:-1000px; left:-1000px" onload="window.productConfigure && productConfigure.onLoadIFrame()"></iframe>
+    <form action="" method="post" id="product_composite_configure_form" enctype="multipart/form-data" onsubmit="productConfigure.onConfirmBtn(); return false;" target="product_composite_configure_iframe">
+        <div class="entry-edit">
+            <div id="product_composite_configure_messages" style="display: none;" >
+                <div class="messages"><div class="message error"><div></div></div></div>
+            </div>
+            <div id="product_composite_configure_form_fields" class="content"></div>
+            <div id="product_composite_configure_form_additional" style="display:none;"></div>
+            <div id="product_composite_configure_form_confirmed" style="display:none;"></div>
+        </div>
+        <input type="hidden" name="as_js_varname" value="iFrameResponse" />
+        <input type="hidden" name="form_key" value="<?php echo $this->getFormKey() ?>" />
+    </form>
+    <div id="product_composite_configure_confirmed" style="display:none;"></div>
+
+    <script type="text/javascript">
+        require([
+            "jquery",
+            "mage/mage"
+        ], function(jQuery){
+
+            jQuery('#product_composite_configure_form').mage('form').mage('validation');
+            
+        });
+    </script>
+</div>

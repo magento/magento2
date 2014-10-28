@@ -18,14 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Sales\Controller\Adminhtml;
 
 /**
@@ -54,8 +49,7 @@ class OrderTest extends \Magento\Backend\Utility\Controller
     public function testOrderViewAction()
     {
         /** @var $order \Magento\Sales\Model\Order */
-        $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Sales\Model\Order');
+        $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order');
         $order->load('100000001', 'increment_id');
         $this->dispatch('backend/sales/order/view/order_id/' . $order->getId());
         $this->assertContains('Los Angeles', $this->getResponse()->getBody());
@@ -74,8 +68,9 @@ class OrderTest extends \Magento\Backend\Utility\Controller
     public function testAddressActionNoVAT()
     {
         /** @var $address \Magento\Sales\Model\Order\Address */
-        $address = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Sales\Model\Order\Address');
+        $address = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Sales\Model\Order\Address'
+        );
         $address->load('a_unique_firstname', 'firstname');
         $this->getRequest()->setParam('address_id', $address->getId());
         $this->dispatch('backend/sales/order/address');
@@ -98,8 +93,7 @@ class OrderTest extends \Magento\Backend\Utility\Controller
     public function testAddCommentAction($status, $comment, $response)
     {
         /** @var $order \Magento\Sales\Model\Order */
-        $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Sales\Model\Order');
+        $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order');
         $order->load('100000001', 'increment_id');
 
         $this->getRequest()->setPost(array('history' => array('status' => $status, 'comment' => $comment)));
@@ -119,10 +113,10 @@ class OrderTest extends \Magento\Backend\Utility\Controller
         return array(
             array('status' => 'pending', 'comment' => 'Test comment', 'response' => 'Test comment'),
             array(
-                'status' => '',
+                'status' => 'processing',
                 'comment' => '',
                 'response' => '{"error":true,"message":"Comment text cannot be empty."}'
-            ),
+            )
         );
     }
 }

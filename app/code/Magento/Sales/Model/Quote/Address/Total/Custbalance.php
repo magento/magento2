@@ -18,18 +18,17 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Sales\Model\Quote\Address\Total;
 
-class Custbalance
-    extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
+class Custbalance extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
 {
+    /**
+     * @param \Magento\Sales\Model\Quote\Address $address
+     * @return $this
+     */
     public function collect(\Magento\Sales\Model\Quote\Address $address)
     {
         $address->setCustbalanceAmount(0);

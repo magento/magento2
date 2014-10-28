@@ -20,13 +20,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Config\Structure\Element;
 
 class FieldTest extends \PHPUnit_Framework_TestCase
@@ -41,7 +37,7 @@ class FieldTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_applicationMock;
+    protected $_storeManagerMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -66,11 +62,6 @@ class FieldTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_dsGraphMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $_depMapperMock;
 
     /**
@@ -81,35 +72,55 @@ class FieldTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_iteratorMock = $this->getMock(
-            'Magento\Backend\Model\Config\Structure\Element\Iterator', array(), array(), '', false
+            'Magento\Backend\Model\Config\Structure\Element\Iterator',
+            array(),
+            array(),
+            '',
+            false
         );
-        $this->_applicationMock = $this->getMock('Magento\Core\Model\App', array(), array(), '', false);
+        $this->_storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', array(), array(), '', false);
         $this->_backendFactoryMock = $this->getMock(
-            'Magento\Backend\Model\Config\BackendFactory', array(), array(), '', false
+            'Magento\Backend\Model\Config\BackendFactory',
+            array(),
+            array(),
+            '',
+            false
         );
         $this->_sourceFactoryMock = $this->getMock(
-            'Magento\Backend\Model\Config\SourceFactory', array(), array(), '', false
+            'Magento\Backend\Model\Config\SourceFactory',
+            array(),
+            array(),
+            '',
+            false
         );
         $this->_commentFactoryMock = $this->getMock(
-            'Magento\Backend\Model\Config\CommentFactory', array(), array(), '', false
+            'Magento\Backend\Model\Config\CommentFactory',
+            array(),
+            array(),
+            '',
+            false
         );
         $this->_blockFactoryMock = $this->getMock(
-            'Magento\View\Element\BlockFactory', array(), array(), '', false
-        );
-        $this->_dsGraphMock = $this->getMock(
-            'Magento\Core\Model\DataService\Graph', array(), array(), '', false
+            'Magento\Framework\View\Element\BlockFactory',
+            array(),
+            array(),
+            '',
+            false
         );
         $this->_depMapperMock = $this->getMock(
-            'Magento\Backend\Model\Config\Structure\Element\Dependency\Mapper', array(), array(), '', false
+            'Magento\Backend\Model\Config\Structure\Element\Dependency\Mapper',
+            array(),
+            array(),
+            '',
+            false
         );
 
         $this->_model = new \Magento\Backend\Model\Config\Structure\Element\Field(
-            $this->_applicationMock,
+            $this->_storeManagerMock,
             $this->_backendFactoryMock,
             $this->_sourceFactoryMock,
             $this->_commentFactoryMock,
             $this->_blockFactoryMock,
-            $this->_dsGraphMock,
             $this->_depMapperMock
         );
     }
@@ -117,7 +128,7 @@ class FieldTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         unset($this->_iteratorMock);
-        unset($this->_applicationMock);
+        unset($this->_storeManagerMock);
         unset($this->_backendFactoryMock);
         unset($this->_sourceFactoryMock);
         unset($this->_commentFactoryMock);
@@ -149,14 +160,24 @@ class FieldTest extends \PHPUnit_Framework_TestCase
         $config = array('comment' => array('model' => 'Model_Name'));
         $this->_model->setData($config, 'scope');
         $commentModelMock = $this->getMock('Magento\Backend\Model\Config\CommentInterface');
-        $commentModelMock->expects($this->once())
-            ->method('getCommentText')
-            ->with('currentValue')
-            ->will($this->returnValue('translatedValue'));
-        $this->_commentFactoryMock->expects($this->once())
-            ->method('create')
-            ->with('Model_Name')
-            ->will($this->returnValue($commentModelMock));
+        $commentModelMock->expects(
+            $this->once()
+        )->method(
+            'getCommentText'
+        )->with(
+            'currentValue'
+        )->will(
+            $this->returnValue('translatedValue')
+        );
+        $this->_commentFactoryMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            'Model_Name'
+        )->will(
+            $this->returnValue($commentModelMock)
+        );
         $this->assertEquals('translatedValue', $this->_model->getComment('currentValue'));
     }
 
@@ -169,12 +190,17 @@ class FieldTest extends \PHPUnit_Framework_TestCase
     public function testGetTooltipCreatesTooltipBlock()
     {
         $this->_model->setData(array('tooltip_block' => 'Magento\Core\Block\Tooltip'), 'scope');
-        $tooltipBlock = $this->getMock('Magento\View\Element\BlockInterface');
+        $tooltipBlock = $this->getMock('Magento\Framework\View\Element\BlockInterface');
         $tooltipBlock->expects($this->once())->method('toHtml')->will($this->returnValue('tooltip block'));
-        $this->_blockFactoryMock->expects($this->once())
-            ->method('createBlock')
-            ->with('Magento\Core\Block\Tooltip')
-            ->will($this->returnValue($tooltipBlock));
+        $this->_blockFactoryMock->expects(
+            $this->once()
+        )->method(
+            'createBlock'
+        )->with(
+            'Magento\Core\Block\Tooltip'
+        )->will(
+            $this->returnValue($tooltipBlock)
+        );
         $this->assertEquals('tooltip block', $this->_model->getTooltip());
     }
 
@@ -205,11 +231,16 @@ class FieldTest extends \PHPUnit_Framework_TestCase
 
     public function testGetBackendModelCreatesBackendModel()
     {
-        $this->_backendFactoryMock->expects($this->once())
-            ->method('create')
-            ->with('Magento\Model\Name')
-            ->will($this->returnValue('backend_model_object'));
-        $this->_model->setData(array('backend_model' => 'Magento\Model\Name'), 'scope');
+        $this->_backendFactoryMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            'Magento\Framework\Model\Name'
+        )->will(
+            $this->returnValue('backend_model_object')
+        );
+        $this->_model->setData(array('backend_model' => 'Magento\Framework\Model\Name'), 'scope');
         $this->assertEquals('backend_model_object', $this->_model->getBackendModel());
     }
 
@@ -258,12 +289,16 @@ class FieldTest extends \PHPUnit_Framework_TestCase
             'type' => 'multiselect',
             'can_be_empty' => true,
             'source_model' => 'some_model',
-            'someArr' => array(
-                'testVar' => 'testVal'
-            )
+            'someArr' => array('testVar' => 'testVal')
         );
         $this->_model->setData($params, 'scope');
-        $elementMock = $this->getMock('Magento\Data\Form\Element\Text', array('setOriginalData'), array(), '', false);
+        $elementMock = $this->getMock(
+            'Magento\Framework\Data\Form\Element\Text',
+            array('setOriginalData'),
+            array(),
+            '',
+            false
+        );
         unset($params['someArr']);
         $elementMock->expects($this->once())->method('setOriginalData')->with($params);
         $this->_model->populateInput($elementMock);
@@ -306,14 +341,8 @@ class FieldTest extends \PHPUnit_Framework_TestCase
 
     public function testGetOptionsWithOptions()
     {
-        $option = array(
-            array('label' => 'test', 'value' => 0),
-            array('label' => 'test2', 'value' => 1)
-        );
-        $expected = array(
-            array('label' => __('test'), 'value' => 0),
-            array('label' => __('test2'), 'value' => 1)
-        );
+        $option = array(array('label' => 'test', 'value' => 0), array('label' => 'test2', 'value' => 1));
+        $expected = array(array('label' => __('test'), 'value' => 0), array('label' => __('test2'), 'value' => 1));
         $this->_model->setData(array('options' => array('option' => $option)), 'scope');
         $this->assertEquals($expected, $this->_model->getOptions());
     }
@@ -324,13 +353,13 @@ class FieldTest extends \PHPUnit_Framework_TestCase
             array(
                 'label' => 'test',
                 'value' => "{{\Magento\Backend\Model\Config\Structure\Element\FieldTest::FIELD_TEST_CONSTANT}}"
-            ),
+            )
         );
         $expected = array(
             array(
                 'label' => __('test'),
                 'value' => \Magento\Backend\Model\Config\Structure\Element\FieldTest::FIELD_TEST_CONSTANT
-            ),
+            )
         );
 
         $this->_model->setData(array('options' => array('option' => $option)), 'scope');
@@ -340,19 +369,26 @@ class FieldTest extends \PHPUnit_Framework_TestCase
     public function testGetOptionsUsesOptionsInterfaceIfNoMethodIsProvided()
     {
         $this->_model->setData(array('source_model' => 'Source_Model_Name'), 'scope');
-        $sourceModelMock = $this->getMock('Magento\Core\Model\Option\ArrayInterface');
-        $this->_sourceFactoryMock->expects($this->once())
-            ->method('create')
-            ->with('Source_Model_Name')
-            ->will($this->returnValue($sourceModelMock));
-        $expected = array(
-            array('label' => 'test', 'value' => 0),
-            array('label' => 'test2', 'value' => 1)
+        $sourceModelMock = $this->getMock('Magento\Framework\Option\ArrayInterface');
+        $this->_sourceFactoryMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            'Source_Model_Name'
+        )->will(
+            $this->returnValue($sourceModelMock)
         );
-        $sourceModelMock->expects($this->once())
-            ->method('toOptionArray')
-            ->with(false)
-            ->will($this->returnValue($expected));
+        $expected = array(array('label' => 'test', 'value' => 0), array('label' => 'test2', 'value' => 1));
+        $sourceModelMock->expects(
+            $this->once()
+        )->method(
+            'toOptionArray'
+        )->with(
+            false
+        )->will(
+            $this->returnValue($expected)
+        );
         $this->assertEquals($expected, $this->_model->getOptions());
     }
 
@@ -362,16 +398,19 @@ class FieldTest extends \PHPUnit_Framework_TestCase
             array('source_model' => 'Source_Model_Name::retrieveElements', 'path' => 'path', 'type' => 'multiselect'),
             'scope'
         );
-        $sourceModelMock = $this->getMock('Magento\Object', array('setPath', 'retrieveElements'));
-        $this->_sourceFactoryMock->expects($this->once())
-            ->method('create')
-            ->with('Source_Model_Name')
-            ->will($this->returnValue($sourceModelMock));
+        $sourceModelMock = $this->getMock('Magento\Framework\Object', array('setPath', 'retrieveElements'));
+        $this->_sourceFactoryMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            'Source_Model_Name'
+        )->will(
+            $this->returnValue($sourceModelMock)
+        );
         $expected = array('testVar1' => 'testVal1', 'testVar2' => array('subvar1' => 'subval1'));
         $sourceModelMock->expects($this->once())->method('setPath')->with('path/');
-        $sourceModelMock->expects($this->once())
-            ->method('retrieveElements')
-            ->will($this->returnValue($expected));
+        $sourceModelMock->expects($this->once())->method('retrieveElements')->will($this->returnValue($expected));
         $this->assertEquals($expected, $this->_model->getOptions());
     }
 
@@ -381,71 +420,25 @@ class FieldTest extends \PHPUnit_Framework_TestCase
             array('source_model' => 'Source_Model_Name::retrieveElements', 'path' => 'path', 'type' => 'select'),
             'scope'
         );
-        $sourceModelMock = $this->getMock('Magento\Object', array('setPath', 'retrieveElements'));
-        $this->_sourceFactoryMock->expects($this->once())
-            ->method('create')
-            ->with('Source_Model_Name')
-            ->will($this->returnValue($sourceModelMock));
+        $sourceModelMock = $this->getMock('Magento\Framework\Object', array('setPath', 'retrieveElements'));
+        $this->_sourceFactoryMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            'Source_Model_Name'
+        )->will(
+            $this->returnValue($sourceModelMock)
+        );
         $sourceModelMock->expects($this->once())->method('setPath')->with('path/');
-        $sourceModelMock->expects($this->once())
-            ->method('retrieveElements')
-            ->will($this->returnValue(array(
-                'var1' => 'val1',
-                'var2' => array(
-                    'subvar1' => 'subval1'
-                )
-            )));
-        $expected = array(
-            array('label' => 'val1', 'value' => 'var1'),
-            array('subvar1' => 'subval1')
+        $sourceModelMock->expects(
+            $this->once()
+        )->method(
+            'retrieveElements'
+        )->will(
+            $this->returnValue(array('var1' => 'val1', 'var2' => array('subvar1' => 'subval1')))
         );
-        $this->assertEquals($expected, $this->_model->getOptions());
-    }
-
-    public function testGetOptionsWithServiceOptions()
-    {
-        $option = array(
-            array('customLabel' => 'test', 'customId' => 0),
-            array('customLabel' => 'test2', 'customId' => 1)
-        );
-        $this->_dsGraphMock->expects($this->once())
-            ->method('get')
-            ->with('serviceCallName')
-            ->will($this->returnValue($option));
-
-        $expected = array(
-            array('label' => __('test'), 'value' => 0),
-            array('label' => __('test2'), 'value' => 1)
-        );
-        $options = array(
-            'service_call'      => 'serviceCallName',
-            'idField'           => 'customId',
-            'labelField'        => 'customLabel',
-            'includeSelectLine' => 'false',
-        );
-        $this->_model->setData(array('source_service' => $options), 'scope');
-        $this->assertEquals($expected, $this->_model->getOptions());
-    }
-
-    public function testGetOptionsWithServiceOptionsButNoFieldNamesSpecified()
-    {
-        $option = array(
-            array('name' => 'test', 'id' => 0),
-            array('name' => 'test2', 'id' => 1)
-        );
-        $this->_dsGraphMock->expects($this->once())
-            ->method('get')
-            ->with('serviceCallName')
-            ->will($this->returnValue($option));
-
-        $expected = array(
-            array('label' => __('test'), 'value' => 0),
-            array('label' => __('test2'), 'value' => 1)
-        );
-        $options = array(
-            'service_call' => 'serviceCallName',
-        );
-        $this->_model->setData(array('source_service' => $options), 'scope');
+        $expected = array(array('label' => 'val1', 'value' => 'var1'), array('subvar1' => 'subval1'));
         $this->assertEquals($expected, $this->_model->getOptions());
     }
 
@@ -460,26 +453,26 @@ class FieldTest extends \PHPUnit_Framework_TestCase
             'field_4' => array(
                 'id' => 'section_2/group_3/field_4',
                 'value' => 'someValue',
-                'dependPath' => array(
-                    'section_2',
-                    'group_3',
-                    'field_4',
-                ),
+                'dependPath' => array('section_2', 'group_3', 'field_4')
             ),
             'field_1' => array(
                 'id' => 'section_1/group_3/field_1',
                 'value' => 'someValue',
-                'dependPath' => array(
-                    'section_1',
-                    'group_3',
-                    'field_1',
-                ),
-            ),
+                'dependPath' => array('section_1', 'group_3', 'field_1')
+            )
         );
         $this->_model->setData(array('depends' => array('fields' => $fields)), 0);
-        $this->_depMapperMock->expects($this->once())
-            ->method('getDependencies')->with($fields, 'test_scope', 'test_prefix')
-            ->will($this->returnArgument(0));
+        $this->_depMapperMock->expects(
+            $this->once()
+        )->method(
+            'getDependencies'
+        )->with(
+            $fields,
+            'test_scope',
+            'test_prefix'
+        )->will(
+            $this->returnArgument(0)
+        );
 
         $this->assertEquals($fields, $this->_model->getDependencies('test_prefix', 'test_scope'));
     }
@@ -489,16 +482,10 @@ class FieldTest extends \PHPUnit_Framework_TestCase
         $this->_model->setData(array(), 'scope');
         $this->assertFalse($this->_model->isAdvanced());
 
-        $this->_model->setData(
-            array('advanced' => true),
-            'scope'
-        );
+        $this->_model->setData(array('advanced' => true), 'scope');
         $this->assertTrue($this->_model->isAdvanced());
 
-        $this->_model->setData(
-            array('advanced' => false),
-            'scope'
-        );
+        $this->_model->setData(array('advanced' => false), 'scope');
         $this->assertFalse($this->_model->isAdvanced());
     }
 
@@ -507,10 +494,7 @@ class FieldTest extends \PHPUnit_Framework_TestCase
         $this->_model->setData(array(), 'scope');
         $this->assertNull($this->_model->getValidation());
 
-        $this->_model->setData(
-            array('validate' => 'validate'),
-            'scope'
-        );
+        $this->_model->setData(array('validate' => 'validate'), 'scope');
         $this->assertEquals('validate', $this->_model->getValidation());
     }
 }

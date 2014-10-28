@@ -21,20 +21,19 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Block\Account;
 
 /**
  * Customer authorization link
  */
-class AuthorizationLink extends \Magento\View\Element\Html\Link
+class AuthorizationLink extends \Magento\Framework\View\Element\Html\Link
 {
     /**
      * Customer session
      *
-     * @var \Magento\Customer\Model\Session
+     * @var \Magento\Framework\App\Http\Context
      */
-    protected $_customerSession;
+    protected $httpContext;
 
     /**
      * @var \Magento\Customer\Helper\Data
@@ -42,20 +41,28 @@ class AuthorizationLink extends \Magento\View\Element\Html\Link
     protected $_customerHelper;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Customer\Model\Session $session
+     * @var \Magento\Core\Helper\PostData
+     */
+    protected $_postDataHelper;
+
+    /**
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Customer\Helper\Data $customerHelper
+     * @param \Magento\Core\Helper\PostData $postDataHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Customer\Model\Session $session,
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Customer\Helper\Data $customerHelper,
+        \Magento\Core\Helper\PostData $postDataHelper,
         array $data = array()
     ) {
         parent::__construct($context, $data);
-        $this->_customerSession = $session;
+        $this->httpContext = $httpContext;
         $this->_customerHelper = $customerHelper;
+        $this->_postDataHelper = $postDataHelper;
     }
 
     /**
@@ -63,7 +70,7 @@ class AuthorizationLink extends \Magento\View\Element\Html\Link
      */
     public function getHref()
     {
-        return $this->_customerSession->isLoggedIn()
+        return $this->isLoggedIn()
             ? $this->_customerHelper->getLogoutUrl()
             : $this->_customerHelper->getLoginUrl();
     }
@@ -73,7 +80,26 @@ class AuthorizationLink extends \Magento\View\Element\Html\Link
      */
     public function getLabel()
     {
-        return $this->_customerSession->isLoggedIn() ? __('Log Out') : __('Log In');
+        return $this->isLoggedIn() ? __('Log Out') : __('Log In');
     }
 
+    /**
+     * Retrieve params for post request
+     *
+     * @return string
+     */
+    public function getPostParams()
+    {
+        return $this->_postDataHelper->getPostData($this->getHref());
+    }
+
+    /**
+     * Is logged in
+     *
+     * @return bool
+     */
+    public function isLoggedIn()
+    {
+        return $this->httpContext->getValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH);
+    }
 }

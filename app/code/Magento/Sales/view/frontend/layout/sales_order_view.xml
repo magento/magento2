@@ -23,16 +23,25 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <update handle="customer_account"/>
+    <update handle="sales_order_item_renderers"/>
+    <update handle="sales_order_item_price"/>
+    <referenceContainer name="page.main.title">
+        <block class="Magento\Sales\Block\Order\Info" name="order.status" template="order/order_status.phtml" />
+        <block class="Magento\Sales\Block\Order\Info" name="order.date" template="order/order_date.phtml" />
+        <container name="order.actions.container" htmlTag="div" htmlClass="actions-toolbar order-actions-toolbar">
+            <block class="Magento\Sales\Block\Order\Info\Buttons" as="buttons" name="sales.order.info.buttons" cacheable="false"/>
+        </container>
+    </referenceContainer>
+    <referenceContainer name="sales.order.info.buttons">
+        <block class="Magento\Sales\Block\Order\Info\Buttons\Rss" as="buttons.rss" name="sales.order.info.buttons.rss" cacheable="false"/>
+    </referenceContainer>
     <referenceContainer name="content">
-        <block class="Magento\Sales\Block\Order\Info" as="info" name="sales.order.info">
-            <block class="Magento\Sales\Block\Order\Info\Buttons" as="buttons" name="sales.order.info.buttons"/>
-        </block>
-        <block class="Magento\Sales\Block\Order\View" name="sales.order.view" after="sales.order.info">
+        <block class="Magento\Sales\Block\Order\View" name="order.comments" template="order/order_comments.phtml" before="sales.order.info.links" />
+        <block class="Magento\Sales\Block\Order\View" name="sales.order.view" cacheable="false">
             <block class="Magento\Sales\Block\Order\Items" name="order_items" template="order/items.phtml">
-                <block class="Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer" as="default" template="order/items/renderer/default.phtml"/>
-                <block class="Magento\Sales\Block\Order\Item\Renderer\Grouped" as="grouped" template="order/items/renderer/default.phtml"/>
+                <block class="Magento\Framework\View\Element\RendererList" name="sales.order.items.renderers" as="renderer.list" />
                 <block class="Magento\Sales\Block\Order\Totals" name="order_totals" template="order/totals.phtml">
                     <arguments>
                         <argument name="label_properties" xsi:type="string">colspan="4" class="mark"</argument>
@@ -42,7 +51,8 @@
                 </block>
             </block>
         </block>
+        <block class="Magento\Sales\Block\Order\Info" as="info" name="sales.order.info" after="sales.order.view" />
     </referenceContainer>
     <update handle="sales_order_info_links"/>
-    <block class="Magento\View\Element\Template" name="additional.product.info" template="Magento_Core::template.phtml"/>
-</layout>
+    <block class="Magento\Framework\View\Element\Template" name="additional.product.info" template="Magento_Core::template.phtml"/>
+</page>

@@ -1,0 +1,71 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/**  @var $this \Magento\Checkout\Block\Cart */
+?>
+<?php $mergedCells = ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices() ? 2 : 1); ?>
+<?php echo $this->getChildHtml('form_before') ?>
+<form action="<?php echo $this->getUrl('checkout/cart/updatePost') ?>"
+          method="post"
+          id="form-validate"
+          data-mage-init='{"validation":{}}'
+          class="form cart">
+    <?php echo $this->getBlockHtml('formkey'); ?>
+    <div class="cart table-wrapper<?php echo $mergedCells == 2 ? ' detailed' : ''; ?>">
+        <table id="shopping-cart-table"
+               class="cart items data"
+               data-mage-init='{"shoppingCart":{"emptyCartButton": "action.clear",
+               "updateCartActionContainer": "#update_cart_action_container"}}'>
+            <caption><?php echo __('Shopping Cart Items') ?></caption>
+            <thead>
+                <tr>
+                    <th class="col item"><span><?php echo __('Item') ?></span></th>
+                    <th class="col price"><span><?php echo __('Price') ?></span></th>
+                    <th class="col qty"><span><?php echo __('Qty') ?></span></th>
+                    <th class="col subtotal"><span><?php echo __('Subtotal') ?></span></th>
+                </tr>
+            </thead>
+            <?php foreach($this->getItems() as $_item): ?>
+                <?php echo $this->getItemHtml($_item) ?>
+            <?php endforeach ?>
+        </table>
+    </div>
+    <div class="cart main actions">
+        <?php if($this->getContinueShoppingUrl()): ?>
+            <a class="action continue" href="<?php echo $this->getContinueShoppingUrl() ?>" title="<?php echo __('Continue Shopping') ?>">
+                <span><?php echo __('Continue Shopping') ?></span>
+            </a>
+        <?php endif; ?>
+        <button type="submit" name="update_cart_action" value="update_qty" title="<?php echo __('Update Shopping Cart'); ?>" class="action update">
+            <span><?php echo __('Update Shopping Cart'); ?></span>
+        </button>
+        <button type="submit" name="update_cart_action" value="empty_cart" title="<?php echo __('Clear Shopping Cart'); ?>" class="action clear" id="empty_cart_button">
+            <span><?php echo __('Clear Shopping Cart'); ?></span>
+        </button>
+        <!--[if lt IE 8]>
+        <input type="hidden" value="" id="update_cart_action_container" />
+        <![endif]-->
+    </div>
+</form>
+<?php echo $this->getChildHtml('shopping.cart.table.after'); ?>

@@ -21,27 +21,26 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Payment\Model\Method;
 
 /**
  * Class \Magento\Payment\Model\Method\Factory
  */
-namespace Magento\Payment\Model\Method;
-
 class Factory
 {
     /**
      * Object manager
      *
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
     /**
      * Construct
      *
-     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManager $objectManager
      */
-    public function __construct(\Magento\ObjectManager $objectManager)
+    public function __construct(\Magento\Framework\ObjectManager $objectManager)
     {
         $this->_objectManager = $objectManager;
     }
@@ -51,15 +50,16 @@ class Factory
      *
      * @param string $className
      * @param array $data
-     * @return \Magento\Payment\Model\Method\AbstractMethod
-     * @throws \Magento\Core\Exception
+     * @return \Magento\Payment\Model\MethodInterface
+     * @throws \Magento\Framework\Model\Exception
      */
     public function create($className, $data = array())
     {
         $method = $this->_objectManager->create($className, $data);
-        if (!($method instanceof \Magento\Payment\Model\Method\AbstractMethod)) {
-            throw new \Magento\Core\Exception(sprintf("%s class doesn't extend \Magento\Payment\Model\Method\AbstractMethod",
-                $className));
+        if (!$method instanceof \Magento\Payment\Model\MethodInterface) {
+            throw new \Magento\Framework\Model\Exception(
+                sprintf("%s class doesn't implement \Magento\Payment\Model\MethodInterface", $className)
+            );
         }
         return $method;
     }

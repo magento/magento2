@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Install
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,6 +26,8 @@
  * Installation wizard model
  */
 namespace Magento\Install\Model;
+
+use Magento\Framework\UrlInterface;
 
 class Wizard
 {
@@ -41,20 +41,25 @@ class Wizard
     /**
      * Url builder
      *
-     * @var \Magento\UrlInterface
+     * @var UrlInterface
      */
     protected $_urlBuilder;
 
     /**
      * Init install wizard
+     * @param UrlInterface $urlBuilder
+     * @param Config $installConfig
      */
-    public function __construct(\Magento\UrlInterface $urlBuilder, \Magento\Install\Model\Config $installConfig)
+    public function __construct(UrlInterface $urlBuilder, Config $installConfig)
     {
         $this->_steps = $installConfig->getWizardSteps();
         $this->_urlBuilder = $urlBuilder;
         $this->_initSteps();
     }
 
+    /**
+     * @return void
+     */
     protected function _initSteps()
     {
         foreach (array_keys($this->_steps) as $index) {
@@ -90,14 +95,15 @@ class Wizard
     /**
      * Get wizard step by request
      *
-     * @param   \Magento\App\RequestInterface $request
-     * @return  \Magento\Object|bool
+     * @param   \Magento\Framework\App\RequestInterface $request
+     * @return  \Magento\Framework\Object|bool
      */
-    public function getStepByRequest(\Magento\App\RequestInterface $request)
+    public function getStepByRequest(\Magento\Framework\App\RequestInterface $request)
     {
         foreach ($this->_steps as $step) {
-            if ($step->getController() == $request->getControllerName()
-                    && $step->getAction() == $request->getActionName()) {
+            if ($step->getController() == $request->getControllerName() &&
+                $step->getAction() == $request->getActionName()
+            ) {
                 return $step;
             }
         }
@@ -108,7 +114,7 @@ class Wizard
      * Get wizard step by name
      *
      * @param   string $name
-     * @return  \Magento\Object|bool
+     * @return  \Magento\Framework\Object|bool
      */
     public function getStepByName($name)
     {

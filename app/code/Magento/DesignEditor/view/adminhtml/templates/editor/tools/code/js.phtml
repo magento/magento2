@@ -1,0 +1,214 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php /** @var $this \Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\Js */ ?>
+<div id="vde-tab-js-messages-placeholder"></div>
+<div class="files-wrapper">
+    <div class="files-list">
+        <div class="files-list-header">
+            <h5 class="title" title="<?php echo $this->escapeHtml($this->getTitle()) ?>"><?php echo $this->getTitle() ?></h5>
+            <span class="action-add" title="<?php echo __('Add Files'); ?>">
+                <span><?php echo __('Add Files'); ?></span>
+                <?php echo $this->getFormHtml() ?>
+            </span>
+        </div>
+        <div>
+            <p><?php echo __('Drag and drop files to reorder them.'); ?></p>
+        </div>
+        <div id="js-file-uploader" class="uploader"></div>
+        <div class="files-list-content">
+            <ul class="items ui-sortable"></ul>
+        </div>
+    </div>
+</div>
+
+<div class="no-display" id="js-file-uploader-template">
+    <div id="{{id}}" class="file-row">
+        <span class="file-info">{{name}} ({{size}})</span>
+        <div class="progressbar-container">
+            <div class="progressbar upload-progress" style="width: 0%;"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+
+
+<li class="js-file item no-display" id="js-uploaded-file-template">
+    <span class="filename" title="${name}">${name}</span>
+    <a href="#" class="action-delete" title="<?php echo __('Delete File'); ?>" data-id="${id}">
+        <span><?php echo __('Delete File'); ?></span>
+    </a>
+</li>
+
+<li class="no-display" id="js-empty-template">
+    <span class="filename"><?php echo __('We found no javascript files.') ?></span>
+</li>
+
+<script type="text/javascript">
+require([
+    "jquery",
+    "jquery/ui",
+    "jquery/file-uploader",
+    "mage/translate",
+    "Magento_Theme/js/custom-js-list"
+], function($){
+
+    $('#vde-tab-js .files-list-content .items').themeJsList({
+        templateId : '#js-uploaded-file-template',
+        emptyTemplateId: '#js-empty-template',
+        refreshFileListEvent : 'refreshJsList',
+        prefixItemId: 'js-file-'
+    });
+    $('body').trigger('refreshJsList', {jsList : <?php echo $this->getFiles() ?>});
+
+    $('#vde-tab-js .js-file .action-delete').live('click', function() {
+        if (!confirm('<?php echo $this->getConfirmMessageDelete() ?>')) {
+            return false;
+        }
+
+        $.ajax({
+            url: '<?php echo $this->getJsDeleteUrl(); ?>',
+            data: {js_removed_files: [$(this).data('id')]},
+            dataType: 'json'
+        }).done(function(data) {
+            if (!data.error) {
+                $('body').trigger('refreshJsList', {jsList : data.files});
+                $('#vde-tab-js .files-list-content .items').trigger('refreshIframe');
+            }
+
+            $('#vde-tab-js .js-file .action-delete').trigger('addMessage', {
+                containerId : '#vde-tab-js-messages-placeholder',
+                message : data.message
+            });
+        });
+
+        return false;
+    });
+
+    $('#js_files_uploader').fileupload({
+        dataType: 'json',
+        replaceFileInput: false,
+        sequentialUploads: true,
+        url : '<?php echo $this->getJsUploadUrl(); ?>',
+
+        /**
+         * Add data
+         * @param e
+         * @param data
+         */
+        add: function (e, data) {
+            $.each(data.files, function (index, file) {
+                data.fileId =  Math.random().toString(36).substr(2,9);
+                var progressTmpl = $('#js-file-uploader-template').children(':first').clone();
+                progressTmpl.attr('id', data.fileId);
+                var fileSize = typeof(file.size) == "undefined"
+                    ? $.mage.__('We could not detect a size.')
+                    : byteConvert(file.size);
+                var fileInfoHtml = progressTmpl.html().replace('{{size}}', fileSize)
+                    .replace('{{name}}', file.name);
+                progressTmpl.html(fileInfoHtml) ;
+                progressTmpl.appendTo('#js-file-uploader');
+            });
+            data.submit();
+        },
+
+        /**
+         * On done event
+         * @param e
+         * @param data
+         */
+        done: function (e, data) {
+            var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+            $(progressSelector).css('width','100%');
+
+            $(this).val('');
+            if (!data.result.error) {
+                $(progressSelector).removeClass('upload-progress').addClass('upload-success');
+                $('#js_files_uploader').trigger('refreshJsList', {jsList : data.result.files});
+            } else {
+                $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
+            }
+            $('#' + data.fileId).delay(2000).fadeOut(2000);
+
+            $('#js_files_uploader').trigger('addMessage', {
+                containerId: '#vde-tab-js-messages-placeholder',
+                message: data.result.message
+            });
+        },
+
+        /**
+         * On progress
+         * @param e
+         * @param data
+         */
+        progress: function(e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+            $(progressSelector).css('width', progress + '%');
+        },
+
+        stop: function(e, data) {
+            $('.ui-sortable').trigger('refreshIframe');
+        },
+
+        /**
+         * Fail event
+         * @param e
+         * @param data
+         */
+        fail: function(e, data) {
+            var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+            $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
+
+            $(this).val('');
+            alert($.mage.__('We don\'t recognize or support this file extension type.'));
+        }
+    });
+
+    $('.ui-sortable').sortable({
+        update: function( event, ui ) {
+            var jsOrder = $(this).sortable('serialize', {key: 'js_order[]'});
+            $.ajax({
+                url: '<?php echo $this->getJsReorderUrl(); ?>',
+                type: 'POST',
+                dataType: 'json',
+                data: jsOrder,
+                showLoader: false,
+                success: $.proxy(function(response) {
+                    $('.ui-sortable').trigger('refreshIframe');
+                    $('.ui-sortable').trigger('addMessage', {
+                        containerId : '#vde-tab-custom-messages-placeholder',
+                        message : response.message
+                    });
+                }, this),
+                error: $.proxy(function() {
+                    alert($.mage.__('Sorry, there was an unknown error.'));
+                }, this)
+            });
+        }
+    });
+    $('.ui-sortable').disableSelection();
+
+});
+</script>

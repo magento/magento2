@@ -24,16 +24,20 @@
  */
 namespace Magento\Backend\Controller\Adminhtml;
 
-class Noroute extends \Magento\Backend\App\Action
+class Noroute
 {
     /**
-     * Noroute action
+     * No route action
+     *
+     * @param null $coreRoute
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function indexAction()
+    public function execute($coreRoute = null)
     {
         $this->getResponse()->setHeader('HTTP/1.1', '404 Not Found');
         $this->getResponse()->setHeader('Status', '404 File not found');
         $this->_view->loadLayout(array('default', 'adminhtml_noroute'));
         $this->_view->renderLayout();
     }
-} 
+}

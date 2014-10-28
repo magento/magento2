@@ -18,40 +18,40 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Email
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Email\Block\Adminhtml\Template\Grid\Renderer;
 
 /**
  * Adminhtml system templates grid block sender item renderer
  *
- * @category   Magento
- * @package    Magento_Email
  * @author      Magento Core Team <core@magentocommerce.com>
  */
- 
-namespace Magento\Email\Block\Adminhtml\Template\Grid\Renderer;
-
 class Sender extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
-    public function render(\Magento\Object $row)
+    /**
+     * Render grid column
+     *
+     * @param \Magento\Framework\Object $row
+     * @return string
+     */
+    public function render(\Magento\Framework\Object $row)
     {
         $str = '';
-        
+
         if ($row->getTemplateSenderName()) {
             $str .= htmlspecialchars($row->getTemplateSenderName()) . ' ';
-        }        
-        
+        }
+
         if ($row->getTemplateSenderEmail()) {
             $str .= '[' . $row->getTemplateSenderEmail() . ']';
-        }        
-        
+        }
+
         if ($str == '') {
             $str .= '---';
         }
-            
+
         return $str;
     }
 }

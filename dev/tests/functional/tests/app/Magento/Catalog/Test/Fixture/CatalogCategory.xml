@@ -1,0 +1,194 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<fixture class="Magento\Catalog\Test\Fixture\CatalogCategory">
+    <module>Magento_Catalog</module>
+    <type>eav</type>
+    <entity_type>catalog_category_entity</entity_type>
+    <collection>Magento\Catalog\Model\Resource\Category\Collection</collection>
+    <fields>
+        <entity_id>
+            <attribute_code>entity_id</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required>1</is_required>
+            <default_value></default_value>
+            <input></input>
+        </entity_id>
+        <entity_type_id>
+            <attribute_code>entity_type_id</attribute_code>
+            <backend_type>smallint</backend_type>
+            <is_required></is_required>
+            <default_value>0</default_value>
+            <input></input>
+        </entity_type_id>
+        <attribute_set_id>
+            <attribute_code>attribute_set_id</attribute_code>
+            <backend_type>smallint</backend_type>
+            <is_required></is_required>
+            <default_value>0</default_value>
+            <input></input>
+        </attribute_set_id>
+        <description>
+            <attribute_code>description</attribute_code>
+            <backend_type>text</backend_type>
+            <is_required>0</is_required>
+            <default_value></default_value>
+            <input>textarea</input>
+        </description>
+        <parent_id>
+            <attribute_code>parent_id</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required></is_required>
+            <default_value>0</default_value>
+            <source>Magento\Catalog\Test\Fixture\CatalogCategory\ParentId</source>
+            <input></input>
+        </parent_id>
+        <created_at>
+            <attribute_code>created_at</attribute_code>
+            <backend_type>timestamp</backend_type>
+            <is_required></is_required>
+            <default_value></default_value>
+            <input></input>
+        </created_at>
+        <updated_at>
+            <attribute_code>updated_at</attribute_code>
+            <backend_type>timestamp</backend_type>
+            <is_required></is_required>
+            <default_value></default_value>
+            <input></input>
+        </updated_at>
+        <path>
+            <attribute_code>path</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required></is_required>
+            <default_value></default_value>
+            <input></input>
+        </path>
+        <position>
+            <attribute_code>position</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required></is_required>
+            <default_value></default_value>
+            <input></input>
+        </position>
+        <level>
+            <attribute_code>level</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required></is_required>
+            <default_value>0</default_value>
+            <input></input>
+        </level>
+        <children_count>
+            <attribute_code>children_count</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required></is_required>
+            <default_value></default_value>
+            <input></input>
+        </children_count>
+        <available_product_listing_config>
+            <attribute_code>available_product_listing_config</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required></is_required>
+            <default_value></default_value>
+            <input>checkbox</input>
+        </available_product_listing_config>
+        <available_sort_by>
+            <attribute_code>available_sort_by</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required>0</is_required>
+            <default_value></default_value>
+            <input>multiselect</input>
+        </available_sort_by>
+        <default_product_listing_config>
+            <attribute_code>default_product_listing_config</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required>0</is_required>
+            <default_value></default_value>
+            <input>checkbox</input>
+        </default_product_listing_config>
+        <default_sort_by>
+            <attribute_code>default_sort_by</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required>0</is_required>
+            <default_value></default_value>
+            <input>select</input>
+        </default_sort_by>
+        <meta_title>
+            <attribute_code>meta_title</attribute_code>
+            <backend_type>text</backend_type>
+            <is_required></is_required>
+            <default_value></default_value>
+            <input></input>
+        </meta_title>
+        <id>
+            <attribute_code>id</attribute_code>
+            <backend_type>virtual</backend_type>
+        </id>
+        <name>
+            <attribute_code>name</attribute_code>
+            <backend_type>virtual</backend_type>
+            <group>general_information</group>
+        </name>
+        <is_active>
+            <attribute_code>is_active</attribute_code>
+            <backend_type>virtual</backend_type>
+            <group>general_information</group>
+        </is_active>
+        <is_anchor>
+            <attribute_code>is_anchor</attribute_code>
+            <backend_type>virtual</backend_type>
+            <group>general_information</group>
+        </is_anchor>
+        <url_key>
+            <attribute_code>url_key</attribute_code>
+            <backend_type>virtual</backend_type>
+            <group>general_information</group>
+        </url_key>
+        <include_in_menu>
+            <attribute_code>include_in_menu</attribute_code>
+            <backend_type>virtual</backend_type>
+            <group>general_information</group>
+        </include_in_menu>
+        <landing_page>
+            <attribute_code>landing_page</attribute_code>
+            <backend_type>virtual</backend_type>
+            <input>select</input>
+            <group>display_setting</group>
+        </landing_page>
+        <display_mode>
+            <attribute_code>display_mode</attribute_code>
+            <backend_type>virtual</backend_type>
+            <input>select</input>
+            <group>display_setting</group>
+        </display_mode>
+        <category_products>
+            <attribute_code>category_products</attribute_code>
+            <backend_type>virtual</backend_type>
+            <source>Magento\Catalog\Test\Fixture\CatalogCategory\CategoryProducts</source>
+        </category_products>
+    </fields>
+    <repository_class>Magento\Catalog\Test\Repository\CatalogCategory</repository_class>
+    <handler_interface>Magento\Catalog\Test\Handler\CatalogCategory\CatalogCategoryInterface</handler_interface>
+</fixture>

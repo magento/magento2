@@ -18,25 +18,30 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Tax
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Tax\Model\TaxClass\Type;
 
 /**
  * Customer Tax Class
  */
-namespace Magento\Tax\Model\TaxClass\Type;
-
-class Customer
-    extends \Magento\Tax\Model\TaxClass\AbstractType
-    implements \Magento\Tax\Model\TaxClass\Type\TypeInterface
+class Customer extends \Magento\Tax\Model\TaxClass\AbstractType
 {
     /**
-     * @var \Magento\Customer\Model\Group
+     * @var \Magento\Customer\Service\V1\CustomerGroupServiceInterface
      */
-    protected $_modelCustomerGroup;
+    protected $groupService;
+
+    /**
+     * @var \Magento\Framework\Service\V1\Data\FilterBuilder
+     */
+    protected $filterBuilder;
+
+    /**
+     * @var \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder
+     */
+    protected $searchCriteriaBuilder;
 
     /**
      * Class Type
@@ -47,28 +52,36 @@ class Customer
 
     /**
      * @param \Magento\Tax\Model\Calculation\Rule $calculationRule
-     * @param \Magento\Customer\Model\Group $modelCustomerGroup
+     * @param \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService
+     * @param \Magento\Framework\Service\V1\Data\FilterBuilder $filterBuilder
+     * @param \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param array $data
      */
     public function __construct(
         \Magento\Tax\Model\Calculation\Rule $calculationRule,
-        \Magento\Customer\Model\Group $modelCustomerGroup,
+        \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService,
+        \Magento\Framework\Service\V1\Data\FilterBuilder $filterBuilder,
+        \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder $searchCriteriaBuilder,
         array $data = array()
     ) {
         parent::__construct($calculationRule, $data);
-        $this->_modelCustomerGroup = $modelCustomerGroup;
+        $this->groupService = $groupService;
+        $this->filterBuilder = $filterBuilder;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
-     * Get Customer Groups with this tax class
-     *
-     * @return \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+     * {@inheritdoc}
      */
-    public function getAssignedToObjects()
+    public function isAssignedToObjects()
     {
-        return $this->_modelCustomerGroup
-            ->getCollection()
-            ->addFieldToFilter('tax_class_id', $this->getId());
+        $searchCriteria = $this->searchCriteriaBuilder->addFilter(
+            [$this->filterBuilder->setField('tax_class_id')->setValue($this->getId())->create()]
+        )->create();
+
+        $result = $this->groupService->searchGroups($searchCriteria);
+        $items = $result->getItems();
+        return !empty($items);
     }
 
     /**

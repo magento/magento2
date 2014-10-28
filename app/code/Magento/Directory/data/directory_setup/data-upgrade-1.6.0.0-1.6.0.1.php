@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Directory
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -30,11 +28,12 @@
 $installer = $this;
 
 $installer->getConnection()->insert(
-    $installer->getTable('core_config_data'), array(
-       'scope'    => 'default',
-       'scope_id' => 0,
-       'path'     => \Magento\Directory\Helper\Data::XML_PATH_DISPLAY_ALL_STATES,
-       'value'    => 1
+    $installer->getTable('core_config_data'),
+    array(
+        'scope' => 'default',
+        'scope_id' => 0,
+        'path' => \Magento\Directory\Helper\Data::XML_PATH_DISPLAY_ALL_STATES,
+        'value' => 1
     )
 );
 
@@ -42,18 +41,18 @@ $installer->getConnection()->insert(
  * @var $countries array
  */
 $countries = array();
-foreach($installer->getDirectoryData()->getCountryCollection() as $country) {
-    if($country->getRegionCollection()->getSize() > 0) {
+foreach ($installer->getDirectoryData()->getCountryCollection() as $country) {
+    if ($country->getRegionCollection()->getSize() > 0) {
         $countries[] = $country->getId();
     }
 }
 
 $installer->getConnection()->insert(
-    $installer->getTable('core_config_data'), array(
-        'scope'    => 'default',
+    $installer->getTable('core_config_data'),
+    array(
+        'scope' => 'default',
         'scope_id' => 0,
-        'path'     => \Magento\Directory\Helper\Data::XML_PATH_STATES_REQUIRED,
-        'value'    => implode(',', $countries)
+        'path' => \Magento\Directory\Helper\Data::XML_PATH_STATES_REQUIRED,
+        'value' => implode(',', $countries)
     )
 );
-

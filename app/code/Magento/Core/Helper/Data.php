@@ -18,63 +18,67 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Helper;
+
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Core data helper
  */
-class Data extends \Magento\App\Helper\AbstractHelper
+class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    const XML_PATH_DEFAULT_COUNTRY              = 'general/country/default';
-    const XML_PATH_DEV_ALLOW_IPS                = 'dev/restrict/allow_ips';
-    const XML_PATH_CONNECTION_TYPE              = 'global/resources/default_setup/connection/type';
+    /**
+     * Currency cache context
+     */
+    const CONTEXT_CURRENCY = 'current_currency';
 
-    const XML_PATH_SINGLE_STORE_MODE_ENABLED = 'general/single_store_mode/enabled';
+    /**
+     * Store cache context
+     */
+    const CONTEXT_STORE = 'store';
+
+    /**#@+
+     * Paths for various config settings
+     */
+    const XML_PATH_DEFAULT_LOCALE = 'general/locale/code';
+    const XML_PATH_DEFAULT_TIMEZONE = 'general/locale/timezone';
+    const XML_PATH_DEFAULT_COUNTRY = 'general/country/default';
+    const XML_PATH_DEV_ALLOW_IPS = 'dev/restrict/allow_ips';
+    const XML_PATH_CONNECTION_TYPE = 'global/resources/default_setup/connection/type';
+    /**#@- */
 
     /**
      * Const for correct dividing decimal values
      */
     const DIVIDE_EPSILON = 10000;
 
-    protected $_allowedFormats = array(
-        \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_FULL,
-        \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_LONG,
-        \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_MEDIUM,
-        \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_SHORT
-    );
-
     /**
-     * Core event manager proxy
-     *
-     * @var \Magento\Event\ManagerInterface
+     * @var string[]
      */
-    protected $_eventManager = null;
+    protected $_allowedFormats = array(
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_FULL,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_LONG,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
+    );
 
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\Core\Model\Locale
-     */
-    protected $_locale;
-
-    /**
-     * @var \Magento\App\State
+     * @var \Magento\Framework\App\State
      */
     protected $_appState;
 
@@ -84,27 +88,32 @@ class Data extends \Magento\App\Helper\AbstractHelper
     protected $_dbCompatibleMode;
 
     /**
-     * @param \Magento\App\Helper\Context $context
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Locale $locale
-     * @param \Magento\App\State $appState
+     * @var PriceCurrencyInterface
+     */
+    protected $_priceCurrency;
+
+    /**
+     * @param \Magento\Framework\App\Helper\Context $context
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\State $appState
+     * @param PriceCurrencyInterface $priceCurrency
      * @param bool $dbCompatibleMode
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Locale $locale,
-        \Magento\App\State $appState,
+        \Magento\Framework\App\Helper\Context $context,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Framework\App\State $appState,
+        PriceCurrencyInterface $priceCurrency,
         $dbCompatibleMode = true
     ) {
         parent::__construct($context);
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
-        $this->_locale = $locale;
         $this->_appState = $appState;
         $this->_dbCompatibleMode = $dbCompatibleMode;
+        $this->_priceCurrency =  $priceCurrency;
     }
 
     /**
@@ -113,33 +122,35 @@ class Data extends \Magento\App\Helper\AbstractHelper
      * @param   float $value
      * @param   bool $format
      * @param   bool $includeContainer
-     * @return  mixed
+     * @return  float|string
      */
     public function currency($value, $format = true, $includeContainer = true)
     {
-        return $this->currencyByStore($value, null, $format, $includeContainer);
+        return $format
+            ? $this->_priceCurrency->convertAndFormat($value, $includeContainer)
+            : $this->_priceCurrency->convert($value);
     }
 
     /**
      * Convert and format price value for specified store
      *
      * @param   float $value
-     * @param   int|\Magento\Core\Model\Store $store
+     * @param   int|\Magento\Store\Model\Store $store
      * @param   bool $format
      * @param   bool $includeContainer
-     * @return  mixed
+     * @return  float|string
      */
     public function currencyByStore($value, $store = null, $format = true, $includeContainer = true)
     {
-        try {
-            if (!($store instanceof \Magento\Core\Model\Store)) {
-                $store = $this->_app->getStore($store);
-            }
-
-            $value = $store->convertPrice($value, $format, $includeContainer);
-        }
-        catch (\Exception $e){
-            $value = $e->getMessage();
+        if ($format) {
+            $value = $this->_priceCurrency->convertAndFormat(
+                $value,
+                $includeContainer,
+                PriceCurrencyInterface::DEFAULT_PRECISION,
+                $store
+            );
+        } else {
+            $value = $this->_priceCurrency->convert($value, $store);
         }
 
         return $value;
@@ -154,7 +165,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function formatCurrency($value, $includeContainer = true)
     {
-        return $this->currency($value, true, $includeContainer);
+        return $this->_priceCurrency->convertAndFormat($value, $includeContainer);
     }
 
     /**
@@ -166,9 +177,8 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function formatPrice($price, $includeContainer = true)
     {
-        return $this->_storeManager->getStore()->formatPrice($price, $includeContainer);
+        return $this->_priceCurrency->format($price, $includeContainer);
     }
-
 
     /**
      * @param null $storeId
@@ -178,12 +188,17 @@ class Data extends \Magento\App\Helper\AbstractHelper
     {
         $allow = true;
 
-        $allowedIps = $this->_coreStoreConfig->getConfig(self::XML_PATH_DEV_ALLOW_IPS, $storeId);
+        $allowedIps = $this->_scopeConfig->getValue(
+            self::XML_PATH_DEV_ALLOW_IPS,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
         $remoteAddr = $this->_remoteAddress->getRemoteAddress();
         if (!empty($allowedIps) && !empty($remoteAddr)) {
             $allowedIps = preg_split('#\s*,\s*#', $allowedIps, null, PREG_SPLIT_NO_EMPTY);
             if (array_search($remoteAddr, $allowedIps) === false
-                && array_search($this->_httpHeader->getHttpHost(), $allowedIps) === false) {
+                && array_search($this->_httpHeader->getHttpHost(), $allowedIps) === false
+            ) {
                 $allow = false;
             }
         }
@@ -200,7 +215,9 @@ class Data extends \Magento\App\Helper\AbstractHelper
     {
         $types = array();
         foreach ($this->_cacheConfig->getTypes() as $type => $node) {
-            $types[$type] = $node['label'];
+            if (array_key_exists('label', $node)) {
+                $types[$type] = $node['label'];
+            }
         }
         return $types;
     }
@@ -209,17 +226,14 @@ class Data extends \Magento\App\Helper\AbstractHelper
      * Encode the mixed $valueToEncode into the JSON format
      *
      * @param mixed $valueToEncode
-     * @param  boolean $cycleCheck Optional; whether or not to check for object recursion; off by default
-     * @param  array $options Additional options used during encoding
+     * @param boolean $cycleCheck Optional; whether or not to check for object recursion; off by default
+     * @param array $options Additional options used during encoding
      * @return string
      */
     public function jsonEncode($valueToEncode, $cycleCheck = false, $options = array())
     {
         $json = \Zend_Json::encode($valueToEncode, $cycleCheck, $options);
-        if ($this->_translator->isAllowed()) {
-            $this->_translator->processResponseBody($json, true);
-        }
-
+        $this->translateInline->processResponseBody($json, true);
         return $json;
     }
 
@@ -239,12 +253,16 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Return default country code
      *
-     * @param \Magento\Core\Model\Store|string|int $store
+     * @param \Magento\Store\Model\Store|string|int $store
      * @return string
      */
     public function getDefaultCountry($store = null)
     {
-        return $this->_coreStoreConfig->getConfig(self::XML_PATH_DEFAULT_COUNTRY, $store);
+        return $this->_scopeConfig->getValue(
+            self::XML_PATH_DEFAULT_COUNTRY,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
 
     /**
@@ -255,18 +273,5 @@ class Data extends \Magento\App\Helper\AbstractHelper
     public function useDbCompatibleMode()
     {
         return $this->_dbCompatibleMode;
-    }
-
-    /**
-     * Check if Single-Store mode is enabled in configuration
-     *
-     * This flag only shows that admin does not want to show certain UI components at backend (like store switchers etc)
-     * if Magento has only one store view but it does not check the store view collection
-     *
-     * @return bool
-     */
-    public function isSingleStoreModeEnabled()
-    {
-        return (bool) $this->_coreStoreConfig->getConfig(self::XML_PATH_SINGLE_STORE_MODE_ENABLED);
     }
 }

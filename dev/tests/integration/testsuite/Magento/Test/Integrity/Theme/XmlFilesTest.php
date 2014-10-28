@@ -18,14 +18,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Integrity\Theme;
+
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 class XmlFilesTest extends \PHPUnit_Framework_TestCase
 {
@@ -42,7 +40,7 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
         }
         $this->_validateConfigFile(
             $file,
-            $this->getPath(\Magento\Filesystem::LIB) . '/Magento/Config/etc/view.xsd'
+            $this->getPath(DirectoryList::LIB_INTERNAL) . '/Magento/Framework/Config/etc/view.xsd'
         );
     }
 
@@ -51,14 +49,12 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function viewConfigFileDataProvider()
     {
-        $result = array();
-        $files = glob(
-            $this->getPath(\Magento\Filesystem::THEMES) . '/*/*/view.xml'
-        );
+        $result = [];
+        $files = glob($this->getPath(DirectoryList::THEMES) . '/*/*/view.xml');
         foreach ($files as $file) {
-            $result[$file] = array($file);
+            $result[substr($file, strlen(BP))] = [$file];
         }
-        return $result === array() ? array(array(self::NO_VIEW_XML_FILES_MARKER)) : $result;
+        return $result === [] ? [[self::NO_VIEW_XML_FILES_MARKER]] : $result;
     }
 
     /**
@@ -75,12 +71,10 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function themeConfigFileExistsDataProvider()
     {
-        $result = array();
-        $files = glob(
-            $this->getPath(\Magento\Filesystem::THEMES) . '/*/*', GLOB_ONLYDIR
-        );
+        $result = [];
+        $files = glob($this->getPath(DirectoryList::THEMES) . '/*/*/*', GLOB_ONLYDIR);
         foreach ($files as $themeDir) {
-            $result[$themeDir] = array($themeDir);
+            $result[substr($themeDir, strlen(BP))] = [$themeDir];
         }
         return $result;
     }
@@ -93,7 +87,7 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
     {
         $this->_validateConfigFile(
             $file,
-            $this->getPath(\Magento\Filesystem::LIB) . '/Magento/Config/etc/theme.xsd'
+            $this->getPath(DirectoryList::LIB_INTERNAL) . '/Magento/Framework/Config/etc/theme.xsd'
         );
     }
 
@@ -116,12 +110,10 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function themeConfigFileDataProvider()
     {
-        $result = array();
-        $files = glob(
-            $this->getPath(\Magento\Filesystem::THEMES) . '/*/*/theme.xml'
-        );
+        $result = [];
+        $files = glob($this->getPath(DirectoryList::THEMES) . '/*/*/*/theme.xml');
         foreach ($files as $file) {
-            $result[$file] = array($file);
+            $result[substr($file, strlen(BP))] = [$file];
         }
         return $result;
     }
@@ -135,7 +127,8 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
      */
     protected function _validateConfigFile($file, $schemaFile)
     {
-        $domConfig = new \Magento\Config\Dom(file_get_contents($file));
+        $domConfig = new \Magento\Framework\Config\Dom(file_get_contents($file));
+        $errors = array();
         $result = $domConfig->validate($schemaFile, $errors);
         $message = "Invalid XML-file: {$file}\n";
         foreach ($errors as $error) {
@@ -152,6 +145,10 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
      */
     protected function getPath($code)
     {
-        return \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Filesystem')->getPath($code);
+        /** @var \Magento\Framework\Filesystem $filesystem */
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\Filesystem'
+        );
+        return $filesystem->getDirectoryRead($code)->getAbsolutePath();
     }
 }

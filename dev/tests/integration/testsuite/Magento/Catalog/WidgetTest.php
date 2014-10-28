@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog;
 
 class WidgetTest extends \PHPUnit_Framework_TestCase
@@ -34,8 +30,9 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
         $type = 'Magento\Catalog\Block\Product\Widget\NewWidget';
 
         /** @var $model \Magento\Widget\Model\Widget\Instance */
-        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Widget\Model\Widget\Instance');
+        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Widget\Model\Widget\Instance'
+        );
         $config = $model->setType($type)->getWidgetConfigAsArray();
         $templates = $config['parameters']['template']['values'];
         $this->assertArrayHasKey('default', $templates);
@@ -51,9 +48,9 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
             $containers[] = $block['container_name'];
         }
 
-        $this->assertContains('left', $containers);
+        $this->assertContains('sidebar.main', $containers);
         $this->assertContains('content', $containers);
-        $this->assertContains('right', $containers);
+        $this->assertContains('sidebar.additional', $containers);
 
         // Verify that the correct id (code) is found for this widget instance type.
         $code = $model->setType($type)->getWidgetReference('type', $type, 'code');

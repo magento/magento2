@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,39 +26,34 @@
 /**
  * Catalog product abstract price backend attribute model with customer group specific
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Model\Resource\Product\Attribute\Backend\Groupprice;
 
-abstract class AbstractGroupprice
-    extends \Magento\Core\Model\Resource\Db\AbstractDb
+abstract class AbstractGroupprice extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Load Tier Prices for product
      *
      * @param int $productId
      * @param int $websiteId
-     * @return \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Tierprice
+     * @return array
      */
     public function loadPriceData($productId, $websiteId = null)
     {
         $adapter = $this->_getReadAdapter();
 
         $columns = array(
-            'price_id'      => $this->getIdFieldName(),
-            'website_id'    => 'website_id',
-            'all_groups'    => 'all_groups',
-            'cust_group'    => 'customer_group_id',
-            'price'         => 'value',
+            'price_id' => $this->getIdFieldName(),
+            'website_id' => 'website_id',
+            'all_groups' => 'all_groups',
+            'cust_group' => 'customer_group_id',
+            'price' => 'value'
         );
 
         $columns = $this->_loadPriceDataColumns($columns);
 
-        $select  = $adapter->select()
-            ->from($this->getMainTable(), $columns)
-            ->where('entity_id=?', $productId);
+        $select = $adapter->select()->from($this->getMainTable(), $columns)->where('entity_id=?', $productId);
 
         $this->_loadPriceDataSelect($select);
 
@@ -89,8 +82,8 @@ abstract class AbstractGroupprice
     /**
      * Load specific db-select data
      *
-     * @param \Magento\DB\Select $select
-     * @return \Magento\DB\Select
+     * @param \Magento\Framework\DB\Select $select
+     * @return \Magento\Framework\DB\Select
      */
     protected function _loadPriceDataSelect($select)
     {
@@ -109,9 +102,7 @@ abstract class AbstractGroupprice
     {
         $adapter = $this->_getWriteAdapter();
 
-        $conds   = array(
-            $adapter->quoteInto('entity_id = ?', $productId)
-        );
+        $conds = array($adapter->quoteInto('entity_id = ?', $productId));
 
         if (!is_null($websiteId)) {
             $conds[] = $adapter->quoteInto('website_id = ?', $websiteId);
@@ -129,13 +120,13 @@ abstract class AbstractGroupprice
     /**
      * Save tier price object
      *
-     * @param \Magento\Object $priceObject
+     * @param \Magento\Framework\Object $priceObject
      * @return \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Tierprice
      */
-    public function savePriceData(\Magento\Object $priceObject)
+    public function savePriceData(\Magento\Framework\Object $priceObject)
     {
         $adapter = $this->_getWriteAdapter();
-        $data    = $this->_prepareDataForTable($priceObject, $this->getMainTable());
+        $data = $this->_prepareDataForTable($priceObject, $this->getMainTable());
 
         if (!empty($data[$this->getIdFieldName()])) {
             $where = $adapter->quoteInto($this->getIdFieldName() . ' = ?', $data[$this->getIdFieldName()]);

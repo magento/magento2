@@ -19,13 +19,11 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Theme
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Core/etc/config.xsd">
     <default>
         <design>
             <head translate="default_description">
@@ -46,7 +44,6 @@ Disallow: /*.js$
 Disallow: /*.css$
 Disallow: /checkout/
 Disallow: /app/
-Disallow: /downloader/
 Disallow: /js/
 Disallow: /lib/
 Disallow: /*.php$
@@ -66,7 +63,7 @@ Disallow: /*SID=
                 <welcome>Default welcome msg!</welcome>
             </header>
             <footer translate="copyright">
-                <copyright>&amp;copy; 2013 Magento Demo Store. All Rights Reserved.</copyright>
+                <copyright>&amp;copy; 2014 Magento Demo Store. All Rights Reserved.</copyright>
             </footer>
         </design>
         <theme>

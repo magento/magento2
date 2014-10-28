@@ -18,26 +18,18 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Reports
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Reports\Model\Event;
 
 /**
  * Reports Event observer model
- *
- * @category   Magento
- * @package    Magento_Reports
- * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Reports\Model\Event;
-
 class Observer
 {
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -62,27 +54,36 @@ class Observer
     protected $_customerSession;
 
     /**
-     * @var \Magento\Log\Model\Visitor
+     * @var \Magento\Customer\Model\Visitor
      */
-    protected $_logVisitor;
+    protected $_customerVisitor;
 
+    /**
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Reports\Model\EventFactory $event
+     * @param \Magento\Reports\Model\Product\Index\ComparedFactory $productCompFactory
+     * @param \Magento\Reports\Model\Product\Index\ViewedFactory $productIndxFactory
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Customer\Model\Visitor $customerVisitor
+     */
     public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Reports\Model\EventFactory $event,
         \Magento\Reports\Model\Product\Index\ComparedFactory $productCompFactory,
         \Magento\Reports\Model\Product\Index\ViewedFactory $productIndxFactory,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Log\Model\Visitor $logVisitor
+        \Magento\Customer\Model\Visitor $customerVisitor
     ) {
         $this->_storeManager = $storeManager;
         $this->_eventFactory = $event;
         $this->_productCompFactory = $productCompFactory;
         $this->_productIndxFactory = $productIndxFactory;
         $this->_customerSession = $customerSession;
-        $this->_logVisitor = $logVisitor;
+        $this->_customerVisitor = $customerVisitor;
     }
+
     /**
-     * Abstract Event obeserver logic
+     * Abstract Event observer logic
      *
      * Save event
      *
@@ -90,28 +91,32 @@ class Observer
      * @param int $objectId
      * @param int $subjectId
      * @param int $subtype
-     * @return \Magento\Reports\Model\Event\Observer
+     * @return $this
      */
     protected function _event($eventTypeId, $objectId, $subjectId = null, $subtype = 0)
     {
         if (is_null($subjectId)) {
             if ($this->_customerSession->isLoggedIn()) {
-                $customer = $this->_customerSession->getCustomer();
-                $subjectId = $customer->getId();
+                $subjectId = $this->_customerSession->getCustomerId();
             } else {
-                $subjectId = $this->_logVisitor->getId();
+                $subjectId = $this->_customerVisitor->getId();
                 $subtype = 1;
             }
         }
 
         $eventModel = $this->_eventFactory->create();
-        $storeId    = $this->_storeManager->getStore()->getId();
-        $eventModel
-            ->setEventTypeId($eventTypeId)
-            ->setObjectId($objectId)
-            ->setSubjectId($subjectId)
-            ->setSubtype($subtype)
-            ->setStoreId($storeId);
+        $storeId = $this->_storeManager->getStore()->getId();
+        $eventModel->setEventTypeId(
+            $eventTypeId
+        )->setObjectId(
+            $objectId
+        )->setSubjectId(
+            $subjectId
+        )->setSubtype(
+            $subtype
+        )->setStoreId(
+            $storeId
+        );
         $eventModel->save();
 
         return $this;
@@ -120,28 +125,22 @@ class Observer
     /**
      * Customer login action
      *
-     * @param \Magento\Event\Observer $observer
-     * @return \Magento\Reports\Model\Event\Observer
+     * @param \Magento\Framework\Event\Observer $observer
+     * @return $this
      */
-    public function customerLogin(\Magento\Event\Observer $observer)
+    public function customerLogin(\Magento\Framework\Event\Observer $observer)
     {
         if (!$this->_customerSession->isLoggedIn()) {
             return $this;
         }
 
-        $visitorId  = $this->_logVisitor->getId();
+        $visitorId = $this->_customerVisitor->getId();
         $customerId = $this->_customerSession->getCustomerId();
         $eventModel = $this->_eventFactory->create();
         $eventModel->updateCustomerType($visitorId, $customerId);
 
-        $this->_productCompFactory
-            ->create()
-            ->updateCustomerFromVisitor()
-            ->calculate();
-        $this->_productIndxFactory
-            ->create()
-            ->updateCustomerFromVisitor()
-            ->calculate();
+        $this->_productCompFactory->create()->updateCustomerFromVisitor()->calculate();
+        $this->_productIndxFactory->create()->updateCustomerFromVisitor()->calculate();
 
         return $this;
     }
@@ -149,37 +148,27 @@ class Observer
     /**
      * Customer logout processing
      *
-     * @param \Magento\Event\Observer $observer
-     * @return \Magento\Reports\Model\Event\Observer
+     * @param \Magento\Framework\Event\Observer $observer
+     * @return $this
      */
-    public function customerLogout(\Magento\Event\Observer $observer)
+    public function customerLogout(\Magento\Framework\Event\Observer $observer)
     {
-        $this->_productCompFactory
-            ->create()
-            ->purgeVisitorByCustomer()
-            ->calculate();
-        $this->_productIndxFactory
-            ->create()
-            ->purgeVisitorByCustomer()
-            ->calculate();
+        $this->_productCompFactory->create()->purgeVisitorByCustomer()->calculate();
+        $this->_productIndxFactory->create()->purgeVisitorByCustomer()->calculate();
         return $this;
     }
 
     /**
      * View Catalog Product action
      *
-     * @param \Magento\Event\Observer $observer
-     * @return \Magento\Reports\Model\Event\Observer
+     * @param \Magento\Framework\Event\Observer $observer
+     * @return Observer
      */
-    public function catalogProductView(\Magento\Event\Observer $observer)
+    public function catalogProductView(\Magento\Framework\Event\Observer $observer)
     {
         $productId = $observer->getEvent()->getProduct()->getId();
 
-        $this->_productIndxFactory
-            ->create()
-            ->setProductId($productId)
-            ->save()
-            ->calculate();
+        $this->_productIndxFactory->create()->setProductId($productId)->save()->calculate();
 
         return $this->_event(\Magento\Reports\Model\Event::EVENT_PRODUCT_VIEW, $productId);
     }
@@ -187,12 +176,13 @@ class Observer
     /**
      * Send Product link to friends action
      *
-     * @param \Magento\Event\Observer $observer
-     * @return \Magento\Reports\Model\Event\Observer
+     * @param \Magento\Framework\Event\Observer $observer
+     * @return Observer
      */
-    public function sendfriendProduct(\Magento\Event\Observer $observer)
+    public function sendfriendProduct(\Magento\Framework\Event\Observer $observer)
     {
-        return $this->_event(\Magento\Reports\Model\Event::EVENT_PRODUCT_SEND,
+        return $this->_event(
+            \Magento\Reports\Model\Event::EVENT_PRODUCT_SEND,
             $observer->getEvent()->getProduct()->getId()
         );
     }
@@ -202,14 +192,12 @@ class Observer
      *
      * Reset count of compared products cache
      *
-     * @param \Magento\Event\Observer $observer
-     * @return \Magento\Reports\Model\Event\Observer
+     * @param \Magento\Framework\Event\Observer $observer
+     * @return $this
      */
-    public function catalogProductCompareRemoveProduct(\Magento\Event\Observer $observer)
+    public function catalogProductCompareRemoveProduct(\Magento\Framework\Event\Observer $observer)
     {
-        $this->_productCompFactory
-            ->create()
-            ->calculate();
+        $this->_productCompFactory->create()->calculate();
 
         return $this;
     }
@@ -219,14 +207,12 @@ class Observer
      *
      * Reset count of compared products cache
      *
-     * @param \Magento\Event\Observer $observer
-     * @return \Magento\Reports\Model\Event\Observer
+     * @param \Magento\Framework\Event\Observer $observer
+     * @return $this
      */
-    public function catalogProductCompareClear(\Magento\Event\Observer $observer)
+    public function catalogProductCompareClear(\Magento\Framework\Event\Observer $observer)
     {
-        $this->_productCompFactory
-            ->create()
-            ->calculate();
+        $this->_productCompFactory->create()->calculate();
 
         return $this;
     }
@@ -236,18 +222,14 @@ class Observer
      *
      * Reset count of compared products cache
      *
-     * @param \Magento\Event\Observer $observer
-     * @return unknown
+     * @param \Magento\Framework\Event\Observer $observer
+     * @return Observer
      */
-    public function catalogProductCompareAddProduct(\Magento\Event\Observer $observer)
+    public function catalogProductCompareAddProduct(\Magento\Framework\Event\Observer $observer)
     {
         $productId = $observer->getEvent()->getProduct()->getId();
 
-        $this->_productCompFactory
-            ->create()
-            ->setProductId($productId)
-            ->save()
-            ->calculate();
+        $this->_productCompFactory->create()->setProductId($productId)->save()->calculate();
 
         return $this->_event(\Magento\Reports\Model\Event::EVENT_PRODUCT_COMPARE, $productId);
     }
@@ -255,10 +237,10 @@ class Observer
     /**
      * Add product to shopping cart action
      *
-     * @param \Magento\Event\Observer $observer
-     * @return \Magento\Reports\Model\Event\Observer
+     * @param \Magento\Framework\Event\Observer $observer
+     * @return $this
      */
-    public function checkoutCartAddProduct(\Magento\Event\Observer $observer)
+    public function checkoutCartAddProduct(\Magento\Framework\Event\Observer $observer)
     {
         $quoteItem = $observer->getEvent()->getItem();
         if (!$quoteItem->getId() && !$quoteItem->getParentItem()) {
@@ -271,12 +253,13 @@ class Observer
     /**
      * Add product to wishlist action
      *
-     * @param \Magento\Event\Observer $observer
-     * @return \Magento\Reports\Model\Event\Observer
+     * @param \Magento\Framework\Event\Observer $observer
+     * @return Observer
      */
-    public function wishlistAddProduct(\Magento\Event\Observer $observer)
+    public function wishlistAddProduct(\Magento\Framework\Event\Observer $observer)
     {
-        return $this->_event(\Magento\Reports\Model\Event::EVENT_PRODUCT_TO_WISHLIST,
+        return $this->_event(
+            \Magento\Reports\Model\Event::EVENT_PRODUCT_TO_WISHLIST,
             $observer->getEvent()->getProduct()->getId()
         );
     }
@@ -284,12 +267,13 @@ class Observer
     /**
      * Share customer wishlist action
      *
-     * @param \Magento\Event\Observer $observer
-     * @return \Magento\Reports\Model\Event\Observer
+     * @param \Magento\Framework\Event\Observer $observer
+     * @return Observer
      */
-    public function wishlistShare(\Magento\Event\Observer $observer)
+    public function wishlistShare(\Magento\Framework\Event\Observer $observer)
     {
-        return $this->_event(\Magento\Reports\Model\Event::EVENT_WISHLIST_SHARE,
+        return $this->_event(
+            \Magento\Reports\Model\Event::EVENT_WISHLIST_SHARE,
             $observer->getEvent()->getWishlist()->getId()
         );
     }

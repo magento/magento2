@@ -28,14 +28,14 @@ namespace Magento\Captcha\Model;
 class CaptchaFactory
 {
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManager $objectManager
      */
-    public function __construct(\Magento\ObjectManager $objectManager)
+    public function __construct(\Magento\Framework\ObjectManager $objectManager)
     {
         $this->_objectManager = $objectManager;
     }
@@ -53,8 +53,10 @@ class CaptchaFactory
         $className = 'Magento\Captcha\Model\\' . ucfirst($captchaType);
 
         $instance = $this->_objectManager->create($className, array('formId' => $formId));
-        if (!($instance instanceof \Magento\Captcha\Model\ModelInterface)) {
-            throw new \InvalidArgumentException($className . ' does not implement \Magento\Captcha\Model\ModelInterface');
+        if (!$instance instanceof \Magento\Captcha\Model\ModelInterface) {
+            throw new \InvalidArgumentException(
+                $className . ' does not implement \Magento\Captcha\Model\ModelInterface'
+            );
         }
         return $instance;
     }

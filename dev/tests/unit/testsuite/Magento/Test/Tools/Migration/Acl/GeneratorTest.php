@@ -18,21 +18,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Tools
- * @package     unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Tools\Migration\Acl;
 
-require_once realpath(__DIR__ . '/../../../../../../../../')
-    . '/tools/Magento/Tools/Migration/Acl/Generator.php';
-require_once realpath(__DIR__ . '/../../../../../../../../')
-    . '/tools/Magento/Tools/Migration/Acl/FileManager.php';
-require_once realpath(__DIR__ . '/../../../../../../../../')
-    . '/tools/Magento/Tools/Migration/Acl/Formatter.php';
 
+require_once realpath(__DIR__ . '/../../../../../../../../') . '/tools/Magento/Tools/Migration/Acl/Generator.php';
+require_once realpath(__DIR__ . '/../../../../../../../../') . '/tools/Magento/Tools/Migration/Acl/FileManager.php';
+require_once realpath(__DIR__ . '/../../../../../../../../') . '/tools/Magento/Tools/Migration/Acl/Formatter.php';
 /**
  * \Magento\Tools\Migration\Acl\Generator test case
  */
@@ -80,7 +74,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             $prefix . 'local/Namespace/Module' . $suffix,
             $prefix . 'community/Namespace/Module' . $suffix,
             $prefix . 'core/ANamespace/Module' . $suffix,
-            $prefix . 'core/BNamespace/Module' . $suffix,
+            $prefix . 'core/BNamespace/Module' . $suffix
         );
 
         $this->_model->setAdminhtmlFiles($this->_adminhtmlFiles);
@@ -107,12 +101,12 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         return array(
             array(
                 'filePath' => '/app/code/core/ANamespace/ModuleOne/etc/adminhtml.xml',
-                'moduleName' => 'ANamespace_ModuleOne',
+                'moduleName' => 'ANamespace_ModuleOne'
             ),
             array(
                 'filePath' => '/app/code/core/BNamespace/ModuleOne/etc/adminhtml.xml',
-                'moduleName' => 'BNamespace_ModuleOne',
-            ),
+                'moduleName' => 'BNamespace_ModuleOne'
+            )
         );
     }
 
@@ -124,10 +118,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testIsMetaNode()
     {
-        $metaNodes = array(
-            'meta_one' => 'MetaOne',
-            'meta_two' => 'MetaTwo',
-        );
+        $metaNodes = array('meta_one' => 'MetaOne', 'meta_two' => 'MetaTwo');
         $this->_model->setMetaNodeNames($metaNodes);
         $this->assertEquals($metaNodes, $this->_model->getMetaNodeNames());
 
@@ -160,16 +151,8 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     public function getEtcPatternDataProvider()
     {
         return array(
-            array(
-                'expectedPath' => '/app/code/*/*/*/etc/',
-                'codePool' => '*',
-                'namespace' => '*',
-            ),
-            array(
-                'expectedPath' => '/app/code/core/Magento/*/etc/',
-                'codePool' => 'core',
-                'namespace' => 'Magento',
-            ),
+            array('expectedPath' => '/app/code/*/*/*/etc/', 'codePool' => '*', 'namespace' => '*'),
+            array('expectedPath' => '/app/code/core/Magento/*/etc/', 'codePool' => 'core', 'namespace' => 'Magento')
         );
     }
 
@@ -190,10 +173,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testSetMetaInfo()
     {
-        $metaNodeName = array(
-            'sort_order' => 'test_SortOrder',
-            'title' => 'test_Title',
-        );
+        $metaNodeName = array('sort_order' => 'test_SortOrder', 'title' => 'test_Title');
         $this->_model->setMetaNodeNames($metaNodeName);
 
         $dom = new \DOMDocument();
@@ -218,7 +198,8 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     public function testGetAdminhtmlFiles()
     {
         $this->_model->setAdminhtmlFiles(null);
-        $this->assertEquals($this->_adminhtmlFiles,
+        $this->assertEquals(
+            $this->_adminhtmlFiles,
             $this->_model->getAdminhtmlFiles(),
             'Incorrect file adminhtml file searching'
         );
@@ -242,7 +223,10 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->_model->parseNode($nodeList->item(0), $dom, $parentNode, $moduleName);
         $expectedDom = new \DOMDocument();
         $expectedDom->load($this->_fixturePath . '/parse_node_result.xml');
-        $this->assertEquals($expectedDom->saveXML($expectedDom->documentElement), $dom->saveXML($dom->documentElement));
+        $this->assertEquals(
+            $expectedDom->saveXML($expectedDom->documentElement),
+            $dom->saveXML($dom->documentElement)
+        );
     }
 
     public function testGetResultDomDocument()
@@ -307,7 +291,7 @@ TEMPLATE;
             '/admin' => 'Map_Module::admin',
             '/admin/customer/manage' => 'Map_Module::manage',
             '/admin/system' => 'Map_Module::system',
-            '/admin/system/config' => 'Map_Module::config',
+            '/admin/system/config' => 'Map_Module::config'
         );
 
         $this->_model->setAclResourceMaps($aclResourcesMaps);

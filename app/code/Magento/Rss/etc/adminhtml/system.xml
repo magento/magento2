@@ -19,13 +19,11 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Rss
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/system_file.xsd">
     <system>
         <section id="rss" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>RSS Feeds</label>
@@ -37,39 +35,6 @@
                     <label>Enable RSS</label>
                     <source_model>Magento\Backend\Model\Config\Source\Enabledisable</source_model>
                     <backend_model>Magento\Rss\Model\System\Config\Backend\Links</backend_model>
-                </field>
-            </group>
-            <group id="wishlist" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Wishlist</label>
-                <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Enable RSS</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Enabledisable</source_model>
-                </field>
-            </group>
-            <group id="catalog" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Catalog</label>
-                <field id="new" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>New Products</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Enabledisable</source_model>
-                </field>
-                <field id="special" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Special Products</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Enabledisable</source_model>
-                </field>
-                <field id="salesrule" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Coupons/Discounts</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Enabledisable</source_model>
-                </field>
-                <field id="category" translate="label" type="select" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Top Level Category</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Enabledisable</source_model>
-                </field>
-            </group>
-            <group id="order" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Order</label>
-                <field id="status_notified" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Customer Order Status Notification</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Enabledisable</source_model>
                 </field>
             </group>
         </section>

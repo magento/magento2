@@ -18,31 +18,27 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Eav
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Eav\Model\Attribute\Data;
 
+use Magento\Framework\App\RequestInterface;
 
 /**
  * EAV Entity Attribute Multiply line Data Model
  *
- * @category    Magento
- * @package     Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Eav\Model\Attribute\Data;
-
 class Multiline extends \Magento\Eav\Model\Attribute\Data\Text
 {
     /**
      * Extract data from request and return value
      *
-     * @param \Magento\App\RequestInterface $request
+     * @param RequestInterface $request
      * @return array|string
      */
-    public function extractValue(\Magento\App\RequestInterface $request)
+    public function extractValue(RequestInterface $request)
     {
         $value = $this->_getRequestValue($request);
         if (!is_array($value)) {
@@ -58,56 +54,61 @@ class Multiline extends \Magento\Eav\Model\Attribute\Data\Text
      * Return true or array of errors
      *
      * @param array|string $value
-     * @return boolean|array
+     * @return bool|array
      */
     public function validateValue($value)
     {
-        $errors     = array();
-        $attribute  = $this->getAttribute();
+        $errors = array();
+        $lines = $this->processValue($value);
+        $attribute = $this->getAttribute();
+        $attributeLabel = __($attribute->getStoreLabel());
+        if ($attribute->getIsRequired() && empty($lines)) {
+            $errors[] = __('"%1" is a required value.', $attributeLabel);
+        }
 
+        $maxAllowedLineCount = $attribute->getMultilineCount();
+        if (count($lines) > $maxAllowedLineCount) {
+            $errors[] = __('"%1" cannot contain more than %2 lines.', $attributeLabel, $maxAllowedLineCount);
+        }
+
+        foreach ($lines as $lineIndex => $line) {
+            // First line must be always validated
+            if ($lineIndex == 0 || !empty($line)) {
+                $result = parent::validateValue($line);
+                if ($result !== true) {
+                    $errors = array_merge($errors, $result);
+                }
+            }
+        }
+
+        return (count($errors) == 0) ? true : $errors;
+    }
+
+    /**
+     * Process value before validation
+     *
+     * @param bool|string|array $value
+     * @return array list of lines represented by given value
+     */
+    protected function processValue($value)
+    {
         if ($value === false) {
             // try to load original value and validate it
-            $value = $this->getEntity()->getDataUsingMethod($attribute->getAttributeCode());
-            if (!is_array($value)) {
-                $value = explode("\n", $value);
-            }
+            $attribute = $this->getAttribute();
+            $entity = $this->getEntity();
+            $value = $entity->getDataUsingMethod($attribute->getAttributeCode());
         }
-
         if (!is_array($value)) {
-            $value = array($value);
+            $value = explode("\n", $value);
         }
-        for ($i = 0; $i < $attribute->getMultilineCount(); $i ++) {
-            if (!isset($value[$i])) {
-                $value[$i] = null;
-            }
-            // validate first line
-            if ($i == 0) {
-                $result = parent::validateValue($value[$i]);
-                if ($result !== true) {
-                    $errors = $result;
-                }
-            } else {
-                if (!empty($value[$i])) {
-                    $result = parent::validateValue($value[$i]);
-                    if ($result !== true) {
-                        $errors = array_merge($errors, $result);
-                    }
-                }
-            }
-        }
-
-        if (count($errors) == 0) {
-            return true;
-        }
-        return $errors;
+        return $value;
     }
 
     /**
      * Export attribute value to entity model
      *
-     * @param \Magento\Core\Model\AbstractModel $entity
      * @param array|string $value
-     * @return \Magento\Eav\Model\Attribute\Data\Multiline
+     * @return $this
      */
     public function compactValue($value)
     {
@@ -121,7 +122,7 @@ class Multiline extends \Magento\Eav\Model\Attribute\Data\Text
      * Restore attribute value from SESSION to entity model
      *
      * @param array|string $value
-     * @return \Magento\Eav\Model\Attribute\Data\Multiline
+     * @return $this
      */
     public function restoreValue($value)
     {

@@ -1,0 +1,205 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<div id="popup-window-mask" style="display:none;"></div>
+<div id="packed_window" style="display:none;" class="packed-window">
+    <div class="popup-window-wrapper">
+        <div class="popup-window-title">
+            <span class="title"><?php echo __('Packages') ?></span>
+        </div>
+        <div class="packed-content">
+            <div class="popup-window-content">
+            <?php foreach ($this->getPackages() as $packageId => $package): ?>
+                <div class="package">
+                    <?php $package = new \Magento\Framework\Object($package) ?>
+                    <?php $params = new \Magento\Framework\Object($package->getParams()) ?>
+                    <div class="package-number popup-fieldset-title">
+                        <div class="title"><?php echo __('Package') . ' ' . $packageId ?></div>
+                    </div>
+                    <div class="package-info">
+                        <table class="package-options" cellspacing="0">
+                            <tbody>
+                                <tr>
+                                    <th><?php echo __('Type') ?></th>
+                                    <td><?php echo $this->getContainerTypeByCode($params->getContainer()) ?></td>
+                                    <th><?php echo __('Length') ?></th>
+                                    <td>
+                                        <?php if ($params->getLength() != null): ?>
+                                            <?php echo $params->getLength() .' '. $this->helper('Magento\Shipping\Helper\Carrier')->getMeasureDimensionName($params->getDimensionUnits()) ?>
+                                        <?php else: ?>
+                                            --
+                                        <?php endif; ?>
+                                    </td>
+                                    <?php if ($params->getDeliveryConfirmation() != null): ?>
+                                        <th><?php echo __('Signature Confirmation') ?></th>
+                                        <td><?php echo $this->getDeliveryConfirmationTypeByCode($params->getDeliveryConfirmation()) ?></td>
+                                    <?php else: ?>
+                                        <th>&nbsp;</th>
+                                        <td>&nbsp;</td>
+                                    <?php endif; ?>
+                                </tr>
+                                <tr>
+                                    <?php if ($this->displayCustomsValue()): ?>
+                                        <th><?php echo __('Customs Value') ?></th>
+                                        <td><?php echo $this->displayCustomsPrice($params->getCustomsValue()) ?></td>
+                                    <?php else: ?>
+                                        <th><?php echo __('Total Weight') ?></th>
+                                        <td><?php echo $params->getWeight() .' '. $this->helper('Magento\Shipping\Helper\Carrier')->getMeasureWeightName($params->getWeightUnits()) ?></td>
+                                    <?php endif; ?>
+                                    <th><?php echo __('Width') ?></th>
+                                    <td>
+                                        <?php if ($params->getWidth() != null): ?>
+                                            <?php echo $params->getWidth() .' '. $this->helper('Magento\Shipping\Helper\Carrier')->getMeasureDimensionName($params->getDimensionUnits()) ?>
+                                        <?php else: ?>
+                                            --
+                                        <?php endif; ?>
+                                    </td>
+                                    <?php if ($params->getContentType() != null): ?>
+                                        <th><?php echo __('Contents') ?></th>
+                                        <?php if ($params->getContentType() == 'OTHER'): ?>
+                                            <td><?php echo $this->escapeHtml($params->getContentTypeOther()) ?></td>
+                                        <?php else: ?>
+                                            <td><?php echo $this->getContentTypeByCode($params->getContentType()) ?></td>
+                                        <?php endif; ?>
+                                    <?php else: ?>
+                                        <th>&nbsp;</th>
+                                        <td>&nbsp;</td>
+                                    <?php endif; ?>
+                                </tr>
+                                <tr>
+                                    <?php if ($this->displayCustomsValue()): ?>
+                                        <th><?php echo __('Total Weight') ?></th>
+                                        <td><?php echo $params->getWeight() .' '. $this->helper('Magento\Shipping\Helper\Carrier')->getMeasureWeightName($params->getWeightUnits()) ?></td>
+                                    <?php else: ?>
+                                        <th>&nbsp;</th>
+                                        <td>&nbsp;</td>
+                                    <?php endif; ?>
+                                    <th><?php echo __('Height') ?></th>
+                                    <td>
+                                        <?php if ($params->getHeight() != null): ?>
+                                            <?php echo $params->getHeight() .' '. $this->helper('Magento\Shipping\Helper\Carrier')->getMeasureDimensionName($params->getDimensionUnits()) ?>
+                                        <?php else: ?>
+                                            --
+                                        <?php endif; ?>
+                                    <td>
+                                    <th>&nbsp;</th>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <?php if ($params->getSize()): ?>
+                                        <th><?php echo __('Size') ?></th>
+                                        <td><?php echo ucfirst(strtolower($params->getSize())) ?></td>
+                                    <?php else: ?>
+                                        <th>&nbsp;</th>
+                                        <td>&nbsp;</td>
+                                    <?php endif; ?>
+                                    <?php if ($params->getGirth()): ?>
+                                        <th><?php echo __('Girth') ?></th>
+                                        <td><?php echo $params->getGirth() .' '. $this->helper('Magento\Shipping\Helper\Carrier')->getMeasureDimensionName($params->getGirthDimensionUnits()) ?></td>
+                                    <?php else: ?>
+                                        <th>&nbsp;</th>
+                                        <td>&nbsp;</td>
+                                    <?php endif; ?>
+                                    <th>&nbsp;</th>
+                                    <td>&nbsp;</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="package-number popup-fieldset-title">
+                        <div class="title"><?php echo __('Items in the Package') ?></div>
+                    </div>
+                    <div class="grid">
+                        <table cellspacing="0" class="data">
+                            <thead>
+                            <tr class="headings">
+                                <th class="col-product no-link"><span><?php echo __('Product') ?></span></th>
+                                <th class="col-weight no-link"><span><?php echo __('Weight') ?></span></th>
+                                <?php if ($this->displayCustomsValue()): ?>
+                                    <th class="col-custom no-link"><span><?php echo __('Customs Value') ?></span></th>
+                                <?php endif; ?>
+                                <th class="col-qty_ordered no-link"><span><?php echo __('Qty Ordered') ?></span></th>
+                                <th class="col-qty no-link last"><span><?php echo __('Qty') ?></span></th>
+                            </tr>
+                            </thead>
+                            <tbody id="">
+                            <?php foreach($package->getItems() as $itemId => $item) : ?>
+                                <?php $item = new \Magento\Framework\Object($item) ?>
+                                <tr title="#" id="" class="">
+                                    <td class="col-product name">
+                                        <?php echo $item->getName(); ?>
+                                    </td>
+                                    <td class="col-weight weight ">
+                                        <?php echo $item->getWeight(); ?>
+                                    </td>
+                                    <?php if ($this->displayCustomsValue()): ?>
+                                        <td class="col-custom "><?php echo $this->displayCustomsPrice($item->getCustomsValue()) ?></td>
+                                    <?php endif; ?>
+                                    <td class="col-qty_ordered">
+                                        <?php echo $this->getQtyOrderedItem($item->getOrderItemId()); ?>
+                                    </td>
+                                    <td class="col-qty last">
+                                        <?php echo $item->getQty()*1; ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+            </div>
+        </div>
+        <div class="popup-window-buttons-set">
+            <?php echo $this->getPrintButton() ?>
+            <button type="button" class="action-ok SavePackagesBtn save" onclick="hidePackedWindow();" title="<?php echo __('Products should be added to package(s)')?>">
+                <span><?php echo __('OK') ?></span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+require(['prototype'], function(){
+
+//<![CDATA[
+    function showPackedWindow() {
+        var window = $('packed_window');
+        window.show().setStyle({
+            'marginLeft': -window.getDimensions().width/2 + 'px'
+        });
+        $('popup-window-mask').setStyle({
+            height: $('html-body').getHeight() + 'px'
+        }).show();
+    }
+    function hidePackedWindow() {
+        $('packed_window').hide();
+        $('popup-window-mask').hide();
+    }
+    window.hidePackedWindow = hidePackedWindow;
+    window.showPackedWindow = showPackedWindow;
+//]]>
+
+});
+</script>

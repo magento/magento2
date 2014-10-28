@@ -1,0 +1,72 @@
+None,None
+"Sort Order","Sort Order"
+Title,Title
+Password,Password
+"Unable to retrieve tracking","Unable to retrieve tracking"
+"Failed to parse xml document: %1","Failed to parse xml document: %1"
+"Europe First Priority","Europe First Priority"
+"1 Day Freight","1 Day Freight"
+"2 Day Freight","2 Day Freight"
+"2 Day","2 Day"
+"2 Day AM","2 Day AM"
+"3 Day Freight","3 Day Freight"
+"Express Saver","Express Saver"
+Ground,Ground
+"First Overnight","First Overnight"
+"Home Delivery","Home Delivery"
+"International Economy","International Economy"
+"Intl Economy Freight","Intl Economy Freight"
+"International First","International First"
+"International Ground","International Ground"
+"International Priority","International Priority"
+"Intl Priority Freight","Intl Priority Freight"
+"Priority Overnight","Priority Overnight"
+"Smart Post","Smart Post"
+"Standard Overnight","Standard Overnight"
+Freight,Freight
+"National Freight","National Freight"
+"Regular Pickup","Regular Pickup"
+"Request Courier","Request Courier"
+"Drop Box","Drop Box"
+"Business Service Center","Business Service Center"
+Station,Station
+"FedEx Envelope","FedEx Envelope"
+"FedEx Pak","FedEx Pak"
+"FedEx Box","FedEx Box"
+"FedEx Tube","FedEx Tube"
+"FedEx 10kg Box","FedEx 10kg Box"
+"FedEx 25kg Box","FedEx 25kg Box"
+"Your Packaging","Your Packaging"
+"Not Required","Not Required"
+Adult,Adult
+Direct,Direct
+Indirect,Indirect
+status,status
+"Empty response","Empty response"
+Key,Key
+Debug,Debug
+"Enabled for Checkout","Enabled for Checkout"
+"Calculate Handling Fee","Calculate Handling Fee"
+"Handling Applied","Handling Applied"
+"Handling Fee","Handling Fee"
+"Allowed Methods","Allowed Methods"
+"Displayed Error Message","Displayed Error Message"
+"Free Method","Free Method"
+"Free Shipping Amount Threshold","Free Shipping Amount Threshold"
+"Ship to Applicable Countries","Ship to Applicable Countries"
+"Ship to Specific Countries","Ship to Specific Countries"
+"Show Method if Not Applicable","Show Method if Not Applicable"
+FedEx,FedEx
+"Account ID","Account ID"
+"Please make sure to use only digits here. No dashes are allowed.","Please make sure to use only digits here. No dashes are allowed."
+"Meter Number","Meter Number"
+"Sandbox Mode","Sandbox Mode"
+"Web-Services URL (Production)","Web-Services URL (Production)"
+"Web-Services URL (Sandbox)","Web-Services URL (Sandbox)"
+"Packages Request Type","Packages Request Type"
+Packaging,Packaging
+Dropoff,Dropoff
+"Maximum Package Weight (Please consult your shipping carrier for maximum supported shipping weight)","Maximum Package Weight (Please consult your shipping carrier for maximum supported shipping weight)"
+"Residential Delivery","Residential Delivery"
+"Hub ID","Hub ID"
+"The field is applicable if the Smart Post method is selected.","The field is applicable if the Smart Post method is selected."

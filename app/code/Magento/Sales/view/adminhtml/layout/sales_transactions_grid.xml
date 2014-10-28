@@ -23,6 +23,10 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <block class="Magento\Sales\Block\Adminhtml\Transactions\Grid" name="sales_transactions.grid" output="1"/>
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/layout_generic.xsd">
+    <update handle="formkey"/>
+    <update handle="sales_transactions_grid_block"/>
+    <container name="root">
+        <block class="Magento\Backend\Block\Widget\Grid\Container" name="sales_transactions.grid.container" template="Magento_Backend::widget/grid/container/empty.phtml"/>
+    </container>
 </layout>

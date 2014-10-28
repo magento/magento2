@@ -18,12 +18,10 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_GiftMessage
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\GiftMessage\Model;
 
 /**
  * Gift Message model
@@ -39,13 +37,9 @@
  * @method string getMessage()
  * @method \Magento\GiftMessage\Model\Message setMessage(string $value)
  *
- * @category    Magento
- * @package     Magento_GiftMessage
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\GiftMessage\Model;
-
-class Message extends \Magento\Core\Model\AbstractModel
+class Message extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * @var \Magento\GiftMessage\Model\TypeFactory
@@ -53,18 +47,18 @@ class Message extends \Magento\Core\Model\AbstractModel
     protected $_typeFactory;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\GiftMessage\Model\Resource\Message $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param \Magento\GiftMessage\Model\TypeFactory $typeFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\GiftMessage\Model\Resource\Message $resource,
-        \Magento\Data\Collection\Db $resourceCollection,
+        \Magento\Framework\Data\Collection\Db $resourceCollection,
         \Magento\GiftMessage\Model\TypeFactory $typeFactory,
         array $data = array()
     ) {
@@ -72,6 +66,9 @@ class Message extends \Magento\Core\Model\AbstractModel
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init('Magento\GiftMessage\Model\Resource\Message');
@@ -81,7 +78,6 @@ class Message extends \Magento\Core\Model\AbstractModel
      * Return model from entity type
      *
      * @param string $type
-     *
      * @return mixed
      */
     public function getEntityModelByType($type)
@@ -92,7 +88,7 @@ class Message extends \Magento\Core\Model\AbstractModel
     /**
      * Checks thats gift message is empty
      *
-     * @return boolean
+     * @return bool
      */
     public function isMessageEmpty()
     {

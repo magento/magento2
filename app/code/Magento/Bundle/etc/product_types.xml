@@ -23,8 +23,8 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
-    <type name="bundle" label="Bundle Product" modelInstance="Magento\Bundle\Model\Product\Type" composite='true' indexPriority="40">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Catalog/etc/product_types.xsd">
+    <type name="bundle" label="Bundle Product" modelInstance="Magento\Bundle\Model\Product\Type" composite='true' indexPriority="40" sortOrder="50">
         <priceModel instance="Magento\Bundle\Model\Product\Price" />
         <indexerModel instance="Magento\Bundle\Model\Resource\Indexer\Price" />
         <stockIndexerModel instance="Magento\Bundle\Model\Resource\Indexer\Stock" />
@@ -32,5 +32,8 @@
             <type name="simple" />
             <type name="virtual" />
         </allowedSelectionTypes>
+        <customAttributes>
+            <attribute name="refundable" value="true"/>
+        </customAttributes>
     </type>
 </config>

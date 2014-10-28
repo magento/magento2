@@ -1,0 +1,104 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+/** @var $this \Magento\Sales\Block\Adminhtml\Order\Totals\Tax */
+?>
+<?php
+/** @var $_source \Magento\Sales\Model\Order\Invoice */
+$_source    = $this->getSource();
+$_order     = $this->getOrder();
+$_fullInfo  = $this->getFullTaxInfo();
+?>
+
+<?php if ($this->displayFullSummary()): ?>
+    <?php $isTop = 1; ?>
+    <?php if (isset($_fullInfo[0]['rates'])): ?>
+        <?php foreach ($_fullInfo as $info): ?>
+            <?php if (isset($info['hidden']) && $info['hidden']) continue; ?>
+            <?php
+                $percent    = $info['percent'];
+                $amount     = $info['amount'];
+                $baseAmount = $info['base_amount'];
+                $rates      = $info['rates'];
+                $isFirst    = 1;
+            ?>
+
+            <?php foreach ($rates as $rate): ?>
+            <tr class="summary-details<?php if ($isTop): echo ' summary-details-first'; endif; ?>" style="display:none;">
+                <?php if (!is_null($rate['percent'])): ?>
+                    <td class="label"><?php echo $rate['title']; ?> (<?php echo (float)$rate['percent']; ?>%)<br /></td>
+                <?php else: ?>
+                    <td class="label"><?php echo $rate['title']; ?><br /></td>
+                <?php endif; ?>
+                <?php if ($isFirst): ?>
+                    <td rowspan="<?php echo count($rates); ?>"><?php echo $this->displayAmount($amount, $baseAmount); ?></td>
+                <?php endif; ?>
+            </tr>
+            <?php
+                $isFirst = 0;
+                $isTop = 0;
+            ?>
+            <?php endforeach; ?>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <?php foreach ($_fullInfo as $info): ?>
+            <?php
+                $percent    = $info['percent'];
+                $amount     = $info['tax_amount'];
+                $baseAmount = $info['base_tax_amount'];
+                $isFirst    = 1;
+            ?>
+
+            <tr class="summary-details<?php if ($isTop): echo ' summary-details-first'; endif; ?>" style="display:none;">
+                <?php if (!is_null($info['percent'])): ?>
+                    <td class="label"><?php echo $this->escapeHtml($info['title']); ?> (<?php echo (float)$info['percent']; ?>%)<br /></td>
+                <?php else: ?>
+                    <td class="label"><?php echo $this->escapeHtml($info['title']); ?><br /></td>
+                <?php endif; ?>
+                    <td><?php echo $this->displayAmount($amount, $baseAmount); ?></td>
+            </tr>
+            <?php
+                $isFirst = 0;
+                $isTop = 0;
+            ?>
+        <?php endforeach; ?>
+    <?php endif; ?>
+<?php endif;?>
+<?php if ($this->displayFullSummary() && $_fullInfo): ?>
+<tr class="summary-total" onclick="expandDetails(this, '.summary-details')">
+<?php else: ?>
+<tr>
+<?php endif; ?>
+    <td class="label">
+        <div class="summary-collapse">
+        <?php if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary()): ?>
+            <?php echo __('Total Tax') ?>
+        <?php else: ?>
+            <?php echo __('Tax') ?>
+        <?php endif;?>
+        </div>
+    </td>
+    <td>
+        <?php echo $this->displayAmount($_source->getTaxAmount(), $_source->getBaseTaxAmount()); ?>
+    </td>
+</tr>

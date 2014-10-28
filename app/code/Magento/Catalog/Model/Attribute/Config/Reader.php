@@ -1,7 +1,5 @@
 <?php
 /**
- * Loads catalog attributes configuration from multiple XML files by merging them together
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -25,36 +23,38 @@
  */
 namespace Magento\Catalog\Model\Attribute\Config;
 
-class Reader extends \Magento\Config\Reader\Filesystem
+/**
+ * Loads catalog attributes configuration from multiple XML files by merging them together
+ */
+class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**
      * List of id attributes for merge
      *
      * @var array
      */
-    protected $_idAttributes = array(
-        '/config/group' => 'name',
-        '/config/group/attribute' => 'name',
-    );
+    protected $_idAttributes = array('/config/group' => 'name', '/config/group/attribute' => 'name');
 
     /**
-     * @param \Magento\Config\FileResolverInterface $fileResolver
+     * Construct the FileSystem Reader Class
+     *
+     * @param \Magento\Framework\Config\FileResolverInterface $fileResolver
      * @param Converter $converter
      * @param SchemaLocator $schemaLocator
-     * @param \Magento\Config\ValidationStateInterface $validationState
+     * @param \Magento\Framework\Config\ValidationStateInterface $validationState
      * @param string $fileName
      * @param array $idAttributes
      * @param string $domDocumentClass
      * @param string $defaultScope
      */
     public function __construct(
-        \Magento\Config\FileResolverInterface $fileResolver,
-        \Magento\Catalog\Model\Attribute\Config\Converter $converter,
-        \Magento\Catalog\Model\Attribute\Config\SchemaLocator $schemaLocator,
-        \Magento\Config\ValidationStateInterface $validationState,
+        \Magento\Framework\Config\FileResolverInterface $fileResolver,
+        Converter $converter,
+        SchemaLocator $schemaLocator,
+        \Magento\Framework\Config\ValidationStateInterface $validationState,
         $fileName = 'catalog_attributes.xml',
         $idAttributes = array(),
-        $domDocumentClass = 'Magento\Config\Dom',
+        $domDocumentClass = 'Magento\Framework\Config\Dom',
         $defaultScope = 'global'
     ) {
         parent::__construct(

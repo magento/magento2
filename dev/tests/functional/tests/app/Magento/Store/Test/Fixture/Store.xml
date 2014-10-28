@@ -1,0 +1,87 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<fixture class="Magento\Store\Test\Fixture\Store">
+    <module>Magento_Store</module>
+    <type>flat</type>
+    <entity_type>store</entity_type>
+    <collection>Magento\Store\Model\Resource\Store\Collection</collection>
+    <fields>
+        <store_id>
+            <attribute_code>store_id</attribute_code>
+            <backend_type>smallint</backend_type>
+            <is_required>1</is_required>
+            <default_value></default_value>
+            <input></input>
+        </store_id>
+        <code>
+            <attribute_code>code</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required></is_required>
+            <default_value></default_value>
+            <input>text</input>
+        </code>
+        <website_id>
+            <attribute_code>website_id</attribute_code>
+            <backend_type>smallint</backend_type>
+            <is_required></is_required>
+            <default_value>0</default_value>
+            <input></input>
+        </website_id>
+        <group_id>
+            <attribute_code>group_id</attribute_code>
+            <backend_type>smallint</backend_type>
+            <is_required></is_required>
+            <default_value>0</default_value>
+            <input>select</input>
+            <source>Magento\Store\Test\Fixture\Store\GroupId</source>
+        </group_id>
+        <name>
+            <attribute_code>name</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required></is_required>
+            <default_value></default_value>
+            <input>text</input>
+        </name>
+        <sort_order>
+            <attribute_code>sort_order</attribute_code>
+            <backend_type>smallint</backend_type>
+            <is_required></is_required>
+            <default_value>0</default_value>
+            <input>text</input>
+        </sort_order>
+        <is_active>
+            <attribute_code>is_active</attribute_code>
+            <backend_type>smallint</backend_type>
+            <is_required></is_required>
+            <default_value>0</default_value>
+            <input>select</input>
+        </is_active>
+    </fields>
+    <data_set></data_set>
+    <data_config></data_config>
+    <repository_class>Magento\Store\Test\Repository\Store</repository_class>
+    <handler_interface>Magento\Store\Test\Handler\Store\StoreInterface</handler_interface>
+</fixture>

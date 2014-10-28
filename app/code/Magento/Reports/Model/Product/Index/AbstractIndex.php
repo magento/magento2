@@ -18,18 +18,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Reports
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Reports\Model\Product\Index;
 
 /**
  * Reports Product Index Abstract Model
  */
-abstract class AbstractIndex extends \Magento\Core\Model\AbstractModel
+abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * Cache key name for Count of product index
@@ -39,14 +36,14 @@ abstract class AbstractIndex extends \Magento\Core\Model\AbstractModel
     protected $_countCacheKey;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\Log\Model\Visitor
+     * @var \Magento\Customer\Model\Visitor
      */
-    protected $_logVisitor;
+    protected $_customerVisitor;
 
     /**
      * @var \Magento\Customer\Model\Session
@@ -54,7 +51,7 @@ abstract class AbstractIndex extends \Magento\Core\Model\AbstractModel
     protected $_customerSession;
 
     /**
-     * @var \Magento\Session\Generic
+     * @var \Magento\Framework\Session\Generic
      */
     protected $_reportSession;
 
@@ -64,40 +61,40 @@ abstract class AbstractIndex extends \Magento\Core\Model\AbstractModel
     protected $_productVisibility;
 
     /**
-     * @var \Magento\Stdlib\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime
      */
     protected $dateTime;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Log\Model\Visitor $logVisitor
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Customer\Model\Visitor $customerVisitor
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Session\Generic $reportSession
+     * @param \Magento\Framework\Session\Generic $reportSession
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
-     * @param \Magento\Stdlib\DateTime $dateTime
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Log\Model\Visitor $logVisitor,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Customer\Model\Visitor $customerVisitor,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Session\Generic $reportSession,
+        \Magento\Framework\Session\Generic $reportSession,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
-        \Magento\Stdlib\DateTime $dateTime,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Stdlib\DateTime $dateTime,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_storeManager = $storeManager;
         $this->dateTime = $dateTime;
-        $this->_logVisitor = $logVisitor;
+        $this->_customerVisitor = $customerVisitor;
         $this->_customerSession = $customerSession;
         $this->_reportSession = $reportSession;
         $this->_productVisibility = $productVisibility;
@@ -106,7 +103,7 @@ abstract class AbstractIndex extends \Magento\Core\Model\AbstractModel
     /**
      * Prepare customer/visitor, store data before save
      *
-     * @return \Magento\Reports\Model\Product\Index\AbstractIndex
+     * @return $this
      */
     protected function _beforeSave()
     {
@@ -140,7 +137,7 @@ abstract class AbstractIndex extends \Magento\Core\Model\AbstractModel
         if ($this->hasData('visitor_id')) {
             return $this->getData('visitor_id');
         }
-        return $this->_logVisitor->getId();
+        return $this->_customerVisitor->getId();
     }
 
     /**
@@ -186,7 +183,7 @@ abstract class AbstractIndex extends \Magento\Core\Model\AbstractModel
     /**
      * On customer loggin merge visitor/customer index
      *
-     * @return \Magento\Reports\Model\Product\Index\AbstractIndex
+     * @return $this
      */
     public function updateCustomerFromVisitor()
     {
@@ -197,7 +194,7 @@ abstract class AbstractIndex extends \Magento\Core\Model\AbstractModel
     /**
      * Purge visitor data by customer (logout)
      *
-     * @return \Magento\Reports\Model\Product\Index\AbstractIndex
+     * @return $this
      */
     public function purgeVisitorByCustomer()
     {
@@ -208,7 +205,7 @@ abstract class AbstractIndex extends \Magento\Core\Model\AbstractModel
     /**
      * Retrieve Reports Session instance
      *
-     * @return \Magento\Session\Generic
+     * @return \Magento\Framework\Session\Generic
      */
     protected function _getSession()
     {
@@ -218,14 +215,15 @@ abstract class AbstractIndex extends \Magento\Core\Model\AbstractModel
     /**
      * Calculate count of product index items cache
      *
-     * @return \Magento\Reports\Model\Product\Index\AbstractIndex
+     * @return $this
      */
     public function calculate()
     {
-        $collection = $this->getCollection()
-            ->setCustomerId($this->getCustomerId())
-            ->addIndexFilter()
-            ->setVisibility($this->_productVisibility->getVisibleInSiteIds());
+        $collection = $this->getCollection()->setCustomerId(
+            $this->getCustomerId()
+        )->addIndexFilter()->setVisibility(
+            $this->_productVisibility->getVisibleInSiteIds()
+        );
 
         $count = $collection->getSize();
         $this->_getSession()->setData($this->_countCacheKey, $count);
@@ -263,7 +261,7 @@ abstract class AbstractIndex extends \Magento\Core\Model\AbstractModel
     /**
      * Clean index (visitors)
      *
-     * @return \Magento\Reports\Model\Product\Index\AbstractIndex
+     * @return $this
      */
     public function clean()
     {
@@ -273,8 +271,8 @@ abstract class AbstractIndex extends \Magento\Core\Model\AbstractModel
 
     /**
      * Add product ids to current visitor/customer log
-     * @param array $productIds
-     * @return \Magento\Reports\Model\Product\Index\AbstractIndex
+     * @param string[] $productIds
+     * @return $this
      */
     public function registerIds($productIds)
     {

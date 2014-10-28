@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Checkout
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -48,10 +45,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('checkout/cart/configure/id/' . $quoteItem->getId());
         $response = $this->getResponse();
 
-        $this->assertSessionMessages(
-            $this->isEmpty(),
-            \Magento\Message\MessageInterface::TYPE_ERROR
-        );
+        $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
 
         $this->assertSelectCount(
             'button[type="button"][title="Update Cart"]',
@@ -77,10 +71,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('checkout/cart/configure/id/' . $quoteItem->getId());
         $response = $this->getResponse();
 
-        $this->assertSessionMessages(
-            $this->isEmpty(),
-            \Magento\Message\MessageInterface::TYPE_ERROR
-        );
+        $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
 
         $this->assertSelectCount(
             'button[type="button"][title="Update Cart"]',
@@ -113,10 +104,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('checkout/cart/configure/id/' . $quoteItem->getId());
         $response = $this->getResponse();
 
-        $this->assertSessionMessages(
-            $this->isEmpty(),
-            \Magento\Message\MessageInterface::TYPE_ERROR
-        );
+        $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
 
         $this->assertSelectCount(
             'button[type="button"][title="Update Cart"]',
@@ -142,10 +130,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('checkout/cart/configure/id/' . $quoteItem->getId());
         $response = $this->getResponse();
 
-        $this->assertSessionMessages(
-            $this->isEmpty(),
-            \Magento\Message\MessageInterface::TYPE_ERROR
-        );
+        $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
 
         $this->assertSelectCount(
             'button[type="button"][title="Update Cart"]',
@@ -163,39 +148,49 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
-     * Test for \Magento\Checkout\Controller\Cart::configureAction() with configurable product
-     *
-     * @magentoDataFixture Magento/Checkout/_files/quote_with_configurable_product.php
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Checkout/_files/quote_with_simple_product.php
+     * @magentoAppIsolation enabled
      */
-    public function testConfigureActionWithConfigurableProduct()
+    public function testUpdatePostAction()
     {
-        /** @var $session \Magento\Checkout\Model\Session  */
-        $session = $this->_objectManager->create('Magento\Checkout\Model\Session');
+        /** Preconditions */
+        $customerFromFixture = 1;
+        $productId = 1;
+        $originalQuantity = 1;
+        $updatedQuantity = 2;
+        /** @var $checkoutSession \Magento\Checkout\Model\Session  */
+        $checkoutSession = $this->_objectManager->create('Magento\Checkout\Model\Session');
+        $quoteItem = $this->_getQuoteItemIdByProductId($checkoutSession->getQuote(), $productId);
 
-        $quoteItem = $this->_getQuoteItemIdByProductId($session->getQuote(), 1);
-        $this->assertNotNull($quoteItem, 'Cannot get quote item for configurable product');
+        /** @var \Magento\Framework\Data\Form\FormKey $formKey */
+        $formKey = $this->_objectManager->get('Magento\Framework\Data\Form\FormKey');
+        $postData = array(
+            'cart' => array($quoteItem->getId() => array('qty' => $updatedQuantity)),
+            'update_cart_action' => 'update_qty',
+            'form_key' => $formKey->getFormKey()
+        );
+        $this->getRequest()->setPost($postData);
+        /** @var $customerSession \Magento\Customer\Model\Session */
+        $customerSession = $this->_objectManager->create('Magento\Customer\Model\Session');
+        $customerSession->setCustomerId($customerFromFixture);
 
-        $this->dispatch('checkout/cart/configure/id/' . $quoteItem->getId());
-        $response = $this->getResponse();
-
-        $this->assertSessionMessages(
-            $this->isEmpty(),
-            \Magento\Message\MessageInterface::TYPE_ERROR
+        $this->assertNotNull($quoteItem, 'Cannot get quote item for simple product');
+        $this->assertEquals(
+            $originalQuantity,
+            $quoteItem->getQty(),
+            "Precondition failed: invalid quote item quantity"
         );
 
-        $this->assertSelectCount(
-            'button[type="button"][title="Update Cart"]',
-            1,
-            $response->getBody(),
-            'Response for configurable product doesn\'t contain "Update Cart" button'
-        );
+        /** Execute SUT */
+        $this->dispatch('checkout/cart/updatePost');
 
-        $this->assertSelectCount(
-            'select.super-attribute-select',
-            1,
-            $response->getBody(),
-            'Response for configurable product doesn\'t contain select for super attribute'
-        );
+        /** Check results */
+        /** @var \Magento\Sales\Model\Quote $quote */
+        $quote = $this->_objectManager->create('Magento\Sales\Model\Quote');
+        $quote->load($checkoutSession->getQuote()->getId());
+        $quoteItem = $this->_getQuoteItemIdByProductId($quote, 1);
+        $this->assertEquals($updatedQuantity, $quoteItem->getQty(), "Invalid quote item quantity");
     }
 
     /**

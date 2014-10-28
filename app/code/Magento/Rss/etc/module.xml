@@ -19,33 +19,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Rss
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
-    <module name="Magento_Rss" version="1.6.0.0" active="true">
-        <sequence>
-            <module name="Magento_Catalog"/>
-            <module name="Magento_CatalogInventory"/>
-            <module name="Magento_Sales"/>
-            <module name="Magento_SalesRule"/>
-            <module name="Magento_Wishlist"/>
-        </sequence>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Module/etc/module.xsd">
+    <module name="Magento_Rss" schema_version="1.6.0.0" active="true">
         <depends>
-            <module name="Magento_Catalog"/>
-            <module name="Magento_Tax"/>
-            <module name="Magento_CatalogInventory"/>
-            <module name="Magento_Sales"/>
-            <module name="Magento_SalesRule"/>
-            <module name="Magento_Wishlist"/>
-            <module name="Magento_Core"/>
-            <module name="Magento_Review"/>
-            <module name="Magento_Customer"/>
+            <module name="Magento_Store"/>
             <module name="Magento_Backend"/>
-            <module name="Magento_GiftMessage"/>
         </depends>
     </module>
 </config>

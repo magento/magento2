@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    tests
- * @package     static
- * @subpackage  Integrity
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -77,13 +74,17 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
             function ($path) {
                 $xml = simplexml_load_file($path);
                 $classes = \Magento\TestFramework\Utility\Classes::collectLayoutClasses($xml);
-                foreach (\Magento\TestFramework\Utility\Classes::getXmlAttributeValues($xml,
-                    '/layout//@helper', 'helper') as $class) {
+                foreach (\Magento\TestFramework\Utility\Classes::getXmlAttributeValues(
+                    $xml,
+                    '/layout//@helper',
+                    'helper'
+                ) as $class) {
                     $classes[] = \Magento\TestFramework\Utility\Classes::getCallbackClass($class);
                 }
-                $classes =
-                    array_merge($classes, \Magento\TestFramework\Utility\Classes::getXmlAttributeValues($xml,
-                            '/layout//@module', 'module'));
+                $classes = array_merge(
+                    $classes,
+                    \Magento\TestFramework\Utility\Classes::getXmlAttributeValues($xml, '/layout//@module', 'module')
+                );
                 $this->_assertNonFactoryName(array_unique($classes), $path);
 
                 $tabs = \Magento\TestFramework\Utility\Classes::getXmlNodeValues(
@@ -130,7 +131,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
             }
         }
         if ($factoryNames) {
-            $this->fail("Obsolete factory name(s) detected in $file:" . "\n" . implode("\n", $factoryNames));
+            $this->fail("Obsolete factory name(s) detected in {$file}:" . "\n" . implode("\n", $factoryNames));
         }
     }
 }

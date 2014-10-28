@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     performance_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,8 +27,7 @@
  */
 namespace Magento\TestFramework\Performance\Scenario\Handler;
 
-class FileFormat
-    implements \Magento\TestFramework\Performance\Scenario\HandlerInterface
+class FileFormat implements \Magento\TestFramework\Performance\Scenario\HandlerInterface
 {
     /**
      * @var array
@@ -44,7 +41,8 @@ class FileFormat
      * @param \Magento\TestFramework\Performance\Scenario\HandlerInterface $handlerInstance
      * @return \Magento\TestFramework\Performance\Scenario\Handler\FileFormat
      */
-    public function register($fileExtension,
+    public function register(
+        $fileExtension,
         \Magento\TestFramework\Performance\Scenario\HandlerInterface $handlerInstance
     ) {
         $this->_handlers[$fileExtension] = $handlerInstance;
@@ -67,7 +65,7 @@ class FileFormat
      *
      * @param \Magento\TestFramework\Performance\Scenario $scenario
      * @param string|null $reportFile Report file to write results to, NULL disables report creation
-     * @throws \Magento\Exception
+     * @throws \Magento\Framework\Exception
      */
     public function run(\Magento\TestFramework\Performance\Scenario $scenario, $reportFile = null)
     {
@@ -75,7 +73,9 @@ class FileFormat
         /** @var $scenarioHandler \Magento\TestFramework\Performance\Scenario\HandlerInterface */
         $scenarioHandler = $this->getHandler($scenarioExtension);
         if (!$scenarioHandler) {
-            throw new \Magento\Exception("Unable to run scenario '{$scenario->getTitle()}', format is not supported.");
+            throw new \Magento\Framework\Exception(
+                "Unable to run scenario '{$scenario->getTitle()}', format is not supported."
+            );
         }
         $scenarioHandler->run($scenario, $reportFile);
     }

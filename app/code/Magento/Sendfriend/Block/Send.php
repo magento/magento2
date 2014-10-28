@@ -18,23 +18,17 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sendfriend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Sendfriend\Block;
 
 /**
  * Email to a Friend Block
  *
- * @category    Magento
- * @package     Magento_Sendfriend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sendfriend\Block;
-
-class Send extends \Magento\View\Element\Template
+class Send extends \Magento\Framework\View\Element\Template
 {
     /**
      * Sendfriend data
@@ -46,7 +40,7 @@ class Send extends \Magento\View\Element\Template
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
@@ -56,23 +50,40 @@ class Send extends \Magento\View\Element\Template
     protected $_customerSession;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @var \Magento\Framework\App\Http\Context
+     */
+    protected $httpContext;
+
+    /**
+     * @var \Magento\Customer\Helper\View
+     */
+    protected $_customerViewHelper;
+
+    /**
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sendfriend\Helper\Data $sendfriendData
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Customer\Helper\View $customerViewHelper
+     * @param \Magento\Framework\App\Http\Context $httpContext
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Sendfriend\Helper\Data $sendfriendData,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Framework\Registry $registry,
+        \Magento\Customer\Helper\View $customerViewHelper,
+        \Magento\Framework\App\Http\Context $httpContext,
         array $data = array()
     ) {
         $this->_customerSession = $customerSession;
         $this->_coreRegistry = $registry;
         $this->_sendfriendData = $sendfriendData;
         parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
+        $this->httpContext = $httpContext;
+        $this->_customerViewHelper = $customerViewHelper;
     }
 
     /**
@@ -90,8 +101,10 @@ class Send extends \Magento\View\Element\Template
         /* @var $session \Magento\Customer\Model\Session */
         $session = $this->_customerSession;
 
-        if ($session->isLoggedIn()) {
-            return $session->getCustomer()->getName();
+        if ($this->httpContext->getValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH)) {
+            return $this->_customerViewHelper->getCustomerName(
+                $session->getCustomerDataObject()
+            );
         }
 
         return '';
@@ -112,8 +125,8 @@ class Send extends \Magento\View\Element\Template
         /* @var $session \Magento\Customer\Model\Session */
         $session = $this->_customerSession;
 
-        if ($session->isLoggedIn()) {
-            return $session->getCustomer()->getEmail();
+        if ($this->httpContext->getValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH)) {
+            return $session->getCustomerDataObject()->getEmail();
         }
 
         return '';
@@ -130,15 +143,15 @@ class Send extends \Magento\View\Element\Template
     }
 
     /**
-     * Retrieve Form data or empty \Magento\Object
+     * Retrieve Form data or empty \Magento\Framework\Object
      *
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     public function getFormData()
     {
         $data = $this->getData('form_data');
-        if (!$data instanceof \Magento\Object) {
-            $data = new \Magento\Object();
+        if (!$data instanceof \Magento\Framework\Object) {
+            $data = new \Magento\Framework\Object();
             $this->setData('form_data', $data);
         }
 
@@ -149,12 +162,12 @@ class Send extends \Magento\View\Element\Template
      * Set Form data array
      *
      * @param array $data
-     * @return \Magento\Sendfriend\Block\Send
+     * @return $this
      */
     public function setFormData($data)
     {
         if (is_array($data)) {
-            $this->setData('form_data', new \Magento\Object($data));
+            $this->setData('form_data', new \Magento\Framework\Object($data));
         }
 
         return $this;
@@ -197,10 +210,7 @@ class Send extends \Magento\View\Element\Template
      */
     public function getSendUrl()
     {
-        return $this->getUrl('*/*/sendmail', array(
-            'id'     => $this->getProductId(),
-            'cat_id' => $this->getCategoryId()
-        ));
+        return $this->getUrl('*/*/sendmail', array('id' => $this->getProductId(), 'cat_id' => $this->getCategoryId()));
     }
 
     /**

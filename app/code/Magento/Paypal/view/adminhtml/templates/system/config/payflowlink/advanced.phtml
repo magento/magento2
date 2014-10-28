@@ -1,0 +1,38 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/*
+ * @var $this \Magento\Paypal\Block\Adminhtml\System\Config\Payflowlink\Advanced
+ */
+?>
+<div class="payflow-settings-notice">
+    <strong class="important-label"><?php echo __('Important: ') ?></strong>
+    <?php echo __('To use PayPal Payments Advanced, you must configure  your PayPal Payments Advanced account on the PayPal website.'); ?>
+    <?php echo __('Once you log into your PayPal Advanced account, navigate to the Service Settings - Hosted Checkout Pages - Set Up menu and set the options described below') ?>
+    <ul class="options-list">
+        <li><strong>AVS:</strong> No</li>
+        <li><strong>CSC:</strong> No</li>
+        <li><strong>Enable Secure Token:</strong> Yes</li>
+    </ul>
+</div>

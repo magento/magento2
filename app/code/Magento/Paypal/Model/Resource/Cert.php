@@ -18,38 +18,35 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Paypal
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Model\Resource;
 
 /**
  * PayPal resource model for certificate based authentication
  */
-namespace Magento\Paypal\Model\Resource;
-
-class Cert extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Cert extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
-     * @var \Magento\Core\Model\Date
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
     protected $_coreDate;
 
     /**
-     * @var \Magento\Stdlib\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime
      */
     protected $dateTime;
 
     /**
-     * @param \Magento\App\Resource $resource
-     * @param \Magento\Core\Model\Date $coreDate
-     * @param \Magento\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $coreDate
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      */
     public function __construct(
-        \Magento\App\Resource $resource,
-        \Magento\Core\Model\Date $coreDate,
-        \Magento\Stdlib\DateTime $dateTime
+        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Stdlib\DateTime\DateTime $coreDate,
+        \Magento\Framework\Stdlib\DateTime $dateTime
     ) {
         $this->_coreDate = $coreDate;
         $this->dateTime = $dateTime;
@@ -58,6 +55,8 @@ class Cert extends \Magento\Core\Model\Resource\Db\AbstractDb
 
     /**
      * Initialize connection
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -67,10 +66,10 @@ class Cert extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Set date of last update
      *
-     * @param \Magento\Core\Model\AbstractModel $object
-     * @return \Magento\Core\Model\Resource\Db\AbstractDb
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return \Magento\Framework\Model\Resource\Db\AbstractDb
      */
-    protected function _beforeSave(\Magento\Core\Model\AbstractModel $object)
+    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
         $object->setUpdatedAt($this->dateTime->formatDate($this->_coreDate->gmtDate()));
         return parent::_beforeSave($object);
@@ -86,14 +85,19 @@ class Cert extends \Magento\Core\Model\Resource\Db\AbstractDb
     public function loadByWebsite($object, $strictLoad = true)
     {
         $adapter = $this->_getReadAdapter();
-        $select  = $adapter->select()->from(array('main_table' => $this->getMainTable()));
+        $select = $adapter->select()->from(array('main_table' => $this->getMainTable()));
 
         if ($strictLoad) {
             $select->where('main_table.website_id =?', $object->getWebsiteId());
         } else {
-            $select->where('main_table.website_id IN(0, ?)', $object->getWebsiteId())
-                ->order('main_table.website_id DESC')
-                ->limit(1);
+            $select->where(
+                'main_table.website_id IN(0, ?)',
+                $object->getWebsiteId()
+            )->order(
+                'main_table.website_id DESC'
+            )->limit(
+                1
+            );
         }
 
         $data = $adapter->fetchRow($select);

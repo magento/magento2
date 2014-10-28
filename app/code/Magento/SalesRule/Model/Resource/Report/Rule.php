@@ -18,22 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_SalesRule
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\SalesRule\Model\Resource\Report;
 
 /**
  * Rule report resource model
  *
- * @category    Magento
- * @package     Magento_SalesRule
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\SalesRule\Model\Resource\Report;
-
 class Rule extends \Magento\Reports\Model\Resource\Report\AbstractReport
 {
     /**
@@ -47,26 +41,26 @@ class Rule extends \Magento\Reports\Model\Resource\Report\AbstractReport
     protected $_updatedatFactory;
 
     /**
-     * @param \Magento\App\Resource $resource
-     * @param \Magento\Logger $logger
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
-     * @param \Magento\Stdlib\DateTime $dateTime
-     * @param \Magento\Stdlib\DateTime\Timezone\Validator $timezoneValidator
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator
      * @param \Magento\SalesRule\Model\Resource\Report\Rule\CreatedatFactory $createdatFactory
      * @param \Magento\SalesRule\Model\Resource\Report\Rule\UpdatedatFactory $updatedatFactory
      */
     public function __construct(
-        \Magento\App\Resource $resource,
-        \Magento\Logger $logger,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Logger $logger,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Reports\Model\FlagFactory $reportsFlagFactory,
-        \Magento\Stdlib\DateTime $dateTime,
-        \Magento\Stdlib\DateTime\Timezone\Validator $timezoneValidator,
+        \Magento\Framework\Stdlib\DateTime $dateTime,
+        \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator,
         \Magento\SalesRule\Model\Resource\Report\Rule\CreatedatFactory $createdatFactory,
         \Magento\SalesRule\Model\Resource\Report\Rule\UpdatedatFactory $updatedatFactory
     ) {
-        parent::__construct($resource, $logger, $locale, $reportsFlagFactory, $dateTime, $timezoneValidator);
+        parent::__construct($resource, $logger, $localeDate, $reportsFlagFactory, $dateTime, $timezoneValidator);
         $this->_createdatFactory = $createdatFactory;
         $this->_updatedatFactory = $updatedatFactory;
     }
@@ -74,6 +68,7 @@ class Rule extends \Magento\Reports\Model\Resource\Report\AbstractReport
     /**
      * Resource Report Rule constructor
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -83,9 +78,9 @@ class Rule extends \Magento\Reports\Model\Resource\Report\AbstractReport
     /**
      * Aggregate Coupons data
      *
-     * @param mixed $from
-     * @param mixed $to
-     * @return \Magento\SalesRule\Model\Resource\Report\Rule
+     * @param mixed|null $from
+     * @param mixed|null $to
+     * @return $this
      */
     public function aggregate($from = null, $to = null)
     {
@@ -105,14 +100,17 @@ class Rule extends \Magento\Reports\Model\Resource\Report\AbstractReport
     {
         $adapter = $this->_getReadAdapter();
         $tableName = $this->getTable('coupon_aggregated');
-        $select = $adapter->select()
-            ->from(
-                $tableName,
-                new \Zend_Db_Expr('DISTINCT rule_name')
-            )
-            ->where('rule_name IS NOT NULL')
-            ->where('rule_name <> ?', '')
-            ->order('rule_name ASC');
+        $select = $adapter->select()->from(
+            $tableName,
+            new \Zend_Db_Expr('DISTINCT rule_name')
+        )->where(
+            'rule_name IS NOT NULL'
+        )->where(
+            'rule_name <> ?',
+            ''
+        )->order(
+            'rule_name ASC'
+        );
 
         $rulesNames = $adapter->fetchAll($select);
 

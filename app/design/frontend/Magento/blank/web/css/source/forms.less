@@ -1,0 +1,107 @@
+// /**
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+.fieldset {
+    .legend + .fieldset,
+    .legend + div {
+        clear: both;
+    }
+    .legend {
+        strong {
+            margin-left: @indent-xs-base;
+        }
+    }
+    .form-fieldset();
+    &:last-child {
+        margin-bottom: 0;
+    }
+    > .field {
+        .form-field();
+        &.no-label {
+            > .label {
+                &:extend(.abstract-visually-hidden all);
+            }
+        }
+        &.choice {
+            .label {
+                font-weight: normal;
+                display: inline;
+            }
+        }
+        .label {
+            .column:not(.main) & {
+                font-weight: normal;
+            }
+        }
+        .field.choice {
+            margin-bottom: @indent-s-base;
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+        &.date {
+            .control > input {
+                margin-right: 10px;
+                min-width: 80px;
+                width: 25%;
+            }
+        }
+    }
+    fieldset.field {
+        border: 0;
+        padding: 0;
+    }
+}
+
+div.mage-error[generated] {
+    margin-top: 7px;
+}
+
+.field .tooltip {
+    .tooltip(right);
+    .tooltip-content {
+        min-width: 200px;
+        white-space: normal;
+    }
+}
+
+input:focus ~ .tooltip .tooltip-content,
+select:focus ~ .tooltip .tooltip-content {
+    display: block;
+}
+
+//
+//    Desktop
+//--------------------------------------
+.responsive(@break) when (@break = @screen-m) {
+    .fieldset {
+        .legend {
+            &:extend(.abstract-margin-for-forms-desktop all);
+        }
+        > .field {
+            .form-field-type-revert();
+            margin: 0 0 29px;
+        }
+    }
+}

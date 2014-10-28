@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,24 +25,23 @@
 /**
  * Config source reports event store filter
  *
- * @category   Magento
- * @package    Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Backend\Model\Config\Source\Reports;
 
-class Scope implements \Magento\Core\Model\Option\ArrayInterface
+class Scope implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * Scope filter
+     *
+     * @return array
      */
     public function toOptionArray()
     {
         return array(
-            array('value'=>'website', 'label'=>__('Website')),
-            array('value'=>'group', 'label'=>__('Store')),
-            array('value'=>'store', 'label'=>__('Store View')),
+            array('value' => 'website', 'label' => __('Website')),
+            array('value' => 'group', 'label' => __('Store')),
+            array('value' => 'store', 'label' => __('Store View'))
         );
     }
-
 }

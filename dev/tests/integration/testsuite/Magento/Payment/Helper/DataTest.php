@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Payment
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -35,10 +32,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testGetInfoBlock()
     {
         $helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Payment\Helper\Data');
-        $paymentInfo = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Payment\Model\Info');
+        $paymentInfo = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Payment\Model\Info'
+        );
         $paymentInfo->setMethod('checkmo');
         $result = $helper->getInfoBlock($paymentInfo);
-        $this->assertInstanceOf('Magento\Payment\Block\Info\Checkmo', $result);
+        $this->assertInstanceOf('Magento\OfflinePayments\Block\Info\Checkmo', $result);
     }
 }

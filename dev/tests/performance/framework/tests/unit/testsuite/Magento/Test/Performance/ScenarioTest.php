@@ -18,18 +18,13 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     performance_tests
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Performance;
 
 class ScenarioTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var \Magento\TestFramework\Performance\Scenario
      */
@@ -37,8 +32,11 @@ class ScenarioTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_object = new \Magento\TestFramework\Performance\Scenario('Test title', 'test/file.jmx',
-            array('arg1' => 'value1', 'arg2' => 'value2'), array('setting1' => 'value1', 'setting2' => 'value2'),
+        $this->_object = new \Magento\TestFramework\Performance\Scenario(
+            'Test title',
+            'test/file.jmx',
+            array('arg1' => 'value1', 'arg2' => 'value2'),
+            array('setting1' => 'value1', 'setting2' => 'value2'),
             array('fixture1', 'fixture2')
         );
     }
@@ -64,26 +62,20 @@ class ScenarioTest extends \PHPUnit_Framework_TestCase
             'arg1' => 'value1',
             'arg2' => 'value2',
             \Magento\TestFramework\Performance\Scenario::ARG_USERS => 1,
-            \Magento\TestFramework\Performance\Scenario::ARG_LOOPS => 1,
+            \Magento\TestFramework\Performance\Scenario::ARG_LOOPS => 1
         );
         $this->assertEquals($expectedArguments, $this->_object->getArguments());
     }
 
     public function testGetSettings()
     {
-        $expectedSettings = array(
-            'setting1' => 'value1',
-            'setting2' => 'value2',
-        );
+        $expectedSettings = array('setting1' => 'value1', 'setting2' => 'value2');
         $this->assertEquals($expectedSettings, $this->_object->getSettings());
     }
 
     public function testGetFixtures()
     {
-        $expectedFixtures = array(
-            'fixture1',
-            'fixture2'
-        );
+        $expectedFixtures = array('fixture1', 'fixture2');
         $this->assertEquals($expectedFixtures, $this->_object->getFixtures());
     }
 }

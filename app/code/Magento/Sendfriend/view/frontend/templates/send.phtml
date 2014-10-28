@@ -1,0 +1,140 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+/**
+ * Send to friend form
+ *
+ * @var $this \Magento\Sendfriend\Block\Send
+ */
+?>
+<script id="add-recipient-tmpl" type="text/x-jQuery-tmpl">
+    <div class="actions-toolbar">
+        <div class="secondary">
+            <button type="button" id="btn-remove${_index_}" class="action remove"
+               title="<?php echo $this->escapeJsQuote(__('Remove')) ?>"><span><?php echo $this->escapeJsQuote(__('Remove')) ?></span></button>
+        </div>
+    </div>
+    <fieldset class="fieldset">
+        <div class="field name required">
+            <label for="recipients-name${_index_}" class="label"><span><?php echo __('Name')?></span></label>
+            <div class="control">
+                <input name="recipients[name][${_index_}]" type="text" title="<?php echo __('Name') ?>" class="input-text"
+                       id="recipients-name${_index_}" data-validate="{required:true}"/>
+            </div>
+        </div>
+
+        <div class="field email required">
+            <label for="recipients-email${_index_}" class="label"><span><?php echo __('Email Address') ?></span></label>
+            <div class="control">
+                <input name="recipients[email][${_index_}]" title="<?php echo __('Email Address') ?>"
+                       id="recipients-email${_index_}" type="email" class="input-text"
+                       data-validate="{required:true, 'validate-email':true}"/>
+            </div>
+        </div>
+    </fieldset>
+</script>
+
+<form action="<?php echo $this->getSendUrl() ?>" method="post" id="product-sendtofriend-form"
+      data-mage-init='{
+        "rowBuilder":{
+            "rowTemplate":"#add-recipient-tmpl",
+            "rowContainer":"#recipients-options",
+            "rowParentElem":"<div></div>",
+            "remEventSelector":"button",
+            "btnRemoveSelector":".action.remove",
+            "maxRows":"<?php echo $this->getMaxRecipients() ?>",
+            "maxRowsMsg":"#max-recipient-message",
+            "addRowBtn":"#add-recipient-button",
+            "additionalRowClass":"additional"},
+        "validation":{}}'
+      class="form send friend" data-hasRequired="<?php echo __('* Required Fields') ?>">
+    <fieldset class="fieldset sender" id="sender_options">
+        <?php echo $this->getBlockHtml('formkey')?>
+        <legend class="legend"><span><?php echo __('Sender') ?></span></legend>
+        <br>
+        <div class="field sender required">
+            <label for="sender-name" class="label"><span><?php echo __('Name') ?></span></label>
+            <div class="control">
+                <input name="sender[name]" value="<?php echo $this->escapeHtml($this->getUserName()) ?>"
+                       title="<?php echo __('Name') ?>" id="sender-name" type="text" class="input-text"
+                       data-validate="{required:true}"/>
+            </div>
+        </div>
+
+        <div class="field email required">
+            <label for="sender-email" class="label"><span><?php echo __('Email') ?></span></label>
+            <div class="control">
+                <input name="sender[email]" value="<?php echo $this->escapeHtml($this->getEmail()) ?>"
+                       title="<?php echo __('Email Address') ?>" id="sender-email" type="text" class="input-text"
+                       data-validate="{required:true, 'validate-email':true}"/>
+            </div>
+        </div>
+
+        <div class="field text required">
+            <label for="sender-message" class="label"><span><?php echo __('Message') ?></span></label>
+            <div class="control">
+                <textarea name="sender[message]" class="input-text" id="sender-message" cols="3" rows="3"
+                          data-validate="{required:true}"><?php echo $this->escapeHtml($this->getMessage()) ?></textarea>
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset class="fieldset recipients">
+        <?php echo $this->getBlockHtml('formkey')?>
+        <legend class="legend"><span><?php echo __('Recipient') ?></span></legend>
+        <br />
+        <div id="recipients-options"></div>
+        <?php if ($this->getMaxRecipients()): ?>
+            <div id="max-recipient-message" style="display: none;" class="message notice limit">
+                <span><?php echo __('Maximum %1 email addresses allowed.', $this->getMaxRecipients()) ?></span>
+            </div>
+        <?php endif; ?>
+        <div class="actions-toolbar">
+            <div class="secondary">
+            <?php if (1 < $this->getMaxRecipients()): ?>
+                <button type="button" id="add-recipient-button" class="action add">
+                    <span><?php echo __('Add Recipient') ?></span></button>
+            <?php endif; ?>
+            </div>
+        </div>
+    </fieldset>
+    <div class="actions-toolbar">
+        <div class="primary">
+            <button type="submit"
+                    class="action submit primary"<?php if (!$this->canSend()): ?> disabled="disabled"<?php endif ?>>
+                <span><?php echo __('Send Email') ?></span></button>
+        </div>
+        <div class="secondary">
+            <a class="action back" href="#" role="back"><span><?php echo __('Back') ?></span></a>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+require(['jquery'], function(jQuery){
+
+    //<![CDATA[
+        jQuery('a[role="back"]').on('click', function() { history.back(); return false; });
+    //]]>
+
+});
+</script>

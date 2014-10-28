@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -33,118 +30,70 @@ namespace Magento\Core\Model\Theme;
 class ValidationTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Test validator with valid data
+     * @param array $data
+     * @param bool $result
+     * @param array $messages
      *
-     * @covers \Magento\View\Design\Theme\Validator::validate
+     * @covers \Magento\Framework\View\Design\Theme\Validator::validate
+     * @dataProvider dataProviderValidate
      */
-    public function testValidateWithValidData()
+    public function testValidate(array $data, $result, array $messages)
     {
-        /** @var $themeMock \Magento\Object */
-        $themeMock = new \Magento\Object();
-        $themeMock->setData($this->_getThemeValidData());
+        /** @var $themeMock \Magento\Framework\Object */
+        $themeMock = new \Magento\Framework\Object();
+        $themeMock->setData($data);
 
-        /** @var $validatorMock \Magento\View\Design\Theme\Validator */
-        $validatorMock = $this->getMock(
-            'Magento\View\Design\Theme\Validator', array('_setThemeValidators'), array(), '', false
-        );
+        $validator = new \Magento\Framework\View\Design\Theme\Validator();
 
-        $versionValidators = array(
-            array(
-                'name' => 'available', 'class' => 'Zend_Validate_Regex', 'break' => true,
-                'options' => array('pattern' => '/([a-z0-9\_]+)/'),
-                'message' => 'Theme code has not compatible format'
-            )
-        );
-
-        $validatorMock->addDataValidators('theme_code', $versionValidators);
-        $this->assertEquals(true, $validatorMock->validate($themeMock));
+        $this->assertEquals($result, $validator->validate($themeMock));
+        $this->assertEquals($messages, $validator->getErrorMessages());
     }
 
-    /**
-     * Test validator with invalid data
-     *
-     * @covers \Magento\View\Design\Theme\Validator::validate
-     */
-    public function testValidateWithInvalidData()
+    public function dataProviderValidate()
     {
-        /** @var $themeMock \Magento\Object */
-        $themeMock = new \Magento\Object();
-        $themeMock->setData($this->_getThemeInvalidData());
-
-        /** @var $helper \Magento\Core\Helper\Data */
-        $helper = $this->getMockBuilder('Magento\Core\Helper\Data')->disableOriginalConstructor()->getMock();
-
-        /** @var $validatorMock \Magento\View\Design\Theme\Validator */
-        $validatorMock = $this->getMock(
-            'Magento\View\Design\Theme\Validator', array('_setThemeValidators'), array($helper), '', true
-        );
-
-        $codeValidators = array(
+        return array(
             array(
-                'name' => 'available', 'class' => 'Zend_Validate_Regex', 'break' => true,
-                'options' => array('pattern' => '/^[a-z]+$/'),
-                'message' => 'Theme code has not compatible format'
+                array(
+                    'theme_code' => 'Magento/iphone',
+                    'theme_title' => 'Iphone',
+                    'theme_version' => '2.0.0',
+                    'parent_theme' => array('default', 'default'),
+                    'theme_path' => 'Magento/iphone',
+                    'preview_image' => 'images/preview.png'
+                ),
+                true,
+                array(),
+            ),
+            array(
+                array(
+                    'theme_code' => 'iphone#theme!!!!',
+                    'theme_title' => 'Iphone',
+                    'theme_version' => 'last theme version',
+                    'parent_theme' => array('default', 'default'),
+                    'theme_path' => 'magento_iphone',
+                    'preview_image' => 'images/preview.png'
+                ),
+                false,
+                array(
+                    'theme_version' => array('Theme version has not compatible format.')
+                ),
+            ),
+            array(
+                array(
+                    'theme_code' => 'iphone#theme!!!!',
+                    'theme_title' => '',
+                    'theme_version' => '',
+                    'parent_theme' => array('default', 'default'),
+                    'theme_path' => 'magento_iphone',
+                    'preview_image' => 'images/preview.png'
+                ),
+                false,
+                array(
+                    'theme_version' => array('Field can\'t be empty'),
+                    'theme_title' => array('Field title can\'t be empty')
+                ),
             ),
         );
-
-        $versionValidators = array(
-            array(
-                'name' => 'available', 'class' => 'Zend_Validate_Regex', 'break' => true,
-                'options' => array('pattern' => '/(\d+\.\d+\.\d+\.\d+(\-[a-zA-Z0-9]+)?)|\*/'),
-                'message' => 'Theme version has not compatible format.'
-            )
-        );
-
-        $validatorMock->addDataValidators('theme_code', $codeValidators)
-            ->addDataValidators('theme_version', $versionValidators);
-        $this->assertEquals(false, $validatorMock->validate($themeMock));
-        $this->assertEquals($this->_getErrorMessages(), $validatorMock->getErrorMessages());
     }
 
-    /**
-     * Get theme valid data
-     *
-     * @return array
-     */
-    protected function _getThemeValidData()
-    {
-        return array(
-            'theme_code'           => 'iphone',
-            'theme_title'          => 'Iphone',
-            'theme_version'        => '2.0.0.0',
-            'parent_theme'         => array('default', 'default'),
-            'theme_path'           => 'magento_iphone',
-            'preview_image'        => 'images/preview.png',
-        );
-    }
-
-    /**
-     * Get theme invalid data
-     *
-     * @return array
-     */
-    protected function _getThemeInvalidData()
-    {
-        return array(
-            'theme_code'           => 'iphone#theme!!!!',
-            'theme_title'          => 'Iphone',
-            'theme_version'        => 'last theme version',
-            'parent_theme'         => array('default', 'default'),
-            'theme_path'           => 'magento_iphone',
-            'preview_image'        => 'images/preview.png',
-        );
-    }
-
-    /**
-     * Get error messages
-     *
-     * @return array
-     */
-    protected function _getErrorMessages()
-    {
-        return array(
-            'theme_code'           => array('Theme code has not compatible format'),
-            'theme_version'        => array('Theme version has not compatible format.')
-        );
-    }
 }

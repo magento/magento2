@@ -1,0 +1,95 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php /** @var $this \Magento\Bundle\Block\Sales\Order\Items\Renderer */ ?>
+
+<?php $parentItem = $this->getItem() ?>
+<?php $items = $this->getChilds($parentItem) ?>
+<?php $_index = 0 ?>
+<?php $_order = $this->getItem()->getOrder(); ?>
+
+<?php $_prevOptionId = '' ?>
+
+<?php foreach ($items as $_item): ?>
+
+<?php if($this->getItemOptions() || $parentItem->getDescription() || $this->helper('Magento\GiftMessage\Helper\Message')->getIsMessagesAvailable('order_item', $parentItem) && $parentItem->getGiftMessageId()): ?>
+    <?php $_showlastRow = true ?>
+<?php else: ?>
+    <?php $_showlastRow = false ?>
+<?php endif; ?>
+
+<?php if ($_item->getOrderItem()->getParentItem()): ?>
+    <?php $attributes = $this->getSelectionAttributes($_item) ?>
+    <?php if ($_prevOptionId != $attributes['option_id']): ?>
+    <tr>
+        <td align="left" valign="top" style="padding:3px 9px"><strong><em><?php echo $attributes['option_label'] ?></em></strong></td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <?php $_prevOptionId = $attributes['option_id'] ?>
+    <?php endif; ?>
+<?php endif; ?>
+<tr id="order-item-row-<?php echo $_item->getId() ?>">
+    <?php if (!$_item->getOrderItem()->getParentItem()): ?>
+    <td align="left" valign="top" style="padding:3px 9px"><strong><?php echo $this->escapeHtml($_item->getName()) ?></strong></td>
+    <?php else: ?>
+    <td align="left" valign="top" style="padding:3px 19px"><?php echo $this->getValueHtml($_item)?></td>
+    <?php endif; ?>
+    <td align="left" valign="top" style="padding:3px 9px"><?php echo $this->escapeHtml($_item->getSku()) ?></td>
+    <td align="center" valign="top" style="padding:3px 9px">
+        <?php if ($this->canShowPriceInfo($_item)): ?>
+            <?php echo $_item->getQty()*1 ?>
+        <?php else: ?>
+            &nbsp;
+        <?php endif; ?>
+    </td>
+    <td align="right" valign="top" style="padding:3px 9px">
+        <?php if ($this->canShowPriceInfo($_item)): ?>
+            <?php echo $this->getItemPrice($_item); ?>
+        <?php else: ?>
+            &nbsp;
+        <?php endif; ?>
+    </td>
+</tr>
+<?php endforeach; ?>
+
+<?php if ($_showlastRow): ?>
+<tr>
+    <td align="left" valign="top" style="padding:3px 9px">
+        <?php if ($this->getItemOptions()): ?>
+        <dl style="margin:0; padding:0;">
+            <?php foreach ($this->getItemOptions() as $option): ?>
+            <dt><strong><em><?php echo $option['label'] ?></em></strong></dt>
+            <dd style="margin:0; padding:0 0 0 9px;"><?php echo $option['value'] ?></dd>
+            <?php endforeach; ?>
+        </dl>
+        <?php endif; ?>
+        <?php echo $this->escapeHtml($_item->getDescription()) ?>
+    </td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+</tr>
+<?php endif; ?>

@@ -44,10 +44,13 @@ class Log
      * Catalog Product Compare Items Clean
      * after plugin for clean method
      *
+     * @param \Magento\Log\Model\Resource\Log $subject
      * @param \Magento\Log\Model\Resource\Log $logResourceModel
+     *
      * @return \Magento\Log\Model\Resource\Log
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterClean($logResourceModel)
+    public function afterClean(\Magento\Log\Model\Resource\Log $subject, $logResourceModel)
     {
         $this->_productCompareItem->clean();
         return $logResourceModel;

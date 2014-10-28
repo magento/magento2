@@ -18,21 +18,18 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_ImportExport
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ImportExport\Model\Import\Source;
 
 /**
  * CSV import adapter
  */
-namespace Magento\ImportExport\Model\Import\Source;
-
 class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
 {
     /**
-     * @var \Magento\Filesystem\File\Write
+     * @var \Magento\Framework\Filesystem\File\Write
      */
     protected $_file;
 
@@ -51,22 +48,22 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
      *
      * There must be column names in the first line
      *
-     * @param string $fileOrStream
-     * @param \Magento\Filesystem\Directory\Write $directory
+     * @param string $file
+     * @param \Magento\Framework\Filesystem\Directory\Write $directory
      * @param string $delimiter
      * @param string $enclosure
      * @throws \LogicException
      */
     public function __construct(
-        $fileOrStream,
-        \Magento\Filesystem\Directory\Write $directory,
+        $file,
+        \Magento\Framework\Filesystem\Directory\Write $directory,
         $delimiter = ',',
         $enclosure = '"'
     ) {
         try {
-            $this->_file = $directory->openFile($directory->getRelativePath($fileOrStream), 'r');
-        } catch(\Magento\Filesystem\FilesystemException $e) {
-            throw new \LogicException("Unable to open file or stream: '{$fileOrStream}'");
+            $this->_file = $directory->openFile($directory->getRelativePath($file), 'r');
+        } catch (\Magento\Framework\Filesystem\FilesystemException $e) {
+            throw new \LogicException("Unable to open file: '{$file}'");
         }
         $this->_delimiter = $delimiter;
         $this->_enclosure = $enclosure;
@@ -95,11 +92,14 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
 
     /**
      * Rewind the \Iterator to the first element (\Iterator interface)
+     *
+     * @return void
      */
     public function rewind()
     {
         $this->_file->seek(0);
-        $this->_getNextRow(); // skip first line with the header
+        $this->_getNextRow();
+        // skip first line with the header
         parent::rewind();
     }
 }

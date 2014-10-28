@@ -18,16 +18,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Install
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
  * Installation ending block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Install\Block;
 
@@ -39,12 +35,7 @@ class End extends \Magento\Install\Block\AbstractBlock
     protected $_template = 'end.phtml';
 
     /**
-     * @var \Magento\Core\Model\Config
-     */
-    protected $_coreConfig;
-
-    /**
-     * @var \Magento\AdminNotification\Model\Survey
+     * @var \Magento\Install\Model\Survey
      */
     protected $_survey;
 
@@ -56,28 +47,25 @@ class End extends \Magento\Install\Block\AbstractBlock
     protected $_cryptKey;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Install\Model\Installer $installer
      * @param \Magento\Install\Model\Wizard $installWizard
-     * @param \Magento\Session\Generic $session
-     * @param \Magento\Core\Model\Config $coreConfig
-     * @param \Magento\AdminNotification\Model\Survey $survey
-     * @param $cryptKey
+     * @param \Magento\Framework\Session\Generic $session
+     * @param \Magento\Install\Model\Survey $survey
+     * @param string $cryptKey
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Install\Model\Installer $installer,
         \Magento\Install\Model\Wizard $installWizard,
-        \Magento\Session\Generic $session,
-        \Magento\Core\Model\Config $coreConfig,
-        \Magento\AdminNotification\Model\Survey $survey,
+        \Magento\Framework\Session\Generic $session,
+        \Magento\Install\Model\Survey $survey,
         $cryptKey,
         array $data = array()
     ) {
         $this->_cryptKey = $cryptKey;
         parent::__construct($context, $installer, $installWizard, $session, $data);
-        $this->_coreConfig = $coreConfig;
         $this->_survey = $survey;
     }
 
@@ -101,8 +89,7 @@ class End extends \Magento\Install\Block\AbstractBlock
      */
     public function getIframeSourceUrl()
     {
-        if (!$this->_survey->isSurveyUrlValid()
-            || $this->_installer->getHideIframe()) {
+        if (!$this->_survey->isSurveyUrlValid() || $this->_installer->getHideIframe()) {
             return null;
         }
         return $this->_survey->getSurveyUrl();

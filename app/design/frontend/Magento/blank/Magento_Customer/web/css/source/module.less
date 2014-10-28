@@ -1,0 +1,333 @@
+// /**
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+.login.container {
+    .block {
+        &.new {
+            .actions-toolbar {
+                margin-top: 25px;
+            }
+        }
+        .title {
+            &:extend(.abstract-login-block-title all);
+        }
+    }
+    .fieldset {
+        .form-hasrequired(bottom);
+        &:after {
+            text-align: center;
+            margin-top: 35px;
+        }
+    }
+}
+
+.block-addresses-list {
+    .items.addresses {
+        > .item {
+            margin-bottom: @indent-base;
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+}
+
+.form-address-edit {
+    #region_id {
+        display: none;
+    }
+    .actions-toolbar .action.primary {
+        &:extend(.abstract-button-l all);
+    }
+}
+
+.form-edit-account {
+    .fieldset.password {
+        display: none;
+    }
+}
+
+.box-address-billing,
+.box-address-shipping,
+.box-information,
+.box-newsletter {
+    .box-content {
+        line-height: 26px;
+    }
+}
+
+// My account
+.account {
+    .page-title {
+        .title {
+            display: inline-block;
+            margin-top: 0;
+        }
+    }
+    .messages {
+        margin-bottom: @indent-base;
+    }
+    .column.main {
+        margin-bottom: @indent-l-base;
+        h2 {
+            margin-top: 0;
+        }
+        .toolbar {
+            text-align: center;
+            .limiter-options {
+                width: auto;
+            }
+        }
+        .block:not(.widget) {
+            &:extend(.abstract-account-blocks all);
+        }
+    }
+    .sidebar-additional {
+        margin-top: 40px;
+    }
+    .table-wrapper {
+        margin-bottom: @indent-base;
+        &:last-child {
+            margin-bottom: 0;
+        }
+        .data.table {
+            .table-striped(@_stripped-highlight: even);
+            .col.actions {
+                .action {
+                    margin-right: 15px;
+                    &:last-child {
+                        margin-left: 0;
+                    }
+                }
+            }
+        } 
+    }
+}
+
+//
+//    Blocks & Widgets
+//--------------------------------------
+.block {
+    &:extend(.abstract-margin-for-blocks-and-widgets all);
+    &:last-child {
+        margin-bottom: 0;
+    }
+    .title {
+        strong {
+            .heading(h4);
+            .column.main & {
+                font-size: @h3-font-size;
+            }
+        }
+        margin-bottom: @indent-s-base;
+    }
+    p:last-child {
+        margin: 0;
+    }
+    .box-actions {
+        margin-top: @indent-xs-base;
+    }
+}
+
+.control.captcha-image {
+    .css(margin-top, @indent-s-base);
+    .captcha-img {
+        vertical-align: middle;
+    }
+}
+
+.widget {
+    img {
+        max-width: 100%;
+    }
+}
+
+//
+//    Mobile
+//--------------------------------------
+.responsive-smaller(@break) when (@break = @screen-m) {
+    .account {
+        .page.messages {
+            margin-bottom: 40px;
+        }
+        .block-collapsible-nav {
+            margin-top: -21px;
+        }
+        .data.table {
+            &:extend(.abstract-table-vertical-mobile all);
+            .col.actions {
+                padding-top: 9px;
+                padding-bottom: 15px;
+                &:before {
+                    &:extend(.abstract-visually-hidden-mobile all);
+                }
+            }
+        }
+        .toolbar {
+            .toolbar-amount,
+            .limiter,
+            .pages {
+                margin-bottom: 25px;
+            }
+        }
+    }
+    .control.captcha-image {
+        .captcha-img {
+            display: block;
+            .css(margin-bottom, @indent-s-base);
+        }
+    }
+    .customer-account-index {
+        .page-title {
+            position: relative;
+        }
+    }
+}
+
+//
+//    Desktop
+//--------------------------------------
+.responsive(@break) when (@break = @screen-m) {
+    .login.container {
+        &:extend(.abstract-add-clearfix-desktop all);
+        .block {
+            &:extend(.abstract-blocks-2columns all);
+            &.login {
+                .actions-toolbar {
+                    > .primary {
+                        margin-bottom: 0;
+                        margin-right: 30px;
+                    }
+                    > .secondary {
+                        float: left;
+                    }
+                }
+            }
+        }
+        .fieldset {
+            &:after {
+                &:extend(.abstract-margin-for-forms-desktop all);
+                text-align: left;
+            }
+            > .field {
+                > .control {
+                    width: 55%;
+                }
+            }
+        }
+    }
+
+    .form.password.reset,
+    .form.send.confirmation,
+    .form.password.forget,
+    .form.create.account {
+        width: 50%;
+        min-width: 600px;
+    }
+
+    // My account
+    .account.page-layout-2columns-left {
+        .sidebar-main,
+        .sidebar-additional {
+            width: 22.3%;
+        }
+        .column.main {
+            width: 77.7%;
+        }
+    }
+
+    .account {
+        .column.main {
+            .block:not(.widget) {
+                .block-content {
+                    &:extend(.abstract-add-clearfix-desktop all);
+                    .box {
+                        &:extend(.abstract-blocks-2columns all);
+                    }
+                }
+            }
+        }
+        .data.table {
+            .table-bordered(
+                @_type: light,
+                @_border-width: 1px
+            );
+            margin-bottom: 0;
+        }
+        .toolbar {
+            position: relative;
+            margin-bottom: @indent-base;
+            &:extend(.abstract-add-clearfix-desktop all);
+            .limiter {
+                float: right;
+                position: relative;
+                z-index: 1;
+            }
+            .toolbar-amount {
+                float: left;
+                line-height: normal;
+                padding: 7px 0 0;
+                position: relative;
+                z-index: 1;
+            }
+            .pages {
+                position: absolute;
+                z-index: 0;
+                width: 100%;
+            }
+        }
+    }
+
+    .block-addresses-list {
+        .items.addresses {
+            &:extend(.abstract-add-clearfix-desktop all);
+            > .item {
+                &:extend(.abstract-blocks-2columns all);
+                margin-bottom: @indent-base;
+                &:nth-last-child(1),
+                &:nth-last-child(2) {
+                    margin-bottom: 0;
+                }
+            }
+        }
+    }
+
+    .widget {
+        clear: both;
+    }
+
+    //
+    //    Welcome block
+    //--------------------------------------
+    .dashboard-welcome-toggler {
+        &:extend(.abstract-visually-hidden-desktop all);
+    }
+
+    .control.captcha-image {
+        white-space: nowrap;
+        .captcha-img {
+            margin: 0 10px 0 0;
+        }
+    }
+}

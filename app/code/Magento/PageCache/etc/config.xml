@@ -19,20 +19,26 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_PageCache
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Core/etc/config.xsd">
     <default>
         <system>
-            <external_page_cache>
-                <enabled>0</enabled>
-                <control>zend_page_cache</control>
-                <cookie_lifetime>3600</cookie_lifetime>
-            </external_page_cache>
+            <full_page_cache>
+                <varnish>
+                    <path>Magento/PageCache/etc/varnish.vcl</path>
+                </varnish>
+                <ttl>120</ttl>
+                <caching_application>1</caching_application>
+                <default>
+                    <access_list>localhost</access_list>
+                    <backend_host>localhost</backend_host>
+                    <backend_port>8080</backend_port>
+                    <ttl>120</ttl>
+                </default>
+            </full_page_cache>
         </system>
     </default>
 </config>

@@ -55,14 +55,16 @@
         <!-- DB model layer. Used to determine names of resource helpers and
             specific installs/upgrades for a DB vendor. -->
         <model>{{db_model}}</model>
-        <adapter>Magento\Core\Model\Resource\Type\Db\Pdo\Mysql</adapter>
+        <adapter>Magento\Framework\Model\Resource\Type\Db\Pdo\Mysql</adapter>
         <!-- Connection activation. Default connection is last level of fallback, thus
             it must be always left active.  -->
         <active>1</active>
     </connection>
     <resource name="default_setup" connection="default"/>
-    <!-- Session storage method. Can be 'files' (default), 'db', 'memcache', 'memcached', 'eaccelerator'. -->
+    <!-- Session storage method. Can be 'files' (default), 'db', 'memcache', 'memcached', 'eaccelerator', 'redis' (phpredis). -->
     <session_save>{{session_save}}</session_save>
+    <!-- Example save path for 'redis', but can also be used for other session storage types such as 'files' -->
+    <!--<session_save_path><![CDATA[tcp://127.0.0.1:6379?timeout=2.5]]></session_save_path> -->
     <backend>
         <!-- Routing path of a backend area. Any string like 'backend', 'admin' or whatsoever. -->
         <frontName>{{backend_frontname}}</frontName>

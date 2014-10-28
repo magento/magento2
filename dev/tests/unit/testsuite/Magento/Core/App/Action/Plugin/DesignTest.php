@@ -21,19 +21,20 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\App\Action\Plugin;
 
 class DesignTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testAroundDispatch()
     {
-        $designLoaderMock = $this->getMock('Magento\View\DesignLoader', array(), array(), '', false);
-        $invocationChainMock = $this->getMock('Magento\Code\Plugin\InvocationChain', array(), array(), '', false);
+        $subjectMock = $this->getMock('Magento\Framework\App\Action\Action', array(), array(), '', false);
+        $designLoaderMock = $this->getMock('Magento\Framework\View\DesignLoader', array(), array(), '', false);
+        $closureMock = function () {
+            return 'Expected';
+        };
+        $requestMock = $this->getMock('Magento\Framework\App\RequestInterface');
         $plugin = new \Magento\Core\App\Action\Plugin\Design($designLoaderMock);
         $designLoaderMock->expects($this->once())->method('load');
-        $invocationChainMock->expects($this->once())->method('proceed')->with(array());
-        $plugin->aroundDispatch(array(), $invocationChainMock);
+        $this->assertEquals('Expected', $plugin->aroundDispatch($subjectMock, $closureMock, $requestMock));
     }
 }

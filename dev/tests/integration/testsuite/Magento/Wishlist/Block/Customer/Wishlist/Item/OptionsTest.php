@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Wishlist
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -34,11 +31,14 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetTemplate()
     {
-        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-            ->createBlock('Magento\Wishlist\Block\Customer\Wishlist\Item\Options');
+        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\View\LayoutInterface'
+        )->createBlock(
+            'Magento\Wishlist\Block\Customer\Wishlist\Item\Options'
+        );
         $this->assertEmpty($block->getTemplate());
-        $product = new \Magento\Object(array('type_id' => 'test'));
-        $item = new \Magento\Object(array('product' => $product));
+        $product = new \Magento\Framework\Object(array('type_id' => 'test'));
+        $item = new \Magento\Framework\Object(array('product' => $product));
         $block->setItem($item);
         $this->assertNotEmpty($block->getTemplate());
         $block->setTemplate('template');

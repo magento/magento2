@@ -18,35 +18,36 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Auth;
+
+use \Magento\Framework\Stdlib\CookieManager;
+use \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 
 /**
  * Backend Auth session model
  *
  * @method \Magento\User\Model\User|null getUser()
  * @method \Magento\Backend\Model\Auth\Session setUser(\Magento\User\Model\User $value)
- * @method \Magento\Acl|null getAcl()
- * @method \Magento\Backend\Model\Auth\Session setAcl(\Magento\Acl $value)
+ * @method \Magento\Framework\Acl|null getAcl()
+ * @method \Magento\Backend\Model\Auth\Session setAcl(\Magento\Framework\Acl $value)
  * @method int getUpdatedAt()
  * @method \Magento\Backend\Model\Auth\Session setUpdatedAt(int $value)
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @todo implement solution that keeps is_first_visit flag in session during redirects
  */
-class Session
-    extends \Magento\Session\SessionManager
-    implements \Magento\Backend\Model\Auth\StorageInterface
+class Session extends \Magento\Framework\Session\SessionManager implements \Magento\Backend\Model\Auth\StorageInterface
 {
+    /**
+     * Admin session lifetime config path
+     */
     const XML_PATH_SESSION_LIFETIME = 'admin/security/session_lifetime';
 
     /**
-     * Whether it is the first page after successfull login
+     * Whether it is the first page after successful login
      *
      * @var boolean
      */
@@ -55,12 +56,12 @@ class Session
     /**
      * Access Control List builder
      *
-     * @var \Magento\Acl\Builder
+     * @var \Magento\Framework\Acl\Builder
      */
     protected $_aclBuilder;
 
     /**
-     * @var \Magento\Backend\Model\Url
+     * @var \Magento\Backend\Model\UrlInterface
      */
     protected $_backendUrl;
 
@@ -70,31 +71,44 @@ class Session
     protected $_config;
 
     /**
-     * @param \Magento\App\RequestInterface $request
-     * @param \Magento\Session\SidResolverInterface $sidResolver
-     * @param \Magento\Session\Config\ConfigInterface $sessionConfig
-     * @param \Magento\Session\SaveHandlerInterface $saveHandler
-     * @param \Magento\Session\ValidatorInterface $validator
-     * @param \Magento\Session\StorageInterface $storage
-     * @param \Magento\Acl\Builder $aclBuilder
-     * @param \Magento\Backend\Model\Url $backendUrl
+     * @param \Magento\Framework\App\Request\Http $request
+     * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
+     * @param \Magento\Framework\Session\Config\ConfigInterface $sessionConfig
+     * @param \Magento\Framework\Session\SaveHandlerInterface $saveHandler
+     * @param \Magento\Framework\Session\ValidatorInterface $validator
+     * @param \Magento\Framework\Session\StorageInterface $storage
+     * @param CookieManager $cookieManager
+     * @param CookieMetadataFactory $cookieMetadataFactory
+     * @param \Magento\Framework\Acl\Builder $aclBuilder
+     * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param \Magento\Backend\App\ConfigInterface $config
      */
     public function __construct(
-        \Magento\App\RequestInterface $request,
-        \Magento\Session\SidResolverInterface $sidResolver,
-        \Magento\Session\Config\ConfigInterface $sessionConfig,
-        \Magento\Session\SaveHandlerInterface $saveHandler,
-        \Magento\Session\ValidatorInterface $validator,
-        \Magento\Session\StorageInterface $storage,
-        \Magento\Acl\Builder $aclBuilder,
-        \Magento\Backend\Model\Url $backendUrl,
+        \Magento\Framework\App\Request\Http $request,
+        \Magento\Framework\Session\SidResolverInterface $sidResolver,
+        \Magento\Framework\Session\Config\ConfigInterface $sessionConfig,
+        \Magento\Framework\Session\SaveHandlerInterface $saveHandler,
+        \Magento\Framework\Session\ValidatorInterface $validator,
+        \Magento\Framework\Session\StorageInterface $storage,
+        CookieManager $cookieManager,
+        CookieMetadataFactory $cookieMetadataFactory,
+        \Magento\Framework\Acl\Builder $aclBuilder,
+        \Magento\Backend\Model\UrlInterface $backendUrl,
         \Magento\Backend\App\ConfigInterface $config
     ) {
         $this->_config = $config;
         $this->_aclBuilder = $aclBuilder;
         $this->_backendUrl = $backendUrl;
-        parent::__construct($request, $sidResolver, $sessionConfig, $saveHandler, $validator, $storage);
+        parent::__construct(
+            $request,
+            $sidResolver,
+            $sessionConfig,
+            $saveHandler,
+            $validator,
+            $storage,
+            $cookieManager,
+            $cookieMetadataFactory
+        );
         $this->start();
     }
 
@@ -143,7 +157,6 @@ class Session
                         return $acl->isAllowed($user->getAclRole(), null, $privilege);
                     }
                 } catch (\Exception $e) {
-
                 }
             }
         }
@@ -161,19 +174,41 @@ class Session
         $currentTime = time();
 
         /* Validate admin session lifetime that should be more than 60 seconds */
-        if ($lifetime >= 60 && ($this->getUpdatedAt() < $currentTime - $lifetime)) {
+        if ($lifetime >= 60 && $this->getUpdatedAt() < $currentTime - $lifetime) {
             return false;
         }
 
         if ($this->getUser() && $this->getUser()->getId()) {
-            $this->setUpdatedAt($currentTime);
             return true;
         }
         return false;
     }
 
     /**
-     * Check if it is the first page after successfull login
+     * Set session UpdatedAt to current time and update cookie expiration time
+     *
+     * @return void
+     */
+    public function prolong()
+    {
+        $lifetime = $this->_config->getValue(self::XML_PATH_SESSION_LIFETIME);
+        $currentTime = time();
+
+        $this->setUpdatedAt($currentTime);
+        $cookieValue = $this->cookieManager->getCookie($this->getName());
+        if ($cookieValue) {
+            $cookieMetadata = $this->cookieMetadataFactory->createPublicCookieMetadata()
+                ->setDuration($lifetime)
+                ->setPath($this->sessionConfig->getCookiePath())
+                ->setDomain($this->sessionConfig->getCookieDomain())
+                ->setSecure($this->sessionConfig->getCookieSecure())
+                ->setHttpOnly($this->sessionConfig->getCookieHttpOnly());
+            $this->cookieManager->setPublicCookie($this->getName(), $cookieValue, $cookieMetadata);
+        }
+    }
+
+    /**
+     * Check if it is the first page after successful login
      *
      * @return bool
      */
@@ -234,6 +269,7 @@ class Session
      *
      * @param string $path
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function isValidForPath($path)
     {

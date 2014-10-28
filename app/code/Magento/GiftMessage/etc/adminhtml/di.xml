@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <type name="Magento\GiftMessage\Model\Plugin\QuoteItem" shared="false" />
     <type name="Magento\Sales\Model\Convert\Quote">
         <plugin name="gift_message_quote_item_conversion" type="Magento\GiftMessage\Model\Plugin\QuoteItem"/>

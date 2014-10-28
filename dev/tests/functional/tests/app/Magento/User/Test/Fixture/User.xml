@@ -1,0 +1,161 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<fixture class="Magento\User\Test\Fixture\User">
+    <module>Magento_User</module>
+    <type>flat</type>
+    <entity_type>admin_user</entity_type>
+    <collection>Magento\User\Model\Resource\User\Collection</collection>
+    <fields>
+        <user_id>
+            <attribute_code>user_id</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required>1</is_required>
+            <default_value></default_value>
+            <input></input>
+        </user_id>
+        <firstname>
+            <attribute_code>firstname</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required></is_required>
+            <default_value></default_value>
+            <input></input>
+        </firstname>
+        <lastname>
+            <attribute_code>lastname</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required></is_required>
+            <default_value></default_value>
+            <input></input>
+        </lastname>
+        <email>
+            <attribute_code>email</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required></is_required>
+            <default_value></default_value>
+            <input></input>
+        </email>
+        <username>
+            <attribute_code>username</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required></is_required>
+            <default_value></default_value>
+            <input></input>
+        </username>
+        <password>
+            <attribute_code>password</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required></is_required>
+            <default_value></default_value>
+            <input></input>
+        </password>
+        <created>
+            <attribute_code>created</attribute_code>
+            <backend_type>timestamp</backend_type>
+            <is_required></is_required>
+            <default_value>CURRENT_TIMESTAMP</default_value>
+            <input></input>
+        </created>
+        <modified>
+            <attribute_code>modified</attribute_code>
+            <backend_type>timestamp</backend_type>
+            <is_required></is_required>
+            <default_value></default_value>
+            <input></input>
+        </modified>
+        <logdate>
+            <attribute_code>logdate</attribute_code>
+            <backend_type>timestamp</backend_type>
+            <is_required></is_required>
+            <default_value></default_value>
+            <input></input>
+        </logdate>
+        <lognum>
+            <attribute_code>lognum</attribute_code>
+            <backend_type>smallint</backend_type>
+            <is_required></is_required>
+            <default_value>0</default_value>
+            <input></input>
+        </lognum>
+        <reload_acl_flag>
+            <attribute_code>reload_acl_flag</attribute_code>
+            <backend_type>smallint</backend_type>
+            <is_required></is_required>
+            <default_value>0</default_value>
+            <input></input>
+        </reload_acl_flag>
+        <is_active>
+            <attribute_code>is_active</attribute_code>
+            <backend_type>smallint</backend_type>
+            <is_required></is_required>
+            <default_value>1</default_value>
+            <input></input>
+        </is_active>
+        <extra>
+            <attribute_code>extra</attribute_code>
+            <backend_type>text</backend_type>
+            <is_required></is_required>
+            <default_value></default_value>
+            <input></input>
+        </extra>
+        <rp_token>
+            <attribute_code>rp_token</attribute_code>
+            <backend_type>text</backend_type>
+            <is_required></is_required>
+            <default_value></default_value>
+            <input></input>
+        </rp_token>
+        <rp_token_created_at>
+            <attribute_code>rp_token_created_at</attribute_code>
+            <backend_type>timestamp</backend_type>
+            <is_required></is_required>
+            <default_value></default_value>
+            <input></input>
+        </rp_token_created_at>
+        <interface_locale>
+            <attribute_code>interface_locale</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required></is_required>
+            <default_value>en_US</default_value>
+            <input></input>
+        </interface_locale>
+        <role_id>
+            <attribute_code>role_id</attribute_code>
+            <backend_type>virtual</backend_type>
+            <group>user-role</group>
+            <source>Magento\User\Test\Fixture\User\RoleId</source>
+        </role_id>
+        <password_confirmation>
+            <attribute_code>password_confirmation</attribute_code>
+            <backend_type>virtual</backend_type>
+        </password_confirmation>
+        <current_password>
+            <attribute_code>current_password</attribute_code>
+            <backend_type>virtual</backend_type>
+        </current_password>
+    </fields>
+    <repository_class>Magento\User\Test\Repository\User</repository_class>
+    <handler_interface>Magento\User\Test\Handler\User\UserInterface</handler_interface>
+</fixture>

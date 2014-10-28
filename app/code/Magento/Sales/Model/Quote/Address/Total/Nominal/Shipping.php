@@ -18,17 +18,14 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model\Quote\Address\Total\Nominal;
 
 /**
  * Nominal shipping total
  */
-namespace Magento\Sales\Model\Quote\Address\Total\Nominal;
-
 class Shipping extends \Magento\Sales\Model\Quote\Address\Total\Shipping
 {
     /**
@@ -36,7 +33,11 @@ class Shipping extends \Magento\Sales\Model\Quote\Address\Total\Shipping
      * @var bool
      */
     protected $_canAddAmountToAddress = false;
-    protected $_canSetAddressAmount   = false;
+
+    /**
+     * @var bool
+     */
+    protected $_canSetAddressAmount = false;
 
     /**
      * Custom row total key
@@ -56,7 +57,7 @@ class Shipping extends \Magento\Sales\Model\Quote\Address\Total\Shipping
      * Collect shipping amount individually for each item
      *
      * @param \Magento\Sales\Model\Quote\Address $address
-     * @return \Magento\Sales\Model\Quote\Address\Total\Nominal\Shipping
+     * @return $this
      */
     public function collect(\Magento\Sales\Model\Quote\Address $address)
     {
@@ -78,7 +79,9 @@ class Shipping extends \Magento\Sales\Model\Quote\Address\Total\Shipping
                 $address->requestShippingRates($item);
                 $baseAmount = $item->getBaseShippingAmount();
                 if ($baseAmount) {
-                    $item->setShippingAmount($address->getQuote()->getStore()->convertPrice($baseAmount, false));
+                    $item->setShippingAmount(
+                        $this->priceCurrency->convert($baseAmount, $address->getQuote()->getStore())
+                    );
                 }
             }
         }

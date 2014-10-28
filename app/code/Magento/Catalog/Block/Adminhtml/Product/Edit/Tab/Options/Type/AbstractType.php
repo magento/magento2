@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Adminhtml
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,15 +25,15 @@
 /**
  * customers defined options
  *
- * @category   Magento
- * @package    Magento_Catalog
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Type;
 
 class AbstractType extends \Magento\Backend\Block\Widget
 {
+    /**
+     * @var string
+     */
     protected $_name = 'abstract';
 
     /**
@@ -57,22 +55,29 @@ class AbstractType extends \Magento\Backend\Block\Widget
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareLayout()
     {
-        $this->setChild('option_price_type',
-            $this->getLayout()
-                ->addBlock('Magento\View\Element\Html\Select',
-                    $this->getNameInLayout() . '.option_price_type',
-                    $this->getNameInLayout())
-                ->setData(array(
-                    'id' => 'product_option_${option_id}_price_type',
-                    'class' => 'select product-option-price-type'
-                ))
+        $this->setChild(
+            'option_price_type',
+            $this->getLayout()->addBlock(
+                'Magento\Framework\View\Element\Html\Select',
+                $this->getNameInLayout() . '.option_price_type',
+                $this->getNameInLayout()
+            )->setData(
+                array('id' => 'product_option_${option_id}_price_type', 'class' => 'select product-option-price-type')
+            )
         );
 
-        $this->getChildBlock('option_price_type')
-            ->setName('product[options][${option_id}][price_type]')
-            ->setOptions($this->_optionPrice->toOptionArray());
+        $this->getChildBlock(
+            'option_price_type'
+        )->setName(
+            'product[options][${option_id}][price_type]'
+        )->setOptions(
+            $this->_optionPrice->toOptionArray()
+        );
 
         return parent::_prepareLayout();
     }
@@ -89,5 +94,4 @@ class AbstractType extends \Magento\Backend\Block\Widget
         }
         return $this->getChildHtml('option_price_type');
     }
-
 }

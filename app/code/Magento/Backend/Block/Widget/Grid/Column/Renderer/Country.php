@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,19 +27,39 @@
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
-class Country
-    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+use Magento\Framework\View\Element\AbstractBlock;
+
+class Country extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
+    /**
+     * @var \Magento\Framework\Locale\ListsInterface
+     */
+    protected $localeLists;
+
+    /**
+     * @param \Magento\Backend\Block\Context $context
+     * @param \Magento\Framework\Locale\ListsInterface $localeLists
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Backend\Block\Context $context,
+        \Magento\Framework\Locale\ListsInterface $localeLists,
+        array $data = array()
+    ) {
+        parent::__construct($context, $data);
+        $this->localeLists = $localeLists;
+    }
+
     /**
      * Render country grid column
      *
-     * @param   \Magento\Object $row
+     * @param   \Magento\Framework\Object $row
      * @return  string
      */
-    public function render(\Magento\Object $row)
+    public function render(\Magento\Framework\Object $row)
     {
         if ($data = $row->getData($this->getColumn()->getIndex())) {
-            $name = $this->_locale->getCountryTranslation($data);
+            $name = $this->localeLists->getCountryTranslation($data);
             if (empty($name)) {
                 $name = $this->escapeHtml($data);
             }

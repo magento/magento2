@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento
- * @subpackage  static_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -30,8 +27,7 @@
  */
 namespace Magento\TestFramework\CodingStandard\Tool;
 
-class CodeMessDetector
-    implements \Magento\TestFramework\CodingStandard\ToolInterface
+class CodeMessDetector implements \Magento\TestFramework\CodingStandard\ToolInterface
 {
     /**
      * Ruleset directory
@@ -80,12 +76,15 @@ class CodeMessDetector
      */
     public function run(array $whiteList, array $blackList = array(), array $extensions = array())
     {
-        $commandLineArguments = array('run_file_mock', //emulate script name in console arguments
+        $commandLineArguments = array(
+            'run_file_mock', //emulate script name in console arguments
             implode(',', $whiteList),
             'xml', //report format
             $this->_rulesetFile,
-            '--exclude' , implode(',', $blackList),
-            '--reportfile' , $this->_reportFile
+            '--exclude',
+            implode(',', $blackList),
+            '--reportfile',
+            $this->_reportFile
         );
 
         $options = new \PHP_PMD_TextUI_CommandLineOptions($commandLineArguments);
@@ -94,5 +93,4 @@ class CodeMessDetector
 
         return $command->run($options, new \PHP_PMD_RuleSetFactory());
     }
-
 }

@@ -1,0 +1,84 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Last order sidebar
+ *
+ * @see \Magento\Sale\Block\Reorder\Sidebar
+ */
+?>
+<?php $_items = $this->getItems()?>
+<?php if($_items): ?>
+<div class="block reorder">
+    <div class="title">
+        <strong><?php echo __('My Orders') ?></strong>
+    </div>
+    <div class="content">
+        <form method="post" class="form reorder" action="<?php echo $this->getFormActionUrl() ?>" id="reorder-validate-detail">
+            <strong class="subtitle"><?php echo __('Last Ordered Items') ?></strong>
+            <ol class="items" id="cart-sidebar-reorder">
+            <?php $_showAddButtonFlag = false ?>
+            <?php foreach ($_items as $_item): ?>
+                <li class="item">
+                    <?php if ($this->isItemAvailableForReorder($_item)): ?>
+                        <?php $_showAddButtonFlag = true ?>
+                        <input type="checkbox" name="order_items[]" id="reorder-item-<?php echo $_item->getId() ?>" value="<?php echo $_item->getId() ?>" title="<?php echo __('Add to Cart') ?>"
+                               class="checkbox" data-validate='{"validate-one-checkbox-required-by-name": true}'/>
+                    <?php endif; ?>
+                    <strong class="product name"><a href="<?php echo $_item->getProduct()->getProductUrl() ?>"><?php echo $this->escapeHtml($_item->getName()) ?></a></strong>
+                </li>
+            <?php endforeach; ?>
+            </ol>
+            <div id="cart-sidebar-reorder-advice-container"></div>
+            <div class="actions-toolbar">
+                <?php if ($_showAddButtonFlag): ?>
+                    <div class="primary">
+                        <button type="submit" title="<?php echo __('Add to Cart') ?>" class="action tocart primary">
+                            <span><?php echo __('Add to Cart') ?></span>
+                        </button>
+                    </div>
+                <?php endif; ?>
+                <div class="secondary">
+                    <a class="action view" href="<?php echo $this->getUrl('customer/account') ?>">
+                        <span><?php echo __('View All'); ?></span>
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+    <?php echo $this->getPagerHtml(); ?>
+    <script type="text/javascript">
+require(["jquery", "mage/mage"], function(jQuery){
+
+jQuery('#reorder-validate-detail').mage('validation', {
+    errorPlacement: function(error, element) {
+        error.appendTo('#cart-sidebar-reorder-advice-container');
+    }
+});
+    
+});
+</script>
+</div>
+<?php endif ?>

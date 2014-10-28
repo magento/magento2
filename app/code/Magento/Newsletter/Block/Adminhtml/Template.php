@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Newsletter
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,31 +25,57 @@
 /**
  * Newsletter templates page content block
  *
- * @category   Magento
- * @package    Magento_Newsletter
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
 namespace Magento\Newsletter\Block\Adminhtml;
 
 class Template extends \Magento\Backend\Block\Template
 {
+    /**
+     * @var string
+     */
     protected $_template = 'template/list.phtml';
 
+    /**
+     * @return $this
+     */
     protected function _prepareLayout()
     {
+        $this->getToolbar()->addChild(
+            'add_button',
+            'Magento\Backend\Block\Widget\Button',
+            array(
+                'label' => __('Add New Template'),
+                'onclick' => "window.location='" . $this->getCreateUrl() . "'",
+                'class' => 'add primary add-template'
+            )
+        );
+
         $this->setChild(
             'grid',
-            $this->getLayout()->createBlock('Magento\Newsletter\Block\Adminhtml\Template\Grid', 'newsletter.template.grid')
+            $this->getLayout()->createBlock(
+                'Magento\Newsletter\Block\Adminhtml\Template\Grid',
+                'newsletter.template.grid'
+            )
         );
         return parent::_prepareLayout();
     }
 
+    /**
+     * Get the url for create
+     *
+     * @return string
+     */
     public function getCreateUrl()
     {
         return $this->getUrl('*/*/new');
     }
 
+    /**
+     * Get header text
+     *
+     * @return string
+     */
     public function getHeaderText()
     {
         return __('Newsletter Templates');

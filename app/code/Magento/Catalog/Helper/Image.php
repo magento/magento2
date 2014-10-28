@@ -18,20 +18,17 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Helper;
+
+use Magento\Framework\App\Helper\AbstractHelper;
 
 /**
  * Catalog image helper
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Helper;
-
-class Image extends \Magento\App\Helper\AbstractHelper
+class Image extends AbstractHelper
 {
     /**
      * Current model
@@ -111,16 +108,16 @@ class Image extends \Magento\App\Helper\AbstractHelper
     protected $_placeholder;
 
     /**
-     * @var \Magento\View\Url
+     * @var \Magento\Framework\View\Asset\Repository
      */
-    protected $_viewUrl;
+    protected $_assetRepo;
 
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
      * Product image factory
@@ -130,27 +127,27 @@ class Image extends \Magento\App\Helper\AbstractHelper
     protected $_productImageFactory;
 
     /**
-     * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Catalog\Model\Product\ImageFactory $productImageFactory
-     * @param \Magento\View\Url $viewUrl
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\Framework\View\Asset\Repository $assetRepo
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
+        \Magento\Framework\App\Helper\Context $context,
         \Magento\Catalog\Model\Product\ImageFactory $productImageFactory,
-        \Magento\View\Url $viewUrl,
-        \Magento\Core\Model\Store\Config $coreStoreConfig
+        \Magento\Framework\View\Asset\Repository $assetRepo,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
         $this->_productImageFactory = $productImageFactory;
         parent::__construct($context);
-        $this->_coreStoreConfig = $coreStoreConfig;
-        $this->_viewUrl = $viewUrl;
+        $this->_scopeConfig = $scopeConfig;
+        $this->_assetRepo = $assetRepo;
     }
 
     /**
      * Reset all previous data
      *
-     * @return \Magento\Catalog\Helper\Image
+     * @return $this
      */
     protected function _reset()
     {
@@ -172,10 +169,10 @@ class Image extends \Magento\App\Helper\AbstractHelper
      *
      * @param \Magento\Catalog\Model\Product $product
      * @param string $attributeName
-     * @param mixed $imageFile
-     * @return \Magento\Catalog\Helper\Image
+     * @param string|null $imageFile
+     * @return $this
      */
-    public function init(\Magento\Catalog\Model\Product $product, $attributeName, $imageFile=null)
+    public function init(\Magento\Catalog\Model\Product $product, $attributeName, $imageFile = null)
     {
         $this->_reset();
         $this->_setModel($this->_productImageFactory->create());
@@ -183,16 +180,28 @@ class Image extends \Magento\App\Helper\AbstractHelper
         $this->setProduct($product);
 
         $this->setWatermark(
-            $this->_coreStoreConfig->getConfig("design/watermark/{$this->_getModel()->getDestinationSubdir()}_image")
+            $this->_scopeConfig->getValue(
+                "design/watermark/{$this->_getModel()->getDestinationSubdir()}_image",
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )
         );
         $this->setWatermarkImageOpacity(
-            $this->_coreStoreConfig->getConfig("design/watermark/{$this->_getModel()->getDestinationSubdir()}_imageOpacity")
+            $this->_scopeConfig->getValue(
+                "design/watermark/{$this->_getModel()->getDestinationSubdir()}_imageOpacity",
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )
         );
         $this->setWatermarkPosition(
-            $this->_coreStoreConfig->getConfig("design/watermark/{$this->_getModel()->getDestinationSubdir()}_position")
+            $this->_scopeConfig->getValue(
+                "design/watermark/{$this->_getModel()->getDestinationSubdir()}_position",
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )
         );
         $this->setWatermarkSize(
-            $this->_coreStoreConfig->getConfig("design/watermark/{$this->_getModel()->getDestinationSubdir()}_size")
+            $this->_scopeConfig->getValue(
+                "design/watermark/{$this->_getModel()->getDestinationSubdir()}_size",
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )
         );
 
         if ($imageFile) {
@@ -211,7 +220,7 @@ class Image extends \Magento\App\Helper\AbstractHelper
      * @see \Magento\Catalog\Model\Product\Image
      * @param int $width
      * @param int $height
-     * @return \Magento\Catalog\Helper\Image
+     * @return $this
      */
     public function resize($width, $height = null)
     {
@@ -224,7 +233,7 @@ class Image extends \Magento\App\Helper\AbstractHelper
      * Set image quality, values in percentage from 0 to 100
      *
      * @param int $quality
-     * @return \Magento\Catalog\Helper\Image
+     * @return $this
      */
     public function setQuality($quality)
     {
@@ -239,7 +248,7 @@ class Image extends \Magento\App\Helper\AbstractHelper
      *
      * @see \Magento\Catalog\Model\Product\Image
      * @param bool $flag
-     * @return \Magento\Catalog\Helper\Image
+     * @return $this
      */
     public function keepAspectRatio($flag)
     {
@@ -256,8 +265,8 @@ class Image extends \Magento\App\Helper\AbstractHelper
      *
      * @see \Magento\Catalog\Model\Product\Image
      * @param bool $flag
-     * @param array $position
-     * @return \Magento\Catalog\Helper\Image
+     * @param string[] $position
+     * @return $this
      */
     public function keepFrame($flag, $position = array('center', 'middle'))
     {
@@ -275,7 +284,7 @@ class Image extends \Magento\App\Helper\AbstractHelper
      * @see \Magento\Catalog\Model\Product\Image
      * @param bool $flag
      * @param int $alphaOpacity
-     * @return \Magento\Catalog\Helper\Image
+     * @return $this
      */
     public function keepTransparency($flag, $alphaOpacity = null)
     {
@@ -289,7 +298,7 @@ class Image extends \Magento\App\Helper\AbstractHelper
      * It is false by default
      *
      * @param bool $flag
-     * @return \Magento\Catalog\Helper\Image
+     * @return $this
      */
     public function constrainOnly($flag)
     {
@@ -305,7 +314,7 @@ class Image extends \Magento\App\Helper\AbstractHelper
      *
      * @see \Magento\Catalog\Model\Product\Image
      * @param array $colorRGB
-     * @return \Magento\Catalog\Helper\Image
+     * @return $this
      */
     public function backgroundColor($colorRGB)
     {
@@ -321,7 +330,7 @@ class Image extends \Magento\App\Helper\AbstractHelper
      * Rotate image into specified angle
      *
      * @param int $angle
-     * @return \Magento\Catalog\Helper\Image
+     * @return $this
      */
     public function rotate($angle)
     {
@@ -339,14 +348,19 @@ class Image extends \Magento\App\Helper\AbstractHelper
      * @param string $position
      * @param string $size
      * @param int $imageOpacity
-     * @return \Magento\Catalog\Helper\Image
+     * @return $this
      */
-    public function watermark($fileName, $position, $size=null, $imageOpacity=null)
+    public function watermark($fileName, $position, $size = null, $imageOpacity = null)
     {
-        $this->setWatermark($fileName)
-            ->setWatermarkPosition($position)
-            ->setWatermarkSize($size)
-            ->setWatermarkImageOpacity($imageOpacity);
+        $this->setWatermark(
+            $fileName
+        )->setWatermarkPosition(
+            $position
+        )->setWatermarkSize(
+            $size
+        )->setWatermarkImageOpacity(
+            $imageOpacity
+        );
         return $this;
     }
 
@@ -409,7 +423,21 @@ class Image extends \Magento\App\Helper\AbstractHelper
                 $url = $model->saveFile()->getUrl();
             }
         } catch (\Exception $e) {
-            $url = $this->_viewUrl->getViewFileUrl($this->getPlaceholder());
+            $url = $this->getDefaultPlaceholderUrl();
+        }
+        return $url;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getDefaultPlaceholderUrl()
+    {
+        try {
+            $url = $this->_assetRepo->getUrl($this->getPlaceholder());
+        } catch (\Exception $e) {
+            $this->_logger->logException($e);
+            $url = $this->_urlBuilder->getUrl('', array('_direct' => 'core/index/notFound'));
         }
         return $url;
     }
@@ -418,7 +446,7 @@ class Image extends \Magento\App\Helper\AbstractHelper
      * Set current Image model
      *
      * @param \Magento\Catalog\Model\Product\Image $model
-     * @return \Magento\Catalog\Helper\Image
+     * @return $this
      */
     protected function _setModel($model)
     {
@@ -440,7 +468,7 @@ class Image extends \Magento\App\Helper\AbstractHelper
      * Set Rotation Angle
      *
      * @param int $angle
-     * @return \Magento\Catalog\Helper\Image
+     * @return $this
      */
     protected function setAngle($angle)
     {
@@ -462,7 +490,7 @@ class Image extends \Magento\App\Helper\AbstractHelper
      * Set watermark file name
      *
      * @param string $watermark
-     * @return \Magento\Catalog\Helper\Image
+     * @return $this
      */
     protected function setWatermark($watermark)
     {
@@ -485,7 +513,7 @@ class Image extends \Magento\App\Helper\AbstractHelper
      * Set watermark position
      *
      * @param string $position
-     * @return \Magento\Catalog\Helper\Image
+     * @return $this
      */
     protected function setWatermarkPosition($position)
     {
@@ -509,7 +537,7 @@ class Image extends \Magento\App\Helper\AbstractHelper
      * param size in format 100x200
      *
      * @param string $size
-     * @return \Magento\Catalog\Helper\Image
+     * @return $this
      */
     public function setWatermarkSize($size)
     {
@@ -532,7 +560,7 @@ class Image extends \Magento\App\Helper\AbstractHelper
      * Set watermark image opacity
      *
      * @param int $imageOpacity
-     * @return \Magento\Catalog\Helper\Image
+     * @return $this
      */
     public function setWatermarkImageOpacity($imageOpacity)
     {
@@ -559,7 +587,7 @@ class Image extends \Magento\App\Helper\AbstractHelper
      * Set current Product
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Helper\Image
+     * @return $this
      */
     protected function setProduct($product)
     {
@@ -581,7 +609,7 @@ class Image extends \Magento\App\Helper\AbstractHelper
      * Set Image file
      *
      * @param string $file
-     * @return \Magento\Catalog\Helper\Image
+     * @return $this
      */
     protected function setImageFile($file)
     {
@@ -609,10 +637,7 @@ class Image extends \Magento\App\Helper\AbstractHelper
     {
         $size = explode('x', strtolower($string));
         if (sizeof($size) == 2) {
-            return array(
-                'width' => ($size[0] > 0) ? $size[0] : null,
-                'heigth' => ($size[1] > 0) ? $size[1] : null,
-            );
+            return array('width' => $size[0] > 0 ? $size[0] : null, 'height' => $size[1] > 0 ? $size[1] : null);
         }
         return false;
     }
@@ -641,13 +666,10 @@ class Image extends \Magento\App\Helper\AbstractHelper
      * Retrieve Original image size as array
      * 0 - width, 1 - height
      *
-     * @return array
+     * @return int[]
      */
     public function getOriginalSizeArray()
     {
-        return array(
-            $this->getOriginalWidth(),
-            $this->getOriginalHeight()
-        );
+        return array($this->getOriginalWidth(), $this->getOriginalHeight());
     }
 }

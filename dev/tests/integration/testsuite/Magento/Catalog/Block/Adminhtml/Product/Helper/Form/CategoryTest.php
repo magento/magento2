@@ -32,15 +32,17 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Core\Model\Layout',
+            'Magento\Framework\View\Layout',
             array('area' => \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
         );
 
-        $block = $objectManager->create('Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Category',
-            array('layout' => $layout));
+        $block = $objectManager->create(
+            'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Category',
+            array('layout' => $layout)
+        );
 
-        /** @var $formFactory \Magento\Data\FormFactory */
-        $formFactory = $objectManager->get('Magento\Data\FormFactory');
+        /** @var $formFactory \Magento\Framework\Data\FormFactory */
+        $formFactory = $objectManager->get('Magento\Framework\Data\FormFactory');
         $form = $formFactory->create();
         $block->setForm($form);
 

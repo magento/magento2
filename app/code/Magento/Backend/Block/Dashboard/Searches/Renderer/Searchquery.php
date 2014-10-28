@@ -18,48 +18,52 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Backend\Block\Dashboard\Searches\Renderer;
 
 /**
  * Dashboard search query column renderer
  */
-namespace Magento\Backend\Block\Dashboard\Searches\Renderer;
-
-class Searchquery
-    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+class Searchquery extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * String helper
      *
-     * @var \Magento\Stdlib\String
+     * @var \Magento\Framework\Stdlib\String
      */
-    protected $_stringHelper = null;
+    protected $stringHelper;
 
     /**
      * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\Stdlib\String $stringHelper
+     * @param \Magento\Framework\Stdlib\String $stringHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
-        \Magento\Stdlib\String $stringHelper,
+        \Magento\Framework\Stdlib\String $stringHelper,
         array $data = array()
     ) {
-        $this->_stringHelper = $stringHelper;
+        $this->stringHelper = $stringHelper;
         parent::__construct($context, $data);
     }
 
-    public function render(\Magento\Object $row)
+    /**
+     * Renders a column
+     *
+     * @param   \Magento\Framework\Object $row
+     * @return  string
+     */
+    public function render(\Magento\Framework\Object $row)
     {
         $value = $row->getData($this->getColumn()->getIndex());
-        if ($this->_stringHelper->strlen($value) > 30) {
-            $value = '<span title="'. $this->escapeHtml($value) .'">'
-                . $this->escapeHtml($this->_stringHelper->truncate($value, 30)) . '</span>';
+        if ($this->stringHelper->strlen($value) > 30) {
+            $value = '<span title="' . $this->escapeHtml(
+                $value
+            ) . '">' . $this->escapeHtml(
+                $this->filterManager->truncate($value, array('length' => 30))
+            ) . '</span>';
         } else {
             $value = $this->escapeHtml($value);
         }

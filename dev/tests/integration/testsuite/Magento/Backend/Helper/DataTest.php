@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Helper;
 
 /**
@@ -44,31 +40,40 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Config\ScopeInterface')
-            ->setCurrentScope(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
-        $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Backend\Helper\Data');
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\Config\ScopeInterface'
+        )->setCurrentScope(
+            \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
+        );
+        $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Backend\Helper\Data'
+        );
     }
 
     protected function tearDown()
     {
         $this->_helper = null;
         $this->_auth = null;
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Config\ScopeInterface')
-            ->setCurrentScope(null);
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\Config\ScopeInterface'
+        )->setCurrentScope(
+            null
+        );
     }
 
     /**
      * Performs user login
      */
-    protected  function _login()
+    protected function _login()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Backend\Model\Url')
-            ->turnOffSecretKey();
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Backend\Model\UrlInterface'
+        )->turnOffSecretKey();
         $this->_auth = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Backend\Model\Auth');
         $this->_auth->login(
-            \Magento\TestFramework\Bootstrap::ADMIN_NAME, \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD);
+            \Magento\TestFramework\Bootstrap::ADMIN_NAME,
+            \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
+        );
     }
 
     /**
@@ -77,8 +82,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected function _logout()
     {
         $this->_auth->logout();
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Backend\Model\Url')->turnOnSecretKey();
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Backend\Model\UrlInterface'
+        )->turnOnSecretKey();
     }
 
     /**
@@ -88,10 +94,15 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     public function testPageHelpUrl()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\RequestInterface')
-            ->setControllerModule('dummy')
-            ->setControllerName('index')
-            ->setActionName('test');
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\App\RequestInterface'
+        )->setControllerModule(
+            'dummy'
+        )->setControllerName(
+            'index'
+        )->setActionName(
+            'test'
+        );
 
 
         $expected = 'http://www.magentocommerce.com/gethelp/en_US/dummy/index/test/';
@@ -112,11 +123,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
         /**
          * perform login
          */
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Backend\Model\Url')
-            ->turnOffSecretKey();
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Backend\Model\UrlInterface'
+        )->turnOffSecretKey();
 
-        $auth = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Backend\Model\Auth');
+        $auth = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Backend\Model\Auth');
         $auth->login(\Magento\TestFramework\Bootstrap::ADMIN_NAME, \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD);
         $this->assertEquals(1, $this->_helper->getCurrentUserId());
 
@@ -124,25 +135,21 @@ class DataTest extends \PHPUnit_Framework_TestCase
          * perform logout
          */
         $auth->logout();
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Backend\Model\Url')->turnOnSecretKey();
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Backend\Model\UrlInterface'
+        )->turnOnSecretKey();
 
         $this->assertFalse($this->_helper->getCurrentUserId());
     }
 
     /**
      * @covers \Magento\Backend\Helper\Data::prepareFilterString
-     * @covers \Magento\Backend\Helper\Data::decodeFilter
      */
     public function testPrepareFilterString()
     {
-        $expected = array(
-            'key1' => 'val1',
-            'key2' => 'val2',
-            'key3' => 'val3',
-        );
+        $expected = array('key1' => 'val1', 'key2' => 'val2', 'key3' => 'val3');
 
-        $filterString = base64_encode('key1='.rawurlencode('val1').'&key2=' . rawurlencode('val2') . '&key3=val3');
+        $filterString = base64_encode('key1=' . rawurlencode('val1') . '&key2=' . rawurlencode('val2') . '&key3=val3');
         $actual = $this->_helper->prepareFilterString($filterString);
         $this->assertEquals($expected, $actual);
     }
@@ -150,7 +157,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testGetHomePageUrl()
     {
         $this->assertStringEndsWith(
-            'index.php/backend/admin/', $this->_helper->getHomePageUrl(), 'Incorrect home page URL'
+            'index.php/backend/admin/',
+            $this->_helper->getHomePageUrl(),
+            'Incorrect home page URL'
         );
     }
 }

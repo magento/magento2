@@ -18,27 +18,22 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Checkout
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Checkout\Model\Resource;
 
 /**
  * Resource model for Checkout Cart
  *
- * @category    Magento
- * @package     Magento_Checkout
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Checkout\Model\Resource;
-
-class Cart extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Cart extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Model initialization
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -54,12 +49,15 @@ class Cart extends \Magento\Core\Model\Resource\Db\AbstractDb
     public function fetchItemsSummary($quoteId)
     {
         $read = $this->_getReadAdapter();
-        $select = $read->select()
-            ->from(array('q'=>$this->getTable('sales_flat_quote')), array('items_qty', 'items_count'))
-            ->where('q.entity_id = :quote_id');
+        $select = $read->select()->from(
+            array('q' => $this->getTable('sales_flat_quote')),
+            array('items_qty', 'items_count')
+        )->where(
+            'q.entity_id = :quote_id'
+        );
 
         $result = $read->fetchRow($select, array(':quote_id' => $quoteId));
-        return $result ? $result : array('items_qty'=>0, 'items_count'=>0);
+        return $result ? $result : array('items_qty' => 0, 'items_count' => 0);
     }
 
     /**
@@ -71,10 +69,12 @@ class Cart extends \Magento\Core\Model\Resource\Db\AbstractDb
     public function fetchItems($quoteId)
     {
         $read = $this->_getReadAdapter();
-        $select = $read->select()
-            ->from(array('qi'=>$this->getTable('sales_flat_quote_item')),
-                array('id'=>'item_id', 'product_id', 'super_product_id', 'qty', 'created_at'))
-            ->where('qi.quote_id = :quote_id');
+        $select = $read->select()->from(
+            array('qi' => $this->getTable('sales_flat_quote_item')),
+            array('id' => 'item_id', 'product_id', 'super_product_id', 'qty', 'created_at')
+        )->where(
+            'qi.quote_id = :quote_id'
+        );
 
         return $read->fetchAll($select, array(':quote_id' => $quoteId));
     }
@@ -84,14 +84,18 @@ class Cart extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Catalog\Model\Resource\Product\Collection $collection
      * @param int $quoteId
-     * @return \Magento\Checkout\Model\Resource\Cart
+     * @return $this
      */
     public function addExcludeProductFilter($collection, $quoteId)
     {
         $adapter = $this->_getReadAdapter();
-        $exclusionSelect = $adapter->select()
-            ->from($this->getTable('sales_flat_quote_item'), array('product_id'))
-            ->where('quote_id = ?', $quoteId);
+        $exclusionSelect = $adapter->select()->from(
+            $this->getTable('sales_flat_quote_item'),
+            array('product_id')
+        )->where(
+            'quote_id = ?',
+            $quoteId
+        );
         $condition = $adapter->prepareSqlCondition('e.entity_id', array('nin' => $exclusionSelect));
         $collection->getSelect()->where($condition);
         return $this;

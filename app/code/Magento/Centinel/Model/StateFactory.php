@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Centinel
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -34,7 +32,7 @@ class StateFactory
     /**
      * Object manager
      *
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
@@ -46,10 +44,10 @@ class StateFactory
     protected $_stateClassMap;
 
     /**
-     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManager $objectManager
      * @param array $stateClassMap - key stands for card type, value define the validator class
      */
-    public function __construct(\Magento\ObjectManager $objectManager, array $stateClassMap = array())
+    public function __construct(\Magento\Framework\ObjectManager $objectManager, array $stateClassMap = array())
     {
         $this->_objectManager = $objectManager;
         $this->_stateClassMap = $stateClassMap;

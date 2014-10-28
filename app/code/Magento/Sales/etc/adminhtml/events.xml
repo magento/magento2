@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
     <event name="catalog_product_delete_before">
         <observer name="sales_quote_observer" instance="Magento\Sales\Model\Observer\Backend\CatalogProductQuote" method="subtractQtyFromQuotes" />
     </event>
@@ -39,13 +39,7 @@
     <event name="catalog_product_status_update">
         <observer name="sales_quote" instance="Magento\Sales\Model\Observer\Backend\CatalogProductQuote" method="catalogProductStatusUpdate" />
     </event>
-    <event name="catalog_product_edit_form_render_recurring">
-        <observer name="payment" instance="Magento\Sales\Model\Observer\Backend\RecurringProfile\FormRenderer" method="render" />
-    </event>
-    <event name="payment_method_is_active">
-        <observer name="sales_billing_agreement" instance="Magento\Sales\Model\Observer\Backend\BillingAgreement" method="dispatch" />
-    </event>
-    <event name="customer_save_after">
+    <event name="customer_save_after_data_object">
         <observer name="customer" instance="Magento\Sales\Model\Observer\Backend\CustomerQuote" method="dispatch" />
     </event>
 </config>

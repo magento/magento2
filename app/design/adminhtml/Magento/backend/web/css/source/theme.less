@@ -1,0 +1,134 @@
+// /**
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+// Override default variables
+@font-family-base: 'Open Sans', @font-family-sans-serif;
+@col-layout-bg: #f6f3eb;
+
+// Introduce new theme specific variables
+
+@color-dark: #31302b;
+@color-middle: #676056;
+@color-light: #e0dacf;
+@color-general: #f3ebde;
+
+@color-link: #026294;
+
+@page-main-action-color: #645D53;
+
+@dropdown-split-actions-padding: '';
+@dropdown-split-toggle-actions-padding: 6px 5px;
+@dropdown-split-toggle-icon-font-line-height: 14px;
+
+// Default = secondary button
+@button-padding: 6px 13px;
+@button-font-weight: 500;
+@button-font-size: 13px;
+@button-line-height: @button-font-size + 1;
+@button-color: #645D53;
+@button-background: #f2ebde;
+@button-border: 1px solid #ada89e;
+@button-background-hover: #cac3b4;
+@button-color-hover: '';
+@button-border-hover: '';
+@button-background-active: @button-background-hover;
+@button-color-active: '';
+@button-border-active: 1px solid #989287;
+
+// Primary button
+@button-primary-background: #007dbd;
+@button-primary-border: 1px solid #0a6c9f;
+@button-primary-color: #fff;
+@button-primary-background-hover: #026294;
+@button-primary-border-hover: 1px solid #026294;
+@button-primary-color-hover: '';
+@button-primary-background-active: @button-primary-background-hover;
+@button-primary-border-active: 1px solid #004c74;
+
+@responsive: false;
+
+//
+//    Form elements
+//--------------------------------------
+@form-element-bg: #fff;
+
+//
+//    Validation
+//--------------------------------------
+@validation-color: #e22626;
+@validation-color-rgba: rgba(226, 38, 38, 0.6);
+@validation-bg: #f9d4d4;
+@validation-border: 1px dashed @validation-color;
+@validation-color-light: #f9d4d4; // for asterisk on <th> elements of grid tables
+
+//
+//    Grid
+//--------------------------------------
+@grid-frame-bg: #fff;
+@grid-controls-border: #989287;
+
+@grid-headings-color: #f7f3eb;
+@grid-headings-color-darker: darken(@grid-headings-color, 20%);
+@grid-headings-bg: #807a6e;
+@grid-headings-border: #cac3b4;
+
+@grid-filters-color: #f7f3eb;
+@grid-filters-bg: @color-middle;
+@grid-filters-border: @grid-filters-bg;
+@grid-filters-placeholder-color: #989287;
+
+@grid-massaction-border: 1px solid #f2ebde;
+
+@grid-td-color: @color-middle;
+@grid-td-light: #fff;
+@grid-td-dark: #f7f3eb;
+@grid-td-border: @grid-headings-border;
+@grid-td-bg-hover: #f2ebde;
+
+@grid-tfoot-color: @grid-td-color;
+@grid-tfoot-bg: #f2ebde;
+
+@grid-severity-critical-color: #e22626;
+@grid-severity-critical-bg: #f9d4d4;
+@grid-severity-critical-border: @grid-severity-critical-color;
+
+@grid-severity-notice-color: #185b00;
+@grid-severity-notice-bg: #d0e5a9;
+@grid-severity-notice-border: #5b8116;
+
+@grid-severity-minor-color: #ed4f2e;
+@grid-severity-minor-bg: #feeee1;
+@grid-severity-minor-border: @grid-severity-minor-color;
+
+// Pager
+@pager-actions-color: @primary3;
+@pager-actions-color-hover: @primary5;
+
+// Data-table
+@data-table-th-border-color: #c9c2b8;
+@data-table-td-border-color: #eae8e4;
+@data-table-td-bg: @grid-td-light;
+@data-table-td-bg-odd: #fbfaf6;
+
+@data-table-td-bg-hover: #f7f3eb;

@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,26 +25,24 @@
 /**
  * Core URL helper
  *
- * @category    Magento
- * @package     Magento_Core
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Core\Helper;
 
-class Url extends \Magento\App\Helper\AbstractHelper
+class Url extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @param \Magento\App\Helper\Context $context
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\Helper\Context $context
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
-        \Magento\Core\Model\StoreManagerInterface $storeManager
+        \Magento\Framework\App\Helper\Context $context,
+        \Magento\Framework\StoreManagerInterface $storeManager
     ) {
         parent::__construct($context);
         $this->_storeManager = $storeManager;
@@ -62,6 +58,10 @@ class Url extends \Magento\App\Helper\AbstractHelper
         return $this->urlEncode($this->_urlBuilder->getCurrentUrl());
     }
 
+    /**
+     * @param string $url
+     * @return string
+     */
     public function getEncodedUrl($url = null)
     {
         if (!$url) {
@@ -80,28 +80,19 @@ class Url extends \Magento\App\Helper\AbstractHelper
         return $this->_storeManager->getStore()->getBaseUrl();
     }
 
-    protected function _prepareString($string)
-    {
-        $string = preg_replace('#[^0-9a-z]+#i', '-', $string);
-        $string = strtolower($string);
-        $string = trim($string, '-');
-
-        return $string;
-    }
-
     /**
      * Add request parameter into url
      *
-     * @param  $url string
-     * @param  $param array( 'key' => value )
+     * @param  string $url
+     * @param  array $param array( 'key' => value )
      * @return string
      */
     public function addRequestParam($url, $param)
     {
-        $startDelimiter = (false === strpos($url,'?'))? '?' : '&';
+        $startDelimiter = false === strpos($url, '?') ? '?' : '&';
 
         $arrQueryParams = array();
-        foreach($param as $key=>$value) {
+        foreach ($param as $key => $value) {
             if (is_numeric($key) || is_object($value)) {
                 continue;
             }
@@ -115,7 +106,9 @@ class Url extends \Magento\App\Helper\AbstractHelper
                 $arrQueryParams[] = $key . '=' . $value;
             }
         }
-        $url .= $startDelimiter . implode('&', $arrQueryParams);
+        if (!empty($arrQueryParams)) {
+            $url .= $startDelimiter . implode('&', $arrQueryParams);
+        }
 
         return $url;
     }

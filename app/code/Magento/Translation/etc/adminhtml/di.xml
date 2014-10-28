@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Magento\Framework\Translate\Inline\ConfigInterface" type="Magento\Backend\Model\Translate\Inline\Config" />
+    <type name="Magento\Translation\Model\Resource\Translate">
+        <arguments>
+            <argument name="scope" xsi:type="string">admin</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Translation\Model\Resource\String">
+        <arguments>
+            <argument name="scope" xsi:type="string">admin</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Translate\Inline">
+        <arguments>
+            <argument name="templateFileName" xsi:type="string">Magento_Translation::translate_inline.phtml</argument>
+            <argument name="translatorRoute" xsi:type="string">adminhtml/ajax/translate</argument>
+            <argument name="layout" xsi:type="object">Magento\Framework\View\LayoutInterface\Proxy</argument>
+            <argument name="url" xsi:type="object">Magento\Backend\Model\UrlInterface</argument>
+            <argument name="scope" xsi:type="string">admin</argument>
+        </arguments>
+    </type>
+</config>

@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Install
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -46,18 +44,18 @@ class Config extends \Magento\Install\Block\AbstractBlock
     protected $_installerConfig = null;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Install\Model\Installer $installer
      * @param \Magento\Install\Model\Wizard $installWizard
-     * @param \Magento\Session\Generic $session
+     * @param \Magento\Framework\Session\Generic $session
      * @param \Magento\Install\Model\Installer\Config $installerConfig
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Install\Model\Installer $installer,
         \Magento\Install\Model\Wizard $installWizard,
-        \Magento\Session\Generic $session,
+        \Magento\Framework\Session\Generic $session,
         \Magento\Install\Model\Installer\Config $installerConfig,
         array $data = array()
     ) {
@@ -78,7 +76,7 @@ class Config extends \Magento\Install\Block\AbstractBlock
     /**
      * Retrieve configuration form data object
      *
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     public function getFormData()
     {
@@ -88,7 +86,7 @@ class Config extends \Magento\Install\Block\AbstractBlock
             if (empty($data)) {
                 $data = $this->_installerConfig->getFormData();
             } else {
-                $data = new \Magento\Object($data);
+                $data = new \Magento\Framework\Object($data);
             }
             $this->setFormData($data);
         }
@@ -116,10 +114,7 @@ class Config extends \Magento\Install\Block\AbstractBlock
      */
     public function getSessionSaveOptions()
     {
-        return array(
-            'files' => __('File System'),
-            'db'    => __('Database'),
-        );
+        return array('files' => __('File System'), 'db' => __('Database'));
     }
 
     /**
@@ -127,13 +122,19 @@ class Config extends \Magento\Install\Block\AbstractBlock
      */
     public function getSessionSaveSelect()
     {
-        $html = $this->getLayout()->createBlock('Magento\View\Element\Html\Select')
-            ->setName('config[session_save]')
-            ->setId('session_save')
-            ->setTitle(__('Save Session Files In'))
-            ->setClass('required-entry')
-            ->setOptions($this->getSessionSaveOptions())
-            ->getHtml();
+        $html = $this->getLayout()->createBlock(
+            'Magento\Framework\View\Element\Html\Select'
+        )->setName(
+            'config[session_save]'
+        )->setId(
+            'session_save'
+        )->setTitle(
+            __('Save Session Files In')
+        )->setClass(
+            'required-entry'
+        )->setOptions(
+            $this->getSessionSaveOptions()
+        )->getHtml();
         return $html;
     }
 }

@@ -1,0 +1,166 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Edit customer address template
+ *
+ * @var $this \Magento\Customer\Block\Address\Edit
+ */
+?>
+<form class="form-address-edit" action="<?php echo $this->getSaveUrl() ?>" method="post" id="form-validate" enctype="multipart/form-data" data-hasrequired="<?php echo __('* Required Fields') ?>">
+    <fieldset class="fieldset">
+        <legend class="legend"><span><?php echo __('Contact Information') ?></span></legend><br>
+        <?php echo $this->getBlockHtml('formkey')?>
+        <input type="hidden" name="success_url" value="<?php echo $this->getSuccessUrl() ?>">
+        <input type="hidden" name="error_url" value="<?php echo $this->getErrorUrl() ?>">
+        <?php echo $this->getNameBlockHtml() ?>
+        <div class="field company">
+            <label class="label" for="company"><span><?php echo __('Company') ?></span></label>
+            <div class="control">
+                <input type="text" name="company" id="company" title="<?php echo __('Company') ?>" value="<?php echo $this->escapeHtml($this->getAddress()->getCompany()) ?>" class="input-text <?php echo $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('company') ?>">
+            </div>
+        </div>
+        <div class="field telephone required">
+            <label class="label" for="telephone"><span><?php echo __('Phone Number') ?></span></label>
+            <div class="control">
+                <input type="text" name="telephone" value="<?php echo $this->escapeHtml($this->getAddress()->getTelephone()) ?>" title="<?php echo __('Phone Number') ?>" class="input-text <?php echo $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('telephone') ?>" id="telephone">
+            </div>
+        </div>
+        <div class="field fax">
+            <label class="label" for="fax"><span><?php echo __('Fax') ?></span></label>
+            <div class="control">
+                <input type="text" name="fax" id="fax" title="<?php echo __('Fax') ?>" value="<?php echo $this->escapeHtml($this->getAddress()->getFax()) ?>" class="input-text <?php echo $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('fax') ?>">
+            </div>
+        </div>
+    </fieldset>
+    <fieldset class="fieldset">
+        <legend class="legend"><span><?php echo __('Address') ?></span></legend><br>
+        <?php $_streetValidationClass = $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('street'); ?>
+        <div class="field street required">
+            <label for="street_1" class="label"><span><?php echo __('Street Address') ?></span></label>
+            <div class="control">
+                <input type="text" name="street[]" value="<?php echo $this->escapeHtml($this->getStreetLine(1)) ?>" title="<?php echo __('Street Address') ?>" id="street_1" class="input-text <?php echo $_streetValidationClass ?>"  />
+                <div class="nested">
+                    <?php $_streetValidationClass = trim(str_replace('required-entry', '', $_streetValidationClass)); ?>
+                    <?php for ($_i = 1, $_n = $this->helper('Magento\Customer\Helper\Address')->getStreetLines(); $_i < $_n; $_i++): ?>
+                        <div class="field additional">
+                            <div class="control">
+                                <input type="text" name="street[]" value="<?php echo $this->escapeHtml($this->getStreetLine($_i+1)) ?>" title="<?php echo __('Street Address %1', $_i+1) ?>" id="street_<?php echo $_i+1 ?>" class="input-text <?php echo $_streetValidationClass ?>">
+                            </div>
+                        </div>
+                    <?php endfor; ?>
+                </div>
+            </div>
+        </div>
+
+        <?php if ($this->helper('Magento\Customer\Helper\Address')->isVatAttributeVisible()) : ?>
+            <div class="field taxvat">
+                <label class="label" for="vat_id"><span><?php echo __('VAT Number') ?></span></label>
+                <div class="control">
+                    <input type="text" name="vat_id" value="<?php echo $this->escapeHtml($this->getAddress()->getVatId()) ?>" title="<?php echo __('VAT Number') ?>" class="input-text <?php echo $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('vat_id') ?>" id="vat_id">
+                </div>
+            </div>
+        <?php endif; ?>
+        <div class="field city required">
+            <label class="label" for="city"><span><?php echo __('City') ?></span></label>
+            <div class="control">
+                <input type="text" name="city" value="<?php echo $this->escapeHtml($this->getAddress()->getCity()) ?>" title="<?php echo __('City') ?>" class="input-text <?php echo $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('city') ?>" id="city">
+            </div>
+        </div>
+        <div class="field region required">
+            <label class="label" for="region_id"><span><?php echo __('State/Province') ?></span></label>
+            <div class="control">
+                <select id="region_id" name="region_id" title="<?php echo __('State/Province') ?>" class="validate-select" <?php echo (!$this->getConfig('general/region/display_all')) ? ' disabled="disabled"' :'';?>>
+                    <option value=""><?php echo __('Please select region, state or province') ?></option>
+                </select>
+                <input type="text" id="region" name="region" value="<?php echo $this->escapeHtml($this->getRegion()) ?>"  title="<?php echo __('State/Province') ?>" class="input-text <?php echo $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('region') ?>"<?php echo (!$this->getConfig('general/region/display_all')) ? ' disabled="disabled"' :'';?>/>
+            </div>
+        </div>
+        <div class="field zip required">
+            <label class="label" for="zip"><span><?php echo __('Zip/Postal Code') ?></span></label>
+            <div class="control">
+                <input type="text" name="postcode" value="<?php echo $this->escapeHtml($this->getAddress()->getPostcode()) ?>" title="<?php echo __('Zip/Postal Code') ?>" id="zip" class="input-text validate-zip-international <?php echo $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('postcode') ?>">
+            </div>
+        </div>
+        <div class="field country required">
+            <label class="label" for="country"><span><?php echo __('Country') ?></span></label>
+            <div class="control">
+                <?php echo $this->getCountryHtmlSelect() ?>
+            </div>
+        </div>
+
+        <?php if($this->isDefaultBilling()): ?>
+            <div class="field note default"><?php echo __('Default Billing Address') ?></div>
+        <?php elseif($this->canSetAsDefaultBilling()): ?>
+            <div class="field choice set billing">
+                <input type="checkbox" id="primary_billing" name="default_billing" value="1" class="checkbox">
+                <label class="label" for="primary_billing"><span><?php echo __('Use as my default billing address') ?></span></label>
+            </div>
+        <?php else: ?>
+            <input type="hidden" name="default_billing" value="1" />
+        <?php endif; ?>
+
+        <?php if($this->isDefaultShipping()): ?>
+            <div class="field note default"><?php echo __('Default Shipping Address') ?></div>
+        <?php elseif($this->canSetAsDefaultShipping()): ?>
+            <div class="field choice set shipping">
+                <input type="checkbox" id="primary_shipping" name="default_shipping" value="1" class="checkbox">
+                <label class="label" for="primary_shipping"><span><?php echo __('Use as my default shipping address') ?></span></label>
+            </div>
+        <?php else: ?>
+            <input type="hidden" name="default_shipping" value="1">
+        <?php endif; ?>
+    </fieldset>
+    <div class="actions-toolbar">
+        <div class="primary">
+            <button type="submit" class="action save primary" data-action="save-address" title="<?php echo __('Save Address') ?>">
+                <span><?php echo __('Save Address') ?></span>
+            </button>
+        </div>
+        <div class="secondary">
+            <a class="action back" href="<?php echo $this->escapeUrl($this->getBackUrl()) ?>"><span><?php echo __('Go back') ?></span></a>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+require([
+    "jquery",
+    "mage/validation",
+    "Magento_Checkout/js/region-updater"
+], function($){
+        var $form = $('#form-validate');
+        $form.validation();
+        $('#country').regionUpdater({
+            optionalRegionAllowed: <?php echo ($this->getConfig('general/region/display_all')? 'true' : 'false'); ?>,
+            regionListId: '#region_id',
+            regionInputId: '#region',
+            postcodeId: '#zip',
+            form: $form,
+            regionJson: <?php echo $this->helper('Magento\Directory\Helper\Data')->getRegionJson() ?>,
+            defaultRegion: "<?php echo $this->getRegionId() ?>",
+            countriesWithOptionalZip: <?php echo $this->helper('Magento\Directory\Helper\Data')->getCountriesWithOptionalZip(true) ?>
+        });
+});
+</script>

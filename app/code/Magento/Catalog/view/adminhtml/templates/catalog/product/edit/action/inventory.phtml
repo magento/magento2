@@ -1,0 +1,374 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<script type="text/javascript">
+    require(['jquery'], function($){
+        $('[data-role=toggle-editability-all]').change(function(e) {
+            var toggler = $(this);
+            var field = toggler.parents('.field');
+            var someEditable = $('input[type!="checkbox"], select, textarea', field);
+            var someEditableCheckboxes = $('input[type="checkbox"]', field).not(toggler);
+            if(someEditableCheckboxes.length){
+                someEditable.prop('disabled', !toggler.prop('checked') || someEditableCheckboxes.prop('checked'));
+                someEditableCheckboxes.prop('disabled', !toggler.prop('checked'));
+            } else {
+                someEditable.prop('disabled', !toggler.prop('checked'));
+            }
+        });
+        $('[data-role=toggle-editability]').change(function(e) {
+            var useConfigSettings = $(this);
+            var field = useConfigSettings.parents('.field');
+            var someEditable = $('input[type!="checkbox"], select, textarea', field);
+            someEditable.prop('disabled', useConfigSettings.prop('checked'));
+        });
+    });
+</script>
+
+<div class="fieldset-wrapper form-inline advanced-inventory-edit">
+    <div class="fieldset-wrapper-title">
+        <strong class="title">
+            <span><?php echo __('Advanced Inventory') ?></span>
+        </strong>
+    </div>
+    <div class="fieldset-wrapper-content">
+        <fieldset class="fieldset" id="table_cataloginventory">
+        <div class="field">
+            <label class="label" for="inventory_manage_stock">
+                <span><?php echo __('Manage Stock') ?></span>
+            </label>
+
+            <div class="control">
+                <div class="fields-group-2">
+                    <div class="field">
+                        <select id="inventory_manage_stock" name="<?php echo $this->getFieldSuffix() ?>[manage_stock]"
+                                class="select" disabled="disabled">
+                            <option value="1"><?php echo __('Yes') ?></option>
+                            <option
+                                value="0"<?php if ($this->getConfigFieldValue('manage_stock') == 0): ?> selected="selected"<?php endif; ?>><?php echo __('No') ?></option>
+                        </select>
+                    </div>
+                    <div class="field choice">
+                        <input name="<?php echo $this->getFieldSuffix() ?>[use_config_manage_stock]" type="checkbox"
+                               id="inventory_use_config_manage_stock" data-role="toggle-editability" value="1"
+                               checked="checked" disabled="disabled"/>
+                        <label for="inventory_use_config_manage_stock"
+                               class="label"><span><?php echo __('Use Config Settings') ?></span></label>
+                    </div>
+                    <div class="field choice">
+                        <input type="checkbox" id="inventory_manage_stock_checkbox" data-role="toggle-editability-all"/>
+                        <label for="inventory_manage_stock_checkbox"
+                               class="label"><span><?php echo __('Change') ?></span></label>
+                    </div>
+                </div>
+            </div>
+            <div class="field-service" value-scope="<?php echo __('[GLOBAL]') ?>"></div>
+        </div>
+
+        <div class="field required">
+            <label class="label" for="inventory_qty">
+                <span><?php echo __('Qty') ?></span>
+            </label>
+
+            <div class="control">
+                <div class="fields-group-2">
+                    <div class="field">
+                        <input type="text" class="input-text required-entry validate-number" id="inventory_qty"
+                               name="<?php echo $this->getFieldSuffix() ?>[qty]"
+                               value="<?php echo $this->getDefaultConfigValue('qty') * 1 ?>" disabled="disabled"/>
+                    </div>
+                    <div class="field choice">
+                        <input type="checkbox" id="inventory_qty_checkbox" data-role="toggle-editability-all"/>
+                        <label for="inventory_qty_checkbox"
+                               class="label"><span><?php echo __('Change') ?></span></label>
+                    </div>
+                </div>
+            </div>
+            <div class="field-service" value-scope="<?php echo __('[GLOBAL]') ?>"></div>
+        </div>
+
+        <div class="field with-addon">
+            <label class="label" for="inventory_min_qty">
+                <span><?php echo __('Minimum Qty for Item\'s Status to be Out of Stock') ?></span>
+            </label>
+
+            <div class="control">
+                <div class="fields-group-2">
+                    <div class="field">
+                        <input type="text" class="input-text validate-number" id="inventory_min_qty"
+                               name="<?php echo $this->getFieldSuffix() ?>[min_qty]"
+                               value="<?php echo $this->getDefaultConfigValue('min_qty') * 1 ?>" disabled="disabled"/>
+                    </div>
+                    <div class="field choice">
+                        <input type="checkbox" id="inventory_use_config_min_qty"
+                               name="<?php echo $this->getFieldSuffix() ?>[use_config_min_qty]" value="1"
+                               data-role="toggle-editability" checked="checked" disabled="disabled"/>
+                        <label for="inventory_use_config_min_qty" class="label">
+                            <span><?php echo __('Use Config Settings') ?></span>
+                        </label>
+                    </div>
+                    <div class="field choice">
+                        <input type="checkbox" id="inventory_min_qty_checkbox" data-role="toggle-editability-all"/>
+                        <label for="inventory_min_qty_checkbox"
+                               class="label"><span><?php echo __('Change') ?></span></label>
+                    </div>
+                </div>
+            </div>
+            <div class="field-service" value-scope="<?php echo __('[GLOBAL]') ?>"></div>
+        </div>
+
+        <div class="field">
+            <label class="label" for="inventory_min_sale_qty">
+                <span><?php echo __('Minimum Qty Allowed in Shopping Cart') ?></span>
+            </label>
+
+            <div class="control">
+                <div class="fields-group-2">
+                    <div class="field">
+                        <input type="text" class="input-text validate-number" id="inventory_min_sale_qty"
+                               name="<?php echo $this->getFieldSuffix() ?>[min_sale_qty]"
+                               value="<?php echo $this->getDefaultConfigValue('min_sale_qty') * 1 ?>"
+                               disabled="disabled"/>
+                    </div>
+                    <div class="field choice">
+                        <input type="checkbox" id="inventory_use_config_min_sale_qty"
+                               name="<?php echo $this->getFieldSuffix() ?>[use_config_min_sale_qty]" value="1" data-role="toggle-editability" checked="checked" disabled="disabled"/>
+                        <label for="inventory_use_config_min_sale_qty"
+                               class="label"><span><?php echo __('Use Config Settings') ?></span></label>
+                    </div>
+                    <div class="field choice">
+                        <input type="checkbox" id="inventory_min_sale_qty_checkbox" data-role="toggle-editability-all"/>
+                        <label for="inventory_min_sale_qty_checkbox"
+                               class="label"><span><?php echo __('Change') ?></span></label>
+                    </div>
+                </div>
+            </div>
+            <div class="field-service" value-scope="<?php echo __('[GLOBAL]') ?>"></div>
+        </div>
+
+        <div class="field">
+            <label class="label" for="inventory_max_sale_qty">
+                <span><?php echo __('Maximum Qty Allowed in Shopping Cart') ?></span>
+            </label>
+
+            <div class="control">
+                <div class="fields-group-2">
+                    <div class="field">
+                        <input type="text" class="input-text validate-number" id="inventory_max_sale_qty"
+                               name="<?php echo $this->getFieldSuffix() ?>[max_sale_qty]"
+                               value="<?php echo $this->getDefaultConfigValue('max_sale_qty') * 1 ?>"
+                               disabled="disabled"/>
+                    </div>
+                    <div class="field choice">
+                        <input type="checkbox" id="inventory_use_config_max_sale_qty"
+                               name="<?php echo $this->getFieldSuffix() ?>[use_config_max_sale_qty]" value="1" data-role="toggle-editability" checked="checked" disabled="disabled"/>
+                        <label for="inventory_use_config_max_sale_qty"
+                               class="label"><span><?php echo __('Use Config Settings') ?></span></label>
+                    </div>
+                    <div class="field choice">
+                        <input type="checkbox" id="inventory_max_sale_checkbox" data-role="toggle-editability-all"/>
+                        <label for="inventory_max_sale_checkbox"
+                               class="label"><span><?php echo __('Change') ?></span></label>
+                    </div>
+                </div>
+            </div>
+            <div class="field-service" value-scope="<?php echo __('[GLOBAL]') ?>"></div>
+        </div>
+
+        <div class="field">
+            <label class="label" for="inventory_is_qty_decimal">
+                <span><?php echo __('Qty Uses Decimals') ?></span>
+            </label>
+
+            <div class="control">
+                <div class="fields-group-2">
+                    <div class="field">
+                        <select id="inventory_is_qty_decimal"
+                                name="<?php echo $this->getFieldSuffix() ?>[is_qty_decimal]" class="select"
+                                disabled="disabled">
+                            <option value="0"><?php echo __('No') ?></option>
+                            <option
+                                value="1"<?php if ($this->getDefaultConfigValue('is_qty_decimal') == 1): ?> selected="selected"<?php endif; ?>><?php echo __('Yes') ?></option>
+                        </select>
+                    </div>
+                    <div class="field choice">
+                        <input type="checkbox" id="inventory_is_qty_decimal_checkbox" data-role="toggle-editability-all"/>
+                        <label for="inventory_is_qty_decimal_checkbox"
+                               class="label"><span><?php echo __('Change') ?></span></label>
+                    </div>
+                </div>
+            </div>
+            <div class="field-service" value-scope="<?php echo __('[GLOBAL]') ?>"></div>
+        </div>
+
+        <div class="field">
+            <label class="label" for="inventory_backorders">
+                <span><?php echo __('Backorders') ?></span>
+            </label>
+
+            <div class="control">
+                <div class="fields-group-2">
+                    <div class="field">
+                        <select id="inventory_backorders" name="<?php echo $this->getFieldSuffix() ?>[backorders]"
+                                class="select" disabled="disabled">
+                            <?php foreach ($this->getBackordersOption() as $option): ?>
+                                <?php $_selected = ($option['value'] == $this->getDefaultConfigValue('backorders')) ? ' selected="selected"' : '' ?>
+                                <option
+                                    value="<?php echo $option['value'] ?>"<?php echo $_selected ?>><?php echo $option['label'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="field choice">
+                        <input type="checkbox" id="inventory_use_config_backorders"
+                               name="<?php echo $this->getFieldSuffix() ?>[use_config_backorders]" value="1" data-role="toggle-editability" checked="checked" disabled="disabled"/>
+                        <label for="inventory_use_config_backorders"
+                               class="label"><span><?php echo __('Use Config Settings') ?></span></label>
+                    </div>
+                    <div class="field choice">
+                        <input type="checkbox" id="inventory_backorders_checkbox" data-role="toggle-editability-all"/>
+                        <label for="inventory_backorders_checkbox" class="label"><span><?php echo __('Change') ?></span></label>
+                    </div>
+                </div>
+
+            </div>
+            <div class="field-service" value-scope="<?php echo __('[GLOBAL]') ?>"></div>
+        </div>
+
+        <div class="field">
+            <label class="label" for="inventory_notify_stock_qty">
+                <span><?php echo __('Notify for Quantity Below') ?></span>
+            </label>
+
+            <div class="control">
+                <div class="fields-group-2">
+                    <div class="field">
+                        <input type="text" class="input-text validate-number" id="inventory_notify_stock_qty"
+                               name="<?php echo $this->getFieldSuffix() ?>[notify_stock_qty]"
+                               value="<?php echo $this->getDefaultConfigValue('notify_stock_qty') * 1 ?>"
+                               disabled="disabled"/>
+                    </div>
+                    <div class="field choice">
+                        <input type="checkbox" id="inventory_use_config_notify_stock_qty"
+                               name="<?php echo $this->getFieldSuffix() ?>[use_config_notify_stock_qty]" value="1" data-role="toggle-editability" checked="checked" disabled="disabled"/>
+                        <label for="inventory_use_config_notify_stock_qty"
+                               class="label"><span><?php echo __('Use Config Settings') ?></span></label>
+                    </div>
+                    <div class="field choice">
+                        <input type="checkbox" id="inventory_notify_stock_qty_checkbox" data-role="toggle-editability-all"/>
+                        <label for="inventory_notify_stock_qty_checkbox"
+                               class="label"><span><?php echo __('Change') ?></span></label>
+                    </div>
+                </div>
+            </div>
+            <div class="field-service" value-scope="<?php echo __('[GLOBAL]') ?>"></div>
+        </div>
+
+        <div class="field">
+            <label class="label" for="inventory_enable_qty_increments">
+                <span><?php echo __('Enable Qty Increments') ?></span>
+            </label>
+
+            <div class="control">
+                <div class="fields-group-2">
+                    <div class="field">
+                        <select id="inventory_enable_qty_increments"
+                                name="<?php echo $this->getFieldSuffix() ?>[enable_qty_increments]" class="select"
+                                disabled="disabled">
+                            <option value="1"><?php echo __('Yes') ?></option>
+                            <option
+                                value="0"<?php if ($this->getDefaultConfigValue('enable_qty_increments') == 0): ?> selected="selected"<?php endif; ?>><?php echo __('No') ?></option>
+                        </select>
+                    </div>
+                    <div class="field choice">
+                        <input type="checkbox" id="inventory_use_config_enable_qty_increments"
+                               name="<?php echo $this->getFieldSuffix() ?>[use_config_enable_qty_increments]" value="1" data-role="toggle-editability" checked="checked" disabled="disabled"/>
+                        <label for="inventory_use_config_enable_qty_increments"
+                               class="label"><span><?php echo __('Use Config Settings') ?></span></label>
+                    </div>
+                    <div class="field choice">
+                        <input type="checkbox" id="inventory_enable_qty_increments_checkbox" data-role="toggle-editability-all"/>
+                        <label for="inventory_enable_qty_increments_checkbox"
+                               class="label"><span><?php echo __('Change') ?></span></label>
+                    </div>
+                </div>
+            </div>
+            <div class="field-service" value-scope="<?php echo __('[GLOBAL]') ?>"></div>
+        </div>
+
+        <div class="field">
+            <label class="label" for="inventory_qty_increments">
+                <span><?php echo __('Qty Increments') ?></span>
+            </label>
+
+            <div class="control">
+                <div class="fields-group-2">
+                    <div class="field">
+                        <input type="text" class="input-text validate-number" id="inventory_qty_increments"
+                               name="<?php echo $this->getFieldSuffix() ?>[qty_increments]"
+                               value="<?php echo $this->getDefaultConfigValue('qty_increments') * 1 ?>"
+                               disabled="disabled"/>
+                    </div>
+                    <div class="field choice">
+                        <input type="checkbox" id="inventory_use_config_qty_increments"
+                               name="<?php echo $this->getFieldSuffix() ?>[use_config_qty_increments]" value="1" data-role="toggle-editability" checked="checked" disabled="disabled"/>
+                        <label for="inventory_use_config_qty_increments"
+                               class="label"><span><?php echo __('Use Config Settings') ?></span></label>
+                    </div>
+                    <div class="field choice">
+                        <input type="checkbox" id="inventory_qty_increments_checkbox" data-role="toggle-editability-all"/>
+                        <label for="inventory_qty_increments_checkbox"
+                               class="label"><span><?php echo __('Change') ?></span></label>
+                    </div>
+                </div>
+            </div>
+            <div class="field-service" value-scope="<?php echo __('[GLOBAL]') ?>"></div>
+        </div>
+
+        <div class="field">
+            <label class="label" for="inventory_stock_availability">
+                <span><?php echo __('Stock Availability') ?></span>
+            </label>
+
+            <div class="control">
+                <div class="fields-group-2">
+                    <div class="field">
+                        <select id="inventory_stock_availability"
+                                name="<?php echo $this->getFieldSuffix() ?>[is_in_stock]" class="select"
+                                disabled="disabled">
+                            <option value="1"><?php echo __('In Stock') ?></option>
+                            <option
+                                value="0"<?php if ($this->getDefaultConfigValue('is_in_stock') == 0): ?> selected<?php endif; ?>><?php echo __('Out of Stock') ?></option>
+                        </select>
+                    </div>
+                    <div class="field choice">
+                        <input type="checkbox" id="inventory_stock_availability_checkbox" data-role="toggle-editability-all"/>
+                        <label for="inventory_stock_availability_checkbox"
+                               class="label"><span><?php echo __('Change') ?></span></label>
+                    </div>
+                </div>
+            </div>
+            <div class="field-service" value-scope="<?php echo __('[GLOBAL]') ?>"></div>
+        </div>
+        </fieldset>
+    </div>
+</div>

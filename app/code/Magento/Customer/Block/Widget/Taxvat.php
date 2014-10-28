@@ -18,57 +18,63 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Block\Widget;
 
-class Taxvat extends \Magento\Customer\Block\Widget\AbstractWidget
+/**
+ * Customer Value Added Tax Widget
+ *
+ */
+class Taxvat extends AbstractWidget
 {
     /**
-     * @var \Magento\Customer\Model\Resource\Customer
-     */
-    protected $_customerResource;
-
-    /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Customer\Helper\Address $addressHelper
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param array $data
+     * Constructor.
+     *
+     * @param \Magento\Framework\View\Element\Template\Context                        $context
+     * @param \Magento\Customer\Helper\Address                              $addressHelper
+     * @param \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $customerMetadataService
+     * @param array                                                         $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Eav\Model\Config $eavConfig,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Helper\Address $addressHelper,
-        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $customerMetadataService,
         array $data = array()
     ) {
-        $this->_customerSession = $customerSession;
-        parent::__construct($context, $eavConfig, $addressHelper, $data);
+        parent::__construct($context, $addressHelper, $customerMetadataService, $data);
+        $this->_isScopePrivate = true;
     }
 
+    /**
+     * Sets the template
+     *
+     * @return void
+     */
     public function _construct()
     {
         parent::_construct();
         $this->setTemplate('widget/taxvat.phtml');
     }
 
+    /**
+     * Get is enabled.
+     *
+     * @return bool
+     */
     public function isEnabled()
     {
-        return (bool)$this->_getAttribute('taxvat')->getIsVisible();
+        return $this->_getAttribute('taxvat') ? (bool)$this->_getAttribute('taxvat')->isVisible() : false;
     }
 
+    /**
+     * Get is required.
+     *
+     * @return bool
+     */
     public function isRequired()
     {
-        return (bool)$this->_getAttribute('taxvat')->getIsRequired();
-    }
-
-    public function getCustomer()
-    {
-        return $this->_customerSession->getCustomer();
+        return $this->_getAttribute('taxvat') ? (bool)$this->_getAttribute('taxvat')->isRequired() : false;
     }
 }

@@ -23,16 +23,16 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
-    <type name="Magento\App\RouterList">
-        <param name="routerList">
-            <value>
-                <vde>
-                    <instance>Magento\DesignEditor\Controller\Varien\Router\Standard</instance>
-                    <disable type="bool">false</disable>
-                    <sortOrder>40</sortOrder>
-                </vde>
-            </value>
-        </param>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\App\RouterList">
+        <arguments>
+            <argument name="routerList" xsi:type="array">
+                <item name="vde" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\DesignEditor\Controller\Varien\Router\Standard</item>
+                    <item name="disable" xsi:type="boolean">false</item>
+                    <item name="sortOrder" xsi:type="string">40</item>
+                </item>
+            </argument>
+        </arguments>
     </type>
 </config>

@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Config\Backend\File;
 
 class RequestDataTest extends \PHPUnit_Framework_TestCase
@@ -39,42 +35,18 @@ class RequestDataTest extends \PHPUnit_Framework_TestCase
         $_FILES = array(
             'groups' => array(
                 'name' => array(
-                    'group_1' => array(
-                        'fields' => array(
-                            'field_1' => array(
-                                'value' => 'file_name_1'
-                            )
-                        )
-                    ),
+                    'group_1' => array('fields' => array('field_1' => array('value' => 'file_name_1'))),
                     'group_2' => array(
                         'groups' => array(
-                            'group_2_1' => array(
-                                'fields' => array(
-                                    'field_2' => array(
-                                        'value' => 'file_name_2'
-                                    )
-                                )
-                            )
+                            'group_2_1' => array('fields' => array('field_2' => array('value' => 'file_name_2')))
                         )
                     )
                 ),
                 'tmp_name' => array(
-                    'group_1' => array(
-                        'fields' => array(
-                            'field_1' => array(
-                                'value' => 'file_tmp_name_1'
-                            )
-                        )
-                    ),
+                    'group_1' => array('fields' => array('field_1' => array('value' => 'file_tmp_name_1'))),
                     'group_2' => array(
                         'groups' => array(
-                            'group_2_1' => array(
-                                'fields' => array(
-                                    'field_2' => array(
-                                        'value' => 'file_tmp_name_2'
-                                    )
-                                )
-                            )
+                            'group_2_1' => array('fields' => array('field_2' => array('value' => 'file_tmp_name_2')))
                         )
                     )
                 )

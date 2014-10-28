@@ -18,18 +18,33 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_SalesRule
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\SalesRule\Model\Coupon;
 
-class Codegenerator extends \Magento\Object
-    implements \Magento\SalesRule\Model\Coupon\CodegeneratorInterface
+class Codegenerator extends \Magento\Framework\Object implements \Magento\SalesRule\Model\Coupon\CodegeneratorInterface
 {
+    /**
+     * The minimum length of the default
+     */
+    const DEFAULT_LENGTH_MIN = 16;
+
+    /**
+     * The maximal length of the default
+     */
+    const DEFAULT_LENGTH_MAX = 32;
+
+    /**
+     * Collection of the default symbols
+     */
+    const SYMBOLS_COLLECTION = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
+    /**
+     * Delimiter default
+     */
+    const DEFAULT_DELIMITER = '-';
+
     /**
      * Retrieve generated code
      *
@@ -37,17 +52,27 @@ class Codegenerator extends \Magento\Object
      */
     public function generateCode()
     {
-        $alphabet = ($this->getAlphabet() ? $this->getAlphabet() : 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789');
-        $lengthMin = ($this->getLengthMin() ? $this->getLengthMin() : 16);
-        $lengthMax = ($this->getLengthMax() ? $this->getLengthMax() : 32);
-        $length = ($this->getLength() ? $this->getLength() : rand($lengthMin, $lengthMax));
-        $result = '';
-        $indexMax = strlen($alphabet) - 1;
-        for ($i = 0; $i < $length; $i++) {
-            $index = rand(0, $indexMax);
-            $result .= $alphabet{$index};
+        $alphabet = $this->getAlphabet() ? $this->getAlphabet() : static::SYMBOLS_COLLECTION;
+        $length = $this->getActualLength();
+        $code = '';
+        for ($i = 0, $indexMax = strlen($alphabet) - 1; $i < $length; ++$i) {
+            $code .= substr($alphabet, mt_rand(0, $indexMax), 1);
         }
-        return $result;
+
+        return $code;
+    }
+
+    /**
+     * Getting actual code length
+     *
+     * @return int
+     */
+    protected function getActualLength()
+    {
+        $lengthMin = $this->getLengthMin() ? $this->getLengthMin() : static::DEFAULT_LENGTH_MIN;
+        $lengthMax = $this->getLengthMax() ? $this->getLengthMax() : static::DEFAULT_LENGTH_MAX;
+
+        return $this->getLength() ? $this->getLength() : mt_rand($lengthMin, $lengthMax);
     }
 
     /**
@@ -57,6 +82,6 @@ class Codegenerator extends \Magento\Object
      */
     public function getDelimiter()
     {
-        return ($this->getData('delimiter') ? $this->getData('delimiter') : '-');
+        return $this->hasData('delimiter') ? $this->getData('delimiter') : static::DEFAULT_DELIMITER;
     }
 }

@@ -18,12 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Block;
 
 /**
@@ -31,20 +28,15 @@ namespace Magento\Backend\Block;
  *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-class Template extends \Magento\View\Element\Template
+class Template extends \Magento\Framework\View\Element\Template
 {
     /**
-     * @var \Magento\AuthorizationInterface
+     * @var \Magento\Framework\AuthorizationInterface
      */
     protected $_authorization;
 
     /**
-     * @var \Magento\Core\Model\LocaleInterface
-     */
-    protected $_locale;
-
-    /**
-     * @var \Magento\Math\Random
+     * @var \Magento\Framework\Math\Random
      */
     protected $mathRandom;
 
@@ -54,23 +46,27 @@ class Template extends \Magento\View\Element\Template
     protected $_backendSession;
 
     /**
-     * @var \Magento\Data\Form\FormKey
+     * @var \Magento\Framework\Data\Form\FormKey
      */
     protected $formKey;
+
+    /**
+     * @var \Magento\Framework\Code\NameBuilder
+     */
+    protected $nameBuilder;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param array $data
      */
-    public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        array $data = array()
-    ) {
-        $this->_locale = $context->getLocale();
+    public function __construct(\Magento\Backend\Block\Template\Context $context, array $data = array())
+    {
+        $this->_localeDate = $context->getLocaleDate();
         $this->_authorization = $context->getAuthorization();
         $this->mathRandom = $context->getMathRandom();
         $this->_backendSession = $context->getBackendSession();
         $this->formKey = $context->getFormKey();
+        $this->nameBuilder = $context->getNameBuilder();
         parent::__construct($context, $data);
     }
 
@@ -98,15 +94,19 @@ class Template extends \Magento\View\Element\Template
         if ($moduleName === null) {
             $moduleName = $this->getModuleName();
         }
-        return !$this->_storeConfig->getConfigFlag('advanced/modules_disable_output/' . $moduleName);
+
+        return !$this->_scopeConfig->isSetFlag(
+            'advanced/modules_disable_output/' . $moduleName,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
-    
+
     /**
      * Make this public so that templates can use it properly with template engine
-     * 
-     * @return \Magento\AuthorizationInterface
+     *
+     * @return \Magento\Framework\AuthorizationInterface
      */
-    public function getAuthorization() 
+    public function getAuthorization()
     {
         return $this->_authorization;
     }
@@ -120,5 +120,15 @@ class Template extends \Magento\View\Element\Template
     {
         $this->_eventManager->dispatch('adminhtml_block_html_before', array('block' => $this));
         return parent::_toHtml();
+    }
+
+    /**
+     * Return toolbar block instance
+     *
+     * @return bool|\Magento\Framework\View\Element\BlockInterface
+     */
+    public function getToolbar()
+    {
+        return $this->getLayout()->getBlock('page.actions.toolbar');
     }
 }

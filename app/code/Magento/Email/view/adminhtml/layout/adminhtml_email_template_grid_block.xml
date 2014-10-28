@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <referenceBlock name="adminhtml.system.email.template.container">
         <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.system.email.template.grid" as="grid">
             <arguments>
@@ -49,6 +49,8 @@
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">ID</argument>
                         <argument name="index" xsi:type="string">template_id</argument>
+                        <argument name="column_css_class" xsi:type="string">col-id</argument>
+                        <argument name="header_css_class" xsi:type="string">col-id</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="code">
@@ -63,6 +65,8 @@
                         <argument name="index" xsi:type="string">added_at</argument>
                         <argument name="gmtoffset" xsi:type="string">1</argument>
                         <argument name="type" xsi:type="string">datetime</argument>
+                        <argument name="column_css_class" xsi:type="string">col-date</argument>
+                        <argument name="header_css_class" xsi:type="string">col-date</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="modified_at">
@@ -71,6 +75,8 @@
                         <argument name="index" xsi:type="string">modified_at</argument>
                         <argument name="gmtoffset" xsi:type="string">1</argument>
                         <argument name="type" xsi:type="string">datetime</argument>
+                        <argument name="column_css_class" xsi:type="string">col-date</argument>
+                        <argument name="header_css_class" xsi:type="string">col-date</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="subject">
@@ -93,11 +99,10 @@
                         <argument name="index" xsi:type="string">template_id</argument>
                         <argument name="sortable" xsi:type="string">0</argument>
                         <argument name="filter" xsi:type="string">0</argument>
-                        <argument name="width" xsi:type="string">100px</argument>
                         <argument name="renderer" xsi:type="string">Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Action</argument>
                     </arguments>
                 </block>
             </block>
         </block>
     </referenceBlock>
-</layout>
+</page>

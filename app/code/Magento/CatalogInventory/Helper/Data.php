@@ -18,21 +18,27 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_CatalogInventory
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Catalo
- */
 namespace Magento\CatalogInventory\Helper;
 
-class Data extends \Magento\App\Helper\AbstractHelper
+/**
+ * Catalog Inventory default helper
+ */
+class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    const XML_PATH_SHOW_OUT_OF_STOCK    = 'cataloginventory/options/show_out_of_stock';
-    const XML_PATH_ITEM_AUTO_RETURN     = 'cataloginventory/item_options/auto_return';
+    /**
+     * Show out of stock config path
+     */
+    const XML_PATH_SHOW_OUT_OF_STOCK = 'cataloginventory/options/show_out_of_stock';
+
+    /**
+     * Auto return config path
+     */
+    const XML_PATH_ITEM_AUTO_RETURN = 'cataloginventory/item_options/auto_return';
+
     /**
      * Path to configuration option 'Display product stock status'
      */
@@ -41,89 +47,36 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Error codes, that Catalog Inventory module can set to quote or quote items
      */
-    const ERROR_QTY =               1;
-    const ERROR_QTY_INCREMENTS =    2;
+    const ERROR_QTY = 1;
 
     /**
-     * All product types registry in scope of quantity availability
-     *
-     * @var array
+     * Error qty increments
      */
-    protected static $_isQtyTypeIds;
-
-    /**
-     * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface
-     */
-    protected $_config;
+    const ERROR_QTY_INCREMENTS = 2;
 
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $scopeConfig;
 
     /**
-     * @param \Magento\App\Helper\Context $context
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $config
+     * @param \Magento\Framework\App\Helper\Context $context
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Catalog\Model\ProductTypes\ConfigInterface $config
+        \Magento\Framework\App\Helper\Context $context,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
-        $this->_config = $config;
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->scopeConfig = $scopeConfig;
         parent::__construct($context);
-    }
-
-    /**
-     * Check if quantity defined for specified product type
-     *
-     * @param string $productTypeId
-     * @return bool
-     */
-    public function isQty($productTypeId)
-    {
-        $this->getIsQtyTypeIds();
-        if (!isset(self::$_isQtyTypeIds[$productTypeId])) {
-            return false;
-        }
-        return self::$_isQtyTypeIds[$productTypeId];
-    }
-
-    /**
-     * Get all registered product type ids and if quantity is defined for them
-     *
-     * @param bool $filter
-     * @return array
-     */
-    public function getIsQtyTypeIds($filter = null)
-    {
-        if (null === self::$_isQtyTypeIds) {
-            self::$_isQtyTypeIds = array();
-
-            foreach ($this->_config->getAll() as $typeId => $typeConfig) {
-                self::$_isQtyTypeIds[$typeId] = isset($typeConfig['is_qty']) ? $typeConfig['is_qty'] : false;
-            }
-        }
-        if (null === $filter) {
-            return self::$_isQtyTypeIds;
-        }
-        $result = self::$_isQtyTypeIds;
-        foreach ($result as $key => $value) {
-            if ($value !== $filter) {
-                unset($result[$key]);
-            }
-        }
-        return $result;
     }
 
     /**
      * Retrieve inventory item options (used in config)
      *
-     * @return array
+     * @return string[]
      */
     public function getConfigItemOptions()
     {
@@ -136,7 +89,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
             'manage_stock',
             'enable_qty_increments',
             'qty_increments',
-            'is_decimal_divided',
+            'is_decimal_divided'
         );
     }
 
@@ -147,16 +100,23 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function isShowOutOfStock()
     {
-        return $this->_coreStoreConfig->getConfigFlag(self::XML_PATH_SHOW_OUT_OF_STOCK);
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_SHOW_OUT_OF_STOCK,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
-     * Check if creditmemo items auto return option is enabled
+     * Check if credit memo items auto return option is enabled
+     *
      * @return bool
      */
     public function isAutoReturnEnabled()
     {
-        return $this->_coreStoreConfig->getConfigFlag(self::XML_PATH_ITEM_AUTO_RETURN);
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_ITEM_AUTO_RETURN,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
@@ -167,6 +127,9 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     public function isDisplayProductStockStatus()
     {
-        return $this->_coreStoreConfig->getConfigFlag(self::XML_PATH_DISPLAY_PRODUCT_STOCK_STATUS);
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_DISPLAY_PRODUCT_STOCK_STATUS,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 }

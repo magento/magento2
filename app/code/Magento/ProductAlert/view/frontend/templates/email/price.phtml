@@ -1,0 +1,63 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/** @var $this \Magento\ProductAlert\Block\Email\Price */
+?>
+<?php if ($_products = $this->getProducts()): ?>
+<p><?php echo __('You are receiving this notification because you subscribed to receive alerts when the prices for the following products changed:') ?></p>
+<table>
+<?php /** @var $_product \Magento\Catalog\Model\Product */ ?>
+<?php foreach ($_products as $_product): ?>
+    <tr>
+        <td class="col photo">
+            <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->escapeHtml($_product->getName()) ?>">
+                <img src="<?php echo $_product->getThumbnailUrl() ?>" height="75" width="75" alt="<?php echo $this->escapeHtml($_product->getName()) ?>" />
+            </a>
+        </td>
+        <td class="col item">
+            <p>
+                <strong class="product name">
+                    <a href="<?php echo $_product->getProductUrl() ?>"><?php echo $this->escapeHtml($_product->getName()) ?></a>
+                </strong>
+            </p>
+            <?php if ($shortDescription = $this->getFilteredContent($_product->getShortDescription())): ?>
+                <p><small><?php echo $shortDescription ?></small></p>
+            <?php endif; ?>
+            <p><?php echo $this->getProductPriceHtml(
+                    $_product,
+                    \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
+                    \Magento\Framework\Pricing\Render::ZONE_EMAIL,
+                    [
+                        'display_label' => __('Price:')
+                    ]
+                );
+                ?>
+            </p>
+            <p><small><a href="<?php echo $this->getProductUnsubscribeUrl($_product->getId()) ?>"><?php echo __('Click here not to receive alerts for this product.') ?></a></small></p>
+        </td>
+    </tr>
+<?php endforeach; ?>
+</table>
+<p><a href="<?php echo $this->getUnsubscribeUrl() ?>"><?php echo __('Unsubscribe from all price alerts') ?></a></p>
+<?php endif; ?>

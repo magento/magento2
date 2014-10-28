@@ -18,31 +18,39 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Newsletter
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 require __DIR__ . '/../../../Magento/Core/_files/store.php';
+require __DIR__ . '/../../../Magento/Customer/_files/customer.php';
 
-$currentStore = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->get('Magento\Core\Model\StoreManagerInterface')->getStore()->getId();
-$otherStore = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->get('Magento\Core\Model\StoreManagerInterface')->getStore('fixturestore')->getId();
+$currentStore = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+    'Magento\Framework\StoreManagerInterface'
+)->getStore()->getId();
+$otherStore = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+    'Magento\Framework\StoreManagerInterface'
+)->getStore(
+    'fixturestore'
+)->getId();
 
+/** @var \Magento\Newsletter\Model\Subscriber $subscriber */
 $subscriber = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create('Magento\Newsletter\Model\Subscriber');
 $subscriber->setStoreId($currentStore)
-    ->setSubscriberEmail('test1@example.com')
+    ->setCustomerId(1)
+    ->setSubscriberEmail('customer@example.com')
     ->setSubscriberStatus(\Magento\Newsletter\Model\Subscriber::STATUS_SUBSCRIBED)
     ->save()
 ;
+$firstSubscriberId = $subscriber->getId();
+
 $subscriber = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create('Magento\Newsletter\Model\Subscriber');
 $subscriber->setStoreId($otherStore)
-    ->setSubscriberEmail('test2@example.com')
+    // Intentionally setting ID to 0 instead of 2 to test fallback mechanism in Subscriber model
+    ->setCustomerId(0)
+    ->setSubscriberEmail('customer_two@example.com')
     ->setSubscriberStatus(\Magento\Newsletter\Model\Subscriber::STATUS_SUBSCRIBED)
     ->save()
 ;

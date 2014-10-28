@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Widget
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -35,8 +32,9 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Widget\Model\Widget');
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Widget\Model\Widget'
+        );
     }
 
     public function testGetWidgetsArray()
@@ -62,23 +60,14 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPlaceholderImageUrl($type, $expectedFile)
     {
-        $this->markTestIncomplete('Functionality is failed because widget'
-            . ' "app/design/frontend/magento_iphone_html5/etc/widget.xml" replaces'
-            . ' "new_products" widget in Catalog module');
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Core\Model\App')
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()
             ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
-        $objectManager->get('Magento\View\DesignInterface')->setDesignTheme('magento_backend');
-        $expectedPubFile = $objectManager->get('Magento\Filesystem')
-                ->getPath(\Magento\Filesystem::STATIC_VIEW) . "/adminhtml/magento_backend/en_US/{$expectedFile}";
-        if (file_exists($expectedPubFile)) {
-            unlink($expectedPubFile);
-        }
+        $objectManager->get('Magento\Framework\View\DesignInterface')->setDesignTheme('Magento/backend');
+        $expectedFilePath = "/adminhtml/Magento/backend/en_US/{$expectedFile}";
 
         $url = $this->_model->getPlaceholderImageUrl($type);
-        $this->assertStringEndsWith($expectedFile, $url);
-        $this->assertFileExists($expectedPubFile);
-        return $expectedPubFile;
+        $this->assertStringEndsWith($expectedFilePath, $url);
     }
 
     /**
@@ -87,37 +76,11 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
     public function getPlaceholderImageUrlDataProvider()
     {
         return array(
-            'custom image'  => array(
+            'custom image' => array(
                 'Magento\Catalog\Block\Product\Widget\NewWidget',
                 'Magento_Catalog/images/product_widget_new.gif'
             ),
-            'default image' => array(
-                'non_existing_widget_type',
-                'Magento_Widget/placeholder.gif'
-            ),
+            'default image' => array('non_existing_widget_type', 'Magento_Widget/placeholder.gif')
         );
-    }
-
-    /**
-     * Tests, that theme file is found anywhere in theme folders, not only in module directory.
-     *
-     * @magentoDataFixture Magento/Widget/_files/themes.php
-     * @magentoAppIsolation enabled
-     */
-    public function testGetPlaceholderImageUrlAtTheme()
-    {
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
-            \Magento\Filesystem::PARAM_APP_DIRS => array(
-                \Magento\Filesystem::THEMES => array('path' => dirname(__DIR__) . '/_files/design')
-            )
-        ));
-        $actualFile = $this->testGetPlaceholderImageUrl(
-            'Magento\Catalog\Block\Product\Widget\NewWidget',
-            'Magento_Catalog/images/product_widget_new.gif'
-        );
-
-        $expectedFile = dirname(__DIR__)
-            . '/_files/design/adminhtml/magento_backend/Magento_Catalog/images/product_widget_new.gif';
-        $this->assertFileEquals($expectedFile, $actualFile);
     }
 }

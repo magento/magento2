@@ -18,12 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Theme
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content;
 
 /**
@@ -47,13 +44,13 @@ class Uploader extends \Magento\Backend\Block\Media\Uploader
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\File\Size $fileSize
+     * @param \Magento\Framework\File\Size $fileSize
      * @param \Magento\Theme\Helper\Storage $storageHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\File\Size $fileSize,
+        \Magento\Framework\File\Size $fileSize,
         \Magento\Theme\Helper\Storage $storageHelper,
         array $data = array()
     ) {
@@ -68,9 +65,7 @@ class Uploader extends \Magento\Backend\Block\Media\Uploader
      */
     protected function _prepareLayout()
     {
-        $this->getConfig()->setUrl(
-            $this->getUrl('adminhtml/*/upload', $this->_storageHelper->getRequestParams())
-        );
+        $this->getConfig()->setUrl($this->getUrl('adminhtml/*/upload', $this->_storageHelper->getRequestParams()));
         return parent::_prepareLayout();
     }
 

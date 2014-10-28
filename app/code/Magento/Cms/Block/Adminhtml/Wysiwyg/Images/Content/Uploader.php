@@ -18,21 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Cms
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Content;
 
 /**
  * Uploader block for Wysiwyg Images
  *
- * @category   Magento
- * @package    Magento_Cms
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Content;
-
 class Uploader extends \Magento\Backend\Block\Media\Uploader
 {
     /**
@@ -42,13 +37,13 @@ class Uploader extends \Magento\Backend\Block\Media\Uploader
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\File\Size $fileSize
+     * @param \Magento\Framework\File\Size $fileSize
      * @param \Magento\Cms\Model\Wysiwyg\Images\Storage $imagesStorage
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\File\Size $fileSize,
+        \Magento\Framework\File\Size $fileSize,
         \Magento\Cms\Model\Wysiwyg\Images\Storage $imagesStorage,
         array $data = array()
     ) {
@@ -56,6 +51,9 @@ class Uploader extends \Magento\Backend\Block\Media\Uploader
         parent::__construct($context, $fileSize, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -67,19 +65,18 @@ class Uploader extends \Magento\Backend\Block\Media\Uploader
             $labels[] = '.' . $ext;
             $files[] = '*.' . $ext;
         }
-        $this->getConfig()
-            ->setUrl($this->_urlBuilder->addSessionParam()->getUrl('cms/*/upload', array('type' => $type)))
-            ->setFileField('image')
-            ->setFilters(array(
-                'images' => array(
-                    'label' => __('Images (%1)', implode(', ', $labels)),
-                    'files' => $files
-                )
-            ));
+        $this->getConfig()->setUrl(
+            $this->_urlBuilder->addSessionParam()->getUrl('cms/*/upload', array('type' => $type))
+        )->setFileField(
+            'image'
+        )->setFilters(
+            array('images' => array('label' => __('Images (%1)', implode(', ', $labels)), 'files' => $files))
+        );
     }
 
     /**
      * Return current media type based on request or data
+     *
      * @return string
      */
     protected function _getMediaType()

@@ -1,0 +1,70 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<legend class="legend"><span><?php echo __('Order Totals') ?></span></legend>
+<table class="data-table" cellspacing="0">
+    <tbody>
+        <?php echo $this->renderTotals(); ?>
+        <?php echo $this->renderTotals('footer'); ?>
+    </tbody>
+</table>
+<div class="divider"></div>
+<div class="order-totals-bottom">
+    <div class="field choice field-append-comments">
+        <input type="checkbox" id="notify_customer" name="order[comment][customer_note_notify]" value="1" <?php if($this->getNoteNotify()): ?>checked="true"<?php endif; ?>/>
+        <label for="notify_customer" class="normal"><?php echo __('Append Comments') ?></label>
+    </div>
+    <?php if ($this->canSendNewOrderConfirmationEmail()): ?>
+    <div class="field choice field-email-order-confirmation">
+        <input type="checkbox" id="send_confirmation" name="order[send_confirmation]" value="1" checked="checked"/>
+        <label for="send_confirmation" class="normal"><?php echo __('Email Order Confirmation') ?></label>
+    </div>
+    <?php endif; ?>
+    <div class="actions"><?php echo $this->getButtonHtml(__('Submit Order'),'order.submit()' ,'save primary'); ?></div>
+</div>
+
+<script type="text/javascript">
+require(['prototype'], function(){
+
+//<![CDATA[
+var sendEmailCheckbox = $('send_confirmation');
+if (sendEmailCheckbox) {
+    Event.observe(sendEmailCheckbox, 'change', notifyCustomerUpdate);
+    notifyCustomerUpdate();
+}
+
+function notifyCustomerUpdate() {
+    var sendEmailCheckbox = $('send_confirmation');
+    var notifyCustomerCheckbox = $('notify_customer');
+    if (!sendEmailCheckbox || !notifyCustomerCheckbox)
+        return;
+    notifyCustomerCheckbox.disabled = !sendEmailCheckbox.checked;
+}
+//]]>
+
+window.notifyCustomerUpdate = notifyCustomerUpdate;
+window.sendEmailCheckbox = sendEmailCheckbox;
+
+});
+</script>

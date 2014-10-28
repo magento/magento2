@@ -18,14 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Adminhtml
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Catalog\Controller\Adminhtml\Product\Action;
 
 /**
@@ -34,7 +29,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Action;
 class AttributeTest extends \Magento\Backend\Utility\Controller
 {
     /**
-     * @covers \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute::saveAction
+     * @covers \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute\Save::execute
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      */
@@ -49,14 +44,15 @@ class AttributeTest extends \Magento\Backend\Utility\Controller
         $this->dispatch('backend/catalog/product_action_attribute/save/store/0');
 
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
-        /** @var \Magento\Backend\Model\Url $urlBuilder */
-        $urlBuilder = $objectManager->get('Magento\UrlInterface');
+        /** @var \Magento\Backend\Model\UrlInterface $urlBuilder */
+        $urlBuilder = $objectManager->get('Magento\Framework\UrlInterface');
 
         /** @var \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper */
         $attributeHelper = $objectManager->get('Magento\Catalog\Helper\Product\Edit\Action\Attribute');
         $expectedUrl = $urlBuilder->getUrl(
-            'catalog/product/index', array('store' => $attributeHelper->getSelectedStoreId()))
-        ;
+            'catalog/product/index',
+            array('store' => $attributeHelper->getSelectedStoreId())
+        );
         $isRedirectPresent = false;
         foreach ($this->getResponse()->getHeaders() as $header) {
             if ($header['name'] === 'Location' && strpos($header['value'], $expectedUrl) === 0) {
@@ -65,5 +61,59 @@ class AttributeTest extends \Magento\Backend\Utility\Controller
         }
 
         $this->assertTrue($isRedirectPresent);
+    }
+
+
+    /**
+     * @covers \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute\Validate::execute
+     *
+     * @dataProvider validateActionDataProvider
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_duplicated.php
+     */
+    public function testValidateActionWithMassUpdate($attributes)
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        /** @var $session \Magento\Backend\Model\Session */
+        $session = $objectManager->get('Magento\Backend\Model\Session');
+        $session->setProductIds(array(1, 2));
+
+        $this->getRequest()->setParam('attributes', $attributes);
+
+        $this->dispatch('backend/catalog/product_action_attribute/validate/store/0');
+
+        $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
+
+        $response = $this->getResponse()->getBody();
+        $this->assertJson($response);
+        $data = json_decode($response, true);
+        $this->assertArrayHasKey('error', $data);
+        $this->assertFalse($data['error']);
+        $this->assertCount(1, $data);
+    }
+
+    /**
+     * Data Provider for validation
+     *
+     * @return array
+     */
+    public function validateActionDataProvider()
+    {
+        return array(
+            [
+                'arguments' => [
+                    'name'              => 'Name',
+                    'description'       => 'Description',
+                    'short_description' => 'Short Description',
+                    'price'             => '512',
+                    'weight'            => '16',
+                    'meta_title'        => 'Meta Title',
+                    'meta_keyword'      => 'Meta Keywords',
+                    'meta_description'  => 'Meta Description',
+                ],
+            ]
+        );
     }
 }

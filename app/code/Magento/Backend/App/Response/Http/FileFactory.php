@@ -23,7 +23,9 @@
  */
 namespace Magento\Backend\App\Response\Http;
 
-class FileFactory extends \Magento\App\Response\Http\FileFactory
+use Magento\Framework\App\Filesystem\DirectoryList;
+
+class FileFactory extends \Magento\Framework\App\Response\Http\FileFactory
 {
     /**
      * @var \Magento\Backend\Model\Auth
@@ -31,12 +33,12 @@ class FileFactory extends \Magento\App\Response\Http\FileFactory
     protected $_auth;
 
     /**
-     * @var \Magento\Backend\Model\Url
+     * @var \Magento\Backend\Model\UrlInterface
      */
     protected $_backendUrl;
 
     /**
-     * @var \Magento\App\ResponseInterface
+     * @var \Magento\Framework\App\ResponseInterface
      */
     protected $_response;
 
@@ -46,7 +48,7 @@ class FileFactory extends \Magento\App\Response\Http\FileFactory
     protected $_session;
 
     /**
-     * @var \Magento\App\ActionFlag
+     * @var \Magento\Framework\App\ActionFlag
      */
     protected $_flag;
 
@@ -56,21 +58,21 @@ class FileFactory extends \Magento\App\Response\Http\FileFactory
     protected $_helper;
 
     /**
-     * @param \Magento\App\ResponseInterface $response
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\Framework\App\ResponseInterface $response
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Backend\Model\Auth $auth
-     * @param \Magento\Backend\Model\Url $backendUrl
+     * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param \Magento\Backend\Model\Session $session
-     * @param \Magento\App\ActionFlag $flag
+     * @param \Magento\Framework\App\ActionFlag $flag
      * @param \Magento\Backend\Helper\Data $helper
      */
     public function __construct(
-        \Magento\App\ResponseInterface $response,
-        \Magento\Filesystem $filesystem,
+        \Magento\Framework\App\ResponseInterface $response,
+        \Magento\Framework\Filesystem $filesystem,
         \Magento\Backend\Model\Auth $auth,
-        \Magento\Backend\Model\Url $backendUrl,
+        \Magento\Backend\Model\UrlInterface $backendUrl,
         \Magento\Backend\Model\Session $session,
-        \Magento\App\ActionFlag $flag,
+        \Magento\Framework\App\ActionFlag $flag,
         \Magento\Backend\Helper\Data $helper
     ) {
         $this->_auth = $auth;
@@ -81,19 +83,19 @@ class FileFactory extends \Magento\App\Response\Http\FileFactory
         parent::__construct($response, $filesystem);
     }
 
-
     /**
      * Set redirect into response
      *
      * @param   string $path
      * @param   array $arguments
-     * @return \Magento\App\ResponseInterface
+     * @return \Magento\Framework\App\ResponseInterface
      * @TODO move method
      */
-    protected function _redirect($path, $arguments=array())
+    protected function _redirect($path, $arguments = array())
     {
-        $this->_session
-            ->setIsUrlNotice($this->_flag->get('', \Magento\Backend\App\AbstractAction::FLAG_IS_URLS_CHECKED));
+        $this->_session->setIsUrlNotice(
+            $this->_flag->get('', \Magento\Backend\App\AbstractAction::FLAG_IS_URLS_CHECKED)
+        );
         $this->_response->setRedirect($this->_helper->getUrl($path, $arguments));
         return $this->_response;
     }
@@ -104,15 +106,21 @@ class FileFactory extends \Magento\App\Response\Http\FileFactory
      * @param string $fileName
      * @param string|array $content set to null to avoid starting output, $contentLength should be set explicitly in
      * that case
+     * @param string $baseDir
      * @param string $contentType
      * @param int $contentLength    explicit content length, if strlen($content) isn't applicable
-     * @return \Magento\App\ResponseInterface
+     * @return \Magento\Framework\App\ResponseInterface
      */
-    public function create($fileName, $content, $contentType = 'application/octet-stream', $contentLength = null)
-    {
+    public function create(
+        $fileName,
+        $content,
+        $baseDir = DirectoryList::ROOT,
+        $contentType = 'application/octet-stream',
+        $contentLength = null
+    ) {
         if ($this->_auth->getAuthStorage()->isFirstPageAfterLogin()) {
             return $this->_redirect($this->_backendUrl->getStartupPageUrl());
         }
-        return parent::create($fileName, $content, $contentType, $contentLength);
+        return parent::create($fileName, $content, $baseDir, $contentType, $contentLength);
     }
 }

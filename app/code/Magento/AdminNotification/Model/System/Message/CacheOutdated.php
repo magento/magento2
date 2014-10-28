@@ -23,33 +23,32 @@
  */
 namespace Magento\AdminNotification\Model\System\Message;
 
-class CacheOutdated
-    implements \Magento\AdminNotification\Model\System\MessageInterface
+class CacheOutdated implements \Magento\Framework\Notification\MessageInterface
 {
     /**
-     * @var \Magento\UrlInterface
+     * @var \Magento\Framework\UrlInterface
      */
     protected $_urlBuilder;
 
     /**
-     * @var \Magento\AuthorizationInterface
+     * @var \Magento\Framework\AuthorizationInterface
      */
     protected $_authorization;
 
     /**
-     * @var \Magento\App\Cache\TypeListInterface
+     * @var \Magento\Framework\App\Cache\TypeListInterface
      */
     protected $_cacheTypeList;
 
     /**
-     * @param \Magento\AuthorizationInterface $authorization
-     * @param \Magento\UrlInterface $urlBuilder
-     * @param \Magento\App\Cache\TypeListInterface $cacheTypeList
+     * @param \Magento\Framework\AuthorizationInterface $authorization
+     * @param \Magento\Framework\UrlInterface $urlBuilder
+     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
      */
     public function __construct(
-        \Magento\AuthorizationInterface $authorization,
-        \Magento\UrlInterface $urlBuilder,
-        \Magento\App\Cache\TypeListInterface $cacheTypeList
+        \Magento\Framework\AuthorizationInterface $authorization,
+        \Magento\Framework\UrlInterface $urlBuilder,
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
     ) {
         $this->_authorization = $authorization;
         $this->_urlBuilder = $urlBuilder;
@@ -87,8 +86,11 @@ class CacheOutdated
      */
     public function isDisplayed()
     {
-        return $this->_authorization->isAllowed('Magento_Adminhtml::cache')
-            && count($this->_getCacheTypesForRefresh()) > 0;
+        return $this->_authorization->isAllowed(
+            'Magento_Adminhtml::cache'
+        ) && count(
+            $this->_getCacheTypesForRefresh()
+        ) > 0;
     }
 
     /**
@@ -122,6 +124,6 @@ class CacheOutdated
      */
     public function getSeverity()
     {
-        return \Magento\AdminNotification\Model\System\MessageInterface::SEVERITY_CRITICAL;
+        return \Magento\Framework\Notification\MessageInterface::SEVERITY_CRITICAL;
     }
 }

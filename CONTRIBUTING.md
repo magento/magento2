@@ -4,10 +4,10 @@ The Magento 2 development team will review all issues and contributions submitte
 
 ## Contribution Process
 
-If you are a new github user, we recommend that you create your own [free github account](https://github.com/signup/free). By doing that, you will be able to collaborate with the Magento 2 development team, “fork” the Magento 2 project and be able to easily send “pull requests”.
+If you are a new GitHub user, we recommend that you create your own [free github account](https://github.com/signup/free). By doing that, you will be able to collaborate with the Magento 2 development team, “fork” the Magento 2 project and be able to easily send “pull requests”.
 
 1. Search current [listed issues](https://github.com/magento/magento2/issues) (open or closed) for similar proposals of intended contribution before starting work on a new contribution.
-2. Review the [Contributor License Agreement](https://github.com/magento/magento2/wiki/Contributor-License-Agreement) if this is your first time contributing.
+2. Review the [Contributor License Agreement](https://github.com/magento/magento2/blob/master/CONTRIBUTOR_LICENSE_AGREEMENT.html) if this is your first time contributing.
 3. Create and test your work.
 4. Fork the Magento 2 repository according to [github's Fork A Repo instructions](https://help.github.com/articles/fork-a-repo) and when you are ready to send us a Pull Request – follow [github's Using Pull Requests instructions](https://help.github.com/articles/using-pull-requests).
 5. Once your contribution is received, Magento 2 development team will review the contribution and collaborate with you as needed to improve the quality of the contribution.
@@ -26,11 +26,3 @@ Yes. We strongly encourage that you follow the requirements as stated, before su
 **Do you accept all contributions?**
 
 Not all contributions will be used or incorporated into the code for the project. The decision to incorporate the code or not is at the discretion of the Magento 2 development team.
-
-# X.Commerce (Magento) Contributor License Agreement
-
-All Submissions you make to Magento, a division of X.commerce, Inc. (“Magento”) through GitHub are subject to the following terms and conditions:
-
-1. You grant Magento a perpetual, worldwide, non-exclusive, no charge, royalty free, irrevocable license under your applicable copyrights and patents to reproduce, prepare derivative works of, display, publically perform, sublicense and distribute any feedback, ideas, code, or other information (“Submission”) you submit through GitHub.
-2. Your Submission is an original work of authorship and you are the owner or are legally entitled to grant the license stated above.
-3. You agree to the X.commerce Agreement found here: [https://www.x.com/developers/x.commerce/x.commerce-user-agreement](https://www.x.com/developers/x.commerce/x.commerce-user-agreement)

@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,8 +26,6 @@
 /**
  * Product image attribute frontend
  *
- * @category   Magento
- * @package    Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Model\Product\Attribute\Frontend;
@@ -39,18 +35,17 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFronten
     /**
      * Store manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * Construct
      *
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      */
-    public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager
-    ) {
+    public function __construct(\Magento\Framework\StoreManagerInterface $storeManager)
+    {
         $this->_storeManager = $storeManager;
     }
 
@@ -58,16 +53,17 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFronten
      * Returns url to product image
      *
      * @param  \Magento\Catalog\Model\Product $product
+     *
      * @return string|false
      */
     public function getUrl($product)
     {
         $image = $product->getData($this->getAttribute()->getAttributeCode());
-        if ($image) {
+        $url = false;
+        if (!empty($image)) {
             $url = $this->_storeManager->getStore($product->getStore())
-                ->getBaseUrl('media') . 'catalog/product/' . $image;
-        } else {
-            $url = false;
+                ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA)
+                . 'catalog/product/' . $image;
         }
         return $url;
     }

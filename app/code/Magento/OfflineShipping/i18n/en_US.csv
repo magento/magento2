@@ -1,0 +1,49 @@
+None,None
+Price,Price
+No,No
+Enabled,Enabled
+"Sort Order","Sort Order"
+Title,Title
+Type,Type
+Export,Export
+Import,Import
+Country,Country
+"Zip/Postal Code","Zip/Postal Code"
+Condition,Condition
+Region/State,Region/State
+"Shipping Price","Shipping Price"
+"Export CSV","Export CSV"
+"Store Pickup","Store Pickup"
+"Weight vs. Destination","Weight vs. Destination"
+"Price vs. Destination","Price vs. Destination"
+"# of Items vs. Destination","# of Items vs. Destination"
+"Weight (and above)","Weight (and above)"
+"Order Subtotal (and above)","Order Subtotal (and above)"
+"# of Items (and above)","# of Items (and above)"
+"Please correct Table Rate code type: %1.","Please correct Table Rate code type: %1."
+"Please correct Table Rate code for type %1: %2.","Please correct Table Rate code for type %1: %2."
+"Per Order","Per Order"
+"Per Item","Per Item"
+"Free Shipping","Free Shipping"
+"For matching items only","For matching items only"
+"For shipment with matching items","For shipment with matching items"
+"Please correct Table Rates File Format.","Please correct Table Rates File Format."
+"Something went wrong while importing table rates.","Something went wrong while importing table rates."
+"We couldn't import this file because of these errors: %1","We couldn't import this file because of these errors: %1"
+"Please correct Table Rates format in the Row #%1.","Please correct Table Rates format in the Row #%1."
+"Please correct Country ""%1"" in the Row #%2.","Please correct Country ""%1"" in the Row #%2."
+"Please correct Region/State ""%1"" in the Row #%2.","Please correct Region/State ""%1"" in the Row #%2."
+"Please correct %1 ""%2"" in the Row #%3.","Please correct %1 ""%2"" in the Row #%3."
+"Please correct Shipping Price ""%1"" in the Row #%2.","Please correct Shipping Price ""%1"" in the Row #%2."
+"Duplicate Row #%1 (Country ""%2"", Region/State ""%3"", Zip ""%4"" and Value ""%5"")","Duplicate Row #%1 (Country ""%2"", Region/State ""%3"", Zip ""%4"" and Value ""%5"")"
+"Calculate Handling Fee","Calculate Handling Fee"
+"Handling Fee","Handling Fee"
+"Displayed Error Message","Displayed Error Message"
+"Ship to Applicable Countries","Ship to Applicable Countries"
+"Ship to Specific Countries","Ship to Specific Countries"
+"Show Method if Not Applicable","Show Method if Not Applicable"
+"Flat Rate","Flat Rate"
+"Method Name","Method Name"
+"Table Rates","Table Rates"
+"Include Virtual Products in Price Calculation","Include Virtual Products in Price Calculation"
+"Minimum Order Amount","Minimum Order Amount"

@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_CatalogRule
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -45,17 +43,18 @@
  * @method string getEarliestEndDate()
  * @method \Magento\CatalogRule\Model\Rule\Product\Price setEarliestEndDate(string $value)
  *
- * @category    Magento
- * @package     Magento_CatalogRule
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\CatalogRule\Model\Rule\Product;
 
-class Price extends \Magento\Core\Model\AbstractModel
+use Magento\Framework\DB\Select;
+
+class Price extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * Initialize resource model
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -65,21 +64,34 @@ class Price extends \Magento\Core\Model\AbstractModel
     /**
      * Apply price rule price to price index table
      *
-     * @param \Magento\DB\Select $select
+     * @param Select $select
      * @param array|string $indexTable
      * @param string $entityId
      * @param string $customerGroupId
      * @param string $websiteId
      * @param array $updateFields       the array fields for compare with rule price and update
      * @param string $websiteDate
-     * @return \Magento\CatalogRule\Model\Rule\Product\Price
+     * @return $this
      */
-    public function applyPriceRuleToIndexTable(\Magento\DB\Select $select, $indexTable, $entityId, $customerGroupId,
-        $websiteId, $updateFields, $websiteDate)
-    {
+    public function applyPriceRuleToIndexTable(
+        Select $select,
+        $indexTable,
+        $entityId,
+        $customerGroupId,
+        $websiteId,
+        $updateFields,
+        $websiteDate
+    ) {
 
-        $this->_getResource()->applyPriceRuleToIndexTable($select, $indexTable, $entityId, $customerGroupId, $websiteId,
-            $updateFields, $websiteDate);
+        $this->_getResource()->applyPriceRuleToIndexTable(
+            $select,
+            $indexTable,
+            $entityId,
+            $customerGroupId,
+            $websiteId,
+            $updateFields,
+            $websiteDate
+        );
 
         return $this;
     }

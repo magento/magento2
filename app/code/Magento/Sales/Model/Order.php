@@ -18,11 +18,22 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model;
+
+use Magento\Directory\Model\Currency;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Sales\Model\Order\Payment;
+use Magento\Sales\Model\Resource\Order\Address\Collection;
+use Magento\Sales\Model\Resource\Order\Creditmemo\Collection as CreditmemoCollection;
+use Magento\Sales\Model\Resource\Order\Invoice\Collection as InvoiceCollection;
+use Magento\Sales\Model\Resource\Order\Item\Collection as ImportCollection;
+use Magento\Sales\Model\Resource\Order\Payment\Collection as PaymentCollection;
+use Magento\Sales\Model\Resource\Order\Shipment\Collection as ShipmentCollection;
+use Magento\Sales\Model\Resource\Order\Shipment\Track\Collection as TrackCollection;
+use Magento\Sales\Model\Resource\Order\Status\History\Collection as HistoryCollection;
 
 /**
  * Order model
@@ -187,8 +198,6 @@
  * @method \Magento\Sales\Model\Order setGiftMessageId(int $value)
  * @method int getPaymentAuthExpiration()
  * @method \Magento\Sales\Model\Order setPaymentAuthExpiration(int $value)
- * @method int getPaypalIpnCustomerNotified()
- * @method \Magento\Sales\Model\Order setPaypalIpnCustomerNotified(int $value)
  * @method int getQuoteAddressId()
  * @method \Magento\Sales\Model\Order setQuoteAddressId(int $value)
  * @method int getQuoteId()
@@ -219,7 +228,6 @@
  * @method \Magento\Sales\Model\Order setWeight(float $value)
  * @method string getCustomerDob()
  * @method \Magento\Sales\Model\Order setCustomerDob(string $value)
- * @method string getIncrementId()
  * @method \Magento\Sales\Model\Order setIncrementId(string $value)
  * @method string getAppliedRuleIds()
  * @method \Magento\Sales\Model\Order setAppliedRuleIds(string $value)
@@ -302,84 +310,136 @@
  * @method \Magento\Sales\Model\Order setShippingInclTax(float $value)
  * @method float getBaseShippingInclTax()
  * @method \Magento\Sales\Model\Order setBaseShippingInclTax(float $value)
+ * @method bool hasBillingAddressId()
+ * @method \Magento\Sales\Model\Order unsBillingAddressId()
+ * @method bool hasShippingAddressId()
+ * @method \Magento\Sales\Model\Order unsShippingAddressId()
+ * @method int getShippigAddressId()
+ * @method bool hasCustomerNoteNotify()
+ * @method bool hasForcedCanCreditmemo()
+ * @method bool getIsInProcess()
+ * @method \Magento\Customer\Model\Customer getCustomer()
  */
-namespace Magento\Sales\Model;
-
-class Order extends \Magento\Sales\Model\AbstractModel
+class Order extends \Magento\Sales\Model\AbstractModel implements EntityInterface
 {
-    const ENTITY                                = 'order';
-    /**
-     * XML configuration paths
-     */
-    const XML_PATH_EMAIL_TEMPLATE               = 'sales_email/order/template';
-    const XML_PATH_EMAIL_GUEST_TEMPLATE         = 'sales_email/order/guest_template';
-    const XML_PATH_EMAIL_IDENTITY               = 'sales_email/order/identity';
-    const XML_PATH_EMAIL_COPY_TO                = 'sales_email/order/copy_to';
-    const XML_PATH_EMAIL_COPY_METHOD            = 'sales_email/order/copy_method';
-    const XML_PATH_EMAIL_ENABLED                = 'sales_email/order/enabled';
-
-    const XML_PATH_UPDATE_EMAIL_TEMPLATE        = 'sales_email/order_comment/template';
-    const XML_PATH_UPDATE_EMAIL_GUEST_TEMPLATE  = 'sales_email/order_comment/guest_template';
-    const XML_PATH_UPDATE_EMAIL_IDENTITY        = 'sales_email/order_comment/identity';
-    const XML_PATH_UPDATE_EMAIL_COPY_TO         = 'sales_email/order_comment/copy_to';
-    const XML_PATH_UPDATE_EMAIL_COPY_METHOD     = 'sales_email/order_comment/copy_method';
-    const XML_PATH_UPDATE_EMAIL_ENABLED         = 'sales_email/order_comment/enabled';
+    const ENTITY = 'order';
 
     /**
      * Order states
      */
-    const STATE_NEW             = 'new';
+    const STATE_NEW = 'new';
+
     const STATE_PENDING_PAYMENT = 'pending_payment';
-    const STATE_PROCESSING      = 'processing';
-    const STATE_COMPLETE        = 'complete';
-    const STATE_CLOSED          = 'closed';
-    const STATE_CANCELED        = 'canceled';
-    const STATE_HOLDED          = 'holded';
-    const STATE_PAYMENT_REVIEW  = 'payment_review';
+
+    const STATE_PROCESSING = 'processing';
+
+    const STATE_COMPLETE = 'complete';
+
+    const STATE_CLOSED = 'closed';
+
+    const STATE_CANCELED = 'canceled';
+
+    const STATE_HOLDED = 'holded';
+
+    const STATE_PAYMENT_REVIEW = 'payment_review';
 
     /**
      * Order statuses
      */
-    const STATUS_FRAUD  = 'fraud';
+    const STATUS_FRAUD = 'fraud';
 
     /**
      * Order flags
      */
-    const ACTION_FLAG_CANCEL                    = 'cancel';
-    const ACTION_FLAG_HOLD                      = 'hold';
-    const ACTION_FLAG_UNHOLD                    = 'unhold';
-    const ACTION_FLAG_EDIT                      = 'edit';
-    const ACTION_FLAG_CREDITMEMO                = 'creditmemo';
-    const ACTION_FLAG_INVOICE                   = 'invoice';
-    const ACTION_FLAG_REORDER                   = 'reorder';
-    const ACTION_FLAG_SHIP                      = 'ship';
-    const ACTION_FLAG_COMMENT                   = 'comment';
+    const ACTION_FLAG_CANCEL = 'cancel';
+
+    const ACTION_FLAG_HOLD = 'hold';
+
+    const ACTION_FLAG_UNHOLD = 'unhold';
+
+    const ACTION_FLAG_EDIT = 'edit';
+
+    const ACTION_FLAG_CREDITMEMO = 'creditmemo';
+
+    const ACTION_FLAG_INVOICE = 'invoice';
+
+    const ACTION_FLAG_REORDER = 'reorder';
+
+    const ACTION_FLAG_SHIP = 'ship';
+
+    const ACTION_FLAG_COMMENT = 'comment';
 
     /**
      * Report date types
      */
     const REPORT_DATE_TYPE_CREATED = 'created';
-    const REPORT_DATE_TYPE_UPDATED = 'updated';
-    /*
-     * Identifier for history item
-     */
-    const HISTORY_ENTITY_NAME = 'order';
 
+    const REPORT_DATE_TYPE_UPDATED = 'updated';
+
+    /**
+     * @var string
+     */
     protected $_eventPrefix = 'sales_order';
+
+    /**
+     * @var string
+     */
     protected $_eventObject = 'order';
 
-    protected $_addresses       = null;
-    protected $_items           = null;
-    protected $_payments        = null;
-    protected $_statusHistory   = null;
+    /**
+     * @var  Collection|null
+     */
+    protected $_addresses = null;
+
+    /**
+     * @var ImportCollection|null
+     */
+    protected $_items = null;
+
+    /**
+     * @var PaymentCollection|null
+     */
+    protected $_payments = null;
+
+    /**
+     * @var HistoryCollection|null
+     */
+    protected $_statusHistory = null;
+
+    /**
+     * @var InvoiceCollection
+     */
     protected $_invoices;
+
+    /**
+     * @var TrackCollection
+     */
     protected $_tracks;
+
+    /**
+     * @var ShipmentCollection
+     */
     protected $_shipments;
+
+    /**
+     * @var CreditmemoCollection
+     */
     protected $_creditmemos;
 
-    protected $_relatedObjects  = array();
-    protected $_orderCurrency   = null;
-    protected $_baseCurrency    = null;
+    /**
+     * @var array
+     */
+    protected $_relatedObjects = array();
+
+    /**
+     * @var Currency
+     */
+    protected $_orderCurrency = null;
+
+    /**
+     * @var Currency|null
+     */
+    protected $_baseCurrency = null;
 
     /**
      * Array of action flags for canUnhold, canEdit, etc.
@@ -400,38 +460,12 @@ class Order extends \Magento\Sales\Model\AbstractModel
      *
      * @var string
      */
-    protected $_historyEntityName = self::HISTORY_ENTITY_NAME;
+    protected $entityType = 'order';
 
     /**
-     * Sales data
-     *
-     * @var \Magento\Sales\Helper\Data
-     */
-    protected $_salesData;
-
-    /**
-     * Payment data
-     *
-     * @var \Magento\Payment\Helper\Data
-     */
-    protected $_paymentData;
-
-    /**
-     * Core store config
-     *
-     * @var \Magento\Core\Model\Store\ConfigInterface
-     */
-    protected $_coreStoreConfig;
-
-    /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
-
-    /**
-     * @var \Magento\Sales\Model\ResourceFactory
-     */
-    protected $_resourceFactory;
 
     /**
      * @var \Magento\Sales\Model\Order\Config
@@ -444,29 +478,14 @@ class Order extends \Magento\Sales\Model\AbstractModel
     protected $_productFactory;
 
     /**
-     * @var \Magento\Email\Model\Template\MailerFactory
-     */
-    protected $_templateMailerFactory;
-
-    /**
-     * @var \Magento\Email\Model\InfoFactory
-     */
-    protected $_emailInfoFactory;
-
-    /**
      * @var \Magento\Sales\Model\Resource\Order\Item\CollectionFactory
      */
-    protected $_orderItemCollFactory;
+    protected $_orderItemCollectionFactory;
 
     /**
      * @var \Magento\Catalog\Model\Product\Visibility
      */
     protected $_productVisibility;
-
-    /**
-     * @var \Magento\Tax\Model\Calculation
-     */
-    protected $_taxCalculation;
 
     /**
      * @var \Magento\Sales\Model\Service\OrderFactory
@@ -479,102 +498,127 @@ class Order extends \Magento\Sales\Model\AbstractModel
     protected $_currencyFactory;
 
     /**
-     * @var \Magento\Eav\Model\Config
-     */
-    protected $_eavConfig;
-
-    /**
      * @var \Magento\Sales\Model\Order\Status\HistoryFactory
      */
     protected $_orderHistoryFactory;
 
     /**
-     * @var \Magento\Tax\Model\Resource\Sales\Order\Tax\CollectionFactory
+     * @var Resource\Order\Address\CollectionFactory
      */
-    protected $_orderTaxCollFactory;
+    protected $_addressCollectionFactory;
 
     /**
-     * @var \Magento\Sales\Model\CarrierFactory
+     * @var Resource\Order\Payment\CollectionFactory
      */
-    protected $_carrierFactory;
+    protected $_paymentCollectionFactory;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Core\Model\LocaleInterface $coreLocale
-     * @param \Magento\Stdlib\DateTime $dateTime
-     * @param \Magento\Payment\Helper\Data $paymentData
-     * @param \Magento\Sales\Helper\Data $salesData
-     * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Sales\Model\ResourceFactory $resourceFactory
-     * @param \Magento\Sales\Model\Order\Config $orderConfig
+     * @var Resource\Order\Status\History\CollectionFactory
+     */
+    protected $_historyCollectionFactory;
+
+    /**
+     * @var Resource\Order\Invoice\CollectionFactory
+     */
+    protected $_invoiceCollectionFactory;
+
+    /**
+     * @var Resource\Order\Shipment\CollectionFactory
+     */
+    protected $_shipmentCollectionFactory;
+
+    /**
+     * @var Resource\Order\Creditmemo\CollectionFactory
+     */
+    protected $_memoCollectionFactory;
+
+    /**
+     * @var Resource\Order\Shipment\Track\CollectionFactory
+     */
+    protected $_trackCollectionFactory;
+
+    /**
+     * @var PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param Order\Config $orderConfig
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Email\Model\Template\MailerFactory $templateMailerFactory
-     * @param \Magento\Email\Model\InfoFactory $emailInfoFactory
-     * @param \Magento\Sales\Model\Resource\Order\Item\CollectionFactory $orderItemCollFactory
+     * @param Resource\Order\Item\CollectionFactory $orderItemCollectionFactory
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
-     * @param \Magento\Tax\Model\Calculation $taxCalculation
-     * @param \Magento\Sales\Model\Service\OrderFactory $serviceOrderFactory
+     * @param Service\OrderFactory $serviceOrderFactory
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Sales\Model\Order\Status\HistoryFactory $orderHistoryFactory
-     * @param \Magento\Tax\Model\Resource\Sales\Order\Tax\CollectionFactory $orderTaxCollFactory
-     * @param \Magento\Sales\Model\CarrierFactory $carrierFactory
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param Order\Status\HistoryFactory $orderHistoryFactory
+     * @param Resource\Order\Address\CollectionFactory $addressCollectionFactory
+     * @param Resource\Order\Payment\CollectionFactory $paymentCollectionFactory
+     * @param Resource\Order\Status\History\CollectionFactory $historyCollectionFactory
+     * @param Resource\Order\Invoice\CollectionFactory $invoiceCollectionFactory
+     * @param Resource\Order\Shipment\CollectionFactory $shipmentCollectionFactory
+     * @param Resource\Order\Creditmemo\CollectionFactory $memoCollectionFactory
+     * @param Resource\Order\Shipment\Track\CollectionFactory $trackCollectionFactory
+     * @param PriceCurrencyInterface $priceCurrency
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Core\Model\LocaleInterface $coreLocale,
-        \Magento\Stdlib\DateTime $dateTime,
-        \Magento\Payment\Helper\Data $paymentData,
-        \Magento\Sales\Helper\Data $salesData,
-        \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Sales\Model\ResourceFactory $resourceFactory,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Framework\Stdlib\DateTime $dateTime,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\Order\Config $orderConfig,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Email\Model\Template\MailerFactory $templateMailerFactory,
-        \Magento\Email\Model\InfoFactory $emailInfoFactory,
-        \Magento\Sales\Model\Resource\Order\Item\CollectionFactory $orderItemCollFactory,
+        \Magento\Sales\Model\Resource\Order\Item\CollectionFactory $orderItemCollectionFactory,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
-        \Magento\Tax\Model\Calculation $taxCalculation,
         \Magento\Sales\Model\Service\OrderFactory $serviceOrderFactory,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Sales\Model\Order\Status\HistoryFactory $orderHistoryFactory,
-        \Magento\Tax\Model\Resource\Sales\Order\Tax\CollectionFactory $orderTaxCollFactory,
-        \Magento\Sales\Model\CarrierFactory $carrierFactory,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Sales\Model\Resource\Order\Address\CollectionFactory $addressCollectionFactory,
+        \Magento\Sales\Model\Resource\Order\Payment\CollectionFactory $paymentCollectionFactory,
+        \Magento\Sales\Model\Resource\Order\Status\History\CollectionFactory $historyCollectionFactory,
+        \Magento\Sales\Model\Resource\Order\Invoice\CollectionFactory $invoiceCollectionFactory,
+        \Magento\Sales\Model\Resource\Order\Shipment\CollectionFactory $shipmentCollectionFactory,
+        \Magento\Sales\Model\Resource\Order\Creditmemo\CollectionFactory $memoCollectionFactory,
+        \Magento\Sales\Model\Resource\Order\Shipment\Track\CollectionFactory $trackCollectionFactory,
+        PriceCurrencyInterface $priceCurrency,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        $this->_paymentData = $paymentData;
-        $this->_salesData = $salesData;
-        $this->_coreStoreConfig = $coreStoreConfig;
         $this->_storeManager = $storeManager;
-        $this->_resourceFactory = $resourceFactory;
         $this->_orderConfig = $orderConfig;
         $this->_productFactory = $productFactory;
-        $this->_templateMailerFactory = $templateMailerFactory;
-        $this->_emailInfoFactory = $emailInfoFactory;
-        $this->_orderItemCollFactory = $orderItemCollFactory;
+
+        $this->_orderItemCollectionFactory = $orderItemCollectionFactory;
         $this->_productVisibility = $productVisibility;
-        $this->_taxCalculation = $taxCalculation;
         $this->_serviceOrderFactory = $serviceOrderFactory;
         $this->_currencyFactory = $currencyFactory;
         $this->_eavConfig = $eavConfig;
         $this->_orderHistoryFactory = $orderHistoryFactory;
-        $this->_orderTaxCollFactory = $orderTaxCollFactory;
-        $this->_carrierFactory = $carrierFactory;
-        parent::__construct($context, $registry, $coreLocale, $dateTime, $resource, $resourceCollection, $data);
+        $this->_addressCollectionFactory = $addressCollectionFactory;
+        $this->_paymentCollectionFactory = $paymentCollectionFactory;
+        $this->_historyCollectionFactory = $historyCollectionFactory;
+        $this->_invoiceCollectionFactory = $invoiceCollectionFactory;
+        $this->_shipmentCollectionFactory = $shipmentCollectionFactory;
+        $this->_memoCollectionFactory = $memoCollectionFactory;
+        $this->_trackCollectionFactory = $trackCollectionFactory;
+        $this->priceCurrency = $priceCurrency;
+        parent::__construct($context, $registry, $localeDate, $dateTime, $resource, $resourceCollection, $data);
     }
 
     /**
      * Initialize resource model
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -585,7 +629,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
      * Clear order object data
      *
      * @param string $key data key
-     * @return \Magento\Sales\Model\Order
+     * @return $this
      */
     public function unsetData($key = null)
     {
@@ -615,11 +659,11 @@ class Order extends \Magento\Sales\Model\AbstractModel
      *
      * @param string $action
      * @param boolean $flag
-     * @return \Magento\Sales\Model\Order
+     * @return $this
      */
     public function setActionFlag($action, $flag)
     {
-        $this->_actionFlag[$action] = (boolean) $flag;
+        $this->_actionFlag[$action] = (bool)$flag;
         return $this;
     }
 
@@ -637,11 +681,11 @@ class Order extends \Magento\Sales\Model\AbstractModel
      * Set flag for order if it can sends new email to customer.
      *
      * @param bool $flag
-     * @return \Magento\Sales\Model\Order
+     * @return $this
      */
     public function setCanSendNewEmailFlag($flag)
     {
-        $this->_canSendNewEmailFlag = (boolean) $flag;
+        $this->_canSendNewEmailFlag = (bool)$flag;
         return $this;
     }
 
@@ -661,7 +705,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
      *
      * @param string $attribute
      * @param string $value
-     * @return \Magento\Sales\Model\Order
+     * @return $this
      */
     public function loadByAttribute($attribute, $value)
     {
@@ -672,7 +716,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
     /**
      * Retrieve store model instance
      *
-     * @return \Magento\Core\Model\Store
+     * @return \Magento\Store\Model\Store
      */
     public function getStore()
     {
@@ -696,7 +740,6 @@ class Order extends \Magento\Sales\Model\AbstractModel
         if ($this->canUnhold()) {
             return false;
         }
-
         if (!$this->canReviewPayment() && $this->canFetchPaymentReviewUpdate()) {
             return false;
         }
@@ -766,7 +809,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
         }
 
         foreach ($this->getAllItems() as $item) {
-            if ($item->getQtyToInvoice()>0 && !$item->getLockedDoInvoice()) {
+            if ($item->getQtyToInvoice() > 0 && !$item->getLockedDoInvoice()) {
                 return true;
             }
         }
@@ -797,7 +840,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
          * for this we have additional diapason for 0
          * TotalPaid - contains amount, that were not rounded.
          */
-        if (abs($this->getStore()->roundPrice($this->getTotalPaid()) - $this->getTotalRefunded()) < .0001) {
+        if (abs($this->priceCurrency->round($this->getTotalPaid()) - $this->getTotalRefunded()) < .0001) {
             return false;
         }
 
@@ -815,8 +858,12 @@ class Order extends \Magento\Sales\Model\AbstractModel
     public function canHold()
     {
         $state = $this->getState();
-        if ($this->isCanceled() || $this->isPaymentReview()
-            || $state === self::STATE_COMPLETE || $state === self::STATE_CLOSED || $state === self::STATE_HOLDED) {
+        if ($this->isCanceled() ||
+            $this->isPaymentReview() ||
+            $state === self::STATE_COMPLETE ||
+            $state === self::STATE_CLOSED ||
+            $state === self::STATE_HOLDED
+        ) {
             return false;
         }
 
@@ -872,9 +919,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
         }
 
         foreach ($this->getAllItems() as $item) {
-            if ($item->getQtyToShip()>0 && !$item->getIsVirtual()
-                && !$item->getLockedDoShip())
-            {
+            if ($item->getQtyToShip() > 0 && !$item->getIsVirtual() && !$item->getLockedDoShip()) {
                 return true;
             }
         }
@@ -893,8 +938,11 @@ class Order extends \Magento\Sales\Model\AbstractModel
         }
 
         $state = $this->getState();
-        if ($this->isCanceled() || $this->isPaymentReview()
-            || $state === self::STATE_COMPLETE || $state === self::STATE_CLOSED) {
+        if ($this->isCanceled() ||
+            $this->isPaymentReview() ||
+            $state === self::STATE_COMPLETE ||
+            $state === self::STATE_CLOSED
+        ) {
             return false;
         }
 
@@ -954,7 +1002,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
             /*
              * @TODO ACPAOC: Use product collection here, but ensure that product
              * is loaded with order store id, otherwise there'll be problems with isSalable()
-             * for configurables, bundles and other composites
+             * for composite products
              *
              */
             /*
@@ -972,11 +1020,9 @@ class Order extends \Magento\Sales\Model\AbstractModel
             */
 
             foreach ($products as $productId) {
-                $product = $this->_productFactory->create()
-                    ->setStoreId($this->getStoreId())
-                    ->load($productId);
+                $product = $this->_productFactory->create()->setStoreId($this->getStoreId())->load($productId);
             }
-            if (!$product->getId() || (!$ignoreSalable && !$product->isSalable())) {
+            if (!$product->getId() || !$ignoreSalable && !$product->isSalable()) {
                 return false;
             }
         }
@@ -1030,7 +1076,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
     /**
      * Place order payments
      *
-     * @return \Magento\Sales\Model\Order
+     * @return $this
      */
     protected function _placePayment()
     {
@@ -1041,7 +1087,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
     /**
      * Retrieve order payment model object
      *
-     * @return \Magento\Sales\Model\Order\Payment
+     * @return Payment|false
      */
     public function getPayment()
     {
@@ -1056,8 +1102,8 @@ class Order extends \Magento\Sales\Model\AbstractModel
     /**
      * Declare order billing address
      *
-     * @param   \Magento\Sales\Model\Order\Address $address
-     * @return  \Magento\Sales\Model\Order
+     * @param \Magento\Sales\Model\Order\Address $address
+     * @return $this
      */
     public function setBillingAddress(\Magento\Sales\Model\Order\Address $address)
     {
@@ -1073,8 +1119,8 @@ class Order extends \Magento\Sales\Model\AbstractModel
     /**
      * Declare order shipping address
      *
-     * @param   \Magento\Sales\Model\Order\Address $address
-     * @return  \Magento\Sales\Model\Order
+     * @param \Magento\Sales\Model\Order\Address $address
+     * @return $this
      */
     public function setShippingAddress(\Magento\Sales\Model\Order\Address $address)
     {
@@ -1090,12 +1136,12 @@ class Order extends \Magento\Sales\Model\AbstractModel
     /**
      * Retrieve order billing address
      *
-     * @return \Magento\Sales\Model\Order\Address
+     * @return \Magento\Sales\Model\Order\Address|false
      */
     public function getBillingAddress()
     {
         foreach ($this->getAddressesCollection() as $address) {
-            if ($address->getAddressType()=='billing' && !$address->isDeleted()) {
+            if ($address->getAddressType() == 'billing' && !$address->isDeleted()) {
                 return $address;
             }
         }
@@ -1105,7 +1151,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
     /**
      * Retrieve order shipping address
      *
-     * @return \Magento\Sales\Model\Order\Address|bool
+     * @return \Magento\Sales\Model\Order\Address|false
      */
     public function getShippingAddress()
     {
@@ -1126,11 +1172,17 @@ class Order extends \Magento\Sales\Model\AbstractModel
      * @param string|bool $status
      * @param string $comment
      * @param bool $isCustomerNotified
+     * @param bool $shouldProtectState
      * @return \Magento\Sales\Model\Order
      */
-    public function setState($state, $status = false, $comment = '', $isCustomerNotified = null)
-    {
-        return $this->_setState($state, $status, $comment, $isCustomerNotified, true);
+    public function setState(
+        $state,
+        $status = false,
+        $comment = '',
+        $isCustomerNotified = null,
+        $shouldProtectState = true
+    ) {
+        return $this->_setState($state, $status, $comment, $isCustomerNotified, $shouldProtectState);
     }
 
     /**
@@ -1143,18 +1195,20 @@ class Order extends \Magento\Sales\Model\AbstractModel
      * @param string $comment
      * @param bool $isCustomerNotified
      * @param bool $shouldProtectState
-     * @return \Magento\Sales\Model\Order
-     * @throws \Magento\Core\Exception
+     * @return $this
+     * @throws \Magento\Framework\Model\Exception
      */
-    protected function _setState($state, $status = false, $comment = '',
-        $isCustomerNotified = null, $shouldProtectState = false
+    protected function _setState(
+        $state,
+        $status = false,
+        $comment = '',
+        $isCustomerNotified = null,
+        $shouldProtectState = false
     ) {
         // attempt to set the specified state
         if ($shouldProtectState) {
             if ($this->isStateProtected($state)) {
-                throw new \Magento\Core\Exception(
-                    __('The Order State "%1" must not be set manually.', $state)
-                );
+                throw new \Magento\Framework\Model\Exception(__('The Order State "%1" must not be set manually.', $state));
             }
         }
         $this->setData('state', $state);
@@ -1165,15 +1219,16 @@ class Order extends \Magento\Sales\Model\AbstractModel
                 $status = $this->getConfig()->getStateDefaultStatus($state);
             }
             $this->setStatus($status);
-            $history = $this->addStatusHistoryComment($comment, false); // no sense to set $status again
-            $history->setIsCustomerNotified($isCustomerNotified); // for backwards compatibility
+            $history = $this->addStatusHistoryComment($comment, false);
+            // no sense to set $status again
+            $history->setIsCustomerNotified($isCustomerNotified);
         }
         return $this;
     }
 
     /**
      * Whether specified state can be set from outside
-     * @param $state
+     * @param string $state
      * @return bool
      */
     public function isStateProtected($state)
@@ -1200,7 +1255,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
      * @param  string $status
      * @param  string $comment
      * @param  bool $isCustomerNotified
-     * @return \Magento\Sales\Model\Order
+     * @return $this
      */
     public function addStatusToHistory($status, $comment = '', $isCustomerNotified = false)
     {
@@ -1225,10 +1280,13 @@ class Order extends \Magento\Sales\Model\AbstractModel
         } else {
             $this->setStatus($status);
         }
-        $history = $this->_orderHistoryFactory->create()
-            ->setStatus($status)
-            ->setComment($comment)
-            ->setEntityName($this->_historyEntityName);
+        $history = $this->_orderHistoryFactory->create()->setStatus(
+            $status
+        )->setComment(
+            $comment
+        )->setEntityName(
+            $this->entityType
+        );
         $this->addStatusHistory($history);
         return $history;
     }
@@ -1237,35 +1295,45 @@ class Order extends \Magento\Sales\Model\AbstractModel
      * Overrides entity id, which will be saved to comments history status
      *
      * @param string $entityName
-     * @return \Magento\Sales\Model\Order
+     * @return $this
      */
     public function setHistoryEntityName($entityName)
     {
-        $this->_historyEntityName = $entityName;
+        $this->entityType = $entityName;
         return $this;
+    }
+
+    /**
+     * Return order entity type
+     *
+     * @return string
+     */
+    public function getEntityType()
+    {
+        return $this->entityType;
     }
 
     /**
      * Place order
      *
-     * @return \Magento\Sales\Model\Order
+     * @return $this
      */
     public function place()
     {
-        $this->_eventManager->dispatch('sales_order_place_before', array('order'=>$this));
+        $this->_eventManager->dispatch('sales_order_place_before', array('order' => $this));
         $this->_placePayment();
-        $this->_eventManager->dispatch('sales_order_place_after', array('order'=>$this));
+        $this->_eventManager->dispatch('sales_order_place_after', array('order' => $this));
         return $this;
     }
 
     /**
      * @return $this
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function hold()
     {
         if (!$this->canHold()) {
-            throw new \Magento\Core\Exception(__('A hold action is not available.'));
+            throw new \Magento\Framework\Model\Exception(__('A hold action is not available.'));
         }
         $this->setHoldBeforeState($this->getState());
         $this->setHoldBeforeStatus($this->getStatus());
@@ -1276,13 +1344,13 @@ class Order extends \Magento\Sales\Model\AbstractModel
     /**
      * Attempt to unhold the order
      *
-     * @return \Magento\Sales\Model\Order
-     * @throws \Magento\Core\Exception
+     * @return $this
+     * @throws \Magento\Framework\Model\Exception
      */
     public function unhold()
     {
         if (!$this->canUnhold()) {
-            throw new \Magento\Core\Exception(__('You cannot remove the hold.'));
+            throw new \Magento\Framework\Model\Exception(__('You cannot remove the hold.'));
         }
         $this->setState($this->getHoldBeforeState(), $this->getHoldBeforeStatus());
         $this->setHoldBeforeState(null);
@@ -1293,7 +1361,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
     /**
      * Cancel order
      *
-     * @return \Magento\Sales\Model\Order
+     * @return $this
      */
     public function cancel()
     {
@@ -1311,8 +1379,8 @@ class Order extends \Magento\Sales\Model\AbstractModel
      * Prepare order totals to cancellation
      * @param string $comment
      * @param bool $graceful
-     * @return \Magento\Sales\Model\Order
-     * @throws \Magento\Core\Exception
+     * @return $this
+     * @throws \Magento\Framework\Model\Exception
      */
     public function registerCancellation($comment = '', $graceful = true)
     {
@@ -1346,7 +1414,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
 
             $this->_setState($cancelState, true, $comment);
         } elseif (!$graceful) {
-            throw new \Magento\Core\Exception(__('We cannot cancel this order.'));
+            throw new \Magento\Framework\Model\Exception(__('We cannot cancel this order.'));
         }
         return $this;
     }
@@ -1365,32 +1433,10 @@ class Order extends \Magento\Sales\Model\AbstractModel
     }
 
     /**
-     * Return model of shipping carrier
-     *
-     * @return bool|float|\Magento\Shipping\Model\Carrier\AbstractCarrier
-     */
-    public function getShippingCarrier()
-    {
-        $carrierModel = $this->getData('shipping_carrier');
-        if (is_null($carrierModel)) {
-            $carrierModel = false;
-            /**
-             * $method - carrier_method
-             */
-            $method = $this->getShippingMethod(true);
-            if ($method instanceof \Magento\Object) {
-                $carrierModel = $this->_carrierFactory->create($method->getCarrierCode());
-            }
-            $this->setData('shipping_carrier', $carrierModel);
-        }
-        return $carrierModel;
-    }
-
-    /**
      * Retrieve shipping method
      *
      * @param bool $asObject return carrier code and shipping method data as object
-     * @return string|\Magento\Object
+     * @return string|\Magento\Framework\Object
      */
     public function getShippingMethod($asObject = false)
     {
@@ -1399,170 +1445,19 @@ class Order extends \Magento\Sales\Model\AbstractModel
             return $shippingMethod;
         } else {
             list($carrierCode, $method) = explode('_', $shippingMethod, 2);
-            return new \Magento\Object(array(
-                'carrier_code' => $carrierCode,
-                'method'       => $method
-            ));
+            return new \Magento\Framework\Object(array('carrier_code' => $carrierCode, 'method' => $method));
         }
-    }
-
-    /**
-     * Send email with order data
-     *
-     * @return \Magento\Sales\Model\Order
-     */
-    public function sendNewOrderEmail()
-    {
-        $storeId = $this->getStore()->getId();
-
-        if (!$this->_salesData->canSendNewOrderEmail($storeId)) {
-            return $this;
-        }
-        // Get the destination email addresses to send copies to
-        $copyTo = $this->_getEmails(self::XML_PATH_EMAIL_COPY_TO);
-        $copyMethod = $this->_coreStoreConfig->getConfig(self::XML_PATH_EMAIL_COPY_METHOD, $storeId);
-
-        $paymentBlockHtml = $this->_paymentData->getInfoBlockHtml($this->getPayment(), $storeId);
-
-        // Retrieve corresponding email template id and customer name
-        if ($this->getCustomerIsGuest()) {
-            $templateId = $this->_coreStoreConfig->getConfig(self::XML_PATH_EMAIL_GUEST_TEMPLATE, $storeId);
-            $customerName = $this->getBillingAddress()->getName();
-        } else {
-            $templateId = $this->_coreStoreConfig->getConfig(self::XML_PATH_EMAIL_TEMPLATE, $storeId);
-            $customerName = $this->getCustomerName();
-        }
-
-        $mailer = $this->_templateMailerFactory->create();
-        $emailInfo = $this->_emailInfoFactory->create();
-        $emailInfo->addTo($this->getCustomerEmail(), $customerName);
-        if ($copyTo && $copyMethod == 'bcc') {
-            // Add bcc to customer email
-            foreach ($copyTo as $email) {
-                $emailInfo->addBcc($email);
-            }
-        }
-        $mailer->addEmailInfo($emailInfo);
-
-        // Email copies are sent as separated emails if their copy method is 'copy'
-        if ($copyTo && $copyMethod == 'copy') {
-            foreach ($copyTo as $email) {
-                $emailInfo = $this->_emailInfoFactory->create();
-                $emailInfo->addTo($email);
-                $mailer->addEmailInfo($emailInfo);
-            }
-        }
-
-        // Set all required params and send emails
-        $mailer->setSender($this->_coreStoreConfig->getConfig(self::XML_PATH_EMAIL_IDENTITY, $storeId));
-        $mailer->setStoreId($storeId);
-        $mailer->setTemplateId($templateId);
-        $mailer->setTemplateParams(array(
-                'order'        => $this,
-                'billing'      => $this->getBillingAddress(),
-                'payment_html' => $paymentBlockHtml
-            )
-        );
-        $mailer->send();
-
-        $this->setEmailSent(true);
-        $this->_getResource()->saveAttribute($this, 'email_sent');
-
-        return $this;
-    }
-
-    /**
-     * Send email with order update information
-     *
-     * @param boolean $notifyCustomer
-     * @param string $comment
-     * @return \Magento\Sales\Model\Order
-     */
-    public function sendOrderUpdateEmail($notifyCustomer = true, $comment = '')
-    {
-        $storeId = $this->getStore()->getId();
-
-        if (!$this->_salesData->canSendOrderCommentEmail($storeId)) {
-            return $this;
-        }
-        // Get the destination email addresses to send copies to
-        $copyTo = $this->_getEmails(self::XML_PATH_UPDATE_EMAIL_COPY_TO);
-        $copyMethod = $this->_coreStoreConfig->getConfig(self::XML_PATH_UPDATE_EMAIL_COPY_METHOD, $storeId);
-        // Check if at least one recipient is found
-        if (!$notifyCustomer && !$copyTo) {
-            return $this;
-        }
-
-        // Retrieve corresponding email template id and customer name
-        if ($this->getCustomerIsGuest()) {
-            $templateId = $this->_coreStoreConfig->getConfig(self::XML_PATH_UPDATE_EMAIL_GUEST_TEMPLATE, $storeId);
-            $customerName = $this->getBillingAddress()->getName();
-        } else {
-            $templateId = $this->_coreStoreConfig->getConfig(self::XML_PATH_UPDATE_EMAIL_TEMPLATE, $storeId);
-            $customerName = $this->getCustomerName();
-        }
-
-        $mailer = $this->_templateMailerFactory->create();
-        if ($notifyCustomer) {
-            $emailInfo = $this->_emailInfoFactory->create();
-            $emailInfo->addTo($this->getCustomerEmail(), $customerName);
-            if ($copyTo && $copyMethod == 'bcc') {
-                // Add bcc to customer email
-                foreach ($copyTo as $email) {
-                    $emailInfo->addBcc($email);
-                }
-            }
-            $mailer->addEmailInfo($emailInfo);
-        }
-
-        // Email copies are sent as separated emails if their copy method is
-        // 'copy' or a customer should not be notified
-        if ($copyTo && ($copyMethod == 'copy' || !$notifyCustomer)) {
-            foreach ($copyTo as $email) {
-                $emailInfo = $this->_emailInfoFactory->create();
-                $emailInfo->addTo($email);
-                $mailer->addEmailInfo($emailInfo);
-            }
-        }
-
-        // Set all required params and send emails
-        $mailer->setSender($this->_coreStoreConfig->getConfig(self::XML_PATH_UPDATE_EMAIL_IDENTITY, $storeId));
-        $mailer->setStoreId($storeId);
-        $mailer->setTemplateId($templateId);
-        $mailer->setTemplateParams(array(
-                'order'   => $this,
-                'comment' => $comment,
-                'billing' => $this->getBillingAddress()
-            )
-        );
-        $mailer->send();
-
-        return $this;
-    }
-
-    /**
-     * @param string $configPath
-     * @return array|bool
-     */
-    protected function _getEmails($configPath)
-    {
-        $data = $this->_coreStoreConfig->getConfig($configPath, $this->getStoreId());
-        if (!empty($data)) {
-            return explode(',', $data);
-        }
-        return false;
     }
 
     /*********************** ADDRESSES ***************************/
 
     /**
-     * @return \Magento\Sales\Model\Resource\Order\Address\Collection
+     * @return Collection
      */
     public function getAddressesCollection()
     {
         if (is_null($this->_addresses)) {
-            $this->_addresses = $this->_resourceFactory->create('Magento\Sales\Model\Resource\Order\Address\Collection')
-                ->setOrderFilter($this);
+            $this->_addresses = $this->_addressCollectionFactory->create()->setOrderFilter($this);
 
             if ($this->getId()) {
                 foreach ($this->_addresses as $address) {
@@ -1574,10 +1469,14 @@ class Order extends \Magento\Sales\Model\AbstractModel
         return $this->_addresses;
     }
 
+    /**
+     * @param mixed $addressId
+     * @return false
+     */
     public function getAddressById($addressId)
     {
         foreach ($this->getAddressesCollection() as $address) {
-            if ($address->getId()==$addressId) {
+            if ($address->getId() == $addressId) {
                 return $address;
             }
         }
@@ -1601,13 +1500,12 @@ class Order extends \Magento\Sales\Model\AbstractModel
     /**
      * @param array $filterByTypes
      * @param bool $nonChildrenOnly
-     * @return \Magento\Sales\Model\Resource\Order\Item\Collection
+     * @return ImportCollection
      */
     public function getItemsCollection($filterByTypes = array(), $nonChildrenOnly = false)
     {
         if (is_null($this->_items)) {
-            $this->_items = $this->_resourceFactory->create('Magento\Sales\Model\Resource\Order\Item\Collection')
-                ->setOrderFilter($this);
+            $this->_items = $this->_orderItemCollectionFactory->create()->setOrderFilter($this);
 
             if ($filterByTypes) {
                 $this->_items->filterByTypes($filterByTypes);
@@ -1629,7 +1527,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
      * Get random items collection with related children
      *
      * @param int $limit
-     * @return \Magento\Sales\Model\Resource\Order\Item\Collection
+     * @return ImportCollection
      */
     public function getItemsRandomCollection($limit = 1)
     {
@@ -1640,7 +1538,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
      * Get random items collection without related children
      *
      * @param int $limit
-     * @return \Magento\Sales\Model\Resource\Order\Item\Collection
+     * @return ImportCollection
      */
     public function getParentItemsRandomCollection($limit = 1)
     {
@@ -1652,13 +1550,11 @@ class Order extends \Magento\Sales\Model\AbstractModel
      *
      * @param int $limit
      * @param bool $nonChildrenOnly
-     * @return \Magento\Sales\Model\Resource\Order\Item\Collection
+     * @return ImportCollection
      */
     protected function _getItemsRandomCollection($limit, $nonChildrenOnly = false)
     {
-        $collection = $this->_orderItemCollFactory->create()
-            ->setOrderFilter($this)
-            ->setRandomOrder();
+        $collection = $this->_orderItemCollectionFactory->create()->setOrderFilter($this)->setRandomOrder();
 
         if ($nonChildrenOnly) {
             $collection->filterByParent();
@@ -1668,14 +1564,13 @@ class Order extends \Magento\Sales\Model\AbstractModel
             $products[] = $item->getProductId();
         }
 
-        $productsCollection = $this->_productFactory->create()
-            ->getCollection()
-            ->addIdFilter($products)
-            ->setVisibility($this->_productVisibility->getVisibleInSiteIds())
-            /* Price data is added to consider item stock status using price index */
-            ->addPriceData()
-            ->setPageSize($limit)
-            ->load();
+        $productsCollection = $this->_productFactory->create()->getCollection()->addIdFilter(
+            $products
+        )->setVisibility(
+            $this->_productVisibility->getVisibleInSiteIds()
+        )->addPriceData()->setPageSize(
+            $limit
+        )->load();
 
         foreach ($collection as $item) {
             $product = $productsCollection->getItemById($item->getProductId());
@@ -1688,14 +1583,14 @@ class Order extends \Magento\Sales\Model\AbstractModel
     }
 
     /**
-     * @return array
+     * @return \Magento\Sales\Model\Order\Item[]
      */
     public function getAllItems()
     {
         $items = array();
         foreach ($this->getItemsCollection() as $item) {
             if (!$item->isDeleted()) {
-                $items[] =  $item;
+                $items[] = $item;
             }
         }
         return $items;
@@ -1709,17 +1604,25 @@ class Order extends \Magento\Sales\Model\AbstractModel
         $items = array();
         foreach ($this->getItemsCollection() as $item) {
             if (!$item->isDeleted() && !$item->getParentItemId()) {
-                $items[] =  $item;
+                $items[] = $item;
             }
         }
         return $items;
     }
 
+    /**
+     * @param mixed $itemId
+     * @return \Magento\Framework\Object
+     */
     public function getItemById($itemId)
     {
         return $this->getItemsCollection()->getItemById($itemId);
     }
 
+    /**
+     * @param mixed $quoteItemId
+     * @return  \Magento\Framework\Object|null
+     */
     public function getItemByQuoteItemId($quoteItemId)
     {
         foreach ($this->getItemsCollection() as $item) {
@@ -1761,13 +1664,12 @@ class Order extends \Magento\Sales\Model\AbstractModel
     /*********************** PAYMENTS ***************************/
 
     /**
-     * @return \Magento\Sales\Model\Resource\Order\Payment\Collection
+     * @return PaymentCollection
      */
     public function getPaymentsCollection()
     {
         if (is_null($this->_payments)) {
-            $this->_payments = $this->_resourceFactory->create('Magento\Sales\Model\Resource\Order\Payment\Collection')
-                ->setOrderFilter($this);
+            $this->_payments = $this->_paymentCollectionFactory->create()->setOrderFilter($this);
 
             if ($this->getId()) {
                 foreach ($this->_payments as $payment) {
@@ -1786,13 +1688,16 @@ class Order extends \Magento\Sales\Model\AbstractModel
         $payments = array();
         foreach ($this->getPaymentsCollection() as $payment) {
             if (!$payment->isDeleted()) {
-                $payments[] =  $payment;
+                $payments[] = $payment;
             }
         }
         return $payments;
     }
 
-
+    /**
+     * @param mixed $paymentId
+     * @return Payment|false
+     */
     public function getPaymentById($paymentId)
     {
         foreach ($this->getPaymentsCollection() as $payment) {
@@ -1803,10 +1708,13 @@ class Order extends \Magento\Sales\Model\AbstractModel
         return false;
     }
 
-    public function addPayment(\Magento\Sales\Model\Order\Payment $payment)
+    /**
+     * @param Payment $payment
+     * @return $this
+     */
+    public function addPayment(Payment $payment)
     {
-        $payment->setOrder($this)
-            ->setParentId($this->getId());
+        $payment->setOrder($this)->setParentId($this->getId());
         if (!$payment->getId()) {
             $this->getPaymentsCollection()->addItem($payment);
             $this->setDataChanges(true);
@@ -1814,7 +1722,11 @@ class Order extends \Magento\Sales\Model\AbstractModel
         return $this;
     }
 
-    public function setPayment(\Magento\Sales\Model\Order\Payment $payment)
+    /**
+     * @param Payment $payment
+     * @return Payment
+     */
+    public function setPayment(Payment $payment)
     {
         if (!$this->getIsMultiPayment() && ($old = $this->getPayment())) {
             $payment->setId($old->getId());
@@ -1828,15 +1740,20 @@ class Order extends \Magento\Sales\Model\AbstractModel
      * Return collection of order status history items.
      *
      * @param bool $reload
-     * @return \Magento\Sales\Model\Resource\Order\Status\History\Collection
+     * @return HistoryCollection
      */
     public function getStatusHistoryCollection($reload = false)
     {
         if (is_null($this->_statusHistory) || $reload) {
-            $this->_statusHistory = $this->_resourceFactory->create('Magento\Sales\Model\Resource\Order\Status\History\Collection')
-                ->setOrderFilter($this)
-                ->setOrder('created_at', 'desc')
-                ->setOrder('entity_id', 'desc');
+            $this->_statusHistory = $this->_historyCollectionFactory->create()->setOrderFilter(
+                $this
+            )->setOrder(
+                'created_at',
+                'desc'
+            )->setOrder(
+                'entity_id',
+                'desc'
+            );
 
             if ($this->getId()) {
                 foreach ($this->_statusHistory as $status) {
@@ -1857,7 +1774,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
         $history = array();
         foreach ($this->getStatusHistoryCollection() as $status) {
             if (!$status->isDeleted()) {
-                $history[] =  $status;
+                $history[] = $status;
             }
         }
         return $history;
@@ -1873,12 +1790,16 @@ class Order extends \Magento\Sales\Model\AbstractModel
         $history = array();
         foreach ($this->getStatusHistoryCollection() as $status) {
             if (!$status->isDeleted() && $status->getComment() && $status->getIsVisibleOnFront()) {
-                $history[] =  $status;
+                $history[] = $status;
             }
         }
         return $history;
     }
 
+    /**
+     * @param mixed $statusId
+     * @return string|false
+     */
     public function getStatusHistoryById($statusId)
     {
         foreach ($this->getStatusHistoryCollection() as $status) {
@@ -1896,7 +1817,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
      * Or the history record can be saved standalone after this.
      *
      * @param \Magento\Sales\Model\Order\Status\History $history
-     * @return \Magento\Sales\Model\Order
+     * @return $this
      */
     public function addStatusHistory(\Magento\Sales\Model\Order\Status\History $history)
     {
@@ -1924,7 +1845,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
     /**
      * Get currency model instance. Will be used currency with which order placed
      *
-     * @return \Magento\Directory\Model\Currency
+     * @return Currency
      */
     public function getOrderCurrency()
     {
@@ -1972,7 +1893,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
     /**
      * Retrieve order website currency for working with base prices
      *
-     * @return \Magento\Directory\Model\Currency
+     * @return Currency
      */
     public function getBaseCurrency()
     {
@@ -2016,8 +1937,8 @@ class Order extends \Magento\Sales\Model\AbstractModel
      */
     public function getTotalDue()
     {
-        $total = $this->getGrandTotal()-$this->getTotalPaid();
-        $total = $this->_storeManager->getStore($this->getStoreId())->roundPrice($total);
+        $total = $this->getGrandTotal() - $this->getTotalPaid();
+        $total = $this->priceCurrency->round($total);
         return max($total, 0);
     }
 
@@ -2029,7 +1950,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
     public function getBaseTotalDue()
     {
         $total = $this->getBaseGrandTotal() - $this->getBaseTotalPaid();
-        $total = $this->_storeManager->getStore($this->getStoreId())->roundPrice($total);
+        $total = $this->priceCurrency->round($total);
         return max($total, 0);
     }
 
@@ -2052,13 +1973,12 @@ class Order extends \Magento\Sales\Model\AbstractModel
     /**
      * Retrieve order invoices collection
      *
-     * @return \Magento\Sales\Model\Resource\Order\Invoice\Collection
+     * @return InvoiceCollection
      */
     public function getInvoiceCollection()
     {
         if (is_null($this->_invoices)) {
-            $this->_invoices = $this->_resourceFactory->create('Magento\Sales\Model\Resource\Order\Invoice\Collection')
-                ->setOrderFilter($this);
+            $this->_invoices = $this->_invoiceCollectionFactory->create()->setOrderFilter($this);
 
             if ($this->getId()) {
                 foreach ($this->_invoices as $invoice) {
@@ -2072,16 +1992,13 @@ class Order extends \Magento\Sales\Model\AbstractModel
     /**
      * Retrieve order shipments collection
      *
-     * @return \Magento\Sales\Model\Resource\Order\Shipment\Collection|bool
+     * @return ShipmentCollection|false
      */
     public function getShipmentsCollection()
     {
         if (empty($this->_shipments)) {
             if ($this->getId()) {
-                $this->_shipments = $this->_resourceFactory
-                    ->create('Magento\Sales\Model\Resource\Order\Shipment\Collection')
-                    ->setOrderFilter($this)
-                    ->load();
+                $this->_shipments = $this->_shipmentCollectionFactory->create()->setOrderFilter($this)->load();
             } else {
                 return false;
             }
@@ -2092,15 +2009,13 @@ class Order extends \Magento\Sales\Model\AbstractModel
     /**
      * Retrieve order creditmemos collection
      *
-     * @return \Magento\Sales\Model\Resource\Order\Creditmemo\Collection|bool
+     * @return CreditmemoCollection|false
      */
     public function getCreditmemosCollection()
     {
         if (empty($this->_creditmemos)) {
             if ($this->getId()) {
-                $this->_creditmemos = $this->_resourceFactory->create('Magento\Sales\Model\Resource\Order\Creditmemo\Collection')
-                    ->setOrderFilter($this)
-                    ->load();
+                $this->_creditmemos = $this->_memoCollectionFactory->create()->setOrderFilter($this)->load();
             } else {
                 return false;
             }
@@ -2111,13 +2026,12 @@ class Order extends \Magento\Sales\Model\AbstractModel
     /**
      * Retrieve order tracking numbers collection
      *
-     * @return \Magento\Sales\Model\Resource\Order\Shipment\Track\Collection
+     * @return TrackCollection
      */
     public function getTracksCollection()
     {
         if (empty($this->_tracks)) {
-            $this->_tracks = $this->_resourceFactory->create('Magento\Sales\Model\Resource\Order\Shipment\Track\Collection')
-                ->setOrderFilter($this);
+            $this->_tracks = $this->_trackCollectionFactory->create()->setOrderFilter($this);
 
             if ($this->getId()) {
                 $this->_tracks->load();
@@ -2184,10 +2098,10 @@ class Order extends \Magento\Sales\Model\AbstractModel
     /**
      * Add New object to related array
      *
-     * @param   \Magento\Core\Model\AbstractModel $object
-     * @return  \Magento\Sales\Model\Order
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return $this
      */
-    public function addRelatedObject(\Magento\Core\Model\AbstractModel $object)
+    public function addRelatedObject(\Magento\Framework\Model\AbstractModel $object)
     {
         $this->_relatedObjects[] = $object;
         return $this;
@@ -2201,7 +2115,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
      */
     public function getCreatedAtFormated($format)
     {
-        return $this->_coreLocale->formatDate($this->getCreatedAtStoreDate(), $format, true);
+        return $this->_localeDate->formatDate($this->getCreatedAtStoreDate(), $format, true);
     }
 
     /**
@@ -2216,149 +2130,13 @@ class Order extends \Magento\Sales\Model\AbstractModel
     }
 
     /**
-     * Processing object before save data
-     *
-     * @return \Magento\Core\Model\AbstractModel
-     */
-    protected function _beforeSave()
-    {
-        parent::_beforeSave();
-        $this->_checkState();
-        if (!$this->getId()) {
-            $store = $this->getStore();
-            $name = array($store->getWebsite()->getName(), $store->getGroup()->getName(), $store->getName());
-            $this->setStoreName(implode("\n", $name));
-        }
-
-        if (!$this->getIncrementId()) {
-            $incrementId = $this->_eavConfig
-                ->getEntityType('order')
-                ->fetchNewIncrementId($this->getStoreId());
-            $this->setIncrementId($incrementId);
-        }
-
-        /**
-         * Process items dependency for new order
-         */
-        if (!$this->getId()) {
-            $itemsCount = 0;
-            foreach ($this->getAllItems() as $item) {
-                $parent = $item->getQuoteParentItemId();
-                if ($parent && !$item->getParentItem()) {
-                    $item->setParentItem($this->getItemByQuoteItemId($parent));
-                } elseif (!$parent) {
-                    $itemsCount++;
-                }
-            }
-            // Set items count
-            $this->setTotalItemCount($itemsCount);
-        }
-        if ($this->getCustomer()) {
-            $this->setCustomerId($this->getCustomer()->getId());
-        }
-
-        if ($this->hasBillingAddressId() && $this->getBillingAddressId() === null) {
-            $this->unsBillingAddressId();
-        }
-
-        if ($this->hasShippingAddressId() && $this->getShippingAddressId() === null) {
-            $this->unsShippingAddressId();
-        }
-
-        $this->setData('protect_code', substr(md5(uniqid(mt_rand(), true) . ':' . microtime(true)), 5, 6));
-        return $this;
-    }
-
-    /**
-     * Check order state before saving
-     */
-    protected function _checkState()
-    {
-        if (!$this->getId()) {
-            return $this;
-        }
-
-        $userNotification = $this->hasCustomerNoteNotify() ? $this->getCustomerNoteNotify() : null;
-
-        if (!$this->isCanceled()
-            && !$this->canUnhold()
-            && !$this->canInvoice()
-            && !$this->canShip()
-        ) {
-            if (0 == $this->getBaseGrandTotal() || $this->canCreditmemo()) {
-                if ($this->getState() !== self::STATE_COMPLETE) {
-                    $this->_setState(self::STATE_COMPLETE, true, '', $userNotification);
-                }
-            }
-            /**
-             * Order can be closed just in case when we have refunded amount.
-             * In case of "0" grand total order checking ForcedCanCreditmemo flag
-             */
-            elseif (floatval($this->getTotalRefunded()) || (!$this->getTotalRefunded()
-                && $this->hasForcedCanCreditmemo())
-            ) {
-                if ($this->getState() !== self::STATE_CLOSED) {
-                    $this->_setState(self::STATE_CLOSED, true, '', $userNotification);
-                }
-            }
-        }
-
-        if ($this->getState() == self::STATE_NEW && $this->getIsInProcess()) {
-            $this->setState(self::STATE_PROCESSING, true, '', $userNotification);
-        }
-        return $this;
-    }
-
-    /**
-     * Save order related objects
-     *
-     * @return \Magento\Sales\Model\Order
-     */
-    protected function _afterSave()
-    {
-        if (null !== $this->_addresses) {
-            $this->_addresses->save();
-            $billingAddress = $this->getBillingAddress();
-            $attributesForSave = array();
-            if ($billingAddress && $this->getBillingAddressId() != $billingAddress->getId()) {
-                $this->setBillingAddressId($billingAddress->getId());
-                $attributesForSave[] = 'billing_address_id';
-            }
-
-            $shippingAddress = $this->getShippingAddress();
-            if ($shippingAddress && $this->getShippigAddressId() != $shippingAddress->getId()) {
-                $this->setShippingAddressId($shippingAddress->getId());
-                $attributesForSave[] = 'shipping_address_id';
-            }
-
-            if (!empty($attributesForSave)) {
-                $this->_getResource()->saveAttribute($this, $attributesForSave);
-            }
-
-        }
-        if (null !== $this->_items) {
-            $this->_items->save();
-        }
-        if (null !== $this->_payments) {
-            $this->_payments->save();
-        }
-        if (null !== $this->_statusHistory) {
-            $this->_statusHistory->save();
-        }
-        foreach ($this->getRelatedObjects() as $object) {
-            $object->save();
-        }
-        return parent::_afterSave();
-    }
-
-    /**
      * @return string
      */
     public function getStoreGroupName()
     {
         $storeId = $this->getStoreId();
         if (is_null($storeId)) {
-            return $this->getStoreName(1); // 0 - website name, 1 - store group name, 2 - store name
+            return $this->getStoreName(1);
         }
         return $this->getStore()->getGroup()->getName();
     }
@@ -2367,7 +2145,7 @@ class Order extends \Magento\Sales\Model\AbstractModel
      * Resets all data in object
      * so after another load it will be complete new object
      *
-     * @return \Magento\Sales\Model\Order
+     * @return $this
      */
     public function reset()
     {
@@ -2394,12 +2172,6 @@ class Order extends \Magento\Sales\Model\AbstractModel
     public function getIsNotVirtual()
     {
         return !$this->getIsVirtual();
-    }
-
-    public function getFullTaxInfo()
-    {
-        $rates = $this->_orderTaxCollFactory->create()->loadByOrder($this)->toArray();
-        return $this->_taxCalculation->reproduceProcess($rates['items']);
     }
 
     /**
@@ -2433,16 +2205,16 @@ class Order extends \Magento\Sales\Model\AbstractModel
      */
     public function isCanceled()
     {
-        return ($this->getState() === self::STATE_CANCELED);
+        return $this->getState() === self::STATE_CANCELED;
     }
 
     /**
-     * Protect order delete from not admin scope
-     * @return \Magento\Sales\Model\Order
+     * Returns increment id
+     *
+     * @return string
      */
-    protected function _beforeDelete()
+    public function getIncrementId()
     {
-        $this->_protectFromNonAdmin();
-        return parent::_beforeDelete();
+        return $this->getData('increment_id');
     }
 }

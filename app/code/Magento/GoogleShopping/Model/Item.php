@@ -18,22 +18,19 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_GoogleShopping
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\GoogleShopping\Model;
+
+use Magento\Catalog\Model\Product as CatalogModelProduct;
 
 /**
  * Google Content Item Types Model
  *
- * @category   Magento
- * @package    Magento_GoogleShopping
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\GoogleShopping\Model;
-
-class Item extends \Magento\Core\Model\AbstractModel
+class Item extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * Registry keys for caching attributes and types
@@ -78,24 +75,24 @@ class Item extends \Magento\Core\Model\AbstractModel
     protected $_productFactory;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\GoogleShopping\Model\Service\ItemFactory $itemFactory
      * @param \Magento\GoogleShopping\Model\TypeFactory $typeFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\GoogleShopping\Model\Resource\Item $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param \Magento\GoogleShopping\Model\Config $config
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\GoogleShopping\Model\Service\ItemFactory $itemFactory,
         \Magento\GoogleShopping\Model\TypeFactory $typeFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\GoogleShopping\Model\Resource\Item $resource,
-        \Magento\Data\Collection\Db $resourceCollection,
+        \Magento\Framework\Data\Collection\Db $resourceCollection,
         \Magento\GoogleShopping\Model\Config $config,
         array $data = array()
     ) {
@@ -106,7 +103,9 @@ class Item extends \Magento\Core\Model\AbstractModel
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
-
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -130,7 +129,7 @@ class Item extends \Magento\Core\Model\AbstractModel
      * Set Service Item Instance
      *
      * @param \Magento\GoogleShopping\Model\Service\Item $service
-     * @return \Magento\GoogleShopping\Model\Item
+     * @return $this
      */
     public function setServiceItem($service)
     {
@@ -151,14 +150,13 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Save item to Google Content
      *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\GoogleShopping\Model\Item
+     * @param CatalogModelProduct $product
+     * @return $this
      */
-    public function insertItem(\Magento\Catalog\Model\Product $product)
+    public function insertItem(CatalogModelProduct $product)
     {
         $this->setProduct($product);
-        $this->getServiceItem()
-            ->insert($this);
+        $this->getServiceItem()->insert($this);
         $this->setTypeId($this->getType()->getTypeId());
 
         return $this;
@@ -167,13 +165,12 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Update Item data
      *
-     * @return \Magento\GoogleShopping\Model\Item
+     * @return $this
      */
     public function updateItem()
     {
         if ($this->getId()) {
-            $this->getServiceItem()
-                ->update($this);
+            $this->getServiceItem()->update($this);
         }
         return $this;
     }
@@ -181,7 +178,7 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Delete Item from Google Content
      *
-     * @return \Magento\GoogleShopping\Model\Item
+     * @return $this
      */
     public function deleteItem()
     {
@@ -192,8 +189,8 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Load Item Model by Product
      *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\GoogleShopping\Model\Item
+     * @param CatalogModelProduct $product
+     * @return $this
      */
     public function loadByProduct($product)
     {
@@ -212,7 +209,7 @@ class Item extends \Magento\Core\Model\AbstractModel
         $attributeSetId = $this->getProduct()->getAttributeSetId();
         $targetCountry = $this->getTargetCountry();
 
-        $registry = $this->_coreRegistry->registry(self::TYPES_REGISTRY_KEY);
+        $registry = $this->_registry->registry(self::TYPES_REGISTRY_KEY);
         if (is_array($registry) && isset($registry[$attributeSetId][$targetCountry])) {
             return $registry[$attributeSetId][$targetCountry];
         }
@@ -220,8 +217,8 @@ class Item extends \Magento\Core\Model\AbstractModel
         $type = $this->_typeFactory->create()->loadByAttributeSetId($attributeSetId, $targetCountry);
 
         $registry[$attributeSetId][$targetCountry] = $type;
-        $this->_coreRegistry->unregister(self::TYPES_REGISTRY_KEY);
-        $this->_coreRegistry->register(self::TYPES_REGISTRY_KEY, $registry);
+        $this->_registry->unregister(self::TYPES_REGISTRY_KEY);
+        $this->_registry->register(self::TYPES_REGISTRY_KEY, $registry);
 
         return $type;
     }
@@ -229,7 +226,7 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Product Getter. Load product if not exist.
      *
-     * @return \Magento\Catalog\Model\Product
+     * @return CatalogModelProduct
      */
     public function getProduct()
     {
@@ -244,10 +241,10 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Product Setter.
      *
-     * @param \Magento\Catalog\Model\Product
-     * @return \Magento\GoogleShopping\Model\Item
+     * @param CatalogModelProduct $product
+     * @return $this
      */
-    public function setProduct(\Magento\Catalog\Model\Product $product)
+    public function setProduct(CatalogModelProduct $product)
     {
         $this->setData('product', $product);
         $this->setProductId($product->getId());

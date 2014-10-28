@@ -30,7 +30,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreate()
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject */
-        $mockObjectManager = $this->getMockBuilder('Magento\ObjectManager')
+        $mockObjectManager = $this->getMockBuilder('Magento\Framework\ObjectManager')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -40,15 +40,11 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             Info::DATA_EMAIL => 'test@magento.com',
             Info::DATA_ENDPOINT => 'http://magento.ll/endpoint'
         );
-        $mockIntegration = $this->getMockBuilder('Magento\Integration\Model\Integration')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $mockIntegration->expects($this->any())
-            ->method('setData')
-            ->will($this->returnSelf());
-        $mockIntegration->expects($this->any())
-            ->method('getData')
-            ->will($this->returnValue($data));
+        $mockIntegration = $this->getMockBuilder(
+            'Magento\Integration\Model\Integration'
+        )->disableOriginalConstructor()->getMock();
+        $mockIntegration->expects($this->any())->method('setData')->will($this->returnSelf());
+        $mockIntegration->expects($this->any())->method('getData')->will($this->returnValue($data));
         $mockObjectManager->expects($this->any())->method('create')->will($this->returnValue($mockIntegration));
         /* @var \Magento\Integration\Model\Integration\Factory */
         $integrationFactory = new \Magento\Integration\Model\Integration\Factory($mockObjectManager);

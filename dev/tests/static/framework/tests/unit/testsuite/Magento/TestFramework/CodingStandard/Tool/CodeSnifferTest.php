@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento
- * @subpackage  static_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\TestFramework\CodingStandard\Tool;
 
 class CodeSnifferTest extends \PHPUnit_Framework_TestCase
@@ -52,8 +48,11 @@ class CodeSnifferTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_wrapper = $this->getMock('Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper');
-        $this->_tool = new \Magento\TestFramework\CodingStandard\Tool\CodeSniffer(self::RULE_SET, self::REPORT_FILE,
-            $this->_wrapper);
+        $this->_tool = new \Magento\TestFramework\CodingStandard\Tool\CodeSniffer(
+            self::RULE_SET,
+            self::REPORT_FILE,
+            $this->_wrapper
+        );
     }
 
     public function testRun()
@@ -62,13 +61,11 @@ class CodeSnifferTest extends \PHPUnit_Framework_TestCase
         $blackList = array('test' . rand(), 'test' . rand());
         $extensions = array('test' . rand(), 'test' . rand());
 
-        $this->_wrapper->expects($this->once())
-            ->method('getDefaults')
-            ->will($this->returnValue(array()));
+        $this->_wrapper->expects($this->once())->method('getDefaults')->will($this->returnValue(array()));
 
         $expectedCliEmulation = array(
             'files' => $whiteList,
-            'standard' => self::RULE_SET,
+            'standard' => [self::RULE_SET],
             'ignored' => $blackList,
             'extensions' => $extensions,
             'reportFile' => self::REPORT_FILE,
@@ -76,12 +73,9 @@ class CodeSnifferTest extends \PHPUnit_Framework_TestCase
             'reports' => array('checkstyle' => null)
         );
 
-        $this->_wrapper->expects($this->once())
-            ->method('setValues')
-            ->with($this->equalTo($expectedCliEmulation));
+        $this->_wrapper->expects($this->once())->method('setValues')->with($this->equalTo($expectedCliEmulation));
 
-        $this->_wrapper->expects($this->once())
-            ->method('process');
+        $this->_wrapper->expects($this->once())->method('process');
 
         $this->_tool->run($whiteList, $blackList, $extensions);
     }

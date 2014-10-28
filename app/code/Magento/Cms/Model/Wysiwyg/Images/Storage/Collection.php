@@ -18,46 +18,47 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Cms
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Cms\Model\Wysiwyg\Images\Storage;
+
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Wysiwyg Images storage collection
- *
- * @category    Magento
- * @package     Magento_Cms
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Cms\Model\Wysiwyg\Images\Storage;
-
-class Collection extends \Magento\Data\Collection\Filesystem
+class Collection extends \Magento\Framework\Data\Collection\Filesystem
 {
     /**
-     * @var \Magento\Filesystem
+     * @var \Magento\Framework\Filesystem
      */
     protected $_filesystem;
 
     /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      */
-    public function __construct(\Magento\Core\Model\EntityFactory $entityFactory, \Magento\Filesystem $filesystem)
+    public function __construct(\Magento\Core\Model\EntityFactory $entityFactory, \Magento\Framework\Filesystem $filesystem)
     {
         $this->_filesystem = $filesystem;
         parent::__construct($entityFactory);
     }
 
+    /**
+     * Generate row
+     *
+     * @param string $filename
+     * @return array
+     */
     protected function _generateRow($filename)
     {
         $filename = preg_replace('~[/\\\]+~', '/', $filename);
-        $path = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::MEDIA);
+        $path = $this->_filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         return array(
             'filename' => $filename,
             'basename' => basename($filename),
-            'mtime'    => $path->stat($path->getRelativePath($filename))['mtime']
+            'mtime' => $path->stat($path->getRelativePath($filename))['mtime']
         );
     }
 }

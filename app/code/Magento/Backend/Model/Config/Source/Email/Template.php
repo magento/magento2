@@ -23,11 +23,10 @@
  */
 namespace Magento\Backend\Model\Config\Source\Email;
 
-class Template extends \Magento\Object
-    implements \Magento\Core\Model\Option\ArrayInterface
+class Template extends \Magento\Framework\Object implements \Magento\Framework\Option\ArrayInterface
 {
     /**
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Framework\Registry
      */
     private $_coreRegistry;
 
@@ -42,13 +41,13 @@ class Template extends \Magento\Object
     protected $_templatesFactory;
 
     /**
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Email\Model\Resource\Template\CollectionFactory $templatesFactory
      * @param \Magento\Email\Model\Template\Config $emailConfig
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Framework\Registry $coreRegistry,
         \Magento\Email\Model\Resource\Template\CollectionFactory $templatesFactory,
         \Magento\Email\Model\Template\Config $emailConfig,
         array $data = array()
@@ -67,7 +66,7 @@ class Template extends \Magento\Object
     public function toOptionArray()
     {
         /** @var $collection \Magento\Email\Model\Resource\Template\Collection */
-        if (!$collection = $this->_coreRegistry->registry('config_system_email_template')) {
+        if (!($collection = $this->_coreRegistry->registry('config_system_email_template'))) {
             $collection = $this->_templatesFactory->create();
             $collection->load();
             $this->_coreRegistry->register('config_system_email_template', $collection);
@@ -76,10 +75,7 @@ class Template extends \Magento\Object
         $templateId = str_replace('/', '_', $this->getPath());
         $templateLabel = $this->_emailConfig->getTemplateLabel($templateId);
         $templateLabel = __('%1 (Default)', $templateLabel);
-        array_unshift($options, array(
-            'value' => $templateId,
-            'label' => $templateLabel
-        ));
+        array_unshift($options, array('value' => $templateId, 'label' => $templateLabel));
         return $options;
     }
 }

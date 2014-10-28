@@ -31,7 +31,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Config\FileResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\FileResolverInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_fileResolverMock;
 
@@ -46,36 +46,51 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     protected $_schemaLocator;
 
     /**
-     * @var \Magento\Config\ValidationStateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\ValidationStateInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_validationState;
 
     protected function setUp()
     {
-        $this->_fileResolverMock = $this->getMock('Magento\Config\FileResolverInterface');
-        $this->_fileResolverMock
-            ->expects($this->once())
-            ->method('get')
-            ->with('catalog_attributes.xml', 'scope')
-            ->will($this->returnValue(array(
-                file_get_contents(__DIR__ . '/_files/attributes_config_one.xml'),
-                file_get_contents(__DIR__ . '/_files/attributes_config_two.xml'),
-            )))
-        ;
+        $this->_fileResolverMock = $this->getMock('Magento\Framework\Config\FileResolverInterface');
+        $this->_fileResolverMock->expects(
+            $this->once()
+        )->method(
+            'get'
+        )->with(
+            'catalog_attributes.xml',
+            'scope'
+        )->will(
+            $this->returnValue(
+                array(
+                    file_get_contents(__DIR__ . '/_files/attributes_config_one.xml'),
+                    file_get_contents(__DIR__ . '/_files/attributes_config_two.xml')
+                )
+            )
+        );
 
         $this->_converter = $this->getMock('Magento\Catalog\Model\Attribute\Config\Converter', array('convert'));
 
         $moduleReader = $this->getMock(
-            'Magento\Module\Dir\Reader', array('getModuleDir'), array(), '', false
+            'Magento\Framework\Module\Dir\Reader',
+            array('getModuleDir'),
+            array(),
+            '',
+            false
         );
-        $moduleReader
-            ->expects($this->once())
-            ->method('getModuleDir')->with('etc', 'Magento_Catalog')
-            ->will($this->returnValue('stub'))
-        ;
+        $moduleReader->expects(
+            $this->once()
+        )->method(
+            'getModuleDir'
+        )->with(
+            'etc',
+            'Magento_Catalog'
+        )->will(
+            $this->returnValue('stub')
+        );
         $this->_schemaLocator = new \Magento\Catalog\Model\Attribute\Config\SchemaLocator($moduleReader);
 
-        $this->_validationState = $this->getMock('Magento\Config\ValidationStateInterface');
+        $this->_validationState = $this->getMock('Magento\Framework\Config\ValidationStateInterface');
         $this->_validationState->expects($this->once())->method('isValidated')->will($this->returnValue(false));
 
         $this->_model = new \Magento\Catalog\Model\Attribute\Config\Reader(
@@ -98,13 +113,15 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
                 return false;
             }
         };
-        $this->_converter
-            ->expects($this->once())
-            ->method('convert')
-            ->with($this->callback($constraint))
-            ->will($this->returnValue($expectedResult))
-        ;
+        $this->_converter->expects(
+            $this->once()
+        )->method(
+            'convert'
+        )->with(
+            $this->callback($constraint)
+        )->will(
+            $this->returnValue($expectedResult)
+        );
         $this->assertSame($expectedResult, $this->_model->read('scope'));
     }
-
 }

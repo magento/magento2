@@ -1,0 +1,59 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php echo $this->doctype(); ?>
+<html lang="en" ng-app="magentoSetup">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <?php echo $this->headTitle($this->translate('Magento Setup Tool'))->setSeparator(' - ')->setAutoEscape(false) ?>
+        <?php echo $this->headLink()
+            ->appendStylesheet($this->basePath() . '/pub/bootstrap/css/bootstrap.min.css')
+            ->appendStylesheet($this->basePath() . '/pub/bootstrap/css/bootstrap-theme.min.css')
+            ->appendStylesheet($this->basePath() . '/pub/magento/setup/css/app.css');
+        ?>
+        <?php echo $this->headScript()
+            ->appendFile($this->basePath() . '/pub/angular/angular.min.js')
+            ->appendFile($this->basePath() . '/pub/angular-ng-storage/angular-ng-storage.min.js')
+            ->appendFile($this->basePath() . '/pub/angular-ui-router/angular-ui-router.min.js')
+            ->appendFile($this->basePath() . '/pub/angular-ui-bootstrap/angular-ui-bootstrap.min.js')
+            ->appendFile($this->basePath() . '/pub/magento/setup/app.js')
+            ->appendFile($this->basePath() . '/pub/magento/setup/main.js')
+            ->appendFile($this->basePath() . '/pub/magento/setup/landing.js')
+            ->appendFile($this->basePath() . '/pub/magento/setup/readiness-check.js')
+            ->appendFile($this->basePath() . '/pub/magento/setup/add-database.js')
+            ->appendFile($this->basePath() . '/pub/magento/setup/web-configuration.js')
+            ->appendFile($this->basePath() . '/pub/magento/setup/customize-your-store.js')
+            ->appendFile($this->basePath() . '/pub/magento/setup/create-admin-account.js')
+            ->appendFile($this->basePath() . '/pub/magento/setup/install.js')
+            ->appendFile($this->basePath() . '/pub/magento/setup/success.js');
+        ?>
+        <?php echo $this->inlineScript() ?>
+    </head>
+    <body>
+        <div class="container">
+            <?php echo $this->content; ?>
+        </div>
+    </body>
+</html>

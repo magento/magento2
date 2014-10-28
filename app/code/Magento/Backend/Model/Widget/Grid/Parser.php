@@ -18,12 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Widget\Grid;
 
 class Parser
@@ -31,7 +28,7 @@ class Parser
     /**
      * List of allowed operations
      *
-     * @var array
+     * @var string[]
      */
     protected $_operations = array('-', '+', '/', '*');
 
@@ -48,7 +45,7 @@ class Parser
         foreach ($this->_operations as $operation) {
             $splittedExpr = preg_split('/\\' . $operation . '/', $expression, -1, PREG_SPLIT_DELIM_CAPTURE);
             if (count($splittedExpr) > 1) {
-                for ($i=0; $i < count($splittedExpr); $i++) {
+                for ($i = 0; $i < count($splittedExpr); $i++) {
                     $stack = array_merge($stack, $this->parseExpression($splittedExpr[$i]));
                     if ($i > 0) {
                         $stack[] = $operation;
@@ -57,13 +54,13 @@ class Parser
                 break;
             }
         }
-        return empty($stack)? array($expression) : $stack;
+        return empty($stack) ? array($expression) : $stack;
     }
 
     /**
      * Check if string is operation
      *
-     * @param $operation
+     * @param string $operation
      * @return bool
      */
     public function isOperation($operation)

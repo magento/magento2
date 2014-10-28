@@ -21,26 +21,32 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\Theme;
 
 class ThemeProviderTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetByFullPath()
     {
-        $path = 'frontend/magento_plushe';
+        $path = 'frontend/Magento/plushe';
         $collectionFactory = $this->getMock(
-            'Magento\Core\Model\Resource\Theme\CollectionFactory', array('create'), array(), '', false
+            'Magento\Core\Model\Resource\Theme\CollectionFactory',
+            array('create'),
+            array(),
+            '',
+            false
         );
         $collectionMock = $this->getMock('Magento\Core\Model\Resource\Theme\Collection', array(), array(), '', false);
-        $theme = $this->getMock('Magento\View\Design\ThemeInterface', array(), array(), '', false);
-        $collectionMock->expects($this->once())
-            ->method('getThemeByFullPath')
-            ->with($path)
-            ->will($this->returnValue($theme));
-        $collectionFactory->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($collectionMock));
+        $theme = $this->getMock('Magento\Framework\View\Design\ThemeInterface', array(), array(), '', false);
+        $collectionMock->expects(
+            $this->once()
+        )->method(
+            'getThemeByFullPath'
+        )->with(
+            $path
+        )->will(
+            $this->returnValue($theme)
+        );
+        $collectionFactory->expects($this->once())->method('create')->will($this->returnValue($collectionMock));
         $themeFactory = $this->getMock('\Magento\Core\Model\ThemeFactory', array(), array(), '', false);
 
         $themeProvider = new ThemeProvider($collectionFactory, $themeFactory);
@@ -51,20 +57,18 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
     {
         $themeId = 755;
         $collectionFactory = $this->getMock(
-            'Magento\Core\Model\Resource\Theme\CollectionFactory', array(), array(), '', false
+            'Magento\Core\Model\Resource\Theme\CollectionFactory',
+            array(),
+            array(),
+            '',
+            false
         );
         $theme = $this->getMock('Magento\Core\Model\Theme', array(), array(), '', false);
-        $theme->expects($this->once())
-            ->method('load')
-            ->with($themeId)
-            ->will($this->returnSelf());
+        $theme->expects($this->once())->method('load')->with($themeId)->will($this->returnSelf());
         $themeFactory = $this->getMock('\Magento\Core\Model\ThemeFactory', array('create'), array(), '', false);
-        $themeFactory->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($theme));
+        $themeFactory->expects($this->once())->method('create')->will($this->returnValue($theme));
 
         $themeProvider = new ThemeProvider($collectionFactory, $themeFactory);
         $this->assertSame($theme, $themeProvider->getThemeById($themeId));
     }
 }
- 

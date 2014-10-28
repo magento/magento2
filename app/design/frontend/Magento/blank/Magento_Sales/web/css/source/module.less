@@ -1,0 +1,330 @@
+// /**
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+.order-links {
+    border-bottom: @border-width-base solid @border-color-base;
+    margin-bottom: 10px;
+    .item {
+        display: inline-block;
+        margin-right: 20px;
+    }
+}
+
+.order-actions-toolbar {
+    .action {
+        margin: 0 20px 0 0;
+    }
+}
+
+.order-details-items {
+    border-bottom: @border-width-base solid @border-color-base;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    .order-title {
+        > strong {
+            .heading(h3);
+            display: inline-block;
+        }
+    }
+    .items-qty {
+        &:extend(.abstract-reset-list all);
+        .item {
+            white-space: nowrap;
+        }
+        .title {
+            &:after {
+                content: ": ";
+            }
+        }
+    }
+    .table-order-items {
+        .table-bordered(
+            @_type: horizontal
+        );
+        .account & {
+            tfoot {
+                &:extend(.abstract-account-summary all);
+            }
+        }
+
+        .item.options {
+            dt {
+                margin: 0;
+            }
+            dd {
+                margin: 0 0 15px;
+            }
+            &.links {
+                dt {
+                    display: inline-block;
+                    &:after {
+                        content: ": ";
+                    }
+                }
+                dd {
+                    margin: 0;
+                }
+            }
+        }
+    }
+}
+
+.order-actions-toolbar {
+    margin-bottom: 25px;
+    .action {
+        margin-right: 30px;
+        &.print {
+            margin: 0;
+        }
+    }
+}
+
+.order-status {
+    display: inline-block;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+.sales-order-view {
+    .page-title {
+        .title {
+            margin-right: 25px;
+        }
+        .order-date {
+            margin: 0 0 20px;
+        }
+    }
+}
+
+.form.orders.search {
+    .field {
+        &.email,
+        &.zip {
+            margin-bottom: 0;
+        }
+    }
+}
+
+.block.reorder {
+    .item {
+        .checkbox {
+            position: relative;
+            top: 2px;
+            vertical-align: baseline;
+        }
+    }
+    .actions-toolbar {
+        margin: 17px 0;
+        max-width: 178px;
+    }
+    .sidebar-main & .subtitle,
+    .sidebar-additional & .subtitle {
+        display: none;
+    }
+}
+
+.block-order-details {
+    &-comments {
+        margin: 0 0 40px;
+        .comment-date {
+            font-weight: @font-weight-semibold;
+        }
+        .comment-content {
+            line-height: 1.6;
+            margin: 0 0 20px;
+        }
+    }
+
+    &-view {
+        .box-content {
+            .payment-method {
+                .title {
+                    font-weight: @font-weight-base;
+                }
+                .content {
+                    margin: 0;
+                    > strong {
+                        font-weight: @font-weight-base;
+                        &:after {
+                            content: ': ';
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.order-tracking {
+    border-bottom: @border-width-base solid @border-color-base;
+    margin: 0;
+    padding: 20px 0;
+    .tracking-title {
+        display: inline-block;
+    }
+    .tracking-content {
+        display: inline-block;
+        margin: 0 0 0 5px;
+    }
+}
+
+//
+//    Guest order view page
+//--------------------------------------
+.sales-guest-view {
+    .column.main {
+        .block:not(.widget) {
+            &:extend(.abstract-account-blocks all);
+        }
+    }
+}
+
+//
+//    Mobile
+//--------------------------------------
+.responsive-smaller(@break) when (@break = @screen-m) {
+    .account {
+        .order-details-items {
+            .table-order-items {
+                tbody,
+                tfoot {
+                    > tr > td {
+                        border: none;
+                    }
+                }
+                tbody {
+                    tr {
+                        td:first-child {
+                            padding-top: 15px;
+                        }
+                        td:last-child {
+                            padding-bottom: 15px;
+                        }
+                    }
+                }
+                .col {
+                    &.price,
+                    &.subtotal {
+                        .price-including-tax,
+                        .price-excluding-tax,
+                        .weee {
+                            display: inline-block;
+                        }
+                    }
+                    &.name,
+                    &.sku,
+                    &.qty,
+                    &.price,
+                    &.subtotal {
+                        &:before {
+                            content: attr(data-th) ":";
+                            vertical-align: top;
+                        }
+                    }
+                    &.label {
+                        display: none;
+                    }
+                    .items-qty {
+                        display: inline-block;
+                    }
+                    .item.options {
+                        .font-size(12);
+                        margin: 10px 0 0;
+                    }
+                }
+                .options-label + .item-options,
+                .item-options + .item-options {
+                    &:before {
+                        content: attr(data-th) ":";
+                        display: block;
+                        font-weight: bold;
+                    }
+                    .col {
+                        .font-size(12);
+                        padding: 0;
+                        &:first-child {
+                            padding-top: 3px;
+                        }
+                        &:last-child {
+                            padding-bottom: 20px;
+                        }
+                    }
+                }
+            }
+            .action.print {
+                display: none;
+            }
+        }
+        .toolbar {
+            &:extend(.abstract-add-clearfix-desktop all);
+            .pages {
+                float: right;
+            }
+            .limiter {
+                clear: both;
+            }
+        }
+    }
+}
+
+//
+//    Desktop
+//--------------------------------------
+.responsive(@break) when (@break = @screen-m) {
+    .table-order-items {
+        .col {
+            &.subtotal {
+                text-align: right;
+            }
+        }
+        .mark,
+        .amount {
+            text-align: right;
+        }
+    }
+
+    .order-actions-toolbar {
+        .action.print {
+            display: block;
+            float: right;
+        }
+    }
+
+    //
+    //    Guest order view page
+    //--------------------------------------
+    .sales-guest-view {
+        .column.main {
+            .block:not(.widget) {
+                .block-content {
+                    &:extend(.abstract-add-clearfix-desktop all);
+                    .box {
+                        &:extend(.abstract-blocks-2columns all);
+                        margin-bottom: @indent-base;
+                    }
+                }
+            }
+        }
+    }
+}

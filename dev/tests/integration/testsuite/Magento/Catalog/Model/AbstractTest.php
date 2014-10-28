@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model;
 
 class AbstractTest extends \PHPUnit_Framework_TestCase
@@ -53,8 +49,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             self::$_isStubClass = true;
         }
 
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(self::STUB_CLASS);
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(self::STUB_CLASS);
 
         $resourceProperty = new \ReflectionProperty(get_class($this->_model), '_resourceName');
         $resourceProperty->setAccessible(true);
@@ -146,9 +141,11 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     {
         $object = $this->_model->loadByAttribute('sku', 'simple');
         $this->assertNotSame($object, $this->_model);
-        $this->assertEquals(1, $object->getId()); // fixture
+        $this->assertEquals(1, $object->getId());
+        // fixture
 
-        $result = $this->_model->loadByAttribute('sku', uniqid()); // specifying wrong attribute code leads to fatal
+        $result = $this->_model->loadByAttribute('sku', uniqid());
+        // specifying wrong attribute code leads to fatal
         $this->assertFalse($result);
     }
 
@@ -157,16 +154,18 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $store = $this->_model->getStore();
         $this->assertSame(
             $store,
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-                ->getStore()
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                'Magento\Framework\StoreManagerInterface'
+            )->getStore()
         );
     }
 
     public function testGetWebsiteStoreIds()
     {
         $ids = $this->_model->getWebsiteStoreIds();
-        $storeId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Core\Model\StoreManagerInterface')->getStore()->getId();
+        $storeId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\StoreManagerInterface'
+        )->getStore()->getId();
         $this->assertEquals(array($storeId => $storeId), $ids);
     }
 

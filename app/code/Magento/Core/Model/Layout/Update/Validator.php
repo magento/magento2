@@ -18,39 +18,36 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Core\Model\Layout\Update;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Validator for custom layout update
  *
  * Validator checked XML validation and protected expressions
- *
- * @category   Magento
- * @package    Magento_Core
- * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Core\Model\Layout\Update;
-
 class Validator extends \Zend_Validate_Abstract
 {
     const XML_INVALID = 'invalidXml';
+
     const HELPER_ARGUMENT_TYPE = 'helperArgumentType';
+
     const UPDATER_MODEL = 'updaterModel';
 
     const XML_NAMESPACE_XSI = 'http://www.w3.org/2001/XMLSchema-instance';
 
-    const LAYOUT_SCHEMA_SINGLE_HANDLE = 'layout_single';
+    const LAYOUT_SCHEMA_PAGE_HANDLE = 'page_layout';
+
     const LAYOUT_SCHEMA_MERGED = 'layout_merged';
 
     /**
      * The Magento SimpleXml object
      *
-     * @var \Magento\Simplexml\Element
+     * @var \Magento\Framework\Simplexml\Element
      */
     protected $_value;
 
@@ -61,7 +58,7 @@ class Validator extends \Zend_Validate_Abstract
      */
     protected $_protectedExpressions = array(
         self::HELPER_ARGUMENT_TYPE => '//*[@xsi:type="helper"]',
-        self::UPDATER_MODEL => '//updater',
+        self::UPDATER_MODEL => '//updater'
     );
 
     /**
@@ -72,48 +69,40 @@ class Validator extends \Zend_Validate_Abstract
     protected $_xsdSchemas;
 
     /**
-     * @var \Magento\Module\Dir\Reader
-     */
-    protected $_modulesReader;
-
-    /**
-     * @var \Magento\Config\DomFactory
+     * @var \Magento\Framework\Config\DomFactory
      */
     protected $_domConfigFactory;
 
     /**
-     * @param \Magento\Module\Dir\Reader $modulesReader
-     * @param \Magento\Config\DomFactory $domConfigFactory
+     * @param DirectoryList $dirList
+     * @param \Magento\Framework\Config\DomFactory $domConfigFactory
      */
     public function __construct(
-        \Magento\Module\Dir\Reader $modulesReader,
-        \Magento\Config\DomFactory $domConfigFactory
+        DirectoryList $dirList,
+        \Magento\Framework\Config\DomFactory $domConfigFactory
     ) {
-        $this->_modulesReader = $modulesReader;
         $this->_domConfigFactory = $domConfigFactory;
         $this->_initMessageTemplates();
-        $this->_xsdSchemas = array(
-            self::LAYOUT_SCHEMA_SINGLE_HANDLE => $this->_modulesReader->getModuleDir('etc', 'Magento_Core')
-                . '/layout_single.xsd',
-            self::LAYOUT_SCHEMA_MERGED => $this->_modulesReader->getModuleDir('etc', 'Magento_Core')
-                . '/layout_merged.xsd',
-        );
+        $this->_xsdSchemas = [
+            self::LAYOUT_SCHEMA_PAGE_HANDLE => $dirList->getPath(DirectoryList::LIB_INTERNAL)
+                . '/Magento/Framework/View/Layout/etc/page_layout.xsd',
+            self::LAYOUT_SCHEMA_MERGED => $dirList->getPath(DirectoryList::LIB_INTERNAL)
+                . '/Magento/Framework/View/Layout/etc/layout_merged.xsd'
+        ];
     }
 
     /**
      * Initialize messages templates with translating
      *
-     * @return \Magento\Core\Model\Layout\Update\Validator
+     * @return $this
      */
     protected function _initMessageTemplates()
     {
         if (!$this->_messageTemplates) {
             $this->_messageTemplates = array(
-                self::HELPER_ARGUMENT_TYPE =>
-                    __('Helper arguments should not be used in custom layout updates.'),
-                self::UPDATER_MODEL =>
-                    __('Updater model should not be used in custom layout updates.'),
-                self::XML_INVALID => __('Please correct the XML data and try again. %value%'),
+                self::HELPER_ARGUMENT_TYPE => __('Helper arguments should not be used in custom layout updates.'),
+                self::UPDATER_MODEL => __('Updater model should not be used in custom layout updates.'),
+                self::XML_INVALID => __('Please correct the XML data and try again. %value%')
             );
         }
         return $this;
@@ -128,21 +117,18 @@ class Validator extends \Zend_Validate_Abstract
      *
      * @param string $value
      * @param string $schema
-     * @param boolean $isSecurityCheck
+     * @param bool $isSecurityCheck
      * @return bool
      */
-    public function isValid($value, $schema = self::LAYOUT_SCHEMA_SINGLE_HANDLE, $isSecurityCheck = true)
+    public function isValid($value, $schema = self::LAYOUT_SCHEMA_PAGE_HANDLE, $isSecurityCheck = true)
     {
         try {
             //wrap XML value in the "layout" and "handle" tags to make it validatable
             $value = '<layout xmlns:xsi="' . self::XML_NAMESPACE_XSI . '">' . $value . '</layout>';
-            $this->_domConfigFactory->createDom(array(
-                'xml' => $value,
-                'schemaFile' => $this->_xsdSchemas[$schema]
-            ));
+            $this->_domConfigFactory->createDom(array('xml' => $value, 'schemaFile' => $this->_xsdSchemas[$schema]));
 
             if ($isSecurityCheck) {
-                $value = new \Magento\Simplexml\Element($value);
+                $value = new \Magento\Framework\Simplexml\Element($value);
                 $value->registerXPathNamespace('xsi', self::XML_NAMESPACE_XSI);
                 foreach ($this->_protectedExpressions as $key => $xpr) {
                     if ($value->xpath($xpr)) {
@@ -154,7 +140,7 @@ class Validator extends \Zend_Validate_Abstract
                     return false;
                 }
             }
-        } catch (\Magento\Config\Dom\ValidationException $e) {
+        } catch (\Magento\Framework\Config\Dom\ValidationException $e) {
             $this->_error(self::XML_INVALID, $e->getMessage());
             return false;
         } catch (\Exception $e) {

@@ -18,52 +18,56 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
+
+use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Service\ExtensibleDataObjectConverter;
 
 /**
  * Create order account form
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
-
-class Account extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractForm
+class Account extends AbstractForm
 {
     /**
-     * @var \Magento\Customer\Model\CustomerFactory
+     * Metadata form factory
+     *
+     * @var \Magento\Customer\Model\Metadata\FormFactory
      */
-    protected $_customerFactory;
+    protected $_metadataFormFactory;
 
-    /**
-     * @var \Magento\Customer\Model\FormFactory
-     */
-    protected $_customerFormFactory;
+    /** @var CustomerAccountServiceInterface */
+    protected $_customerAccountService;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Model\Session\Quote $sessionQuote
      * @param \Magento\Sales\Model\AdminOrder\Create $orderCreate
-     * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Customer\Model\CustomerFactory $customerFactory
-     * @param \Magento\Customer\Model\FormFactory $customerFormFactory
+     * @param PriceCurrencyInterface $priceCurrency
+     * @param \Magento\Framework\Data\FormFactory $formFactory
+     * @param \Magento\Customer\Model\Metadata\FormFactory $metadataFormFactory
+     * @param CustomerAccountServiceInterface $customerAccountService
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Model\Session\Quote $sessionQuote,
         \Magento\Sales\Model\AdminOrder\Create $orderCreate,
-        \Magento\Data\FormFactory $formFactory,
-        \Magento\Customer\Model\CustomerFactory $customerFactory,
-        \Magento\Customer\Model\FormFactory $customerFormFactory,
+        PriceCurrencyInterface $priceCurrency,
+        \Magento\Framework\Data\FormFactory $formFactory,
+        \Magento\Customer\Model\Metadata\FormFactory $metadataFormFactory,
+        CustomerAccountServiceInterface $customerAccountService,
         array $data = array()
     ) {
-        $this->_customerFactory = $customerFactory;
-        $this->_customerFormFactory = $customerFormFactory;
-        parent::__construct($context, $sessionQuote, $orderCreate, $formFactory, $data);
+        $this->_metadataFormFactory = $metadataFormFactory;
+        $this->_customerAccountService = $customerAccountService;
+        parent::__construct($context, $sessionQuote, $orderCreate, $priceCurrency, $formFactory, $data);
     }
 
     /**
@@ -89,26 +93,19 @@ class Account extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
     /**
      * Prepare Form and add elements to form
      *
-     * @return \Magento\Sales\Block\Adminhtml\Order\Create\Form\Account
+     * @return $this
      */
     protected function _prepareForm()
     {
-        /* @var $customerModel \Magento\Customer\Model\Customer */
-        $customerModel = $this->_customerFactory->create();
-
-        /* @var $customerForm \Magento\Customer\Model\Form */
-        $customerForm   = $this->_customerFormFactory->create();
-        $customerForm->setFormCode('adminhtml_checkout')
-            ->setStore($this->getStore())
-            ->setEntity($customerModel);
+        /** @var \Magento\Customer\Model\Metadata\Form $customerForm */
+        $customerForm = $this->_metadataFormFactory->create('customer', 'adminhtml_checkout');
 
         // prepare customer attributes to show
-        $attributes     = array();
+        $attributes = array();
 
         // add system required attributes
         foreach ($customerForm->getSystemAttributes() as $attribute) {
-            /* @var $attribute \Magento\Customer\Model\Attribute */
-            if ($attribute->getIsRequired()) {
+            if ($attribute->isRequired()) {
                 $attributes[$attribute->getAttributeCode()] = $attribute;
             }
         }
@@ -119,7 +116,6 @@ class Account extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
 
         // add user defined attributes
         foreach ($customerForm->getUserAttributes() as $attribute) {
-            /* @var $attribute \Magento\Customer\Model\Attribute */
             $attributes[$attribute->getAttributeCode()] = $attribute;
         }
 
@@ -136,10 +132,10 @@ class Account extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
     /**
      * Add additional data to form element
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
-     * @return \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractForm
+     * @param AbstractElement $element
+     * @return $this
      */
-    protected function _addAdditionalFormElementData(\Magento\Data\Form\Element\AbstractElement $element)
+    protected function _addAdditionalFormElementData(AbstractElement $element)
     {
         switch ($element->getId()) {
             case 'email':
@@ -157,7 +153,12 @@ class Account extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
      */
     public function getFormValues()
     {
-        $data = $this->getCustomer()->getData();
+        try {
+            $customer = $this->_customerAccountService->getCustomer($this->getCustomerId());
+        } catch (\Exception $e) {
+            /** If customer does not exist do nothing. */
+        }
+        $data = isset($customer) ? ExtensibleDataObjectConverter::toFlatArray($customer) : array();
         foreach ($this->getQuote()->getData() as $key => $value) {
             if (strpos($key, 'customer_') === 0) {
                 $data[substr($key, 9)] = $value;
@@ -165,7 +166,7 @@ class Account extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
         }
 
         if ($this->getQuote()->getCustomerEmail()) {
-            $data['email']  = $this->getQuote()->getCustomerEmail();
+            $data['email'] = $this->getQuote()->getCustomerEmail();
         }
 
         return $data;

@@ -18,21 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Reports
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Reports\Block\Adminhtml\Review\Detail;
 
 /**
  * Adminhtml report reviews product grid block
  *
- * @category   Magento
- * @package    Magento_Reports
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Reports\Block\Adminhtml\Review\Detail;
-
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
@@ -42,32 +37,37 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Reports\Model\Resource\Review\CollectionFactory $reviewsFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Url $urlModel,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Reports\Model\Resource\Review\CollectionFactory $reviewsFactory,
         array $data = array()
     ) {
         $this->_reviewsFactory = $reviewsFactory;
-        parent::__construct($context, $urlModel, $backendHelper, $data);
+        parent::__construct($context, $backendHelper, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
         $this->setId('reviews_grid');
     }
 
+    /**
+     * Apply sorting and filtering to reports review collection
+     *
+     * @return $this
+     */
     protected function _prepareCollection()
     {
-        $collection = $this->_reviewsFactory->create()
-            ->addProductFilter((int)$this->getRequest()->getParam('id'));
+        $collection = $this->_reviewsFactory->create()->addProductFilter((int)$this->getRequest()->getParam('id'));
 
         $this->setCollection($collection);
 
@@ -76,32 +76,23 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         return $this;
     }
 
+    /**
+     * Initialize grid report review columns
+     *
+     * @return $this
+     */
     protected function _prepareColumns()
     {
+        $this->addColumn('nickname', array('header' => __('Customer'), 'width' => '100px', 'index' => 'nickname'));
 
-        $this->addColumn('nickname', array(
-            'header'    =>__('Customer'),
-            'width'     =>'100px',
-            'index'     =>'nickname'
-        ));
+        $this->addColumn('title', array('header' => __('Title'), 'width' => '150px', 'index' => 'title'));
 
-        $this->addColumn('title', array(
-            'header'    =>__('Title'),
-            'width'     =>'150px',
-            'index'     =>'title'
-        ));
+        $this->addColumn('detail', array('header' => __('Detail'), 'index' => 'detail'));
 
-        $this->addColumn('detail', array(
-            'header'    =>__('Detail'),
-            'index'     =>'detail'
-        ));
-
-        $this->addColumn('created_at', array(
-            'header'    =>__('Created'),
-            'index'     =>'created_at',
-            'width'     =>'200px',
-            'type'      =>'datetime'
-        ));
+        $this->addColumn(
+            'created_at',
+            array('header' => __('Created'), 'index' => 'created_at', 'width' => '200px', 'type' => 'datetime')
+        );
 
         $this->setFilterVisibility(false);
 
@@ -110,6 +101,4 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
         return parent::_prepareColumns();
     }
-
 }
-

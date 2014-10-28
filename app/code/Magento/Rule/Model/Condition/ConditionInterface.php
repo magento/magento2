@@ -18,16 +18,31 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Rule
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Rule\Model\Condition;
 
 interface ConditionInterface
 {
-    
+    /**
+     * Get tables to join
+     *
+     * @return array
+     */
+    public function getTablesToJoin();
+
+    /**
+     * Get field by attribute
+     *
+     * @return string
+     */
+    public function getMappedSqlField();
+
+    /**
+     * Get argument value to bind
+     *
+     * @return mixed
+     */
+    public function getBindArgumentValue();
 }

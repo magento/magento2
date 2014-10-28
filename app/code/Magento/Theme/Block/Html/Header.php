@@ -24,10 +24,13 @@
 
 namespace Magento\Theme\Block\Html;
 
+use Magento\Customer\Helper\Data;
+use Magento\Customer\Helper\View as CustomerViewHelper;
+
 /**
  * Html page header block
  */
-class Header extends \Magento\View\Element\Template
+class Header extends \Magento\Framework\View\Element\Template
 {
     /**
      * Current template name
@@ -42,64 +45,34 @@ class Header extends \Magento\View\Element\Template
     protected $_customerSession;
 
     /**
-     * @var \Magento\Core\Helper\File\Storage\Database
+     * @var \Magento\Framework\App\Http\Context
      */
-    protected $_fileStorageHelper;
+    protected $httpContext;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @var \Magento\Customer\Helper\View
+     */
+    protected $_customerViewHelper;
+
+    /**
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Core\Helper\File\Storage\Database $fileStorageHelper
+     * @param \Magento\Framework\App\Http\Context $httpContext
+     * @param CustomerViewHelper $customerViewHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Core\Helper\File\Storage\Database $fileStorageHelper,
+        \Magento\Framework\App\Http\Context $httpContext,
+        CustomerViewHelper $customerViewHelper,
         array $data = array()
     ) {
-        $this->_fileStorageHelper = $fileStorageHelper;
         $this->_customerSession = $customerSession;
         parent::__construct($context, $data);
-    }
-
-    /**
-     * Check if current url is url for home page
-     *
-     * @return bool
-     */
-    public function isHomePage()
-    {
-        return $this->getUrl('', array('_current' => true)) == $this->getUrl(
-            '*/*/*',
-            array('_current' => true, '_use_rewrite' => true)
-        );
-    }
-
-    /**
-     * Get logo image URL
-     *
-     * @return string
-     */
-    public function getLogoSrc()
-    {
-        if (empty($this->_data['logo_src'])) {
-            $this->_data['logo_src'] = $this->_getLogoUrl();
-        }
-        return $this->_data['logo_src'];
-    }
-
-    /**
-     * Retrieve logo text
-     *
-     * @return string
-     */
-    public function getLogoAlt()
-    {
-        if (empty($this->_data['logo_alt'])) {
-            $this->_data['logo_alt'] = $this->_storeConfig->getConfig('design/header/logo_alt');
-        }
-        return $this->_data['logo_alt'];
+        $this->httpContext = $httpContext;
+        $this->_customerViewHelper = $customerViewHelper;
+        $this->_isScopePrivate = true;
     }
 
     /**
@@ -110,48 +83,21 @@ class Header extends \Magento\View\Element\Template
     public function getWelcome()
     {
         if (empty($this->_data['welcome'])) {
-            if ($this->_appState->isInstalled() && $this->_customerSession->isLoggedIn()) {
-                $this->_data['welcome'] = __('Welcome, %1!',
-                    $this->escapeHtml($this->_customerSession->getCustomer()->getName()));
+            if ($this->httpContext->getValue(Data::CONTEXT_AUTH)) {
+                $customerName = $this->_customerViewHelper->getCustomerName(
+                    $this->_customerSession->getCustomerDataObject()
+                );
+                $this->_data['welcome'] = __(
+                    'Welcome, %1!',
+                    $this->escapeHtml($customerName)
+                );
             } else {
-                $this->_data['welcome'] = $this->_storeConfig->getConfig('design/header/welcome');
+                $this->_data['welcome'] = $this->_scopeConfig->getValue(
+                    'design/header/welcome',
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                );
             }
         }
         return $this->_data['welcome'];
-    }
-
-    /**
-     * Retrieve logo image URL
-     *
-     * @return string
-     */
-    protected function _getLogoUrl()
-    {
-        $folderName = \Magento\Backend\Model\Config\Backend\Image\Logo::UPLOAD_DIR;
-        $storeLogoPath = $this->_storeConfig->getConfig('design/header/logo_src');
-        $path = $folderName . '/' . $storeLogoPath;
-        $logoUrl = $this->_urlBuilder->getBaseUrl(array('_type' => \Magento\Core\Model\Store::URL_TYPE_MEDIA)) . $path;
-
-        if (!is_null($storeLogoPath) && $this->_isFile($path)) {
-            $url = $logoUrl;
-        } else {
-            $url = $this->getViewFileUrl('images/logo.gif');
-        }
-        return $url;
-    }
-
-    /**
-     * If DB file storage is on - find there, otherwise - just file_exists
-     *
-     * @param string $filename relative path
-     * @return bool
-     */
-    protected function _isFile($filename)
-    {
-        if ($this->_fileStorageHelper->checkDbUsage() && !$this->getMediaDirectory()->isFile($filename)) {
-            $this->_fileStorageHelper->saveFileToFilesystem($filename);
-        }
-
-        return $this->getMediaDirectory()->isFile($filename);
     }
 }

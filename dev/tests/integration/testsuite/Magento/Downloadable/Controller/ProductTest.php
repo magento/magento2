@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Downloadable
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -33,15 +30,16 @@ namespace Magento\Downloadable\Controller;
 class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
 {
     /**
-     * @magentoDataFixture Magento/Downloadable/_files/product.php
+     * @magentoDataFixture Magento/Downloadable/_files/product_downloadable.php
      */
     public function testViewAction()
     {
         $this->dispatch('catalog/product/view/id/1');
         $this->assertContains(
             'catalog_product_view_type_downloadable',
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-                ->getUpdate()->getHandles()
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                'Magento\Framework\View\LayoutInterface'
+            )->getUpdate()->getHandles()
         );
         $responseBody = $this->getResponse()->getBody();
         $this->assertContains('Downloadable Product', $responseBody);

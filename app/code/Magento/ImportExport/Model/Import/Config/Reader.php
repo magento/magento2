@@ -23,7 +23,7 @@
  */
 namespace Magento\ImportExport\Model\Import\Config;
 
-class Reader extends \Magento\Config\Reader\Filesystem
+class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**
      * List of id attributes for merge
@@ -32,27 +32,28 @@ class Reader extends \Magento\Config\Reader\Filesystem
      */
     protected $_idAttributes = array(
         '/config/entity' => 'name',
-        '/config/productType' => 'name',
+        '/config/entityType' => ['entity', 'name'],
+        '/config/relatedIndexers' => ['entity', 'name']
     );
 
     /**
-     * @param \Magento\Config\FileResolverInterface $fileResolver
+     * @param \Magento\Framework\Config\FileResolverInterface $fileResolver
      * @param \Magento\ImportExport\Model\Import\Config\Converter $converter
      * @param \Magento\ImportExport\Model\Import\Config\SchemaLocator $schemaLocator
-     * @param \Magento\Config\ValidationStateInterface $validationState
+     * @param \Magento\Framework\Config\ValidationStateInterface $validationState
      * @param string $fileName
      * @param array $idAttributes
      * @param string $domDocumentClass
      * @param string $defaultScope
      */
     public function __construct(
-        \Magento\Config\FileResolverInterface $fileResolver,
+        \Magento\Framework\Config\FileResolverInterface $fileResolver,
         \Magento\ImportExport\Model\Import\Config\Converter $converter,
         \Magento\ImportExport\Model\Import\Config\SchemaLocator $schemaLocator,
-        \Magento\Config\ValidationStateInterface $validationState,
+        \Magento\Framework\Config\ValidationStateInterface $validationState,
         $fileName = 'import.xml',
         $idAttributes = array(),
-        $domDocumentClass = 'Magento\Config\Dom',
+        $domDocumentClass = 'Magento\Framework\Config\Dom',
         $defaultScope = 'global'
     ) {
         parent::__construct(
@@ -66,5 +67,4 @@ class Reader extends \Magento\Config\Reader\Filesystem
             $defaultScope
         );
     }
-
 }

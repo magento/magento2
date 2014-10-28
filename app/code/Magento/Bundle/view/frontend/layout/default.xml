@@ -23,22 +23,8 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <referenceBlock name="wishlist_sidebar">
-        <action method="addPriceBlockType">
-            <argument name="type" xsi:type="string">bundle</argument>
-            <argument name="block" xsi:type="string">Magento\Bundle\Block\Catalog\Product\Price</argument>
-            <argument name="template" xsi:type="string">catalog/product/price.phtml</argument>
-        </action>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <referenceBlock name="head.components">
+        <block class="Magento\Framework\View\Element\Js\Components" name="bundle_checkout_page_head_components" template="Magento_Bundle::js/components.phtml"/>
     </referenceBlock>
-    <referenceBlock name="catalog_product_price_template">
-        <action method="addPriceBlockType">
-            <argument name="type" xsi:type="string">bundle</argument>
-            <argument name="block" xsi:type="string">Magento\Bundle\Block\Catalog\Product\Price</argument>
-            <argument name="template" xsi:type="string">catalog/product/price.phtml</argument>
-        </action>
-    </referenceBlock>
-    <referenceBlock name="minicart">
-        <block class="Magento\Bundle\Block\Checkout\Cart\Item\Renderer" as="bundle" template="Magento_Checkout::cart/sidebar/default.phtml"/>
-    </referenceBlock>
-</layout>
+</page>

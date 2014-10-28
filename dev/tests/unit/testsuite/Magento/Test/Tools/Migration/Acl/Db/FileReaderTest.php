@@ -18,17 +18,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Tools
- * @package     unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Tools\Migration\Acl\Db;
 
-require_once realpath(__DIR__ . '/../../../../../../../../../')
-    . '/tools/Magento/Tools/Migration/Acl/Db/FileReader.php';
 
+require_once realpath(
+    __DIR__ . '/../../../../../../../../../'
+) . '/tools/Magento/Tools/Migration/Acl/Db/FileReader.php';
 class FileReaderTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -45,11 +43,11 @@ class FileReaderTest extends \PHPUnit_Framework_TestCase
     {
         $filePath = __DIR__ . '/../_files/log/AclXPathToAclId.log';
         $expectedMap = array(
-            "admin/test1/test2"        => "Test1_Test2::all",
-            "admin/test1/test2/test3"  => "Test1_Test2::test3",
-            "admin/test1/test2/test4"  => "Test1_Test2::test4",
-            "admin/test1/test2/test5"  => "Test1_Test2::test5",
-            "admin/test6"              => "Test6_Test6::all"
+            "admin/test1/test2" => "Test1_Test2::all",
+            "admin/test1/test2/test3" => "Test1_Test2::test3",
+            "admin/test1/test2/test4" => "Test1_Test2::test4",
+            "admin/test1/test2/test5" => "Test1_Test2::test5",
+            "admin/test6" => "Test6_Test6::all"
         );
         $this->assertEquals($expectedMap, $this->_model->extractData($filePath));
     }
@@ -62,4 +60,3 @@ class FileReaderTest extends \PHPUnit_Framework_TestCase
         $this->_model->extractData('invalidFile.log');
     }
 }
-

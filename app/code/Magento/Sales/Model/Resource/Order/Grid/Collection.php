@@ -18,22 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Sales\Model\Resource\Order\Grid;
 
 /**
  * Flat sales order grid collection
  *
- * @category    Magento
- * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Model\Resource\Order\Grid;
-
 class Collection extends \Magento\Sales\Model\Resource\Order\Collection
 {
     /**
@@ -41,14 +35,14 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      *
      * @var string
      */
-    protected $_eventPrefix    = 'sales_order_grid_collection';
+    protected $_eventPrefix = 'sales_order_grid_collection';
 
     /**
      * Event object
      *
      * @var string
      */
-    protected $_eventObject    = 'order_grid_collection';
+    protected $_eventObject = 'order_grid_collection';
 
     /**
      * Customer mode flag
@@ -60,6 +54,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     /**
      * Model initialization
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -70,7 +65,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     /**
      * Get SQL for get record count
      *
-     * @return \Magento\DB\Select
+     * @return \Magento\Framework\DB\Select
      */
     public function getSelectCountSql()
     {
@@ -97,7 +92,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * Set customer mode flag value
      *
      * @param bool $value
-     * @return \Magento\Sales\Model\Resource\Order\Grid\Collection
+     * @return $this
      */
     public function setIsCustomerMode($value)
     {

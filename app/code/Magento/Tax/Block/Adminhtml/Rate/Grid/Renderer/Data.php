@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Tax
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,20 +25,21 @@
 /**
  * Adminhtml grid item renderer number
  *
- * @category   Magento
- * @package     Magento_Tax
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
 namespace Magento\Tax\Block\Adminhtml\Rate\Grid\Renderer;
 
 class Data extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
-    protected function _getValue (\Magento\Object $row)
+    /**
+     * @param \Magento\Framework\Object $row
+     * @return int|string
+     */
+    protected function _getValue(\Magento\Framework\Object $row)
     {
         $data = parent::_getValue($row);
         if (intval($data) == $data) {
-            return (string) number_format($data, 2);
+            return (string)number_format($data, 2);
         }
         if (!is_null($data)) {
             return $data * 1;

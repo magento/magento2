@@ -26,7 +26,7 @@ namespace Magento\Webapi\Model\Config\Integration;
 /**
  * Integration config schema locator.
  */
-class SchemaLocator implements \Magento\Config\SchemaLocatorInterface
+class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
     /**
      * Path to corresponding XSD file with validation rules for merged config
@@ -43,9 +43,9 @@ class SchemaLocator implements \Magento\Config\SchemaLocatorInterface
     protected $_perFileSchema = null;
 
     /**
-     * @param \Magento\Module\Dir\Reader $moduleReader
+     * @param \Magento\Framework\Module\Dir\Reader $moduleReader
      */
-    public function __construct(\Magento\Module\Dir\Reader $moduleReader)
+    public function __construct(\Magento\Framework\Module\Dir\Reader $moduleReader)
     {
         $this->_schema = $moduleReader->getModuleDir('etc', 'Magento_Webapi') . '/integration/api.xsd';
     }

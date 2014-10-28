@@ -1,0 +1,129 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Temlate for \Magento\Customer\Block\Address\Book block
+ * @var $this \Magento\Customer\Block\Address\Book
+ */
+?>
+<div class="block block-addresses-default">
+    <div class="block-title"><strong><?php echo __('Default Addresses') ?></strong></div>
+    <div class="block-content">
+        <?php if($_pAddsses = $this->getDefaultBilling()): ?>
+            <div class="box box-address-billing">
+                <strong class="box-title">
+                    <span><?php echo __('Default Billing Address') ?></span>
+                </strong>
+                <div class="box-content">
+                    <address>
+                        <?php echo $this->getAddressHtml($this->getAddressById($_pAddsses)) ?>
+                    </address>
+                </div>
+                <div class="box-actions">
+                    <a class="action edit" href="<?php echo $this->getAddressEditUrl($_pAddsses) ?>">
+                        <span><?php echo __('Change Billing Address') ?></span>
+                    </a>
+                </div>
+            </div>
+        <?php else: ?>
+            <div class="box box-address-billing">
+                <strong class="box-title"><span><?php echo __('Default Billing Address') ?></span></strong>
+                <div class="box-content">
+                    <p><?php echo __('You have no default billing address in your address book.') ?></p>
+                </div>
+            </div>
+        <?php endif ?>
+
+        <?php if($_pAddsses = $this->getDefaultShipping()): ?>
+            <div class="box box-address-shipping">
+                <strong class="box-title">
+                    <span><?php echo __('Default Shipping Address') ?></span>
+                </strong>
+                <div class="box-content">
+                    <address>
+                        <?php echo $this->getAddressHtml($this->getAddressById($_pAddsses)) ?>
+                    </address>
+                </div>
+                <div class="box-actions">
+                    <a class="action edit" href="<?php echo $this->getAddressEditUrl($_pAddsses) ?>">
+                        <span><?php echo __('Change Shipping Address') ?></span>
+                    </a>
+                </div>
+            </div>
+        <?php else: ?>
+            <div class="box box-address-shipping">
+                <strong class="box-title"><span><?php echo __('Default Shipping Address') ?></span></strong>
+                <div class="box-content">
+                    <p><?php echo __('You have no default shipping address in your address book.') ?></p>
+                </div>
+            </div>
+        <?php endif ?>
+    </div>
+</div>
+
+<div class="block block-addresses-list">
+    <div class="block-title"><strong><?php echo __('Additional Address Entries') ?></strong></div>
+    <div class="block-content">
+        <?php if($_pAddsses = $this->getAdditionalAddresses()): ?>
+            <ol class="items addresses">
+                <?php foreach($_pAddsses as $_address): ?>
+                    <li class="item">
+                        <address>
+                            <?php echo $this->getAddressHtml($_address) ?><br />
+                        </address>
+                        <div class="item actions">
+                            <a class="action edit" href="<?php echo $this->getUrl('customer/address/edit', array('id'=>$_address->getId())) ?>"><span><?php echo __('Edit Address') ?></span></a>
+                            <a class="action delete" href="#" role="delete-address" data-address="<?php echo $_address->getId() ?>"><span><?php echo __('Delete Address') ?></span></a>
+                        </div>
+                    </li>
+                <?php endforeach; ?>
+            </ol>
+        <?php else: ?>
+            <p class="empty"><?php echo __('You have no additional address entries in your address book.') ?></p>
+        <?php endif ?>
+    </div>
+</div>
+
+<div class="actions-toolbar">
+    <div class="primary">
+        <button type="button" role="add-address" title="<?php echo __('Add New Address') ?>" class="action primary add"><span><?php echo __('Add New Address') ?></span></button>
+    </div>
+    <div class="secondary">
+        <a class="action back" href="<?php echo $this->escapeUrl($this->getBackUrl()) ?>"><span><?php echo __('Back') ?></span></a>
+    </div>
+</div>
+
+<script type="text/javascript">
+require(['jquery', "mage/mage"], function(jQuery){
+
+    jQuery('.page.main').mage('address', {
+        deleteAddress: "li.item a[role='delete-address']",
+        deleteUrlPrefix: '<?php echo $this->getDeleteUrl() ?>id/',
+        addAddress: "button[role='add-address']",
+        addAddressLocation: '<?php echo $this->getAddAddressUrl() ?>'
+    });
+
+});
+</script>

@@ -23,17 +23,30 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
-    <type name="Magento\Eav\Model\Resource\Helper">
-        <param name="modulePrefix">
-            <value>eav</value>
-        </param>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Magento\Eav\Model\Entity\Setup\PropertyMapperInterface" type="Magento\Eav\Model\Entity\Setup\PropertyMapper\Composite" />
+    <type name="Magento\Eav\Model\Entity\Attribute\Config">
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Eav\Model\Entity\Attribute\Config\Reader\Proxy</argument>
+        </arguments>
     </type>
-    <type name="Magento\Module\Updater\SetupFactory">
-        <param name="resourceTypes">
-            <value>
-                <eav_setup>Magento\Eav\Model\Entity\Setup</eav_setup>
-            </value>
-        </param>
+    <type name="Magento\Eav\Model\Resource\Helper">
+        <arguments>
+            <argument name="modulePrefix" xsi:type="string">eav</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Module\Updater\SetupFactory">
+        <arguments>
+            <argument name="resourceTypes" xsi:type="array">
+                <item name="eav_setup" xsi:type="string">Magento\Eav\Model\Entity\Setup</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Eav\Model\Entity\Setup\PropertyMapper\Composite">
+        <arguments>
+            <argument name="propertyMappers" xsi:type="array">
+                <item name="default" xsi:type="string">Magento\Eav\Model\Entity\Setup\PropertyMapper</item>
+            </argument>
+        </arguments>
     </type>
 </config>

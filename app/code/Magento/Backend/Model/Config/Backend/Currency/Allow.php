@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -30,66 +28,65 @@
  */
 namespace Magento\Backend\Model\Config\Backend\Currency;
 
-class Allow extends \Magento\Backend\Model\Config\Backend\Currency\AbstractCurrency
+class Allow extends AbstractCurrency
 {
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Framework\Locale\CurrencyInterface
      */
-    protected $_locale;
+    protected $_localeCurrency;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Config $config
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\LocaleInterface $locale
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\Locale\CurrencyInterface $localeCurrency
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Config $config,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\LocaleInterface $locale,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        $this->_locale = $locale;
-        parent::__construct($context, $registry, $storeManager, $config, $coreStoreConfig, $resource,
-            $resourceCollection, $data);
+        $this->_localeCurrency = $localeCurrency;
+        parent::__construct($context, $registry, $config, $scopeConfig, $resource, $resourceCollection, $data);
     }
 
     /**
      * Check is isset default display currency in allowed currencies
      * Check allowed currencies is available in installed currencies
      *
-     * @return \Magento\Backend\Model\Config\Backend\Currency\Allow
-     * @throws \Magento\Core\Exception
+     * @return $this
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function _afterSave()
     {
         $exceptions = array();
         foreach ($this->_getAllowedCurrencies() as $currencyCode) {
             if (!in_array($currencyCode, $this->_getInstalledCurrencies())) {
-                $exceptions[] = __('Selected allowed currency "%1" is not available in installed currencies.',
-                    $this->_locale->currency($currencyCode)->getName()
+                $exceptions[] = __(
+                    'Selected allowed currency "%1" is not available in installed currencies.',
+                    $this->_localeCurrency->getCurrency($currencyCode)->getName()
                 );
             }
         }
 
         if (!in_array($this->_getCurrencyDefault(), $this->_getAllowedCurrencies())) {
-            $exceptions[] = __('Default display currency "%1" is not available in allowed currencies.',
-                $this->_locale->currency($this->_getCurrencyDefault())->getName()
+            $exceptions[] = __(
+                'Default display currency "%1" is not available in allowed currencies.',
+                $this->_localeCurrency->getCurrency($this->_getCurrencyDefault())->getName()
             );
         }
 
         if ($exceptions) {
-            throw new \Magento\Core\Exception(join("\n", $exceptions));
+            throw new \Magento\Framework\Model\Exception(join("\n", $exceptions));
         }
 
         return $this;

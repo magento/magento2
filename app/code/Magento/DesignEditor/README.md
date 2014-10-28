@@ -1,0 +1,1 @@
+The Design Editor module provides a way to manage and edit look and feel of a theme using UI.

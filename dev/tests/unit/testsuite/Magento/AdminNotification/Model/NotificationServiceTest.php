@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_AdminNotification
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -45,11 +42,15 @@ class NotificationServiceTest extends \PHPUnit_Framework_TestCase
          *  $notificationFactory \PHPUnit_Framework_MockObject_MockObject|\Magento\AdminNotification\Model\InboxFactory
          */
         $notificationFactory = $this->getMock(
-            'Magento\AdminNotification\Model\InboxFactory', array('create'), array(), '', false
+            'Magento\AdminNotification\Model\InboxFactory',
+            array('create'),
+            array(),
+            '',
+            false
         );
         $notification = $this->getMock(
             'Magento\AdminNotification\Model\Inbox',
-            array('load', 'getId', 'save','setIsRead', '__sleep', '__wakeup'),
+            array('load', 'getId', 'save', 'setIsRead', '__sleep', '__wakeup'),
             array(),
             '',
             false
@@ -75,7 +76,7 @@ class NotificationServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Core\Exception
+     * @expectedException \Magento\Framework\Model\Exception
      * @expectedExceptionMessage Wrong notification ID specified.
      */
     public function testMarkAsReadThrowsExceptionWhenNotificationIdIsInvalid()

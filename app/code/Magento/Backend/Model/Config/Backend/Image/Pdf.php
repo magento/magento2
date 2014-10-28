@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,14 +26,15 @@
 /**
  * System config image field backend model for Zend PDF generator
  *
- * @category   Magento
- * @package    Magento_Backend
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Backend\Model\Config\Backend\Image;
 
 class Pdf extends \Magento\Backend\Model\Config\Backend\Image
 {
+    /**
+     * @return string[]
+     */
     protected function _getAllowedExtensions()
     {
         return array('tif', 'tiff', 'png', 'jpg', 'jpe', 'jpeg');

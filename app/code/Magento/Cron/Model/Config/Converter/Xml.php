@@ -18,23 +18,20 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Cron
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Cron\Model\Config\Converter;
 
 /**
  * Converts cron parameters from XML files
  */
-class Xml implements \Magento\Config\ConverterInterface
+class Xml implements \Magento\Framework\Config\ConverterInterface
 {
     /**
      * Converting data to array type
      *
-     * @param mixed $source
+     * @param \DOMDocument $source
      * @return array
      * @throws \InvalidArgumentException
      */
@@ -46,30 +43,30 @@ class Xml implements \Magento\Config\ConverterInterface
             return $output;
         }
 
-        /** @var \DOMNodeList $jobs */
-        $jobs = $source->getElementsByTagName('job');
-        /** @var \DOMElement $jobConfig */
-        foreach ($jobs as $jobConfig) {
-            $jobName = $jobConfig->getAttribute('name');
-
-            if (!$jobName) {
-                throw new \InvalidArgumentException('Attribute "name" does not exist');
+        $groups = $source->getElementsByTagName('group');
+        foreach ($groups as $group) {
+            /** @var $group \DOMElement */
+            if (!$group->hasAttribute('id')) {
+                throw new \InvalidArgumentException('Attribute "id" does not exist');
             }
-            $config = array();
-            $config['name'] = $jobName;
-            $config += $this->_convertCronConfig($jobConfig);
-
-            /** @var \DOMText $schedules */
-            foreach ($jobConfig->childNodes as $schedules) {
-                if ($schedules->nodeName == 'schedule') {
-                    if (!empty($schedules->nodeValue)) {
-                        $config['schedule'] = $schedules->nodeValue;
-                        break;
-                    }
+            /** @var \DOMElement $jobConfig */
+            foreach ($group->childNodes as $jobConfig) {
+                if ($jobConfig->nodeName != 'job') {
+                    continue;
                 }
-                continue;
+                $jobName = $jobConfig->getAttribute('name');
+
+                if (!$jobName) {
+                    throw new \InvalidArgumentException('Attribute "name" does not exist');
+                }
+                $config = array();
+                $config['name'] = $jobName;
+                $config += $this->convertCronConfig($jobConfig);
+                $config += $this->convertCronSchedule($jobConfig);
+                $config += $this->convertCronConfigPath($jobConfig);
+
+                $output[$group->getAttribute('id')][$jobName] = $config;
             }
-            $output[$jobName] = $config;
         }
         return $output;
     }
@@ -81,7 +78,7 @@ class Xml implements \Magento\Config\ConverterInterface
      * @return array
      * @throws \InvalidArgumentException
      */
-    protected function _convertCronConfig($jobConfig)
+    protected function convertCronConfig(\DOMElement $jobConfig)
     {
         $instanceName = $jobConfig->getAttribute('instance');
         $methodName = $jobConfig->getAttribute('method');
@@ -92,6 +89,53 @@ class Xml implements \Magento\Config\ConverterInterface
         if (!isset($methodName)) {
             throw new \InvalidArgumentException('Attribute "method" does not exist');
         }
+
         return array('instance' => $instanceName, 'method' => $methodName);
+    }
+
+    /**
+     * Convert schedule cron configurations
+     *
+     * @param \DOMElement $jobConfig
+     * @return array
+     */
+    protected function convertCronSchedule(\DOMElement $jobConfig)
+    {
+        $result = array();
+        /** @var \DOMText $schedules */
+        foreach ($jobConfig->childNodes as $schedules) {
+            if ($schedules->nodeName == 'schedule') {
+                if (!empty($schedules->nodeValue)) {
+                    $result['schedule'] = $schedules->nodeValue;
+                    break;
+                }
+            }
+            continue;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Convert schedule cron configurations
+     *
+     * @param \DOMElement $jobConfig
+     * @return array
+     */
+    protected function convertCronConfigPath(\DOMElement $jobConfig)
+    {
+        $result = array();
+        /** @var \DOMText $schedules */
+        foreach ($jobConfig->childNodes as $schedules) {
+            if ($schedules->nodeName == 'config_path') {
+                if (!empty($schedules->nodeValue)) {
+                    $result['config_path'] = $schedules->nodeValue;
+                    break;
+                }
+            }
+            continue;
+        }
+
+        return $result;
     }
 }

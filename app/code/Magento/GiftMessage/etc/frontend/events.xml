@@ -23,18 +23,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
     <event name="sales_convert_quote_address_to_order">
         <observer name="giftmessage" instance="Magento\GiftMessage\Model\Observer" method="salesEventConvertQuoteAddressToOrder" shared="false" />
     </event>
     <event name="sales_convert_quote_to_order">
         <observer name="giftmessage" instance="Magento\GiftMessage\Model\Observer" method="salesEventConvertQuoteToOrder" shared="false" />
-    </event>
-    <event name="checkout_controller_onepage_save_shipping_method">
-        <observer name="giftmessage" instance="Magento\GiftMessage\Model\Observer" method="checkoutEventCreateGiftMessage" shared="false" />
-    </event>
-    <event name="checkout_controller_multishipping_shipping_post">
-        <observer name="giftmessage" instance="Magento\GiftMessage\Model\Observer" method="checkoutEventCreateGiftMessage" shared="false" />
     </event>
     <event name="sales_convert_order_to_quote">
         <observer name="giftmessage" instance="Magento\GiftMessage\Model\Observer" method="salesEventOrderToQuote" shared="false" />

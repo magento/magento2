@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Theme
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Theme\Block\Html;
 
 class BreadcrumbsTest extends \PHPUnit_Framework_TestCase
@@ -36,19 +32,19 @@ class BreadcrumbsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')->setAreaCode('frontend');
-        $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-            ->createBlock('Magento\Theme\Block\Html\Breadcrumbs');
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\State')
+            ->setAreaCode('frontend');
+        $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\View\LayoutInterface'
+        )->createBlock(
+            'Magento\Theme\Block\Html\Breadcrumbs'
+        );
     }
 
     public function testAddCrumb()
     {
         $this->assertEmpty($this->_block->toHtml());
-        $info = array(
-            'label' => 'test label',
-            'title' => 'test title',
-            'link'  => 'test link',
-        );
+        $info = array('label' => 'test label', 'title' => 'test title', 'link' => 'test link');
         $this->_block->addCrumb('test', $info);
         $html = $this->_block->toHtml();
         $this->assertContains('test label', $html);
@@ -58,20 +54,10 @@ class BreadcrumbsTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCacheKeyInfo()
     {
-        $crumbs = array(
-            'test' => array(
-                'label'    => 'test label',
-                'title'    => 'test title',
-                'link'     => 'test link',
-            )
-        );
+        $crumbs = array('test' => array('label' => 'test label', 'title' => 'test title', 'link' => 'test link'));
         foreach ($crumbs as $crumbName => &$crumb) {
             $this->_block->addCrumb($crumbName, $crumb);
-            $crumb += array(
-                'first'    => null,
-                'last'     => null,
-                'readonly' => null,
-            );
+            $crumb += array('first' => null, 'last' => null, 'readonly' => null);
         }
 
         $cacheKeyInfo = $this->_block->getCacheKeyInfo();

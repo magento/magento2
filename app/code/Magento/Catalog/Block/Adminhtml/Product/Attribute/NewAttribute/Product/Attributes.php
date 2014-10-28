@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Adminhtml
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,17 +25,20 @@
 /**
  * Product attributes tab
  *
- * @category   Magento
- * @package    Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\NewAttribute\Product;
 
+use Magento\Backend\Block\Widget\Form;
+
 class Attributes extends \Magento\Catalog\Block\Adminhtml\Form
 {
+    /**
+     * @return void
+     */
     protected function _prepareForm()
     {
-        /** @var \Magento\Data\Form $form */
+        /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
         /**
          * Initialize product object as form property
@@ -63,31 +64,37 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form
             }
         }
 
-        $this->_eventManager->dispatch('adminhtml_catalog_product_edit_prepare_form', array('form'=>$form));
+        $this->_eventManager->dispatch('adminhtml_catalog_product_edit_prepare_form', array('form' => $form));
         $form->addValues($values);
         $form->setFieldNameSuffix('product');
         $this->setForm($form);
     }
 
+    /**
+     * @return array
+     */
     protected function _getAdditionalElementTypes()
     {
         $result = array(
-            'price'   => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Price',
-            'image'   => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Image',
-            'boolean' => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Boolean',
+            'price' => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Price',
+            'image' => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Image',
+            'boolean' => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Boolean'
         );
 
-        $response = new \Magento\Object();
+        $response = new \Magento\Framework\Object();
         $response->setTypes(array());
-        $this->_eventManager->dispatch('adminhtml_catalog_product_edit_element_types', array('response'=>$response));
+        $this->_eventManager->dispatch('adminhtml_catalog_product_edit_element_types', array('response' => $response));
 
-        foreach ($response->getTypes() as $typeName=>$typeClass) {
+        foreach ($response->getTypes() as $typeName => $typeClass) {
             $result[$typeName] = $typeClass;
         }
 
         return $result;
     }
 
+    /**
+     * @return string
+     */
     protected function _toHtml()
     {
         parent::_toHtml();

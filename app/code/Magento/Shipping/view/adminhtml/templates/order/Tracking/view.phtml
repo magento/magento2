@@ -1,0 +1,89 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php /** @var $this Magento\Shipping\Block\Adminhtml\Order\Tracking\View */ ?>
+<table cellspacing="0" class="data-table" id="shipment_tracking_info">
+    <thead>
+        <tr class="headings">
+            <th class="col-carrier"><?php echo __('Carrier') ?></th>
+            <th class="col-title"><?php echo __('Title') ?></th>
+            <th class="col-number"><?php echo __('Number') ?></th>
+            <th class="col-delete last"><?php echo __('Action') ?></th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <td class="col-carrier">
+                <select name="carrier" class="select" onchange="selectCarrier(this)">
+                    <?php foreach ($this->getCarriers() as $_code=>$_name): ?>
+                    <option value="<?php echo $_code ?>"><?php echo $this->escapeHtml($_name) ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </td>
+            <td class="col-title"><input class="input-text" type="text" id="tracking_title" name="title" value="" /></td>
+            <td class="col-number"><input class="input-text" type="text" id="tracking_number" name="number" value="" /></td>
+            <td class="col-delete last"><?php echo $this->getSaveButtonHtml() ?></td>
+        </tr>
+    </tfoot>
+<?php if($_tracks = $this->getShipment()->getAllTracks()): ?>
+    <tbody>
+    <?php $i=0;foreach ($_tracks as $_track):$i++ ?>
+        <tr class="<?php echo ($i%2==0)?'even':'odd' ?>">
+            <td class="col-carrier"><?php echo $this->escapeHtml($this->getCarrierTitle($_track->getCarrierCode())) ?></td>
+            <td class="col-title"><?php echo $this->escapeHtml($_track->getTitle()) ?></td>
+            <td class="col-number">
+                <?php if ($_track->isCustom()): ?>
+                <?php echo $this->escapeHtml($_track->getNumber()) ?>
+                <?php else: ?>
+                <a href="#" onclick="popWin('<?php echo $this->helper('Magento\Shipping\Helper\Data')->getTrackingPopupUrlBySalesModel($_track) ?>','trackorder','width=800,height=600,resizable=yes,scrollbars=yes')"><?php echo $this->escapeHtml($_track->getNumber()) ?></a>
+                <div id="shipment_tracking_info_response_<?php echo $_track->getId() ?>"></div>
+                <?php endif; ?>
+            </td>
+            <td class="col-delete last"><a class="action- delete" href="#" onclick="deleteTrackingNumber('<?php echo $this->getRemoveUrl($_track) ?>'); return false;"><span><?php echo __('Delete') ?></span></a></td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+<?php endif; ?>
+</table>
+<script type="text/javascript">
+require(['prototype'], function(){
+
+//<![CDATA[
+function selectCarrier(elem) {
+    var option = elem.options[elem.selectedIndex];
+    $('tracking_title').value = option.value && option.value != 'custom' ? option.text : '';
+}
+
+function deleteTrackingNumber(url) {
+    if (confirm('<?php echo __('Are you sure?') ?>')) {
+        submitAndReloadArea($('shipment_tracking_info').parentNode, url)
+    }
+}
+
+window.selectCarrier = selectCarrier;
+window.deleteTrackingNumber = deleteTrackingNumber;
+//]]>
+
+});
+</script>

@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -68,7 +65,7 @@ abstract class AbstractDb
     protected $_varPath = '';
 
     /**
-     * @var \Magento\Shell
+     * @var \Magento\Framework\Shell
      */
     protected $_shell;
 
@@ -80,13 +77,13 @@ abstract class AbstractDb
      * @param string $password
      * @param string $schema
      * @param string $varPath
-     * @param \Magento\Shell $shell
-     * @throws \Magento\Exception
+     * @param \Magento\Framework\Shell $shell
+     * @throws \Magento\Framework\Exception
      */
-    public function __construct($host, $user, $password, $schema, $varPath, \Magento\Shell $shell)
+    public function __construct($host, $user, $password, $schema, $varPath, \Magento\Framework\Shell $shell)
     {
         if (!is_dir($varPath) || !is_writable($varPath)) {
-            throw new \Magento\Exception("The specified '$varPath' is not a directory or not writable.");
+            throw new \Magento\Framework\Exception("The specified '{$varPath}' is not a directory or not writable.");
         }
         $this->_host = $host;
         $this->_user = $user;
@@ -100,6 +97,30 @@ abstract class AbstractDb
      * Remove all DB objects
      */
     abstract public function cleanup();
+
+    /**
+     * Get filename for setup db dump
+     *
+     * @return string
+     */
+    abstract protected function getSetupDbDumpFilename();
+
+    /**
+     * Is dump esxists
+     *
+     * @return bool
+     */
+    abstract public function isDbDumpExists();
+
+    /**
+     * Store setup db dump
+     */
+    abstract public function storeDbDump();
+
+    /**
+     * Restore db from setup db dump
+     */
+    abstract public function restoreFromDbDump();
 
     /**
      * Create file with sql script content.

@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Tax
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,8 +26,6 @@
 /**
  * Tax report resource model with aggregation by updated at
  *
- * @category    Magento
- * @package     Magento_Tax
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Tax\Model\Resource\Report\Tax;
@@ -38,6 +34,8 @@ class Updatedat extends \Magento\Tax\Model\Resource\Report\Tax\Createdat
 {
     /**
      * Resource initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -49,7 +47,7 @@ class Updatedat extends \Magento\Tax\Model\Resource\Report\Tax\Createdat
      *
      * @param mixed $from
      * @param mixed $to
-     * @return \Magento\Tax\Model\Resource\Report\Tax\Updatedat
+     * @return $this
      */
     public function aggregate($from = null, $to = null)
     {

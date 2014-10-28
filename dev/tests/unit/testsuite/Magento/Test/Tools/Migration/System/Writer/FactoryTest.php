@@ -18,19 +18,18 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category   Magento
- * @package    tools
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Tools\Migration\System\Writer;
 
-require_once realpath(__DIR__ . '/../../../../../../../../../')
-    . '/tools/Magento/Tools/Migration/System/Writer/Factory.php';
-require_once realpath(__DIR__ . '/../../../../../../../../../')
-    . '/tools/Magento/Tools/Migration/System/Writer/FileSystem.php';
 
+require_once realpath(
+    __DIR__ . '/../../../../../../../../../'
+) . '/tools/Magento/Tools/Migration/System/Writer/Factory.php';
+require_once realpath(
+    __DIR__ . '/../../../../../../../../../'
+) . '/tools/Magento/Tools/Migration/System/Writer/FileSystem.php';
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -46,6 +45,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function testGetWriterReturnsProperWriter()
     {
         $this->assertInstanceOf('Magento\Tools\Migration\System\Writer\FileSystem', $this->_model->getWriter('write'));
-        $this->assertInstanceOf('Magento\Tools\Migration\System\Writer\Memory', $this->_model->getWriter('someWriter'));
+        $this->assertInstanceOf(
+            'Magento\Tools\Migration\System\Writer\Memory',
+            $this->_model->getWriter('someWriter')
+        );
     }
 }

@@ -18,17 +18,14 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Review
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Review\Block\Adminhtml;
 
 /**
  * Review edit form
  */
-namespace Magento\Review\Block\Adminhtml;
-
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
@@ -41,27 +38,29 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
+     * Review model factory
+     *
      * @var \Magento\Review\Model\ReviewFactory
      */
     protected $_reviewFactory;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Review\Model\ReviewFactory $reviewFactory
      * @param \Magento\Review\Helper\Action\Pager $reviewActionPager
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Backend\Block\Widget\Context $context,
         \Magento\Review\Model\ReviewFactory $reviewFactory,
         \Magento\Review\Helper\Action\Pager $reviewActionPager,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Framework\Registry $registry,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
@@ -70,6 +69,11 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         parent::__construct($context, $data);
     }
 
+    /**
+     * Initialize edit review
+     *
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -86,105 +90,108 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         $prevId = $actionPager->getPreviousItemId($reviewId);
         $nextId = $actionPager->getNextItemId($reviewId);
         if ($prevId !== false) {
-            $this->addButton('previous', array(
-                'label' => __('Previous'),
-                'onclick' => 'setLocation(\'' . $this->getUrl('catalog/*/*', array('id' => $prevId)) . '\')'
-            ), 3, 10);
-
-            $this->addButton('save_and_previous', array(
-                'label'   => __('Save and Previous'),
-                'class'   => 'save',
-                'data_attribute'  => array(
-                    'mage-init' => array(
-                        'button' => array(
-                            'event' => 'save',
-                            'target' => '#edit_form',
-                            'eventData' => array(
-                                'action' => array(
-                                    'args' => array('next_item' => $prevId),
-                                ),
-                            ),
-                        ),
-                    ),
+            $this->addButton(
+                'previous',
+                array(
+                    'label' => __('Previous'),
+                    'onclick' => 'setLocation(\'' . $this->getUrl('review/*/*', array('id' => $prevId)) . '\')'
                 ),
-            ), 3, 11);
+                3,
+                10
+            );
+
+            $this->addButton(
+                'save_and_previous',
+                array(
+                    'label' => __('Save and Previous'),
+                    'class' => 'save',
+                    'data_attribute' => array(
+                        'mage-init' => array(
+                            'button' => array(
+                                'event' => 'save',
+                                'target' => '#edit_form',
+                                'eventData' => array('action' => array('args' => array('next_item' => $prevId)))
+                            )
+                        )
+                    )
+                ),
+                3,
+                11
+            );
         }
         if ($nextId !== false) {
-            $this->addButton('save_and_next', array(
-                'label'   => __('Save and Next'),
-                'class'   => 'save',
-                'data_attribute'  => array(
-                    'mage-init' => array(
-                        'button' => array(
-                            'event' => 'save',
-                            'target' => '#edit_form',
-                            'eventData' => array(
-                                'action' => array(
-                                    'args' => array('next_item' => $nextId),
-                                ),
-                            ),
-                        ),
-                    ),
+            $this->addButton(
+                'save_and_next',
+                array(
+                    'label' => __('Save and Next'),
+                    'class' => 'save',
+                    'data_attribute' => array(
+                        'mage-init' => array(
+                            'button' => array(
+                                'event' => 'save',
+                                'target' => '#edit_form',
+                                'eventData' => array('action' => array('args' => array('next_item' => $nextId)))
+                            )
+                        )
+                    )
                 ),
-            ), 3, 100);
+                3,
+                100
+            );
 
-            $this->addButton('next', array(
-                'label' => __('Next'),
-                'onclick' => 'setLocation(\'' . $this->getUrl('catalog/*/*', array('id' => $nextId)) . '\')'
-            ), 3, 105);
+            $this->addButton(
+                'next',
+                array(
+                    'label' => __('Next'),
+                    'onclick' => 'setLocation(\'' . $this->getUrl('review/*/*', array('id' => $nextId)) . '\')'
+                ),
+                3,
+                105
+            );
         }
-        $this->_updateButton('save', 'label', __('Save Review'));
-        $this->_updateButton('save', 'id', 'save_button');
-        $this->_updateButton('delete', 'label', __('Delete Review'));
+        $this->buttonList->update('save', 'label', __('Save Review'));
+        $this->buttonList->update('save', 'id', 'save_button');
+        $this->buttonList->update('delete', 'label', __('Delete Review'));
 
         if ($this->getRequest()->getParam('productId', false)) {
-            $this->_updateButton(
+            $this->buttonList->update(
                 'back',
                 'onclick',
-                'setLocation(\''
-                    . $this->getUrl(
-                        'catalog/product/edit',
-                        array('id' => $this->getRequest()->getParam('productId', false))
-                    )
-                    .'\')'
+                'setLocation(\'' . $this->getUrl(
+                    'catalog/product/edit',
+                    array('id' => $this->getRequest()->getParam('productId', false))
+                ) . '\')'
             );
         }
 
         if ($this->getRequest()->getParam('customerId', false)) {
-            $this->_updateButton(
+            $this->buttonList->update(
                 'back',
                 'onclick',
-                'setLocation(\''
-                    . $this->getUrl(
-                        'customer/index/edit',
-                        array('id' => $this->getRequest()->getParam('customerId', false))
-                    )
-                    .'\')'
+                'setLocation(\'' . $this->getUrl(
+                    'customer/index/edit',
+                    array('id' => $this->getRequest()->getParam('customerId', false))
+                ) . '\')'
             );
         }
 
         if ($this->getRequest()->getParam('ret', false) == 'pending') {
-            $this->_updateButton('back', 'onclick', 'setLocation(\'' . $this->getUrl('catalog/*/pending') .'\')' );
-            $this->_updateButton(
+            $this->buttonList->update('back', 'onclick', 'setLocation(\'' . $this->getUrl('catalog/*/pending') . '\')');
+            $this->buttonList->update(
                 'delete',
                 'onclick',
-                'deleteConfirm('
-                    . '\'' . __('Are you sure you want to do this?').'\' '
-                    . '\'' . $this->getUrl(
-                        '*/*/delete',
-                        array(
-                            $this->_objectId => $this->getRequest()->getParam($this->_objectId),
-                            'ret'           => 'pending',
-                        )
-                    ) . '\''
-                    . ')'
+                'deleteConfirm(' . '\'' . __(
+                    'Are you sure you want to do this?'
+                ) . '\' ' . '\'' . $this->getUrl(
+                    '*/*/delete',
+                    array($this->_objectId => $this->getRequest()->getParam($this->_objectId), 'ret' => 'pending')
+                ) . '\'' . ')'
             );
             $this->_coreRegistry->register('ret', 'pending');
         }
 
         if ($this->getRequest()->getParam($this->_objectId)) {
-            $reviewData = $this->_reviewFactory->create()
-                ->load($this->getRequest()->getParam($this->_objectId));
+            $reviewData = $this->_reviewFactory->create()->load($this->getRequest()->getParam($this->_objectId));
             $this->_coreRegistry->register('review_data', $reviewData);
         }
 
@@ -198,7 +205,12 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                         $(\'save_button\').disabled = true;
                         new Ajax.Updater(
                             "rating_detail",
-                            "' . $this->getUrl('catalog/*/ratingItems', array('_current'=>true)).'",
+                            "' .
+            $this->getUrl(
+                'review/*/ratingItems',
+                array('_current' => true)
+            ) .
+            '",
                             {
                                 parameters:Form.serializeElements(elements),
                                 evalScripts:true,
@@ -213,6 +225,11 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         ';
     }
 
+    /**
+     * Get edit review header text
+     *
+     * @return string
+     */
     public function getHeaderText()
     {
         $reviewData = $this->_coreRegistry->registry('review_data');

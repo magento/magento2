@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Theme
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,7 +27,9 @@
  */
 namespace Magento\Theme\Helper;
 
-class Storage extends \Magento\App\Helper\AbstractHelper
+use Magento\Framework\App\Filesystem\DirectoryList;
+
+class Storage extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Parameter name of node
@@ -83,7 +83,7 @@ class Storage extends \Magento\App\Helper\AbstractHelper
     /**
      * Magento filesystem
      *
-     * @var \Magento\Filesystem
+     * @var \Magento\Framework\Filesystem
      */
     protected $filesystem;
 
@@ -93,33 +93,33 @@ class Storage extends \Magento\App\Helper\AbstractHelper
     protected $_session;
 
     /**
-     * @var \Magento\View\Design\Theme\FlyweightFactory
+     * @var \Magento\Framework\View\Design\Theme\FlyweightFactory
      */
     protected $_themeFactory;
 
     /**
-     * @var \Magento\Filesystem\Directory\Write
+     * @var \Magento\Framework\Filesystem\Directory\Write
      */
     protected $mediaDirectoryWrite;
 
     /**
-     * @param \Magento\App\Helper\Context $context
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\Framework\App\Helper\Context $context
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Backend\Model\Session $session
-     * @param \Magento\View\Design\Theme\FlyweightFactory $themeFactory
+     * @param \Magento\Framework\View\Design\Theme\FlyweightFactory $themeFactory
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
-        \Magento\Filesystem $filesystem,
+        \Magento\Framework\App\Helper\Context $context,
+        \Magento\Framework\Filesystem $filesystem,
         \Magento\Backend\Model\Session $session,
-        \Magento\View\Design\Theme\FlyweightFactory $themeFactory
+        \Magento\Framework\View\Design\Theme\FlyweightFactory $themeFactory
     ) {
         parent::__construct($context);
         $this->filesystem = $filesystem;
         $this->_session = $session;
         $this->_themeFactory = $themeFactory;
-        $this->mediaDirectoryWrite = $this->filesystem->getDirectoryWrite(\Magento\Filesystem::MEDIA);
-        $this->mediaDirectoryWrite->create($this->getStorageRoot());
+        $this->mediaDirectoryWrite = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->mediaDirectoryWrite->create($this->mediaDirectoryWrite->getRelativePath($this->getStorageRoot()));
     }
 
     /**
@@ -169,9 +169,9 @@ class Storage extends \Magento\App\Helper\AbstractHelper
     public function getStorageRoot()
     {
         if (null === $this->_storageRoot) {
-            $this->_storageRoot = implode('/', array(
-                $this->_getTheme()->getCustomization()->getCustomizationPath(),
-                $this->getStorageType())
+            $this->_storageRoot = implode(
+                '/',
+                array($this->_getTheme()->getCustomization()->getCustomizationPath(), $this->getStorageType())
             );
         }
         return $this->_storageRoot;
@@ -197,7 +197,7 @@ class Storage extends \Magento\App\Helper\AbstractHelper
      * Get storage type
      *
      * @return string
-     * @throws \Magento\Exception
+     * @throws \Magento\Framework\Exception
      */
     public function getStorageType()
     {
@@ -207,7 +207,7 @@ class Storage extends \Magento\App\Helper\AbstractHelper
         );
         $type = (string)$this->_getRequest()->getParam(self::PARAM_CONTENT_TYPE);
         if (!in_array($type, $allowedTypes)) {
-            throw new \Magento\Exception('Invalid type');
+            throw new \Magento\Framework\Exception('Invalid type');
         }
         return $type;
     }
@@ -243,9 +243,7 @@ class Storage extends \Magento\App\Helper\AbstractHelper
             if ($path && $path !== self::NODE_ROOT) {
                 $path = $this->convertIdToPath($path);
 
-                if ($this->mediaDirectoryWrite->isDirectory($path)
-                    && 0 === strpos($path, $currentPath)
-                ) {
+                if ($this->mediaDirectoryWrite->isDirectory($path) && 0 === strpos($path, $currentPath)) {
                     $currentPath = $this->mediaDirectoryWrite->getRelativePath($path);
                 }
             }
@@ -262,27 +260,23 @@ class Storage extends \Magento\App\Helper\AbstractHelper
      */
     public function getThumbnailDirectory($path)
     {
-        return pathinfo($path, PATHINFO_DIRNAME) . '/'
-            . \Magento\Theme\Model\Wysiwyg\Storage::THUMBNAIL_DIRECTORY;
+        return pathinfo($path, PATHINFO_DIRNAME) . '/' . \Magento\Theme\Model\Wysiwyg\Storage::THUMBNAIL_DIRECTORY;
     }
 
     /**
      * Get thumbnail path in current directory by image name
      *
-     * @param $imageName
+     * @param string $imageName
      * @return string
      * @throws \InvalidArgumentException
      */
     public function getThumbnailPath($imageName)
     {
         $imagePath = $this->getCurrentPath() . '/' . $imageName;
-        if (!$this->mediaDirectoryWrite->isExist($imagePath)
-            || 0 !== strpos($imagePath, $this->getStorageRoot())
-        ) {
+        if (!$this->mediaDirectoryWrite->isExist($imagePath) || 0 !== strpos($imagePath, $this->getStorageRoot())) {
             throw new \InvalidArgumentException('The image not found.');
         }
-        return $this->getThumbnailDirectory($imagePath) . '/'
-            . pathinfo($imageName, PATHINFO_BASENAME);
+        return $this->getThumbnailDirectory($imagePath) . '/' . pathinfo($imageName, PATHINFO_BASENAME);
     }
 
     /**
@@ -296,17 +290,17 @@ class Storage extends \Magento\App\Helper\AbstractHelper
         $contentType = $this->_getRequest()->getParam(self::PARAM_CONTENT_TYPE);
         $node = $this->_getRequest()->getParam(self::PARAM_NODE);
         return array(
-            self::PARAM_THEME_ID     => $themeId,
+            self::PARAM_THEME_ID => $themeId,
             self::PARAM_CONTENT_TYPE => $contentType,
-            self::PARAM_NODE         => $node
+            self::PARAM_NODE => $node
         );
     }
 
     /**
      * Get allowed extensions by type
      *
-     * @return array
-     * @throws \Magento\Exception
+     * @return string[]
+     * @throws \Magento\Framework\Exception
      */
     public function getAllowedExtensionsByType()
     {
@@ -318,7 +312,7 @@ class Storage extends \Magento\App\Helper\AbstractHelper
                 $extensions = array('jpg', 'jpeg', 'gif', 'png', 'xbm', 'wbmp');
                 break;
             default:
-                throw new \Magento\Exception('Invalid type');
+                throw new \Magento\Framework\Exception('Invalid type');
         }
         return $extensions;
     }
@@ -327,7 +321,7 @@ class Storage extends \Magento\App\Helper\AbstractHelper
      * Get storage type name for display.
      *
      * @return string
-     * @throws \Magento\Exception
+     * @throws \Magento\Framework\Exception
      */
     public function getStorageTypeName()
     {
@@ -339,7 +333,7 @@ class Storage extends \Magento\App\Helper\AbstractHelper
                 $name = self::IMAGES;
                 break;
             default:
-                throw new \Magento\Exception('Invalid type');
+                throw new \Magento\Framework\Exception('Invalid type');
         }
 
         return $name;

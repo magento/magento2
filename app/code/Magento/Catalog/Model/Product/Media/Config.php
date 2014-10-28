@@ -18,35 +18,30 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Catalog\Model\Product\Media;
 
 /**
  * Catalog product media config
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Product\Media;
-
 class Config implements ConfigInterface
 {
     /**
      * Store manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $storeManager;
 
     /**
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      */
-    public function __construct(\Magento\Core\Model\StoreManagerInterface $storeManager) {
+    public function __construct(\Magento\Framework\StoreManagerInterface $storeManager)
+    {
         $this->storeManager = $storeManager;
     }
 
@@ -85,8 +80,7 @@ class Config implements ConfigInterface
      */
     public function getBaseMediaUrl()
     {
-        return $this->storeManager->getStore()
-            ->getBaseUrl(\Magento\Core\Model\Store::URL_TYPE_MEDIA) . 'catalog/product';
+        return $this->storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . 'catalog/product';
     }
 
     /**
@@ -105,8 +99,9 @@ class Config implements ConfigInterface
      */
     public function getBaseTmpMediaUrl()
     {
-        return $this->storeManager->getStore()
-            ->getBaseUrl(\Magento\Core\Model\Store::URL_TYPE_MEDIA) . 'tmp/' . $this->getBaseMediaUrlAddition();
+        return $this->storeManager->getStore()->getBaseUrl(
+            \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
+        ) . 'tmp/' . $this->getBaseMediaUrlAddition();
     }
 
     /**
@@ -128,7 +123,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @param $file
+     * @param string $file
      * @return string
      */
     public function getTmpMediaUrl($file)
@@ -160,7 +155,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @param $file
+     * @param string $file
      * @return string
      */
     public function getTmpMediaPath($file)
@@ -169,7 +164,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @param $file
+     * @param string $file
      * @return string
      */
     protected function _prepareFile($file)

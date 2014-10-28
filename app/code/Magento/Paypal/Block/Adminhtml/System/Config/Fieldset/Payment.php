@@ -18,19 +18,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Paypal
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Block\Adminhtml\System\Config\Fieldset;
 
 /**
  * Fieldset renderer for PayPal solution
  */
-namespace Magento\Paypal\Block\Adminhtml\System\Config\Fieldset;
-
-class Payment
-    extends \Magento\Backend\Block\System\Config\Form\Fieldset
+class Payment extends \Magento\Backend\Block\System\Config\Form\Fieldset
 {
     /**
      * @var \Magento\Backend\Model\Config
@@ -40,14 +36,14 @@ class Payment
     /**
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Backend\Model\Auth\Session $authSession
-     * @param \Magento\Core\Helper\Js $jsHelper
+     * @param \Magento\Framework\View\Helper\Js $jsHelper
      * @param \Magento\Backend\Model\Config $backendConfig
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
         \Magento\Backend\Model\Auth\Session $authSession,
-        \Magento\Core\Helper\Js $jsHelper,
+        \Magento\Framework\View\Helper\Js $jsHelper,
         \Magento\Backend\Model\Config $backendConfig,
         array $data = array()
     ) {
@@ -58,7 +54,7 @@ class Payment
     /**
      * Add custom css class
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
     protected function _getFrontendClass($element)
@@ -70,27 +66,31 @@ class Payment
     /**
      * Check whether current payment method is enabled
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return bool
      */
     protected function _isPaymentEnabled($element)
     {
         $groupConfig = $element->getGroup();
-        $activityPath = isset($groupConfig['activity_path']) ? $groupConfig['activity_path'] : '';
+        $activityPaths = isset($groupConfig['activity_path']) ? $groupConfig['activity_path'] : [];
 
-        if (empty($activityPath)) {
-            return false;
+        if (!is_array($activityPaths)) {
+            $activityPaths = [$activityPaths];
         }
 
-        $isPaymentEnabled = (string)$this->_backendConfig->getConfigDataValue($activityPath);
+        $isPaymentEnabled = false;
+        foreach ($activityPaths as $activityPath) {
+            $isPaymentEnabled = $isPaymentEnabled
+                || (bool)(string)$this->_backendConfig->getConfigDataValue($activityPath);
+        }
 
-        return (bool)$isPaymentEnabled;
+        return $isPaymentEnabled;
     }
 
     /**
      * Return header title part of html for payment solution
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
     protected function _getHeaderTitleHtml($element)
@@ -109,25 +109,36 @@ class Payment
         $disabledAttributeString = $this->_isPaymentEnabled($element) ? '' : ' disabled="disabled"';
         $disabledClassString = $this->_isPaymentEnabled($element) ? '' : ' disabled';
         $htmlId = $element->getHtmlId();
-        $html .= '<div class="button-container"><button type="button"' . $disabledAttributeString
-            . ' class="button action-configure'
-            . (empty($groupConfig['paypal_ec_separate']) ? '' : ' paypal-ec-separate')
-            . $disabledClassString . '" id="' . $htmlId
-            . '-head" onclick="paypalToggleSolution.call(this, \'' . $htmlId . "', '"
-            . $this->getUrl('adminhtml/*/state') . '\'); return false;"><span class="state-closed">'
-            . __('Configure') . '</span><span class="state-opened">'
-            . __('Close') . '</span></button>';
+        $html .= '<div class="button-container"><button type="button"' .
+            $disabledAttributeString .
+            ' class="button action-configure' .
+            (empty($groupConfig['paypal_ec_separate']) ? '' : ' paypal-ec-separate') .
+            $disabledClassString .
+            '" id="' .
+            $htmlId .
+            '-head" onclick="paypalToggleSolution.call(this, \'' .
+            $htmlId .
+            "', '" .
+            $this->getUrl(
+                'adminhtml/*/state'
+            ) . '\'); return false;"><span class="state-closed">' . __(
+                'Configure'
+            ) . '</span><span class="state-opened">' . __(
+                'Close'
+            ) . '</span></button>';
 
         if (!empty($groupConfig['more_url'])) {
-            $html .= '<a class="link-more" href="' . $groupConfig['more_url'] . '" target="_blank">'
-                . __('Learn More') . '</a>';
+            $html .= '<a class="link-more" href="' . $groupConfig['more_url'] . '" target="_blank">' . __(
+                'Learn More'
+            ) . '</a>';
         }
         if (!empty($groupConfig['demo_url'])) {
-            $html .= '<a class="link-demo" href="' . $groupConfig['demo_url'] . '" target="_blank">'
-                . __('View Demo') . '</a>';
+            $html .= '<a class="link-demo" href="' . $groupConfig['demo_url'] . '" target="_blank">' . __(
+                'View Demo'
+            ) . '</a>';
         }
 
-            $html .= '</div></div>';
+        $html .= '</div></div>';
 
         return $html;
     }
@@ -135,7 +146,7 @@ class Payment
     /**
      * Return header comment part of html for payment solution
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
     protected function _getHeaderCommentHtml($element)
@@ -146,8 +157,8 @@ class Payment
     /**
      * Get collapsed state on-load
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
-     * @return bool
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @return false
      */
     protected function _isCollapseState($element)
     {

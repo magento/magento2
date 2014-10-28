@@ -18,54 +18,50 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Bundle
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Bundle\Model\Sales\Order\Pdf\Items;
+
+use Magento\Catalog\Model\Product\Type\AbstractType;
 
 /**
  * Sales Order Pdf Items renderer
- *
- * @category   Magento
- * @package    Magento_Bundle
- * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Bundle\Model\Sales\Order\Pdf\Items;
-
 abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
 {
     /**
-     * Getting all available childs for Invoice, Shipmen or Creditmemo item
+     * Getting all available children for Invoice, Shipment or CreditMemo item
      *
-     * @param \Magento\Object $item
+     * @param \Magento\Framework\Object $item
      * @return array
      */
     public function getChilds($item)
     {
-        $_itemsArray = array();
+        $itemsArray = array();
 
+        $items = null;
         if ($item instanceof \Magento\Sales\Model\Order\Invoice\Item) {
-            $_items = $item->getInvoice()->getAllItems();
-        } else if ($item instanceof \Magento\Sales\Model\Order\Shipment\Item) {
-            $_items = $item->getShipment()->getAllItems();
-        } else if ($item instanceof \Magento\Sales\Model\Order\Creditmemo\Item) {
-            $_items = $item->getCreditmemo()->getAllItems();
+            $items = $item->getInvoice()->getAllItems();
+        } elseif ($item instanceof \Magento\Sales\Model\Order\Shipment\Item) {
+            $items = $item->getShipment()->getAllItems();
+        } elseif ($item instanceof \Magento\Sales\Model\Order\Creditmemo\Item) {
+            $items = $item->getCreditmemo()->getAllItems();
         }
 
-        if ($_items) {
-            foreach ($_items as $_item) {
-                $parentItem = $_item->getOrderItem()->getParentItem();
+        if ($items) {
+            foreach ($items as $value) {
+                $parentItem = $value->getOrderItem()->getParentItem();
                 if ($parentItem) {
-                    $_itemsArray[$parentItem->getId()][$_item->getOrderItemId()] = $_item;
+                    $itemsArray[$parentItem->getId()][$value->getOrderItemId()] = $value;
                 } else {
-                    $_itemsArray[$_item->getOrderItem()->getId()][$_item->getOrderItemId()] = $_item;
+                    $itemsArray[$value->getOrderItem()->getId()][$value->getOrderItemId()] = $value;
                 }
             }
         }
 
-        if (isset($_itemsArray[$item->getOrderItem()->getId()])) {
-            return $_itemsArray[$item->getOrderItem()->getId()];
+        if (isset($itemsArray[$item->getOrderItem()->getId()])) {
+            return $itemsArray[$item->getOrderItem()->getId()];
         } else {
             return null;
         }
@@ -74,7 +70,7 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
     /**
      * Retrieve is Shipment Separately flag for Item
      *
-     * @param \Magento\Object $item
+     * @param \Magento\Framework\Object $item
      * @return bool
      */
     public function isShipmentSeparately($item = null)
@@ -83,35 +79,25 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
             if ($item->getOrderItem()) {
                 $item = $item->getOrderItem();
             }
-
             $parentItem = $item->getParentItem();
             if ($parentItem) {
                 $options = $parentItem->getProductOptions();
                 if ($options) {
-                    if (isset($options['shipment_type'])
-                        && $options['shipment_type'] == \Magento\Catalog\Model\Product\Type\AbstractType::SHIPMENT_SEPARATELY) {
-                        return true;
-                    } else {
-                        return false;
-                    }
+                    return (isset($options['shipment_type'])
+                        && $options['shipment_type'] == AbstractType::SHIPMENT_SEPARATELY);
                 }
             } else {
                 $options = $item->getProductOptions();
                 if ($options) {
-                    if (isset($options['shipment_type'])
-                        && $options['shipment_type'] == \Magento\Catalog\Model\Product\Type\AbstractType::SHIPMENT_SEPARATELY) {
-                        return false;
-                    } else {
-                        return true;
-                    }
+                    return !(isset($options['shipment_type'])
+                        && $options['shipment_type'] == AbstractType::SHIPMENT_SEPARATELY);
                 }
             }
         }
 
         $options = $this->getOrderItem()->getProductOptions();
         if ($options) {
-            if (isset($options['shipment_type'])
-                && $options['shipment_type'] == \Magento\Catalog\Model\Product\Type\AbstractType::SHIPMENT_SEPARATELY) {
+            if (isset($options['shipment_type']) && $options['shipment_type'] == AbstractType::SHIPMENT_SEPARATELY) {
                 return true;
             }
         }
@@ -121,7 +107,7 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
     /**
      * Retrieve is Child Calculated
      *
-     * @param \Magento\Object $item
+     * @param \Magento\Framework\Object $item
      * @return bool
      */
     public function isChildCalculated($item = null)
@@ -130,29 +116,18 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
             if ($item->getOrderItem()) {
                 $item = $item->getOrderItem();
             }
-
             $parentItem = $item->getParentItem();
             if ($parentItem) {
                 $options = $parentItem->getProductOptions();
                 if ($options) {
-                    if (isset($options['product_calculations']) &&
-                        $options['product_calculations'] == \Magento\Catalog\Model\Product\Type\AbstractType::CALCULATE_CHILD
-                    ) {
-                        return true;
-                    } else {
-                        return false;
-                    }
+                    return (isset($options['product_calculations'])
+                        && $options['product_calculations'] == AbstractType::CALCULATE_CHILD);
                 }
             } else {
                 $options = $item->getProductOptions();
                 if ($options) {
-                    if (isset($options['product_calculations']) &&
-                        $options['product_calculations'] == \Magento\Catalog\Model\Product\Type\AbstractType::CALCULATE_CHILD
-                    ) {
-                        return false;
-                    } else {
-                        return true;
-                    }
+                    return !(isset($options['product_calculations'])
+                        && $options['product_calculations'] == AbstractType::CALCULATE_CHILD);
                 }
             }
         }
@@ -160,7 +135,8 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
         $options = $this->getOrderItem()->getProductOptions();
         if ($options) {
             if (isset($options['product_calculations'])
-                && $options['product_calculations'] == \Magento\Catalog\Model\Product\Type\AbstractType::CALCULATE_CHILD) {
+                && $options['product_calculations'] == AbstractType::CALCULATE_CHILD
+            ) {
                 return true;
             }
         }
@@ -170,16 +146,14 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
     /**
      * Retrieve Bundle Options
      *
-     * @param \Magento\Object $item
+     * @param \Magento\Framework\Object $item
      * @return array
      */
     public function getBundleOptions($item = null)
     {
         $options = $this->getOrderItem()->getProductOptions();
-        if ($options) {
-            if (isset($options['bundle_options'])) {
-                return $options['bundle_options'];
-            }
+        if ($options && isset($options['bundle_options'])) {
+            return $options['bundle_options'];
         }
         return array();
     }
@@ -187,7 +161,7 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
     /**
      * Retrieve Selection attributes
      *
-     * @param \Magento\Object $item
+     * @param \Magento\Framework\Object $item
      * @return mixed
      */
     public function getSelectionAttributes($item)
@@ -206,13 +180,12 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
     /**
      * Retrieve Order options
      *
-     * @param \Magento\Object $item
+     * @param \Magento\Framework\Object $item
      * @return array
      */
     public function getOrderOptions($item = null)
     {
         $result = array();
-
         $options = $this->getOrderItem()->getProductOptions();
         if ($options) {
             if (isset($options['options'])) {
@@ -250,17 +223,19 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
      */
     public function getValueHtml($item)
     {
-        $result = strip_tags($item->getName());
+        $result = $this->filterManager->stripTags($item->getName());
         if (!$this->isShipmentSeparately($item)) {
             $attributes = $this->getSelectionAttributes($item);
             if ($attributes) {
-                $result =  sprintf('%d', $attributes['qty']) . ' x ' . $result;
+                $result = $this->filterManager->sprintf($attributes['qty'], array('format' => '%d')) . ' x ' . $result;
             }
         }
         if (!$this->isChildCalculated($item)) {
             $attributes = $this->getSelectionAttributes($item);
             if ($attributes) {
-                $result .= " " . strip_tags($this->getOrderItem()->getOrder()->formatPrice($attributes['price']));
+                $result .= " " . $this->filterManager->stripTags(
+                    $this->getOrderItem()->getOrder()->formatPrice($attributes['price'])
+                );
             }
         }
         return $result;
@@ -274,8 +249,9 @@ abstract class AbstractItems extends \Magento\Sales\Model\Order\Pdf\Items\Abstra
      */
     public function canShowPriceInfo($item)
     {
-        if (($item->getOrderItem()->getParentItem() && $this->isChildCalculated())
-                || (!$item->getOrderItem()->getParentItem() && !$this->isChildCalculated())) {
+        if ($item->getOrderItem()->getParentItem() && $this->isChildCalculated() ||
+            !$item->getOrderItem()->getParentItem() && !$this->isChildCalculated()
+        ) {
             return true;
         }
         return false;

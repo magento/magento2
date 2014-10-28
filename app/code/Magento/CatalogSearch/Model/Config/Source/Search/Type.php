@@ -1,5 +1,7 @@
 <?php
 /**
+ * Catalog search types
+ *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -18,37 +20,26 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_CatalogSearch
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
-/**
- * Catalog search types
- *
- * @category   Magento
- * @package    Magento_CatalogSearch
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\CatalogSearch\Model\Config\Source\Search;
 
-class Type implements \Magento\Core\Model\Option\ArrayInterface
+class Type implements \Magento\Framework\Option\ArrayInterface
 {
+    /**
+     * @return array
+     */
     public function toOptionArray()
     {
         $types = array(
-            \Magento\CatalogSearch\Model\Fulltext::SEARCH_TYPE_LIKE     => 'Like',
+            \Magento\CatalogSearch\Model\Fulltext::SEARCH_TYPE_LIKE => 'Like',
             \Magento\CatalogSearch\Model\Fulltext::SEARCH_TYPE_FULLTEXT => 'Fulltext',
-            \Magento\CatalogSearch\Model\Fulltext::SEARCH_TYPE_COMBINE  => 'Combine (Like and Fulltext)',
+            \Magento\CatalogSearch\Model\Fulltext::SEARCH_TYPE_COMBINE => 'Combine (Like and Fulltext)'
         );
         $options = array();
         foreach ($types as $k => $v) {
-            $options[] = array(
-                'value' => $k,
-                'label' => $v
-            );
+            $options[] = array('value' => $k, 'label' => $v);
         }
         return $options;
     }

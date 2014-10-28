@@ -23,11 +23,10 @@
  */
 namespace Magento\CatalogRule\Model\Resource\Grid;
 
-class Collection
-    extends \Magento\CatalogRule\Model\Resource\Rule\Collection
+class Collection extends \Magento\CatalogRule\Model\Resource\Rule\Collection
 {
     /**
-     * @return $this|\Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+     * @return $this
      */
     protected function _initSelect()
     {

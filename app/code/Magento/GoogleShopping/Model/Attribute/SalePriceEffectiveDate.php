@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_GoogleShopping
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,8 +25,6 @@
 /**
  * Sale price effective date attribute model.
  *
- * @category   Magento
- * @package    Magento_GoogleShopping
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\GoogleShopping\Model\Attribute;
@@ -39,8 +35,8 @@ class SalePriceEffectiveDate extends \Magento\GoogleShopping\Model\Attribute\Def
      * Set current attribute to entry (for specified product)
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @param \Magento\Gdata\Gshopping\Entry $entry
-     * @return \Magento\Gdata\Gshopping\Entry
+     * @param \Magento\Framework\Gdata\Gshopping\Entry $entry
+     * @return \Magento\Framework\Gdata\Gshopping\Entry
      */
     public function convertAttribute($product, $entry)
     {
@@ -52,10 +48,10 @@ class SalePriceEffectiveDate extends \Magento\GoogleShopping\Model\Attribute\Def
 
         $from = $to = null;
         if (!empty($fromValue) && \Zend_Date::isDate($fromValue, \Zend_Date::ATOM)) {
-            $from = new \Zend_Date($fromValue, \Zend_Date::ATOM);
+            $from = new \Magento\Framework\Stdlib\DateTime\Date($fromValue, \Zend_Date::ATOM);
         }
         if (!empty($toValue) && \Zend_Date::isDate($toValue, \Zend_Date::ATOM)) {
-            $to = new \Zend_Date($toValue, \Zend_Date::ATOM);
+            $to = new \Magento\Framework\Stdlib\DateTime\Date($toValue, \Zend_Date::ATOM);
         }
 
         $dateString = null;
@@ -71,7 +67,7 @@ class SalePriceEffectiveDate extends \Magento\GoogleShopping\Model\Attribute\Def
 
         // if we have only "to" date, use "now" date for "from"
         if (is_null($from) && !is_null($to)) {
-            $from = new \Zend_Date();
+            $from = new \Magento\Framework\Stdlib\DateTime\Date();
             // if "now" date is earlier than "to" date
             if ($from->isEarlier($to)) {
                 $dateString = $from->toString(\Zend_Date::ATOM) . '/' . $to->toString(\Zend_Date::ATOM);

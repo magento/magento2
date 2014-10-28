@@ -18,17 +18,21 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    tests
- * @package     static
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Test\Js;
+
+/**
+ * Duplicating the same namespace in the "use" below is a workaround to comply with
+ * \Magento\Test\Integrity\ClassesTest::testClassReferences()
+ */
+use Magento\TestFramework\Utility\Files;
+use Magento\TestFramework\Utility\AggregateInvoker;
 
 /**
  * JSHint static code analysis tests for javascript files
  */
-namespace Magento\Test\Js;
-
 class LiveCodeTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -72,14 +76,14 @@ class LiveCodeTest extends \PHPUnit_Framework_TestCase
      */
     public static function setUpBeforeClass()
     {
-        $reportDir = \Magento\TestFramework\Utility\Files::init()->getPathToSource() . '/dev/tests/static/report';
+        $reportDir = Files::init()->getPathToSource() . '/dev/tests/static/report';
         if (!is_dir($reportDir)) {
             mkdir($reportDir, 0777);
         }
         self::$_reportFile = $reportDir . '/js_report.txt';
         @unlink(self::$_reportFile);
-        $whiteList = self::_readLists(__DIR__ . '/_files/whitelist/*.txt');
-        $blackList = self::_readLists(__DIR__ . '/_files/blacklist/*.txt');
+        $whiteList = Files::readLists(__DIR__ . '/_files/whitelist/*.txt');
+        $blackList = Files::readLists(__DIR__ . '/_files/blacklist/*.txt');
         foreach ($blackList as $listFiles) {
             self::$_blackListJsFiles = array_merge(self::$_blackListJsFiles, self::_scanJsFile($listFiles));
         }
@@ -95,7 +99,7 @@ class LiveCodeTest extends \PHPUnit_Framework_TestCase
 
     public function testCodeJsHint()
     {
-        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker = new AggregateInvoker($this);
         $invoker(
             /**
              * @param string $filename
@@ -127,26 +131,5 @@ class LiveCodeTest extends \PHPUnit_Framework_TestCase
             return array($value);
         };
         return array_map($map, self::$_whiteListJsFiles);
-    }
-
-    /**
-     * Read all text files by specified glob pattern and combine them into an array of valid files/directories
-     *
-     * The Magento root path is prepended to all (non-empty) entries
-     *
-     * @param string $globPattern
-     * @return array
-     */
-    protected static function _readLists($globPattern)
-    {
-        $result = array();
-        foreach (glob($globPattern) as $list) {
-            $result = array_merge($result, file($list));
-        }
-        $map = function ($value) {
-            return trim($value) ?
-                \Magento\TestFramework\Utility\Files::init()->getPathToSource() . '/' . trim($value) : '';
-        };
-        return array_filter(array_map($map, $result), 'file_exists');
     }
 }

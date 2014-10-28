@@ -18,27 +18,22 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Directory
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Directory\Model\Resource\Country\Format;
 
 /**
  * \Directory country format resource model
  *
- * @category    Magento
- * @package     Magento_Directory
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Directory\Model\Resource\Country\Format;
-
-class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Define main table
      *
+     * @return void
      */
     protected function _construct()
     {

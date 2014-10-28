@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\I18n\Code\Parser\Adapter\Php\Tokenizer;
 
 use Magento\Tools\I18n\Code\Parser\Adapter\Php\Tokenizer;
@@ -53,7 +52,7 @@ class PhraseCollector
     /**
      * Construct
      *
-     * @param \Magento\Tools\I18n\Code\Parser\Adapter\Php\Tokenizer $tokenizer
+     * @param Tokenizer $tokenizer
      */
     public function __construct(Tokenizer $tokenizer)
     {
@@ -74,6 +73,7 @@ class PhraseCollector
      * Parse given files for phrase
      *
      * @param string $file
+     * @return void
      */
     public function parse($file)
     {
@@ -87,6 +87,8 @@ class PhraseCollector
 
     /**
      * Extract phrases from given tokens. e.g.: __('phrase', ...)
+     *
+     * @return void
      */
     protected function _extractPhrases()
     {
@@ -130,6 +132,7 @@ class PhraseCollector
      * @param int $argumentsAmount
      * @param \SplFileInfo $file
      * @param int $line
+     * @return void
      */
     protected function _addPhrase($phrase, $argumentsAmount, $file, $line)
     {
@@ -137,7 +140,7 @@ class PhraseCollector
             'phrase' => $phrase,
             'arguments' => $argumentsAmount,
             'file' => $file,
-            'line' => $line,
+            'line' => $line
         );
     }
 }

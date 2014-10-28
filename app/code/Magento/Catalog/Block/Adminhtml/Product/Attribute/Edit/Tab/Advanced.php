@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Adminhtml
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,41 +26,42 @@
 /**
  * Product attribute add/edit form main tab
  *
- * @category   Magento
- * @package    Magento_Catalog
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab;
 
-class Advanced
-    extends \Magento\Backend\Block\Widget\Form\Generic
+use Magento\Backend\Block\Widget\Form\Generic;
+use Magento\Backend\Model\Config\Source\Yesno;
+use Magento\Eav\Helper\Data;
+
+class Advanced extends Generic
 {
     /**
      * Eav data
      *
-     * @var \Magento\Eav\Helper\Data
+     * @var Data
      */
     protected $_eavData = null;
 
     /**
-     * @var \Magento\Backend\Model\Config\Source\Yesno
+     * @var Yesno
      */
     protected $_yesNo;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Backend\Model\Config\Source\Yesno $yesNo
-     * @param \Magento\Eav\Helper\Data $eavData
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Data\FormFactory $formFactory
+     * @param Yesno $yesNo
+     * @param Data $eavData
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Data\FormFactory $formFactory,
-        \Magento\Backend\Model\Config\Source\Yesno $yesNo,
-        \Magento\Eav\Helper\Data $eavData,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Data\FormFactory $formFactory,
+        Yesno $yesNo,
+        Data $eavData,
         array $data = array()
     ) {
         $this->_yesNo = $yesNo;
@@ -73,24 +72,19 @@ class Advanced
     /**
      * Adding product form elements for editing attribute
      *
-     * @return \Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Advanced
+     * @return $this
      */
     protected function _prepareForm()
     {
         $attributeObject = $this->getAttributeObject();
 
-        $form = $this->_formFactory->create(array('data' => array(
-            'id' => 'edit_form',
-            'action' => $this->getData('action'),
-            'method' => 'post'
-        )));
+        $form = $this->_formFactory->create(
+            array('data' => array('id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post'))
+        );
 
         $fieldset = $form->addFieldset(
             'advanced_fieldset',
-            array(
-                'legend' => __('Advanced Attribute Properties'),
-                'collapsable' => true
-            )
+            array('legend' => __('Advanced Attribute Properties'), 'collapsable' => true)
         );
 
         $yesno = $this->_yesNo->toOptionArray();
@@ -110,7 +104,7 @@ class Advanced
                     'For internal use. Must be unique with no spaces. Maximum length of attribute code must be less than %1 symbols',
                     \Magento\Eav\Model\Entity\Attribute::ATTRIBUTE_CODE_MAX_LENGTH
                 ),
-                'class' => $validateClass,
+                'class' => $validateClass
             )
         );
 
@@ -121,7 +115,7 @@ class Advanced
                 'name' => 'default_value_text',
                 'label' => __('Default Value'),
                 'title' => __('Default Value'),
-                'value' => $attributeObject->getDefaultValue(),
+                'value' => $attributeObject->getDefaultValue()
             )
         );
 
@@ -133,11 +127,11 @@ class Advanced
                 'label' => __('Default Value'),
                 'title' => __('Default Value'),
                 'values' => $yesno,
-                'value' => $attributeObject->getDefaultValue(),
+                'value' => $attributeObject->getDefaultValue()
             )
         );
 
-        $dateFormat = $this->_locale->getDateFormat(\Magento\Core\Model\LocaleInterface::FORMAT_TYPE_SHORT);
+        $dateFormat = $this->_localeDate->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
         $fieldset->addField(
             'default_value_date',
             'date',
@@ -158,7 +152,7 @@ class Advanced
                 'name' => 'default_value_textarea',
                 'label' => __('Default Value'),
                 'title' => __('Default Value'),
-                'value' => $attributeObject->getDefaultValue(),
+                'value' => $attributeObject->getDefaultValue()
             )
         );
 
@@ -170,7 +164,7 @@ class Advanced
                 'label' => __('Unique Value'),
                 'title' => __('Unique Value (not shared with other products)'),
                 'note' => __('Not shared with other products'),
-                'values' => $yesno,
+                'values' => $yesno
             )
         );
 
@@ -181,9 +175,7 @@ class Advanced
                 'name' => 'frontend_class',
                 'label' => __('Input Validation for Store Owner'),
                 'title' => __('Input Validation for Store Owner'),
-                'values' => $this->_eavData->getFrontendClasses(
-                    $attributeObject->getEntityType()->getEntityTypeCode()
-                )
+                'values' => $this->_eavData->getFrontendClasses($attributeObject->getEntityType()->getEntityTypeCode())
             )
         );
 
@@ -194,32 +186,31 @@ class Advanced
             }
         }
 
-        $yesnoSource = $this->_yesNo->toOptionArray();
-
         $scopes = array(
-            \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_STORE =>__('Store View'),
-            \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_WEBSITE =>__('Website'),
-            \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_GLOBAL =>__('Global'),
+            \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_STORE => __('Store View'),
+            \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_WEBSITE => __('Website'),
+            \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_GLOBAL => __('Global')
         );
 
-        if ($attributeObject->getAttributeCode() == 'status' || $attributeObject->getAttributeCode() == 'tax_class_id') {
+        if ($attributeObject->getAttributeCode() == 'status' || $attributeObject->getAttributeCode() == 'tax_class_id'
+        ) {
             unset($scopes[\Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_STORE]);
         }
 
-        $fieldset->addField('is_global', 'select', array(
-            'name'  => 'is_global',
-            'label' => __('Scope'),
-            'title' => __('Scope'),
-            'note'  => __('Declare attribute value saving scope'),
-            'values'=> $scopes
-        ), 'attribute_code');
+        $fieldset->addField(
+            'is_global',
+            'select',
+            array(
+                'name' => 'is_global',
+                'label' => __('Scope'),
+                'title' => __('Scope'),
+                'note' => __('Declare attribute value saving scope'),
+                'values' => $scopes
+            ),
+            'attribute_code'
+        );
 
-
-        $fieldset->addField('is_configurable', 'select', array(
-            'name' => 'is_configurable',
-            'label' => __('Use To Create Configurable Product'),
-            'values' => $yesnoSource,
-        ));
+        $this->_eventManager->dispatch('product_attribute_form_build', array('form' => $form));
         $this->setForm($form);
         return $this;
     }
@@ -227,7 +218,7 @@ class Advanced
     /**
      * Initialize form fileds values
      *
-     * @return \Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Advanced
+     * @return $this
      */
     protected function _initFormValues()
     {
@@ -238,7 +229,7 @@ class Advanced
     /**
      * Retrieve attribute object from registry
      *
-     * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
+     * @return mixed
      */
     private function getAttributeObject()
     {

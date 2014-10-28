@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config>
+    <connection name="connection_one">
+        <dbName>db_one</dbName>
+    </connection>
+    <connection name="connection_two">
+        <dbName>db_two</dbName>
+    </connection>
+    <resource name="resource_one" connection="connection_one"/>
+    <resource name="resource_two" connection="connection_two"/>
+    <cache>
+        <frontend name="cache_frontend_one">
+            <backend>blackHole</backend>
+        </frontend>
+        <frontend name="cache_frontend_two">
+            <backend>file</backend>
+        </frontend>
+        <type name="cache_type_one" frontend="cache_frontend_one"/>
+        <type name="cache_type_two" frontend="cache_frontend_two"/>
+    </cache>
+    <arbitrary_one>Value One</arbitrary_one>
+    <arbitrary_two>Value Two</arbitrary_two>
+    <huge_nested_level>
+        <level_one>
+            <level_two>
+                <level_three>
+                    <level_four>
+                        <level_five>Level Five Data</level_five>
+                    </level_four>
+                </level_three>
+            </level_two>
+        </level_one>
+    </huge_nested_level>
+</config>

@@ -18,31 +18,28 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Downloadable
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Downloadable\Model\Resource\Link\Purchased\Item;
 
 /**
  * Downloadable links purchased items resource collection
  *
- * @category    Magento
- * @package     Magento_Downloadable
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Downloadable\Model\Resource\Link\Purchased\Item;
-
-class Collection
-    extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Init resource model
      *
+     * @return void
      */
     protected function _construct()
     {
-        $this->_init('Magento\Downloadable\Model\Link\Purchased\Item', 'Magento\Downloadable\Model\Resource\Link\Purchased\Item');
+        $this->_init(
+            'Magento\Downloadable\Model\Link\Purchased\Item',
+            'Magento\Downloadable\Model\Resource\Link\Purchased\Item'
+        );
     }
 }

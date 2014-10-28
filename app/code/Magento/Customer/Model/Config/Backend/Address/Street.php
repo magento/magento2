@@ -18,62 +18,63 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Customer\Model\Config\Backend\Address;
 
 /**
- * Customer Address Street Model
+ * Line count config model for customer address street attribute
  *
  * @method string getWebsiteCode
  */
-namespace Magento\Customer\Model\Config\Backend\Address;
-
-class Street extends \Magento\Core\Model\Config\Value
+class Street extends \Magento\Framework\App\Config\Value
 {
     /**
      * @var \Magento\Eav\Model\Config
      */
     protected $_eavConfig;
 
+    /** @var \Magento\Framework\StoreManagerInterface */
+    protected $_storeManager;
+
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Config $config
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Config $config,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_eavConfig = $eavConfig;
-        parent::__construct($context, $registry, $storeManager, $config, $resource, $resourceCollection, $data);
+        parent::__construct($context, $registry, $config, $resource, $resourceCollection, $data);
+        $this->_storeManager = $storeManager;
     }
 
     /**
      * Actions after save
      *
-     * @return \Magento\Customer\Model\Config\Backend\Address\Street
+     * @return $this
      */
     protected function _afterSave()
     {
         $attribute = $this->_eavConfig->getAttribute('customer_address', 'street');
-        $value  = $this->getValue();
+        $value = $this->getValue();
         switch ($this->getScope()) {
-            case 'websites':
-                $website = $this->_storeManager->getWebsite($this->getWebsiteCode());
+            case \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES:
+                $website = $this->_storeManager->getWebsite($this->getScopeCode());
                 $attribute->setWebsite($website);
                 $attribute->load($attribute->getId());
                 if ($attribute->getData('multiline_count') != $value) {
@@ -81,7 +82,7 @@ class Street extends \Magento\Core\Model\Config\Value
                 }
                 break;
 
-            case 'default':
+            case \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT:
                 $attribute->setData('multiline_count', $value);
                 break;
         }
@@ -92,15 +93,15 @@ class Street extends \Magento\Core\Model\Config\Value
     /**
      * Processing object after delete data
      *
-     * @return \Magento\Core\Model\AbstractModel
+     * @return \Magento\Framework\Model\AbstractModel
      */
     protected function _afterDelete()
     {
         $result = parent::_afterDelete();
 
-        if ($this->getScope() == 'websites') {
+        if ($this->getScope() == \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES) {
             $attribute = $this->_eavConfig->getAttribute('customer_address', 'street');
-            $website = $this->_storeManager->getWebsite($this->getWebsiteCode());
+            $website = $this->_storeManager->getWebsite($this->getScopeCode());
             $attribute->setWebsite($website);
             $attribute->load($attribute->getId());
             $attribute->setData('scope_multiline_count', null);

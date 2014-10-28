@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Adminhtml
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,38 +26,39 @@
 /**
  * Catalog product gallery attribute
  *
- * @category   Magento
- * @package    Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 
-class Gallery extends \Magento\Data\Form\Element\AbstractElement
+use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Eav\Model\Entity\Attribute;
+
+class Gallery extends AbstractElement
 {
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\View\LayoutInterface
+     * @var \Magento\Framework\View\LayoutInterface
      */
     protected $_layout;
 
     /**
-     * @param \Magento\Data\Form\Element\Factory $factoryElement
-     * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
-     * @param \Magento\Escaper $escaper
-     * @param \Magento\View\LayoutInterface $layout
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Data\Form\Element\Factory $factoryElement
+     * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
+     * @param \Magento\Framework\Escaper $escaper
+     * @param \Magento\Framework\View\LayoutInterface $layout
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param array $data
      */
     public function __construct(
-        \Magento\Data\Form\Element\Factory $factoryElement,
-        \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
-        \Magento\Escaper $escaper,
-        \Magento\View\LayoutInterface $layout,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Data\Form\Element\Factory $factoryElement,
+        \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection,
+        \Magento\Framework\Escaper $escaper,
+        \Magento\Framework\View\LayoutInterface $layout,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         $data = array()
     ) {
         $this->_layout = $layout;
@@ -67,6 +66,9 @@ class Gallery extends \Magento\Data\Form\Element\AbstractElement
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
     }
 
+    /**
+     * @return string
+     */
     public function getElementHtml()
     {
         $html = $this->getContentHtml();
@@ -89,6 +91,9 @@ class Gallery extends \Magento\Data\Form\Element\AbstractElement
         return $content->toHtml();
     }
 
+    /**
+     * @return string
+     */
     public function getLabel()
     {
         return '';
@@ -97,7 +102,7 @@ class Gallery extends \Magento\Data\Form\Element\AbstractElement
     /**
      * Check "Use default" checkbox display availability
      *
-     * @param \Magento\Eav\Model\Entity\Attribute $attribute
+     * @param Attribute $attribute
      * @return bool
      */
     public function canDisplayUseDefault($attribute)
@@ -112,7 +117,7 @@ class Gallery extends \Magento\Data\Form\Element\AbstractElement
     /**
      * Check default value usage fact
      *
-     * @param \Magento\Eav\Model\Entity\Attribute $attribute
+     * @param Attribute $attribute
      * @return bool
      */
     public function usedDefault($attribute)
@@ -122,8 +127,9 @@ class Gallery extends \Magento\Data\Form\Element\AbstractElement
 
         if (!$this->getDataObject()->getExistsStoreValueFlag($attributeCode)) {
             return true;
-        } else if ($this->getValue() == $defaultValue &&
-                   $this->getDataObject()->getStoreId() != $this->_getDefaultStoreId()) {
+        } elseif ($this->getValue() == $defaultValue &&
+            $this->getDataObject()->getStoreId() != $this->_getDefaultStoreId()
+        ) {
             return false;
         }
         if ($defaultValue === false && !$attribute->getIsRequired() && $this->getValue()) {
@@ -137,7 +143,7 @@ class Gallery extends \Magento\Data\Form\Element\AbstractElement
      *
      * GLOBAL | WEBSITE | STORE
      *
-     * @param \Magento\Eav\Model\Entity\Attribute $attribute
+     * @param Attribute $attribute
      * @return string
      */
     public function getScopeLabel($attribute)
@@ -160,7 +166,7 @@ class Gallery extends \Magento\Data\Form\Element\AbstractElement
     /**
      * Retrieve data object related with form
      *
-     * @return \Magento\Catalog\Model\Product || \Magento\Catalog\Model\Category
+     *@return mixed
      */
     public function getDataObject()
     {
@@ -171,7 +177,7 @@ class Gallery extends \Magento\Data\Form\Element\AbstractElement
      * Retrieve attribute field name
      *
      *
-     * @param \Magento\Eav\Model\Entity\Attribute $attribute
+     * @param Attribute $attribute
      * @return string
      */
     public function getAttributeFieldName($attribute)
@@ -186,7 +192,7 @@ class Gallery extends \Magento\Data\Form\Element\AbstractElement
     /**
      * Check readonly attribute
      *
-     * @param \Magento\Eav\Model\Entity\Attribute|string $attribute
+     * @param Attribute|string $attribute
      * @return boolean
      */
     public function getAttributeReadonly($attribute)
@@ -202,6 +208,9 @@ class Gallery extends \Magento\Data\Form\Element\AbstractElement
         return false;
     }
 
+    /**
+     * @return string
+     */
     public function toHtml()
     {
         return '<tr><td class="value" colspan="3">' . $this->getElementHtml() . '</td></tr>';
@@ -214,6 +223,6 @@ class Gallery extends \Magento\Data\Form\Element\AbstractElement
      */
     protected function _getDefaultStoreId()
     {
-        return \Magento\Core\Model\Store::DEFAULT_STORE_ID;
+        return \Magento\Store\Model\Store::DEFAULT_STORE_ID;
     }
 }

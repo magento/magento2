@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Checkout
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,8 +25,6 @@
 /**
  * Checkout observer model
  *
- * @category   Magento
- * @package    Magento_Checkout
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Checkout\Model;
@@ -36,43 +32,51 @@ namespace Magento\Checkout\Model;
 class Observer
 {
     /**
-     * @var \Magento\Checkout\Model\Session
+     * @var Session
      */
     protected $_checkoutSession;
 
     /**
-     * @var \Magento\Message\ManagerInterface
+     * @var \Magento\Framework\Message\ManagerInterface
      */
     protected $messageManager;
 
     /**
-     * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Message\ManagerInterface $messageManager
+     * @param Session $checkoutSession
+     * @param \Magento\Framework\Message\ManagerInterface $messageManager
      */
-    public function __construct(
-        \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Message\ManagerInterface $messageManager
-    ) {
+    public function __construct(Session $checkoutSession, \Magento\Framework\Message\ManagerInterface $messageManager)
+    {
         $this->_checkoutSession = $checkoutSession;
         $this->messageManager = $messageManager;
     }
 
+    /**
+     * @return void
+     */
     public function unsetAll()
     {
         $this->_checkoutSession->clearQuote()->clearStorage();
     }
 
+    /**
+     * @return void
+     */
     public function loadCustomerQuote()
     {
         try {
             $this->_checkoutSession->loadCustomerQuote();
-        } catch (\Magento\Core\Exception $e) {
+        } catch (\Magento\Framework\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('Load customer quote error'));
         }
     }
 
+    /**
+     * @param \Magento\Framework\Event\Observer $observer
+     * @return void
+     */
     public function salesQuoteSaveAfter($observer)
     {
         $quote = $observer->getEvent()->getQuote();

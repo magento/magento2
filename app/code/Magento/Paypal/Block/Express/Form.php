@@ -18,17 +18,14 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Paypal
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Block\Express;
 
 /**
  * PayPal Standard payment "form"
  */
-namespace Magento\Paypal\Block\Express;
-
 class Form extends \Magento\Paypal\Block\Standard\Form
 {
     /**
@@ -46,31 +43,36 @@ class Form extends \Magento\Paypal\Block\Standard\Form
     protected $_paypalData;
 
     /**
-     * @var \Magento\Customer\Model\Session
+     * @var \Magento\Customer\Helper\Session\CurrentCustomer
      */
-    protected $_customerSession;
+    protected $currentCustomer;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Paypal\Model\ConfigFactory $paypalConfigFactory
+     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Paypal\Helper\Data $paypalData
-     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Paypal\Model\ConfigFactory $paypalConfigFactory,
+        \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Paypal\Helper\Data $paypalData,
-        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
         array $data = array()
     ) {
         $this->_paypalData = $paypalData;
-        $this->_customerSession = $customerSession;
-        parent::__construct($context, $paypalConfigFactory, $data);
+        $this->currentCustomer = $currentCustomer;
+        parent::__construct($context, $paypalConfigFactory, $localeResolver, $data);
+        $this->_isScopePrivate = true;
     }
 
     /**
      * Set template and redirect message
+     *
+     * @return null
      */
     protected function _construct()
     {
@@ -80,18 +82,14 @@ class Form extends \Magento\Paypal\Block\Standard\Form
     }
 
     /**
-     * Set data to block
+     * Get billing agreement code
      *
-     * @return \Magento\View\Element\AbstractBlock
+     * @return string|null
      */
-    protected function _beforeToHtml()
+    public function getBillingAgreementCode()
     {
-        $customerId = $this->_customerSession->getCustomerId();
-        if ($this->_paypalData->shouldAskToCreateBillingAgreement($this->_config, $customerId)
-            && $this->canCreateBillingAgreement()
-        ) {
-            $this->setCreateBACode(\Magento\Paypal\Model\Express\Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT);
-        }
-        return parent::_beforeToHtml();
+        $customerId = $this->currentCustomer->getCustomerId();
+        return $this->_paypalData->shouldAskToCreateBillingAgreement($this->_config, $customerId)
+            ? \Magento\Paypal\Model\Express\Checkout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT : null;
     }
 }

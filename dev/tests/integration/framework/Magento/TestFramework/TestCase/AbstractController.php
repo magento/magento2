@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -35,9 +32,11 @@ namespace Magento\TestFramework\TestCase;
  */
 abstract class AbstractController extends \PHPUnit_Framework_TestCase
 {
-    protected $_runCode     = '';
-    protected $_runScope    = 'store';
-    protected $_runOptions  = array();
+    protected $_runCode = '';
+
+    protected $_runScope = 'store';
+
+    protected $_runOptions = array();
 
     /**
      * @var \Magento\TestFramework\Request
@@ -78,9 +77,8 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
     {
         $this->_assertSessionErrors = false;
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_objectManager->removeSharedInstance('Magento\App\ResponseInterface');
-        $this->_objectManager->removeSharedInstance('Magento\App\RequestInterface');
-
+        $this->_objectManager->removeSharedInstance('Magento\Framework\App\ResponseInterface');
+        $this->_objectManager->removeSharedInstance('Magento\Framework\App\RequestInterface');
     }
 
     protected function tearDown()
@@ -97,7 +95,10 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
     {
         if ($this->_assertSessionErrors) {
             // equalTo() is intentionally used instead of isEmpty() to provide the informative diff
-            $this->assertSessionMessages($this->equalTo(array()), \Magento\Message\MessageInterface::TYPE_ERROR);
+            $this->assertSessionMessages(
+                $this->equalTo(array()),
+                \Magento\Framework\Message\MessageInterface::TYPE_ERROR
+            );
         }
     }
 
@@ -115,12 +116,12 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
     /**
      * Request getter
      *
-     * @return \Magento\App\RequestInterface
+     * @return \Magento\TestFramework\Request
      */
     public function getRequest()
     {
         if (!$this->_request) {
-            $this->_request = $this->_objectManager->get('Magento\App\RequestInterface');
+            $this->_request = $this->_objectManager->get('Magento\Framework\App\RequestInterface');
         }
         return $this->_request;
     }
@@ -128,12 +129,12 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
     /**
      * Response getter
      *
-     * @return \Magento\App\ResponseInterface
+     * @return \Magento\TestFramework\Response
      */
     public function getResponse()
     {
         if (!$this->_response) {
-            $this->_response = $this->_objectManager->get('Magento\App\ResponseInterface');
+            $this->_response = $this->_objectManager->get('Magento\Framework\App\ResponseInterface');
         }
         return $this->_response;
     }
@@ -198,23 +199,31 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
     /**
      * Assert that actual session messages meet expectations:
      * Usage examples:
-     * $this->assertSessionMessages($this->isEmpty(), \Magento\Message\MessageInterface::TYPE_ERROR);
+     * $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
      * $this->assertSessionMessages($this->equalTo(array('Entity has been saved.')),
-     * \Magento\Message\MessageInterface::TYPE_SUCCESS);
+     * \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS);
      *
      * @param \PHPUnit_Framework_Constraint $constraint Constraint to compare actual messages against
-     * @param string|null $messageType Message type filter, one of the constants \Magento\Message\MessageInterface::*
-     * @param string $messageManager Class of the session model that manages messages
+     * @param string|null $messageType Message type filter,
+     *        one of the constants \Magento\Framework\Message\MessageInterface::*
+     * @param string $messageManagerClass Class of the session model that manages messages
      */
     public function assertSessionMessages(
-        \PHPUnit_Framework_Constraint $constraint, $messageType = null, $messageManager = 'Magento\Message\Manager'
+        \PHPUnit_Framework_Constraint $constraint,
+        $messageType = null,
+        $messageManagerClass = 'Magento\Framework\Message\Manager'
     ) {
         $this->_assertSessionErrors = false;
-        /** @var $messages \Magento\Message\ManagerInterface */
-        $messages = $this->_objectManager->get($messageManager);
-        $actualMessages = array();
-        /** @var $message \Magento\Message\AbstractMessage */
-        foreach ($messages->getMessages()->getItemsByType($messageType) as $message) {
+        /** @var $messageManager \Magento\Framework\Message\ManagerInterface */
+        $messageManager = $this->_objectManager->get($messageManagerClass);
+        /** @var $messages \Magento\Framework\Message\AbstractMessage[] */
+        if (is_null($messageType)) {
+            $messages = $messageManager->getMessages()->getItems();
+        } else {
+            $messages = $messageManager->getMessages()->getItemsByType($messageType);
+        }
+        $actualMessages = [];
+        foreach ($messages as $message) {
             $actualMessages[] = $message->getText();
         }
         $this->assertThat(

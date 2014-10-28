@@ -19,19 +19,18 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_CatalogSearch
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Core/etc/config.xsd">
     <default>
         <catalog>
             <seo>
                 <search_terms>1</search_terms>
             </seo>
             <search>
+                <engine>Magento\CatalogSearch\Model\Resource\Fulltext\Engine</engine>
                 <min_query_length>1</min_query_length>
                 <max_query_length>128</max_query_length>
                 <max_query_words>10</max_query_words>

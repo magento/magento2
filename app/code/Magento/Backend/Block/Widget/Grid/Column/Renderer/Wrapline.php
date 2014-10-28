@@ -18,12 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
 /**
@@ -41,18 +38,18 @@ class Wrapline extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
     /**
      * Magento string lib
      *
-     * @var \Magento\Stdlib\String
+     * @var \Magento\Framework\Stdlib\String
      */
     protected $string;
 
     /**
      * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\String $string
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
-        \Magento\Stdlib\String $string,
+        \Magento\Framework\Stdlib\String $string,
         array $data = array()
     ) {
         $this->string = $string;
@@ -62,19 +59,20 @@ class Wrapline extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
     /**
      * Renders grid column
      *
-     * @param \Magento\Object $row
+     * @param \Magento\Framework\Object $row
      * @return string
      */
-    public function render(\Magento\Object $row)
+    public function render(\Magento\Framework\Object $row)
     {
         $line = parent::_getValue($row);
         $wrappedLine = '';
-        $lineLength = $this->getColumn()->getData('lineLength')
-            ? $this->getColumn()->getData('lineLength')
-            : $this->_defaultMaxLineLength;
-        for ($i = 0, $n = floor($this->string->strlen($line) / $lineLength); $i <= $n; $i++) {
-            $wrappedLine .= $this->string->substr($line, ($lineLength * $i), $lineLength)
-                . "<br />";
+        $lineLength = $this->getColumn()->getData(
+            'lineLength'
+        ) ? $this->getColumn()->getData(
+            'lineLength'
+        ) : $this->_defaultMaxLineLength;
+        for ($i = 0,$n = floor($this->string->strlen($line) / $lineLength); $i <= $n; $i++) {
+            $wrappedLine .= $this->string->substr($line, $lineLength * $i, $lineLength) . "<br />";
         }
         return $wrappedLine;
     }

@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     performance_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -32,45 +30,86 @@ namespace Magento\TestFramework\Performance;
 class Bootstrap
 {
     /**
+     * The real application bootstrap
+     *
+     * @var \Magento\Framework\App\Bootstrap
+     */
+    private $appBootstrap;
+
+    /**
+     * Tests base directory
+     *
+     * @var string
+     */
+    private $testsBaseDir;
+
+    /**
      * Tests configuration holder
      *
      * @var \Magento\TestFramework\Performance\Config
      */
-    protected $_config;
+    private $config;
 
     /**
      * Constructor
      *
+     * @param \Magento\Framework\App\Bootstrap $appBootstrap
      * @param string $testsBaseDir
-     * @param string $appBaseDir
      */
-    public function __construct($testsBaseDir, $appBaseDir)
+    public function __construct(\Magento\Framework\App\Bootstrap $appBootstrap, $testsBaseDir)
     {
-        $configFile = "$testsBaseDir/config.php";
-        $configFile = file_exists($configFile) ? $configFile : "$configFile.dist";
-        $configData = require $configFile;
-        $this->_config = new \Magento\TestFramework\Performance\Config($configData, $testsBaseDir, $appBaseDir);
+        $this->appBootstrap = $appBootstrap;
+        $this->testsBaseDir = $testsBaseDir;
     }
 
     /**
      * Ensure reports directory exists, empty, and has write permissions
      *
-     * @throws \Magento\Exception
+     * @throws \Magento\Framework\Exception
      */
     public function cleanupReports()
     {
-        $reportDir = $this->_config->getReportDir();
+        $reportDir = $this->getConfig()->getReportDir();
         try {
-            $filesystemAdapter = new \Magento\Filesystem\Driver\File();
+            $filesystemAdapter = new \Magento\Framework\Filesystem\Driver\File();
             if ($filesystemAdapter->isExists($reportDir)) {
                 $filesystemAdapter->deleteDirectory($reportDir);
             }
-        } catch (\Magento\Filesystem\FilesystemException $e) {
+        } catch (\Magento\Framework\Filesystem\FilesystemException $e) {
             if (file_exists($reportDir)) {
-                throw new \Magento\Exception("Cannot cleanup reports directory '$reportDir'.");
+                throw new \Magento\Framework\Exception("Cannot cleanup reports directory '{$reportDir}'.");
             }
         }
         mkdir($reportDir, 0777, true);
+    }
+
+    /**
+     * Test framework application factory method
+     *
+     * @param \Magento\Framework\Shell $shell
+     * @return \Magento\TestFramework\Application
+     */
+    public function createApplication(\Magento\Framework\Shell $shell)
+    {
+        return new \Magento\TestFramework\Application(
+            $this->getConfig(),
+            $this->appBootstrap->getObjectManager(),
+            $shell
+        );
+    }
+
+    /**
+     * Test suite factory method
+     *
+     * @param \Magento\TestFramework\Application $application
+     * @param \Magento\TestFramework\Performance\Scenario\HandlerInterface $scenarioHandler
+     * @return Testsuite
+     */
+    public function createTestSuite(
+        \Magento\TestFramework\Application $application,
+        \Magento\TestFramework\Performance\Scenario\HandlerInterface $scenarioHandler
+    ) {
+        return new Testsuite($this->getConfig(), $application, $scenarioHandler);
     }
 
     /**
@@ -80,6 +119,14 @@ class Bootstrap
      */
     public function getConfig()
     {
-        return $this->_config;
+        if (null === $this->config) {
+            $configFile = "{$this->testsBaseDir}/config.php";
+            $configFile = file_exists($configFile) ? $configFile : "{$configFile}.dist";
+            $configData = require $configFile;
+            /** @var \Magento\Framework\App\Filesystem\DirectoryList $dirList */
+            $dirList = $this->appBootstrap->getObjectManager()->get('Magento\Framework\App\Filesystem\DirectoryList');
+            $this->config = new Config($configData, $this->testsBaseDir, $dirList->getRoot());
+        }
+        return $this->config;
     }
 }

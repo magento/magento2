@@ -1,0 +1,4 @@
+"orders";"report/report_from";"report/report_to";"report/report_period";"columns/orders";"columns/average";"columns/total";"constraint"
+"default,virtual_product";"m/d/Y";"m/d/Y";"Day";"2";"285";"570";"assertCustomerOrderTotalReportResult"
+"default,virtual_product";"m/d/Y";"m/d/Y";"Month";"2";"285";"570";"assertCustomerOrderTotalReportResult"
+"default";"m/d/Y";"m/d/Y";"Year";"1";"560";"560";"assertCustomerOrderTotalReportResult"

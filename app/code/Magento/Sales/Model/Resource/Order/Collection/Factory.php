@@ -26,14 +26,14 @@ namespace Magento\Sales\Model\Resource\Order\Collection;
 class Factory
 {
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManager $objectManager
      */
-    public function __construct(\Magento\ObjectManager $objectManager)
+    public function __construct(\Magento\Framework\ObjectManager $objectManager)
     {
         $this->_objectManager = $objectManager;
     }
@@ -41,14 +41,14 @@ class Factory
     /**
      * @param string $className
      * @param array $data
-     * @return \Magento\Sales\Model\Resource\Order\Collection\AbstractCollection
+     * @return AbstractCollection
      * @throws \InvalidArgumentException
      */
     public function create($className, array $data = array())
     {
         $instance = $this->_objectManager->create($className, $data);
 
-        if (!($instance instanceof \Magento\Sales\Model\Resource\Order\Collection\AbstractCollection)) {
+        if (!$instance instanceof AbstractCollection) {
             throw new \InvalidArgumentException(
                 $className . ' does not implement \Magento\Sales\Model\Resource\Order\Collection\AbstractCollection'
             );

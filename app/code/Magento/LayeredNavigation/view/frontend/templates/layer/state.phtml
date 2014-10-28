@@ -1,0 +1,64 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Category layered navigation state
+ *
+ * @var $this \Magento\LayeredNavigation\Block\Navigation\State
+ */
+?>
+<?php $_filters = $this->getActiveFilters() ?>
+<?php if(!empty($_filters)): ?>
+<div class="filter-current">
+    <strong class="block-subtitle filter-current-subtitle" data-count="<?php echo count($_filters); ?>"><?php echo __('Currently Shopping by') ?></strong>
+    <ol class="items">
+        <?php foreach ($_filters as $_filter): ?>
+            <li class="item">
+                <span class="filter-label"><?php echo $this->escapeHtml(__($_filter->getName())); ?></span>
+                <span class="filter-value"><?php echo $this->stripTags($_filter->getLabel()) ?></span>
+                <?php
+                $clearLinkUrl = $_filter->getClearLinkUrl();
+                if ($clearLinkUrl):
+                    ?>
+                    <a class="action previous" href="<?php echo $_filter->getRemoveUrl() ?>"
+                       title="<?php echo __('Previous') ?>">
+                        <span><?php echo __('Previous') ?></span>
+                    </a>
+                    <a class="action remove"
+                       title="<?php echo $this->escapeHtml($_filter->getFilter()->getClearLinkText()) ?>"
+                       href="<?php echo $clearLinkUrl ?>">
+                        <span><?php echo $this->escapeHtml($_filter->getFilter()->getClearLinkText()) ?></span>
+                    </a>
+                <?php else: ?>
+                    <a class="action remove" href="<?php echo $_filter->getRemoveUrl() ?>"
+                       title="<?php echo __('Remove This Item') ?>">
+                        <span><?php echo __('Remove This Item') ?></span>
+                    </a>
+                <?php endif; ?>
+            </li>
+        <?php endforeach; ?>
+    </ol>
+</div>
+<?php endif; ?>

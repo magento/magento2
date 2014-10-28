@@ -18,44 +18,42 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Customer\Model\Customer\Attribute\Source;
 
 /**
  * Customer website attribute source
  *
- * @category   Magento
- * @package    Magento_Customer
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Customer\Model\Customer\Attribute\Source;
-
 class Website extends \Magento\Eav\Model\Entity\Attribute\Source\Table
 {
     /**
-     * @var \Magento\Core\Model\System\Store
+     * @var \Magento\Store\Model\System\Store
      */
     protected $_store;
 
     /**
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptCollFactory
+     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $attrOptionFactory
-     * @param \Magento\Core\Model\System\Store $store
+     * @param \Magento\Store\Model\System\Store $store
      */
     public function __construct(
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptCollFactory,
+        \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $attrOptionFactory,
-        \Magento\Core\Model\System\Store $store
+        \Magento\Store\Model\System\Store $store
     ) {
-        parent::__construct($coreData, $attrOptCollFactory, $attrOptionFactory);
+        parent::__construct($coreData, $attrOptionCollectionFactory, $attrOptionFactory);
         $this->_store = $store;
     }
 
+    /**
+     * @return array
+     */
     public function getAllOptions()
     {
         if (!$this->_options) {
@@ -65,15 +63,19 @@ class Website extends \Magento\Eav\Model\Entity\Attribute\Source\Table
         return $this->_options;
     }
 
+    /**
+     * @param int|string $value
+     * @return string|false
+     */
     public function getOptionText($value)
     {
         if (!$this->_options) {
-          $this->_options = $this->getAllOptions();
+            $this->_options = $this->getAllOptions();
         }
         foreach ($this->_options as $option) {
-          if ($option['value'] == $value) {
-            return $option['label'];
-          }
+            if ($option['value'] == $value) {
+                return $option['label'];
+            }
         }
         return false;
     }

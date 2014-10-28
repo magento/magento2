@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Newsletter
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Newsletter\Model;
 
 /**
@@ -35,18 +31,19 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Newsletter\Model\Template
      */
-    protected  $_model = null;
+    protected $_model = null;
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Newsletter\Model\Template');
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Newsletter\Model\Template'
+        );
     }
 
     /**
      * This test expects next themes for areas:
-     * current_store design/theme/full_name magento_plushe
-     * fixturestore_store design/theme/full_name magento_blank
+     * current_store design/theme/full_name Magento/blank
+     * fixturestore_store design/theme/full_name Magento/plushe
      *
      * @magentoAppIsolation  enabled
      * @magentoAppArea adminhtml
@@ -56,12 +53,22 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model->setTemplateText('{{view url="Magento_Theme::favicon.ico"}}');
         if ($store != 'default') {
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\Config')
-                ->setValue(\Magento\Core\Model\View\Design::XML_PATH_THEME_ID, $design, 'store', $store);
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                'Magento\Framework\App\Config\MutableScopeConfigInterface'
+            )->setValue(
+                \Magento\Core\Model\View\Design::XML_PATH_THEME_ID,
+                $design,
+                'store',
+                $store
+            );
         }
         $this->_model->emulateDesign($store, 'frontend');
-        $processedTemplate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')
-            ->emulateAreaCode('frontend', array($this->_model, 'getProcessedTemplate'));
+        $processedTemplate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\App\State'
+        )->emulateAreaCode(
+            'frontend',
+            array($this->_model, 'getProcessedTemplate')
+        );
         $expectedTemplateText = "frontend/{$design}/en_US/Magento_Theme/favicon.ico";
         $this->assertStringEndsWith($expectedTemplateText, $processedTemplate);
         $this->_model->revertDesign();
@@ -73,15 +80,15 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     public function getProcessedTemplateFrontendDataProvider()
     {
         return array(
-            'frontend'       => array('default',      'magento_plushe'),
-            'frontend store' => array('fixturestore', 'magento_blank')
+            'frontend' => array('default', 'Magento/blank'),
+            'frontend store' => array('fixturestore', 'Magento/plushe')
         );
     }
 
     /**
      * This test expects next themes for areas:
-     * install/design/theme/full_name   magento_basic
-     * adminhtml/design/theme/full_name magento_backend
+     * install/design/theme/full_name   Magento/basic
+     * adminhtml/design/theme/full_name Magento/backend
      *
      * @magentoAppIsolation  enabled
      * @dataProvider getProcessedTemplateAreaDataProvider
@@ -90,8 +97,12 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model->setTemplateText('{{view url="Magento_Theme::favicon.ico"}}');
         $this->_model->emulateDesign('default', $area);
-        $processedTemplate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')
-            ->emulateAreaCode($area, array($this->_model, 'getProcessedTemplate'));
+        $processedTemplate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\App\State'
+        )->emulateAreaCode(
+            $area,
+            array($this->_model, 'getProcessedTemplate')
+        );
         $expectedTemplateText = "{$area}/{$design}/en_US/Magento_Theme/favicon.ico";
         $this->assertStringEndsWith($expectedTemplateText, $processedTemplate);
     }
@@ -101,11 +112,12 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      */
     public function getProcessedTemplateAreaDataProvider()
     {
-        $design = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\View\Design');
+        $design = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Core\Model\View\Design'
+        );
         return array(
-            'install' => array('install',   $design->getConfigurationDesignTheme('install')),
-            'backend' => array('adminhtml', 'magento_backend')
+            'install' => array('install', $design->getConfigurationDesignTheme('install')),
+            'backend' => array('adminhtml', 'Magento/backend')
         );
     }
 
@@ -116,9 +128,13 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsValidToSend($senderEmail, $senderName, $subject, $isValid)
     {
-        $this->_model->setTemplateSenderEmail($senderEmail)
-            ->setTemplateSenderName($senderName)
-            ->setTemplateSubject($subject);
+        $this->_model->setTemplateSenderEmail(
+            $senderEmail
+        )->setTemplateSenderName(
+            $senderName
+        )->setTemplateSubject(
+            $subject
+        );
         $this->assertSame($isValid, $this->_model->isValidForSend());
     }
 
@@ -135,7 +151,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             array('', 'john.doe', 'Test Subject', false),
             array('', '', 'Test Subject', false),
             array('', 'john.doe', '', false),
-            array('', '', '', false),
+            array('', '', '', false)
         );
     }
 }

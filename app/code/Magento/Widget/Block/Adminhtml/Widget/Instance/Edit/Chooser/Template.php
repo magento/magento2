@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Widget
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,14 +25,11 @@
 /**
  * Widget Instance template chooser
  *
- * @category    Magento
- * @package     Magento_Widget
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
 
-class Template
-    extends \Magento\Backend\Block\Widget
+class Template extends \Magento\Backend\Block\Widget
 {
     /**
      * Prepare html output
@@ -50,12 +45,18 @@ class Template
             $html = '<input type="hidden" name="template" value="' . $widgetTemplate['value'] . '" />';
             $html .= $widgetTemplate['label'];
         } else {
-            $html = $this->getLayout()->createBlock('Magento\View\Element\Html\Select')
-                ->setName('template')
-                ->setClass('select')
-                ->setOptions($this->getWidgetTemplates())
-                ->setValue($this->getSelected())->toHtml();
+            $html = $this->getLayout()->createBlock(
+                'Magento\Framework\View\Element\Html\Select'
+            )->setName(
+                'template'
+            )->setClass(
+                'select'
+            )->setOptions(
+                $this->getWidgetTemplates()
+            )->setValue(
+                $this->getSelected()
+            )->toHtml();
         }
-        return parent::_toHtml().$html;
+        return parent::_toHtml() . $html;
     }
 }

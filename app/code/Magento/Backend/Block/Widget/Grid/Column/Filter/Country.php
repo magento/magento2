@@ -18,19 +18,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 
 /**
  * Country grid filter
  */
-namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
-
-class Country
-    extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
+class Country extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
 {
     /**
      * @var \Magento\Directory\Model\Resource\Country\CollectionFactory
@@ -39,13 +35,13 @@ class Country
 
     /**
      * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\Core\Model\Resource\Helper $resourceHelper
+     * @param \Magento\Framework\DB\Helper $resourceHelper
      * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $directoriesFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
-        \Magento\Core\Model\Resource\Helper $resourceHelper,
+        \Magento\Framework\DB\Helper $resourceHelper,
         \Magento\Directory\Model\Resource\Country\CollectionFactory $directoriesFactory,
         array $data = array()
     ) {
@@ -53,6 +49,9 @@ class Country
         parent::__construct($context, $resourceHelper, $data);
     }
 
+    /**
+     * @return array
+     */
     protected function _getOptions()
     {
         $options = $this->_directoriesFactory->create()->load()->toOptionArray(false);

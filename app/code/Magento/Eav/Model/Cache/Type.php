@@ -18,20 +18,17 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Eav\Model\Cache;
 
 /**
  * System / Cache Management / Cache type "EAV types and attributes"
  *
  * @todo utilize the class for all manipulations with the cache type
  */
-namespace Magento\Eav\Model\Cache;
-
-class Type extends \Magento\Cache\Frontend\Decorator\TagScope
+class Type extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
 {
     /**
      * Cache type code unique among all cache types
@@ -44,9 +41,9 @@ class Type extends \Magento\Cache\Frontend\Decorator\TagScope
     const CACHE_TAG = 'EAV';
 
     /**
-     * @param \Magento\App\Cache\Type\FrontendPool $cacheFrontendPool
+     * @param \Magento\Framework\App\Cache\Type\FrontendPool $cacheFrontendPool
      */
-    public function __construct(\Magento\App\Cache\Type\FrontendPool $cacheFrontendPool)
+    public function __construct(\Magento\Framework\App\Cache\Type\FrontendPool $cacheFrontendPool)
     {
         parent::__construct($cacheFrontendPool->get(self::TYPE_IDENTIFIER), self::CACHE_TAG);
     }

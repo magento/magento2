@@ -18,46 +18,30 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_ImportExport
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-/**
- * Import behavior source model used in import for product and customer import entities.
- * Source model saved to maintain compatibility with Magento 1.* import.
- *
- * @category    Magento
- * @package     Magento_ImportExport
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\ImportExport\Model\Source\Import\Behavior;
 
-class Basic
-    extends \Magento\ImportExport\Model\Source\Import\AbstractBehavior
+/**
+ * Import behavior source model used for defining the behaviour during the import.
+ */
+class Basic extends \Magento\ImportExport\Model\Source\Import\AbstractBehavior
 {
     /**
-     * Get possible behaviours
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function toArray()
     {
         return array(
-            \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND
-                => __('Append Complex Data'),
-            \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE
-                => __('Replace Existing Complex Data'),
-            \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE
-                => __('Delete Entities'),
+            \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND => __('Append Complex Data'),
+            \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE => __('Replace Existing Complex Data'),
+            \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE => __('Delete Entities')
         );
     }
 
     /**
-     * Get current behaviour code
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getCode()
     {

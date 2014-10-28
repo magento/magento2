@@ -18,24 +18,17 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Customer\Model\Resource\Address\Attribute\Backend;
 
 /**
  * Address region attribute backend
  *
- * @category    Magento
- * @package     Magento_Customer
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Customer\Model\Resource\Address\Attribute\Backend;
-
-class Region
-    extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+class Region extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
      * @var \Magento\Directory\Model\RegionFactory
@@ -43,13 +36,11 @@ class Region
     protected $_regionFactory;
 
     /**
-     * @param \Magento\Logger $logger
+     * @param \Magento\Framework\Logger $logger
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      */
-    public function __construct(
-        \Magento\Logger $logger,
-        \Magento\Directory\Model\RegionFactory $regionFactory
-    ) {
+    public function __construct(\Magento\Framework\Logger $logger, \Magento\Directory\Model\RegionFactory $regionFactory)
+    {
         $this->_regionFactory = $regionFactory;
         parent::__construct($logger);
     }
@@ -57,8 +48,8 @@ class Region
     /**
      * Prepare object for save
      *
-     * @param \Magento\Object $object
-     * @return \Magento\Customer\Model\Resource\Address\Attribute\Backend\Region
+     * @param \Magento\Framework\Object $object
+     * @return $this
      */
     public function beforeSave($object)
     {
@@ -67,8 +58,7 @@ class Region
             $regionModel = $this->_createRegionInstance();
             $regionModel->load($region);
             if ($regionModel->getId() && $object->getCountryId() == $regionModel->getCountryId()) {
-                $object->setRegionId($regionModel->getId())
-                    ->setRegion($regionModel->getName());
+                $object->setRegionId($regionModel->getId())->setRegion($regionModel->getName());
             }
         }
         return $this;

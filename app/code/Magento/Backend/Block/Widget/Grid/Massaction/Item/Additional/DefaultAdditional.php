@@ -18,38 +18,32 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Backend\Block\Widget\Grid\Massaction\Item\Additional;
 
 /**
  * Backend grid widget massaction item additional action default
  *
- * @category   Magento
- * @package    Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backend\Block\Widget\Grid\Massaction\Item\Additional;
-
-class DefaultAdditional
-    extends \Magento\Backend\Block\Widget\Form\Generic
-    implements \Magento\Backend\Block\Widget\Grid\Massaction\Item\Additional\AdditionalInterface
+class DefaultAdditional extends \Magento\Backend\Block\Widget\Form\Generic implements
+    \Magento\Backend\Block\Widget\Grid\Massaction\Item\Additional\AdditionalInterface
 {
-
+    /**
+     * {@inheritdoc}
+     */
     public function createFromConfiguration(array $configuration)
     {
-        /** @var \Magento\Data\Form $form */
+        /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
 
-        foreach ($configuration as $itemId=>$item) {
+        foreach ($configuration as $itemId => $item) {
             $item['class'] = isset($item['class']) ? $item['class'] . ' absolute-advice' : 'absolute-advice';
             $form->addField($itemId, $item['type'], $item);
         }
         $this->setForm($form);
         return $this;
     }
-
 }

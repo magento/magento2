@@ -23,22 +23,19 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
-    <type name="Magento\Module\Updater\SetupFactory">
-        <param name="resourceTypes">
-            <value>
-                <newsletter_setup>Magento\Newsletter\Model\Resource\Setup</newsletter_setup>
-            </value>
-        </param>
-    </type>
-    <virtualType name="Magento\Newsletter\Model\Session\Storage" type="Magento\Session\Storage">
-        <param name="namespace">
-            <value>newsletter</value>
-        </param>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <virtualType name="Magento\Newsletter\Model\Session\Storage" type="Magento\Framework\Session\Storage">
+        <arguments>
+            <argument name="namespace" xsi:type="string">newsletter</argument>
+        </arguments>
     </virtualType>
     <type name="Magento\Newsletter\Model\Session">
-        <param name="storage">
-            <instance type="Magento\Newsletter\Model\Session\Storage" />
-        </param>
+        <arguments>
+            <argument name="storage" xsi:type="object">Magento\Newsletter\Model\Session\Storage</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Service\V1\CustomerAccountServiceInterface">
+        <plugin name="update_newsletter_subscription_on_customer_update"
+                type="Magento\Newsletter\Model\Plugin\CustomerPlugin"/>
     </type>
 </config>

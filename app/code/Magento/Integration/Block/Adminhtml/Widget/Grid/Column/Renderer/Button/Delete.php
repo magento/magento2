@@ -23,29 +23,31 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Button;
 
 use Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Button;
-use Magento\Object;
+use Magento\Framework\Object;
 
 class Delete extends Button
 {
     /**
      * Return 'onclick' action for the button (redirect to the integration edit page).
      *
-     * @param \Magento\Object $row
+     * @param \Magento\Framework\Object $row
      * @return string
      */
     protected function _getOnclickAttribute(Object $row)
     {
-        return sprintf("this.setAttribute('data-url', '%s')", $this->getUrl('*/*/delete', ['id' => $row->getId()]));
+        return sprintf(
+            "this.setAttribute('data-url', '%s')",
+            $this->getUrl('*/*/delete', array('id' => $row->getId()))
+        );
     }
 
     /**
      * Get title depending on whether element is disabled or not.
      *
-     * @param \Magento\Object $row
+     * @param \Magento\Framework\Object $row
      * @return string
      */
     protected function _getTitleAttribute(Object $row)
@@ -56,7 +58,7 @@ class Delete extends Button
     /**
      * Determine whether current integration came from config file, thus can not be removed
      *
-     * @param \Magento\Object $row
+     * @param \Magento\Framework\Object $row
      * @return bool
      */
     protected function _isDisabled(Object $row)

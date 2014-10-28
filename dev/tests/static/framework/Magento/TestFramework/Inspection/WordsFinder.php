@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento
- * @subpackage  static_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -70,7 +67,7 @@ class WordsFinder
         if (!is_dir($baseDir)) {
             throw new \Magento\TestFramework\Inspection\Exception("Base directory {$baseDir} does not exist");
         }
-        $this->_baseDir = realpath($baseDir);
+        $this->_baseDir = str_replace('\\', '/', realpath($baseDir));
 
         // Load config files
         if (!is_array($configFiles)) {
@@ -84,8 +81,9 @@ class WordsFinder
         $basePath = $this->_baseDir . '/';
         $basePathLen = strlen($basePath);
         foreach ($configFiles as $configFile) {
-            $configFile = realpath($configFile);
-            if (strncmp($basePath, $configFile, $basePathLen) === 0) { // File is inside base dir
+            $configFile = str_replace('\\', '/', realpath($configFile));
+            if (strncmp($basePath, $configFile, $basePathLen) === 0) {
+                // File is inside base dir
                 $this->_whitelist[$this->_getRelPath($configFile)] = array();
             }
         }
@@ -115,8 +113,7 @@ class WordsFinder
             throw new \Magento\TestFramework\Inspection\Exception($e->getMessage(), $e->getCode(), $e);
         }
 
-        $this->_extractWords($xml)
-            ->_extractWhitelist($xml);
+        $this->_extractWords($xml)->_extractWhitelist($xml);
     }
 
     /**
@@ -131,7 +128,7 @@ class WordsFinder
         $words = array();
         $nodes = $configXml->xpath('//config/words/word');
         foreach ($nodes as $node) {
-            $words[] = (string) $node;
+            $words[] = (string)$node;
         }
         $words = array_filter($words);
 
@@ -156,16 +153,17 @@ class WordsFinder
             $path = $node->xpath('path');
             if (!$path) {
                 throw new \Magento\TestFramework\Inspection\Exception(
-                    'A "path" must be defined for the whitelisted item');
+                    'A "path" must be defined for the whitelisted item'
+                );
             }
-            $path = (string) $path[0];
+            $path = (string)$path[0];
 
             // Words
             $words = array();
             $wordNodes = $node->xpath('word');
             if ($wordNodes) {
                 foreach ($wordNodes as $wordNode) {
-                    $words[] = (string) $wordNode;
+                    $words[] = (string)$wordNode;
                 }
             }
 
@@ -230,8 +228,7 @@ class WordsFinder
 
         $foundWords = array();
         foreach ($this->_words as $word) {
-            if ((stripos($relPath, $word) !== false)
-                || (stripos($contents, $word) !== false)) {
+            if (stripos($relPath, $word) !== false || stripos($contents, $word) !== false) {
                 $foundWords[] = $word;
             }
         }
@@ -264,7 +261,8 @@ class WordsFinder
                 continue;
             }
 
-            if (!$whitelistWords) { // All words are permitted there
+            if (!$whitelistWords) {
+                // All words are permitted there
                 return array();
             }
             $foundWords = array_diff($foundWords, $whitelistWords);

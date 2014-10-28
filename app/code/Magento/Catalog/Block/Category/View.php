@@ -18,27 +18,21 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-/**
- * Category View block
- *
- * @category   Magento
- * @package    Magento_Catalog
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Block\Category;
 
-class View extends \Magento\View\Element\Template
+/**
+ * Class View
+ * @package Magento\Catalog\Block\Category
+ */
+class View extends \Magento\Framework\View\Element\Template implements \Magento\Framework\View\Block\IdentityInterface
 {
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
@@ -55,16 +49,16 @@ class View extends \Magento\View\Element\Template
     protected $_categoryHelper;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Catalog\Model\Layer $catalogLayer
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Catalog\Model\Layer\Category $catalogLayer
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Helper\Category $categoryHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Catalog\Model\Layer $catalogLayer,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Catalog\Model\Layer\Category $catalogLayer,
+        \Magento\Framework\Registry $registry,
         \Magento\Catalog\Helper\Category $categoryHelper,
         array $data = array()
     ) {
@@ -74,47 +68,36 @@ class View extends \Magento\View\Element\Template
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
 
         $this->getLayout()->createBlock('Magento\Catalog\Block\Breadcrumbs');
 
-        $headBlock = $this->getLayout()->getBlock('head');
-        if ($headBlock) {
-            $category = $this->getCurrentCategory();
+        $category = $this->getCurrentCategory();
+        if ($category) {
             $title = $category->getMetaTitle();
             if ($title) {
-                $headBlock->setTitle($title);
+                $this->pageConfig->setTitle($title);
             }
             $description = $category->getMetaDescription();
             if ($description) {
-                $headBlock->setDescription($description);
+                $this->pageConfig->setDescription($description);
             }
             $keywords = $category->getMetaKeywords();
             if ($keywords) {
-                $headBlock->setKeywords($keywords);
+                $this->pageConfig->setKeywords($keywords);
             }
-            //@todo: move canonical link to separate block
-            if ($this->_categoryHelper->canUseCanonicalTag()
-                && !$headBlock->getChildBlock('magento-page-head-category-canonical-link')
-            ) {
-                $headBlock->addChild(
-                    'magento-page-head-category-canonical-link',
-                    'Magento\Theme\Block\Html\Head\Link',
-                    array(
-                        'url' => $category->getUrl(),
-                        'properties' => array('attributes' => array('rel' => 'canonical'))
-                    )
+            if ($this->_categoryHelper->canUseCanonicalTag()) {
+                $this->pageConfig->addRemotePageAsset(
+                    $category->getUrl(),
+                    ['attributes' => ['rel' => 'canonical']]
                 );
             }
-            /**
-             * want to show rss feed in the url
-             */
-            if ($this->isRssCatalogEnable() && $this->isTopCategory()) {
-                $title = __('%1 RSS Feed', $this->getCurrentCategory()->getName());
-                $headBlock->addRss($title, $this->getRssLink());
-            }
+
             $pageMainTitle = $this->getLayout()->getBlock('page.main.title');
             if ($pageMainTitle) {
                 $pageMainTitle->setPageTitle($this->getCurrentCategory()->getName());
@@ -124,24 +107,9 @@ class View extends \Magento\View\Element\Template
         return $this;
     }
 
-    public function isRssCatalogEnable()
-    {
-        return $this->_storeConfig->getConfig('rss/catalog/category');
-    }
-
-    public function isTopCategory()
-    {
-        return $this->getCurrentCategory()->getLevel()==2;
-    }
-
-    public function getRssLink()
-    {
-        return $this->_urlBuilder->getUrl('rss/catalog/category', array(
-            'cid' => $this->getCurrentCategory()->getId(),
-            'store_id' => $this->_storeManager->getStore()->getId())
-        );
-    }
-
+    /**
+     * @return string
+     */
     public function getProductListHtml()
     {
         return $this->getChildHtml('product_list');
@@ -160,12 +128,17 @@ class View extends \Magento\View\Element\Template
         return $this->getData('current_category');
     }
 
+    /**
+     * @return mixed
+     */
     public function getCmsBlockHtml()
     {
         if (!$this->getData('cms_block_html')) {
-            $html = $this->getLayout()->createBlock('Magento\Cms\Block\Block')
-                ->setBlockId($this->getCurrentCategory()->getLandingPage())
-                ->toHtml();
+            $html = $this->getLayout()->createBlock(
+                'Magento\Cms\Block\Block'
+            )->setBlockId(
+                $this->getCurrentCategory()->getLandingPage()
+            )->toHtml();
             $this->setData('cms_block_html', $html);
         }
         return $this->getData('cms_block_html');
@@ -209,5 +182,15 @@ class View extends \Magento\View\Element\Template
             }
         }
         return $res;
+    }
+
+    /**
+     * Return identifiers for produced content
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        return $this->getCurrentCategory()->getIdentities();
     }
 }

@@ -18,16 +18,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Config\Backend\Design;
 
-class Exception
-    extends \Magento\Backend\Model\Config\Backend\Serialized\ArraySerialized
+class Exception extends \Magento\Backend\Model\Config\Backend\Serialized\ArraySerialized
 {
+    /**
+     * @var string
+     */
     protected $_eventPrefix = 'core_config_backend_design_exception';
 }

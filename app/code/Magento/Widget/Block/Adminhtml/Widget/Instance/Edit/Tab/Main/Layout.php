@@ -18,27 +18,28 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Widget
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main;
+
+use Magento\Framework\Data\Form\Element\AbstractElement;
 
 /**
  * Widget Instance page groups (predefined layouts group) to display on
  *
  * @method \Magento\Widget\Model\Widget\Instance getWidgetInstance()
  */
-namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main;
-
-class Layout
-    extends \Magento\Backend\Block\Template implements \Magento\Data\Form\Element\Renderer\RendererInterface
+class Layout extends \Magento\Backend\Block\Template implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {
     /**
-     * @var \Magento\Data\Form\Element\AbstractElement
+     * @var AbstractElement|null
      */
     protected $_element = null;
 
+    /**
+     * @var string
+     */
     protected $_template = 'instance/edit/layout.phtml';
 
     /**
@@ -63,9 +64,10 @@ class Layout
     /**
      * Render given element (return html of element)
      *
+     * @param AbstractElement $element
      * @return string
      */
-    public function render(\Magento\Data\Form\Element\AbstractElement $element)
+    public function render(AbstractElement $element)
     {
         $this->setElement($element);
         return $this->toHtml();
@@ -74,10 +76,10 @@ class Layout
     /**
      * Setter
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
-     * @return
+     * @param AbstractElement $element
+     * @return $this
      */
-    public function setElement(\Magento\Data\Form\Element\AbstractElement $element)
+    public function setElement(AbstractElement $element)
     {
         $this->_element = $element;
         return $this;
@@ -86,7 +88,7 @@ class Layout
     /**
      * Getter
      *
-     * @return \Magento\Data\Form\Element\AbstractElement
+     * @return AbstractElement
      */
     public function getElement()
     {
@@ -140,12 +142,19 @@ class Layout
      */
     public function getDisplayOnSelectHtml()
     {
-        $selectBlock = $this->getLayout()->createBlock('Magento\View\Element\Html\Select')
-            ->setName('widget_instance[{{id}}][page_group]')
-            ->setId('widget_instance[{{id}}][page_group]')
-            ->setClass('required-entry page_group_select select')
-            ->setExtraParams("onchange=\"WidgetInstance.displayPageGroup(this.value+\'_{{id}}\')\"")
-            ->setOptions($this->_getDisplayOnOptions());
+        $selectBlock = $this->getLayout()->createBlock(
+            'Magento\Framework\View\Element\Html\Select'
+        )->setName(
+            'widget_instance[{{id}}][page_group]'
+        )->setId(
+            'widget_instance[{{id}}][page_group]'
+        )->setClass(
+            'required-entry page_group_select select'
+        )->setExtraParams(
+            "onchange=\"WidgetInstance.displayPageGroup(this.value+\'_{{id}}\')\""
+        )->setOptions(
+            $this->_getDisplayOnOptions()
+        );
         return $selectBlock->toHtml();
     }
 
@@ -160,52 +169,31 @@ class Layout
     protected function _getDisplayOnOptions()
     {
         $options = array();
-        $options[] = array(
-            'value' => '',
-            'label' => $this->escapeJsQuote(__('-- Please Select --'))
-        );
+        $options[] = array('value' => '', 'label' => $this->escapeJsQuote(__('-- Please Select --')));
         $options[] = array(
             'label' => __('Categories'),
             'value' => array(
-                array(
-                    'value' => 'anchor_categories',
-                    'label' => $this->escapeJsQuote(__('Anchor Categories'))
-                ),
-                array(
-                    'value' => 'notanchor_categories',
-                    'label' => $this->escapeJsQuote(__('Non-Anchor Categories'))
-                )
+                array('value' => 'anchor_categories', 'label' => $this->escapeJsQuote(__('Anchor Categories'))),
+                array('value' => 'notanchor_categories', 'label' => $this->escapeJsQuote(__('Non-Anchor Categories')))
             )
         );
         foreach ($this->_productType->getTypes() as $typeId => $type) {
             $productsOptions[] = array(
-               'value' => $typeId.'_products',
-               'label' => $this->escapeJsQuote($type['label'])
+                'value' => $typeId . '_products',
+                'label' => $this->escapeJsQuote($type['label'])
             );
         }
-        array_unshift($productsOptions, array(
-            'value' => 'all_products',
-            'label' => $this->escapeJsQuote(__('All Product Types'))
-        ));
-        $options[] = array(
-            'label' => $this->escapeJsQuote(__('Products')),
-            'value' => $productsOptions
+        array_unshift(
+            $productsOptions,
+            array('value' => 'all_products', 'label' => $this->escapeJsQuote(__('All Product Types')))
         );
+        $options[] = array('label' => $this->escapeJsQuote(__('Products')), 'value' => $productsOptions);
         $options[] = array(
             'label' => $this->escapeJsQuote(__('Generic Pages')),
             'value' => array(
-                array(
-                    'value' => 'all_pages',
-                    'label' => $this->escapeJsQuote(__('All Pages'))
-                ),
-                array(
-                    'value' => 'pages',
-                    'label' => $this->escapeJsQuote(__('Specified Page'))
-                ),
-                array(
-                    'value' => 'page_layouts',
-                    'label' => $this->escapeJsQuote(__('Page Layouts'))
-                )
+                array('value' => 'all_pages', 'label' => $this->escapeJsQuote(__('All Pages'))),
+                array('value' => 'pages', 'label' => $this->escapeJsQuote(__('Specified Page'))),
+                array('value' => 'page_layouts', 'label' => $this->escapeJsQuote(__('Page Layouts')))
             )
         );
         return $options;
@@ -248,8 +236,11 @@ class Layout
                 'label' => 'Products',
                 'code' => 'products',
                 'name' => $typeId . '_products',
-                'layout_handle'
-                    => str_replace('{{TYPE}}', $typeId, \Magento\Widget\Model\Widget\Instance::PRODUCT_TYPE_LAYOUT_HANDLE),
+                'layout_handle' => str_replace(
+                    '{{TYPE}}',
+                    $typeId,
+                    \Magento\Widget\Model\Widget\Instance::PRODUCT_TYPE_LAYOUT_HANDLE
+                ),
                 'is_anchor_only' => '',
                 'product_type_id' => $typeId
             );
@@ -264,16 +255,22 @@ class Layout
      */
     public function getLayoutsChooser()
     {
-        $chooserBlock = $this->getLayout()
-            ->createBlock('Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Layout')
-            ->setName('widget_instance[{{id}}][pages][layout_handle]')
-            ->setId('layout_handle')
-            ->setClass('required-entry select')
-            ->setExtraParams("onchange=\"WidgetInstance.loadSelectBoxByType(\'block_reference\', "
-                . "this.up(\'div.pages\'), this.value)\"")
-            ->setArea($this->getWidgetInstance()->getArea())
-            ->setTheme($this->getWidgetInstance()->getThemeId())
-        ;
+        $chooserBlock = $this->getLayout()->createBlock(
+            'Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Layout'
+        )->setName(
+            'widget_instance[{{id}}][pages][layout_handle]'
+        )->setId(
+            'layout_handle'
+        )->setClass(
+            'required-entry select'
+        )->setExtraParams(
+            "onchange=\"WidgetInstance.loadSelectBoxByType(\'block_reference\', " .
+            "this.up(\'div.pages\'), this.value)\""
+        )->setArea(
+            $this->getWidgetInstance()->getArea()
+        )->setTheme(
+            $this->getWidgetInstance()->getThemeId()
+        );
         return $chooserBlock->toHtml();
     }
 
@@ -284,16 +281,22 @@ class Layout
      */
     public function getPageLayoutsPageChooser()
     {
-        $chooserBlock = $this->getLayout()
-            ->createBlock('Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\DesignAbstraction')
-            ->setName('widget_instance[{{id}}][page_layouts][layout_handle]')
-            ->setId('layout_handle')
-            ->setClass('required-entry select')
-            ->setExtraParams("onchange=\"WidgetInstance.loadSelectBoxByType(\'block_reference\', "
-                    . "this.up(\'div.pages\'), this.value)\"")
-            ->setArea($this->getWidgetInstance()->getArea())
-            ->setTheme($this->getWidgetInstance()->getThemeId())
-        ;
+        $chooserBlock = $this->getLayout()->createBlock(
+            'Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\DesignAbstraction'
+        )->setName(
+            'widget_instance[{{id}}][page_layouts][layout_handle]'
+        )->setId(
+            'layout_handle'
+        )->setClass(
+            'required-entry select'
+        )->setExtraParams(
+            "onchange=\"WidgetInstance.loadSelectBoxByType(\'block_reference\', " .
+            "this.up(\'div.pages\'), this.value)\""
+        )->setArea(
+            $this->getWidgetInstance()->getArea()
+        )->setTheme(
+            $this->getWidgetInstance()->getThemeId()
+        );
         return $chooserBlock->toHtml();
     }
 
@@ -304,12 +307,15 @@ class Layout
      */
     public function getAddLayoutButtonHtml()
     {
-        $button = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
-            ->setData(array(
-                'label'     => __('Add Layout Update'),
-                'onclick'   => 'WidgetInstance.addPageGroup({})',
-                'class'     => 'action-add'
-            ));
+        $button = $this->getLayout()->createBlock(
+            'Magento\Backend\Block\Widget\Button'
+        )->setData(
+            array(
+                'label' => __('Add Layout Update'),
+                'onclick' => 'WidgetInstance.addPageGroup({})',
+                'class' => 'action-add'
+            )
+        );
         return $button->toHtml();
     }
 
@@ -320,12 +326,15 @@ class Layout
      */
     public function getRemoveLayoutButtonHtml()
     {
-        $button = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
-            ->setData(array(
-                'label'     => $this->escapeJsQuote(__('Remove Layout Update')),
-                'onclick'   => 'WidgetInstance.removePageGroup(this)',
-                'class'     => 'action-delete'
-            ));
+        $button = $this->getLayout()->createBlock(
+            'Magento\Backend\Block\Widget\Button'
+        )->setData(
+            array(
+                'label' => $this->escapeJsQuote(__('Remove Layout Update')),
+                'onclick' => 'WidgetInstance.removePageGroup(this)',
+                'class' => 'action-delete'
+            )
+        );
         return $button->toHtml();
     }
 
@@ -344,9 +353,9 @@ class Layout
                     'page_id' => $pageGroup['page_id'],
                     'group' => $pageGroup['page_group'],
                     'block' => $pageGroup['block_reference'],
-                    'for_value'   => $pageGroup['page_for'],
+                    'for_value' => $pageGroup['page_for'],
                     'layout_handle' => $pageGroup['layout_handle'],
-                    $pageGroup['page_group'].'_entities' => $pageGroup['entities'],
+                    $pageGroup['page_group'] . '_entities' => $pageGroup['entities'],
                     'template' => $pageGroup['page_template']
                 );
             }

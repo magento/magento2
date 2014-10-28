@@ -25,8 +25,18 @@
  */
 namespace Magento\Payment\Model\Config;
 
-class SchemaLocator implements \Magento\Config\SchemaLocatorInterface
+class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
+    /**
+     * Merged config schema file name
+     */
+    const MERGED_CONFIG_SCHEMA = 'payment.xsd';
+
+    /**
+     * Per file validation schema file name
+     */
+    const PER_FILE_VALIDATION_SCHEMA = 'payment_file.xsd';
+
     /**
      * Path to corresponding XSD file with validation rules for merged config
      *
@@ -42,12 +52,13 @@ class SchemaLocator implements \Magento\Config\SchemaLocatorInterface
     protected $_perFileSchema = null;
 
     /**
-     * @param \Magento\Module\Dir\Reader $moduleReader
+     * @param \Magento\Framework\Module\Dir\Reader $moduleReader
      */
-    public function __construct(\Magento\Module\Dir\Reader $moduleReader)
+    public function __construct(\Magento\Framework\Module\Dir\Reader $moduleReader)
     {
-        $this->_schema =  $moduleReader->getModuleDir('etc', 'Magento_Payment') . '/payment.xsd';
-        $this->_perFileSchema =  $moduleReader->getModuleDir('etc', 'Magento_Payment') . '/payment_file.xsd';
+        $this->_schema = $moduleReader->getModuleDir('etc', 'Magento_Payment') . '/' . self::MERGED_CONFIG_SCHEMA;
+        $this->_perFileSchema = $moduleReader->getModuleDir('etc', 'Magento_Payment')
+            . '/' . self::PER_FILE_VALIDATION_SCHEMA;
     }
 
     /**

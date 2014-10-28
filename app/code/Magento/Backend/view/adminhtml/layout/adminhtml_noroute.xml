@@ -23,14 +23,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <referenceContainer name="content">
-        <block class="Magento\View\Element\Text" name="content.noRoute">
+        <block class="Magento\Framework\View\Element\Text" name="content.noRoute">
             <action method="setText">
-                <argument translate="true" name="text" xsi:type="string">
-                    <![CDATA[<h1 class="page-heading">404 Error</h1><p>Page not found.</p>]]>
-                </argument>
+                <argument translate="true" name="text" xsi:type="string"><![CDATA[<h1 class="page-heading">404 Error</h1><p>Page not found.</p>]]></argument>
             </action>
         </block>
     </referenceContainer>
-</layout>
+</page>

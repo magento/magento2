@@ -19,13 +19,11 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_SalesRule
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/system_file.xsd">
     <system>
         <section id="promo" translate="label" type="text" sortOrder="400" showInDefault="1" showInWebsite="0" showInStore="0">
             <class>separator-top</class>
@@ -53,6 +51,14 @@
                     <label>Dash Every X Characters</label>
                     <comment>If empty no separation.</comment>
                     <frontend_class>validate-digits</frontend_class>
+                </field>
+            </group>
+        </section>
+        <section id="rss">
+            <group id="catalog">
+                <field id="discounts" translate="label" type="select" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Coupons/Discounts</label>
+                    <source_model>Magento\Backend\Model\Config\Source\Enabledisable</source_model>
                 </field>
             </group>
         </section>

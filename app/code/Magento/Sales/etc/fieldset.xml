@@ -19,14 +19,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/Object/etc/fieldset.xsd">
+        xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Object/etc/fieldset.xsd">
     <scope id="global">
         <fieldset id="sales_copy_order">
             <field name="customer_email">
@@ -325,8 +323,8 @@
                 <aspect name="to_order_address" />
                 <aspect name="to_customer_address" />
             </field>
-            <field name="street_full">
-                <aspect name="to_order_address" targetField="street" />
+            <field name="street">
+                <aspect name="to_order_address" />
             </field>
             <field name="street">
                 <aspect name="to_customer_address" />
@@ -499,13 +497,7 @@
             <field name="base_hidden_tax_amount">
                 <aspect name="to_order_item" />
             </field>
-            <field name="is_recurring">
-                <aspect name="to_order_item" />
-            </field>
             <field name="is_nominal">
-                <aspect name="to_order_item" />
-            </field>
-            <field name="free_shipping">
                 <aspect name="to_order_item" />
             </field>
         </fieldset>
@@ -673,8 +665,8 @@
             <field name="company">
                 <aspect name="to_quote_address" />
             </field>
-            <field name="street_full">
-                <aspect name="to_quote_address" targetField="street" />
+            <field name="street">
+                <aspect name="to_quote_address" />
             </field>
             <field name="city">
                 <aspect name="to_quote_address" />
@@ -811,9 +803,6 @@
                 <aspect name="to_cm_item" />
                 <aspect name="to_quote_item" />
             </field>
-            <field name="free_shipping">
-                <aspect name="to_quote_item" />
-            </field>
         </fieldset>
         <fieldset id="customer_account">
             <field name="id">
@@ -857,8 +846,8 @@
             <field name="id">
                 <aspect name="to_quote_address" targetField="customer_address_id" />
             </field>
-            <field name="parent_id">
-                <aspect name="to_quote_address" targetField="customer_id" />
+            <field name="customer_id">
+                <aspect name="to_quote_address" />
             </field>
             <field name="prefix">
                 <aspect name="to_quote_address" />
@@ -878,8 +867,8 @@
             <field name="company">
                 <aspect name="to_quote_address" />
             </field>
-            <field name="street_full">
-                <aspect name="to_quote_address" targetField="street" />
+            <field name="street">
+                <aspect name="to_quote_address" />
             </field>
             <field name="city">
                 <aspect name="to_quote_address" />

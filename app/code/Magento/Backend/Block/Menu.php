@@ -18,11 +18,10 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block;
 
 /**
  * Backend menu block
@@ -30,8 +29,6 @@
  * @method \Magento\Backend\Block\Menu setAdditionalCacheKeyInfo(array $cacheKeyInfo)
  * @method array getAdditionalCacheKeyInfo()
  */
-namespace Magento\Backend\Block;
-
 class Menu extends \Magento\Backend\Block\Template
 {
     const CACHE_TAGS = 'BACKEND_MAINMENU';
@@ -49,7 +46,7 @@ class Menu extends \Magento\Backend\Block\Template
     /**
      * Backend URL instance
      *
-     * @var \Magento\Backend\Model\Url
+     * @var \Magento\Backend\Model\UrlInterface
      */
     protected $_url;
 
@@ -76,30 +73,40 @@ class Menu extends \Magento\Backend\Block\Template
     protected $_menuConfig;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Backend\Model\Url $url
+     * @var \Magento\Framework\Locale\ResolverInterface
+     */
+    protected $_localeResolver;
+
+    /**
+     * @param Template\Context $context
+     * @param \Magento\Backend\Model\UrlInterface $url
      * @param \Magento\Backend\Model\Menu\Filter\IteratorFactory $iteratorFactory
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Backend\Model\Menu\Config $menuConfig
+     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Backend\Model\Url $url,
+        \Magento\Backend\Model\UrlInterface $url,
         \Magento\Backend\Model\Menu\Filter\IteratorFactory $iteratorFactory,
         \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Backend\Model\Menu\Config $menuConfig,
+        \Magento\Framework\Locale\ResolverInterface $localeResolver,
         array $data = array()
     ) {
         $this->_url = $url;
         $this->_iteratorFactory = $iteratorFactory;
         $this->_authSession = $authSession;
         $this->_menuConfig = $menuConfig;
+        $this->_localeResolver = $localeResolver;
         parent::__construct($context, $data);
     }
 
     /**
      * Initialize template and cache settings
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -119,10 +126,12 @@ class Menu extends \Magento\Backend\Block\Template
         $itemModel = $this->getActiveItemModel();
         $output = false;
 
-        if ($level == 0
-            && $itemModel instanceof \Magento\Backend\Model\Menu\Item
-            && ($itemModel->getId() == $item->getId()
-                || $item->getChildren()->get($itemModel->getId())!== null)
+        if ($level == 0 &&
+            $itemModel instanceof \Magento\Backend\Model\Menu\Item &&
+            ($itemModel->getId() == $item->getId() ||
+            $item->getChildren()->get(
+                $itemModel->getId()
+            ) !== null)
         ) {
             $output = true;
         }
@@ -181,9 +190,7 @@ class Menu extends \Magento\Backend\Block\Template
      */
     protected function _renderMouseEvent($menuItem)
     {
-        return $menuItem->hasChildren() ?
-            'onmouseover="Element.addClassName(this,\'over\')" onmouseout="Element.removeClassName(this,\'over\')"' :
-            '';
+        return $menuItem->hasChildren() ? 'onmouseover="Element.addClassName(this,\'over\')" onmouseout="Element.removeClassName(this,\'over\')"' : '';
     }
 
     /**
@@ -195,11 +202,18 @@ class Menu extends \Magento\Backend\Block\Template
      */
     protected function _renderItemCssClass($menuItem, $level)
     {
-        $isLast = 0 == $level && (bool) $this->getMenuModel()->isLast($menuItem) ? 'last' : '';
-        $output = ($this->_isItemActive($menuItem, $level) ? 'active' : '')
-            . ' ' . ($menuItem->hasChildren() ? 'parent' : '')
-            . ' ' . $isLast
-            . ' ' . 'level-' . $level;
+        $isLast = 0 == $level && (bool)$this->getMenuModel()->isLast($menuItem) ? 'last' : '';
+        $output = ($this->_isItemActive(
+            $menuItem,
+            $level
+        ) ? 'active' : '') .
+            ' ' .
+            ($menuItem->hasChildren() ? 'parent' : '') .
+            ' ' .
+            $isLast .
+            ' ' .
+            'level-' .
+            $level;
         return $output;
     }
 
@@ -211,11 +225,16 @@ class Menu extends \Magento\Backend\Block\Template
      */
     protected function _renderAnchor($menuItem, $level)
     {
-        return '<a href="' . $menuItem->getUrl() . '" ' . $this->_renderItemAnchorTitle($menuItem)
-            . $this->_renderItemOnclickFunction($menuItem)
-            . ' class="' . $this->_renderAnchorCssClass($menuItem, $level) . '">'
-            . '<span>' . $this->_getAnchorLabel($menuItem) . '</span>'
-            . '</a>';
+        return '<a href="' . $menuItem->getUrl() . '" ' . $this->_renderItemAnchorTitle(
+            $menuItem
+        ) . $this->_renderItemOnclickFunction(
+            $menuItem
+        ) . ' class="' . $this->_renderAnchorCssClass(
+            $menuItem,
+            $level
+        ) . '">' . '<span>' . $this->_getAnchorLabel(
+            $menuItem
+        ) . '</span>' . '</a>';
     }
 
     /**
@@ -238,7 +257,7 @@ class Menu extends \Magento\Backend\Block\Template
     protected function _afterToHtml($html)
     {
         $html = preg_replace_callback(
-            '#' . \Magento\Backend\Model\Url::SECRET_KEY_PARAM_NAME . '/\$([^\/].*)/([^\/].*)/([^\$].*)\$#U',
+            '#' . \Magento\Backend\Model\UrlInterface::SECRET_KEY_PARAM_NAME . '/\$([^\/].*)/([^\/].*)/([^\$].*)\$#U',
             array($this, '_callbackSecretKey'),
             $html
         );
@@ -249,13 +268,16 @@ class Menu extends \Magento\Backend\Block\Template
     /**
      * Replace Callback Secret Key
      *
-     * @param array $match
+     * @param string[] $match
      * @return string
      */
     protected function _callbackSecretKey($match)
     {
-        return \Magento\Backend\Model\Url::SECRET_KEY_PARAM_NAME . '/'
-            . $this->_url->getSecretKey($match[1], $match[2], $match[3]);
+        return \Magento\Backend\Model\UrlInterface::SECRET_KEY_PARAM_NAME . '/' . $this->_url->getSecretKey(
+            $match[1],
+            $match[2],
+            $match[3]
+        );
     }
 
     /**
@@ -279,7 +301,7 @@ class Menu extends \Magento\Backend\Block\Template
             'admin_top_nav',
             $this->getActive(),
             $this->_authSession->getUser()->getId(),
-            $this->_locale->getLocaleCode()
+            $this->_localeResolver->getLocaleCode()
         );
         // Add additional key parameters if needed
         $newCacheKeyInfo = $this->getAdditionalCacheKeyInfo();
@@ -312,16 +334,21 @@ class Menu extends \Magento\Backend\Block\Template
 
         /** @var $menuItem \Magento\Backend\Model\Menu\Item  */
         foreach ($this->_getMenuIterator($menu) as $menuItem) {
-            $output .= '<li ' . $this->_renderMouseEvent($menuItem)
-                . ' class="' . $this->_renderItemCssClass($menuItem, $level) . '"'
-                . $this->getUiId($menuItem->getId()) . '>';
+            $output .= '<li ' . $this->_renderMouseEvent(
+                $menuItem
+            ) . ' class="' . $this->_renderItemCssClass(
+                $menuItem,
+                $level
+            ) . '"' . $this->getUiId(
+                $menuItem->getId()
+            ) . '>';
 
             $output .= $this->_renderAnchor($menuItem, $level);
 
             if ($menuItem->hasChildren()) {
                 $output .= $this->renderMenu($menuItem->getChildren(), $level + 1);
             }
-            $output .='</li>';
+            $output .= '</li>';
         }
         $output .= '</ul>';
 
@@ -351,7 +378,7 @@ class Menu extends \Magento\Backend\Block\Template
      *
      * @param \Magento\Backend\Model\Menu $items
      * @param int $limit
-     * @return array
+     * @return array|void
      * @todo: Add Depth Level limit, and better logic for columns
      */
     protected function _columnBrake($items, $limit)
@@ -360,10 +387,7 @@ class Menu extends \Magento\Backend\Block\Template
         if ($total <= $limit) {
             return;
         }
-        $result[] = array(
-                'total' => $total,
-                'max'   => ceil($total / ceil($total / $limit))
-            );
+        $result[] = array('total' => $total, 'max' => ceil($total / ceil($total / $limit)));
         $count = 0;
         foreach ($items as $item) {
             $place = $this->_countItems($item->getChildren()) + 1;
@@ -377,10 +401,7 @@ class Menu extends \Magento\Backend\Block\Template
             } else {
                 $colbrake = false;
             }
-            $result[] = array(
-                'place' => $place,
-                'colbrake' => $colbrake
-            );
+            $result[] = array('place' => $place, 'colbrake' => $colbrake);
         }
         return $result;
     }
@@ -388,9 +409,9 @@ class Menu extends \Magento\Backend\Block\Template
     /**
      * Add sub menu HTML code for current menu item
      *
-     * @param $menuItem \Magento\Backend\Model\Menu\Item
-     * @param $level int
-     * @param $limit int
+     * @param \Magento\Backend\Model\Menu\Item $menuItem
+     * @param int $level
+     * @param int $limit
      * @return string HTML code
      */
     protected function _addSubMenu($menuItem, $level, $limit)
@@ -434,12 +455,19 @@ class Menu extends \Magento\Backend\Block\Template
                 $output .= '</ul></li><li class="column"><ul>';
             }
 
-            $output .= '<li ' . $this->getUiId($menuItem->getId())
-                . ' class="item-' . $itemClass . ' '
-                . $this->_renderItemCssClass($menuItem, $level) . '">'
-                . $this->_renderAnchor($menuItem, $level)
-                . $this->_addSubMenu($menuItem, $level, $limit)
-                . '</li>';
+            $output .= '<li ' . $this->getUiId(
+                $menuItem->getId()
+            ) . ' class="item-' . $itemClass . ' ' . $this->_renderItemCssClass(
+                $menuItem,
+                $level
+            ) . '">' . $this->_renderAnchor(
+                $menuItem,
+                $level
+            ) . $this->_addSubMenu(
+                $menuItem,
+                $level,
+                $limit
+            ) . '</li>';
             $itemPosition++;
         }
 
@@ -447,7 +475,7 @@ class Menu extends \Magento\Backend\Block\Template
             $output = '<li class="column"><ul>' . $output . '</ul></li>';
         }
 
-        return $outputStart . $output . '</ul>';;
+        return $outputStart . $output . '</ul>';
     }
 
     /**
@@ -459,7 +487,7 @@ class Menu extends \Magento\Backend\Block\Template
     {
         if (is_null($this->_activeItemModel)) {
             $this->_activeItemModel = $this->getMenuModel()->get($this->getActive());
-            if (false == ($this->_activeItemModel instanceof \Magento\Backend\Model\Menu\Item)) {
+            if (false == $this->_activeItemModel instanceof \Magento\Backend\Model\Menu\Item) {
                 $this->_activeItemModel = false;
             }
         }

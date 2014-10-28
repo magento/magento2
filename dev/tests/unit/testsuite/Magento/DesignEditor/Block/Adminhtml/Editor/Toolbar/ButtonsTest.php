@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_DesignEditor
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\DesignEditor\Block\Adminhtml\Editor\Toolbar;
 
 class ButtonsTest extends \PHPUnit_Framework_TestCase
@@ -47,9 +43,7 @@ class ButtonsTest extends \PHPUnit_Framework_TestCase
 
         $this->_urlBuilder = $this->getMock('Magento\Backend\Model\Url', array('getUrl'), array(), '', false);
 
-        $arguments = array(
-            'urlBuilder' => $this->_urlBuilder
-        );
+        $arguments = array('urlBuilder' => $this->_urlBuilder);
 
         $this->_block = $helper->getObject('Magento\DesignEditor\Block\Adminhtml\Editor\Toolbar\Buttons', $arguments);
     }

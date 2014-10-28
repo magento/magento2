@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Tools\I18n\Code;
 
 class FactoryTest extends \PHPUnit_Framework_TestCase
@@ -29,20 +28,49 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Tools\I18n\Code\Factory
      */
-    protected $_factory;
+    protected $factory;
 
     protected function setUp()
     {
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_factory = $objectManagerHelper->getObject('Magento\Tools\I18n\Code\Factory');
+        $this->factory = $objectManagerHelper->getObject('Magento\Tools\I18n\Code\Factory');
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Writer for "filename.invalid_type" is not exist.
+     * @param string $expectedInstance
+     * @param string $fileName
+     * @dataProvider createDictionaryWriterDataProvider
      */
-    public function testGetContextByPathWithInvalidPath()
+    public function testCreateDictionaryWriter($expectedInstance, $fileName)
     {
-        $this->_factory->createDictionaryWriter('filename.invalid_type');
+        $this->assertInstanceOf(
+            $expectedInstance,
+            $this->factory->createDictionaryWriter($fileName)
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function createDictionaryWriterDataProvider()
+    {
+        return [
+            [
+                'Magento\Tools\I18n\Code\Dictionary\Writer\Csv',
+                'filename.invalid_type'
+            ],
+            [
+                'Magento\Tools\I18n\Code\Dictionary\Writer\Csv',
+                'filename'
+            ],
+            [
+                'Magento\Tools\I18n\Code\Dictionary\Writer\Csv',
+                'filename.csv'
+            ],
+            [
+                'Magento\Tools\I18n\Code\Dictionary\Writer\Csv\Stdo',
+                ''
+            ],
+        ];
     }
 }

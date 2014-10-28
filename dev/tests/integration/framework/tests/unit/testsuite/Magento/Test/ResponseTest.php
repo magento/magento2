@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test;
 
 class ResponseTest extends \PHPUnit_Framework_TestCase
@@ -32,7 +28,9 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testCanSendHeaders()
     {
         $response = new \Magento\TestFramework\Response(
-            $this->getMock('Magento\Event\ManagerInterface', array(), array(), '', false)
+            $this->getMock('Magento\Framework\Stdlib\CookieManager', [], [], '', false),
+            $this->getMock('Magento\Framework\Stdlib\Cookie\CookieMetadataFactory', [], [], '', false),
+            $this->getMock('Magento\Framework\App\Http\Context', [], [], '', false)
         );
         $this->assertTrue($response->canSendHeaders());
         $this->assertTrue($response->canSendHeaders(false));

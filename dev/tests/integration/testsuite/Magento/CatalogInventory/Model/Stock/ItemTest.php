@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_CatalogInventory
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\CatalogInventory\Model\Stock;
 
 class ItemTest extends \PHPUnit_Framework_TestCase
@@ -36,8 +32,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\CatalogInventory\Model\Stock\Item');
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\CatalogInventory\Model\Stock\Item'
+        );
     }
 
     /**
@@ -46,8 +43,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public static function simpleProductFixture()
     {
         /** @var $product \Magento\Catalog\Model\Product */
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Product');
+        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Product'
+        );
         $product->setTypeId('simple')
             ->setId(1)
             ->setAttributeSetId(4)
@@ -55,7 +53,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->setSku('simple')
             ->setPrice(10)
             ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
-            ->setStatus(\Magento\Catalog\Model\Product\Status::STATUS_ENABLED)
+            ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
             ->save();
     }
 
@@ -64,8 +62,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveWithNullQty()
     {
-        $this->_model
-            ->setProductId(1)
+        $this->_model->setProductId(1)
             ->setTypeId(\Magento\Catalog\Model\Product\Type::DEFAULT_TYPE)
             ->setStockId(\Magento\CatalogInventory\Model\Stock::DEFAULT_STOCK_ID)
             ->setQty(null);
@@ -89,8 +86,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
      */
     public function testStockStatusChangedAuto()
     {
-        $this->_model
-            ->setProductId(1)
+        $this->_model->setProductId(1)
             ->setTypeId(\Magento\Catalog\Model\Product\Type::DEFAULT_TYPE)
             ->setStockId(\Magento\CatalogInventory\Model\Stock::DEFAULT_STOCK_ID)
             ->setQty(1);
@@ -111,17 +107,5 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
         $this->_model->setUseConfigEnableQtyInc(true);
         $this->assertTrue($this->_model->getEnableQtyIncrements());
-    }
-
-    public function testSetGetProduct()
-    {
-        $this->assertNull($this->_model->getProduct());
-        $productOne = new \Magento\Object;
-        $this->_model->setData('product', $productOne);
-        $this->assertSame($productOne, $this->_model->getProduct());
-
-        $productTwo = new \Magento\Object;
-        $this->_model->setProduct($productTwo);
-        $this->assertSame($productTwo, $this->_model->getProduct());
     }
 }

@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    tests
- * @package     static
- * @subpackage  Legacy
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -55,7 +52,7 @@ class WordsTest extends \PHPUnit_Framework_TestCase
             function ($file) {
                 $words = self::$_wordsFinder->findWords($file);
                 if ($words) {
-                    $this->fail("Found words: '" . implode("', '", $words) . "' in '$file' file");
+                    $this->fail("Found words: '" . implode("', '", $words) . "' in '{$file}' file");
                 }
             },
             \Magento\TestFramework\Utility\Files::init()->getAllFiles()

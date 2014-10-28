@@ -18,12 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Downloadable
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Downloadable\Model;
 
 /**
@@ -44,22 +41,22 @@ namespace Magento\Downloadable\Model;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Sample extends \Magento\Core\Model\AbstractModel
+class Sample extends \Magento\Framework\Model\AbstractModel
 {
     const XML_PATH_SAMPLES_TITLE = 'catalog/downloadable/samples_title';
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -68,6 +65,7 @@ class Sample extends \Magento\Core\Model\AbstractModel
     /**
      * Initialize resource
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -78,12 +76,11 @@ class Sample extends \Magento\Core\Model\AbstractModel
     /**
      * After save process
      *
-     * @return \Magento\Downloadable\Model\Sample
+     * @return $this
      */
     protected function _afterSave()
     {
-        $this->getResource()
-            ->saveItemTitle($this);
+        $this->getResource()->saveItemTitle($this);
         return parent::_afterSave();
     }
 
@@ -130,7 +127,6 @@ class Sample extends \Magento\Core\Model\AbstractModel
      */
     public function getSearchableData($productId, $storeId)
     {
-        return $this->_getResource()
-            ->getSearchableData($productId, $storeId);
+        return $this->_getResource()->getSearchableData($productId, $storeId);
     }
 }

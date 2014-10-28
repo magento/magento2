@@ -18,30 +18,27 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model\Resource\Order\Grid;
 
 /**
  * Sales orders statuses option array
  */
-namespace Magento\Sales\Model\Resource\Order\Grid;
-
-class StatusesArray implements \Magento\Core\Model\Option\ArrayInterface
+class StatusesArray implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var \Magento\Sales\Model\Resource\Order\Status\CollectionFactory
      */
-    protected $_statusCollFactory;
+    protected $_statusCollectionFactory;
 
     /**
-     * @param \Magento\Sales\Model\Resource\Order\Status\CollectionFactory $statusCollFactory
+     * @param \Magento\Sales\Model\Resource\Order\Status\CollectionFactory $statusCollectionFactory
      */
-    public function __construct(\Magento\Sales\Model\Resource\Order\Status\CollectionFactory $statusCollFactory)
+    public function __construct(\Magento\Sales\Model\Resource\Order\Status\CollectionFactory $statusCollectionFactory)
     {
-        $this->_statusCollFactory = $statusCollFactory;
+        $this->_statusCollectionFactory = $statusCollectionFactory;
     }
 
     /**
@@ -51,7 +48,7 @@ class StatusesArray implements \Magento\Core\Model\Option\ArrayInterface
      */
     public function toOptionArray()
     {
-        $statuses = $this->_statusCollFactory->create()->toOptionHash();
+        $statuses = $this->_statusCollectionFactory->create()->toOptionHash();
         return $statuses;
     }
 }

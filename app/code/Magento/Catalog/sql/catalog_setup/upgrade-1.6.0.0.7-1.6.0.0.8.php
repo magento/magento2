@@ -18,14 +18,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /** @var $installer \Magento\Catalog\Model\Resource\Setup */
-$installer  = $this;
+$installer = $this;
 $connection = $installer->getConnection();
 
 $connection->addIndex(
@@ -53,45 +51,24 @@ $connection->addIndex(
 
 $connection->addIndex(
     $installer->getTable('catalog_category_anc_products_index_idx'),
-    $installer->getIdxName(
-        'catalog_category_anc_products_index_idx',
-        array('category_id', 'product_id', 'position')
-    ),
+    $installer->getIdxName('catalog_category_anc_products_index_idx', array('category_id', 'product_id', 'position')),
     array('category_id', 'product_id', 'position')
 );
 
 $connection->addIndex(
     $installer->getTable('catalog_category_anc_products_index_tmp'),
-    $installer->getIdxName(
-        'catalog_category_anc_products_index_tmp',
-        array('category_id', 'product_id', 'position')
-    ),
+    $installer->getIdxName('catalog_category_anc_products_index_tmp', array('category_id', 'product_id', 'position')),
     array('category_id', 'product_id', 'position')
 );
 
 $connection->addIndex(
     $installer->getTable('catalog_category_anc_categs_index_idx'),
-    $installer->getIdxName(
-        'catalog_category_anc_categs_index_idx',
-        array('path', 'category_id')
-    ),
+    $installer->getIdxName('catalog_category_anc_categs_index_idx', array('path', 'category_id')),
     array('path', 'category_id')
 );
 
 $connection->addIndex(
     $installer->getTable('catalog_category_anc_categs_index_tmp'),
-    $installer->getIdxName(
-        'catalog_category_anc_categs_index_tmp',
-        array('path', 'category_id')
-    ),
+    $installer->getIdxName('catalog_category_anc_categs_index_tmp', array('path', 'category_id')),
     array('path', 'category_id')
-);
-
-$connection->addIndex(
-    $installer->getTable('catalog_category_entity'),
-    $installer->getIdxName(
-        'catalog_category_entity',
-        array('path', 'entity_id')
-    ),
-    array('path', 'entity_id')
 );

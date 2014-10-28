@@ -23,14 +23,19 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <referenceContainer name="content">
-        <block class="Magento\Backend\Block\Dashboard" name="dashboard">
-            <block class="Magento\Backend\Block\Store\Switcher" name="store_switcher" as="store_switcher" template="store/switcher.phtml">
-                <action method="setUseConfirm">
-                    <argument name="params" xsi:type="string">0</argument>
-                </action>
-            </block>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <referenceContainer name="page.main.actions">
+        <block class="Magento\Backend\Block\Store\Switcher"
+               name="store_switcher"
+               as="store_switcher"
+               template="Magento_Backend::store/switcher.phtml">
+            <action method="setUseConfirm">
+                <argument name="params" xsi:type="string">0</argument>
+            </action>
         </block>
     </referenceContainer>
-</layout>
+
+    <referenceContainer name="content">
+        <block class="Magento\Backend\Block\Dashboard" name="dashboard" />
+    </referenceContainer>
+</page>

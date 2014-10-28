@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page_types>
+<page_types xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Core/etc/page_types.xsd">
     <type id="review_customer_index" label="Customer My Account Product Reviews"/>
     <type id="review_customer_view" label="Customer My Account Review Details"/>
     <type id="review_product_list" label="Catalog Product Reviews List"/>

@@ -18,60 +18,53 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Catalog\Model;
 
 /**
  * Catalog Custom Category design Model
  *
- * @category   Magento
- * @package    Magento_Catalog
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model;
-
-class Design extends \Magento\Core\Model\AbstractModel
+class Design extends \Magento\Framework\Model\AbstractModel
 {
-    const APPLY_FOR_PRODUCT     = 1;
-    const APPLY_FOR_CATEGORY    = 2;
+    const APPLY_FOR_PRODUCT = 1;
+
+    const APPLY_FOR_CATEGORY = 2;
 
     /**
      * Design package instance
      *
-     * @var \Magento\View\DesignInterface
+     * @var \Magento\Framework\View\DesignInterface
      */
     protected $_design = null;
 
     /**
-     * Locale
-     *
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
-    protected $_locale;
+    protected $_localeDate;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Core\Model\LocaleInterface $locale
-     * @param \Magento\View\DesignInterface $design
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Framework\View\DesignInterface $design
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Core\Model\LocaleInterface $locale,
-        \Magento\View\DesignInterface $design,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Framework\View\DesignInterface $design,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        $this->_locale = $locale;
+        $this->_localeDate = $localeDate;
         $this->_design = $design;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
@@ -81,7 +74,6 @@ class Design extends \Magento\Core\Model\AbstractModel
      *
      * @param string $design
      * @return $this
-     * @return \Magento\Catalog\Model\Design
      */
     public function applyCustomDesign($design)
     {
@@ -93,7 +85,7 @@ class Design extends \Magento\Core\Model\AbstractModel
      * Get custom layout settings
      *
      * @param \Magento\Catalog\Model\Category|\Magento\Catalog\Model\Product $object
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     public function getDesignSettings($object)
     {
@@ -115,7 +107,7 @@ class Design extends \Magento\Core\Model\AbstractModel
                 return $this->_extractSettings($object);
             }
         } else {
-             return $this->_extractSettings($category);
+            return $this->_extractSettings($category);
         }
     }
 
@@ -123,20 +115,34 @@ class Design extends \Magento\Core\Model\AbstractModel
      * Extract custom layout settings from category or product object
      *
      * @param \Magento\Catalog\Model\Category|\Magento\Catalog\Model\Product $object
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     protected function _extractSettings($object)
     {
-        $settings = new \Magento\Object;
+        $settings = new \Magento\Framework\Object();
         if (!$object) {
             return $settings;
         }
         $date = $object->getCustomDesignDate();
-        if (array_key_exists('from', $date) && array_key_exists('to', $date)
-            && $this->_locale->isStoreDateInInterval(null, $date['from'], $date['to'])) {
-                $settings->setCustomDesign($object->getCustomDesign())
-                    ->setPageLayout($object->getPageLayout())
-                    ->setLayoutUpdates((array)$object->getCustomLayoutUpdate());
+        if (array_key_exists(
+            'from',
+            $date
+        ) && array_key_exists(
+            'to',
+            $date
+        ) && $this->_localeDate->isScopeDateInInterval(
+            null,
+            $date['from'],
+            $date['to']
+        )
+        ) {
+            $settings->setCustomDesign(
+                $object->getCustomDesign()
+            )->setPageLayout(
+                $object->getPageLayout()
+            )->setLayoutUpdates(
+                (array)$object->getCustomLayoutUpdate()
+            );
         }
         return $settings;
     }
@@ -144,9 +150,9 @@ class Design extends \Magento\Core\Model\AbstractModel
     /**
      * Merge custom design settings
      *
-     * @param \Magento\Object $categorySettings
-     * @param \Magento\Object $productSettings
-     * @return \Magento\Object
+     * @param \Magento\Framework\Object $categorySettings
+     * @param \Magento\Framework\Object $productSettings
+     * @return \Magento\Framework\Object
      */
     protected function _mergeSettings($categorySettings, $productSettings)
     {

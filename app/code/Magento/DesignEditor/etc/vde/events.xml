@@ -23,11 +23,8 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
     <event name="controller_action_layout_generate_blocks_after">
         <observer name="vde_editor" instance="Magento\DesignEditor\Model\Observer" method="clearJs" />
-    </event>
-    <event name="translate_initialization_before">
-        <observer name="initialize_translation" instance="Magento\DesignEditor\Model\Observer" method="initializeTranslation" />
     </event>
 </config>

@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     performance_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,11 +27,10 @@
  */
 namespace Magento\TestFramework\Performance\Scenario\Handler;
 
-class Jmeter
-    implements \Magento\TestFramework\Performance\Scenario\HandlerInterface
+class Jmeter implements \Magento\TestFramework\Performance\Scenario\HandlerInterface
 {
     /**
-     * @var \Magento\Shell
+     * @var \Magento\Framework\Shell
      */
     protected $_shell;
 
@@ -45,10 +42,10 @@ class Jmeter
     /**
      * Constructor
      *
-     * @param \Magento\Shell $shell
+     * @param \Magento\Framework\Shell $shell
      * @param bool $validateExecutable
      */
-    public function __construct(\Magento\Shell $shell, $validateExecutable = true)
+    public function __construct(\Magento\Framework\Shell $shell, $validateExecutable = true)
     {
         $this->_shell = $shell;
         $this->_validateExecutable = $validateExecutable;
@@ -60,7 +57,8 @@ class Jmeter
     protected function _validateScenarioExecutable()
     {
         if ($this->_validateExecutable) {
-            $this->_validateExecutable = false; // validate only once
+            $this->_validateExecutable = false;
+            // validate only once
             $this->_shell->execute('jmeter --version');
         }
     }
@@ -70,7 +68,7 @@ class Jmeter
      *
      * @param \Magento\TestFramework\Performance\Scenario $scenario
      * @param string|null $reportFile Report file to write results to, NULL disables report creation
-     * @throws \Magento\Exception
+     * @throws \Magento\Framework\Exception
      * @throws \Magento\TestFramework\Performance\Scenario\FailureException
      */
     public function run(\Magento\TestFramework\Performance\Scenario $scenario, $reportFile = null)
@@ -83,14 +81,16 @@ class Jmeter
 
         if ($reportFile) {
             if (!file_exists($reportFile)) {
-                throw new \Magento\Exception(
-                    "Report file '$reportFile' for '{$scenario->getTitle()}' has not been created."
+                throw new \Magento\Framework\Exception(
+                    "Report file '{$reportFile}' for '{$scenario->getTitle()}' has not been created."
                 );
             }
             $reportErrors = $this->_getReportErrors($reportFile);
             if ($reportErrors) {
-                throw new \Magento\TestFramework\Performance\Scenario\FailureException($scenario,
-                    implode(PHP_EOL, $reportErrors));
+                throw new \Magento\TestFramework\Performance\Scenario\FailureException(
+                    $scenario,
+                    implode(PHP_EOL, $reportErrors)
+                );
             }
         }
     }
@@ -112,7 +112,7 @@ class Jmeter
         }
         foreach ($scenario->getArguments() as $key => $value) {
             $command .= ' %s';
-            $arguments[] = "-J$key=$value";
+            $arguments[] = "-J{$key}={$value}";
         }
         return array($command, $arguments);
     }

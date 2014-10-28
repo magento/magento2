@@ -1,123 +1,121 @@
-"A block identifier with the same properties already exists in the selected store.","具有相同属性的区块标识符已在选定的商店存在。"
-"A directory with the same name already exists. Please try another folder name.","具有同样名称的目录已存在。请尝试另一个文件夹名称。"
-"A page URL key for specified store already exists.","特定商店的页面 URL 密钥已存在。"
-"Action","操作"
-"Add New Block","添加新区块"
-"Add New Page","添加新页面"
-"All Countries","全部国家"
-"An error occurred while saving the page.","保存页面时发生错误。"
-"Anchor Custom Text","自定义文本锚点"
-"Anchor Custom Title","自定义标题锚点"
-"Are you sure you want to delete current folder?","您确认要删除当前文件夹吗？"
-"Are you sure you want to delete the selected file?","您确认要删除已选择的文件吗？"
-"Block","区块"
-"Block Information","块信息"
-"Block Title","区块标题"
-"CMS","CMS"
-"CMS Content Wrapper","CMS 内容包装器"
-"CMS Home Page","CMS首页"
-"CMS No Cookies Page","CMS 无 Cookie 页面"
-"CMS No Route Page","CMS 无路由页面"
-"CMS No-Route Page","CMS非路由页"
-"CMS Page","CMS 页面"
-"CMS Page Link","CMS 页面链接"
-"CMS Page Link Block Template","CMS页面链接块模板"
-"CMS Page Link Inline Template","CMS页面链接内联摸板"
-"CMS Pages (All)","CMS页面（全部）"
-"CMS Static Block","CMS 静态区块"
-"CMS Static Block Default Template","CMS 静态区块默认模板"
-"Cannot create new directory.","无法创建新目录。"
-"Cannot delete directory %s.","无法删除目录 %s。"
-"Cannot delete root directory %s.","无法删除根目录 %s。"
-"Cannot upload file.","无法上传文件。"
-"Collapse All","折叠全部"
-"Content","内容"
-"Content Heading","内容标题"
-"Content Management","内容管理"
-"Contents of a Static Block","静态区块的内容"
-"Create Folder...","创建文件夹..."
-"Custom Design","自定义设计"
-"Custom Design From","自定义设计，来自："
-"Custom Design To","自定义设计到"
-"Custom Layout","自定义布局"
-"Custom Layout Update XML","自定义布局更新 XML"
-"Custom Theme","自定义主题"
-"Customer Tax Class Information","自定义税费类别信息"
-"Date Created","创建日期"
-"Delete Block","删除区块"
-"Delete File","删除文件"
-"Delete Folder","删除文件夹"
-"Delete Page","删除页面"
-"Description","描述"
-"Design","设计"
-"Disabled","已禁用"
-"Disabled Completely","完全禁用"
-"Disabled by Default","默认被禁用"
-"Edit Block","编辑区块"
-"Edit Block '%s'","编辑区块“%s”"
-"Edit Page","编辑页面"
-"Edit Page '%s'","编辑页面“%s”"
-"Enable WYSIWYG Editor","启用 WYSIWYG 编辑器"
-"Enabled","已启用"
-"Enabled by Default","默认启用"
-"Expand All","全部展开"
-"General Information","常规信息"
-"Go to Home Page","前往主页"
-"Home","主页"
-"ID","ID"
-"Identifier","标识"
-"If empty, the Page Title will be used","如果为空，将使用页面标题"
-"Images (%s)","图片 (%s)"
-"Insert File","插入文件"
-"Invalid folder name. Please, use alphanumeric characters, underscores and dashes.","无效的文件夹名称。请使用字母数字字符、下划线和短划线。"
-"Keywords","关键词"
-"Last Modified","上次修改"
-"Layout","布局"
-"Layout Update XML","布局更新 XML"
-"Link to a CMS Page","链接到 CMS 页面"
-"Manage Pages","管理页面"
-"Media Gallery","媒体库"
-"Media Storage","媒体存储"
-"Meta Data","元数据"
-"Meta Description","元描述"
-"Meta Keywords","元关键词"
-"New Block","新块"
-"New Folder Name:","新文件夹名称："
-"New Page","新页面"
-"No files found","没有找到文件"
-"Page Information","页面信息"
-"Page Layout","页面布局"
-"Page Status","页面状态"
-"Page Title","页面标题"
-"Pages","页面"
-"Product Tax Class Information","产品税费类别信息"
-"Redirect to CMS-page if Cookies are Disabled","如果 Cookie 被禁用，则重定向到 CMS 页面"
-"Relative to Website Base URL","关于网站基本 URL"
-"Save Block","保存区块"
-"Save Page","保存页面"
-"Save Process","保存过程"
-"Select Block...","选择区块..."
-"Select Page...","选择页面..."
-"Show Breadcrumbs for CMS Pages","显示 CMS 页面的面包屑"
-"Show Notice if JavaScript is Disabled","如果 JavaScript 被禁用，则显示通知"
-"Static Blocks","静态块"
-"Status","状态"
-"Storage Root","存储根目录"
-"Store View","店铺视图"
-"Template","模板"
-"The block has been deleted.","该区块已被删除。"
-"The block has been saved.","区块已保存。"
-"The directory %s is not writable by server.","目录 %s 对服务器端不可写。"
-"The page URL key cannot consist only of numbers.","页面 URL 密钥不能仅由数字组成。"
-"The page URL key contains capital letters or disallowed symbols.","页面 URL 密钥包含大写字母或不允许的符号。"
-"The page has been deleted.","页面已被删除。"
-"The page has been saved.","页面已保存。"
-"The static block content cannot contain  directive with its self.","静态块内容不能包含到自己的指令。"
-"This block no longer exists.","区块已不存在。"
-"This page no longer exists.","该页面已不存在。"
-"Title","标题"
+ID,ID
+Action,操作
+"Delete File",删除文件
+"-- Please Select --","-- Please Select --"
+"Custom Design",自定义设计
+"Block Information",块信息
+Status,状态
+Disabled,已禁用
+Enabled,已启用
+"Save and Continue Edit","Save and Continue Edit"
+Title,标题
 "URL Key","URL Key"
-"Unable to find a block to delete.","无法找到可删除的区块。"
-"Unable to find a page to delete.","无法找到要删除的页面。"
-"WYSIWYG Options","WYSIWYG 选项"
-"px.","像素"
+"Store View",店铺视图
+Description,描述
+Home,主页
+"Browse Files...","Browse Files..."
+Content,内容
+"General Information",常规信息
+"Go to Home Page",前往主页
+px.,像素
+"Collapse All",折叠全部
+"Expand All",全部展开
+"Static Blocks",静态块
+"Add New Block",添加新区块
+"Save Block",保存区块
+"Delete Block",删除区块
+"Edit Block '%1'","Edit Block '%1'"
+"New Block",新块
+"Block Title",区块标题
+Identifier,标识
+"Manage Pages",管理页面
+"Add New Page",添加新页面
+"Save Page",保存页面
+"Delete Page",删除页面
+"Edit Page '%1'","Edit Page '%1'"
+"New Page",新页面
+"Content Heading",内容标题
+"Page Layout",页面布局
+Layout,布局
+"Layout Update XML","布局更新 XML"
+"Custom Design From",自定义设计，来自：
+"Custom Design To",自定义设计到
+"Custom Theme",自定义主题
+"Custom Layout",自定义布局
+"Custom Layout Update XML","自定义布局更新 XML"
+Design,设计
+"Page Information",页面信息
+"Page Title",页面标题
+"Relative to Web Site Base URL","Relative to Web Site Base URL"
+"Page Status",页面状态
+"Meta Data",元数据
+Keywords,关键词
+"Meta Keywords",元关键词
+"Meta Description",元描述
+Created,Created
+Modified,Modified
+Preview,Preview
+"Media Storage",媒体存储
+"Create Folder...",创建文件夹...
+"Delete Folder",删除文件夹
+"Insert File",插入文件
+"New Folder Name:",新文件夹名称：
+"Are you sure you want to delete this folder?","Are you sure you want to delete this folder?"
+"Are you sure you want to delete this file?","Are you sure you want to delete this file?"
+"Images (%1)","Images (%1)"
+"Storage Root",存储根目录
+CMS,CMS
+Blocks,Blocks
+"This block no longer exists.",区块已不存在。
+"Edit Block",编辑区块
+"The block has been saved.",区块已保存。
+"The block has been deleted.",该区块已被删除。
+"We can't find a block to delete.","We can't find a block to delete."
+Pages,页面
+"This page no longer exists.",该页面已不存在。
+"Edit Page",编辑页面
+"The page has been saved.",页面已保存。
+"Something went wrong while saving the page.","Something went wrong while saving the page."
+"The page has been deleted.",页面已被删除。
+"We can't find a page to delete.","We can't find a page to delete."
+"The directory %1 is not writable by server.","The directory %1 is not writable by server."
+"Make sure that static block content does not reference the block itself.","Make sure that static block content does not reference the block itself."
+"Enabled by Default",默认启用
+"Disabled by Default",默认被禁用
+"Disabled Completely",完全禁用
+"A block identifier with the same properties already exists in the selected store.",具有相同属性的区块标识符已在选定的商店存在。
+"A page URL key for specified store already exists.","特定商店的页面 URL 密钥已存在。"
+"The page URL key contains capital letters or disallowed symbols.","页面 URL 密钥包含大写字母或不允许的符号。"
+"The page URL key cannot be made of only numbers.","The page URL key cannot be made of only numbers."
+"Please correct the folder name. Use only letters, numbers, underscores and dashes.","Please correct the folder name. Use only letters, numbers, underscores and dashes."
+"We found a directory with the same name. Please try another folder name.","We found a directory with the same name. Please try another folder name."
+"We cannot create a new directory.","We cannot create a new directory."
+"We cannot delete directory %1.","We cannot delete directory %1."
+"We cannot upload the file.","We cannot upload the file."
+"We cannot delete root directory %1.","We cannot delete root directory %1."
+"Directory %1 is not under storage root path.","Directory %1 is not under storage root path."
+"No files found",没有找到文件
+Block,区块
+Template,模板
+"Anchor Custom Text",自定义文本锚点
+"Anchor Custom Title",自定义标题锚点
+"CMS Home Page","CMS Home Page"
+"CMS No Route Page","CMS No Route Page"
+"CMS No Cookies Page","CMS No Cookies Page"
+"Show Breadcrumbs for CMS Pages","Show Breadcrumbs for CMS Pages"
+"Browser Capabilities Detection","Browser Capabilities Detection"
+"Redirect to CMS-page if Cookies are Disabled","Redirect to CMS-page if Cookies are Disabled"
+"Show Notice if JavaScript is Disabled","Show Notice if JavaScript is Disabled"
+"Show Notice if Local Storage is Disabled","Show Notice if Local Storage is Disabled"
+"Content Management","Content Management"
+"WYSIWYG Options","WYSIWYG Options"
+"Enable WYSIWYG Editor","Enable WYSIWYG Editor"
+"CMS Page Link","CMS 页面链接"
+"Link to a CMS Page","链接到 CMS 页面"
+"CMS Page","CMS 页面"
+"If empty, the Page Title will be used",如果为空，将使用页面标题
+"CMS Page Link Block Template",CMS页面链接块模板
+"CMS Page Link Inline Template",CMS页面链接内联摸板
+"CMS Static Block","CMS 静态区块"
+"Contents of a Static Block",静态区块的内容
+"CMS Static Block Default Template","CMS 静态区块默认模板"

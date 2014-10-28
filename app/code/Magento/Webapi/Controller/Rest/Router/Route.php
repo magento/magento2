@@ -37,13 +37,16 @@ class Route extends \Zend_Controller_Router_Route
     protected $_secure;
 
     /** @var array */
-    protected $_aclResources = array();
+    protected $_aclResources = [];
+
+    /** @var array */
+    protected $_parameters = [];
 
     /**
      * Set service class.
      *
      * @param string $serviceClass
-     * @return \Magento\Webapi\Controller\Rest\Router\Route
+     * @return $this
      */
     public function setServiceClass($serviceClass)
     {
@@ -65,7 +68,7 @@ class Route extends \Zend_Controller_Router_Route
      * Set service method name.
      *
      * @param string $serviceMethod
-     * @return \Magento\Webapi\Controller\Rest\Router\Route
+     * @return $this
      */
     public function setServiceMethod($serviceMethod)
     {
@@ -87,7 +90,7 @@ class Route extends \Zend_Controller_Router_Route
      * Set if the route is secure
      *
      * @param boolean $secure
-     * @return \Magento\Webapi\Controller\Rest\Router\Route
+     * @return $this
      */
     public function setSecure($secure)
     {
@@ -109,10 +112,12 @@ class Route extends \Zend_Controller_Router_Route
      * Set ACL resources list.
      *
      * @param array $aclResources
+     * @return $this
      */
     public function setAclResources($aclResources)
     {
         $this->_aclResources = $aclResources;
+        return $this;
     }
 
     /**
@@ -123,6 +128,29 @@ class Route extends \Zend_Controller_Router_Route
     public function getAclResources()
     {
         return $this->_aclResources;
+    }
+
+
+    /**
+     * Set parameters list.
+     *
+     * @param array $parameters
+     * @return $this
+     */
+    public function setParameters($parameters)
+    {
+        $this->_parameters = $parameters;
+        return $this;
+    }
+
+    /**
+     * Get parameters list.
+     *
+     * @return array
+     */
+    public function getParameters()
+    {
+        return $this->_parameters;
     }
 
     /**

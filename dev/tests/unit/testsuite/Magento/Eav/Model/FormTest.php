@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Eav
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -53,7 +50,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
     protected $_userAttribute = null;
 
     /**
-     * @var \Magento\Object
+     * @var \Magento\Framework\Object
      */
     protected $_entity = null;
 
@@ -62,30 +59,29 @@ class FormTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_model = $this->getMockBuilder('Magento\Eav\Model\Form')
-            ->setMethods(array('_getFilteredFormAttributeCollection', '_getValidator', 'getEntity'))
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_model = $this->getMockBuilder(
+            'Magento\Eav\Model\Form'
+        )->setMethods(
+            array('_getFilteredFormAttributeCollection', '_getValidator', 'getEntity')
+        )->disableOriginalConstructor()->getMock();
 
-        $this->_userAttribute = new \Magento\Object(array(
-            'is_user_defined' => true,
-            'attribute_code' => 'attribute_visible_user',
-            'is_visible' => true
-        ));
-        $this->_systemAttribute = new \Magento\Object(array(
-            'is_user_defined' => false,
-            'attribute_code' => 'attribute_invisible_system',
-            'is_visible' => false
-        ));
+        $this->_userAttribute = new \Magento\Framework\Object(
+            array('is_user_defined' => true, 'attribute_code' => 'attribute_visible_user', 'is_visible' => true)
+        );
+        $this->_systemAttribute = new \Magento\Framework\Object(
+            array('is_user_defined' => false, 'attribute_code' => 'attribute_invisible_system', 'is_visible' => false)
+        );
         $this->_attributes = array($this->_userAttribute, $this->_systemAttribute);
-        $this->_model->expects($this->any())
-            ->method('_getFilteredFormAttributeCollection')
-            ->will($this->returnValue($this->_attributes));
+        $this->_model->expects(
+            $this->any()
+        )->method(
+            '_getFilteredFormAttributeCollection'
+        )->will(
+            $this->returnValue($this->_attributes)
+        );
 
-        $this->_entity = new \Magento\Object(array('id' => 1, 'attribute_visible_user' => 'abc'));
-        $this->_model->expects($this->any())
-            ->method('getEntity')
-            ->will($this->returnValue($this->_entity));
+        $this->_entity = new \Magento\Framework\Object(array('id' => 1, 'attribute_visible_user' => 'abc'));
+        $this->_model->expects($this->any())->method('getEntity')->will($this->returnValue($this->_entity));
     }
 
     /**
@@ -113,9 +109,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetUserAttributes()
     {
-        $expected = array(
-            'attribute_visible_user' => $this->_userAttribute
-        );
+        $expected = array('attribute_visible_user' => $this->_userAttribute);
         $this->assertEquals($expected, $this->_model->getUserAttributes());
     }
 
@@ -124,9 +118,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetSystemAttributes()
     {
-        $expected = array(
-            'attribute_invisible_system' => $this->_systemAttribute
-        );
+        $expected = array('attribute_invisible_system' => $this->_systemAttribute);
         $this->assertEquals($expected, $this->_model->getSystemAttributes());
     }
 
@@ -135,9 +127,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAllowedAttributes()
     {
-        $expected = array(
-            'attribute_visible_user' => $this->_userAttribute
-        );
+        $expected = array('attribute_visible_user' => $this->_userAttribute);
         $this->assertEquals($expected, $this->_model->getAllowedAttributes());
     }
 
@@ -152,25 +142,19 @@ class FormTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateDataPassed($isValid, $expected, $messages = null)
     {
-        $validator = $this->getMockBuilder('Magento\Eav\Model\Validator\Attribute\Data')
-            ->disableOriginalConstructor()
-            ->setMethods(array('isValid', 'getMessages'))
-            ->getMock();
-        $validator->expects($this->once())
-            ->method('isValid')
-            ->will($this->returnValue($isValid));
+        $validator = $this->getMockBuilder(
+            'Magento\Eav\Model\Validator\Attribute\Data'
+        )->disableOriginalConstructor()->setMethods(
+            array('isValid', 'getMessages')
+        )->getMock();
+        $validator->expects($this->once())->method('isValid')->will($this->returnValue($isValid));
         if ($messages) {
-            $validator->expects($this->once())
-                ->method('getMessages')
-                ->will($this->returnValue($messages));
+            $validator->expects($this->once())->method('getMessages')->will($this->returnValue($messages));
         } else {
-            $validator->expects($this->never())
-                ->method('getMessages');
+            $validator->expects($this->never())->method('getMessages');
         }
 
-        $this->_model->expects($this->once())
-            ->method('_getValidator')
-            ->will($this->returnValue($validator));
+        $this->_model->expects($this->once())->method('_getValidator')->will($this->returnValue($validator));
 
         $data = array('test' => true);
         $this->assertEquals($expected, $this->_model->validateData($data));
@@ -184,12 +168,8 @@ class FormTest extends \PHPUnit_Framework_TestCase
     public function validateDataProvider()
     {
         return array(
-            'is_valid' => array(
-                true, true, null
-            ),
-            'is_invalid' => array(
-                false, array('Invalid'), array('attribute_visible_user' => array('Invalid'))
-            ),
+            'is_valid' => array(true, true, null),
+            'is_invalid' => array(false, array('Invalid'), array('attribute_visible_user' => array('Invalid')))
         );
     }
 }

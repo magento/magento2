@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Model\Address\Config;
 
 class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
@@ -32,7 +31,7 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Module\Dir\Reader|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Dir\Reader|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_moduleReader;
 
@@ -50,13 +49,22 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->_xsdFile = $this->_xsdDir . '/address_formats.xsd';
         $this->_moduleReader = $this->getMock(
-            'Magento\Module\Dir\Reader', array('getModuleDir'), array(), '', false
+            'Magento\Framework\Module\Dir\Reader',
+            array('getModuleDir'),
+            array(),
+            '',
+            false
         );
-        $this->_moduleReader
-            ->expects($this->once())
-            ->method('getModuleDir')->with('etc', 'Magento_Customer')
-            ->will($this->returnValue($this->_xsdDir))
-        ;
+        $this->_moduleReader->expects(
+            $this->once()
+        )->method(
+            'getModuleDir'
+        )->with(
+            'etc',
+            'Magento_Customer'
+        )->will(
+            $this->returnValue($this->_xsdDir)
+        );
 
         $this->_model = new \Magento\Customer\Model\Address\Config\SchemaLocator($this->_moduleReader);
     }

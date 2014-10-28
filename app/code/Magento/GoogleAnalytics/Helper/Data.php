@@ -18,57 +18,54 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_GoogleAnalytics
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\GoogleAnalytics\Helper;
 
+use Magento\Store\Model\Store;
 
 /**
  * GoogleAnalytics data helper
  *
- * @category   Magento
- * @package    Magento_GoogleAnalytics
  */
-namespace Magento\GoogleAnalytics\Helper;
-
-class Data extends \Magento\App\Helper\AbstractHelper
+class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Config paths for using throughout the code
      */
-    const XML_PATH_ACTIVE  = 'google/analytics/active';
+    const XML_PATH_ACTIVE = 'google/analytics/active';
+
     const XML_PATH_ACCOUNT = 'google/analytics/account';
 
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
-     * @param \Magento\App\Helper\Context $context
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\Framework\App\Helper\Context $context
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
-        \Magento\Core\Model\Store\Config $coreStoreConfig
+        \Magento\Framework\App\Helper\Context $context,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         parent::__construct($context);
     }
 
     /**
      * Whether GA is ready to use
      *
-     * @param mixed $store
+     * @param null|string|bool|int|Store $store
      * @return bool
      */
     public function isGoogleAnalyticsAvailable($store = null)
     {
-        $accountId = $this->_coreStoreConfig->getConfig(self::XML_PATH_ACCOUNT, $store);
-        return $accountId && $this->_coreStoreConfig->getConfigFlag(self::XML_PATH_ACTIVE, $store);
+        $accountId = $this->_scopeConfig->getValue(self::XML_PATH_ACCOUNT, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
+        return $accountId && $this->_scopeConfig->isSetFlag(self::XML_PATH_ACTIVE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
     }
 }

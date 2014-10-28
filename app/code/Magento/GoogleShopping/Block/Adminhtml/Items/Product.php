@@ -18,21 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_GoogleShopping
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\GoogleShopping\Block\Adminhtml\Items;
 
 /**
  * Products Grid to add to Google Content
  *
- * @category    Magento
- * @package     Magento_GoogleShopping
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\GoogleShopping\Block\Adminhtml\Items;
-
 class Product extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
@@ -65,7 +60,6 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\GoogleShopping\Model\Resource\Item\CollectionFactory $itemCollectionFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $eavCollectionFactory
@@ -75,7 +69,6 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Url $urlModel,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\GoogleShopping\Model\Resource\Item\CollectionFactory $itemCollectionFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $eavCollectionFactory,
@@ -87,9 +80,12 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->_eavCollectionFactory = $eavCollectionFactory;
         $this->_productType = $productType;
         $this->_productFactory = $productFactory;
-        parent::__construct($context, $urlModel, $backendHelper, $data);
+        parent::__construct($context, $backendHelper, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -101,31 +97,34 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Before rendering html, but after trying to load cache
      *
-     * @return \Magento\GoogleShopping\Block\Adminhtml\Items\Product
+     * @return $this
      */
     protected function _beforeToHtml()
     {
         $this->setId($this->getId() . '_' . $this->getIndex());
-        $this->getChildBlock('reset_filter_button')
-            ->setData('onclick', $this->getJsObjectName() . '.resetFilter()');
-        $this->getChildBlock('search_button')
-            ->setData('onclick', $this->getJsObjectName() . '.doFilter()');
+        $this->getChildBlock('reset_filter_button')->setData('onclick', $this->getJsObjectName() . '.resetFilter()');
+        $this->getChildBlock('search_button')->setData('onclick', $this->getJsObjectName() . '.doFilter()');
         return parent::_beforeToHtml();
     }
 
     /**
      * Prepare grid collection object
      *
-     * @return \Magento\GoogleShopping\Block\Adminhtml\Items\Product
+     * @return $this
      */
     protected function _prepareCollection()
     {
-        $collection = $this->_productFactory->create()->getCollection()
-            ->setStore($this->_getStore())
-            ->addAttributeToSelect('name')
-            ->addAttributeToSelect('sku')
-            ->addAttributeToSelect('price')
-            ->addAttributeToSelect('attribute_set_id');
+        $collection = $this->_productFactory->create()->getCollection()->setStore(
+            $this->_getStore()
+        )->addAttributeToSelect(
+            'name'
+        )->addAttributeToSelect(
+            'sku'
+        )->addAttributeToSelect(
+            'price'
+        )->addAttributeToSelect(
+            'attribute_set_id'
+        );
 
         $store = $this->_getStore();
         if ($store->getId()) {
@@ -144,59 +143,57 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Prepare grid columns
      *
-     * @return \Magento\GoogleShopping\Block\Adminhtml\Items\Product
+     * @return $this
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('id', array(
-            'header'    => __('ID'),
-            'sortable'  => true,
-            'width'     => '60px',
-            'index'     => 'entity_id'
-        ));
-        $this->addColumn('name', array(
-            'header'    => __('Product'),
-            'index'     => 'name',
-            'column_css_class'=> 'name'
-        ));
+        $this->addColumn(
+            'id',
+            array('header' => __('ID'), 'sortable' => true, 'width' => '60px', 'index' => 'entity_id')
+        );
+        $this->addColumn('name', array('header' => __('Product'), 'index' => 'name', 'column_css_class' => 'name'));
 
-        $sets = $this->_eavCollectionFactory->create()
-            ->setEntityTypeFilter($this->_productFactory->create()->getResource()->getTypeId())
-            ->load()
-            ->toOptionHash();
+        $sets = $this->_eavCollectionFactory->create()->setEntityTypeFilter(
+            $this->_productFactory->create()->getResource()->getTypeId()
+        )->load()->toOptionHash();
 
-        $this->addColumn('type',
+        $this->addColumn(
+            'type',
             array(
-                'header'=> __('Type'),
+                'header' => __('Type'),
                 'width' => '60px',
                 'index' => 'type_id',
-                'type'  => 'options',
-                'options' => $this->_productType->getOptionArray(),
-        ));
+                'type' => 'options',
+                'options' => $this->_productType->getOptionArray()
+            )
+        );
 
-        $this->addColumn('set_name',
+        $this->addColumn(
+            'set_name',
             array(
-                'header'=> __('Attribute Set'),
+                'header' => __('Attribute Set'),
                 'width' => '100px',
                 'index' => 'attribute_set_id',
-                'type'  => 'options',
-                'options' => $sets,
-        ));
+                'type' => 'options',
+                'options' => $sets
+            )
+        );
 
-        $this->addColumn('sku', array(
-            'header'    => __('SKU'),
-            'width'     => '80px',
-            'index'     => 'sku',
-            'column_css_class'=> 'sku'
-        ));
-        $this->addColumn('price', array(
-            'header'    => __('Price'),
-            'align'     => 'center',
-            'type'      => 'currency',
-            'currency_code' => $this->_getStore()->getDefaultCurrencyCode(),
-            'rate'      => $this->_getStore()->getBaseCurrency()->getRate($this->_getStore()->getDefaultCurrencyCode()),
-            'index'     => 'price'
-        ));
+        $this->addColumn(
+            'sku',
+            array('header' => __('SKU'), 'width' => '80px', 'index' => 'sku', 'column_css_class' => 'sku')
+        );
+        $this->addColumn(
+            'price',
+            array(
+                'header' => __('Price'),
+                'align' => 'center',
+                'type' => 'currency',
+                'currency_code' => $this->_getStore()->getDefaultCurrencyCode(),
+                'rate' => $this->_getStore()->getBaseCurrency()->getRate($this->_getStore()->getDefaultCurrencyCode()),
+                'index' => 'price'
+            )
+        );
 
         return parent::_prepareColumns();
     }
@@ -204,17 +201,20 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Prepare grid massaction actions
      *
-     * @return \Magento\GoogleShopping\Block\Adminhtml\Items\Product
+     * @return $this
      */
     protected function _prepareMassaction()
     {
         $this->setMassactionIdField('entity_id');
         $this->getMassactionBlock()->setFormFieldName('product');
 
-        $this->getMassactionBlock()->addItem('add', array(
-             'label'    => __('Add to Google Content'),
-             'url'      => $this->getUrl('adminhtml/*/massAdd', array('_current'=>true)),
-        ));
+        $this->getMassactionBlock()->addItem(
+            'add',
+            array(
+                'label' => __('Add to Google Content'),
+                'url' => $this->getUrl('adminhtml/*/massAdd', array('_current' => true))
+            )
+        );
         return $this;
     }
 
@@ -225,13 +225,16 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function getGridUrl()
     {
-        return $this->getUrl('adminhtml/googleshopping_selection/grid', array('index' => $this->getIndex(),'_current'=>true));
+        return $this->getUrl(
+            'adminhtml/googleshopping_selection/grid',
+            array('index' => $this->getIndex(), '_current' => true)
+        );
     }
 
     /**
      * Get array with product ids, which was exported to Google Content
      *
-     * @return array
+     * @return int[]
      */
     protected function _getGoogleShoppingProductIds()
     {
@@ -246,7 +249,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Get store model by request param
      *
-     * @return \Magento\Core\Model\Store
+     * @return \Magento\Store\Model\Store
      */
     protected function _getStore()
     {

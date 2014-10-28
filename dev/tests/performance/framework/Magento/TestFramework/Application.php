@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     performance_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,41 +27,38 @@
  */
 namespace Magento\TestFramework;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class Application
 {
     /**
-     * Area code
-     */
-    const AREA_CODE = 'install';
-
-    /**
      * Configuration object
      *
-     * @param \Magento\Config
+     * @var \Magento\TestFramework\Performance\Config
      */
     protected $_config;
-
-    /**
-     * Application object
-     *
-     * @var \Magento\Core\Model\App
-     */
-    protected $_application;
 
     /**
      * Path to shell installer script
      *
      * @var string
      */
-    protected $_installerScript;
+    protected $_installScript;
 
     /**
-     * @var \Magento\Shell
+     * Path to shell uninstaller script
+     *
+     * @var string
+     */
+    protected $_uninstallScript;
+
+    /**
+     * @var \Magento\Framework\Shell
      */
     protected $_shell;
 
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
@@ -85,18 +80,35 @@ class Application
      * Constructor
      *
      * @param \Magento\TestFramework\Performance\Config $config
-     * @param \Magento\Shell $shell
-     * @throws \Magento\Exception
+     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\Shell $shell
      */
-    public function __construct(\Magento\TestFramework\Performance\Config $config, \Magento\Shell $shell)
-    {
-        $installerScript = $config->getApplicationBaseDir() . '/dev/shell/install.php';
-        if (!is_file($installerScript)) {
-            throw new \Magento\Exception("File '$installerScript' is not found.");
-        }
-        $this->_installerScript = realpath($installerScript);
+    public function __construct(
+        \Magento\TestFramework\Performance\Config $config,
+        \Magento\Framework\ObjectManager $objectManager,
+        \Magento\Framework\Shell $shell
+    ) {
+        $shellDir = $config->getApplicationBaseDir() . '/dev/shell';
+        $this->_objectManager = $objectManager;
+        $this->_installScript = $this->_assertPath($shellDir . '/install.php');
+        $this->_uninstallScript = $this->_assertPath($shellDir . '/uninstall.php');
         $this->_config = $config;
         $this->_shell = $shell;
+    }
+
+    /**
+     * Asserts that a file exists and returns its real path
+     *
+     * @param string $path
+     * @return string
+     * @throws \Magento\Framework\Exception
+     */
+    private function _assertPath($path)
+    {
+        if (!is_file($path)) {
+            throw new \Magento\Framework\Exception("File '{$path}' is not found.");
+        }
+        return realpath($path);
     }
 
     /**
@@ -107,10 +119,7 @@ class Application
     protected function _reset()
     {
         if ($this->_config->getInstallOptions()) {
-            $this->_uninstall()
-                ->_install()
-                ->reindex()
-                ->_updateFilesystemPermissions();
+            $this->_uninstall()->_install()->reindex()->_updateFilesystemPermissions();
         } else {
             $this->_isInstalled = true;
         }
@@ -147,7 +156,7 @@ class Application
      */
     protected function _uninstall()
     {
-        $this->_shell->execute('php -f %s -- --uninstall', array($this->_installerScript));
+        $this->_shell->execute('php -f %s', array($this->_uninstallScript));
 
         $this->_isInstalled = false;
         $this->_fixtures = array();
@@ -159,13 +168,13 @@ class Application
      * Install application according to installation options
      *
      * @return \Magento\TestFramework\Application
-     * @throws \Magento\Exception
+     * @throws \Magento\Framework\Exception
      */
     protected function _install()
     {
         $installOptions = $this->_config->getInstallOptions();
         if (!$installOptions) {
-            throw new \Magento\Exception('Trying to install Magento, but installation options are not set');
+            throw new \Magento\Framework\Exception('Trying to install Magento, but installation options are not set');
         }
 
         // Populate install options with global options
@@ -177,9 +186,9 @@ class Application
         }
 
         $installCmd = 'php -f %s --';
-        $installCmdArgs = array($this->_installerScript);
+        $installCmdArgs = array($this->_installScript);
         foreach ($installOptions as $optionName => $optionValue) {
-            $installCmd .= " --$optionName %s";
+            $installCmd .= " --{$optionName} %s";
             $installCmdArgs[] = $optionValue;
         }
         $this->_shell->execute($installCmd, $installCmdArgs);
@@ -194,36 +203,13 @@ class Application
      */
     protected function _updateFilesystemPermissions()
     {
-        /** @var \Magento\Filesystem\Directory\Write $varDirectory */
-        $varDirectory = $this->getObjectManager()->get('Magento\Filesystem')
-            ->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
-        $varDirectory->changePermissions('', 0777);
-    }
-
-    /**
-     * Bootstrap application, so it is possible to use its resources
-     *
-     * @return \Magento\TestFramework\Application
-     */
-    protected function _bootstrap()
-    {
-        /** @var $app \Magento\Core\Model\App */
-        $this->_application = $this->getObjectManager()->get('Magento\Core\Model\App');
-        $this->getObjectManager()->configure(
-            $this->getObjectManager()->get('Magento\App\ObjectManager\ConfigLoader')->load(self::AREA_CODE)
+        /** @var \Magento\Framework\Filesystem\Directory\Write $varDirectory */
+        $varDirectory = $this->getObjectManager()->get(
+            'Magento\Framework\Filesystem'
+        )->getDirectoryWrite(
+            DirectoryList::VAR_DIR
         );
-        $this->getObjectManager()->get('Magento\Config\ScopeInterface')->setCurrentScope(self::AREA_CODE);
-        return $this;
-    }
-
-    /**
-     * Bootstrap
-     *
-     * @return Application
-     */
-    public function bootstrap()
-    {
-        return $this->_bootstrap();
+        $varDirectory->changePermissions('', 0777);
     }
 
     /**
@@ -244,14 +230,12 @@ class Application
             return;
         }
 
-        $this->_bootstrap();
         foreach ($fixturesToApply as $fixtureFile) {
             $this->applyFixture($fixtureFile);
         }
         $this->_fixtures = $fixtures;
 
-        $this->reindex()
-            ->_updateFilesystemPermissions();
+        $this->reindex()->_updateFilesystemPermissions();
     }
 
     /**
@@ -280,15 +264,10 @@ class Application
     /**
      * Get object manager
      *
-     * @return \Magento\ObjectManager
+     * @return \Magento\Framework\ObjectManager
      */
-    public function getObjectManager()
+    protected function getObjectManager()
     {
-        if (!$this->_objectManager) {
-            $locatorFactory = new \Magento\App\ObjectManagerFactory();
-            $this->_objectManager = $locatorFactory->create(BP, $_SERVER);
-            $this->_objectManager->get('Magento\App\State')->setAreaCode(self::AREA_CODE);
-        }
         return $this->_objectManager;
     }
 }

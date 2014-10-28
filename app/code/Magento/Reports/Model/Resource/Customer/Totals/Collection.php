@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Reports
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,8 +26,6 @@
 /**
  * Customers by totals Report collection
  *
- * @category    Magento
- * @package     Magento_Reports
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Reports\Model\Resource\Customer\Totals;
@@ -41,14 +37,14 @@ class Collection extends \Magento\Reports\Model\Resource\Order\Collection
      *
      * @param string $fromDate
      * @param string $toDate
-     * @return \Magento\Reports\Model\Resource\Customer\Totals\Collection
+     * @return $this
      */
     protected function _joinFields($fromDate = '', $toDate = '')
     {
-        $this->joinCustomerName()
-            ->groupByCustomer()
-            ->addOrdersCount()
-            ->addAttributeToFilter('created_at', array('from' => $fromDate, 'to' => $toDate, 'datetime' => true));
+        $this->joinCustomerName()->groupByCustomer()->addOrdersCount()->addAttributeToFilter(
+            'created_at',
+            array('from' => $fromDate, 'to' => $toDate, 'datetime' => true)
+        );
         return $this;
     }
 
@@ -57,12 +53,11 @@ class Collection extends \Magento\Reports\Model\Resource\Order\Collection
      *
      * @param string $fromDate
      * @param string $toDate
-     * @return \Magento\Reports\Model\Resource\Customer\Totals\Collection
+     * @return $this
      */
     public function setDateRange($fromDate, $toDate)
     {
-        $this->_reset()
-            ->_joinFields($fromDate, $toDate);
+        $this->_reset()->_joinFields($fromDate, $toDate);
         return $this;
     }
 
@@ -70,17 +65,15 @@ class Collection extends \Magento\Reports\Model\Resource\Order\Collection
      * Set store filter collection
      *
      * @param array $storeIds
-     * @return \Magento\Reports\Model\Resource\Customer\Totals\Collection
+     * @return $this
      */
     public function setStoreIds($storeIds)
     {
         if ($storeIds) {
             $this->addAttributeToFilter('store_id', array('in' => (array)$storeIds));
-            $this->addSumAvgTotals(1)
-                ->orderByTotalAmount();
+            $this->addSumAvgTotals(1)->orderByTotalAmount();
         } else {
-            $this->addSumAvgTotals()
-                ->orderByTotalAmount();
+            $this->addSumAvgTotals()->orderByTotalAmount();
         }
 
         return $this;

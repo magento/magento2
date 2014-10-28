@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Tax
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -31,17 +29,32 @@
  */
 namespace Magento\Tax\Model\System\Config\Source\Tax\Display;
 
-class Type implements \Magento\Core\Model\Option\ArrayInterface
+class Type implements \Magento\Framework\Option\ArrayInterface
 {
+    /**
+     * @var array
+     */
     protected $_options;
 
+    /**
+     * @return array
+     */
     public function toOptionArray()
     {
         if (!$this->_options) {
             $this->_options = array();
-            $this->_options[] = array('value'=>\Magento\Tax\Model\Config::DISPLAY_TYPE_EXCLUDING_TAX, 'label'=>__('Excluding Tax'));
-            $this->_options[] = array('value'=>\Magento\Tax\Model\Config::DISPLAY_TYPE_INCLUDING_TAX, 'label'=>__('Including Tax'));
-            $this->_options[] = array('value'=>\Magento\Tax\Model\Config::DISPLAY_TYPE_BOTH, 'label'=>__('Including and Excluding Tax'));
+            $this->_options[] = array(
+                'value' => \Magento\Tax\Model\Config::DISPLAY_TYPE_EXCLUDING_TAX,
+                'label' => __('Excluding Tax')
+            );
+            $this->_options[] = array(
+                'value' => \Magento\Tax\Model\Config::DISPLAY_TYPE_INCLUDING_TAX,
+                'label' => __('Including Tax')
+            );
+            $this->_options[] = array(
+                'value' => \Magento\Tax\Model\Config::DISPLAY_TYPE_BOTH,
+                'label' => __('Including and Excluding Tax')
+            );
         }
         return $this->_options;
     }

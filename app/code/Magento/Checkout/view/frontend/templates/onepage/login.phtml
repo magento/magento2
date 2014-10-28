@@ -1,0 +1,129 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Customer onepage checkout login form template
+ *
+ */
+/** @var $this \Magento\Checkout\Block\Onepage\Login */
+?>
+<div class="login-wrapper">
+<?php echo $this->getChildHtml('login_before')?>
+<div class="block customer login">
+    <div class="title"><strong><?php echo __('Login') ?></strong></div>
+    <div class="content">
+        <form class="form login" data-role="login"
+              id="login-form"
+              action="<?php echo $this->getPostAction() ?>"
+              method="post"
+              data-mage-init='{"validation":{}}'>
+            <?php echo $this->getBlockHtml('formkey'); ?>
+            <fieldset class="fieldset login" data-hasrequired="<?php echo __('* Required Fields') ?>">
+                <div class="field note"><?php echo __('Already registered?') ?> <?php echo __('Please log in below:') ?></div>
+                <div class="field email required">
+                    <label class="label" for="login-email"><span><?php echo __('Email Address') ?></span></label>
+                    <div class="control">
+                        <input type="email" class="input-text" id="login-email" name="login[username]" data-validate="{required:true, 'validate-email':true}" value="<?php echo $this->escapeHtml($this->getUsername()) ?>" />
+                    </div>
+                </div>
+                <div class="field password required">
+                    <label for="login-password" class="label"><span><?php echo __('Password') ?></span></label>
+                    <div class="control">
+                        <input type="password" class="input-text" id="login-password" name="login[password]" data-validate="{required:true, 'validate-password':true}"/>
+                    </div>
+                </div>
+                <?php echo $this->getChildHtml('form_additional_info'); ?>
+                <div class="actions-toolbar">
+                    <input name="context" type="hidden" value="checkout" />
+                    <div class="primary">
+                        <button type="submit" class="action login primary" data-action="checkout-method-login"><span><?php echo __('Login') ?></span></button>
+                    </div>
+                    <div class="secondary">
+                        <a class="action remind" href="<?php echo $this->helper('Magento\Customer\Helper\Data')->getForgotPasswordUrl()?>">
+                            <span><?php echo __('Forgot Your Password?') ?></span>
+                        </a>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+<?php if ( $this->isAllowedGuestCheckout() || $this->helper('Magento\Customer\Helper\Data')->isRegistrationAllowed() ): ?>
+<div class="block guest">
+    <div class="title">
+        <strong>
+        <?php if( $this->isAllowedGuestCheckout() && $this->helper('Magento\Customer\Helper\Data')->isRegistrationAllowed() ): ?>
+            <?php echo __('Checkout as a Guest or Register') ?>
+        <?php elseif ( $this->isAllowedGuestCheckout() && !$this->helper('Magento\Customer\Helper\Data')->isRegistrationAllowed() ): ?>
+            <?php echo __('Checkout as a Guest') ?>
+        <?php else: ?>
+            <?php echo __('Register to Create an Account') ?>
+        <?php endif; ?>
+        </strong>
+    </div>
+    <div class="content">
+        <?php if( !$this->isAllowedGuestCheckout() && $this->helper('Magento\Customer\Helper\Data')->isRegistrationAllowed() ): ?>
+            <p><strong><?php echo __('Register and save time!') ?></strong><br />
+            <?php echo __('Register with us for future convenience:') ?></p>
+            <ul>
+                <li><?php echo __('Fast and easy check out') ?></li>
+                <li><?php echo __('Easy access to your order history and status') ?></li>
+            </ul>
+        <?php elseif( $this->isAllowedGuestCheckout() && $this->helper('Magento\Customer\Helper\Data')->isRegistrationAllowed() ): ?>
+            <p class="note"><?php echo __('Register with us for future convenience:') ?></p>
+        <?php endif ?>
+
+        <?php if( $this->isAllowedGuestCheckout() ): ?>
+            <fieldset class="fieldset guest">
+                <div class="field choice">
+                    <input type="radio" name="checkout_method" data-role="checkout-method-guest" id="login:guest" value="guest"<?php if($this->getQuote()->getCheckoutMethod()==Magento\Checkout\Model\Type\Onepage::METHOD_GUEST): ?> checked="checked"<?php endif; ?> class="radio" />
+                    <label class="label" for="login:guest"><span><?php echo __('Checkout as Guest') ?></span></label>
+                </div>
+                <?php if( $this->helper('Magento\Customer\Helper\Data')->isRegistrationAllowed() ): ?>
+                <div class="field choice">
+                    <input type="radio" name="checkout_method" data-role="checkout-method-register" id="login:register" value="register"<?php if($this->getQuote()->getCheckoutMethod()==Magento\Checkout\Model\Type\Onepage::METHOD_REGISTER || !$this->isAllowedGuestCheckout()): ?> checked="checked"<?php endif ?> class="radio" />
+                    <label class="label" for="login:register"><span><?php echo __('Register') ?></span></label>
+                </div>
+                <?php endif; ?>
+            </fieldset>
+        <?php endif; ?>
+        <div class="actions toolbar">
+            <div class="primary">
+                <?php if ($this->isAllowedGuestCheckout()): ?>
+                    <button data-role="opc-continue" id="onepage-guest-register-button" type="button" class="action continue primary" data-checkout='{"isGuestCheckoutAllowed":true}'><span><?php echo __('Continue') ?></span></button>
+                <?php elseif ($this->helper('Magento\Checkout\Helper\Data')->isCustomerMustBeLogged()): ?>
+                    <input type="checkbox" name="checkout_method" id="login:register" value="register" checked="checked" style="display: none"/>
+                    <button data-role="opc-continue" id="onepage-guest-register-button" type="button" class="action register primary" data-checkout='{"isGuestCheckoutAllowed":false, "registrationUrl":"<?php echo $this->helper('Magento\Customer\Helper\Data')->getRegisterUrl();?>"}'><span><?php echo __('Register') ?></span></button>
+                <?php else: ?>
+                    <input type="checkbox" name="checkout_method" data-role="checkout-method-register" id="login:register" value="register" checked="checked" style="display: none"/>
+                    <button data-role="opc-continue" id="onepage-guest-register-button" type="button" class="action register primary" data-checkout='{"isGuestCheckoutAllowed":true}'><span><?php echo __('Register') ?></span></button>
+                <?php endif; ?>
+            </div>
+        </div>
+
+    </div>
+</div>
+<?php endif; ?>
+</div>

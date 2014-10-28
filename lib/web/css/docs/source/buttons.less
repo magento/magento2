@@ -1,0 +1,740 @@
+// /**
+////  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+// *
+// * @category design
+// * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+// * @license http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+// */
+
+//  # Default button
+//
+//  Default style for buttons is set by the <code>.button()</code> mixin. The mixin is called in <code>.magento-reset()</code> or it can be called directly.
+//
+//  ## Default button large
+//  ```html
+//  <button class="example-button-1 example-button-2" type="button"><span>Button</span></button>
+//  <button class="example-button-1 example-button-2 :hover" type="button"><span>Hover</span></button>
+//  <button class="example-button-1 example-button-2 :active" type="button"><span>Active</span></button>
+//  <button class="example-button-1 example-button-2" type="button" disabled><span>Disabled</span></button>
+//  ```
+//
+//  ## Default button
+//  ```html
+//  <button class="example-button-1" type="button"><span>Button</span></button>
+//  <button class="example-button-1 :hover" type="button"><span>Hover</span></button>
+//  <button class="example-button-1 :active" type="button"><span>Active</span></button>
+//  <button class="example-button-1" type="button" disabled><span>Disabled</span></button>
+//  ```
+//
+//  ## Default button small
+//  ```html
+//  <button class="example-button-1 example-button-3" type="button"><span>Button</span></button>
+//  <button class="example-button-1 example-button-3 :hover" type="button"><span>Hover</span></button>
+//  <button class="example-button-1 example-button-3 :active" type="button"><span>Active</span></button>
+//  <button class="example-button-1 example-button-3" type="button" disabled><span>Disabled</span></button>
+//  ```
+//
+
+button {
+    .button(@_button-margin: 3px);
+    border-radius: 3px;
+    &:active,
+    &:focus {
+        box-shadow: inset 0 2px 1px rgba(0,0,0,.12);
+    }
+}
+
+.example-button-1 {
+    &.example-button-2 {
+        .button-l();
+    }
+    &.example-button-3 {
+        .button-s();
+        border-radius: 0;
+        color: #000;
+        &:hover,
+        &.active {
+            color: #000;
+        }
+    }
+}
+
+//  # Button variables
+//
+//  <pre>
+//    <table>
+//      <tr>
+//        <th class="vars_head">Mixin variable</th>
+//        <th class="vars_head">Default value</th>
+//        <th class="vars_head">Allowed values</th>
+//        <th class="vars_head">Comment</th>
+//      </tr>
+//      <tr>
+//        <th>@_button-font-family</th>
+//        <td class="vars_value">@font-family-base</td>
+//        <td class="vars_value">&nbsp;</td>
+//        <td>button font family</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-font-size</th>
+//        <td class="vars_value">@font-size-base</td>
+//        <td class="vars_value">&nbsp;</td>
+//        <td>button font size</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-font-weight</th>
+//        <td class="vars_value">@font-weight-bold</td>
+//        <td class="vars_value">&nbsp;</td>
+//        <td>button font weight</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-cursor</th>
+//        <td class="vars_value">pointer</td>
+//        <td class="vars_value">&nbsp;</td>
+//        <td>button cursor</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-display</th>
+//        <td class="vars_value">inline-block</td>
+//        <td class="vars_value">&nbsp;</td>
+//        <td>button display</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-disabled-opacity</th>
+//        <td class="vars_value">0.5</td>
+//        <td class="vars_value">&nbsp;</td>
+//        <td>button disabled opacity</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-height</th>
+//        <td class="vars_value">36px</td>
+//        <td class="vars_value">&nbsp;</td>
+//        <td>button height</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-width</th>
+//        <td class="vars_value">''</td>
+//        <td class="vars_value">&nbsp;</td>
+//        <td>button height</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-margin</th>
+//        <td class="vars_value">''</td>
+//        <td class="vars_value">&nbsp;</td>
+//        <td>button margin</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-padding</th>
+//        <td class="vars_value">0 15px</td>
+//        <td class="vars_value">&nbsp;</td>
+//        <td>button padding</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-gradient</th>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">true | false</td>
+//        <td>button has gradient background</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-gradient-direction</th>
+//        <td class="vars_value">''</td>
+//        <td class="vars_value">'' | vertical | horizontal</td>
+//        <td>direction of button background gradient (if there is any)</td>
+//      </tr>
+//      <tr>
+//        <th colspan="4" class="vars_section">Button default state</th>
+//      </tr>
+//      <tr>
+//        <th>@_button-color</th>
+//        <td class="vars_value">#333</td>
+//        <td class="vars_value">&nbsp;</td>
+//        <td>button text color</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-background</th>
+//        <td class="vars_value">#f2f2f2</td>
+//        <td class="vars_value">&nbsp;</td>
+//        <td>button background</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-border</th>
+//        <td class="vars_value">1px solid #cdcdcd</td>
+//        <td class="vars_value">&nbsp;</td>
+//        <td>button border</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-gradient-start-color</th>
+//        <td class="vars_value">#1979c3</td>
+//        <td class="vars_value">&nbsp;</td>
+//        <td>gradient background start color</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-gradient-end-color</th>
+//        <td class="vars_value">#006bb4</td>
+//        <td class="vars_value">&nbsp;</td>
+//        <td>gradient background end color</td>
+//      </tr>
+//      <tr>
+//        <th colspan="4" class="vars_section">Button hover state</th>
+//      </tr>
+//      <tr>
+//        <th>@_button-color-hover</th>
+//        <td class="vars_value">#555</td>
+//        <td class="vars_value">&nbsp;</td>
+//        <td>hovered button text color</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-background-hover</th>
+//        <td class="vars_value">#f2f2f2</td>
+//        <td class="vars_value">&nbsp;</td>
+//        <td>hovered button background</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-border-hover</th>
+//        <td class="vars_value">1px solid #cdcdcd</td>
+//        <td class="vars_value">&nbsp;</td>
+//        <td>hovered button border</td>
+//      </tr>
+//      <tr>
+//        <th nowrap="nowrap">@_button-gradient-start-color-hover<br /></th>
+//        <td class="vars_value">#006bb4</td>
+//        <td class="vars_value">&nbsp;</td>
+//        <td>hovered button gradient background start color</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-gradient-end-color-hover</th>
+//        <td class="vars_value">#1979c3</td>
+//        <td class="vars_value">&nbsp;</td>
+//        <td>hovered button gradient background end color</td>
+//      </tr>
+//      <tr>
+//        <th colspan="4" class="vars_section">Button active state</th>
+//      </tr>
+//      <tr>
+//        <th>@_button-color-active</th>
+//        <td class="vars_value">#333</td>
+//        <td class="vars_value">&nbsp;</td>
+//        <td>active button text color</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-background-active</th>
+//        <td class="vars_value">#f2f2f2</td>
+//        <td class="vars_value">&nbsp;</td>
+//        <td>active button background</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-border-active</th>
+//        <td class="vars_value">1px solid #cdcdcd</td>
+//        <td class="vars_value">&nbsp;</td>
+//        <td>active button border</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-gradient-start-color-active<br /></th>
+//        <td class="vars_value">#006bb4</td>
+//        <td class="vars_value">&nbsp;</td>
+//        <td>active button gradient background start color</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-gradient-end-color-active</th>
+//        <td class="vars_value">#006bb4</td>
+//        <td class="vars_value">&nbsp;</td>
+//        <td>active button gradient background end color</td>
+//      </tr>
+//      <tr>
+//        <th colspan="4" class="vars_section">Button with icon</th>
+//      </tr>
+//      <tr>
+//        <th>@_button-icon-use</th>
+//        <td class="vars_value">true</td>
+//        <td class="vars_value">true | false</td>
+//        <td>button has an icon</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-font-content</th>
+//        <td class="vars_value">@icon-settings</td>
+//        <td class="vars_value">&nbsp;</td>
+//        <td>button icon symbol</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-icon-font</th>
+//        <td class="vars_value">@icon-font</td>
+//        <td class="vars_value">&nbsp;</td>
+//        <td>button icon font</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-icon-font-size</th>
+//        <td class="vars_value">22px</td>
+//        <td class="vars_value">&nbsp;</td>
+//        <td>button icon font size</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-icon-font-line-height</th>
+//        <td class="vars_value" nowrap="nowrap">@icon-font-line-height</td>
+//        <td class="vars_value">&nbsp;</td>
+//        <td>button icon line height</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-icon-font-color</th>
+//        <td class="vars_value">inherit</td>
+//        <td class="vars_value">&nbsp;</td>
+//        <td>button icon color</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-icon-font-color-hover</th>
+//        <td class="vars_value">inherit</td>
+//        <td class="vars_value">&nbsp;</td>
+//        <td>hovered button icon color</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-icon-font-color-active</th>
+//        <td class="vars_value">inherit</td>
+//        <td class="vars_value">&nbsp;</td>
+//        <td>active button icon color</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-icon-font-margin</th>
+//        <td class="vars_value">0</td>
+//        <td class="vars_value">&nbsp;</td>
+//        <td>button icon margin</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-icon-font-vertical-align</th>
+//        <td class="vars_value">top</td>
+//        <td class="vars_value">&nbsp;</td>
+//        <td>button icon vertical align</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-icon-font-position</th>
+//        <td class="vars_value">@icon-position</td>
+//        <td class="vars_value">before | after</td>
+//        <td>button icon font position</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-icon-font-text-hide</th>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">true | false</td>
+//        <td>button icon text hide</td>
+//      </tr>
+//    </table>
+//  </pre>
+//
+//  # Button as an icon
+//
+//  To make a button look like an icon you need to:
+//
+//  enable icon:
+//  ```css
+//  @_button-icon-use: true
+//  ```
+//  set the font icon code:
+//  ```css
+//  @_button-font-content: @icon-cart
+//  ```
+//  hide button text:
+//  ```css
+//  @_button-icon-font-text-hide: true
+//  ```
+//
+//  ```html
+//    <button class="example-button-10" type="button">
+//        <span>Add to cart</span>
+//    </button>
+//    <button class="example-button-10 :hover" type="button">
+//        <span>Add to cart</span>
+//    </button>
+//    <button class="example-button-10 :active" type="button">
+//        <span>Add to cart</span>
+//    </button>
+//  ```
+//
+
+.example-button-10 {
+    .button(
+        @_button-margin: 3px,
+        @_button-icon-use: true,
+        @_button-font-content: @icon-cart,
+        @_button-icon-font-text-hide: true
+    );
+    .button-reset();
+}
+
+//  # Button with an icon on the left or right side of the text
+//
+//  <code>@_button-icon-font-position</code> variable is used to set up the icon postiton
+//
+//  Use <code>before</code> to set up button icon position on the left:
+//  ```css
+//  @_button-icon-font-position: before
+//  ```
+//
+//  ```html
+//    <button class="example-button-11" type="button" title="Add to cart">
+//        <span>Button</span>
+//    </button>
+//    <button class="example-button-11 :hover" type="button" title="Add to cart">
+//        <span>Hover</span>
+//    </button>
+//    <button class="example-button-11 :active" type="button" title="Add to cart">
+//        <span>Active</span>
+//    </button>
+//    <button class="example-button-11 disabled" type="button" title="Add to cart">
+//        <span>Disabled</span>
+//    </button>
+//  ```
+//  Use <code>after</code> to set up button icon position on the right:
+//  ```css
+//  @_button-icon-font-position: after
+//  ```
+//  ```html
+//    <button class="example-button-12" type="button" title="Add to cart">
+//        <span>Button</span>
+//    </button>
+//    <button class="example-button-12 :hover" type="button" title="Add to cart">
+//        <span>Hover</span>
+//    </button>
+//    <button class="example-button-12 :active" type="button" title="Add to cart">
+//        <span>Active</span>
+//    </button>
+//    <button class="example-button-12 disabled" type="button" title="Add to cart">
+//        <span>Disabled</span>
+//    </button>
+//  ```
+//
+
+.example-button-11 {
+    .button(
+        @_button-margin: 3px,
+        @_button-icon-use: true,
+        @_button-font-content: @icon-cart,
+        @_button-icon-font-position: before
+    );
+}
+
+.example-button-12 {
+    .button(
+        @_button-margin: 3px,
+        @_button-icon-use: true,
+        @_button-font-content: @icon-cart,
+        @_button-icon-font-position: after
+   );
+}
+
+//  # Button with fixed width
+//
+//  To get a fixed width button, you need to set:
+//  ```css
+//  @_button-width: 100px
+//  ```
+//
+//  ```html
+//    <button class="example-button-13" type="button" title="Add to cart">
+//        <span>Button</span>
+//    </button>
+//    <button class="example-button-13 :hover" type="button" title="Add to cart">
+//        <span>Hover</span>
+//    </button>
+//    <button class="example-button-13 :active" type="button" title="Add to cart">
+//        <span>Active</span>
+//    </button>
+//    <button class="example-button-13 disabled" type="button" title="Add to cart">
+//        <span>Disabled</span>
+//    </button>
+//  ```
+//
+
+.example-button-13 {
+    .button(@_button-width: 100px, @_button-margin: 3px);
+}
+
+//  # Primary button
+//
+//  The <code>.button-primary()</code> mixin is used to create a **primary button**. By default it uses Primary button variables from variables.less file.
+//
+//  ##Primary button big
+//  ```html
+//  <button class="example-button-4 example-button-5" type="button"><span>Button</span></button>
+//  <button class="example-button-4 example-button-5 :hover" type="button"><span>Hover</span></button>
+//  <button class="example-button-4 example-button-5 :active" type="button"><span>Active</span></button>
+//  <button class="example-button-4 example-button-5" type="button" disabled><span>Disabled</span></button>
+//  ```
+//
+//  ##Primary button
+//  ```html
+//  <button class="example-button-4" type="button"><span>Button</span></button>
+//  <button class="example-button-4 :hover" type="button"><span>Hover</span></button>
+//  <button class="example-button-4 :active" type="button"><span>Active</span></button>
+//  <button class="example-button-4 disabled" type="button"><span>Disabled</span></button>
+//  ```
+//
+//  ##Primary button small
+//  ```html
+//  <button class="example-button-4 example-button-6" type="button"><span>Buttonn</span></button>
+//  <button class="example-button-4 example-button-6 :hover" type="button"><span>Hover</span></button>
+//  <button class="example-button-4 example-button-6 :active" type="button"><span>Active</span></button>
+//  <button class="example-button-4 example-button-6" type="button" disabled><span>Disabled</span></button>
+//  ```
+//
+
+.example-button-4 {
+    .button-primary(
+        @_button-margin: 3px
+    );
+    &:active {
+        box-shadow: inset 0 3px 1px rgba(0,0,0,.29);
+    }
+    &.example-button-5 {
+        .button-l(@_button-l-padding: 0 35px);
+    }
+    &.example-button-6 {
+        .button-s(@_button-s-padding: 0 14px);
+        color: #fff;
+        &:hover,
+        &.active {
+            color: #fff;
+        }
+    }
+}
+
+//  # Primary button variables
+//
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Default vars_value</th>
+//            <th class="vars_head">Allowed vars_values</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@_button-primary-height</th>
+//            <td class="vars_value">36px</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>button height</td>
+//        </tr>
+//        <tr>
+//            <th>@_button-primary-width</th>
+//            <td class="vars_value">''</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>button height</td>
+//        </tr>
+//        <tr>
+//            <th>@_button-primary-margin</th>
+//            <td class="vars_value">0</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>button margin</td>
+//        </tr>
+//        <tr>
+//            <th>@_button-primary-padding</th>
+//            <td class="vars_value">@button-padding</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>button padding</td>
+//        </tr>
+//        <tr>
+//            <th>@_button-primary-gradient</th>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">true | false</td>
+//            <td>button has gradient background</td>
+//        </tr>
+//        <tr>
+//            <th>@_button-primary-gradient-direction</th>
+//            <td class="vars_value">''</td>
+//            <td class="vars_value">'' | vertical | horizontal</td>
+//            <td>direction of button background gradient (if there is any)</td>
+//        </tr>
+//        <tr>
+//            <th colspan="4" class="vars_section">Button default state</th>
+//        </tr>
+//        <tr>
+//            <th>@_button-primary-color</th>
+//            <td class="vars_value">#fff</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>button text color</td>
+//        </tr>
+//        <tr>
+//            <th>@_button-primary-background</th>
+//            <td class="vars_value">#1979c3</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>button background</td>
+//        </tr>
+//        <tr>
+//            <th>@_button-primary-border</th>
+//            <td class="vars_value">none</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>button border</td>
+//        </tr>
+//        <tr>
+//            <th>@_button-primary-gradient-start-color</th>
+//            <td class="vars_value">''</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>gradient background start color</td>
+//        </tr>
+//        <tr>
+//            <th>@_button-primary-gradient-end-color</th>
+//            <td class="vars_value">''</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>gradient background end color</td>
+//        </tr>
+//        <tr>
+//            <th colspan="4" class="vars_section">Button hover state</th>
+//        </tr>
+//        <tr>
+//            <th>@_button-primary-color-hover</th>
+//            <td class="vars_value">#fff</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>hovered button text color</td>
+//        </tr>
+//        <tr>
+//            <th>@_button-primary-background-hover</th>
+//            <td class="vars_value">#006bb4</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>hovered button background</td>
+//        </tr>
+//        <tr>
+//            <th>@_button-primary-border-hover</th>
+//            <td class="vars_value">none</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>hovered button border</td>
+//        </tr>
+//        <tr>
+//            <th nowrap="nowrap">@_button-primary-gradient-start-color-hover</th>
+//            <td class="vars_value">''</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>hovered button gradient background start color</td>
+//        </tr>
+//        <tr>
+//            <th>@_button-primary-gradient-end-color-hover</th>
+//            <td class="vars_value">''</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>hovered button gradient background end color</td>
+//        </tr>
+//        <tr>
+//            <th colspan="4" class="vars_section">Button active state</th>
+//        </tr>
+//        <tr>
+//            <th>@_button-color-active</th>
+//            <td class="vars_value">#006bb4</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>active button text color</td>
+//        </tr>
+//        <tr>
+//            <th>@_button-background-active</th>
+//            <td class="vars_value">#fff</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>active button background</td>
+//        </tr>
+//        <tr>
+//            <th>@_button-border-active</th>
+//            <td class="vars_value">none</td>
+//            <td class="vars_value">&nbsp;</td>
+//            <td>active button border</td>
+//        </tr>
+//        <tr>
+//            <th>@_button-gradient-start-color-active</th>
+//            <td class="vars_value">''</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>active button gradient background start color</td>
+//        </tr>
+//        <tr>
+//            <th>@_button-gradient-end-color-active</th>
+//            <td class="vars_value">''</td>
+//            <td class="vars_value">'' | value</td>
+//            <td>active button gradient background end color</td>
+//        </tr>
+//    </table>
+//  </pre>
+
+//  # Button with gradient background
+//
+//  The <code>.button()</code> mixin can get its values from variables.less file or directly
+//  ```html
+//  <button class="example-button-7" type="button"><span>Button</span></button>
+//  <button class="example-button-7 :hover" type="button"><span>Hover</span></button>
+//  <button class="example-button-7 :active" type="button"><span>Active</span></button>
+//  <button class="example-button-7 disabled" type="button"><span>Disabled</span></button>
+//  ```
+//
+
+.example-button-7 {
+    .button(
+        @_button-margin: 3px,
+        @_button-padding: @button-padding,
+        @_button-gradient-start-color: #1979c3,
+        @_button-gradient-end-color: #006bb4,
+        @_button-color: #fff,
+        @_button-gradient-start-color-hover: #006bb4,
+        @_button-gradient-end-color-hover: #1979c3,
+        @_button-color-hover: #fff,
+        @_button-gradient-start-color-active: #006bb4,
+        @_button-gradient-end-color-active: #006bb4,
+        @_button-color-active: #fff,
+        @_button-gradient: true,
+        @_button-gradient-direction: vertical,
+        @_button-border: @button-primary-border,
+        @_button-border-hover: @button-primary-border-hover,
+        @_button-border-active: @button-primary-border-active
+    );
+    border-radius: 3px;
+    &:active {
+        box-shadow: inset 0 3px 1px rgba(0,0,0,.29);
+    }
+}
+
+//  # Button as a link
+//
+//  The <code>.button-as-link()</code> mixin is used to make button look like a link. It resets default button styles.
+//
+//  ```html
+//  <button class="example-button-8" type="button"><span>Button</span></button>
+//  <button class="example-button-8 :visited" type="button"><span>Visited</span></button>
+//  <button class="example-button-8 :hover" type="button"><span>Hover</span></button>
+//  <button class="example-button-8 :active" type="button"><span>Active</span></button>
+//  <button class="example-button-8 disabled" type="button"><span>Disabled</span></button>
+//  ```
+//
+
+.example-button-8 {
+    .button-as-link();
+    font-weight: normal;
+    &:active {
+        box-shadow: none;
+    }
+}
+
+//  # Link as a button
+//
+//  The <code>.link-as-button()</code> mixin is used to reset link styles (text-decoration and display inline). Then to make it look like a button, you need to add the <code>.button()</code> mixin with appropriate paremeters.
+//
+//  ```html
+//  <a href="#" class="example-button-9"><span>Button</span></a>
+//  <a href="#" class="example-button-9 :hover"><span>Hover</span></a>
+//  <a href="#" class="example-button-9 :active"><span>Active</span></a>
+//  <a href="#" class="example-button-9 disabled"><span>Disabled</span></a>
+//  ```
+//
+
+.example-button-9 {
+    .link-as-button();
+    .button();
+    margin: 3px;
+    border-radius: 3px;
+    font-weight: bold;
+    &:active {
+        box-shadow: inset 0 3px 1px rgba(0,0,0,.29);
+    }
+}

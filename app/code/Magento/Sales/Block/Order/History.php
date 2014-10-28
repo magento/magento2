@@ -18,18 +18,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Order;
 
 /**
  * Sales order history block
  */
-namespace Magento\Sales\Block\Order;
-
-class History extends \Magento\View\Element\Template
+class History extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var string
@@ -52,14 +49,14 @@ class History extends \Magento\View\Element\Template
     protected $_orderConfig;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Sales\Model\Resource\Order\CollectionFactory $orderCollectionFactory
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\Order\Config $orderConfig
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Sales\Model\Resource\Order\CollectionFactory $orderCollectionFactory,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Sales\Model\Order\Config $orderConfig,
@@ -69,34 +66,46 @@ class History extends \Magento\View\Element\Template
         $this->_customerSession = $customerSession;
         $this->_orderConfig = $orderConfig;
         parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
 
-        $orders = $this->_orderCollectionFactory->create()
-            ->addFieldToSelect('*')
-            ->addFieldToFilter('customer_id', $this->_customerSession->getCustomer()->getId())
-            ->addFieldToFilter('state', array('in' => $this->_orderConfig->getVisibleOnFrontStates()))
-            ->setOrder('created_at', 'desc');
+        $orders = $this->_orderCollectionFactory->create()->addFieldToSelect(
+            '*'
+        )->addFieldToFilter(
+            'customer_id',
+            $this->_customerSession->getCustomerId()
+        )->addFieldToFilter(
+            'status',
+            array('in' => $this->_orderConfig->getVisibleOnFrontStatuses())
+        )->setOrder(
+            'created_at',
+            'desc'
+        );
 
         $this->setOrders($orders);
-
-        if ($this->_layout->getBlock('root')) {
-            $this->_layout->getBlock('root')->setHeaderTitle(__('My Orders'));
-        }
+        $this->pageConfig->setTitle(__('My Orders'));
     }
 
     /**
-     * @return $this|\Magento\View\Element\AbstractBlock
+     * @return $this
      */
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
 
-        $pager = $this->getLayout()->createBlock('Magento\Theme\Block\Html\Pager', 'sales.order.history.pager')
-            ->setCollection($this->getOrders());
+        $pager = $this->getLayout()->createBlock(
+            'Magento\Theme\Block\Html\Pager',
+            'sales.order.history.pager'
+        )->setCollection(
+            $this->getOrders()
+        );
         $this->setChild('pager', $pager);
         $this->getOrders()->load();
         return $this;

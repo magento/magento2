@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Payment
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -33,7 +30,7 @@ namespace Magento\Payment\Block\Info;
 class InstructionsTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Object
+     * @var \Magento\Framework\Object
      */
     protected $_method;
 
@@ -50,7 +47,7 @@ class InstructionsTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_method = new \Magento\Object();
+        $this->_method = new \Magento\Framework\Object();
         $this->_info = $objectManagerHelper->getObject('Magento\Payment\Model\Info');
         $this->_instructions = $objectManagerHelper->getObject('Magento\Payment\Block\Info\Instructions');
 

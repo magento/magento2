@@ -18,34 +18,29 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Core\Model\Resource\Variable;
 
 /**
  * Custom variable collection
  *
- * @category    Magento
- * @package     Magento_Core
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Core\Model\Resource\Variable;
-
-class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Store Id
      *
      * @var int
      */
-    protected $_storeId    = 0;
+    protected $_storeId = 0;
 
     /**
      *  Define resource model
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -57,7 +52,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Setter
      *
      * @param integer $storeId
-     * @return \Magento\Core\Model\Resource\Variable\Collection
+     * @return $this
      */
     public function setStoreId($storeId)
     {
@@ -78,15 +73,15 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add store values to result
      *
-     * @return \Magento\Core\Model\Resource\Variable\Collection
+     * @return $this
      */
     public function addValuesToResult()
     {
-        $this->getSelect()
-            ->join(
-                array('value_table' => $this->getTable('core_variable_value')),
-                'value_table.variable_id = main_table.variable_id',
-                array('value_table.value'));
+        $this->getSelect()->join(
+            array('value_table' => $this->getTable('core_variable_value')),
+            'value_table.variable_id = main_table.variable_id',
+            array('value_table.value')
+        );
         $this->addFieldToFilter('value_table.store_id', array('eq' => $this->getStoreId()));
         return $this;
     }

@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -33,6 +30,8 @@
  * config fixtures can't be applied before data fixture.
  */
 namespace Magento\Catalog\Model\Category;
+
+use Magento\Catalog\Model\Category\CategoryImageTest\StubZendLogWriterStream;
 
 class CategoryImageTest extends \PHPUnit_Framework_TestCase
 {
@@ -47,21 +46,38 @@ class CategoryImageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        /** @var $configModel \Magento\Core\Model\Config */
-        $this->_oldLogActive = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Core\Model\StoreManagerInterface')->getStore()->getConfig('dev/log/active');
-        $this->_oldExceptionFile = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Core\Model\StoreManagerInterface')->getStore()->getConfig('dev/log/exception_file');
+        $this->_oldLogActive = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\StoreManagerInterface'
+        )->getStore()->getConfig(
+            'dev/log/active'
+        );
+        $this->_oldExceptionFile = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\StoreManagerInterface'
+        )->getStore()->getConfig(
+            'dev/log/exception_file'
+        );
     }
 
     protected function tearDown()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-            ->getStore()->setConfig('dev/log/active', $this->_oldLogActive);
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\App\Config\MutableScopeConfigInterface'
+        )->setValue(
+            'dev/log/active',
+            $this->_oldLogActive,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+
         $this->_oldLogActive = null;
 
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-            ->getStore()->setConfig('dev/log/exception_file', $this->_oldExceptionFile);
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\App\Config\MutableScopeConfigInterface'
+        )->setValue(
+            'dev/log/exception_file',
+            $this->_oldExceptionFile,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+
         $this->_oldExceptionFile = null;
 
         $this->_oldWriterModel = null;
@@ -73,12 +89,12 @@ class CategoryImageTest extends \PHPUnit_Framework_TestCase
          * Added a quick fix to be able run separate tests with "phpunit --filter testMethod"
          */
         if (class_exists('Magento\Catalog\Model\Category\CategoryImageTest\StubZendLogWriterStreamTest', false)) {
-            \Magento\Catalog\Model\Category\CategoryImageTest\StubZendLogWriterStreamTest::$exceptions = array();
+            StubZendLogWriterStream::$exceptions = array();
         }
     }
 
     /**
-     * Test that there is no exception '$_FILES array is empty' in \Magento\File\Uploader::_setUploadFileId()
+     * Test that there is no exception '$_FILES array is empty' in \Magento\Framework\File\Uploader::_setUploadFileId()
      * if category image was not set
      *
      */
@@ -90,12 +106,11 @@ class CategoryImageTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var $category \Magento\Catalog\Model\Category */
-        $category = $objectManager->get('Magento\Core\Model\Registry')
+        $category = $objectManager->get('Magento\Framework\Registry')
             ->registry('_fixture/Magento\Catalog\Model\Category');
         $this->assertNotEmpty($category->getId());
 
-        foreach (\Magento\Catalog\Model\Category\CategoryImageTest\StubZendLogWriterStreamTest::$exceptions
-                 as $exception) {
+        foreach (StubZendLogWriterStream::$exceptions as $exception) {
             $this->assertNotContains('$_FILES array is empty', $exception['message']);
         }
     }

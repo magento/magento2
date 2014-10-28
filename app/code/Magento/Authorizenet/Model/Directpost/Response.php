@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Authorizenet
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,13 +25,11 @@
 /**
  * Authorize.net response model for DirectPost model.
  *
- * @category   Magento
- * @package    Magento_Authorizenet
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Authorizenet\Model\Directpost;
 
-class Response extends \Magento\Object
+class Response extends \Magento\Framework\Object
 {
     /**
      * Generates an Md5 hash to compare against AuthNet's.
@@ -61,8 +57,14 @@ class Response extends \Magento\Object
      */
     public function isValidHash($merchantMd5, $merchantApiLogin)
     {
-        return $this->generateHash($merchantMd5, $merchantApiLogin, $this->getXAmount(), $this->getXTransId())
-            == $this->getData('x_MD5_Hash');
+        return $this->generateHash(
+            $merchantMd5,
+            $merchantApiLogin,
+            $this->getXAmount(),
+            $this->getXTransId()
+        ) == $this->getData(
+            'x_MD5_Hash'
+        );
     }
 
     /**

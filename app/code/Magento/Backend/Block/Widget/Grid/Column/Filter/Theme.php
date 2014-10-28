@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,24 +27,23 @@
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 
-class Theme
-    extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
+class Theme extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {
     /**
-     * @var \Magento\View\Design\Theme\LabelFactory
+     * @var \Magento\Framework\View\Design\Theme\LabelFactory
      */
     protected $_labelFactory;
 
     /**
      * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\Core\Model\Resource\Helper $resourceHelper
-     * @param \Magento\View\Design\Theme\LabelFactory $labelFactory
+     * @param \Magento\Framework\DB\Helper $resourceHelper
+     * @param \Magento\Framework\View\Design\Theme\LabelFactory $labelFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
-        \Magento\Core\Model\Resource\Helper $resourceHelper,
-        \Magento\View\Design\Theme\LabelFactory $labelFactory,
+        \Magento\Framework\DB\Helper $resourceHelper,
+        \Magento\Framework\View\Design\Theme\LabelFactory $labelFactory,
         array $data = array()
     ) {
         $this->_labelFactory = $labelFactory;
@@ -62,10 +59,7 @@ class Theme
     {
         $options = $this->getOptions();
         if ($this->getColumn()->getWithEmpty()) {
-            array_unshift($options, array(
-                'value' => '',
-                'label' => ''
-            ));
+            array_unshift($options, array('value' => '', 'label' => ''));
         }
         $html = sprintf(
             '<select name="%s" id="%s" class="no-changes" %s>%s</select>',
@@ -87,7 +81,7 @@ class Theme
     {
         $options = $this->getColumn()->getOptions();
         if (empty($options) || !is_array($options)) {
-            /** @var $label \Magento\View\Design\Theme\Label */
+            /** @var $label \Magento\Framework\View\Design\Theme\Label */
             $label = $this->_labelFactory->create();
             $options = $label->getLabelsCollection();
         }
@@ -107,19 +101,19 @@ class Theme
         }
 
         $value = $this->getValue();
-        $html  = '';
+        $html = '';
 
         foreach ($options as $option) {
             if (!isset($option['value']) || !isset($option['label'])) {
                 continue;
             }
             if (is_array($option['value'])) {
-                $html .= '<optgroup label="'.$option['label'].'">'
-                    . $this->_drawOptions($option['value'])
-                    . '</optgroup>';
+                $html .= '<optgroup label="' . $option['label'] . '">' . $this->_drawOptions(
+                    $option['value']
+                ) . '</optgroup>';
             } else {
-                $selected = (($option['value'] == $value && (!is_null($value))) ? ' selected="selected"' : '');
-                $html .= '<option value="'.$option['value'].'"'.$selected.'>'.$option['label'].'</option>';
+                $selected = $option['value'] == $value && !is_null($value) ? ' selected="selected"' : '';
+                $html .= '<option value="' . $option['value'] . '"' . $selected . '>' . $option['label'] . '</option>';
             }
         }
 

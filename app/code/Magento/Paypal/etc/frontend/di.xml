@@ -23,32 +23,37 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
-    <virtualType name="Magento\Paypal\Model\Session\Storage" type="Magento\Session\Storage">
-        <param name="namespace">
-            <value>paypal</value>
-        </param>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <virtualType name="Magento\Paypal\Model\Session\Storage" type="Magento\Framework\Session\Storage">
+        <arguments>
+            <argument name="namespace" xsi:type="string">paypal</argument>
+        </arguments>
     </virtualType>
-    <virtualType name="Magento\Paypal\Model\Session" type="Magento\Session\Generic">
-        <param name="storage">
-            <instance type="Magento\Paypal\Model\Session\Storage" />
-        </param>
-        <param name="sessionName">
-            <value>frontend</value>
-        </param>
+    <virtualType name="Magento\Paypal\Model\Session" type="Magento\Framework\Session\Generic">
+        <arguments>
+            <argument name="storage" xsi:type="object">Magento\Paypal\Model\Session\Storage</argument>
+        </arguments>
     </virtualType>
-    <type name="Magento\Session\Generic">
-        <param name="sessionName">
-            <value>frontend</value>
-        </param>
-    </type>
+    <virtualType name="Magento\Paypal\Model\PayflowSession\Storage" type="Magento\Framework\Session\Storage">
+        <arguments>
+            <argument name="namespace" xsi:type="string">paypal_payflow</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Paypal\Model\PayflowSession" type="Magento\Framework\Session\Generic">
+        <arguments>
+            <argument name="storage" xsi:type="object">Magento\Paypal\Model\PayflowSession\Storage</argument>
+        </arguments>
+    </virtualType>
     <type name="Magento\Core\Model\Url\SecurityInfo">
-        <param name="secureUrlList">
-            <value>
-                <paypal_express>/paypal/express</paypal_express>
-                <paypal_standard>/paypal/standard</paypal_standard>
-                <paypal_express_callbackshippingoptions>paypal/express/callbackshippingoptions</paypal_express_callbackshippingoptions>
-            </value>
-        </param>
+        <arguments>
+            <argument name="secureUrlList" xsi:type="array">
+                <item name="paypal_express" xsi:type="string">/paypal/express</item>
+                <item name="paypal_payflowexpress" xsi:type="string">/paypal/payflowexpress</item>
+                <item name="paypal_standard" xsi:type="string">/paypal/standard</item>
+                <item name="paypal_express_callbackshippingoptions" xsi:type="string">paypal/express/callbackshippingoptions</item>
+                <item name="paypal_bml" xsi:type="string">/paypal/bml</item>
+                <item name="paypal_payflowbml" xsi:type="string">/paypal/payflowbml</item>
+            </argument>
+        </arguments>
     </type>
 </config>

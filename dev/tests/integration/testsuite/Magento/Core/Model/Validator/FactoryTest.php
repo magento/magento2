@@ -37,10 +37,10 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Core\Model\Validator\Factory $factory */
         $factory = $objectManager->get('Magento\Core\Model\Validator\Factory');
-        $this->assertInstanceOf('Magento\Validator\Config', $factory->getValidatorConfig());
+        $this->assertInstanceOf('Magento\Framework\Validator\Config', $factory->getValidatorConfig());
         // Check that default translator was set
-        $translator = \Magento\Validator\AbstractValidator::getDefaultTranslator();
-        $this->assertInstanceOf('Magento\Translate\AdapterInterface', $translator);
+        $translator = \Magento\Framework\Validator\AbstractValidator::getDefaultTranslator();
+        $this->assertInstanceOf('Magento\Framework\Translate\AdapterInterface', $translator);
         $this->assertEquals('Message', __('Message'));
         $this->assertEquals('Message', $translator->translate('Message'));
         $this->assertEquals(

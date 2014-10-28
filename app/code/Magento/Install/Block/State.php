@@ -18,18 +18,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Install
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Install\Block;
 
 /**
  * Install state block
  */
-class State extends \Magento\View\Element\Template
+class State extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var string
@@ -42,19 +39,19 @@ class State extends \Magento\View\Element\Template
      * @var \Magento\Install\Model\Wizard
      */
     protected $_wizard;
-    
+
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Install\Model\Wizard $wizard
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Install\Model\Wizard $wizard,
         array $data = array()
     ) {
         parent::__construct($context, $data);
-
+        $this->_isScopePrivate = true;
         $this->assign('steps', $wizard->getSteps());
     }
 
@@ -66,11 +63,7 @@ class State extends \Magento\View\Element\Template
     public function getDownloaderSteps()
     {
         if ($this->isDownloaderInstall()) {
-            $steps = array(
-                __('Welcome'),
-                __('Validation'),
-                __('Magento Connect Manager Deployment'),
-            );
+            $steps = array(__('Welcome'), __('Validation'), __('Magento Connect Manager Deployment'));
             return $steps;
         } else {
             return array();

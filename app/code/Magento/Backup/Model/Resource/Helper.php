@@ -18,15 +18,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backup
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backup\Model\Resource;
 
-class Helper extends \Magento\Core\Model\Resource\Helper
+class Helper extends \Magento\Framework\DB\Helper
 {
     /**
      * Tables foreign key data array
@@ -34,24 +31,24 @@ class Helper extends \Magento\Core\Model\Resource\Helper
      *
      * @var array
      */
-    protected $_foreignKeys    = array();
+    protected $_foreignKeys = array();
 
     /**
      * Core Date
      *
-     * @var \Magento\Core\Model\Date
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
     protected $_coreDate;
 
     /**
-     * @param \Magento\App\Resource $resource
-     * @param \Magento\Core\Model\Date $coreDate
-     * @param $modulePrefix
+     * @param \Magento\Framework\App\Resource $resource
+     * @param string $modulePrefix
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $coreDate
      */
     public function __construct(
-        \Magento\App\Resource $resource,
-        \Magento\Core\Model\Date $coreDate,
-        $modulePrefix
+        \Magento\Framework\App\Resource $resource,
+        $modulePrefix,
+        \Magento\Framework\Stdlib\DateTime\DateTime $coreDate
     ) {
         parent::__construct($resource, $modulePrefix);
         $this->_coreDate = $coreDate;
@@ -105,19 +102,20 @@ class Helper extends \Magento\Core\Model\Resource\Helper
             return '';
         }
 
-        return sprintf("ALTER TABLE %s\n  %s;\n",
+        return sprintf(
+            "ALTER TABLE %s\n  %s;\n",
             $this->_getReadAdapter()->quoteIdentifier($tableName),
             join(",\n  ", $foreignKeys)
         );
     }
 
-     /**
-      * Get create script for table
-      *
-      * @param string $tableName
-      * @param boolean $addDropIfExists
-      * @return string
-      */
+    /**
+     * Get create script for table
+     *
+     * @param string $tableName
+     * @param boolean $addDropIfExists
+     * @return string
+     */
     public function getTableCreateScript($tableName, $addDropIfExists = false)
     {
         $script = '';
@@ -127,12 +125,13 @@ class Helper extends \Magento\Core\Model\Resource\Helper
             $script .= 'DROP TABLE IF EXISTS ' . $quotedTableName . ";\n";
         }
         //TODO fix me
-        $sql     = 'SHOW CREATE TABLE ' . $quotedTableName;
-        $data    = $this->_getReadAdapter()->fetchRow($sql);
+        $sql = 'SHOW CREATE TABLE ' . $quotedTableName;
+        $data = $this->_getReadAdapter()->fetchRow($sql);
         $script .= isset($data['Create Table']) ? $data['Create Table'] . ";\n" : '';
 
         return $script;
     }
+
     /**
      * Retrieve SQL fragment for create table
      *
@@ -142,25 +141,26 @@ class Helper extends \Magento\Core\Model\Resource\Helper
      */
     public function getTableCreateSql($tableName, $withForeignKeys = false)
     {
-        $adapter         = $this->_getReadAdapter();
+        $adapter = $this->_getReadAdapter();
         $quotedTableName = $adapter->quoteIdentifier($tableName);
-        $query           = 'SHOW CREATE TABLE ' . $quotedTableName;
-        $row             = $adapter->fetchRow($query);
+        $query = 'SHOW CREATE TABLE ' . $quotedTableName;
+        $row = $adapter->fetchRow($query);
 
         if (!$row || !isset($row['Table']) || !isset($row['Create Table'])) {
             return false;
         }
 
-        $regExp  = '/,\s+CONSTRAINT `([^`]*)` FOREIGN KEY \(`([^`]*)`\) '
-            . 'REFERENCES `([^`]*)` \(`([^`]*)`\)'
-            . '( ON DELETE (RESTRICT|CASCADE|SET NULL|NO ACTION))?'
-            . '( ON UPDATE (RESTRICT|CASCADE|SET NULL|NO ACTION))?/';
+        $regExp = '/,\s+CONSTRAINT `([^`]*)` FOREIGN KEY \(`([^`]*)`\) ' .
+            'REFERENCES `([^`]*)` \(`([^`]*)`\)' .
+            '( ON DELETE (RESTRICT|CASCADE|SET NULL|NO ACTION))?' .
+            '( ON UPDATE (RESTRICT|CASCADE|SET NULL|NO ACTION))?/';
         $matches = array();
         preg_match_all($regExp, $row['Create Table'], $matches, PREG_SET_ORDER);
 
         if (is_array($matches)) {
             foreach ($matches as $match) {
-                $this->_foreignKeys[$tableName][] = sprintf('ADD CONSTRAINT %s FOREIGN KEY (%s) REFERENCES %s (%s)%s%s',
+                $this->_foreignKeys[$tableName][] = sprintf(
+                    'ADD CONSTRAINT %s FOREIGN KEY (%s) REFERENCES %s (%s)%s%s',
                     $adapter->quoteIdentifier($match[1]),
                     $adapter->quoteIdentifier($match[2]),
                     $adapter->quoteIdentifier($match[3]),
@@ -179,6 +179,7 @@ class Helper extends \Magento\Core\Model\Resource\Helper
 
         return $sql . ';';
     }
+
     /**
      * Returns SQL header data, move from original resource model
      *
@@ -189,22 +190,21 @@ class Helper extends \Magento\Core\Model\Resource\Helper
         $dbConfig = $this->_getReadAdapter()->getConfig();
 
         $versionRow = $this->_getReadAdapter()->fetchRow('SHOW VARIABLES LIKE \'version\'');
-        $hostName   = !empty($dbConfig['unix_socket']) ? $dbConfig['unix_socket']
-            : (!empty($dbConfig['host']) ? $dbConfig['host'] : 'localhost');
+        $hostName = !empty($dbConfig['unix_socket']) ? $dbConfig['unix_socket'] : (!empty($dbConfig['host']) ? $dbConfig['host'] : 'localhost');
 
-        $header = "-- Magento DB backup\n"
-            . "--\n"
-            . "-- Host: {$hostName}    Database: {$dbConfig['dbname']}\n"
-            . "-- ------------------------------------------------------\n"
-            . "-- Server version: {$versionRow['Value']}\n\n"
-            . "/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;\n"
-            . "/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;\n"
-            . "/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;\n"
-            . "/*!40101 SET NAMES utf8 */;\n"
-            . "/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;\n"
-            . "/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;\n"
-            . "/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;\n"
-            . "/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;\n";
+        $header = "-- Magento DB backup\n" .
+            "--\n" .
+            "-- Host: {$hostName}    Database: {$dbConfig['dbname']}\n" .
+            "-- ------------------------------------------------------\n" .
+            "-- Server version: {$versionRow['Value']}\n\n" .
+            "/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;\n" .
+            "/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;\n" .
+            "/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;\n" .
+            "/*!40101 SET NAMES utf8 */;\n" .
+            "/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;\n" .
+            "/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;\n" .
+            "/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;\n" .
+            "/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;\n";
 
         return $header;
     }
@@ -216,14 +216,16 @@ class Helper extends \Magento\Core\Model\Resource\Helper
      */
     public function getFooter()
     {
-        $footer = "\n/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;\n"
-            . "/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */; \n"
-            . "/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;\n"
-            . "/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;\n"
-            . "/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;\n"
-            . "/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;\n"
-            . "/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;\n"
-            . "\n-- Dump completed on " . $this->_coreDate->gmtDate() . " GMT";
+        $footer = "\n/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;\n" .
+            "/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */; \n" .
+            "/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;\n" .
+            "/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;\n" .
+            "/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;\n" .
+            "/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;\n" .
+            "/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;\n" .
+            "\n-- Dump completed on " .
+            $this->_coreDate->gmtDate() .
+            " GMT";
 
         return $footer;
     }
@@ -237,11 +239,11 @@ class Helper extends \Magento\Core\Model\Resource\Helper
     public function getTableDataBeforeSql($tableName)
     {
         $quotedTableName = $this->_getReadAdapter()->quoteIdentifier($tableName);
-        return "\n--\n"
-            . "-- Dumping data for table {$quotedTableName}\n"
-            . "--\n\n"
-            . "LOCK TABLES {$quotedTableName} WRITE;\n"
-            . "/*!40000 ALTER TABLE {$quotedTableName} DISABLE KEYS */;\n";
+        return "\n--\n" .
+            "-- Dumping data for table {$quotedTableName}\n" .
+            "--\n\n" .
+            "LOCK TABLES {$quotedTableName} WRITE;\n" .
+            "/*!40000 ALTER TABLE {$quotedTableName} DISABLE KEYS */;\n";
     }
 
     /**
@@ -253,8 +255,7 @@ class Helper extends \Magento\Core\Model\Resource\Helper
     public function getTableDataAfterSql($tableName)
     {
         $quotedTableName = $this->_getReadAdapter()->quoteIdentifier($tableName);
-        return "/*!40000 ALTER TABLE {$quotedTableName} ENABLE KEYS */;\n"
-            . "UNLOCK TABLES;\n";
+        return "/*!40000 ALTER TABLE {$quotedTableName} ENABLE KEYS */;\n" . "UNLOCK TABLES;\n";
     }
 
     /**
@@ -269,10 +270,8 @@ class Helper extends \Magento\Core\Model\Resource\Helper
     {
         $sql = null;
         $adapter = $this->_getWriteAdapter();
-        $select = $adapter->select()
-            ->from($tableName)
-            ->limit($count, $offset);
-        $query  = $adapter->query($select);
+        $select = $adapter->select()->from($tableName)->limit($count, $offset);
+        $query = $adapter->query($select);
 
         while (true == ($row = $query->fetch())) {
             if ($sql === null) {
@@ -311,10 +310,10 @@ class Helper extends \Magento\Core\Model\Resource\Helper
      */
     protected function _quoteRow($tableName, array $row)
     {
-        $adapter   = $this->_getReadAdapter();
-        $describe  = $adapter->describeTable($tableName);
+        $adapter = $this->_getReadAdapter();
+        $describe = $adapter->describeTable($tableName);
         $dataTypes = array('bigint', 'mediumint', 'smallint', 'tinyint');
-        $rowData   = array();
+        $rowData = array();
         foreach ($row as $key => $data) {
             if ($data === null) {
                 $value = 'NULL';
@@ -331,6 +330,8 @@ class Helper extends \Magento\Core\Model\Resource\Helper
 
     /**
      * Prepare transaction isolation level for backup process
+     *
+     * @return void
      */
     public function prepareTransactionIsolationLevel()
     {
@@ -339,6 +340,8 @@ class Helper extends \Magento\Core\Model\Resource\Helper
 
     /**
      * Restore transaction isolation level after backup
+     *
+     * @return void
      */
     public function restoreTransactionIsolationLevel()
     {

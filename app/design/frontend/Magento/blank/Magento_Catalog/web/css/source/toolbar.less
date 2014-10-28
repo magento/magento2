@@ -1,0 +1,161 @@
+// /**
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+@toolbar-mode-icon-font-size: 24px;
+@toolbar-element-background: @panel-bg;
+@pager-font-weight: @font-weight-bold;
+
+.page-products .columns {
+    position: relative;
+    z-index: 1;
+    padding-top: 38px;
+}
+
+.toolbar {
+    &-amount {
+        display: block;
+        float: left;
+        line-height: @toolbar-mode-icon-font-size+2;
+        padding: 8px 0 0;
+        margin: 0;
+        vertical-align: middle;
+        .products.wrapper ~ .toolbar & {
+            display: none;
+        }
+    }
+    &-products {
+        margin-bottom: @indent-xl-base;
+        text-align: center;
+        padding: 0 @indent-s-base;
+        &:extend(.abstract-add-clearfix all);
+        .pages {
+            display: none;
+            .products.wrapper ~ & {
+                display: block;
+            }
+        }
+        .limiter {
+            display: none;
+        }
+    }
+}
+
+.sorter {
+    float: right;
+    padding: 4px 0 0;
+    .products.wrapper ~ .toolbar & {
+        display: none;
+    }
+    &-options {
+        margin: 0 5px 0 7px;
+        width: auto;
+    }
+    &-action {
+        .icon-font(
+            @icon-arrow-down,
+            @_icon-font-size: 24px,
+            @_icon-font-color: @text-color-muted
+        );
+        .icon-text-hide();
+        &.sort-desc:before {
+            content: @icon-arrow-down;
+        }
+    }
+}
+
+.modes {
+    display: none;
+}
+
+.limiter {
+    &-options {
+        width: auto;
+        margin: 0 5px 0 7px;
+    }
+    &-label {
+        font-weight: 400;
+    }
+    .page-products .toolbar & {
+        display: none;
+    }
+}
+
+.responsive(@break) when (@break = @screen-s) {
+    .page-products .columns {
+        position: relative;
+        z-index: 1;
+        padding-top: 0;
+    }
+    .toolbar {
+        .products.wrapper ~ & .pages {
+            float: left;
+        }
+    }
+    .modes {
+        float: left;
+        display: inline-block;
+        margin-right: @indent-base;
+        overflow: hidden;
+        .products.wrapper ~ .toolbar & {
+            display: none;
+        }
+        &-label {
+            &:extend(.abstract-visually-hidden-desktop-s all);
+        }
+        &-mode {
+            float: left;
+            border: 1px solid @border-color-base;
+            font-weight: @font-weight-base;
+            color: @text-color-muted;
+            text-align: center;
+            padding: 7px 10px;
+            line-height: 1;
+            border-right: 0;
+            .icon-text-hide();
+            &:not(.active):hover {
+                background: darken(@toolbar-element-background, 7%);
+                color: @text-color-muted;
+            }
+            &:last-child {
+                border-right: 1px solid @border-color-base;
+            }
+            &.active {
+                color: @color-primary-light;
+            }
+            .icon-font(
+                @icon-grid,
+                @_icon-font-size: @toolbar-mode-icon-font-size
+            );
+        }
+    }
+    .mode-list {
+        .icon-font-symbol(@icon-list);
+    }
+    .limiter {
+        float: right;
+        .products.wrapper ~ .toolbar & {
+            display: block;
+        }
+    }
+}

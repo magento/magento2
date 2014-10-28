@@ -1,0 +1,65 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/* @var $this \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle */
+?>
+<?php $_product = $this->getProduct() ?>
+<?php if($_product->isSaleable()): ?>
+    <script type="text/javascript">
+require([
+    "jquery",
+    "mage/mage"
+], function($){
+    //<![CDATA[
+        $(document).ready(function() {
+            $('#product_addtocart_form').mage('bundleOption', {
+                "bundleConfig": <?php echo $this->getJsonConfig() ?>,
+                "roundingMethod" : "<?php echo $this->getRoundingMethod() ?>",
+                "bundleOptionQtyPrefix": "#bundle-option-",
+                "bundleOptionQtySuffix": "-qty-input",
+                "priceSelectors": {
+                    "product-price": "#product-price-<?php echo $_product->getId()?>",
+                    "bundle-price": "#bundle-price-<?php echo $_product->getId()?>",
+                    "price-including-tax": "#price-including-tax-product-price-<?php echo $_product->getId()?>",
+                    "price-excluding-tax": "#price-excluding-tax-product-price-<?php echo $_product->getId()?>"
+                }
+            });
+        });
+    //]]>
+    
+});
+</script>
+<?php endif; ?>
+<?php if ($this->displayProductStockStatus()): ?>
+    <?php if ($_product->isAvailable()): ?>
+        <p class="stock available" title="<?php echo __('Availability:') ?>">
+            <span><?php echo __('In stock') ?></span>
+        </p>
+    <?php else: ?>
+        <p class="stock unavailable" title="<?php echo __('Availability:') ?>">
+            <span><?php echo __('Out of stock') ?></span>
+        </p>
+    <?php endif; ?>
+<?php endif; ?>
+<?php echo $this->getChildHtml('bundle_prices') ?>

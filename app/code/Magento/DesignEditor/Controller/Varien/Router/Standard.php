@@ -30,118 +30,129 @@ namespace Magento\DesignEditor\Controller\Varien\Router;
 class Standard extends \Magento\Core\App\Router\Base
 {
     /**
-     * @var \Magento\ObjectManager
-     */
-    protected $_objectManager;
-
-    /**
      * Routers that must not been matched
      *
-     * @var array
+     * @var string[]
      */
     protected $_excludedRouters = array('admin', 'vde');
 
     /**
      * Router list
      *
-     * @var \Magento\App\RouterListInterface
+     * @var \Magento\Framework\App\RouterListInterface
      */
     protected $_routerList;
 
     /**
-     * @var \Magento\Core\App\Request\RewriteService
+     * @var \Magento\DesignEditor\Helper\Data
      */
-    protected $_urlRewriteService;
+    protected $_designEditorHelper;
 
     /**
-     * @param \Magento\App\ActionFactory $actionFactory
-     * @param \Magento\App\DefaultPathInterface $defaultPath
-     * @param \Magento\App\ResponseFactory $responseFactory
-     * @param \Magento\App\Route\Config $routeConfig
-     * @param \Magento\App\State $appState
-     * @param \Magento\UrlInterface $url
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Store\Config $storeConfig
-     * @param \Magento\Core\Model\Url\SecurityInfoInterface $urlSecurityInfo
+     * @var \Magento\DesignEditor\Model\State
+     */
+    protected $_state;
+
+    /**
+     * @var \Magento\Backend\Model\Auth\Session
+     */
+    protected $_session;
+
+    /**
+     * @param \Magento\Framework\App\Router\ActionList $actionList
+     * @param \Magento\Framework\App\ActionFactory $actionFactory
+     * @param \Magento\Framework\App\DefaultPathInterface $defaultPath
+     * @param \Magento\Framework\App\ResponseFactory $responseFactory
+     * @param \Magento\Framework\App\Route\Config $routeConfig
+     * @param \Magento\Framework\UrlInterface $url
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo
      * @param string $routerId
-     * @param \Magento\App\RouterListInterface $routerList
-     * @param \Magento\ObjectManager $objectManager
-     * @param \Magento\Core\App\Request\RewriteService $urlRewriteService
-     * 
+     * @param \Magento\Framework\Code\NameBuilder $nameBuilder
+     * @param \Magento\Framework\App\RouterListInterface $routerList
+     * @param \Magento\DesignEditor\Helper\Data $designEditorHelper
+     * @param \Magento\DesignEditor\Model\State $designEditorState
+     * @param \Magento\Backend\Model\Auth\Session $session
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\App\ActionFactory $actionFactory,
-        \Magento\App\DefaultPathInterface $defaultPath,
-        \Magento\App\ResponseFactory $responseFactory,
-        \Magento\App\Route\Config $routeConfig,
-        \Magento\App\State $appState,
-        \Magento\UrlInterface $url,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Store\Config $storeConfig,
-        \Magento\Core\Model\Url\SecurityInfoInterface $urlSecurityInfo,
+        \Magento\Framework\App\Router\ActionList $actionList,
+        \Magento\Framework\App\ActionFactory $actionFactory,
+        \Magento\Framework\App\DefaultPathInterface $defaultPath,
+        \Magento\Framework\App\ResponseFactory $responseFactory,
+        \Magento\Framework\App\Route\Config $routeConfig,
+        \Magento\Framework\UrlInterface $url,
+        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo,
         $routerId,
-        \Magento\App\RouterListInterface $routerList,
-        \Magento\ObjectManager $objectManager,
-        \Magento\Core\App\Request\RewriteService $urlRewriteService
+        \Magento\Framework\Code\NameBuilder $nameBuilder,
+        \Magento\Framework\App\RouterListInterface $routerList,
+        \Magento\DesignEditor\Helper\Data $designEditorHelper,
+        \Magento\DesignEditor\Model\State $designEditorState,
+        \Magento\Backend\Model\Auth\Session $session
     ) {
         parent::__construct(
+            $actionList,
             $actionFactory,
             $defaultPath,
             $responseFactory,
             $routeConfig,
-            $appState,
             $url,
             $storeManager,
-            $storeConfig,
+            $scopeConfig,
             $urlSecurityInfo,
-            $routerId
+            $routerId,
+            $nameBuilder
         );
-        $this->_urlRewriteService = $urlRewriteService;
-        $this->_objectManager = $objectManager;
         $this->_routerList = $routerList;
+        $this->_designEditorHelper = $designEditorHelper;
+        $this->_state = $designEditorState;
+        $this->_session = $session;
     }
 
     /**
      * Match provided request and if matched - return corresponding controller
      *
-     * @param \Magento\App\RequestInterface $request
-     * @return \Magento\App\Action\Action|null
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @return \Magento\Framework\App\Action\Action|null
      */
-    public function match(\Magento\App\RequestInterface $request)
+    public function match(\Magento\Framework\App\RequestInterface $request)
     {
         // if URL has VDE prefix
-        if (!$this->_objectManager->get('Magento\DesignEditor\Helper\Data')->isVdeRequest($request)) {
+        if (!$this->_designEditorHelper->isVdeRequest($request)) {
             return null;
         }
 
         // user must be logged in admin area
-        if (!$this->_objectManager->get('Magento\Backend\Model\Auth\Session')->isLoggedIn()) {
+        if (!$this->_session->isLoggedIn()) {
             return null;
         }
 
         // prepare request to imitate
         $this->_prepareVdeRequest($request);
-
-        // apply rewrites
-        $this->_urlRewriteService->applyRewrites($request);
+        /**
+         * Deprecated line of code was here which should be adopted if needed:
+         * $this->_urlRewriteService->applyRewrites($request);
+         */
 
         // match routers
         $controller = null;
         $routers = $this->_getMatchedRouters();
-        /** @var $router \Magento\App\Router\AbstractRouter */
+        /** @var $router \Magento\Framework\App\RouterInterface */
         foreach ($routers as $router) {
-            /** @var $controller \Magento\App\Action\AbstractAction */
+            /** @var $controller \Magento\Framework\App\Action\AbstractAction */
             $controller = $router->match($request);
             if ($controller) {
-                $this->_objectManager->get('Magento\DesignEditor\Model\State')
-                    ->update(\Magento\Core\Model\App\Area::AREA_FRONTEND, $request);
+                $this->_state->update(\Magento\Framework\App\Area::AREA_FRONTEND, $request);
                 break;
             }
         }
 
         // set inline translation mode
-        $this->_objectManager->get('Magento\DesignEditor\Helper\Data')->setTranslationMode($request);
+        $this->_designEditorHelper->setTranslationMode($request);
 
         return $controller;
     }
@@ -149,10 +160,10 @@ class Standard extends \Magento\Core\App\Router\Base
     /**
      * Modify request path to imitate basic request
      *
-     * @param \Magento\App\RequestInterface $request
-     * @return \Magento\DesignEditor\Controller\Varien\Router\Standard
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @return $this
      */
-    protected function _prepareVdeRequest(\Magento\App\RequestInterface $request)
+    protected function _prepareVdeRequest(\Magento\Framework\App\RequestInterface $request)
     {
         list($vdeFrontName, $designMode, $themeId) = explode('/', trim($request->getPathInfo(), '/'));
         $request->setAlias('editorMode', $designMode);
@@ -170,10 +181,11 @@ class Standard extends \Magento\Core\App\Router\Base
      */
     protected function _getMatchedRouters()
     {
-        $routers = $this->_routerList->getRouters();
-        foreach (array_keys($routers) as $name) {
-            if (in_array($name, $this->_excludedRouters)) {
-                unset($routers[$name]);
+        $routers = [];
+        foreach ($this->_routerList as $router) {
+            $name = $this->_routerList->key();
+            if (!in_array($name, $this->_excludedRouters)) {
+                $routers[$name] = $router;
             }
         }
         return $routers;

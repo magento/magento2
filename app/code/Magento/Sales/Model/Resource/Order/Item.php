@@ -18,34 +18,29 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model\Resource\Order;
 
+use Magento\Sales\Model\Resource\Entity as SalesResource;
 
 /**
  * Flat sales order item resource
- *
- * @category    Magento
- * @package     Magento_Sales
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Model\Resource\Order;
-
-class Item extends \Magento\Sales\Model\Resource\Order\AbstractOrder
+class Item extends SalesResource
 {
     /**
      * Event prefix
      *
      * @var string
      */
-    protected $_eventPrefix    = 'sales_order_item_resource';
+    protected $_eventPrefix = 'sales_order_item_resource';
 
     /**
      * Model initialization
      *
+     * @return void
      */
     protected function _construct()
     {

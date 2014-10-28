@@ -1,0 +1,91 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php $_option = $this->getOption() ?>
+<?php $_optionId = $_option->getId() ?>
+<?php $class = ($_option->getIsRequire()) ? ' required' : ''; ?>
+<div class="field date<?php echo $class; ?>">
+    <label class="label">
+        <span><?php echo  $this->escapeHtml($_option->getTitle()) ?></span>
+        <?php echo $this->getFormatedPrice() ?>
+    </label>
+    <div class="control">
+        <?php if ($_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE_TIME
+            || $_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE): ?>
+
+            <?php echo $this->getDateHtml() ?>
+
+            <?php if (!$this->useCalendar()): ?>
+                <script type="text/javascript">
+require([
+    "jquery",
+    "mage/mage"
+], function($){
+
+    //<![CDATA[
+        $('#product_addtocart_form').mage('dateOption', {
+            'datepickerFieldSelector': 'select.datetime-picker',
+            'monthSelector': '#options_<?php echo $_optionId ?>_month',
+            'yearSelector': '#options_<?php echo $_optionId ?>_year'
+        });
+    //]]>
+                
+});
+</script>
+            <?php endif; ?>
+
+        <?php endif; ?>
+
+        <?php if ($_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE_TIME
+            || $_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_TIME): ?>
+            <span class="time-picker"><?php echo $this->getTimeHtml() ?></span>
+        <?php endif; ?>
+
+        <?php if ($_option->getIsRequire()): ?>
+            <input type="hidden"
+                   name="validate_datetime_<?php echo $_optionId ?>"
+                   class="validate-datetime-<?php echo $_optionId ?>"
+                   value=""
+                   data-validate="{'validate-required-datetime':<?php echo $_optionId?>}"/>
+        <?php else: ?>
+            <input type="hidden"
+                   name="validate_datetime_<?php echo $_optionId ?>"
+                   class="validate-datetime-<?php echo $_optionId ?>"
+                   value=""
+                   data-validate="{'validate-optional-datetime':<?php echo $_optionId?>}"/>
+        <?php endif; ?>
+        <script type="text/javascript">
+require(['jquery', "mage/mage"], function($){
+
+    //<![CDATA[
+        var addtocartForm = $('#product_addtocart_form');
+        addtocartForm.mage('validation', {
+            ignore: ':hidden:not(input[name^="validate_datetime_"])'
+        });
+    //]]>
+        
+});
+</script>
+    </div>
+</div>

@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\CatalogInventory\Block\Adminhtml\Form\Field;
 
 /**
@@ -37,25 +36,25 @@ class StockTest extends \PHPUnit_Framework_TestCase
     protected $_coreHelperMock;
 
     /**
-     * @var \Magento\Data\Form\Element\Factory|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Form\Element\Factory|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_factoryElementMock;
 
     /**
-     * @var \Magento\Data\Form\Element\CollectionFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Form\Element\CollectionFactory|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_collectionFactoryMock;
-    
+
     /**
-     * @var \Magento\Data\Form\Element\Text|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Form\Element\Text|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_qtyMock;
 
     /**
-     * @var \Magento\Data\Form\Element\TextFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Form\Element\TextFactory|PHPUnit_Framework_MockObject_MockObject
      */
     protected $_factoryTextMock;
-    
+
     /**
      * @var \Magento\Core\Helper\Data
      */
@@ -63,37 +62,61 @@ class StockTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_factoryElementMock = $this->getMock('Magento\Data\Form\Element\Factory', array(), array(), '', false);
-        $this->_collectionFactoryMock = $this->getMock('Magento\Data\Form\Element\CollectionFactory', array(),
-            array(), '', false);
-        $this->_qtyMock = $this->getMock('Magento\Data\Form\Element\Text', array('setForm', 'setValue', 'setName'),
-            array(), '', false);
-        $this->_factoryTextMock = $this->getMock('Magento\Data\Form\Element\TextFactory', array('create'));
+        $this->_factoryElementMock = $this->getMock(
+            'Magento\Framework\Data\Form\Element\Factory',
+            array(),
+            array(),
+            '',
+            false
+        );
+        $this->_collectionFactoryMock = $this->getMock(
+            'Magento\Framework\Data\Form\Element\CollectionFactory',
+            array(),
+            array(),
+            '',
+            false
+        );
+        $this->_qtyMock = $this->getMock(
+            'Magento\Framework\Data\Form\Element\Text',
+            array('setForm', 'setValue', 'setName'),
+            array(),
+            '',
+            false
+        );
+        $this->_factoryTextMock = $this->getMock('Magento\Framework\Data\Form\Element\TextFactory', array('create'));
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_block = $objectManagerHelper->getObject('Magento\CatalogInventory\Block\Adminhtml\Form\Field\Stock',
+        $this->_block = $objectManagerHelper->getObject(
+            'Magento\CatalogInventory\Block\Adminhtml\Form\Field\Stock',
             array(
                 'factoryElement' => $this->_factoryElementMock,
                 'factoryCollection' => $this->_collectionFactoryMock,
                 'factoryText' => $this->_factoryTextMock,
-                'data' => array(
-                    'qty' => $this->_qtyMock,
-                    'name' => self::ATTRIBUTE_NAME,
-                ),
+                'data' => array('qty' => $this->_qtyMock, 'name' => self::ATTRIBUTE_NAME)
             )
         );
     }
-    
+
     public function testSetForm()
     {
-        $this->_qtyMock->expects($this->once())->method('setForm')
-            ->with($this->isInstanceOf('Magento\Data\Form\Element\AbstractElement'));
+        $this->_qtyMock->expects(
+            $this->once()
+        )->method(
+            'setForm'
+        )->with(
+            $this->isInstanceOf('Magento\Framework\Data\Form\Element\AbstractElement')
+        );
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_block->setForm($objectManager->getObject('Magento\Data\Form\Element\Text', array(
-            'factoryElement' => $this->_factoryElementMock,
-            'factoryCollection' => $this->_collectionFactoryMock
-        )));
+        $this->_block->setForm(
+            $objectManager->getObject(
+                'Magento\Framework\Data\Form\Element\Text',
+                array(
+                    'factoryElement' => $this->_factoryElementMock,
+                    'factoryCollection' => $this->_collectionFactoryMock
+                )
+            )
+        );
     }
 
     public function testSetValue()

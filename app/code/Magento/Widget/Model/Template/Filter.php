@@ -18,12 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Widget
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Widget\Model\Template;
 
 /**
@@ -42,30 +39,32 @@ class Filter extends \Magento\Cms\Model\Template\Filter
     protected $_widget;
 
     /**
-     * @param \Magento\Stdlib\String $string
-     * @param \Magento\Logger $logger
-     * @param \Magento\Escaper $escaper
-     * @param \Magento\View\Url $viewUrl
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\Escaper $escaper
+     * @param \Magento\Framework\View\Asset\Repository $assetRepo
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Core\Model\VariableFactory $coreVariableFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\View\LayoutInterface $layout
-     * @param \Magento\View\LayoutFactory $layoutFactory
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\View\LayoutInterface $layout
+     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     * @param \Magento\Framework\App\State $appState
+     * @param \Magento\Backend\Model\UrlInterface $backendUrlBuilder
      * @param \Magento\Widget\Model\Resource\Widget $widgetResource
      * @param \Magento\Widget\Model\Widget $widget
-     * @param \Magento\App\State $appState
      */
     public function __construct(
-        \Magento\Stdlib\String $string,
-        \Magento\Logger $logger,
-        \Magento\Escaper $escaper,
-        \Magento\View\Url $viewUrl,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Logger $logger,
+        \Magento\Framework\Escaper $escaper,
+        \Magento\Framework\View\Asset\Repository $assetRepo,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Core\Model\VariableFactory $coreVariableFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\View\LayoutInterface $layout,
-        \Magento\View\LayoutFactory $layoutFactory,
-        \Magento\App\State $appState,
+        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Framework\View\LayoutInterface $layout,
+        \Magento\Framework\View\LayoutFactory $layoutFactory,
+        \Magento\Framework\App\State $appState,
+        \Magento\Backend\Model\UrlInterface $backendUrlBuilder,
         \Magento\Widget\Model\Resource\Widget $widgetResource,
         \Magento\Widget\Model\Widget $widget
     ) {
@@ -75,20 +74,21 @@ class Filter extends \Magento\Cms\Model\Template\Filter
             $string,
             $logger,
             $escaper,
-            $viewUrl,
-            $coreStoreConfig,
+            $assetRepo,
+            $scopeConfig,
             $coreVariableFactory,
             $storeManager,
             $layout,
             $layoutFactory,
-            $appState
+            $appState,
+            $backendUrlBuilder
         );
     }
 
     /**
      * Generate widget
      *
-     * @param array $construction
+     * @param string[] $construction
      * @return string
      */
     public function widgetDirective($construction)

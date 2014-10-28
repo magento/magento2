@@ -1,0 +1,186 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<fixture class="Magento\Customer\Test\Fixture\AddressInjectable">
+    <module>Magento_Customer</module>
+    <type>eav</type>
+    <entity_type>customer_address</entity_type>
+    <collection>Magento\Customer\Model\Resource\Address\Collection</collection>
+    <fields>
+        <city>
+            <attribute_code>city</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required>1</is_required>
+            <default_value></default_value>
+            <input>text</input>
+        </city>
+        <company>
+            <attribute_code>company</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required>0</is_required>
+            <default_value></default_value>
+            <input>text</input>
+        </company>
+        <country_id>
+            <attribute_code>country_id</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required>1</is_required>
+            <default_value></default_value>
+            <input>select</input>
+        </country_id>
+        <fax>
+            <attribute_code>fax</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required>0</is_required>
+            <default_value></default_value>
+            <input>text</input>
+        </fax>
+        <firstname>
+            <attribute_code>firstname</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required>1</is_required>
+            <default_value></default_value>
+            <input>text</input>
+        </firstname>
+        <lastname>
+            <attribute_code>lastname</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required>1</is_required>
+            <default_value></default_value>
+            <input>text</input>
+        </lastname>
+        <middlename>
+            <attribute_code>middlename</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required>0</is_required>
+            <default_value></default_value>
+            <input>text</input>
+        </middlename>
+        <postcode>
+            <attribute_code>postcode</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required>1</is_required>
+            <default_value></default_value>
+            <input>text</input>
+        </postcode>
+        <prefix>
+            <attribute_code>prefix</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required>0</is_required>
+            <default_value></default_value>
+            <input>text</input>
+        </prefix>
+        <region>
+            <attribute_code>region</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required>0</is_required>
+            <default_value></default_value>
+            <input>text</input>
+        </region>
+        <region_id>
+            <attribute_code>region_id</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required>0</is_required>
+            <default_value></default_value>
+            <input>hidden</input>
+        </region_id>
+        <street>
+            <attribute_code>street</attribute_code>
+            <backend_type>text</backend_type>
+            <is_required>1</is_required>
+            <default_value></default_value>
+            <input>multiline</input>
+        </street>
+        <suffix>
+            <attribute_code>suffix</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required>0</is_required>
+            <default_value></default_value>
+            <input>text</input>
+        </suffix>
+        <telephone>
+            <attribute_code>telephone</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required>1</is_required>
+            <default_value></default_value>
+            <input>text</input>
+        </telephone>
+        <vat_id>
+            <attribute_code>vat_id</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required>0</is_required>
+            <default_value></default_value>
+            <input>text</input>
+        </vat_id>
+        <vat_is_valid>
+            <attribute_code>vat_is_valid</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required>0</is_required>
+            <default_value></default_value>
+            <input>text</input>
+        </vat_is_valid>
+        <vat_request_date>
+            <attribute_code>vat_request_date</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required>0</is_required>
+            <default_value></default_value>
+            <input>text</input>
+        </vat_request_date>
+        <vat_request_id>
+            <attribute_code>vat_request_id</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required>0</is_required>
+            <default_value></default_value>
+            <input>text</input>
+        </vat_request_id>
+        <vat_request_success>
+            <attribute_code>vat_request_success</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required>0</is_required>
+            <default_value></default_value>
+            <input>text</input>
+        </vat_request_success>
+        <default_billing>
+            <attribute_code>default_billing</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required>0</is_required>
+            <default_value></default_value>
+            <input>checkbox</input>
+        </default_billing>
+        <default_shipping>
+            <attribute_code>default_shipping</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required>0</is_required>
+            <default_value></default_value>
+            <input>checkbox</input>
+        </default_shipping>
+        <email>
+            <attribute_code>email</attribute_code>
+            <backend_type>virtual</backend_type>
+        </email>
+    </fields>
+    <repository_class>Magento\Customer\Test\Repository\AddressInjectable</repository_class>
+    <handler_interface>Magento\Customer\Test\Handler\AddressInjectable\AddressInjectableInterface</handler_interface>
+</fixture>

@@ -18,39 +18,40 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_DesignEditor
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DesignEditor\Model\Config\Control;
+
+use Magento\Framework\Module\Dir\Reader;
 
 /**
  * Quick styles configuration
  */
-namespace Magento\DesignEditor\Model\Config\Control;
-
 class QuickStyles extends \Magento\DesignEditor\Model\Config\Control\AbstractControl
 {
     /**
      * Keys of layout params attributes
      *
-     * @var array
+     * @var string[]
      */
     protected $_controlAttributes = array('title', 'tab', 'column');
 
     /**
-     * @var \Magento\Module\Dir\Reader
+     * Module configuration file reader
+     *
+     * @var Reader
      */
     protected $_moduleReader;
 
     /**
-     * @param $configFiles
-     * @param \Magento\Module\Dir\Reader $moduleReader
+     * Constructor
+     *
+     * @param array $configFiles
+     * @param Reader $moduleReader
      */
-    public function __construct(
-        $configFiles,
-        \Magento\Module\Dir\Reader $moduleReader
-    ) {
+    public function __construct($configFiles, Reader $moduleReader)
+    {
         $this->_moduleReader = $moduleReader;
         parent::__construct($configFiles);
     }

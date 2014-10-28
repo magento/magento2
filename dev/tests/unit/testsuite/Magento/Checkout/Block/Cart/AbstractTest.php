@@ -25,7 +25,9 @@ namespace Magento\Checkout\Block\Cart;
 
 class AbstractTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\TestFramework\Helper\ObjectManager */
+    /**
+     * @var \Magento\TestFramework\Helper\ObjectManager
+     */
     protected $_objectManager;
 
     protected function setUp()
@@ -33,94 +35,94 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
     }
 
-    public function testGetItemRenderer()
+    /**
+     * @dataProvider getItemRendererDataProvider
+     * @param string|null $type
+     * @param string $expectedType
+     */
+    public function testGetItemRenderer($type, $expectedType)
     {
-        $renderer = $this->getMock('Magento\View\Element\AbstractBlock', array('setRenderedBlock'), array(), '', false);
-        $layout = $this->getMock('Magento\Core\Model\Layout', array(
-            'getChildName', 'getBlock'
-        ), array(), '', false);
-        $layout->expects($this->at(0))
-            ->method('getChildName')
-            ->with(null, 'some-type')
-            ->will($this->returnValue('some-block-name'));
-        $layout->expects($this->at(1))
-            ->method('getBlock')
-            ->with('some-block-name')
-            ->will($this->returnValue($renderer));
+        $renderer = $this->getMock('Magento\Framework\View\Element\RendererList', array(), array(), '', false);
 
-        /** @var $block \Magento\Checkout\Block\Cart\AbstractCart */
-        $block = $this->_objectManager->getObject('Magento\Checkout\Block\Cart\AbstractCart', array(
-            'context' => $this->_objectManager->getObject('Magento\Backend\Block\Template\Context', array(
-                'layout' => $layout,
-            ))
-        ));
+        $renderer->expects(
+            $this->once()
+        )->method(
+            'getRenderer'
+        )->with(
+            $expectedType,
+            AbstractCart::DEFAULT_TYPE
+        )->will(
+            $this->returnValue('rendererObject')
+        );
 
-        $renderer->expects($this->once())
-            ->method('setRenderedBlock')
-            ->with($block);
+        $layout = $this->getMock(
+            'Magento\Framework\View\Layout',
+            array('getChildName', 'getBlock'),
+            array(),
+            '',
+            false
+        );
 
-        $this->assertSame($renderer, $block->getItemRenderer('some-type'));
+        $layout->expects($this->once())->method('getChildName')->will($this->returnValue('renderer.list'));
+
+        $layout->expects(
+            $this->once()
+        )->method(
+            'getBlock'
+        )->with(
+            'renderer.list'
+        )->will(
+            $this->returnValue($renderer)
+        );
+
+        /** @var $block \Magento\Sales\Block\Items\AbstractItems */
+        $block = $this->_objectManager->getObject(
+            'Magento\Checkout\Block\Cart\AbstractCart',
+            array(
+                'context' => $this->_objectManager->getObject(
+                    'Magento\Backend\Block\Template\Context',
+                    array('layout' => $layout)
+                )
+            )
+        );
+
+        $this->assertSame('rendererObject', $block->getItemRenderer($type));
+    }
+
+    /**
+     * @return array
+     */
+    public function getItemRendererDataProvider()
+    {
+        return array(array(null, AbstractCart::DEFAULT_TYPE), array('some-type', 'some-type'));
     }
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage Renderer for type "some-type" does not exist.
+     * @expectedExceptionMessage Renderer list for block "" is not defined
      */
     public function testGetItemRendererThrowsExceptionForNonexistentRenderer()
     {
-        $renderer = $this->getMock('StdClass');
-        $layout = $this->getMock('Magento\Core\Model\Layout', array(
-            'getChildName', 'getBlock'
-        ), array(), '', false);
-        $layout->expects($this->at(0))
-            ->method('getChildName')
-            ->with(null, 'some-type')
-            ->will($this->returnValue('some-block-name'));
-        $layout->expects($this->at(1))
-            ->method('getBlock')
-            ->with('some-block-name')
-            ->will($this->returnValue($renderer));
+        $layout = $this->getMock(
+            'Magento\Framework\View\Layout',
+            array('getChildName', 'getBlock'),
+            array(),
+            '',
+            false
+        );
+        $layout->expects($this->once())->method('getChildName')->will($this->returnValue(null));
 
         /** @var $block \Magento\Checkout\Block\Cart\AbstractCart */
-        $block = $this->_objectManager->getObject('Magento\Checkout\Block\Cart\AbstractCart', array(
-            'context' => $this->_objectManager->getObject('Magento\Backend\Block\Template\Context', array(
-                'layout' => $layout,
-            ))
-        ));
+        $block = $this->_objectManager->getObject(
+            'Magento\Checkout\Block\Cart\AbstractCart',
+            array(
+                'context' => $this->_objectManager->getObject(
+                    'Magento\Backend\Block\Template\Context',
+                    array('layout' => $layout)
+                )
+            )
+        );
 
         $block->getItemRenderer('some-type');
-    }
-
-    public function testPrepareLayout()
-    {
-        $childBlock = $this->getMock('Magento\View\Element\AbstractBlock', array(), array(), '', false);
-        /** @var $layout \Magento\View\LayoutInterface */
-        $layout = $this->getMock('Magento\Core\Model\Layout', array(
-            'createBlock', 'getChildName', 'setChild'
-        ), array(), '', false);
-        $layout->expects($this->once())
-            ->method('createBlock')
-            ->with(
-                'Magento\Checkout\Block\Cart\Item\Renderer',
-                '.default',
-                array('data' => array('template' => 'cart/item/default.phtml'))
-            )
-            ->will($this->returnValue($childBlock));
-        $layout->expects($this->any())
-            ->method('getChildName')
-            ->with(null, 'default')
-            ->will($this->returnValue(false));
-        $layout->expects($this->once())
-            ->method('setChild')
-            ->with(null, null, 'default');
-
-        /** @var $block \Magento\Checkout\Block\Cart\AbstractCart */
-        $block = $this->_objectManager->getObject('Magento\Checkout\Block\Cart\AbstractCart', array(
-            'context' => $this->_objectManager->getObject('Magento\Backend\Block\Template\Context', array(
-                'layout' => $layout,
-            ))
-        ));
-
-        $block->setLayout($layout);
     }
 }

@@ -23,95 +23,14 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<page layout="admin-2columns-left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <update handle="editor"/>
-    <referenceBlock name="head">
-        <block class="Magento\Theme\Block\Html\Head\Css" name="jquery-fileuploader-css-jquery-fileupload-ui-css">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/fileUploader/css/jquery.fileupload-ui.css</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-fileuploader-jquery-iframe-transport-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/fileUploader/jquery.iframe-transport.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-fileuploader-jquery-fileupload-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/fileUploader/jquery.fileupload.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-fileuploader-load-image-min-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/fileUploader/load-image.min.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-fileuploader-canvas-to-blob-min-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/fileUploader/canvas-to-blob.min.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-fileuploader-jquery-fileupload-fp-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/fileUploader/jquery.fileupload-fp.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-proxy-event-js">
-            <arguments>
-                <argument name="file" xsi:type="string">mage/proxy-event.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Css" name="magento-adminhtml-catalog-category-selector-css">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Catalog::catalog/category-selector.css</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-jstree-jquery-hotkeys-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/jstree/jquery.hotkeys.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-jstree-jquery-jstree-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/jstree/jquery.jstree.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-catalog-type-switcher-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Catalog::catalog/type-switcher.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-catalog-product-variation-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Catalog::catalog/product-variation.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-catalog-base-image-uploader-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Catalog::catalog/base-image-uploader.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-catalog-js-product-gallery-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Catalog::js/product-gallery.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Css" name="magento-catalog-product-product-css">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Catalog::product/product.css</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-catalog-js-custom-options-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Catalog::js/custom-options.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-catalog-js-new-category-dialog-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Catalog::js/new-category-dialog.js</argument>
-            </arguments>
-        </block>
-    </referenceBlock>
+    <head>
+        <css src="jquery/fileUploader/css/jquery.fileupload-ui.css"/>
+        <css src="Magento_Catalog::catalog/category-selector.css"/>
+        <css src="Magento_Catalog::product/product.css"/>
+        <link src="Magento_Catalog::js/bootstrap/product-new.js"/>
+    </head>
     <referenceContainer name="content">
         <block class="Magento\Catalog\Block\Adminhtml\Product\Edit" name="product_edit">
             <container name="product-type-tabs" label="Tabs">
@@ -119,15 +38,27 @@
         </block>
         <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\AttributeSet" name="attribute-set-info" template="Magento_Catalog::catalog/product/edit/attribute_set.phtml"/>
         <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\NewCategory" name="new-category" template="Magento_Catalog::catalog/product/edit/category/new/form.phtml"/>
-        <block class="Magento\View\Element\Template" name="affected-attribute-set-form" template="Magento_Catalog::product/configurable/affected-attribute-set-selector/form.phtml"/>
     </referenceContainer>
     <referenceContainer name="left">
-        <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\Tabs" name="product_tabs"/>
+        <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\Tabs" name="product_tabs">
+            <block class="Magento\Backend\Block\Widget\Tab" name="product_tabs.customer_options" as="customer_options">
+                <arguments>
+                    <argument name="label" xsi:type="string" translate="true">Custom Options</argument>
+                    <argument name="url" xsi:type="url" path="catalog/*/options">
+                        <param name="_current">1</param>
+                    </argument>
+                    <argument name="class" xsi:type="string">ajax</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts" name="product_tabs.product-alerts" as="product-alerts">
+                <arguments>
+                    <argument name="label" xsi:type="string" translate="true">Product Alerts</argument>
+                </arguments>
+            </block>
+        </block>
     </referenceContainer>
     <referenceContainer name="js">
         <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\Js" name="catalog_product_js" template="catalog/product/js.phtml"/>
-        <block class="Magento\View\Element\Template" template="Magento_Catalog::catalog/wysiwyg/js.phtml"/>
-        <block class="Magento\Catalog\Block\Product\Configurable\AttributeSelector" template="Magento_Catalog::product/configurable/attribute-selector/js.phtml"/>
-        <block class="Magento\Catalog\Block\Product\Configurable\AttributeSelector" template="Magento_Catalog::product/configurable/affected-attribute-set-selector/js.phtml"/>
+        <block class="Magento\Framework\View\Element\Template" template="Magento_Catalog::catalog/wysiwyg/js.phtml"/>
     </referenceContainer>
-</layout>
+</page>

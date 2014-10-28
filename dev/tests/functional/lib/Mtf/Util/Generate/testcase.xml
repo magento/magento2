@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<testcases>
+    <testcase module="Magento\Tax">
+        <id>MTA-120</id>
+        <ticketId>MTA-120</ticketId>
+        <name>CreateTaxRateEntityTest</name>
+        <description>Test Creation for CreateTaxRateEntity</description>
+        <module>Tax</module>
+        <components>
+            <component>Tax (CS)</component>
+        </components>
+        <steps>
+            <step/>
+            <step>Steps:</step>
+            <step>Log in as default admin user.</step>
+            <step>Go to Stores &gt; Taxes &gt; Tax Zones and Rates.</step>
+            <step>Click 'Add New Tax Rate' button.</step>
+            <step>Fill in data according to dataSet</step>
+            <step>Save Tax Rate.</step>
+            <step>Perform all assertions.</step>
+        </steps>
+    </testcase>
+    <testcase>
+        <id>MTA-128</id>
+        <ticketId>MTA-128</ticketId>
+        <name>SuggestSearchingResult(SearchEntity)WithFucntionalTestsDesignedForAutomationTest</name>
+        <description>Cover Suggest Searching Result (SearchEntity) with fucntional tests designed for automation</description>
+        <module>Search</module>
+        <components>
+            <component>Search Frontend (CS)</component>
+        </components>
+        <steps/>
+    </testcase>
+    <testcase>
+        <id>MTA-15</id>
+        <ticketId>MTA-15</ticketId>
+        <name>CreateDownloadableProductEntityTest</name>
+        <description>Test Creation for Create DownloadableProductEntity </description>
+        <module>Catalog</module>
+        <components>
+            <component>Downloadable Product (CS)</component>
+        </components>
+        <steps>
+            <step>Log in to Backend.</step>
+            <step>Navigate to Products &gt; Catalog.</step>
+            <step>Start to create new Downloadable product.</step>
+            <step>Fill in data according to data set.</step>
+            <step>Fill Downloadable Information tab according to data set.</step>
+            <step>Save product.</step>
+            <step>Verify created product.</step>
+        </steps>
+    </testcase>
+    <testcase>
+        <id>MTA-93</id>
+        <ticketId>MTA-93</ticketId>
+        <name>AdvancedSearchEntityTest</name>
+        <description>Test Creation for AdvancedSearchEntity</description>
+        <module>CatalogSearch</module>
+        <components>
+            <component>Search Frontend (MX)</component>
+        </components>
+        <steps>
+            <step/>
+            <step>Preconditions:</step>
+            <step> Two specific simple product is created(unique sku,name,short/full description, tax class)</step>
+            <step/>
+            <step>Steps</step>
+            <step>Navigate to Frontend</step>
+            <step>Click "Advanced Search"</step>
+            <step>Fill test data in to field(s)</step>
+            <step>Click "Search" button</step>
+            <step>Perform all asserts</step>
+        </steps>
+    </testcase>
+    <testcase>
+        <id>MTA-129</id>
+        <ticketId>MTA-129</ticketId>
+        <name>SearchEntityResultsTest</name>
+        <description>Test Creation for SearchEntity results</description>
+        <module>Search</module>
+        <components>
+            <component>Search Frontend (MX)</component>
+        </components>
+        <step>Preconditions:</step>
+        <step>1. All product types are created.</step>
+        <step/>
+        <step>Steps:</step>
+        <step>1. Navigate to frontend on index page.</step>
+        <step>2. Input test data into "search field" and press Enter key.</step>
+        <step>3. Perform all assertions.</step>
+    </testcase>
+</testcases>

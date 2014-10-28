@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Directory
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,54 +27,74 @@
  */
 namespace Magento\Directory\Model\Currency;
 
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+
 class Filter implements \Zend_Filter_Interface
 {
     /**
      * Rate value
      *
-     * @var decimal
+     * @var float
      */
     protected $_rate;
 
     /**
      * Currency object
      *
-     * @var \Zend_Currency
+     * @var \Magento\Framework\CurrencyInterface
      */
     protected $_currency;
 
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Framework\Locale\FormatInterface
      */
-    protected $_locale;
+    protected $_localeFormat;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @param \Magento\Core\Model\LocaleInterface $locale
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @var \Magento\Framework\Locale\CurrencyInterface
+     */
+    protected $_localeCurrency;
+
+    /**
+     * Price currency
+     *
+     * @var PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
+     * @param \Magento\Framework\Locale\FormatInterface $localeFormat
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Locale\CurrencyInterface $localeCurrency
+     * @param PriceCurrencyInterface $priceCurrency
      * @param string $code
      * @param int $rate
      */
     public function __construct(
-        \Magento\Core\Model\LocaleInterface $locale,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Locale\FormatInterface $localeFormat,
+        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
+        PriceCurrencyInterface $priceCurrency,
         $code,
         $rate = 1
     ) {
-        $this->_locale = $locale;
+        $this->_localeFormat = $localeFormat;
         $this->_storeManager = $storeManager;
-        $this->_currency = $this->_locale->currency($code);
+        $this->_currency = $localeCurrency->getCurrency($code);
+        $this->priceCurrency = $priceCurrency;
         $this->_rate = $rate;
     }
 
     /**
      * Set filter rate
      *
-     * @param double $rate
+     * @param float $rate
+     * @return void
      */
     public function setRate($rate)
     {
@@ -86,13 +104,13 @@ class Filter implements \Zend_Filter_Interface
     /**
      * Filter value
      *
-     * @param   double $value
-     * @return  string
+     * @param float $value
+     * @return string
      */
     public function filter($value)
     {
-        $value = $this->_locale->getNumber($value);
-        $value = $this->_storeManager->getStore()->roundPrice($this->_rate*$value);
+        $value = $this->_localeFormat->getNumber($value);
+        $value = $this->priceCurrency->round($this->_rate * $value);
         $value = sprintf("%f", $value);
         return $this->_currency->toCurrency($value);
     }

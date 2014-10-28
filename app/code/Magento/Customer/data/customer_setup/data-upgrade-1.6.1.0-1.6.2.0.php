@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,15 +26,12 @@
 $installer = $this;
 
 $disableAGCAttribute = $installer->getEavConfig()->getAttribute('customer', 'disable_auto_group_change');
-$disableAGCAttribute->setData('used_in_forms', array(
-    'adminhtml_customer'
-));
+$disableAGCAttribute->setData('used_in_forms', array('adminhtml_customer'));
 $disableAGCAttribute->save();
 
 $vatAttribute = $installer->getEavConfig()->getAttribute('customer_address', 'vat_id');
-$vatAttribute->setData('used_in_forms', array(
-     'adminhtml_customer_address',
-     'customer_address_edit',
-     'customer_register_address'
-));
+$vatAttribute->setData(
+    'used_in_forms',
+    array('adminhtml_customer_address', 'customer_address_edit', 'customer_register_address')
+);
 $vatAttribute->save();

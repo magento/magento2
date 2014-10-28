@@ -18,34 +18,72 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Adminhtml
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit;
 
+use Magento\Customer\Helper\Session\CurrentCustomer;
+use Magento\Tax\Service\V1\TaxCalculationServiceInterface;
+use Magento\Tax\Model\TaxClass\Source\Product as ProductTaxClassSource;
+
 class Js extends \Magento\Backend\Block\Template
 {
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $coreRegistry = null;
+
+    /**
+     * @var TaxCalculationServiceInterface
+     */
+    protected $calculationService;
+
+    /**
+     * @var ProductTaxClassSource
+     */
+    protected $productTaxClassSource;
+
+    /**
+     * Current customer
+     *
+     * @var CurrentCustomer
+     */
+    protected $currentCustomer;
+
+    /**
+     * Core data
+     *
+     * @var \Magento\Core\Helper\Data
+     */
+    protected $coreHelper;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Framework\Registry $registry
+     * @param CurrentCustomer $currentCustomer
+     * @param \Magento\Core\Helper\Data $coreHelper
+     * @param TaxCalculationServiceInterface $calculationService
+     * @param ProductTaxClassSource $productTaxClassSource
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Framework\Registry $registry,
+        CurrentCustomer $currentCustomer,
+        \Magento\Core\Helper\Data $coreHelper,
+        TaxCalculationServiceInterface $calculationService,
+        ProductTaxClassSource $productTaxClassSource,
         array $data = array()
     ) {
-        $this->_coreRegistry = $registry;
+        $this->coreRegistry = $registry;
+        $this->currentCustomer = $currentCustomer;
+        $this->coreHelper = $coreHelper;
+        $this->calculationService = $calculationService;
+        $this->productTaxClassSource = $productTaxClassSource;
         parent::__construct($context, $data);
     }
 
@@ -56,13 +94,13 @@ class Js extends \Magento\Backend\Block\Template
      */
     public function getProduct()
     {
-        return $this->_coreRegistry->registry('current_product');
+        return $this->coreRegistry->registry('current_product');
     }
 
     /**
      * Get store object of curently edited product
      *
-     * @return \Magento\Core\Model\Store
+     * @return \Magento\Store\Model\Store
      */
     public function getStore()
     {
@@ -71,5 +109,25 @@ class Js extends \Magento\Backend\Block\Template
             return $this->_storeManager->getStore($product->getStoreId());
         }
         return $this->_storeManager->getStore();
+    }
+
+    /**
+     * Get all tax rates JSON for all product tax classes.
+     *
+     * @return string
+     */
+    public function getAllRatesByProductClassJson()
+    {
+        $result = array();
+        foreach ($this->productTaxClassSource->getAllOptions() as $productTaxClass) {
+            $taxClassId = $productTaxClass['value'];
+            $taxRate = $this->calculationService->getDefaultCalculatedRate(
+                $taxClassId,
+                $this->currentCustomer->getCustomerId(),
+                $this->getStore()->getId()
+            );
+            $result["value_{$taxClassId}"] = $taxRate;
+        }
+        return $this->coreHelper->jsonEncode($result);
     }
 }

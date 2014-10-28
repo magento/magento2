@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model;
 
 class VariableTest extends \PHPUnit_Framework_TestCase
@@ -36,8 +32,9 @@ class VariableTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Variable');
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Core\Model\Variable'
+        );
     }
 
     public function testGetSetStoreId()
@@ -48,14 +45,10 @@ class VariableTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadByCode()
     {
-        $this->_model->setData(array(
-            'code'  => 'test_code',
-            'name'  => 'test_name'
-        ));
+        $this->_model->setData(array('code' => 'test_code', 'name' => 'test_name'));
         $this->_model->save();
 
-        $variable = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\Variable');
+        $variable = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Core\Model\Variable');
         $variable->loadByCode('test_code');
         $this->assertEquals($this->_model->getName(), $variable->getName());
         $this->_model->delete();
@@ -65,11 +58,7 @@ class VariableTest extends \PHPUnit_Framework_TestCase
     {
         $html = '<p>test</p>';
         $text = 'test';
-        $this->_model->setData(array(
-            'code'          => 'test_code',
-            'html_value'    => $html,
-            'plain_value'   => $text
-        ));
+        $this->_model->setData(array('code' => 'test_code', 'html_value' => $html, 'plain_value' => $text));
         $this->assertEquals($html, $this->_model->getValue());
         $this->assertEquals($html, $this->_model->getValue(\Magento\Core\Model\Variable::TYPE_HTML));
         $this->assertEquals($text, $this->_model->getValue(\Magento\Core\Model\Variable::TYPE_TEXT));
@@ -78,8 +67,7 @@ class VariableTest extends \PHPUnit_Framework_TestCase
     public function testValidate()
     {
         $this->assertNotEmpty($this->_model->validate());
-        $this->_model->setName('test')
-            ->setCode('test');
+        $this->_model->setName('test')->setCode('test');
         $this->assertNotEmpty($this->_model->validate());
         $this->_model->save();
         try {
@@ -103,6 +91,6 @@ class VariableTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $collection->getStoreId(), 'Store id setter and getter');
 
         $collection->addValuesToResult();
-        $this->assertContains('core_variable_value', (string) $collection->getSelect());
+        $this->assertContains('core_variable_value', (string)$collection->getSelect());
     }
 }

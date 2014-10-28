@@ -23,18 +23,18 @@
  */
 namespace Magento\Backend\Model\Config\Structure;
 
-class Data extends \Magento\Config\Data\Scoped
+class Data extends \Magento\Framework\Config\Data\Scoped
 {
     /**
-     * @param \Magento\Backend\Model\Config\Structure\Reader $reader
-     * @param \Magento\Config\ScopeInterface $configScope
-     * @param \Magento\Config\CacheInterface $cache
-     * @param $cacheId
+     * @param Reader $reader
+     * @param \Magento\Framework\Config\ScopeInterface $configScope
+     * @param \Magento\Framework\Config\CacheInterface $cache
+     * @param string $cacheId
      */
     public function __construct(
-        \Magento\Backend\Model\Config\Structure\Reader $reader,
-        \Magento\Config\ScopeInterface $configScope,
-        \Magento\Config\CacheInterface $cache,
+        Reader $reader,
+        \Magento\Framework\Config\ScopeInterface $configScope,
+        \Magento\Framework\Config\CacheInterface $cache,
         $cacheId
     ) {
         parent::__construct($reader, $configScope, $cache, $cacheId);
@@ -44,6 +44,7 @@ class Data extends \Magento\Config\Data\Scoped
      * Merge additional config
      *
      * @param array $config
+     * @return void
      */
     public function merge(array $config)
     {

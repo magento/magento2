@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,8 +27,7 @@
  */
 namespace Magento\Backend\Model\Config\Structure\Mapper;
 
-class Sorting
-    extends \Magento\Backend\Model\Config\Structure\AbstractMapper
+class Sorting extends \Magento\Backend\Model\Config\Structure\AbstractMapper
 {
     /**
      * Apply map
@@ -46,6 +43,10 @@ class Sorting
         return $data;
     }
 
+    /**
+     * @param array $data
+     * @return array
+     */
     protected function _processConfig($data)
     {
         foreach ($data as &$item) {
@@ -56,7 +57,6 @@ class Sorting
         uasort($data, array($this, '_cmp'));
         return $data;
     }
-
 
     /**
      * Compare elements
@@ -80,6 +80,6 @@ class Sorting
             return 0;
         }
 
-        return ($sortIndexA < $sortIndexB) ? -1 : 1;
+        return $sortIndexA < $sortIndexB ? -1 : 1;
     }
 }

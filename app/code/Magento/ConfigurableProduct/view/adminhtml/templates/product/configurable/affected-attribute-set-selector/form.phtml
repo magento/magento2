@@ -1,0 +1,67 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/* @var $this \Magento\Framework\View\Element\Template */
+?>
+<div id="<?php echo $this->getNameInLayout() ?>" style="display:none" data-role="dialog" data-id="affected-attribute-set-selector">
+    <form action="">
+
+        <div class="messages">
+            <div class="message notice">
+                <div><?php echo __("Attribute set comprising all selected configurable attributes need to be in order to save generated variations.") ?></div>
+            </div>
+            <div class="message error" style="display:none"></div>
+        </div>
+
+        <fieldset class="fieldset">
+            <div class="field" id="affected-attribute-set-current-container" data-role="container" data-id="current-attribute-set">
+                <div class="control">
+                    <input type="radio" id="affected-attribute-set-current" name="affected-attribute-set" value="current" checked="checked" />
+                    <label class="label" for="affected-attribute-set-current">
+                        <span><?php echo __('Add configurable attributes to the current set ("<span data-role="name-container">%1</span>")', $this->getLayout()->getBlock('product_edit')->getAttributeSetName())?></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="field" id="affected-attribute-set-new-container">
+                <div class="control">
+                    <input type="radio" id="affected-attribute-set-new" name="affected-attribute-set" value="new" />
+                    <label class="label" for="affected-attribute-set-new">
+                        <span><?php echo __('Add configurable attributes to the new set based on current')?></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="field required" id="affected-attribute-set-new-name-container" style="display:none">
+                <label class="label" for="new-attribute-set-name">
+                    <span><?php echo __('New attribute set name')?></span>
+                </label>
+
+                <div class="control">
+                    <input id="new-attribute-set-name" name="new-attribute-set-name" type="text" class="input-text required-entry validate-no-html-tags" />
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>

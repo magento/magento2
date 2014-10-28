@@ -18,25 +18,22 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Config\Source\Image;
 
-class Adapter implements \Magento\Core\Model\Option\ArrayInterface
+class Adapter implements \Magento\Framework\Option\ArrayInterface
 {
     /**
-     * @var \Magento\Image\Adapter\ConfigInterface
+     * @var \Magento\Framework\Image\Adapter\ConfigInterface
      */
     protected $config;
 
     /**
-     * @param \Magento\Image\Adapter\ConfigInterface $config
+     * @param \Magento\Framework\Image\Adapter\ConfigInterface $config
      */
-    public function __construct(\Magento\Image\Adapter\ConfigInterface $config)
+    public function __construct(\Magento\Framework\Image\Adapter\ConfigInterface $config)
     {
         $this->config = $config;
     }

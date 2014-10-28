@@ -23,22 +23,28 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <preference for="Magento\Cron\Model\ConfigInterface" type="Magento\Cron\Model\Config" />
+    <preference for="Magento\Framework\Shell\CommandRendererInterface" type="Magento\Framework\Shell\CommandRenderer" />
     <type name="Magento\Cron\Model\Config\Reader\Db">
-        <param name="converter">
-            <instance type="Magento\Cron\Model\Config\Converter\Db" />
-        </param>
+        <arguments>
+            <argument name="defaultReader" xsi:type="object">Magento\Store\Model\Config\Reader\DefaultReader</argument>
+        </arguments>
     </type>
-    <type name="Magento\Cron\Model\Config\Reader\Xml">
-        <param name="converter">
-            <instance type="Magento\Cron\Model\Config\Converter\Xml" />
-        </param>
-        <param name="schemaLocator">
-            <instance type="Magento\Cron\Model\Config\SchemaLocator" />
-        </param>
+    <type name="Magento\Backend\Model\Config\Structure\Converter">
+        <plugin name="cron_backend_config_structure_converter_plugin" type="Magento\Cron\Model\Backend\Config\Structure\Converter" />
     </type>
-    <type name="Magento\App\Cron">
-        <plugin name="application_initializer" type="Magento\Cron\App\Cron\Plugin\ApplicationInitializer" sortOrder="10"/>
+    <type name="Magento\Framework\App\Config\Initial\Converter">
+        <plugin name="cron_system_config_initial_converter_plugin" type="Magento\Cron\Model\System\Config\Initial\Converter" />
+    </type>
+    <virtualType name="shellBackground" type="Magento\Framework\Shell">
+        <arguments>
+            <argument name="commandRenderer" xsi:type="object">Magento\Framework\Shell\CommandRendererBackground</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Cron\Model\Observer">
+        <arguments>
+            <argument name="shell" xsi:type="object">shellBackground</argument>
+        </arguments>
     </type>
 </config>

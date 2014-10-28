@@ -23,17 +23,52 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
-    <service class="\Magento\TestModule1\Service\AllSoapAndRestV1Interface" baseUrl="/V1/testmodule1">
-        <rest-route httpMethod="GET" method="item" resources="Magento_Test1::resource1">/:id</rest-route>
-    </service>
-
-    <service class="\Magento\TestModule1\Service\AllSoapAndRestV2Interface" baseUrl="/V2/testmodule1">
-        <rest-route httpMethod="GET" method="item" resources="Magento_Test1::resource1, Magento_Test1::resource2">/:id</rest-route>
-        <rest-route httpMethod="POST" method="create" resources="Magento_Test1::resource1,Magento_Test1::resource2"></rest-route>
-        <rest-route httpMethod="DELETE" method="delete" isSecure="true" resources="Magento_Test1::resource2">/:id</rest-route>
-    </service>
-
-    <!--TODO: All service methods must have resources that's why all of them must be declared explicitly-->
-    <service class="\Magento\TestModule1\Service\AllSoapAndRestV3Interface"/>
-</config>
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../../../app/code/Magento/Webapi/etc/webapi.xsd">
+    <route url="/V1/customers/me" method="GET">
+        <service class="Magento\Customer\Service\V1\CustomerServiceInterface" method="getCustomer" />
+        <resources>
+            <resource ref="Magento_Customer::customer_self" />
+        </resources>
+        <data>
+            <parameter name="id" force="true">null</parameter>
+        </data>
+    </route>
+    <route url="/V1/customers/me/session" method="GET">
+        <service class="Magento\Customer\Service\V1\CustomerServiceInterface" method="getCustomer" />
+        <resources>
+            <resource ref="Magento_Customer::customer_self" />
+        </resources>
+        <data>
+            <parameter name="id" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+    <route url="/V1/customers/me" method="PUT" secure="true">
+        <service class="Magento\Customer\Service\V1\CustomerServiceInterface" method="updateCustomer" />
+        <resources>
+            <resource ref="Magento_Customer::customer_self" />
+        </resources>
+        <data>
+            <parameter name="id">null</parameter>
+        </data>
+    </route>
+    <route url="/V1/customers" method="POST">
+        <service class="Magento\Customer\Service\V1\CustomerServiceInterface" method="createCustomer" />
+        <resources>
+            <resource ref="Magento_Customer::manage" />
+        </resources>
+    </route>
+    <route url="/V1/customers/:id" method="GET">
+        <service class="Magento\Customer\Service\V1\CustomerServiceInterface" method="getCustomer" />
+        <resources>
+            <resource ref="Magento_Customer::read" />
+        </resources>
+    </route>
+    <route url="/V1/customers/:id" method="DELETE">
+        <service class="Magento\Customer\Service\V1\CustomerServiceInterface" method="deleteCustomer" />
+        <resources>
+            <resource ref="Magento_Customer::manage" />
+            <resource ref="Magento_Customer::delete" />
+        </resources>
+    </route>
+</routes>

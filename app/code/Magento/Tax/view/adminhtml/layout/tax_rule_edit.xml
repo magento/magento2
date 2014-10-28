@@ -23,38 +23,15 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <referenceBlock name="head">
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-editablemultiselect-js-jquery-editable-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/editableMultiselect/js/jquery.editable.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-editablemultiselect-js-jquery-multiselect-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/editableMultiselect/js/jquery.multiselect.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-backend-editablemultiselect-js">
-            <arguments>
-                <argument name="file" xsi:type="string">mage/backend/editablemultiselect.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Css" name="jquery-editablemultiselect-css-jquery-multiselect-css">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/editableMultiselect/css/jquery.multiselect.css</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Css" name="magento-core-prototype-magento-css">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Core::prototype/magento.css</argument>
-            </arguments>
-        </block>
-    </referenceBlock>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <head>
+        <link src="Magento_Tax::js/bootstrap.js"/>
+        <css src="jquery/editableMultiselect/css/jquery.multiselect.css"/>
+        <css src="Magento_Core::prototype/magento.css"/>
+    </head>
     <referenceContainer name="content">
         <block class="Magento\Tax\Block\Adminhtml\Rule\Edit"/>
         <block class="Magento\Tax\Block\Adminhtml\Rule\Edit\Form" name="tax-rule-edit" template="rule/edit.phtml"/>
         <block class="Magento\Tax\Block\Adminhtml\Rate\Form" name="tax-rate-form" template="rule/rate/form.phtml"/>
-        <block class="Magento\Tax\Block\Adminhtml\Rate\ImportExport" name="tax-rate-importExport" template="importExport.phtml"/>
     </referenceContainer>
-</layout>
+</page>

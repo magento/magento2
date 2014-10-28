@@ -23,15 +23,10 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
-    <virtualType name="Magento\Reports\Model\Session">
-        <param name="sessionName">
-            <value>adminhtml</value>
-        </param>
-    </virtualType>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <type name="Magento\Reports\Model\Resource\Customer\Collection">
-        <param name="modelName">
-            <value>Magento\Customer\Model\Backend\Customer</value>
-        </param>
+        <arguments>
+            <argument name="modelName" xsi:type="string">Magento\Customer\Model\Backend\Customer</argument>
+        </arguments>
     </type>
 </config>

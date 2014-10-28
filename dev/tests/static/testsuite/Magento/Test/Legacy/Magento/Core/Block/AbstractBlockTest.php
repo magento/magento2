@@ -18,15 +18,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    tests
- * @package     static
- * @subpackage  Legacy
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
- * Tests usage of \Magento\View\Element\AbstractBlock
+ * Tests usage of \Magento\Framework\View\Element\AbstractBlock
  */
 namespace Magento\Test\Legacy\Magento\Core\Block;
 
@@ -48,7 +45,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
                 );
                 $this->assertEmpty(
                     $result,
-                    "3rd parameter is not needed anymore for getChildHtml() in '$file': " . print_r($result, true)
+                    "3rd parameter is not needed anymore for getChildHtml() in '{$file}': " . print_r($result, true)
                 );
                 $result = \Magento\TestFramework\Utility\Classes::getAllMatches(
                     file_get_contents($file),
@@ -56,7 +53,10 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
                 );
                 $this->assertEmpty(
                     $result,
-                    "4th parameter is not needed anymore for getChildChildHtml() in '$file': " . print_r($result, true)
+                    "4th parameter is not needed anymore for getChildChildHtml() in '{$file}': " . print_r(
+                        $result,
+                        true
+                    )
                 );
             },
             \Magento\TestFramework\Utility\Files::init()->getPhpFiles()

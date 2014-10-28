@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Adminhtml
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Controller\Adminhtml;
 
 /**
@@ -43,8 +39,7 @@ class DashboardTest extends \Magento\Backend\Utility\Controller
 
     public function testTunnelAction()
     {
-        $testUrl = \Magento\Backend\Block\Dashboard\Graph::API_URL .
-            '?cht=p3&chd=t:60,40&chs=250x100&chl=Hello|World';
+        $testUrl = \Magento\Backend\Block\Dashboard\Graph::API_URL . '?cht=p3&chd=t:60,40&chs=250x100&chl=Hello|World';
         $handle = curl_init();
         curl_setopt($handle, CURLOPT_URL, $testUrl);
         curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
@@ -67,13 +62,14 @@ class DashboardTest extends \Magento\Backend\Utility\Controller
             'chxt' => 'x,y',
             'chxl' => '0:|10/13/12|10/14/12|10/15/12|10/16/12|10/17/12|10/18/12|10/19/12|1:|0|1|2',
             'chs' => '587x300',
-            'chg' => '16.666666666667,50,1,0',
+            'chg' => '16.666666666667,50,1,0'
         );
         $gaFixture = urlencode(base64_encode(json_encode($gaData)));
 
         /** @var $helper \Magento\Backend\Helper\Dashboard\Data */
-        $helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Backend\Helper\Dashboard\Data');
+        $helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Backend\Helper\Dashboard\Data'
+        );
         $hash = $helper->getChartDataHash($gaFixture);
         $this->getRequest()->setParam('ga', $gaFixture)->setParam('h', $hash);
         $this->dispatch('backend/admin/dashboard/tunnel');

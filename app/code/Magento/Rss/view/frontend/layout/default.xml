@@ -23,14 +23,14 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <referenceBlock name="footer_links">
-        <block class="Magento\View\Element\Html\Link\Current" name="rss-link" ifconfig="rss/config/active">
+        <block class="Magento\Framework\View\Element\Html\Link\Current" name="rss-link" ifconfig="rss/config/active">
             <arguments>
                 <argument name="label" xsi:type="string">RSS</argument>
                 <argument name="path" xsi:type="string">rss</argument>
             </arguments>
         </block>
     </referenceBlock>
-    <block class="Magento\Rss\Block\ListBlock" name="head_rss" ifconfig="rss/config/active"/>
-</layout>
+    <block class="Magento\Rss\Block\Feeds" name="head_rss" ifconfig="rss/config/active"/>
+</page>

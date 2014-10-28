@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Reports
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,8 +26,6 @@
 /**
  * Product Low Stock Report Collection
  *
- * @category    Magento
- * @package     Magento_Reports
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Reports\Model\Resource\Product\Lowstock;
@@ -41,21 +37,19 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
      *
      * @var bool
      */
-    protected $_inventoryItemJoined        = false;
+    protected $_inventoryItemJoined = false;
 
     /**
      * Alias for CatalogInventory Stock Item Table
      *
      * @var string
      */
-    protected $_inventoryItemTableAlias    = 'lowstock_inventory_item';
+    protected $_inventoryItemTableAlias = 'lowstock_inventory_item';
 
     /**
-     * Catalog inventory data
-     *
-     * @var \Magento\CatalogInventory\Helper\Data
+     * @var \Magento\CatalogInventory\Service\V1\StockItemService
      */
-    protected $_inventoryData = null;
+    protected $stockItemService;
 
     /**
      * @var \Magento\CatalogInventory\Model\Resource\Stock\Item
@@ -64,55 +58,55 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
 
     /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\Logger $logger
-     * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
      * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Catalog\Helper\Product\Flat $catalogProductFlat
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
      * @param \Magento\Catalog\Model\Resource\Url $catalogUrl
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Catalog\Model\Resource\Product $product
      * @param \Magento\Reports\Model\Event\TypeFactory $eventTypeFactory
      * @param \Magento\Catalog\Model\Product\Type $productType
-     * @param \Magento\CatalogInventory\Helper\Data $catalogInventoryData
+     * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
      * @param \Magento\CatalogInventory\Model\Resource\Stock\Item $itemResource
      * @param mixed $connection
-     * 
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
-        \Magento\Logger $logger,
-        \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Logger $logger,
+        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
         \Magento\Catalog\Model\Resource\Helper $resourceHelper,
-        \Magento\Validator\UniversalFactory $universalFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Catalog\Helper\Product\Flat $catalogProductFlat,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\Framework\Validator\UniversalFactory $universalFactory,
+        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
         \Magento\Catalog\Model\Resource\Url $catalogUrl,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Stdlib\DateTime $dateTime,
+        \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Catalog\Model\Resource\Product $product,
         \Magento\Reports\Model\Event\TypeFactory $eventTypeFactory,
         \Magento\Catalog\Model\Product\Type $productType,
-        \Magento\CatalogInventory\Helper\Data $catalogInventoryData,
+        \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService,
         \Magento\CatalogInventory\Model\Resource\Stock\Item $itemResource,
         $connection = null
     ) {
@@ -127,12 +121,12 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
             $resourceHelper,
             $universalFactory,
             $storeManager,
-            $catalogData,
-            $catalogProductFlat,
-            $coreStoreConfig,
+            $moduleManager,
+            $catalogProductFlatState,
+            $scopeConfig,
             $productOptionFactory,
             $catalogUrl,
-            $locale,
+            $localeDate,
             $customerSession,
             $dateTime,
             $product,
@@ -140,7 +134,7 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
             $productType,
             $connection
         );
-        $this->_inventoryData = $catalogInventoryData;
+        $this->stockItemService = $stockItemService;
         $this->_itemResource = $itemResource;
     }
 
@@ -179,7 +173,7 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
      *
      * @param string $field
      * @param string $alias
-     * @return \Magento\Reports\Model\Resource\Product\Lowstock\Collection
+     * @return $this
      */
     protected function _addInventoryItemFieldToSelect($field, $alias = null)
     {
@@ -191,10 +185,7 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
             return $this;
         }
 
-        $this->_joinFields[$alias] = array(
-            'table' => $this->_getInventoryItemTableAlias(),
-            'field' => $field
-        );
+        $this->_joinFields[$alias] = array('table' => $this->_getInventoryItemTableAlias(), 'field' => $field);
 
         $this->getSelect()->columns(array($alias => $field), $this->_getInventoryItemTableAlias());
         return $this;
@@ -222,7 +213,8 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
         if (!$this->_inventoryItemJoined) {
             $this->getSelect()->join(
                 array($this->_getInventoryItemTableAlias() => $this->_getInventoryItemTable()),
-                sprintf('e.%s = %s.product_id',
+                sprintf(
+                    'e.%s = %s.product_id',
                     $this->getEntity()->getEntityIdField(),
                     $this->_getInventoryItemTableAlias()
                 ),
@@ -253,43 +245,44 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
      * Add filter by product type(s)
      *
      * @param array|string $typeFilter
-     * @return \Magento\Reports\Model\Resource\Product\Lowstock\Collection
+     * @return $this
      */
     public function filterByProductType($typeFilter)
     {
         if (!is_string($typeFilter) && !is_array($typeFilter)) {
-            new \Magento\Core\Exception(__('The product type filter specified is incorrect.'));
+            new \Magento\Framework\Model\Exception(__('The product type filter specified is incorrect.'));
         }
         $this->addAttributeToFilter('type_id', $typeFilter);
         return $this;
     }
 
     /**
-     * Add filter by product types from config
-     * Only types witch has QTY parameter
+     * Add filter by product types from config - only types which have QTY parameter
      *
-     * @return \Magento\Reports\Model\Resource\Product\Lowstock\Collection
+     * @return $this
      */
     public function filterByIsQtyProductTypes()
     {
-        $this->filterByProductType(
-            array_keys(array_filter($this->_inventoryData->getIsQtyTypeIds()))
-        );
+        $this->filterByProductType(array_keys(array_filter($this->stockItemService->getIsQtyTypeIds())));
         return $this;
     }
 
     /**
      * Add Use Manage Stock Condition to collection
      *
-     * @param int|null $storeId
-     * @return \Magento\Reports\Model\Resource\Product\Lowstock\Collection
+     * @param null|int $storeId
+     * @return $this
      */
     public function useManageStockFilter($storeId = null)
     {
         $this->joinInventoryItem();
         $manageStockExpr = $this->getConnection()->getCheckSql(
             $this->_getInventoryItemField('use_config_manage_stock') . ' = 1',
-            (int) $this->_coreStoreConfig->getConfig(\Magento\CatalogInventory\Model\Stock\Item::XML_PATH_MANAGE_STOCK, $storeId),
+            (int)$this->_scopeConfig->getValue(
+                \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_MANAGE_STOCK,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $storeId
+            ),
             $this->_getInventoryItemField('manage_stock')
         );
         $this->getSelect()->where($manageStockExpr . ' = ?', 1);
@@ -299,15 +292,19 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
     /**
      * Add Notify Stock Qty Condition to collection
      *
-     * @param int $storeId
-     * @return \Magento\Reports\Model\Resource\Product\Lowstock\Collection
+     * @param null|int $storeId
+     * @return $this
      */
     public function useNotifyStockQtyFilter($storeId = null)
     {
         $this->joinInventoryItem(array('qty'));
         $notifyStockExpr = $this->getConnection()->getCheckSql(
             $this->_getInventoryItemField('use_config_notify_stock_qty') . ' = 1',
-            (int)$this->_coreStoreConfig->getConfig(\Magento\CatalogInventory\Model\Stock\Item::XML_PATH_NOTIFY_STOCK_QTY, $storeId),
+            (int)$this->_scopeConfig->getValue(
+                \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_NOTIFY_STOCK_QTY,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $storeId
+            ),
             $this->_getInventoryItemField('notify_stock_qty')
         );
         $this->getSelect()->where('qty < ?', $notifyStockExpr);

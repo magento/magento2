@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Install
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -39,8 +37,8 @@ class Mysql4 extends \Magento\Install\Model\Installer\Db\AbstractDb
      */
     public function getVersion()
     {
-        $version  = $this->_getConnection()->fetchOne('SELECT VERSION()');
-        $version    = $version ? $version : 'undefined';
+        $version = $this->_getConnection()->fetchOne('SELECT VERSION()');
+        $version = $version ? $version : 'undefined';
         $match = array();
         if (preg_match("#^([0-9\.]+)#", $version, $match)) {
             $version = $match[0];
@@ -55,21 +53,18 @@ class Mysql4 extends \Magento\Install\Model\Installer\Db\AbstractDb
      */
     public function supportEngine()
     {
-        $variables  = $this->_getConnection()->fetchPairs('SHOW ENGINES');
+        $variables = $this->_getConnection()->fetchPairs('SHOW ENGINES');
         return isset($variables['InnoDB']) && ($variables['InnoDB'] == 'DEFAULT' || $variables['InnoDB'] == 'YES');
     }
 
     /**
-     * Clean database
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function cleanUpDatabase()
     {
-        $connection = $this->_getConnection();
         $connectionData = $this->getConnectionData();
+        $connection = $this->_getConnection();
         $connection->query('DROP DATABASE IF EXISTS ' . $connectionData['dbName']);
         $connection->query('CREATE DATABASE ' . $connectionData['dbName']);
-        return $this;
     }
 }

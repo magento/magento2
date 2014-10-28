@@ -18,28 +18,29 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Install
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Install\Model\Installer;
+
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Filesystem installer
  */
-class Filesystem extends \Magento\Install\Model\Installer\AbstractInstaller
+class Filesystem
 {
     /**#@+
      * @deprecated since 1.7.1.0
      */
     const MODE_WRITE = 'write';
-    const MODE_READ  = 'read';
+
+    const MODE_READ = 'read';
+
     /**#@- */
 
     /**
-     * @var \Magento\Filesystem
+     * @var \Magento\Framework\Filesystem
      */
     protected $_filesystem;
 
@@ -58,23 +59,20 @@ class Filesystem extends \Magento\Install\Model\Installer\AbstractInstaller
     protected $_appRootDir;
 
     /**
-     * @var \Magento\Message\ManagerInterface
+     * @var \Magento\Framework\Message\ManagerInterface
      */
     protected $messageManager;
 
     /**
-     * @param \Magento\Install\Model\Installer $installer
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Install\Model\Config $installConfig
-     * @param \Magento\Message\ManagerInterface $messageManager
+     * @param \Magento\Framework\Message\ManagerInterface $messageManager
      */
     public function __construct(
-        \Magento\Install\Model\Installer $installer,
-        \Magento\Filesystem $filesystem,
+        \Magento\Framework\Filesystem $filesystem,
         \Magento\Install\Model\Config $installConfig,
-        \Magento\Message\ManagerInterface $messageManager
+        \Magento\Framework\Message\ManagerInterface $messageManager
     ) {
-        parent::__construct($installer);
         $this->_filesystem = $filesystem;
         $this->_installConfig = $installConfig;
         $this->messageManager = $messageManager;
@@ -83,12 +81,14 @@ class Filesystem extends \Magento\Install\Model\Installer\AbstractInstaller
     /**
      * Check and prepare file system
      *
+     * @return $this
+     * @throws \Exception
      */
     public function install()
     {
         if (!$this->_checkFilesystem()) {
             throw new \Exception();
-        };
+        }
         return $this;
     }
 
@@ -124,7 +124,7 @@ class Filesystem extends \Magento\Install\Model\Installer\AbstractInstaller
     protected function _checkFullPath($fullPath, $recursive, $existence)
     {
         $result = true;
-        $directory = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::ROOT);
+        $directory = $this->_filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $path = $directory->getRelativePath($fullPath);
         if ($recursive && $directory->isDirectory($path)) {
             $pathsToCheck = $directory->read($path);

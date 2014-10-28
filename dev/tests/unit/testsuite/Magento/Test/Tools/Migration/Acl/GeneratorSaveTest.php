@@ -18,25 +18,18 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Tools
- * @package     unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Tools\Migration\Acl;
 
-require_once realpath(__DIR__ . '/../../../../../../../../')
-    . '/tools/Magento/Tools/Migration/Acl/Generator.php';
-require_once realpath(__DIR__ . '/../../../../../../../../')
-    . '/tools/Magento/Tools/Migration/Acl/FileManager.php';
-require_once realpath(__DIR__ . '/../../../../../../../../')
-    . '/tools/Magento/Tools/Migration/Acl/Formatter.php';
 
+require_once realpath(__DIR__ . '/../../../../../../../../') . '/tools/Magento/Tools/Migration/Acl/Generator.php';
+require_once realpath(__DIR__ . '/../../../../../../../../') . '/tools/Magento/Tools/Migration/Acl/FileManager.php';
+require_once realpath(__DIR__ . '/../../../../../../../../') . '/tools/Magento/Tools/Migration/Acl/Formatter.php';
 /**
  * Tools_Migration_Acl test case
  */
-
 class GeneratorSaveTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -122,28 +115,36 @@ class GeneratorSaveTest extends \PHPUnit_Framework_TestCase
         $dom->preserveWhiteSpace = false;
         $dom->formatOutput = true;
 
-        $this->_xmlFormatterMock->expects($this->once())
-            ->method('parseString')
-            ->with($dom->saveXml(), array(
+        $this->_xmlFormatterMock->expects(
+            $this->once()
+        )->method(
+            'parseString'
+        )->with(
+            $dom->saveXml(),
+            array(
                 'indent' => true,
                 'input-xml' => true,
                 'output-xml' => true,
                 'add-xml-space' => false,
                 'indent-spaces' => 4,
                 'wrap' => 1000
-            ))
-            ->will($this->returnCallback(
+            )
+        )->will(
+            $this->returnCallback(
                 function ($string) {
                     return 'formatted' . $string;
                 }
-            ));
+            )
+        );
 
-        $this->_fileManagerMock->expects($this->once())
-            ->method('write')
-            ->with(
-                $this->equalTo($this->_aclFile),
-                $this->stringStartsWith('formatted')
-            );
+        $this->_fileManagerMock->expects(
+            $this->once()
+        )->method(
+            'write'
+        )->with(
+            $this->equalTo($this->_aclFile),
+            $this->stringStartsWith('formatted')
+        );
 
         $this->_model->saveAclFiles();
     }

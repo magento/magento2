@@ -21,20 +21,30 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Theme\Block\Html;
+
+use Magento\Framework\View\Element\Template;
 
 /**
  * Html page title block
+ *
+ * @method $this setTitleId($titleId)
+ * @method $this setTitleClass($titleClass)
+ * @method $this setTitlePrefix($titlePrefix)
+ * @method $this setTitleSuffix($titleSuffix)
+ * @method string getTitleId()
+ * @method string getTitleClass()
+ * @method string getTitlePrefix()
+ * @method string getTitleSuffix()
  */
-class Title extends \Magento\View\Element\Template
+class Title extends \Magento\Framework\View\Element\Template
 {
     /**
      * Own page title to display on the page
      *
      * @var string
      */
-    protected $_pageTitle;
+    protected $pageTitle;
 
     /**
      * Provide own page title or pick it from Head Block
@@ -43,19 +53,20 @@ class Title extends \Magento\View\Element\Template
      */
     public function getPageTitle()
     {
-        if (!empty($this->_pageTitle)) {
-            return $this->_pageTitle;
+        if (!empty($this->pageTitle)) {
+            return $this->pageTitle;
         }
-        return $this->getLayout()->getBlock('head')->getShortTitle();
+        return $this->pageConfig->getShortTitle();
     }
 
     /**
      * Set own page title
      *
      * @param string $pageTitle
+     * @return void
      */
     public function setPageTitle($pageTitle)
     {
-        $this->_pageTitle = $pageTitle;
+        $this->pageTitle = $pageTitle;
     }
 }

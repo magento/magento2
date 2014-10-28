@@ -59,6 +59,6 @@ class Test
      */
     public function testHelper(\Magento\SomeModule\ElementFactory $factory, array $data = array())
     {
-        $factory->create('\Magento\SomeModule\ElementFactory', array('data' => $data));
+        $factory->create('Magento\SomeModule\ElementFactory', array('data' => $data));
     }
 }

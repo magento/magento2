@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Adminhtml
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Reports\Block\Adminhtml\Sales\Sales;
 
 /**
@@ -40,10 +36,13 @@ class GridTest extends \PHPUnit_Framework_TestCase
      */
     protected function _createBlock($reportType = null)
     {
-        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-            ->createBlock('Magento\Reports\Block\Adminhtml\Sales\Sales\Grid');
+        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\View\LayoutInterface'
+        )->createBlock(
+            'Magento\Reports\Block\Adminhtml\Sales\Sales\Grid'
+        );
 
-        $filterData = new \Magento\Object();
+        $filterData = new \Magento\Framework\Object();
         if ($reportType) {
             $filterData->setReportType($reportType);
         }
@@ -75,5 +74,45 @@ class GridTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(class_exists($filteredCollection));
 
         $this->assertNotEquals($normalCollection, $filteredCollection);
+    }
+
+
+    /**
+     * Check that grid does not contain unnecessary totals row
+     *
+     * @param $from string
+     * @param $to string
+     * @param $expectedResult bool
+     *
+     * @dataProvider getCountTotalsDataProvider
+     * @magentoDataFixture Magento/Reports/_files/orders.php
+     */
+    public function testGetCountTotals($from, $to, $expectedResult)
+    {
+        $block = $this->_createBlock();
+        $filterData = new \Magento\Framework\Object();
+
+        $filterData->setReportType('updated_at_order');
+        $filterData->setPeriodType('day');
+        $filterData->setData('from', $from);
+        $filterData->setData('to', $to);
+        $block->setFilterData($filterData);
+
+        $block->toHtml();
+        $this->assertEquals($block->getCountTotals(), $expectedResult);
+    }
+
+    /**
+     * Data provider for testGetCountTotals
+     *
+     * @return array
+     */
+    public function getCountTotalsDataProvider()
+    {
+        return [
+            [date("Y-m-d", time() + 24 * 60 * 60), date("Y-m-d", time() + 48 * 60 * 60), false],
+            [date("Y-m-d", time() - 24 * 60 * 60), date("Y-m-d", time() + 24 * 60 * 60), true],
+            [null, null, false],
+        ];
     }
 }

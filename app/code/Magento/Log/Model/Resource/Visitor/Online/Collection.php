@@ -18,61 +18,58 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Log
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Log\Model\Resource\Visitor\Online;
 
+use Magento\Customer\Service\V1\CustomerMetadataServiceInterface;
 
 /**
  * Log Online visitors collection
  *
- * @category    Magento
- * @package     Magento_Log
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Log\Model\Resource\Visitor\Online;
-
-class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
-     * joined fields array
+     * Joined fields array
      *
      * @var array
      */
-    protected $_fields   = array();
+    protected $_fields = array();
 
     /**
-     * @var \Magento\Customer\Model\CustomerFactory
+     * @var \Magento\Eav\Helper\Data
      */
-    protected $_customerFactory;
+    protected $_eavHelper;
 
     /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\Logger $logger
-     * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Customer\Model\CustomerFactory $customerFactory
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Eav\Helper\Data $eavHelper
      * @param mixed $connection
-     * @param \Magento\Core\Model\Resource\Db\AbstractDb $resource
+     * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
-        \Magento\Logger $logger,
-        \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Customer\Model\CustomerFactory $customerFactory,
+        \Magento\Framework\Logger $logger,
+        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Eav\Helper\Data $eavHelper,
         $connection = null,
-        \Magento\Core\Model\Resource\Db\AbstractDb $resource = null
+        \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
-        $this->_customerFactory = $customerFactory;
+        $this->_eavHelper = $eavHelper;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
     }
 
     /**
      * Initialize collection model
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -82,51 +79,46 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add Customer data to collection
      *
-     * @return \Magento\Log\Model\Resource\Visitor\Online\Collection
+     * @return $this
      */
     public function addCustomerData()
     {
-        $customer   = $this->_customerFactory->create();
         // alias => attribute_code
         $attributes = array(
-            'customer_lastname'     => 'lastname',
-            'customer_firstname'    => 'firstname',
-            'customer_email'        => 'email'
+            'customer_lastname' => 'lastname',
+            'customer_firstname' => 'firstname',
+            'customer_email' => 'email'
         );
 
         foreach ($attributes as $alias => $attributeCode) {
-            $attribute = $customer->getAttribute($attributeCode);
-            /* @var $attribute \Magento\Eav\Model\Entity\Attribute\AbstractAttribute */
 
-            if ($attribute->getBackendType() == 'static') {
-                $tableAlias = 'customer_' . $attribute->getAttributeCode();
+            $attribute = $this->_eavHelper->getAttributeMetadata(
+                CustomerMetadataServiceInterface::ENTITY_TYPE_CUSTOMER,
+                $attributeCode
+            );
 
+            $tableAlias = 'customer_' . $attributeCode;
+
+            if ($attribute['backend_type'] == 'static') {
                 $this->getSelect()->joinLeft(
-                    array($tableAlias => $attribute->getBackend()->getTable()),
+                    array($tableAlias => $attribute['attribute_table']),
                     sprintf('%s.entity_id=main_table.customer_id', $tableAlias),
-                    array($alias => $attribute->getAttributeCode())
+                    array($alias => $attributeCode)
                 );
-
-                $this->_fields[$alias] = sprintf('%s.%s', $tableAlias, $attribute->getAttributeCode());
-            }
-            else {
-                $tableAlias = 'customer_' . $attribute->getAttributeCode();
-
+                $this->_fields[$alias] = sprintf('%s.%s', $tableAlias, $attributeCode);
+            } else {
                 $joinConds  = array(
                     sprintf('%s.entity_id=main_table.customer_id', $tableAlias),
-                    $this->getConnection()->quoteInto($tableAlias . '.attribute_id=?', $attribute->getAttributeId())
+                    $this->getConnection()->quoteInto($tableAlias . '.attribute_id=?', $attribute['attribute_id'])
                 );
-
                 $this->getSelect()->joinLeft(
-                    array($tableAlias => $attribute->getBackend()->getTable()),
+                    array($tableAlias => $attribute['attribute_table']),
                     join(' AND ', $joinConds),
                     array($alias => 'value')
                 );
-
                 $this->_fields[$alias] = sprintf('%s.value', $tableAlias);
             }
         }
-
         $this->setFlag('has_customer_data', true);
         return $this;
     }
@@ -134,14 +126,13 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Filter collection by specified website(s)
      *
-     * @param int|array $websiteIds
-     * @return \Magento\Log\Model\Resource\Visitor\Online\Collection
+     * @param int|int[] $websiteIds
+     * @return $this
      */
     public function addWebsiteFilter($websiteIds)
     {
         if ($this->getFlag('has_customer_data')) {
-            $this->getSelect()
-                ->where('customer_email.website_id IN (?)', $websiteIds);
+            $this->getSelect()->where('customer_email.website_id IN (?)', $websiteIds);
         }
         return $this;
     }
@@ -154,11 +145,11 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      *     array('attribute'=>'lastname', 'like'=>'test%'),
      * )
      *
-     * @see self::_getConditionSql for $condition
-     *
      * @param string $field
      * @param null|string|array $condition
      * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
+     *
+     * @see self::_getConditionSql for $condition
      */
     public function addFieldToFilter($field, $condition = null)
     {

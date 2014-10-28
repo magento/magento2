@@ -18,18 +18,18 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Persistent
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Persistent\Model;
 
 /**
  * Persistent Session Model
+ *
+ * @method int getCustomerId()
+ * @method Session setCustomerId()
  */
-class Session extends \Magento\Core\Model\AbstractModel
+class Session extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * Persistent cookie key length
@@ -44,9 +44,16 @@ class Session extends \Magento\Core\Model\AbstractModel
     /**
      * Fields which model does not save into `info` db field
      *
-     * @var array
+     * @var string[]
      */
-    protected $_unserializableFields = array('persistent_id', 'key', 'customer_id', 'website_id', 'info', 'updated_at');
+    protected $_unserializableFields = array(
+        'persistent_id',
+        'key',
+        'customer_id',
+        'website_id',
+        'info',
+        'updated_at'
+    );
 
     /**
      * If model loads expired sessions
@@ -70,68 +77,78 @@ class Session extends \Magento\Core\Model\AbstractModel
     protected $_coreData;
 
     /**
-     * @var \Magento\Core\Model\Config
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_coreConfig;
 
     /**
      * Store manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * Cookie model
+     * Cookie manager
      *
-     * @var \Magento\Stdlib\Cookie
+     * @var \Magento\Framework\Stdlib\CookieManager
      */
-    protected $_cookie;
+    protected $_cookieManager;
 
     /**
-     * @var \Magento\Math\Random
+     * Cookie metadata factory
+     *
+     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
+     */
+    protected $_cookieMetadataFactory;
+
+    /**
+     * @var \Magento\Framework\Math\Random
      */
     protected $mathRandom;
 
     /**
-     * @var \Magento\Session\Config\ConfigInterface
+     * @var \Magento\Framework\Session\Config\ConfigInterface
      */
     protected $sessionConfig;
 
     /**
-     * Construct
+     * Constructor
      *
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Core\Model\Config $coreConfig
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Persistent\Helper\Data $persistentData
-     * @param \Magento\Stdlib\Cookie $cookie
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Math\Random $mathRandom
-     * @param \Magento\Session\Config\ConfigInterface $sessionConfig
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Stdlib\CookieManager $cookieManager
+     * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Math\Random $mathRandom
+     * @param \Magento\Framework\Session\Config\ConfigInterface $sessionConfig
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Core\Model\Config $coreConfig,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Persistent\Helper\Data $persistentData,
-        \Magento\Stdlib\Cookie $cookie,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Math\Random $mathRandom,
-        \Magento\Session\Config\ConfigInterface $sessionConfig,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Stdlib\CookieManager $cookieManager,
+        \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
+        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Framework\Math\Random $mathRandom,
+        \Magento\Framework\Session\Config\ConfigInterface $sessionConfig,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_coreData = $coreData;
         $this->_persistentData = $persistentData;
         $this->_coreConfig = $coreConfig;
-        $this->_cookie = $cookie;
+        $this->_cookieManager = $cookieManager;
+        $this->_cookieMetadataFactory = $cookieMetadataFactory;
         $this->_storeManager = $storeManager;
         $this->sessionConfig = $sessionConfig;
         $this->mathRandom = $mathRandom;
@@ -140,6 +157,8 @@ class Session extends \Magento\Core\Model\AbstractModel
 
     /**
      * Define resource model
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -150,7 +169,7 @@ class Session extends \Magento\Core\Model\AbstractModel
      * Set if load expired persistent session
      *
      * @param bool $loadExpired
-     * @return \Magento\Persistent\Model\Session
+     * @return $this
      */
     public function setLoadExpired($loadExpired = true)
     {
@@ -171,7 +190,7 @@ class Session extends \Magento\Core\Model\AbstractModel
     /**
      * Get date-time before which persistent session is expired
      *
-     * @param int|string|\Magento\Core\Model\Store $store
+     * @param int|string|\Magento\Store\Model\Store $store
      * @return string
      */
     public function getExpiredBefore($store = null)
@@ -183,7 +202,7 @@ class Session extends \Magento\Core\Model\AbstractModel
      * Serialize info for Resource Model to save
      * For new model check and set available cookie key
      *
-     * @return \Magento\Persistent\Model\Session
+     * @return $this
      */
     protected function _beforeSave()
     {
@@ -212,7 +231,7 @@ class Session extends \Magento\Core\Model\AbstractModel
     /**
      * Set model data from info field
      *
-     * @return \Magento\Persistent\Model\Session
+     * @return $this
      */
     protected function _afterLoad()
     {
@@ -230,12 +249,12 @@ class Session extends \Magento\Core\Model\AbstractModel
      * Get persistent session by cookie key
      *
      * @param string $key
-     * @return \Magento\Persistent\Model\Session
+     * @return $this
      */
     public function loadByCookieKey($key = null)
     {
         if (null === $key) {
-            $key = $this->_cookie->get(self::COOKIE_NAME);
+            $key = $this->_cookieManager->getCookie(self::COOKIE_NAME);
         }
         if ($key) {
             $this->load($key, 'key');
@@ -248,7 +267,7 @@ class Session extends \Magento\Core\Model\AbstractModel
      * Load session model by specified customer id
      *
      * @param int $id
-     * @return \Magento\Core\Model\AbstractModel
+     * @return $this
      */
     public function loadByCustomerId($id)
     {
@@ -260,7 +279,7 @@ class Session extends \Magento\Core\Model\AbstractModel
      *
      * @param int $customerId
      * @param bool $clearCookie
-     * @return \Magento\Persistent\Model\Session
+     * @return $this
      */
     public function deleteByCustomerId($customerId, $clearCookie = true)
     {
@@ -274,11 +293,46 @@ class Session extends \Magento\Core\Model\AbstractModel
     /**
      * Remove persistent cookie
      *
-     * @return \Magento\Persistent\Model\Session
+     * @return $this
      */
     public function removePersistentCookie()
     {
-        $this->_cookie->set(self::COOKIE_NAME, null, null, $this->sessionConfig->getCookiePath());
+        $cookieMetadata = $this->_cookieMetadataFactory->createCookieMetadata()
+            ->setPath($this->sessionConfig->getCookiePath());
+        $this->_cookieManager->deleteCookie(self::COOKIE_NAME, $cookieMetadata);
+        return $this;
+    }
+
+    /**
+     * Set persistent cookie
+     *
+     * @param int $duration Time in seconds.
+     * @param string $path
+     * @return $this
+     */
+    public function setPersistentCookie($duration, $path)
+    {
+        $value = $this->getKey();
+        $this->setCookie($value, $duration, $path);
+        return $this;
+    }
+
+    /**
+     * Postpone cookie expiration time if cookie value defined
+     *
+     * @param int $duration Time in seconds.
+     * @param string $path
+     * @return $this
+     */
+    public function renewPersistentCookie($duration, $path)
+    {
+        if ($duration === null) {
+            return $this;
+        }
+        $value = $this->_cookieManager->getCookie(self::COOKIE_NAME);
+        if (null !== $value) {
+            $this->setCookie($value, $duration, $path);
+        }
         return $this;
     }
 
@@ -286,7 +340,7 @@ class Session extends \Magento\Core\Model\AbstractModel
      * Delete expired persistent sessions for the website
      *
      * @param null|int $websiteId
-     * @return \Magento\Persistent\Model\Session
+     * @return $this
      */
     public function deleteExpired($websiteId = null)
     {
@@ -310,7 +364,7 @@ class Session extends \Magento\Core\Model\AbstractModel
     /**
      * Delete 'persistent' cookie
      *
-     * @return \Magento\Core\Model\AbstractModel
+     * @return $this
      */
     protected function _afterDeleteCommit()
     {
@@ -321,11 +375,32 @@ class Session extends \Magento\Core\Model\AbstractModel
     /**
      * Set `updated_at` to be always changed
      *
-     * @return \Magento\Persistent\Model\Session
+     * @return $this
      */
     public function save()
     {
         $this->setUpdatedAt(gmdate('Y-m-d H:i:s'));
         return parent::save();
+    }
+
+    /**
+     * Set persistent shopping cart cookie.
+     *
+     * @param string $value
+     * @param int $duration
+     * @param string $path
+     * @return void
+     */
+    private function setCookie($value, $duration, $path)
+    {
+        $publicCookieMetadata = $this->_cookieMetadataFactory->createPublicCookieMetadata()
+            ->setDuration($duration)
+            ->setPath($path)
+            ->setHttpOnly(true);
+        $this->_cookieManager->setPublicCookie(
+            self::COOKIE_NAME,
+            $value,
+            $publicCookieMetadata
+        );
     }
 }

@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     <package-name>
- * @subpackage  <subpackage-name>
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\ImportExport\Model\Resource\Import;
 
 /**
@@ -43,8 +39,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\ImportExport\Model\Resource\Import\Data');
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\ImportExport\Model\Resource\Import\Data'
+        );
     }
 
     /**
@@ -55,8 +52,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $expectedBunches = $objectManager->get('Magento\Core\Model\Registry')
-            ->registry('_fixture/Magento_ImportExport_Import_Data');
+        $expectedBunches = $objectManager->get(
+            'Magento\Framework\Registry'
+        )->registry(
+            '_fixture/Magento_ImportExport_Import_Data'
+        );
 
         $this->assertEquals($expectedBunches[0]['entity'], $this->_model->getUniqueColumnData('entity'));
     }
@@ -64,7 +64,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /**
      * Test getUniqueColumnData() in case when in data stored in requested column is NOT unique
      *
-     * @expectedException \Magento\Core\Exception
+     * @expectedException \Magento\Framework\Model\Exception
      */
     public function testGetUniqueColumnDataException()
     {
@@ -79,8 +79,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $expectedBunches = $objectManager->get('Magento\Core\Model\Registry')
-            ->registry('_fixture/Magento_ImportExport_Import_Data');
+        $expectedBunches = $objectManager->get(
+            'Magento\Framework\Registry'
+        )->registry(
+            '_fixture/Magento_ImportExport_Import_Data'
+        );
 
         $this->assertEquals($expectedBunches[0]['behavior'], $this->_model->getBehavior());
     }
@@ -93,8 +96,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $expectedBunches = $objectManager->get('Magento\Core\Model\Registry')
-            ->registry('_fixture/Magento_ImportExport_Import_Data');
+        $expectedBunches = $objectManager->get(
+            'Magento\Framework\Registry'
+        )->registry(
+            '_fixture/Magento_ImportExport_Import_Data'
+        );
 
         $this->assertEquals($expectedBunches[0]['entity'], $this->_model->getEntityTypeCode());
     }

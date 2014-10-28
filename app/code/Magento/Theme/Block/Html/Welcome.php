@@ -21,13 +21,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Theme\Block\Html;
 
 /**
  * Html page welcome block
  */
-class Welcome extends \Magento\View\Element\Template
+class Welcome extends \Magento\Framework\View\Element\Template
 {
     /**
      * Get block message

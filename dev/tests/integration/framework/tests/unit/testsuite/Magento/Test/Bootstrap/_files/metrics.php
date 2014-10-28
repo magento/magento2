@@ -18,13 +18,8 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-return array(
-    'Fixture Label' => array('fixture_key_one', 'fixture_key_two'),
-);
+return array('Fixture Label' => array('fixture_key_one', 'fixture_key_two'));

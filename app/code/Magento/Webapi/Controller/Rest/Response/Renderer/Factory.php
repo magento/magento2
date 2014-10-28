@@ -28,7 +28,7 @@ namespace Magento\Webapi\Controller\Rest\Response\Renderer;
 class Factory
 {
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
@@ -41,12 +41,12 @@ class Factory
     protected $_renders;
 
     /**
-     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManager $objectManager
      * @param \Magento\Webapi\Controller\Rest\Request $request
      * @param array $renders
      */
     public function __construct(
-        \Magento\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManager $objectManager,
         \Magento\Webapi\Controller\Rest\Request $request,
         array $renders = array()
     ) {
@@ -67,7 +67,8 @@ class Factory
         $renderer = $this->_objectManager->get($this->_getRendererClass());
         if (!$renderer instanceof \Magento\Webapi\Controller\Rest\Response\RendererInterface) {
             throw new \LogicException(
-                'The renderer must implement "Magento\Webapi\Controller\Rest\Response\RendererInterface".');
+                'The renderer must implement "Magento\Webapi\Controller\Rest\Response\RendererInterface".'
+            );
         }
         return $renderer;
     }
@@ -87,9 +88,9 @@ class Factory
         foreach ($acceptTypes as $acceptType) {
             foreach ($this->_renders as $rendererConfig) {
                 $rendererType = $rendererConfig['type'];
-                if ($acceptType == $rendererType
-                    || ($acceptType == current(explode('/', $rendererType)) . '/*')
-                    || $acceptType == '*/*'
+                if ($acceptType == $rendererType || $acceptType == current(
+                    explode('/', $rendererType)
+                ) . '/*' || $acceptType == '*/*'
                 ) {
                     return $rendererConfig['model'];
                 }

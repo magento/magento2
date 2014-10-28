@@ -18,28 +18,30 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Payment
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Payment\Model\Method;
+
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Free payment method
  */
-namespace Magento\Payment\Model\Method;
-
 class Free extends \Magento\Payment\Model\Method\AbstractMethod
 {
     /**
      * XML Paths for configuration constants
      */
     const XML_PATH_PAYMENT_FREE_ACTIVE = 'payment/free/active';
+
     const XML_PATH_PAYMENT_FREE_ORDER_STATUS = 'payment/free/order_status';
+
     const XML_PATH_PAYMENT_FREE_PAYMENT_ACTION = 'payment/free/payment_action';
 
     /**
      * Payment Method features
+     *
      * @var bool
      */
     protected $_canAuthorize = true;
@@ -52,32 +54,28 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
     protected $_code = 'free';
 
     /**
-     * Store manager
-     *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var PriceCurrencyInterface
      */
-    protected $_storeManager;
+    protected $priceCurrency;
 
     /**
-     * Construct
-     *
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Payment\Helper\Data $paymentData
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\Logger\AdapterFactory $logAdapterFactory
+     * @param PriceCurrencyInterface $priceCurrency
      * @param array $data
      */
     public function __construct(
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Payment\Helper\Data $paymentData,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\Log\AdapterFactory $logAdapterFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\Logger\AdapterFactory $logAdapterFactory,
+        PriceCurrencyInterface $priceCurrency,
         array $data = array()
     ) {
-        parent::__construct($eventManager, $paymentData, $coreStoreConfig, $logAdapterFactory, $data);
-        $this->_storeManager = $storeManager;
+        parent::__construct($eventManager, $paymentData, $scopeConfig, $logAdapterFactory, $data);
+        $this->priceCurrency = $priceCurrency;
     }
 
     /**
@@ -88,8 +86,11 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
      */
     public function isAvailable($quote = null)
     {
-        return parent::isAvailable($quote) && !empty($quote)
-            && $this->_storeManager->getStore()->roundPrice($quote->getGrandTotal()) == 0;
+        return parent::isAvailable(
+            $quote
+        ) && !empty($quote) && $this->priceCurrency->round(
+            $quote->getGrandTotal()
+        ) == 0;
     }
 
     /**

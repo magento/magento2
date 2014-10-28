@@ -18,37 +18,34 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Reports
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Reports\Model;
 
 /**
  * Configuration for reports
  */
-namespace Magento\Reports\Model;
-
-class Config extends \Magento\Object
+class Config extends \Magento\Framework\Object
 {
     /**
-     * @var \Magento\Module\Dir\Reader
+     * @var \Magento\Framework\Module\Dir\Reader
      */
     protected $_moduleReader;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @param \Magento\Module\Dir\Reader $moduleReader
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Module\Dir\Reader $moduleReader
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param array $data
      */
     public function __construct(
-        \Magento\Module\Dir\Reader $moduleReader,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Module\Dir\Reader $moduleReader,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         array $data = array()
     ) {
         parent::__construct($data);
@@ -56,6 +53,11 @@ class Config extends \Magento\Object
         $this->_storeManager = $storeManager;
     }
 
+    /**
+     * Return reports global configuration
+     *
+     * @return string
+     */
     public function getGlobalConfig()
     {
         $dom = new \DOMDocument();
@@ -69,17 +71,23 @@ class Config extends \Magento\Object
         return $dom->saveXML();
     }
 
+    /**
+     * Return reports language
+     *
+     * @return string
+     */
     public function getLanguage()
     {
-        return file_get_contents(
-            $this->_moduleReader->getModuleDir('etc', 'Magento_Reports') . '/flexLanguage.xml'
-        );
+        return file_get_contents($this->_moduleReader->getModuleDir('etc', 'Magento_Reports') . '/flexLanguage.xml');
     }
 
+    /**
+     * Return reports dashboard
+     *
+     * @return string
+     */
     public function getDashboard()
     {
-        return file_get_contents(
-            $this->_moduleReader->getModuleDir('etc', 'Magento_Reports') . '/flexDashboard.xml'
-        );
+        return file_get_contents($this->_moduleReader->getModuleDir('etc', 'Magento_Reports') . '/flexDashboard.xml');
     }
 }

@@ -18,29 +18,23 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Sales\Model\Resource\Order\Attribute\Backend;
 
 /**
  * Order shipping address backend
  *
- * @category    Magento
- * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Model\Resource\Order\Attribute\Backend;
-
-class Shipping
-    extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+class Shipping extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
      * Perform operation before save
      *
-     * @param \Magento\Object $object
+     * @param \Magento\Framework\Object $object
+     * @return void
      */
     public function beforeSave($object)
     {
@@ -53,7 +47,8 @@ class Shipping
     /**
      * Perform operation after save
      *
-     * @param \Magento\Object $object
+     * @param \Magento\Framework\Object $object
+     * @return void
      */
     public function afterSave($object)
     {
@@ -65,7 +60,8 @@ class Shipping
         }
         if ($shippingAddressId) {
             $object->setShippingAddressId($shippingAddressId);
-            $this->getAttribute()->getEntity()->saveAttribute($object, $this->getAttribute()->getAttributeCode());
+            $this->getAttribute()->getEntity()
+                ->saveAttribute($object, $this->getAttribute()->getAttributeCode());
         }
     }
 }

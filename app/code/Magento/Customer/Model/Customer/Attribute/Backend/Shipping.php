@@ -18,23 +18,22 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Customer\Model\Customer\Attribute\Backend;
 
 /**
  * Customer default shipping address backend
  *
- * @category   Magento
- * @package    Magento_Customer
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Customer\Model\Customer\Attribute\Backend;
-
 class Shipping extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
+    /**
+     * @param \Magento\Framework\Object $object
+     * @return void
+     */
     public function beforeSave($object)
     {
         $defaultShipping = $object->getDefaultShipping();
@@ -42,11 +41,14 @@ class Shipping extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
             $object->unsetDefaultShipping();
         }
     }
-    
+
+    /**
+     * @param \Magento\Framework\Object $object
+     * @return void
+     */
     public function afterSave($object)
     {
-        if ($defaultShipping = $object->getDefaultShipping()) 
-        {
+        if ($defaultShipping = $object->getDefaultShipping()) {
             $addressId = false;
             /**
              * post_index set in customer save action for address
@@ -57,11 +59,10 @@ class Shipping extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
                     $addressId = $address->getId();
                 }
             }
-            
+
             if ($addressId) {
                 $object->setDefaultShipping($addressId);
-                $this->getAttribute()->getEntity()
-                    ->saveAttribute($object, $this->getAttribute()->getAttributeCode());
+                $this->getAttribute()->getEntity()->saveAttribute($object, $this->getAttribute()->getAttributeCode());
             }
         }
     }

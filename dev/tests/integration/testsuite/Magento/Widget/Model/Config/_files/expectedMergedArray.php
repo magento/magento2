@@ -23,9 +23,7 @@
  */
 return array(
     'new_products' => array(
-        '@' => array(
-            'type' => 'Magento\Sales\Block\Widget\Guest\Form',
-        ),
+        '@' => array('type' => 'Magento\Sales\Block\Widget\Guest\Form'),
         'is_email_compatible' => '1',
         'placeholder_image' => 'Magento_Catalog::images/product_widget_new.gif',
         'name' => 'Orders and Returns',
@@ -35,25 +33,19 @@ return array(
                 'type' => 'select',
                 'value' => 'all_products',
                 'values' => array(
-                    'default' => array(
-                        'value' => 'all_products',
-                        'label' => 'All products',
-                    ),
-                    'item' => array(
-                        'value' => 'new_products',
-                        'label' => 'New products',
-                    ),
+                    'default' => array('value' => 'all_products', 'label' => 'All products'),
+                    'item' => array('value' => 'new_products', 'label' => 'New products')
                 ),
                 'visible' => '1',
                 'required' => '1',
                 'label' => 'Display Type',
-                'description' => 'All products - recently added products, New products - products marked as new',
+                'description' => 'All products - recently added products, New products - products marked as new'
             ),
             'show_pager' => array(
                 'source_model' => "Magento\Backend\Model\Config\Source\Yesno",
                 'type' => 'select',
                 'visible' => '1',
-                'label' => 'Display Page Control',
+                'label' => 'Display Page Control'
             ),
             'products_per_page' => array(
                 'type' => 'text',
@@ -61,18 +53,14 @@ return array(
                 'visible' => '1',
                 'required' => '1',
                 'label' => 'Number of Products per Page',
-                'depends' => array(
-                    'show_pager' => array(
-                        'value' => '1'
-                    )
-                )
+                'depends' => array('show_pager' => array('value' => '1'))
             ),
             'products_count' => array(
                 'type' => 'text',
                 'value' => '10',
                 'visible' => '1',
                 'required' => '1',
-                'label' => 'Number of Products to Display',
+                'label' => 'Number of Products to Display'
             ),
             'template' => array(
                 'type' => 'select',
@@ -80,28 +68,25 @@ return array(
                 'values' => array(
                     'default' => array(
                         'value' => 'product/widget/new/content/new_grid.phtml',
-                        'label' => 'New Products Grid Template',
+                        'label' => 'New Products Grid Template'
                     ),
                     'list' => array(
                         'value' => 'product/widget/new/content/new_list.phtml',
-                        'label' => 'New Products List Template',
+                        'label' => 'New Products List Template'
                     ),
                     'list_default' => array(
                         'value' => 'product/widget/new/column/new_default_list.phtml',
-                        'label' => 'New Products Images and Names Template',
+                        'label' => 'New Products Images and Names Template'
                     ),
                     'list_names' => array(
                         'value' => 'product/widget/new/column/new_names_list.phtml',
-                        'label' => 'New Products Names Only Template',
+                        'label' => 'New Products Names Only Template'
                     ),
                     'list_images' => array(
                         'value' => 'product/widget/new/column/new_images_list.phtml',
-                        'label' => 'New Products Images Only Template',
+                        'label' => 'New Products Images Only Template'
                     ),
-                    'default_template' => array(
-                        'value' => 'widget/guest/form.phtml',
-                        'label' => 'Default Template'
-                    ),
+                    'default_template' => array('value' => 'widget/guest/form.phtml', 'label' => 'Default Template')
                 ),
                 'visible' => '0',
                 'required' => '1',
@@ -113,13 +98,9 @@ return array(
                 'label' => 'Cache Lifetime (Seconds)',
                 'description' => "86400 by default, if not set. To refresh instantly, clear the Blocks HTML
                     Output cache.
-                ",
+                "
             ),
-            'title' => array(
-                'type' => 'text',
-                'visible' => '0',
-                'label' => 'Anchor Custom Title',
-            ),
+            'title' => array('type' => 'text', 'visible' => '0', 'label' => 'Anchor Custom Title')
         ),
         'supported_containers' => array(
             array(
@@ -130,13 +111,7 @@ return array(
                     'images_only' => 'list_images'
                 )
             ),
-            array(
-                'container_name' => 'content',
-                'template' => array(
-                    'grid' => 'default',
-                    'list' => 'list'
-                )
-            ),
+            array('container_name' => 'content', 'template' => array('grid' => 'default', 'list' => 'list')),
             array(
                 'container_name' => 'right',
                 'template' => array(
@@ -144,8 +119,7 @@ return array(
                     'names_only' => 'list_names',
                     'images_only' => 'list_images'
                 )
-            ),
-        ),
+            )
+        )
     )
 );
-

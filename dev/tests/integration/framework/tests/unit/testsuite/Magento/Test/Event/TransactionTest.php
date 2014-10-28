@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -49,20 +46,21 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_eventManager = $this->getMock('Magento\TestFramework\EventManager', array('fireEvent'), array(array()));
-        $this->_adapter = $this->getMock('Magento\TestFramework\Db\Adapter\TransactionInterface', array(
-            'beginTransparentTransaction',
-            'commitTransparentTransaction',
-            'rollbackTransparentTransaction',
-        ));
-        $this->_object = $this->getMock(
-            'Magento\TestFramework\Event\Transaction', array('_getAdapter'), array($this->_eventManager)
+        $this->_eventManager = $this->getMock(
+            'Magento\TestFramework\EventManager',
+            array('fireEvent'),
+            array(array())
         );
-        $this->_object
-            ->expects($this->any())
-            ->method('_getAdapter')
-            ->will($this->returnValue($this->_adapter))
-        ;
+        $this->_adapter = $this->getMock(
+            'Magento\TestFramework\Db\Adapter\TransactionInterface',
+            array('beginTransparentTransaction', 'commitTransparentTransaction', 'rollbackTransparentTransaction')
+        );
+        $this->_object = $this->getMock(
+            'Magento\TestFramework\Event\Transaction',
+            array('_getAdapter'),
+            array($this->_eventManager)
+        );
+        $this->_object->expects($this->any())->method('_getAdapter')->will($this->returnValue($this->_adapter));
     }
 
     /**
@@ -77,12 +75,15 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
             $param = $parameters[1];
             $param->requestTransactionStart();
         };
-        $this->_eventManager
-            ->expects($this->at(0))
-            ->method('fireEvent')
-            ->with($eventName)
-            ->will($this->returnCallback($callback))
-        ;
+        $this->_eventManager->expects(
+            $this->at(0)
+        )->method(
+            'fireEvent'
+        )->with(
+            $eventName
+        )->will(
+            $this->returnCallback($callback)
+        );
     }
 
     /**
@@ -92,15 +93,8 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
      */
     protected function _expectTransactionStart(\PHPUnit_Framework_MockObject_Matcher_Invocation $invocationMatcher)
     {
-        $this->_eventManager
-            ->expects($invocationMatcher)
-            ->method('fireEvent')
-            ->with('startTransaction')
-        ;
-        $this->_adapter
-            ->expects($this->once())
-            ->method('beginTransparentTransaction')
-        ;
+        $this->_eventManager->expects($invocationMatcher)->method('fireEvent')->with('startTransaction');
+        $this->_adapter->expects($this->once())->method('beginTransparentTransaction');
     }
 
     /**
@@ -115,12 +109,15 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
             $param = $parameters[1];
             $param->requestTransactionRollback();
         };
-        $this->_eventManager
-            ->expects($this->at(0))
-            ->method('fireEvent')
-            ->with($eventName)
-            ->will($this->returnCallback($callback))
-        ;
+        $this->_eventManager->expects(
+            $this->at(0)
+        )->method(
+            'fireEvent'
+        )->with(
+            $eventName
+        )->will(
+            $this->returnCallback($callback)
+        );
     }
 
     /**
@@ -130,15 +127,8 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
      */
     protected function _expectTransactionRollback(\PHPUnit_Framework_MockObject_Matcher_Invocation $invocationMatcher)
     {
-        $this->_eventManager
-            ->expects($invocationMatcher)
-            ->method('fireEvent')
-            ->with('rollbackTransaction')
-        ;
-        $this->_adapter
-            ->expects($this->once())
-            ->method('rollbackTransparentTransaction')
-        ;
+        $this->_eventManager->expects($invocationMatcher)->method('fireEvent')->with('rollbackTransaction');
+        $this->_adapter->expects($this->once())->method('rollbackTransparentTransaction');
     }
 
     /**
@@ -150,18 +140,18 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
     {
         $this->_imitateTransactionStartRequest($eventName);
         $this->_expectTransactionStart($this->at(1));
-        $this->_object->$method($this);
+        $this->_object->{$method}($this);
 
         $this->_imitateTransactionRollbackRequest($eventName);
         $this->_expectTransactionRollback($this->at(1));
-        $this->_object->$method($this);
+        $this->_object->{$method}($this);
     }
 
     public function startAndRollbackTransactionDataProvider()
     {
         return array(
             'method "startTest"' => array('startTest', 'startTestTransactionRequest'),
-            'method "endTest"'   => array('endTest',   'endTestTransactionRequest'),
+            'method "endTest"' => array('endTest', 'endTestTransactionRequest')
         );
     }
 
@@ -172,28 +162,15 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
      */
     public function testDoNotStartAndRollbackTransaction($method, $eventName)
     {
-        $this->_eventManager
-            ->expects($this->once())
-            ->method('fireEvent')
-            ->with($eventName)
-        ;
-        $this->_adapter
-            ->expects($this->never())
-            ->method($this->anything())
-        ;
-        $this->_object->$method($this);
+        $this->_eventManager->expects($this->once())->method('fireEvent')->with($eventName);
+        $this->_adapter->expects($this->never())->method($this->anything());
+        $this->_object->{$method}($this);
     }
 
     public function testEndTestSuiteDoNothing()
     {
-        $this->_eventManager
-            ->expects($this->never())
-            ->method('fireEvent')
-        ;
-        $this->_adapter
-            ->expects($this->never())
-            ->method($this->anything())
-        ;
+        $this->_eventManager->expects($this->never())->method('fireEvent');
+        $this->_adapter->expects($this->never())->method($this->anything());
         $this->_object->endTestSuite();
     }
 

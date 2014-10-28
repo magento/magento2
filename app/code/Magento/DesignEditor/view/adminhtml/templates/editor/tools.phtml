@@ -1,0 +1,128 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+
+<?php /** @var $this \Magento\DesignEditor\Block\Adminhtml\Editor\Tools */ ?>
+<section class="vde-tools">
+    <header class="vde-tools-header">
+        <div class="vde-tools-header-inner">
+            <button class="action-close" title="<?php echo __('Close Panel'); ?>">
+                <span><?php echo __('Close Panel'); ?></span>
+            </button>
+        </div>
+    </header>
+    <div class="vde-tools-content">
+        <div class="vde-tools-content-inner">
+            <div class="vde-tools-handler-container"></div>
+            <?php echo join('', $this->getTabContents()) ?>
+        </div>
+    </div>
+    <footer class="vde-tools-footer">
+        <div class="vde-tools-footer-inner">
+            <div class="vde-tools-tabs">
+                <ul class="vde-tab-controls">
+                    <?php echo join('', $this->getTabHandles()) ?>
+                </ul>
+            </div>
+            <div data-translate-container class="vde-tools-menu">
+                <div data-translate-menu class="text-menu-show hidden">
+                    <div data-translate-selected="text" class="text-menu-div">
+                        <span data-translate-img="text" class="text-menu-text-off"></span>
+                        <span data-translate-label="text" class="text-menu-label"><?php echo __('Page Text'); ?></span>
+                    </div>
+
+                    <div data-translate-selected="script" class="text-menu-div">
+                        <span data-translate-img="script" class="text-menu-script-off"></span>
+                        <span data-translate-label="script" class="text-menu-label"><?php echo __('Variable Text'); ?></span>
+                    </div>
+
+                    <div data-translate-selected="alt" class="text-menu-div">
+                        <span data-translate-img="alt" class="text-menu-alt-off"></span>
+                        <span data-translate-label="alt" class="text-menu-label"><?php echo __('Alternative Text'); ?></span>
+                    </div>
+                </div>
+                <div data-tip="translate" class="tip hidden">
+                    <h1 data-tip-text><?php echo __('Toggle Page Text'); ?></h1>
+                    <p><?php echo __('(Hold down button for options)'); ?></p>
+                </div>
+                <ul class="vde-tab-controls" data-editing="translate">
+                    <li data-translate-edit="text" class="item-text-edit text-edit-text-off">
+                        <a vde-translate>
+                            <span><?php echo __('Edit Text'); ?></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+</section>
+
+<div class="vde-message no-display" id="vde-message-template">
+    <div class="message-inner">
+        <div class="message-content">${message}</div>
+        <button class="action-close" title="<?php echo __('Close Message'); ?>">
+            <span><?php echo __('Close Message'); ?></span>
+        </button>
+    </div>
+</div>
+
+<script type="text/javascript">
+require([
+    'jquery',
+    'Magento_DesignEditor/js/quick-style-element',
+    'Magento_DesignEditor/js/message',
+    'Magento_DesignEditor/js/tools-panel'
+], function($){
+
+    'use strict';
+
+    $(function () {
+      $('body').on('click.tab.data-api', '[data-toggle="tab-disabled"]', function (e) {
+        e.preventDefault();
+      })
+    })
+
+    $('.vde-tools').toolsPanel();
+    
+    $('#vde-tab-quick-styles .element-font-picker select,' +
+      '#vde-tab-quick-styles .element-color-picker input,' +
+      '#vde-tab-quick-styles .element-background .element-checkbox'
+    ).quickStyleElement({
+        saveQuickStylesUrl: '<?php echo $this->getSaveUrl(); ?>'
+    });
+
+    $('[class^="action-"][href="#vde-tab-custom"]').on('click.activateCustomCodeTab', function() {
+        $('.vde-tab-controls a[href="#vde-tab-custom"]').trigger('click');
+    });
+
+    $('.action-edit[href="#vde-tab-custom"]').on('click.focusOnCustomCodeTextarea', function() {
+        $('#custom_code').focus();
+    });
+
+    $('.vde-tools').vdeMessage({
+        messageTemplateId: '#vde-message-template'
+    });
+
+});
+</script>

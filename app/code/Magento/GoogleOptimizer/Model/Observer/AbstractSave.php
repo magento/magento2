@@ -25,6 +25,8 @@
  */
 namespace Magento\GoogleOptimizer\Model\Observer;
 
+use Magento\Framework\Event\Observer;
+
 abstract class AbstractSave
 {
     /**
@@ -38,7 +40,7 @@ abstract class AbstractSave
     protected $_modelCode;
 
     /**
-     * @var \Magento\App\RequestInterface
+     * @var \Magento\Framework\App\RequestInterface
      */
     protected $_request;
 
@@ -50,12 +52,12 @@ abstract class AbstractSave
     /**
      * @param \Magento\GoogleOptimizer\Helper\Data $helper
      * @param \Magento\GoogleOptimizer\Model\Code $modelCode
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      */
     public function __construct(
         \Magento\GoogleOptimizer\Helper\Data $helper,
         \Magento\GoogleOptimizer\Model\Code $modelCode,
-        \Magento\App\RequestInterface $request
+        \Magento\Framework\App\RequestInterface $request
     ) {
         $this->_helper = $helper;
         $this->_modelCode = $modelCode;
@@ -65,8 +67,8 @@ abstract class AbstractSave
     /**
      * Save script after saving entity
      *
-     * @param \Magento\Event\Observer $observer
-     * @return \Magento\GoogleOptimizer\Model\Observer\Category\Save
+     * @param Observer $observer
+     * @return $this
      * @throws \InvalidArgumentException
      */
     public function saveGoogleExperimentScript($observer)
@@ -83,12 +85,15 @@ abstract class AbstractSave
     /**
      * Init entity
      *
-     * @param \Magento\Event\Observer $observer
+     * @param Observer $observer
+     * @return void
      */
     abstract protected function _initEntity($observer);
 
     /**
      * Check is Google Experiment enabled
+     *
+     * @return bool
      */
     protected function _isGoogleExperimentActive()
     {
@@ -97,6 +102,8 @@ abstract class AbstractSave
 
     /**
      * Processes Save event of the entity
+     *
+     * @return void
      */
     protected function _processCode()
     {
@@ -117,6 +124,7 @@ abstract class AbstractSave
     /**
      * Init request params
      *
+     * @return void
      * @throws \InvalidArgumentException
      */
     protected function _initRequestParams()
@@ -140,6 +148,8 @@ abstract class AbstractSave
 
     /**
      * Save code model
+     *
+     * @return void
      */
     protected function _saveCode()
     {
@@ -157,6 +167,7 @@ abstract class AbstractSave
     /**
      * Load model code
      *
+     * @return void
      * @throws \InvalidArgumentException
      */
     protected function _loadCode()
@@ -180,6 +191,7 @@ abstract class AbstractSave
     /**
      * Delete model code
      *
+     * @return void
      * @throws \InvalidArgumentException
      */
     protected function _deleteCode()

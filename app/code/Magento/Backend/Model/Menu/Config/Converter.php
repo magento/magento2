@@ -23,7 +23,7 @@
  */
 namespace Magento\Backend\Model\Menu\Config;
 
-class Converter implements \Magento\Config\ConverterInterface
+class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
      * @param mixed $dom
@@ -43,7 +43,7 @@ class Converter implements \Magento\Config\ConverterInterface
             'parent',
             'resource',
             'dependsOnModule',
-            'dependsOnConfig',
+            'dependsOnConfig'
         );
         $xpath = new \DOMXPath($dom);
         $nodeList = $xpath->query('/config/menu/*');

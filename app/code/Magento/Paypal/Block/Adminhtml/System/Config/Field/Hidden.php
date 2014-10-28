@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Paypal
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,13 +27,12 @@
  */
 namespace Magento\Paypal\Block\Adminhtml\System\Config\Field;
 
-class Hidden
-    extends \Magento\Backend\Block\System\Config\Form\Field
+class Hidden extends \Magento\Backend\Block\System\Config\Form\Field
 {
     /**
      * Decorate field row html to be invisible
      *
-     * @param \Magento\Data\Form\Element\AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @param string $html
      * @return string
      */

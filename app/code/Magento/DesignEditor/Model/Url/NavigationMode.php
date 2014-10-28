@@ -18,18 +18,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_DesignEditor
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DesignEditor\Model\Url;
 
 /**
  * Navigation mode design editor url model
  */
-namespace Magento\DesignEditor\Model\Url;
-
-class NavigationMode extends \Magento\Core\Model\Url
+class NavigationMode extends \Magento\Framework\Url
 {
     /**
      * VDE helper
@@ -53,31 +50,31 @@ class NavigationMode extends \Magento\Core\Model\Url
     protected $_themeId;
 
     /**
-     * @param \Magento\App\Route\ConfigInterface $routeConfig
-     * @param \Magento\App\RequestInterface $request
-     * @param \Magento\Core\Model\Url\SecurityInfoInterface $urlSecurityInfo
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\App $app
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Session $session
-     * @param \Magento\Session\SidResolverInterface $sidResolver
+     * @param \Magento\Framework\App\Route\ConfigInterface $routeConfig
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @param \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo
+     * @param \Magento\Framework\Url\ScopeResolverInterface $scopeResolver
+     * @param \Magento\Framework\Session\Generic $session
+     * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
+     * @param \Magento\Framework\Url\RouteParamsResolverFactory $routeParamsResolver
+     * @param \Magento\Framework\Url\QueryParamsResolverInterface $queryParamsResolver
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param string $scopeType
      * @param \Magento\DesignEditor\Helper\Data $helper
-     * @param string $areaCode
      * @param array $data
-     * 
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\App\Route\ConfigInterface $routeConfig,
-        \Magento\App\RequestInterface $request,
-        \Magento\Core\Model\Url\SecurityInfoInterface $urlSecurityInfo,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\App $app,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Session $session,
-        \Magento\Session\SidResolverInterface $sidResolver,
+        \Magento\Framework\App\Route\ConfigInterface $routeConfig,
+        \Magento\Framework\App\RequestInterface $request,
+        \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo,
+        \Magento\Framework\Url\ScopeResolverInterface $scopeResolver,
+        \Magento\Framework\Session\Generic $session,
+        \Magento\Framework\Session\SidResolverInterface $sidResolver,
+        \Magento\Framework\Url\RouteParamsResolverFactory $routeParamsResolver,
+        \Magento\Framework\Url\QueryParamsResolverInterface $queryParamsResolver,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        $scopeType,
         \Magento\DesignEditor\Helper\Data $helper,
-        $areaCode,
         array $data = array()
     ) {
         $this->_helper = $helper;
@@ -92,12 +89,13 @@ class NavigationMode extends \Magento\Core\Model\Url
             $routeConfig,
             $request,
             $urlSecurityInfo,
-            $coreStoreConfig,
-            $app,
-            $storeManager,
+            $scopeResolver,
             $session,
             $sidResolver,
-            $areaCode,
+            $routeParamsResolver,
+            $queryParamsResolver,
+            $scopeConfig,
+            $scopeType,
             $data
         );
     }
@@ -114,9 +112,7 @@ class NavigationMode extends \Magento\Core\Model\Url
         $this->_hasThemeAndMode();
         $url = parent::getRouteUrl($routePath, $routeParams);
         $baseUrl = trim($this->getBaseUrl(), '/');
-        $vdeBaseUrl = implode('/', array(
-            $baseUrl, $this->_helper->getFrontName(), $this->_mode, $this->_themeId
-        ));
+        $vdeBaseUrl = implode('/', array($baseUrl, $this->_helper->getFrontName(), $this->_mode, $this->_themeId));
         if (strpos($url, $baseUrl) === 0 && strpos($url, $vdeBaseUrl) === false) {
             $url = str_replace($baseUrl, $vdeBaseUrl, $url);
         }
@@ -133,11 +129,11 @@ class NavigationMode extends \Magento\Core\Model\Url
     protected function _hasThemeAndMode()
     {
         if (!$this->_mode) {
-            $this->_mode = $this->getRequest()->getAlias('editorMode');
+            $this->_mode = $this->_getRequest()->getAlias('editorMode');
         }
 
         if (!$this->_themeId) {
-            $this->_themeId = $this->getRequest()->getAlias('themeId');
+            $this->_themeId = $this->_getRequest()->getAlias('themeId');
         }
         return $this;
     }

@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Reports
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,8 +26,6 @@
 /**
  * Shopingcart Products Report collection
  *
- * @category    Magento
- * @package     Magento_Reports
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Reports\Model\Resource\Shopcart\Product;
@@ -39,14 +35,12 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
     /**
      * Join fields
      *
-     * @return \Magento\Reports\Model\Resource\Shopcart\Product\Collection
+     * @return $this
      */
     protected function _joinFields()
     {
         parent::_joinFields();
-        $this->addAttributeToSelect('price')
-            ->addCartsCount()
-            ->addOrdersCount();
+        $this->addAttributeToSelect('price')->addCartsCount()->addOrdersCount();
 
         return $this;
     }
@@ -55,8 +49,8 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
      * Set date range
      *
      * @param string $from
-     * @param strin $to
-     * @return \Magento\Reports\Model\Resource\Shopcart\Product\Collection
+     * @param string $to
+     * @return $this
      */
     public function setDateRange($from, $to)
     {

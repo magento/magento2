@@ -21,13 +21,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Cms\Model\Resource;
 
 /**
  * Cms resource setup
  */
-namespace Magento\Cms\Model\Resource;
-
-class Setup extends \Magento\Core\Model\Resource\Setup\Generic
+class Setup extends \Magento\Framework\Module\Setup
 {
     /**
      * Block factory
@@ -43,13 +42,21 @@ class Setup extends \Magento\Core\Model\Resource\Setup\Generic
      */
     protected $_pageFactory;
 
+    /**
+     * @param \Magento\Framework\Module\Setup\Context $context
+     * @param string $resourceName
+     * @param \Magento\Cms\Model\BlockFactory $blockFactory
+     * @param \Magento\Cms\Model\PageFactory $pageFactory
+     * @param string $moduleName
+     * @param string $connectionName
+     */
     public function __construct(
-        \Magento\Core\Model\Resource\Setup\Context $context,
+        \Magento\Framework\Module\Setup\Context $context,
         $resourceName,
         \Magento\Cms\Model\BlockFactory $blockFactory,
         \Magento\Cms\Model\PageFactory $pageFactory,
         $moduleName = 'Magento_Cms',
-        $connectionName = ''
+        $connectionName = \Magento\Framework\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION
     ) {
         $this->_blockFactory = $blockFactory;
         $this->_pageFactory = $pageFactory;

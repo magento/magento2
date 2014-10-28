@@ -18,57 +18,23 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_SalesRule
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\SalesRule\Model\Rule\Condition;
 
 /**
  * Product rule condition data model
  *
- * @category Magento
- * @package Magento_SalesRule
  * @author Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\SalesRule\Model\Rule\Condition;
-
 class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 {
-    /**
-     * @var \Magento\Catalog\Model\ProductFactory
-     */
-    protected $_productFactory;
-
-    /**
-     * @param \Magento\Rule\Model\Condition\Context $context
-     * @param \Magento\Backend\Helper\Data $backendData
-     * @param \Magento\Eav\Model\Config $config
-     * @param \Magento\Catalog\Model\Product $product
-     * @param \Magento\Catalog\Model\Resource\Product $productResource
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection $attrSetCollection
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param array $data
-     */
-    public function __construct(
-        \Magento\Rule\Model\Condition\Context $context,
-        \Magento\Backend\Helper\Data $backendData,
-        \Magento\Eav\Model\Config $config,
-        \Magento\Catalog\Model\Product $product,
-        \Magento\Catalog\Model\Resource\Product $productResource,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection $attrSetCollection,
-        \Magento\Catalog\Model\ProductFactory $productFactory,
-        array $data = array()
-    ) {
-        parent::__construct($context, $backendData, $config, $product, $productResource, $attrSetCollection, $data);
-        $this->_productFactory = $productFactory;
-    }
-
     /**
      * Add special attributes
      *
      * @param array $attributes
+     * @return void
      */
     protected function _addSpecialAttributes(array &$attributes)
     {
@@ -81,28 +47,26 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     /**
      * Validate Product Rule Condition
      *
-     * @param \Magento\Object $object
-     *
+     * @param \Magento\Framework\Object $object
      * @return bool
      */
-    public function validate(\Magento\Object $object)
+    public function validate(\Magento\Framework\Object $object)
     {
+        //@todo reimplement this method when is fixed MAGETWO-5713
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $object->getProduct();
-        if (!($product instanceof \Magento\Catalog\Model\Product)) {
+        if (!$product instanceof \Magento\Catalog\Model\Product) {
             $product = $this->_productFactory->create()->load($object->getProductId());
         }
 
-        $product->setQuoteItemQty($object->getQty())
-            ->setQuoteItemPrice($object->getPrice()) // possible bug: need to use $object->getBasePrice()
-            ->setQuoteItemRowTotal($object->getBaseRowTotal());
+        $product->setQuoteItemQty(
+            $object->getQty()
+        )->setQuoteItemPrice(
+            $object->getPrice() // possible bug: need to use $object->getBasePrice()
+        )->setQuoteItemRowTotal(
+            $object->getBaseRowTotal()
+        );
 
-        $valid = parent::validate($product);
-        if (!$valid && $product->getTypeId() == \Magento\Catalog\Model\Product\Type\Configurable::TYPE_CODE) {
-            $children = $object->getChildren();
-            $valid = $children && $this->validate($children[0]);
-        }
-
-        return $valid;
+        return parent::validate($product);
     }
 }

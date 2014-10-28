@@ -18,11 +18,10 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model\Order\Shipment;
 
 /**
  * @method \Magento\Sales\Model\Resource\Order\Shipment\Track _getResource()
@@ -46,12 +45,8 @@
  * @method string getUpdatedAt()
  * @method \Magento\Sales\Model\Order\Shipment\Track setUpdatedAt(string $value)
  *
- * @category    Magento
- * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Model\Order\Shipment;
-
 class Track extends \Magento\Sales\Model\AbstractModel
 {
     /**
@@ -59,20 +54,25 @@ class Track extends \Magento\Sales\Model\AbstractModel
      */
     const CUSTOM_CARRIER_CODE = 'custom';
 
+    /**
+     * @var \Magento\Sales\Model\Order\Shipment|null
+     */
     protected $_shipment = null;
 
+    /**
+     * @var string
+     */
     protected $_eventPrefix = 'sales_order_shipment_track';
+
+    /**
+     * @var string
+     */
     protected $_eventObject = 'track';
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
-
-    /**
-     * @var \Magento\Shipping\Model\Config
-     */
-    protected $_shippingConfig;
 
     /**
      * @var \Magento\Sales\Model\Order\ShipmentFactory
@@ -80,45 +80,36 @@ class Track extends \Magento\Sales\Model\AbstractModel
     protected $_shipmentFactory;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Core\Model\LocaleInterface $coreLocale
-     * @param \Magento\Stdlib\DateTime $dateTime
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Shipping\Model\Config $shippingConfig
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Core\Model\LocaleInterface $coreLocale,
-        \Magento\Stdlib\DateTime $dateTime,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Shipping\Model\Config $shippingConfig,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Framework\Stdlib\DateTime $dateTime,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        parent::__construct(
-            $context,
-            $registry,
-            $coreLocale,
-            $dateTime,
-            $resource,
-            $resourceCollection,
-            $data
-        );
+        parent::__construct($context, $registry, $localeDate, $dateTime, $resource, $resourceCollection, $data);
         $this->_storeManager = $storeManager;
-        $this->_shippingConfig = $shippingConfig;
         $this->_shipmentFactory = $shipmentFactory;
     }
 
     /**
      * Initialize resource model
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -139,7 +130,7 @@ class Track extends \Magento\Sales\Model\AbstractModel
      * Tracking number setter
      *
      * @param string $number
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     public function setNumber($number)
     {
@@ -149,8 +140,8 @@ class Track extends \Magento\Sales\Model\AbstractModel
     /**
      * Declare Shipment instance
      *
-     * @param   \Magento\Sales\Model\Order\Shipment $shipment
-     * @return  \Magento\Sales\Model\Order\Shipment\Item
+     * @param \Magento\Sales\Model\Order\Shipment $shipment
+     * @return $this
      */
     public function setShipment(\Magento\Sales\Model\Order\Shipment $shipment)
     {
@@ -165,7 +156,7 @@ class Track extends \Magento\Sales\Model\AbstractModel
      */
     public function getShipment()
     {
-        if (!($this->_shipment instanceof \Magento\Sales\Model\Order\Shipment)) {
+        if (!$this->_shipment instanceof \Magento\Sales\Model\Order\Shipment) {
             $this->_shipment = $this->_shipmentFactory->create()->load($this->getParentId());
         }
 
@@ -193,34 +184,9 @@ class Track extends \Magento\Sales\Model\AbstractModel
     }
 
     /**
-     * Retrieve detail for shipment track
-     *
-     * @return string
-     */
-    public function getNumberDetail()
-    {
-        $carrierInstance = $this->_shippingConfig->getCarrierInstance($this->getCarrierCode());
-        if (!$carrierInstance) {
-            $custom = array();
-            $custom['title'] = $this->getTitle();
-            $custom['number'] = $this->getTrackNumber();
-            return $custom;
-        } else {
-            $carrierInstance->setStore($this->getStore());
-        }
-
-        $trackingInfo = $carrierInstance->getTrackingInfo($this->getNumber());
-        if (!$trackingInfo) {
-            return __('No detail for number "%1"', $this->getNumber());
-        }
-
-        return $trackingInfo;
-    }
-
-    /**
      * Get store object
      *
-     * @return \Magento\Core\Model\Store
+     * @return \Magento\Store\Model\Store
      */
     public function getStore()
     {
@@ -243,7 +209,7 @@ class Track extends \Magento\Sales\Model\AbstractModel
     /**
      * Before object save
      *
-     * @return \Magento\Sales\Model\Order\Shipment\Track
+     * @return $this
      */
     protected function _beforeSave()
     {
@@ -262,7 +228,7 @@ class Track extends \Magento\Sales\Model\AbstractModel
      * Retains previous data in the object.
      *
      * @param array $data
-     * @return \Magento\Sales\Model\Order\Shipment\Track
+     * @return $this
      */
     public function addData(array $data)
     {

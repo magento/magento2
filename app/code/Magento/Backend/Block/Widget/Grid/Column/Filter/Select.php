@@ -18,23 +18,21 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 
 /**
  * Select grid column filter
  *
- * @category   Magento
- * @package    Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
-
 class Select extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {
+    /**
+     * {@inheritdoc}
+     */
     protected function _getOptions()
     {
         $emptyOption = array('value' => null, 'label' => '');
@@ -46,7 +44,7 @@ class Select extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFi
         }
 
         $colOptions = $this->getColumn()->getOptions();
-        if (!empty($colOptions) && is_array($colOptions) ) {
+        if (!empty($colOptions) && is_array($colOptions)) {
             $options = array($emptyOption);
 
             foreach ($colOptions as $key => $option) {
@@ -70,17 +68,23 @@ class Select extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFi
      */
     protected function _renderOption($option, $value)
     {
-        $selected = (($option['value'] == $value && (!is_null($value))) ? ' selected="selected"' : '' );
-        return '<option value="'
-            . $this->escapeHtml($option['value']).'"'.$selected.'>'
-            . $this->escapeHtml($option['label']) . '</option>';
+        $selected = $option['value'] == $value && !is_null($value) ? ' selected="selected"' : '';
+        return '<option value="' . $this->escapeHtml(
+            $option['value']
+        ) . '"' . $selected . '>' . $this->escapeHtml(
+            $option['label']
+        ) . '</option>';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getHtml()
     {
-        $html = '<select name="' . $this->_getHtmlName() . '" id="' . $this->_getHtmlId() . '"'
-            . $this->getUiId('filter', $this->_getHtmlName())
-            . 'class="no-changes">';
+        $html = '<select name="' . $this->_getHtmlName() . '" id="' . $this->_getHtmlId() . '"' . $this->getUiId(
+            'filter',
+            $this->_getHtmlName()
+        ) . 'class="no-changes">';
         $value = $this->getValue();
         foreach ($this->_getOptions() as $option) {
             if (is_array($option['value'])) {
@@ -93,10 +97,13 @@ class Select extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFi
                 $html .= $this->_renderOption($option, $value);
             }
         }
-        $html.='</select>';
+        $html .= '</select>';
         return $html;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getCondition()
     {
         if (is_null($this->getValue())) {
@@ -104,5 +111,4 @@ class Select extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFi
         }
         return array('eq' => $this->getValue());
     }
-
 }

@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento;
 
 class MemoryUsageTest extends \PHPUnit_Framework_TestCase
@@ -41,7 +37,9 @@ class MemoryUsageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_helper = new \Magento\TestFramework\Helper\Memory(new \Magento\Shell);
+        $this->_helper = new \Magento\TestFramework\Helper\Memory(
+            new \Magento\Framework\Shell(new \Magento\Framework\Shell\CommandRenderer())
+        );
     }
 
     /**
@@ -59,11 +57,15 @@ class MemoryUsageTest extends \PHPUnit_Framework_TestCase
             $this->_deallocateUnusedMemory();
         }
         $actualMemoryUsage = $this->_helper->getRealMemoryUsage() - $actualMemoryUsage;
-        $this->assertLessThanOrEqual($this->_getAllowedMemoryUsage(), $actualMemoryUsage, sprintf(
-            "Application reinitialization causes the memory leak of %u bytes per %u iterations.",
+        $this->assertLessThanOrEqual(
+            $this->_getAllowedMemoryUsage(),
             $actualMemoryUsage,
-            self::APP_REINITIALIZATION_LOOPS
-        ));
+            sprintf(
+                "Application reinitialization causes the memory leak of %u bytes per %u iterations.",
+                $actualMemoryUsage,
+                self::APP_REINITIALIZATION_LOOPS
+            )
+        );
     }
 
     /**

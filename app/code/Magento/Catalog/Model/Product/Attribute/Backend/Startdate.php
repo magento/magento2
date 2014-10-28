@@ -18,73 +18,69 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
 /**
  *
  * Speical Start Date attribute backend
  *
- * @category   Magento
- * @package    Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Catalog\Model\Product\Attribute\Backend;
-
 class Startdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Datetime
 {
     /**
      * Date model
      *
-     * @var \Magento\Core\Model\Date
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
     protected $_date;
 
     /**
-     * @param \Magento\Logger $logger
-     * @param \Magento\Core\Model\LocaleInterface $locale
-     * @param \Magento\Core\Model\Date $date
+     * Constructor
+     *
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      */
     public function __construct(
-        \Magento\Logger $logger,
-        \Magento\Core\Model\LocaleInterface $locale,
-        \Magento\Core\Model\Date $date
+        \Magento\Framework\Logger $logger,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Framework\Stdlib\DateTime\DateTime $date
     ) {
         $this->_date = $date;
-        parent::__construct($logger, $locale);
+        parent::__construct($logger, $localeDate);
     }
 
     /**
      * Get attribute value for save.
      *
-     * @param \Magento\Object $object
+     * @param \Magento\Framework\Object $object
      * @return string|bool
      */
     protected function _getValueForSave($object)
     {
-        $attributeName  = $this->getAttribute()->getName();
-        $startDate      = $object->getData($attributeName);
+        $attributeName = $this->getAttribute()->getName();
+        $startDate = $object->getData($attributeName);
         if ($startDate === false) {
             return false;
         }
         if ($startDate == '' && $object->getSpecialPrice()) {
-            $startDate = $this->_locale->date();
+            $startDate = $this->_localeDate->date();
         }
 
         return $startDate;
     }
 
-   /**
-    * Before save hook.
-    * Prepare attribute value for save
-    *
-    * @param \Magento\Object $object
-    * @return \Magento\Catalog\Model\Product\Attribute\Backend\Startdate
-    */
+    /**
+     * Before save hook.
+     * Prepare attribute value for save
+     *
+     * @param \Magento\Framework\Object $object
+     * @return $this
+     */
     public function beforeSave($object)
     {
         $startDate = $this->_getValueForSave($object);
@@ -97,31 +93,31 @@ class Startdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Datetime
         return $this;
     }
 
-   /**
-    * Product from date attribute validate function.
-    * In case invalid data throws exception.
-    *
-    * @param \Magento\Object $object
-    * @throws \Magento\Eav\Model\Entity\Attribute\Exception
-    * @return bool
-    */
+    /**
+     * Product from date attribute validate function.
+     * In case invalid data throws exception.
+     *
+     * @param \Magento\Framework\Object $object
+     * @throws \Magento\Eav\Model\Entity\Attribute\Exception
+     * @return bool
+     */
     public function validate($object)
     {
-        $attr      = $this->getAttribute();
-        $maxDate   = $attr->getMaxValue();
+        $attr = $this->getAttribute();
+        $maxDate = $attr->getMaxValue();
         $startDate = $this->_getValueForSave($object);
         if ($startDate === false) {
             return true;
         }
 
         if ($maxDate) {
-            $date     = $this->_date;
-            $value    = $date->timestamp($startDate);
+            $date = $this->_date;
+            $value = $date->timestamp($startDate);
             $maxValue = $date->timestamp($maxDate);
 
             if ($value > $maxValue) {
                 $message = __('The From Date value should be less than or equal to the To Date value.');
-                $eavExc  = new \Magento\Eav\Model\Entity\Attribute\Exception($message);
+                $eavExc = new \Magento\Eav\Model\Entity\Attribute\Exception($message);
                 $eavExc->setAttributeCode($attr->getName());
                 throw $eavExc;
             }

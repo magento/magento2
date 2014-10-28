@@ -19,13 +19,11 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/menu.xsd">
     <menu>
         <add id="Magento_Sales::sales" title="Sales" module="Magento_Sales" sortOrder="15" dependsOnModule="Magento_Sales" resource="Magento_Sales::sales"/>
         <add id="Magento_Sales::sales_operation" title="Operations" module="Magento_Sales" sortOrder="10" parent="Magento_Sales::sales" resource="Magento_Sales::sales_operation" />
@@ -34,8 +32,6 @@
         <add id="Magento_Sales::sales_shipment" title="Shipments" module="Magento_Sales" sortOrder="30" parent="Magento_Sales::sales_operation" action="sales/shipment" resource="Magento_Sales::shipment"/>
         <add id="Magento_Sales::sales_creditmemo" title="Credit Memos" module="Magento_Sales" sortOrder="40" parent="Magento_Sales::sales_operation" action="sales/creditmemo" resource="Magento_Sales::sales_creditmemo"/>
         <add id="Magento_Sales::sales_transactions" title="Transactions" module="Magento_Sales" sortOrder="70" parent="Magento_Sales::sales_operation" action="sales/transactions" resource="Magento_Sales::transactions"/>
-        <add id="Magento_Sales::sales_recurring_profile" title="Recurring Billing" module="Magento_Sales" sortOrder="80" parent="Magento_Sales::sales_operation" action="sales/recurring_profile" resource="Magento_Sales::recurring_profile"/>
-        <add id="Magento_Sales::sales_billing_agreement" title="Billing Agreements" module="Magento_Sales" sortOrder="60" parent="Magento_Sales::sales_operation" action="sales/billing_agreement" resource="Magento_Sales::billing_agreement"/>
         <add id="Magento_Sales::system_order_statuses" title="Order Status" module="Magento_Sales" sortOrder="40" parent="Magento_Backend::stores_settings" action="sales/order_status" resource="Magento_Sales::order_statuses"/>
     </menu>
 </config>

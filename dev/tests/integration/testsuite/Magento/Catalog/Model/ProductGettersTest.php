@@ -18,14 +18,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model;
+
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Tests product model:
@@ -44,8 +42,9 @@ class ProductGettersTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Product');
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Product'
+        );
     }
 
     public function testGetResourceCollection()
@@ -78,9 +77,17 @@ class ProductGettersTest extends \PHPUnit_Framework_TestCase
 
     public function testGetStatus()
     {
-        $this->assertEquals(\Magento\Catalog\Model\Product\Status::STATUS_ENABLED, $this->_model->getStatus());
-        $this->_model->setStatus(\Magento\Catalog\Model\Product\Status::STATUS_DISABLED);
-        $this->assertEquals(\Magento\Catalog\Model\Product\Status::STATUS_DISABLED, $this->_model->getStatus());
+        $this->assertEquals(
+            \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED,
+            $this->_model->getStatus()
+        );
+
+        $this->_model->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED);
+
+        $this->assertEquals(
+            \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED,
+            $this->_model->getStatus()
+        );
     }
 
     public function testGetSetTypeInstance()
@@ -92,13 +99,15 @@ class ProductGettersTest extends \PHPUnit_Framework_TestCase
 
         // singleton
         /** @var $otherProduct \Magento\Catalog\Model\Product */
-        $otherProduct = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Product');
+        $otherProduct = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Product'
+        );
         $this->assertSame($typeInstance, $otherProduct->getTypeInstance());
 
         // model setter
-        $simpleTypeInstance = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Product\Type\Simple');
+        $simpleTypeInstance = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Product\Type\Simple'
+        );
         $this->_model->setTypeInstance($simpleTypeInstance);
         $this->assertSame($simpleTypeInstance, $this->_model->getTypeInstance());
     }
@@ -126,7 +135,6 @@ class ProductGettersTest extends \PHPUnit_Framework_TestCase
      * @covers \Magento\Catalog\Model\Product::getSpecialToDate
      * @covers \Magento\Catalog\Model\Product::getRequestPath
      * @covers \Magento\Catalog\Model\Product::getGiftMessageAvailable
-     * @covers \Magento\Catalog\Model\Product::getRatingSummary
      * @dataProvider getObsoleteGettersDataProvider
      * @param string $key
      * @param string $method
@@ -134,9 +142,9 @@ class ProductGettersTest extends \PHPUnit_Framework_TestCase
     public function testGetObsoleteGetters($key, $method)
     {
         $value = uniqid();
-        $this->assertEmpty($this->_model->$method());
+        $this->assertEmpty($this->_model->{$method}());
         $this->_model->setData($key, $value);
-        $this->assertEquals($value, $this->_model->$method());
+        $this->assertEquals($value, $this->_model->{$method}());
     }
 
     public function getObsoleteGettersDataProvider()
@@ -149,14 +157,13 @@ class ProductGettersTest extends \PHPUnit_Framework_TestCase
             array('special_to_date', 'getSpecialToDate'),
             array('request_path', 'getRequestPath'),
             array('gift_message_available', 'getGiftMessageAvailable'),
-            array('rating_summary', 'getRatingSummary'),
         );
     }
 
     public function testGetMediaAttributes()
     {
-        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Product',
+        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Product',
             array('data' => array('media_attributes' => 'test'))
         );
         $this->assertEquals('test', $model->getMediaAttributes());
@@ -171,15 +178,14 @@ class ProductGettersTest extends \PHPUnit_Framework_TestCase
     public function testGetMediaGalleryImages()
     {
         /** @var $model \Magento\Catalog\Model\Product */
-        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Product');
+        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
         $this->assertEmpty($model->getMediaGalleryImages());
 
         $this->_model->setMediaGallery(array('images' => array(array('file' => 'magento_image.jpg'))));
         $images = $this->_model->getMediaGalleryImages();
-        $this->assertInstanceOf('Magento\Data\Collection', $images);
+        $this->assertInstanceOf('Magento\Framework\Data\Collection', $images);
         foreach ($images as $image) {
-            $this->assertInstanceOf('Magento\Object', $image);
+            $this->assertInstanceOf('Magento\Framework\Object', $image);
             $image = $image->getData();
             $this->assertArrayHasKey('file', $image);
             $this->assertArrayHasKey('url', $image);
@@ -201,7 +207,7 @@ class ProductGettersTest extends \PHPUnit_Framework_TestCase
     public function testGetAttributeText()
     {
         $this->assertNull($this->_model->getAttributeText('status'));
-        $this->_model->setStatus(\Magento\Catalog\Model\Product\Status::STATUS_ENABLED);
+        $this->_model->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
         $this->assertEquals('Enabled', $this->_model->getAttributeText('status'));
     }
 
@@ -239,7 +245,8 @@ class ProductGettersTest extends \PHPUnit_Framework_TestCase
     public function testGetProductOptionsCollection()
     {
         $this->assertInstanceOf(
-            'Magento\Catalog\Model\Resource\Product\Option\Collection', $this->_model->getProductOptionsCollection()
+            'Magento\Catalog\Model\Resource\Product\Option\Collection',
+            $this->_model->getProductOptionsCollection()
         );
     }
 
@@ -250,32 +257,9 @@ class ProductGettersTest extends \PHPUnit_Framework_TestCase
         $this->assertRegExp('/^[0-9]+$/', $setId);
     }
 
-    public function testGetReservedAttributes()
-    {
-        $result = $this->_model->getReservedAttributes();
-        $this->assertInternalType('array', $result);
-        $this->assertContains('position', $result);
-        $this->assertContains('reserved_attributes', $result);
-        $this->assertContains('is_virtual', $result);
-        // and 84 more...
-
-        $this->assertNotContains('type_id', $result);
-        $this->assertNotContains('calculated_final_price', $result);
-        $this->assertNotContains('request_path', $result);
-        $this->assertNotContains('rating_summary', $result);
-    }
-
-    public function testGetCacheIdTags()
-    {
-        $this->assertFalse($this->_model->getCacheIdTags());
-
-        $this->_model->load(1); // fixture
-        $this->assertEquals(array('catalog_product_1'), $this->_model->getCacheIdTags());
-    }
-
     public function testGetPreconfiguredValues()
     {
-        $this->assertInstanceOf('Magento\Object', $this->_model->getPreconfiguredValues());
+        $this->assertInstanceOf('Magento\Framework\Object', $this->_model->getPreconfiguredValues());
         $this->_model->setPreconfiguredValues('test');
         $this->assertEquals('test', $this->_model->getPreconfiguredValues());
     }
@@ -283,8 +267,11 @@ class ProductGettersTest extends \PHPUnit_Framework_TestCase
     public static function tearDownAfterClass()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $mediaDirectory = $objectManager->get('Magento\Filesystem')
-            ->getDirectoryWrite(\Magento\Filesystem::MEDIA);
+        $mediaDirectory = $objectManager->get(
+            'Magento\Framework\Filesystem'
+        )->getDirectoryWrite(
+            DirectoryList::MEDIA
+        );
         $config = $objectManager->get('Magento\Catalog\Model\Product\Media\Config');
         $mediaDirectory->delete($config->getBaseMediaPath());
     }

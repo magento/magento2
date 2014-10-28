@@ -18,38 +18,32 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Resource\Product\Compare\Item;
 
 /**
  * Catalog Product Compare Items Resource Collection
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class Collection
-    extends \Magento\Catalog\Model\Resource\Product\Collection
+class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
 {
     /**
      * Customer Filter
      *
      * @var int
      */
-    protected $_customerId               = 0;
+    protected $_customerId = 0;
 
     /**
      * Visitor Filter
      *
      * @var int
      */
-    protected $_visitorId                = 0;
+    protected $_visitorId = 0;
 
     /**
      * Comparable attributes cache
@@ -74,48 +68,48 @@ class Collection
 
     /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\Logger $logger
-     * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
      * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Catalog\Helper\Product\Flat $catalogProductFlat
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
      * @param \Magento\Catalog\Model\Resource\Url $catalogUrl
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Catalog\Model\Resource\Product\Compare\Item $catalogProductCompareItem
      * @param \Magento\Catalog\Helper\Product\Compare $catalogProductCompare
-     * @param mixed $connection
+     * @param \Zend_Db_Adapter_Abstract $connection
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
-        \Magento\Logger $logger,
-        \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Logger $logger,
+        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
         \Magento\Catalog\Model\Resource\Helper $resourceHelper,
-        \Magento\Validator\UniversalFactory $universalFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Catalog\Helper\Product\Flat $catalogProductFlat,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\Framework\Validator\UniversalFactory $universalFactory,
+        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
         \Magento\Catalog\Model\Resource\Url $catalogUrl,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Stdlib\DateTime $dateTime,
+        \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Catalog\Model\Resource\Product\Compare\Item $catalogProductCompareItem,
         \Magento\Catalog\Helper\Product\Compare $catalogProductCompare,
         $connection = null
@@ -133,12 +127,12 @@ class Collection
             $resourceHelper,
             $universalFactory,
             $storeManager,
-            $catalogData,
-            $catalogProductFlat,
-            $coreStoreConfig,
+            $moduleManager,
+            $catalogProductFlatState,
+            $scopeConfig,
             $productOptionFactory,
             $catalogUrl,
-            $locale,
+            $localeDate,
             $customerSession,
             $dateTime,
             $connection
@@ -147,6 +141,8 @@ class Collection
 
     /**
      * Initialize resources
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -158,7 +154,7 @@ class Collection
      * Set customer filter to collection
      *
      * @param int $customerId
-     * @return \Magento\Catalog\Model\Resource\Product\Compare\Item\Collection
+     * @return $this
      */
     public function setCustomerId($customerId)
     {
@@ -171,7 +167,7 @@ class Collection
      * Set visitor filter to collection
      *
      * @param int $visitorId
-     * @return \Magento\Catalog\Model\Resource\Product\Compare\Item\Collection
+     * @return $this
      */
     public function setVisitorId($visitorId)
     {
@@ -215,13 +211,13 @@ class Collection
             return array('visitor_id' => $this->getVisitorId());
         }
 
-        return array('customer_id' => array('null' => true),'visitor_id' => '0');
+        return array('customer_id' => array('null' => true), 'visitor_id' => '0');
     }
 
     /**
      * Add join to select
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Compare\Item\Collection
+     * @return $this
      */
     public function _addJoinToSelect()
     {
@@ -229,16 +225,16 @@ class Collection
             array('t_compare' => 'catalog_compare_item'),
             'product_id=entity_id',
             array(
-                'product_id'    => 'product_id',
-                'customer_id'   => 'customer_id',
-                'visitor_id'    => 'visitor_id',
+                'product_id' => 'product_id',
+                'customer_id' => 'customer_id',
+                'visitor_id' => 'visitor_id',
                 'item_store_id' => 'store_id',
                 'catalog_compare_item_id' => 'catalog_compare_item_id'
             ),
             $this->getConditionForJoin()
         );
 
-        $this->_productLimitationFilters['store_table']  = 't_compare';
+        $this->_productLimitationFilters['store_table'] = 't_compare';
 
         return $this;
     }
@@ -251,39 +247,35 @@ class Collection
     protected function _getAttributeSetIds()
     {
         // prepare compare items table conditions
-        $compareConds = array(
-            'compare.product_id=entity.entity_id',
-        );
+        $compareConds = array('compare.product_id=entity.entity_id');
         if ($this->getCustomerId()) {
-            $compareConds[] = $this->getConnection()
-                ->quoteInto('compare.customer_id = ?', $this->getCustomerId());
+            $compareConds[] = $this->getConnection()->quoteInto('compare.customer_id = ?', $this->getCustomerId());
         } else {
-            $compareConds[] = $this->getConnection()
-                ->quoteInto('compare.visitor_id = ?', $this->getVisitorId());
+            $compareConds[] = $this->getConnection()->quoteInto('compare.visitor_id = ?', $this->getVisitorId());
         }
 
         // prepare website filter
-        $websiteId    = (int)$this->_storeManager->getStore($this->getStoreId())->getWebsiteId();
+        $websiteId = (int)$this->_storeManager->getStore($this->getStoreId())->getWebsiteId();
         $websiteConds = array(
             'website.product_id = entity.entity_id',
             $this->getConnection()->quoteInto('website.website_id = ?', $websiteId)
         );
 
         // retrieve attribute sets
-        $select = $this->getConnection()->select()
-            ->distinct(true)
-            ->from(
-                array('entity' => $this->getEntity()->getEntityTable()),
-                'attribute_set_id')
-            ->join(
-                array('website' => $this->getTable('catalog_product_website')),
-                join(' AND ', $websiteConds),
-                array())
-            ->join(
-                array('compare' => $this->getTable('catalog_compare_item')),
-                join(' AND ', $compareConds),
-                array()
-            );
+        $select = $this->getConnection()->select()->distinct(
+            true
+        )->from(
+            array('entity' => $this->getEntity()->getEntityTable()),
+            'attribute_set_id'
+        )->join(
+            array('website' => $this->getTable('catalog_product_website')),
+            join(' AND ', $websiteConds),
+            array()
+        )->join(
+            array('compare' => $this->getTable('catalog_compare_item')),
+            join(' AND ', $compareConds),
+            array()
+        );
         return $this->getConnection()->fetchCol($select);
     }
 
@@ -295,10 +287,15 @@ class Collection
      */
     protected function _getAttributeIdsBySetIds(array $setIds)
     {
-        $select = $this->getConnection()->select()
-            ->distinct(true)
-            ->from($this->getTable('eav_entity_attribute'), 'attribute_id')
-            ->where('attribute_set_id IN(?)', $setIds);
+        $select = $this->getConnection()->select()->distinct(
+            true
+        )->from(
+            $this->getTable('eav_entity_attribute'),
+            'attribute_id'
+        )->where(
+            'attribute_set_id IN(?)',
+            $setIds
+        );
         return $this->getConnection()->fetchCol($select);
     }
 
@@ -315,19 +312,28 @@ class Collection
             if ($setIds) {
                 $attributeIds = $this->_getAttributeIdsBySetIds($setIds);
 
-                $select = $this->getConnection()->select()
-                    ->from(array('main_table' => $this->getTable('eav_attribute')))
-                    ->join(
-                        array('additional_table' => $this->getTable('catalog_eav_attribute')),
-                        'additional_table.attribute_id=main_table.attribute_id'
+                $select = $this->getConnection()->select()->from(
+                    array('main_table' => $this->getTable('eav_attribute'))
+                )->join(
+                    array('additional_table' => $this->getTable('catalog_eav_attribute')),
+                    'additional_table.attribute_id=main_table.attribute_id'
+                )->joinLeft(
+                    array('al' => $this->getTable('eav_attribute_label')),
+                    'al.attribute_id = main_table.attribute_id AND al.store_id = ' . (int)$this->getStoreId(),
+                    array(
+                        'store_label' => $this->getConnection()->getCheckSql(
+                            'al.value IS NULL',
+                            'main_table.frontend_label',
+                            'al.value'
+                        )
                     )
-                    ->joinLeft(
-                        array('al' => $this->getTable('eav_attribute_label')),
-                        'al.attribute_id = main_table.attribute_id AND al.store_id = ' . (int) $this->getStoreId(),
-                        array('store_label' => $this->getConnection()->getCheckSql('al.value IS NULL', 'main_table.frontend_label', 'al.value'))
-                    )
-                    ->where('additional_table.is_comparable=?', 1)
-                    ->where('main_table.attribute_id IN(?)', $attributeIds);
+                )->where(
+                    'additional_table.is_comparable=?',
+                    1
+                )->where(
+                    'main_table.attribute_id IN(?)',
+                    $attributeIds
+                );
                 $attributesData = $this->getConnection()->fetchAll($select);
                 if ($attributesData) {
                     $entityType = \Magento\Catalog\Model\Product::ENTITY;
@@ -346,7 +352,7 @@ class Collection
     /**
      * Load Comparable attributes
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Compare\Item\Collection
+     * @return $this
      */
     public function loadComparableAttributes()
     {
@@ -363,7 +369,7 @@ class Collection
     /**
      * Use product as collection item
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Compare\Item\Collection
+     * @return $this
      */
     public function useProductItem()
     {
@@ -378,7 +384,7 @@ class Collection
     /**
      * Retrieve product ids from collection
      *
-     * @return array
+     * @return int[]
      */
     public function getProductIds()
     {
@@ -393,7 +399,7 @@ class Collection
     /**
      * Clear compare items by condition
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Compare\Item\Collection
+     * @return $this
      */
     public function clear()
     {

@@ -18,20 +18,21 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Block\Widget;
 
-class Dob extends \Magento\Customer\Block\Widget\AbstractWidget
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\Service\ArrayObjectSearch;
+
+class Dob extends AbstractWidget
 {
     /**
      * Constants for borders of date-type customer attributes
      */
     const MIN_DATE_RANGE_KEY = 'date_range_min';
+
     const MAX_DATE_RANGE_KEY = 'date_range_max';
 
     /**
@@ -41,22 +42,60 @@ class Dob extends \Magento\Customer\Block\Widget\AbstractWidget
      */
     protected $_dateInputs = array();
 
+    /**
+     * @var \Magento\Framework\View\Element\Html\Date
+     */
+    protected $dateElement;
+
+    /**
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Customer\Helper\Address $addressHelper
+     * @param \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $customerMetadataService
+     * @param \Magento\Framework\View\Element\Html\Date $dateElement
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Customer\Helper\Address $addressHelper,
+        \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $customerMetadataService,
+        \Magento\Framework\View\Element\Html\Date $dateElement,
+        array $data = array()
+    ) {
+        $this->dateElement = $dateElement;
+        parent::__construct($context, $addressHelper, $customerMetadataService, $data);
+    }
+
+    /**
+     * @return void
+     */
     public function _construct()
     {
         parent::_construct();
         $this->setTemplate('widget/dob.phtml');
     }
 
+    /**
+     * @return bool
+     */
     public function isEnabled()
     {
-        return (bool)$this->_getAttribute('dob')->getIsVisible();
+        $attributeMetadata = $this->_getAttribute('dob');
+        return $attributeMetadata ? (bool)$attributeMetadata->isVisible() : false;
     }
 
+    /**
+     * @return bool
+     */
     public function isRequired()
     {
-        return (bool)$this->_getAttribute('dob')->getIsRequired();
+        $attributeMetadata = $this->_getAttribute('dob');
+        return $attributeMetadata ? (bool)$attributeMetadata->isRequired() : false;
     }
 
+    /**
+     * @param string $date
+     * @return $this
+     */
     public function setDate($date)
     {
         $this->setTime($date ? strtotime($date) : false);
@@ -64,19 +103,66 @@ class Dob extends \Magento\Customer\Block\Widget\AbstractWidget
         return $this;
     }
 
+    /**
+     * @return string|bool
+     */
     public function getDay()
     {
         return $this->getTime() ? date('d', $this->getTime()) : '';
     }
 
+    /**
+     * @return string|bool
+     */
     public function getMonth()
     {
         return $this->getTime() ? date('m', $this->getTime()) : '';
     }
 
+    /**
+     * @return string|bool
+     */
     public function getYear()
     {
         return $this->getTime() ? date('Y', $this->getTime()) : '';
+    }
+
+    /**
+     * Return label
+     *
+     * @return string
+     */
+    public function getLabel()
+    {
+        return __('Date of Birth');
+    }
+
+    /**
+     * Create correct date field
+     *
+     * @return string
+     */
+    public function getFieldHtml()
+    {
+        $this->dateElement->setData([
+            'name' => $this->getHtmlId(),
+            'id' => $this->getHtmlId(),
+            'class' => $this->getHtmlClass(),
+            'value' => $this->getValue(),
+            'date_format' => $this->getDateFormat(),
+            'image' => $this->getViewFileUrl('Magento_Core::calendar.gif'),
+        ]);
+        return $this->dateElement->getHtml();
+    }
+
+    /**
+     * Return id
+     *
+     * @return string
+     */
+    public function getHtmlId()
+    {
+        return 'dob';
     }
 
     /**
@@ -86,7 +172,7 @@ class Dob extends \Magento\Customer\Block\Widget\AbstractWidget
      */
     public function getDateFormat()
     {
-        return $this->_locale->getDateFormat(\Magento\Core\Model\LocaleInterface::FORMAT_TYPE_SHORT);
+        return $this->_localeDate->getDateFormat(TimezoneInterface::FORMAT_TYPE_SHORT);
     }
 
     /**
@@ -94,6 +180,7 @@ class Dob extends \Magento\Customer\Block\Widget\AbstractWidget
      *
      * @param string $code
      * @param string $html
+     * @return void
      */
     public function setDateInput($code, $html)
     {
@@ -103,47 +190,65 @@ class Dob extends \Magento\Customer\Block\Widget\AbstractWidget
     /**
      * Sort date inputs by dateformat order of current locale
      *
+     * @param bool $stripNonInputChars
+     *
      * @return string
      */
-    public function getSortedDateInputs()
+    public function getSortedDateInputs($stripNonInputChars = true)
     {
-        $mapping = array(
-            '/[^medy]/i' => '\\1',
-            '/m{1,5}/i' => '%1$s',
-            '/e{1,5}/i' => '%2$s',
-            '/d{1,5}/i' => '%2$s',
-            '/y{1,5}/i' => '%3$s',
-        );
+        $mapping = array();
+        if ($stripNonInputChars) {
+            $mapping['/[^medy]/i'] = '\\1';
+        }
+        $mapping['/m{1,5}/i'] = '%1$s';
+        $mapping['/e{1,5}/i'] = '%2$s';
+        $mapping['/d{1,5}/i'] = '%2$s';
+        $mapping['/y{1,5}/i'] = '%3$s';
 
-        $dateFormat = preg_replace(
-            array_keys($mapping),
-            array_values($mapping),
-            $this->getDateFormat()
-        );
+        $dateFormat = preg_replace(array_keys($mapping), array_values($mapping), $this->getDateFormat());
 
-        return sprintf($dateFormat,
-            $this->_dateInputs['m'], $this->_dateInputs['d'], $this->_dateInputs['y']);
+        return sprintf($dateFormat, $this->_dateInputs['m'], $this->_dateInputs['d'], $this->_dateInputs['y']);
     }
 
     /**
      * Return minimal date range value
      *
-     * @return string
+     * @return string|null
      */
     public function getMinDateRange()
     {
-        $rules = $this->_getAttribute('dob')->getValidateRules();
-        return isset($rules[self::MIN_DATE_RANGE_KEY]) ? date("Y/m/d", $rules[self::MIN_DATE_RANGE_KEY]) : null;
+        $dob = $this->_getAttribute('dob');
+        if (!is_null($dob)) {
+            $rules = $this->_getAttribute('dob')->getValidationRules();
+            $minDateValue = ArrayObjectSearch::getArrayElementByName(
+                $rules,
+                self::MIN_DATE_RANGE_KEY
+            );
+            if (!is_null($minDateValue)) {
+                return date("Y/m/d", $minDateValue);
+            }
+        }
+        return null;
     }
 
     /**
      * Return maximal date range value
      *
-     * @return string
+     * @return string|null
      */
     public function getMaxDateRange()
     {
-        $rules = $this->_getAttribute('dob')->getValidateRules();
-        return isset($rules[self::MAX_DATE_RANGE_KEY]) ? date("Y/m/d", $rules[self::MAX_DATE_RANGE_KEY]) : null;
+        $dob = $this->_getAttribute('dob');
+        if (!is_null($dob)) {
+            $rules = $this->_getAttribute('dob')->getValidationRules();
+            $maxDateValue = ArrayObjectSearch::getArrayElementByName(
+                $rules,
+                self::MAX_DATE_RANGE_KEY
+            );
+            if (!is_null($maxDateValue)) {
+                return date("Y/m/d", $maxDateValue);
+            }
+        }
+        return null;
     }
 }

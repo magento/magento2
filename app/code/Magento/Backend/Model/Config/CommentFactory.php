@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -32,14 +30,14 @@ namespace Magento\Backend\Model\Config;
 class CommentFactory
 {
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManager $objectManager
      */
-    public function __construct(\Magento\ObjectManager $objectManager)
+    public function __construct(\Magento\Framework\ObjectManager $objectManager)
     {
         $this->_objectManager = $objectManager;
     }
@@ -48,13 +46,13 @@ class CommentFactory
      * Create new config object
      *
      * @param string $type
-     * @return \Magento\Backend\Model\Config\CommentInterface
+     * @return CommentInterface
      * @throws \InvalidArgumentException
      */
     public function create($type)
     {
         $commentModel = $this->_objectManager->create($type);
-        if (!$commentModel instanceof \Magento\Backend\Model\Config\CommentInterface) {
+        if (!$commentModel instanceof CommentInterface) {
             throw new \InvalidArgumentException('Incorrect comment model provided');
         }
         return $commentModel;

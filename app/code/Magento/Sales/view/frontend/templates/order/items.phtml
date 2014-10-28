@@ -1,0 +1,83 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php $_order = $this->getOrder() ?>
+<?php $_giftMessage; ?>
+<div class="table-wrapper order-items">
+    <table class="data table table-order-items" id="my-orders-table" summary="<?php echo __('Items Ordered') ?>">
+        <caption class="table caption"><?php echo __('Items Ordered') ?></caption>
+        <thead>
+            <tr>
+                <th class="col name"><?php echo __('Product Name') ?></th>
+                <th class="col sku"><?php echo __('SKU') ?></th>
+                <th class="col price"><?php echo __('Price') ?></th>
+                <th class="col qty"><?php echo __('Qty') ?></th>
+                <th class="col subtotal"><?php echo __('Subtotal') ?></th>
+            </tr>
+        </thead>
+        <tfoot>
+            <?php echo $this->getChildHtml('order_totals') ?>
+        </tfoot>
+            <?php $_items = $_order->getItemsCollection(); ?>
+            <?php $_index = 0; ?>
+            <?php $_count = $_items->count(); ?>
+            <?php $_giftMessage = ''?>
+            <?php foreach ($_items as $_item): ?>
+            <?php if ($_item->getParentItem()) continue; ?>
+            <tbody>
+                <?php echo $this->getItemHtml($_item) ?>
+                <?php if ($this->helper('Magento\GiftMessage\Helper\Message')->getIsMessagesAvailable('order_item', $_item) && $_item->getGiftMessageId()): ?>
+                <tr id="order-item-gift-message-<?php echo $_item->getId() ?>" role="region" aria-expanded="false" tabindex="-1" style="display: none;">
+                    <?php $_giftMessage = $this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessageForEntity($_item); ?>
+                    <td class="col message" colspan="7">
+                        <div class="gift message details">
+                            <a href="#"
+                               title="<?php echo __('Close') ?>"
+                               aria-controls="order-item-gift-message-<?php echo $_item->getId()?>"
+                               data-item-id="<?php echo $_item->getId()?>"
+                               class="action close">
+                                <?php echo __('Close') ?>
+                            </a>
+                            <dl class="gift message">
+                                <dt class="gift sender"><strong class="label"><?php echo __('From:') ?></strong> <?php echo $this->escapeHtml($_giftMessage->getSender()) ?></dt>
+                                <dt class="gift recipient"><strong class="label"><?php echo __('To:') ?></strong> <?php echo $this->escapeHtml($_giftMessage->getRecipient()) ?></dt>
+                                <dd class="message text"><?php echo $this->helper('Magento\GiftMessage\Helper\Message')->getEscapedGiftMessage($_item) ?></dd>
+                            </dl>
+                        </div>
+                    </td>
+                </tr>
+                <?php endif ?>
+            </tbody>
+            <?php endforeach; ?>
+    </table>
+</div>
+<?php if ($_giftMessage): ?>
+    <script type="text/javascript">
+require(['jquery', "mage/mage"], function(jQuery){
+
+    jQuery('a.action.show').add('a.action.close').mage('giftMessage', {});
+    
+});
+</script>
+<?php endif; ?>

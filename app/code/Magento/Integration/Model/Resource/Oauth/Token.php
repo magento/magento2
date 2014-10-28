@@ -18,30 +18,28 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Oauth
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Integration\Model\Resource\Oauth;
+
+use Magento\Authorization\Model\UserContextInterface;
 
 /**
  * OAuth token resource model
  */
-
-namespace Magento\Integration\Model\Resource\Oauth;
-
-class Token extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Token extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
-     * @var \Magento\Stdlib\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime
      */
     protected $_dateTime;
 
     /**
-     * @param \Magento\App\Resource $resource
-     * @param \Magento\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      */
-    public function __construct(\Magento\App\Resource $resource, \Magento\Stdlib\DateTime $dateTime)
+    public function __construct(\Magento\Framework\App\Resource $resource, \Magento\Framework\Stdlib\DateTime $dateTime)
     {
         $this->_dateTime = $dateTime;
         parent::__construct($resource);
@@ -49,6 +47,8 @@ class Token extends \Magento\Core\Model\Resource\Db\AbstractDb
 
     /**
      * Initialize resource model
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -59,17 +59,19 @@ class Token extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Clean up old authorized tokens for specified consumer-user pairs
      *
      * @param \Magento\Integration\Model\Oauth\Token $exceptToken Token just created to exclude from delete
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Framework\Model\Exception
      * @return int The number of affected rows
      */
     public function cleanOldAuthorizedTokensExcept(\Magento\Integration\Model\Oauth\Token $exceptToken)
     {
         if (!$exceptToken->getId() || !$exceptToken->getAuthorized()) {
-            throw new \Magento\Core\Exception('Invalid token to except');
+            throw new \Magento\Framework\Model\Exception('Invalid token to except');
         }
         $adapter = $this->_getWriteAdapter();
-        $where   = $adapter->quoteInto(
-            'authorized = 1 AND consumer_id = ?', $exceptToken->getConsumerId(), \Zend_Db::INT_TYPE
+        $where = $adapter->quoteInto(
+            'authorized = 1 AND consumer_id = ?',
+            $exceptToken->getConsumerId(),
+            \Zend_Db::INT_TYPE
         );
         $where .= $adapter->quoteInto(' AND entity_id <> ?', $exceptToken->getId(), \Zend_Db::INT_TYPE);
 
@@ -78,7 +80,7 @@ class Token extends \Magento\Core\Model\Resource\Db\AbstractDb
         } elseif ($exceptToken->getAdminId()) {
             $where .= $adapter->quoteInto(' AND admin_id = ?', $exceptToken->getAdminId(), \Zend_Db::INT_TYPE);
         } else {
-            throw new \Magento\Core\Exception('Invalid token to except');
+            throw new \Magento\Framework\Model\Exception('Invalid token to except');
         }
         return $adapter->delete($this->getMainTable(), $where);
     }
@@ -118,7 +120,57 @@ class Token extends \Magento\Core\Model\Resource\Db\AbstractDb
         $adapter = $this->_getReadAdapter();
         $select = $adapter->select()
             ->from($this->getMainTable())
-            ->where('consumer_id = ?', $consumerId)->where('type = ?', $type);
+            ->where('consumer_id = ?', $consumerId)
+            ->where('type = ?', $type);
+        return $adapter->fetchRow($select);
+    }
+
+    /**
+     * Select token for a given consumer and user type.
+     *
+     * @param int $consumerId
+     * @param int $userType
+     * @return array|boolean - Row data (array) or false if there is no corresponding row
+     */
+    public function selectTokenByConsumerIdAndUserType($consumerId, $userType)
+    {
+        $adapter = $this->_getReadAdapter();
+        $select = $adapter->select()
+            ->from($this->getMainTable())
+            ->where('consumer_id = ?', (int)$consumerId)
+            ->where('user_type = ?', (int)$userType);
+        return $adapter->fetchRow($select);
+    }
+
+    /**
+     * Select token for a given admin id.
+     *
+     * @param int $adminId
+     * @return array|boolean - Row data (array) or false if there is no corresponding row
+     */
+    public function selectTokenByAdminId($adminId)
+    {
+        $adapter = $this->_getReadAdapter();
+        $select = $adapter->select()
+            ->from($this->getMainTable())
+            ->where('admin_id = ?', $adminId)
+            ->where('user_type = ?', UserContextInterface::USER_TYPE_ADMIN);
+        return $adapter->fetchRow($select);
+    }
+
+    /**
+     * Select token for a given customer.
+     *
+     * @param int $customerId
+     * @return array|boolean - Row data (array) or false if there is no corresponding row
+     */
+    public function selectTokenByCustomerId($customerId)
+    {
+        $adapter = $this->_getReadAdapter();
+        $select = $adapter->select()
+            ->from($this->getMainTable())
+            ->where('customer_id = ?', $customerId)
+            ->where('user_type = ?', UserContextInterface::USER_TYPE_CUSTOMER);
         return $adapter->fetchRow($select);
     }
 }

@@ -1,0 +1,158 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/**
+USAGE:
+
+Simple:
+
+<?php echo $this->getLayout()->createBlock('Magento\Customer\Block\Widget\Name')
+   ->setObject($this->getAddress())
+   ->toHtml() ?>
+
+For checkout/onepage/shipping.phtml:
+
+<?php echo $this->getLayout()->createBlock('Magento\Customer\Block\Widget\Name')
+   ->setObject($this->getAddress())
+   ->setFieldIdFormat('shipping:%s')
+   ->setFieldNameFormat('shipping[%s]')
+   ->setFieldParams('onchange="shipping.setSameAsBilling(false);"')
+   ->toHtml() ?>
+*/
+/* @var $this \Magento\Customer\Block\Widget\Name */
+$prefix = $this->showPrefix();
+$middle = $this->showMiddlename();
+$suffix = $this->showSuffix();
+?>
+<?php if ($prefix || $middle || $suffix && !$this->getNoWrap()): ?>
+<div class="field required fullname <?php echo $this->getContainerClassName() ?>">
+    <label for="<?php echo $this->getFieldId('firstname') ?>" class="label">
+        <span><?php echo __('Name') ?></span>
+    </label>
+    <div class="control">
+        <div class="fields group <?php echo 2 + intval($prefix) + intval($middle) + intval($suffix) ?>">
+    <?php endif; ?>
+    <?php if ($prefix): ?>$
+        <div class="field name prefix<?php if ($this->isPrefixRequired()) echo ' required' ?>">
+            <label class="label" for="<?php echo $this->getFieldId('prefix') ?>">
+                <span><?php echo $this->getStoreLabel('prefix') ?></span>
+            </label>
+
+            <div class="control">
+                <?php if ($this->getPrefixOptions() === false): ?>
+                    <input type="text" id="<?php echo $this->getFieldId('prefix') ?>"
+                           name="<?php echo $this->getFieldName('prefix') ?>"
+                           value="<?php echo $this->escapeHtml($this->getObject()->getPrefix()) ?>"
+                           title="<?php echo $this->getStoreLabel('prefix') ?>"
+                           class="input-text <?php echo $this->getAttributeValidationClass('prefix') ?>" <?php echo $this->getFieldParams() ?> <?php if ($this->isPrefixRequired()) echo ' data-validate="{required:true}"' ?>>
+                <?php else: ?>
+                    <select id="<?php echo $this->getFieldId('prefix') ?>"
+                            name="<?php echo $this->getFieldName('prefix') ?>"
+                            title="<?php echo $this->getStoreLabel('prefix') ?>"
+                            class="<?php echo $this->getAttributeValidationClass('prefix') ?>" <?php echo $this->getFieldParams() ?> <?php if ($this->isPrefixRequired()) echo ' data-validate="{required:true}"' ?> >
+                        <?php foreach ($this->getPrefixOptions() as $_option): ?>
+                            <option value="<?php echo $_option ?>"<?php if ($this->getObject()->getPrefix() == $_option): ?> selected="selected"<?php endif; ?>>
+                                <?php echo __($_option) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                <?php endif; ?>
+            </div>
+        </div>
+    <?php endif; ?>
+        <div class="field name firstname required">
+            <label class="label" for="<?php echo $this->getFieldId('firstname') ?>">
+                <span><?php echo $this->getStoreLabel('firstname') ?></span>
+            </label>
+
+            <div class="control">
+                <input type="text" id="<?php echo $this->getFieldId('firstname') ?>"
+                       name="<?php echo $this->getFieldName('firstname') ?>"
+                       value="<?php echo $this->escapeHtml($this->getObject()->getFirstname()) ?>"
+                       title="<?php echo $this->getStoreLabel('firstname') ?>"
+                       class="input-text <?php echo $this->getAttributeValidationClass('firstname') ?>" <?php echo $this->getFieldParams() ?> <?php if ($this->getAttributeValidationClass('firstname') == 'required-entry') echo ' data-validate="{required:true}"' ?>>
+            </div>
+        </div>
+    <?php if ($middle): ?>
+        <?php $isMiddlenameRequired = $this->isMiddlenameRequired(); ?>
+        <div class="field name middlename<?php echo $isMiddlenameRequired ? ' required' : '' ?>">
+            <label class="label" for="<?php echo $this->getFieldId('middlename') ?>">
+                <span><?php echo $this->getStoreLabel('middlename') ?></span>
+            </label>
+
+            <div class="control">
+                <input type="text" id="<?php echo $this->getFieldId('middlename') ?>"
+                       name="<?php echo $this->getFieldName('middlename') ?>"
+                       value="<?php echo $this->escapeHtml($this->getObject()->getMiddlename()) ?>"
+                       title="<?php echo $this->getStoreLabel('middlename') ?>"
+                       class="input-text <?php echo $this->getAttributeValidationClass('middlename') ?>" <?php echo $this->getFieldParams() ?> <?php echo $isMiddlenameRequired ? ' data-validate="{required:true}"' : '' ?>>
+            </div>
+        </div>
+    <?php endif; ?>
+        <div class="field name lastname required">
+            <label class="label"  for="<?php echo $this->getFieldId('lastname') ?>">
+                <span><?php echo $this->getStoreLabel('lastname') ?></span>
+            </label>
+
+            <div class="control">
+                <input type="text" id="<?php echo $this->getFieldId('lastname') ?>"
+                       name="<?php echo $this->getFieldName('lastname') ?>"
+                       value="<?php echo $this->escapeHtml($this->getObject()->getLastname()) ?>"
+                       title="<?php echo $this->getStoreLabel('lastname') ?>"
+                       class="input-text <?php echo $this->getAttributeValidationClass('lastname') ?>" <?php echo $this->getFieldParams() ?> <?php if ($this->getAttributeValidationClass('lastname') == 'required-entry') echo ' data-validate="{required:true}"' ?>>
+            </div>
+        </div>
+    <?php if ($suffix): ?>
+        <div class="field name suffix<?php if ($this->isSuffixRequired()) echo ' required' ?>">
+            <label class="label" for="<?php echo $this->getFieldId('suffix') ?>">
+                <span><?php echo $this->getStoreLabel('suffix') ?></span>
+            </label>
+
+            <div class="control">
+                <?php if ($this->getSuffixOptions() === false): ?>
+                    <input type="text" id="<?php echo $this->getFieldId('suffix') ?>"
+                           name="<?php echo $this->getFieldName('suffix') ?>"
+                           value="<?php echo $this->escapeHtml($this->getObject()->getSuffix()) ?>"
+                           title="<?php echo $this->getStoreLabel('suffix') ?>"
+                           class="input-text <?php echo $this->getAttributeValidationClass('suffix') ?>" <?php echo $this->getFieldParams() ?> <?php if ($this->isSuffixRequired()) echo ' data-validate="{required:true}"' ?>>
+                <?php else: ?>
+                    <select id="<?php echo $this->getFieldId('suffix') ?>"
+                            name="<?php echo $this->getFieldName('suffix') ?>"
+                            title="<?php echo $this->getStoreLabel('suffix') ?>"
+                            class="<?php echo $this->getAttributeValidationClass('suffix') ?>" <?php echo $this->getFieldParams() ?> <?php if ($this->isSuffixRequired()) echo ' data-validate="{required:true}"' ?>>
+                        <?php foreach ($this->getSuffixOptions() as $_option): ?>
+                            <option value="<?php echo $_option ?>"<?php if ($this->getObject()->getSuffix() == $_option): ?> selected="selected"<?php endif; ?>>
+                                <?php echo __($_option) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                <?php endif; ?>
+            </div>
+        </div>
+    <?php endif; ?>
+    <?php if ($prefix || $middle || $suffix && !$this->getNoWrap()): ?>
+        </div>
+    </div>
+</div>
+<?php endif; ?>

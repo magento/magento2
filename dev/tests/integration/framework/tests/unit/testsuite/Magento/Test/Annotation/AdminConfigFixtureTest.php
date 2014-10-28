@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -50,32 +47,26 @@ class AdminConfigFixtureTest extends \PHPUnit_Framework_TestCase
      */
     public function testConfig()
     {
-        $this->_object
-            ->expects($this->at(0))
-            ->method('_getConfigValue')
-            ->with('any_config')
-            ->will($this->returnValue('some_value'));
-        $this->_object
-            ->expects($this->at(1))
-            ->method('_setConfigValue')
-            ->with('any_config', 'some_value');
+        $this->_object->expects(
+            $this->at(0)
+        )->method(
+            '_getConfigValue'
+        )->with(
+            'any_config'
+        )->will(
+            $this->returnValue('some_value')
+        );
+        $this->_object->expects($this->at(1))->method('_setConfigValue')->with('any_config', 'some_value');
         $this->_object->startTest($this);
 
-        $this->_object
-            ->expects($this->once())
-            ->method('_setConfigValue')
-            ->with('any_config', 'some_value');
+        $this->_object->expects($this->once())->method('_setConfigValue')->with('any_config', 'some_value');
         $this->_object->endTest($this);
     }
 
     public function testInitStoreAfterOfScope()
     {
-        $this->_object
-            ->expects($this->never())
-            ->method('_getConfigValue');
-        $this->_object
-            ->expects($this->never())
-            ->method('_setConfigValue');
+        $this->_object->expects($this->never())->method('_getConfigValue');
+        $this->_object->expects($this->never())->method('_setConfigValue');
         $this->_object->initStoreAfter();
     }
 
@@ -85,15 +76,16 @@ class AdminConfigFixtureTest extends \PHPUnit_Framework_TestCase
     public function testInitStoreAfter()
     {
         $this->_object->startTest($this);
-        $this->_object
-            ->expects($this->at(0))
-            ->method('_getConfigValue')
-            ->with('any_config')
-            ->will($this->returnValue('some_value'));
-        $this->_object
-            ->expects($this->at(1))
-            ->method('_setConfigValue')
-            ->with('any_config', 'some_value');
+        $this->_object->expects(
+            $this->at(0)
+        )->method(
+            '_getConfigValue'
+        )->with(
+            'any_config'
+        )->will(
+            $this->returnValue('some_value')
+        );
+        $this->_object->expects($this->at(1))->method('_setConfigValue')->with('any_config', 'some_value');
         $this->_object->initStoreAfter();
     }
 }

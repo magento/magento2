@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -30,7 +27,7 @@
  */
 namespace Magento\TestFramework;
 
-class Request extends \Magento\App\Request\Http
+class Request extends \Magento\Framework\App\Request\Http
 {
     /**
      * Server super-global mock
@@ -78,6 +75,18 @@ class Request extends \Magento\App\Request\Http
             return $this->_server;
         }
 
-        return (isset($this->_server[$key])) ? $this->_server[$key] : $default;
+        return isset($this->_server[$key]) ? $this->_server[$key] : $default;
+    }
+
+    /**
+     * Set the HTTP Method type.
+     *
+     * Examples are POST, PUT, GET, DELETE
+     *
+     * @param string $type
+     */
+    public function setMethod($type)
+    {
+        $this->_server['REQUEST_METHOD'] = $type;
     }
 }

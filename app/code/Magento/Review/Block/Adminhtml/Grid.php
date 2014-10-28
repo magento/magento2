@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Review
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -33,8 +31,6 @@
  * @method \Magento\Review\Block\Adminhtml\Grid setCustomerId() setCustomerId(int $customerId)
  * @method \Magento\Review\Block\Adminhtml\Grid setMassactionIdFieldOnlyIndexValue() setMassactionIdFieldOnlyIndexValue(bool $onlyIndex)
  *
- * @category   Magento
- * @package    Magento_Review
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Review\Block\Adminhtml;
@@ -58,40 +54,42 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
+     * Review collection model factory
+     *
      * @var \Magento\Review\Model\Resource\Review\Product\CollectionFactory
      */
     protected $_productsFactory;
 
     /**
+     * Review model factory
+     *
      * @var \Magento\Review\Model\ReviewFactory
      */
     protected $_reviewFactory;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Review\Model\ReviewFactory $reviewFactory
      * @param \Magento\Review\Model\Resource\Review\Product\CollectionFactory $productsFactory
      * @param \Magento\Review\Helper\Data $reviewData
      * @param \Magento\Review\Helper\Action\Pager $reviewActionPager
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Url $urlModel,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Review\Model\ReviewFactory $reviewFactory,
         \Magento\Review\Model\Resource\Review\Product\CollectionFactory $productsFactory,
         \Magento\Review\Helper\Data $reviewData,
         \Magento\Review\Helper\Action\Pager $reviewActionPager,
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Framework\Registry $coreRegistry,
         array $data = array()
     ) {
         $this->_productsFactory = $productsFactory;
@@ -99,11 +97,13 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->_reviewData = $reviewData;
         $this->_reviewActionPager = $reviewActionPager;
         $this->_reviewFactory = $reviewFactory;
-        parent::__construct($context, $urlModel, $backendHelper, $data);
+        parent::__construct($context, $backendHelper, $data);
     }
 
     /**
      * Initialize grid
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -174,130 +174,146 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareColumns()
     {
-        $this->addColumn('review_id', array(
-            'header'        => __('ID'),
-            'align'         => 'right',
-            'width'         => '50px',
-            'filter_index'  => 'rt.review_id',
-            'index'         => 'review_id',
-        ));
+        $this->addColumn(
+            'review_id',
+            array(
+                'header' => __('ID'),
+                'filter_index' => 'rt.review_id',
+                'index' => 'review_id',
+                'header_css_class' => 'col-id',
+                'column_css_class' => 'col-id'
+            )
+        );
 
-        $this->addColumn('created_at', array(
-            'header'        => __('Created'),
-            'align'         => 'left',
-            'type'          => 'datetime',
-            'width'         => '100px',
-            'filter_index'  => 'rt.created_at',
-            'index'         => 'review_created_at',
-        ));
+        $this->addColumn(
+            'created_at',
+            array(
+                'header' => __('Created'),
+                'type' => 'datetime',
+                'filter_index' => 'rt.created_at',
+                'index' => 'review_created_at',
+                'header_css_class' => 'col-date',
+                'column_css_class' => 'col-date'
+            )
+        );
 
         if (!$this->_coreRegistry->registry('usePendingFilter')) {
-            $this->addColumn('status', array(
-                'header'        => __('Status'),
-                'align'         => 'left',
-                'type'          => 'options',
-                'options'       => $this->_reviewData->getReviewStatuses(),
-                'width'         => '100px',
-                'filter_index'  => 'rt.status_id',
-                'index'         => 'status_id',
-            ));
+            $this->addColumn(
+                'status',
+                array(
+                    'header' => __('Status'),
+                    'type' => 'options',
+                    'options' => $this->_reviewData->getReviewStatuses(),
+                    'filter_index' => 'rt.status_id',
+                    'index' => 'status_id'
+                )
+            );
         }
 
-        $this->addColumn('title', array(
-            'header'        => __('Title'),
-            'align'         => 'left',
-            'width'         => '100px',
-            'filter_index'  => 'rdt.title',
-            'index'         => 'title',
-            'type'          => 'text',
-            'truncate'      => 50,
-            'escape'        => true,
-        ));
+        $this->addColumn(
+            'title',
+            array(
+                'header' => __('Title'),
+                'filter_index' => 'rdt.title',
+                'index' => 'title',
+                'type' => 'text',
+                'truncate' => 50,
+                'escape' => true
+            )
+        );
 
-        $this->addColumn('nickname', array(
-            'header'        => __('Nickname'),
-            'align'         => 'left',
-            'width'         => '100px',
-            'filter_index'  => 'rdt.nickname',
-            'index'         => 'nickname',
-            'type'          => 'text',
-            'truncate'      => 50,
-            'escape'        => true,
-        ));
+        $this->addColumn(
+            'nickname',
+            array(
+                'header' => __('Nickname'),
+                'filter_index' => 'rdt.nickname',
+                'index' => 'nickname',
+                'type' => 'text',
+                'truncate' => 50,
+                'escape' => true,
+                'header_css_class' => 'col-name',
+                'column_css_class' => 'col-name'
+            )
+        );
 
-        $this->addColumn('detail', array(
-            'header'        => __('Review'),
-            'align'         => 'left',
-            'index'         => 'detail',
-            'filter_index'  => 'rdt.detail',
-            'type'          => 'text',
-            'truncate'      => 50,
-            'nl2br'         => true,
-            'escape'        => true,
-        ));
+        $this->addColumn(
+            'detail',
+            array(
+                'header' => __('Review'),
+                'index' => 'detail',
+                'filter_index' => 'rdt.detail',
+                'type' => 'text',
+                'truncate' => 50,
+                'nl2br' => true,
+                'escape' => true
+            )
+        );
 
         /**
          * Check is single store mode
          */
         if (!$this->_storeManager->isSingleStoreMode()) {
-            $this->addColumn('visible_in', array(
-                'header'    => __('Visibility'),
-                'index'     => 'stores',
-                'type'      => 'store',
-                'store_view' => true,
-            ));
+            $this->addColumn(
+                'visible_in',
+                array('header' => __('Visibility'), 'index' => 'stores', 'type' => 'store', 'store_view' => true)
+            );
         }
 
-        $this->addColumn('type', array(
-            'header'    => __('Type'),
-            'type'      => 'select',
-            'index'     => 'type',
-            'filter'    => 'Magento\Review\Block\Adminhtml\Grid\Filter\Type',
-            'renderer'  => 'Magento\Review\Block\Adminhtml\Grid\Renderer\Type'
-        ));
-
-        $this->addColumn('name', array(
-            'header'    => __('Product'),
-            'align'     =>'left',
-            'type'      => 'text',
-            'index'     => 'name',
-            'escape'    => true
-        ));
-
-        $this->addColumn('sku', array(
-            'header'    => __('SKU'),
-            'align'     => 'right',
-            'type'      => 'text',
-            'width'     => '50px',
-            'index'     => 'sku',
-            'escape'    => true
-        ));
-
-        $this->addColumn('action',
+        $this->addColumn(
+            'type',
             array(
-                'header'    => __('Action'),
-                'width'     => '50px',
-                'type'      => 'action',
-                'getter'     => 'getReviewId',
-                'actions'   => array(
+                'header' => __('Type'),
+                'type' => 'select',
+                'index' => 'type',
+                'filter' => 'Magento\Review\Block\Adminhtml\Grid\Filter\Type',
+                'renderer' => 'Magento\Review\Block\Adminhtml\Grid\Renderer\Type'
+            )
+        );
+
+        $this->addColumn(
+            'name',
+            array('header' => __('Product'), 'type' => 'text', 'index' => 'name', 'escape' => true)
+        );
+
+        $this->addColumn(
+            'sku',
+            array(
+                'header' => __('SKU'),
+                'type' => 'text',
+                'index' => 'sku',
+                'escape' => true
+            )
+        );
+
+        $this->addColumn(
+            'action',
+            array(
+                'header' => __('Action'),
+                'type' => 'action',
+                'getter' => 'getReviewId',
+                'actions' => array(
                     array(
                         'caption' => __('Edit'),
-                        'url'     => array(
-                            'base'=>'catalog/product_review/edit',
-                            'params'=> array(
+                        'url' => array(
+                            'base' => 'review/product/edit',
+                            'params' => array(
                                 'productId' => $this->getProductId(),
                                 'customerId' => $this->getCustomerId(),
                                 'ret' => $this->_coreRegistry->registry('usePendingFilter') ? 'pending' : null
                             )
-                         ),
-                         'field'   => 'id'
+                        ),
+                        'field' => 'id'
                     )
                 ),
-                'filter'    => false,
-                'sortable'  => false
-        ));
+                'filter' => false,
+                'sortable' => false
+            )
+        );
 
-        $this->addRssList('rss/catalog/review', __('Pending Reviews RSS'));
+        $block = $this->getLayout()->getBlock('grid.bottom.links');
+        if ($block) {
+            $this->setChild('grid.bottom.links', $block);
+        }
 
         return parent::_prepareColumns();
     }
@@ -305,7 +321,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Prepare grid mass actions
      *
-     * @return \Magento\Backend\Block\Widget\Grid|void
+     * @return void
      */
     protected function _prepareMassaction()
     {
@@ -314,49 +330,58 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->setMassactionIdFieldOnlyIndexValue(true);
         $this->getMassactionBlock()->setFormFieldName('reviews');
 
-        $this->getMassactionBlock()->addItem('delete', array(
-            'label'=> __('Delete'),
-            'url'  => $this->getUrl(
-                '*/*/massDelete',
-                array('ret' => $this->_coreRegistry->registry('usePendingFilter') ? 'pending' : 'index')
-            ),
-            'confirm' => __('Are you sure?')
-        ));
+        $this->getMassactionBlock()->addItem(
+            'delete',
+            array(
+                'label' => __('Delete'),
+                'url' => $this->getUrl(
+                    '*/*/massDelete',
+                    array('ret' => $this->_coreRegistry->registry('usePendingFilter') ? 'pending' : 'index')
+                ),
+                'confirm' => __('Are you sure?')
+            )
+        );
 
         $statuses = $this->_reviewData->getReviewStatusesOptionArray();
-        array_unshift($statuses, array('label'=>'', 'value'=>''));
-        $this->getMassactionBlock()->addItem('update_status', array(
-            'label'         => __('Update Status'),
-            'url'           => $this->getUrl(
-                '*/*/massUpdateStatus',
-                array('ret' => $this->_coreRegistry->registry('usePendingFilter') ? 'pending' : 'index')
-            ),
-            'additional'    => array(
-                'status'    => array(
-                    'name'      => 'status',
-                    'type'      => 'select',
-                    'class'     => 'required-entry',
-                    'label'     => __('Status'),
-                    'values'    => $statuses
+        array_unshift($statuses, array('label' => '', 'value' => ''));
+        $this->getMassactionBlock()->addItem(
+            'update_status',
+            array(
+                'label' => __('Update Status'),
+                'url' => $this->getUrl(
+                    '*/*/massUpdateStatus',
+                    array('ret' => $this->_coreRegistry->registry('usePendingFilter') ? 'pending' : 'index')
+                ),
+                'additional' => array(
+                    'status' => array(
+                        'name' => 'status',
+                        'type' => 'select',
+                        'class' => 'required-entry',
+                        'label' => __('Status'),
+                        'values' => $statuses
+                    )
                 )
             )
-        ));
+        );
     }
 
     /**
      * Get row url
      *
-     * @param \Magento\Review\Model\Review|\Magento\Object $row
+     * @param \Magento\Review\Model\Review|\Magento\Framework\Object $row
      * @return string
      */
     public function getRowUrl($row)
     {
-        return $this->getUrl('catalog/product_review/edit', array(
-            'id' => $row->getReviewId(),
-            'productId' => $this->getProductId(),
-            'customerId' => $this->getCustomerId(),
-            'ret'       => $this->_coreRegistry->registry('usePendingFilter') ? 'pending' : null,
-        ));
+        return $this->getUrl(
+            'review/product/edit',
+            array(
+                'id' => $row->getReviewId(),
+                'productId' => $this->getProductId(),
+                'customerId' => $this->getCustomerId(),
+                'ret' => $this->_coreRegistry->registry('usePendingFilter') ? 'pending' : null
+            )
+        );
     }
 
     /**
@@ -368,11 +393,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     {
         if ($this->getProductId() || $this->getCustomerId()) {
             return $this->getUrl(
-                'catalog/product_review/' . ($this->_coreRegistry->registry('usePendingFilter') ? 'pending' : ''),
-                array(
-                    'productId' => $this->getProductId(),
-                    'customerId' => $this->getCustomerId(),
-                )
+                'review/product' . ($this->_coreRegistry->registry('usePendingFilter') ? 'pending' : ''),
+                array('productId' => $this->getProductId(), 'customerId' => $this->getCustomerId())
             );
         } else {
             return $this->getCurrentUrl();

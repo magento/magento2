@@ -23,15 +23,32 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="\Magento\Wishlist\Model\AuthenticationStateInterface" type="\Magento\Wishlist\Model\AuthenticationState" />
+    <preference for="\Magento\Wishlist\Controller\WishlistProviderInterface" type="\Magento\Wishlist\Controller\WishlistProvider" />
     <type name="Magento\Wishlist\Model\Resource\Item\Collection\Grid">
-        <param name="resource">
-            <instance type="Magento\Wishlist\Model\Resource\Item" />
-        </param>
+        <arguments>
+            <argument name="resource" xsi:type="object">Magento\Wishlist\Model\Resource\Item</argument>
+        </arguments>
     </type>
     <type name="Magento\Wishlist\Helper\Data">
-        <param name="customerSession">
-            <instance type="Magento\Customer\Model\Session\Proxy" />
-        </param>
+        <arguments>
+            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Wishlist\Controller\IndexInterface">
+        <plugin name="authentication" type="\Magento\Wishlist\Controller\Index\Plugin" sortOrder="10"/>
+    </type>
+    <virtualType name="Magento\Wishlist\Block\Context" type="Magento\Catalog\Block\Product\Context">
+        <arguments>
+            <argument name="wishlistHelper" xsi:type="object">Magento\Wishlist\Helper\Rss</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\App\Rss\RssManagerInterface">
+        <arguments>
+            <argument name="dataProviders" xsi:type="array">
+                <item name="wishlist" xsi:type="string">Magento\Wishlist\Model\Rss\Wishlist</item>
+            </argument>
+        </arguments>
     </type>
 </config>

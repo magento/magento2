@@ -18,21 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_GoogleShopping
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\GoogleShopping\Model\Attribute;
 
 /**
  * Image link attribute model
  *
- * @category   Magento
- * @package    Magento_GoogleShopping
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\GoogleShopping\Model\Attribute;
-
 class ImageLink extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
 {
     /**
@@ -41,27 +36,27 @@ class ImageLink extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
     protected $_catalogProduct = null;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\GoogleShopping\Helper\Data $gsData
+     * @param \Magento\GoogleShopping\Helper\Data $googleShoppingHelper
      * @param \Magento\GoogleShopping\Helper\Product $gsProduct
-     * @param \Magento\GoogleShopping\Helper\Price $gsPrice
+     * @param \Magento\Catalog\Model\Product\CatalogPrice $catalogPrice
      * @param \Magento\GoogleShopping\Model\Resource\Attribute $resource
      * @param \Magento\Catalog\Helper\Product $catalogProduct
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\GoogleShopping\Helper\Data $gsData,
+        \Magento\GoogleShopping\Helper\Data $googleShoppingHelper,
         \Magento\GoogleShopping\Helper\Product $gsProduct,
-        \Magento\GoogleShopping\Helper\Price $gsPrice,
+        \Magento\Catalog\Model\Product\CatalogPrice $catalogPrice,
         \Magento\GoogleShopping\Model\Resource\Attribute $resource,
         \Magento\Catalog\Helper\Product $catalogProduct,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_catalogProduct = $catalogProduct;
@@ -69,9 +64,9 @@ class ImageLink extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
             $context,
             $registry,
             $productFactory,
-            $gsData,
+            $googleShoppingHelper,
             $gsProduct,
-            $gsPrice,
+            $catalogPrice,
             $resource,
             $resourceCollection,
             $data
@@ -82,8 +77,8 @@ class ImageLink extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
      * Set current attribute to entry (for specified product)
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @param \Magento\Gdata\Gshopping\Entry $entry
-     * @return \Magento\Gdata\Gshopping\Entry
+     * @param \Magento\Framework\Gdata\Gshopping\Entry $entry
+     * @return \Magento\Framework\Gdata\Gshopping\Entry
      */
     public function convertAttribute($product, $entry)
     {

@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -37,14 +34,15 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
         parent::assert404NotFound();
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->assertNull($objectManager->get('Magento\Core\Model\Registry')->registry('current_product'));
+        $this->assertNull($objectManager->get('Magento\Framework\Registry')->registry('current_product'));
     }
 
     protected function _getProductImageFile()
     {
         /** @var $product \Magento\Catalog\Model\Product */
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Product');
+        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Product'
+        );
         $product->load(1);
         $images = $product->getMediaGalleryImages()->getItems();
         $image = reset($images);
@@ -61,17 +59,19 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var $currentProduct \Magento\Catalog\Model\Product */
-        $currentProduct = $objectManager->get('Magento\Core\Model\Registry')->registry('current_product');
+        $currentProduct = $objectManager->get('Magento\Framework\Registry')->registry('current_product');
         $this->assertInstanceOf('Magento\Catalog\Model\Product', $currentProduct);
         $this->assertEquals(1, $currentProduct->getId());
 
-        $lastViewedProductId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Catalog\Model\Session')->getLastViewedProductId();
+        $lastViewedProductId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Catalog\Model\Session'
+        )->getLastViewedProductId();
         $this->assertEquals(1, $lastViewedProductId);
 
         /* Layout updates */
-        $handles = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\LayoutInterface')
-            ->getUpdate()->getHandles();
+        $handles = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\View\LayoutInterface'
+        )->getUpdate()->getHandles();
         $this->assertContains('catalog_product_view_type_simple', $handles);
 
         $responseBody = $this->getResponse()->getBody();

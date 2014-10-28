@@ -18,28 +18,22 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Customer\Block\Adminhtml\Form\Element;
 
 /**
  * Customer Widget Form File Element Block
  *
- * @category    Magento
- * @package     Magento_Customer
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Customer\Block\Adminhtml\Form\Element;
-
-class File extends \Magento\Data\Form\Element\AbstractElement
+class File extends \Magento\Framework\Data\Form\Element\AbstractElement
 {
     /**
-     * @var \Magento\View\Url
+     * @var \Magento\Framework\View\Asset\Repository
      */
-    protected $_viewUrl;
+    protected $_assetRepo;
 
     /**
      * Adminhtml data
@@ -49,23 +43,23 @@ class File extends \Magento\Data\Form\Element\AbstractElement
     protected $_adminhtmlData = null;
 
     /**
-     * @param \Magento\Data\Form\Element\Factory $factoryElement
-     * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
-     * @param \Magento\Escaper $escaper
+     * @param \Magento\Framework\Data\Form\Element\Factory $factoryElement
+     * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
+     * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Backend\Helper\Data $adminhtmlData
-     * @param \Magento\View\Url $viewUrl
+     * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param array $data
      */
     public function __construct(
-        \Magento\Data\Form\Element\Factory $factoryElement,
-        \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
-        \Magento\Escaper $escaper,
+        \Magento\Framework\Data\Form\Element\Factory $factoryElement,
+        \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection,
+        \Magento\Framework\Escaper $escaper,
         \Magento\Backend\Helper\Data $adminhtmlData,
-        \Magento\View\Url $viewUrl,
+        \Magento\Framework\View\Asset\Repository $assetRepo,
         $data = array()
     ) {
         $this->_adminhtmlData = $adminhtmlData;
-        $this->_viewUrl = $viewUrl;
+        $this->_assetRepo = $assetRepo;
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
         $this->setType('file');
     }
@@ -83,7 +77,8 @@ class File extends \Magento\Data\Form\Element\AbstractElement
             $this->addClass('required-file');
         }
 
-        $element = sprintf('<input id="%s" name="%s" %s />%s%s',
+        $element = sprintf(
+            '<input id="%s" name="%s" %s />%s%s',
             $this->getHtmlId(),
             $this->getName(),
             $this->serialize($this->getHtmlAttributes()),
@@ -104,16 +99,14 @@ class File extends \Magento\Data\Form\Element\AbstractElement
         $html = '';
         if ($this->getValue() && !$this->getRequired() && !is_array($this->getValue())) {
             $checkboxId = sprintf('%s_delete', $this->getHtmlId());
-            $checkbox   = array(
-                'type'  => 'checkbox',
-                'name'  => sprintf('%s[delete]', $this->getName()),
+            $checkbox = array(
+                'type' => 'checkbox',
+                'name' => sprintf('%s[delete]', $this->getName()),
                 'value' => '1',
                 'class' => 'checkbox',
-                'id'    => $checkboxId
+                'id' => $checkboxId
             );
-            $label      = array(
-                'for'   => $checkboxId
-            );
+            $label = array('for' => $checkboxId);
             if ($this->getDisabled()) {
                 $checkbox['disabled'] = 'disabled';
                 $label['class'] = 'disabled';
@@ -157,9 +150,9 @@ class File extends \Magento\Data\Form\Element\AbstractElement
         $html = '';
         if ($this->getValue() && !is_array($this->getValue())) {
             $image = array(
-                'alt'   => __('Download'),
+                'alt' => __('Download'),
                 'title' => __('Download'),
-                'src'   => $this->_viewUrl->getViewFileUrl('images/fam_bullet_disk.gif'),
+                'src'   => $this->_assetRepo->getUrl('images/fam_bullet_disk.gif'),
                 'class' => 'v-middle'
             );
             $url = $this->_getPreviewUrl();
@@ -178,12 +171,15 @@ class File extends \Magento\Data\Form\Element\AbstractElement
      */
     protected function _getHiddenInput()
     {
-        return $this->_drawElementHtml('input', array(
-            'type'  => 'hidden',
-            'name'  => sprintf('%s[value]', $this->getName()),
-            'id'    => sprintf('%s_value', $this->getHtmlId()),
-            'value' => $this->getEscapedValue()
-        ));
+        return $this->_drawElementHtml(
+            'input',
+            array(
+                'type' => 'hidden',
+                'name' => sprintf('%s[value]', $this->getName()),
+                'id' => sprintf('%s_value', $this->getHtmlId()),
+                'value' => $this->getEscapedValue()
+            )
+        );
     }
 
     /**
@@ -193,9 +189,10 @@ class File extends \Magento\Data\Form\Element\AbstractElement
      */
     protected function _getPreviewUrl()
     {
-        return $this->_adminhtmlData->getUrl('customer/index/viewfile', array(
-            'file' => $this->_escaper->urlEncode($this->getValue()),
-        ));
+        return $this->_adminhtmlData->getUrl(
+            'customer/index/viewfile',
+            array('file' => $this->_adminhtmlData->urlEncode($this->getValue()))
+        );
     }
 
     /**
@@ -203,7 +200,7 @@ class File extends \Magento\Data\Form\Element\AbstractElement
      *
      * @param string $element
      * @param array $attributes
-     * @param boolean $closed
+     * @param bool $closed
      * @return string
      */
     protected function _drawElementHtml($element, array $attributes, $closed = true)
@@ -219,8 +216,8 @@ class File extends \Magento\Data\Form\Element\AbstractElement
     /**
      * Return escaped value
      *
-     * @param int $index
-     * @return string
+     * @param int|null $index
+     * @return string|false
      */
     public function getEscapedValue($index = null)
     {

@@ -18,26 +18,25 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_DesignEditor
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DesignEditor\Block\Adminhtml;
+
+use Magento\Backend\Block\Widget\Button;
 
 /**
  * Design editor theme
  *
- * @method \Magento\DesignEditor\Block\Adminhtml\Theme setTheme(\Magento\View\Design\ThemeInterface $theme)
- * @method \Magento\View\Design\ThemeInterface getTheme()
+ * @method \Magento\DesignEditor\Block\Adminhtml\Theme setTheme(\Magento\Framework\View\Design\ThemeInterface $theme)
+ * @method \Magento\Framework\View\Design\ThemeInterface getTheme()
  */
-namespace Magento\DesignEditor\Block\Adminhtml;
-
 class Theme extends \Magento\Backend\Block\Template
 {
     /**
      * Buttons array
      *
-     * @var array
+     * @var Button[]
      */
     protected $_buttons = array();
 
@@ -63,8 +62,8 @@ class Theme extends \Magento\Backend\Block\Template
     /**
      * Add button
      *
-     * @param \Magento\Backend\Block\Widget\Button $button
-     * @return \Magento\DesignEditor\Block\Adminhtml\Theme
+     * @param Button $button
+     * @return $this
      */
     public function addButton($button)
     {
@@ -75,7 +74,7 @@ class Theme extends \Magento\Backend\Block\Template
     /**
      * Clear buttons
      *
-     * @return \Magento\DesignEditor\Block\Adminhtml\Theme
+     * @return $this
      */
     public function clearButtons()
     {
@@ -91,7 +90,7 @@ class Theme extends \Magento\Backend\Block\Template
     public function getButtonsHtml()
     {
         $output = '';
-        /** @var $button \Magento\Backend\Block\Widget\Button */
+        /** @var $button Button */
         foreach ($this->_buttons as $button) {
             $output .= $button->toHtml();
         }
@@ -101,12 +100,12 @@ class Theme extends \Magento\Backend\Block\Template
     /**
      * Return array of assigned stores titles
      *
-     * @return array
+     * @return string[]
      */
     public function getStoresTitles()
     {
         $storesTitles = array();
-        /** @var $store \Magento\Core\Model\Store */
+        /** @var $store \Magento\Store\Model\Store */
         foreach ($this->getTheme()->getAssignedStores() as $store) {
             $storesTitles[] = $store->getName();
         }
@@ -121,10 +120,7 @@ class Theme extends \Magento\Backend\Block\Template
     public function getOptionsJson()
     {
         $theme = $this->getTheme();
-        $options = array(
-            'theme_id'    => $theme->getId(),
-            'theme_title' => $theme->getThemeTitle()
-        );
+        $options = array('theme_id' => $theme->getId(), 'theme_title' => $theme->getThemeTitle());
 
         /** @var $helper \Magento\Core\Helper\Data */
         $helper = $this->_coreHelper;
@@ -134,16 +130,13 @@ class Theme extends \Magento\Backend\Block\Template
     /**
      * Get quick save button
      *
-     * @return \Magento\Backend\Block\Widget\Button
+     * @return Button
      */
     public function getQuickSaveButton()
     {
-        /** @var $saveButton \Magento\Backend\Block\Widget\Button */
+        /** @var $saveButton Button */
         $saveButton = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button');
-        $saveButton->setData(array(
-            'label'     => __('Save'),
-            'class'     => 'action-save',
-        ));
+        $saveButton->setData(array('label' => __('Save'), 'class' => 'action-save'));
         return $saveButton;
     }
 }

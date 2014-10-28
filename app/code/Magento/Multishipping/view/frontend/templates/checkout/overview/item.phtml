@@ -1,0 +1,72 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Quote Item row html
+ *
+ * @see \Magento\Checkout\Block\Cart\Item\Renderer
+ */
+?>
+<?php /** @var $this Magento\Checkout\Block\Cart\Item\Renderer */ ?>
+<?php $_item = $this->getItem() ?>
+<tr>
+    <td class="col item" data-th="<?php echo $this->escapeHtml(__('Product Name'));?>">
+        <?php echo $this->getRenderedBlock()->getItemHtml($_item) ?>
+    </td>
+    <td class="col price" data-th="<?php echo $this->escapeHtml(__('Price'));?>">
+        <?php /* Including Tax */ ?>
+            <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartPriceInclTax() || $this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): ?>
+                <span class="price-including-tax" data-label="<?php echo $this->escapeHtml(__('Incl. Tax'));?>">
+                    <?php echo $this->getUnitPriceInclTaxHtml($_item); ?>
+                </span>
+            <?php endif; ?>
+        <?php /* // Including Tax */ ?>
+        <?php /* Excluding Tax */ ?>
+        <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartPriceExclTax() || $this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): ?>
+            <span class="price-excluding-tax" data-label="<?php echo $this->escapeHtml(__('Excl. Tax'));?>">
+                <?php echo $this->getUnitPriceExclTaxHtml($_item); ?>
+            </span>
+        <?php endif; ?>
+        <?php /* // Excluding Tax */ ?>
+    </td>
+
+    <td class="col qty" data-th="<?php echo $this->escapeHtml(__('Qty'));?>"><?php echo $_item->getQty()*1 ?></td>
+    <td class="col subtotal" data-th="<?php echo $this->escapeHtml(__('Subtotal'));?>">
+    <?php /* Including Tax Subtotal */ ?>
+        <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartPriceInclTax() || $this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): ?>
+        <span class="price-including-tax" data-label="<?php echo $this->escapeHtml(__('Incl. Tax'));?>">
+            <?php echo $this->getRowTotalInclTaxHtml($_item); ?>
+        </span>
+        <?php endif; ?>
+    <?php /* //Including Tax Subtotal */ ?>
+    <?php /* Excluding Tax Subtotal */ ?>
+    <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartPriceExclTax() || $this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): ?>
+        <span class="price-excluding-tax" data-label="<?php echo $this->escapeHtml(__('Excl. Tax'));?>">
+            <?php echo $this->getRowTotalExclTaxHtml($_item); ?>
+        </span>
+    <?php endif; ?>
+    <?php /* //Excluding Tax Subtotal */ ?>
+    </td>
+</tr>

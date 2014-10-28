@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_CatalogSearch
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,38 +25,45 @@
 /**
  * Advanced search form
  *
- * @category   Magento
- * @package    Magento_CatalogSearch
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\CatalogSearch\Block\Advanced;
 
-class Form extends \Magento\View\Element\Template
+use Magento\CatalogSearch\Model\Advanced;
+use Magento\Framework\Data\Collection\Db;
+use Magento\Directory\Model\CurrencyFactory;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\Element\BlockInterface;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
+
+class Form extends Template
 {
     /**
      * Currency factory
      *
-     * @var \Magento\Directory\Model\CurrencyFactory
+     * @var CurrencyFactory
      */
     protected $_currencyFactory;
 
     /**
      * Catalog search advanced
      *
-     * @var \Magento\CatalogSearch\Model\Advanced
+     * @var Advanced
      */
     protected $_catalogSearchAdvanced;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\CatalogSearch\Model\Advanced $catalogSearchAdvanced
-     * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
+     * @param Context $context
+     * @param Advanced $catalogSearchAdvanced
+     * @param CurrencyFactory $currencyFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\CatalogSearch\Model\Advanced $catalogSearchAdvanced,
-        \Magento\Directory\Model\CurrencyFactory $currencyFactory,
+        Context $context,
+        Advanced $catalogSearchAdvanced,
+        CurrencyFactory $currencyFactory,
         array $data = array()
     ) {
         $this->_catalogSearchAdvanced = $catalogSearchAdvanced;
@@ -66,17 +71,24 @@ class Form extends \Magento\View\Element\Template
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return AbstractBlock
+     */
     public function _prepareLayout()
     {
         // add Home breadcrumb
         if ($breadcrumbs = $this->getLayout()->getBlock('breadcrumbs')) {
-            $breadcrumbs->addCrumb('home', array(
-                'label'=>__('Home'),
-                'title'=>__('Go to Home Page'),
-                'link' => $this->_storeManager->getStore()->getBaseUrl(),
-            ))->addCrumb('search', array(
-                'label'=>__('Catalog Advanced Search')
-            ));
+            $breadcrumbs->addCrumb(
+                'home',
+                array(
+                    'label' => __('Home'),
+                    'title' => __('Go to Home Page'),
+                    'link' => $this->_storeManager->getStore()->getBaseUrl()
+                )
+            )->addCrumb(
+                'search',
+                array('label' => __('Catalog Advanced Search'))
+            );
         }
         return parent::_prepareLayout();
     }
@@ -84,7 +96,7 @@ class Form extends \Magento\View\Element\Template
     /**
      * Retrieve collection of product searchable attributes
      *
-     * @return \Magento\Data\Collection\Db
+     * @return Db
      */
     public function getSearchableAttributes()
     {
@@ -95,7 +107,7 @@ class Form extends \Magento\View\Element\Template
     /**
      * Retrieve attribute label
      *
-     * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
+     * @param AbstractAttribute $attribute
      * @return string
      */
     public function getAttributeLabel($attribute)
@@ -106,7 +118,7 @@ class Form extends \Magento\View\Element\Template
     /**
      * Retrieve attribute input validation class
      *
-     * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
+     * @param AbstractAttribute $attribute
      * @return string
      */
     public function getAttributeValidationClass($attribute)
@@ -117,7 +129,7 @@ class Form extends \Magento\View\Element\Template
     /**
      * Retrieve search string for given field from request
      *
-     * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
+     * @param AbstractAttribute $attribute
      * @param string|null $part
      * @return mixed|string
      */
@@ -177,7 +189,7 @@ class Form extends \Magento\View\Element\Template
     /**
      * Retrieve currency code for attribute
      *
-     * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
+     * @param AbstractAttribute $attribute
      * @return string
      */
     public function getCurrency($attribute)
@@ -185,20 +197,25 @@ class Form extends \Magento\View\Element\Template
         return $this->_storeManager->getStore()->getCurrentCurrencyCode();
 
         $baseCurrency = $this->_storeManager->getStore()->getBaseCurrency()->getCurrencyCode();
-        return $this->getAttributeValue($attribute, 'currency') ?
-            $this->getAttributeValue($attribute, 'currency') : $baseCurrency;
+        return $this->getAttributeValue(
+            $attribute,
+            'currency'
+        ) ? $this->getAttributeValue(
+            $attribute,
+            'currency'
+        ) : $baseCurrency;
     }
 
     /**
      * Retrieve attribute input type
      *
-     * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
+     * @param AbstractAttribute $attribute
      * @return  string
      */
     public function getAttributeInputType($attribute)
     {
-        $dataType   = $attribute->getBackend()->getType();
-        $imputType  = $attribute->getFrontend()->getInputType();
+        $dataType = $attribute->getBackend()->getType();
+        $imputType = $attribute->getFrontend()->getInputType();
         if ($imputType == 'select' || $imputType == 'multiselect') {
             return 'select';
         }
@@ -225,7 +242,7 @@ class Form extends \Magento\View\Element\Template
     /**
      * Build attribute select element html string
      *
-     * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
+     * @param AbstractAttribute $attribute
      * @return string
      */
     public function getAttributeSelectElement($attribute)
@@ -236,65 +253,81 @@ class Form extends \Magento\View\Element\Template
         $name = $attribute->getAttributeCode();
 
         // 2 - avoid yes/no selects to be multiselects
-        if (is_array($options) && count($options)>2) {
+        if (is_array($options) && count($options) > 2) {
             $extra = 'multiple="multiple" size="4"';
-            $name.= '[]';
-        }
-        else {
-            array_unshift($options, array('value'=>'', 'label'=>__('All')));
+            $name .= '[]';
+        } else {
+            array_unshift($options, array('value' => '', 'label' => __('All')));
         }
 
-        return $this->_getSelectBlock()
-            ->setName($name)
-            ->setId($attribute->getAttributeCode())
-            ->setTitle($this->getAttributeLabel($attribute))
-            ->setExtraParams($extra)
-            ->setValue($this->getAttributeValue($attribute))
-            ->setOptions($options)
-            ->setClass('multiselect')
-            ->getHtml();
+        return $this->_getSelectBlock()->setName(
+            $name
+        )->setId(
+            $attribute->getAttributeCode()
+        )->setTitle(
+            $this->getAttributeLabel($attribute)
+        )->setExtraParams(
+            $extra
+        )->setValue(
+            $this->getAttributeValue($attribute)
+        )->setOptions(
+            $options
+        )->setClass(
+            'multiselect'
+        )->getHtml();
     }
 
     /**
      * Retrieve yes/no element html for provided attribute
      *
-     * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
+     * @param AbstractAttribute $attribute
      * @return string
      */
     public function getAttributeYesNoElement($attribute)
     {
         $options = array(
-            array('value' => '',  'label' => __('All')),
+            array('value' => '', 'label' => __('All')),
             array('value' => '1', 'label' => __('Yes')),
             array('value' => '0', 'label' => __('No'))
         );
 
         $name = $attribute->getAttributeCode();
-        return $this->_getSelectBlock()
-            ->setName($name)
-            ->setId($attribute->getAttributeCode())
-            ->setTitle($this->getAttributeLabel($attribute))
-            ->setExtraParams("")
-            ->setValue($this->getAttributeValue($attribute))
-            ->setOptions($options)
-            ->getHtml();
+        return $this->_getSelectBlock()->setName(
+            $name
+        )->setId(
+            $attribute->getAttributeCode()
+        )->setTitle(
+            $this->getAttributeLabel($attribute)
+        )->setExtraParams(
+            ""
+        )->setValue(
+            $this->getAttributeValue($attribute)
+        )->setOptions(
+            $options
+        )->getHtml();
     }
 
+    /**
+     * @return BlockInterface
+     */
     protected function _getSelectBlock()
     {
         $block = $this->getData('_select_block');
         if (is_null($block)) {
-            $block = $this->getLayout()->createBlock('Magento\View\Element\Html\Select');
+            $block = $this->getLayout()->createBlock('Magento\Framework\View\Element\Html\Select');
             $this->setData('_select_block', $block);
         }
         return $block;
     }
 
+    /**
+     * @return BlockInterface|mixed
+     */
     protected function _getDateBlock()
     {
         $block = $this->getData('_date_block');
         if (is_null($block)) {
-            $block = $this->getLayout()->createBlock('Magento\View\Element\Html\Date');
+            $block = $this->getLayout()->createBlock('Magento\Framework\View\Element\Html\Date');
             $this->setData('_date_block', $block);
         }
         return $block;
@@ -303,7 +336,7 @@ class Form extends \Magento\View\Element\Template
     /**
      * Retrieve advanced search model object
      *
-     * @return \Magento\CatalogSearch\Model\Advanced
+     * @return Advanced
      */
     public function getModel()
     {
@@ -323,7 +356,7 @@ class Form extends \Magento\View\Element\Template
     /**
      * Build date element html string for attribute
      *
-     * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
+     * @param AbstractAttribute $attribute
      * @param string $part
      * @return string
      */
@@ -332,14 +365,20 @@ class Form extends \Magento\View\Element\Template
         $name = $attribute->getAttributeCode() . '[' . $part . ']';
         $value = $this->getAttributeValue($attribute, $part);
 
-        return $this->_getDateBlock()
-            ->setName($name)
-            ->setId($attribute->getAttributeCode() . ($part == 'from' ? '' : '_' . $part))
-            ->setTitle($this->getAttributeLabel($attribute))
-            ->setValue($value)
-            ->setImage($this->getViewFileUrl('Magento_Core::calendar.gif'))
-            ->setDateFormat($this->_locale->getDateFormat(\Magento\Core\Model\LocaleInterface::FORMAT_TYPE_SHORT))
-            ->setClass('input-text')
-            ->getHtml();
+        return $this->_getDateBlock()->setName(
+            $name
+        )->setId(
+            $attribute->getAttributeCode() . ($part == 'from' ? '' : '_' . $part)
+        )->setTitle(
+            $this->getAttributeLabel($attribute)
+        )->setValue(
+            $value
+        )->setImage(
+            $this->getViewFileUrl('Magento_Core::calendar.gif')
+        )->setDateFormat(
+            $this->_localeDate->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT)
+        )->setClass(
+            'input-text'
+        )->getHtml();
     }
 }

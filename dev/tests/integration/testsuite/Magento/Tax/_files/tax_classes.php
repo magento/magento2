@@ -18,34 +18,43 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Tax
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /** @var $objectManager \Magento\TestFramework\ObjectManager */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-$customerTaxClass1 = $objectManager->create('Magento\Tax\Model\ClassModel')
-    ->setClassName('CustomerTaxClass1')
-    ->setClassType(\Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_CUSTOMER)
-    ->save();
+$customerTaxClass1 = $objectManager->create(
+    'Magento\Tax\Model\ClassModel'
+)->setClassName(
+    'CustomerTaxClass1'
+)->setClassType(
+    \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_CUSTOMER
+)->save();
 
-$customerTaxClass2 = $objectManager->create('Magento\Tax\Model\ClassModel')
-    ->setClassName('CustomerTaxClass2')
-    ->setClassType(\Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_CUSTOMER)
-    ->save();
+$customerTaxClass2 = $objectManager->create(
+    'Magento\Tax\Model\ClassModel'
+)->setClassName(
+    'CustomerTaxClass2'
+)->setClassType(
+    \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_CUSTOMER
+)->save();
 
-$productTaxClass1 = $objectManager->create('Magento\Tax\Model\ClassModel')
-    ->setClassName('ProductTaxClass1')
-    ->setClassType(\Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_PRODUCT)
-    ->save();
+$productTaxClass1 = $objectManager->create(
+    'Magento\Tax\Model\ClassModel'
+)->setClassName(
+    'ProductTaxClass1'
+)->setClassType(
+    \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_PRODUCT
+)->save();
 
-$productTaxClass2 = $objectManager->create('Magento\Tax\Model\ClassModel')
-    ->setClassName('ProductTaxClass2')
-    ->setClassType(\Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_PRODUCT)
-    ->save();
+$productTaxClass2 = $objectManager->create(
+    'Magento\Tax\Model\ClassModel'
+)->setClassName(
+    'ProductTaxClass2'
+)->setClassType(
+    \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_PRODUCT
+)->save();
 
 $taxRate = array(
     'tax_country_id' => 'US',
@@ -56,7 +65,10 @@ $taxRate = array(
 );
 $rate = $objectManager->create('Magento\Tax\Model\Calculation\Rate')->setData($taxRate)->save();
 
-$objectManager->get('Magento\Core\Model\Registry')->register('_fixture/Magento_Tax_Model_Calculation_Rate', $rate);
+/** @var Magento\Framework\Registry $registry */
+$registry = $objectManager->get('Magento\Framework\Registry');
+$registry->unregister('_fixture/Magento_Tax_Model_Calculation_Rate');
+$registry->register('_fixture/Magento_Tax_Model_Calculation_Rate', $rate);
 
 $ruleData = array(
     'code' => 'Test Rule',
@@ -69,7 +81,8 @@ $ruleData = array(
 
 $taxRule = $objectManager->create('Magento\Tax\Model\Calculation\Rule')->setData($ruleData)->save();
 
-$objectManager->get('Magento\Core\Model\Registry')->register('_fixture/Magento_Tax_Model_Calculation_Rule', $taxRule);
+$registry->unregister('_fixture/Magento_Tax_Model_Calculation_Rule');
+$registry->register('_fixture/Magento_Tax_Model_Calculation_Rule', $taxRule);
 
 $ruleData['code'] = 'Test Rule Duplicate';
 

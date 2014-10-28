@@ -21,30 +21,35 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-return array
-(
-    'without_required_type_handle' => array(
-        '<?xml version="1.0" encoding="UTF-8"?><config></config>',
-        array("Element 'config': Missing child element(s). Expected is ( type ).")),
+return array(
     'type_without_required_name' => array(
         '<?xml version="1.0" encoding="UTF-8"?><config><type label="some label" modelInstance="model_name" /></config>',
-        array("Element 'type': The attribute 'name' is required but missing.")),
+        array(
+            "Element 'type': The attribute 'name' is required but missing.",
+            "Element 'type': Not all fields of key identity-constraint 'productTypeKey' evaluate to a node."
+        )
+    ),
     'type_without_required_label' => array(
         '<?xml version="1.0" encoding="UTF-8"?><config><type name="some_name" modelInstance="model_name" /></config>',
-        array("Element 'type': The attribute 'label' is required but missing.")),
+        array("Element 'type': The attribute 'label' is required but missing.")
+    ),
     'type_without_required_modelInstance' => array(
         '<?xml version="1.0" encoding="UTF-8"?><config><type label="some_label" name="some_name" /></config>',
-        array("Element 'type': The attribute 'modelInstance' is required but missing.")),
+        array("Element 'type': The attribute 'modelInstance' is required but missing.")
+    ),
     'type_pricemodel_without_required_instance_attribute' => array(
-        '<?xml version="1.0" encoding="UTF-8"?><config>'
-            . '<type label="some_label" name="some_name" modelInstance="model_name"><priceModel/></type></config>',
-        array("Element 'priceModel': The attribute 'instance' is required but missing.")),
+        '<?xml version="1.0" encoding="UTF-8"?><config>' .
+        '<type label="some_label" name="some_name" modelInstance="model_name"><priceModel/></type></config>',
+        array("Element 'priceModel': The attribute 'instance' is required but missing.")
+    ),
     'type_indexmodel_without_required_instance_attribute' => array(
-        '<?xml version="1.0" encoding="UTF-8"?><config>'
-            . '<type label="some_label" name="some_name" modelInstance="model_name"><indexerModel/></type></config>',
-        array("Element 'indexerModel': The attribute 'instance' is required but missing.")),
+        '<?xml version="1.0" encoding="UTF-8"?><config>' .
+        '<type label="some_label" name="some_name" modelInstance="model_name"><indexerModel/></type></config>',
+        array("Element 'indexerModel': The attribute 'instance' is required but missing.")
+    ),
     'type_stockindexermodel_without_required_instance_attribute' => array(
-        '<?xml version="1.0" encoding="UTF-8"?><config><type label="some_label" '
-            . 'name="some_name" modelInstance="model_name"><stockIndexerModel/></type></config>',
-        array("Element 'stockIndexerModel': The attribute 'instance' is required but missing.")),
+        '<?xml version="1.0" encoding="UTF-8"?><config><type label="some_label" ' .
+        'name="some_name" modelInstance="model_name"><stockIndexerModel/></type></config>',
+        array("Element 'stockIndexerModel': The attribute 'instance' is required but missing.")
+    )
 );

@@ -17,8 +17,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    mage.js
- * @package     test
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -35,7 +33,7 @@ EditTriggerTest.prototype.testCreate = function() {
      */
     var options = {
             img: 'img.gif',
-            alt: 'translate',
+            alt: 'translate'
         },
         editTrigger = jQuery(document).editTrigger(options);
     var trigger = jQuery('.translate-edit-icon');
@@ -56,7 +54,7 @@ EditTriggerTest.prototype.testShowHideOnMouseMove = function() {
      */
     var editTrigger = jQuery(document).editTrigger({
             editSelector: '.edit',
-            delay: 0,
+            delay: 0
         }),
         trigger = jQuery('.translate-edit-icon'),
         editElement = jQuery('.edit'),
@@ -74,7 +72,7 @@ EditTriggerTest.prototype.testTriggerClick = function() {
       </script>
     */
     var editTrigger = jQuery(document).editTrigger({
-            editSelector: '.edit',
+            editSelector: '.edit'
         }),
         trigger = jQuery('.translate-edit-icon'),
         editElement = jQuery('.edit'),
@@ -91,8 +89,8 @@ EditTriggerTest.prototype.testDestroy = function() {
         editProcessed = false,
         mousemoveProcessed = false;
     $(document)
-        .on('edit.editTrigger', function() {editProcessed = true})
-        .on('mousemove.editTrigger', function() {mousemoveProcessed = true});
+        .on('edit.editTrigger', function() {editProcessed = true;})
+        .on('mousemove.editTrigger', function() {mousemoveProcessed = true;});
     editTrigger.editTrigger('destroy');
     assertEquals(false, editTriggerExist === editTrigger.is(':mage-editTrigger'));
     $(document).trigger('edit.editTrigger');
@@ -111,7 +109,7 @@ EditTriggerTestAsync.prototype.testHideEditTriggerWithDelay = function(queue) {
      */
     var editTrigger = jQuery(document).editTrigger({
             editSelector: '.edit',
-            delay: 1000,
+            delay: 1000
         }),
         trigger = jQuery('.translate-edit-icon'),
         editElement = jQuery('.edit'),

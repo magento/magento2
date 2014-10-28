@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Eav
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -30,8 +27,7 @@
  */
 namespace Magento\Eav\Block\Adminhtml\Attribute\Edit\Main;
 
-class AbstractTest
-    extends \PHPUnit_Framework_TestCase
+class AbstractTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @magentoAppIsolation enabled
@@ -41,32 +37,35 @@ class AbstractTest
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $objectManager->get('Magento\Core\Model\App')
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()
             ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
-        $objectManager->get('Magento\View\DesignInterface')
+        $objectManager->get('Magento\Framework\View\DesignInterface')
             ->setDefaultDesignTheme();
         $entityType = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Eav\Model\Config')
             ->getEntityType('customer');
         $model = $objectManager->create('Magento\Customer\Model\Attribute');
         $model->setEntityTypeId($entityType->getId());
-        $objectManager->get('Magento\Core\Model\Registry')->register('entity_attribute', $model);
+        $objectManager->get('Magento\Framework\Registry')->register('entity_attribute', $model);
 
         $block = $this->getMockForAbstractClass(
             'Magento\Eav\Block\Adminhtml\Attribute\Edit\Main\AbstractMain',
             array(
                 $objectManager->get('Magento\Backend\Block\Template\Context'),
-                $objectManager->get('Magento\Core\Model\Registry'),
-                $objectManager->get('Magento\Data\FormFactory'),
+                $objectManager->get('Magento\Framework\Registry'),
+                $objectManager->get('Magento\Framework\Data\FormFactory'),
                 $objectManager->get('Magento\Eav\Helper\Data'),
                 $objectManager->get('Magento\Backend\Model\Config\Source\YesnoFactory'),
                 $objectManager->get('Magento\Eav\Model\Adminhtml\System\Config\Source\InputtypeFactory'),
                 $objectManager->get('Magento\Eav\Model\Entity\Attribute\Config')
             )
-        )
-        ->setLayout($objectManager->create('Magento\Core\Model\Layout'));
+        )->setLayout(
+            $objectManager->create('Magento\Framework\View\Layout')
+        );
 
         $method = new \ReflectionMethod(
-            'Magento\Eav\Block\Adminhtml\Attribute\Edit\Main\AbstractMain', '_prepareForm');
+            'Magento\Eav\Block\Adminhtml\Attribute\Edit\Main\AbstractMain',
+            '_prepareForm'
+        );
         $method->setAccessible(true);
         $method->invoke($block);
 

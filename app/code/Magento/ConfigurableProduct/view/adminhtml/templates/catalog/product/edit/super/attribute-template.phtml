@@ -1,0 +1,185 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+/* @var $this \Magento\Framework\View\Element\Template */
+
+$havePriceVariation = array_reduce(
+    $attribute['values'],
+    function (&$r, $i) {
+        return $r || !empty($i['pricing_value']);
+    },
+    false
+);
+$id = $this->escapeHtml($attribute['attribute_id']);
+?>
+
+<div class="entry-edit
+            <?php echo $havePriceVariation ? ' have-price' : '' ?>
+            " <?php echo $this->getUiId('attribute-container', $attribute['attribute_code']) ?>
+     data-role="configurable-attribute"
+     data-attribute="<?php echo $this->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode($attribute));?>">
+    <input name="attributes[]" id="configurable_attribute_<?php echo $id ?>"
+        value="<?php echo $id; ?>" type="hidden"/>
+    <input value="<?php echo $this->escapeHtml($attribute['id']); ?>" type="hidden"
+        name="product[configurable_attributes_data][<?php echo $id ?>][id]"/>
+    <input value="<?php echo $this->escapeHtml($attribute['attribute_code']); ?>" type="hidden"
+        name="product[configurable_attributes_data][<?php echo $id ?>][code]"/>
+    <input value="<?php echo $id; ?>" type="hidden"
+        name="product[configurable_attributes_data][<?php echo $id ?>][attribute_id]"/>
+    <input value="<?php echo $this->escapeHtml($attribute['position']); ?>" type="hidden"
+        name="product[configurable_attributes_data][<?php echo $id ?>][position]"/>
+
+    <?php /* empty <div> to avoid undesired showing with $('.collapse:first', entry).collapse('show'); in theme.js
+           * @TODO refactor collapsable and remove this <div> */?>
+    <div class="collapse hidden"></div>
+
+    <div class="fieldset-wrapper collapsable-wrapper" id="<?php echo $id ?>-wrapper">
+        <div class="fieldset-wrapper-title">
+            <strong class="title" data-toggle="collapse" data-target="#<?php echo $id ?>-content">
+                <span><?php echo $this->escapeHtml($attribute['label']); ?></span>
+            </strong>
+            <div class="actions">
+                <button type="button" title="<?php echo __('Delete Variations Group'); ?>" class="action-delete">
+                    <span><?php echo __('Delete Variations Group'); ?></span>
+                </button>
+            </div>
+            <div class="draggable-handle" title="<?php echo __('Sort Variations'); ?>"></div>
+        </div>
+        <div class="fieldset-wrapper-content collapse" id="<?php echo $id ?>-content" data-attribute-id="<?php echo $id ?>">
+            <fieldset class="fieldset">
+                <div class="field field-variation">
+                    <label class="label"><span><?php echo __('Variation Label'); ?></span></label>
+                    <div class="control">
+                        <input type="text" value="<?php echo $this->escapeHtml($attribute['label']); ?>"
+                               name="product[configurable_attributes_data][<?php echo $id ?>][label]"
+                               data-store-label="<?php echo $this->escapeHtml($attribute['label']); ?>"
+                               class="store-label required-entry"/>
+                    </div>
+                    <div class="field-service">
+                        <label for="attribute-<?php echo $id ?>" class="use-default">
+                            <input value="1"
+                                   type="checkbox"
+                                   class="use-default-control"
+                                   name="product[configurable_attributes_data][<?php echo $id ?>][use_default]"
+                                   id="attribute-<?php echo $id ?>"/>
+                            <span class="use-default-label"><?php echo __('Use Default')?></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="control">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th class="col-name"><?php echo __('Label'); ?></th>
+                                    <th class="col-change-price"><?php echo __('Change Price'); ?></th>
+                                    <th class="col-include"><?php echo __('Include'); ?></th>
+                                    <th class="col-actions"><?php echo __('Delete'); ?></th>
+                                </tr>
+                            </thead>
+                            <tbody data-role="options">
+                            <?php
+                            $namePrefix = 'product[configurable_attributes_data][' . $id . '][values]';
+                            foreach ($attribute['options'] as $option) {
+                                ?>
+                                <tr data-role="option-container">
+                                    <td class="col-name" data-column="name"><?php echo $this->escapeHtml($option['label']) ?></td>
+                                    <td class="col-change-price" data-column="change-price">
+                                        <?php
+                                        $pricingValue = '';
+                                        $isPercent = false;
+                                        $include = false;
+                                        $valueIndex = $option['value'];
+                                        foreach ($attribute['values'] as $priceValue) {
+                                            if ($valueIndex == $priceValue['value_index']) {
+                                                $pricingValue = $priceValue['pricing_value'];
+                                                $isPercent = (bool)$priceValue['is_percent'];
+                                                $include = true;
+                                                if (isset($priceValue['include'])) {
+                                                    $include = $include && (bool)$priceValue['include'];
+                                                }
+                                                break;
+                                            }
+                                        }
+                                        ?>
+                                        <input type="hidden"
+                                               name="<?php echo $namePrefix ?>[<?php echo $valueIndex ?>][value_index]"
+                                               value="<?php echo $this->escapeHtml($valueIndex); ?>">
+
+                                        <div class="field field-change-pricing">
+                                            <div class="control">
+                                                <div class="fields-group-2">
+                                                    <div class="field field-pricing-value">
+                                                        <div class="control">
+                                                            <input type="text" class="pricing-value validate-number"
+                                                                   name="<?php echo $namePrefix ?>[<?php echo $valueIndex ?>][pricing_value]"
+                                                                   value="<?php echo $this->escapeHtml($pricingValue); ?>">
+                                                        </div>
+                                                    </div>
+                                                    <div class="field field-pricing-measure">
+                                                        <div class="actions dropdown actions-select">
+                                                            <input name="<?php echo $namePrefix ?>[<?php echo $valueIndex ?>][is_percent]" type="hidden" value="<?php echo $isPercent ? 1 : 0; ?>"/>
+                                                            <button type="button" class="action toggle" data-toggle="dropdown" data-mage-init='{"dropdown":{}}'>
+                                                                <span><?php echo $isPercent ? __('%') : $this->getBaseCurrency()->getSymbol() ?></span>
+                                                            </button>
+                                                            <ul class="dropdown" data-role="dropdown-menu" data-mage-init='{"menu":{}}'>
+                                                                <li data-value="0"><a class="item"><?php echo $this->getBaseCurrency()->getSymbol() ?></a></li>
+                                                                <li data-value="1"><a class="item"><?php echo __('%')?></a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="col-include" data-column="include">
+                                        <input type="hidden"
+                                               name="<?php echo $namePrefix ?>[<?php echo $valueIndex ?>][include]"
+                                               value="0"/>
+                                        <div class="field choice">
+                                            <input type="checkbox" class="include"
+                                                   name="<?php echo $namePrefix ?>[<?php echo $valueIndex ?>][include]"
+                                                   value="1" <?php echo $include ? 'checked="checked"' : ''; ?> />
+                                        </div>
+                                    </td>
+                                    <td class="col-actions" data-column="actions">
+                                        <button type="button" class="action-locked" disabled="disabled"
+                                                data-action="delete" title="<?php echo __('Delete'); ?>">
+                                            <span><?php echo __('Delete'); ?></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <?php } ?>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="4" class="col-actions-add"><?php echo $this->getChildHtml('add_option'); ?></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+</div>

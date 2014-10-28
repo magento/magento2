@@ -18,24 +18,19 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Reports
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Reports\Block\Product;
 
 /**
  * Reports Recently Viewed Products Block
  *
- * @category   Magento
- * @package    Magento_Reports
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Reports\Block\Product;
-
-class Viewed extends \Magento\Reports\Block\Product\AbstractProduct
+class Viewed extends \Magento\Reports\Block\Product\AbstractProduct implements \Magento\Framework\View\Block\IdentityInterface
 {
-    const XML_PATH_RECENTLY_VIEWED_COUNT    = 'catalog/recently_products/viewed_count';
+    const XML_PATH_RECENTLY_VIEWED_COUNT = 'catalog/recently_products/viewed_count';
 
     /**
      * Viewed Product Index type
@@ -54,11 +49,13 @@ class Viewed extends \Magento\Reports\Block\Product\AbstractProduct
         if ($this->hasData('page_size')) {
             return $this->getData('page_size');
         }
-        return $this->_storeConfig->getConfig(self::XML_PATH_RECENTLY_VIEWED_COUNT);
+        return $this->_scopeConfig->getValue(self::XML_PATH_RECENTLY_VIEWED_COUNT, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
     /**
      * Added predefined ids support
+     *
+     * @return int
      */
     public function getCount()
     {
@@ -77,10 +74,21 @@ class Viewed extends \Magento\Reports\Block\Product\AbstractProduct
      */
     protected function _toHtml()
     {
-        if (!$this->getCount()) {
-            return '';
-        }
         $this->setRecentlyViewedProducts($this->getItemsCollection());
         return parent::_toHtml();
+    }
+
+    /**
+     * Return identifiers for produced content
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        $identities = array();
+        foreach ($this->getItemsCollection() as $item) {
+            $identities = array_merge($identities, $item->getIdentities());
+        }
+        return $identities;
     }
 }

@@ -18,51 +18,61 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model\Resource\Order;
 
 /**
  * Flat sales order address resource
  */
-namespace Magento\Sales\Model\Resource\Order;
-
-class Address extends \Magento\Sales\Model\Resource\Order\AbstractOrder
+class Address extends \Magento\Sales\Model\Resource\Entity
 {
     /**
      * Event prefix
      *
      * @var string
      */
-    protected $_eventPrefix    = 'sales_order_address_resource';
+    protected $_eventPrefix = 'sales_order_address_resource';
 
     /**
-     * @var \Magento\Sales\Model\Resource\Factory
+     * @var \Magento\Sales\Model\Order\Address\Validator
      */
-    protected $_salesResourceFactory;
+    protected $_validator;
 
     /**
-     * @param \Magento\App\Resource $resource
-     * @param \Magento\Stdlib\DateTime $dateTime
-     * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Eav\Model\Entity\TypeFactory $eavEntityTypeFactory
-     * @param \Magento\Sales\Model\Resource\Factory $salesResourceFactory
+     * @var \Magento\Sales\Model\Resource\GridPool
+     */
+    protected $gridPool;
+
+    /**
+     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param \Magento\Sales\Model\Resource\Attribute $attribute
+     * @param \Magento\Sales\Model\Increment $salesIncrement
+     * @param \Magento\Sales\Model\Order\Address\Validator $validator
+     * @param \Magento\Sales\Model\Resource\GridPool $gridPool
+     * @param \Magento\Sales\Model\Resource\GridInterface $gridAggregator
      */
     public function __construct(
-        \Magento\App\Resource $resource,
-        \Magento\Stdlib\DateTime $dateTime,
-        \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Eav\Model\Entity\TypeFactory $eavEntityTypeFactory,
-        \Magento\Sales\Model\Resource\Factory $salesResourceFactory
+        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Stdlib\DateTime $dateTime,
+        \Magento\Sales\Model\Resource\Attribute $attribute,
+        \Magento\Sales\Model\Increment $salesIncrement,
+        \Magento\Sales\Model\Order\Address\Validator $validator,
+        \Magento\Sales\Model\Resource\GridPool $gridPool,
+        \Magento\Sales\Model\Resource\GridInterface $gridAggregator = null
     ) {
-        parent::__construct($resource, $dateTime, $eventManager, $eavEntityTypeFactory);
-        $this->_salesResourceFactory = $salesResourceFactory;
+        $this->_validator = $validator;
+        $this->gridPool = $gridPool;
+        parent::__construct($resource, $dateTime, $attribute, $salesIncrement, $gridAggregator);
+
     }
 
     /**
      * Resource initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -77,47 +87,52 @@ class Address extends \Magento\Sales\Model\Resource\Order\AbstractOrder
     public function getAllAttributes()
     {
         $attributes = array(
-            'city'       => __('City'),
-            'company'    => __('Company'),
+            'city' => __('City'),
+            'company' => __('Company'),
             'country_id' => __('Country'),
-            'email'      => __('Email'),
-            'firstname'  => __('First Name'),
-            'lastname'   => __('Last Name'),
-            'region_id'  => __('State/Province'),
-            'street'     => __('Street Address'),
-            'telephone'  => __('Telephone'),
-            'postcode'   => __('Zip/Postal Code')
+            'email' => __('Email'),
+            'firstname' => __('First Name'),
+            'lastname' => __('Last Name'),
+            'region_id' => __('State/Province'),
+            'street' => __('Street Address'),
+            'telephone' => __('Phone Number'),
+            'postcode' => __('Zip/Postal Code')
         );
         asort($attributes);
         return $attributes;
     }
 
     /**
+     * Performs validation before save
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return $this
+     * @throws \Magento\Framework\Model\Exception
+     */
+    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
+    {
+        parent::_beforeSave($object);
+        $warnings = $this->_validator->validate($object);
+        if (!empty($warnings)) {
+            throw new \Magento\Framework\Model\Exception(
+                __("Cannot save address") . ":\n" . implode("\n", $warnings)
+            );
+        }
+        return $this;
+    }
+
+    /**
      * Update related grid table after object save
      *
-     * @param \Magento\Core\Model\AbstractModel|\Magento\Object $object
-     * @return \Magento\Core\Model\Resource\Db\AbstractDb
+     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\Object $object
+     * @return \Magento\Framework\Model\Resource\Db\AbstractDb
      */
-    protected function _afterSave(\Magento\Core\Model\AbstractModel $object)
+    protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
         $resource = parent::_afterSave($object);
-        if ($object->hasDataChanges() && $object->getOrder()) {
-            $gridList = array(
-                'Magento\Sales\Model\Resource\Order' => 'entity_id',
-                'Magento\Sales\Model\Resource\Order\Invoice' => 'order_id',
-                'Magento\Sales\Model\Resource\Order\Shipment' => 'order_id',
-                'Magento\Sales\Model\Resource\Order\Creditmemo' => 'order_id'
-            );
-
-            // update grid table after grid update
-            foreach ($gridList as $gridResource => $field) {
-                $this->_salesResourceFactory->create($gridResource)->updateOnRelatedRecordChanged(
-                    $field,
-                    $object->getParentId()
-                );
-            }
+        if ($object->hasDataChanges() && $object->getOrderId()) {
+            $this->gridPool->refreshByOrderId($object->getOrderId());
         }
-
         return $resource;
     }
 }

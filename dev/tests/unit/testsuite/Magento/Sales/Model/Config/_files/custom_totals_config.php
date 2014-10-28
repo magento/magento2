@@ -18,34 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 $result = require __DIR__ . '/core_totals_config.php';
 $result += array(
-    'handling' => array(
-        'after'  => array('shipping'),
-        'before' => array('tax'),
-    ),
-    'handling_tax' => array(
-        'after'  => array('tax_shipping'),
-        'before' => array('tax'),
-    ),
-    'own_subtotal' => array(
-        'after'  => array('nominal'),
-        'before' => array('subtotal'),
-    ),
-    'own_total1' => array(
-        'after'  => array('nominal'),
-        'before' => array('subtotal'),
-    ),
-    'own_total2' => array(
-        'after'  => array('nominal'),
-        'before' => array('subtotal'),
-    ),
+    'handling' => array('after' => array('shipping'), 'before' => array('tax')),
+    'handling_tax' => array('after' => array('tax_shipping'), 'before' => array('tax')),
+    'own_subtotal' => array('after' => array('nominal'), 'before' => array('subtotal')),
+    'own_total1' => array('after' => array('nominal'), 'before' => array('subtotal')),
+    'own_total2' => array('after' => array('nominal'), 'before' => array('subtotal'))
 );
 return $result;

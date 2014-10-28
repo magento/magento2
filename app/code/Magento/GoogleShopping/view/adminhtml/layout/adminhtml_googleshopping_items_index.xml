@@ -23,12 +23,13 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <referenceBlock name="head">
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-googleshopping-googleshopping-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_GoogleShopping::googleshopping.js</argument>
-            </arguments>
-        </block>
-    </referenceBlock>
-</layout>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <head>
+        <link src="Magento_GoogleShopping::js/bootstrap.js"/>
+    </head>
+    <referenceContainer name="page.main.actions">
+        <block class="Magento\Backend\Block\Store\Switcher"
+               name="store_switcher"
+               template="Magento_Backend::store/switcher.phtml" />
+    </referenceContainer>
+</page>

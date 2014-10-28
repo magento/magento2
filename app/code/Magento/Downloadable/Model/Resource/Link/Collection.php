@@ -18,26 +18,22 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Downloadable
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Downloadable\Model\Resource\Link;
 
 /**
  * Downloadable links resource collection
  *
- * @category    Magento
- * @package     Magento_Downloadable
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Downloadable\Model\Resource\Link;
-
-class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Init resource model
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -48,7 +44,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Method for product filter
      *
      * @param \Magento\Catalog\Model\Product|array|integer|null $product
-     * @return \Magento\Downloadable\Model\Resource\Link\Collection
+     * @return $this
      */
     public function addProductToFilter($product)
     {
@@ -66,22 +62,25 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Retrieve title for for current store
      *
-     * @param integer $storeId
-     * @return \Magento\Downloadable\Model\Resource\Link\Collection
+     * @param int $storeId
+     * @return $this
      */
     public function addTitleToResult($storeId = 0)
     {
-        $ifNullDefaultTitle = $this->getConnection()
-            ->getIfNullSql('st.title', 'd.title');
-        $this->getSelect()
-            ->joinLeft(array('d' => $this->getTable('downloadable_link_title')),
-                'd.link_id=main_table.link_id AND d.store_id = 0',
-                array('default_title' => 'title'))
-            ->joinLeft(array('st' => $this->getTable('downloadable_link_title')),
-                'st.link_id=main_table.link_id AND st.store_id = ' . (int)$storeId,
-                array('store_title' => 'title','title' => $ifNullDefaultTitle))
-            ->order('main_table.sort_order ASC')
-            ->order('title ASC');
+        $ifNullDefaultTitle = $this->getConnection()->getIfNullSql('st.title', 'd.title');
+        $this->getSelect()->joinLeft(
+            array('d' => $this->getTable('downloadable_link_title')),
+            'd.link_id=main_table.link_id AND d.store_id = 0',
+            array('default_title' => 'title')
+        )->joinLeft(
+            array('st' => $this->getTable('downloadable_link_title')),
+            'st.link_id=main_table.link_id AND st.store_id = ' . (int)$storeId,
+            array('store_title' => 'title', 'title' => $ifNullDefaultTitle)
+        )->order(
+            'main_table.sort_order ASC'
+        )->order(
+            'title ASC'
+        );
 
         return $this;
     }
@@ -89,20 +88,21 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Retrieve price for for current website
      *
-     * @param integer $websiteId
-     * @return \Magento\Downloadable\Model\Resource\Link\Collection
+     * @param int $websiteId
+     * @return $this
      */
     public function addPriceToResult($websiteId)
     {
-        $ifNullDefaultPrice = $this->getConnection()
-            ->getIfNullSql('stp.price', 'dp.price');
-        $this->getSelect()
-            ->joinLeft(array('dp' => $this->getTable('downloadable_link_price')),
-                'dp.link_id=main_table.link_id AND dp.website_id = 0',
-                array('default_price' => 'price'))
-            ->joinLeft(array('stp' => $this->getTable('downloadable_link_price')),
-                'stp.link_id=main_table.link_id AND stp.website_id = ' . (int)$websiteId,
-                array('website_price' => 'price','price' => $ifNullDefaultPrice));
+        $ifNullDefaultPrice = $this->getConnection()->getIfNullSql('stp.price', 'dp.price');
+        $this->getSelect()->joinLeft(
+            array('dp' => $this->getTable('downloadable_link_price')),
+            'dp.link_id=main_table.link_id AND dp.website_id = 0',
+            array('default_price' => 'price')
+        )->joinLeft(
+            array('stp' => $this->getTable('downloadable_link_price')),
+            'stp.link_id=main_table.link_id AND stp.website_id = ' . (int)$websiteId,
+            array('website_price' => 'price', 'price' => $ifNullDefaultPrice)
+        );
 
         return $this;
     }

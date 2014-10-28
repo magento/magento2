@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Menu\Filter;
 
 class IteratorTest extends \PHPUnit_Framework_TestCase
@@ -61,12 +57,13 @@ class IteratorTest extends \PHPUnit_Framework_TestCase
         $this->_items['item3']->expects($this->any())->method('isDisabled')->will($this->returnValue(false));
         $this->_items['item3']->expects($this->any())->method('isAllowed')->will($this->returnValue(false));
 
-        $loggerMock = $this->getMock('Magento\Logger', array(), array(), '', false);
+        $loggerMock = $this->getMock('Magento\Framework\Logger', array(), array(), '', false);
 
         $this->_menuModel = new \Magento\Backend\Model\Menu($loggerMock);
-        $this->_filterIteratorModel = new \Magento\Backend\Model\Menu\Filter\Iterator($this->_menuModel->getIterator());
+        $this->_filterIteratorModel = new \Magento\Backend\Model\Menu\Filter\Iterator(
+            $this->_menuModel->getIterator()
+        );
     }
-
 
     public function testLoopWithAllItemsDisabledDoesntIterate()
     {

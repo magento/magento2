@@ -18,19 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Checkout
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Checkout\Block\Total;
 
 /**
  * Nominal total rendered
  *
  * Each item is rendered as separate total with its details
  */
-namespace Magento\Checkout\Block\Total;
-
 class Nominal extends \Magento\Checkout\Block\Total\DefaultTotal
 {
     /**
@@ -39,6 +36,31 @@ class Nominal extends \Magento\Checkout\Block\Total\DefaultTotal
      * @var string
      */
     protected $_template = 'total/nominal.phtml';
+
+    /**
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Sales\Model\Config $salesConfig
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Sales\Model\Config $salesConfig,
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
+        array $data = array()
+    ) {
+        $this->priceCurrency = $priceCurrency;
+        parent::__construct($context, $customerSession, $checkoutSession, $salesConfig, $data);
+    }
 
     /**
      * Getter for a quote item name
@@ -76,10 +98,10 @@ class Nominal extends \Magento\Checkout\Block\Total\DefaultTotal
     /**
      * Getter for details row label
      *
-     * @param \Magento\Object $row
+     * @param \Magento\Framework\Object $row
      * @return string
      */
-    public function getItemDetailsRowLabel(\Magento\Object $row)
+    public function getItemDetailsRowLabel(\Magento\Framework\Object $row)
     {
         return $row->getLabel();
     }
@@ -87,10 +109,10 @@ class Nominal extends \Magento\Checkout\Block\Total\DefaultTotal
     /**
      * Getter for details row amount
      *
-     * @param \Magento\Object $row
+     * @param \Magento\Framework\Object $row
      * @return string
      */
-    public function getItemDetailsRowAmount(\Magento\Object $row)
+    public function getItemDetailsRowAmount(\Magento\Framework\Object $row)
     {
         return $row->getAmount();
     }
@@ -98,10 +120,10 @@ class Nominal extends \Magento\Checkout\Block\Total\DefaultTotal
     /**
      * Getter for details row compounded state
      *
-     * @param \Magento\Object $row
+     * @param \Magento\Framework\Object $row
      * @return bool
      */
-    public function getItemDetailsRowIsCompounded(\Magento\Object $row)
+    public function getItemDetailsRowIsCompounded(\Magento\Framework\Object $row)
     {
         return $row->getIsCompounded();
     }
@@ -114,7 +136,7 @@ class Nominal extends \Magento\Checkout\Block\Total\DefaultTotal
      */
     public function formatPrice($amount)
     {
-        return $this->_store->formatPrice($amount, false);
+        return $this->priceCurrency->format($amount, false);
     }
 
     /**

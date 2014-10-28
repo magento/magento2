@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Install
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -31,6 +29,8 @@
  */
 namespace Magento\Install\Block;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class Download extends \Magento\Install\Block\AbstractBlock
 {
     /**
@@ -39,24 +39,24 @@ class Download extends \Magento\Install\Block\AbstractBlock
     protected $_template = 'download.phtml';
 
     /**
-     * @var \Magento\Module\Dir\Reader
+     * @var \Magento\Framework\Module\Dir\Reader
      */
     protected $_moduleReader;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Install\Model\Installer $installer
      * @param \Magento\Install\Model\Wizard $installWizard
-     * @param \Magento\Session\Generic $session
-     * @param \Magento\Module\Dir\Reader $moduleReader
+     * @param \Magento\Framework\Session\Generic $session
+     * @param \Magento\Framework\Module\Dir\Reader $moduleReader
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Install\Model\Installer $installer,
         \Magento\Install\Model\Wizard $installWizard,
-        \Magento\Session\Generic $session,
-        \Magento\Module\Dir\Reader $moduleReader,
+        \Magento\Framework\Session\Generic $session,
+        \Magento\Framework\Module\Dir\Reader $moduleReader,
         array $data = array()
     ) {
         parent::__construct($context, $installer, $installWizard, $session, $data);
@@ -78,9 +78,7 @@ class Download extends \Magento\Install\Block\AbstractBlock
      */
     public function getNextUrl()
     {
-        return $this->_installWizard
-            ->getStepByName('download')
-            ->getNextUrl();
+        return $this->_installWizard->getStepByName('download')->getNextUrl();
     }
 
     /**
@@ -89,7 +87,7 @@ class Download extends \Magento\Install\Block\AbstractBlock
     public function hasLocalCopy()
     {
         $path = $this->_moduleReader->getModuleDir('etc', 'Magento_Adminhtml');
-        $directory = $this->_filesystem->getDirectoryRead(\Magento\Filesystem::MODULES);
+        $directory = $this->_filesystem->getDirectoryRead(DirectoryList::MODULES);
 
         if ($path && $directory->isDirectory($directory->getRelativePath($path))) {
             return true;

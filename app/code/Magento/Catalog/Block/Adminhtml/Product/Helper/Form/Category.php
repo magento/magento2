@@ -18,21 +18,21 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Adminhtml
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
+
+use Magento\Catalog\Model\Resource\Category\Collection;
+use Magento\Framework\AuthorizationInterface;
 
 /**
  * Product form category field helper
  */
-class Category extends \Magento\Data\Form\Element\Multiselect
+class Category extends \Magento\Framework\Data\Form\Element\Multiselect
 {
     /**
-     * @var \Magento\View\LayoutInterface
+     * @var \Magento\Framework\View\LayoutInterface
      */
     protected $_layout;
 
@@ -49,39 +49,61 @@ class Category extends \Magento\Data\Form\Element\Multiselect
     protected $_collectionFactory;
 
     /**
-     * @var \Magento\Json\EncoderInterface
+     * @var \Magento\Framework\Json\EncoderInterface
      */
     protected $_jsonEncoder;
 
     /**
-     * @param \Magento\Data\Form\Element\Factory $factoryElement
-     * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
-     * @param \Magento\Escaper $escaper
+     * @var AuthorizationInterface
+     */
+    protected $authorization;
+
+    /**
+     * @param \Magento\Framework\Data\Form\Element\Factory $factoryElement
+     * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
+     * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Catalog\Model\Resource\Category\CollectionFactory $collectionFactory
      * @param \Magento\Backend\Helper\Data $backendData
-     * @param \Magento\View\LayoutInterface $layout
-     * @param \Magento\Json\EncoderInterface $jsonEncoder
+     * @param \Magento\Framework\View\LayoutInterface $layout
+     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
+     * @param AuthorizationInterface $authorization
      * @param array $data
      */
     public function __construct(
-        \Magento\Data\Form\Element\Factory $factoryElement,
-        \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
-        \Magento\Escaper $escaper,
+        \Magento\Framework\Data\Form\Element\Factory $factoryElement,
+        \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection,
+        \Magento\Framework\Escaper $escaper,
         \Magento\Catalog\Model\Resource\Category\CollectionFactory $collectionFactory,
         \Magento\Backend\Helper\Data $backendData,
-        \Magento\View\LayoutInterface $layout,
-        \Magento\Json\EncoderInterface $jsonEncoder,
-        array $data = array()
+        \Magento\Framework\View\LayoutInterface $layout,
+        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
+        AuthorizationInterface $authorization,
+        array $data = []
     ) {
         $this->_jsonEncoder = $jsonEncoder;
         $this->_collectionFactory = $collectionFactory;
         $this->_backendData = $backendData;
+        $this->authorization = $authorization;
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
         $this->_layout = $layout;
     }
 
     /**
+     * Get no display
+     *
+     * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     */
+    public function getNoDisplay()
+    {
+
+        $isNotAllowed = !$this->authorization->isAllowed('Magento_Catalog::categories');
+        return $this->getData('no_display') || $isNotAllowed;
+    }
+
+    /**
      * Get values for select
+     *
      * @return array
      */
     public function getValues()
@@ -94,20 +116,18 @@ class Category extends \Magento\Data\Form\Element\Multiselect
         $collection->addAttributeToSelect('name');
         $collection->addIdFilter($values);
 
-        $options = array();
+        $options = [];
 
         foreach ($collection as $category) {
-            $options[] = array(
-                'label' => $category->getName(),
-                'value' => $category->getId()
-            );
+            $options[] = ['label' => $category->getName(), 'value' => $category->getId()];
         }
         return $options;
     }
 
     /**
      * Get categories collection
-     * @return \Magento\Catalog\Model\Resource\Category\Collection
+     *
+     * @return Collection
      */
     protected function _getCategoriesCollection()
     {
@@ -126,18 +146,23 @@ class Category extends \Magento\Data\Form\Element\Multiselect
         $selectorOptions = $this->_jsonEncoder->encode($this->_getSelectorOptions());
         $newCategoryCaption = __('New Category');
 
-        $button = $this->_layout
-            ->createBlock('Magento\Backend\Block\Widget\Button')
-            ->setData(array(
-                'id'        => 'add_category_button',
-                'label'     => $newCategoryCaption,
-                'title'     => $newCategoryCaption,
-                'onclick'   => 'jQuery("#new-category").dialog("open")'
-            ));
+        $button = $this->_layout->createBlock(
+            'Magento\Backend\Block\Widget\Button'
+        )->setData(
+                [
+                    'id' => 'add_category_button',
+                    'label' => $newCategoryCaption,
+                    'title' => $newCategoryCaption,
+                    'onclick' => 'jQuery("#new-category").dialog("open")',
+                    'disabled' => $this->getDisabled()
+                ]
+            );
         $return = <<<HTML
     <input id="{$htmlId}-suggest" placeholder="$suggestPlaceholder" />
-    <script>
-        jQuery('#{$htmlId}-suggest').mage('treeSuggest', {$selectorOptions});
+    <script type="text/javascript">
+        require(["jquery", "mage/mage", "mage/backend/tree-suggest"], function($){
+            $('#{$htmlId}-suggest').mage('treeSuggest', {$selectorOptions});
+        });
     </script>
 HTML;
         return $return . $button->toHtml();
@@ -150,13 +175,12 @@ HTML;
      */
     protected function _getSelectorOptions()
     {
-        return array(
-            'source' => $this->_backendData
-                ->getUrl('catalog/category/suggestCategories'),
+        return [
+            'source' => $this->_backendData->getUrl('catalog/category/suggestCategories'),
             'valueField' => '#' . $this->getHtmlId(),
             'className' => 'category-select',
             'multiselect' => true,
             'showAll' => true
-        );
+        ];
     }
 }

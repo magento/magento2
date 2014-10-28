@@ -1,0 +1,43 @@
+namespace \Magento\Framework\Service\Code\Generator;
+
+/**
+ * Mapper class for \Magento\Framework\Service\Code\Generator\Sample
+ */
+class SampleMapper
+{
+    /**
+     * sampleBuilder
+     *
+     * @var \Magento\Framework\Service\Code\Generator\SampleBuilder
+     */
+    protected $sampleBuilder = null;
+
+    /**
+     * Magento\Framework\Service\Code\Generator\Sample[]
+     *
+     * @var array
+     */
+    protected $registry = array();
+
+    /**
+     * Mapper constructor
+     *
+     * @param \Magento\Framework\Service\Code\Generator\Sample $sampleBuilder
+     */
+    public function __construct(\Magento\Framework\Service\Code\Generator\SampleBuilder $sampleBuilder)
+    {
+        $this->sampleBuilder = $sampleBuilder;
+    }
+
+    /**
+     * Extract data object from model
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return \Magento\Framework\Service\Code\Generator\Sample
+     */
+    public function extractDto(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $this->sampleBuilder->populateWithArray($object->getData());
+        return $this->sampleBuilder->create();
+    }
+}

@@ -1,0 +1,87 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+
+<script type="text/javascript">
+require(['prototype'], function(){
+
+//<![CDATA[
+var itemType = function() {
+    return {
+        updateAttributes: function() {
+            if ($("select_attribute_set").value != "" && itemType.confirmChanges())
+            {
+                var elements = [$("select_attribute_set"), $("select_target_country")].flatten();
+                $('save_button').disabled = true;
+                new Ajax.Updater("attributes_details", "<?php echo $this->getUrl('*/*/loadAttributes') ?>",
+                    {
+                        parameters:Form.serializeElements(elements),
+                        evalScripts:true,
+                        onComplete:function(){ $('save_button').disabled = false; }
+                    }
+                );
+            }
+        },
+
+        reloadItemTypes: function() {
+            if ($("select_target_country").value != "" && itemType.confirmChanges())
+            {
+                var elements = [$("select_attribute_set"),$("select_target_country")].flatten();
+                new Ajax.Updater("attribute_set_select", "<?php echo $this->getUrl('*/*/loadAttributeSets') ?>",
+                    {
+                        parameters:Form.serializeElements(elements),
+                        evalScripts:true,
+                        onComplete:function(){
+                            $('save_button').disabled = false;
+                            Event.observe($("select_attribute_set"), 'change', itemType.updateAttributes);
+                        }
+                    }
+                );
+                $("attributes_details").innerHTML = "<?php echo __('Please, select Attribute Set and Google Item Type to load attributes') ?>";
+            }
+        },
+
+        confirmChanges: function() {
+            var blocksCount = Element.select($("attributes_details"), "div[id^=gcontent_attribute_]").length;
+            return blocksCount > 0 &&
+                confirm("<?php echo __('Current Mapping will be reloaded. Continue?') ?>") ||
+                blocksCount == 0;
+        }
+    }
+}();
+
+ Event.observe(window, 'load', function(){
+     if ($("select_attribute_set")) {
+         Event.observe($("select_attribute_set"), 'change', itemType.updateAttributes);
+     }
+     if ($("select_target_country")) {
+         Event.observe($("select_target_country"), 'change', itemType.reloadItemTypes);
+     }
+});
+
+window.itemType = itemType;
+//]]>
+
+});
+</script>

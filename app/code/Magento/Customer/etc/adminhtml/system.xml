@@ -19,13 +19,11 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/system_file.xsd">
     <system>
         <tab id="customer" translate="label" sortOrder="300">
             <label>Customers</label>
@@ -42,13 +40,6 @@
                     <label>Share Customer Accounts</label>
                     <backend_model>Magento\Customer\Model\Config\Share</backend_model>
                     <source_model>Magento\Customer\Model\Config\Share</source_model>
-                </field>
-            </group>
-            <group id="online_customers" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
-                <label>Online Customers Options</label>
-                <field id="online_minutes_interval" translate="label comment" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Online Minutes Interval</label>
-                    <comment>Leave empty for default (15 minutes).</comment>
                 </field>
             </group>
             <group id="create_account" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">

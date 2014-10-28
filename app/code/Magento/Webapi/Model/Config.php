@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Magento
  *
@@ -22,12 +21,17 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\Webapi\Model;
+
+use Magento\Webapi\Model\Config\Reader;
+use Zend\Code\Reflection\ClassReflection;
+use Magento\Webapi\Model\Cache\Type as WebapiCache;
 
 /**
  * Web API Config Model.
  *
- * This is a parent class for storing information about Web API. Most of it is needed by REST.
+ * This is a parent class for storing information about service configuration.
  */
 class Config
 {
@@ -36,40 +40,33 @@ class Config
     /**
      * Pattern for Web API interface name.
      */
-    const SERVICE_CLASS_PATTERN = '/^(.+?)\\\\(.+?)\\\\Service(\\\\.+)+(V\d+)Interface$/';
+    const SERVICE_CLASS_PATTERN = '/^(.+?)\\\\(.+?)\\\\Service\\\\(V\d+)+(\\\\.+)Interface$/';
 
     /**
-     * @var \Magento\App\Cache\Type\Config
+     * @var WebapiCache
      */
-    protected $_configCacheType;
+    protected $cache;
 
     /**
-     * @var \Magento\Webapi\Model\Config\Reader
+     * @var Reader
      */
-    protected $_configReader;
-
-    /**
-     * Module configuration reader
-     *
-     * @var \Magento\Module\Dir\Reader
-     */
-    protected $_moduleReader;
+    protected $configReader;
 
     /**
      * @var array
      */
-    protected $_services;
+    protected $services;
 
     /**
-     * @param Cache\Type $configCacheType
-     * @param Config\Reader $configReader
+     * Initialize dependencies.
+     *
+     * @param WebapiCache $cache
+     * @param Reader $configReader
      */
-    public function __construct(
-        \Magento\Webapi\Model\Cache\Type $configCacheType,
-        \Magento\Webapi\Model\Config\Reader $configReader
-    ) {
-        $this->_configCacheType = $configCacheType;
-        $this->_configReader = $configReader;
+    public function __construct(WebapiCache $cache, Reader $configReader)
+    {
+        $this->cache = $cache;
+        $this->configReader = $configReader;
     }
 
     /**
@@ -79,35 +76,15 @@ class Config
      */
     public function getServices()
     {
-        if (null === $this->_services) {
-            $services = $this->_loadFromCache();
+        if (null === $this->services) {
+            $services = $this->cache->load(self::CACHE_ID);
             if ($services && is_string($services)) {
-                $this->_services = unserialize($services);
+                $this->services = unserialize($services);
             } else {
-                $this->_services = $this->_configReader->read();
-                $this->_saveToCache(serialize($this->_services));
+                $this->services = $this->configReader->read();
+                $this->cache->save(serialize($this->services), self::CACHE_ID);
             }
         }
-        return $this->_services;
-    }
-
-    /**
-     * Load services from cache
-     */
-    protected function _loadFromCache()
-    {
-        return $this->_configCacheType->load(self::CACHE_ID);
-    }
-
-    /**
-     * Save services into the cache
-     *
-     * @param string $data serialized version of the webapi registry
-     * @return \Magento\Webapi\Model\Config
-     */
-    protected function _saveToCache($data)
-    {
-        $this->_configCacheType->save($data, self::CACHE_ID, array(\Magento\Webapi\Model\Cache\Type::CACHE_TAG));
-        return $this;
+        return $this->services;
     }
 }

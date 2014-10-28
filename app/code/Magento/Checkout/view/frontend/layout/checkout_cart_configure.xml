@@ -23,8 +23,11 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <update handle="catalog_product_view"/>
+    <referenceBlock name="head.components">
+        <block class="Magento\Framework\View\Element\Js\Components" name="checkout_cart_configure_head_components" template="Magento_Checkout::js/components.phtml"/>
+    </referenceBlock>
     <referenceBlock name="product.info">
         <block class="Magento\Checkout\Block\Cart\Item\Configure" name="checkout.cart.item.configure.block"/>
     </referenceBlock>
@@ -38,4 +41,4 @@
             <argument name="template" xsi:type="string">Magento_Checkout::cart/item/configure/updatecart.phtml</argument>
         </action>
     </referenceBlock>
-</layout>
+</page>

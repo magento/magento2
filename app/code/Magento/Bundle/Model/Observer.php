@@ -18,21 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Bundle
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Bundle\Model;
 
 /**
  * Bundle Products Observer
  *
- * @category    Magento
- * @package     Magento_Bundle
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Bundle\Model;
-
 class Observer
 {
     /**
@@ -86,46 +81,10 @@ class Observer
     }
 
     /**
-     * Setting Bundle Items Data to product for father processing
-     *
-     * @param \Magento\Object $observer
-     * @return \Magento\Bundle\Model\Observer
-     */
-    public function prepareProductSave($observer)
-    {
-        $request = $observer->getEvent()->getRequest();
-        $product = $observer->getEvent()->getProduct();
-
-        if (($items = $request->getPost('bundle_options')) && !$product->getCompositeReadonly()) {
-            $product->setBundleOptionsData($items);
-        }
-
-        if (($selections = $request->getPost('bundle_selections')) && !$product->getCompositeReadonly()) {
-            $product->setBundleSelectionsData($selections);
-        }
-
-        if ($product->getPriceType() == '0' && !$product->getOptionsReadonly()) {
-            $product->setCanSaveCustomOptions(true);
-            if ($customOptions = $product->getProductOptions()) {
-                foreach (array_keys($customOptions) as $key) {
-                    $customOptions[$key]['is_delete'] = 1;
-                }
-                $product->setProductOptions($customOptions);
-            }
-        }
-
-        $product->setCanSaveBundleSelections(
-            (bool)$request->getPost('affect_bundle_product_selections') && !$product->getCompositeReadonly()
-        );
-
-        return $this;
-    }
-
-    /**
      * Append bundles in upsell list for current product
      *
-     * @param \Magento\Object $observer
-     * @return \Magento\Bundle\Model\Observer
+     * @param \Magento\Framework\Object $observer
+     * @return $this
      */
     public function appendUpsellProducts($observer)
     {
@@ -141,7 +100,7 @@ class Observer
 
         /* @var $collection \Magento\Catalog\Model\Resource\Product\Link\Product\Collection */
         $collection = $observer->getEvent()->getCollection();
-        $limit      = $observer->getEvent()->getLimit();
+        $limit = $observer->getEvent()->getLimit();
         if (is_array($limit)) {
             if (isset($limit['upsell'])) {
                 $limit = $limit['upsell'];
@@ -151,7 +110,7 @@ class Observer
         }
 
         /* @var $resource \Magento\Bundle\Model\Resource\Selection */
-        $resource   = $this->_bundleSelection;
+        $resource = $this->_bundleSelection;
 
         $productIds = array_keys($collection->getItems());
         if (!is_null($limit) && $limit <= count($productIds)) {
@@ -159,34 +118,37 @@ class Observer
         }
 
         // retrieve bundle product ids
-        $bundleIds  = $resource->getParentIdsByChild($product->getId());
+        $bundleIds = $resource->getParentIdsByChild($product->getId());
         // exclude up-sell product ids
-        $bundleIds  = array_diff($bundleIds, $productIds);
+        $bundleIds = array_diff($bundleIds, $productIds);
 
         if (!$bundleIds) {
             return $this;
         }
 
         /* @var $bundleCollection \Magento\Catalog\Model\Resource\Product\Collection */
-        $bundleCollection = $product->getCollection()
-            ->addAttributeToSelect($this->_config->getProductAttributes())
-            ->addStoreFilter()
-            ->addMinimalPrice()
-            ->addFinalPrice()
-            ->addTaxPercents()
-            ->setVisibility($this->_productVisibility->getVisibleInCatalogIds());
+        $bundleCollection = $product->getCollection()->addAttributeToSelect(
+            $this->_config->getProductAttributes()
+        )->addStoreFilter()->addMinimalPrice()->addFinalPrice()->addTaxPercents()->setVisibility(
+            $this->_productVisibility->getVisibleInCatalogIds()
+        );
 
         if (!is_null($limit)) {
             $bundleCollection->setPageSize($limit);
         }
-        $bundleCollection->addFieldToFilter('entity_id', array('in' => $bundleIds))
-            ->setFlag('do_not_use_category_id', true);
+        $bundleCollection->addFieldToFilter(
+            'entity_id',
+            array('in' => $bundleIds)
+        )->setFlag(
+            'do_not_use_category_id',
+            true
+        );
 
-        if ($collection instanceof \Magento\Data\Collection) {
+        if ($collection instanceof \Magento\Framework\Data\Collection) {
             foreach ($bundleCollection as $item) {
                 $collection->addItem($item);
             }
-        } elseif ($collection instanceof \Magento\Object) {
+        } elseif ($collection instanceof \Magento\Framework\Object) {
             $items = $collection->getItems();
             foreach ($bundleCollection as $item) {
                 $items[$item->getEntityId()] = $item;
@@ -201,8 +163,8 @@ class Observer
      * Add price index data for catalog product collection
      * only for front end
      *
-     * @param \Magento\Event\Observer $observer
-     * @return \Magento\Bundle\Model\Observer
+     * @param \Magento\Framework\Event\Observer $observer
+     * @return $this
      */
     public function loadProductOptions($observer)
     {
@@ -214,74 +176,18 @@ class Observer
     }
 
     /**
-     * duplicating bundle options and selections
-     *
-     * @param \Magento\Object $observer
-     * @return \Magento\Bundle\Model\Observer
-     */
-    public function duplicateProduct($observer)
-    {
-        $product = $observer->getEvent()->getCurrentProduct();
-
-        if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-            //do nothing if not bundle
-            return $this;
-        }
-
-        $newProduct = $observer->getEvent()->getNewProduct();
-
-        $product->getTypeInstance()->setStoreFilter($product->getStoreId(), $product);
-        $optionCollection = $product->getTypeInstance()->getOptionsCollection($product);
-        $selectionCollection = $product->getTypeInstance()->getSelectionsCollection(
-            $product->getTypeInstance()->getOptionsIds($product),
-            $product
-        );
-        $optionCollection->appendSelections($selectionCollection);
-
-        $optionRawData = array();
-        $selectionRawData = array();
-
-        $i = 0;
-        foreach ($optionCollection as $option) {
-            $optionRawData[$i] = array(
-                    'required' => $option->getData('required'),
-                    'position' => $option->getData('position'),
-                    'type' => $option->getData('type'),
-                    'title' => $option->getData('title')?$option->getData('title'):$option->getData('default_title'),
-                    'delete' => ''
-                );
-            foreach ($option->getSelections() as $selection) {
-                $selectionRawData[$i][] = array(
-                    'product_id' => $selection->getProductId(),
-                    'position' => $selection->getPosition(),
-                    'is_default' => $selection->getIsDefault(),
-                    'selection_price_type' => $selection->getSelectionPriceType(),
-                    'selection_price_value' => $selection->getSelectionPriceValue(),
-                    'selection_qty' => $selection->getSelectionQty(),
-                    'selection_can_change_qty' => $selection->getSelectionCanChangeQty(),
-                    'delete' => ''
-                );
-            }
-            $i++;
-        }
-
-        $newProduct->setBundleOptionsData($optionRawData);
-        $newProduct->setBundleSelectionsData($selectionRawData);
-        return $this;
-    }
-
-    /**
      * Setting attribute tab block for bundle
      *
-     * @param \Magento\Object $observer
-     * @return \Magento\Bundle\Model\Observer
+     * @param \Magento\Framework\Object $observer
+     * @return $this
      */
     public function setAttributeTabBlock($observer)
     {
         $product = $observer->getEvent()->getProduct();
         if ($product->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-            $this->_helperCatalog
-                ->setAttributeTabBlock('Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes');
+            $this->_helperCatalog->setAttributeTabBlock(
+                'Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes'
+            );
         }
         return $this;
     }
@@ -289,10 +195,10 @@ class Observer
     /**
      * Initialize product options renderer with bundle specific params
      *
-     * @param \Magento\Event\Observer $observer
-     * @return \Magento\Bundle\Model\Observer
+     * @param \Magento\Framework\Event\Observer $observer
+     * @return $this
      */
-    public function initOptionRenderer(\Magento\Event\Observer $observer)
+    public function initOptionRenderer(\Magento\Framework\Event\Observer $observer)
     {
         $block = $observer->getBlock();
         $block->addOptionsRenderCfg('bundle', 'Magento\Bundle\Helper\Catalog\Product\Configuration');

@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Adminhtml
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,18 +25,16 @@
 /**
  * Product form image field helper
  *
- * @category   Magento
- * @package    Magento_Catalog
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 
-class BaseImage extends \Magento\Data\Form\Element\AbstractElement
+class BaseImage extends \Magento\Framework\Data\Form\Element\AbstractElement
 {
     /**
      * Model Url instance
      *
-     * @var \Magento\Backend\Model\Url
+     * @var \Magento\Backend\Model\UrlInterface
      */
     protected $_url;
 
@@ -53,38 +49,38 @@ class BaseImage extends \Magento\Data\Form\Element\AbstractElement
     protected $_catalogHelperData;
 
     /**
-     * @var \Magento\File\Size
+     * @var \Magento\Framework\File\Size
      */
     protected $_fileConfig;
 
     /**
-     * @var \Magento\View\Url
+     * @var \Magento\Framework\View\Asset\Repository
      */
-    protected $_viewUrl;
+    protected $_assetRepo;
 
     /**
-     * @param \Magento\Data\Form\Element\Factory $factoryElement
-     * @param \Magento\Data\Form\Element\CollectionFactory $factoryCollection
-     * @param \Magento\Escaper $escaper
-     * @param \Magento\View\UrlFactory $coreViewUrlFactory
+     * @param \Magento\Framework\Data\Form\Element\Factory $factoryElement
+     * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
+     * @param \Magento\Framework\Escaper $escaper
+     * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Backend\Model\UrlFactory $backendUrlFactory
      * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\File\Size $fileConfig
+     * @param \Magento\Framework\File\Size $fileConfig
      * @param array $data
      */
     public function __construct(
-        \Magento\Data\Form\Element\Factory $factoryElement,
-        \Magento\Data\Form\Element\CollectionFactory $factoryCollection,
-        \Magento\Escaper $escaper,
-        \Magento\View\UrlFactory $coreViewUrlFactory,
+        \Magento\Framework\Data\Form\Element\Factory $factoryElement,
+        \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection,
+        \Magento\Framework\Escaper $escaper,
+        \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Backend\Model\UrlFactory $backendUrlFactory,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\File\Size $fileConfig,
+        \Magento\Framework\File\Size $fileConfig,
         array $data = array()
     ) {
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
 
-        $this->_viewUrl = $coreViewUrlFactory->create();
+        $this->_assetRepo = $assetRepo;
         $this->_url = $backendUrlFactory->create();
         $this->_catalogHelperData = $catalogData;
         $this->_fileConfig = $fileConfig;
@@ -110,7 +106,7 @@ class BaseImage extends \Magento\Data\Form\Element\AbstractElement
     {
         $htmlId = $this->_escaper->escapeHtml($this->getHtmlId());
         $uploadUrl = $this->_escaper->escapeHtml($this->_getUploadUrl());
-        $spacerImage = $this->_viewUrl->getViewFileUrl('images/spacer.gif');
+        $spacerImage = $this->_assetRepo->getUrl('images/spacer.gif');
         $imagePlaceholderText = __('Click here or drag and drop to add images');
         $deleteImageText = __('Delete image');
         $makeBaseText = __('Make Base');
@@ -119,7 +115,7 @@ class BaseImage extends \Magento\Data\Form\Element\AbstractElement
         /** @var $product \Magento\Catalog\Model\Product */
         $html = <<<HTML
 <div id="{$htmlId}-container" class="images"
-    data-mage-init="{baseImage:{}}"
+    data-mage-init='{"baseImage":{}}'
     data-max-file-size="{$this->_getFileMaxSize()}"
     >
     <div class="image image-placeholder">
@@ -149,14 +145,17 @@ class BaseImage extends \Magento\Data\Form\Element\AbstractElement
     <span>{$imageManagementText}</span>
 </span>
 <script>
-    (function($) {
+    require([
+        'jquery'
+    ],function($){
+
         'use strict';
 
         $('[data-activate-tab=image-management]')
             .on('click.toggleImageManagementTab', function() {
                 $('#product_info_tabs_image-management').trigger('click');
             });
-    })(window.jQuery);
+    });
 </script>
 
 HTML;

@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_CatalogRule
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,17 +26,16 @@
 /**
  * Catalog Rule Product Aggregated Price per date Resource Model
  *
- * @category    Magento
- * @package     Magento_CatalogRule
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\CatalogRule\Model\Resource\Rule\Product;
 
-class Price extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Initialize connection and define main table
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -48,7 +45,7 @@ class Price extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Apply price rule price to price index table
      *
-     * @param \Magento\DB\Select $select
+     * @param \Magento\Framework\DB\Select $select
      * @param array|string $indexTable
      * @param string $entityId
      * @param string $customerGroupId
@@ -57,9 +54,15 @@ class Price extends \Magento\Core\Model\Resource\Db\AbstractDb
      * @param string $websiteDate
      * @return \Magento\CatalogRule\Model\Resource\Rule\Product\Price
      */
-    public function applyPriceRuleToIndexTable(\Magento\DB\Select $select, $indexTable, $entityId, $customerGroupId,
-        $websiteId, $updateFields, $websiteDate)
-    {
+    public function applyPriceRuleToIndexTable(
+        \Magento\Framework\DB\Select $select,
+        $indexTable,
+        $entityId,
+        $customerGroupId,
+        $websiteId,
+        $updateFields,
+        $websiteDate
+    ) {
         if (empty($updateFields)) {
             return $this;
         }
@@ -77,12 +80,21 @@ class Price extends \Magento\Core\Model\Resource\Db\AbstractDb
             $indexAlias = $indexTable;
         }
 
-        $select->join(array('rp' => $this->getMainTable()), "rp.rule_date = {$websiteDate}", array())
-               ->where("rp.product_id = {$entityId} AND rp.website_id = {$websiteId} AND rp.customer_group_id = {$customerGroupId}");
+        $select->join(
+            array('rp' => $this->getMainTable()),
+            "rp.rule_date = {$websiteDate}",
+            array()
+        )->where(
+            "rp.product_id = {$entityId} AND rp.website_id = {$websiteId} AND rp.customer_group_id = {$customerGroupId}"
+        );
 
         foreach ($updateFields as $priceField) {
             $priceCond = $this->_getWriteAdapter()->quoteIdentifier(array($indexAlias, $priceField));
-            $priceExpr = $this->_getWriteAdapter()->getCheckSql("rp.rule_price < {$priceCond}", 'rp.rule_price', $priceCond);
+            $priceExpr = $this->_getWriteAdapter()->getCheckSql(
+                "rp.rule_price < {$priceCond}",
+                'rp.rule_price',
+                $priceCond
+            );
             $select->columns(array($priceField => $priceExpr));
         }
 

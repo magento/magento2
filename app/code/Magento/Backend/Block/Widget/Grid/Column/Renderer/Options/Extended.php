@@ -23,8 +23,7 @@
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer\Options;
 
-class Extended
-    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Options
+class Extended extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Options
 {
     /**
      * @var \Magento\Backend\Block\Widget\Grid\Column\Renderer\Options\Converter

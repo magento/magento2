@@ -42,8 +42,12 @@ class StatusTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_factoryMock = $this->getMock('Magento\Log\Model\Resource\ShellFactory',
-            array('create'), array(), '', false
+        $this->_factoryMock = $this->getMock(
+            'Magento\Log\Model\Resource\ShellFactory',
+            array('create'),
+            array(),
+            '',
+            false
         );
         $this->_shellMock = $this->getMock('Magento\Log\Model\Resource\Shell', array(), array(), '', false);
         $this->_factoryMock->expects($this->once())->method('create')->will($this->returnValue($this->_shellMock));
@@ -77,25 +81,19 @@ class StatusTest extends \PHPUnit_Framework_TestCase
     public function executeDataFormatDataProvider()
     {
         return array(
-           array(
-               array(
-                   'name' => 'table_1',
-                   'rows' => 1500,
-                   'data_length' => 1000,
-                   'index_length' => 1024 * 1024,
-               ),
-               '/table_1( )+\|( )+1\.50K( )+\|( )+1000 b( )+\|( )+1\.00Mb( )+\|/'
-           ),
-
             array(
-               array(
-                   'name' => 'table_2',
-                   'rows' => 1500000,
-                   'data_length' => 1024 * 1024 * 1024,
-                   'index_length' => 1024 * 1024 * 1024 * 500,
-               ),
+                array('name' => 'table_1', 'rows' => 1500, 'data_length' => 1000, 'index_length' => 1024 * 1024),
+                '/table_1( )+\|( )+1\.50K( )+\|( )+1000 b( )+\|( )+1\.00Mb( )+\|/'
+            ),
+            array(
+                array(
+                    'name' => 'table_2',
+                    'rows' => 1500000,
+                    'data_length' => 1024 * 1024 * 1024,
+                    'index_length' => 1024 * 1024 * 1024 * 500
+                ),
                 '/table_2( )+\|( )+1\.50M( )+\|( )+1\.00Gb( )+\|( )+500\.00Gb( )+\|/'
-           ),
+            )
         );
     }
 }

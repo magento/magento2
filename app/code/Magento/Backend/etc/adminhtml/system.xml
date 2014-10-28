@@ -19,13 +19,11 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/system_file.xsd">
     <system>
         <tab id="general" translate="label" sortOrder="100">
             <label>General</label>
@@ -124,11 +122,11 @@
                 <label>Design Theme</label>
                 <field id="theme_id" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Design Theme</label>
-                    <source_model>Magento\View\Design\Theme\Label::getLabelsCollectionForSystemConfiguration</source_model>
+                    <source_model>Magento\Framework\View\Design\Theme\Label::getLabelsCollectionForSystemConfiguration</source_model>
                     <backend_model>Magento\Core\Model\Design\Backend\Theme</backend_model>
                     <comment><![CDATA[If no value is specified, the system default will be used. The system default may be modified by third party extensions.]]></comment>
                 </field>
-                <field id="ua_regexp" translate="label comment tooltip" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="ua_regexp" translate="label comment tooltip" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>User-Agent Exceptions</label>
                     <frontend_model>Magento\Backend\Block\System\Config\Form\Field\Regexceptions</frontend_model>
                     <backend_model>Magento\Core\Model\Design\Backend\Exceptions</backend_model>
@@ -223,12 +221,12 @@
                 <field id="file" translate="label comment" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>System Log File Name</label>
                     <backend_model>Magento\Backend\Model\Config\Backend\Filename</backend_model>
-                    <comment>Logging from \Magento\Logger. File is located in {{base_dir}}/var/log</comment>
+                    <comment>Logging from \Magento\Framework\Logger. File is located in {{base_dir}}/var/log</comment>
                 </field>
                 <field id="exception_file" translate="label comment" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Exceptions Log File Name</label>
                     <backend_model>Magento\Backend\Model\Config\Backend\Filename</backend_model>
-                    <comment>Logging from \Magento\Logger. File is located in {{base_dir}}/var/log</comment>
+                    <comment>Logging from \Magento\Framework\Logger. File is located in {{base_dir}}/var/log</comment>
                 </field>
             </group>
             <group id="js" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -509,7 +507,7 @@
                 </field>
             </group>
             <group id="seo" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Search Engines Optimization</label>
+                <label>Search Engine Optimization</label>
                 <field id="use_rewrites" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Use Web Server Rewrites</label>
                     <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
@@ -533,16 +531,6 @@
                     <backend_model>Magento\Backend\Model\Config\Backend\Baseurl</backend_model>
                     <comment>May be empty or start with {{unsecure_base_url}} placeholder.</comment>
                 </field>
-                <field id="base_cache_url" translate="label comment" type="text" sortOrder="26" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Base URL for View Files Cache</label>
-                    <backend_model>Magento\Backend\Model\Config\Backend\Baseurl</backend_model>
-                    <comment>May be empty or start with {{unsecure_base_url}} placeholder.</comment>
-                </field>
-                <field id="base_lib_url" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Base URL for Static Library Files</label>
-                    <backend_model>Magento\Backend\Model\Config\Backend\Baseurl</backend_model>
-                    <comment>May be empty or start with {{unsecure_base_url}} placeholder. &lt;br/&gt; &lt;strong style="color:red"&gt;Warning!&lt;/strong&gt; When using CDN, in some cases JavaScript may not run properly if CDN is not in your subdomain</comment>
-                </field>
                 <field id="base_media_url" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Base URL for User Media Files</label>
                     <backend_model>Magento\Backend\Model\Config\Backend\Baseurl</backend_model>
@@ -551,7 +539,7 @@
             </group>
             <group id="secure" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Base URLs (Secure)</label>
-                <comment>Any of the fields allow fully qualified URLs that end with '/' (slash) e.g. http://example.com/magento/</comment>
+                <comment>Any of the fields allow fully qualified URLs that end with '/' (slash) e.g. https://example.com/magento/</comment>
                 <field id="base_url" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Secure Base URL</label>
                     <backend_model>Magento\Backend\Model\Config\Backend\Baseurl</backend_model>
@@ -567,16 +555,6 @@
                     <backend_model>Magento\Backend\Model\Config\Backend\Baseurl</backend_model>
                     <comment>May be empty or start with {{secure_base_url}}, or {{unsecure_base_url}} placeholder.</comment>
                 </field>
-                <field id="base_cache_url" translate="label comment" type="text" sortOrder="26" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Secure Base URL for View Files Cache</label>
-                    <backend_model>Magento\Backend\Model\Config\Backend\Baseurl</backend_model>
-                    <comment>May be empty or start with {{secure_base_url}}, or {{unsecure_base_url}} placeholder.</comment>
-                </field>
-                <field id="base_lib_url" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Secure Base URL for Static Library Files</label>
-                    <backend_model>Magento\Backend\Model\Config\Backend\Baseurl</backend_model>
-                    <comment>May be empty or start with {{secure_base_url}}, or {{unsecure_base_url}} placeholder.</comment>
-                </field>
                 <field id="base_media_url" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Secure Base URL for User Media Files</label>
                     <backend_model>Magento\Backend\Model\Config\Backend\Baseurl</backend_model>
@@ -586,11 +564,13 @@
                     <label>Use Secure URLs in Frontend</label>
                     <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
                     <backend_model>Magento\Backend\Model\Config\Backend\Secure</backend_model>
+                    <comment>Enter https protocol to use Secure URLs in Frontend.</comment>
                 </field>
                 <field id="use_in_adminhtml" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Use Secure URLs in Admin</label>
                     <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
                     <backend_model>Magento\Backend\Model\Config\Backend\Secure</backend_model>
+                    <comment>Enter https protocol to use Secure URLs in Admin.</comment>
                 </field>
                 <field id="offloader_header" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Offloader header</label>
@@ -609,15 +589,21 @@
                 <label>Default Cookie Settings</label>
                 <field id="cookie_lifetime" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Cookie Lifetime</label>
+                    <backend_model>Magento\Backend\Model\Config\Backend\Cookie\Lifetime</backend_model>
                 </field>
                 <field id="cookie_path" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Cookie Path</label>
+                    <backend_model>Magento\Backend\Model\Config\Backend\Cookie\Path</backend_model>
                 </field>
                 <field id="cookie_domain" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Cookie Domain</label>
+                    <backend_model>Magento\Backend\Model\Config\Backend\Cookie\Domain</backend_model>
                 </field>
                 <field id="cookie_httponly" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Use HTTP Only</label>
+                    <comment>
+                        <![CDATA[<strong style="color:red">Warning</strong>:  Do not set to "No". User security could be compromised.]]>
+                    </comment>
                     <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="cookie_restriction" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">

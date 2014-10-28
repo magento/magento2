@@ -18,11 +18,10 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_DesignEditor
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DesignEditor\Block\Adminhtml\Theme\Selector\SelectorList;
 
 /**
  * Available theme list
@@ -30,10 +29,7 @@
  * @method int getNextPage()
  * @method \Magento\DesignEditor\Block\Adminhtml\Theme\Selector\SelectorList\Available setNextPage(int $page)
  */
-namespace Magento\DesignEditor\Block\Adminhtml\Theme\Selector\SelectorList;
-
-class Available
-    extends \Magento\DesignEditor\Block\Adminhtml\Theme\Selector\SelectorList\AbstractSelectorList
+class Available extends \Magento\DesignEditor\Block\Adminhtml\Theme\Selector\SelectorList\AbstractSelectorList
 {
     /**
      * Get tab title
@@ -52,16 +48,17 @@ class Available
      */
     public function getNextPageUrl()
     {
-        return $this->getNextPage() <= $this->getCollection()->getLastPageNumber()
-            ? $this->getUrl('adminhtml/*/*', array('page' => $this->getNextPage()))
-            : '';
+        return $this->getNextPage() <= $this->getCollection()->getLastPageNumber() ? $this->getUrl(
+            'adminhtml/*/*',
+            array('page' => $this->getNextPage())
+        ) : '';
     }
 
     /**
      * Get edit button
      *
      * @param \Magento\DesignEditor\Block\Adminhtml\Theme $themeBlock
-     * @return $this
+     * @return void
      */
     protected function _addEditButtonHtml($themeBlock)
     {
@@ -69,21 +66,21 @@ class Available
 
         /** @var $assignButton \Magento\Backend\Block\Widget\Button */
         $assignButton = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button');
-        $assignButton->setData(array(
-            'label' => __('Edit'),
-            'data_attribute' => array(
-                'mage-init' => array(
-                    'button' => array(
-                        'event' => 'themeEdit',
-                        'target' => 'body',
-                        'eventData' => array(
-                            'theme_id' => $themeId
+        $assignButton->setData(
+            array(
+                'label' => __('Edit'),
+                'data_attribute' => array(
+                    'mage-init' => array(
+                        'button' => array(
+                            'event' => 'themeEdit',
+                            'target' => 'body',
+                            'eventData' => array('theme_id' => $themeId)
                         )
-                    ),
+                    )
                 ),
-            ),
-            'class' => 'action-edit',
-        ));
+                'class' => 'action-edit'
+            )
+        );
 
         $themeBlock->addButton($assignButton);
     }
@@ -92,7 +89,7 @@ class Available
      * Add theme buttons
      *
      * @param \Magento\DesignEditor\Block\Adminhtml\Theme $themeBlock
-     * @return \Magento\DesignEditor\Block\Adminhtml\Theme\Selector\SelectorList\AbstractSelectorList
+     * @return $this
      */
     protected function _addThemeButtons($themeBlock)
     {

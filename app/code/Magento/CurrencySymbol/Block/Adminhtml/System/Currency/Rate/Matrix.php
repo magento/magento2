@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Adminhtml
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,14 +25,15 @@
 /**
  * Manage currency block
  *
- * @category   Magento
- * @package    Magento_Adminhtml
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\CurrencySymbol\Block\Adminhtml\System\Currency\Rate;
 
 class Matrix extends \Magento\Backend\Block\Template
 {
+    /**
+     * @var string
+     */
     protected $_template = 'system/currency/rate/matrix.phtml';
 
     /**
@@ -56,6 +55,11 @@ class Matrix extends \Magento\Backend\Block\Template
         parent::__construct($context, $data);
     }
 
+    /**
+     * Prepare layout
+     *
+     * @return \Magento\Framework\View\Element\AbstractBlock
+     */
     protected function _prepareLayout()
     {
         $newRates = $this->_backendSession->getRates();
@@ -80,19 +84,35 @@ class Matrix extends \Magento\Backend\Block\Template
 
         sort($currencies);
 
-        $this->setAllowedCurrencies($currencies)
-            ->setDefaultCurrencies($defaultCurrencies)
-            ->setOldRates($oldCurrencies)
-            ->setNewRates($this->_prepareRates($newRates));
+        $this->setAllowedCurrencies(
+            $currencies
+        )->setDefaultCurrencies(
+            $defaultCurrencies
+        )->setOldRates(
+            $oldCurrencies
+        )->setNewRates(
+            $this->_prepareRates($newRates)
+        );
 
         return parent::_prepareLayout();
     }
 
+    /**
+     * Get rates form action
+     *
+     * @return string
+     */
     public function getRatesFormAction()
     {
         return $this->getUrl('adminhtml/*/saveRates');
     }
 
+    /**
+     * Prepare rates
+     *
+     * @param array $array
+     * @return array
+     */
     protected function _prepareRates($array)
     {
         if (!is_array($array)) {

@@ -18,24 +18,25 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Order\Create\Shipping\Method;
+
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Adminhtml sales order create shipping method form block
  *
- * @category   Magento
- * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Adminhtml\Order\Create\Shipping\Method;
-
-class Form
-    extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
+class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
+    /**
+     * Shipping rates
+     *
+     * @var array
+     */
     protected $_rates;
 
     /**
@@ -46,23 +47,38 @@ class Form
     protected $_taxData = null;
 
     /**
+     * @var PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Model\Session\Quote $sessionQuote
      * @param \Magento\Sales\Model\AdminOrder\Create $orderCreate
+     * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Tax\Helper\Data $taxData
+     * @param PriceCurrencyInterface $priceCurrency
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Model\Session\Quote $sessionQuote,
         \Magento\Sales\Model\AdminOrder\Create $orderCreate,
+        PriceCurrencyInterface $priceCurrency,
         \Magento\Tax\Helper\Data $taxData,
+        PriceCurrencyInterface $priceCurrency,
         array $data = array()
     ) {
+        $this->priceCurrency = $priceCurrency;
         $this->_taxData = $taxData;
-        parent::__construct($context, $sessionQuote, $orderCreate, $data);
+        parent::__construct($context, $sessionQuote, $orderCreate, $priceCurrency, $data);
     }
 
+    /**
+     * Constructor
+     *
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -95,12 +111,17 @@ class Form
     /**
      * Rertrieve carrier name from store configuration
      *
-     * @param   string $carrierCode
-     * @return  string
+     * @param string $carrierCode
+     * @return string
      */
     public function getCarrierName($carrierCode)
     {
-        if ($name = $this->_storeConfig->getConfig('carriers/'.$carrierCode.'/title', $this->getStore()->getId())) {
+        if ($name = $this->_scopeConfig->getValue(
+            'carriers/' . $carrierCode . '/title',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $this->getStore()->getId()
+        )
+        ) {
             return $name;
         }
         return $carrierCode;
@@ -119,18 +140,18 @@ class Form
     /**
      * Check activity of method by code
      *
-     * @param   string $code
-     * @return  bool
+     * @param string $code
+     * @return bool
      */
     public function isMethodActive($code)
     {
-        return $code===$this->getShippingMethod();
+        return $code === $this->getShippingMethod();
     }
 
     /**
      * Retrieve rate of active shipping method
      *
-     * @return \Magento\Sales\Model\Quote\Address\Rate || false
+     * @return \Magento\Sales\Model\Quote\Address\Rate|false
      */
     public function getActiveMethodRate()
     {
@@ -147,23 +168,36 @@ class Form
         return false;
     }
 
+    /**
+     * Get rate request
+     *
+     * @return mixed
+     */
     public function getIsRateRequest()
     {
         return $this->getRequest()->getParam('collect_shipping_rates');
     }
 
+    /**
+     * Get shipping price
+     *
+     * @param float $price
+     * @param bool $flag
+     * @return float
+     */
     public function getShippingPrice($price, $flag)
     {
-        return $this->getQuote()->getStore()->convertPrice(
+        return $this->priceCurrency->convertAndFormat(
             $this->_taxData->getShippingPrice(
                 $price,
                 $flag,
                 $this->getAddress(),
                 null,
-                //We should send exact quote store to prevent fetching default config for admin store.
                 $this->getAddress()->getQuote()->getStore()
             ),
-            true
+            true,
+            PriceCurrencyInterface::DEFAULT_PRECISION,
+            $this->getQuote()->getStore()
         );
     }
 }

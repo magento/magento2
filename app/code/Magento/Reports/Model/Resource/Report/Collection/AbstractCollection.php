@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Reports
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,68 +26,66 @@
 /**
  * Report collection abstract model
  *
- * @category    Magento
- * @package     Magento_Reports
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Reports\Model\Resource\Report\Collection;
 
-class AbstractCollection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class AbstractCollection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * From date
      *
      * @var string
      */
-    protected $_from               = null;
+    protected $_from = null;
 
     /**
      * To date
      *
      * @var string
      */
-    protected $_to                 = null;
+    protected $_to = null;
 
     /**
      * Period
      *
      * @var string
      */
-    protected $_period             = null;
+    protected $_period = null;
 
     /**
      * Store ids
      *
      * @var int|array
      */
-    protected $_storesIds          = 0;
+    protected $_storesIds = 0;
 
     /**
      * Is totals
      *
      * @var bool
      */
-    protected $_isTotals           = false;
+    protected $_isTotals = false;
 
     /**
      * Is subtotals
      *
      * @var bool
      */
-    protected $_isSubTotals        = false;
+    protected $_isSubTotals = false;
 
     /**
      * Aggregated columns
      *
      * @var array
      */
-    protected $_aggregatedColumns  = array();
+    protected $_aggregatedColumns = array();
 
     /**
      * Set array of columns that should be aggregated
      *
      * @param array $columns
-     * @return \Magento\Sales\Model\Resource\Report\Collection\AbstractCollection
+     * @return $this
      */
     public function setAggregatedColumns(array $columns)
     {
@@ -112,12 +108,12 @@ class AbstractCollection extends \Magento\Core\Model\Resource\Db\Collection\Abst
      *
      * @param mixed $from
      * @param mixed $to
-     * @return \Magento\Sales\Model\Resource\Report\Collection\AbstractCollection
+     * @return $this
      */
     public function setDateRange($from = null, $to = null)
     {
         $this->_from = $from;
-        $this->_to   = $to;
+        $this->_to = $to;
         return $this;
     }
 
@@ -125,7 +121,7 @@ class AbstractCollection extends \Magento\Core\Model\Resource\Db\Collection\Abst
      * Set period
      *
      * @param string $period
-     * @return \Magento\Sales\Model\Resource\Report\Collection\AbstractCollection
+     * @return $this
      */
     public function setPeriod($period)
     {
@@ -134,9 +130,19 @@ class AbstractCollection extends \Magento\Core\Model\Resource\Db\Collection\Abst
     }
 
     /**
+     * Apply needed aggregated table
+     *
+     * @return $this
+     */
+    protected function _applyAggregatedTable()
+    {
+        return $this;
+    }
+
+    /**
      * Apply date range filter
      *
-     * @return \Magento\Sales\Model\Resource\Report\Collection\AbstractCollection
+     * @return $this
      */
     protected function _applyDateRangeFilter()
     {
@@ -155,7 +161,7 @@ class AbstractCollection extends \Magento\Core\Model\Resource\Db\Collection\Abst
      * Set store ids
      *
      * @param mixed $storeIds (null, int|string, array, array may contain null)
-     * @return \Magento\Sales\Model\Resource\Report\Collection\AbstractCollection
+     * @return $this
      */
     public function addStoreFilter($storeIds)
     {
@@ -167,12 +173,12 @@ class AbstractCollection extends \Magento\Core\Model\Resource\Db\Collection\Abst
      * Apply stores filter to select object
      *
      * @param \Zend_Db_Select $select
-     * @return \Magento\Sales\Model\Resource\Report\Collection\AbstractCollection
+     * @return $this
      */
     protected function _applyStoresFilterToSelect(\Zend_Db_Select $select)
     {
         $nullCheck = false;
-        $storeIds  = $this->_storesIds;
+        $storeIds = $this->_storesIds;
 
         if (!is_array($storeIds)) {
             $storeIds = array($storeIds);
@@ -184,8 +190,6 @@ class AbstractCollection extends \Magento\Core\Model\Resource\Db\Collection\Abst
             unset($storeIds[$index]);
             $nullCheck = true;
         }
-
-        $storeIds[0] = ($storeIds[0] == '') ? 0 : $storeIds[0];
 
         if ($nullCheck) {
             $select->where('store_id IN(?) OR store_id IS NULL', $storeIds);
@@ -199,7 +203,7 @@ class AbstractCollection extends \Magento\Core\Model\Resource\Db\Collection\Abst
     /**
      * Apply stores filter
      *
-     * @return \Magento\Sales\Model\Resource\Report\Collection\AbstractCollection
+     * @return $this
      */
     protected function _applyStoresFilter()
     {
@@ -209,8 +213,8 @@ class AbstractCollection extends \Magento\Core\Model\Resource\Db\Collection\Abst
     /**
      * Getter/Setter for isTotals
      *
-     * @param null|boolean $flag
-     * @return \Magento\Sales\Model\Resource\Report\Collection\AbstractCollection
+     * @param null|bool $flag
+     * @return $this
      */
     public function isTotals($flag = null)
     {
@@ -224,8 +228,8 @@ class AbstractCollection extends \Magento\Core\Model\Resource\Db\Collection\Abst
     /**
      * Getter/Setter for isSubTotals
      *
-     * @param null|boolean $flag
-     * @return \Magento\Sales\Model\Resource\Report\Collection\AbstractCollection
+     * @param null|bool $flag
+     * @return $this
      */
     public function isSubTotals($flag = null)
     {
@@ -239,7 +243,7 @@ class AbstractCollection extends \Magento\Core\Model\Resource\Db\Collection\Abst
     /**
      * Custom filters application ability
      *
-     * @return \Magento\Reports\Model\Resource\Report\Collection\AbstractCollection
+     * @return $this
      */
     protected function _applyCustomFilter()
     {
@@ -247,12 +251,23 @@ class AbstractCollection extends \Magento\Core\Model\Resource\Db\Collection\Abst
     }
 
     /**
-     * Apply filters common to reports
-     *
-     * @return \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+     * @return $this
      */
     protected function _initSelect()
     {
+        return $this;
+    }
+
+    /**
+     * Apply filters common to reports
+     *
+     * @return $this
+     */
+    protected function _beforeLoad()
+    {
+        parent::_beforeLoad();
+
+        $this->_applyAggregatedTable();
         $this->_applyDateRangeFilter();
         $this->_applyStoresFilter();
         $this->_applyCustomFilter();

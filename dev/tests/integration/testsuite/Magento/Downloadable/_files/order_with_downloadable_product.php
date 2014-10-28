@@ -18,49 +18,57 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Downlodable
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-$billingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Sales\Model\Order\Address',
+$billingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    'Magento\Sales\Model\Order\Address',
     array(
         'data' => array(
-            'firstname'  => 'guest',
-            'lastname'   => 'guest',
-            'email'      => 'customer@example.com',
-            'street'     => 'street',
-            'city'       => 'Los Angeles',
-            'region'     => 'CA',
-            'postcode'   => '1',
+            'firstname' => 'guest',
+            'lastname' => 'guest',
+            'email' => 'customer@example.com',
+            'street' => 'street',
+            'city' => 'Los Angeles',
+            'region' => 'CA',
+            'postcode' => '1',
             'country_id' => 'US',
-            'telephone'  => '1',
+            'telephone' => '1'
         )
     )
 );
 $billingAddress->setAddressType('billing');
 
-$payment = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Sales\Model\Order\Payment');
+$payment = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order\Payment');
 $payment->setMethod('checkmo');
 
-$orderItem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Sales\Model\Order\Item');
-$orderItem->setProductId(1)
-    ->setProductType(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE)
-    ->setBasePrice(100)
-    ->setQtyOrdered(1);
+$orderItem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order\Item');
+$orderItem->setProductId(
+    1
+)->setProductType(
+    \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE
+)->setBasePrice(
+    100
+)->setQtyOrdered(
+    1
+);
 
-$order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Sales\Model\Order');
-$order->addItem($orderItem)
-    ->setIncrementId('100000001')
-    ->setCustomerIsGuest(true)
-    ->setStoreId(1)
-    ->setEmailSent(1)
-    ->setBillingAddress($billingAddress)
-    ->setPayment($payment);
+$order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order');
+$order->setCustomerEmail('mail@to.co')
+    ->addItem(
+    $orderItem
+)->setIncrementId(
+    '100000001'
+)->setCustomerIsGuest(
+    true
+)->setStoreId(
+    1
+)->setEmailSent(
+    1
+)->setBillingAddress(
+    $billingAddress
+)->setPayment(
+    $payment
+);
 $order->save();

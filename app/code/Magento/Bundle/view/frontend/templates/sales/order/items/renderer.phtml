@@ -1,0 +1,160 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/** @var $this \Magento\Bundle\Block\Sales\Order\Items\Renderer */
+?>
+<?php $parentItem = $this->getItem() ?>
+<?php $items = array_merge(array($parentItem), $parentItem->getChildrenItems()); ?>
+<?php $_count = count ($items) ?>
+<?php $_index = 0 ?>
+
+<?php $_prevOptionId = '' ?>
+
+<?php foreach ($items as $_item): ?>
+
+    <?php if($this->getItemOptions() || $parentItem->getDescription() || $this->helper('Magento\GiftMessage\Helper\Message')->getIsMessagesAvailable('order_item', $parentItem) && $parentItem->getGiftMessageId()): ?>
+        <?php $_showlastRow = true ?>
+    <?php else: ?>
+        <?php $_showlastRow = false ?>
+    <?php endif; ?>
+
+    <?php if ($_item->getParentItem()): ?>
+        <?php $attributes = $this->getSelectionAttributes($_item) ?>
+        <?php if ($_prevOptionId != $attributes['option_id']): ?>
+            <tr class="options-label">
+                <td class="col label" colspan="5"><?php echo $attributes['option_label'] ?></td>
+            </tr>
+            <?php $_prevOptionId = $attributes['option_id'] ?>
+        <?php endif; ?>
+    <?php endif; ?>
+<tr id="order-item-row-<?php echo $_item->getId() ?>" class="<?php if ($_item->getParentItem()): ?>item-options<?php else: ?>item-parent<?php endif; ?>"<?php if ($_item->getParentItem()): ?> data-th="<?php echo $attributes['option_label'] ?>"<?php endif; ?>>
+    <?php if (!$_item->getParentItem()): ?>
+        <td class="col name" data-th="<?php echo $this->escapeHtml(__('Product Name')); ?>">
+            <strong class="product name product-item-name"><?php echo $this->escapeHtml($_item->getName()) ?></strong>
+        </td>
+    <?php else: ?>
+        <td class="col value" data-th="<?php echo $this->escapeHtml(__('Product Name')); ?>"><?php echo $this->getValueHtml($_item)?></td>
+    <?php endif; ?>
+    <td class="col sku" data-th="<?php echo $this->escapeHtml(__('SKU')); ?>"><?php echo $this->prepareSku($_item->getSku()) ?></td>
+    <td class="col price" data-th="<?php echo $this->escapeHtml(__('Price')); ?>">
+        <?php if (!$_item->getParentItem()): ?>
+            <?php echo $this->getItemPriceHtml(); ?>
+        <?php else: ?>
+            &nbsp;
+        <?php endif; ?>
+    </td>
+    <td class="col qty" data-th="<?php echo $this->escapeHtml(__('Qty')); ?>">
+        <?php if (
+        ($_item->getParentItem() && $this->isChildCalculated()) ||
+        (!$_item->getParentItem() && !$this->isChildCalculated()) || ($_item->getQtyShipped() > 0 && $_item->getParentItem() && $this->isShipmentSeparately())):?>
+            <ul class="items-qty">
+        <?php endif; ?>
+        <?php if (($_item->getParentItem() && $this->isChildCalculated()) ||
+            (!$_item->getParentItem() && !$this->isChildCalculated())): ?>
+            <?php if ($_item->getQtyOrdered() > 0): ?>
+                <li class="item">
+                    <span class="title"><?php echo __('Ordered'); ?></span>
+                    <span class="content"><?php echo $_item->getQtyOrdered()*1 ?></span>
+                </li>
+            <?php endif; ?>
+            <?php if ($_item->getQtyShipped() > 0 && !$this->isShipmentSeparately()): ?>
+                <li class="item">
+                    <span class="title"><?php echo __('Shipped'); ?></span>
+                    <span class="content"><?php echo $_item->getQtyShipped()*1 ?></span>
+                </li>
+            <?php endif; ?>
+            <?php if ($_item->getQtyCanceled() > 0): ?>
+                <li class="item">
+                    <span class="title"><?php echo __('Canceled'); ?></span>
+                    <span class="content"><?php echo $_item->getQtyCanceled()*1 ?></span>
+                </li>
+            <?php endif; ?>
+            <?php if ($_item->getQtyRefunded() > 0): ?>
+                <li class="item">
+                    <span class="title"><?php echo __('Refunded'); ?></span>
+                    <span class="content"><?php echo $_item->getQtyRefunded()*1 ?></span>
+                </li>
+            <?php endif; ?>
+        <?php elseif ($_item->getQtyShipped() > 0 && $_item->getParentItem() && $this->isShipmentSeparately()): ?>
+            <li class="item">
+                <span class="title"><?php echo __('Shipped'); ?></span>
+                <span class="content"><?php echo $_item->getQtyShipped()*1 ?></span>
+            </li>
+        <?php else: ?>
+            &nbsp;
+        <?php endif; ?>
+        <?php if (
+        ($_item->getParentItem() && $this->isChildCalculated()) ||
+        (!$_item->getParentItem() && !$this->isChildCalculated()) || ($_item->getQtyShipped() > 0 && $_item->getParentItem() && $this->isShipmentSeparately())):?>
+            </ul>
+        <?php endif; ?>
+    </td>
+    <td class="col subtotal" data-th="<?php echo $this->escapeHtml(__('Subtotal')); ?>">
+        <?php if (!$_item->getParentItem()): ?>
+            <?php echo $this->getItemRowTotalHtml(); ?>
+        <?php else: ?>
+            &nbsp;
+        <?php endif; ?>
+    </td>
+</tr>
+<?php endforeach; ?>
+<?php if ($_showlastRow): ?>
+<tr>
+    <td class="col options" colspan="5" >
+        <?php if($_options = $this->getItemOptions()): ?>
+            <dl class="item options">
+                <?php foreach ($_options as $_option) : ?>
+                    <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>
+                    <?php if (!$this->getPrintStatus()): ?>
+                        <?php $_formatedOptionValue = $this->getFormatedOptionValue($_option) ?>
+                        <dd<?php if (isset($_formatedOptionValue['full_view'])): ?> class="tooltip wrapper"<?php endif; ?>>
+                            <?php echo $_formatedOptionValue['value'] ?>
+                            <?php if (isset($_formatedOptionValue['full_view'])): ?>
+                                <div class="tooltip content">
+                                    <dl class="item options">
+                                        <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>
+                                        <dd><?php echo $_formatedOptionValue['full_view'] ?></dd>
+                                    </dl>
+                                </div>
+                            <?php endif; ?>
+                        </dd>
+                    <?php else: ?>
+                        <dd><?php echo $this->escapeHtml( (isset($_option['print_value']) ? $_option['print_value'] : $_option['value']) ) ?></dd>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </dl>
+        <?php endif; ?>
+        <?php echo $this->escapeHtml($_item->getDescription()) ?>
+        <?php if ($this->helper('Magento\GiftMessage\Helper\Message')->getIsMessagesAvailable('order_item', $parentItem) && $parentItem->getGiftMessageId()): ?>
+            <a href="#"
+               id="order-item-gift-message-link-<?php echo $parentItem->getId() ?>"
+               class="action show"
+               aria-controls="order-item-gift-message-<?php echo $parentItem->getId()?>"
+               data-item-id="<?php echo $parentItem->getId()?>">
+                <?php echo __('Gift Message') ?>
+            </a>
+        <?php endif; ?>
+    </td>
+</tr>
+<?php endif; ?>

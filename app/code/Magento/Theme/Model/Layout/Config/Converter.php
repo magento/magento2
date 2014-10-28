@@ -25,7 +25,7 @@
  */
 namespace Magento\Theme\Model\Layout\Config;
 
-class Converter implements \Magento\Config\ConverterInterface
+class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
      * {@inheritdoc}
@@ -35,21 +35,16 @@ class Converter implements \Magento\Config\ConverterInterface
         $pageLayouts = array();
         $xpath = new \DOMXPath($source);
 
-        $defaultLayout = $xpath->query('/page_layouts/layouts')->item(0)->getAttribute('default');
-
         /** @var $layout DOMNode */
-        foreach ($xpath->query('/page_layouts/layouts/layout') as $layout) {
+        foreach ($xpath->query('/page_layouts/layout') as $layout) {
             $layoutAttributes = $layout->attributes;
             $id = $layoutAttributes->getNamedItem('id')->nodeValue;
             $pageLayouts[$id]['code'] = $id;
-            $pageLayouts[$id]['is_default'] = ($defaultLayout === $id) ? 1 : 0;
 
             /** @var $layoutSubNode DOMNode */
             foreach ($layout->childNodes as $layoutSubNode) {
                 switch ($layoutSubNode->nodeName) {
                     case 'label':
-                    case 'template':
-                    case 'layout_handle':
                         $pageLayouts[$id][$layoutSubNode->nodeName] = $layoutSubNode->nodeValue;
                         break;
                     default:

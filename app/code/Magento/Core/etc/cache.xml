@@ -23,24 +23,28 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
-    <type name="config" translate="label,description" instance="Magento\App\Cache\Type\Config">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Cache/etc/cache.xsd">
+    <type name="config" translate="label,description" instance="Magento\Framework\App\Cache\Type\Config">
         <label>Configuration</label>
         <description>System(config.xml, local.xml) and modules configuration files(config.xml).</description>
     </type>
-    <type name="layout" translate="label,description" instance="Magento\App\Cache\Type\Layout">
+    <type name="layout" translate="label,description" instance="Magento\Framework\App\Cache\Type\Layout">
         <label>Layouts</label>
         <description>Layout building instructions.</description>
     </type>
-    <type name="block_html" translate="label,description" instance="Magento\App\Cache\Type\Block">
+    <type name="block_html" translate="label,description" instance="Magento\Framework\App\Cache\Type\Block">
         <label>Blocks HTML output</label>
         <description>Page blocks HTML.</description>
     </type>
-    <type name="translate" translate="label,description" instance="Magento\App\Cache\Type\Translate">
-        <label>Translations</label>
-        <description>Translation files.</description>
+    <type name="view_files_fallback" translate="label,description" instance="Magento\Framework\View\Design\FileResolution\Fallback\Cache">
+        <label>View files fallback</label>
+        <description>Paths to view files (e.g., PHTML templates, images, CSS, JS files).</description>
     </type>
-    <type name="collections" translate="label,description" instance="Magento\App\Cache\Type\Collection">
+    <type name="view_files_preprocessing" translate="label,description" instance="Magento\Framework\View\Asset\PreProcessor\Cache">
+        <label>View files pre-processing</label>
+        <description>Paths to pre-processed view files (e.g, CSS files with fixed paths or generated from LESS files).</description>
+    </type>
+    <type name="collections" translate="label,description" instance="Magento\Framework\App\Cache\Type\Collection">
         <label>Collections Data</label>
         <description>Collection data files.</description>
     </type>

@@ -25,12 +25,13 @@
  */
 namespace Magento\Backend\App\Area;
 
-class FrontNameResolver implements \Magento\App\Area\FrontNameResolverInterface
+class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolverInterface
 {
-    const XML_PATH_USE_CUSTOM_ADMIN_PATH        = 'admin/url/use_custom_path';
-    const XML_PATH_CUSTOM_ADMIN_PATH            = 'admin/url/custom_path';
+    const XML_PATH_USE_CUSTOM_ADMIN_PATH = 'admin/url/use_custom_path';
 
-    const PARAM_BACKEND_FRONT_NAME              = 'backend.frontName';
+    const XML_PATH_CUSTOM_ADMIN_PATH = 'admin/url/custom_path';
+
+    const PARAM_BACKEND_FRONT_NAME = 'backend.frontName';
 
     /**
      * Backend area code

@@ -20,9 +20,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    tests
- * @package     static
- * @subpackage  Legacy
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -63,10 +60,14 @@ class XmlTest extends \PHPUnit_Framework_TestCase
              */
             function ($file) {
                 $xml = simplexml_load_file($file);
-                $this->assertSame(array(), $xml->xpath('/widgets/*/supported_blocks'),
+                $this->assertSame(
+                    array(),
+                    $xml->xpath('/widgets/*/supported_blocks'),
                     'Obsolete node: <supported_blocks>. To be replaced with <supported_containers>'
                 );
-                $this->assertSame(array(), $xml->xpath('/widgets/*/*/*/block_name'),
+                $this->assertSame(
+                    array(),
+                    $xml->xpath('/widgets/*/*/*/block_name'),
                     'Obsolete node: <block_name>. To be replaced with <container_name>'
                 );
             },

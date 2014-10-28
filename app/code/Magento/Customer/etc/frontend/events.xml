@@ -23,8 +23,23 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
-    <event name="sales_model_service_quote_submit_after">
-        <observer name="restore_customer_group_id" instance="Magento\Customer\Model\Observer" method="quoteSubmitAfter" />
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
+    <event name="controller_action_predispatch">
+        <observer name="customer_visitor" instance="Magento\Customer\Model\Visitor" method="initByRequest" />
+    </event>
+    <event name="controller_action_postdispatch">
+        <observer name="customer_visitor" instance="Magento\Customer\Model\Visitor" method="saveByRequest" />
+    </event>
+    <event name="customer_data_object_login">
+        <observer name="customer_visitor" instance="Magento\Customer\Model\Visitor" method="bindCustomerLogin" />
+    </event>
+    <event name="customer_logout">
+        <observer name="customer_visitor" instance="Magento\Customer\Model\Visitor" method="bindCustomerLogout" />
+    </event>
+    <event name="sales_quote_save_after">
+        <observer name="customer_visitor" instance="Magento\Customer\Model\Visitor" method="bindQuoteCreate" />
+    </event>
+    <event name="checkout_quote_destroy">
+        <observer name="customer_visitor" instance="Magento\Customer\Model\Visitor" method="bindQuoteDestroy" />
     </event>
 </config>

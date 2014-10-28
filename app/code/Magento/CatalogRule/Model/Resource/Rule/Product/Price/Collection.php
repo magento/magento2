@@ -18,21 +18,23 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_CatalogRule
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\CatalogRule\Model\Resource\Rule\Product\Price;
 
-class Collection
-    extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Magento\CatalogRule\Model\Rule\Product\Price', 'Magento\CatalogRule\Model\Resource\Rule\Product\Price');
+        $this->_init(
+            'Magento\CatalogRule\Model\Rule\Product\Price',
+            'Magento\CatalogRule\Model\Resource\Rule\Product\Price'
+        );
     }
 
     /**

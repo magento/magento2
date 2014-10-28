@@ -18,22 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Sales\Model\Resource\Order\Item;
 
 /**
  * Flat sales order payment collection
  *
- * @category    Magento
- * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Model\Resource\Order\Item;
-
 class Collection extends \Magento\Sales\Model\Resource\Order\Collection\AbstractCollection
 {
     /**
@@ -41,25 +35,26 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection\Abstract
      *
      * @var string
      */
-    protected $_eventPrefix    = 'sales_order_item_collection';
+    protected $_eventPrefix = 'sales_order_item_collection';
 
     /**
      * Event object
      *
      * @var string
      */
-    protected $_eventObject    = 'order_item_collection';
+    protected $_eventObject = 'order_item_collection';
 
     /**
      * Order field for setOrderFilter
      *
      * @var string
      */
-    protected $_orderField     = 'order_id';
+    protected $_orderField = 'order_id';
 
     /**
      * Model initialization
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -69,7 +64,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection\Abstract
     /**
      * Assign parent items on after collection load
      *
-     * @return \Magento\Sales\Model\Resource\Order\Item\Collection
+     * @return $this
      */
     protected function _afterLoad()
     {
@@ -88,7 +83,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection\Abstract
     /**
      * Set random items order
      *
-     * @return \Magento\Sales\Model\Resource\Order\Item\Collection
+     * @return $this
      */
     public function setRandomOrder()
     {
@@ -100,12 +95,12 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection\Abstract
      * Set filter by item id
      *
      * @param mixed $item
-     * @return \Magento\Sales\Model\Resource\Order\Item\Collection
+     * @return $this
      */
     public function addIdFilter($item)
     {
         if (is_array($item)) {
-            $this->addFieldToFilter('item_id', array('in'=>$item));
+            $this->addFieldToFilter('item_id', array('in' => $item));
         } elseif ($item instanceof \Magento\Sales\Model\Order\Item) {
             $this->addFieldToFilter('item_id', $item->getId());
         } else {
@@ -118,7 +113,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection\Abstract
      * Filter collection by specified product types
      *
      * @param array $typeIds
-     * @return \Magento\Sales\Model\Resource\Order\Item\Collection
+     * @return $this
      */
     public function filterByTypes($typeIds)
     {
@@ -130,7 +125,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection\Abstract
      * Filter collection by parent_item_id
      *
      * @param int $parentId
-     * @return \Magento\Sales\Model\Resource\Order\Item\Collection
+     * @return $this
      */
     public function filterByParent($parentId = null)
     {

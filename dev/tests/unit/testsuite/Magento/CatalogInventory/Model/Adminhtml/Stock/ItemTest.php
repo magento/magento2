@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\CatalogInventory\Model\Adminhtml\Stock;
 
 class ItemTest extends \PHPUnit_Framework_TestCase
@@ -37,26 +36,17 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $resourceMock = $this->getMock(
-            'Magento\Core\Model\Resource\AbstractResource',
+            'Magento\Framework\Model\Resource\AbstractResource',
             array('_construct', '_getReadAdapter', '_getWriteAdapter', 'getIdFieldName'),
-            array(), '', false
+            array(),
+            '',
+            false
         );
+        $objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $this->_model = new \Magento\CatalogInventory\Model\Adminhtml\Stock\Item(
-            $this->getMock('Magento\Core\Model\Context', array(), array(), '', false),
-            $this->getMock('Magento\Core\Model\Registry', array(), array(), '', false),
-            $this->getMock('Magento\Customer\Model\Session', array(), array(), '', false),
-            $this->getMock('Magento\Index\Model\Indexer', array(), array(), '', false),
-            $this->getMock('Magento\CatalogInventory\Model\Stock\Status', array(), array(), '', false),
-            $this->getMock('Magento\CatalogInventory\Helper\Data', array(), array(), '', false),
-            $this->getMock('Magento\CatalogInventory\Helper\Minsaleqty', array(), array(), '', false),
-            $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false),
-            $this->getMock('Magento\Core\Model\StoreManagerInterface', array(), array(), '', false),
-            $this->getMock('Magento\Core\Model\LocaleInterface', array(), array(), '', false),
-            $this->getMock('Magento\Math\Division', array(), array(), '', false),
-            $resourceMock,
-            $this->getMock('Magento\Data\Collection\Db', array(), array(), '', false),
-            array()
+        $this->_model = $objectHelper->getObject(
+            '\Magento\CatalogInventory\Model\Adminhtml\Stock\Item',
+            array('resource' => $resourceMock)
         );
     }
 

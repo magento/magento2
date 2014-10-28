@@ -26,12 +26,12 @@ namespace Magento\Test\Di\Child;
 class Interceptor extends \Magento\Test\Di\Child
 {
     /**
-     * @var \Magento\ObjectManager\Config
+     * @var \Magento\Framework\ObjectManager\Config
      */
     protected $_config;
 
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_factory;
 
@@ -41,7 +41,7 @@ class Interceptor extends \Magento\Test\Di\Child
     protected $_plugins = array();
 
     /**
-     * @var \Magento\ObjectManager\ObjectManager
+     * @var \Magento\Framework\ObjectManager\ObjectManager
      */
     protected $_objectManager;
 
@@ -61,15 +61,15 @@ class Interceptor extends \Magento\Test\Di\Child
     protected $_arguments;
 
     /**
-     * @param \Magento\ObjectManager\Factory $factory
-     * @param \Magento\ObjectManager\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManager\Factory $factory
+     * @param \Magento\Framework\ObjectManager\ObjectManager $objectManager
      * @param string $subjectType
      * @param array $pluginList
      * @param array $arguments
      */
     public function __construct(
-        \Magento\ObjectManager\Factory $factory,
-        \Magento\ObjectManager\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManager\Factory $factory,
+        \Magento\Framework\ObjectManager\ObjectManager $objectManager,
         $subjectType,
         array $pluginList,
         array $arguments
@@ -98,20 +98,20 @@ class Interceptor extends \Magento\Test\Di\Child
         $beforeFunc = __FUNCTION__ . 'Before';
         if (isset($this->_pluginList[$beforeFunc])) {
             foreach ($this->_pluginList[$beforeFunc] as $plugin) {
-                $param = $this->_objectManager->get($plugin)->$beforeFunc($param);
+                $param = $this->_objectManager->get($plugin)->{$beforeFunc}($param);
             }
         }
         $insteadFunc = __FUNCTION__;
         if (isset($this->_pluginList[$insteadFunc])) {
             $first = reset($this->_pluginList[$insteadFunc]);
-            $returnValue = $this->_objectManager->get($first)->$insteadFunc();
+            $returnValue = $this->_objectManager->get($first)->{$insteadFunc}();
         } else {
             $returnValue = $this->_getSubject()->wrap($param);
         }
         $afterFunc = __FUNCTION__ . 'After';
         if (isset($this->_pluginList[$afterFunc])) {
             foreach (array_reverse($this->_pluginList[$afterFunc]) as $plugin) {
-                $returnValue = $this->_objectManager->get($plugin)->$afterFunc($returnValue);
+                $returnValue = $this->_objectManager->get($plugin)->{$afterFunc}($returnValue);
             }
         }
         return $returnValue;

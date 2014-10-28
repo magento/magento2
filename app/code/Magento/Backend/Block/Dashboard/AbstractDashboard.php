@@ -18,22 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Dashboard;
 
 /**
  * Adminhtml dashboard tab abstract
  *
- * @category   Magento
- * @package    Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Backend\Block\Dashboard;
-
 abstract class AbstractDashboard extends \Magento\Backend\Block\Widget
 {
     /**
@@ -60,11 +54,17 @@ abstract class AbstractDashboard extends \Magento\Backend\Block\Widget
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return array|\Magento\Framework\Model\Resource\Db\Collection\AbstractCollection|\Magento\Eav\Model\Entity\Collection\Abstract
+     */
     public function getCollection()
     {
         return $this->getDataHelper()->getCollection();
     }
 
+    /**
+     * @return int
+     */
     public function getCount()
     {
         return $this->getDataHelper()->getCount();
@@ -80,11 +80,17 @@ abstract class AbstractDashboard extends \Magento\Backend\Block\Widget
         return $this->_dataHelper;
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareData()
     {
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareLayout()
     {
         $this->_prepareData();

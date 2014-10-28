@@ -18,20 +18,20 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Config\Backend;
+
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
 
 /**
  * System config file field backend model
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class File extends \Magento\Core\Model\Config\Value
+class File extends \Magento\Framework\App\Config\Value
 {
     /**
      * @var \Magento\Backend\Model\Config\Backend\File\RequestData\RequestDataInterface
@@ -46,12 +46,12 @@ class File extends \Magento\Core\Model\Config\Value
     protected $_maxFileSize = 0;
 
     /**
-     * @var \Magento\Filesystem
+     * @var Filesystem
      */
     protected $_filesystem;
 
     /**
-     * @var \Magento\Filesystem\Directory\WriteInterface
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
      */
     protected $_mediaDirectory;
 
@@ -61,41 +61,39 @@ class File extends \Magento\Core\Model\Config\Value
     protected $_uploaderFactory;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Config $config
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Core\Model\File\UploaderFactory $uploaderFactory
      * @param \Magento\Backend\Model\Config\Backend\File\RequestData\RequestDataInterface $requestData
-     * @param \Magento\Filesystem $filesystem
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param Filesystem $filesystem
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Config $config,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Core\Model\File\UploaderFactory $uploaderFactory,
         \Magento\Backend\Model\Config\Backend\File\RequestData\RequestDataInterface $requestData,
-        \Magento\Filesystem $filesystem,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        Filesystem $filesystem,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_uploaderFactory = $uploaderFactory;
         $this->_requestData = $requestData;
         $this->_filesystem = $filesystem;
-        $this->_mediaDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::MEDIA);
-        parent::__construct($context, $registry, $storeManager, $config, $resource, $resourceCollection, $data);
+        $this->_mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        parent::__construct($context, $registry, $config, $resource, $resourceCollection, $data);
     }
 
     /**
      * Save uploaded file before saving config value
      *
-     * @return \Magento\Backend\Model\Config\Backend\File
-     * @throws \Magento\Core\Exception
+     * @return $this
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function _beforeSave()
     {
@@ -118,7 +116,7 @@ class File extends \Magento\Core\Model\Config\Value
                 $uploader->addValidateCallback('size', $this, 'validateMaxSize');
                 $result = $uploader->save($uploadDir);
             } catch (\Exception $e) {
-                throw new \Magento\Core\Exception($e->getMessage());
+                throw new \Magento\Framework\Model\Exception($e->getMessage());
             }
 
             $filename = $result['file'];
@@ -143,16 +141,17 @@ class File extends \Magento\Core\Model\Config\Value
      * Validation callback for checking max file size
      *
      * @param  string $filePath Path to temporary uploaded file
-     * @throws \Magento\Core\Exception
+     * @return void
+     * @throws \Magento\Framework\Model\Exception
      */
     public function validateMaxSize($filePath)
     {
-        $directory = $this->_filesystem->getDirectoryRead(\Magento\Filesystem::SYS_TMP);
-        if (
-            $this->_maxFileSize > 0 &&
-            $directory->stat($directory->getRelativePath($filePath))['size'] > ($this->_maxFileSize * 1024)
+        $directory = $this->_filesystem->getDirectoryRead(DirectoryList::SYS_TMP);
+        if ($this->_maxFileSize > 0 && $directory->stat(
+            $directory->getRelativePath($filePath)
+        )['size'] > $this->_maxFileSize * 1024
         ) {
-            throw new \Magento\Core\Exception(
+            throw new \Magento\Framework\Model\Exception(
                 __('The file you\'re uploading exceeds the server size limit of %1 kilobytes.', $this->_maxFileSize)
             );
         }
@@ -167,30 +166,27 @@ class File extends \Magento\Core\Model\Config\Value
     {
         $fieldConfig = $this->getFieldConfig();
         $dirParams = array_key_exists('upload_dir', $fieldConfig) ? $fieldConfig['upload_dir'] : array();
-        return (is_array($dirParams) && array_key_exists('scope_info', $dirParams) && $dirParams['scope_info']);
+        return is_array($dirParams) && array_key_exists('scope_info', $dirParams) && $dirParams['scope_info'];
     }
 
     /**
      * Return path to directory for upload file
      *
      * @return string
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function _getUploadDir()
     {
         $fieldConfig = $this->getFieldConfig();
-        /* @var $fieldConfig \Magento\Simplexml\Element */
+        /* @var $fieldConfig \Magento\Framework\Simplexml\Element */
 
         if (!array_key_exists('upload_dir', $fieldConfig)) {
-            throw new \Magento\Core\Exception(
-                __('The base directory to upload file is not specified.')
-            );
+            throw new \Magento\Framework\Model\Exception(__('The base directory to upload file is not specified.'));
         }
 
         if (is_array($fieldConfig['upload_dir'])) {
             $uploadDir = $fieldConfig['upload_dir']['value'];
-            if (array_key_exists('scope_info', $fieldConfig['upload_dir'])
-                && $fieldConfig['upload_dir']['scope_info']
+            if (array_key_exists('scope_info', $fieldConfig['upload_dir']) && $fieldConfig['upload_dir']['scope_info']
             ) {
                 $uploadDir = $this->_appendScopeInfo($uploadDir);
             }
@@ -199,7 +195,7 @@ class File extends \Magento\Core\Model\Config\Value
                 $uploadDir = $this->_mediaDirectory->getAbsolutePath($uploadDir);
             }
         } else {
-            $uploadDir = (string) $fieldConfig['upload_dir'];
+            $uploadDir = (string)$fieldConfig['upload_dir'];
         }
 
         return $uploadDir;
@@ -216,7 +212,7 @@ class File extends \Magento\Core\Model\Config\Value
     protected function _prependScopeInfo($path)
     {
         $scopeInfo = $this->getScope();
-        if ('default' != $this->getScope()) {
+        if (\Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT != $this->getScope()) {
             $scopeInfo .= '/' . $this->getScopeId();
         }
         return $scopeInfo . '/' . $path;
@@ -233,7 +229,7 @@ class File extends \Magento\Core\Model\Config\Value
     protected function _appendScopeInfo($path)
     {
         $path .= '/' . $this->getScope();
-        if ('default' != $this->getScope()) {
+        if (\Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT != $this->getScope()) {
             $path .= '/' . $this->getScopeId();
         }
         return $path;

@@ -18,12 +18,10 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Directory
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Directory\Model\Country;
 
 /**
  * \Directory country format model
@@ -37,18 +35,15 @@
  * @method string getFormat()
  * @method \Magento\Directory\Model\Country\Format setFormat(string $value)
  *
- * @category    Magento
- * @package     Magento_Directory
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Directory\Model\Country;
-
-class Format extends \Magento\Core\Model\AbstractModel
+class Format extends \Magento\Framework\Model\AbstractModel
 {
-
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init('Magento\Directory\Model\Resource\Country\Format');
     }
-
 }

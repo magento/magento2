@@ -23,11 +23,18 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <update handle="page_two_columns_left"/>
+<page layout="2columns-left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <referenceContainer name="columns.top">
+        <container name="category.view.container" htmlTag="div" htmlClass="category-view" after="-">
+            <block class="Magento\Catalog\Block\Category\View" name="category.image" template="Magento_Catalog::category/image.phtml"/>
+            <block class="Magento\Catalog\Block\Category\View" name="category.description" template="Magento_Catalog::category/description.phtml"/>
+            <block class="Magento\Catalog\Block\Category\View" name="category.cms" template="Magento_Catalog::category/cms.phtml"/>
+        </container>
+    </referenceContainer>
     <referenceContainer name="content">
-        <block class="Magento\Catalog\Block\Category\View" name="category.products" template="category/view.phtml">
-            <block class="Magento\Catalog\Block\Product\ListProduct" name="product_list" template="product/list.phtml">
+        <block class="Magento\Catalog\Block\Category\View" name="category.products" template="Magento_Catalog::category/products.phtml">
+            <block class="Magento\Catalog\Block\Product\ListProduct" name="category.products.list" as="product_list" template="Magento_Catalog::product/list.phtml">
+                <container name="category.product.list.additional" as="additional" />
                 <block class="Magento\Catalog\Block\Product\ProductList\Toolbar" name="product_list_toolbar" template="product/list/toolbar.phtml">
                     <block class="Magento\Theme\Block\Html\Pager" name="product_list_toolbar_pager"/>
                     <!-- The following code shows how to set your own pager increments -->
@@ -83,6 +90,15 @@
                 </action>
             </block>
         </block>
+        <block class="Magento\Core\Block\RequireCookie" name="require-cookie" template="Magento_Core::require_cookie.phtml">
+            <arguments>
+                <argument name="triggers" xsi:type="array">
+                        <item name="compareProductLink" xsi:type="string">.action.tocompare</item>
+                </argument>
+            </arguments>
+        </block>
     </referenceContainer>
-    <update handle="MAP_popup"/>
-</layout>
+    <referenceBlock name="page.main.title">
+        <block class="Magento\Catalog\Block\Category\Rss\Link" name="rss.link" template="Magento_Catalog::category/rss.phtml"/>
+    </referenceBlock>
+</page>

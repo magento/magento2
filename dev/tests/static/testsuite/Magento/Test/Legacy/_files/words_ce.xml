@@ -19,9 +19,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    tests
- * @package     static
- * @subpackage  Legacy
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -43,6 +40,7 @@
         <word>secure_base_url}}js/</word>
         <word>secure_base_url}}skin/</word>
         <word>secure_base_url}}media/</word>
+        <word>head.js</word>
         <!-- typos -->
         <word>overriden</word>
         <word>retrive</word>
@@ -53,7 +51,7 @@
             <path>CHANGELOG.md</path>
         </item>
         <item>
-            <path>CHANGELOG_CE.md</path>
+            <path>dev/build/publication/extra_files/ce/CHANGELOG.md</path>
         </item>
         <item>
             <path>app/code/Magento/User/data/user_setup/data-upgrade-1.6.1.1-1.6.1.2.php</path>
@@ -76,11 +74,43 @@
             <word>dataflow</word>
         </item>
         <item>
-            <path>lib/Zend</path>
+            <path>lib/internal/Zend</path>
         </item>
         <item>
             <path>dev/tests/static/testsuite/Magento/Test/Legacy/_files/obsolete_constants.php</path>
             <word>overriden</word>
+        </item>
+        <item>
+            <path>app/code/Magento/Paypal/view/frontend/templates/express/shortcut.phtml</path>
+            <word>head.js</word>
+        </item>
+        <item>
+            <path>app/code/Magento/Bundle/view/adminhtml/templates/product/edit/bundle.phtml</path>
+            <word>head.js</word>
+        </item>
+        <item>
+            <path>app/code/Magento/Webapi/view/adminhtml/templates/integration/activate/permissions/tab/webapi.phtml</path>
+            <word>head.js</word>
+        </item>
+        <item>
+            <path>app/code/Magento/Install/view/install/</path>
+            <word>head.js</word>
+        </item>
+        <item>
+            <path>app/code/Magento/GiftCard/view/adminhtml/templates/catalog/product/composite/fieldset/giftcard.phtml</path>
+            <word>head.js</word>
+        </item>
+        <item>
+            <path>app/code/Magento/GiftRegistry/view/adminhtml/templates/edit/attributes.phtml</path>
+            <word>head.js</word>
+        </item>
+        <item>
+            <path>app/code/Magento/GiftRegistry/view/adminhtml/templates/edit/type/select.phtml</path>
+            <word>head.js</word>
+        </item>
+        <item>
+            <path>lib/web/mage/mage.js</path>
+            <word>head.js</word>
         </item>
     </whitelist>
 </config>

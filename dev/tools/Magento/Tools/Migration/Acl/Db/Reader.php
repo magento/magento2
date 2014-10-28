@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category   Magento
- * @package    Tools
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -64,11 +62,14 @@ class Reader
     public function fetchAll()
     {
         $select = $this->_adapter->select();
-        $select->from($this->_tableName, array())
-            ->columns(array('resource_id' => 'resource_id', 'itemsCount' => new \Zend_Db_Expr('count(*)')))
-            ->group('resource_id');
+        $select->from(
+            $this->_tableName,
+            array()
+        )->columns(
+            array('resource_id' => 'resource_id', 'itemsCount' => new \Zend_Db_Expr('count(*)'))
+        )->group(
+            'resource_id'
+        );
         return $this->_adapter->fetchPairs($select);
     }
 }
-
-

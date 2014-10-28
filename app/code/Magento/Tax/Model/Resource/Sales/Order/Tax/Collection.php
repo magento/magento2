@@ -18,26 +18,22 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Tax
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Tax\Model\Resource\Sales\Order\Tax;
 
 /**
  * Order Tax Collection
  *
- * @category    Magento
- * @package     Magento_Tax
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Tax\Model\Resource\Sales\Order\Tax;
-
-class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Resource initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -47,15 +43,13 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Retrieve order tax collection by order identifier
      *
-     * @param \Magento\Object $order
+     * @param \Magento\Framework\Object $order
      * @return \Magento\Tax\Model\Resource\Sales\Order\Tax\Collection
      */
     public function loadByOrder($order)
     {
         $orderId = $order->getId();
-        $this->getSelect()
-            ->where('main_table.order_id = ?', (int)$orderId)
-            ->order('process');
+        $this->getSelect()->where('main_table.order_id = ?', (int)$orderId)->order('process');
         return $this->load();
     }
 }

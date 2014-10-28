@@ -2,23 +2,23 @@
 # Glob patterns are supported
 # Overrides the white list
 #
-# Formatter intorduces long line
+# Formatter introduces long line
 app/bootstrap.php
-# Formatter intorduces long line
+# Formatter introduces long line
 app/code/Magento/Catalog/Block/Adminhtml/Product/Edit/NewCategory.php
-# Formatter intorduces long line
+# Formatter introduces long line
 app/code/Magento/Catalog/Block/Adminhtml/Product/Edit/Tab/Attributes/Search.php
-# Formatter intorduces long line
+# Formatter introduces long line
 app/code/Magento/Catalog/Block/Adminhtml/Product/Helper/Form/Category.php
-# Formatter intorduces long line
+# Formatter introduces long line
 app/code/Magento/Catalog/Block/Adminhtml/Product/Helper/Form/Weight.php
-# Formatter intorduces long line
+# Formatter introduces long line
 app/code/Magento/Catalog/Block/Adminhtml/Product/Options/Ajax.php
-# Formatter intorduces long line
+# Formatter introduces long line
 app/code/Magento/Cms/Block/Adminhtml/Page/Edit/Tab/Design.php
-# Formatter intorduces long line
+# Formatter introduces long line
 app/code/Magento/Backend/Block/Page/System/Config/Robots/Reset.php
-# Formatter intorduces long line
+# Formatter introduces long line
 app/code/Magento/Backend/Block/System/Store/Edit.php
 # Not magento code
 app/code/Zend
@@ -26,11 +26,21 @@ app/code/Zend
 dev/tools/Magento/Tools/I18n/Zend
 # Not magento code
 dev/tools/layout
-# Not magento code
-dev/tools/xml
 # PSR-1 not applied to
 dev/tests/js
 # Example files that are expected to fail code sniffer
 dev/tests/static/testsuite/Magento/Test/Php/Exemplar/CodeStyleTest/phpcs/input
 # Example files that are expected to fail code mess detector
 dev/tests/static/testsuite/Magento/Test/Php/Exemplar/CodeMessTest/phpmd/input
+# __ method for Translate cannot be in camelCase
+lib/internal/Magento/Framework/Translate/Adapter.php
+# __ method for Translate cannot be in camelCase
+lib/internal/Magento/Framework/Translate/AdapterInterface.php
+# PSR-1 not applied to
+dev/tests/integration/testsuite/Magento
+# PSR-1 not applied to
+dev/tests/unit/testsuite/Magento
+# Newer version of phpcs does not complain about spacing issue.  This appears to be a bug in the phpcs version that is currently run in bamboo.
+app/code/Magento/Sales/Model/Order/Payment/Transaction.php
+vendor
+setup/vendor

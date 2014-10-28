@@ -1,0 +1,210 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Config/etc/view.xsd">
+    <vars module="Magento_Catalog">
+        <var name="product_small_image_sidebar_size">100</var>  <!-- Override for small product image -->
+        <var name="product_base_image_size">275</var>           <!-- Override for base product image -->
+        <var name="product_base_image_icon_size">48</var>       <!-- Base product image icon size -->
+
+        <var name="product_list_image_size">166</var>           <!-- New Product image size used in product list -->
+        <var name="product_zoom_image_size">370</var>           <!-- New Product image size used for zooming -->
+
+        <var name="product_image_white_borders">0</var>
+
+        <var name="review_page_product_image:type">small_image</var>
+        <var name="review_page_product_image:width">285</var>
+        <var name="review_page_product_image:ratio">1</var>
+        <var name="review_page_product_image:height">285</var>
+
+        <var name="customer_account_product_review_page:type">image</var>
+        <var name="customer_account_product_review_page:width">285</var>
+        <var name="customer_account_product_review_page:ratio">1</var>
+        <var name="customer_account_product_review_page:height">285</var>
+
+        <var name="category_page_list:type">small_image</var>
+        <var name="category_page_list:width">270</var>
+        <var name="category_page_list:ratio">1</var>
+        <var name="category_page_list:height">270</var>
+
+        <var name="category_page_grid:type">small_image</var>
+        <var name="category_page_grid:width">220</var>
+        <var name="category_page_grid:ratio">1</var>
+        <var name="category_page_grid:height">220</var>
+
+        <var name="product_comparison_list:type">small_image</var>
+        <var name="product_comparison_list:width">140</var>
+        <var name="product_comparison_list:ratio">1</var>
+        <var name="product_comparison_list:height">140</var>
+
+        <var name="related_products_list:type">small_image</var>
+        <var name="related_products_list:width">140</var>
+        <var name="related_products_list:ratio">1</var>
+        <var name="related_products_list:height">140</var>
+
+        <var name="upsell_products_list:type">small_image</var>
+        <var name="upsell_products_list:width">140</var>
+        <var name="upsell_products_list:ratio">1</var>
+        <var name="upsell_products_list:height">140</var>
+
+        <var name="product_page_main_image:type">image</var>
+        <var name="product_page_main_image:width">700</var>
+        <var name="product_page_main_image:ratio">1</var>
+        <var name="product_page_main_image:height">700</var>
+
+        <var name="product_page_main_image_default:type">image</var>
+        <var name="product_page_main_image_default:width">700</var>
+        <var name="product_page_main_image_default:ratio">1</var>
+        <var name="product_page_main_image_default:height">700</var>
+
+        <var name="product_page_more_views:type">thumbnail</var>
+        <var name="product_page_more_views:width">90</var>
+        <var name="product_page_more_views:ratio">1</var>
+        <var name="product_page_more_views:height">90</var>
+
+        <var name="side_column_widget_product_thumbnail:type">thumbnail</var>
+        <var name="side_column_widget_product_thumbnail:width">50</var>
+        <var name="side_column_widget_product_thumbnail:ratio">1</var>
+        <var name="side_column_widget_product_thumbnail:height">50</var>
+
+        <var name="new_products_content_widget_list:type">small_image</var>
+        <var name="new_products_content_widget_list:width">166</var>
+        <var name="new_products_content_widget_list:ratio">1</var>
+        <var name="new_products_content_widget_list:height">166</var>
+
+        <var name="new_products_content_widget_grid:type">small_image</var>
+        <var name="new_products_content_widget_grid:width">166</var>
+        <var name="new_products_content_widget_grid:ratio">1</var>
+        <var name="new_products_content_widget_grid:height">166</var>
+
+        <var name="recently_compared_products_images_names_widget:type">thumbnail</var>
+        <var name="recently_compared_products_images_names_widget:width">50</var>
+        <var name="recently_compared_products_images_names_widget:ratio">1</var>
+        <var name="recently_compared_products_images_names_widget:height">50</var>
+
+        <var name="recently_viewed_products_images_names_widget:type">small_image</var>
+        <var name="recently_viewed_products_images_names_widget:width">50</var>
+        <var name="recently_viewed_products_images_names_widget:ratio">1</var>
+        <var name="recently_viewed_products_images_names_widget:height">50</var>
+
+        <var name="recently_compared_products_images_only_widget:type">thumbnail</var>
+        <var name="recently_compared_products_images_only_widget:width">76</var>
+        <var name="recently_compared_products_images_only_widget:ratio">1</var>
+        <var name="recently_compared_products_images_only_widget:height">76</var>
+
+        <var name="recently_viewed_products_images_only_widget:type">small_image</var>
+        <var name="recently_viewed_products_images_only_widget:width">76</var>
+        <var name="recently_viewed_products_images_only_widget:ratio">1</var>
+        <var name="recently_viewed_products_images_only_widget:height">76</var>
+
+        <var name="bundled_product_customization_page:type">thumbnail</var>
+        <var name="bundled_product_customization_page:width">140</var>
+        <var name="bundled_product_customization_page:ratio">1</var>
+        <var name="bundled_product_customization_page:height">140</var>
+
+        <var name="recently_compared_products_grid_content_widget:type">small_image</var>
+        <var name="recently_compared_products_grid_content_widget:width">135</var>
+        <var name="recently_compared_products_grid_content_widget:ratio">1</var>
+        <var name="recently_compared_products_grid_content_widget:height">135</var>
+
+        <var name="recently_compared_products_list_content_widget:type">small_image</var>
+        <var name="recently_compared_products_list_content_widget:width">166</var>
+        <var name="recently_compared_products_list_content_widget:ratio">1</var>
+        <var name="recently_compared_products_list_content_widget:height">166</var>
+
+        <var name="recently_viewed_products_grid_content_widget:type">small_image</var>
+        <var name="recently_viewed_products_grid_content_widget:width">135</var>
+        <var name="recently_viewed_products_grid_content_widget:ratio">1</var>
+        <var name="recently_viewed_products_grid_content_widget:height">135</var>
+
+        <var name="recently_viewed_products_list_content_widget:type">small_image</var>
+        <var name="recently_viewed_products_list_content_widget:width">166</var>
+        <var name="recently_viewed_products_list_content_widget:ratio">1</var>
+        <var name="recently_viewed_products_list_content_widget:height">166</var>
+
+        <var name="customer_shared_wishlist:type">small_image</var>
+        <var name="customer_shared_wishlist:width">113</var>
+        <var name="customer_shared_wishlist:ratio">1</var>
+        <var name="customer_shared_wishlist:height">113</var>
+
+        <var name="wishlist_thumbnail:type">small_image</var>
+        <var name="wishlist_thumbnail:width">200</var>
+        <var name="wishlist_thumbnail:ratio">1</var>
+        <var name="wishlist_thumbnail:height">200</var>
+
+        <var name="wishlist_sidebar_block:type">thumbnail</var>
+        <var name="wishlist_sidebar_block:width">50</var>
+        <var name="wishlist_sidebar_block:ratio">1</var>
+        <var name="wishlist_sidebar_block:height">50</var>
+
+        <var name="shared_wishlist_email:type">small_image</var>
+        <var name="shared_wishlist_email:width">135</var>
+        <var name="shared_wishlist_email:ratio">1</var>
+        <var name="shared_wishlist_email:height">135</var>
+
+        <var name="customer_account_my_tags_tag_view:type">small_image</var>
+        <var name="customer_account_my_tags_tag_view:width">100</var>
+        <var name="customer_account_my_tags_tag_view:ratio">1</var>
+        <var name="customer_account_my_tags_tag_view:height">100</var>
+
+        <var name="cart_cross_sell_products:type">thumbnail</var>
+        <var name="cart_cross_sell_products:width">235</var>
+        <var name="cart_cross_sell_products:ratio">1</var>
+        <var name="cart_cross_sell_products:height">290</var>
+
+        <var name="gift_messages_checkout_thumbnail:type">thumbnail</var>
+        <var name="gift_messages_checkout_thumbnail:width">100</var>
+        <var name="gift_messages_checkout_thumbnail:ratio">1</var>
+        <var name="gift_messages_checkout_thumbnail:height">100</var>
+
+        <var name="gift_messages_checkout_small_image:type">small_image</var>
+        <var name="gift_messages_checkout_small_image:width">75</var>
+        <var name="gift_messages_checkout_small_image:ratio">1</var>
+        <var name="gift_messages_checkout_small_image:height">75</var>
+
+        <var name="mini_cart_product_thumbnail:type">thumbnail</var>
+        <var name="mini_cart_product_thumbnail:width">78</var>
+        <var name="mini_cart_product_thumbnail:ratio">1</var>
+        <var name="mini_cart_product_thumbnail:height">78</var>
+
+        <var name="new_products_images_only_widget:type">small_image</var>
+        <var name="new_products_images_only_widget:width">78</var>
+        <var name="new_products_images_only_widget:ratio">1</var>
+        <var name="new_products_images_only_widget:height">78</var>
+
+        <var name="cart_page_product_thumbnail:type">thumbnail</var>
+        <var name="cart_page_product_thumbnail:width">110</var>
+        <var name="cart_page_product_thumbnail:ratio">1</var>
+        <var name="cart_page_product_thumbnail:height">160</var>
+
+        <var name="product_stock_alert_email_product_image:type">small_image</var>
+        <var name="product_stock_alert_email_product_image:width">76</var>
+        <var name="product_stock_alert_email_product_image:ratio">1</var>
+        <var name="product_stock_alert_email_product_image:height">76</var>
+    </vars>
+    <vars module="Magento_Bundle">
+        <var name="product_summary_image_size">58</var>         <!-- New Product image size used for summary block-->
+    </vars>
+</view>

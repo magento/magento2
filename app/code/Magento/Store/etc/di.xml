@@ -1,0 +1,176 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\Module\Updater\SetupFactory">
+        <arguments>
+            <argument name="resourceTypes" xsi:type="array">
+                <item name="store_setup" xsi:type="string">Magento\Core\Model\Resource\Setup</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Config\ScopePool">
+        <arguments>
+            <argument name="readerPool" xsi:type="object">Magento\Store\Model\Config\Reader\ReaderPool\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Store\Model\Config\Reader\Website">
+        <arguments>
+            <argument name="scopePool" xsi:type="object">Magento\Framework\App\Config\ScopePool\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Store\Model\Config\Reader\Store">
+        <arguments>
+            <argument name="scopePool" xsi:type="object">Magento\Framework\App\Config\ScopePool\Proxy</argument>
+            <argument name="storeManager" xsi:type="object">Magento\Framework\StoreManagerInterface\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Store\Model\Resolver\Store">
+        <arguments>
+            <argument name="storeManager" xsi:type="object">Magento\Framework\StoreManagerInterface\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Store\Model\Resolver\Website">
+        <arguments>
+            <argument name="storeManager" xsi:type="object">Magento\Framework\StoreManagerInterface\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Store\Model\Config\Reader\ReaderPool">
+        <arguments>
+            <argument name="readers" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\Store\Model\Config\Reader\DefaultReader</item>
+                <item name="website" xsi:type="object">Magento\Store\Model\Config\Reader\Website</item>
+                <item name="websites" xsi:type="object">Magento\Store\Model\Config\Reader\Website</item>
+                <item name="store" xsi:type="object">Magento\Store\Model\Config\Reader\Store</item>
+                <item name="stores" xsi:type="object">Magento\Store\Model\Config\Reader\Store</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Framework\App\Config\Scope\ReaderPoolInterface" type="Magento\Store\Model\Config\Reader\ReaderPool"/>
+    <preference for="Magento\Framework\App\ScopeResolverInterface" type="Magento\Store\Model\Resolver\Store" />
+    <preference for="Magento\Framework\Stdlib\CookieManager" type="Magento\Framework\Stdlib\Cookie\PhpCookieManager" />
+    <type name="Magento\Framework\App\Action\Action">
+        <plugin name="storeCheck" type="Magento\Store\App\Action\Plugin\StoreCheck" sortOrder="10"/>
+    </type>
+    <type name="Magento\Store\Model\Resource\Website\Collection">
+        <arguments>
+            <argument name="fetchStrategy" xsi:type="object">Magento\Store\Model\Resource\Website\Collection\FetchStrategy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Store\Model\Resource\Group\Collection">
+        <arguments>
+            <argument name="fetchStrategy" xsi:type="object">Magento\Store\Model\Resource\Group\Collection\FetchStrategy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Store\Model\Resource\Store\Collection">
+        <arguments>
+            <argument name="fetchStrategy" xsi:type="object">Magento\Store\Model\Resource\Store\Collection\FetchStrategy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Store\Model\Store">
+        <arguments>
+            <argument name="session" xsi:type="object" shared="false">Magento\Framework\Session\Generic\Proxy</argument>
+            <argument name="isCustomEntryPoint" xsi:type="init_parameter">Magento\Store\Model\Store::CUSTOM_ENTRY_POINT_PARAM</argument>
+            <argument name="url" xsi:type="object" shared="false">Magento\Framework\UrlInterface</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Store\Model\StoreManager">
+        <arguments>
+            <argument name="request" xsi:type="object">Magento\Framework\App\Request\Http\Proxy</argument>
+            <argument name="helper" xsi:type="object">Magento\Core\Helper\Data\Proxy</argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Store\Model\Resource\Group\Collection\FetchStrategy" type="Magento\Framework\Data\Collection\Db\FetchStrategy\Cache">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Collection</argument>
+            <argument name="cacheIdPrefix" xsi:type="string">app_</argument>
+            <argument name="cacheTags" xsi:type="array">
+                <item name="storeTag" xsi:type="const">Magento\Store\Model\Store::CACHE_TAG</item>
+            </argument>
+            <argument name="cacheLifetime" xsi:type="boolean">false</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Store\Model\Resource\Store\Collection\FetchStrategy" type="Magento\Framework\Data\Collection\Db\FetchStrategy\Cache">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Collection</argument>
+            <argument name="cacheIdPrefix" xsi:type="string">app_</argument>
+            <argument name="cacheTags" xsi:type="array">
+                <item name="storeTag" xsi:type="const">Magento\Store\Model\Store::CACHE_TAG</item>
+            </argument>
+            <argument name="cacheLifetime" xsi:type="boolean">false</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Store\Model\Resource\Website\Collection\FetchStrategy" type="Magento\Framework\Data\Collection\Db\FetchStrategy\Cache">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Collection</argument>
+            <argument name="cacheIdPrefix" xsi:type="string">app_</argument>
+            <argument name="cacheTags" xsi:type="array">
+                <item name="storeTag" xsi:type="const">Magento\Store\Model\Website::CACHE_TAG</item>
+            </argument>
+            <argument name="cacheLifetime" xsi:type="boolean">false</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Store\Model\Config\Processor\Placeholder">
+        <arguments>
+            <argument name="request" xsi:type="object">Magento\Framework\App\Request\Http\Proxy</argument>
+            <argument name="urlPaths" xsi:type="array">
+                <item name="unsecureBaseUrl" xsi:type="string">web/unsecure/base_url</item>
+                <item name="secureBaseUrl" xsi:type="string">web/secure/base_url</item>
+            </argument>
+            <argument name="urlPlaceholder" xsi:type="string">{{base_url}}</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Module\Output\Config">
+        <arguments>
+            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Session\Config">
+        <arguments>
+            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Session\SidResolver">
+        <arguments>
+            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Session\Validator">
+        <arguments>
+            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Layout\Element\Layout">
+        <arguments>
+            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\DesignExceptions">
+        <arguments>
+            <argument name="exceptionConfigPath" xsi:type="string">design/theme/ua_regexp</argument>
+            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+        </arguments>
+    </type>
+</config>

@@ -19,13 +19,11 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Core/etc/config.xsd">
     <default>
         <design>
             <pagination>
@@ -40,13 +38,6 @@
             <debug>
                 <profiler>0</profiler>
             </debug>
-            <translate_inline>
-                <active>0</active>
-                <active_admin>0</active_admin>
-                <invalid_caches>
-                    <block_html />
-                </invalid_caches>
-            </translate_inline>
             <log>
                 <active>0</active>
                 <file>system.log</file>
@@ -55,18 +46,18 @@
             <js>
                 <merge_files>0</merge_files>
                 <minify_files>0</minify_files>
-                <minify_adapter>Magento\Code\Minifier\Adapter\Js\Jsmin</minify_adapter>
+                <minify_adapter>Magento\Framework\Code\Minifier\Adapter\Js\Jsmin</minify_adapter>
             </js>
             <image>
                 <default_adapter>GD2</default_adapter>
                 <adapters>
                     <GD2>
                         <title>PHP GD2</title>
-                        <class>Magento\Image\Adapter\Gd2</class>
+                        <class>Magento\Framework\Image\Adapter\Gd2</class>
                     </GD2>
                     <IMAGEMAGICK>
                         <title>ImageMagick</title>
-                        <class>Magento\Image\Adapter\ImageMagick</class>
+                        <class>Magento\Framework\Image\Adapter\ImageMagick</class>
                     </IMAGEMAGICK>
                 </adapters>
             </image>
@@ -86,119 +77,12 @@
                     <design_theme_folder>theme</design_theme_folder>
                 </allowed_resources>
             </media_storage_configuration>
-            <filesystem>
-                <directory>
-                    <design>
-                        <read_only>1</read_only>
-                        <path>app/design</path>
-                    </design>
-                    <var>
-                        <read_only>0</read_only>
-                        <path>var</path>
-                        <allow_create_dirs>1</allow_create_dirs>
-                        <permissions>511</permissions>
-                    </var>
-                    <tmp>
-                        <read_only>0</read_only>
-                        <path>var/tmp</path>
-                        <allow_create_dirs>1</allow_create_dirs>
-                        <permissions>511</permissions>
-                    </tmp>
-                    <cache>
-                        <read_only>0</read_only>
-                        <path>var/cache</path>
-                        <allow_create_dirs>1</allow_create_dirs>
-                        <permissions>511</permissions>
-                    </cache>
-                    <log>
-                        <read_only>0</read_only>
-                        <path>var/log</path>
-                        <allow_create_dirs>1</allow_create_dirs>
-                        <permissions>511</permissions>
-                    </log>
-                    <session>
-                        <read_only>0</read_only>
-                        <path>var/session</path>
-                        <allow_create_dirs>1</allow_create_dirs>
-                        <permissions>511</permissions>
-                    </session>
-                    <pub>
-                        <read_only>0</read_only>
-                        <path>pub</path>
-                        <uri>pub</uri>
-                        <permissions>511</permissions>
-                    </pub>
-                    <pub_lib>
-                        <read_only>1</read_only>
-                        <path>pub/lib</path>
-                        <uri>pub/lib</uri>
-                    </pub_lib>
-                    <media>
-                        <read_only>0</read_only>
-                        <path>pub/media</path>
-                        <uri>pub/media</uri>
-                        <permissions>511</permissions>
-                    </media>
-                    <upload>
-                        <read_only>0</read_only>
-                        <path>pub/media/upload</path>
-                        <uri>pub/media/upload</uri>
-                        <permissions>511</permissions>
-                    </upload>
-                    <static>
-                        <read_only>0</read_only>
-                        <path>pub/static</path>
-                        <uri>pub/static</uri>
-                        <permissions>511</permissions>
-                    </static>
-                    <view_cache>
-                        <read_only>0</read_only>
-                        <path>pub/cache</path>
-                        <uri>pub/cache</uri>
-                        <permissions>511</permissions>
-                    </view_cache>
-                    <ftp>
-                        <read_only>0</read_only>
-                        <permissions>511</permissions>
-                        <driver>Magento\Filesystem\Driver\File</driver>
-                    </ftp>
-                    <ftps>
-                        <read_only>0</read_only>
-                        <permissions>511</permissions>
-                        <driver>Magento\Filesystem\Driver\File</driver>
-                    </ftps>
-                    <ssh2>
-                        <read_only>0</read_only>
-                        <permissions>511</permissions>
-                        <driver>Magento\Filesystem\Driver\File</driver>
-                    </ssh2>
-                </directory>
-                <protocol>
-                    <zlib>
-                        <driver>Magento\Filesystem\Driver\Zlib</driver>
-                        <protocol>compress.zlib</protocol>
-                    </zlib>
-                    <http>
-                        <read_only>1</read_only>
-                        <driver>Magento\Filesystem\Driver\Http</driver>
-                        <protocol>http</protocol>
-                    </http>
-                    <https>
-                        <read_only>1</read_only>
-                        <driver>Magento\Filesystem\Driver\Https</driver>
-                        <protocol>https</protocol>
-                    </https>
-                </protocol>
-            </filesystem>
         </system>
         <web>
             <url>
                 <use_store>0</use_store>
                 <redirect_to_base>1</redirect_to_base>
             </url>
-            <seo>
-                <use_rewrites>0</use_rewrites>
-            </seo>
             <unsecure>
                 <base_url>{{base_url}}</base_url>
                 <base_web_url>{{unsecure_base_url}}</base_web_url>
@@ -228,6 +112,7 @@
             <browser_capabilities>
                 <cookies>1</cookies>
                 <javascript>1</javascript>
+                <local_storage>0</local_storage>
             </browser_capabilities>
         </web>
         <admin>
@@ -279,8 +164,8 @@
         </general>
         <theme>
             <customization>
-                <css>Magento\View\Design\Theme\Customization\File\Css</css>
-                <js>Magento\View\Design\Theme\Customization\File\Js</js>
+                <css>Magento\Framework\View\Design\Theme\Customization\File\Css</css>
+                <js>Magento\Framework\View\Design\Theme\Customization\File\Js</js>
             </customization>
         </theme>
     </default>

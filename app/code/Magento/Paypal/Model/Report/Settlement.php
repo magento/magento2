@@ -18,11 +18,13 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Paypal
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Model\Report;
+
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\DirectoryList;
 
 /**
  * Paypal Settlement Report model
@@ -41,9 +43,7 @@
  * @method string getLastModified()
  * @method \Magento\Paypal\Model\Report\Settlement setLastModified(string $value)
  */
-namespace Magento\Paypal\Model\Report;
-
-class Settlement extends \Magento\Core\Model\AbstractModel
+class Settlement extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * Default PayPal SFTP host
@@ -72,6 +72,7 @@ class Settlement extends \Magento\Core\Model\AbstractModel
 
     /**
      * Reports rows storage
+     *
      * @var array
      */
     protected $_rows = array();
@@ -135,7 +136,8 @@ class Settlement extends \Magento\Core\Model\AbstractModel
                 'Fee Currency' => 13,
                 'Custom Field' => 14,
                 'Consumer ID' => 15,
-                'Payment Tracking ID' => 16
+                'Payment Tracking ID' => 16,
+                'Store ID' => 17
             ),
             'rowmap' => array(
                 'Transaction ID' => 'transaction_id',
@@ -153,46 +155,57 @@ class Settlement extends \Magento\Core\Model\AbstractModel
                 'Fee Currency' => 'fee_currency',
                 'Custom Field' => 'custom_field',
                 'Consumer ID' => 'consumer_id',
-                'Payment Tracking ID' => 'payment_tracking_id'
+                'Payment Tracking ID' => 'payment_tracking_id',
+                'Store ID' => 'store_id'
             )
         )
     );
 
     /**
-     * @var \Magento\Filesystem\Directory\WriteInterface
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
      */
     protected $_tmpDirectory;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Filesystem $filesystem
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
-     * @param array $data
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
+    protected $_scopeConfig;
+
+    /**
+    * @param \Magento\Framework\Model\Context $context
+    * @param \Magento\Framework\Registry $registry
+    * @param \Magento\Framework\Filesystem $filesystem
+    * @param \Magento\Framework\StoreManagerInterface $storeManager
+    * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+    * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+    * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+    * @param array $data
+    */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Filesystem $filesystem,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Filesystem $filesystem,
+        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        $this->_tmpDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::SYS_TMP);
+        $this->_tmpDirectory = $filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
         $this->_storeManager = $storeManager;
+        $this->_scopeConfig = $scopeConfig;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
     /**
      * Initialize resource model
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -202,7 +215,7 @@ class Settlement extends \Magento\Core\Model\AbstractModel
     /**
      * Stop saving process if file with same report date, account ID and last modified date was already ferched
      *
-     * @return \Magento\Core\Model\AbstractModel
+     * @return \Magento\Framework\Model\AbstractModel
      */
     protected function _beforeSave()
     {
@@ -220,41 +233,49 @@ class Settlement extends \Magento\Core\Model\AbstractModel
      * Goes to specified host/path and fetches reports from there.
      * Save reports to database.
      *
-     * @param \Magento\Io\Sftp $connection
+     * @param \Magento\Framework\Io\Sftp $connection
      * @return int Number of report rows that were fetched and saved successfully
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
-    public function fetchAndSave(\Magento\Io\Sftp $connection)
+    public function fetchAndSave(\Magento\Framework\Io\Sftp $connection)
     {
         $fetched = 0;
         $listing = $this->_filterReportsList($connection->rawls());
         foreach ($listing as $filename => $attributes) {
 
-            $localCsv = 'PayPal_STL_' . uniqid(mt_rand()) . time() . '.csv';
+            $localCsv = 'PayPal_STL_' . uniqid(\Magento\Framework\Math\Random::getRandomNumber()) . time() . '.csv';
             if ($connection->read($filename, $this->_tmpDirectory->getAbsolutePath($localCsv))) {
                 if (!$this->_tmpDirectory->isWritable($localCsv)) {
-                    throw new \Magento\Core\Exception(__('We cannot create a target file for reading reports.'));
+                    throw new \Magento\Framework\Model\Exception(__('We cannot create a target file for reading reports.'));
                 }
 
                 $encoded = $this->_tmpDirectory->readFile($localCsv);
                 $csvFormat = 'new';
-                if (self::FILES_OUT_CHARSET != mb_detect_encoding(($encoded))) {
-                    $decoded = @iconv(self::FILES_IN_CHARSET, self::FILES_OUT_CHARSET . '//IGNORE', $encoded);
+
+                $fileEncoding = mb_detect_encoding($encoded);
+
+                if (self::FILES_OUT_CHARSET != $fileEncoding) {
+                    $decoded = @iconv($fileEncoding, self::FILES_OUT_CHARSET.'//IGNORE', $encoded);
                     $this->_tmpDirectory->writeFile($localCsv, $decoded);
                     $csvFormat = 'old';
                 }
 
                 // Set last modified date, this value will be overwritten during parsing
                 if (isset($attributes['mtime'])) {
-                    $lastModified = new \Zend_Date($attributes['mtime']);
+                    $lastModified = new \Magento\Framework\Stdlib\DateTime\Date($attributes['mtime']);
                     $this->setReportLastModified(
-                        $lastModified->toString(\Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)
+                        $lastModified->toString(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)
                     );
                 }
 
-                $this->setReportDate($this->_fileNameToDate($filename))
-                    ->setFilename($filename)
-                    ->parseCsv($localCsv, $csvFormat);
+                $this->setReportDate(
+                    $this->_fileNameToDate($filename)
+                )->setFilename(
+                    $filename
+                )->parseCsv(
+                    $localCsv,
+                    $csvFormat
+                );
 
                 if ($this->getAccountId()) {
                     $this->save();
@@ -275,22 +296,27 @@ class Settlement extends \Magento\Core\Model\AbstractModel
      * Connect to an SFTP server using specified configuration
      *
      * @param array $config
-     * @return \Magento\Io\Sftp
+     * @return \Magento\Framework\Io\Sftp
      * @throws \InvalidArgumentException
      */
     public static function createConnection(array $config)
     {
-        if (!isset($config['hostname']) || !isset($config['username'])
-            || !isset($config['password']) || !isset($config['path'])
+        if (!isset(
+            $config['hostname']
+        ) || !isset(
+            $config['username']
+        ) || !isset(
+            $config['password']
+        ) || !isset(
+            $config['path']
+        )
         ) {
             throw new \InvalidArgumentException('Required config elements: hostname, username, password, path');
         }
-        $connection = new \Magento\Io\Sftp();
-        $connection->open(array(
-            'host'     => $config['hostname'],
-            'username' => $config['username'],
-            'password' => $config['password']
-        ));
+        $connection = new \Magento\Framework\Io\Sftp();
+        $connection->open(
+            array('host' => $config['hostname'], 'username' => $config['username'], 'password' => $config['password'])
+        );
         $connection->cd($config['path']);
         return $connection;
     }
@@ -300,7 +326,7 @@ class Settlement extends \Magento\Core\Model\AbstractModel
      *
      * @param string $localCsv Path to CSV file
      * @param string $format CSV format(column names)
-     * @return \Magento\Paypal\Model\Report\Settlement
+     * @return $this
      */
     public function parseCsv($localCsv, $format = 'new')
     {
@@ -312,24 +338,31 @@ class Settlement extends \Magento\Core\Model\AbstractModel
         $flippedSectionColumns = array_flip($sectionColumns);
         $stream = $this->_tmpDirectory->openFile($localCsv);
         while ($line = $stream->readCsv()) {
-            if (empty($line)) { // The line was empty, so skip it.
+            if (empty($line)) {
+                // The line was empty, so skip it.
                 continue;
             }
             $lineType = $line[0];
-            switch($lineType) {
-                case 'RH': // Report header.
-                    $lastModified = new \Zend_Date($line[1]);
-                    $this->setReportLastModified($lastModified->toString(\Magento\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT));
+            switch ($lineType) {
+                case 'RH':
+                    // Report header.
+                    $lastModified = new \Magento\Framework\Stdlib\DateTime\Date($line[1]);
+                    $this->setReportLastModified(
+                        $lastModified->toString(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)
+                    );
                     //$this->setAccountId($columns[2]); -- probably we'll just take that from the section header...
                     break;
-                case 'FH': // File header.
+                case 'FH':
+                    // File header.
                     // Nothing interesting here, move along
                     break;
-                case 'SH': // Section header.
+                case 'SH':
+                    // Section header.
                     $this->setAccountId($line[3]);
                     $this->loadByAccountAndDate();
                     break;
-                case 'CH': // Section columns.
+                case 'CH':
+                    // Section columns.
                     // In case ever the column order is changed, we will have the items recorded properly
                     // anyway. We have named, not numbered columns.
                     for ($i = 1; $i < count($line); $i++) {
@@ -337,18 +370,24 @@ class Settlement extends \Magento\Core\Model\AbstractModel
                     }
                     $flippedSectionColumns = array_flip($sectionColumns);
                     break;
-                case 'SB': // Section body.
+                case 'SB':
+                    // Section body.
                     $bodyItem = array();
-                    for($i = 1; $i < count($line); $i++) {
+                    for ($i = 1; $i < count($line); $i++) {
                         $bodyItem[$rowMap[$flippedSectionColumns[$i]]] = $line[$i];
                     }
                     $this->_rows[] = $bodyItem;
                     break;
-                case 'SC': // Section records count.
-                case 'RC': // Report records count.
-                case 'SF': // Section footer.
-                case 'FF': // File footer.
-                case 'RF': // Report footer.
+                case 'SC':
+                    // Section records count.
+                case 'RC':
+                    // Report records count.
+                case 'SF':
+                    // Section footer.
+                case 'FF':
+                    // File footer.
+                case 'RF':
+                    // Report footer.
                     // Nothing to see here, move along
                     break;
                 default:
@@ -361,7 +400,7 @@ class Settlement extends \Magento\Core\Model\AbstractModel
     /**
      * Load report by unique key (accoutn + report date)
      *
-     * @return \Magento\Paypal\Model\Report\Settlement
+     * @return $this
      */
     public function loadByAccountAndDate()
     {
@@ -435,17 +474,41 @@ class Settlement extends \Magento\Core\Model\AbstractModel
         $configs = array();
         $uniques = array();
         foreach ($this->_storeManager->getStores() as $store) {
-            /*@var $store \Magento\Core\Model\Store */
-            $active = (bool)$store->getConfig('paypal/fetch_reports/active');
+            /*@var $store \Magento\Store\Model\Store */
+            $active = $this->_scopeConfig->isSetFlag(
+                'paypal/fetch_reports/active',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $store
+            );
             if (!$active && $automaticMode) {
                 continue;
             }
             $cfg = array(
-                'hostname'  => $store->getConfig('paypal/fetch_reports/ftp_ip'),
-                'path'      => $store->getConfig('paypal/fetch_reports/ftp_path'),
-                'username'  => $store->getConfig('paypal/fetch_reports/ftp_login'),
-                'password'  => $store->getConfig('paypal/fetch_reports/ftp_password'),
-                'sandbox'   => $store->getConfig('paypal/fetch_reports/ftp_sandbox'),
+                'hostname' => $this->_scopeConfig->getValue(
+                    'paypal/fetch_reports/ftp_ip',
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    $store
+                ),
+                'path' => $this->_scopeConfig->getValue(
+                    'paypal/fetch_reports/ftp_path',
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    $store
+                ),
+                'username' => $this->_scopeConfig->getValue(
+                    'paypal/fetch_reports/ftp_login',
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    $store
+                ),
+                'password' => $this->_scopeConfig->getValue(
+                    'paypal/fetch_reports/ftp_password',
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    $store
+                ),
+                'sandbox' => $this->_scopeConfig->getValue(
+                    'paypal/fetch_reports/ftp_sandbox',
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    $store
+                )
             );
             if (empty($cfg['username']) || empty($cfg['password'])) {
                 continue;

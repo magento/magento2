@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -30,23 +27,22 @@ $billingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->c
     'Magento\Sales\Model\Order\Address',
     array(
         'data' => array(
-            'firstname'  => 'guest',
-            'lastname'   => 'guest',
-            'email'      => 'customer@example.com',
-            'street'     => 'street',
-            'city'       => 'Los Angeles',
-            'region'     => 'CA',
-            'postcode'   => '1',
+            'firstname' => 'guest',
+            'lastname' => 'guest',
+            'email' => 'customer@example.com',
+            'street' => 'street',
+            'city' => 'Los Angeles',
+            'region' => 'CA',
+            'postcode' => '1',
             'country_id' => 'US',
-            'telephone'  => '1',
+            'telephone' => '1'
         )
     )
 );
 $billingAddress->setAddressType('billing');
 
 $shippingAddress = clone $billingAddress;
-$shippingAddress->setId(null)
-    ->setAddressType('shipping');
+$shippingAddress->setId(null)->setAddressType('shipping');
 
 /** @var $order \Magento\Sales\Model\Order */
 $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order');
@@ -60,9 +56,15 @@ $payment = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('
 $payment->setMethod('checkmo');
 
 $order = $clonedOrder;
-$order->setId(null)
-    ->setCustomerEmail('customer@example.com')
-    ->setBillingAddress($billingAddress)
-    ->setShippingAddress($shippingAddress)
-    ->setPayment($payment);
+$order->setId(
+    null
+)->setCustomerEmail(
+    'customer@example.com'
+)->setBillingAddress(
+    $billingAddress
+)->setShippingAddress(
+    $shippingAddress
+)->setPayment(
+    $payment
+);
 $order->save();

@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Magento\Framework\Module\SomeInterface" type="Magento\Framework\Module\ClassOne" />
+    <preference for="Magento\Framework\Module\SomeInterfaceTwo" type="Magento\Framework\Module\ClassTwo" />
+    <type name="Magento\Framework\App\Arguments\Loader" shared="false">
+        <arguments>
+            <argument name="customFile" xsi:type="init_parameter">Magento\Framework\App\Arguments\Loader::PARAM_CUSTOM_FILE</argument>
+            <argument name="newParam" xsi:type="string">paramValue</argument>
+            <argument name="customConfig" xsi:type="object" shared="false">Magento\Core\Model\Config\Storage\Modules</argument>
+            <argument name="customValue" xsi:type="string">someCustomValue</argument>
+            <argument name="customComplexValue" xsi:type="array">
+                <item name="three" xsi:type="string">three</item>
+            </argument>
+        </arguments>
+        <plugin name="three" type="somePluginThree"/>
+        <plugin name="two" type="somePluginTwo" sortOrder="20" disabled="true"/>
+        <plugin name="one" sortOrder="800"/>
+    </type>
+    <virtualType name="Magento\Framework\App\Arguments\LoaderVirtual" shared="true">
+        <plugin name="three" type="somePluginThree"/>
+        <plugin name="two" type="somePluginTwo" sortOrder="20" disabled="true"/>
+        <plugin name="one" sortOrder="800"/>
+    </virtualType>
+    <type name="Magento\Framework\Data\Collection\Db\FetchStrategy\Cache">
+        <arguments>
+            <argument name="cacheTags" xsi:type="array">
+                <item name="const" xsi:type="const">Magento\Store\Model\Website::CACHE_TAG</item>
+                <item name="boolFalse" xsi:type="boolean">true</item>
+                <item name="boolTrue" xsi:type="number">10</item>
+                <item name="boolOne" xsi:type="string">1</item>
+                <item name="boolZero" xsi:type="boolean">false</item>
+                <item name="stringPattern" xsi:type="string">Az-Value</item>
+            </argument>
+            <argument name="constParam" xsi:type="const">Magento\Store\Model\Website::CACHE_TAG</argument>
+            <argument name="boolFalseParam" xsi:type="number">100</argument>
+            <argument name="nullValueParam" xsi:type="boolean">true</argument>
+        </arguments>
+    </type>
+</config>

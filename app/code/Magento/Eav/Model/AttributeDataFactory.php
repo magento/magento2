@@ -18,30 +18,31 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Eav
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Eav\Model;
 
 /**
  * EAV Entity Attribute Data Factory
  *
- * @category    Magento
- * @package     Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Eav\Model;
-
 class AttributeDataFactory
 {
-    const OUTPUT_FORMAT_JSON    = 'json';
-    const OUTPUT_FORMAT_TEXT    = 'text';
-    const OUTPUT_FORMAT_HTML    = 'html';
-    const OUTPUT_FORMAT_PDF     = 'pdf';
+    const OUTPUT_FORMAT_JSON = 'json';
+
+    const OUTPUT_FORMAT_TEXT = 'text';
+
+    const OUTPUT_FORMAT_HTML = 'html';
+
+    const OUTPUT_FORMAT_PDF = 'pdf';
+
     const OUTPUT_FORMAT_ONELINE = 'oneline';
-    const OUTPUT_FORMAT_ARRAY   = 'array'; // available only for multiply attributes
+
+    const OUTPUT_FORMAT_ARRAY = 'array';
+
+    // available only for multiply attributes
 
     /**
      * Array of attribute data models by input type
@@ -51,20 +52,20 @@ class AttributeDataFactory
     protected $_dataModels = array();
 
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Stdlib\String
+     * @var \Magento\Framework\Stdlib\String
      */
     protected $string;
 
     /**
-     * @param \Magento\ObjectManager $objectManager
-     * @param \Magento\Stdlib\String $string
+     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\Stdlib\String $string
      */
-    public function __construct(\Magento\ObjectManager $objectManager, \Magento\Stdlib\String $string)
+    public function __construct(\Magento\Framework\ObjectManager $objectManager, \Magento\Framework\Stdlib\String $string)
     {
         $this->_objectManager = $objectManager;
         $this->string = $string;
@@ -75,10 +76,10 @@ class AttributeDataFactory
      * Set entity to data model (need for work)
      *
      * @param \Magento\Eav\Model\Attribute $attribute
-     * @param \Magento\Core\Model\AbstractModel $entity
+     * @param \Magento\Framework\Model\AbstractModel $entity
      * @return \Magento\Eav\Model\Attribute\Data\AbstractData
      */
-    public function create(\Magento\Eav\Model\Attribute $attribute, \Magento\Core\Model\AbstractModel $entity)
+    public function create(\Magento\Eav\Model\Attribute $attribute, \Magento\Framework\Model\AbstractModel $entity)
     {
         /* @var $dataModel \Magento\Eav\Model\Attribute\Data\AbstractData */
         $dataModelClass = $attribute->getDataModel();

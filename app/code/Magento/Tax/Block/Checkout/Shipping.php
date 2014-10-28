@@ -18,17 +18,14 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Tax
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Tax\Block\Checkout;
 
 /**
  * Subtotal Total Row Renderer
  */
-namespace Magento\Tax\Block\Checkout;
-
 class Shipping extends \Magento\Checkout\Block\Total\DefaultTotal
 {
     /**
@@ -44,8 +41,7 @@ class Shipping extends \Magento\Checkout\Block\Total\DefaultTotal
     protected $_taxConfig;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Catalog\Helper\Data $catalogData
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Sales\Model\Config $salesConfig
@@ -53,8 +49,7 @@ class Shipping extends \Magento\Checkout\Block\Total\DefaultTotal
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Catalog\Helper\Data $catalogData,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Sales\Model\Config $salesConfig,
@@ -62,7 +57,8 @@ class Shipping extends \Magento\Checkout\Block\Total\DefaultTotal
         array $data = array()
     ) {
         $this->_taxConfig = $taxConfig;
-        parent::__construct($context, $catalogData, $customerSession, $checkoutSession, $salesConfig, $data);
+        parent::__construct($context, $customerSession, $checkoutSession, $salesConfig, $data);
+        $this->_isScopePrivate = true;
     }
 
     /**
@@ -112,7 +108,10 @@ class Shipping extends \Magento\Checkout\Block\Total\DefaultTotal
      */
     public function getIncludeTaxLabel()
     {
-        return __('Shipping Incl. Tax (%1)', $this->escapeHtml($this->getTotal()->getAddress()->getShippingDescription()));
+        return __(
+            'Shipping Incl. Tax (%1)',
+            $this->escapeHtml($this->getTotal()->getAddress()->getShippingDescription())
+        );
     }
 
     /**
@@ -122,6 +121,9 @@ class Shipping extends \Magento\Checkout\Block\Total\DefaultTotal
      */
     public function getExcludeTaxLabel()
     {
-        return __('Shipping Excl. Tax (%1)', $this->escapeHtml($this->getTotal()->getAddress()->getShippingDescription()));
+        return __(
+            'Shipping Excl. Tax (%1)',
+            $this->escapeHtml($this->getTotal()->getAddress()->getShippingDescription())
+        );
     }
 }

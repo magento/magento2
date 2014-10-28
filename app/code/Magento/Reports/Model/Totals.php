@@ -18,21 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Reports
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Reports\Model;
 
 /**
  *  Totals Class
  *
- * @category   Magento
- * @package    Magento_Reports
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Reports\Model;
-
 class Totals
 {
     /**
@@ -41,7 +36,7 @@ class Totals
      * @param \Magento\Backend\Block\Widget\Grid $grid
      * @param string $from
      * @param string $to
-     * @return \Magento\Object
+     * @return \Magento\Framework\Object
      */
     public function countTotals($grid, $from, $to)
     {
@@ -61,7 +56,7 @@ class Totals
             }
             $data = $item->getData();
 
-            foreach ($columns as $field=>$a) {
+            foreach ($columns as $field => $a) {
                 if ($field !== '') {
                     $columns[$field]['value'] = $columns[$field]['value'] + (isset($data[$field]) ? $data[$field] : 0);
                 }
@@ -73,23 +68,23 @@ class Totals
             if ($a['total'] == 'avg') {
                 if ($field !== '') {
                     if ($count != 0) {
-                        $data[$field] = $a['value']/$count;
+                        $data[$field] = $a['value'] / $count;
                     } else {
                         $data[$field] = 0;
                     }
                 }
-            } else if ($a['total'] == 'sum') {
+            } elseif ($a['total'] == 'sum') {
                 if ($field !== '') {
                     $data[$field] = $a['value'];
                 }
-            } else if (strpos($a['total'], '/') !== FALSE) {
+            } elseif (strpos($a['total'], '/') !== false) {
                 if ($field !== '') {
                     $data[$field] = 0;
                 }
             }
         }
 
-        $totals = new \Magento\Object();
+        $totals = new \Magento\Framework\Object();
         $totals->setData($data);
 
         return $totals;

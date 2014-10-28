@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Config\Structure\Element;
 
 class FlyweightFactoryTest extends \PHPUnit_Framework_TestCase
@@ -41,8 +37,10 @@ class FlyweightFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock('Magento\ObjectManager');
-        $this->_model = new \Magento\Backend\Model\Config\Structure\Element\FlyweightFactory($this->_objectManagerMock);
+        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManager');
+        $this->_model = new \Magento\Backend\Model\Config\Structure\Element\FlyweightFactory(
+            $this->_objectManagerMock
+        );
     }
 
     protected function tearDown()
@@ -53,11 +51,19 @@ class FlyweightFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreate()
     {
-        $this->_objectManagerMock->expects($this->any())->method('create')->will($this->returnValueMap(array(
-            array('Magento\Backend\Model\Config\Structure\Element\Section', array(), 'sectionObject'),
-            array('Magento\Backend\Model\Config\Structure\Element\Group', array(), 'groupObject'),
-            array('Magento\Backend\Model\Config\Structure\Element\Field', array(), 'fieldObject'),
-        )));
+        $this->_objectManagerMock->expects(
+            $this->any()
+        )->method(
+            'create'
+        )->will(
+            $this->returnValueMap(
+                array(
+                    array('Magento\Backend\Model\Config\Structure\Element\Section', array(), 'sectionObject'),
+                    array('Magento\Backend\Model\Config\Structure\Element\Group', array(), 'groupObject'),
+                    array('Magento\Backend\Model\Config\Structure\Element\Field', array(), 'fieldObject')
+                )
+            )
+        );
         $this->assertEquals('sectionObject', $this->_model->create('section'));
         $this->assertEquals('groupObject', $this->_model->create('group'));
         $this->assertEquals('fieldObject', $this->_model->create('field'));

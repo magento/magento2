@@ -18,12 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Config\Structure\Element\Dependency;
 
 class Mapper
@@ -38,31 +35,29 @@ class Mapper
     /**
      * Dependency Field model
      *
-     * @var \Magento\Backend\Model\Config\Structure\Element\Dependency\FieldFactory
+     * @var FieldFactory
      */
     protected $_fieldFactory;
 
     /**
-     * Application object
-     *
-     * @var \Magento\Core\Model\App
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_application;
+    protected $_scopeConfig;
 
     /**
-     * @param \Magento\Core\Model\App $application
      * @param \Magento\Backend\Model\Config\Structure\SearchInterface $fieldLocator
-     * @param \Magento\Backend\Model\Config\Structure\Element\Dependency\FieldFactory $fieldFactory
+     * @param FieldFactory $fieldFactory
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        \Magento\Core\Model\App $application,
         \Magento\Backend\Model\Config\Structure\SearchInterface $fieldLocator,
-        \Magento\Backend\Model\Config\Structure\Element\Dependency\FieldFactory $fieldFactory
+        FieldFactory $fieldFactory,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
 
         $this->_fieldLocator = $fieldLocator;
-        $this->_application = $application;
         $this->_fieldFactory = $fieldFactory;
+        $this->_scopeConfig = $scopeConfig;
     }
 
     /**
@@ -83,14 +78,16 @@ class Mapper
             /** @var \Magento\Backend\Model\Config\Structure\Element\Field $dependentField  */
             $dependentField = $this->_fieldLocator->getElement($depend['id']);
             /*
-            * If dependent field can't be shown in current scope and real dependent config value
-            * is not equal to preferred one, then hide dependence fields by adding dependence
-            * based on not shown field (not rendered field)
-            */
+             * If dependent field can't be shown in current scope and real dependent config value
+             * is not equal to preferred one, then hide dependence fields by adding dependence
+             * based on not shown field (not rendered field)
+             */
             if (false == $dependentField->isVisible()) {
-                $valueInStore = $this->_application
-                    ->getStore($storeCode)
-                    ->getConfig($dependentField->getPath($fieldPrefix));
+                $valueInStore = $this->_scopeConfig->getValue(
+                    $dependentField->getPath($fieldPrefix),
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    $storeCode
+                );
                 $shouldAddDependency = !$field->isValueSatisfy($valueInStore);
             }
             if ($shouldAddDependency) {

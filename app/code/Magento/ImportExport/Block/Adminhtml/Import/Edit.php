@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_ImportExport
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,8 +25,6 @@
 /**
  * Import edit block
  *
- * @category    Magento
- * @package     Magento_ImportExport
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\ImportExport\Block\Adminhtml\Import;
@@ -44,14 +40,14 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     {
         parent::_construct();
 
-        $this->removeButton('back')
-            ->removeButton('reset')
-            ->_updateButton('save', 'label', __('Check Data'))
-            ->_updateButton('save', 'id', 'upload_button')
-            ->_updateButton('save', 'onclick', 'varienImport.postToFrame();')
-            ->_updateButton('save', 'data_attribute', '');
+        $this->buttonList->remove('back');
+        $this->buttonList->remove('reset');
+        $this->buttonList->update('save', 'label', __('Check Data'));
+        $this->buttonList->update('save', 'id', 'upload_button');
+        $this->buttonList->update('save', 'onclick', 'varienImport.postToFrame();');
+        $this->buttonList->update('save', 'data_attribute', '');
 
-        $this->_objectId   = 'import_id';
+        $this->_objectId = 'import_id';
         $this->_blockGroup = 'Magento_ImportExport';
         $this->_controller = 'adminhtml_import';
     }

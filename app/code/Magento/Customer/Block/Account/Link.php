@@ -21,10 +21,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Block\Account;
 
-class Link extends \Magento\View\Element\Html\Link
+class Link extends \Magento\Framework\View\Element\Html\Link
 {
     /**
      * @var \Magento\Customer\Helper\Data
@@ -32,17 +31,18 @@ class Link extends \Magento\View\Element\Html\Link
     protected $_customerHelper;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Helper\Data $customerHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Helper\Data $customerHelper,
         array $data = array()
     ) {
         $this->_customerHelper = $customerHelper;
         parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
     }
 
     /**

@@ -18,24 +18,17 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Sales\Model\Resource\Report\Refunded\Collection;
 
 /**
  * Sales report refunded collection
  *
- * @category    Magento
- * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Model\Resource\Report\Refunded\Collection;
-
-class Order
-    extends \Magento\Sales\Model\Resource\Report\Collection\AbstractCollection
+class Order extends \Magento\Sales\Model\Resource\Report\Collection\AbstractCollection
 {
     /**
      * Period format
@@ -49,21 +42,21 @@ class Order
      *
      * @var array
      */
-    protected $_selectedColumns    = array();
+    protected $_selectedColumns = array();
 
     /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\Logger $logger
-     * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Sales\Model\Resource\Report $resource
-     * @param mixed $connection
+     * @param \Zend_Db_Adapter_Abstract $connection
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
-        \Magento\Logger $logger,
-        \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Logger $logger,
+        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Sales\Model\Resource\Report $resource,
         $connection = null
     ) {
@@ -82,18 +75,21 @@ class Order
         if ('month' == $this->_period) {
             $this->_periodFormat = $adapter->getDateFormatSql('period', '%Y-%m');
         } elseif ('year' == $this->_period) {
-            $this->_periodFormat = $adapter->getDateExtractSql('period', \Magento\DB\Adapter\AdapterInterface::INTERVAL_YEAR);
+            $this->_periodFormat = $adapter->getDateExtractSql(
+                'period',
+                \Magento\Framework\DB\Adapter\AdapterInterface::INTERVAL_YEAR
+            );
         } else {
             $this->_periodFormat = $adapter->getDateFormatSql('period', '%Y-%m-%d');
         }
 
         if (!$this->isTotals()) {
             $this->_selectedColumns = array(
-                'period'            => $this->_periodFormat,
-                'orders_count'      => 'SUM(orders_count)',
-                'refunded'          => 'SUM(refunded)',
-                'online_refunded'   => 'SUM(online_refunded)',
-                'offline_refunded'  => 'SUM(offline_refunded)'
+                'period' => $this->_periodFormat,
+                'orders_count' => 'SUM(orders_count)',
+                'refunded' => 'SUM(refunded)',
+                'online_refunded' => 'SUM(online_refunded)',
+                'offline_refunded' => 'SUM(offline_refunded)'
             );
         }
 

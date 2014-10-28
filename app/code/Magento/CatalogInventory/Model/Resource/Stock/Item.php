@@ -18,46 +18,40 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_CatalogInventory
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\CatalogInventory\Model\Resource\Stock;
 
 /**
  * Stock item resource model
- *
- * @category    Magento
- * @package     Magento_CatalogInventory
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\CatalogInventory\Model\Resource\Stock;
-
-class Item extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Item extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
-     * @param \Magento\App\Resource $resource
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        \Magento\App\Resource $resource,
-        \Magento\Core\Model\Store\Config $coreStoreConfig
+        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         parent::__construct($resource);
     }
 
     /**
      * Define main table and initialize connection
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -69,12 +63,11 @@ class Item extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\CatalogInventory\Model\Stock\Item $item
      * @param int $productId
-     * @return \Magento\CatalogInventory\Model\Resource\Stock\Item
+     * @return $this
      */
     public function loadByProductId(\Magento\CatalogInventory\Model\Stock\Item $item, $productId)
     {
-        $select = $this->_getLoadSelect('product_id', $productId, $item)
-            ->where('stock_id = :stock_id');
+        $select = $this->_getLoadSelect('product_id', $productId, $item)->where('stock_id = :stock_id');
         $data = $this->_getReadAdapter()->fetchRow($select, array(':stock_id' => $item->getStockId()));
         if ($data) {
             $item->setData($data);
@@ -87,17 +80,14 @@ class Item extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Retrieve select object and join it to product entity table to get type ids
      *
      * @param string $field
-     * @param mixed $value
+     * @param int $value
      * @param \Magento\CatalogInventory\Model\Stock\Item $object
-     * @return \Magento\DB\Select
+     * @return \Magento\Framework\DB\Select
      */
     protected function _getLoadSelect($field, $value, $object)
     {
         $select = parent::_getLoadSelect($field, $value, $object)
-            ->join(array('p' => $this->getTable('catalog_product_entity')),
-                'product_id=p.entity_id',
-                array('type_id')
-            );
+            ->join(array('p' => $this->getTable('catalog_product_entity')), 'product_id=p.entity_id', array('type_id'));
         return $select;
     }
 
@@ -106,20 +96,24 @@ class Item extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Catalog\Model\Resource\Product\Collection $productCollection
      * @param array $columns
-     * @return \Magento\CatalogInventory\Model\Resource\Stock\Item
+     * @return $this
      */
     public function addCatalogInventoryToProductCollection($productCollection, $columns = null)
     {
         if ($columns === null) {
             $adapter = $this->_getReadAdapter();
-            $isManageStock = (int)$this->_coreStoreConfig->getConfig(\Magento\CatalogInventory\Model\Stock\Item::XML_PATH_MANAGE_STOCK);
-            $stockExpr = $adapter->getCheckSql('cisi.use_config_manage_stock = 1', $isManageStock, 'cisi.manage_stock');
+            $isManageStock = (int) $this->_scopeConfig->getValue(
+                \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_MANAGE_STOCK,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
+            $stockExpr = $adapter->getCheckSql(
+                'cisi.use_config_manage_stock = 1',
+                $isManageStock,
+                'cisi.manage_stock'
+            );
             $stockExpr = $adapter->getCheckSql("({$stockExpr} = 1)", 'cisi.is_in_stock', '1');
 
-            $columns = array(
-                'is_saleable' => new \Zend_Db_Expr($stockExpr),
-                'inventory_in_stock' => 'is_in_stock'
-            );
+            $columns = array('is_saleable' => new \Zend_Db_Expr($stockExpr), 'inventory_in_stock' => 'is_in_stock');
         }
 
         $productCollection->joinTable(
@@ -135,11 +129,11 @@ class Item extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Use qty correction for qty column update
      *
-     * @param \Magento\Core\Model\AbstractModel $object
+     * @param \Magento\Framework\Object $object
      * @param string $table
      * @return array
      */
-    protected function _prepareDataForTable(\Magento\Object $object, $table)
+    protected function _prepareDataForTable(\Magento\Framework\Object $object, $table)
     {
         $data = parent::_prepareDataForTable($object, $table);
         $ifNullSql = $this->_getWriteAdapter()->getIfNullSql('qty');

@@ -18,57 +18,50 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Eav
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Eav\Model\Entity\Attribute\Frontend;
 
 class Datetime extends \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend
 {
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
-    protected $_locale;
+    protected $_localeDate;
 
     /**
      * @param \Magento\Eav\Model\Entity\Attribute\Source\BooleanFactory $attrBooleanFactory
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      */
-    function __construct(
+    public function __construct(
         \Magento\Eav\Model\Entity\Attribute\Source\BooleanFactory $attrBooleanFactory,
-        \Magento\Core\Model\LocaleInterface $locale
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
     ) {
         parent::__construct($attrBooleanFactory);
-        $this->_locale = $locale;
+        $this->_localeDate = $localeDate;
     }
 
     /**
      * Retrieve attribute value
      *
-     * @param $object
+     * @param \Magento\Framework\Object $object
      * @return mixed
      */
-    public function getValue(\Magento\Object $object)
+    public function getValue(\Magento\Framework\Object $object)
     {
         $data = '';
         $value = parent::getValue($object);
-        $format = $this->_locale->getDateFormat(
-            \Magento\Core\Model\LocaleInterface::FORMAT_TYPE_MEDIUM
-        );
+        $format = $this->_localeDate->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM);
 
         if ($value) {
             try {
-                $data = $this->_locale->date($value, \Zend_Date::ISO_8601, null, false)->toString($format);
+                $data = $this->_localeDate->date($value, \Zend_Date::ISO_8601, null, false)->toString($format);
             } catch (\Exception $e) {
-                $data = $this->_locale->date($value, null, null, false)->toString($format);
+                $data = $this->_localeDate->date($value, null, null, false)->toString($format);
             }
         }
 
         return $data;
     }
 }
-

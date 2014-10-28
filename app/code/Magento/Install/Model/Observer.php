@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Install
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -34,21 +32,20 @@ class Observer
     /**
      * Install Session
      *
-     * @var \Magento\Session\Generic
+     * @var \Magento\Framework\Session\Generic
      */
     protected $_session;
 
     /**
-     * @param \Magento\Session\Generic $session
+     * @param \Magento\Framework\Session\Generic $session
      */
-    public function __construct(\Magento\Session\Generic $session)
+    public function __construct(\Magento\Framework\Session\Generic $session)
     {
         $this->_session = $session;
     }
 
-
     /**
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
      * @return $this
      */
     public function bindLocale($observer)

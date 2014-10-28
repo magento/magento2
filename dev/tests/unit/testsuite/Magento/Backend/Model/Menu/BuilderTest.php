@@ -18,23 +18,17 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Backend\Model\Menu;
 
 class BuilderTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var \Magento\Backend\Model\Menu\Builder
      */
-    protected  $_model;
+    protected $_model;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -49,8 +43,11 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_factoryMock = $this->getMock("Magento\Backend\Model\Menu\Item\Factory", array(), array(), '', false);
-        $this->_menuMock = $this->getMock('Magento\Backend\Model\Menu', array(),
-            array($this->getMock('Magento\Logger', array(), array(), '', false)));
+        $this->_menuMock = $this->getMock(
+            'Magento\Backend\Model\Menu',
+            array(),
+            array($this->getMock('Magento\Framework\Logger', array(), array(), '', false))
+        );
 
         $this->_model = new \Magento\Backend\Model\Menu\Builder($this->_factoryMock, $this->_menuMock);
     }
@@ -58,16 +55,10 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     public function testProcessCommand()
     {
         $command = $this->getMock('Magento\Backend\Model\Menu\Builder\Command\Add', array(), array(), '', false);
-        $command->expects($this->any())
-            ->method('getId')
-            ->will($this->returnValue(1));
+        $command->expects($this->any())->method('getId')->will($this->returnValue(1));
         $command2 = $this->getMock('Magento\Backend\Model\Menu\Builder\Command\Update', array(), array(), '', false);
-        $command2->expects($this->any())
-            ->method('getId')
-            ->will($this->returnValue(1));
-        $command->expects($this->once())
-            ->method('chain')
-            ->with($this->equalTo($command2));
+        $command2->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $command->expects($this->once())->method('chain')->with($this->equalTo($command2));
         $this->_model->processCommand($command);
         $this->_model->processCommand($command2);
     }
@@ -81,17 +72,21 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $item2 = $this->getMock("Magento\Backend\Model\Menu\Item", array(), array(), '', false);
         $this->_factoryMock->expects($this->at(1))->method('create')->will($this->returnValue($item2));
 
-        $this->_menuMock->expects($this->at(0))
-            ->method('add')
-            ->with(
+        $this->_menuMock->expects(
+            $this->at(0)
+        )->method(
+            'add'
+        )->with(
             $this->isInstanceOf('Magento\Backend\Model\Menu\Item'),
             $this->equalTo(null),
             $this->equalTo(2)
         );
 
-        $this->_menuMock->expects($this->at(1))
-            ->method('add')
-            ->with(
+        $this->_menuMock->expects(
+            $this->at(1)
+        )->method(
+            'add'
+        )->with(
             $this->isInstanceOf('Magento\Backend\Model\Menu\Item'),
             $this->equalTo(null),
             $this->equalTo(4)
@@ -104,7 +99,8 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
                     'title' => 'Item 1',
                     'module' => 'Magento_Backend',
                     'sortOrder' => 2,
-                    'resource' => 'Magento_Backend::item1')
+                    'resource' => 'Magento_Backend::item1'
+                )
             )
         );
         $this->_model->processCommand(
@@ -125,21 +121,19 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetResultSkipsRemovedItems()
     {
-        $this->_model->processCommand(new \Magento\Backend\Model\Menu\Builder\Command\Add(array(
-                'id' => 1,
-                'title' => 'Item 1',
-                'module' => 'Magento_Backend',
-                'resource' => 'Magento_Backend::i1'
-            )
-        ));
         $this->_model->processCommand(
-            new \Magento\Backend\Model\Menu\Builder\Command\Remove(
-                array('id' => 1,)
+            new \Magento\Backend\Model\Menu\Builder\Command\Add(
+                array(
+                    'id' => 1,
+                    'title' => 'Item 1',
+                    'module' => 'Magento_Backend',
+                    'resource' => 'Magento_Backend::i1'
+                )
             )
         );
+        $this->_model->processCommand(new \Magento\Backend\Model\Menu\Builder\Command\Remove(array('id' => 1)));
 
-        $this->_menuMock->expects($this->never())
-            ->method('addChild');
+        $this->_menuMock->expects($this->never())->method('addChild');
 
         $this->_model->getResult($this->_menuMock);
     }
@@ -150,17 +144,19 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     public function testGetResultSkipItemsWithInvalidParent()
     {
         $item1 = $this->getMock("Magento\Backend\Model\Menu\Item", array(), array(), '', false);
-        $this->_factoryMock->expects($this->any())->method('create')
-            ->will($this->returnValue($item1));
+        $this->_factoryMock->expects($this->any())->method('create')->will($this->returnValue($item1));
 
-        $this->_model->processCommand(new \Magento\Backend\Model\Menu\Builder\Command\Add(array(
-                'id' => 'item1',
-                'parent' => 'not_exists',
-                'title' => 'Item 1',
-                'module' => 'Magento_Backend',
-                'resource' => 'Magento_Backend::item1'
+        $this->_model->processCommand(
+            new \Magento\Backend\Model\Menu\Builder\Command\Add(
+                array(
+                    'id' => 'item1',
+                    'parent' => 'not_exists',
+                    'title' => 'Item 1',
+                    'module' => 'Magento_Backend',
+                    'resource' => 'Magento_Backend::item1'
+                )
             )
-        ));
+        );
 
         $this->_model->getResult($this->_menuMock);
     }

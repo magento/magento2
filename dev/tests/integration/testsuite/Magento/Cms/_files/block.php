@@ -18,27 +18,28 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Cms
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /** @var $block \Magento\Cms\Model\Block */
-$block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Cms\Model\Block');
-$block->setTitle('CMS Block Title')
-    ->setIdentifier('fixture_block')
-    ->setContent('<h1>Fixture Block Title</h1>
+$block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Cms\Model\Block');
+$block->setTitle(
+    'CMS Block Title'
+)->setIdentifier(
+    'fixture_block'
+)->setContent(
+    '<h1>Fixture Block Title</h1>
 <a href="{{store url=""}}">store url</a>
 <p>Config value: "{{config path="web/unsecure/base_url"}}".</p>
 <p>Custom variable: "{{customvar code="variable_code"}}".</p>
-')
-    ->setIsActive(1)
-    ->setStores(array(
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-            ->getStore()->getId()
-    ))
-    ->save()
-;
+'
+)->setIsActive(
+    1
+)->setStores(
+    array(
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\StoreManagerInterface'
+        )->getStore()->getId()
+    )
+)->save();

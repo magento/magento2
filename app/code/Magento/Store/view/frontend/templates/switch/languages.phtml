@@ -1,0 +1,60 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Language switcher template
+ */
+?>
+
+<?php if(count($this->getStores())>1): ?>
+<?php $id = $this->getIdModifier() ? '-' . $this->getIdModifier() : ''?>
+<div class="switcher language switcher-language" data-ui-id="language-switcher" id="switcher-language<?php echo $id?>">
+    <strong class="label switcher-label"><span><?php echo __('Language') ?></span></strong>
+    <div class="actions dropdown options switcher-options">
+        <div class="action toggle switcher-trigger" id="switcher-language-trigger<?php echo $id?>">
+            <strong class="view-<?php echo $this->escapeHtml($this->getCurrentStoreCode()) ?>">
+                <span><?php echo $this->escapeHtml($this->getStoreName()) ?></span>
+            </strong>
+        </div>
+        <ul class="dropdown switcher-dropdown"
+            data-mage-init='{"dropdownDialog":{
+                "appendTo":"#switcher-language<?php echo $id ?> > .options",
+                "triggerTarget":"#switcher-language-trigger<?php echo $id ?>",
+                "closeOnMouseLeave": false,
+                "triggerClass":"active",
+                "parentClass":"active",
+                "buttons":null}}'>
+            <?php foreach ($this->getStores() as $_lang): ?>
+                <?php if($_lang->getId()!=$this->getCurrentStoreId()): ?>
+                    <li class="view-<?php echo $this->escapeHtml($_lang->getCode()); ?> switcher-option">
+                        <a href="#" data-post='<?php echo $this->getTargetStorePostData($_lang); ?>'>
+                            <?php echo $this->escapeHtml($_lang->getName()) ?></a>
+                    </li>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+</div>
+<?php endif; ?>

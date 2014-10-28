@@ -1,93 +1,160 @@
-" for more information or ","欲知详情或"
-"# of Items (and above)","# 商品（上述）"
-"# of Items vs. Destination","# 商品 vs. 目标"
-"Allow Shipping to Multiple Addresses","允许发送到多个地址"
-"An error occurred while import table rates.","导入表格费率时遇到了错误。"
-"Calculate Handling Fee","计算的手续费"
-"Carrier:","运营商："
-"City","城市"
-"Close Window","关闭窗口"
-"Condition","条件"
-"Country","国家"
-"Custom Value","自定义值"
-"Date","日期"
-"Delivered on:","发布于："
-"Delivered to:","发布至："
-"Description","描述"
-"Displayed Error Message","显示的错误信息"
-"Divide to equal weight (one request)","拆分为相等重量（申请一次）"
-"Duplicate Row #%s (Country ""%s"", Region/State ""%s"", Zip ""%s"" and Value ""%s"").","重复行 #%s (国家 ""%s"", 地区/州 ""%s"", 邮编 ""%s"" ，以及值 ""%s"")。"
-"Enabled","已启用"
-"Error:","错误："
-"Export","导出"
-"File has not been imported. See the following list of errors: %s","文件并未导入。请查看下列错误列表：%s"
-"Fixed","固定"
-"Flat Rate","平坦费率"
-"Free Shipping","免运费"
-"Google Sitemap Section","Google站点结构图区域"
-"Handling Fee","处理费"
-"Import","导入"
-"Include Virtual Products in Price Calculation","计算的价格中包含虚拟产品"
-"Info:","信息："
-"Invalid %s ""%s"" in the Row #%s.","行 #%s 存在无效的 %s ""%s"""
-"Invalid Country ""%s"" in the Row #%s.","行 #%s 存在无效的国家""%s""。"
-"Invalid Region/State ""%s"" in the Row #%s.","行 #%s 存在无效的地区/州 ""%s""。"
-"Invalid Shipping Price ""%s"" in the Row #%s.","行 #%s 存在无效的运费 ""%s"" 。"
-"Invalid Table Rate code for type %s: %s","类型 %s: %s 的表格费率代码无效"
-"Invalid Table Rate code type: %s","类型 %s 的表格费率代码无效"
-"Invalid Table Rates File Format","无效的表格费率文件格式"
-"Invalid Table Rates format in the Row #%s","行 #%s 存在无效的表费率格式"
-"Local Time","本地时间"
-"Location","位置"
-"Maximum Quantity Allowed for Shipping to Multiple Addresses","允许发送到多个地址的最多数量"
-"Method Name","方法的名称"
-"Minimum Order Amount","最小订单数量"
-"N/A","N/A"
-"None","无"
-"Options","选项"
-"Order Subtotal (and above)","订单小计（以上）"
-"Origin","原始"
-"Per Order","每订单"
-"Per Package","每个包裹"
-"Percent","百分之"
-"Price","价格"
-"Price vs. Destination","价格 vs. 目标"
-"Region/State","地区/州"
-"Service Type:","服务类型："
-"Ship to Applicable Countries","发送到适用的国家"
-"Ship to Specific Countries","发送到指定国家"
-"Shipment #","送货单号"
-"Shipment Tracking Popup","运单追踪弹出窗口"
-"Shipped or billed on:","发送或扣款于："
-"Shipping Methods","运送方式"
-"Shipping Methods Section","发送方法选择"
-"Shipping Settings","发送设置"
-"Shipping Settings Section","发送设置区域"
-"Show Method if Not Applicable","如果不可用，显示其他方法"
-"Signed by:","签名者："
-"Sort Order","排序顺序"
-"Status:","状态："
-"Store Pickup","店铺取货"
-"Street Address","街道地址"
-"Street Address Line 2","街道地址第二行"
-"Table Rates","表费率"
-"The shipping module is not available for selected delivery country.","针对所选目标国家，发货模块不可用。"
-"The shipping module is not available.","运送模块不可用。"
-"There is no tracking available for this shipment.","此运送项目无可用的状态追踪。"
-"There is no tracking available.","没有可用的追踪。"
-"This shipping method is currently unavailable. If you would like to ship using this shipping method, please contact us.","该运送方式当前不可用。如果您要使用该运送方式进行运送，请联系我们。"
-"This shipping method is not available, please specify ZIP-code","该运送方式不可用，请指定邮政编码"
-"Title","标题"
-"Track:","追踪："
-"Tracking Information","追踪信息"
-"Tracking Number:","追踪号码："
-"Tracking information is currently not available. Please ","追踪信息当前不可用。请"
-"Tracking information is currently unavailable.","追踪信息当前不可用。"
-"Type","类型"
-"Use origin weight (few requests)","使用原始重量（较少请求）"
-"Weight (and above)","重量（和以上）"
-"Weight vs. Destination","重量 vs. 目的地"
-"Weight:","重量："
-"ZIP/Postal Code","邮政编码"
-"contact us","联系我们"
-"email us at ","发送电子邮件给我们："
+"Are you sure?","Are you sure?"
+Cancel,Cancel
+"Add Products","Add Products"
+Product,Product
+SKU,SKU
+Qty,Qty
+Action,Action
+"Incl. Tax","Incl. Tax"
+Add,Add
+Delete,Delete
+Title,标题
+Type,类型
+Description,描述
+"Select All","Select All"
+OK,OK
+Fixed,固定
+N/A,N/A
+Percent,百分之
+"Close Window",关闭窗口
+"Product Name","Product Name"
+Country,Country
+"Payment Information","Payment Information"
+"Shipping Information","Shipping Information"
+City,City
+"Street Address","Street Address"
+Weight,Weight
+Contents,Contents
+Package,Package
+Packages,Packages
+Date,日期
+cm,cm
+Height,Height
+Width,Width
+"No packages for request","No packages for request"
+Region/State,Region/State
+Location,位置
+"Shipping Methods","Shipping Methods"
+"Per Order",每订单
+"All Allowed Countries","All Allowed Countries"
+"Specific Countries","Specific Countries"
+Status:,状态：
+Print,Print
+"Custom Value",自定义值
+"Print Shipping Label","Print Shipping Label"
+"Show Packages","Show Packages"
+"Products should be added to package(s)","Products should be added to package(s)"
+"Please specify a carrier.","Please specify a carrier."
+"Tracking Information",追踪信息
+"No detail for number ""%1""","No detail for number ""%1"""
+"Customs Value","Customs Value"
+"Qty Ordered","Qty Ordered"
+"Create Shipping Label","Create Shipping Label"
+"Add Package","Add Package"
+"Create Packages","Create Packages"
+Size,Size
+Girth,Girth
+"Total Weight","Total Weight"
+Length,Length
+"Signature Confirmation","Signature Confirmation"
+in,in
+lb,lb
+kg,kg
+"Delete Package","Delete Package"
+Explanation,Explanation
+"Add Selected Product(s) to Package","Add Selected Product(s) to Package"
+"Please select products.","Please select products."
+Carrier,Carrier
+Number,Number
+"Items in the Package","Items in the Package"
+"Shipping and Tracking Information","Shipping and Tracking Information"
+"Track this shipment","Track this shipment"
+Ship,Ship
+Shipments,Shipments
+"Order # %1","Order # %1"
+"Back to My Orders","Back to My Orders"
+"View Another Order","View Another Order"
+"The order no longer exists.","The order no longer exists."
+"Cannot add new comment.","Cannot add new comment."
+"Total Shipping Charges","Total Shipping Charges"
+"Append Comments","Append Comments"
+"The order was placed using %1.","The order was placed using %1."
+"No shipping information available","No shipping information available"
+"Items Shipped","Items Shipped"
+"Qty Shipped","Qty Shipped"
+"New Shipment for Order #%1","New Shipment for Order #%1"
+"Submit Shipment","Submit Shipment"
+"You are trying to add a quantity for some products that doesn't match the quantity that was shipped.","You are trying to add a quantity for some products that doesn't match the quantity that was shipped."
+"The value that you entered is not valid.","The value that you entered is not valid."
+"Add Tracking Number","Add Tracking Number"
+"Send Tracking Information","Send Tracking Information"
+"Are you sure you want to send a Shipment email to customer?","Are you sure you want to send a Shipment email to customer?"
+"the shipment email was sent","the shipment email was sent"
+"the shipment email is not sent","the shipment email is not sent"
+"Shipment #%1 | %3 (%2)","Shipment #%1 | %3 (%2)"
+"Create Shipping Label...","Create Shipping Label..."
+"About Your Shipment","About Your Shipment"
+"Cannot do shipment for the order separately from invoice.","Cannot do shipment for the order separately from invoice."
+"Cannot do shipment for the order.","Cannot do shipment for the order."
+"Please enter a tracking number.","Please enter a tracking number."
+"New Shipment","New Shipment"
+"The shipment has been created.","The shipment has been created."
+"You created the shipping label.","You created the shipping label."
+"An error occurred while creating shipping label.","An error occurred while creating shipping label."
+"Cannot save shipment.","Cannot save shipment."
+"You sent the shipment.","You sent the shipment."
+"Cannot send shipment information.","Cannot send shipment information."
+"Cannot initialize shipment for adding tracking number.","Cannot initialize shipment for adding tracking number."
+"Cannot add tracking number.","Cannot add tracking number."
+"Cannot initialize shipment for delete tracking number.","Cannot initialize shipment for delete tracking number."
+"Cannot delete tracking number.","Cannot delete tracking number."
+"Cannot load track with retrieving identifier.","Cannot load track with retrieving identifier."
+"The comment text field cannot be empty.","The comment text field cannot be empty."
+"We don't recognize or support the file extension in this shipment: %1.","We don't recognize or support the file extension in this shipment: %1."
+"There are no shipping labels related to selected orders.","There are no shipping labels related to selected orders."
+"There are no shipping labels related to selected shipments.","There are no shipping labels related to selected shipments."
+"Sorry, but we can't deliver to the destination country with this shipping module.","Sorry, but we can't deliver to the destination country with this shipping module."
+"The shipping module is not available.",运送模块不可用。
+"This shipping method is not available. Please specify the zip code.","This shipping method is not available. Please specify the zip code."
+Development,Development
+Live,Live
+"Divide to equal weight (one request)",拆分为相等重量（申请一次）
+"Use origin weight (few requests)",使用原始重量（较少请求）
+"We don't have enough information to create shipping labels. Please make sure your store information and settings are complete.","We don't have enough information to create shipping labels. Please make sure your store information and settings are complete."
+"Per Package",每个包裹
+"Tracking information is unavailable.","Tracking information is unavailable."
+"Items to Ship","Items to Ship"
+"Qty to Ship","Qty to Ship"
+"Shipment Comments","Shipment Comments"
+"Email Copy of Shipment","Email Copy of Shipment"
+"Invalid value(s) for Qty to Ship","Invalid value(s) for Qty to Ship"
+"USPS domestic shipments don't use package types.","USPS domestic shipments don't use package types."
+"Shipping &amp; Handling Information","Shipping &amp; Handling Information"
+"Track Order","Track Order"
+"Shipment History","Shipment History"
+"Print All Shipments","Print All Shipments"
+"Shipment #",送货单号
+"Print Shipment","Print Shipment"
+"Tracking Number(s):","Tracking Number(s):"
+"Tracking Number:",追踪号码：
+Carrier:,运营商：
+Error:,错误：
+"Tracking information is currently not available. Please ",追踪信息当前不可用。请
+"contact us",联系我们
+" for more information or ",欲知详情或
+"email us at ",发送电子邮件给我们：
+Info:,信息：
+Track:,追踪：
+"Delivered on:",发布于：
+"Signed by:",签名者：
+"Delivered to:",发布至：
+"Shipped or billed on:",发送或扣款于：
+"Service Type:",服务类型：
+Weight:,重量：
+"Local Time",本地时间
+"There is no tracking available for this shipment.",此运送项目无可用的状态追踪。
+"There is no tracking available.",没有可用的追踪。
+"ZIP/Postal Code","ZIP/Postal Code"
+"Street Address Line 2","Street Address Line 2"
+"Shipping Settings","Shipping Settings"
+Origin,Origin

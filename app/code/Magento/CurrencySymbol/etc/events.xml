@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
     <event name="currency_display_options_forming">
         <observer name="magento_currencysymbol_currency_display_options" instance="Magento\CurrencySymbol\Model\Observer" method="currencyDisplayOptions" />
     </event>

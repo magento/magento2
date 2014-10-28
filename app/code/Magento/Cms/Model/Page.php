@@ -18,12 +18,10 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Cms
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Cms\Model;
 
 /**
  * Cms Page Model
@@ -32,8 +30,8 @@
  * @method \Magento\Cms\Model\Resource\Page getResource()
  * @method string getTitle()
  * @method \Magento\Cms\Model\Page setTitle(string $value)
- * @method string getRootTemplate()
- * @method \Magento\Cms\Model\Page setRootTemplate(string $value)
+ * @method string getPageLayout()
+ * @method \Magento\Cms\Model\Page setPageLayout(string $value)
  * @method string getMetaKeywords()
  * @method \Magento\Cms\Model\Page setMetaKeywords(string $value)
  * @method string getMetaDescription()
@@ -56,33 +54,39 @@
  * @method \Magento\Cms\Model\Page setLayoutUpdateXml(string $value)
  * @method string getCustomTheme()
  * @method \Magento\Cms\Model\Page setCustomTheme(string $value)
- * @method string getCustomRootTemplate()
- * @method \Magento\Cms\Model\Page setCustomRootTemplate(string $value)
+ * @method string getCustomPageLayout()
+ * @method \Magento\Cms\Model\Page setCustomPageLayout(string $value)
  * @method string getCustomLayoutUpdateXml()
  * @method \Magento\Cms\Model\Page setCustomLayoutUpdateXml(string $value)
  * @method string getCustomThemeFrom()
  * @method \Magento\Cms\Model\Page setCustomThemeFrom(string $value)
  * @method string getCustomThemeTo()
  * @method \Magento\Cms\Model\Page setCustomThemeTo(string $value)
- *
- * @category    Magento
- * @package     Magento_Cms
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @method int[] getStores()
  */
-namespace Magento\Cms\Model;
-
-class Page extends \Magento\Core\Model\AbstractModel
+class Page extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\Object\IdentityInterface
 {
+    /**
+     * No route page id
+     */
     const NOROUTE_PAGE_ID = 'no-route';
 
-    /**
+    /**#@+
      * Page's Statuses
      */
     const STATUS_ENABLED = 1;
     const STATUS_DISABLED = 0;
+    /**#@-*/
 
-    const CACHE_TAG              = 'cms_page';
-    protected $_cacheTag         = 'cms_page';
+    /**
+     * CMS page cache tag
+     */
+    const CACHE_TAG = 'cms_page';
+
+    /**
+     * @var string
+     */
+    protected $_cacheTag = 'cms_page';
 
     /**
      * Prefix of model events names
@@ -94,6 +98,7 @@ class Page extends \Magento\Core\Model\AbstractModel
     /**
      * Initialize resource model
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -103,11 +108,11 @@ class Page extends \Magento\Core\Model\AbstractModel
     /**
      * Load object data
      *
-     * @param mixed $id
+     * @param int|null $id
      * @param string $field
-     * @return \Magento\Cms\Model\Page
+     * @return $this
      */
-    public function load($id, $field=null)
+    public function load($id, $field = null)
     {
         if (is_null($id)) {
             return $this->noRoutePage();
@@ -146,9 +151,16 @@ class Page extends \Magento\Core\Model\AbstractModel
      */
     public function getAvailableStatuses()
     {
-        return array(
-            self::STATUS_ENABLED => __('Enabled'),
-            self::STATUS_DISABLED => __('Disabled'),
-        );
+        return array(self::STATUS_ENABLED => __('Enabled'), self::STATUS_DISABLED => __('Disabled'));
+    }
+
+    /**
+     * Get identities
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        return array(self::CACHE_TAG . '_' . $this->getId());
     }
 }

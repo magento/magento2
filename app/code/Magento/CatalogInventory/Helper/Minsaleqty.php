@@ -18,74 +18,75 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_CatalogInventory
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\CatalogInventory\Helper;
+
+use Magento\Store\Model\Store;
+use Magento\Customer\Service\V1\CustomerGroupServiceInterface as CustomerGroupService;
+
 /**
  * MinSaleQty value manipulation helper
  */
-namespace Magento\CatalogInventory\Helper;
-
 class Minsaleqty
 {
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $scopeConfig;
 
     /**
-     * @var \Magento\Math\Random
+     * @var \Magento\Framework\Math\Random
      */
     protected $mathRandom;
 
     /**
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Math\Random $mathRandom
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\Math\Random $mathRandom
      */
     public function __construct(
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Math\Random $mathRandom
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\Math\Random $mathRandom
     ) {
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->scopeConfig = $scopeConfig;
         $this->mathRandom = $mathRandom;
     }
 
     /**
      * Retrieve fixed qty value
      *
-     * @param mixed $qty
+     * @param int|float|string|null $qty
      * @return float|null
      */
-    protected function _fixQty($qty)
+    protected function fixQty($qty)
     {
-        return (!empty($qty) ? (float)$qty : null);
+        return !empty($qty) ? (float) $qty : null;
     }
 
     /**
      * Generate a storable representation of a value
      *
-     * @param mixed $value
+     * @param int|float|string|array $value
      * @return string
      */
-    protected function _serializeValue($value)
+    protected function serializeValue($value)
     {
         if (is_numeric($value)) {
-            $data = (float)$value;
-            return (string)$data;
-        } else if (is_array($value)) {
+            $data = (float) $value;
+            return (string) $data;
+        } elseif (is_array($value)) {
             $data = array();
             foreach ($value as $groupId => $qty) {
                 if (!array_key_exists($groupId, $data)) {
-                    $data[$groupId] = $this->_fixQty($qty);
+                    $data[$groupId] = $this->fixQty($qty);
                 }
             }
-            if (count($data) == 1 && array_key_exists(\Magento\Customer\Model\Group::CUST_GROUP_ALL, $data)) {
-                return (string)$data[\Magento\Customer\Model\Group::CUST_GROUP_ALL];
+            if (count($data) == 1 && array_key_exists(CustomerGroupService::CUST_GROUP_ALL, $data)) {
+                return (string) $data[CustomerGroupService::CUST_GROUP_ALL];
             }
             return serialize($data);
         } else {
@@ -96,16 +97,14 @@ class Minsaleqty
     /**
      * Create a value from a storable representation
      *
-     * @param mixed $value
+     * @param int|float|string $value
      * @return array
      */
-    protected function _unserializeValue($value)
+    protected function unserializeValue($value)
     {
         if (is_numeric($value)) {
-            return array(
-                \Magento\Customer\Model\Group::CUST_GROUP_ALL => $this->_fixQty($value)
-            );
-        } else if (is_string($value) && !empty($value)) {
+            return array(CustomerGroupService::CUST_GROUP_ALL => $this->fixQty($value));
+        } elseif (is_string($value) && !empty($value)) {
             return unserialize($value);
         } else {
             return array();
@@ -115,17 +114,20 @@ class Minsaleqty
     /**
      * Check whether value is in form retrieved by _encodeArrayFieldValue()
      *
-     * @param mixed
+     * @param string|array $value
      * @return bool
      */
-    protected function _isEncodedArrayFieldValue($value)
+    protected function isEncodedArrayFieldValue($value)
     {
         if (!is_array($value)) {
             return false;
         }
         unset($value['__empty']);
-        foreach ($value as $_id => $row) {
-            if (!is_array($row) || !array_key_exists('customer_group_id', $row) || !array_key_exists('min_sale_qty', $row)) {
+        foreach ($value as $row) {
+            if (!is_array($row)
+                || !array_key_exists('customer_group_id', $row)
+                || !array_key_exists('min_sale_qty', $row)
+            ) {
                 return false;
             }
         }
@@ -135,18 +137,15 @@ class Minsaleqty
     /**
      * Encode value to be used in \Magento\Backend\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray
      *
-     * @param array
+     * @param array $value
      * @return array
      */
-    protected function _encodeArrayFieldValue(array $value)
+    protected function encodeArrayFieldValue(array $value)
     {
         $result = array();
         foreach ($value as $groupId => $qty) {
-            $_id = $this->mathRandom->getUniqueHash('_');
-            $result[$_id] = array(
-                'customer_group_id' => $groupId,
-                'min_sale_qty' => $this->_fixQty($qty),
-            );
+            $resultId = $this->mathRandom->getUniqueHash('_');
+            $result[$resultId] = array('customer_group_id' => $groupId, 'min_sale_qty' => $this->fixQty($qty));
         }
         return $result;
     }
@@ -154,19 +153,22 @@ class Minsaleqty
     /**
      * Decode value from used in \Magento\Backend\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray
      *
-     * @param array
+     * @param array $value
      * @return array
      */
-    protected function _decodeArrayFieldValue(array $value)
+    protected function decodeArrayFieldValue(array $value)
     {
         $result = array();
         unset($value['__empty']);
-        foreach ($value as $_id => $row) {
-            if (!is_array($row) || !array_key_exists('customer_group_id', $row) || !array_key_exists('min_sale_qty', $row)) {
+        foreach ($value as $row) {
+            if (!is_array($row)
+                || !array_key_exists('customer_group_id', $row)
+                || !array_key_exists('min_sale_qty', $row)
+            ) {
                 continue;
             }
             $groupId = $row['customer_group_id'];
-            $qty = $this->_fixQty($row['min_sale_qty']);
+            $qty = $this->fixQty($row['min_sale_qty']);
             $result[$groupId] = $qty;
         }
         return $result;
@@ -176,39 +178,43 @@ class Minsaleqty
      * Retrieve min_sale_qty value from config
      *
      * @param int $customerGroupId
-     * @param mixed $store
+     * @param null|string|bool|int|Store $store
      * @return float|null
      */
     public function getConfigValue($customerGroupId, $store = null)
     {
-        $value = $this->_coreStoreConfig->getConfig(\Magento\CatalogInventory\Model\Stock\Item::XML_PATH_MIN_SALE_QTY, $store);
-        $value = $this->_unserializeValue($value);
-        if ($this->_isEncodedArrayFieldValue($value)) {
-            $value = $this->_decodeArrayFieldValue($value);
+        $value = $this->scopeConfig->getValue(
+            \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_MIN_SALE_QTY,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
+        $value = $this->unserializeValue($value);
+        if ($this->isEncodedArrayFieldValue($value)) {
+            $value = $this->decodeArrayFieldValue($value);
         }
         $result = null;
         foreach ($value as $groupId => $qty) {
             if ($groupId == $customerGroupId) {
                 $result = $qty;
                 break;
-            } else if ($groupId == \Magento\Customer\Model\Group::CUST_GROUP_ALL) {
+            } elseif ($groupId == CustomerGroupService::CUST_GROUP_ALL) {
                 $result = $qty;
             }
         }
-        return $this->_fixQty($result);
+        return $this->fixQty($result);
     }
 
     /**
      * Make value readable by \Magento\Backend\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray
      *
-     * @param mixed $value
+     * @param string|array $value
      * @return array
      */
     public function makeArrayFieldValue($value)
     {
-        $value = $this->_unserializeValue($value);
-        if (!$this->_isEncodedArrayFieldValue($value)) {
-            $value = $this->_encodeArrayFieldValue($value);
+        $value = $this->unserializeValue($value);
+        if (!$this->isEncodedArrayFieldValue($value)) {
+            $value = $this->encodeArrayFieldValue($value);
         }
         return $value;
     }
@@ -216,15 +222,15 @@ class Minsaleqty
     /**
      * Make value ready for store
      *
-     * @param mixed $value
+     * @param string|array $value
      * @return string
      */
     public function makeStorableArrayFieldValue($value)
     {
-        if ($this->_isEncodedArrayFieldValue($value)) {
-            $value = $this->_decodeArrayFieldValue($value);
+        if ($this->isEncodedArrayFieldValue($value)) {
+            $value = $this->decodeArrayFieldValue($value);
         }
-        $value = $this->_serializeValue($value);
+        $value = $this->serializeValue($value);
         return $value;
     }
 }

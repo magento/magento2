@@ -23,23 +23,30 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <referenceBlock name="menu">
         <action method="setActive">
             <argument name="itemId" xsi:type="string">Magento_Catalog::catalog_products</argument>
         </action>
     </referenceBlock>
     <referenceBlock name="page-title">
+        <action method="setTitleClass">
+            <argument name="class" xsi:type="string">complex</argument>
+        </action>
+    </referenceBlock>
+    <referenceContainer name="page.main.actions">
         <block class="Magento\Backend\Block\Store\Switcher" name="store_switcher">
             <action method="setUseConfirm">
                 <argument name="params" xsi:type="string">1</argument>
             </action>
         </block>
-        <action method="setTitleClass">
-            <argument name="class" xsi:type="string">complex</argument>
-        </action>
-    </referenceBlock>
+    </referenceContainer>
     <referenceContainer name="content">
         <block class="Magento\Catalog\Block\Adminhtml\Product" name="products_list"/>
     </referenceContainer>
-</layout>
+    <referenceContainer name="product.grid">
+        <block class="Magento\Framework\View\Element\Text\ListText" name="grid.bottom.links">
+            <block class="Magento\Catalog\Block\Adminhtml\Rss\Grid\Link" name="grid.rss.link"/>
+        </block>
+    </referenceContainer>
+</page>

@@ -1,0 +1,62 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+
+<?php
+/** @var \Magento\Bundle\Pricing\Render\FinalPriceBox $this */
+$productId = $this->getSaleableItem()->getId();
+/** @var \Magento\Bundle\Pricing\Price\FinalPrice $finalPriceModel */
+$finalPriceModel = $this->getPrice();
+?>
+<?php if ($this->getSaleableItem()->getPriceView()): ?>
+    <p class="minimal-price">
+        <?php echo $this->renderAmount($finalPriceModel->getMinimalPrice(), [
+            'display_label'     => __('As low as'),
+            'price_id'          => $this->getPriceId('from-'),
+            'include_container' => true
+        ]); ?>
+    </p>
+<?php else: ?>
+    <?php if ($this->showRangePrice()): ?>
+        <p class="price-from">
+            <?php echo $this->renderAmount($finalPriceModel->getMinimalPrice(), [
+                'display_label'     => __('From'),
+                'price_id'          => $this->getPriceId('from-'),
+                'include_container' => true
+            ]); ?>
+        </p>
+        <p class="price-to">
+            <?php echo $this->renderAmount($finalPriceModel->getMaximalPrice(), [
+                'display_label'     => __('To'),
+                'price_id'          => $this->getPriceId('to-'),
+                'include_container' => true
+            ]); ?>
+        </p>
+    <?php else: ?>
+        <?php echo $this->renderAmount($finalPriceModel->getMinimalPrice(), [
+            'price_id'          => $this->getPriceId('product-price-'),
+            'include_container' => true
+        ]); ?>
+    <?php endif ?>
+<?php endif ?>

@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Install
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,74 +27,77 @@
  */
 namespace Magento\Install\Model\Installer;
 
-class Console extends \Magento\Install\Model\Installer\AbstractInstaller
+class Console
 {
-    /**#@+
-     * Installation options for application initialization
-     */
-    const OPTION_URIS = 'install_option_uris';
-    const OPTION_DIRS = 'install_option_dirs';
-    /**#@- */
-
     /**
      * Available installation options
      *
      * @var array
      */
-    protected $_installOptions = array(
-        'license_agreement_accepted' => array('required' => 1),
-        'locale'                     => array('required' => 1),
-        'timezone'                   => array('required' => 1),
-        'default_currency'           => array('required' => 1),
-        'db_model'                   => array('required' => 0),
-        'db_host'                    => array('required' => 1),
-        'db_name'                    => array('required' => 1),
-        'db_user'                    => array('required' => 1),
-        'db_pass'                    => array('required' => 0),
-        'db_prefix'                  => array('required' => 0),
-        'url'                        => array('required' => 1),
-        'skip_url_validation'        => array('required' => 0),
-        'use_rewrites'               => array('required' => 1),
-        'use_secure'                 => array('required' => 1),
-        'secure_base_url'            => array('required' => 1),
-        'use_secure_admin'           => array('required' => 1),
-        'admin_lastname'             => array('required' => 1),
-        'admin_firstname'            => array('required' => 1),
-        'admin_email'                => array('required' => 1),
-        'admin_username'             => array('required' => 1),
-        'admin_password'             => array('required' => 1),
-        'admin_no_form_key'          => array('required' => 0),
-        'encryption_key'             => array('required' => 0),
-        'session_save'               => array('required' => 0),
-        'backend_frontname'          => array('required' => 0),
-        'enable_charts'              => array('required' => 0),
-        'order_increment_prefix'     => array('required' => 0),
-        'cleanup_database'           => array('required' => 0),
-    );
+    protected $installParameters = [];
 
     /**
-     * @var \Magento\Filesystem
+     * Required parameters with descriptions
+     *
+     * @var array
      */
-    protected $_filesystem;
+    protected $requiredParameters = [
+        'license_agreement_accepted' => 'Accept licence. See LICENSE*.txt. Flag value.',
+        'locale' => 'Locale to use. Run with --show_locales for full list',
+        'timezone' => 'Time zone to use. Run with --show_timezones for full list',
+        'default_currency' => 'Default currency. Run with --show_currencies for full list',
+        'db_host' => 'IP or name of your DB host',
+        'db_name' => 'Database name',
+        'db_user' => 'Database user name',
+        'url' => 'Instance URL. For example, "http://myinstance.com"',
+        'use_rewrites' => 'Use web server rewrites. Flag value',
+        'use_secure' => 'Use https(ssl) protocol. Flag value',
+        'secure_base_url' => 'Full secure URL if use_secure enabled. For example "https://myinstance.com"',
+        'use_secure_admin' => 'Use secure protocol for backend. Flag value',
+        'admin_lastname' => 'Admin user last name',
+        'admin_firstname' => 'Admin user first name',
+        'admin_email' => 'Admin email',
+        'admin_username' => 'Admin login',
+        'admin_password' => 'Admin password'
+    ];
+
+    /**
+     * Optional parameters with descriptions
+     *
+     * @var array
+     */
+    protected $optionalParameters = [
+        'db_model' => 'DB driver. "mysql4" is default and the only supported now',
+        'db_pass' => 'DB password. Empty by default',
+        'db_prefix' => 'Use prefix for tables of this installation. Empty by default',
+        'skip_url_validation' => 'Skip URL validation on installation. Flag value. Validate by default',
+        'admin_no_form_key' => 'Disable the form key protection on the back-end. Flag value. Enabled by default',
+        'encryption_key' => 'Key to encrypt sensitive data. Auto-generated if empty',
+        'session_save' => 'Where session data will be stored. "files"(default) or "db"',
+        'backend_frontname' => 'Backend URL path. "backend" by default',
+        'enable_charts' => 'Enable charts on backend dashboard. Flag value. Enabled by default',
+        'order_increment_prefix' => 'Order number prefix. Empty by default.',
+        'cleanup_database' => 'Clean up database before installation. Flag value. Disabled by default'
+    ];
 
     /**
      * Installer data model to store data between installations steps
      *
-     * @var \Magento\Install\Model\Installer\Data|\Magento\Session\Generic
+     * @var \Magento\Install\Model\Installer\Data|\Magento\Framework\Session\Generic
      */
     protected $_dataModel;
 
     /**
-     * Resource config
+     * Installer model
      *
-     * @var \Magento\App\Resource\Config
+     * @var \Magento\Install\Model\Installer
      */
-    protected $_resourceConfig;
+    protected $installer;
 
     /**
      * DB updater
      *
-     * @var \Magento\Module\UpdaterInterface
+     * @var \Magento\Framework\Module\Updater
      */
     protected $_dbUpdater;
 
@@ -108,71 +109,64 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
     protected $_installerData = null;
 
     /**
-     * Application State
+     * Locale Lists
      *
-     * @var \Magento\App\State
+     * @var \Magento\Framework\Locale\ListsInterface
      */
-    protected $_appState;
-
-    /**
-     * Locale model
-     *
-     * @var \Magento\Core\Model\LocaleInterface
-     */
-    protected $_locale;
+    protected $_localeLists;
 
     /**
      * Magento Object Manager
      *
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\Message\ManagerInterface
      */
-    protected $_objectManager;
+    protected $messageManager;
+
+    /**
+     * @var \Magento\Install\Model\Installer\Db\Mysql4
+     */
+    protected $db;
 
     /**
      * @param \Magento\Install\Model\Installer $installer
-     * @param \Magento\App\Resource\Config $resourceConfig
-     * @param \Magento\Module\UpdaterInterface $dbUpdater
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\Framework\Module\Updater $dbUpdater
      * @param \Magento\Install\Model\Installer\Data $installerData
-     * @param \Magento\App\State $appState
-     * @param \Magento\Core\Model\LocaleInterface $locale
-     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Framework\Locale\ListsInterface $localeLists
+     * @param \Magento\Install\Model\Installer\Db\Mysql4 $db
+     * @param \Magento\Framework\Message\ManagerInterface $messageManager
      */
     public function __construct(
         \Magento\Install\Model\Installer $installer,
-        \Magento\App\Resource\Config $resourceConfig,
-        \Magento\Module\UpdaterInterface $dbUpdater,
-        \Magento\Filesystem $filesystem,
+        \Magento\Framework\Module\Updater $dbUpdater,
         \Magento\Install\Model\Installer\Data $installerData,
-        \Magento\App\State $appState,
-        \Magento\Core\Model\LocaleInterface $locale,
-        \Magento\ObjectManager $objectManager
+        \Magento\Framework\Locale\ListsInterface $localeLists,
+        Db\Mysql4 $db,
+        \Magento\Framework\Message\ManagerInterface $messageManager
     ) {
-        parent::__construct($installer);
-        $this->_resourceConfig = $resourceConfig;
+        $this->installer = $installer;
         $this->_dbUpdater = $dbUpdater;
-        $this->_filesystem = $filesystem;
         $this->_installerData = $installerData;
-        $this->_installer->setDataModel($this->_installerData);
-        $this->_appState = $appState;
-        $this->_locale = $locale;
-        $this->_objectManager = $objectManager;
+        $this->installer->setDataModel($this->_installerData);
+        $this->_localeLists = $localeLists;
+        $this->installParameters = array_keys($this->requiredParameters + $this->optionalParameters);
+        $this->db = $db;
+        $this->messageManager = $messageManager;
     }
 
     /**
      * Retrieve validated installation options
      *
      * @param array $options
-     * @return array|boolean
+     * @return array|bool
      */
     protected function _getInstallOptions(array $options)
     {
         /**
          * Check required options
          */
-        foreach ($this->_installOptions as $optionName => $optionInfo) {
-            if (isset($optionInfo['required']) && $optionInfo['required'] && !isset($options[$optionName])) {
-                $this->addError("ERROR: installation option '$optionName' is required.");
+        foreach (array_keys($this->requiredParameters) as $optionName) {
+            if (!isset($options[$optionName])) {
+                $this->addError("ERROR: installation parameter '{$optionName}' is required.");
             }
         }
 
@@ -190,8 +184,8 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
             return false;
         }
 
-        $result = array();
-        foreach ($this->_installOptions as $optionName => $optionInfo) {
+        $result = [];
+        foreach ($this->installParameters as $optionName) {
             $result[$optionName] = isset($options[$optionName]) ? $options[$optionName] : '';
         }
 
@@ -202,7 +196,7 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
      * Add error
      *
      * @param string $error
-     * @return \Magento\Install\Model\Installer\Console
+     * @return $this
      */
     public function addError($error)
     {
@@ -217,7 +211,7 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
      */
     public function hasErrors()
     {
-        return (count($this->_installerData->getErrors()) > 0);
+        return count($this->_installerData->getErrors()) > 0;
     }
 
     /**
@@ -238,7 +232,7 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
      */
     protected function _getFlagValue($value)
     {
-        $res = (1 == $value) || preg_match('/^(yes|y|true)$/i', $value);
+        $res = 1 == $value || preg_match('/^(yes|y|true)$/i', $value);
         return $res;
     }
 
@@ -246,21 +240,13 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
      * Install Magento
      *
      * @param array $options
-     * @return string|boolean
+     * @return string|false
      */
     public function install(array $options)
     {
         try {
             $options = $this->_getInstallOptions($options);
             if (!$options) {
-                return false;
-            }
-
-            /**
-             * Check if already installed
-             */
-            if ($this->_appState->isInstalled()) {
-                $this->addError('ERROR: Magento is already installed.');
                 return false;
             }
 
@@ -273,55 +259,64 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
             /**
              * Locale settings
              */
-            $this->_installerData->setLocaleData(array(
-                'locale'            => $options['locale'],
-                'timezone'          => $options['timezone'],
-                'currency'          => $options['default_currency'],
-            ));
+            $this->_installerData->setLocaleData(
+                [
+                    'locale' => $options['locale'],
+                    'timezone' => $options['timezone'],
+                    'currency' => $options['default_currency']
+                ]
+            );
 
             /**
              * Database and web config
              */
-            $this->_installerData->setConfigData(array(
-                'db_model'               => $options['db_model'],
-                'db_host'                => $options['db_host'],
-                'db_name'                => $options['db_name'],
-                'db_user'                => $options['db_user'],
-                'db_pass'                => $options['db_pass'],
-                'db_prefix'              => $options['db_prefix'],
-                'use_rewrites'           => $this->_getFlagValue($options['use_rewrites']),
-                'use_secure'             => $this->_getFlagValue($options['use_secure']),
-                'unsecure_base_url'      => $options['url'],
-                'secure_base_url'        => $options['secure_base_url'],
-                'use_secure_admin'       => $this->_getFlagValue($options['use_secure_admin']),
-                'session_save'           => $this->_checkSessionSave($options['session_save']),
-                'backend_frontname'      => $this->_checkBackendFrontname($options['backend_frontname']),
-                'admin_no_form_key'      => $this->_getFlagValue($options['admin_no_form_key']),
-                'skip_url_validation'    => $this->_getFlagValue($options['skip_url_validation']),
-                'enable_charts'          => $this->_getFlagValue($options['enable_charts']),
-                'order_increment_prefix' => $options['order_increment_prefix'],
-            ));
+            $this->_installerData->setConfigData(
+                [
+                    'db_model' => $options['db_model'],
+                    'db_host' => $options['db_host'],
+                    'db_name' => $options['db_name'],
+                    'db_user' => $options['db_user'],
+                    'db_pass' => $options['db_pass'],
+                    'db_prefix' => $options['db_prefix'],
+                    'use_rewrites' => $this->_getFlagValue($options['use_rewrites']),
+                    'use_secure' => $this->_getFlagValue($options['use_secure']),
+                    'unsecure_base_url' => $options['url'],
+                    'secure_base_url' => $options['secure_base_url'],
+                    'use_secure_admin' => $this->_getFlagValue($options['use_secure_admin']),
+                    'session_save' => $this->_checkSessionSave($options['session_save']),
+                    'backend_frontname' => $this->_checkBackendFrontname($options['backend_frontname']),
+                    'admin_no_form_key' => $this->_getFlagValue($options['admin_no_form_key']),
+                    'skip_url_validation' => $this->_getFlagValue($options['skip_url_validation']),
+                    'enable_charts' => $this->_getFlagValue($options['enable_charts']),
+                    'order_increment_prefix' => $options['order_increment_prefix']
+                ]
+            );
 
             /**
              * Primary admin user
              */
-            $this->_installerData->setAdminData(array(
-                'firstname'         => $options['admin_firstname'],
-                'lastname'          => $options['admin_lastname'],
-                'email'             => $options['admin_email'],
-                'username'          => $options['admin_username'],
-                'password'          => $options['admin_password'],
-            ));
+            $this->_installerData->setAdminData(
+                [
+                    'firstname' => $options['admin_firstname'],
+                    'lastname' => $options['admin_lastname'],
+                    'email' => $options['admin_email'],
+                    'username' => $options['admin_username'],
+                    'password' => $options['admin_password']
+                ]
+            );
 
-            $installer = $this->_getInstaller();
+            $this->checkServer();
+            if ($this->hasErrors()) {
+                return false;
+            }
 
             /**
              * Install configuration
              */
-            $installer->installConfig($this->_installerData->getConfigData());
+            $this->installer->installConfig($this->_installerData->getConfigData());
 
             if (!empty($options['cleanup_database'])) {
-                $this->_cleanUpDatabase();
+                $this->db->cleanUpDatabase();
             }
 
             if ($this->hasErrors()) {
@@ -331,7 +326,7 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
             /**
              * Install database
              */
-            $installer->installDb();
+            $this->installer->installDb();
 
             if ($this->hasErrors()) {
                 return false;
@@ -344,72 +339,36 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
              * Create primary administrator user & install encryption key
              */
             $encryptionKey = !empty($options['encryption_key']) ? $options['encryption_key'] : null;
-            $encryptionKey = $installer->getValidEncryptionKey($encryptionKey);
-            $installer->createAdministrator($this->_installerData->getAdminData());
-            $installer->installEncryptionKey($encryptionKey);
+            $encryptionKey = $this->installer->getValidEncryptionKey($encryptionKey);
+            $this->installer->createAdministrator($this->_installerData->getAdminData());
+            $this->installer->installEncryptionKey($encryptionKey);
 
             /**
              * Installation finish
              */
-            $installer->finish();
+            $this->installer->finish();
 
             if ($this->hasErrors()) {
                 return false;
             }
 
-            /**
-             * Change directories mode to be writable by apache user
-             */
-            $this->_filesystem
-                ->getDirectoryWrite(\Magento\Filesystem::VAR_DIR)
-                ->changePermissions('', 0777);
-
             return $encryptionKey;
         } catch (\Exception $e) {
-            if ($e instanceof \Magento\Core\Exception) {
-                foreach ($e->getMessages(\Magento\Message\MessageInterface::TYPE_ERROR) as $errorMessage) {
-                    $this->addError($errorMessage);
+            if ($e instanceof \Magento\Framework\Model\Exception) {
+                $errorMessages = $e->getMessages(\Magento\Framework\Message\MessageInterface::TYPE_ERROR);
+                if (!empty($errorMessages)) {
+                    foreach ($errorMessages as $errorMessage) {
+                        $this->addError($errorMessage);
+                    }
+                } else {
+                    $this->addError($e->getMessage());
                 }
+
             } else {
-                $this->addError('ERROR: ' . $e->getMessage());
+                $this->addError('ERROR: ' . $e->getMessage() . $e->getTraceAsString());
             }
             return false;
         }
-    }
-
-    /**
-     * Cleanup database use system configuration
-     */
-    protected function _cleanUpDatabase()
-    {
-        $modelName = 'Magento\Install\Model\Installer\Db\Mysql4';
-        /** @var $resourceModel \Magento\Install\Model\Installer\Db\AbstractDb */
-        $resourceModel = $this->_objectManager->get($modelName);
-        $resourceModel->cleanUpDatabase();
-    }
-
-    /**
-     * Uninstall the application
-     *
-     * @return bool
-     */
-    public function uninstall()
-    {
-        if (!$this->_appState->isInstalled()) {
-            return false;
-        }
-
-        $this->_cleanUpDatabase();
-
-        /* Remove temporary directories and local.xml */
-        $varDirectory = $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::VAR_DIR);
-        foreach ($varDirectory->read() as $path) {
-            if ($varDirectory->isDirectory($path)) {
-                $varDirectory->delete($path);
-            }
-        }
-        $this->_filesystem->getDirectoryWrite(\Magento\Filesystem::CONFIG)->delete('local.xml');
-        return true;
     }
 
     /**
@@ -419,7 +378,7 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
      */
     public function getAvailableLocales()
     {
-        return $this->_locale->getOptionLocales();
+        return $this->_localeLists->getOptionLocales();
     }
 
     /**
@@ -429,7 +388,7 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
      */
     public function getAvailableCurrencies()
     {
-        return $this->_locale->getOptionCurrencies();
+        return $this->_localeLists->getOptionCurrencies();
     }
 
     /**
@@ -439,20 +398,83 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
      */
     public function getAvailableTimezones()
     {
-        return $this->_locale->getOptionTimezones();
+        return $this->_localeLists->getOptionTimezones();
     }
 
     /**
-     * Retrieve available installation options
+     * Retrieve required installation params
      *
      * @return array
      */
-    public function getAvailableInstallOptions()
+    public function getRequiredParams()
     {
-        $result = array();
-        foreach ($this->_installOptions as $optionName => $optionInfo) {
-            $result[$optionName] = ($optionInfo['required'] ? 'required' : 'optional');
+
+        return $this->requiredParameters;
+    }
+
+    /**
+     * Get optional installation parameters
+     * @return array
+     */
+    public function getOptionalParams()
+    {
+        return $this->optionalParameters;
+    }
+
+    /**
+     * Check if server is applicable for Magento
+     * @return $this
+     */
+    public function checkServer()
+    {
+        $result = $this->installer->checkServer();
+        if (!$result) {
+            foreach ($this->messageManager->getMessages()->getItems() as $message) {
+                $this->addError($message->toString());
+            }
         }
-        return $result;
+
+        return $this;
+    }
+
+    /**
+     * Validate session storage value (files or db)
+     * If empty, will return 'files'
+     *
+     * @param string $value
+     * @return string
+     * @throws \Exception
+     */
+    protected function _checkSessionSave($value)
+    {
+        if (empty($value)) {
+            return 'files';
+        }
+        if (!in_array($value, array('files', 'db'), true)) {
+            throw new \Exception('session_save value must be "files" or "db".');
+        }
+        return $value;
+    }
+
+    /**
+     * Validate backend area frontname value.
+     * If empty, "backend" will be returned
+     *
+     * @param string $value
+     * @return string
+     * @throws \Exception
+     */
+    protected function _checkBackendFrontname($value)
+    {
+        if (empty($value)) {
+            return 'backend';
+        }
+        if (!preg_match('/^[a-z]+[a-z0-9_]+$/', $value)) {
+            throw new \Exception(
+                'backend_frontname value must contain only letters (a-z), numbers (0-9)' .
+                ' or underscore(_), first character should be a letter.'
+            );
+        }
+        return $value;
     }
 }

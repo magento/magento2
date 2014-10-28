@@ -20,13 +20,13 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Theme
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Theme\Model\Uploader;
+
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\DirectoryList;
 
 class Service
 {
@@ -38,14 +38,14 @@ class Service
     protected $_filePath;
 
     /**
-     * @var \Magento\Filesystem\Directory\ReadInterface
+     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
      */
     protected $_tmpDirectory;
 
     /**
      * File size
      *
-     * @var \Magento\File\Size
+     * @var \Magento\Framework\File\Size
      */
     protected $_fileSize;
 
@@ -74,18 +74,18 @@ class Service
     /**
      * Constructor
      *
-     * @param \Magento\Filesystem $filesystem
-     * @param \Magento\File\Size $fileSize
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Framework\File\Size $fileSize
      * @param \Magento\Core\Model\File\UploaderFactory $uploaderFactory
      * @param array $uploadLimits keys are 'css' and 'js' for file type, values defines maximum file size, example: 2M
      */
     public function __construct(
-        \Magento\Filesystem $filesystem,
-        \Magento\File\Size $fileSize,
+        \Magento\Framework\Filesystem $filesystem,
+        \Magento\Framework\File\Size $fileSize,
         \Magento\Core\Model\File\UploaderFactory $uploaderFactory,
         array $uploadLimits = array()
     ) {
-        $this->_tmpDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::SYS_TMP);
+        $this->_tmpDirectory = $filesystem->getDirectoryRead(DirectoryList::SYS_TMP);
         $this->_fileSize = $fileSize;
         $this->_uploaderFactory = $uploaderFactory;
         if (isset($uploadLimits['css'])) {
@@ -101,7 +101,7 @@ class Service
      *
      * @param string $file - Key in the $_FILES array
      * @return array
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function uploadCssFile($file)
     {
@@ -113,9 +113,9 @@ class Service
 
         $isValidFileSize = $this->_validateFileSize($fileUploader->getFileSize(), $this->getCssUploadMaxSize());
         if (!$isValidFileSize) {
-            throw new \Magento\Core\Exception(__(
-                'The CSS file must be less than %1M.', $this->getCssUploadMaxSizeInMb()
-            ));
+            throw new \Magento\Framework\Model\Exception(
+                __('The CSS file must be less than %1M.', $this->getCssUploadMaxSizeInMb())
+            );
         }
 
         $file = $fileUploader->validateFile();
@@ -127,7 +127,7 @@ class Service
      *
      * @param string $file - Key in the $_FILES array
      * @return array
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function uploadJsFile($file)
     {
@@ -139,9 +139,9 @@ class Service
 
         $isValidFileSize = $this->_validateFileSize($fileUploader->getFileSize(), $this->getJsUploadMaxSize());
         if (!$isValidFileSize) {
-            throw new \Magento\Core\Exception(__(
-                'The JS file must be less than %1M.', $this->getJsUploadMaxSizeInMb()
-            ));
+            throw new \Magento\Framework\Model\Exception(
+                __('The JS file must be less than %1M.', $this->getJsUploadMaxSizeInMb())
+            );
         }
 
         $file = $fileUploader->validateFile();

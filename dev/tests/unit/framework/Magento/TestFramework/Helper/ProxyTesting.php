@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -44,8 +42,14 @@ class ProxyTesting
      * @param null $expectedParams Expected parameters, to be passed to the proxied method
      * @return mixed
      */
-    public function invokeWithExpectations($object, \PHPUnit_Framework_MockObject_MockObject $proxiedObject, $method,
-        $params = array(), $proxiedResult = null, $expectedMethod = null, $expectedParams = null
+    public function invokeWithExpectations(
+        $object,
+        \PHPUnit_Framework_MockObject_MockObject $proxiedObject,
+        $method,
+        $params = array(),
+        $proxiedResult = null,
+        $expectedMethod = null,
+        $expectedParams = null
     ) {
         if ($expectedMethod === null) {
             $expectedMethod = $method;
@@ -53,8 +57,11 @@ class ProxyTesting
         if ($expectedParams === null) {
             $expectedParams = $params;
         }
-        $builder = $proxiedObject->expects(new \PHPUnit_Framework_MockObject_Matcher_InvokedCount(1))
-            ->method($expectedMethod);
+        $builder = $proxiedObject->expects(
+            new \PHPUnit_Framework_MockObject_Matcher_InvokedCount(1)
+        )->method(
+            $expectedMethod
+        );
         $builder = call_user_func_array(array($builder, 'with'), $expectedParams);
         $builder->will(new \PHPUnit_Framework_MockObject_Stub_Return($proxiedResult));
 

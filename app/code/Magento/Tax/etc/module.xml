@@ -23,14 +23,15 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
-    <module name="Magento_Tax" version="1.6.0.5" active="true">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Module/etc/module.xsd">
+    <module name="Magento_Tax" schema_version="1.6.0.7" active="true">
         <sequence>
             <module name="Magento_Catalog"/>
             <module name="Magento_Customer"/>
             <module name="Magento_User"/>
         </sequence>
         <depends>
+            <module name="Magento_Store"/>
             <module name="Magento_Catalog"/>
             <module name="Magento_Customer"/>
             <module name="Magento_Core"/>
@@ -41,6 +42,7 @@
             <module name="Magento_Eav"/>
             <module name="Magento_Sales"/>
             <module name="Magento_Reports"/>
+            <module name="Magento_ConfigurableProduct"/>
         </depends>
     </module>
 </config>

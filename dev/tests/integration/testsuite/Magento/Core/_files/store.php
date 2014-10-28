@@ -18,29 +18,33 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-$store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Core\Model\Store');
-$websiteId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->get('Magento\Core\Model\StoreManagerInterface')
-    ->getWebsite()->getId();
-$groupId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-    ->getWebsite()->getDefaultGroupId();
-$store->setCode('fixturestore') // fixture_store conflicts with "current_store" notation
-    ->setWebsiteId($websiteId)
-    ->setGroupId($groupId)
-    ->setName('Fixture Store')
-    ->setSortOrder(10)
-    ->setIsActive(1)
-;
+$store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Store\Model\Store');
+$websiteId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+    'Magento\Framework\StoreManagerInterface'
+)->getWebsite()->getId();
+$groupId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+    'Magento\Framework\StoreManagerInterface'
+)->getWebsite()->getDefaultGroupId();
+$store->setCode(
+    'fixturestore'
+)->setWebsiteId(
+    $websiteId
+)->setGroupId(
+    $groupId
+)->setName(
+    'Fixture Store'
+)->setSortOrder(
+    10
+)->setIsActive(
+    1
+);
 $store->save();
 
 /* Refresh stores memory cache */
-\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\StoreManagerInterface')
-    ->reinitStores();
+\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+    'Magento\Framework\StoreManagerInterface'
+)->reinitStores();

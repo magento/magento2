@@ -18,17 +18,14 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Paypal
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-return array (
-    'mc_gross'       => '100.00',
-    'invoice'        => '100000001',
+return array(
+    'mc_gross' => '100.00',
+    'invoice' => '100000001',
     'payment_status' => 'Completed',
-    'mc_currency'    => 'USD',
-    'receiver_email' => 'merchant_2012050718_biz@example.com',
+    'mc_currency' => 'USD',
+    'receiver_email' => 'merchant_2012050718_biz@example.com'
 );

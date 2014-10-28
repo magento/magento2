@@ -1,0 +1,110 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/**
+ * Grouped product data template
+ *
+ * @var $this \Magento\Catalog\Block\Product\View\BaseImage
+ * @var $this \Magento\GroupedProduct\Block\Product\View\Type\Grouped
+ */
+?>
+<?php $this->setPreconfiguredValue(); ?>
+<?php $_product = $this->getProduct(); ?>
+<?php $_associatedProducts = $this->getAssociatedProducts(); ?>
+<?php $_hasAssociatedProducts = count($_associatedProducts) > 0; ?>
+
+<div class="table-wrapper grouped">
+    <table class="table data grouped" id="super-product-table">
+        <caption class="table caption"><?php echo __('Grouped product items') ?></caption>
+        <thead>
+        <tr>
+            <th class="col item"><?php echo __('Product Name') ?></th>
+            <?php if ($_product->isSaleable()): ?>
+                <th class="col qty"><?php echo __('Qty') ?></th>
+            <?php endif; ?>
+        </tr>
+        </thead>
+
+        <?php if ($_hasAssociatedProducts): ?>
+        <?php foreach ($_associatedProducts as $_item): ?>
+        <tbody>
+            <tr>
+                <td class="col item">
+                    <strong class="product name"><?php echo $this->escapeHtml($_item->getName()) ?></strong>
+                    <?php if ($this->getCanShowProductPrice($_product)): ?>
+                        <?php if ($this->getCanShowProductPrice($_item)): ?>
+                            <?php echo $this->getProductPrice($_item) ?>
+                        <?php endif; ?>
+                     <?php endif; ?>
+                </td>
+                <?php if ($_product->isSaleable()): ?>
+                <td class="col qty">
+                <?php if ($_item->isSaleable()) : ?>
+                    <div class="control qty">
+                        <input type="number" name="super_group[<?php echo $_item->getId() ?>]"
+                               maxlength="12"
+                               value="<?php echo $_item->getQty() * 1 ?>"
+                               title="<?php echo __('Qty') ?>"
+                               class="input-text qty"
+                               data-validate="{'validate-grouped-qty':'#super-product-table'}"
+                               data-validate-message-box="#validate-message-box"/>
+                    </div>
+                <?php else: ?>
+                    <p class="stock unavailable" title="<?php echo __('Availability') ?>">
+                        <span><?php echo __('Out of stock') ?></span>
+                    </p>
+                <?php endif; ?>
+                </td>
+                <?php endif; ?>
+            </tr>
+            <?php if ($this->getCanShowProductPrice($_product)
+                && $this->getCanShowProductPrice($_item)
+                && trim($this->getProductPriceHtml(
+                    $_item,
+                    \Magento\Catalog\Pricing\Price\TierPrice::PRICE_CODE
+                ))): ?>
+                <tr class="row-tier-price">
+                    <td colspan="2">
+                        <?php echo $this->getProductPriceHtml(
+                            $_item,
+                            \Magento\Catalog\Pricing\Price\TierPrice::PRICE_CODE
+                        ) ?>
+                    </td>
+                </tr>
+            <?php endif; ?>
+        </tbody>
+        <?php endforeach; ?>
+        <?php else: ?>
+        <tbody>
+            <tr>
+                <td class="unavailable"
+                    colspan="<?php if ($_product->isSaleable()): ?>4<?php else : ?>3<?php endif; ?>">
+                    <?php echo __('No options of this product are available.') ?>
+                </td>
+            </tr>
+        </tbody>
+        <?php endif; ?>
+    </table>
+</div>
+<div id="validation-message-box"></div>

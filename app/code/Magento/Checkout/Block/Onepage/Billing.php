@@ -18,22 +18,18 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Checkout
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Checkout\Block\Onepage;
+
+use Magento\Customer\Service\V1\CustomerAccountServiceInterface as CustomerAccountService;
+use Magento\Customer\Service\V1\CustomerAddressServiceInterface as CustomerAddressService;
+use Magento\Customer\Model\Address\Config as AddressConfig;
 
 /**
  * One page checkout status
- *
- * @category   Magento
- * @category   Magento
- * @package    Magento_Checkout
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Checkout\Block\Onepage;
-
 class Billing extends \Magento\Checkout\Block\Onepage\AbstractOnepage
 {
     /**
@@ -56,24 +52,32 @@ class Billing extends \Magento\Checkout\Block\Onepage\AbstractOnepage
     protected $_addressFactory;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\App\Cache\Type\Config $configCacheType
+     * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $resourceSession
-     * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollFactory
-     * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollFactory
+     * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory
+     * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory
+     * @param CustomerAccountService $customerAccountService
+     * @param CustomerAddressService $customerAddressService
+     * @param AddressConfig $addressConfig
+     * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Sales\Model\Quote\AddressFactory $addressFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\App\Cache\Type\Config $configCacheType,
+        \Magento\Framework\App\Cache\Type\Config $configCacheType,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $resourceSession,
-        \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollFactory,
-        \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollFactory,
+        \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory,
+        \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory,
+        CustomerAccountService $customerAccountService,
+        CustomerAddressService $customerAddressService,
+        AddressConfig $addressConfig,
+        \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Sales\Model\Quote\AddressFactory $addressFactory,
         array $data = array()
     ) {
@@ -84,21 +88,28 @@ class Billing extends \Magento\Checkout\Block\Onepage\AbstractOnepage
             $configCacheType,
             $customerSession,
             $resourceSession,
-            $countryCollFactory,
-            $regionCollFactory,
+            $countryCollectionFactory,
+            $regionCollectionFactory,
+            $customerAccountService,
+            $customerAddressService,
+            $addressConfig,
+            $httpContext,
             $data
         );
+        $this->_isScopePrivate = true;
     }
 
     /**
      * Initialize billing address step
+     *
+     * @return void
      */
     protected function _construct()
     {
-        $this->getCheckout()->setStepData('billing', array(
-            'label'     => __('Billing Information'),
-            'is_show'   => $this->isShow()
-        ));
+        $this->getCheckout()->setStepData(
+            'billing',
+            array('label' => __('Billing Information'), 'is_show' => $this->isShow())
+        );
 
         if ($this->isCustomerLoggedIn()) {
             $this->getCheckout()->setStepData('billing', 'allow', true);
@@ -106,10 +117,12 @@ class Billing extends \Magento\Checkout\Block\Onepage\AbstractOnepage
         parent::_construct();
     }
 
+    /**
+     * @return bool
+     */
     public function isUseBillingAddressForShipping()
     {
-        if (($this->getQuote()->getIsVirtual())
-            || !$this->getQuote()->getShippingAddress()->getSameAsBilling()) {
+        if ($this->getQuote()->getIsVirtual() || !$this->getQuote()->getShippingAddress()->getSameAsBilling()) {
             return false;
         }
         return true;
@@ -122,7 +135,7 @@ class Billing extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      */
     public function getCountries()
     {
-        return $this->_countryCollFactory->create()->loadByStore();
+        return $this->_countryCollectionFactory->create()->loadByStore();
     }
 
     /**
@@ -145,11 +158,11 @@ class Billing extends \Magento\Checkout\Block\Onepage\AbstractOnepage
         if (is_null($this->_address)) {
             if ($this->isCustomerLoggedIn()) {
                 $this->_address = $this->getQuote()->getBillingAddress();
-                if(!$this->_address->getFirstname()) {
-                    $this->_address->setFirstname($this->getQuote()->getCustomer()->getFirstname());
+                if (!$this->_address->getFirstname()) {
+                    $this->_address->setFirstname($this->getQuote()->getCustomerData()->getFirstname());
                 }
-                if(!$this->_address->getLastname()) {
-                    $this->_address->setLastname($this->getQuote()->getCustomer()->getLastname());
+                if (!$this->_address->getLastname()) {
+                    $this->_address->setLastname($this->getQuote()->getCustomerData()->getLastname());
                 }
             } else {
                 $this->_address = $this->_addressFactory->create();
@@ -167,11 +180,7 @@ class Billing extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      */
     public function getFirstname()
     {
-        $firstname = $this->getAddress()->getFirstname();
-        if (empty($firstname) && $this->getQuote()->getCustomer()) {
-            return $this->getQuote()->getCustomer()->getFirstname();
-        }
-        return $firstname;
+        return $this->getAddress()->getFirstname();
     }
 
     /**
@@ -182,23 +191,22 @@ class Billing extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      */
     public function getLastname()
     {
-        $lastname = $this->getAddress()->getLastname();
-        if (empty($lastname) && $this->getQuote()->getCustomer()) {
-            return $this->getQuote()->getCustomer()->getLastname();
-        }
-        return $lastname;
+        return $this->getAddress()->getLastname();
     }
 
     /**
      * Check is Quote items can ship to
      *
-     * @return boolean
+     * @return bool
      */
     public function canShip()
     {
         return !$this->getQuote()->isVirtual();
     }
 
+    /**
+     * @return void
+     */
     public function getSaveUrl()
     {
     }
@@ -227,12 +235,17 @@ class Billing extends \Magento\Checkout\Block\Onepage\AbstractOnepage
         return $this->_getTaxvat()->isEnabled();
     }
 
+    /**
+     * @return string
+     */
     public function getTaxvatHtml()
     {
-        return $this->_getTaxvat()
-            ->setTaxvat($this->getQuote()->getCustomerTaxvat())
-            ->setFieldIdFormat('billing:%s')
-            ->setFieldNameFormat('billing[%s]')
-            ->toHtml();
+        return $this->_getTaxvat()->setTaxvat(
+            $this->getQuote()->getCustomerTaxvat()
+        )->setFieldIdFormat(
+            'billing:%s'
+        )->setFieldNameFormat(
+            'billing[%s]'
+        )->toHtml();
     }
 }

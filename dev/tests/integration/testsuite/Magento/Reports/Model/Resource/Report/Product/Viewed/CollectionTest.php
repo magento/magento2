@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Reports\Model\Resource\Report\Product\Viewed;
 
 /**
@@ -36,13 +35,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Reports\Model\Resource\Report\Product\Viewed\Collection');
-        $this->_collection
-            ->setPeriod('day')
-            ->setDateRange(null, null)
-            ->addStoreFilter(array(1))
-        ;
+        $this->_collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Reports\Model\Resource\Report\Product\Viewed\Collection'
+        );
+        $this->_collection->setPeriod('day')->setDateRange(null, null)->addStoreFilter(array(1));
     }
 
     /**
@@ -57,5 +53,90 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             $actualResult[$reportItem->getData('product_id')] = $reportItem->getData('views_num');
         }
         $this->assertEquals($expectedResult, $actualResult);
+    }
+
+    /**
+     * @dataProvider tableForPeriodDataProvider
+     *
+     * @param $period
+     * @param $expectedTable
+     * @param $dateFrom
+     * @param $dateTo
+     */
+    public function testTableSelection($period, $expectedTable, $dateFrom, $dateTo)
+    {
+        $dbTableName = $this->_collection->getTable($expectedTable);
+        $this->_collection->setPeriod($period);
+        $this->_collection->setDateRange($dateFrom, $dateTo);
+        $this->_collection->load();
+        $from = $this->_collection->getSelect()->getPart('from');
+
+        $this->assertArrayHasKey($dbTableName, $from);
+
+        $this->assertArrayHasKey('tableName', $from[$dbTableName]);
+        $actualTable = $from[$dbTableName]['tableName'];
+
+        $this->assertEquals($dbTableName, $actualTable);
+    }
+
+    /**
+     * Data provider for testTableSelection
+     *
+     * @return array
+     */
+    public function tableForPeriodDataProvider()
+    {
+        $dateNow = date('Y-m-d', time());
+        $dateYearAgo = date('Y-m-d', strtotime($dateNow . ' -1 year'));
+        return array(
+            [
+                'period'    => 'year',
+                'table'     => 'report_viewed_product_aggregated_yearly',
+                'date_from' => null,
+                'date_to'   => null
+            ],
+            [
+                'period'    => 'month',
+                'table'     => 'report_viewed_product_aggregated_monthly',
+                'date_from' => null,
+                'date_to'   => null
+            ],
+            [
+                'period'    => 'day',
+                'table'     => 'report_viewed_product_aggregated_daily',
+                'date_from' => null,
+                'date_to'   => null
+            ],
+            [
+                'period'    => 'undefinedPeriod',
+                'table'     => 'report_viewed_product_aggregated_daily',
+                'date_from' => null,
+                'date_to'   => null
+            ],
+            [
+                'period'    => null,
+                'table'     => 'report_viewed_product_aggregated_daily',
+                'date_from' => $dateYearAgo,
+                'date_to'   => $dateNow
+            ],
+            [
+                'period'    => null,
+                'table'     => 'report_viewed_product_aggregated_daily',
+                'date_from' => $dateNow,
+                'date_to'   => $dateNow
+            ],
+            [
+                'period'    => null,
+                'table'     => 'report_viewed_product_aggregated_daily',
+                'date_from' => $dateYearAgo,
+                'date_to'   => $dateYearAgo
+            ],
+            [
+                'period'    => null,
+                'table'     => 'report_viewed_product_aggregated_yearly',
+                'date_from' => null,
+                'date_to'   => null
+            ],
+        );
     }
 }

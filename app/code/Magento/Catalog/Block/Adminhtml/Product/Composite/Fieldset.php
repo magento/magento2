@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Adminhtml
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,13 +25,11 @@
 /**
  * Adminhtml block for showing product options fieldsets
  *
- * @category   Magento
- * @package    Magento_Catalog
  * @author    Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Composite;
 
-class Fieldset extends \Magento\View\Element\Text\ListText
+class Fieldset extends \Magento\Framework\View\Element\Text\ListText
 {
     /**
      *
@@ -47,7 +43,7 @@ class Fieldset extends \Magento\View\Element\Text\ListText
         $total = count($children);
         $i = 0;
         $this->setText('');
-        /** @var $block \Magento\View\Element\AbstractBlock  */
+        /** @var $block \Magento\Framework\View\Element\AbstractBlock  */
         foreach ($children as $block) {
             $i++;
             $block->setIsLastFieldset($i == $total);

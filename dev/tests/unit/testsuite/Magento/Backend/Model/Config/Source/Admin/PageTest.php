@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Adminhtml
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,7 +25,6 @@
 /**
  * Test class for \Magento\Backend\Model\Config\Source\Admin\Page
  */
-
 namespace Magento\Backend\Model\Config\Source\Admin;
 
 class PageTest extends \PHPUnit_Framework_TestCase
@@ -55,12 +51,16 @@ class PageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $logger = $this->getMock('Magento\Logger', array(), array(), '', false);
+        $logger = $this->getMock('Magento\Framework\Logger', array(), array(), '', false);
         $this->_menuModel = new \Magento\Backend\Model\Menu($logger);
         $this->_menuSubModel = new \Magento\Backend\Model\Menu($logger);
 
         $this->_factoryMock = $this->getMock(
-            'Magento\Backend\Model\Menu\Filter\IteratorFactory', array('create'), array(), '', false
+            'Magento\Backend\Model\Menu\Filter\IteratorFactory',
+            array('create'),
+            array(),
+            '',
+            false
         );
 
         $itemOne = $this->getMock('Magento\Backend\Model\Menu\Item', array(), array(), '', false);
@@ -90,37 +90,32 @@ class PageTest extends \PHPUnit_Framework_TestCase
 
     public function testToOptionArray()
     {
-        $this->_factoryMock
-            ->expects($this->at(0))
-            ->method('create')
-            ->with(
-                $this->equalTo(array('iterator' => $this->_menuModel->getIterator()))
-            )->will(
-                $this->returnValue(new \Magento\Backend\Model\Menu\Filter\Iterator($this->_menuModel->getIterator()))
-            );
+        $this->_factoryMock->expects(
+            $this->at(0)
+        )->method(
+            'create'
+        )->with(
+            $this->equalTo(array('iterator' => $this->_menuModel->getIterator()))
+        )->will(
+            $this->returnValue(new \Magento\Backend\Model\Menu\Filter\Iterator($this->_menuModel->getIterator()))
+        );
 
-        $this->_factoryMock
-            ->expects($this->at(1))
-            ->method('create')
-            ->with(
-                $this->equalTo(array('iterator' => $this->_menuSubModel->getIterator()))
-            )->will($this->returnValue(
-                new \Magento\Backend\Model\Menu\Filter\Iterator($this->_menuSubModel->getIterator())
-            )
+        $this->_factoryMock->expects(
+            $this->at(1)
+        )->method(
+            'create'
+        )->with(
+            $this->equalTo(array('iterator' => $this->_menuSubModel->getIterator()))
+        )->will(
+            $this->returnValue(new \Magento\Backend\Model\Menu\Filter\Iterator($this->_menuSubModel->getIterator()))
         );
 
         $nonEscapableNbspChar = html_entity_decode('&#160;', ENT_NOQUOTES, 'UTF-8');
         $paddingString = str_repeat($nonEscapableNbspChar, 4);
 
         $expected = array(
-            array(
-                'label' => 'Item 1',
-                'value' => 'item1',
-            ),
-            array(
-                'label' => $paddingString . 'Item 2',
-                'value' => 'item2',
-            ),
+            array('label' => 'Item 1', 'value' => 'item1'),
+            array('label' => $paddingString . 'Item 2', 'value' => 'item2')
         );
         $this->assertEquals($expected, $this->_model->toOptionArray());
     }

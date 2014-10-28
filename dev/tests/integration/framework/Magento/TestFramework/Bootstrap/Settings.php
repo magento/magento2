@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -56,7 +53,7 @@ class Settings
     public function __construct($baseDir, array $settings)
     {
         if (!is_dir($baseDir)) {
-            throw new \InvalidArgumentException("Base path '$baseDir' has to be an existing directory.");
+            throw new \InvalidArgumentException("Base path '{$baseDir}' has to be an existing directory.");
         }
         $this->_baseDir = realpath($baseDir);
         $this->_settings = $settings;
@@ -71,7 +68,7 @@ class Settings
      */
     public function get($settingName, $defaultValue = null)
     {
-        return (array_key_exists($settingName, $this->_settings) ? $this->_settings[$settingName] : $defaultValue);
+        return array_key_exists($settingName, $this->_settings) ? $this->_settings[$settingName] : $defaultValue;
     }
 
     /**
@@ -83,7 +80,7 @@ class Settings
      */
     public function getAsBoolean($settingName)
     {
-        return ($this->get($settingName) === 'enabled');
+        return $this->get($settingName) === 'enabled';
     }
 
     /**
@@ -107,7 +104,7 @@ class Settings
      *
      * @param string $settingName
      * @return string
-     * @throws \Magento\Exception
+     * @throws \Magento\Framework\Exception
      */
     public function getAsConfigFile($settingName)
     {
@@ -120,7 +117,7 @@ class Settings
                 return $result;
             }
         }
-        throw new \Magento\Exception("Setting '$settingName' specifies the non-existing file '$result'.");
+        throw new \Magento\Framework\Exception("Setting '{$settingName}' specifies the non-existing file '{$result}'.");
     }
 
     /**

@@ -18,22 +18,17 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Payment
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Payment\Block\Info;
 
 /**
  * Payment information container block
  *
- * @category   Magento
- * @package    Magento_Payment
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Payment\Block\Info;
-
-abstract class AbstractContainer extends \Magento\View\Element\Template
+abstract class AbstractContainer extends \Magento\Framework\View\Element\Template
 {
     /**
      * Payment data
@@ -43,12 +38,12 @@ abstract class AbstractContainer extends \Magento\View\Element\Template
     protected $_paymentData = null;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Payment\Helper\Data $paymentData,
         array $data = array()
     ) {
@@ -59,15 +54,12 @@ abstract class AbstractContainer extends \Magento\View\Element\Template
     /**
      * Add payment info block to layout
      *
-     * @return \Magento\Payment\Block\Info\AbstractContainer
+     * @return $this
      */
     protected function _prepareLayout()
     {
         if ($info = $this->getPaymentInfo()) {
-            $this->setChild(
-                $this->_getInfoBlockName(),
-                $this->_paymentData->getInfoBlock($info)
-            );
+            $this->setChild($this->_getInfoBlockName(), $this->_paymentData->getInfoBlock($info));
         }
         return parent::_prepareLayout();
     }
@@ -75,12 +67,12 @@ abstract class AbstractContainer extends \Magento\View\Element\Template
     /**
      * Retrieve info block name
      *
-     * @return unknown
+     * @return string|false
      */
     protected function _getInfoBlockName()
     {
         if ($info = $this->getPaymentInfo()) {
-            return 'payment.info.'.$info->getMethodInstance()->getCode();
+            return 'payment.info.' . $info->getMethodInstance()->getCode();
         }
         return false;
     }
@@ -95,11 +87,11 @@ abstract class AbstractContainer extends \Magento\View\Element\Template
     /**
      * Declare info block template
      *
-     * @param   string $method
-     * @param   string $template
-     * @return  \Magento\Payment\Block\Info\AbstractContainer
+     * @param string $method
+     * @param string $template
+     * @return $this
      */
-    public function setInfoTemplate($method='', $template='')
+    public function setInfoTemplate($method = '', $template = '')
     {
         if ($info = $this->getPaymentInfo()) {
             if ($info->getMethodInstance()->getCode() == $method) {

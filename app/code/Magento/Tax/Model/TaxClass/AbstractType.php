@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Tax
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,7 +27,7 @@
  */
 namespace Magento\Tax\Model\TaxClass;
 
-abstract class AbstractType extends \Magento\Object implements \Magento\Tax\Model\TaxClass\Type\TypeInterface
+abstract class AbstractType extends \Magento\Framework\Object implements \Magento\Tax\Model\TaxClass\Type\TypeInterface
 {
     /**
      * @var \Magento\Tax\Model\Calculation\Rule
@@ -56,12 +54,10 @@ abstract class AbstractType extends \Magento\Object implements \Magento\Tax\Mode
     /**
      * Get Collection of Tax Rules that are assigned to this tax class
      *
-     * @return \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+     * @return \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
      */
     public function getAssignedToRules()
     {
-        return $this->_calculationRule
-            ->getCollection()
-            ->setClassTypeFilter($this->_classType, $this->getId());
+        return $this->_calculationRule->getCollection()->setClassTypeFilter($this->_classType, $this->getId());
     }
 }

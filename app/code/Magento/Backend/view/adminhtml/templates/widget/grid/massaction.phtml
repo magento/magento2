@@ -1,0 +1,112 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<div id="<?php echo $this->getHtmlId() ?>">
+<div class="massaction">
+    <div class="entry-edit">
+        <?php if ($this->getHideFormElement() !== true):?>
+            <form action="" id="<?php echo $this->getHtmlId() ?>-form" method="post">
+        <?php endif ?>
+            <?php echo $this->getBlockHtml('formkey')?>
+                <span class="field-row">
+                    <label class="label"><?php echo __('Actions') ?></label>
+                        <select id="<?php echo $this->getHtmlId() ?>-select" class="required-entry select absolute-advice local-validation"<?php echo $this->getUiId('select') ?>>
+                            <option value=""></option>
+                            <?php foreach ($this->getItems() as $_item):?>
+                                <option value="<?php echo $_item->getId() ?>"<?php echo ($_item->getSelected() ? ' selected="selected"' : '')?>><?php echo $_item->getLabel() ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                </span>
+                <span class="outer-span" id="<?php echo $this->getHtmlId() ?>-form-hiddens"></span>
+                <span class="outer-span" id="<?php echo $this->getHtmlId() ?>-form-additional"></span>
+                <span class="field-row">
+                    <?php echo $this->getApplyButtonHtml() ?>
+                </span>
+        <?php if ($this->getHideFormElement() !== true):?>
+            </form>
+        <?php endif ?>
+        <div class="no-display">
+        <?php foreach ($this->getItems() as $_item): ?>
+            <div id="<?php echo $this->getHtmlId() ?>-item-<?php echo $_item->getId() ?>-block">
+                <?php if ('' != $_item->getBlockName()):?>
+                    <?php echo $this->getChildHtml($_item->getBlockName());?>
+                <?php endif;?>
+            </div>
+        <?php endforeach; ?>
+        </div>
+    </div>
+    <div class="entry-select">
+        <select id="massaction-select" class="select">
+            <option value="">
+                <?php echo __('Mass Actions')?>
+            </option>
+            <?php if ($this->getUseSelectAll()):?>
+                <option value="selectAll">
+                    <?php echo __('Select All') ?>
+                </option>
+                <option value="unselectAll">
+                    <?php echo __('Unselect All') ?>
+                </option>
+            <?php endif; ?>
+            <option value="selectVisible">
+                <?php echo __('Select Visible') ?>
+            </option>
+            <option value="unselectVisible">
+                <?php echo __('Unselect Visible') ?>
+            </option>
+        </select>
+        <span class="items">
+            <strong id="<?php echo $this->getHtmlId() ?>-count">0</strong> <?php echo __('items selected') ?>
+        </span>
+    </div>
+</div>
+<script type="text/javascript">
+
+    require(['jquery'], function($){
+        'use strict';
+        $('#massaction-select').change(function () {
+            var massAction = $('option:selected', this).val();
+            switch (massAction) {
+                <?php if ($this->getUseSelectAll()):?>
+                case 'selectAll':
+                    return <?php echo $this->getJsObjectName() ?>.selectAll();
+                    break;
+                case 'unselectAll':
+                    return <?php echo $this->getJsObjectName() ?>.unselectAll();
+                    break;
+                <?php endif; ?>
+                case 'selectVisible':
+                    return <?php echo $this->getJsObjectName() ?>.selectVisible();
+                    break;
+                case 'unselectVisible':
+                    return <?php echo $this->getJsObjectName() ?>.unselectVisible();
+                    break;
+            }
+        });
+    });
+    <?php if (!$this->getParentBlock()->canDisplayContainer()): ?>
+        <?php echo $this->getJsObjectName() ?>.setGridIds('<?php echo $this->getGridIdsJson() ?>');
+    <?php endif; ?>
+</script>
+</div>

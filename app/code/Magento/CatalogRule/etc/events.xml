@@ -23,12 +23,9 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
     <event name="prepare_catalog_product_price_index_table">
         <observer name="catalogrule" instance="Magento\CatalogRule\Model\Observer" method="prepareCatalogProductPriceIndexTable" />
-    </event>
-    <event name="catalog_product_type_configurable_price">
-        <observer name="catalogrule" instance="Magento\CatalogRule\Model\Observer" method="catalogProductTypeConfigurablePrice" />
     </event>
     <event name="catalogrule_apply_all">
         <observer name="catalogrule" instance="Magento\CatalogRule\Model\Observer" method="processApplyAll" />

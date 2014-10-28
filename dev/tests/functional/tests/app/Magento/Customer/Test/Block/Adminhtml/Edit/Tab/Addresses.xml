@@ -1,0 +1,99 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<mapping strict="0">
+    <fields>
+        <prefix>
+            <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[prefix]"]</selector>
+            <strategy>css selector</strategy>
+        </prefix>
+        <firstname>
+            <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[firstname]"]</selector>
+            <strategy>css selector</strategy>
+        </firstname>
+        <middlename>
+            <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[middlename]"]</selector>
+            <strategy>css selector</strategy>
+        </middlename>
+        <lastname>
+            <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[lastname]"]</selector>
+            <strategy>css selector</strategy>
+        </lastname>
+        <suffix>
+            <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[suffix]"]</selector>
+            <strategy>css selector</strategy>
+        </suffix>
+        <company>
+            <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[company]"]</selector>
+            <strategy>css selector</strategy>
+        </company>
+        <street>
+            <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[street][0]"]</selector>
+            <strategy>css selector</strategy>
+        </street>
+        <city>
+            <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[city]"]</selector>
+            <strategy>css selector</strategy>
+        </city>
+        <country_id>
+            <input>select</input>
+            <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[country_id]"]</selector>
+            <strategy>css selector</strategy>
+        </country_id>
+        <region_id>
+            <input>select</input>
+            <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[region_id]"]</selector>
+            <strategy>css selector</strategy>
+        </region_id>
+        <region>
+            <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[region]"]</selector>
+            <strategy>css selector</strategy>
+        </region>
+        <postcode>
+            <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[postcode]"]</selector>
+            <strategy>css selector</strategy>
+        </postcode>
+        <telephone>
+            <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[telephone]"]</selector>
+            <strategy>css selector</strategy>
+        </telephone>
+        <fax>
+            <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[fax]"]</selector>
+            <strategy>css selector</strategy>
+        </fax>
+        <vat_id>
+            <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[vat_id]"]</selector>
+            <strategy>css selector</strategy>
+        </vat_id>
+        <default_billing>
+            <selector>#address_list [aria-selected="true"] [name^="account"][name$="[default_billing]"]</selector>
+            <input>checkbox</input>
+        </default_billing>
+        <default_shipping>
+            <selector>#address_list [aria-selected="true"] [name^="account"][name$="[default_shipping]"]</selector>
+            <input>checkbox</input>
+        </default_shipping>
+    </fields>
+</mapping>

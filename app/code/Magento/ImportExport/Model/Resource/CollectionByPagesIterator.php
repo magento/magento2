@@ -18,41 +18,36 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_ImportExport
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ImportExport\Model\Resource;
 
 /**
  * Collection by pages iterator
  *
- * @category    Magento
- * @package     Magento_ImportExport
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\ImportExport\Model\Resource;
-
 class CollectionByPagesIterator
 {
     /**
      * Load collection page by page and apply callbacks to each collection item
      *
-     * @param \Magento\Data\Collection\Db $collection Collection to load page by page
+     * @param \Magento\Framework\Data\Collection\Db $collection Collection to load page by page
      * @param int $pageSize Number of items to fetch from db in one query
      * @param array $callbacks Array of callbacks which should be applied to each collection item
+     * @return void
      */
-    public function iterate(\Magento\Data\Collection\Db $collection, $pageSize, array $callbacks)
+    public function iterate(\Magento\Framework\Data\Collection\Db $collection, $pageSize, array $callbacks)
     {
-        /** @var $paginatedCollection \Magento\Data\Collection\Db */
+        /** @var $paginatedCollection \Magento\Framework\Data\Collection\Db */
         $paginatedCollection = null;
         $pageNumber = 1;
         do {
             $paginatedCollection = clone $collection;
             $paginatedCollection->clear();
 
-            $paginatedCollection->setPageSize($pageSize)
-                ->setCurPage($pageNumber);
+            $paginatedCollection->setPageSize($pageSize)->setCurPage($pageNumber);
 
             if ($paginatedCollection->count() > 0) {
                 foreach ($paginatedCollection as $item) {

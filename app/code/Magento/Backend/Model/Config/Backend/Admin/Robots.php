@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,10 +27,12 @@
  */
 namespace Magento\Backend\Model\Config\Backend\Admin;
 
-class Robots extends \Magento\Core\Model\Config\Value
+use Magento\Framework\App\Filesystem\DirectoryList;
+
+class Robots extends \Magento\Framework\App\Config\Value
 {
     /**
-     * @var \Magento\Filesystem\Directory\Write
+     * @var \Magento\Framework\Filesystem\Directory\Write
      */
     protected $_directory;
 
@@ -42,35 +42,25 @@ class Robots extends \Magento\Core\Model\Config\Value
     protected $_file;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Config $config
-     * @param \Magento\Filesystem $filesystem
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Config $config,
-        \Magento\Filesystem $filesystem,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\Filesystem $filesystem,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        parent::__construct(
-            $context,
-            $registry,
-            $storeManager,
-            $config,
-            $resource,
-            $resourceCollection,
-            $data
-        );
-        $this->_directory = $filesystem->getDirectoryWrite(\Magento\Filesystem::ROOT);
+        parent::__construct($context, $registry, $config, $resource, $resourceCollection, $data);
+        $this->_directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $this->_file = 'robots.txt';
     }
 
@@ -90,7 +80,7 @@ class Robots extends \Magento\Core\Model\Config\Value
     /**
      * Load default content from robots.txt if customer does not define own
      *
-     * @return \Magento\Backend\Model\Config\Backend\Admin\Robots
+     * @return $this
      */
     protected function _afterLoad()
     {
@@ -104,7 +94,7 @@ class Robots extends \Magento\Core\Model\Config\Value
     /**
      * Check and process robots file
      *
-     * @return \Magento\Backend\Model\Config\Backend\Admin\Robots
+     * @return $this
      */
     protected function _afterSave()
     {

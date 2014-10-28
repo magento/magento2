@@ -18,46 +18,45 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Cms
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Cms\Block\Adminhtml\Page\Grid\Renderer;
 
-class Action
-    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
-     * @var \Magento\Core\Model\UrlFactory
+     * @var Action\UrlBuilder
      */
-    protected $_urlFactory;
+    protected $actionUrlBuilder;
 
     /**
      * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\Core\Model\UrlFactory $urlFactory
+     * @param Action\UrlBuilder $actionUrlBuilder
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
-        \Magento\Core\Model\UrlFactory $urlFactory,
+        Action\UrlBuilder $actionUrlBuilder,
         array $data = array()
     ) {
-        $this->_urlFactory = $urlFactory;
+        $this->actionUrlBuilder = $actionUrlBuilder;
         parent::__construct($context, $data);
     }
 
-    public function render(\Magento\Object $row)
+    /**
+     * Render action
+     *
+     * @param \Magento\Framework\Object $row
+     * @return string
+     */
+    public function render(\Magento\Framework\Object $row)
     {
-        /** @var \Magento\Core\Model\Url $urlModel */
-        $urlModel = $this->_urlFactory->create()->setStore($row->getData('_first_store_id'));
-        $href = $urlModel->getUrl(
-            $row->getIdentifier(), array(
-                '_current' => false,
-                '_query' => '___store='.$row->getStoreCode()
-           )
+        $href = $this->actionUrlBuilder->getUrl(
+            $row->getIdentifier(),
+            $row->getData('_first_store_id'),
+            $row->getStoreCode()
         );
-        return '<a href="'.$href.'" target="_blank">'.__('Preview').'</a>';
+        return '<a href="' . $href . '" target="_blank">' . __('Preview') . '</a>';
     }
 }

@@ -18,25 +18,23 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Block\Layer;
 
 class ViewTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetClearUrl()
     {
-        $childBlock = new \Magento\Object;
+        $childBlock = new \Magento\Framework\Object();
 
-        $block = $this->getMock('Magento\Catalog\Block\Layer\View', array('getChildBlock'), array(), '', false);
+        $block = $this->getMock(
+            'Magento\LayeredNavigation\Block\Navigation', array('getChildBlock'), array(), '', false
+        );
         $block->expects($this->atLeastOnce())
             ->method('getChildBlock')
-            ->with('layer_state')
+            ->with('state')
             ->will($this->returnValue($childBlock));
 
         $expectedUrl = 'http://example.com/clear_all/12/';

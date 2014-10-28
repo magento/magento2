@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model;
 
 /**
@@ -43,7 +39,7 @@ class AuthTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()
             ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Backend\Model\Auth');
@@ -85,7 +81,9 @@ class AuthTest extends \PHPUnit_Framework_TestCase
     public function testLoginSuccessful()
     {
         $this->_model->login(
-            \Magento\TestFramework\Bootstrap::ADMIN_NAME, \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD);
+            \Magento\TestFramework\Bootstrap::ADMIN_NAME,
+            \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
+        );
         $this->assertInstanceOf('Magento\Backend\Model\Auth\Credential\StorageInterface', $this->_model->getUser());
         $this->assertGreaterThan(time() - 10, $this->_model->getAuthStorage()->getUpdatedAt());
     }
@@ -95,10 +93,13 @@ class AuthTest extends \PHPUnit_Framework_TestCase
      */
     public function testLogout()
     {
+        $this->markTestIncomplete('MAGETWO-17021');
         $this->_model->login(
-            \Magento\TestFramework\Bootstrap::ADMIN_NAME, \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD);
+            \Magento\TestFramework\Bootstrap::ADMIN_NAME,
+            \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
+        );
         $this->assertNotEmpty($this->_model->getAuthStorage()->getData());
-        $cookie = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('\Magento\Stdlib\Cookie');
+        $cookie = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('\Magento\Framework\Stdlib\Cookie');
         $cookie->set($this->_model->getAuthStorage()->getName(), 'session_id');
         $this->_model->logout();
         $this->assertEmpty($this->_model->getAuthStorage()->getData());
@@ -112,7 +113,9 @@ class AuthTest extends \PHPUnit_Framework_TestCase
     public function testIsLoggedIn()
     {
         $this->_model->login(
-            \Magento\TestFramework\Bootstrap::ADMIN_NAME, \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD);
+            \Magento\TestFramework\Bootstrap::ADMIN_NAME,
+            \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
+        );
         $this->assertTrue($this->_model->isLoggedIn());
 
         $this->_model->getAuthStorage()->setUpdatedAt(time() - 101);
@@ -126,7 +129,9 @@ class AuthTest extends \PHPUnit_Framework_TestCase
     public function testIsLoggedInWithIgnoredLifetime()
     {
         $this->_model->login(
-            \Magento\TestFramework\Bootstrap::ADMIN_NAME, \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD);
+            \Magento\TestFramework\Bootstrap::ADMIN_NAME,
+            \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
+        );
         $this->assertTrue($this->_model->isLoggedIn());
 
         $this->_model->getAuthStorage()->setUpdatedAt(time() - 101);
@@ -136,7 +141,9 @@ class AuthTest extends \PHPUnit_Framework_TestCase
     public function testGetUser()
     {
         $this->_model->login(
-            \Magento\TestFramework\Bootstrap::ADMIN_NAME, \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD);
+            \Magento\TestFramework\Bootstrap::ADMIN_NAME,
+            \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
+        );
 
         $this->assertNotNull($this->_model->getUser());
         $this->assertGreaterThan(0, $this->_model->getUser()->getId());

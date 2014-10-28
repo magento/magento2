@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Centinel
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -31,27 +29,8 @@
  */
 namespace Magento\Centinel\Helper;
 
-class Data extends \Magento\App\Helper\AbstractHelper
+class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    /**
-     * Layout factory
-     *
-     * @var \Magento\View\LayoutInterface
-     */
-    protected $_layout;
-
-    /**
-     * @param \Magento\App\Helper\Context $context
-     * @param \Magento\View\LayoutInterface $layout
-     */
-    public function __construct(
-        \Magento\App\Helper\Context $context,
-        \Magento\View\LayoutInterface $layout
-    ) {
-        $this->_layout = $layout;
-        parent::__construct($context);
-    }
-
     /**
      * Return label for cmpi field
      *
@@ -62,15 +41,15 @@ class Data extends \Magento\App\Helper\AbstractHelper
     {
         switch ($fieldName) {
             case \Magento\Centinel\Model\Service::CMPI_PARES:
-               return __('3D Secure Verification Result');
+                return __('3D Secure Verification Result');
             case \Magento\Centinel\Model\Service::CMPI_ENROLLED:
-               return __('3D Secure Cardholder Validation');
+                return __('3D Secure Cardholder Validation');
             case \Magento\Centinel\Model\Service::CMPI_ECI:
-               return __('3D Secure Electronic Commerce Indicator');
+                return __('3D Secure Electronic Commerce Indicator');
             case \Magento\Centinel\Model\Service::CMPI_CAVV:
-               return __('3D Secure CAVV');
+                return __('3D Secure CAVV');
             case \Magento\Centinel\Model\Service::CMPI_XID:
-               return __('3D Secure XID');
+                return __('3D Secure XID');
         }
         return '';
     }
@@ -86,14 +65,15 @@ class Data extends \Magento\App\Helper\AbstractHelper
     {
         switch ($fieldName) {
             case \Magento\Centinel\Model\Service::CMPI_PARES:
-               return $this->_getCmpiParesValue($value);
+                return $this->_getCmpiParesValue($value);
             case \Magento\Centinel\Model\Service::CMPI_ENROLLED:
-               return $this->_getCmpiEnrolledValue($value);
+                return $this->_getCmpiEnrolledValue($value);
             case \Magento\Centinel\Model\Service::CMPI_ECI:
-               return $this->_getCmpiEciValue($value);
-            case \Magento\Centinel\Model\Service::CMPI_CAVV: // break intentionally omitted
+                return $this->_getCmpiEciValue($value);
+            case \Magento\Centinel\Model\Service::CMPI_CAVV:
+                // break intentionally omitted
             case \Magento\Centinel\Model\Service::CMPI_XID:
-               return $value;
+                return $value;
         }
         return '';
     }
@@ -132,7 +112,8 @@ class Data extends \Magento\App\Helper\AbstractHelper
                 return __('Enrolled');
             case 'U':
                 return __('Enrolled but Authentication Unavailable');
-            case 'N': // break intentionally omitted
+            case 'N':
+                // break intentionally omitted
             default:
                 return __('Not Enrolled');
         }
@@ -158,19 +139,6 @@ class Data extends \Magento\App\Helper\AbstractHelper
             default:
                 return $value;
         }
-    }
-
-    /**
-     * Return centinel block for payment form with logos
-     *
-     * @param \Magento\Payment\Model\Method\AbstractMethod $method
-     * @return \Magento\Centinel\Block\Logo
-     */
-    public function getMethodFormBlock($method)
-    {
-        $block = $this->_layout->createBlock('Magento\Centinel\Block\Logo');
-        $block->setMethod($method);
-        return $block;
     }
 
     /**

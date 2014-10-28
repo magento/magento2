@@ -36,7 +36,9 @@ class JsonTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         /** Prepare mocks and objects for SUT constructor. */
-        $this->_helperMock = $this->getMockBuilder('Magento\Core\Helper\Data')->disableOriginalConstructor()->getMock();
+        $this->_helperMock = $this->getMockBuilder(
+            'Magento\Core\Helper\Data'
+        )->disableOriginalConstructor()->getMock();
         /** Initialize SUT. */
         $this->_restJsonRenderer = new \Magento\Webapi\Controller\Rest\Response\Renderer\Json($this->_helperMock);
         parent::setUp();

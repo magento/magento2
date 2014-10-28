@@ -23,25 +23,27 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
-    <virtualType name="Magento\Centinel\Model\Session\Storage" type="Magento\Session\Storage">
-        <param name="namespace">
-            <value>centinel_validator</value>
-        </param>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <virtualType name="Magento\Centinel\Model\Session\Storage" type="Magento\Framework\Session\Storage">
+        <arguments>
+            <argument name="namespace" xsi:type="string">centinel_validator</argument>
+        </arguments>
     </virtualType>
-    <virtualType name="Magento\Centinel\Model\Session" type="Magento\Session\Generic">
-        <param name="storage">
-            <instance type="Magento\Centinel\Model\Session\Storage" />
-        </param>
-        <param name="sessionName">
-            <value>frontend</value>
-        </param>
+    <virtualType name="Magento\Centinel\Model\Session" type="Magento\Framework\Session\Generic">
+        <arguments>
+            <argument name="storage" xsi:type="object">Magento\Centinel\Model\Session\Storage</argument>
+        </arguments>
     </virtualType>
     <type name="Magento\Core\Model\Url\SecurityInfo">
-        <param name="secureUrlList">
-            <value>
-                <centinel>/centinel/</centinel>
-            </value>
-        </param>
+        <arguments>
+            <argument name="secureUrlList" xsi:type="array">
+                <item name="centinel" xsi:type="string">/centinel/</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Centinel\Model\Service">
+        <arguments>
+            <argument name="centinelSession" xsi:type="object">Magento\Centinel\Model\Session</argument>
+        </arguments>
     </type>
 </config>

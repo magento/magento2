@@ -1,0 +1,67 @@
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+div.ui-tabs {
+    padding: 0 0 20px 0;
+}
+div.ui-tabs > ul {
+    padding-left: 5px;
+}
+div.ui-tabs li {
+    position: relative;
+    z-index: 98;
+    display:inline-block;
+    border: 1px solid #ccc;
+    margin: 0 3px;
+    padding: 7px 10px;
+    -webkit-border-top-left-radius: 4px;
+    -webkit-border-top-right-radius: 4px;
+    -moz-border-radius-topleft: 4px;
+    -moz-border-radius-topright: 4px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    background-color: #f7f7f7;
+}
+div.ui-tabs li.ui-tabs-active {
+    background-color: #fff;
+    border-bottom: 1px solid #fff;
+    z-index: 100;
+}
+div.ui-tabs .ui-state-hover > a {
+    color: #444;
+}
+div.ui-tabs > ul a {
+    text-decoration: none;
+    color: #777;
+    font-size: 1.1em;
+}
+div.ui-tabs .ui-tabs-active > a {
+    color: #444;
+}
+
+div.ui-tabs > div {
+    position: relative;
+    border: 1px solid #CCC;
+    padding: 20px;
+    z-index: 99;
+    font-size: 1.1em;
+}

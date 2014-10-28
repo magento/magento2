@@ -18,17 +18,14 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Payment
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Payment\Block\Info;
 
 /**
  * Credit card generic payment info
  */
-namespace Magento\Payment\Block\Info;
-
 class Cc extends \Magento\Payment\Block\Info
 {
     /**
@@ -39,18 +36,19 @@ class Cc extends \Magento\Payment\Block\Info
     protected $_paymentConfig;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Payment\Model\Config $paymentConfig
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Payment\Model\Config $paymentConfig,
         array $data = array()
     ) {
         parent::__construct($context, $data);
         $this->_paymentConfig = $paymentConfig;
     }
+
     /**
      * Retrieve credit card type name
      *
@@ -63,7 +61,7 @@ class Cc extends \Magento\Payment\Block\Info
         if (isset($types[$ccType])) {
             return $types[$ccType];
         }
-        return (empty($ccType)) ? __('N/A') : $ccType;
+        return empty($ccType) ? __('N/A') : $ccType;
     }
 
     /**
@@ -84,8 +82,8 @@ class Cc extends \Magento\Payment\Block\Info
     public function getCcExpMonth()
     {
         $month = $this->getInfo()->getCcExpMonth();
-        if ($month<10) {
-            $month = '0'.$month;
+        if ($month < 10) {
+            $month = '0' . $month;
         }
         return $month;
     }
@@ -93,11 +91,11 @@ class Cc extends \Magento\Payment\Block\Info
     /**
      * Retrieve CC expiration date
      *
-     * @return \Zend_Date
+     * @return \Magento\Framework\Stdlib\DateTime\Date
      */
     public function getCcExpDate()
     {
-        $date = $this->_locale->date(0);
+        $date = $this->_localeDate->date(0);
         $date->setYear($this->getInfo()->getCcExpYear());
         $date->setMonth($this->getInfo()->getCcExpMonth());
         return $date;
@@ -106,8 +104,8 @@ class Cc extends \Magento\Payment\Block\Info
     /**
      * Prepare credit card related payment info
      *
-     * @param \Magento\Object|array $transport
-     * @return \Magento\Object
+     * @param \Magento\Framework\Object|array $transport
+     * @return \Magento\Framework\Object
      */
     protected function _prepareSpecificInformation($transport = null)
     {
@@ -129,7 +127,7 @@ class Cc extends \Magento\Payment\Block\Info
             $year = $this->getInfo()->getCcSsStartYear();
             $month = $this->getInfo()->getCcSsStartMonth();
             if ($year && $month) {
-                $data[__('Switch/Solo/Maestro Start Date')] =  $this->_formatCardDate($year, $month);
+                $data[__('Switch/Solo/Maestro Start Date')] = $this->_formatCardDate($year, $month);
             }
         }
         return $transport->setData(array_merge($data, $transport->getData()));

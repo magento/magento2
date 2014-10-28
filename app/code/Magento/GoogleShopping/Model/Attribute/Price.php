@@ -18,21 +18,23 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_GoogleShopping
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\GoogleShopping\Model\Attribute;
+
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Gdata\Gshopping\Entry;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Tax\Model\Config;
 
 /**
  * Price attribute model
  *
- * @category   Magento
- * @package    Magento_GoogleShopping
  * @author     Magento Core Team <core@magentocommerce.com>
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-namespace Magento\GoogleShopping\Model\Attribute;
-
 class Price extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
 {
     /**
@@ -41,11 +43,9 @@ class Price extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
     protected $_taxData = null;
 
     /**
-     * Core store config
-     *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\Catalog\Helper\Data|null
      */
-    protected $_coreStoreConfig;
+    protected $_catalogData = null;
 
     /**
      * Config
@@ -57,51 +57,75 @@ class Price extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
     /**
      * Store manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @var \Magento\Catalog\Model\Product\CatalogPrice
+     */
+    protected $catalogPrice;
+
+    /**
+     * @var  \Magento\Customer\Service\V1\CustomerGroupService
+     */
+    protected $_customerGroupService;
+
+    /**
+     * @var PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\GoogleShopping\Helper\Data $gsData
+     * @param \Magento\GoogleShopping\Helper\Data $googleShoppingHelper
      * @param \Magento\GoogleShopping\Helper\Product $gsProduct
-     * @param \Magento\GoogleShopping\Helper\Price $gsPrice
+     * @param \Magento\Catalog\Model\Product\CatalogPrice $catalogPrice
      * @param \Magento\GoogleShopping\Model\Resource\Attribute $resource
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
      * @param \Magento\GoogleShopping\Model\Config $config
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Customer\Service\V1\CustomerGroupService $customerGroupService
+     * @param \Magento\Catalog\Helper\Data $catalogData
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param PriceCurrencyInterface $priceCurrency
      * @param array $data
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\GoogleShopping\Helper\Data $gsData,
+        \Magento\GoogleShopping\Helper\Data $googleShoppingHelper,
         \Magento\GoogleShopping\Helper\Product $gsProduct,
-        \Magento\GoogleShopping\Helper\Price $gsPrice,
+        \Magento\Catalog\Model\Product\CatalogPrice $catalogPrice,
         \Magento\GoogleShopping\Model\Resource\Attribute $resource,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Tax\Helper\Data $taxData,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
         \Magento\GoogleShopping\Model\Config $config,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Customer\Service\V1\CustomerGroupService $customerGroupService,
+        \Magento\Catalog\Helper\Data $catalogData,
+        PriceCurrencyInterface $priceCurrency,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
+        $this->priceCurrency = $priceCurrency;
         $this->_storeManager = $storeManager;
         $this->_config = $config;
         $this->_taxData = $taxData;
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_customerGroupService = $customerGroupService;
+        $this->catalogPrice = $catalogPrice;
+        $this->_catalogData = $catalogData;
         parent::__construct(
             $context,
             $registry,
             $productFactory,
-            $gsData,
+            $googleShoppingHelper,
             $gsProduct,
-            $gsPrice,
+            $catalogPrice,
             $resource,
             $resourceCollection,
             $data
@@ -111,73 +135,38 @@ class Price extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
     /**
      * Set current attribute to entry (for specified product)
      *
-     * @param \Magento\Catalog\Model\Product $product
-     * @param \Magento\Gdata\Gshopping\Entry $entry
-     * @return \Magento\Gdata\Gshopping\Entry
+     * @param Product $product
+     * @param Entry $entry
+     * @return Entry
      */
     public function convertAttribute($product, $entry)
     {
         $product->setWebsiteId($this->_storeManager->getStore($product->getStoreId())->getWebsiteId());
-        $product->setCustomerGroupId(
-            $this->_coreStoreConfig->getConfig(\Magento\Customer\Model\Group::XML_PATH_DEFAULT_ID, $product->getStoreId())
-        );
+        $defaultCustomerGroup = $this->_customerGroupService->getDefaultGroup($product->getStoreId());
+        $product->setCustomerGroupId($defaultCustomerGroup->getId());
 
+        /** @var \Magento\Store\Model\Store $store */
         $store = $this->_storeManager->getStore($product->getStoreId());
-        $targetCountry = $this->_config->getTargetCountry($product->getStoreId());
-        $isSalePriceAllowed = ($targetCountry == 'US');
+        $isSalePriceAllowed = $this->_config->getTargetCountry($product->getStoreId()) == 'US';
 
         // get tax settings
-        $taxHelp = $this->_taxData;
-        $priceDisplayType = $taxHelp->getPriceDisplayType($product->getStoreId());
-        $inclTax = ($priceDisplayType == \Magento\Tax\Model\Config::DISPLAY_TYPE_INCLUDING_TAX);
+        $priceDisplayType = $this->_taxData->getPriceDisplayType($product->getStoreId());
+        $inclTax = $priceDisplayType == Config::DISPLAY_TYPE_INCLUDING_TAX;
 
-        // calculate sale_price attribute value
-        $salePriceAttribute = $this->getGroupAttributeSalePrice();
-        $salePriceMapValue = null;
-        $finalPrice = null;
-        if (!is_null($salePriceAttribute)) {
-            $salePriceMapValue = $salePriceAttribute->getProductAttributeValue($product);
-        }
-        if (!is_null($salePriceMapValue) && floatval($salePriceMapValue) > .0001) {
-            $finalPrice = $salePriceMapValue;
-        } else if ($isSalePriceAllowed) {
-            $finalPrice = $this->_gsPrice->getCatalogPrice($product, $store, $inclTax);
-        }
-        if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-            $finalPrice = $taxHelp->getPrice($product, $finalPrice, $inclTax, null, null, null, $product->getStoreId());
-        }
+        $finalPrice = $this->_getFinalPrice($product, $store, $inclTax, $isSalePriceAllowed);
 
         // calculate price attribute value
-        $priceMapValue = $this->getProductAttributeValue($product);
-        $price = null;
-        if (!is_null($priceMapValue) && floatval($priceMapValue) > .0001) {
-            $price = $priceMapValue;
-        } else if ($isSalePriceAllowed) {
-            $price = $this->_gsPrice->getCatalogRegularPrice($product, $store);
-        } else {
-            $inclTax = ($priceDisplayType != \Magento\Tax\Model\Config::DISPLAY_TYPE_EXCLUDING_TAX);
-            $price = $this->_gsPrice->getCatalogPrice($product, $store, $inclTax);
-        }
-        if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-            $price = $taxHelp->getPrice($product, $price, $inclTax, null, null, null, $product->getStoreId());
-        }
+        $price = $this->_getPrice($product, $store, $priceDisplayType, $inclTax, $isSalePriceAllowed);
 
         if ($isSalePriceAllowed) {
             // set sale_price and effective dates for it
-            if ($price && ($price - $finalPrice) > .0001) {
-                $this->_setAttributePrice($entry, $product, $targetCountry, $price);
-                $this->_setAttributePrice($entry, $product, $targetCountry, $finalPrice, 'sale_price');
+            if ($price && $price - $finalPrice > .0001) {
+                $this->_setAttributePrice($entry, $product, $price);
+                $this->_setAttributePrice($entry, $product, $finalPrice, 'sale_price');
 
-                $effectiveDate = $this->getGroupAttributeSalePriceEffectiveDate();
-                if (!is_null($effectiveDate)) {
-                    $effectiveDate->setGroupAttributeSalePriceEffectiveDateFrom(
-                            $this->getGroupAttributeSalePriceEffectiveDateFrom()
-                        )
-                        ->setGroupAttributeSalePriceEffectiveDateTo($this->getGroupAttributeSalePriceEffectiveDateTo())
-                        ->convertAttribute($product, $entry);
-                }
+                $this->_setEffectiveDate($product, $entry);
             } else {
-                $this->_setAttributePrice($entry, $product, $targetCountry, $finalPrice);
+                $this->_setAttributePrice($entry, $product, $finalPrice);
                 $entry->removeContentAttribute('sale_price_effective_date');
                 $entry->removeContentAttribute('sale_price');
             }
@@ -188,7 +177,7 @@ class Price extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
                 $tax->convertAttribute($product, $entry);
             }
         } else {
-            $this->_setAttributePrice($entry, $product, $targetCountry, $price);
+            $this->_setAttributePrice($entry, $product, $price);
         }
 
         return $entry;
@@ -197,22 +186,114 @@ class Price extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
     /**
      * Custom setter for 'price' attribute
      *
-     * @param \Magento\Gdata\Gshopping\Entry $entry
-     * @param string $attribute Google Content attribute name
+     * @param Entry $entry
+     * @param Product $product
      * @param mixed $value Fload price value
-     * @param string $type Google Content attribute type
      * @param string $name Google Content attribute name
-     * @return \Magento\Gdata\Gshopping\Entry
+     * @return Entry
      */
-    protected function _setAttributePrice($entry, $product, $targetCountry, $value, $name = 'price')
+    protected function _setAttributePrice($entry, $product, $value, $name = 'price')
     {
         $store = $this->_storeManager->getStore($product->getStoreId());
-        $price = $store->convertPrice($value);
-        return $this->_setAttribute($entry,
+        $price = $this->priceCurrency->convert($value, $store);
+        return $this->_setAttribute(
+            $entry,
             $name,
             self::ATTRIBUTE_TYPE_FLOAT,
-            sprintf('%.2f', $store->roundPrice($price)),
+            sprintf('%.2f', $this->priceCurrency->round($price)),
             $store->getDefaultCurrencyCode()
         );
+    }
+
+    /**
+     * Sets sales price effective date from/to and sets current attribute to entry (for specified product)
+     *
+     * @param Product $product
+     * @param Entry $entry
+     * @return void
+     */
+    private function _setEffectiveDate($product, $entry)
+    {
+        /** @var SalePriceEffectiveDate $effectiveDate */
+        $effectiveDate = $this->getGroupAttributeSalePriceEffectiveDate();
+        if (!is_null($effectiveDate)) {
+            $effectiveDate->setGroupAttributeSalePriceEffectiveDateFrom(
+                $this->getGroupAttributeSalePriceEffectiveDateFrom()
+            )->setGroupAttributeSalePriceEffectiveDateTo(
+                $this->getGroupAttributeSalePriceEffectiveDateTo()
+            )->convertAttribute(
+                $product,
+                $entry
+            );
+        }
+    }
+
+    /**
+     * Calculate price attribute value
+     *
+     * @param Product $product
+     * @param \Magento\Store\Model\Store $store
+     * @param int $priceDisplayType
+     * @param bool $inclTax
+     * @param bool $isSalePriceAllowed
+     * @return float|null|string
+     */
+    private function _getPrice($product, $store, $priceDisplayType, $inclTax, $isSalePriceAllowed)
+    {
+        $priceMapValue = $this->getProductAttributeValue($product);
+        $price = null;
+        if (!is_null($priceMapValue) && floatval($priceMapValue) > .0001) {
+            $price = $priceMapValue;
+        } else {
+            if ($isSalePriceAllowed) {
+                $price = $this->catalogPrice->getCatalogRegularPrice($product, $store);
+            } else {
+                $inclTax = $priceDisplayType != Config::DISPLAY_TYPE_EXCLUDING_TAX;
+                $price = $this->catalogPrice->getCatalogPrice($product, $store, $inclTax);
+            }
+        }
+        if ($product->getTypeId() != Product\Type::TYPE_BUNDLE) {
+            $price = $this->_catalogData->getTaxPrice($product, $price, $inclTax, null, null, null, $product->getStoreId());
+        }
+        return $price;
+    }
+
+    /**
+     * Calculate final price
+     *
+     * @param Product $product
+     * @param \Magento\Store\Model\Store $store
+     * @param bool $inclTax
+     * @param bool $isSalePriceAllowed
+     * @return float|null
+     */
+    private function _getFinalPrice($product, $store, $inclTax, $isSalePriceAllowed)
+    {
+        // calculate sale_price attribute value
+        $salePriceAttribute = $this->getGroupAttributeSalePrice();
+        $salePriceMapValue = null;
+        $finalPrice = null;
+        if (!is_null($salePriceAttribute)) {
+            $salePriceMapValue = $salePriceAttribute->getProductAttributeValue($product);
+        }
+        if (!is_null($salePriceMapValue) && floatval($salePriceMapValue) > .0001) {
+            $finalPrice = $salePriceMapValue;
+        } else {
+            if ($isSalePriceAllowed) {
+                $finalPrice = $this->catalogPrice->getCatalogPrice($product, $store, $inclTax);
+            }
+        }
+        if ($product->getTypeId() != Product\Type::TYPE_BUNDLE) {
+            $finalPrice = $this->_catalogData->getTaxPrice(
+                $product,
+                $finalPrice,
+                $inclTax,
+                null,
+                null,
+                null,
+                $product->getStoreId()
+            );
+        }
+        return $finalPrice;
     }
 }

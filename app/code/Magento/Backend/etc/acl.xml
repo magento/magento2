@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Magento_Adminhtml::all" title="Allow everything" sortOrder="10" />
+            <resource id="Magento_Adminhtml::admin" title="Magento Admin" sortOrder="20">
+                <resource id="Magento_Adminhtml::dashboard" title="Dashboard" sortOrder="0" />
+                <resource id="Magento_Adminhtml::global_search" title="Global Search" sortOrder="100" />
+                <resource id="Magento_Adminhtml::myaccount" title="My Account" sortOrder="50" />
+                <resource id="Magento_Adminhtml::marketing" title="Marketing" sortOrder="50">
+                    <resource id="Magento_Adminhtml::marketing_seo" title="SEO &amp; Search" sortOrder="40" />
+                    <resource id="Magento_Adminhtml::marketing_user_content" title="User Content" sortOrder="50" />
+                </resource>
+                <resource id="Magento_Adminhtml::content" title="Content" sortOrder="60">
+                    <resource id="Magento_Adminhtml::content_elements" title="Elements" sortOrder="10" />
+                    <resource id="Magento_Adminhtml::design"  title="Design" sortOrder="20">
+                        <resource id="Magento_Adminhtml::schedule" title="Schedule" sortOrder="30" />
+                    </resource>
+                </resource>
+                <resource id="Magento_Adminhtml::stores" title="Stores" sortOrder="80">
+                    <resource id="Magento_Adminhtml::stores_settings" title="Settings" sortOrder="10">
+                        <resource id="Magento_Adminhtml::store" title="All Stores" sortOrder="10"/>
+                        <resource id="Magento_Adminhtml::config" title="Configuration" sortOrder="20">
+                            <resource id="Magento_Adminhtml::advanced" title="Advanced Section" sortOrder="90" />
+                            <resource id="Magento_Adminhtml::config_admin" title="Advanced Admin Section" sortOrder="100" />
+                            <resource id="Magento_Adminhtml::config_design" title="Design Section" sortOrder="40" />
+                            <resource id="Magento_Adminhtml::config_general" title="General Section" sortOrder="20" />
+                            <resource id="Magento_Adminhtml::config_system" title="System Section" sortOrder="80" />
+                            <resource id="Magento_Adminhtml::currency" title="Currency Setup Section" sortOrder="120" />
+                            <resource id="Magento_Adminhtml::dev" title="Developer Section" sortOrder="110" />
+                            <resource id="Magento_Adminhtml::web" title="Web Section" sortOrder="30" />
+                            <resource id="Magento_Adminhtml::trans_email" title="Store Email Addresses Section" sortOrder="100" />
+                            <resource id="Magento_Adminhtml::sendfriend" title="Email to a Friend" sortOrder="140" />
+                        </resource>
+                    </resource>
+                    <resource id="Magento_Adminhtml::stores_attributes" title="Attributes" sortOrder="40" />
+                    <resource id="Magento_Adminhtml::stores_other_settings" title="Other Settings" sortOrder="50" />
+                </resource>
+                <resource id="Magento_Adminhtml::system" title="System" sortOrder="90">
+                    <resource id="Magento_Adminhtml::convert" title="Data Transfer" sortOrder="10" />
+                    <resource id="Magento_Adminhtml::extensions" title="Magento Connect" sortOrder="20">
+                        <resource id="Magento_Adminhtml::local" title="Connect Manager" sortOrder="10" />
+                        <resource id="Magento_Adminhtml::custom" title="Package Extensions" sortOrder="20" />
+                    </resource>
+                    <resource id="Magento_Adminhtml::tools" title="Tools" sortOrder="50">
+                        <resource id="Magento_Adminhtml::cache" title="Cache Management"  sortOrder="10" />
+                    </resource>
+                    <resource id="Magento_Adminhtml::system_other_settings" title="Other Settings"  sortOrder="80">
+                        <resource id="Magento_Adminhtml::variable" title="Custom Variables"  sortOrder="20" />
+                    </resource>
+                </resource>
+            </resource>
+        </resources>
+    </acl>
+</config>

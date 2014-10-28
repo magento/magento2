@@ -18,22 +18,18 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Catalog\Block\Product\Compare;
+
+use Magento\Framework\App\Action\Action;
+use Magento\Catalog\Model\Product;
 
 /**
  * Catalog products compare block
- *
- * @category   Magento
- * @package    Magento_Catalog
- * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Block\Product\Compare;
-
 class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
 {
     /**
@@ -65,25 +61,16 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
     protected $_customerId = null;
 
     /**
-     * Default MAP renderer type
-     *
-     * @var string
+     * @var \Magento\Framework\App\Http\Context
      */
-    protected $_mapRenderer = 'msrp_noform';
+    protected $httpContext;
 
     /**
-     * Customer session
+     * Customer visitor
      *
-     * @var \Magento\Customer\Model\Session
+     * @var \Magento\Customer\Model\Visitor
      */
-    protected $_customerSession;
-
-    /**
-     * Log visitor
-     *
-     * @var \Magento\Log\Model\Visitor
-     */
-    protected $_logVisitor;
+    protected $_customerVisitor;
 
     /**
      * Catalog product visibility
@@ -105,88 +92,57 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
     protected $_coreData;
 
     /**
-     * @var \Magento\Wishlist\Helper\Data
+     * @var \Magento\Customer\Helper\Session\CurrentCustomer
      */
-    protected $_wishlistHelper;
+    protected $currentCustomer;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Catalog\Model\Config $catalogConfig
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Math\Random $mathRandom
-     * @param \Magento\Checkout\Helper\Cart $cartHelper
-     * @param \Magento\Wishlist\Helper\Data $wishlistHelper
-     * @param \Magento\Catalog\Helper\Product\Compare $compareProduct
-     * @param \Magento\Theme\Helper\Layout $layoutHelper
-     * @param \Magento\Catalog\Helper\Image $imageHelper
+     * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemCollectionFactory
-     * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
-     * @param \Magento\Log\Model\Visitor $logVisitor
-     * @param \Magento\Customer\Model\Session $customerSession
+     * @param Product\Visibility $catalogProductVisibility
+     * @param \Magento\Customer\Model\Visitor $customerVisitor
+     * @param \Magento\Framework\App\Http\Context $httpContext
+     * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
      * @param array $data
-     * 
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Catalog\Model\Config $catalogConfig,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Tax\Helper\Data $taxData,
-        \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Math\Random $mathRandom,
-        \Magento\Checkout\Helper\Cart $cartHelper,
-        \Magento\Wishlist\Helper\Data $wishlistHelper,
-        \Magento\Catalog\Helper\Product\Compare $compareProduct,
-        \Magento\Theme\Helper\Layout $layoutHelper,
-        \Magento\Catalog\Helper\Image $imageHelper,
+        \Magento\Catalog\Block\Product\Context $context,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemCollectionFactory,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
-        \Magento\Log\Model\Visitor $logVisitor,
-        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Customer\Model\Visitor $customerVisitor,
+        \Magento\Framework\App\Http\Context $httpContext,
+        \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
         array $data = array()
     ) {
-        $this->_wishlistHelper = $wishlistHelper;
         $this->_coreData = $coreData;
         $this->_itemCollectionFactory = $itemCollectionFactory;
         $this->_catalogProductVisibility = $catalogProductVisibility;
-        $this->_logVisitor = $logVisitor;
-        $this->_customerSession = $customerSession;
+        $this->_customerVisitor = $customerVisitor;
+        $this->httpContext = $httpContext;
+        $this->currentCustomer = $currentCustomer;
         parent::__construct(
             $context,
-            $catalogConfig,
-            $registry,
-            $taxData,
-            $catalogData,
-            $mathRandom,
-            $cartHelper,
-            $wishlistHelper,
-            $compareProduct,
-            $layoutHelper,
-            $imageHelper,
             $data
         );
+        $this->_isScopePrivate = true;
     }
 
     /**
-     * Retrieve url for adding product to wishlist with params
+     * Get add to wishlist params
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @return string
      */
-    public function getAddToWishlistUrl($product)
+    public function getAddToWishlistParams($product)
     {
-        $continueUrl    = $this->_coreData->urlEncode($this->getUrl('customer/account'));
-        $urlParamName   = \Magento\App\Action\Action::PARAM_NAME_URL_ENCODED;
+        $continueUrl = $this->_coreData->urlEncode($this->getUrl('customer/account'));
+        $urlParamName = Action::PARAM_NAME_URL_ENCODED;
 
-        $params = array(
-            $urlParamName   => $continueUrl
-        );
+        $continueUrlParams = array($urlParamName => $continueUrl);
 
-        return $this->_wishlistHelper->getAddUrlWithParams($product, $params);
+        return $this->_wishlistHelper->getAddParams($product, $continueUrlParams);
     }
 
     /**
@@ -196,10 +152,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
      */
     protected function _prepareLayout()
     {
-        $headBlock = $this->getLayout()->getBlock('head');
-        if ($headBlock) {
-            $headBlock->setTitle(__('Products Comparison List') . ' - ' . $headBlock->getDefaultTitle());
-        }
+        $this->pageConfig->setTitle(__('Products Comparison List') . ' - ' . $this->pageConfig->getDefaultTitle());
         return parent::_prepareLayout();
     }
 
@@ -214,23 +167,21 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
             $this->_compareProduct->setAllowUsedFlat(false);
 
             $this->_items = $this->_itemCollectionFactory->create();
-            $this->_items->useProductItem(true)
-                ->setStoreId($this->_storeManager->getStore()->getId());
+            $this->_items->useProductItem(true)->setStoreId($this->_storeManager->getStore()->getId());
 
-            if ($this->_customerSession->isLoggedIn()) {
-                $this->_items->setCustomerId($this->_customerSession->getCustomerId());
+            if ($this->httpContext->getValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH)) {
+                $this->_items->setCustomerId($this->currentCustomer->getCustomerId());
             } elseif ($this->_customerId) {
                 $this->_items->setCustomerId($this->_customerId);
             } else {
-                $this->_items->setVisitorId($this->_logVisitor->getId());
+                $this->_items->setVisitorId($this->_customerVisitor->getId());
             }
 
-            $this->_items
-                ->addAttributeToSelect($this->_catalogConfig->getProductAttributes())
-                ->loadComparableAttributes()
-                ->addMinimalPrice()
-                ->addTaxPercents()
-                ->setVisibility($this->_catalogProductVisibility->getVisibleInSiteIds());
+            $this->_items->addAttributeToSelect(
+                $this->_catalogConfig->getProductAttributes()
+            )->loadComparableAttributes()->addMinimalPrice()->addTaxPercents()->setVisibility(
+                $this->_catalogProductVisibility->getVisibleInSiteIds()
+            );
         }
 
         return $this->_items;
@@ -253,7 +204,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
     /**
      * Retrieve Product Attribute Value
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
      * @return string
      */
@@ -263,15 +214,17 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
             return __('N/A');
         }
 
-        if ($attribute->getSourceModel()
-            || in_array($attribute->getFrontendInput(), array('select','boolean','multiselect'))
+        if ($attribute->getSourceModel() || in_array(
+            $attribute->getFrontendInput(),
+            array('select', 'boolean', 'multiselect')
+        )
         ) {
             //$value = $attribute->getSource()->getOptionText($product->getData($attribute->getAttributeCode()));
             $value = $attribute->getFrontend()->getValue($product);
         } else {
             $value = $product->getData($attribute->getAttributeCode());
         }
-        return ((string)$value == '') ? __('No') : $value;
+        return (string)$value == '' ? __('No') : $value;
     }
 
     /**
@@ -281,7 +234,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
      */
     public function getPrintUrl()
     {
-        return $this->getUrl('*/*/*', array('_current'=>true, 'print'=>1));
+        return $this->getUrl('*/*/*', array('_current' => true, 'print' => 1));
     }
 
     /**
@@ -294,5 +247,32 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
     {
         $this->_customerId = $id;
         return $this;
+    }
+
+    /**
+     * Render price block
+     *
+     * @param Product $product
+     * @param string|null $idSuffix
+     * @return string
+     */
+    public function getProductPrice(\Magento\Catalog\Model\Product $product, $idSuffix = '')
+    {
+        /** @var \Magento\Framework\Pricing\Render $priceRender */
+        $priceRender = $this->getLayout()->getBlock('product.price.render.default');
+
+        $price = '';
+        if ($priceRender) {
+            $price = $priceRender->render(
+                \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
+                $product,
+                [
+                    'price_id' => 'product-price-' . $product->getId() . $idSuffix,
+                    'display_minimal_price' => true,
+                    'zone' => \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST
+                ]
+            );
+        }
+        return $price;
     }
 }

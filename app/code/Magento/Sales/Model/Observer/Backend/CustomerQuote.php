@@ -23,6 +23,8 @@
  */
 namespace Magento\Sales\Model\Observer\Backend;
 
+use Magento\Customer\Service\V1\Data\Customer as CustomerData;
+
 class CustomerQuote
 {
     /**
@@ -31,58 +33,60 @@ class CustomerQuote
     protected $_config;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\Sales\Model\Quote
+     * @var \Magento\Sales\Model\QuoteFactory
      */
-    protected $_quote;
+    protected $_quoteFactory;
 
     /**
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Model\Config\Share $config
-     * @param \Magento\Sales\Model\Quote $quote
+     * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
      */
     public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Customer\Model\Config\Share $config,
-        \Magento\Sales\Model\Quote $quote
+        \Magento\Sales\Model\QuoteFactory $quoteFactory
     ) {
         $this->_storeManager = $storeManager;
         $this->_config = $config;
-        $this->_quote = $quote;
+        $this->_quoteFactory = $quoteFactory;
     }
 
     /**
      * Set new customer group to all his quotes
      *
-     * @param \Magento\Event\Observer $observer
+     * @param \Magento\Framework\Event\Observer $observer
+     * @return void
      */
-    public function dispatch(\Magento\Event\Observer $observer)
+    public function dispatch(\Magento\Framework\Event\Observer $observer)
     {
-        /** @var $customer \Magento\Customer\Model\Customer */
-        $customer = $observer->getEvent()->getCustomer();
-
-        if ($customer->getGroupId() !== $customer->getOrigData('group_id')) {
+        /** @var CustomerData $customerDataObject */
+        $customerDataObject = $observer->getEvent()->getCustomerDataObject();
+        /** @var CustomerData $origCustomerDataObject */
+        $origCustomerDataObject = $observer->getEvent()->getOrigCustomerDataObject();
+        if ($customerDataObject->getGroupId() !== $origCustomerDataObject->getGroupId()) {
             /**
              * It is needed to process customer's quotes for all websites
              * if customer accounts are shared between all of them
              */
-            /** @var $websites \Magento\Core\Model\Website[] */
-            $websites = $this->_config->isWebsiteScope() ?
-                array($this->_storeManager->getWebsite($customer->getWebsiteId())) :
-                $this->_storeManager->getWebsites();
+            /** @var $websites \Magento\Store\Model\Website[] */
+            $websites = $this->_config->isWebsiteScope() ? array(
+                $this->_storeManager->getWebsite($customerDataObject->getWebsiteId())
+            ) : $this->_storeManager->getWebsites();
 
             foreach ($websites as $website) {
-                $this->_quote->setWebsite($website);
-                $this->_quote->loadByCustomer($customer);
-
-                if ($this->_quote->getId()) {
-                    $this->_quote->setCustomerGroupId($customer->getGroupId());
-                    $this->_quote->collectTotals();
-                    $this->_quote->save();
+                $quote = $this->_quoteFactory->create();
+                $quote->setWebsite($website);
+                $quote->loadByCustomer($customerDataObject->getId());
+                if ($quote->getId()) {
+                    $quote->setCustomerGroupId($customerDataObject->getGroupId());
+                    $quote->collectTotals();
+                    $quote->save();
                 }
             }
         }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Admin system config sturtup page
+ * Admin system config startup page
  *
  * Magento
  *
@@ -25,7 +25,7 @@
  */
 namespace Magento\Backend\Model\Config\Source\Admin;
 
-class Page implements \Magento\Core\Model\Option\ArrayInterface
+class Page implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * Menu model
@@ -33,13 +33,6 @@ class Page implements \Magento\Core\Model\Option\ArrayInterface
      * @var \Magento\Backend\Model\Menu
      */
     protected $_menu;
-
-    /**
-     * @var \Magento\Backend\Model\Menu\Filter\IteratorFactory
-     *
-     * @var \Magento\Core\Model\Config
-     */
-    protected $_objectFactory;
 
     /**
      * @var \Magento\Backend\Model\Menu\Filter\IteratorFactory
@@ -58,6 +51,9 @@ class Page implements \Magento\Core\Model\Option\ArrayInterface
         $this->_iteratorFactory = $iteratorFactory;
     }
 
+    /**
+     * @return array
+     */
     public function toOptionArray()
     {
         $options = array();
@@ -73,30 +69,29 @@ class Page implements \Magento\Core\Model\Option\ArrayInterface
      */
     protected function _getMenuIterator(\Magento\Backend\Model\Menu $menu)
     {
-        return $this->_iteratorFactory->create(
-            array('iterator' => $menu->getIterator())
-        );
+        return $this->_iteratorFactory->create(array('iterator' => $menu->getIterator()));
     }
 
     /**
      * Create options array
      *
-     * @param array $optionArray
+     * @param array &$optionArray
      * @param \Magento\Backend\Model\Menu $menu
      * @param int $level
+     * @return void
      */
     protected function _createOptions(&$optionArray, \Magento\Backend\Model\Menu $menu, $level = 0)
     {
         $nonEscapableNbspChar = html_entity_decode('&#160;', ENT_NOQUOTES, 'UTF-8');
-        $paddingString = str_repeat($nonEscapableNbspChar, ($level * 4));
+        $paddingString = str_repeat($nonEscapableNbspChar, $level * 4);
 
         foreach ($this->_getMenuIterator($menu) as $menuItem) {
 
             /**@var  $menuItem \Magento\Backend\Model\Menu\Item */
             if ($menuItem->getAction()) {
                 $optionArray[] = array(
-                    'label' =>  $paddingString . $menuItem->getTitle(),
-                    'value' => $menuItem->getId(),
+                    'label' => $paddingString . $menuItem->getTitle(),
+                    'value' => $menuItem->getId()
                 );
 
                 if ($menuItem->hasChildren()) {
@@ -109,10 +104,7 @@ class Page implements \Magento\Core\Model\Option\ArrayInterface
                     $this->_createOptions($children, $menuItem->getChildren(), $level + 1);
                 }
 
-                $optionArray[] = array(
-                    'label' => $paddingString . $menuItem->getTitle(),
-                    'value' => $children,
-                );
+                $optionArray[] = array('label' => $paddingString . $menuItem->getTitle(), 'value' => $children);
             }
         }
     }

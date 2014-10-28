@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Adminhtml
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,14 +25,15 @@
 /**
  * Attribute form apply element
  *
- * @category   Magento
- * @package    Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 
-class Apply extends \Magento\Data\Form\Element\Multiselect
+class Apply extends \Magento\Framework\Data\Form\Element\Multiselect
 {
+    /**
+     * @return string
+     */
     public function getElementHtml()
     {
         $elementAttributeHtml = '';
@@ -48,20 +47,20 @@ class Apply extends \Magento\Data\Form\Element\Multiselect
         }
 
         $html = '<select onchange="toggleApplyVisibility(this)"' . $elementAttributeHtml . '>'
-              . '<option value="0">' . $this->getModeLabels('all'). '</option>'
-              . '<option value="1" ' . ($this->getValue()==null ? '' : 'selected') . '>' . $this->getModeLabels('custom'). '</option>'
-              . '</select><br /><br />';
+            . '<option value="0">' . $this->getModeLabels('all'). '</option>'
+            . '<option value="1" ' . ($this->getValue()==null ? '' : 'selected') . '>'
+            . $this->getModeLabels('custom'). '</option>' . '</select><br /><br />';
 
         $html .= parent::getElementHtml();
         return $html;
     }
 
     /**
-     * Dublicate interface of \Magento\Data\Form\Element\AbstractElement::setReadonly
+     * Dublicate interface of \Magento\Framework\Data\Form\Element\AbstractElement::setReadonly
      *
      * @param bool $readonly
      * @param bool $useDisabled
-     * @return \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Apply
+     * @return $this
      */
     public function setReadonly($readonly, $useDisabled = false)
     {
@@ -69,5 +68,4 @@ class Apply extends \Magento\Data\Form\Element\Multiselect
         $this->setData('disabled', $useDisabled);
         return $this;
     }
-
 }

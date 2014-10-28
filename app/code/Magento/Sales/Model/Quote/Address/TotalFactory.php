@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -34,16 +32,16 @@ class TotalFactory
     /**
      * Object Manager instance
      *
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager = null;
 
     /**
      * Quote address factory constructor
      *
-     * @param \Magento\ObjectManager $objManager
+     * @param \Magento\Framework\ObjectManager $objManager
      */
-    public function __construct(\Magento\ObjectManager $objManager)
+    public function __construct(\Magento\Framework\ObjectManager $objManager)
     {
         $this->_objectManager = $objManager;
     }

@@ -1,0 +1,119 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/** @var $this \Magento\Backend\Block\Media\Uploader */
+?>
+
+<div id="<?php echo $this->getHtmlId() ?>" class="uploader">
+    <div class="fileinput-button form-buttons button">
+        <span><?php echo __('Browse Files...') ?></span>
+        <input id="fileupload" type="file" name="<?php echo $this->getConfig()->getFileField() ?>"
+            data-url="<?php echo $this->getConfig()->getUrl() ?>" multiple="multiple" />
+    </div>
+    <div class="clear"></div>
+    <div class="no-display" id="<?php echo $this->getHtmlId() ?>-template">
+        <div id="{{id}}" class="file-row">
+            <span class="file-info">{{name}} ({{size}})</span>
+            <div class="progressbar-container">
+                <div class="progressbar upload-progress" style="width: 0%;"></div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+require([
+    "jquery",
+    "mage/translate",
+    "jquery/file-uploader"
+], function($){
+
+    $(function () {
+        $('#fileupload').fileupload({
+            dataType: 'json',
+            dropZone: '[data-tab-panel=image-management]',
+            sequentialUploads: true,
+            acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+            maxFileSize: <?php echo $this->getFileSizeService()->getMaxFileSize() ?>,
+            add: function(e, data) {
+                $.each(data.files, function (index, file) {
+                    data.fileId = Math.random().toString(33).substr(2, 18);
+                    var progressTmpl = $('#<?php echo $this->getHtmlId(); ?>-template').children(':first').clone();
+                    progressTmpl.attr('id', data.fileId);
+                    var fileInfoHtml = progressTmpl.html().replace('{{size}}', byteConvert(file.size))
+                        .replace('{{name}}', file.name);
+                    progressTmpl.html(fileInfoHtml) ;
+
+                    progressTmpl.appendTo('#<?php echo $this->getHtmlId() ?>');
+
+                });
+                $(this).fileupload('process', data).done(function () {
+                    data.submit();
+                });
+            },
+            done: function(e, data) {
+                if (data.result && !data.result.error) {
+                    $('#<?php echo $this->getParentBlock()->getHtmlId() ?>').trigger('addItem', data.result);
+                } else {
+                    $('#' + data.fileId)
+                        .delay(2000)
+                        .hide('highlight');
+                    alert($.mage.__('File extension not known or unsupported type.'));
+                }
+                $('#' + data.fileId).remove();
+            },
+            progress: function(e, data) {
+                var progress = parseInt(data.loaded / data.total * 100, 10);
+                var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+                $(progressSelector).css('width', progress + '%');
+            },
+            fail: function(e, data) {
+                var progressSelector = '#' + data.fileId;
+                $(progressSelector).removeClass('upload-progress').addClass('upload-failure')
+                    .delay(2000)
+                    .hide('highlight')
+                    .remove();
+            }
+        });
+        $('#fileupload').fileupload('option', {
+            process: [
+                {
+                    action: 'load',
+                    fileTypes: /^image\/(gif|jpeg|png)$/
+                },
+                {
+                    action: 'resize',
+                    maxWidth: <?php echo \Magento\Framework\File\Uploader::MAX_IMAGE_WIDTH ?>,
+                    maxHeight: <?php echo \Magento\Framework\File\Uploader::MAX_IMAGE_HEIGHT ?>
+                },
+                {
+                    action: 'save'
+                }
+            ]
+        });
+    });
+
+});
+</script>

@@ -18,22 +18,18 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Adminhtml
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /**
- * @category   Magento
- * @package    Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main;
 
-class Formgroup
-    extends \Magento\Backend\Block\Widget\Form\Generic
+use Magento\Backend\Block\Widget\Form;
+
+class Formgroup extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
      * @var \Magento\Eav\Model\Entity\TypeFactory
@@ -42,15 +38,15 @@ class Formgroup
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Data\FormFactory $formFactory
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Eav\Model\Entity\TypeFactory $typeFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Data\FormFactory $formFactory,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Eav\Model\Entity\TypeFactory $typeFactory,
         array $data = array()
     ) {
@@ -58,39 +54,38 @@ class Formgroup
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _prepareForm()
     {
-        /** @var \Magento\Data\Form $form */
+        /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
 
-        $fieldset = $form->addFieldset('set_fieldset', array('legend'=>__('Add New Group')));
+        $fieldset = $form->addFieldset('set_fieldset', array('legend' => __('Add New Group')));
 
-        $fieldset->addField('attribute_group_name', 'text',
-                            array(
-                                'label' => __('Name'),
-                                'name' => 'attribute_group_name',
-                                'required' => true,
-                            )
+        $fieldset->addField(
+            'attribute_group_name',
+            'text',
+            array('label' => __('Name'), 'name' => 'attribute_group_name', 'required' => true)
         );
 
-        $fieldset->addField('submit', 'note',
-                            array(
-                                'text' => $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
-                                            ->setData(array(
-                                                'label'     => __('Add Group'),
-                                                'onclick'   => 'this.form.submit();',
-                                                                                                'class' => 'add'
-                                            ))
-                                            ->toHtml(),
-                            )
+        $fieldset->addField(
+            'submit',
+            'note',
+            array(
+                'text' => $this->getLayout()->createBlock(
+                    'Magento\Backend\Block\Widget\Button'
+                )->setData(
+                    array('label' => __('Add Group'), 'onclick' => 'this.form.submit();', 'class' => 'add')
+                )->toHtml()
+            )
         );
 
-        $fieldset->addField('attribute_set_id', 'hidden',
-                            array(
-                                'name' => 'attribute_set_id',
-                                'value' => $this->_getSetId(),
-                            )
-
+        $fieldset->addField(
+            'attribute_set_id',
+            'hidden',
+            array('name' => 'attribute_set_id', 'value' => $this->_getSetId())
         );
 
         $form->setUseContainer(true);
@@ -99,12 +94,17 @@ class Formgroup
         $this->setForm($form);
     }
 
+    /**
+     * @return int
+     */
     protected function _getSetId()
     {
-        return ( intval($this->getRequest()->getParam('id')) > 0 )
-                    ? intval($this->getRequest()->getParam('id'))
-                    : $this->_typeFactory->create()
-                        ->load($this->_coreRegistry->registry('entityType'))
-                        ->getDefaultAttributeSetId();
+        return intval(
+            $this->getRequest()->getParam('id')
+        ) > 0 ? intval(
+            $this->getRequest()->getParam('id')
+        ) : $this->_typeFactory->create()->load(
+            $this->_coreRegistry->registry('entityType')
+        )->getDefaultAttributeSetId();
     }
 }

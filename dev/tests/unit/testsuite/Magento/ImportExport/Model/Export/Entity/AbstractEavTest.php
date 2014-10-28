@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_ImportExport
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\ImportExport\Model\Export\Entity;
 
 class AbstractEavTest extends \PHPUnit_Framework_TestCase
@@ -55,9 +51,13 @@ class AbstractEavTest extends \PHPUnit_Framework_TestCase
             array('_getExportAttributeCodes', 'getAttributeCollection', 'getAttributeOptions', '__wakeup')
         );
 
-        $this->_model->expects($this->once())
-            ->method('_getExportAttributeCodes')
-            ->will($this->returnValue($this->_expectedAttributes));
+        $this->_model->expects(
+            $this->once()
+        )->method(
+            '_getExportAttributeCodes'
+        )->will(
+            $this->returnValue($this->_expectedAttributes)
+        );
     }
 
     protected function tearDown()
@@ -75,7 +75,11 @@ class AbstractEavTest extends \PHPUnit_Framework_TestCase
         $method = new \ReflectionMethod($this->_model, '_addAttributesToCollection');
         $method->setAccessible(true);
         $stubCollection = $this->getMock(
-            'Magento\Eav\Model\Entity\Collection\AbstractCollection', array('addAttributeToSelect'), array(), '', false
+            'Magento\Eav\Model\Entity\Collection\AbstractCollection',
+            array('addAttributeToSelect'),
+            array(),
+            '',
+            false
         );
         $stubCollection->expects($this->once())->method('addAttributeToSelect')->with($this->_expectedAttributes);
         $method->invoke($this->_model, $stubCollection);
@@ -104,17 +108,25 @@ class AbstractEavTest extends \PHPUnit_Framework_TestCase
         );
         $testAttribute->setAttributeCode($testAttributeCode);
 
-        $this->_model->expects($this->any())
-            ->method('getAttributeCollection')
-            ->will($this->returnValue(array($testAttribute)));
+        $this->_model->expects(
+            $this->any()
+        )->method(
+            'getAttributeCollection'
+        )->will(
+            $this->returnValue(array($testAttribute))
+        );
 
-        $this->_model->expects($this->any())
-            ->method('getAttributeOptions')
-            ->will($this->returnValue($testAttributeOptions));
+        $this->_model->expects(
+            $this->any()
+        )->method(
+            'getAttributeOptions'
+        )->will(
+            $this->returnValue($testAttributeOptions)
+        );
 
-        /** @var $item \Magento\Core\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $item \Magento\Framework\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject */
         $item = $this->getMockForAbstractClass(
-            'Magento\Core\Model\AbstractModel',
+            'Magento\Framework\Model\AbstractModel',
             array(),
             '',
             false,
@@ -122,9 +134,7 @@ class AbstractEavTest extends \PHPUnit_Framework_TestCase
             true,
             array('getData', '__wakeup')
         );
-        $item->expects($this->any())
-            ->method('getData')
-            ->will($this->returnValue($testAttributeValue));
+        $item->expects($this->any())->method('getData')->will($this->returnValue($testAttributeValue));
 
         $method = new \ReflectionMethod($this->_model, '_initAttributeValues');
         $method->setAccessible(true);

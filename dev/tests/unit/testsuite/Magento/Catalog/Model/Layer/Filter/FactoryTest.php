@@ -21,13 +21,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Model\Layer\Filter;
 
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_objectManagerMock;
 
@@ -38,12 +37,13 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock('Magento\ObjectManager', array(), array(), '', false);
+        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManager', array(), array(), '', false);
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_factory = $objectManagerHelper->getObject('Magento\Catalog\Model\Layer\Filter\Factory', array(
-            'objectManager' => $this->_objectManagerMock,
-        ));
+        $this->_factory = $objectManagerHelper->getObject(
+            'Magento\Catalog\Model\Layer\Filter\Factory',
+            array('objectManager' => $this->_objectManagerMock)
+        );
     }
 
     public function testCreate()
@@ -51,8 +51,16 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $className = 'Magento\Catalog\Model\Layer\Filter\AbstractFilter';
 
         $filterMock = $this->getMock($className, array(), array(), '', false);
-        $this->_objectManagerMock->expects($this->once())->method('create')->with($className, array())
-            ->will($this->returnValue($filterMock));
+        $this->_objectManagerMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            $className,
+            array()
+        )->will(
+            $this->returnValue($filterMock)
+        );
 
         $this->assertEquals($filterMock, $this->_factory->create($className));
     }
@@ -63,14 +71,22 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $arguments = array('foo', 'bar');
 
         $filterMock = $this->getMock($className, array(), array(), '', false);
-        $this->_objectManagerMock->expects($this->once())->method('create')->with($className, $arguments)
-            ->will($this->returnValue($filterMock));
+        $this->_objectManagerMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            $className,
+            $arguments
+        )->will(
+            $this->returnValue($filterMock)
+        );
 
         $this->assertEquals($filterMock, $this->_factory->create($className, $arguments));
     }
 
     /**
-     * @expectedException \Magento\Core\Exception
+     * @expectedException \Magento\Framework\Model\Exception
      * @expectedExceptionMessage WrongClass doesn't extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      */
     public function testWrongTypeException()

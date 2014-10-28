@@ -34,8 +34,14 @@
         </type>
     </credit_cards>
     <groups>
-        <group id="paypal">
-            <label>PayPal</label>
+        <group id="any_payment">
+            <label>Any Payment</label>
         </group>
     </groups>
+    <methods>
+        <method name="checkmo">
+            <allow_multiple_address>1</allow_multiple_address>
+            <allow_multiple_with_3dsecure>1</allow_multiple_with_3dsecure>
+        </method>
+    </methods>
 </payment>

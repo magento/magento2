@@ -1,9 +1,8 @@
 # Files or directories that are included into php code sniffer analysis
 # Glob patterns are supported
 #
-app/
-dev/
+app
+dev
 index.php
-lib/Magento
-downloader/lib/Magento
-downloader/app/Magento
+lib/internal/Magento
+pub

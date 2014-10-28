@@ -18,22 +18,17 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_ImportExport
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ImportExport\Model\Source\Export;
 
 /**
  * Source export entity model
  *
- * @category    Magento
- * @package     Magento_ImportExport
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\ImportExport\Model\Source\Export;
-
-class Entity implements \Magento\Core\Model\Option\ArrayInterface
+class Entity implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var \Magento\ImportExport\Model\Export\ConfigInterface
@@ -43,24 +38,18 @@ class Entity implements \Magento\Core\Model\Option\ArrayInterface
     /**
      * @param \Magento\ImportExport\Model\Export\ConfigInterface $exportConfig
      */
-    public function __construct(
-        \Magento\ImportExport\Model\Export\ConfigInterface $exportConfig
-    ) {
+    public function __construct(\Magento\ImportExport\Model\Export\ConfigInterface $exportConfig)
+    {
         $this->_exportConfig = $exportConfig;
     }
 
     /**
-     * Prepare and return array of export entities ids and their names
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function toOptionArray()
     {
         $options = array();
-        $options[] = array(
-            'label' => __('-- Please Select --'),
-            'value' => ''
-        );
+        $options[] = array('label' => __('-- Please Select --'), 'value' => '');
         foreach ($this->_exportConfig->getEntities() as $entityName => $entityConfig) {
             $options[] = array('value' => $entityName, 'label' => __($entityConfig['label']));
         }

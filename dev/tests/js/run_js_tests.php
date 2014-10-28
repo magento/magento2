@@ -20,15 +20,13 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    tests
- * @package     js
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 define('RELATIVE_APP_ROOT', '../../..');
 require __DIR__ . '/../../../app/autoload.php';
-\Magento\Autoload\IncludePath::addIncludePath(realpath(RELATIVE_APP_ROOT . '/lib'));
+(new \Magento\Framework\Autoload\IncludePath())->addIncludePath(realpath(RELATIVE_APP_ROOT . '/lib/internal'));
 
 $userConfig = normalize('jsTestDriver.php');
 $defaultConfig = normalize('jsTestDriver.php.dist');
@@ -135,7 +133,7 @@ fclose($fh);
 
 $testOutput = __DIR__ . '/test-output';
 
-$filesystemAdapter = new \Magento\Filesystem\Driver\File();
+$filesystemAdapter = new \Magento\Framework\Filesystem\Driver\File();
 if ($filesystemAdapter->isExists($testOutput)) {
     $filesystemAdapter->deleteDirectory($testOutput);
 }

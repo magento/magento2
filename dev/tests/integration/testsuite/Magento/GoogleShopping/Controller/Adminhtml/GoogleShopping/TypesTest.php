@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_GoogleShopping
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\GoogleShopping\Controller\Adminhtml\GoogleShopping;
 
 /**
@@ -37,5 +33,24 @@ class TypesTest extends \Magento\Backend\Utility\Controller
         $this->dispatch('backend/admin/googleshopping_types/index/');
         $body = $this->getResponse()->getBody();
         $this->assertSelectCount('[data-role="row"]', 1, $body, 'Grid with row exists');
+    }
+
+    public function testLoadAttributeSetsAction()
+    {
+        $this->dispatch('backend/admin/googleshopping_types/loadAttributeSets/');
+        $body = $this->getResponse()->getBody();
+
+        $this->assertTag(
+            array(
+                'tag'        => 'select',
+                'attributes' => array('name' => 'attribute_set_id'),
+                'descendant' => array(
+                    'tag'    => 'option',
+                    'attributes' => array('value' => 4),
+                    'content' => 'Default',
+                )
+            ),
+            $body
+        );
     }
 }

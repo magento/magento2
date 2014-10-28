@@ -1,64 +1,70 @@
-"%d Catalog Price Rules based on ""%s"" attribute have been disabled.","%d catalogus prijs regels gebaseerd op ""%s"" attribuut zijn uitgeschakeld."
-"Actions","Acties"
-"Active","actief"
-"Add New Rule","voeg nieuwe regel toe"
-"An error occurred while deleting the rule. Please review the log and try again.","Er is een fout opgetreden tijdens het verwijderen van de regel. Herzie a.u.b. de log en probeer opnieuw."
-"An error occurred while saving the rule data. Please review the log and try again.","Er is een fout opgetreden tijdens het opslaan van de regeldata. Herzie a.u.b. het log en probeer opnieuw."
-"Apply","Toepassen"
-"Apply Rules","Stel regels in"
-"Attribute Set","Attributenset"
-"By Fixed Amount","Door Vaste Hoeveelheid"
-"By Percentage of the Original Price","Door Percentage van de Oorspronkelijke Prijs"
-"Catalog","Catalogus"
-"Catalog Price Rule","Catalogus prijs regel"
-"Catalog Price Rules","Catalogus prijs regels"
-"Category","Categorie"
-"Conditions","Voorwaarden"
-"Conditions (leave blank for all products)","Voorwaarden (laat leeg voor alle producten)"
-"Conditions Combination","Voorwaardencombinaties"
-"Customer Groups","Klantgroepen"
-"End on","Vervaldatum"
-"Date From","Datum vanaf"
-"Start on","Startdatum"
-"Date To","Datum tot"
-"Description","Omschrijving"
-"Discount","Hoeveelheid Korting"
-"Edit Rule","Bewerk regel"
-"Edit Rule '%s'","Bewerk regel '%s'"
-"Enable Discount to Subproducts","Schakel Korting op Deelproducten in"
-"Expiration Date","vervaldatum"
-"From Date","Vanaf datum"
-"General Information","Algemene informatie"
-"ID","ID"
-"Inactive","Inactief"
-"New Rule","Nieuwe regel"
-"No","Nee"
-"Options","Opties"
-"Priority","Prioriteit"
-"Product Attribute","Product attribuut"
-"Promotions","Promoties"
-"Rule Information","Regel informatie"
-"Rule","Regel naam"
-"Save and Apply","Sla op en stel in"
+Product,Product
+ID,ID
+SKU,SKU
+Apply,Toepassen
+No,Nee
+Yes,ja
+"Web Site","Web Site"
+Status,Status
 "Save and Continue Edit","Bewaar en Ga Door met Bewerking"
-"Start Date","Startdatum"
-"Status","Status"
-"Stop Further Rules Processing","Stop verdere verwerking van regels"
-"The rule has been deleted.","De regel is verwijderd"
-"The rule has been saved.","De regel is opgeslagen."
-"The rules have been applied.","De regels zijn ingesteld."
-"There are rules that have been changed but were not applied. Only users with exclusive access can apply rules.","Er zijn regels die zijn veranderd, maar niet werden toegepast. Alleen gebruikers met exclusieve toegang kunnen regels toepassen."
-"There are rules that have been changed but were not applied. Please, click Apply Rules in order to see immediate effect in the catalog.","Er zijn regels welke veranderd zijn, maar niet ingesteld. Klik op 'stel regels in' om direct effect te zien in de catalogus."
+Type,type
+Description,Omschrijving
+From,From
+To,To
+Catalog,Catalogus
+Actions,Acties
+Rule,"Regel naam"
+"Start on",Startdatum
+"End on",Vervaldatum
+Active,actief
 "This rule no longer exists.","Deze regel bestaat niet langer"
-"To Date","Naar datum"
-"To Fixed Amount","Naar Vaste Hoeveelheid"
-"To Percentage of the Original Price","Naar Percentage van de Oorspronkelijke Prijs"
-"Type","type"
-"Unable to apply rules.","Niet in staat om regels in te stellen"
-"Unable to find a rule to delete.","Niet in staat om een regel te vinden om te verwijderen"
+"General Information","Algemene informatie"
+Websites,Websites
+"Attribute Set",Attributenset
+"Apply Rules","Stel regels in"
+"Catalog Price Rules","Catalogus prijs regels"
+"Add New Rule","voeg nieuwe regel toe"
+"Save and Apply","Sla op en stel in"
+"Edit Rule '%1'","Edit Rule '%1'"
+"New Rule","Nieuwe regel"
+"Rule Information","Regel informatie"
 "Update Prices Using the Following Information","Update Prijzen Met behulp van de Volgende Informatie"
-"Update product's %s %s: %s","Update producten %s %s: %s"
-"Website","Website"
-"Websites","Websites"
+"By Percentage of the Original Price","Door Percentage van de Oorspronkelijke Prijs"
+"By Fixed Amount","Door Vaste Hoeveelheid"
+"To Percentage of the Original Price","Naar Percentage van de Oorspronkelijke Prijs"
+"To Fixed Amount","Naar Vaste Hoeveelheid"
+"Discount Amount","Discount Amount"
+"Enable Discount to Subproducts","Schakel Korting op Deelproducten in"
+"Stop Further Rules Processing","Stop verdere verwerking van regels"
+Conditions,Voorwaarden
+"Conditions (leave blank for all products)","Voorwaarden (laat leeg voor alle producten)"
+"Rule Name","Rule Name"
+Inactive,Inactief
+"Customer Groups",Klantgroepen
+"From Date","Vanaf datum"
+"To Date","Naar datum"
+Priority,Prioriteit
+"Catalog Price Rule","Catalogus prijs regel"
+Promotions,Promoties
+Promo,Promo
+"New Catalog Price Rule","New Catalog Price Rule"
+"Edit Rule","Bewerk regel"
 "Wrong rule specified.","Verkeerde regel gespecificeerd"
-"Yes","ja"
+"The rule has been saved.","De regel is opgeslagen."
+"An error occurred while saving the rule data. Please review the log and try again.","Er is een fout opgetreden tijdens het opslaan van de regeldata. Herzie a.u.b. het log en probeer opnieuw."
+"The rule has been deleted.","De regel is verwijderd"
+"An error occurred while deleting the rule. Please review the log and try again.","Er is een fout opgetreden tijdens het verwijderen van de regel. Herzie a.u.b. de log en probeer opnieuw."
+"Unable to find a rule to delete.","Niet in staat om een regel te vinden om te verwijderen"
+"Unable to apply rules.","Niet in staat om regels in te stellen"
+"There are rules that have been changed but were not applied. Please, click Apply Rules in order to see immediate effect in the catalog.","Er zijn regels welke veranderd zijn, maar niet ingesteld. Klik op 'stel regels in' om direct effect te zien in de catalogus."
+"%1 Catalog Price Rules based on ""%2"" attribute have been disabled.","%1 Catalog Price Rules based on ""%2"" attribute have been disabled."
+"Update the Product","Update the Product"
+"Rule price","Rule price"
+"To Fixed Value","To Fixed Value"
+"To Percentage","To Percentage"
+"By Fixed value","By Fixed value"
+"By Percentage","By Percentage"
+"Update product's %1 %2: %3","Update product's %1 %2: %3"
+"Conditions Combination",Voorwaardencombinaties
+"Product Attribute","Product attribuut"
+"The rules have been applied.","De regels zijn ingesteld."

@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,11 +27,12 @@
  */
 namespace Magento\Sales\Model\Config\Source\Order;
 
-class Status implements \Magento\Core\Model\Option\ArrayInterface
+class Status implements \Magento\Framework\Option\ArrayInterface
 {
-    // set null to enable all possible
+    const UNDEFINED_OPTION_LABEL = '-- Please Select --';
+
     /**
-     * @var array
+     * @var string[]
      */
     protected $_stateStatuses = array(
         \Magento\Sales\Model\Order::STATE_NEW,
@@ -41,7 +40,7 @@ class Status implements \Magento\Core\Model\Option\ArrayInterface
         \Magento\Sales\Model\Order::STATE_COMPLETE,
         \Magento\Sales\Model\Order::STATE_CLOSED,
         \Magento\Sales\Model\Order::STATE_CANCELED,
-        \Magento\Sales\Model\Order::STATE_HOLDED,
+        \Magento\Sales\Model\Order::STATE_HOLDED
     );
 
     /**
@@ -62,21 +61,13 @@ class Status implements \Magento\Core\Model\Option\ArrayInterface
      */
     public function toOptionArray()
     {
-        if ($this->_stateStatuses) {
-            $statuses = $this->_orderConfig->getStateStatuses($this->_stateStatuses);
-        } else {
-            $statuses = $this->_orderConfig->getStatuses();
-        }
-        $options = array();
-        $options[] = array(
-           'value' => '',
-           'label' => __('-- Please Select --')
-        );
+        $statuses = $this->_stateStatuses
+            ? $this->_orderConfig->getStateStatuses($this->_stateStatuses)
+            : $this->_orderConfig->getStatuses();
+
+        $options = [['value' => '', 'label' => __(self::UNDEFINED_OPTION_LABEL)]];
         foreach ($statuses as $code => $label) {
-            $options[] = array(
-               'value' => $code,
-               'label' => $label
-            );
+            $options[] = ['value' => $code, 'label' => $label];
         }
         return $options;
     }

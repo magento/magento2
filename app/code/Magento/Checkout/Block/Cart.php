@@ -18,21 +18,14 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Checkout
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Checkout\Block;
 
 /**
  * Shopping cart block
- *
- * @category    Magento
- * @package     Magento_Checkout
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Checkout\Block;
-
 class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
 {
     /**
@@ -41,36 +34,44 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     protected $_catalogUrlBuilder;
 
     /**
+     * @var \Magento\Framework\App\Http\Context
+     */
+    protected $httpContext;
+
+    /**
      * @var \Magento\Checkout\Helper\Cart
      */
     protected $_cartHelper;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Catalog\Helper\Data $catalogData
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Catalog\Model\Resource\Url $catalogUrlBuilder
      * @param \Magento\Checkout\Helper\Cart $cartHelper
+     * @param \Magento\Framework\App\Http\Context $httpContext
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Catalog\Helper\Data $catalogData,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Catalog\Model\Resource\Url $catalogUrlBuilder,
         \Magento\Checkout\Helper\Cart $cartHelper,
+        \Magento\Framework\App\Http\Context $httpContext,
         array $data = array()
     ) {
         $this->_cartHelper = $cartHelper;
         $this->_catalogUrlBuilder = $catalogUrlBuilder;
-        parent::__construct($context, $catalogData, $customerSession, $checkoutSession, $data);
+        parent::__construct($context, $customerSession, $checkoutSession, $data);
+        $this->_isScopePrivate = true;
+        $this->httpContext = $httpContext;
     }
 
     /**
      * Prepare Quote Item Product URLs
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -80,22 +81,24 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
 
     /**
      * prepare cart items URLs
+     *
+     * @return void
      */
     public function prepareItemUrls()
     {
         $products = array();
         /* @var $item \Magento\Sales\Model\Quote\Item */
         foreach ($this->getItems() as $item) {
-            $product    = $item->getProduct();
-            $option     = $item->getOptionByCode('product_type');
+            $product = $item->getProduct();
+            $option = $item->getOptionByCode('product_type');
             if ($option) {
                 $product = $option->getProduct();
             }
 
-            if ($item->getStoreId() != $this->_storeManager->getStore()->getId()
-                && !$item->getRedirectUrl()
-                && !$product->isVisibleInSiteVisibility())
-            {
+            if ($item->getStoreId() != $this->_storeManager->getStore()->getId() &&
+                !$item->getRedirectUrl() &&
+                !$product->isVisibleInSiteVisibility()
+            ) {
                 $products[$product->getId()] = $item->getStoreId();
             }
         }
@@ -103,14 +106,14 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
         if ($products) {
             $products = $this->_catalogUrlBuilder->getRewriteByProductStore($products);
             foreach ($this->getItems() as $item) {
-                $product    = $item->getProduct();
-                $option     = $item->getOptionByCode('product_type');
+                $product = $item->getProduct();
+                $option = $item->getOptionByCode('product_type');
                 if ($option) {
                     $product = $option->getProduct();
                 }
 
                 if (isset($products[$product->getId()])) {
-                    $object = new \Magento\Object($products[$product->getId()]);
+                    $object = new \Magento\Framework\Object($products[$product->getId()]);
                     $item->getProduct()->setUrlDataObject($object);
                 }
             }
@@ -140,8 +143,12 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     {
         $isActive = $this->_getData('is_wishlist_active');
         if ($isActive === null) {
-            $isActive = $this->_storeConfig->getConfig('wishlist/general/active')
-                && $this->_customerSession->isLoggedIn();
+            $isActive = $this->_scopeConfig->getValue(
+                'wishlist/general/active',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ) && $this->httpContext->getValue(
+                \Magento\Customer\Helper\Data::CONTEXT_AUTH
+            );
             $this->setIsWishlistActive($isActive);
         }
         return $isActive;
@@ -152,11 +159,11 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
      */
     public function getCheckoutUrl()
     {
-        return $this->getUrl('checkout/onepage', array('_secure'=>true));
+        return $this->getUrl('checkout/onepage', array('_secure' => true));
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getContinueShoppingUrl()
     {
@@ -199,13 +206,13 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
      *
      * @param string $name Block name in layout
      * @return string
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function getMethodHtml($name)
     {
         $block = $this->getLayout()->getBlock($name);
         if (!$block) {
-            throw new \Magento\Core\Exception(__('Invalid method: %1', $name));
+            throw new \Magento\Framework\Model\Exception(__('Invalid method: %1', $name));
         }
         return $block->toHtml();
     }

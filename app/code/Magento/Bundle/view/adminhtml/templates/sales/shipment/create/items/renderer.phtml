@@ -1,0 +1,121 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * @see \Magento\Bundle\Block\Adminhtml\Sales\Order\Items\Renderer
+ */
+?>
+
+<?php $_item = $this->getItem() ?>
+<?php $items = $this->getChilds($_item); ?>
+<?php $_count = count ($items) ?>
+<?php $_index = 0 ?>
+
+<?php $_prevOptionId = '' ?>
+
+<?php if($this->getOrderOptions() || $_item->getDescription()): ?>
+    <?php $_showlastRow = true ?>
+<?php else: ?>
+    <?php $_showlastRow = false ?>
+<?php endif; ?>
+
+<?php foreach ($items as $_item): ?>
+    <?php $this->setPriceDataObject($_item) ?>
+    <?php if ($_item->getOrderItem()->getParentItem()): ?>
+        <?php $attributes = $this->getSelectionAttributes($_item) ?>
+        <?php if ($_prevOptionId != $attributes['option_id']): ?>
+        <tr>
+            <td class="col-product"><div class="option-label"><?php echo $attributes['option_label'] ?></div></td>
+            <td class="col-product">&nbsp;</td>
+            <td class="col-qty last">&nbsp;</td>
+        </tr>
+        <?php $_prevOptionId = $attributes['option_id'] ?>
+        <?php endif; ?>
+    <?php endif; ?>
+    <tr class="<?php echo (++$_index==$_count && !$_showlastRow)?'border':'' ?>">
+        <?php if (!$_item->getOrderItem()->getParentItem()): ?>
+        <td class="col-product">
+            <div class="product-title"><?php echo $this->escapeHtml($_item->getName()) ?></div>
+            <div>
+                <strong><?php echo __('SKU') ?>:</strong>
+                <?php echo implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($this->escapeHtml($_item->getSku()))); ?>
+            </div>
+        </td>
+        <?php else: ?>
+        <td class="col-product"><div class="option-value"><?php echo $this->getValueHtml($_item)?></div></td>
+        <?php endif; ?>
+        <td class="col-ordered-qty">
+            <?php if ($this->isShipmentSeparately($_item)): ?>
+                <?php echo $this->getColumnHtml($_item, 'qty') ?>
+            <?php else: ?>
+                &nbsp;
+            <?php endif; ?>
+        </td>
+        <td class="col-qty last">
+            <?php if ($this->isShipmentSeparately($_item)): ?>
+                <input type="text" class="input-text" name="shipment[items][<?php echo $_item->getOrderItemId() ?>]" value="<?php echo $_item->getQty()*1 ?>" />
+            <?php else: ?>
+                &nbsp;
+            <?php endif; ?>
+        </td>
+    </tr>
+<?php endforeach; ?>
+<?php if($_showlastRow): ?>
+    <tr class="border">
+        <td class="col-product">
+            <?php if ($this->getOrderOptions($_item->getOrderItem())): ?>
+                <dl class="item-options">
+                <?php foreach ($this->getOrderOptions($_item->getOrderItem()) as $option): ?>
+                    <dt><?php echo $option['label'] ?></dt>
+                    <dd>
+                    <?php if (isset($option['custom_view']) && $option['custom_view']): ?>
+                        <?php echo $option['value'];?>
+                    <?php else: ?>
+                        <?php echo $this->truncateString($option['value'], 55, '', $_remainder);?>
+                        <?php if ($_remainder):?>
+                            ... <span id="<?php echo $_id = 'id' . uniqid()?>"><?php echo $_remainder ?></span>
+                            <script type="text/javascript">
+require(['prototype'], function(){
+
+                            $('<?php echo $_id ?>').hide();
+                            $('<?php echo $_id ?>').up().observe('mouseover', function(){$('<?php echo $_id ?>').show();});
+                            $('<?php echo $_id ?>').up().observe('mouseout',  function(){$('<?php echo $_id ?>').hide();});
+                            
+});
+</script>
+                        <?php endif;?>
+                    <?php endif;?>
+                    </dd>
+                <?php endforeach; ?>
+                </dl>
+                        <?php else: ?>
+                &nbsp;
+                        <?php endif; ?>
+            <?php echo $this->escapeHtml($_item->getDescription()) ?>
+        </td>
+        <td class="col-ordered-qty">&nbsp;</td>
+        <td class="col-qty last">&nbsp;</td>
+    </tr>
+<?php endif; ?>

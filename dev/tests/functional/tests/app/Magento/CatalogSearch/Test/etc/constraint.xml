@@ -1,0 +1,141 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<constraint>
+    <assertSuggestSearchingResult module="Magento_CatalogSearch">
+        <severeness>high</severeness>
+        <require>
+            <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
+            <catalogSearch class="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery" />
+        </require>
+    </assertSuggestSearchingResult>
+    <assertAdvancedSearchProductsResult module="Magento_CatalogSearch">
+        <severeness>high</severeness>
+        <require>
+            <resultPage class="Magento\CatalogSearch\Test\Page\Advanced\Result" />
+            <productSearch class="Magento\Catalog\Test\Fixture\CatalogProductSimple" />
+        </require>
+    </assertAdvancedSearchProductsResult>
+    <assertCatalogSearchResult module="Magento_CatalogSearch">
+        <severeness>high</severeness>
+        <require>
+            <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
+            <catalogSearch class="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery" />
+            <editPage class="Magento\CatalogSearch\Test\Page\Adminhtml\CatalogSearchEdit" />
+        </require>
+    </assertCatalogSearchResult>
+    <assertSearchTermForm module="Magento_CatalogSearch">
+        <severeness>high</severeness>
+        <require>
+            <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
+            <searchTerm class="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery" />
+            <editPage class="Magento\CatalogSearch\Test\Page\Adminhtml\CatalogSearchEdit" />
+        </require>
+    </assertSearchTermForm>
+    <assertSearchTermInGrid module="Magento_CatalogSearch">
+        <severeness>high</severeness>
+        <require>
+            <indexPage class="Magento\CatalogSearch\Test\Page\Adminhtml\CatalogSearchIndex" />
+            <searchTerm class="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery" />
+        </require>
+    </assertSearchTermInGrid>
+    <assertSearchTermOnFrontend module="Magento_CatalogSearch">
+        <severeness>high</severeness>
+        <require>
+            <searchTerm class="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery" />
+            <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
+            <browser class="Mtf\Client\Browser" />
+        </require>
+    </assertSearchTermOnFrontend>
+    <assertSearchTermSuccessSaveMessage  module="Magento_CatalogSearch">
+        <severeness>high</severeness>
+        <require>
+            <indexPage class="Magento\CatalogSearch\Test\Page\Adminhtml\CatalogSearchIndex" />
+        </require>
+    </assertSearchTermSuccessSaveMessage>
+    <assertSearchTermSynonymOnFrontend  module="Magento_CatalogSearch">
+        <severeness>high</severeness>
+        <require>
+            <searchTerm class="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery" />
+            <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
+            <browser class="Mtf\Client\Browser" />
+        </require>
+    </assertSearchTermSynonymOnFrontend>
+    <assertSearchTermSuccessDeleteMessage module="Magento_CatalogSearch">
+        <severeness>high</severeness>
+        <require>
+            <indexPage class="Magento\CatalogSearch\Test\Page\Adminhtml\CatalogSearchIndex" />
+        </require>
+    </assertSearchTermSuccessDeleteMessage>
+    <assertSearchTermNotInGrid module="Magento_CatalogSearch">
+        <severeness>high</severeness>
+        <require>
+            <indexPage class="Magento\CatalogSearch\Test\Page\Adminhtml\CatalogSearchIndex" />
+            <searchTerm class="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery" />
+        </require>
+    </assertSearchTermNotInGrid>
+    <assertSearchTermNotOnFrontend module="Magento_CatalogSearch">
+        <severeness>high</severeness>
+        <require>
+            <searchTerm class="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery" />
+            <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
+            <browser class="Mtf\Client\Browser" />
+        </require>
+    </assertSearchTermNotOnFrontend>
+    <assertSearchSynonymNotOnFrontend module="Magento_CatalogSearch">
+        <severeness>high</severeness>
+        <require>
+            <searchTerm class="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery" />
+            <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
+            <browser class="Mtf\Client\Browser" />
+        </require>
+    </assertSearchSynonymNotOnFrontend>
+    <assertSearchTermSuccessMassDeleteMessage module="Magento_CatalogSearch">
+        <severeness>high</severeness>
+        <require>
+            <indexPage class="Magento\CatalogSearch\Test\Page\Adminhtml\CatalogSearchIndex" />
+        </require>
+    </assertSearchTermSuccessMassDeleteMessage>
+    <assertSearchTermMassActionsNotInGrid module="Magento_CatalogSearch">
+        <severeness>high</severeness>
+        <require>
+            <indexPage class="Magento\CatalogSearch\Test\Page\Adminhtml\CatalogSearchIndex" />
+        </require>
+    </assertSearchTermMassActionsNotInGrid>
+    <assertSearchTermMassActionNotOnFrontend module="Magento_CatalogSearch">
+        <severeness>high</severeness>
+        <require>
+            <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
+            <browser class="Mtf\Client\Browser" />
+        </require>
+    </assertSearchTermMassActionNotOnFrontend>
+    <assertSearchSynonymMassActionNotOnFrontend module="Magento_CatalogSearch">
+        <severeness>high</severeness>
+        <require>
+            <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
+            <browser class="Mtf\Client\Browser" />
+        </require>
+    </assertSearchSynonymMassActionNotOnFrontend>
+</constraint>

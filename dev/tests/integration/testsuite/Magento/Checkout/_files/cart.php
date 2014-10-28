@@ -18,17 +18,14 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Checkout
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 /** @var $objectManager \Magento\TestFramework\ObjectManager */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-$objectManager->get('Magento\Core\Model\Registry')->unregister('_singleton/Magento\Checkout\Model\Session');
-$objectManager->get('Magento\Core\Model\Registry')->unregister('_singleton/Magento_Checkout_Model_Cart');
+$objectManager->get('Magento\Framework\Registry')->unregister('_singleton/Magento\Checkout\Model\Session');
+$objectManager->get('Magento\Framework\Registry')->unregister('_singleton/Magento_Checkout_Model_Cart');
 /** @var $cart \Magento\Checkout\Model\Cart */
 $cart = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Checkout\Model\Cart');
 
@@ -36,6 +33,6 @@ $cart->addProduct($product, $requestInfo);
 $cart->save();
 
 $quoteItemId = $cart->getQuote()->getItemByProduct($product)->getId();
-$objectManager->get('Magento\Core\Model\Registry')->register('product/quoteItemId', $quoteItemId);
-$objectManager->get('Magento\Core\Model\Registry')->unregister('_singleton/Magento\Checkout\Model\Session');
-$objectManager->get('Magento\Core\Model\Registry')->unregister('_singleton/Magento_Checkout_Model_Cart');
+$objectManager->get('Magento\Framework\Registry')->register('product/quoteItemId', $quoteItemId);
+$objectManager->get('Magento\Framework\Registry')->unregister('_singleton/Magento\Checkout\Model\Session');
+$objectManager->get('Magento\Framework\Registry')->unregister('_singleton/Magento_Checkout_Model_Cart');

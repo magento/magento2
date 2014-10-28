@@ -18,55 +18,79 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-/**
- * Adminhtml sales order create sidebar
- *
- * @category   Magento
- * @package    Magento_Sales
- * @author      Magento Core Team <core@magentocommerce.com>
- */
-
 namespace Magento\Sales\Block\Adminhtml\Order\Create;
 
+use Magento\Customer\Service\V1\Data\AddressConverter;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+
+/**
+ * Adminhtml sales order create form block
+ */
 class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
     /**
-     * @var \Magento\Customer\Model\FormFactory
+     * Customer form factory
+     *
+     * @var \Magento\Customer\Model\Metadata\FormFactory
      */
     protected $_customerFormFactory;
 
     /**
-     * @var \Magento\Json\EncoderInterface
+     * Json encoder
+     *
+     * @var \Magento\Framework\Json\EncoderInterface
      */
     protected $_jsonEncoder;
 
     /**
+     * Address service
+     *
+     * @var \Magento\Customer\Service\V1\CustomerAddressServiceInterface
+     */
+    protected $_addressService;
+
+    /**
+     * @var \Magento\Framework\Locale\CurrencyInterface
+     */
+    protected $_localeCurrency;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Backend\Model\Session\Quote $sessionQuote
      * @param \Magento\Sales\Model\AdminOrder\Create $orderCreate
-     * @param \Magento\Customer\Model\FormFactory $customerFormFactory
+     * @param PriceCurrencyInterface $priceCurrency
+     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
+     * @param \Magento\Customer\Model\Metadata\FormFactory $customerFormFactory
+     * @param \Magento\Customer\Service\V1\CustomerAddressServiceInterface $addressService
+     * @param \Magento\Framework\Locale\CurrencyInterface $localeCurrency
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Model\Session\Quote $sessionQuote,
         \Magento\Sales\Model\AdminOrder\Create $orderCreate,
-        \Magento\Json\EncoderInterface $jsonEncoder,
-        \Magento\Customer\Model\FormFactory $customerFormFactory,
+        PriceCurrencyInterface $priceCurrency,
+        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
+        \Magento\Customer\Model\Metadata\FormFactory $customerFormFactory,
+        \Magento\Customer\Service\V1\CustomerAddressServiceInterface $addressService,
+        \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
         array $data = array()
     ) {
         $this->_jsonEncoder = $jsonEncoder;
         $this->_customerFormFactory = $customerFormFactory;
-        parent::__construct($context, $sessionQuote, $orderCreate, $data);
+        $this->_addressService = $addressService;
+        $this->_localeCurrency = $localeCurrency;
+        parent::__construct($context, $sessionQuote, $orderCreate, $priceCurrency, $data);
     }
 
+    /**
+     * Constructor
+     *
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -75,6 +99,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 
     /**
      * Retrieve url for loading blocks
+     *
      * @return string
      */
     public function getLoadBlockUrl()
@@ -84,6 +109,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 
     /**
      * Retrieve url for form submiting
+     *
      * @return string
      */
     public function getSaveUrl()
@@ -91,6 +117,11 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
         return $this->getUrl('sales/*/save');
     }
 
+    /**
+     * Get customer selector display
+     *
+     * @return string
+     */
     public function getCustomerSelectorDisplay()
     {
         $customerId = $this->getCustomerId();
@@ -100,9 +131,14 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
         return 'none';
     }
 
+    /**
+     * Get store selector display
+     *
+     * @return string
+     */
     public function getStoreSelectorDisplay()
     {
-        $storeId    = $this->getStoreId();
+        $storeId = $this->getStoreId();
         $customerId = $this->getCustomerId();
         if (!is_null($customerId) && !$storeId) {
             return 'block';
@@ -110,9 +146,14 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
         return 'none';
     }
 
+    /**
+     * Get data selector display
+     *
+     * @return string
+     */
     public function getDataSelectorDisplay()
     {
-        $storeId    = $this->getStoreId();
+        $storeId = $this->getStoreId();
         $customerId = $this->getCustomerId();
         if (!is_null($customerId) && $storeId) {
             return 'block';
@@ -120,25 +161,32 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
         return 'none';
     }
 
+    /**
+     * Get order data jason
+     *
+     * @return string
+     */
     public function getOrderDataJson()
     {
         $data = array();
-        if (!is_null($this->getCustomerId())) {
+        if ($this->getCustomerId()) {
             $data['customer_id'] = $this->getCustomerId();
             $data['addresses'] = array();
-
-            /* @var $addressForm \Magento\Customer\Model\Form */
-            $addressForm = $this->_customerFormFactory->create()
-                ->setFormCode('adminhtml_customer_address')
-                ->setStore($this->getStore());
-            foreach ($this->getCustomer()->getAddresses() as $address) {
-                $data['addresses'][$address->getId()] = $addressForm->setEntity($address)
-                    ->outputData(\Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_JSON);
+            $addresses = $this->_addressService->getAddresses($this->getCustomerId());
+            foreach ($addresses as $addressData) {
+                $addressForm = $this->_customerFormFactory->create(
+                    'customer_address',
+                    'adminhtml_customer_address',
+                    AddressConverter::toFlatArray($addressData)
+                );
+                $data['addresses'][$addressData->getId()] = $addressForm->outputData(
+                    \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_JSON
+                );
             }
         }
         if (!is_null($this->getStoreId())) {
             $data['store_id'] = $this->getStoreId();
-            $currency = $this->_locale->currency($this->getStore()->getCurrentCurrencyCode());
+            $currency = $this->_localeCurrency->getCurrency($this->getStore()->getCurrentCurrencyCode());
             $symbol = $currency->getSymbol() ? $currency->getSymbol() : $currency->getShortName();
             $data['currency_symbol'] = $symbol;
             $data['shipping_method_reseted'] = !(bool)$this->getQuote()->getShippingAddress()->getShippingMethod();

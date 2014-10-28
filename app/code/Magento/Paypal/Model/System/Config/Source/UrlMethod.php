@@ -18,29 +18,21 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Paypal
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Paypal\Model\System\Config\Source;
 
 /**
  * Source model for url method: GET/POST
  */
-namespace Magento\Paypal\Model\System\Config\Source;
-
-class UrlMethod implements \Magento\Core\Model\Option\ArrayInterface
+class UrlMethod implements \Magento\Framework\Option\ArrayInterface
 {
     /**
-     * Options getter
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function toOptionArray()
     {
-        return array(
-            array('value' => 'GET', 'label' => 'GET'),
-            array('value' => 'POST', 'label' => 'POST'),
-        );
+        return array(array('value' => 'GET', 'label' => 'GET'), array('value' => 'POST', 'label' => 'POST'));
     }
 }

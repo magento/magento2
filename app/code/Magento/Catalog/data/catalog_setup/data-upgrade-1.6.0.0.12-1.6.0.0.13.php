@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -31,24 +29,33 @@ $priceAttrId = $installer->getAttribute('catalog_product', 'price', 'attribute_i
 $connection = $installer->getConnection();
 
 // update sort_order of Group Price attribute to be after Price
-$select = $connection->select()
-    ->join(
-        array('t2' => $installer->getTable('eav_entity_attribute')),
-        't1.attribute_group_id = t2.attribute_group_id',
-        array('sort_order' => new \Zend_Db_Expr('t2.sort_order + 1'))
-    )->where('t1.attribute_id = ?', $groupPriceAttrId)
-    ->where('t2.attribute_id = ?', $priceAttrId);
+$select = $connection->select()->join(
+    array('t2' => $installer->getTable('eav_entity_attribute')),
+    't1.attribute_group_id = t2.attribute_group_id',
+    array('sort_order' => new \Zend_Db_Expr('t2.sort_order + 1'))
+)->where(
+    't1.attribute_id = ?',
+    $groupPriceAttrId
+)->where(
+    't2.attribute_id = ?',
+    $priceAttrId
+);
 $query = $select->crossUpdateFromSelect(array('t1' => $installer->getTable('eav_entity_attribute')));
 $connection->query($query);
 
 // update sort_order of all other attributes to be after Group Price
-$select = $connection->select()
-    ->join(
-        array('t2' => $installer->getTable('eav_entity_attribute')),
-        't1.attribute_group_id = t2.attribute_group_id',
-        array('sort_order' => new \Zend_Db_Expr('t1.sort_order + 1'))
-    )->where('t1.attribute_id != ?', $groupPriceAttrId)
-    ->where('t1.sort_order >= t2.sort_order')
-    ->where('t2.attribute_id = ?', $groupPriceAttrId);
+$select = $connection->select()->join(
+    array('t2' => $installer->getTable('eav_entity_attribute')),
+    't1.attribute_group_id = t2.attribute_group_id',
+    array('sort_order' => new \Zend_Db_Expr('t1.sort_order + 1'))
+)->where(
+    't1.attribute_id != ?',
+    $groupPriceAttrId
+)->where(
+    't1.sort_order >= t2.sort_order'
+)->where(
+    't2.attribute_id = ?',
+    $groupPriceAttrId
+);
 $query = $select->crossUpdateFromSelect(array('t1' => $installer->getTable('eav_entity_attribute')));
 $connection->query($query);

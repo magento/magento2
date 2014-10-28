@@ -21,9 +21,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\App\Action;
-
 
 class FormKeyValidatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -44,11 +42,15 @@ class FormKeyValidatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_formKeyMock = $this->getMock('\Magento\Data\Form\FormKey', array('getFormKey'), array(), '', false);
-        $this->_requestMock = $this->getMock('Magento\App\Request\Http', array(), array(), '', false);
-        $this->_model = new \Magento\Core\App\Action\FormKeyValidator(
-            $this->_formKeyMock
+        $this->_formKeyMock = $this->getMock(
+            '\Magento\Framework\Data\Form\FormKey',
+            array('getFormKey'),
+            array(),
+            '',
+            false
         );
+        $this->_requestMock = $this->getMock('Magento\Framework\App\Request\Http', array(), array(), '', false);
+        $this->_model = new \Magento\Core\App\Action\FormKeyValidator($this->_formKeyMock);
     }
 
     /**
@@ -58,11 +60,16 @@ class FormKeyValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidate($formKey, $expected)
     {
-        $this->_requestMock
-            ->expects($this->once())
-            ->method('getParam')
-            ->with('form_key', null)
-            ->will($this->returnValue($formKey));
+        $this->_requestMock->expects(
+            $this->once()
+        )->method(
+            'getParam'
+        )->with(
+            'form_key',
+            null
+        )->will(
+            $this->returnValue($formKey)
+        );
         $this->_formKeyMock->expects($this->once())->method('getFormKey')->will($this->returnValue('formKey'));
         $this->assertEquals($expected, $this->_model->validate($this->_requestMock));
     }
@@ -70,8 +77,8 @@ class FormKeyValidatorTest extends \PHPUnit_Framework_TestCase
     public function validateDataProvider()
     {
         return array(
-          'formKeyExist' => array('formKey', true),
-          'formKeyNotEqualToFormKeyInSession' => array('formKeySession', false)
+            'formKeyExist' => array('formKey', true),
+            'formKeyNotEqualToFormKeyInSession' => array('formKeySession', false)
         );
     }
 }

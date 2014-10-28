@@ -18,32 +18,27 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_ProductAlert
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ProductAlert\Model\Resource;
 
 /**
  * Product alert for back in stock resource model
  */
-namespace Magento\ProductAlert\Model\Resource;
-
 class Stock extends \Magento\ProductAlert\Model\Resource\AbstractResource
 {
     /**
-     * @var \Magento\Core\Model\DateFactory
+     * @var \Magento\Framework\Stdlib\DateTime\DateTimeFactory
      */
     protected $_dateFactory;
 
     /**
-     * @param \Magento\App\Resource $resource
-     * @param \Magento\Core\Model\DateFactory $dateFactory
+     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateFactory
      */
-    public function __construct(
-        \Magento\App\Resource $resource,
-        \Magento\Core\Model\DateFactory $dateFactory
-    ) {
+    public function __construct(\Magento\Framework\App\Resource $resource, \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateFactory)
+    {
         $this->_dateFactory = $dateFactory;
         parent::__construct($resource);
     }
@@ -51,6 +46,7 @@ class Stock extends \Magento\ProductAlert\Model\Resource\AbstractResource
     /**
      * Initialize connection
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -60,13 +56,13 @@ class Stock extends \Magento\ProductAlert\Model\Resource\AbstractResource
     /**
      * Before save action
      *
-     * @param \Magento\Core\Model\AbstractModel $object
-     * @return \Magento\Core\Model\Resource\Db\AbstractDb
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return $this
      */
-    protected function _beforeSave(\Magento\Core\Model\AbstractModel $object)
+    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
-        if (is_null($object->getId()) && $object->getCustomerId()
-                && $object->getProductId() && $object->getWebsiteId()) {
+        if (is_null($object->getId()) && $object->getCustomerId() && $object->getProductId() && $object->getWebsiteId()
+        ) {
             if ($row = $this->_getAlertRow($object)) {
                 $object->addData($row);
                 $object->setStatus(0);

@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,20 +26,17 @@
 /**
  * Catalog product weight backend attribute model
  *
- * @category   Magento
- * @package    Magento_Catalog
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
 class Weight extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
-
     /**
      * Validate
      *
      * @param \Magento\Catalog\Model\Product $object
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Framework\Model\Exception
      * @return bool
      */
     public function validate($object)
@@ -49,9 +44,7 @@ class Weight extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $attrCode = $this->getAttribute()->getAttributeCode();
         $value = $object->getData($attrCode);
         if (!empty($value) && !\Zend_Validate::is($value, 'Between', array('min' => 0, 'max' => 99999999.9999))) {
-            throw new \Magento\Core\Exception(
-                __('Please enter a number 0 or greater in this field.')
-            );
+            throw new \Magento\Framework\Model\Exception(__('Please enter a number 0 or greater in this field.'));
         }
         return true;
     }

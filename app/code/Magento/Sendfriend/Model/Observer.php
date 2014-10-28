@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sendfriend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,8 +26,6 @@
 /**
  * Sendfriend Observer
  *
- * @category    Magento
- * @package     Magento_Sendfriend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Sendfriend\Model;
@@ -44,19 +40,18 @@ class Observer
     /**
      * @param \Magento\Sendfriend\Model\SendfriendFactory $sendfriendFactory
      */
-    public function __construct(
-        \Magento\Sendfriend\Model\SendfriendFactory $sendfriendFactory
-    ) {
+    public function __construct(\Magento\Sendfriend\Model\SendfriendFactory $sendfriendFactory)
+    {
         $this->_sendfriendFactory = $sendfriendFactory;
     }
 
     /**
      * Register Sendfriend Model in global registry
      *
-     * @param \Magento\Event\Observer $observer
-     * @return \Magento\Sendfriend\Model\Observer
+     * @param \Magento\Framework\Event\Observer $observer
+     * @return $this
      */
-    public function register(\Magento\Event\Observer $observer)
+    public function register(\Magento\Framework\Event\Observer $observer)
     {
         $this->_sendfriendFactory->create()->register();
         return $this;

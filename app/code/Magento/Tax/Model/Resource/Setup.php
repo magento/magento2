@@ -18,17 +18,14 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Tax
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Tax\Model\Resource;
 
 /**
  * Tax Setup Resource Model
  */
-namespace Magento\Tax\Model\Resource;
-
 class Setup extends \Magento\Sales\Model\Resource\Setup
 {
     /**
@@ -37,27 +34,43 @@ class Setup extends \Magento\Sales\Model\Resource\Setup
     protected $_setupFactory;
 
     /**
-     * @param \Magento\Core\Model\Resource\Setup\Context $context
+     * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface
+     */
+    protected $productTypeConfig;
+
+    /**
+     * @param \Magento\Eav\Model\Entity\Setup\Context $context
      * @param string $resourceName
-     * @param \Magento\App\CacheInterface $cache
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGrCollFactory
-     * @param \Magento\Core\Model\Config $config
+     * @param \Magento\Framework\App\CacheInterface $cache
+     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGroupCollectionFactory
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Catalog\Model\Resource\SetupFactory $setupFactory
+     * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig
      * @param string $moduleName
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Core\Model\Resource\Setup\Context $context,
+        \Magento\Eav\Model\Entity\Setup\Context $context,
         $resourceName,
-        \Magento\App\CacheInterface $cache,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGrCollFactory,
-        \Magento\Core\Model\Config $config,
+        \Magento\Framework\App\CacheInterface $cache,
+        \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $attrGroupCollectionFactory,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Catalog\Model\Resource\SetupFactory $setupFactory,
+        \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig,
         $moduleName = 'Magento_Tax',
-        $connectionName = ''
+        $connectionName = \Magento\Framework\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION
     ) {
         $this->_setupFactory = $setupFactory;
-        parent::__construct($context, $resourceName, $cache, $attrGrCollFactory, $config, $moduleName, $connectionName);
+        $this->productTypeConfig = $productTypeConfig;
+        parent::__construct(
+            $context,
+            $resourceName,
+            $cache,
+            $attrGroupCollectionFactory,
+            $config,
+            $moduleName,
+            $connectionName
+        );
     }
 
     /**
@@ -81,5 +94,15 @@ class Setup extends \Magento\Sales\Model\Resource\Setup
     public function getCatalogResourceSetup(array $data = array())
     {
         return $this->_setupFactory->create($data);
+    }
+
+    /**
+     * Get taxable product types
+     *
+     * @return array
+     */
+    public function getTaxableItems()
+    {
+        return $this->productTypeConfig->filter('taxable');
     }
 }

@@ -1,0 +1,71 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php $_order = $this->getOrder() ?>
+<div class="actions-toolbar">
+    <a href="<?php echo $this->getPrintAllCreditmemosUrl($_order) ?>"
+       onclick="this.target='_blank'"
+       class="action print">
+        <span><?php echo __('Print All Refunds') ?></span>
+    </a>
+</div>
+<?php foreach ($_order->getCreditmemosCollection() as $_creditmemo): ?>
+<div class="order-title">
+    <strong><?php echo __('Refund #') ?><?php echo $_creditmemo->getIncrementId(); ?> </strong>
+    <a href="<?php echo $this->getPrintCreditmemoUrl($_creditmemo) ?>"
+       onclick="this.target='_blank'"
+       class="action print">
+        <span><?php echo __('Print Refund') ?></span>
+    </a>
+</div>
+
+<div class="table-wrapper order-items-creditmemo">
+    <table class="data table table-order-items creditmemo" id="my-refund-table-<?php echo $_creditmemo->getId(); ?>">
+        <caption class="table caption"><?php echo __('Items Refunded') ?></caption>
+        <thead>
+            <tr>
+                <th class="col name"><?php echo __('Product Name') ?></th>
+                <th class="col sku"><?php echo __('SKU') ?></th>
+                <th class="col price"><?php echo __('Price') ?></th>
+                <th class="col qty"><?php echo __('Qty') ?></th>
+                <th class="col subtotal"><?php echo __('Subtotal') ?></th>
+                <th class="col discount"><?php echo __('Discount Amount') ?></th>
+                <th class="col total"><?php echo __('Row Total') ?></th>
+            </tr>
+        </thead>
+        <tfoot>
+           <?php echo $this->getTotalsHtml($_creditmemo);?>
+        </tfoot>
+        <?php $_items = $_creditmemo->getAllItems(); ?>
+        <?php $_count = count($_items) ?>
+        <?php foreach ($_items as $_item): ?>
+        <?php if ($_item->getOrderItem()->getParentItem()) continue; ?>
+        <tbody>
+            <?php echo $this->getItemHtml($_item) ?>
+        </tbody>
+        <?php endforeach; ?>
+    </table>
+</div>
+<?php echo $this->getCommentsHtml($_creditmemo)?>
+<?php endforeach; ?>

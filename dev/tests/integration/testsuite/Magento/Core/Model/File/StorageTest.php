@@ -18,14 +18,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\File;
+
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 class StorageTest extends \PHPUnit_Framework_TestCase
 {
@@ -36,15 +34,19 @@ class StorageTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetScriptConfig()
     {
-        $config = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Core\Model\File\Storage')->getScriptConfig();
+        $config = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Core\Model\File\Storage'
+        )->getScriptConfig();
         $this->assertInternalType('array', $config);
         $this->assertArrayHasKey('media_directory', $config);
         $this->assertArrayHasKey('allowed_resources', $config);
         $this->assertArrayHasKey('update_time', $config);
+        /** @var \Magento\Framework\Filesystem $filesystem */
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\Filesystem'
+        );
         $this->assertEquals(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                ->get('Magento\Filesystem')->getPath(\Magento\Filesystem::MEDIA),
+            $filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath(),
             $config['media_directory']
         );
         $this->assertInternalType('array', $config['allowed_resources']);

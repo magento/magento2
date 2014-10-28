@@ -25,32 +25,35 @@
  */
 namespace Magento\Email\Model\Template\Config;
 
-class FileResolver implements \Magento\Config\FileResolverInterface
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Config\FileIteratorFactory;
+
+class FileResolver implements \Magento\Framework\Config\FileResolverInterface
 {
     /**
-     * @var \Magento\Filesystem\Directory\ReadInterface
+     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
      */
     protected $directoryRead;
 
     /**
-     * @var \Magento\Config\FileIteratorFactory
+     * @var \Magento\Framework\Config\FileIteratorFactory
      */
     protected $iteratorFactory;
 
     /**
-     * @param \Magento\Filesystem $filesystem
-     * @param \Magento\Email\Model\Template\Config\FileIteratorFactory $iteratorFactory
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Framework\Config\FileIteratorFactory $iteratorFactory
      */
     public function __construct(
-        \Magento\Filesystem $filesystem,
-        \Magento\Email\Model\Template\Config\FileIteratorFactory $iteratorFactory
+        \Magento\Framework\Filesystem $filesystem,
+        FileIteratorFactory $iteratorFactory
     ) {
-        $this->directoryRead = $filesystem->getDirectoryRead(\Magento\Filesystem::MODULES);
+        $this->directoryRead = $filesystem->getDirectoryRead(DirectoryList::MODULES);
         $this->iteratorFactory = $iteratorFactory;
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get($filename, $scope)
     {

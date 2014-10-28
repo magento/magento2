@@ -18,23 +18,17 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Review
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Review\Model\Resource\Review;
 
 /**
  * Review collection resource model
  *
- * @category    Magento
- * @package     Magento_Review
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Review\Model\Resource\Review;
-
-class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Review table
@@ -75,7 +69,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Add store data flag
      * @var bool
      */
-    protected $_addStoreDataFlag   = false;
+    protected $_addStoreDataFlag = false;
 
     /**
      * Review data
@@ -85,36 +79,40 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     protected $_reviewData = null;
 
     /**
-     * @var \Magento\Rating\Model\Rating\Option\VoteFactory
+     * Rating option model
+     *
+     * @var \Magento\Review\Model\Rating\Option\VoteFactory
      */
     protected $_voteFactory;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * Core model store manager interface
+     *
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\Logger $logger
-     * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Review\Helper\Data $reviewData
-     * @param \Magento\Rating\Model\Rating\Option\VoteFactory $voteFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Review\Model\Rating\Option\VoteFactory $voteFactory
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param mixed $connection
-     * @param \Magento\Core\Model\Resource\Db\AbstractDb $resource
+     * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
-        \Magento\Logger $logger,
-        \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Logger $logger,
+        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Review\Helper\Data $reviewData,
-        \Magento\Rating\Model\Rating\Option\VoteFactory $voteFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Review\Model\Rating\Option\VoteFactory $voteFactory,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         $connection = null,
-        \Magento\Core\Model\Resource\Db\AbstractDb $resource = null
+        \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         $this->_reviewData = $reviewData;
         $this->_voteFactory = $voteFactory;
@@ -126,56 +124,60 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Define module
      *
+     * @return void
      */
     protected function _construct()
     {
         $this->_init('Magento\Review\Model\Review', 'Magento\Review\Model\Resource\Review');
-        $this->_reviewTable         = $this->getTable('review');
-        $this->_reviewDetailTable   = $this->getTable('review_detail');
-        $this->_reviewStatusTable   = $this->getTable('review_status');
-        $this->_reviewEntityTable   = $this->getTable('review_entity');
-        $this->_reviewStoreTable    = $this->getTable('review_store');
+        $this->_reviewTable = $this->getTable('review');
+        $this->_reviewDetailTable = $this->getTable('review_detail');
+        $this->_reviewStatusTable = $this->getTable('review_status');
+        $this->_reviewEntityTable = $this->getTable('review_entity');
+        $this->_reviewStoreTable = $this->getTable('review_store');
     }
 
     /**
-     * init select
+     * Initialize select
      *
-     * @return \Magento\Review\Model\Resource\Review\Product\Collection
+     * @return $this
      */
     protected function _initSelect()
     {
         parent::_initSelect();
-        $this->getSelect()
-            ->join(array('detail' => $this->_reviewDetailTable),
-                'main_table.review_id = detail.review_id',
-                array('detail_id', 'title', 'detail', 'nickname', 'customer_id'));
+        $this->getSelect()->join(
+            array('detail' => $this->_reviewDetailTable),
+            'main_table.review_id = detail.review_id',
+            array('detail_id', 'title', 'detail', 'nickname', 'customer_id')
+        );
         return $this;
     }
 
     /**
+     * Add customer filter
+     *
      * @param int|string $customerId
-     * @return \Magento\Review\Model\Resource\Review\Collection
+     * @return $this
      */
     public function addCustomerFilter($customerId)
     {
-        $this->addFilter('customer',
-            $this->getConnection()->quoteInto('detail.customer_id=?', $customerId),
-            'string');
+        $this->addFilter('customer', $this->getConnection()->quoteInto('detail.customer_id=?', $customerId), 'string');
         return $this;
     }
 
     /**
      * Add store filter
      *
-     * @param int|array $storeId
-     * @return \Magento\Review\Model\Resource\Review\Collection
+     * @param int|int[] $storeId
+     * @return $this
      */
     public function addStoreFilter($storeId)
     {
         $inCond = $this->getConnection()->prepareSqlCondition('store.store_id', array('in' => $storeId));
-        $this->getSelect()->join(array('store'=>$this->_reviewStoreTable),
+        $this->getSelect()->join(
+            array('store' => $this->_reviewStoreTable),
             'main_table.review_id=store.review_id',
-            array());
+            array()
+        );
         $this->getSelect()->where($inCond);
         return $this;
     }
@@ -183,7 +185,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add stores data
      *
-     * @return \Magento\Review\Model\Resource\Review\Collection
+     * @return $this
      */
     public function addStoreData()
     {
@@ -196,27 +198,31 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      *
      * @param int|string $entity
      * @param int $pkValue
-     * @return \Magento\Review\Model\Resource\Review\Collection
+     * @return $this
      */
     public function addEntityFilter($entity, $pkValue)
     {
         if (is_numeric($entity)) {
-            $this->addFilter('entity',
-                $this->getConnection()->quoteInto('main_table.entity_id=?', $entity),
-                'string');
+            $this->addFilter('entity', $this->getConnection()->quoteInto('main_table.entity_id=?', $entity), 'string');
         } elseif (is_string($entity)) {
-            $this->_select->join($this->_reviewEntityTable,
-                'main_table.entity_id='.$this->_reviewEntityTable.'.entity_id',
-                array('entity_code'));
+            $this->_select->join(
+                $this->_reviewEntityTable,
+                'main_table.entity_id=' . $this->_reviewEntityTable . '.entity_id',
+                array('entity_code')
+            );
 
-            $this->addFilter('entity',
-                $this->getConnection()->quoteInto($this->_reviewEntityTable.'.entity_code=?', $entity),
-                'string');
+            $this->addFilter(
+                'entity',
+                $this->getConnection()->quoteInto($this->_reviewEntityTable . '.entity_code=?', $entity),
+                'string'
+            );
         }
 
-        $this->addFilter('entity_pk_value',
+        $this->addFilter(
+            'entity_pk_value',
             $this->getConnection()->quoteInto('main_table.entity_pk_value=?', $pkValue),
-            'string');
+            'string'
+        );
 
         return $this;
     }
@@ -225,7 +231,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Add status filter
      *
      * @param int|string $status
-     * @return \Magento\Review\Model\Resource\Review\Collection
+     * @return $this
      */
     public function addStatusFilter($status)
     {
@@ -234,9 +240,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
             $status = isset($statuses[$status]) ? $statuses[$status] : 0;
         }
         if (is_numeric($status)) {
-            $this->addFilter('status',
-                $this->getConnection()->quoteInto('main_table.status_id=?', $status),
-                'string');
+            $this->addFilter('status', $this->getConnection()->quoteInto('main_table.status_id=?', $status), 'string');
         }
         return $this;
     }
@@ -245,7 +249,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Set date order
      *
      * @param string $dir
-     * @return \Magento\Review\Model\Resource\Review\Collection
+     * @return $this
      */
     public function setDateOrder($dir = 'DESC')
     {
@@ -256,17 +260,18 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add rate votes
      *
-     * @return \Magento\Review\Model\Resource\Review\Collection
+     * @return $this
      */
     public function addRateVotes()
     {
         foreach ($this->getItems() as $item) {
-            $votesCollection = $this->_voteFactory->create()
-                ->getResourceCollection()
-                ->setReviewFilter($item->getId())
-                ->setStoreFilter($this->_storeManager->getStore()->getId())
-                ->addRatingInfo($this->_storeManager->getStore()->getId())
-                ->load();
+            $votesCollection = $this->_voteFactory->create()->getResourceCollection()->setReviewFilter(
+                $item->getId()
+            )->setStoreFilter(
+                $this->_storeManager->getStore()->getId()
+            )->addRatingInfo(
+                $this->_storeManager->getStore()->getId()
+            )->load();
             $item->setRatingVotes($votesCollection);
         }
 
@@ -276,7 +281,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add reviews total count
      *
-     * @return \Magento\Review\Model\Resource\Review\Collection
+     * @return $this
      */
     public function addReviewsTotalCount()
     {
@@ -284,8 +289,9 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
             array('r' => $this->_reviewTable),
             'main_table.entity_pk_value = r.entity_pk_value',
             array('total_reviews' => new \Zend_Db_Expr('COUNT(r.review_id)'))
-        )
-        ->group('main_table.review_id');
+        )->group(
+            'main_table.review_id'
+        );
 
         return $this;
     }
@@ -295,7 +301,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      *
      * @param boolean $printQuery
      * @param boolean $logQuery
-     * @return \Magento\Review\Model\Resource\Review\Collection
+     * @return $this
      */
     public function load($printQuery = false, $logQuery = false)
     {
@@ -313,6 +319,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add store data
      *
+     * @return void
      */
     protected function _addStoreData()
     {
@@ -320,11 +327,9 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
 
         $reviewsIds = $this->getColumnValues('review_id');
         $storesToReviews = array();
-        if (count($reviewsIds)>0) {
+        if (count($reviewsIds) > 0) {
             $inCond = $adapter->prepareSqlCondition('review_id', array('in' => $reviewsIds));
-            $select = $adapter->select()
-                ->from($this->_reviewStoreTable)
-                ->where($inCond);
+            $select = $adapter->select()->from($this->_reviewStoreTable)->where($inCond);
             $result = $adapter->fetchAll($select);
             foreach ($result as $row) {
                 if (!isset($storesToReviews[$row['review_id']])) {

@@ -18,19 +18,19 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model;
+
+use Magento\Framework\App\DesignInterface;
+use Magento\Framework\Model\Resource\AbstractResource;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Object\IdentityInterface;
 
 /**
  * Design settings change model
  *
- * @method \Magento\Core\Model\Resource\Design _getResource()
- * @method \Magento\Core\Model\Resource\Design getResource()
  * @method int getStoreId()
  * @method \Magento\Core\Model\Design setStoreId(int $value)
  * @method string getDesign()
@@ -40,7 +40,7 @@ namespace Magento\Core\Model;
  * @method string getDateTo()
  * @method \Magento\Core\Model\Design setDateTo(string $value)
  */
-class Design extends \Magento\Core\Model\AbstractModel
+class Design extends AbstractModel implements IdentityInterface, DesignInterface
 {
     /**
      * Cache tag
@@ -64,40 +64,42 @@ class Design extends \Magento\Core\Model\AbstractModel
     protected $_cacheTag = self::CACHE_TAG;
 
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
-    protected $_locale;
+    protected $_localeDate;
 
     /**
-     * @var \Magento\Stdlib\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime
      */
     protected $_dateTime;
 
     /**
-     * @param Context $context
-     * @param Registry $registry
-     * @param LocaleInterface $locale
-     * @param \Magento\Stdlib\DateTime $dateTime
-     * @param Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Core\Model\LocaleInterface $locale,
-        \Magento\Stdlib\DateTime $dateTime,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Framework\Stdlib\DateTime $dateTime,
+        AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        $this->_locale = $locale;
+        $this->_localeDate = $localeDate;
         $this->_dateTime = $dateTime;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
     /**
      * Initialize resource model
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -109,12 +111,12 @@ class Design extends \Magento\Core\Model\AbstractModel
      *
      * @param string $storeId
      * @param string|null $date
-     * @return \Magento\Core\Model\Design
+     * @return $this
      */
     public function loadChange($storeId, $date = null)
     {
         if (is_null($date)) {
-            $date = $this->_dateTime->formatDate($this->_locale->storeTimeStamp($storeId), false);
+            $date = $this->_dateTime->formatDate($this->_localeDate->scopeTimeStamp($storeId), false);
         }
 
         $changeCacheId = 'design_change_' . md5($storeId . $date);
@@ -139,15 +141,25 @@ class Design extends \Magento\Core\Model\AbstractModel
     /**
      * Apply design change from self data into specified design package instance
      *
-     * @param \Magento\View\DesignInterface $packageInto
-     * @return \Magento\Core\Model\Design
+     * @param \Magento\Framework\View\DesignInterface $packageInto
+     * @return $this
      */
-    public function changeDesign(\Magento\View\DesignInterface $packageInto)
+    public function changeDesign(\Magento\Framework\View\DesignInterface $packageInto)
     {
         $design = $this->getDesign();
         if ($design) {
             $packageInto->setDesignTheme($design);
         }
         return $this;
+    }
+
+    /**
+     * Get identities
+     *
+     * @return array
+     */
+    public function getIdentities()
+    {
+        return array(self::CACHE_TAG . '_' . $this->getId());
     }
 }

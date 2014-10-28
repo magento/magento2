@@ -1,0 +1,87 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+ ?>
+
+<?php /* @var $this \Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped */ ?>
+<?php $_skipSaleableCheck = $this->helper('Magento\Catalog\Helper\Product')->getSkipSaleableCheck(); ?>
+<div id="catalog_product_composite_configure_fields_grouped" class="<?php echo $this->getIsLastFieldset() ? 'last-fieldset' : '' ?>">
+    <h4><?php echo __('Associated Products') ?></h4>
+    <div class="product-options">
+        <?php $_product = $this->getProduct(); ?>
+        <?php $this->setPreconfiguredValue(); ?>
+        <?php $_associatedProducts = $this->getAssociatedProducts(); ?>
+        <?php $_hasAssociatedProducts = count($_associatedProducts) > 0; ?>
+        <?php if ((!$_product->isAvailable() && !$_skipSaleableCheck) || !$_hasAssociatedProducts): ?>
+            <p class="availability out-of-stock"><?php echo __('Availability:') ?> <span><?php echo __('Out of stock') ?></span></p>
+        <?php endif; ?>
+        <table class="data-table grouped-items-table" id="super-product-table">
+            <thead>
+                <tr class="headings">
+                    <th class="col-id"><?php echo __('ID') ?></th>
+                    <th class="col-sku"><?php echo __('SKU') ?></th>
+                    <th class="col-name"><?php echo __('Product Name') ?></th>
+                    <?php if ($this->getCanShowProductPrice($_product)): ?>
+                    <th class="col-price"><?php echo __('Price') ?></th>
+                    <?php endif; ?>
+                    <?php if ($_product->isSaleable() || $_skipSaleableCheck): ?>
+                    <th class="col-qty"><?php echo __('Qty') ?></th>
+                    <?php endif; ?>
+                </tr>
+            </thead>
+            <tbody>
+            <?php if ($_hasAssociatedProducts): ?>
+                <?php $i = 0 ?>
+            <?php foreach ($_associatedProducts as $_item): ?>
+                <tr class="<?php echo (++$i % 2) ? 'even' : 'odd' ?>">
+                    <td class="col-id"><?php echo $_item->getId() ?></td>
+                    <td class="col-sku"><?php echo $this->escapeHtml($_item->getSku()) ?></td>
+                    <td class="col-name"><?php echo $this->escapeHtml($_item->getName()) ?></td>
+                    <?php if ($this->getCanShowProductPrice($_product)): ?>
+                    <td class="col-price">
+                        <?php if ($this->getCanShowProductPrice($_item)): ?>
+                        <?php echo $this->getProductPrice($_item) ?>
+                        <?php endif; ?>
+                    </td>
+                    <?php endif; ?>
+                    <?php if ($_product->isSaleable() || $_skipSaleableCheck): ?>
+                    <td class="col-qty">
+                    <?php if ($_item->isSaleable() || $_skipSaleableCheck) : ?>
+                        <input type="text" name="super_group[<?php echo $_item->getId() ?>]" id="super_group[<?php echo $_item->getId() ?>]" maxlength="12" value="<?php echo $_item->getQty()*1 ?>" title="<?php echo __('Qty') ?>" class="input-text qty" />
+                        <input type="hidden" value="1" price="<?php echo $this->getCurrencyPrice($_item->getPrice()) ?>" qtyId="super_group[<?php echo $_item->getId() ?>]" />
+                    <?php else: ?>
+                        <p class="availability out-of-stock"><span><?php echo __('Out of stock') ?></span></p>
+                    <?php endif; ?>
+                    </td>
+                    <?php endif; ?>
+                </tr>
+            <?php endforeach; ?>
+            <?php else: ?>
+               <tr>
+                   <td class="empty-text" colspan="<?php if ($_product->isSaleable() || $_skipSaleableCheck): ?>4<?php else : ?>3<?php endif; ?>"><?php echo __('No options of this product are available.') ?></td>
+               </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+</div>

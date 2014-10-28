@@ -1,0 +1,135 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+
+<?php if ($this->getAttributeSetSelected()): ?>
+<script type="text/javascript">
+require(['prototype'], function(){
+
+//<![CDATA[
+Gcontent = {};
+Gcontent.Attribute = Class.create();
+Gcontent.Attribute.prototype = {
+    idLabel : '<?php echo $this->getFieldId() ?>',
+    top : '',
+    templateSyntax : /(^|.|\r|\n)({{(\w+)}})/,
+    templateText : '',
+    itemsCount : 0,
+    initialize : function(template) {
+        this.templateText = template;
+        this.top = $('gcontent_attribute_top');
+    },
+
+    add : function(data) {
+        if(!data){
+            data = {};
+        }
+        this.top = $('gcontent_attribute_top');
+
+        data.index = this.itemsCount++;
+        this.template = new Template(this.templateText, this.templateSyntax);
+        Element.insert(this.top, {'bottom':this.template.evaluate(data)});
+        this.top = $(this.idLabel + '_' + data.index);
+
+        //set selected type
+        if (data.attribute_id) {
+            $A($(this.idLabel + '_'+data.index+'_attribute').options).each(function(option){
+                if (option.value==data.attribute_id) option.selected = true;
+            });
+        }
+
+        //set selected is_require
+        if (data.gcontent_attribute) {
+            $A($(this.idLabel + '_'+data.index+'_gattribute').options).each(function(option){
+                if (option.value==data.gcontent_attribute) option.selected = true;
+            });
+        }
+        return data.index;
+    },
+
+    remove : function(event) {
+        var element = $(Event.findElement(event, 'tr'));
+        if(element){
+            Element.select(element, '.delete').each(function(elem){elem.value='1'});
+            Element.select(element, ['input', 'select']).each(function(elem){elem.hide(); elem.className = '';});
+            Element.hide(element);
+        }
+    }
+}
+
+var attributesSelectTemplate = '<tr id="<?php echo $this->getFieldId() ?>_{{index}}">' +
+                '<td>'+
+                    '<?php echo $this->getAttributesSelectHtml(true) ?>' +
+                    '<input type="hidden" name="<?php echo $this->getFieldName() ?>[{{index}}][delete]" value="">' +
+                '</td>' +
+                '<td><?php echo $this->getGcontentAttributesSelectHtml() ?></td>' +
+                '<td class="col-delete">' + <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($this->getDeleteButtonHtml()) ?> + '</td>' +
+            '</tr>';
+
+optionIndex = 0;
+gContentAttribute = new Gcontent.Attribute(attributesSelectTemplate);
+//]]>
+
+});
+</script>
+
+<div id="gcontent_attributes_container">
+    <table class="data-table" id="gcontent_attribute">
+        <thead>
+            <tr>
+                <th class="col-type"><?php echo __('Attribute') ?></th>
+                <th class="col-req"><?php echo __('Google Content Attribute') ?></th>
+                <th class="col-actions"><?php echo __('Action') ?></th>
+            </tr>
+        </thead>
+        <tbody id="gcontent_attribute_top">
+
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3">
+                    <?php echo $this->getAddButtonHtml() ?>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+<?php if ($this->getAttributesData()): ?>
+<script type="text/javascript">
+require(['prototype'], function(){
+
+//<![CDATA[
+    <?php foreach ($this->getAttributesData() as $data): ?>
+        gContentAttribute.add(<?php echo $this->jsonFormat($data) ?>);
+    <?php endforeach; ?>
+//]]>
+
+});
+</script>
+<?php endif; ?>
+
+<?php else: ?>
+    <?php echo __("Please, select Attribute Set to load attributes") ?>
+<?php endif; ?>

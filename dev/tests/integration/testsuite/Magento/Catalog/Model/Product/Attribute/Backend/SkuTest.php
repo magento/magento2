@@ -18,14 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
 /**
@@ -40,8 +35,9 @@ class SkuTest extends \PHPUnit_Framework_TestCase
     public function testGenerateUniqueSkuExistingProduct()
     {
         /** @var $product \Magento\Catalog\Model\Product */
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Product');
+        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Product'
+        );
         $product->load(1);
         $product->setId(null);
         $this->assertEquals('simple', $product->getSku());
@@ -68,7 +64,11 @@ class SkuTest extends \PHPUnit_Framework_TestCase
      */
     public function testGenerateUniqueLongSku($product)
     {
-        $product->duplicate();
+        /** @var \Magento\Catalog\Model\Product\Copier $copier */
+        $copier = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Catalog\Model\Product\Copier'
+        );
+        $copier->copy($product);
         $this->assertEquals('0123456789012345678901234567890123456789012345678901234567890123', $product->getSku());
         $product->getResource()->getAttribute('sku')->getBackend()->beforeSave($product);
         $this->assertEquals('01234567890123456789012345678901234567890123456789012345678901-1', $product->getSku());
@@ -93,7 +93,8 @@ class SkuTest extends \PHPUnit_Framework_TestCase
     public function uniqueLongSkuDataProvider()
     {
         $product = $this->_getProduct();
-        $product->setSku('0123456789012345678901234567890123456789012345678901234567890123'); //strlen === 64
+        $product->setSku('0123456789012345678901234567890123456789012345678901234567890123');
+        //strlen === 64
         return array(array($product));
     }
 
@@ -105,27 +106,34 @@ class SkuTest extends \PHPUnit_Framework_TestCase
     protected function _getProduct()
     {
         /** @var $product \Magento\Catalog\Model\Product */
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Product');
-        $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
-            ->setId(1)
-            ->setAttributeSetId(4)
-            ->setWebsiteIds(array(1))
-            ->setName('Simple Product')
-            ->setSku('simple')
-            ->setPrice(10)
-            ->setDescription('Description with <b>html tag</b>')
-            ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
-            ->setStatus(\Magento\Catalog\Model\Product\Status::STATUS_ENABLED)
-            ->setCategoryIds(array(2))
-            ->setStockData(
-                array(
-                    'use_config_manage_stock' => 1,
-                    'qty' => 100,
-                    'is_qty_decimal' => 0,
-                    'is_in_stock' => 1,
-                )
-            );
+        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Product'
+        );
+        $product->setTypeId(
+            \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
+        )->setId(
+            1
+        )->setAttributeSetId(
+            4
+        )->setWebsiteIds(
+            array(1)
+        )->setName(
+            'Simple Product'
+        )->setSku(
+            'simple'
+        )->setPrice(
+            10
+        )->setDescription(
+            'Description with <b>html tag</b>'
+        )->setVisibility(
+            \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
+        )->setStatus(
+            \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
+        )->setCategoryIds(
+            array(2)
+        )->setStockData(
+            array('use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1)
+        );
         return $product;
     }
 }

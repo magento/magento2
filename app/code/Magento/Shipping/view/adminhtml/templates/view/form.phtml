@@ -1,0 +1,117 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php  $_order = $this->getShipment()->getOrder() ?>
+<?php echo $this->getChildHtml('order_info') ?>
+<div class="clearfix">
+    <div class="order-payment-method">
+        <?php /* Billing Address */ ?>
+        <div class="fieldset-wrapper">
+            <div class="fieldset-wrapper-title">
+                <span class="title"><?php echo __('Payment Information') ?></span>
+            </div>
+            <div><?php echo $this->getChildHtml('order_payment') ?></div>
+            <div class="order-payment-currency"><?php echo __('The order was placed using %1.', $_order->getOrderCurrencyCode()) ?></div>
+        </div>
+    </div>
+    <div class="order-shipping-address">
+        <?php /* Shipping Address */ ?>
+        <div class="fieldset-wrapper">
+            <div class="fieldset-wrapper-title">
+                <span class="title"><?php echo __('Shipping and Tracking Information') ?></span>
+            </div>
+            <div class="shipping-description-wrapper">
+                <?php if($this->getShipment()->getTracksCollection()->count()): ?>
+                <p>
+                    <a href="#" id="linkId" onclick="popWin('<?php echo $this->helper('Magento\Shipping\Helper\Data')->getTrackingPopupUrlBySalesModel($this->getShipment()) ?>','trackshipment','width=800,height=600,resizable=yes,scrollbars=yes')" title="<?php echo __('Track this shipment') ?>"><?php echo __('Track this shipment') ?></a>
+                </p>
+                <?php endif; ?>
+                <div class="shipping-description-title"><?php echo $this->escapeHtml($_order->getShippingDescription()) ?></div>
+                <?php echo __('Total Shipping Charges'); ?>:
+
+                <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingPriceIncludingTax()): ?>
+                    <?php $_excl = $this->displayShippingPriceInclTax($_order); ?>
+                <?php else: ?>
+                    <?php $_excl = $this->displayPriceAttribute('shipping_amount', false, ' '); ?>
+                <?php endif; ?>
+                <?php $_incl = $this->displayShippingPriceInclTax($_order); ?>
+
+                <?php echo $_excl; ?>
+                <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
+                    (<?php echo __('Incl. Tax'); ?> <?php echo $_incl; ?>)
+                <?php endif; ?>
+            </div>
+            <?php if ($this->canCreateShippingLabel()): ?>
+            <p>
+                <?php echo $this->getCreateLabelButton()?>
+                <?php if ($this->getShipment()->getShippingLabel()): ?>
+                    <?php echo $this->getPrintLabelButton() ?>
+                <?php endif ?>
+                <?php if ($this->getShipment()->getPackages()): ?>
+                    <?php echo $this->getShowPackagesButton() ?>
+                <?php endif ?>
+            </p>
+            <?php endif ?>
+            <div><?php echo $this->getChildHtml('shipment_tracking') ?></div>
+        <?php echo $this->getChildHtml('shipment_packaging') ?>
+        <script type="text/javascript">
+require([
+    'prototype'
+], function(){
+
+    setTimeout(function(){
+        packaging.setConfirmPackagingCallback(function(){
+            packaging.sendCreateLabelRequest();
+        });
+        packaging.setLabelCreatedCallback(function(response){
+            setLocation("<?php echo $this->getUrl(
+                'adminhtml/order_shipment/view',
+                array('shipment_id' => $this->getShipment()->getId())
+            ); ?>");
+        });
+    }, 500);
+        
+});
+</script>
+        </div>
+    </div>
+</div>
+
+<div class="fieldset-wrapper">
+    <div class="fieldset-wrapper-title">
+        <span class="title"><?php echo __('Items Shipped') ?></span>
+    </div>
+    <?php echo $this->getChildHtml('shipment_items') ?>
+</div>
+
+<div class="clearfix">
+    <?php echo $this->getChildHtml('shipment_packed') ?>
+
+    <div class="order-comments-history">
+        <div class="fieldset-wrapper">
+            <div class="fieldset-wrapper-title"><span class="title"><?php echo __('Shipment History') ?></span></div>
+            <fieldset><?php echo $this->getChildHtml('order_comments') ?></fieldset>
+        </div>
+    </div>
+</div>

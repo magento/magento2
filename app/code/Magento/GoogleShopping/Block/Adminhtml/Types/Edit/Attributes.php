@@ -18,25 +18,21 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_GoogleShopping
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\GoogleShopping\Block\Adminhtml\Types\Edit;
 
 /**
  * Attributes box for Google Content attributes mapping
  *
- * @category    Magento
- * @package     Magento_GoogleShopping
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\GoogleShopping\Block\Adminhtml\Types\Edit;
-
-class Attributes
-    extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element
+class Attributes extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element
 {
-
+    /**
+     * @var string
+     */
     protected $_template = 'types/edit/attributes.phtml';
 
     /**
@@ -54,20 +50,20 @@ class Attributes
     protected $_attributeFactory;
 
     /**
-     * @var \Magento\Json\EncoderInterface
+     * @var \Magento\Framework\Json\EncoderInterface
      */
     protected $_jsonEncoder;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Json\EncoderInterface $jsonEncoder
+     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\GoogleShopping\Model\Config $config
      * @param \Magento\GoogleShopping\Model\AttributeFactory $attributeFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Json\EncoderInterface $jsonEncoder,
+        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\GoogleShopping\Model\Config $config,
         \Magento\GoogleShopping\Model\AttributeFactory $attributeFactory,
         array $data = array()
@@ -78,25 +74,32 @@ class Attributes
         parent::__construct($context, $data);
     }
 
-
     /**
      * Preparing global layout
      *
-     * @return \Magento\View\Element\AbstractBlock
+     * @return \Magento\Framework\View\Element\AbstractBlock
      */
     protected function _prepareLayout()
     {
-        $this->addChild('add_button', 'Magento\Backend\Block\Widget\Button', array(
-            'label' => __('Add New Attribute'),
-            'class' => 'add',
-            'id'    => 'add_new_attribute',
-            'on_click' => 'gContentAttribute.add()'
-        ));
-        $this->addChild('delete_button', 'Magento\Backend\Block\Widget\Button', array(
-            'label' => __('Remove'),
-            'class' => 'delete delete-product-option',
-            'on_click' => 'gContentAttribute.remove(event)'
-        ));
+        $this->addChild(
+            'add_button',
+            'Magento\Backend\Block\Widget\Button',
+            array(
+                'label' => __('Add New Attribute'),
+                'class' => 'add',
+                'id' => 'add_new_attribute',
+                'on_click' => 'gContentAttribute.add()'
+            )
+        );
+        $this->addChild(
+            'delete_button',
+            'Magento\Backend\Block\Widget\Button',
+            array(
+                'label' => __('Remove'),
+                'class' => 'delete delete-product-option',
+                'on_click' => 'gContentAttribute.remove(event)'
+            )
+        );
 
         return parent::_prepareLayout();
     }
@@ -116,7 +119,7 @@ class Attributes
      *
      * @return string
      */
-    public function getFieldName ()
+    public function getFieldName()
     {
         return 'attributes';
     }
@@ -133,26 +136,25 @@ class Attributes
         $attributesTree = $this->_config->getAttributesByCountry($this->getTargetCountry());
 
         foreach ($attributesTree as $destination => $attributes) {
-            $options[] = array(
-                'label' => $destination,
-                'is_group' => true,
-            );
+            $options[] = array('label' => $destination, 'is_group' => true);
             foreach ($attributes as $attribute => $params) {
                 $options[$attribute] = array('label' => $params['name']);
                 if ((int)$params['required'] == 1) {
                     $options[$attribute]['style'] = 'color: #940000;';
                 }
             }
-            $options[] = array(
-                'is_group' => true,
-                'is_close' => true
-            );
+            $options[] = array('is_group' => true, 'is_close' => true);
         }
 
-        $select = $this->getLayout()->createBlock('Magento\GoogleShopping\Block\Adminhtml\Types\Edit\Select')
-            ->setId($this->getFieldId().'_{{index}}_gattribute')
-            ->setName($this->getFieldName().'[{{index}}][gcontent_attribute]')
-            ->setOptions($options);
+        $select = $this->getLayout()->createBlock(
+            'Magento\GoogleShopping\Block\Adminhtml\Types\Edit\Select'
+        )->setId(
+            $this->getFieldId() . '_{{index}}_gattribute'
+        )->setName(
+            $this->getFieldName() . '[{{index}}][gcontent_attribute]'
+        )->setOptions(
+            $options
+        );
 
         return $this->_toOneLineString($select->toHtml());
     }
@@ -160,15 +162,20 @@ class Attributes
     /**
      * Build HTML select element of attribute set attributes
      *
-     * @param boolean $escapeJsQuotes
+     * @param bool $escapeJsQuotes
      * @return string
      */
     public function getAttributesSelectHtml($escapeJsQuotes = false)
     {
-        $select = $this->getLayout()->createBlock('Magento\View\Element\Html\Select')
-            ->setId($this->getFieldId().'_{{index}}_attribute')
-            ->setName($this->getFieldName().'[{{index}}][attribute_id]')
-            ->setOptions($this->_getAttributes($this->getAttributeSetId(), $escapeJsQuotes));
+        $select = $this->getLayout()->createBlock(
+            'Magento\Framework\View\Element\Html\Select'
+        )->setId(
+            $this->getFieldId() . '_{{index}}_attribute'
+        )->setName(
+            $this->getFieldName() . '[{{index}}][attribute_id]'
+        )->setOptions(
+            $this->_getAttributes($this->getAttributeSetId(), $escapeJsQuotes)
+        );
         return $select->getHtml();
     }
 
@@ -197,7 +204,7 @@ class Attributes
      * Skip attributes not needed for Google Content
      *
      * @param int $setId
-     * @param boolean $escapeJsQuotes
+     * @param bool $escapeJsQuotes
      * @return array
      */
     public function _getAttributes($setId, $escapeJsQuotes = false)
@@ -207,9 +214,9 @@ class Attributes
 
         foreach ($attributes as $attribute) {
             /* @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
-            $result[$attribute->getAttributeId()] = $escapeJsQuotes
-                ? $this->escapeJsQuote($attribute->getFrontendLabel())
-                : $attribute->getFrontendLabel();
+            $result[$attribute->getAttributeId()] = $escapeJsQuotes ? $this->escapeJsQuote(
+                $attribute->getFrontendLabel()
+            ) : $attribute->getFrontendLabel();
         }
         return $result;
     }
@@ -235,5 +242,4 @@ class Attributes
     {
         return str_replace(array("\r\n", "\n", "\r"), "", $string);
     }
-
 }

@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Magento\Framework\Translate\InlineInterface" type="Magento\Framework\Translate\Inline" />
+    <preference for="Magento\Framework\Translate\Inline\ConfigInterface" type="Magento\Translation\Model\Inline\Config" />
+    <preference for="Magento\Framework\Translate\Inline\ProviderInterface" type="Magento\Framework\Translate\Inline\Provider" />
+    <preference for="Magento\Framework\Translate\Inline\ParserInterface" type="Magento\Translation\Model\Inline\Parser" />
+    <preference for="Magento\Framework\Translate\ResourceInterface" type="Magento\Translation\Model\Resource\Translate" />
+    <preference for="Magento\Framework\Translate\Inline\StateInterface" type="Magento\Framework\Translate\Inline\State" />
+    <preference for="Magento\Framework\Phrase\RendererInterface" type="Magento\Framework\Phrase\Renderer\Composite" />
+    <type name="Magento\Framework\Translate\Inline">
+        <arguments>
+            <argument name="templateFileName" xsi:type="string">Magento_Translation::translate_inline.phtml</argument>
+            <argument name="translatorRoute" xsi:type="string">translation/ajax/index</argument>
+            <argument name="layout" xsi:type="object">Magento\Framework\View\LayoutInterface\Proxy</argument>
+            <argument name="config" xsi:type="object">Magento\Framework\Translate\Inline\ConfigInterface\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Translation\Model\Inline\Parser">
+        <arguments>
+            <argument name="inputFilter" xsi:type="object">Magento\Framework\Filter\Input\MaliciousCode</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Translate\Inline\Provider">
+        <arguments>
+            <argument name="inlineTranslate" xsi:type="object">Magento\Framework\Translate\Inline\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Phrase\Renderer\Composite">
+        <arguments>
+            <argument name="renderers" xsi:type="array">
+                <item name="translation" xsi:type="object">Magento\Framework\Phrase\Renderer\Translate</item>
+                <item name="placeholder" xsi:type="object">Magento\Framework\Phrase\Renderer\Placeholder</item>
+                <item name="inline" xsi:type="object">Magento\Framework\Phrase\Renderer\Inline</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Phrase\Renderer\Translate">
+        <arguments>
+            <argument name="translator" xsi:type="object">Magento\Framework\Translate</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Translation\Model\Js">
+        <arguments>
+            <argument name="dataProviders" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\Translation\Model\Js\DataProvider</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

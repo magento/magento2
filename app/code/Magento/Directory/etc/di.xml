@@ -23,23 +23,23 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <type name="Magento\Directory\Model\Resource\Country\Collection" shared="false" />
     <type name="Magento\Directory\Model\Currency\Import\Config">
-        <param name="servicesConfig">
-            <value>
-                <webservicex>
-                    <label>Webservicex</label>
-                    <class>Magento\Directory\Model\Currency\Import\Webservicex</class>
-                </webservicex>
-            </value>
-        </param>
+        <arguments>
+            <argument name="servicesConfig" xsi:type="array">
+                <item name="webservicex" xsi:type="array">
+                    <item name="label" xsi:type="string">Webservicex</item>
+                    <item name="class" xsi:type="string">Magento\Directory\Model\Currency\Import\Webservicex</item>
+                </item>
+            </argument>
+        </arguments>
     </type>
-    <type name="Magento\Module\Updater\SetupFactory">
-        <param name="resourceTypes">
-            <value>
-                <directory_setup>Magento\Directory\Model\Resource\Setup</directory_setup>
-            </value>
-        </param>
+    <type name="Magento\Framework\Module\Updater\SetupFactory">
+        <arguments>
+            <argument name="resourceTypes" xsi:type="array">
+                <item name="directory_setup" xsi:type="string">Magento\Directory\Model\Resource\Setup</item>
+            </argument>
+        </arguments>
     </type>
 </config>

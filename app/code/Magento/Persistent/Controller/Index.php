@@ -18,18 +18,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Persistent
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Persistent\Controller;
 
 /**
  * Persistent front controller
  */
-namespace Magento\Persistent\Controller;
-
-class Index extends \Magento\App\Action\Action
+class Index extends \Magento\Framework\App\Action\Action
 {
     /**
      * Whether clear checkout session when logout
@@ -57,23 +54,21 @@ class Index extends \Magento\App\Action\Action
      *
      * @var \Magento\Persistent\Model\Observer
      */
-    protected $_persistentObserver;
+    protected $quoteManager;
 
     /**
-     * Construct
-     *
-     * @param \Magento\App\Action\Context $context
-     * @param \Magento\Persistent\Model\Observer $persistentObserver
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Persistent\Model\QuoteManager $quoteManager
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      */
     public function __construct(
-        \Magento\App\Action\Context $context,
-        \Magento\Persistent\Model\Observer $persistentObserver,
+        \Magento\Framework\App\Action\Context $context,
+        \Magento\Persistent\Model\QuoteManager $quoteManager,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession
     ) {
-        $this->_persistentObserver = $persistentObserver;
+        $this->quoteManager = $quoteManager;
         $this->_checkoutSession = $checkoutSession;
         $this->_customerSession = $customerSession;
         parent::__construct($context);
@@ -83,7 +78,7 @@ class Index extends \Magento\App\Action\Action
      * Set whether clear checkout session when logout
      *
      * @param bool $clear
-     * @return \Magento\Persistent\Controller\Index
+     * @return $this
      */
     public function setClearCheckoutSession($clear = true)
     {
@@ -99,64 +94,5 @@ class Index extends \Magento\App\Action\Action
     protected function _getHelper()
     {
         return $this->_objectManager->get('Magento\Persistent\Helper\Session');
-    }
-
-    /**
-     * Unset persistent cookie action
-     */
-    public function unsetCookieAction()
-    {
-        if ($this->_getHelper()->isPersistent()) {
-            $this->_cleanup();
-        }
-        $this->_redirect('customer/account/login');
-        return;
-    }
-
-    /**
-     * Revert all persistent data
-     *
-     * @return \Magento\Persistent\Controller\Index
-     */
-    protected function _cleanup()
-    {
-        $this->_eventManager->dispatch('persistent_session_expired');
-        $this->_customerSession
-            ->setCustomerId(null)
-            ->setCustomerGroupId(null);
-        if ($this->_clearCheckoutSession) {
-            $this->_checkoutSession->clearStorage();
-        }
-        $this->_getHelper()->getSession()->removePersistentCookie();
-        return $this;
-    }
-
-    /**
-     * Save onepage checkout method to be register
-     */
-    public function saveMethodAction()
-    {
-        if ($this->_getHelper()->isPersistent()) {
-            $this->_getHelper()->getSession()->removePersistentCookie();
-            if (!$this->_customerSession->isLoggedIn()) {
-                $this->_customerSession->setCustomerId(null)
-                    ->setCustomerGroupId(null);
-            }
-
-            $this->_persistentObserver->setQuoteGuest();
-        }
-
-        $checkoutUrl = $this->_redirect->getRefererUrl();
-        $this->getResponse()->setRedirect($checkoutUrl . (strpos($checkoutUrl, '?') ? '&' : '?') . 'register');
-    }
-
-    /**
-     * Add appropriate session message and redirect to shopping cart
-     * used for google checkout and paypal express checkout
-     */
-    public function expressCheckoutAction()
-    {
-        $this->messageManager->addNotice(__('Your shopping cart has been updated with new prices.'));
-        $this->_redirect('checkout/cart');
     }
 }

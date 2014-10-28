@@ -23,18 +23,23 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <update handle="checkout_cart_sidebar_item_renderers" />
+    <update handle="checkout_cart_sidebar_item_price_renderers" />
+    <update handle="checkout_cart_sidebar_total_renderers" />
     <referenceBlock name="head.components">
-        <block class="Magento\View\Element\Js\Components" name="checkout_page_head_components" template="Magento_Checkout::js/components.phtml"/>
+        <block class="Magento\Framework\View\Element\Js\Components" name="checkout_page_head_components" template="Magento_Checkout::js/components.phtml"/>
     </referenceBlock>
-    <referenceContainer name="header">
+    <referenceContainer name="header-wrapper">
         <block class="Magento\Checkout\Block\Cart\Sidebar" name="minicart" as="minicart" after="logo" template="cart/minicart.phtml">
-            <block class="Magento\Checkout\Block\Cart\Item\Renderer" as="simple" template="cart/sidebar/default.phtml"/>
-            <block class="Magento\Checkout\Block\Cart\Item\Renderer\Grouped" as="grouped" template="cart/sidebar/default.phtml"/>
-            <block class="Magento\Checkout\Block\Cart\Item\Renderer\Configurable" as="configurable" template="cart/sidebar/default.phtml"/>
-            <block class="Magento\Checkout\Block\Cart\Item\Renderer" as="virtual" template="cart/sidebar/default.phtml"/>
+            <block class="Magento\Framework\View\Element\RendererList" name="checkout.cart.sidebar.item.renderers" as="renderer.list" />
+            <container name="minicart.subtotal.container" as="subtotal" label="My Cart Subtotal">
+                <block name="minicart.subtotal" class="Magento\Checkout\Block\Cart\Sidebar" template="cart/subtotal.phtml"/>
+            </container>
             <container name="minicart.extra.info" as="minicart_info" label="My Cart Extra info"/>
-            <container name="topCart.extra_actions" as="extra_actions" label="My Cart Extra Actions"/>
+            <container name="topCart.extra_actions" as="extra_actions" label="My Cart Extra Actions">
+                <block class="Magento\Catalog\Block\ShortcutButtons" name="topCart.shortcut.buttons"/>
+            </container>
         </block>
     </referenceContainer>
-</layout>
+</page>

@@ -18,12 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_DesignEditor
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code;
 
 /**
@@ -45,22 +42,21 @@ class Custom extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Data\FormFactory $formFactory
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\DesignEditor\Model\Theme\Context $themeContext
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Data\FormFactory $formFactory,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\DesignEditor\Model\Theme\Context $themeContext,
         array $data = array()
     ) {
         parent::__construct($context, $registry, $formFactory, $data);
         $this->_themeContext = $themeContext;
     }
-
 
     /**
      * Create a form element with necessary controls
@@ -69,23 +65,18 @@ class Custom extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected function _prepareForm()
     {
-        /** @var \Magento\Data\Form $form */
-        $form = $this->_formFactory->create(array(
-            'data' => array(
-                'action'   => '#',
-                'method'   => 'post',
-            ))
-        );
+        /** @var \Magento\Framework\Data\Form $form */
+        $form = $this->_formFactory->create(array('data' => array('action' => '#', 'method' => 'post')));
         $this->setForm($form);
         $form->setUseContainer(true);
 
         $form->addType('css_file', 'Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\Uploader');
 
-        $form->addField($this->getFileElementName(), 'css_file', array(
-            'name'     => $this->getFileElementName(),
-            'accept'   => 'text/css',
-            'no_span'  => true
-        ));
+        $form->addField(
+            $this->getFileElementName(),
+            'css_file',
+            array('name' => $this->getFileElementName(), 'accept' => 'text/css', 'no_span' => true)
+        );
 
         parent::_prepareForm();
         return $this;
@@ -98,8 +89,10 @@ class Custom extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function getDownloadCustomCssUrl()
     {
-        return $this->getUrl('adminhtml/system_design_theme/downloadCustomCss',
-            array('theme_id' => $this->_themeContext->getEditableTheme()->getId()));
+        return $this->getUrl(
+            'adminhtml/system_design_theme/downloadCustomCss',
+            array('theme_id' => $this->_themeContext->getEditableTheme()->getId())
+        );
     }
 
     /**
@@ -109,8 +102,10 @@ class Custom extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function getUploadUrl()
     {
-        return $this->getUrl('adminhtml/system_design_editor_tools/upload',
-            array('theme_id' => $this->_themeContext->getEditableTheme()->getId()));
+        return $this->getUrl(
+            'adminhtml/system_design_editor_tools/upload',
+            array('theme_id' => $this->_themeContext->getEditableTheme()->getId())
+        );
     }
 
     /**
@@ -120,8 +115,10 @@ class Custom extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function getSaveCustomCssUrl()
     {
-        return $this->getUrl('adminhtml/system_design_editor_tools/saveCssContent',
-            array('theme_id' => $this->_themeContext->getEditableTheme()->getId()));
+        return $this->getUrl(
+            'adminhtml/system_design_editor_tools/saveCssContent',
+            array('theme_id' => $this->_themeContext->getEditableTheme()->getId())
+        );
     }
 
     /**
@@ -133,18 +130,21 @@ class Custom extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function getMediaBrowserUrl($targetElementId, $contentType)
     {
-        return $this->getUrl('adminhtml/system_design_editor_files/index', array(
-            'target_element_id'                           => $targetElementId,
-            \Magento\Theme\Helper\Storage::PARAM_THEME_ID     => $this->_themeContext->getEditableTheme()->getId(),
-            \Magento\Theme\Helper\Storage::PARAM_CONTENT_TYPE => $contentType
-        ));
+        return $this->getUrl(
+            'adminhtml/system_design_editor_files/index',
+            array(
+                'target_element_id' => $targetElementId,
+                \Magento\Theme\Helper\Storage::PARAM_THEME_ID => $this->_themeContext->getEditableTheme()->getId(),
+                \Magento\Theme\Helper\Storage::PARAM_CONTENT_TYPE => $contentType
+            )
+        );
     }
 
     /**
      * Get theme file (with custom CSS)
      *
-     * @param \Magento\View\Design\ThemeInterface $theme
-     * @return \Magento\View\Design\Theme\FileInterface|null
+     * @param \Magento\Framework\View\Design\ThemeInterface $theme
+     * @return \Magento\Framework\View\Design\Theme\FileInterface|null
      */
     protected function _getCustomCss($theme)
     {

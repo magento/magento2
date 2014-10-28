@@ -18,41 +18,35 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Reports
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Reports\Block\Adminhtml\Grid\Column\Renderer;
 
 /**
  * Adminhtml Report Customers Reviews renderer
  *
- * @category   Magento
- * @package    Magento_Reports
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Reports\Block\Adminhtml\Grid\Column\Renderer;
-
-class Customer
-    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+class Customer extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * Renders grid column
      *
-     * @param   \Magento\Object $row
-     * @return  string
+     * @param \Magento\Framework\Object $row
+     * @return string
      */
-    public function render(\Magento\Object $row)
+    public function render(\Magento\Framework\Object $row)
     {
-        $id   = $row->getCustomerId();
+        $id = $row->getCustomerId();
 
         if (!$id) {
             return __('Show Reviews');
         }
 
-        return sprintf('<a href="%s">%s</a>',
-            $this->getUrl('catalog/product_review/', array('customerId' => $id)),
+        return sprintf(
+            '<a href="%s">%s</a>',
+            $this->getUrl('review/product/', array('customerId' => $id)),
             __('Show Reviews')
         );
     }

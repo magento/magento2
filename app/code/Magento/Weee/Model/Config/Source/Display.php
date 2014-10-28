@@ -18,14 +18,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Weee
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Weee\Model\Config\Source;
 
-class Display implements \Magento\Core\Model\Option\ArrayInterface
+class Display implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * Retrieve list of available options to display FPT
@@ -35,10 +33,7 @@ class Display implements \Magento\Core\Model\Option\ArrayInterface
     public function toOptionArray()
     {
         return array(
-            array(
-                'value' => \Magento\Weee\Model\Tax::DISPLAY_INCL,
-                'label' => __('Including FPT only')
-            ),
+            array('value' => \Magento\Weee\Model\Tax::DISPLAY_INCL, 'label' => __('Including FPT only')),
             array(
                 'value' => \Magento\Weee\Model\Tax::DISPLAY_INCL_DESCR,
                 'label' => __('Including FPT and FPT description')
@@ -47,11 +42,7 @@ class Display implements \Magento\Core\Model\Option\ArrayInterface
                 'value' => \Magento\Weee\Model\Tax::DISPLAY_EXCL_DESCR_INCL,
                 'label' => __('Excluding FPT, FPT description, final price')
             ),
-            array(
-                'value' => \Magento\Weee\Model\Tax::DISPLAY_EXCL,
-                'label' => __('Excluding FPT')
-            ),
+            array('value' => \Magento\Weee\Model\Tax::DISPLAY_EXCL, 'label' => __('Excluding FPT'))
         );
     }
-
 }

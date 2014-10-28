@@ -18,27 +18,22 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Eav
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Eav\Model\Resource\Entity\Attribute\Group;
 
 /**
  * Eav attribute group resource collection
  *
- * @category    Magento
- * @package     Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Eav\Model\Resource\Entity\Attribute\Group;
-
-class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Init resource model for collection
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -49,7 +44,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Set Attribute Set Filter
      *
      * @param int $setId
-     * @return \Magento\Eav\Model\Resource\Entity\Attribute\Group\Collection
+     * @return $this
      */
     public function setAttributeSetFilter($setId)
     {
@@ -62,7 +57,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Set sort order
      *
      * @param string $direction
-     * @return \Magento\Eav\Model\Resource\Entity\Attribute\Group\Collection
+     * @return $this
      */
     public function setSortOrder($direction = self::SORT_ORDER_ASC)
     {

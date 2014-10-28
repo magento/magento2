@@ -18,22 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Catalog\Model\Resource\Product\Link\Product;
 
 /**
  * Catalog product linked products collection
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Resource\Product\Link\Product;
-
 class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
 {
     /**
@@ -69,13 +63,13 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      *
      * @var bool
      */
-    protected $_hasLinkFilter  = false;
+    protected $_hasLinkFilter = false;
 
     /**
      * Declare link model and initialize type attributes join
      *
      * @param \Magento\Catalog\Model\Product\Link $linkModel
-     * @return \Magento\Catalog\Model\Resource\Product\Link\Product\Collection
+     * @return $this
      */
     public function setLinkModel(\Magento\Catalog\Model\Product\Link $linkModel)
     {
@@ -89,7 +83,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     /**
      * Enable strong mode for inner join of linked products
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Link\Product\Collection
+     * @return $this
      */
     public function setIsStrongMode()
     {
@@ -111,13 +105,14 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * Initialize collection parent product and add limitation join
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Model\Resource\Product\Link\Product\Collection
+     * @return $this
      */
     public function setProduct(\Magento\Catalog\Model\Product $product)
     {
         $this->_product = $product;
         if ($product && $product->getId()) {
             $this->_hasLinkFilter = true;
+            $this->setStore($product->getStore());
         }
         return $this;
     }
@@ -136,7 +131,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * Exclude products from filter
      *
      * @param array $products
-     * @return \Magento\Catalog\Model\Resource\Product\Link\Product\Collection
+     * @return $this
      */
     public function addExcludeProductFilter($products)
     {
@@ -154,7 +149,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * Add products to filter
      *
      * @param array|int|string $products
-     * @return \Magento\Catalog\Model\Resource\Product\Link\Product\Collection
+     * @return $this
      */
     public function addProductFilter($products)
     {
@@ -172,7 +167,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     /**
      * Add random sorting order
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Link\Product\Collection
+     * @return $this
      */
     public function setRandomOrder()
     {
@@ -184,7 +179,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * Setting group by to exclude duplications in collection
      *
      * @param string $groupBy
-     * @return \Magento\Catalog\Model\Resource\Product\Link\Product\Collection
+     * @return $this
      */
     public function setGroupBy($groupBy = 'e.entity_id')
     {
@@ -195,7 +190,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     /**
      * Join linked products when specified link model
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Link\Product\Collection
+     * @return $this
      */
     protected function _beforeLoad()
     {
@@ -208,11 +203,11 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     /**
      * Join linked products and their attributes
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Link\Product\Collection
+     * @return $this
      */
     protected function _joinLinks()
     {
-        $select  = $this->getSelect();
+        $select = $this->getSelect();
         $adapter = $select->getAdapter();
 
         $joinCondition = array(
@@ -232,8 +227,8 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         } else if ($this->_isStrongMode) {
             $this->addFieldToFilter('entity_id', array('eq' => -1));
         }
-        if($this->_hasLinkFilter) {
-            $select->$joinType(
+        if ($this->_hasLinkFilter) {
+            $select->{$joinType}(
                 array('links' => $this->getTable('catalog_product_link')),
                 implode(' AND ', $joinCondition),
                 array('link_id')
@@ -243,13 +238,11 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         return $this;
     }
 
-
-
     /**
      * Enable sorting products by its position
      *
      * @param string $dir sort type asc|desc
-     * @return \Magento\Catalog\Model\Resource\Product\Link\Product\Collection
+     * @return $this
      */
     public function setPositionOrder($dir = self::SORT_ORDER_ASC)
     {
@@ -263,34 +256,32 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * Enable sorting products by its attribute set name
      *
      * @param string $dir sort type asc|desc
-     * @return \Magento\Catalog\Model\Resource\Product\Link\Product\Collection
+     * @return $this
      */
     public function setAttributeSetIdOrder($dir = self::SORT_ORDER_ASC)
     {
-        $this->getSelect()
-            ->joinLeft(
-                array('set' => $this->getTable('eav_attribute_set')),
-                'e.attribute_set_id = set.attribute_set_id',
-                array('attribute_set_name')
-            )
-            ->order('set.attribute_set_name ' . $dir);
+        $this->getSelect()->joinLeft(
+            array('set' => $this->getTable('eav_attribute_set')),
+            'e.attribute_set_id = set.attribute_set_id',
+            array('attribute_set_name')
+        )->order(
+            'set.attribute_set_name ' . $dir
+        );
         return $this;
     }
 
     /**
      * Join attributes
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Link\Product\Collection
+     * @return $this
      */
     public function joinAttributes()
     {
         if (!$this->getLinkModel()) {
             return $this;
         }
-        $attributes = $this->getLinkModel()->getAttributes();
 
-        $attributesByType = array();
-        foreach ($attributes as $attribute) {
+        foreach ($this->getLinkAttributes() as $attribute) {
             $table = $this->getLinkModel()->getAttributeTypeTable($attribute['type']);
             $alias = sprintf('link_attribute_%s_%s', $attribute['code'], $attribute['type']);
 
@@ -315,7 +306,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      *
      * @param string|array $attribute
      * @param string $dir
-     * @return \Magento\Catalog\Model\Resource\Product\Link\Product\Collection
+     * @return $this
      */
     public function setOrder($attribute, $dir = self::SORT_ORDER_ASC)
     {
@@ -325,5 +316,35 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
             return $this->setAttributeSetIdOrder($dir);
         }
         return parent::setOrder($attribute, $dir);
+    }
+
+    /**
+     * Get attributes of specified link type
+     *
+     * @param int $type
+     * @return array
+     */
+    public function getLinkAttributes($type = null)
+    {
+        return $this->getLinkModel()->getAttributes($type);
+    }
+
+    /**
+     * Add link attribute to filter.
+     *
+     * @param string $code
+     * @param array $condition
+     * @return $this
+     */
+    public function addLinkAttributeToFilter($code, $condition)
+    {
+        foreach ($this->getLinkAttributes() as $attribute) {
+            if ($attribute['code'] == $code) {
+                $alias = sprintf('link_attribute_%s_%s', $code, $attribute['type']);
+                $whereCondition = $this->_getConditionSql($alias.'.`value`', $condition);
+                $this->getSelect()->where($whereCondition);
+            }
+        }
+        return $this;
     }
 }

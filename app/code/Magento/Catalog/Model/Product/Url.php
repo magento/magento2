@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,36 +26,26 @@
 /**
  * Product Url model
  *
- * @category   Magento
- * @package    Magento_Catalog
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Model\Product;
 
-class Url extends \Magento\Object
-{
-    const CACHE_TAG = 'url_rewrite';
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use Magento\UrlRewrite\Model\UrlFinderInterface;
 
+class Url extends \Magento\Framework\Object
+{
     /**
      * Static URL instance
      *
-     * @var \Magento\Core\Model\Url
+     * @var \Magento\Framework\UrlInterface
      */
     protected $_url;
 
     /**
-     * Static URL Rewrite Instance
-     *
-     * @var \Magento\Core\Model\Url\Rewrite
+     * @var \Magento\Framework\Filter\FilterManager
      */
-    protected $_urlRewrite;
-
-    /**
-     * Catalog product url
-     *
-     * @var \Magento\Catalog\Helper\Product\Url
-     */
-    protected $_catalogProductUrl = null;
+    protected $filter;
 
     /**
      * Catalog category
@@ -69,64 +57,59 @@ class Url extends \Magento\Object
     /**
      * Store manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * App model
-     *
-     * @var \Magento\Core\Model\App
+     * @var \Magento\Framework\Session\SidResolverInterface
      */
-    protected $_app;
+    protected $_sidResolver;
+
+    /** @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator */
+    protected $productUrlPathGenerator;
+
+    /** @var UrlFinderInterface */
+    protected $urlFinder;
 
     /**
-     * Construct
-     *
-     * @param \Magento\Core\Model\Url\RewriteFactory $urlRewriteFactory
-     * @param \Magento\UrlInterface $url
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\UrlInterface $url
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Category $catalogCategory
-     * @param \Magento\Catalog\Helper\Product\Url $catalogProductUrl
-     * @param \Magento\Core\Model\App $app
+     * @param \Magento\Framework\Filter\FilterManager $filter
+     * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
+     * @param \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator $productUrlPathGenerator
+     * @param UrlFinderInterface $urlFinder
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Url\RewriteFactory $urlRewriteFactory,
-        \Magento\UrlInterface $url,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\UrlInterface $url,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Catalog\Helper\Category $catalogCategory,
-        \Magento\Catalog\Helper\Product\Url $catalogProductUrl,
-        \Magento\Core\Model\App $app,
+        \Magento\Framework\Filter\FilterManager $filter,
+        \Magento\Framework\Session\SidResolverInterface $sidResolver,
+        \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator $productUrlPathGenerator,
+        UrlFinderInterface $urlFinder,
         array $data = array()
     ) {
-        $this->_urlRewrite = $urlRewriteFactory->create();
+        parent::__construct($data);
         $this->_url = $url;
         $this->_storeManager = $storeManager;
         $this->_catalogCategory = $catalogCategory;
-        $this->_catalogProductUrl = $catalogProductUrl;
-        $this->_app = $app;
-        parent::__construct($data);
+        $this->filter = $filter;
+        $this->_sidResolver = $sidResolver;
+        $this->productUrlPathGenerator = $productUrlPathGenerator;
+        $this->urlFinder = $urlFinder;
     }
 
     /**
      * Retrieve URL Instance
      *
-     * @return \Magento\Core\Model\Url
+     * @return \Magento\Framework\UrlInterface
      */
     public function getUrlInstance()
     {
         return $this->_url;
-    }
-
-    /**
-     * Retrieve URL Rewrite Instance
-     *
-     * @return \Magento\Core\Model\Url\Rewrite
-     */
-    public function getUrlRewrite()
-    {
-        return $this->_urlRewrite;
     }
 
     /**
@@ -137,7 +120,7 @@ class Url extends \Magento\Object
      */
     protected function _validImage($image)
     {
-        if($image == 'no_selection') {
+        if ($image == 'no_selection') {
             $image = null;
         }
         return $image;
@@ -152,7 +135,7 @@ class Url extends \Magento\Object
      */
     public function getUrlInStore(\Magento\Catalog\Model\Product $product, $params = array())
     {
-        $params['_store_to_url'] = true;
+        $params['_scope_to_url'] = true;
         return $this->getUrl($product, $params);
     }
 
@@ -166,7 +149,7 @@ class Url extends \Magento\Object
     public function getProductUrl($product, $useSid = null)
     {
         if ($useSid === null) {
-            $useSid = $this->_app->getUseSessionInUrl();
+            $useSid = $this->_sidResolver->getUseSessionInUrl();
         }
 
         $params = array();
@@ -185,35 +168,7 @@ class Url extends \Magento\Object
      */
     public function formatUrlKey($str)
     {
-        $urlKey = preg_replace('#[^0-9a-z]+#i', '-', $this->_catalogProductUrl->format($str));
-        $urlKey = strtolower($urlKey);
-        $urlKey = trim($urlKey, '-');
-
-        return $urlKey;
-    }
-
-    /**
-     * Retrieve Product Url path (with category if exists)
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @param \Magento\Catalog\Model\Category $category
-     *
-     * @return string
-     * @throws \Magento\Core\Exception
-     */
-    public function getUrlPath($product, $category=null)
-    {
-        $path = $product->getData('url_path');
-
-        if (is_null($category)) {
-            /** @todo get default category */
-            return $path;
-        } elseif (!$category instanceof \Magento\Catalog\Model\Category) {
-            throw new \Magento\Core\Exception('Invalid category object supplied');
-        }
-
-        return $this->_catalogCategory->getCategoryUrlPath($category->getUrlPath())
-            . '/' . $path;
+        return $this->filter->translitUrl($str);
     }
 
     /**
@@ -225,32 +180,34 @@ class Url extends \Magento\Object
      */
     public function getUrl(\Magento\Catalog\Model\Product $product, $params = array())
     {
-        $routePath      = '';
-        $routeParams    = $params;
+        $routePath = '';
+        $routeParams = $params;
 
-        $storeId    = $product->getStoreId();
+        $storeId = $product->getStoreId();
         if (isset($params['_ignore_category'])) {
             unset($params['_ignore_category']);
             $categoryId = null;
         } else {
-            $categoryId = $product->getCategoryId() && !$product->getDoNotUseCategoryId()
-                ? $product->getCategoryId() : null;
+            $categoryId = $product->getCategoryId() &&
+                !$product->getDoNotUseCategoryId() ? $product->getCategoryId() : null;
         }
 
         if ($product->hasUrlDataObject()) {
             $requestPath = $product->getUrlDataObject()->getUrlRewrite();
-            $routeParams['_store'] = $product->getUrlDataObject()->getStoreId();
+            $routeParams['_scope'] = $product->getUrlDataObject()->getStoreId();
         } else {
             $requestPath = $product->getRequestPath();
             if (empty($requestPath) && $requestPath !== false) {
-                $idPath = sprintf('product/%d', $product->getEntityId());
+                $filterData = [
+                    UrlRewrite::ENTITY_ID => $product->getId(),
+                    UrlRewrite::ENTITY_TYPE => \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator::ENTITY_TYPE,
+                    UrlRewrite::STORE_ID => $storeId,
+                ];
                 if ($categoryId) {
-                    $idPath = sprintf('%s/%d', $idPath, $categoryId);
+                    $filterData[UrlRewrite::METADATA]['category_id'] = $categoryId;
                 }
-                $rewrite = $this->getUrlRewrite();
-                $rewrite->setStoreId($storeId)
-                    ->loadByIdPath($idPath);
-                if ($rewrite->getId()) {
+                $rewrite = $this->urlFinder->findOneByData($filterData);
+                if ($rewrite) {
                     $requestPath = $rewrite->getRequestPath();
                     $product->setRequestPath($requestPath);
                 } else {
@@ -259,20 +216,20 @@ class Url extends \Magento\Object
             }
         }
 
-        if (isset($routeParams['_store'])) {
-            $storeId = $this->_storeManager->getStore($routeParams['_store'])->getId();
+        if (isset($routeParams['_scope'])) {
+            $storeId = $this->_storeManager->getStore($routeParams['_scope'])->getId();
         }
 
         if ($storeId != $this->_storeManager->getStore()->getId()) {
-            $routeParams['_store_to_url'] = true;
+            $routeParams['_scope_to_url'] = true;
         }
 
         if (!empty($requestPath)) {
             $routeParams['_direct'] = $requestPath;
         } else {
             $routePath = 'catalog/product/view';
-            $routeParams['id']  = $product->getId();
-            $routeParams['s']   = $product->getUrlKey();
+            $routeParams['id'] = $product->getId();
+            $routeParams['s'] = $product->getUrlKey();
             if ($categoryId) {
                 $routeParams['category'] = $categoryId;
             }
@@ -283,7 +240,6 @@ class Url extends \Magento\Object
             $routeParams['_query'] = array();
         }
 
-        return $this->getUrlInstance()->setStore($storeId)
-            ->getUrl($routePath, $routeParams);
+        return $this->getUrlInstance()->setScope($storeId)->getUrl($routePath, $routeParams);
     }
 }

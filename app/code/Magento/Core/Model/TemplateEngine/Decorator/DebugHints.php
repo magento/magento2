@@ -25,10 +25,10 @@
  */
 namespace Magento\Core\Model\TemplateEngine\Decorator;
 
-class DebugHints implements \Magento\View\TemplateEngineInterface
+class DebugHints implements \Magento\Framework\View\TemplateEngineInterface
 {
     /**
-     * @var \Magento\View\TemplateEngineInterface
+     * @var \Magento\Framework\View\TemplateEngineInterface
      */
     private $_subject;
 
@@ -38,13 +38,11 @@ class DebugHints implements \Magento\View\TemplateEngineInterface
     private $_showBlockHints;
 
     /**
-     * @param \Magento\View\TemplateEngineInterface $subject
+     * @param \Magento\Framework\View\TemplateEngineInterface $subject
      * @param bool $showBlockHints Whether to include block into the debugging information or not
      */
-    public function __construct(
-        \Magento\View\TemplateEngineInterface $subject,
-        $showBlockHints
-    ) {
+    public function __construct(\Magento\Framework\View\TemplateEngineInterface $subject, $showBlockHints)
+    {
         $this->_subject = $subject;
         $this->_showBlockHints = $showBlockHints;
     }
@@ -54,7 +52,7 @@ class DebugHints implements \Magento\View\TemplateEngineInterface
      *
      * {@inheritdoc}
      */
-    public function render(\Magento\View\Element\BlockInterface $block, $templateFile, array $dictionary = array())
+    public function render(\Magento\Framework\View\Element\BlockInterface $block, $templateFile, array $dictionary = array())
     {
         $result = $this->_subject->render($block, $templateFile, $dictionary);
         if ($this->_showBlockHints) {
@@ -74,10 +72,8 @@ class DebugHints implements \Magento\View\TemplateEngineInterface
     protected function _renderTemplateHints($blockHtml, $templateFile)
     {
         return <<<HTML
-<div style="position:relative; border:1px dotted red; margin:6px 2px; padding:18px 2px 2px 2px; zoom:1;">
-<div style="position:absolute; left:0; top:0; padding:2px 5px; background:red; color:white; font:normal 11px Arial;
-text-align:left !important; z-index:998;" onmouseover="this.style.zIndex='999'"
-onmouseout="this.style.zIndex='998'" title="{$templateFile}">{$templateFile}</div>
+<div class="debugging-hints" style="position: relative; border: 1px dotted red; margin: 6px 2px; padding: 18px 2px 2px 2px;">
+<div class="debugging-hint-template-file" style="position: absolute; top: 0; padding: 2px 5px; font: normal 11px Arial; background: red; left: 0; color: white; white-space: nowrap;" onmouseover="this.style.zIndex = 999;" onmouseout="this.style.zIndex = 'auto';" title="{$templateFile}">{$templateFile}</div>
 {$blockHtml}
 </div>
 HTML;
@@ -87,16 +83,14 @@ HTML;
      * Insert block debugging hints into the rendered block contents
      *
      * @param string $blockHtml
-     * @param \Magento\View\Element\BlockInterface $block
+     * @param \Magento\Framework\View\Element\BlockInterface $block
      * @return string
      */
-    protected function _renderBlockHints($blockHtml, \Magento\View\Element\BlockInterface $block)
+    protected function _renderBlockHints($blockHtml, \Magento\Framework\View\Element\BlockInterface $block)
     {
         $blockClass = get_class($block);
         return <<<HTML
-<div style="position:absolute; right:0; top:0; padding:2px 5px; background:red; color:blue; font:normal 11px Arial;
-text-align:left !important; z-index:998;" onmouseover="this.style.zIndex='999'" onmouseout="this.style.zIndex='998'"
-title="{$blockClass}">{$blockClass}</div>
+<div class="debugging-hint-block-class" style="position: absolute; top: 0; padding: 2px 5px; font: normal 11px Arial; background: red; right: 0; color: blue; white-space: nowrap;" onmouseover="this.style.zIndex = 999;" onmouseout="this.style.zIndex = 'auto';" title="{$blockClass}">{$blockClass}</div>
 {$blockHtml}
 HTML;
     }

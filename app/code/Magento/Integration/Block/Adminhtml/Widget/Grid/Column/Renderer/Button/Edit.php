@@ -23,10 +23,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Button;
 
-use Magento\Object;
+use Magento\Framework\Object;
 use Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Button;
 
 class Edit extends Button
@@ -34,18 +33,18 @@ class Edit extends Button
     /**
      * Return 'onclick' action for the button (redirect to the integration edit page).
      *
-     * @param \Magento\Object $row
+     * @param \Magento\Framework\Object $row
      * @return string
      */
     protected function _getOnclickAttribute(Object $row)
     {
-        return sprintf("window.location.href='%s'", $this->getUrl('*/*/edit', ['id' => $row->getId()]));
+        return sprintf("window.location.href='%s'", $this->getUrl('*/*/edit', array('id' => $row->getId())));
     }
 
     /**
      * Get title depending on whether element is disabled or not.
      *
-     * @param \Magento\Object $row
+     * @param \Magento\Framework\Object $row
      * @return string
      */
     protected function _getTitleAttribute(Object $row)
@@ -56,14 +55,13 @@ class Edit extends Button
     /**
      * Get the icon on the grid according to the integration type
      *
-     * @param \Magento\Object $row
-     * return string
+     * @param \Magento\Framework\Object $row
+     * @return string
      */
     public function _getClassAttribute(Object $row)
     {
         $class = $this->_isConfigBasedIntegration($row) ? 'info' : 'edit';
 
         return 'action ' . $class;
-
     }
 }

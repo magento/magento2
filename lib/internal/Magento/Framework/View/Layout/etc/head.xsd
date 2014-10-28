@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:complexType name="linkType">
+        <xs:attribute name="src" type="xs:string" use="required"/>
+        <xs:attribute name="defer" type="xs:string"/>
+        <xs:attribute name="ie_condition" type="xs:string"/>
+        <xs:attribute name="charset" type="xs:string"/>
+        <xs:attribute name="hreflang" type="xs:string"/>
+        <xs:attribute name="media" type="xs:string"/>
+        <xs:attribute name="rel" type="xs:string"/>
+        <xs:attribute name="rev" type="xs:string"/>
+        <xs:attribute name="sizes" type="xs:string"/>
+        <xs:attribute name="target" type="xs:string"/>
+        <xs:attribute name="type" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="metaType">
+        <xs:attribute name="content" type="xs:string" use="required"/>
+        <xs:attribute name="charset" type="xs:string" />
+        <xs:attribute name="http-equiv" type="xs:string"/>
+        <xs:attribute name="name" type="xs:string"/>
+        <xs:attribute name="scheme" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="scriptType">
+        <xs:attribute name="src" type="xs:string" use="required"/>
+        <xs:attribute name="defer" type="xs:string"/>
+        <xs:attribute name="ie_condition" type="xs:string"/>
+        <xs:attribute name="async" type="xs:string"/>
+        <xs:attribute name="charset" type="xs:string"/>
+        <xs:attribute name="type" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="headType">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="title" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="css" type="linkType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="link" type="linkType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="meta" type="metaType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="script" type="scriptType" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

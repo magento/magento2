@@ -19,8 +19,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Paypal
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
@@ -40,5 +38,24 @@
             <label>PayPal</label>
         </group>
     </groups>
+    <methods>
+        <method name="paypal_express">
+            <support_recurring_payment>1</support_recurring_payment>
+        </method>
+        <method name="paypal_direct">
+            <allow_multiple_address>1</allow_multiple_address>
+            <allow_multiple_with_3dsecure>1</allow_multiple_with_3dsecure>
+        </method>
+        <method name="paypal_billing_agreement">
+            <allow_multiple_address>1</allow_multiple_address>
+        </method>
+        <method name="payflow_express">
+            <support_recurring_payment>1</support_recurring_payment>        
+        </method>
+        <method name="payflowpro">
+            <allow_multiple_address>1</allow_multiple_address>
+            <allow_multiple_with_3dsecure>1</allow_multiple_with_3dsecure>
+        </method>
+    </methods>
 </payment>
 

@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,39 +27,41 @@
  */
 namespace Magento\Backend\Model\Config\Backend\Currency;
 
-class Cron extends \Magento\Core\Model\Config\Value
+class Cron extends \Magento\Framework\App\Config\Value
 {
-    const CRON_STRING_PATH = 'crontab/jobs/currency_rates_update/schedule/cron_expr';
+    const CRON_STRING_PATH = 'crontab/default/jobs/currency_rates_update/schedule/cron_expr';
 
     /**
-     * @var \Magento\Core\Model\Config\ValueFactory
+     * @var \Magento\Framework\App\Config\ValueFactory
      */
     protected $_configValueFactory;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Config $config
-     * @param \Magento\Core\Model\Config\ValueFactory $configValueFactory
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Config\ValueFactory $configValueFactory
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Config $config,
-        \Magento\Core\Model\Config\ValueFactory $configValueFactory,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\App\Config\ValueFactory $configValueFactory,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_configValueFactory = $configValueFactory;
-        parent::__construct($context, $registry, $storeManager, $config, $resource, $resourceCollection, $data);
+        parent::__construct($context, $registry, $config, $resource, $resourceCollection, $data);
     }
 
+    /**
+     * @return void
+     * @throws \Exception
+     */
     protected function _afterSave()
     {
         $time = $this->getData('groups/import/fields/time/value');
@@ -71,25 +71,22 @@ class Cron extends \Magento\Core\Model\Config\Value
         $frequencyMonthly = \Magento\Cron\Model\Config\Source\Frequency::CRON_MONTHLY;
 
         $cronExprArray = array(
-            intval($time[1]),                                   # Minute
-            intval($time[0]),                                   # Hour
-            ($frequency == $frequencyMonthly) ? '1' : '*',       # Day of the Month
-            '*',                                                # Month of the Year
-            ($frequency == $frequencyWeekly) ? '1' : '*',        # Day of the Week
+            intval($time[1]),                                 # Minute
+            intval($time[0]),                                 # Hour
+            $frequency == $frequencyMonthly ? '1' : '*',      # Day of the Month
+            '*',                                              # Month of the Year
+            $frequency == $frequencyWeekly ? '1' : '*'        # Day of the Week
         );
 
         $cronExprString = join(' ', $cronExprArray);
 
         try {
-            /** @var $configValue \Magento\Core\Model\Config\Value */
+            /** @var $configValue \Magento\Framework\App\Config\ValueInterface */
             $configValue = $this->_configValueFactory->create();
             $configValue->load(self::CRON_STRING_PATH, 'path');
-            $configValue->setValue($cronExprString)
-                ->setPath(self::CRON_STRING_PATH)
-                ->save();
+            $configValue->setValue($cronExprString)->setPath(self::CRON_STRING_PATH)->save();
         } catch (\Exception $e) {
             throw new \Exception(__('We can\'t save the Cron expression.'));
         }
     }
-
 }

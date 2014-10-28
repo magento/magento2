@@ -18,40 +18,37 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
- 
+
 /**
  * Catalog breadcrumbs
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block;
 
-class Breadcrumbs extends \Magento\View\Element\Template
+use Magento\Catalog\Helper\Data;
+use Magento\Store\Model\Store;
+use Magento\Framework\View\Element\Template\Context;
+
+class Breadcrumbs extends \Magento\Framework\View\Element\Template
 {
     /**
      * Catalog data
      *
-     * @var \Magento\Catalog\Helper\Data
+     * @var Data
      */
     protected $_catalogData = null;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Catalog\Helper\Data $catalogData
+     * @param Context $context
+     * @param Data $catalogData
      * @param array $data
      */
-    public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Catalog\Helper\Data $catalogData,
-        array $data = array()
-    ) {
+    public function __construct(Context $context, Data $catalogData, array $data = array())
+    {
         $this->_catalogData = $catalogData;
         parent::__construct($context, $data);
     }
@@ -59,12 +56,12 @@ class Breadcrumbs extends \Magento\View\Element\Template
     /**
      * Retrieve HTML title value separator (with space)
      *
-     * @param mixed $store
+     * @param null|string|bool|int|Store $store
      * @return string
      */
     public function getTitleSeparator($store = null)
     {
-        $separator = (string)$this->_storeConfig->getConfig('catalog/seo/title_separator', $store);
+        $separator = (string)$this->_scopeConfig->getValue('catalog/seo/title_separator', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
         return ' ' . $separator . ' ';
     }
 
@@ -76,23 +73,24 @@ class Breadcrumbs extends \Magento\View\Element\Template
     protected function _prepareLayout()
     {
         if ($breadcrumbsBlock = $this->getLayout()->getBlock('breadcrumbs')) {
-            $breadcrumbsBlock->addCrumb('home', array(
-                'label'=>__('Home'),
-                'title'=>__('Go to Home Page'),
-                'link'=>$this->_storeManager->getStore()->getBaseUrl()
-            ));
+            $breadcrumbsBlock->addCrumb(
+                'home',
+                array(
+                    'label' => __('Home'),
+                    'title' => __('Go to Home Page'),
+                    'link' => $this->_storeManager->getStore()->getBaseUrl()
+                )
+            );
 
             $title = array();
-            $path  = $this->_catalogData->getBreadcrumbPath();
+            $path = $this->_catalogData->getBreadcrumbPath();
 
             foreach ($path as $name => $breadcrumb) {
                 $breadcrumbsBlock->addCrumb($name, $breadcrumb);
                 $title[] = $breadcrumb['label'];
             }
 
-            if ($headBlock = $this->getLayout()->getBlock('head')) {
-                $headBlock->setTitle(join($this->getTitleSeparator(), array_reverse($title)));
-            }
+            $this->pageConfig->setTitle(join($this->getTitleSeparator(), array_reverse($title)));
         }
         return parent::_prepareLayout();
     }

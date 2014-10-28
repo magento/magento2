@@ -23,19 +23,17 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <preference for="Magento\Captcha\Block\Captcha\DefaultCaptcha" type="Magento\Captcha\Block\Adminhtml\Captcha\DefaultCaptcha" />
     <type name="Magento\Captcha\Model\DefaultModel">
-        <param name="session">
-            <instance type="Magento\Backend\Model\Auth\Session" />
-        </param>
-        <param name="captchaData">
-            <instance type="Magento\Captcha\Helper\Adminhtml\Data" />
-        </param>
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Backend\Model\Auth\Session</argument>
+            <argument name="captchaData" xsi:type="object">Magento\Captcha\Helper\Adminhtml\Data</argument>
+        </arguments>
     </type>
     <type name="Magento\Captcha\Model\Observer">
-        <param name="session">
-            <instance type="Magento\Backend\Model\Session" />
-        </param>
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Backend\Model\Session</argument>
+        </arguments>
     </type>
 </config>

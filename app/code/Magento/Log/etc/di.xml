@@ -23,19 +23,10 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <type name="Magento\Log\Model\Shell\Command\Clean">
-        <param name="storeManager">
-            <instance type="Magento\Core\Model\StoreManager\Proxy" />
-        </param>
-    </type>
-    <type name="Magento\Log\Model\Visitor">
-        <param name="ignoredUserAgents">
-            <value>
-                <google1>Googlebot/1.0 (googlebot@googlebot.com http://googlebot.com/)</google1>
-                <google2>Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)</google2>
-                <google3>Googlebot/2.1 (+http://www.googlebot.com/bot.html)</google3>
-            </value>
-        </param>
+        <arguments>
+            <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManager\Proxy</argument>
+        </arguments>
     </type>
 </config>

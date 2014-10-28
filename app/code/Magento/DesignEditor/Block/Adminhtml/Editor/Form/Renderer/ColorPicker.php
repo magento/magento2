@@ -18,19 +18,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_DesignEditor
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer;
 
 /**
  * Color-picker form element renderer
  */
-namespace Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer;
-
-class ColorPicker
-    extends \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\Recursive
+class ColorPicker extends \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\Recursive
 {
     /**
      * Set of templates to render
@@ -38,7 +34,7 @@ class ColorPicker
      * Upper is rendered first and is inserted into next using <?php echo $this->getHtml() ?>
      * Templates used are based fieldset/element.phtml but split into several templates
      *
-     * @var array
+     * @var string[]
      */
     protected $_templates = array(
         'Magento_DesignEditor::editor/form/renderer/element/input.phtml',
@@ -52,7 +48,7 @@ class ColorPicker
      *
      * Actually it will be added to a field wrapper
      *
-     * @return array
+     * @return string[]
      */
     public function getFieldClass()
     {

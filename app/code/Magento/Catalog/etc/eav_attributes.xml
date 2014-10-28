@@ -23,22 +23,17 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Eav/etc/eav_attributes.xsd">
     <entity type="catalog_product">
         <attribute code="sku">
             <field code="is_global" locked="true" />
             <field code="is_unique" locked="true" />
         </attribute>
-        <attribute code="url_key">
-            <field code="is_unique" locked="true" />
-        </attribute>
         <attribute code="status">
-            <field code="is_configurable" locked="true" />
             <field code="is_filterable" locked="true" />
             <field code="is_filterable_in_search" locked="true" />
         </attribute>
         <attribute code="visibility">
-            <field code="is_configurable" locked="true" />
             <field code="is_filterable" locked="true" />
             <field code="is_filterable_in_search" locked="true" />
         </attribute>

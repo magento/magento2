@@ -1,0 +1,67 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+
+<?php if ($websites = $this->getWebsites()): ?>
+<div class="field field-store-switcher">
+    <label class="label" for="store_switcher"><?php echo __('Choose Store View:') ?></label>
+    <div class="control">
+        <select name="store_switcher" id="store_switcher">
+            <?php foreach ($websites as $website): ?>
+                <?php $showWebsite=false; ?>
+                <?php foreach ($website->getGroups() as $group): ?>
+                    <?php $showGroup=false; ?>
+                    <?php foreach ($this->getStores($group) as $store): ?>
+                        <?php if ($showWebsite == false): ?>
+                            <?php $showWebsite = true; ?>
+                            <optgroup label="<?php echo $website->getName() ?>"></optgroup>
+                        <?php endif; ?>
+                        <?php if ($showGroup == false): ?>
+                            <?php $showGroup = true; ?>
+                            <optgroup label="&nbsp;&nbsp;&nbsp;<?php echo $group->getName() ?>">
+                        <?php endif; ?>
+                        <option value="<?php echo $store->getId() ?>"<?php if($this->getStoreId() == $store->getId()): ?> selected="selected"<?php endif; ?>>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $store->getName() ?></option>
+                    <?php endforeach; ?>
+                    <?php if ($showGroup): ?>
+                        </optgroup>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            <?php endforeach; ?>
+        </select>
+    </div>
+    <?php echo $this->getHintHtml() ?>
+</div>
+<script type="text/javascript">
+require(['prototype'], function(){
+
+//<![CDATA[
+Event.observe($('store_switcher'), 'change', function(event) {
+    var element = Event.element(event);
+    $('preview_store_id').value = element.value;
+});
+//]]>
+
+});
+</script>
+<?php endif; ?>

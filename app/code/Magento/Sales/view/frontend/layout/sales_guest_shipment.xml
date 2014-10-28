@@ -23,22 +23,14 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <referenceBlock name="root">
-        <action method="setTemplate">
-            <argument name="template" xsi:type="string">1column.phtml</argument>
-        </action>
-    </referenceBlock>
+<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <referenceContainer name="content">
         <block class="Magento\Sales\Block\Order\Info" as="info" name="sales.order.info">
-            <block class="Magento\Sales\Block\Order\Info\Buttons" as="buttons" name="sales.order.info.buttons"/>
-        </block>
-        <block class="Magento\Sales\Block\Order\Shipment" name="sales.order.shipment" after="sales.order.info">
-            <block class="Magento\Sales\Block\Order\Shipment\Items" name="shipment_items" template="order/shipment/items.phtml">
-                <block class="Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer" as="default" template="order/shipment/items/renderer/default.phtml"/>
-                <block class="Magento\Sales\Block\Order\Comments" name="shipment_comments" template="order/comments.phtml"/>
-            </block>
+            <block class="Magento\Sales\Block\Order\Info\Buttons" as="buttons" name="sales.order.info.buttons" cacheable="false"/>
         </block>
     </referenceContainer>
+    <referenceContainer name="sales.order.info.buttons">
+        <block class="Magento\Sales\Block\Order\Info\Buttons\Rss" as="buttons.rss" name="sales.order.info.buttons.rss" cacheable="false"/>
+    </referenceContainer>
     <update handle="sales_order_guest_info_links"/>
-</layout>
+</page>

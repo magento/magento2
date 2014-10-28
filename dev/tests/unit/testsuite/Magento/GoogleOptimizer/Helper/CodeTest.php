@@ -40,9 +40,10 @@ class CodeTest extends \PHPUnit_Framework_TestCase
         $this->_codeModelMock = $this->getMock('Magento\GoogleOptimizer\Model\Code', array(), array(), '', false);
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_helper = $objectManagerHelper->getObject('Magento\GoogleOptimizer\Helper\Code', array(
-            'code' => $this->_codeModelMock,
-        ));
+        $this->_helper = $objectManagerHelper->getObject(
+            'Magento\GoogleOptimizer\Helper\Code',
+            array('code' => $this->_codeModelMock)
+        );
     }
 
     public function testLoadingCodeForCategoryEntity()
@@ -54,14 +55,23 @@ class CodeTest extends \PHPUnit_Framework_TestCase
 
         $categoryMock->expects($this->exactly(2))->method('getId')->will($this->returnValue($categoryId));
         $categoryMock->expects($this->once())->method('getStoreId')->will($this->returnValue($storeId));
-        $this->_codeModelMock->expects($this->once())->method('loadByEntityIdAndType')->with(
+        $this->_codeModelMock->expects(
+            $this->once()
+        )->method(
+            'loadByEntityIdAndType'
+        )->with(
             $categoryId,
             \Magento\GoogleOptimizer\Model\Code::ENTITY_TYPE_CATEGORY,
             $storeId
         );
 
-        $this->assertEquals($this->_codeModelMock, $this->_helper->getCodeObjectByEntity($categoryMock,
-            \Magento\GoogleOptimizer\Model\Code::ENTITY_TYPE_CATEGORY));
+        $this->assertEquals(
+            $this->_codeModelMock,
+            $this->_helper->getCodeObjectByEntity(
+                $categoryMock,
+                \Magento\GoogleOptimizer\Model\Code::ENTITY_TYPE_CATEGORY
+            )
+        );
     }
 
     public function testLoadingCodeForProductEntity()
@@ -73,14 +83,23 @@ class CodeTest extends \PHPUnit_Framework_TestCase
 
         $productMock->expects($this->exactly(2))->method('getId')->will($this->returnValue($categoryId));
         $productMock->expects($this->once())->method('getStoreId')->will($this->returnValue($storeId));
-        $this->_codeModelMock->expects($this->once())->method('loadByEntityIdAndType')->with(
+        $this->_codeModelMock->expects(
+            $this->once()
+        )->method(
+            'loadByEntityIdAndType'
+        )->with(
             $categoryId,
             \Magento\GoogleOptimizer\Model\Code::ENTITY_TYPE_PRODUCT,
             $storeId
         );
 
-        $this->assertEquals($this->_codeModelMock, $this->_helper->getCodeObjectByEntity($productMock,
-            \Magento\GoogleOptimizer\Model\Code::ENTITY_TYPE_PRODUCT));
+        $this->assertEquals(
+            $this->_codeModelMock,
+            $this->_helper->getCodeObjectByEntity(
+                $productMock,
+                \Magento\GoogleOptimizer\Model\Code::ENTITY_TYPE_PRODUCT
+            )
+        );
     }
 
     public function testLoadingCodeForPageEntity()
@@ -90,13 +109,19 @@ class CodeTest extends \PHPUnit_Framework_TestCase
         $categoryId = 1;
 
         $pageMock->expects($this->exactly(2))->method('getId')->will($this->returnValue($categoryId));
-        $this->_codeModelMock->expects($this->once())->method('loadByEntityIdAndType')->with(
+        $this->_codeModelMock->expects(
+            $this->once()
+        )->method(
+            'loadByEntityIdAndType'
+        )->with(
             $categoryId,
             \Magento\GoogleOptimizer\Model\Code::ENTITY_TYPE_PAGE
         );
 
-        $this->assertEquals($this->_codeModelMock, $this->_helper->getCodeObjectByEntity($pageMock,
-            \Magento\GoogleOptimizer\Model\Code::ENTITY_TYPE_PAGE));
+        $this->assertEquals(
+            $this->_codeModelMock,
+            $this->_helper->getCodeObjectByEntity($pageMock, \Magento\GoogleOptimizer\Model\Code::ENTITY_TYPE_PAGE)
+        );
     }
 
     /**
@@ -112,8 +137,10 @@ class CodeTest extends \PHPUnit_Framework_TestCase
         $entity->expects($this->exactly(2))->method('getId')->will($this->returnValue($entityId));
         $this->_codeModelMock->expects($this->never())->method('loadByEntityIdAndType');
 
-        $this->assertEquals($this->_codeModelMock, $this->_helper->getCodeObjectByEntity($entity,
-            \Magento\GoogleOptimizer\Model\Code::ENTITY_TYPE_PAGE));
+        $this->assertEquals(
+            $this->_codeModelMock,
+            $this->_helper->getCodeObjectByEntity($entity, \Magento\GoogleOptimizer\Model\Code::ENTITY_TYPE_PAGE)
+        );
     }
 
     /**
@@ -129,7 +156,9 @@ class CodeTest extends \PHPUnit_Framework_TestCase
         $entity->expects($this->exactly(1))->method('getId')->will($this->returnValue($entityId));
         $this->_codeModelMock->expects($this->never())->method('loadByEntityIdAndType');
 
-        $this->assertEquals($this->_codeModelMock, $this->_helper->getCodeObjectByEntity($entity,
-            \Magento\GoogleOptimizer\Model\Code::ENTITY_TYPE_PAGE));
+        $this->assertEquals(
+            $this->_codeModelMock,
+            $this->_helper->getCodeObjectByEntity($entity, \Magento\GoogleOptimizer\Model\Code::ENTITY_TYPE_PAGE)
+        );
     }
 }

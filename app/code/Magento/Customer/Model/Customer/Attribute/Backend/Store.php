@@ -18,37 +18,29 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Customer\Model\Customer\Attribute\Backend;
 
 /**
  * Store attribute backend
  *
- * @category   Magento
- * @package    Magento_Customer
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Customer\Model\Customer\Attribute\Backend;
-
-class Store
-    extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+class Store extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @param \Magento\Logger $logger
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      */
-    public function __construct(
-        \Magento\Logger $logger,
-        \Magento\Core\Model\StoreManagerInterface $storeManager
-    ) {
+    public function __construct(\Magento\Framework\Logger $logger, \Magento\Framework\StoreManagerInterface $storeManager)
+    {
         $this->_storeManager = $storeManager;
         parent::__construct($logger);
     }
@@ -56,8 +48,8 @@ class Store
     /**
      * Before save
      *
-     * @param \Magento\Object $object
-     * @return \Magento\Customer\Model\Customer\Attribute\Backend\Store
+     * @param \Magento\Framework\Object $object
+     * @return $this
      */
     public function beforeSave($object)
     {

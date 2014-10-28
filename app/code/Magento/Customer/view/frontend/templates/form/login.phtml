@@ -1,0 +1,66 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/** @var \Magento\Customer\Block\Form\Login $this */
+?>
+<?php
+/**
+ * Customer login form template
+ *
+ * @see \Magento\Customer\Block\Form\Login
+ * @var $this \Magento\Customer\Block\Form\Login
+ */
+?>
+<div class="block customer login">
+    <div class="title"><strong><?php echo __('Registered Customers') ?></strong></div>
+    <div class="content">
+        <form class="form login"
+              action="<?php echo $this->getPostActionUrl() ?>"
+              method="post"
+              id="login-form"
+              data-mage-init='{"validation":{}}'>
+            <?php echo $this->getBlockHtml('formkey'); ?>
+            <fieldset class="fieldset login" data-hasrequired="<?php echo __('* Required Fields') ?>">
+                <div class="field note"><?php echo __('If you have an account with us, log in using your email address.') ?></div>
+                <div class="field email required">
+                    <label class="label" for="email"><span><?php echo __('Email Address') ?></span></label>
+                    <div class="control">
+                        <input name="login[username]" value="<?php echo $this->escapeHtml($this->getUsername()) ?>" id="email" type="email" class="input-text" title="<?php echo __('Email Address') ?>" data-validate="{required:true, 'validate-email':true}">
+                    </div>
+                </div>
+                <div class="field password required">
+                    <label for="pass" class="label"><span><?php echo __('Password') ?></span></label>
+                    <div class="control">
+                        <input name="login[password]" type="password" class="input-text" id="pass" title="<?php echo __('Password') ?>" data-validate="{required:true, 'validate-password':true}">
+                    </div>
+                </div>
+                <?php echo $this->getChildHtml('form_additional_info'); ?>
+                <div class="actions-toolbar">
+                    <div class="primary"><button type="submit" class="action login primary" name="send" id="send2"><span><?php echo __('Login') ?></span></button></div>
+                    <div class="secondary"><a class="action remind" href="<?php echo $this->getForgotPasswordUrl() ?>"><span><?php echo __('Forgot Your Password?') ?></span></a></div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>

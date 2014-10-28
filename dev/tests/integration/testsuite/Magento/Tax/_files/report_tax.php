@@ -26,7 +26,8 @@
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\Tax\Model\Resource\Report\Tax $reportResource */
 $reportResource = $objectManager->create('Magento\Tax\Model\Resource\Report\Tax');
-$reportResource->beginTransaction(); // prevent table truncation by incrementing the transaction nesting level counter
+$reportResource->beginTransaction();
+// prevent table truncation by incrementing the transaction nesting level counter
 try {
     $reportResource->aggregate();
     $reportResource->commit();

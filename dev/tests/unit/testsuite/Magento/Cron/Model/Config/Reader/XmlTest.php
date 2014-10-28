@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Cron
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -37,18 +35,18 @@ class XmlTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $fileResolver = $this->getMockBuilder('Magento\Core\Model\Config\FileResolver')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $converter = $this->getMockBuilder('Magento\Cron\Model\Config\Converter\Xml')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $schema = $this->getMockBuilder('Magento\Cron\Model\Config\SchemaLocator')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $validator = $this->getMockBuilder('\Magento\Config\ValidationStateInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $fileResolver = $this->getMockBuilder(
+            'Magento\Framework\App\Config\FileResolver'
+        )->disableOriginalConstructor()->getMock();
+        $converter = $this->getMockBuilder(
+            'Magento\Cron\Model\Config\Converter\Xml'
+        )->disableOriginalConstructor()->getMock();
+        $schema = $this->getMockBuilder(
+            'Magento\Cron\Model\Config\SchemaLocator'
+        )->disableOriginalConstructor()->getMock();
+        $validator = $this->getMockBuilder(
+            '\Magento\Framework\Config\ValidationStateInterface'
+        )->disableOriginalConstructor()->getMock();
         $this->_xmlReader = new \Magento\Cron\Model\Config\Reader\Xml($fileResolver, $converter, $schema, $validator);
     }
 

@@ -18,42 +18,40 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
 /**
  * Backend grid item renderer number
  *
- * @category   Magento
- * @package    Magento_Backend
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
-
-class Number
-    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+class Number extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
+    /**
+     * @var int
+     */
     protected $_defaultWidth = 100;
 
     /**
      * Returns value of the row
      *
-     * @param \Magento\Object $row
+     * @param \Magento\Framework\Object $row
      * @return mixed|string
      */
-    protected function _getValue(\Magento\Object $row)
+    protected function _getValue(\Magento\Framework\Object $row)
     {
         $data = parent::_getValue($row);
         if (!is_null($data)) {
             $value = $data * 1;
-            $sign = (bool)(int)$this->getColumn()->getShowNumberSign() && ($value > 0) ? '+' : '';
+            $sign = (bool)(int)$this->getColumn()->getShowNumberSign() && $value > 0 ? '+' : '';
             if ($sign) {
                 $value = $sign . $value;
             }
-            return $value ? $value : '0'; // fixed for showing zero in grid
+            // fixed for showing zero in grid
+            return $value ? $value : '0';
         }
         return $this->getColumn()->getDefault();
     }
@@ -67,5 +65,4 @@ class Number
     {
         return parent::renderCss() . ' col-number';
     }
-
 }

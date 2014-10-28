@@ -23,58 +23,54 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <type name="Magento\Cms\Model\Wysiwyg\Config">
-        <param name="windowSize">
-            <value>
-                <height type="int">600</height>
-                <width type="int">1000</width>
-            </value>
-        </param>
+        <arguments>
+            <argument name="windowSize" xsi:type="array">
+                <item name="height" xsi:type="number">600</item>
+                <item name="width" xsi:type="number">1000</item>
+            </argument>
+        </arguments>
     </type>
     <type name="Magento\Cms\Model\Wysiwyg\Images\Storage">
-        <param name="resizeParameters">
-            <value>
-                <height type="int">75</height>
-                <width type="int">100</width>
-            </value>
-        </param>
-        <param name="extensions">
-            <value>
-                <allowed>
-                    <jpg type="int">1</jpg>
-                    <jpeg type="int">1</jpeg>
-                    <png type="int">1</png>
-                    <gif type="int">1</gif>
-                </allowed>
-                <image_allowed>
-                    <jpg type="int">1</jpg>
-                    <jpeg type="int">1</jpeg>
-                    <png type="int">1</png>
-                    <gif type="int">1</gif>
-                </image_allowed>
-                <media_allowed>
-                    <flv type="int">1</flv>
-                    <swf type="int">1</swf>
-                    <avi type="int">1</avi>
-                    <mov type="int">1</mov>
-                    <rm type="int">1</rm>
-                    <wmv type="int">1</wmv>
-                </media_allowed>
-            </value>
-        </param>
-        <param name="dirs">
-            <value>
-                <exclude />
-                <include />
-            </value>
-        </param>
+        <arguments>
+            <argument name="resizeParameters" xsi:type="array">
+                <item name="height" xsi:type="number">75</item>
+                <item name="width" xsi:type="number">100</item>
+            </argument>
+            <argument name="extensions" xsi:type="array">
+                <item name="allowed" xsi:type="array">
+                    <item name="jpg" xsi:type="number">1</item>
+                    <item name="jpeg" xsi:type="number">1</item>
+                    <item name="png" xsi:type="number">1</item>
+                    <item name="gif" xsi:type="number">1</item>
+                </item>
+                <item name="image_allowed" xsi:type="array">
+                    <item name="jpg" xsi:type="number">1</item>
+                    <item name="jpeg" xsi:type="number">1</item>
+                    <item name="png" xsi:type="number">1</item>
+                    <item name="gif" xsi:type="number">1</item>
+                </item>
+                <item name="media_allowed" xsi:type="array">
+                    <item name="flv" xsi:type="number">1</item>
+                    <item name="swf" xsi:type="number">1</item>
+                    <item name="avi" xsi:type="number">1</item>
+                    <item name="mov" xsi:type="number">1</item>
+                    <item name="rm" xsi:type="number">1</item>
+                    <item name="wmv" xsi:type="number">1</item>
+                </item>
+            </argument>
+            <argument name="dirs" xsi:type="array">
+                <item name="exclude" xsi:type="string"></item>
+                <item name="include" xsi:type="string"></item>
+            </argument>
+        </arguments>
     </type>
-    <type name="Magento\Module\Updater\SetupFactory">
-        <param name="resourceTypes">
-            <value>
-                <cms_setup>Magento\Cms\Model\Resource\Setup</cms_setup>
-            </value>
-        </param>
+    <type name="Magento\Framework\Module\Updater\SetupFactory">
+        <arguments>
+            <argument name="resourceTypes" xsi:type="array">
+                <item name="cms_setup" xsi:type="string">Magento\Cms\Model\Resource\Setup</item>
+            </argument>
+        </arguments>
     </type>
 </config>

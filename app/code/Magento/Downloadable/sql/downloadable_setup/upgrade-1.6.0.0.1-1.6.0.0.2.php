@@ -18,17 +18,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Downloadable
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/** @var $installer \Magento\Catalog\Model\Resource\Setup */
-$installer = $this;
 
-$applyTo = explode(',', $installer->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'group_price', 'apply_to'));
-if (!in_array(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE, $applyTo)) {
-    $applyTo[] = \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE;
-    $installer->updateAttribute(\Magento\Catalog\Model\Product::ENTITY, 'group_price', 'apply_to', implode(',', $applyTo));
-}
+/** @var $this \Magento\Catalog\Model\Resource\Setup */
+/** @var $connection \Magento\Framework\DB\Adapter\Pdo\Mysql */
+$connection = $this->getConnection();
+$connection->changeTableEngine(
+    $this->getTable('catalog_product_index_price_downlod_tmp'),
+    \Magento\Framework\DB\Adapter\Pdo\Mysql::ENGINE_MEMORY
+);

@@ -1,0 +1,143 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+$_item = $this->getItem();
+$product = $_item->getProduct();
+$isVisibleProduct = $product->isVisibleInSiteVisibility();
+/** @var \Magento\Msrp\Helper\Data $helper */
+$helper = $this->helper('Magento\Msrp\Helper\Data');
+$canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinimalPriceLessMsrp($product);
+?>
+<?php echo $this->getChildHtml('item_extra') ?>
+<tbody class="cart item">
+    <tr class="item info item-info">
+        <td class="col item">
+            <?php if ($this->hasProductUrl()): ?>
+                <a href="<?php echo $this->getProductUrl() ?>"
+                   title="<?php echo $this->escapeHtml($this->getProductName()) ?>"
+                   class="product photo product-item-photo">
+            <?php endif; ?>
+            <?php echo $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image')->init($product, 'cart_page_product_thumbnail')->toHtml(); ?>
+            <?php if ($this->hasProductUrl()):?></a><?php endif;?>
+            <div class="product details product-item-details">
+                <strong class="product name product-item-name">
+                    <?php if ($this->hasProductUrl()):?>
+                        <a href="<?php echo $this->getProductUrl() ?>"><?php echo $this->escapeHtml($this->getProductName()) ?></a>
+                    <?php else: ?>
+                        <?php echo $this->escapeHtml($this->getProductName()) ?>
+                    <?php endif; ?>
+                </strong>
+                <?php if ($_options = $this->getOptionList()):?>
+                    <dl class="cart-item-options">
+                        <?php foreach ($_options as $_option) : ?>
+                            <?php $_formatedOptionValue = $this->getFormatedOptionValue($_option) ?>
+                            <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>
+                            <dd<?php if (isset($_formatedOptionValue['full_view'])): ?> class="tooltip wrapper"<?php endif; ?>>
+                                <?php echo $_formatedOptionValue['value'] ?>
+                                <?php if (isset($_formatedOptionValue['full_view'])): ?>
+                                    <div class="tooltip content">
+                                        <dl class="item options">
+                                            <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>
+                                            <dd><?php echo $_formatedOptionValue['full_view'] ?></dd>
+                                        </dl>
+                                    </div>
+                                <?php endif; ?>
+                            </dd>
+                        <?php endforeach; ?>
+                    </dl>
+                <?php endif;?>
+                <?php if ($messages = $this->getMessages()): ?>
+                    <?php foreach ($messages as $message): ?>
+                        <div class="cart item message <?php echo $message['type'] ?>"><div><?php echo $this->escapeHtml($message['text']) ?></div></div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+                <?php $addInfoBlock = $this->getProductAdditionalInformationBlock(); ?>
+                <?php if ($addInfoBlock): ?>
+                    <?php echo $addInfoBlock->setItem($_item)->toHtml() ?>
+                <?php endif;?>
+            </div>
+            <?php $cols = 1; ?>
+        </td>
+    <?php if ($canApplyMsrp): ?>
+        <td class="col msrp">
+            <span class="cart-price">
+                <span class="msrp notice"><?php echo __('See price before order confirmation.'); ?></span>
+                <?php $helpLinkId = 'cart-msrp-help-' . $_item->getId(); ?>
+                <a id="<?php echo $helpLinkId ?>" href="#" class="action help map"><?php echo __("What's this?"); ?></a>
+                <script type="text/javascript">
+                    require(['prototype'], function () {
+                        Catalog.Map.addHelpLink($('<?php echo $helpLinkId ?>'), "<?php echo __("What's this?") ?>");
+                    });
+                </script>
+            </span>
+            <?php $cols++; ?>
+        </td>
+    <?php else: ?>
+
+        <td class="col price" data-th="<?php echo $this->escapeHtml(__('Price')); ?>">
+            <?php echo $this->getUnitPriceHtml($_item); ?>
+            <?php $cols++; ?>
+        </td>
+
+
+    <?php endif; ?>
+        <td class="col qty">
+            <div class="control qty">
+                <input name="cart[<?php echo $_item->getId() ?>][qty]" value="<?php echo $this->getQty() ?>" type="number" size="4" title="<?php echo __('Qty') ?>" class="input-text qty" maxlength="12" data-validate="{required:true,'validate-greater-than-zero':true}"/>
+            </div>
+            <?php $cols++; ?>
+        </td>
+
+        <td class="col subtotal" data-th="<?php echo $this->escapeHtml(__('Subtotal'));?>">
+            <?php if ($canApplyMsrp): ?>
+                <span class="cart msrp subtotal">--</span>
+            <?php else: ?>
+                <?php echo $this->getRowTotalHtml($_item); ?>
+            <?php endif; ?>
+            <?php $cols++; ?>
+        </td>
+    </tr>
+    <tr class="item actions">
+        <td colspan="<?php echo $cols;?>">
+            <div class="actions">
+                <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllowInCart()) : ?>
+                    <?php if ($isVisibleProduct): ?>
+                        <a href="#" data-post='<?php echo $this->helper('Magento\Wishlist\Helper\Data')->getMoveFromCartParams($_item->getId()); ?>' class="use-ajax action towishlist">
+                            <span><?php echo __('Move to Wishlist'); ?></span>
+                        </a>
+                    <?php endif ?>
+                <?php endif ?>
+                <?php if ($isVisibleProduct): ?>
+                    <a class="action edit" href="<?php echo $this->getConfigureUrl() ?>" title="<?php echo __('Edit item parameters') ?>"><span><?php echo __('Edit') ?></span></a>
+                <?php endif ?>
+                <button title="<?php echo __('Remove item') ?>"
+                        class="action delete"
+                        data-post='<?php echo $this->helper('Magento\Checkout\Helper\Cart')->getDeletePostJson($_item); ?>'>
+                    <span><?php echo __('Remove item')?></span>
+                </button>
+            </div>
+        </td>
+    </tr>
+</tbody>

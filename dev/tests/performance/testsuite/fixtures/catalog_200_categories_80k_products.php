@@ -32,9 +32,10 @@ $maxNestingLevel = 3;
 $anchorStep = 2;
 
 $nestingLevel = 1;
-$parentCategoryId = $defaultParentCategoryId = $this->getObjectManager()
-    ->get('Magento\Core\Model\StoreManagerInterface')->getStore()->getRootCategoryId();
-$nestingPath = "1/$parentCategoryId";
+$parentCategoryId = $defaultParentCategoryId = $this->getObjectManager()->get(
+    'Magento\Framework\StoreManagerInterface'
+)->getStore()->getRootCategoryId();
+$nestingPath = "1/{$parentCategoryId}";
 $categoryPath = '';
 $categoryIndex = 1;
 
@@ -42,18 +43,27 @@ $categories = array();
 
 $category = $this->getObjectManager()->create('Magento\Catalog\Model\Category');
 while ($categoryIndex <= $categoriesNumber) {
-    $category->setId(null)
-        ->setName("Category $categoryIndex")
-        ->setParentId($parentCategoryId)
-        ->setPath($nestingPath)
-        ->setLevel($nestingLevel)
-        ->setAvailableSortBy('name')
-        ->setDefaultSortBy('name')
-        ->setIsActive(true)
-        ->setIsAnchor($categoryIndex++ % $anchorStep == 0)
-        ->save();
+    $category->setId(
+        null
+    )->setName(
+        "Category {$categoryIndex}"
+    )->setParentId(
+        $parentCategoryId
+    )->setPath(
+        $nestingPath
+    )->setLevel(
+        $nestingLevel
+    )->setAvailableSortBy(
+        'name'
+    )->setDefaultSortBy(
+        'name'
+    )->setIsActive(
+        true
+    )->setIsAnchor(
+        $categoryIndex++ % $anchorStep == 0
+    )->save();
 
-    $categoryPath .=  '/' . $category->getName();
+    $categoryPath .= '/' . $category->getName();
     $categories[] = ltrim($categoryPath, '/');
 
     if ($nestingLevel++ == $maxNestingLevel) {
@@ -64,7 +74,7 @@ while ($categoryIndex <= $categoriesNumber) {
     } else {
         $parentCategoryId = $category->getId();
     }
-    $nestingPath .= "/$parentCategoryId";
+    $nestingPath .= "/{$parentCategoryId}";
 }
 
 /**
@@ -85,10 +95,8 @@ $pattern = array(
     'sku' => 'product_dynamic_%s',
     'price' => 10,
     'visibility' => \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH,
-    'status' => \Magento\Catalog\Model\Product\Status::STATUS_ENABLED,
-    'tax_class_id' => 0,
-
-    // actually it saves without stock data, but by default system won't show on the frontend products out of stock
+    'status' => \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED,
+    'tax_class_id' => 2,
     'is_in_stock' => 1,
     'qty' => 100500,
     'use_config_min_qty' => '1',
@@ -99,7 +107,7 @@ $pattern = array(
     'use_config_manage_stock' => '1',
     'use_config_qty_increments' => '1',
     'use_config_enable_qty_inc' => '1',
-    'stock_id' => \Magento\CatalogInventory\Model\Stock::DEFAULT_STOCK_ID,
+    'stock_id' => \Magento\CatalogInventory\Model\Stock::DEFAULT_STOCK_ID
 );
 $generator = new \Magento\TestFramework\ImportExport\Fixture\Generator($pattern, $productsNumber);
 /** @var \Magento\ImportExport\Model\Import $import */

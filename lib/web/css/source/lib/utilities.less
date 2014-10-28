@@ -1,0 +1,449 @@
+// /**
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+.debug() {
+    outline:2px dotted red;
+}
+
+.margin-top-rem(@value) {
+    @_value: unit(@value);
+    margin-top: @_value * 1px;
+    margin-top: @_value * 1rem / @font-rem-ratio;
+}
+
+.margin-bottom-rem(@value) {
+    @_value: unit(@value);
+    margin-bottom: @_value * 1px;
+    margin-bottom: @_value * 1rem / @font-rem-ratio;
+}
+
+.margin-vertical-rem(@val-top, @val-bottom) {
+    .margin-top-rem(@val-top);
+    .margin-bottom-rem(@val-bottom);
+}
+
+.padding-top-rem(@value) {
+    @_value: unit(@value);
+    padding-top: @_value * 1px;
+    padding-top: @_value * 1rem / @font-rem-ratio;
+}
+
+.padding-bottom-rem(@value) {
+    @_value: unit(@value);
+    padding-bottom: @_value * 1px;
+    padding-bottom: @_value * 1rem / @font-rem-ratio;
+}
+
+.padding-vertical-rem(@val-top, @val-bottom) {
+    .padding-top-rem(@val-top);
+    .padding-bottom-rem(@val-bottom);
+}
+
+.visually-hidden() {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    border: 0;
+}
+
+.visually-hidden-reset() {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+}
+
+//
+//    Clearfix
+//--------------------------------------
+.clearfix() {
+    &:before,
+    &:after {
+        content: "";
+        display: table;
+    }
+    &:after {
+        clear: both;
+    }
+}
+.clearer() {
+    &:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+}
+
+//
+//    Gradient
+//--------------------------------------
+#gradient {
+    // Horizontal gradient, from left to right
+    // Creates two color stops, start and end, by specifying a color and position for each color stop.
+    // Color stops are not available in IE9 and below.
+    // Filters are enabled
+    .horizontal(@_start-color; @_end-color; @_start-percent: 0%; @_end-percent: 100%) when not (@disable-filters) {
+        background-color: @_end-color;
+        background-repeat: repeat-x;
+        background-image: -webkit-linear-gradient(left, color-stop(@_start-color @_start-percent), color-stop(@_end-color @_end-percent)); // Safari 5.1-6, Chrome 10+
+        background-image: linear-gradient(to right, @_start-color @_start-percent, @_end-color @_end-percent); // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+        filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=1)", @_start-color, @_end-color)); // IE9 and down
+    }
+
+    // Horizontal gradient, from left to right
+    // Creates two color stops, start and end, by specifying a color and position for each color stop.
+    // Color stops are not available in IE9 and below.
+    // Filters are disabled
+    .horizontal(@_start-color; @_end-color; @_start-percent: 0%; @_end-percent: 100%) when (@disable-filters) {
+        background-color: @_end-color;
+        background-repeat: repeat-x;
+        background-image: -webkit-linear-gradient(left, color-stop(@_start-color @_start-percent), color-stop(@_end-color @_end-percent)); // Safari 5.1-6, Chrome 10+
+        background-image: linear-gradient(to right, @_start-color @_start-percent, @_end-color @_end-percent); // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+    }
+
+    // Vertical gradient, from top to bottom
+    // Creates two color stops, start and end, by specifying a color and position for each color stop.
+    // Color stops are not available in IE9 and below.
+// Filters are enabled
+    .vertical(@_start-color; @_end-color; @_start-percent: 0%; @_end-percent: 100%) when not (@disable-filters) {
+        background-color: @_end-color;
+        background-repeat: repeat-x;
+        background-image: -webkit-linear-gradient(top, @_start-color @_start-percent, @_end-color @_end-percent);  // Safari 5.1-6, Chrome 10+
+        background-image: linear-gradient(to bottom, @_start-color @_start-percent, @_end-color @_end-percent); // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+        filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)", @_start-color, @_end-color)); // IE9 and down
+    }
+
+    // Vertical gradient, from top to bottom
+    // Creates two color stops, start and end, by specifying a color and position for each color stop.
+    // Color stops are not available in IE9 and below.
+    // Filters are disabled
+    .vertical(@_start-color; @_end-color; @_start-percent: 0%; @_end-percent: 100%) when (@disable-filters) {
+        background-color: @_end-color;
+        background-repeat: repeat-x;
+        background-image: -webkit-linear-gradient(top, @_start-color @_start-percent, @_end-color @_end-percent);  // Safari 5.1-6, Chrome 10+
+        background-image: linear-gradient(to bottom, @_start-color @_start-percent, @_end-color @_end-percent); // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+    }
+}
+
+//
+//    Custom background gradient
+//--------------------------------------
+// Pager gradient - horizontal
+.background-gradient(
+    @_background-gradient-start-color,
+    @_background-gradient-end-color,
+    @_background-gradient-direction,
+    @_background-gradient
+) when (@_background-gradient-direction = horizontal) and (@_background-gradient = true) {
+    #gradient > .horizontal(@_background-gradient-start-color, @_background-gradient-end-color);
+}
+
+// Pager gradient - vertical
+.background-gradient(
+    @_background-gradient-start-color,
+    @_background-gradient-end-color,
+    @_background-gradient-direction,
+    @_background-gradient
+) when (@_background-gradient-direction = vertical) and (@_background-gradient = true) {
+    #gradient > .vertical(@_background-gradient-start-color, @_background-gradient-end-color);
+}
+
+//
+//    WebKit-style focus
+//--------------------------------------
+.tab-focus() {
+    // Default
+    outline: thin dotted;
+    // WebKit
+    outline: 5px auto -webkit-focus-ring-color;
+    outline-offset: -2px;
+}
+
+//
+//    Box-sizing
+//--------------------------------------
+.box-sizing(@type: border-box) {
+    -webkit-box-sizing: @type;
+    -moz-box-sizing: @type;
+    box-sizing: @type;
+}
+
+//
+//    Box-shadow
+//--------------------------------------
+.box-shadow(@shadow: 1px 1px 2px rgba(0,0,0,0.25)) {
+    -webkit-box-shadow: @shadow;
+    -moz-box-shadow: @shadow;
+    box-shadow: @shadow;
+}
+
+//
+//    Transition
+//--------------------------------------
+.transition(@transition) {
+    -webkit-transition: @transition;
+    -moz-transition: @transition;
+    transition: @transition;
+}
+
+//
+//    Rotate
+//--------------------------------------
+.rotate(@rotation) {
+    -webkit-transform: rotate(@rotation);
+    -moz-transform: rotate(@rotation);
+    -o-transform: rotate(@rotation);
+    transform: rotate(@rotation);
+}
+
+//
+//    Remove spaces between elements with display: inline-block
+//--------------------------------------
+.inline-block-space-container() {
+    font-size: 0;
+    line-height: 0;
+    letter-spacing: -1px;
+}
+
+.inline-block-space-item(@_font-size: @font-size-base, @_line-height: normal) {
+    .font-size(@_font-size);
+    font-size: @_font-size;
+    line-height: @_line-height;
+    letter-spacing: normal;
+}
+
+//
+//    Add any css property
+//--------------------------------------
+.css(@_property, @_value, @_prefix: 0) when (@_prefix = 1) {
+    -ms-@{_property}:@_value;
+    -webkit-@{_property}:@_value;
+    -moz-@{_property}:@_value;
+}
+.css(@_property, @_value, @_prefix: 0) when not (@_value = false) and not (@_value = '') {
+    @{_property}:@_value;
+}
+
+//
+//    Add url to property
+//--------------------------------------
+// usage:
+// .column.left {
+//     .url('images/fallback.png');
+//     background:url("@{url}") repeat-y;
+// }
+// .columns {
+//     .url('images/fallback.png', 'Magento_Catalog');
+//     background:url("@{url}") repeat;
+// }
+
+@urls-resolved: false;
+
+.url (@_path) {
+    @url: "@{baseDir}@{_path}";
+}
+.url (@_path, @_module) when not (@_module = false) and not (@_module = '') and  (@urls-resolved = false) {
+    @url: "@{_module}::@{_path}";
+}
+.url (@_path, @_module) when not (@_module = false) and not (@_module = '') and  (@urls-resolved = true) {
+    @url: "@{baseDir}@{_module}/@{_path}";
+}
+
+//
+//    Add padding when the variable is set
+//--------------------------------------
+.add-padding(@_add-padding) when not (@_add-padding = false) and not (@_add-padding = '') {
+    padding: @_add-padding;
+}
+
+//
+//    Add margin when the variable is set
+//--------------------------------------
+.add-margin(@_add-margin) when not (@_add-margin = false) and not (@_add-margin = '') {
+    margin: @_add-margin;
+}
+
+//
+//    Add width when the variable is set
+//--------------------------------------
+.add-width(@_add-width) when not (@_add-width = false) and not (@_add-width = '') {
+    width: @_add-width;
+}
+
+//
+//    Add height when the variable is set
+//--------------------------------------
+.add-height(@_add-height) when not (@_add-height = false) and not (@_add-height = '') {
+    height: @_add-height;
+}
+
+//
+//    Add border when the variable is set
+//--------------------------------------
+.add-border(@_add-border) when not (@_add-border = false) and not (@_add-border = '') {
+    border: @_add-border;
+}
+
+//
+//    Add background when the variable is set
+//--------------------------------------
+.add-background(@_add-background) when (iscolor(@_add-background)) {
+    background-color: @_add-background;
+}
+
+//
+//    Add color when the variable is set
+//--------------------------------------
+.add-color(@_add-color) when (iscolor(@_add-color)) {
+    color: @_add-color;
+}
+
+//
+//    Add display when the variable is set
+//--------------------------------------
+.add-display(@_add-display) when not (@_add-display = '') {
+    display: @_add-display;
+}
+
+//
+//    Add border-radius when the variable is set
+//--------------------------------------
+.add-border-radius(@_add-border-radius) when not (@_add-border-radius = '') {
+    border-radius: @_add-border-radius;
+}
+
+//
+//    Add font-family when the variable is set
+//--------------------------------------
+.add-font-family(@_font-family) when not (@_font-family = false) and not (@_font-family = '') {
+    font-family: @_font-family;
+}
+
+//
+//    Add font-weight when the variable is set
+//--------------------------------------
+.add-font-weight(@_font-weight) when not (@_font-weight = false) and not (@_font-weight = '') {
+    font-weight: @_font-weight;
+}
+
+//
+//    Add line-height when the variable is set
+//--------------------------------------
+.add-line-height(@_line-height) when not (@_line-height = false) and not (@_line-height = '') {
+    line-height: @_line-height;
+}
+
+//
+//    Add font-style when the variable is set
+//--------------------------------------
+.add-font-style(@_font-style) when not (@_font-style = false) and not (@_font-style = '') {
+    font-style: @_font-style;
+}
+
+//
+//    Arrow
+//--------------------------------------
+.arrow(@_position, @_size, @_color) {
+    width: 0;
+    height: 0;
+    border: @_size solid transparent;
+    ._abbor_el(@_position, @_color);
+}
+._abbor_el(@_position, @_color) when (@_position = left) {
+    border-right-color: @_color;
+}
+._abbor_el(@_position, @_color) when (@_position = right) {
+    border-left-color: @_color;
+}
+._abbor_el(@_position, @_color) when (@_position = up) {
+    border-bottom-color: @_color;
+}
+._abbor_el(@_position, @_color) when (@_position = down) {
+    border-top-color: @_color;
+}
+
+//
+//    Input placeholder
+//--------------------------------------
+
+.input-placeholder(
+    @_input-placeholder-color: @form-element-input-placeholder-color,
+    @_input-placeholder-font-weight: @form-element-input-font-weight
+) {
+    &::-webkit-input-placeholder {
+        color: @_input-placeholder-color;
+        font-weight: @_input-placeholder-font-weight;
+    }
+    &:-moz-placeholder {
+        color: @_input-placeholder-color;
+        font-weight: @_input-placeholder-font-weight;
+    }
+    &::-moz-placeholder {
+        color: @_input-placeholder-color;
+        font-weight: @_input-placeholder-font-weight;
+    }
+    &:-ms-input-placeholder {
+        color: @_input-placeholder-color;
+        font-weight: @_input-placeholder-font-weight;
+    }
+}
+
+//
+//    Flex layout
+//--------------------------------------
+
+.mix-flex(
+        @_display: flex,
+        @_flow: row wrap
+) {
+    display: ~"-webkit-@{_display}";
+    display: ~"-ms-@{_display}";
+    display: @_display;
+
+    -webkit-flex-flow: @_flow;
+    -ms-flex-flow: @_flow;
+    flex-flow: @_flow;
+}
+.mix-flex-flex(
+    @_flex: 1,
+    @_basis: 100%
+) {
+    -webkit-flex: @_flex @_basis;
+    -ms-flex: @_flex @_basis;
+    flex: @_flex @_basis;
+}
+.mix-flex-order(
+    @_order: 1
+) {
+    -webkit-order: @_order;
+    -ms-order: @_order;
+    order: @_order;
+}
+

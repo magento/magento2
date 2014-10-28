@@ -18,28 +18,27 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Model\Layer;
+
+use Magento\Catalog\Model\Layer\Filter\Item;
+use Magento\Framework\Model\Exception;
+use Magento\Framework\Object;
 
 /**
  * Layered navigation state model
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Layer;
-
-class State extends \Magento\Object
+class State extends Object
 {
     /**
      * Add filter item to layer state
      *
-     * @param   \Magento\Catalog\Model\Layer\Filter\Item $filter
-     * @return  \Magento\Catalog\Model\Layer\State
+     * @param   Item $filter
+     * @return  $this
      */
     public function addFilter($filter)
     {
@@ -52,14 +51,14 @@ class State extends \Magento\Object
     /**
      * Set layer state filter items
      *
-     * @param   array $filters
-     * @return  \Magento\Catalog\Model\Layer\State
-     * @throws \Magento\Core\Exception
+     * @param  Item[] $filters
+     * @return $this
+     * @throws Exception
      */
     public function setFilters($filters)
     {
         if (!is_array($filters)) {
-            throw new \Magento\Core\Exception(__('The filters must be an array.'));
+            throw new Exception(__('The filters must be an array.'));
         }
         $this->setData('filters', $filters);
         return $this;
@@ -68,7 +67,7 @@ class State extends \Magento\Object
     /**
      * Get applied to layer filter items
      *
-     * @return array
+     * @return Item[]
      */
     public function getFilters()
     {

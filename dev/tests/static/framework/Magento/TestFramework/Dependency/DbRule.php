@@ -20,9 +20,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento
- * @subpackage  static_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -39,16 +36,12 @@ class DbRule implements \Magento\TestFramework\Dependency\RuleInterface
 
     /**
      * Constructor
+     *
+     * @param array $tables
      */
-    public function __construct()
+    public function __construct(array $tables)
     {
-        $replaceFilePattern = str_replace('\\', '/', realpath(__DIR__)) . '/_files/*.php';
-
-        $this->_moduleTableMap = array();
-        foreach (glob($replaceFilePattern) as $fileName) {
-            $tables = @include $fileName;
-            $this->_moduleTableMap = array_merge($this->_moduleTableMap, $tables);
-        }
+        $this->_moduleTableMap = $tables;
     }
 
     /**
@@ -67,7 +60,7 @@ class DbRule implements \Magento\TestFramework\Dependency\RuleInterface
         }
 
         $dependenciesInfo = array();
-        $unKnowTables     = array();
+        $unKnowTables = array();
         if (preg_match_all('#>gettable(name)?\([\'"]([^\'"]+)[\'"]\)#i', $contents, $matches)) {
             $tables = array_pop($matches);
             foreach ($tables as $table) {
@@ -78,18 +71,15 @@ class DbRule implements \Magento\TestFramework\Dependency\RuleInterface
                 if (strtolower($currentModule) !== strtolower($this->_moduleTableMap[$table])) {
                     $dependenciesInfo[] = array(
                         'module' => $this->_moduleTableMap[$table],
-                        'type'   => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
-                        'source' => $table,
+                        'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
+                        'source' => $table
                     );
                 }
             }
         }
         foreach ($unKnowTables as $tables) {
             foreach ($tables as $table) {
-                $dependenciesInfo[] = array(
-                    'module' => 'Unknown',
-                    'source' => $table,
-                );
+                $dependenciesInfo[] = array('module' => 'Unknown', 'source' => $table);
             }
         }
         return $dependenciesInfo;

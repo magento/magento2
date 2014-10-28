@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backup
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -31,33 +28,23 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testConstructor()
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $filesystem = $this->getMockBuilder('\Magento\Filesystem')
+        $filesystem = $this->getMockBuilder('\Magento\Framework\Filesystem')
             ->disableOriginalConstructor()
             ->getMock();
-        $directoryWrite = $this->getMockBuilder('\Magento\Filesystem\Directory\WriteInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $filesystem->expects($this->any())
-            ->method('getDirectoryWrite')
-            ->will($this->returnValue($directoryWrite));
+        $directoryWrite = $this->getMockBuilder(
+            '\Magento\Framework\Filesystem\Directory\WriteInterface'
+        )->disableOriginalConstructor()->getMock();
+        $filesystem->expects($this->any())->method('getDirectoryWrite')->will($this->returnValue($directoryWrite));
 
-        $backupData = $this->getMockBuilder('\Magento\Backup\Helper\Data')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $backupData->expects($this->any())
-            ->method('getExtensions')
-            ->will($this->returnValue(array()));
+        $backupData = $this->getMockBuilder('\Magento\Backup\Helper\Data')->disableOriginalConstructor()->getMock();
+        $backupData->expects($this->any())->method('getExtensions')->will($this->returnValue(array()));
 
-        $directoryWrite->expects($this->any())
-            ->method('create')
-            ->with('backups');
-        $directoryWrite->expects($this->any())
-            ->method('getAbsolutePath')
-            ->with('backups');
+        $directoryWrite->expects($this->any())->method('create')->with('backups');
+        $directoryWrite->expects($this->any())->method('getAbsolutePath')->with('backups');
 
-        $helper->getObject('Magento\Backup\Model\Fs\Collection', array(
-            'filesystem' => $filesystem,
-            'backupData' => $backupData,
-        ));
+        $helper->getObject(
+            'Magento\Backup\Model\Fs\Collection',
+            array('filesystem' => $filesystem, 'backupData' => $backupData)
+        );
     }
 }

@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_DesignEditor
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\DesignEditor\Controller\Adminhtml\System\Design;
 
 /**
@@ -57,9 +53,9 @@ class EditorTest extends \Magento\Backend\Utility\Controller
         $wrongThemeId = 999;
         $this->getRequest()->setParam('theme_id', $wrongThemeId);
         $this->dispatch('backend/admin/system_design_editor/launch');
-        $this->assertSessionMessages($this->equalTo(
-            array('We can\'t find theme "' . $wrongThemeId . '".')),
-            \Magento\Message\MessageInterface::TYPE_ERROR
+        $this->assertSessionMessages(
+            $this->equalTo(array('We can\'t find theme "' . $wrongThemeId . '".')),
+            \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
         $expected = 'http://localhost/index.php/backend/admin/system_design_editor/index/';
         $this->assertRedirect($this->stringStartsWith($expected));

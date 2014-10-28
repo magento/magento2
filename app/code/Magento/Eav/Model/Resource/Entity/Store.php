@@ -18,26 +18,25 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Eav
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Eav\Model\Resource\Entity;
 
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Object;
 
 /**
  * Eav Entity store resource model
  *
- * @category    Magento
- * @package     Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Eav\Model\Resource\Entity;
-
-class Store extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Store extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Resource initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -47,23 +46,24 @@ class Store extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Load an object by entity type and store
      *
-     * @param \Magento\Object $object
+     * @param Object|\Magento\Framework\Model\AbstractModel $object
      * @param int $entityTypeId
      * @param int $storeId
-     * @return boolean
+     * @return bool
      */
-    public function loadByEntityStore(\Magento\Core\Model\AbstractModel $object, $entityTypeId, $storeId)
+    public function loadByEntityStore(AbstractModel $object, $entityTypeId, $storeId)
     {
         $adapter = $this->_getWriteAdapter();
-        $bind    = array(
-            ':entity_type_id' => $entityTypeId,
-            ':store_id'       => $storeId
+        $bind = array(':entity_type_id' => $entityTypeId, ':store_id' => $storeId);
+        $select = $adapter->select()->from(
+            $this->getMainTable()
+        )->forUpdate(
+            true
+        )->where(
+            'entity_type_id = :entity_type_id'
+        )->where(
+            'store_id = :store_id'
         );
-        $select = $adapter->select()
-            ->from($this->getMainTable())
-            ->forUpdate(true)
-            ->where('entity_type_id = :entity_type_id')
-            ->where('store_id = :store_id');
         $data = $adapter->fetchRow($select, $bind);
 
         if (!$data) {

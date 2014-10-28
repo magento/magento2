@@ -18,16 +18,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\Customer\Model\Config\Source;
 
-class Group implements \Magento\Core\Model\Option\ArrayInterface
+class Group implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var array
@@ -35,32 +31,37 @@ class Group implements \Magento\Core\Model\Option\ArrayInterface
     protected $_options;
 
     /**
-     * @var \Magento\Customer\Model\Resource\Group\CollectionFactory
+     * @var \Magento\Customer\Service\V1\CustomerGroupServiceInterface
      */
-    protected $_groupsFactory;
+    protected $_groupService;
 
     /**
-     * @param \Magento\Customer\Model\Resource\Group\CollectionFactory $groupsFactory
+     * @var \Magento\Framework\Convert\Object
      */
-    public function __construct(\Magento\Customer\Model\Resource\Group\CollectionFactory $groupsFactory)
-    {
-        $this->_groupsFactory = $groupsFactory;
+    protected $_converter;
+
+    /**
+     * @param \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService
+     * @param \Magento\Framework\Convert\Object $converter
+     */
+    public function __construct(
+        \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService,
+        \Magento\Framework\Convert\Object $converter
+    ) {
+        $this->_groupService = $groupService;
+        $this->_converter = $converter;
     }
 
+    /**
+     * @return array
+     */
     public function toOptionArray()
     {
         if (!$this->_options) {
-            $this->_options = $this->_getCustomerGroupsCollection()->setRealGroupsFilter()->loadData()->toOptionArray();
-            array_unshift($this->_options, array('value'=> '', 'label'=> __('-- Please Select --')));
+            $groups = $this->_groupService->getGroups(false);
+            $this->_options = $this->_converter->toOptionArray($groups, 'id', 'code');
+            array_unshift($this->_options, array('value' => '', 'label' => __('-- Please Select --')));
         }
         return $this->_options;
-    }
-
-    /**
-     * @return \Magento\Customer\Model\Resource\Group\Collection
-     */
-    protected function _getCustomerGroupsCollection()
-    {
-        return $this->_groupsFactory->create();
     }
 }

@@ -1,0 +1,105 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<fixture class="Magento\User\Test\Fixture\AdminUserRole">
+    <module>Magento_User</module>
+    <type>flat</type>
+    <entity_type>authorization_role</entity_type>
+    <collection>Magento\User\Model\Resource\Role\User\Collection</collection>
+    <fields>
+        <role_id>
+            <attribute_code>role_id</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required>1</is_required>
+            <default_value></default_value>
+            <input></input>
+        </role_id>
+        <parent_id>
+            <attribute_code>parent_id</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required></is_required>
+            <default_value>0</default_value>
+            <input></input>
+        </parent_id>
+        <tree_level>
+            <attribute_code>tree_level</attribute_code>
+            <backend_type>smallint</backend_type>
+            <is_required></is_required>
+            <default_value>0</default_value>
+            <input></input>
+        </tree_level>
+        <sort_order>
+            <attribute_code>sort_order</attribute_code>
+            <backend_type>smallint</backend_type>
+            <is_required></is_required>
+            <default_value>0</default_value>
+            <input></input>
+        </sort_order>
+        <role_type>
+            <attribute_code>role_type</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required></is_required>
+            <default_value>0</default_value>
+            <input></input>
+        </role_type>
+        <user_id>
+            <attribute_code>user_id</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required></is_required>
+            <default_value>0</default_value>
+            <input></input>
+        </user_id>
+        <rolename>
+            <attribute_code>rolename</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required></is_required>
+            <default_value></default_value>
+            <input></input>
+        </rolename>
+        <user_type>
+            <attribute_code>user_type</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required></is_required>
+            <default_value></default_value>
+            <input></input>
+        </user_type>
+        <resource_access>
+            <attribute_code>resource_access</attribute_code>
+            <backend_type>virtual</backend_type>
+        </resource_access>
+        <roles_resources>
+            <attribute_code>roles_resources</attribute_code>
+            <backend_type>virtual</backend_type>
+        </roles_resources>
+        <in_role_users>
+            <attribute_code>in_role_users</attribute_code>
+            <backend_type>virtual</backend_type>
+            <group>in_role_users</group>
+            <source>Magento\User\Test\Fixture\AdminUserRole\InRoleUsers</source>
+        </in_role_users>
+    </fields>
+    <repository_class>Magento\User\Test\Repository\AdminUserRole</repository_class>
+    <handler_interface>Magento\User\Test\Handler\AdminUserRole\AdminUserRoleInterface</handler_interface>
+</fixture>

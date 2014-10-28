@@ -18,127 +18,123 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model\Quote;
+
+use Magento\Customer\Service\V1\Data\AddressBuilder as CustomerAddressBuilder;
+use Magento\Customer\Service\V1\Data\Address as AddressDataObject;
+use Magento\Customer\Service\V1\CustomerAddressServiceInterface;
+use Magento\Customer\Service\V1\Data\AddressConverter;
 
 /**
  * Sales Quote address model
  *
- * @method \Magento\Sales\Model\Resource\Quote\Address _getResource()
- * @method \Magento\Sales\Model\Resource\Quote\Address getResource()
  * @method int getQuoteId()
- * @method \Magento\Sales\Model\Quote\Address setQuoteId(int $value)
+ * @method Address setQuoteId(int $value)
  * @method string getCreatedAt()
- * @method \Magento\Sales\Model\Quote\Address setCreatedAt(string $value)
+ * @method Address setCreatedAt(string $value)
  * @method string getUpdatedAt()
- * @method \Magento\Sales\Model\Quote\Address setUpdatedAt(string $value)
+ * @method Address setUpdatedAt(string $value)
  * @method int getCustomerId()
- * @method \Magento\Sales\Model\Quote\Address setCustomerId(int $value)
+ * @method Address setCustomerId(int $value)
  * @method int getSaveInAddressBook()
- * @method \Magento\Sales\Model\Quote\Address setSaveInAddressBook(int $value)
+ * @method Address setSaveInAddressBook(int $value)
  * @method int getCustomerAddressId()
- * @method \Magento\Sales\Model\Quote\Address setCustomerAddressId(int $value)
+ * @method Address setCustomerAddressId(int $value)
+ * @method AddressDataObject|null getCustomerAddressData()
+ * @method Address setCustomerAddressData(AddressDataObject $value)
  * @method string getAddressType()
- * @method \Magento\Sales\Model\Quote\Address setAddressType(string $value)
+ * @method Address setAddressType(string $value)
  * @method string getEmail()
- * @method \Magento\Sales\Model\Quote\Address setEmail(string $value)
- * @method string getPrefix()
- * @method \Magento\Sales\Model\Quote\Address setPrefix(string $value)
- * @method string getFirstname()
- * @method \Magento\Sales\Model\Quote\Address setFirstname(string $value)
- * @method string getMiddlename()
- * @method \Magento\Sales\Model\Quote\Address setMiddlename(string $value)
- * @method string getLastname()
- * @method \Magento\Sales\Model\Quote\Address setLastname(string $value)
- * @method string getSuffix()
- * @method \Magento\Sales\Model\Quote\Address setSuffix(string $value)
+ * @method Address setEmail(string $value)
+ * @method Address setPrefix(string $value)
+ * @method Address setFirstname(string $value)
+ * @method Address setMiddlename(string $value)
+ * @method Address setLastname(string $value)
+ * @method Address setSuffix(string $value)
  * @method string getCompany()
- * @method \Magento\Sales\Model\Quote\Address setCompany(string $value)
- * @method string getCity()
- * @method \Magento\Sales\Model\Quote\Address setCity(string $value)
- * @method \Magento\Sales\Model\Quote\Address setRegion(string $value)
- * @method \Magento\Sales\Model\Quote\Address setRegionId(int $value)
- * @method string getPostcode()
- * @method \Magento\Sales\Model\Quote\Address setPostcode(string $value)
- * @method string getCountryId()
- * @method \Magento\Sales\Model\Quote\Address setCountryId(string $value)
- * @method string getTelephone()
- * @method \Magento\Sales\Model\Quote\Address setTelephone(string $value)
+ * @method Address setCompany(string $value)
+ * @method Address setCity(string $value)
+ * @method Address setRegion(string $value)
+ * @method Address setRegionId(int $value)
+ * @method Address setPostcode(string $value)
+ * @method Address setCountryId(string $value)
+ * @method Address setTelephone(string $value)
  * @method string getFax()
- * @method \Magento\Sales\Model\Quote\Address setFax(string $value)
+ * @method Address setFax(string $value)
  * @method int getSameAsBilling()
- * @method \Magento\Sales\Model\Quote\Address setSameAsBilling(int $value)
+ * @method Address setSameAsBilling(int $value)
  * @method int getFreeShipping()
- * @method \Magento\Sales\Model\Quote\Address setFreeShipping(int $value)
+ * @method Address setFreeShipping(int $value)
  * @method int getCollectShippingRates()
- * @method \Magento\Sales\Model\Quote\Address setCollectShippingRates(int $value)
+ * @method Address setCollectShippingRates(int $value)
  * @method string getShippingMethod()
- * @method \Magento\Sales\Model\Quote\Address setShippingMethod(string $value)
+ * @method Address setShippingMethod(string $value)
  * @method string getShippingDescription()
- * @method \Magento\Sales\Model\Quote\Address setShippingDescription(string $value)
+ * @method Address setShippingDescription(string $value)
  * @method float getWeight()
- * @method \Magento\Sales\Model\Quote\Address setWeight(float $value)
+ * @method Address setWeight(float $value)
  * @method float getSubtotal()
- * @method \Magento\Sales\Model\Quote\Address setSubtotal(float $value)
+ * @method Address setSubtotal(float $value)
  * @method float getBaseSubtotal()
- * @method \Magento\Sales\Model\Quote\Address setBaseSubtotal(float $value)
- * @method \Magento\Sales\Model\Quote\Address setSubtotalWithDiscount(float $value)
- * @method \Magento\Sales\Model\Quote\Address setBaseSubtotalWithDiscount(float $value)
+ * @method Address setBaseSubtotal(float $value)
+ * @method Address setSubtotalWithDiscount(float $value)
+ * @method Address setBaseSubtotalWithDiscount(float $value)
  * @method float getTaxAmount()
- * @method \Magento\Sales\Model\Quote\Address setTaxAmount(float $value)
+ * @method Address setTaxAmount(float $value)
  * @method float getBaseTaxAmount()
- * @method \Magento\Sales\Model\Quote\Address setBaseTaxAmount(float $value)
+ * @method Address setBaseTaxAmount(float $value)
  * @method float getShippingAmount()
  * @method float getBaseShippingAmount()
  * @method float getShippingTaxAmount()
- * @method \Magento\Sales\Model\Quote\Address setShippingTaxAmount(float $value)
+ * @method Address setShippingTaxAmount(float $value)
  * @method float getBaseShippingTaxAmount()
- * @method \Magento\Sales\Model\Quote\Address setBaseShippingTaxAmount(float $value)
+ * @method Address setBaseShippingTaxAmount(float $value)
  * @method float getDiscountAmount()
- * @method \Magento\Sales\Model\Quote\Address setDiscountAmount(float $value)
+ * @method Address setDiscountAmount(float $value)
  * @method float getBaseDiscountAmount()
- * @method \Magento\Sales\Model\Quote\Address setBaseDiscountAmount(float $value)
+ * @method Address setBaseDiscountAmount(float $value)
  * @method float getGrandTotal()
- * @method \Magento\Sales\Model\Quote\Address setGrandTotal(float $value)
+ * @method Address setGrandTotal(float $value)
  * @method float getBaseGrandTotal()
- * @method \Magento\Sales\Model\Quote\Address setBaseGrandTotal(float $value)
+ * @method Address setBaseGrandTotal(float $value)
  * @method string getCustomerNotes()
- * @method \Magento\Sales\Model\Quote\Address setCustomerNotes(string $value)
+ * @method Address setCustomerNotes(string $value)
  * @method string getDiscountDescription()
- * @method \Magento\Sales\Model\Quote\Address setDiscountDescription(string $value)
+ * @method Address setDiscountDescription(string $value)
  * @method null|array getDiscountDescriptionArray()
- * @method \Magento\Sales\Model\Quote\Address setDiscountDescriptionArray(array $value)
+ * @method Address setDiscountDescriptionArray(array $value)
  * @method float getShippingDiscountAmount()
- * @method \Magento\Sales\Model\Quote\Address setShippingDiscountAmount(float $value)
+ * @method Address setShippingDiscountAmount(float $value)
  * @method float getBaseShippingDiscountAmount()
- * @method \Magento\Sales\Model\Quote\Address setBaseShippingDiscountAmount(float $value)
+ * @method Address setBaseShippingDiscountAmount(float $value)
  * @method float getSubtotalInclTax()
- * @method \Magento\Sales\Model\Quote\Address setSubtotalInclTax(float $value)
+ * @method Address setSubtotalInclTax(float $value)
  * @method float getBaseSubtotalTotalInclTax()
- * @method \Magento\Sales\Model\Quote\Address setBaseSubtotalTotalInclTax(float $value)
+ * @method Address setBaseSubtotalTotalInclTax(float $value)
  * @method int getGiftMessageId()
- * @method \Magento\Sales\Model\Quote\Address setGiftMessageId(int $value)
+ * @method Address setGiftMessageId(int $value)
  * @method float getHiddenTaxAmount()
- * @method \Magento\Sales\Model\Quote\Address setHiddenTaxAmount(float $value)
+ * @method Address setHiddenTaxAmount(float $value)
  * @method float getBaseHiddenTaxAmount()
- * @method \Magento\Sales\Model\Quote\Address setBaseHiddenTaxAmount(float $value)
+ * @method Address setBaseHiddenTaxAmount(float $value)
  * @method float getShippingHiddenTaxAmount()
- * @method \Magento\Sales\Model\Quote\Address setShippingHiddenTaxAmount(float $value)
+ * @method Address setShippingHiddenTaxAmount(float $value)
  * @method float getBaseShippingHiddenTaxAmnt()
- * @method \Magento\Sales\Model\Quote\Address setBaseShippingHiddenTaxAmnt(float $value)
+ * @method Address setBaseShippingHiddenTaxAmnt(float $value)
  * @method float getShippingInclTax()
- * @method \Magento\Sales\Model\Quote\Address setShippingInclTax(float $value)
+ * @method Address setShippingInclTax(float $value)
  * @method float getBaseShippingInclTax()
- * @method \Magento\Sales\Model\Quote\Address setBaseShippingInclTax(float $value)
+ * @method \Magento\SalesRule\Model\Rule[] getCartFixedRules()
+ * @method int[] getAppliedRuleIds()
+ * @method Address setBaseShippingInclTax(float $value)
  */
-namespace Magento\Sales\Model\Quote;
-
 class Address extends \Magento\Customer\Model\Address\AbstractAddress
 {
     const RATES_FETCH = 1;
+
     const RATES_RECALCULATE = 2;
 
     /**
@@ -210,14 +206,9 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\ConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
-
-    /**
-     * @var \Magento\Customer\Model\AddressFactory
-     */
-    protected $_addressFactory;
+    protected $_scopeConfig;
 
     /**
      * @var \Magento\Sales\Model\Quote\Address\ItemFactory
@@ -227,17 +218,17 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     /**
      * @var \Magento\Sales\Model\Resource\Quote\Address\Item\CollectionFactory
      */
-    protected $_itemCollFactory;
+    protected $_itemCollectionFactory;
 
     /**
-     * @var \Magento\Shipping\Model\ShippingFactory
+     * @var \Magento\Sales\Model\Quote\Address\RateCollectorInterfaceFactory
      */
-    protected $_shippingFactory;
+    protected $_rateCollector;
 
     /**
      * @var \Magento\Sales\Model\Resource\Quote\Address\Rate\CollectionFactory
      */
-    protected $_rateCollFactory;
+    protected $_rateCollectionFactory;
 
     /**
      * @var \Magento\Sales\Model\Quote\Address\Total\CollectorFactory
@@ -250,62 +241,86 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     protected $_addressTotalFactory;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @var CustomerAddressBuilder
+     */
+    protected $_customerAddressBuilder;
+
+    /**
+     * @var CustomerAddressServiceInterface
+     */
+    protected $_customerAdressService;
+
+    /**
+     * @var Address\Validator
+     */
+    protected $validator;
+
+    /**
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Directory\Helper\Data $directoryData
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Customer\Model\Address\Config $addressConfig
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
-     * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
-     * @param \Magento\Customer\Model\AddressFactory $addressFactory
-     * @param \Magento\Sales\Model\Quote\Address\ItemFactory $addressItemFactory
-     * @param \Magento\Sales\Model\Resource\Quote\Address\Item\CollectionFactory $itemCollFactory
-     * @param \Magento\Sales\Model\Quote\Address\RateFactory $addressRateFactory
-     * @param \Magento\Shipping\Model\ShippingFactory $shippingFactory
-     * @param \Magento\Sales\Model\Resource\Quote\Address\Rate\CollectionFactory $rateCollFactory
-     * @param \Magento\Shipping\Model\Rate\RequestFactory $rateRequestFactory
-     * @param \Magento\Sales\Model\Quote\Address\Total\CollectorFactory $totalCollectorFactory
-     * @param \Magento\Sales\Model\Quote\Address\TotalFactory $addressTotalFactory
-     * @param \Magento\Object\Copy $objectCopyService
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param Address\ItemFactory $addressItemFactory
+     * @param \Magento\Sales\Model\Resource\Quote\Address\Item\CollectionFactory $itemCollectionFactory
+     * @param Address\RateFactory $addressRateFactory
+     * @param Address\RateCollectorInterfaceFactory $rateCollector
+     * @param \Magento\Sales\Model\Resource\Quote\Address\Rate\CollectionFactory $rateCollectionFactory
+     * @param Address\RateRequestFactory $rateRequestFactory
+     * @param Address\Total\CollectorFactory $totalCollectorFactory
+     * @param Address\TotalFactory $addressTotalFactory
+     * @param \Magento\Framework\Object\Copy $objectCopyService
+     * @param Address\CarrierFactoryInterface $carrierFactory
+     * @param CustomerAddressBuilder $customerAddressBuilder
+     * @param CustomerAddressServiceInterface $customerAddressService
+     * @param Address\Validator $validator
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\Directory\Helper\Data $directoryData,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Customer\Model\Address\Config $addressConfig,
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Directory\Model\CountryFactory $countryFactory,
-        \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
-        \Magento\Customer\Model\AddressFactory $addressFactory,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Sales\Model\Quote\Address\ItemFactory $addressItemFactory,
-        \Magento\Sales\Model\Resource\Quote\Address\Item\CollectionFactory $itemCollFactory,
+        \Magento\Sales\Model\Resource\Quote\Address\Item\CollectionFactory $itemCollectionFactory,
         \Magento\Sales\Model\Quote\Address\RateFactory $addressRateFactory,
-        \Magento\Shipping\Model\ShippingFactory $shippingFactory,
-        \Magento\Sales\Model\Resource\Quote\Address\Rate\CollectionFactory $rateCollFactory,
-        \Magento\Shipping\Model\Rate\RequestFactory $rateRequestFactory,
+        \Magento\Sales\Model\Quote\Address\RateCollectorInterfaceFactory $rateCollector,
+        \Magento\Sales\Model\Resource\Quote\Address\Rate\CollectionFactory $rateCollectionFactory,
+        \Magento\Sales\Model\Quote\Address\RateRequestFactory $rateRequestFactory,
         \Magento\Sales\Model\Quote\Address\Total\CollectorFactory $totalCollectorFactory,
         \Magento\Sales\Model\Quote\Address\TotalFactory $addressTotalFactory,
-        \Magento\Object\Copy $objectCopyService,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Object\Copy $objectCopyService,
+        \Magento\Sales\Model\Quote\Address\CarrierFactoryInterface $carrierFactory,
+        CustomerAddressBuilder $customerAddressBuilder,
+        CustomerAddressServiceInterface $customerAddressService,
+        Address\Validator $validator,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        $this->_coreStoreConfig = $coreStoreConfig;
-        $this->_addressFactory = $addressFactory;
+        $this->_scopeConfig = $scopeConfig;
         $this->_addressItemFactory = $addressItemFactory;
-        $this->_itemCollFactory = $itemCollFactory;
+        $this->_itemCollectionFactory = $itemCollectionFactory;
         $this->_addressRateFactory = $addressRateFactory;
-        $this->_shippingFactory = $shippingFactory;
-        $this->_rateCollFactory = $rateCollFactory;
+        $this->_rateCollector = $rateCollector;
+        $this->_rateCollectionFactory = $rateCollectionFactory;
         $this->_rateRequestFactory = $rateRequestFactory;
         $this->_totalCollectorFactory = $totalCollectorFactory;
         $this->_addressTotalFactory = $addressTotalFactory;
         $this->_objectCopyService = $objectCopyService;
+        $this->_carrierFactory = $carrierFactory;
+        $this->_customerAddressBuilder = $customerAddressBuilder;
+        $this->_customerAdressService = $customerAddressService;
+        $this->validator = $validator;
         parent::__construct(
             $context,
             $registry,
@@ -322,6 +337,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
 
     /**
      * Initialize resource
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -331,7 +348,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     /**
      * Initialize quote identifier before save
      *
-     * @return \Magento\Sales\Model\Quote\Address
+     * @return $this
      */
     protected function _beforeSave()
     {
@@ -342,6 +359,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
 
     /**
      * Set the required fields
+     *
+     * @return void
      */
     protected function _populateBeforeSaveData()
     {
@@ -356,8 +375,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
             /**
              * Init customer address id if customer address is assigned
              */
-            if ($this->getCustomerAddress()) {
-                $this->setCustomerAddressId($this->getCustomerAddress()->getId());
+            if ($this->getCustomerAddressData()) {
+                $this->setCustomerAddressId($this->getCustomerAddressData()->getId());
             }
 
             if (!$this->getId()) {
@@ -373,8 +392,9 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      */
     protected function _isSameAsBilling()
     {
-        return $this->getAddressType() == \Magento\Sales\Model\Quote\Address::TYPE_SHIPPING
-            && ($this->_isNotRegisteredCustomer() || $this->_isDefaultShippingNullOrSameAsBillingAddress());
+        return $this->getAddressType() == \Magento\Sales\Model\Quote\Address::TYPE_SHIPPING &&
+            ($this->_isNotRegisteredCustomer() ||
+            $this->_isDefaultShippingNullOrSameAsBillingAddress());
     }
 
     /**
@@ -394,16 +414,31 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      */
     protected function _isDefaultShippingNullOrSameAsBillingAddress()
     {
-        $customer = $this->getQuote()->getCustomer();
-        return !$customer->getDefaultShippingAddress()
-            || $customer->getDefaultBillingAddress() && $customer->getDefaultShippingAddress()
-                && $customer->getDefaultBillingAddress()->getId() == $customer->getDefaultShippingAddress()->getId();
+        $customerData = $this->getQuote()->getCustomerData();
+        $customerId = $customerData->getId();
+        $defaultBillingAddress = null;
+        $defaultShippingAddress = null;
+
+        if ($customerId) {
+            /* we should load data from the service once customer is saved */
+            $defaultBillingAddress = $this->_customerAdressService->getDefaultBillingAddress($customerId);
+            $defaultShippingAddress = $this->_customerAdressService->getDefaultShippingAddress($customerId);
+        } else {
+            /* we should load data from the quote if customer is not saved yet */
+            $defaultBillingAddress = $customerData->getDefaultBilling();
+            $defaultShippingAddress = $customerData->getDefaultShipping();
+        }
+
+        return !$defaultShippingAddress ||
+            $defaultBillingAddress &&
+            $defaultShippingAddress &&
+            $defaultBillingAddress->getId() == $defaultShippingAddress->getId();
     }
 
     /**
      * Save child collections
      *
-     * @return \Magento\Sales\Model\Quote\Address
+     * @return $this
      */
     protected function _afterSave()
     {
@@ -421,7 +456,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * Declare address quote model object
      *
      * @param   \Magento\Sales\Model\Quote $quote
-     * @return  \Magento\Sales\Model\Quote\Address
+     * @return $this
      */
     public function setQuote(\Magento\Sales\Model\Quote $quote)
     {
@@ -441,55 +476,80 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     }
 
     /**
-     * Import quote address data from customer address object
+     * Import quote address data from customer address Data Object.
      *
-     * @param   \Magento\Customer\Model\Address $address
-     * @return  \Magento\Sales\Model\Quote\Address
+     * @param \Magento\Customer\Service\V1\Data\Address $address
+     * @return $this
      */
-    public function importCustomerAddress(\Magento\Customer\Model\Address $address)
+    public function importCustomerAddressData(\Magento\Customer\Service\V1\Data\Address $address)
     {
-        $this->_objectCopyService->copyFieldsetToTarget('customer_address', 'to_quote_address', $address, $this);
-        $email = null;
-        if ($address->hasEmail()) {
-            $email =  $address->getEmail();
-        } elseif ($address->getCustomer()) {
-            $email = $address->getCustomer()->getEmail();
+        $this->_objectCopyService->copyFieldsetToTarget(
+            'customer_address',
+            'to_quote_address',
+            AddressConverter::toFlatArray($address),
+            $this
+        );
+        $region = $this->getRegion();
+        if (isset($region['region_id']) && isset($region['region'])) {
+            $this->setRegionId($region['region_id']);
+            $this->setRegion($region['region']);
         }
-        if ($email) {
-            $this->setEmail($email);
+        $quote = $this->getQuote();
+        if ($address->getCustomerId() && (!empty($quote) && $address->getCustomerId() == $quote->getCustomerId())) {
+            $customer = $quote->getCustomerData();
+            $this->setEmail($customer->getEmail());
         }
         return $this;
     }
 
     /**
-     * Export data to customer address object
+     * Export data to customer address Data Object.
      *
-     * @return \Magento\Customer\Model\Address
+     * @return \Magento\Customer\Service\V1\Data\Address
      */
-    public function exportCustomerAddress()
+    public function exportCustomerAddressData()
     {
-        $address = $this->_addressFactory->create();
-        $this->_objectCopyService->copyFieldsetToTarget(
-            'sales_convert_quote_address', 'to_customer_address', $this, $address
+        $customerAddressData = $this->_objectCopyService->getDataFromFieldset(
+            'sales_convert_quote_address',
+            'to_customer_address',
+            $this
         );
-        return $address;
+        $customerAddressDataWithRegion = array();
+        $customerAddressDataWithRegion['region']['region'] = $customerAddressData['region'];
+        if (isset($customerAddressData['region_code'])) {
+            $customerAddressDataWithRegion['region']['region_code'] = $customerAddressData['region_code'];
+        }
+        if ($customerAddressData['region_id']) {
+            $customerAddressDataWithRegion['region']['region_id'] = $customerAddressData['region_id'];
+        }
+        $customerAddressData = array_merge($customerAddressData, $customerAddressDataWithRegion);
+        return $this->_customerAddressBuilder->populateWithArray($customerAddressData)->create();
     }
 
     /**
      * Import address data from order address
      *
      * @param   \Magento\Sales\Model\Order\Address $address
-     * @return  \Magento\Sales\Model\Quote\Address
+     * @return $this
+     * @deprecated Use \Magento\Sales\Model\Quote\Address::importCustomerAddressData() instead
      */
     public function importOrderAddress(\Magento\Sales\Model\Order\Address $address)
     {
-        $this->setAddressType($address->getAddressType())
-            ->setCustomerId($address->getCustomerId())
-            ->setCustomerAddressId($address->getCustomerAddressId())
-            ->setEmail($address->getEmail());
+        $this->setAddressType(
+            $address->getAddressType()
+        )->setCustomerId(
+            $address->getCustomerId()
+        )->setCustomerAddressId(
+            $address->getCustomerAddressId()
+        )->setEmail(
+            $address->getEmail()
+        );
 
         $this->_objectCopyService->copyFieldsetToTarget(
-            'sales_convert_order_address', 'to_quote_address', $address, $this
+            'sales_convert_order_address',
+            'to_quote_address',
+            $address,
+            $this
         );
 
         return $this;
@@ -506,7 +566,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
         $arr = parent::toArray($arrAttributes);
         $arr['rates'] = $this->getShippingRatesCollection()->toArray($arrAttributes);
         $arr['items'] = $this->getItemsCollection()->toArray($arrAttributes);
-        foreach ($this->getTotals() as $k=>$total) {
+        foreach ($this->getTotals() as $k => $total) {
             $arr['totals'][$k] = $total->toArray();
         }
         return $arr;
@@ -520,7 +580,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     public function getItemsCollection()
     {
         if (null === $this->_items) {
-            $this->_items = $this->_itemCollFactory->create()->setAddressFilter($this->getId());
+            $this->_items = $this->_itemCollectionFactory->create()->setAddressFilter($this->getId());
             if ($this->getId()) {
                 foreach ($this->_items as $item) {
                     $item->setAddress($this);
@@ -545,7 +605,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
             // (because it can be overloaded)
             // So keep current flag $this->_nominalOnly and restore it after cycle
             $wasNominal = $this->_nominalOnly;
-            $this->_nominalOnly = true; // Now $this->_filterNominal() will return positive values for nominal items
+            $this->_nominalOnly = true;
+            // Now $this->_filterNominal() will return positive values for nominal items
 
             $quoteItems = $this->getQuote()->getItemsCollection();
             $addressItems = $this->getItemsCollection();
@@ -574,12 +635,12 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
                 }
             } else {
                 /*
-                * For virtual quote we assign items only to billing address, otherwise - only to shipping address
-                */
+                 * For virtual quote we assign items only to billing address, otherwise - only to shipping address
+                 */
                 $addressType = $this->getAddressType();
-                $canAddItems = $this->getQuote()->isVirtual()
-                    ? ($addressType == self::TYPE_BILLING)
-                    : ($addressType == self::TYPE_SHIPPING);
+                $canAddItems = $this->getQuote()->isVirtual() ? $addressType ==
+                    self::TYPE_BILLING : $addressType ==
+                    self::TYPE_SHIPPING;
 
                 if ($canAddItems) {
                     foreach ($quoteItems as $qItem) {
@@ -637,19 +698,19 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     /**
      * Segregate by nominal criteria
      *
+     * Returns
      * true: get nominals only
      * false: get non-nominals only
      * null: get all
      *
-     * @param \Magento\Sales\Model\Quote\Item\AbstractItem
+     * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
      * @return \Magento\Sales\Model\Quote\Item\AbstractItem|false
      */
     protected function _filterNominal($item)
     {
-        return (null === $this->_nominalOnly)
-            || ((false === $this->_nominalOnly) && !$item->isNominal())
-            || ((true === $this->_nominalOnly) && $item->isNominal())
-            ? $item : false;
+        return null === $this->_nominalOnly ||
+            false === $this->_nominalOnly && !$item->isNominal() ||
+            true === $this->_nominalOnly && $item->isNominal() ? $item : false;
     }
 
     /**
@@ -708,7 +769,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * Get address item object by id without
      *
      * @param int $itemId
-     * @return \Magento\Sales\Model\Quote\Address\Item
+     * @return \Magento\Sales\Model\Quote\Address\Item|false
      */
     public function getItemById($itemId)
     {
@@ -724,7 +785,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * Get prepared not deleted item
      *
      * @param int $itemId
-     * @return \Magento\Sales\Model\Quote\Address\Item
+     * @return \Magento\Sales\Model\Quote\Address\Item|false
      */
     public function getValidItemById($itemId)
     {
@@ -740,7 +801,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * Retrieve item object by quote item Id
      *
      * @param int $itemId
-     * @return \Magento\Sales\Model\Quote\Address\Item
+     * @return \Magento\Sales\Model\Quote\Address\Item|false
      */
     public function getItemByQuoteItemId($itemId)
     {
@@ -756,7 +817,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * Remove item from collection
      *
      * @param int $itemId
-     * @return \Magento\Sales\Model\Quote\Address
+     * @return $this
      */
     public function removeItem($itemId)
     {
@@ -770,27 +831,28 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     /**
      * Add item to address
      *
-     * @param   \Magento\Sales\Model\Quote\Item\AbstractItem $item
-     * @param   int $qty
-     * @return  \Magento\Sales\Model\Quote\Address
+     * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
+     * @param int $qty
+     * @return $this
      */
-    public function addItem(\Magento\Sales\Model\Quote\Item\AbstractItem $item, $qty=null)
+    public function addItem(\Magento\Sales\Model\Quote\Item\AbstractItem $item, $qty = null)
     {
         if ($item instanceof \Magento\Sales\Model\Quote\Item) {
             if ($item->getParentItemId()) {
                 return $this;
             }
-            $addressItem = $this->_addressItemFactory->create()
-                ->setAddress($this)
-                ->importQuoteItem($item);
+            $addressItem = $this->_addressItemFactory->create()->setAddress($this)->importQuoteItem($item);
             $this->getItemsCollection()->addItem($addressItem);
 
             if ($item->getHasChildren()) {
                 foreach ($item->getChildren() as $child) {
-                    $addressChildItem = $this->_addressItemFactory->create()
-                        ->setAddress($this)
-                        ->importQuoteItem($child)
-                        ->setParentItem($addressItem);
+                    $addressChildItem = $this->_addressItemFactory->create()->setAddress(
+                        $this
+                    )->importQuoteItem(
+                        $child
+                    )->setParentItem(
+                        $addressItem
+                    );
                     $this->getItemsCollection()->addItem($addressChildItem);
                 }
             }
@@ -816,7 +878,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     public function getShippingRatesCollection()
     {
         if (null === $this->_rates) {
-            $this->_rates = $this->_rateCollFactory->create()->setAddressFilter($this->getId());
+            $this->_rates = $this->_rateCollectionFactory->create()->setAddressFilter($this->getId());
             if ($this->getQuote()->hasNominalItems(false)) {
                 $this->_rates->setFixedOnlyFilter(true);
             }
@@ -854,13 +916,15 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     {
         $rates = array();
         foreach ($this->getShippingRatesCollection() as $rate) {
-            if (!$rate->isDeleted() && $rate->getCarrierInstance()) {
+            if (!$rate->isDeleted() && $this->_carrierFactory->get($rate->getCarrier())) {
                 if (!isset($rates[$rate->getCarrier()])) {
                     $rates[$rate->getCarrier()] = array();
                 }
 
                 $rates[$rate->getCarrier()][] = $rate;
-                $rates[$rate->getCarrier()][0]->carrier_sort_order = $rate->getCarrierInstance()->getSortOrder();
+                $rates[$rate->getCarrier()][0]->carrier_sort_order = $this->_carrierFactory->get(
+                    $rate->getCarrier()
+                )->getSortOrder();
             }
         }
         uasort($rates, array($this, '_sortRates'));
@@ -889,7 +953,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * Retrieve shipping rate by identifier
      *
      * @param   int $rateId
-     * @return  \Magento\Sales\Model\Quote\Address\Rate|bool
+     * @return  \Magento\Sales\Model\Quote\Address\Rate|false
      */
     public function getShippingRateById($rateId)
     {
@@ -905,7 +969,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * Retrieve shipping rate by code
      *
      * @param   string $code
-     * @return  \Magento\Sales\Model\Quote\Address\Rate
+     * @return  \Magento\Sales\Model\Quote\Address\Rate|false
      */
     public function getShippingRateByCode($code)
     {
@@ -920,7 +984,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     /**
      * Mark all shipping rates as deleted
      *
-     * @return \Magento\Sales\Model\Quote\Address
+     * @return $this
      */
     public function removeAllShippingRates()
     {
@@ -934,7 +998,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * Add shipping rate
      *
      * @param \Magento\Sales\Model\Quote\Address\Rate $rate
-     * @return \Magento\Sales\Model\Quote\Address
+     * @return $this
      */
     public function addShippingRate(\Magento\Sales\Model\Quote\Address\Rate $rate)
     {
@@ -946,7 +1010,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     /**
      * Collecting shipping rates by address
      *
-     * @return \Magento\Sales\Model\Quote\Address
+     * @return $this
      */
     public function collectShippingRates()
     {
@@ -964,10 +1028,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
 
         $found = $this->requestShippingRates();
         if (!$found) {
-            $this->setShippingAmount(0)
-                ->setBaseShippingAmount(0)
-                ->setShippingMethod('')
-                ->setShippingDescription('');
+            $this->setShippingAmount(0)->setBaseShippingAmount(0)->setShippingMethod('')->setShippingDescription('');
         }
 
         return $this;
@@ -982,7 +1043,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      */
     public function requestShippingRates(\Magento\Sales\Model\Quote\Item\AbstractItem $item = null)
     {
-        /** @var $request \Magento\Shipping\Model\Rate\Request */
+        /** @var $request \Magento\Sales\Model\Quote\Address\RateRequest */
         $request = $this->_rateRequestFactory->create();
         $request->setAllItems($item ? array($item) : $this->getAllItems());
         $request->setDestCountryId($this->getCountryId());
@@ -992,9 +1053,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
         $request->setDestCity($this->getCity());
         $request->setDestPostcode($this->getPostcode());
         $request->setPackageValue($item ? $item->getBaseRowTotal() : $this->getBaseSubtotal());
-        $packageWithDiscount = $item
-            ? $item->getBaseRowTotal() - $item->getBaseDiscountAmount()
-            : $this->getBaseSubtotalWithDiscount();
+        $packageWithDiscount = $item ? $item->getBaseRowTotal() -
+            $item->getBaseDiscountAmount() : $this->getBaseSubtotalWithDiscount();
         $request->setPackageValueWithDiscount($packageWithDiscount);
         $request->setPackageWeight($item ? $item->getRowWeight() : $this->getWeight());
         $request->setPackageQty($item ? $item->getQty() : $this->getItemQty());
@@ -1002,9 +1062,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
         /**
          * Need for shipping methods that use insurance based on price of physical products
          */
-        $packagePhysicalValue = $item
-            ? $item->getBaseRowTotal()
-            : $this->getBaseSubtotal() - $this->getBaseVirtualAmount();
+        $packagePhysicalValue = $item ? $item->getBaseRowTotal() : $this->getBaseSubtotal() -
+            $this->getBaseVirtualAmount();
         $request->setPackagePhysicalValue($packagePhysicalValue);
 
         $request->setFreeMethodWeight($item ? 0 : $this->getFreeMethodWeight());
@@ -1013,7 +1072,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
          * Store and website identifiers need specify from quote
          */
         /*$request->setStoreId($this->_storeManager->getStore()->getId());
-        $request->setWebsiteId($this->_storeManager->getStore()->getWebsiteId());*/
+          $request->setWebsiteId($this->_storeManager->getStore()->getWebsiteId());*/
 
         $request->setStoreId($this->getQuote()->getStore()->getId());
         $request->setWebsiteId($this->getQuote()->getStore()->getWebsiteId());
@@ -1027,7 +1086,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
 
         $request->setBaseSubtotalInclTax($this->getBaseSubtotalInclTax());
 
-        $result = $this->_shippingFactory->create()->collectRates($request)->getResult();
+        $result = $this->_rateCollector->create()->collectRates($request)->getResult();
 
         $found = false;
         if ($result) {
@@ -1077,7 +1136,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     /**
      * Collect address totals
      *
-     * @return \Magento\Sales\Model\Quote\Address
+     * @return $this
      */
     public function collectTotals()
     {
@@ -1112,13 +1171,16 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * Add total data or model
      *
      * @param \Magento\Sales\Model\Quote\Total|array $total
-     * @return \Magento\Sales\Model\Quote\Address
+     * @return $this
      */
     public function addTotal($total)
     {
         if (is_array($total)) {
-            $totalInstance = $this->_addressTotalFactory
-                ->create('Magento\Sales\Model\Quote\Address\Total')->setData($total);
+            $totalInstance = $this->_addressTotalFactory->create(
+                'Magento\Sales\Model\Quote\Address\Total'
+            )->setData(
+                $total
+            );
         } elseif ($total instanceof \Magento\Sales\Model\Quote\Total) {
             $totalInstance = $total;
         }
@@ -1145,21 +1207,31 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     public function validateMinimumAmount()
     {
         $storeId = $this->getQuote()->getStoreId();
-        if (!$this->_coreStoreConfig->getConfigFlag('sales/minimum_order/active', $storeId)) {
+        $validateEnabled = $this->_scopeConfig->isSetFlag(
+            'sales/minimum_order/active',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+        if (!$validateEnabled) {
             return true;
         }
 
-        if ($this->getQuote()->getIsVirtual() && $this->getAddressType() == self::TYPE_SHIPPING) {
-            return true;
-        } elseif (!$this->getQuote()->getIsVirtual() && $this->getAddressType() != self::TYPE_SHIPPING) {
+        if (!$this->getQuote()->getIsVirtual() xor $this->getAddressType() == self::TYPE_SHIPPING) {
             return true;
         }
 
-        $amount = $this->_coreStoreConfig->getConfig('sales/minimum_order/amount', $storeId);
-        if ($this->getBaseSubtotalWithDiscount() < $amount) {
-            return false;
-        }
-        return true;
+        $amount = $this->_scopeConfig->getValue(
+            'sales/minimum_order/amount',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+        $taxInclude = $this->_scopeConfig->getValue(
+            'sales/minimum_order/tax_including',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+        $taxes = ($taxInclude) ? $this->getBaseTaxAmount() : 0;
+        return ($this->getBaseSubtotalWithDiscount() + $taxes >= $amount);
     }
 
     /**
@@ -1176,7 +1248,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * Set applied taxes
      *
      * @param array $data
-     * @return \Magento\Sales\Model\Quote\Address
+     * @return $this
      */
     public function setAppliedTaxes($data)
     {
@@ -1188,7 +1260,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      *
      * @param float $value
      * @param bool $alreadyExclTax
-     * @return \Magento\Sales\Model\Quote\Address
+     * @return $this
      */
     public function setShippingAmount($value, $alreadyExclTax = false)
     {
@@ -1200,7 +1272,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      *
      * @param float $value
      * @param bool $alreadyExclTax
-     * @return \Magento\Sales\Model\Quote\Address
+     * @return $this
      */
     public function setBaseShippingAmount($value, $alreadyExclTax = false)
     {
@@ -1212,7 +1284,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      *
      * @param   string $code
      * @param   float $amount
-     * @return  \Magento\Sales\Model\Quote\Address
+     * @return $this
      */
     public function setTotalAmount($code, $amount)
     {
@@ -1229,7 +1301,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      *
      * @param   string $code
      * @param   float $amount
-     * @return  \Magento\Sales\Model\Quote\Address
+     * @return $this
      */
     public function setBaseTotalAmount($code, $amount)
     {
@@ -1246,7 +1318,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      *
      * @param   string $code
      * @param   float $amount
-     * @return  \Magento\Sales\Model\Quote\Address
+     * @return $this
      */
     public function addTotalAmount($code, $amount)
     {
@@ -1260,7 +1332,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      *
      * @param   string $code
      * @param   float $amount
-     * @return  \Magento\Sales\Model\Quote\Address
+     * @return $this
      */
     public function addBaseTotalAmount($code, $amount)
     {
@@ -1273,12 +1345,12 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * Get total amount value by code
      *
      * @param   string $code
-     * @return  float
+     * @return  float|int
      */
     public function getTotalAmount($code)
     {
         if (isset($this->_totalAmounts[$code])) {
-            return  $this->_totalAmounts[$code];
+            return $this->_totalAmounts[$code];
         }
         return 0;
     }
@@ -1287,12 +1359,12 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * Get total amount value by code in base store currency
      *
      * @param   string $code
-     * @return  float
+     * @return  float|int
      */
     public function getBaseTotalAmount($code)
     {
         if (isset($this->_baseTotalAmounts[$code])) {
-            return  $this->_baseTotalAmounts[$code];
+            return $this->_baseTotalAmounts[$code];
         }
         return 0;
     }
@@ -1335,5 +1407,13 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     public function getSubtotalWithDiscount()
     {
         return $this->getSubtotal() + $this->getDiscountAmount();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function _getValidationRulesBeforeSave()
+    {
+        return $this->validator;
     }
 }

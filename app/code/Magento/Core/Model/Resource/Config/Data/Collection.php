@@ -18,31 +18,26 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Core\Model\Resource\Config\Data;
 
 /**
  * Config data collection
  *
- * @category    Magento
- * @package     Magento_Core
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Core\Model\Resource\Config\Data;
-
-class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Define resource model
      *
+     * @return void
      */
     protected function _construct()
     {
-        $this->_init('Magento\Core\Model\Config\Value', 'Magento\Core\Model\Resource\Config\Data');
+        $this->_init('Magento\Framework\App\Config\Value', 'Magento\Core\Model\Resource\Config\Data');
     }
 
     /**
@@ -51,7 +46,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * @param string $scope
      * @param int $scopeId
      * @param string $section
-     * @return \Magento\Core\Model\Resource\Config\Data\Collection
+     * @return $this
      */
     public function addScopeFilter($scope, $scopeId, $section)
     {
@@ -65,7 +60,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      *  Add path filter
      *
      * @param string $section
-     * @return \Magento\Core\Model\Resource\Config\Data\Collection
+     * @return $this
      */
     public function addPathFilter($section)
     {
@@ -77,7 +72,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Add value filter
      *
      * @param int|string $value
-     * @return \Magento\Core\Model\Resource\Config\Data\Collection
+     * @return $this
      */
     public function addValueFilter($value)
     {

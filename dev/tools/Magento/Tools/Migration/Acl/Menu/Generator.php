@@ -18,12 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category   Magento
- * @package    Tools
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\Migration\Acl\Menu;
 
 class Generator
@@ -85,11 +82,10 @@ class Generator
      */
     protected $_fileManager;
 
-
     /**
-     * @param $basePath
-     * @param $validNodeTypes
-     * @param $aclXPathToId
+     * @param string $basePath
+     * @param string $validNodeTypes
+     * @param array $aclXPathToId
      * @param \Magento\Tools\Migration\Acl\FileManager $fileManager
      * @param bool $preview
      */
@@ -105,14 +101,8 @@ class Generator
         $this->_validNodeTypes = $validNodeTypes;
         $this->_aclXPathToId = $aclXPathToId;
         $this->_updateNodes = array(
-            'add' => array(
-                'required' => true,
-                'attribute' => 'resource',
-            ),
-            'update' => array(
-                'required' => false,
-                'attribute' => 'resource',
-            ),
+            'add' => array('required' => true, 'attribute' => 'resource'),
+            'update' => array('required' => false, 'attribute' => 'resource')
         );
 
         $this->_isPreviewMode = $preview;
@@ -135,7 +125,7 @@ class Generator
     {
         if (null === $this->_menuFiles) {
             $pattern = $this->getEtcDirPattern() . 'adminhtml/menu.xml';
-            $this->_menuFiles = (glob($pattern));
+            $this->_menuFiles = glob($pattern);
         }
         return $this->_menuFiles;
     }
@@ -144,6 +134,7 @@ class Generator
      * Parse menu item node
      *
      * @param \DOMNode $node
+     * @return void
      */
     public function parseMenuNode(\DOMNode $node)
     {
@@ -167,6 +158,8 @@ class Generator
 
     /**
      * Parse menu files
+     *
+     * @return void
      */
     public function parseMenuFiles()
     {
@@ -192,7 +185,8 @@ class Generator
     }
 
     /**
-     * @param $menuId
+     * @param string $menuId
+     * @return void
      */
     public function initParentItems($menuId)
     {
@@ -210,13 +204,12 @@ class Generator
     /**
      * Build xpath elements
      *
-     * @param $menuId
+     * @param string $menuId
+     * @return void
      */
     public function buildXPath($menuId)
     {
-        $parents = $this->_menuIdMaps[$menuId]['parents'] ?
-            $this->_menuIdMaps[$menuId]['parents'] :
-            array();
+        $parents = $this->_menuIdMaps[$menuId]['parents'] ? $this->_menuIdMaps[$menuId]['parents'] : array();
         $resource = $this->_menuIdMaps[$menuId]['resource'];
         if (!$resource) {
             $parts = array();
@@ -247,6 +240,8 @@ class Generator
 
     /**
      * Initialize menu items XPath
+     *
+     * @return void
      */
     public function buildMenuItemsXPath()
     {
@@ -263,10 +258,7 @@ class Generator
      */
     public function mapMenuToAcl()
     {
-        $output = array(
-            'mapped' => array(),
-            'not_mapped' => array(),
-        );
+        $output = array('mapped' => array(), 'not_mapped' => array());
         $aclPrefix = 'config/acl/resources/admin/';
         foreach ($this->_idToXPath as $menuId => $menuXPath) {
             $key = $aclPrefix . $menuXPath;
@@ -292,6 +284,7 @@ class Generator
 
     /**
      * @param array $idToXPath
+     * @return void
      */
     public function setIdToXPath($idToXPath)
     {
@@ -301,7 +294,7 @@ class Generator
     /**
      * Update attributes of menu items to set ACL resource id
      *
-     * @return array
+     * @return string[]
      */
     public function updateMenuAttributes()
     {
@@ -331,8 +324,12 @@ class Generator
                 if ($resource) {
                     $aclXPath = $aclPrefix . $resource;
                     if (false == array_key_exists($aclXPath, $this->_aclXPathToId)) {
-                        $errors[] = 'File: ' . $file . ' :: Menu: ' . $menuId
-                            . '. There is no ACL resource with XPath ' . $aclXPath;
+                        $errors[] = 'File: ' .
+                            $file .
+                            ' :: Menu: ' .
+                            $menuId .
+                            '. There is no ACL resource with XPath ' .
+                            $aclXPath;
                         continue;
                     }
                     $aclId = $this->_aclXPathToId[$aclXPath];
@@ -354,8 +351,13 @@ class Generator
      */
     protected function _isNodeValidToUpdate(\DOMNode $node)
     {
-        if (false == in_array($node->nodeType, $this->_validNodeTypes) ||
-            false == array_key_exists($node->nodeName, $this->_updateNodes)
+        if (false == in_array(
+            $node->nodeType,
+            $this->_validNodeTypes
+        ) || false == array_key_exists(
+            $node->nodeName,
+            $this->_updateNodes
+        )
         ) {
             return false;
         }
@@ -365,6 +367,7 @@ class Generator
 
     /**
      * @param array $menuIdToAclId
+     * @return void
      */
     public function setMenuIdToAclId($menuIdToAclId)
     {
@@ -373,6 +376,7 @@ class Generator
 
     /**
      * @param array $aclXPathToId
+     * @return void
      */
     public function setAclXPathToId($aclXPathToId)
     {
@@ -381,6 +385,7 @@ class Generator
 
     /**
      * @param array $menuDomList
+     * @return void
      */
     public function setMenuDomList($menuDomList)
     {
@@ -389,6 +394,8 @@ class Generator
 
     /**
      * Save menu XML files
+     *
+     * @return void
      */
     public function saveMenuFiles()
     {

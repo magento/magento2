@@ -1,0 +1,78 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php if($this->getProductData()->getId()): ?>
+<?php $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image'); ?>
+<div class="customer-review view">
+    <div class="product-details">
+        <div class="product-media">
+            <a class="product-photo" href="<?php echo $this->getProductData()->getProductUrl() ?>">
+                <?php /* customer_account_product_review_page */ ?>
+                <?php echo $imageBlock->init($this->getProductData(), 'customer_account_product_review_page')->toHtml() ?>
+            </a>
+        </div>
+        <div class="product-info">
+            <h2 class="product-name"><?php echo $this->escapeHtml($this->getProductData()->getName()) ?></h2>
+            <?php if( $this->getRating() && $this->getRating()->getSize()): ?>
+                <span class="rating-average-label"><?php echo __('Average Customer Rating:') ?></span>
+                <?php echo $this->getReviewsSummaryHtml($this->getProductData()) ?>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <div class="review-details">
+        <?php if( $this->getRating() && $this->getRating()->getSize()): ?>
+            <div class="title">
+                <strong><?php echo ($this->isReviewOwner()) ? __('Your Review') : __('Review'); ?></strong>
+            </div>
+            <div class="customer-review-rating">
+                <?php foreach ($this->getRating() as $_rating): ?>
+                <?php if($_rating->getPercent()): ?>
+                    <?php $rating = ceil($_rating->getPercent()) ?>
+                    <div class="rating-summary item">
+                        <span class="rating-label"><span><?php echo $this->escapeHtml($_rating->getRatingCode()) ?></span></span>
+                        <div class="rating-result" title="<?php echo $rating; ?>%">
+                            <span style="width:<?php echo $rating; ?>%">
+                                <span><?php echo $rating; ?>%</span>
+                            </span>
+                        </div>
+                    </div>
+                <?php endif; ?>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+
+        <div class="review-title"><?php echo $this->escapeHtml($this->getReviewData()->getTitle()) ?></div>
+        <div class="review-content"><?php echo nl2br($this->escapeHtml($this->getReviewData()->getDetail())) ?></div>
+        <div class="review-date">
+            <?php echo __('Submitted on %1', '<time class="date">' . $this->dateFormat($this->getReviewData()->getCreatedAt()) . '</time>') ?>
+        </div>
+    </div>
+</div>
+<div class="actions-toolbar">
+    <div class="secondary">
+        <a class="action back" href="<?php echo $this->getBackUrl() ?>"><span><?php echo __('Back to My Reviews') ?></span></a>
+    </div>
+</div>
+<?php endif; ?>

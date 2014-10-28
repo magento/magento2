@@ -18,19 +18,18 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category   Magento
- * @package    tools
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Tools\Migration\System\Configuration\Mapper;
 
-require_once realpath(__DIR__ . '/../../../../../../../../../../')
-    . '/tools/Magento/Tools/Migration/System/Configuration/Mapper/AbstractMapper.php';
-require_once realpath(__DIR__ . '/../../../../../../../../../../')
-    . '/tools/Magento/Tools/Migration/System/Configuration/Mapper/Tab.php';
 
+require_once realpath(
+    __DIR__ . '/../../../../../../../../../../'
+) . '/tools/Magento/Tools/Migration/System/Configuration/Mapper/AbstractMapper.php';
+require_once realpath(
+    __DIR__ . '/../../../../../../../../../../'
+) . '/tools/Magento/Tools/Migration/System/Configuration/Mapper/Tab.php';
 /**
  * Test case for \Magento\Tools\Migration\System\Configuration\Mapper\Tab
  */
@@ -61,36 +60,19 @@ class TabTest extends \PHPUnit_Framework_TestCase
                 'label' => array('#text' => 'tab label'),
                 'comment' => array('#cdata-section' => 'tab comment')
             ),
-            'tab_2' => array(),
+            'tab_2' => array()
         );
 
         $expected = array(
             array(
                 'nodeName' => 'tab',
-                '@attributes' => array (
-                    'id' => 'tab_1',
-                    'sortOrder' => 10,
-                    'type' => 'text',
-                    'class' => 'css class',
-                ),
-                'parameters' => array (
-                    array(
-                        'name' => 'label',
-                        '#text' => 'tab label'
-                    ),
-                    array(
-                        'name' => 'comment',
-                        '#cdata-section' => 'tab comment'
-                    ),
+                '@attributes' => array('id' => 'tab_1', 'sortOrder' => 10, 'type' => 'text', 'class' => 'css class'),
+                'parameters' => array(
+                    array('name' => 'label', '#text' => 'tab label'),
+                    array('name' => 'comment', '#cdata-section' => 'tab comment')
                 )
             ),
-            array(
-                'nodeName' => 'tab',
-                '@attributes' => array (
-                    'id' => 'tab_2',
-                ),
-                'parameters' => array ()
-            )
+            array('nodeName' => 'tab', '@attributes' => array('id' => 'tab_2'), 'parameters' => array())
         );
 
         $actual = $this->_object->transform($config);

@@ -1,0 +1,347 @@
+// /**
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+.multicheckout {
+    .title {
+        margin-bottom: 30px;
+        strong {
+            font-weight: @font-weight-base;
+        }
+    }
+
+    .table-wrapper {
+        margin-bottom: 0;
+        .action.delete {
+            display: inline-block;
+            margin: 7px 0 0;
+        }
+        .col {
+            &.qty {
+                .input-text {
+                    text-align: center;
+                    width: 45px;
+                }
+            }
+            &.item {
+                .action.edit {
+                    font-weight: @font-weight-base;
+                    margin-left: @indent-s-base;
+                }
+            }
+        }
+        .cart-price {
+            &:extend(.abstract-checkout-cart-price all);
+        }
+        .product-item-name {
+            &:extend(.abstract-checkout-product-name all);
+        }
+    }
+
+    &:not(.address) {
+        .table-wrapper {
+            .product-item-name {
+                margin: 0;
+            }
+        }
+    }
+    
+    > .actions-toolbar {
+        margin-top: @indent-xl-base;
+    }
+
+    .actions-toolbar > .secondary {
+        display: block;
+        .action.back {
+            display: block;
+        }
+    }
+
+    .action.primary {
+        &:extend(.abstract-button-l all);
+    }
+
+    .item-options {
+        margin: 10px 0 0;
+        &:extend(.abstract-product-options-list all);
+        &:extend(.abstract-add-clearfix all);
+    }
+    
+    &:extend(.abstract-account-blocks all);
+
+    .block {
+        &:extend(.abstract-add-clearfix all);
+    }
+
+    .block-title,
+    .block-content .title {
+        &:extend(.abstract-account-title all);
+        border-bottom: @border-width-base solid @border-color-base;
+        padding-bottom: 10px;
+        strong {
+            font-weight: @font-weight-base;
+            span {
+                color: @color-primary-light;
+            }
+        }
+    }
+
+    .block-content {
+        &:extend(.abstract-add-clearfix all);
+        .title {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+    }
+
+    &.order-review {
+        .block-title > strong {
+            .font-size(24);
+        }
+        .data.table {
+            tfoot {
+                &:extend(.abstract-account-summary all);
+            }
+        }
+        .block-shipping {
+            .block-content:not(:last-child) {
+                margin-bottom: @indent-xl-base;
+            }
+        }
+    }
+
+    .box-shipping-method {
+        .price {
+            font-weight: @font-weight-bold;
+        }
+    }
+
+    .hidden {
+        &:extend(.abstract-no-display all);
+    }
+
+    .checkout-review .grand.totals {
+        .font-size(@font-size-xl);
+        margin-bottom: @indent-xl-base;
+        .mark {
+            font-weight: @font-weight-base;
+        }
+    }
+}
+
+[class^="multishipping-"] {
+    .nav-sections {
+        &:extend(.abstract-no-display all);
+    }
+}
+
+//
+//    Mobile
+//--------------------------------------
+.responsive-smaller(@break) when (@break = @screen-m) {
+    [class^="multishipping-"] {
+        .nav-toggle {
+            &:extend(.abstract-no-display all);
+        }
+        .logo {
+            margin-left: 0;
+        }
+    }
+
+    .multicheckout {
+        .data.table {
+            &:extend(.abstract-table-vertical-mobile all);
+            &:extend(.abstract-product-items-summary all);
+            > tbody {
+                > tr td {
+                    padding-top: 15px;
+                    padding-left: 0;
+                }
+                td {
+                    &:before {
+                        margin-bottom: 5px;
+                    }
+                    &.actions {
+                        padding-top: 9px;
+                        padding-bottom: 15px;
+                        &:before {
+                            &:extend(.abstract-visually-hidden-mobile-m all);
+                        }
+                    }
+                    &:last-child {
+                        border-bottom: @border-width-base solid @border-color-base;
+                    }
+                }
+            }
+        }
+
+        .block-content .box {
+            &:not(:last-child) {
+                margin-bottom: @indent-xl-base;
+            }
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+        &.order-review {
+            .data.table {
+                thead {
+                    .col.item {
+                        display: block;
+                        padding: 0;
+                    }
+                }
+            }
+        }
+    }
+}
+
+//
+//    Desktop
+//--------------------------------------
+.responsive(@break) when (@break = @screen-m) {
+    .multicheckout {
+        .actions-toolbar {
+            .column:not(.sidebar-main) & {
+                &:extend(.abstract-reset-left-margin-desktop all);
+            }
+            .secondary {
+                float: none;
+                margin-top: 11px;
+                text-align: right;
+                .action {
+                    margin-left: 10px;
+                    &.back {
+                        display: block;
+                        float: left;
+                    }
+                }
+            }
+        }
+
+        .table-wrapper {
+            tbody {
+                td {
+                    border-top: @border-width-base solid @border-color-base;
+                }
+            }
+            .col.qty {
+                text-align: center;
+            }
+        }
+
+        .item-options {
+            margin: 20px 0 0;
+        }
+
+        .block-content .box {
+            margin-bottom: 0;
+        }
+
+        .block-shipping {
+            .box {
+                &:extend(.abstract-add-box-sizing-desktop all);
+                float: left;
+                width: 25%;
+            }
+            .box-shipping-method {
+                padding-right: @indent-m-base;
+                padding-left: @indent-m-base;
+                width: 50%;
+            }
+        }
+
+        .block-billing {
+            &:extend(.abstract-add-clearfix-mobile-m all);
+            .box-billing-address {
+                &:extend(.abstract-add-box-sizing-desktop all);
+                float: left;
+                width: 25%;
+            }
+            .box-billing-method {
+                &:extend(.abstract-add-box-sizing-desktop all);
+                float: left;
+                padding-left: @indent-m-base;
+                width: 50%;
+            }
+        }
+
+        &.form.address {
+            .table-wrapper {
+                .applicable {
+                    margin: 7px 0 0;
+                }
+            }
+        }
+
+        &.order-review {
+            .box-items {
+                clear: left;
+                float: none;
+                padding-top: @indent-xl-base;
+                width: auto;
+                .data.table {
+                    tr:first-child td {
+                        padding-top: 20px;
+                    }
+                    tr:last-child td {
+                        padding-bottom: 20px;
+                    }
+                }
+            }
+            .col.item {
+                width: 75%;
+            }
+            .mark {
+                text-align: right;
+            }
+        }
+
+        // Payment methods
+        .methods-payment {
+            .item-content > .fieldset {
+                width: auto;
+                .field {
+                    &.cvv {
+                        display: inline-block;
+                        width: auto;
+                    }
+                }
+            }
+            .fieldset > .field:not(.choice) {
+                > .label {
+                    float: none;
+                    margin-bottom: 8px;
+                    text-align: left;
+                    width: auto;
+                }
+                &:not(.cvv) {
+                    .control {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+}

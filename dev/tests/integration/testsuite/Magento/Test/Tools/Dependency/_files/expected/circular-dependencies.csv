@@ -1,0 +1,9 @@
+"Circular dependencies:";"Total number of chains"
+"";"2"
+
+"Circular dependencies for each module:";""
+"Module1";"1"
+"Module1->Module2->Module1"
+
+"Module2";"1"
+"Module2->Module1->Module2"

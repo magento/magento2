@@ -1,0 +1,312 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/** @var $this \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option */
+?>
+<script id="bundle-option-template" type="text/x-jquery-tmpl">
+    <div id="<?php echo $this->getFieldId() ?>_{{index}}" class="option-box">
+        <div class="fieldset-wrapper collapsable-wrapper opened" id="<?php echo $this->getFieldId() ?>_{{index}}-wrapper">
+            <div class="fieldset-wrapper-title">
+                <strong class="title" data-toggle="collapse" data-target="#<?php echo $this->getFieldId() ?>_{{index}}-content">
+                    <span>{{default_title}}</span>
+                </strong>
+                <div class="actions">
+                    <?php echo $this->getOptionDeleteButtonHtml() ?>
+                </div>
+                <div data-role="draggable-handle" class="draggable-handle"></div>
+            </div>
+            <div class="fieldset-wrapper-content in collapse" id="<?php echo $this->getFieldId() ?>_{{index}}-content">
+                <fieldset class="fieldset">
+                    <fieldset class="fieldset-alt">
+                        <div class="field field-option-title required">
+                            <label class="label" for="id_<?php echo $this->getFieldName() ?>_{{index}}_title">
+                                <?php echo __('Option Title') ?>
+                            </label>
+                            <div class="control">
+                                <?php if ($this->isDefaultStore()): ?>
+                                <input class="input-text required-entry"
+                                       type="text"
+                                       name="<?php echo $this->getFieldName() ?>[{{index}}][title]"
+                                       id="id_<?php echo $this->getFieldName() ?>_{{index}}_title"
+                                       value="{{title}}"
+                                       data-original-value="{{title}}" />
+                                <?php else: ?>
+                                <input class="input-text required-entry"
+                                       type="text"
+                                       name="<?php echo $this->getFieldName() ?>[{{index}}][default_title]"
+                                       id="id_<?php echo $this->getFieldName() ?>_{{index}}_default_title"
+                                       value="{{default_title}}"
+                                       data-original-value="{{default_title}}" />
+                                <?php endif; ?>
+                                <input type="hidden"
+                                       id="<?php echo $this->getFieldId() ?>_id_{{index}}"
+                                       name="<?php echo $this->getFieldName() ?>[{{index}}][option_id]"
+                                       value="{{option_id}}" />
+                                <input type="hidden"
+                                       name="<?php echo $this->getFieldName() ?>[{{index}}][delete]"
+                                       value=""
+                                       data-state="deleted" />
+                            </div>
+                        </div>
+                        <?php if (!$this->isDefaultStore()): ?>
+                        <div class="field field-option-store-view required">
+                            <label class="label" for="id_<?php echo $this->getFieldName() ?>_{{index}}_title_store">
+                                <?php echo __('Store View Title') ?>
+                            </label>
+                            <div class="control">
+                                <input class="input-text required-entry" type="text"
+                                       name="<?php echo $this->getFieldName() ?>[{{index}}][title]"
+                                       id="id_<?php echo $this->getFieldName() ?>_{{index}}_title_store"
+                                       value="{{title}}" />
+                            </div>
+                        </div>
+                        <?php endif; ?>
+                        <div class="field field-option-input-type required">
+                            <label class="label" for="<?php echo $this->getFieldId().'_{{index}}_type' ?>">
+                                <?php echo __('Input Type') ?>
+                            </label>
+                            <div class="control">
+                                <?php echo $this->getTypeSelectHtml() ?>
+                            </div>
+                        </div>
+                        <div class="field field-option-req">
+                            <div class="control">
+                                <input type="checkbox"
+                                       class="is-required"
+                                       checked="checked"
+                                       id="field-option-req" />
+                                <label for="field-option-req">
+                                    <?php echo __('Required')?>
+                                </label>
+                                <span style="display:none"><?php echo $this->getRequireSelectHtml() ?></span>
+                            </div>
+                        </div>
+                        <div class="field field-option-position no-display">
+                            <label class="label" for="field-option-position">
+                                <?php echo __('Position') ?>
+                            </label>
+                            <div class="control">
+                                <input class="input-text validate-zero-or-greater"
+                                       type="text"
+                                       name="<?php echo $this->getFieldName() ?>[{{index}}][position]"
+                                       value="{{position}}"
+                                       id="field-option-position" />
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <div class="no-products-message">
+                        <?php echo __('There are no products in this option.')?>
+                    </div>
+                    <?php echo $this->getAddSelectionButtonHtml() ?>
+                </fieldset>
+            </div>
+        </div>
+        <div id="<?php echo $this->getFieldId() ?>_search_{{index}}" class="selection-search"></div>
+    </div>
+</script>
+
+<?php echo $this->getSelectionHtml() ?>
+
+<script type="text/javascript">
+require([
+    "jquery",
+    "js/theme",
+    "Magento_Bundle/js/bundle-product",
+    "prototype",
+    "mage/adminhtml/form"
+], function(jQuery){
+
+    var optionTemplate = jQuery('#bundle-option-template').html();
+
+function changeInputType(oldObject, oType) {
+    var newObject = document.createElement('input');
+    newObject.type = oType;
+    if(oldObject.size) newObject.size = oldObject.size;
+    if(oldObject.value) newObject.value = oldObject.value;
+    if(oldObject.name) newObject.name = oldObject.name;
+    if(oldObject.id) newObject.id = oldObject.id;
+    if(oldObject.onclick) newObject.onclick = oldObject.onclick;
+    if(oldObject.className) newObject.className = oldObject.className;
+    oldObject.parentNode.replaceChild(newObject,oldObject);
+    return newObject;
+}
+
+Bundle.Option = Class.create();
+Bundle.Option.prototype = {
+    idLabel : '<?php echo $this->getFieldId() ?>',
+    templateSyntax : /(^|.|\r|\n)({{(\w+)}})/,
+    templateText : '',
+    itemsCount : 0,
+    initialize : function(template) {
+        this.templateText = template;
+    },
+
+    add : function(data) {
+        if (!data) {
+            data = <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode(array('default_title' => __('New Option')))?>;
+        } else {
+            data.title = data.title.replace(/</g, "&lt;");
+            data.title = data.title.replace(/"/g, "&quot;");
+            data.default_title =  data.title;
+        }
+        data.index = this.itemsCount++;
+
+        this.template = new Template(this.templateText, this.templateSyntax);
+
+        jQuery('#product_bundle_container').append(jQuery(this.template.evaluate(data)));
+
+        jQuery('.collapse', jQuery('#product_bundle_container')).collapsable();
+
+        //set selected type
+        if (data.type) {
+            $A($(this.idLabel + '_'+data.index+'_type').options).each(function(option){
+                if (option.value==data.type) option.selected = true;
+            });
+        }
+
+        //set selected is_require
+        if (data.required) {
+            $A($(this.idLabel + '_'+data.index+'_required').options).each(function(option){
+                if (option.value==data.required) option.selected = true;
+            });
+        }
+        // rebind change notifications
+        varienWindowOnload(true);
+
+        if (jQuery && jQuery('#bundle_product_container').data('bundleProduct')) {
+            jQuery('#bundle_product_container').bundleProduct('refreshSortableElements');
+        }
+
+        return data.index;
+    },
+
+    remove : function(event){
+        var element = Event.findElement(event, 'div').up('.option-box');
+
+        if(element){
+            Element.select(element, '[data-state="deleted"]').each(function(elem) {
+                elem.value = '1';
+            });
+
+            Element.select(element, ['input', 'select']).each(function(elem) {
+                elem.hide();
+                elem.className = '';
+            });
+
+            Element.hide(element);
+        }
+    },
+
+    changeType : function(event) {
+        var element = Event.element(event);
+        parts = element.id.split('_');
+        i = parts[2];
+        if (element.value == 'multi' || element.value == 'checkbox') {
+            inputs = $A($$('#' + bSelection.idLabel + '_box_' + i + ' tr.selection input.default'));
+            inputs.each(
+                function(elem){
+                    //elem.type = "checkbox";
+                    changeInputType(elem, 'checkbox');
+                }
+            );
+            /**
+             * Hide not needed elements (user defined qty select box)
+             */
+            inputs = $A($$('#' + bSelection.idLabel + '_box_' + i + ' .qty-box'));
+            inputs.each(
+                function(elem){
+                    elem.hide();
+                }
+            );
+
+        } else {
+            inputs = $A($$('#' + bSelection.idLabel + '_box_' + i + ' tr.selection input.default'));
+            have = false;
+            for (j=0; j< inputs.length; j++) {
+                //inputs[j].type = "radio";
+                changeInputType(inputs[j], 'radio');
+                if (inputs[j].checked && have) {
+                    inputs[j].checked = false;
+                } else {
+                    have = true;
+                }
+            }
+
+            /**
+             * Show user defined select box
+             */
+            inputs = $A($$('#' + bSelection.idLabel + '_box_' + i + ' .qty-box'));
+            inputs.each(
+                function(elem){
+                    elem.show();
+                }
+            );
+        }
+    },
+
+    priceTypeFixed : function() {
+        inputs = $A($$('.price-type-box'));
+        inputs.each(
+            function(elem){
+                elem.show();
+            }
+        );
+    },
+
+    priceTypeDynamic : function() {
+        inputs = $A($$('.price-type-box'));
+        inputs.each(
+            function(elem){
+                elem.hide();
+            }
+        );
+    }
+};
+
+var optionIndex = 0;
+bOption = new Bundle.Option(optionTemplate);
+<?php
+    foreach ($this->getOptions() as $_option) {
+        /** @var $_option \Magento\Bundle\Model\Option */
+        echo 'optionIndex = bOption.add(', $_option->toJson(), ');', PHP_EOL;
+        if ($_option->getSelections()) {
+            foreach ($_option->getSelections() as $_selection) {
+                /** @var $_selection \Magento\Catalog\Model\Product */
+                $_selection->setName($this->escapeHtml($_selection->getName()));
+                echo 'bSelection.addRow(optionIndex,', $_selection->toJson(), ');', PHP_EOL;
+            }
+        }
+    }
+?>
+function togglePriceType() {
+    bOption['priceType' + ($('price_type').value == '1' ? 'Fixed' : 'Dynamic')]();
+}
+document.observe("dom:loaded", function() {
+    togglePriceType();
+    Event.observe('price_type', 'change', togglePriceType);
+});
+
+});
+</script>

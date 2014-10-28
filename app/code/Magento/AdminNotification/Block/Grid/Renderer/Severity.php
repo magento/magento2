@@ -20,15 +20,14 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_AdminNotification
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\AdminNotification\Block\Grid\Renderer;
 
-class Severity
-    extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
+use \Magento\Framework\Notification\MessageInterface;
+
+class Severity extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
      * @var \Magento\AdminNotification\Model\Inbox
@@ -52,30 +51,30 @@ class Severity
     /**
      * Renders grid column
      *
-     * @param   \Magento\Object $row
+     * @param   \Magento\Framework\Object $row
      * @return  string
      */
-    public function render(\Magento\Object $row)
+    public function render(\Magento\Framework\Object $row)
     {
         $class = '';
         $value = '';
 
         switch ($row->getData($this->getColumn()->getIndex())) {
-            case \Magento\AdminNotification\Model\Inbox::SEVERITY_CRITICAL:
+            case MessageInterface::SEVERITY_CRITICAL:
                 $class = 'critical';
-                $value = $this->_notice->getSeverities(\Magento\AdminNotification\Model\Inbox::SEVERITY_CRITICAL);
+                $value = $this->_notice->getSeverities(MessageInterface::SEVERITY_CRITICAL);
                 break;
-            case \Magento\AdminNotification\Model\Inbox::SEVERITY_MAJOR:
+            case MessageInterface::SEVERITY_MAJOR:
                 $class = 'major';
-                $value = $this->_notice->getSeverities(\Magento\AdminNotification\Model\Inbox::SEVERITY_MAJOR);
+                $value = $this->_notice->getSeverities(MessageInterface::SEVERITY_MAJOR);
                 break;
-            case \Magento\AdminNotification\Model\Inbox::SEVERITY_MINOR:
+            case MessageInterface::SEVERITY_MINOR:
                 $class = 'minor';
-                $value = $this->_notice->getSeverities(\Magento\AdminNotification\Model\Inbox::SEVERITY_MINOR);
+                $value = $this->_notice->getSeverities(MessageInterface::SEVERITY_MINOR);
                 break;
-            case \Magento\AdminNotification\Model\Inbox::SEVERITY_NOTICE:
+            case MessageInterface::SEVERITY_NOTICE:
                 $class = 'notice';
-                $value = $this->_notice->getSeverities(\Magento\AdminNotification\Model\Inbox::SEVERITY_NOTICE);
+                $value = $this->_notice->getSeverities(MessageInterface::SEVERITY_NOTICE);
                 break;
         }
         return '<span class="grid-severity-' . $class . '"><span>' . $value . '</span></span>';

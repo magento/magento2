@@ -18,31 +18,27 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Eav
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Eav\Model\Attribute\Data;
 
+use Magento\Framework\App\RequestInterface;
 
 /**
  * EAV Entity Attribute Multiply select Data Model
  *
- * @category    Magento
- * @package     Magento_Eav
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Eav\Model\Attribute\Data;
-
 class Multiselect extends \Magento\Eav\Model\Attribute\Data\Select
 {
     /**
      * Extract data from request and return value
      *
-     * @param \Magento\App\RequestInterface $request
+     * @param RequestInterface $request
      * @return array|string
      */
-    public function extractValue(\Magento\App\RequestInterface $request)
+    public function extractValue(RequestInterface $request)
     {
         $values = $this->_getRequestValue($request);
         if ($values !== false && !is_array($values)) {
@@ -55,7 +51,7 @@ class Multiselect extends \Magento\Eav\Model\Attribute\Data\Select
      * Export attribute value to entity model
      *
      * @param array|string $value
-     * @return \Magento\Eav\Model\Attribute\Data\Multiselect
+     * @return $this
      */
     public function compactValue($value)
     {
@@ -82,7 +78,7 @@ class Multiselect extends \Magento\Eav\Model\Attribute\Data\Select
             case \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_JSON:
             case \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_ARRAY:
                 $output = $values;
-            // fall-through intentional
+                // fall-through intentional
             default:
                 $output = array();
                 foreach ($values as $value) {

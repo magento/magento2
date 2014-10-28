@@ -18,18 +18,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model\Resource\Quote\Item;
 
 /**
  * Quote item resource collection
  */
-namespace Magento\Sales\Model\Resource\Quote\Item;
-
-class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Collection quote instance
@@ -41,19 +38,19 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Product Ids array
      *
-     * @var array
+     * @var int[]
      */
-    protected $_productIds   = array();
+    protected $_productIds = array();
 
     /**
      * @var \Magento\Sales\Model\Resource\Quote\Item\Option\CollectionFactory
      */
-    protected $_itemOptionCollFactory;
+    protected $_itemOptionCollectionFactory;
 
     /**
      * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory
      */
-    protected $_productCollFactory;
+    protected $_productCollectionFactory;
 
     /**
      * @var \Magento\Sales\Model\Quote\Config
@@ -62,34 +59,36 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
 
     /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\Logger $logger
-     * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Sales\Model\Resource\Quote\Item\Option\CollectionFactory $itemOptionCollFactory
-     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollFactory
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Sales\Model\Resource\Quote\Item\Option\CollectionFactory $itemOptionCollectionFactory
+     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Sales\Model\Quote\Config $quoteConfig
-     * @param mixed $connection
-     * @param \Magento\Core\Model\Resource\Db\AbstractDb $resource
+     * @param \Zend_Db_Adapter_Abstract $connection
+     * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
-        \Magento\Logger $logger,
-        \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Sales\Model\Resource\Quote\Item\Option\CollectionFactory $itemOptionCollFactory,
-        \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollFactory,
+        \Magento\Framework\Logger $logger,
+        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Sales\Model\Resource\Quote\Item\Option\CollectionFactory $itemOptionCollectionFactory,
+        \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
         \Magento\Sales\Model\Quote\Config $quoteConfig,
         $connection = null,
-        \Magento\Core\Model\Resource\Db\AbstractDb $resource = null
+        \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
-        $this->_itemOptionCollFactory = $itemOptionCollFactory;
-        $this->_productCollFactory = $productCollFactory;
+        $this->_itemOptionCollectionFactory = $itemOptionCollectionFactory;
+        $this->_productCollectionFactory = $productCollectionFactory;
         $this->_quoteConfig = $quoteConfig;
     }
 
     /**
      * Initialize resource model
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -110,12 +109,12 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Set Quote object to Collection
      *
      * @param \Magento\Sales\Model\Quote $quote
-     * @return \Magento\Sales\Model\Resource\Quote\Item\Collection
+     * @return $this
      */
     public function setQuote($quote)
     {
         $this->_quote = $quote;
-        $quoteId      = $quote->getId();
+        $quoteId = $quote->getId();
         if ($quoteId) {
             $this->addFieldToFilter('quote_id', $quote->getId());
         } else {
@@ -131,19 +130,18 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      *
      * @param string $quotesTableName
      * @param int $productId
-     * @return \Magento\Sales\Model\Resource\Quote\Item\Collection
+     * @return $this
      */
     public function resetJoinQuotes($quotesTableName, $productId = null)
     {
-        $this->getSelect()->reset()
-            ->from(
-                array('qi' => $this->getResource()->getMainTable()),
-                array('item_id', 'qty', 'quote_id'))
-            ->joinInner(
-                array('q' => $quotesTableName),
-               'qi.quote_id = q.entity_id',
-                array('store_id', 'items_qty', 'items_count')
-            );
+        $this->getSelect()->reset()->from(
+            array('qi' => $this->getResource()->getMainTable()),
+            array('item_id', 'qty', 'quote_id')
+        )->joinInner(
+            array('q' => $quotesTableName),
+            'qi.quote_id = q.entity_id',
+            array('store_id', 'items_qty', 'items_count')
+        );
         if ($productId) {
             $this->getSelect()->where('qi.product_id = ?', (int)$productId);
         }
@@ -153,7 +151,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * After load processing
      *
-     * @return \Magento\Sales\Model\Resource\Quote\Item\Collection
+     * @return $this
      */
     protected function _afterLoad()
     {
@@ -184,16 +182,16 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add options to items
      *
-     * @return \Magento\Sales\Model\Resource\Quote\Item\Collection
+     * @return $this
      */
     protected function _assignOptions()
     {
-        $itemIds          = array_keys($this->_items);
-        $optionCollection = $this->_itemOptionCollFactory->create()->addItemFilter($itemIds);
+        $itemIds = array_keys($this->_items);
+        $optionCollection = $this->_itemOptionCollectionFactory->create()->addItemFilter($itemIds);
         foreach ($this as $item) {
             $item->setOptions($optionCollection->getOptionsByItem($item));
         }
-        $productIds        = $optionCollection->getProductIds();
+        $productIds = $optionCollection->getProductIds();
         $this->_productIds = array_merge($this->_productIds, $productIds);
 
         return $this;
@@ -202,50 +200,50 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add products to items and item options
      *
-     * @return \Magento\Sales\Model\Resource\Quote\Item\Collection
+     * @return $this
      */
     protected function _assignProducts()
     {
-        \Magento\Profiler::start('QUOTE:' . __METHOD__, array('group' => 'QUOTE', 'method' => __METHOD__));
+        \Magento\Framework\Profiler::start('QUOTE:' . __METHOD__, array('group' => 'QUOTE', 'method' => __METHOD__));
         $productIds = array();
         foreach ($this as $item) {
             $productIds[] = (int)$item->getProductId();
         }
         $this->_productIds = array_merge($this->_productIds, $productIds);
 
-        $productCollection = $this->_productCollFactory->create()
-            ->setStoreId($this->getStoreId())
-            ->addIdFilter($this->_productIds)
-            ->addAttributeToSelect($this->_quoteConfig->getProductAttributes())
-            ->addOptionsToResult()
-            ->addStoreFilter()
-            ->addUrlRewrite()
-            ->addTierPriceData();
+        $productCollection = $this->_productCollectionFactory->create()->setStoreId(
+            $this->getStoreId()
+        )->addIdFilter(
+            $this->_productIds
+        )->addAttributeToSelect(
+            $this->_quoteConfig->getProductAttributes()
+        )->addOptionsToResult()->addStoreFilter()->addUrlRewrite()->addTierPriceData();
 
-        $this->_eventManager->dispatch('prepare_catalog_product_collection_prices', array(
-            'collection'            => $productCollection,
-            'store_id'              => $this->getStoreId(),
-        ));
-        $this->_eventManager->dispatch('sales_quote_item_collection_products_after_load', array(
-            'product_collection'    => $productCollection
-        ));
+        $this->_eventManager->dispatch(
+            'prepare_catalog_product_collection_prices',
+            array('collection' => $productCollection, 'store_id' => $this->getStoreId())
+        );
+        $this->_eventManager->dispatch(
+            'sales_quote_item_collection_products_after_load',
+            array('product_collection' => $productCollection)
+        );
 
         $recollectQuote = false;
         foreach ($this as $item) {
             $product = $productCollection->getItemById($item->getProductId());
             if ($product) {
                 $product->setCustomOptions(array());
-                $qtyOptions         = array();
-                $optionProductIds   = array();
+                $qtyOptions = array();
+                $optionProductIds = array();
                 foreach ($item->getOptions() as $option) {
                     /**
                      * Call type-specific logic for product associated with quote item
                      */
                     $product->getTypeInstance()->assignProductToOption(
-                            $productCollection->getItemById($option->getProductId()),
-                            $option,
-                            $product
-                        );
+                        $productCollection->getItemById($option->getProductId()),
+                        $option,
+                        $product
+                    );
 
                     if (is_object($option->getProduct()) && $option->getProduct()->getId() != $product->getId()) {
                         $optionProductIds[$option->getProduct()->getId()] = $option->getProduct()->getId();
@@ -272,9 +270,8 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
         if ($recollectQuote && $this->_quote) {
             $this->_quote->collectTotals();
         }
-        \Magento\Profiler::stop('QUOTE:' . __METHOD__);
+        \Magento\Framework\Profiler::stop('QUOTE:' . __METHOD__);
 
         return $this;
     }
 }
-

@@ -23,28 +23,27 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
-    <type name="type_one" label="Label One" modelInstance="Instance_Type" composite="true" indexPriority="40" canUseQtyDecimals="true" isQty="true">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../app/code/Magento/Catalog/etc/product_types.xsd">
+    <type name="type_one" label="Label One" modelInstance="Instance_Type" composite="true" indexPriority="40" canUseQtyDecimals="true" isQty="true" sortOrder="100">
         <priceModel instance="Instance_Type_One" />
         <indexerModel instance="Instance_Type_Two" />
-        <false/>
         <stockIndexerModel instance="Instance_Type_Three" />
-        <allowProductTypes>
-            <type name="type_one" />
-        </allowProductTypes>
     </type>
     <type name="type_two" modelInstance="Instance_Type">
         <allowedSelectionTypes>
             <type name="type_two" />
         </allowedSelectionTypes>
+        <customAttributes>
+            <attribute name="some_name" value="some_value" />
+        </customAttributes>
     </type>
-    <type name="type_three" label="Label Three" modelInstance="Instance_Type" composite="false" indexPriority="20" canUseQtyDecimals="false" isQty="false">
+    <type name="type_three" label="Label Three" modelInstance="Instance_Type" composite="false" indexPriority="20" canUseQtyDecimals="false" isQty="false" sortOrder="5">
         <priceModel instance="Instance_Type_Three" />
         <indexerModel instance="Instance_Type_Three" />
-        <false/>
         <stockIndexerModel instance="Instance_Type_Three" />
-        <allowProductTypes>
-            <type name="type_three" />
-        </allowProductTypes>
     </type>
+    <composableTypes>
+        <type name="type_one" />
+        <type name="type_three" />        
+    </composableTypes>
 </config>

@@ -18,18 +18,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Model\Menu;
 
 /**
  * Menu builder object. Retrieves commands (\Magento\Backend\Model\Menu\Builder\AbstractCommand)
  * to build menu (\Magento\Backend\Model\Menu)
  */
-namespace Magento\Backend\Model\Menu;
-
 class Builder
 {
     /**
@@ -45,9 +42,8 @@ class Builder
     /**
      * @param \Magento\Backend\Model\Menu\Item\Factory $menuItemFactory
      */
-    public function __construct(
-        \Magento\Backend\Model\Menu\Item\Factory $menuItemFactory
-    ) {
+    public function __construct(\Magento\Backend\Model\Menu\Item\Factory $menuItemFactory)
+    {
         $this->_itemFactory = $menuItemFactory;
     }
 
@@ -55,7 +51,7 @@ class Builder
      * Process provided command object
      *
      * @param \Magento\Backend\Model\Menu\Builder\AbstractCommand $command
-     * @return \Magento\Backend\Model\Menu\Builder
+     * @return $this
      */
     public function processCommand(\Magento\Backend\Model\Menu\Builder\AbstractCommand $command)
     {

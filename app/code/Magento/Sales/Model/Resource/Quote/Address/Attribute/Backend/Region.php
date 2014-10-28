@@ -18,19 +18,15 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model\Resource\Quote\Address\Attribute\Backend;
 
 /**
  * Quote address attribute backend region resource model
  */
-namespace Magento\Sales\Model\Resource\Quote\Address\Attribute\Backend;
-
-class Region
-    extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+class Region extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
      * @var \Magento\Directory\Model\RegionFactory
@@ -38,13 +34,11 @@ class Region
     protected $_regionFactory;
 
     /**
-     * @param \Magento\Logger $logger
+     * @param \Magento\Framework\Logger $logger
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      */
-    public function __construct(
-        \Magento\Logger $logger,
-        \Magento\Directory\Model\RegionFactory $regionFactory
-    ) {
+    public function __construct(\Magento\Framework\Logger $logger, \Magento\Directory\Model\RegionFactory $regionFactory)
+    {
         $this->_regionFactory = $regionFactory;
         parent::__construct($logger);
     }
@@ -52,8 +46,8 @@ class Region
     /**
      * Set region to the attribute
      *
-     * @param \Magento\Object $object
-     * @return \Magento\Sales\Model\Resource\Quote\Address\Attribute\Backend\Region
+     * @param \Magento\Framework\Object $object
+     * @return $this
      */
     public function beforeSave($object)
     {

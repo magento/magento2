@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category   Magento
- * @package    Tools
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -79,11 +77,7 @@ abstract class AbstractLogger
      */
     public function __toString()
     {
-        $output = array(
-            'Mapped items' => array(),
-            'Not mapped items' => array(),
-            'Items in actual format' => array(),
-        );
+        $output = array('Mapped items' => array(), 'Not mapped items' => array(), 'Items in actual format' => array());
         foreach ($this->_logs as $oldKey => $data) {
             $newKey = $data['newKey'];
             $countItems = $data['updateResult'];
@@ -93,8 +87,11 @@ abstract class AbstractLogger
             } elseif (empty($newKey)) {
                 $output['Not mapped items'][$oldKey] = $oldKey;
             } else {
-                $output['Mapped items'][$oldKey] = $oldKey . ' => ' . $newKey
-                    . ' :: Count updated rules: ' . $countItems;
+                $output['Mapped items'][$oldKey] = $oldKey .
+                    ' => ' .
+                    $newKey .
+                    ' :: Count updated rules: ' .
+                    $countItems;
             }
         }
 
@@ -114,5 +111,5 @@ abstract class AbstractLogger
      * @abstract
      * @return mixed
      */
-    public abstract function report();
+    abstract public function report();
 }

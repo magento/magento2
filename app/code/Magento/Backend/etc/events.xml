@@ -23,10 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
-    <event name="adminhtml_controller_action_predispatch_start">
-        <observer name="massaction" instance="Magento\Backend\Model\Observer" method="massactionPrepareKey" />
-    </event>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
     <event name="admin_user_authenticate_after">
         <observer name="configuration_files_access_level_verification" instance="Magento\Backend\Model\Observer" method="clearCacheConfigurationFilesAccessLevelVerification" />
     </event>

@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Reports
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -30,36 +28,35 @@
  */
 namespace Magento\Reports\Model\Resource\Report\Product\Viewed;
 
-class Collection
-    extends \Magento\Reports\Model\Resource\Report\Collection\AbstractCollection
+class Collection extends \Magento\Reports\Model\Resource\Report\Collection\AbstractCollection
 {
     /**
      * Rating limit
      *
      * @var int
      */
-    protected $_ratingLimit        = 5;
+    protected $_ratingLimit = 5;
 
     /**
      * Selected columns
      *
      * @var array
      */
-    protected $_selectedColumns    = array();
+    protected $_selectedColumns = array();
 
     /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\Logger $logger
-     * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Sales\Model\Resource\Report $resource
      * @param mixed $connection
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
-        \Magento\Logger $logger,
-        \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Logger $logger,
+        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Sales\Model\Resource\Report $resource,
         $connection = null
     ) {
@@ -82,11 +79,11 @@ class Collection
                 $this->_selectedColumns = $this->getAggregatedColumns();
             } else {
                 $this->_selectedColumns = array(
-                    'period'         =>  sprintf('MAX(%s)', $adapter->getDateFormatSql('period', '%Y-%m-%d')),
-                    'views_num'      => 'SUM(views_num)',
-                    'product_id'     => 'product_id',
-                    'product_name'   => 'MAX(product_name)',
-                    'product_price'  => 'MAX(product_price)',
+                    'period' => sprintf('MAX(%s)', $adapter->getDateFormatSql('period', '%Y-%m-%d')),
+                    'views_num' => 'SUM(views_num)',
+                    'product_id' => 'product_id',
+                    'product_name' => 'MAX(product_name)',
+                    'product_price' => 'MAX(product_price)'
                 );
                 if ('year' == $this->_period) {
                     $this->_selectedColumns['period'] = $adapter->getDateFormatSql('period', '%Y');
@@ -108,15 +105,24 @@ class Collection
     protected function _makeBoundarySelect($from, $to)
     {
         $adapter = $this->getConnection();
-        $cols    = $this->_getSelectedColumns();
+        $cols = $this->_getSelectedColumns();
         $cols['views_num'] = 'SUM(views_num)';
-        $select  = $adapter->select()
-            ->from($this->getResource()->getMainTable(), $cols)
-            ->where('period >= ?', $from)
-            ->where('period <= ?', $to)
-            ->group('product_id')
-            ->order('views_num DESC')
-            ->limit($this->_ratingLimit);
+        $select = $adapter->select()->from(
+            $this->getResource()->getMainTable(),
+            $cols
+        )->where(
+            'period >= ?',
+            $from
+        )->where(
+            'period <= ?',
+            $to
+        )->group(
+            'product_id'
+        )->order(
+            'views_num DESC'
+        )->limit(
+            $this->_ratingLimit
+        );
 
         $this->_applyStoresFilterToSelect($select);
 
@@ -126,9 +132,9 @@ class Collection
     /**
      * Init collection select
      *
-     * @return \Magento\Reports\Model\Resource\Report\Product\Viewed\Collection
+     * @return $this
      */
-    protected function _initSelect()
+    protected function _applyAggregatedTable()
     {
         $select = $this->getSelect();
 
@@ -140,18 +146,29 @@ class Collection
                 $mainTable = $this->getTable(\Magento\Reports\Model\Resource\Report\Product\Viewed::AGGREGATION_DAILY);
                 $select->from($mainTable, $cols);
             } else {
-                $mainTable = $this->getTable(\Magento\Reports\Model\Resource\Report\Product\Viewed::AGGREGATION_YEARLY);
+                $mainTable = $this->getTable(
+                    \Magento\Reports\Model\Resource\Report\Product\Viewed::AGGREGATION_YEARLY
+                );
                 $select->from($mainTable, $cols);
             }
 
             //exclude removed products
             $subSelect = $this->getConnection()->select();
-            $subSelect->from(array('existed_products' => $this->getTable('catalog_product_entity')), new \Zend_Db_Expr('1)'));
+            $subSelect->from(
+                array('existed_products' => $this->getTable('catalog_product_entity')),
+                new \Zend_Db_Expr('1)')
+            );
 
-            $select->exists($subSelect, $mainTable . '.product_id = existed_products.entity_id')
-                ->group('product_id')
-                ->order('views_num ' . \Magento\DB\Select::SQL_DESC)
-                ->limit($this->_ratingLimit);
+            $select->exists(
+                $subSelect,
+                $mainTable . '.product_id = existed_products.entity_id'
+            )->group(
+                'product_id'
+            )->order(
+                'views_num ' . \Magento\Framework\DB\Select::SQL_DESC
+            )->limit(
+                $this->_ratingLimit
+            );
 
             return $this;
         }
@@ -177,7 +194,7 @@ class Collection
     /**
      * Get SQL for get record count
      *
-     * @return \Magento\DB\Select
+     * @return \Magento\Framework\DB\Select
      */
     public function getSelectCountSql()
     {
@@ -191,7 +208,7 @@ class Collection
      * Set ids for store restrictions
      *
      * @param  array $storeIds
-     * @return \Magento\Reports\Model\Resource\Report\Product\Viewed\Collection
+     * @return $this
      */
     public function addStoreRestrictions($storeIds)
     {
@@ -199,8 +216,12 @@ class Collection
             $storeIds = array($storeIds);
         }
         $currentStoreIds = $this->_storesIds;
-        if (isset($currentStoreIds) && $currentStoreIds != \Magento\Core\Model\Store::DEFAULT_STORE_ID
-            && $currentStoreIds != array(\Magento\Core\Model\Store::DEFAULT_STORE_ID)) {
+        if (isset(
+            $currentStoreIds
+        ) && $currentStoreIds != \Magento\Store\Model\Store::DEFAULT_STORE_ID && $currentStoreIds != array(
+            \Magento\Store\Model\Store::DEFAULT_STORE_ID
+        )
+        ) {
             if (!is_array($currentStoreIds)) {
                 $currentStoreIds = array($currentStoreIds);
             }
@@ -213,10 +234,10 @@ class Collection
     }
 
     /**
-     * Redeclare parent method for applying filters after parent method
-     * but before adding unions and calculating totals
+     * Re-declare parent method for applying filters after parent method, but before adding unions and calculating
+     * totals
      *
-     * @return \Magento\Reports\Model\Resource\Report\Product\Viewed\Collection
+     * @return $this|\Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
      */
     protected function _beforeLoad()
     {
@@ -228,9 +249,9 @@ class Collection
             $selectUnions = array();
 
             // apply date boundaries (before calling $this->_applyDateRangeFilter())
-            $dtFormat   = \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT;
-            $periodFrom = (!is_null($this->_from) ? new \Zend_Date($this->_from, $dtFormat) : null);
-            $periodTo   = (!is_null($this->_to)   ? new \Zend_Date($this->_to,   $dtFormat) : null);
+            $dtFormat = \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT;
+            $periodFrom = !is_null($this->_from) ? new \Magento\Framework\Stdlib\DateTime\Date($this->_from, $dtFormat) : null;
+            $periodTo = !is_null($this->_to) ? new \Magento\Framework\Stdlib\DateTime\Date($this->_to, $dtFormat) : null;
             if ('year' == $this->_period) {
 
                 if ($periodFrom) {
@@ -246,11 +267,15 @@ class Collection
                             );
 
                             // first day of the next year
-                            $this->_from = $periodFrom->getDate()
-                                ->addYear(1)
-                                ->setMonth(1)
-                                ->setDay(1)
-                                ->toString($dtFormat);
+                            $this->_from = $periodFrom->getDate()->addYear(
+                                1
+                            )->setMonth(
+                                1
+                            )->setDay(
+                                1
+                            )->toString(
+                                $dtFormat
+                            );
                         }
                     }
                 }
@@ -258,7 +283,8 @@ class Collection
                 if ($periodTo) {
                     // not the last day of the year
                     if ($periodTo->toValue(\Zend_Date::MONTH) != 12 || $periodTo->toValue(\Zend_Date::DAY) != 31) {
-                        $dtFrom = $periodTo->getDate()->setMonth(1)->setDay(1);  // first day of the year
+                        $dtFrom = $periodTo->getDate()->setMonth(1)->setDay(1);
+                        // first day of the year
                         $dtTo = $periodTo->getDate();
                         if (!$periodFrom || $dtFrom->isLater($periodFrom)) {
                             $selectUnions[] = $this->_makeBoundarySelect(
@@ -267,11 +293,15 @@ class Collection
                             );
 
                             // last day of the previous year
-                            $this->_to = $periodTo->getDate()
-                                ->subYear(1)
-                                ->setMonth(12)
-                                ->setDay(31)
-                                ->toString($dtFormat);
+                            $this->_to = $periodTo->getDate()->subYear(
+                                1
+                            )->setMonth(
+                                12
+                            )->setDay(
+                                31
+                            )->toString(
+                                $dtFormat
+                            );
                         }
                     }
                 }
@@ -289,9 +319,7 @@ class Collection
                         $this->getSelect()->where('1<>1');
                     }
                 }
-
-            }
-            else if ('month' == $this->_period) {
+            } elseif ('month' == $this->_period) {
                 if ($periodFrom) {
                     // not the first day of the month
                     if ($periodFrom->toValue(\Zend_Date::DAY) != 1) {
@@ -313,7 +341,8 @@ class Collection
                 if ($periodTo) {
                     // not the last day of the month
                     if ($periodTo->toValue(\Zend_Date::DAY) != $periodTo->toValue(\Zend_Date::MONTH_DAYS)) {
-                        $dtFrom = $periodTo->getDate()->setDay(1);  // first day of the month
+                        $dtFrom = $periodTo->getDate()->setDay(1);
+                        // first day of the month
                         $dtTo = $periodTo->getDate();
                         if (!$periodFrom || $dtFrom->isLater($periodFrom)) {
                             $selectUnions[] = $this->_makeBoundarySelect(
@@ -329,8 +358,15 @@ class Collection
 
                 if ($periodFrom && $periodTo) {
                     // the same month
-                    if ($periodFrom->toValue(\Zend_Date::YEAR) == $periodTo->toValue(\Zend_Date::YEAR)
-                        && $periodFrom->toValue(\Zend_Date::MONTH) == $periodTo->toValue(\Zend_Date::MONTH)
+                    if ($periodFrom->toValue(
+                        \Zend_Date::YEAR
+                    ) == $periodTo->toValue(
+                        \Zend_Date::YEAR
+                    ) && $periodFrom->toValue(
+                        \Zend_Date::MONTH
+                    ) == $periodTo->toValue(
+                        \Zend_Date::MONTH
+                    )
                     ) {
                         $dtFrom = $periodFrom->getDate();
                         $dtTo = $periodTo->getDate();
@@ -342,7 +378,6 @@ class Collection
                         $this->getSelect()->where('1<>1');
                     }
                 }
-
             }
 
             $this->_applyDateRangeFilter();

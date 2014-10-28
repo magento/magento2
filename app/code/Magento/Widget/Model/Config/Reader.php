@@ -23,7 +23,7 @@
  */
 namespace Magento\Widget\Model\Config;
 
-class Reader extends \Magento\Config\Reader\Filesystem
+class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**
      * List of identifier attributes for merging
@@ -35,27 +35,27 @@ class Reader extends \Magento\Config\Reader\Filesystem
         '/widgets/widget/parameters/parameter' => 'name',
         '/widgets/widget/parameters/parameter/options/option' => 'name',
         '/widgets/widget/containers/container' => 'name',
-        '/widgets/widget/containers/container/template' => 'name',
+        '/widgets/widget/containers/container/template' => 'name'
     );
 
     /**
-     * @param \Magento\Config\FileResolverInterface $fileResolver
-     * @param \Magento\Widget\Model\Config\Converter $converter
-     * @param \Magento\Config\SchemaLocatorInterface $schemaLocator
-     * @param \Magento\Config\ValidationStateInterface $validationState
+     * @param \Magento\Framework\Config\FileResolverInterface $fileResolver
+     * @param Converter $converter
+     * @param \Magento\Framework\Config\SchemaLocatorInterface $schemaLocator
+     * @param \Magento\Framework\Config\ValidationStateInterface $validationState
      * @param string $fileName
      * @param array $idAttributes
      * @param string $domDocumentClass
      * @param string $defaultScope
      */
     public function __construct(
-        \Magento\Config\FileResolverInterface $fileResolver,
-        \Magento\Widget\Model\Config\Converter $converter,
-        \Magento\Config\SchemaLocatorInterface $schemaLocator,
-        \Magento\Config\ValidationStateInterface $validationState,
+        \Magento\Framework\Config\FileResolverInterface $fileResolver,
+        Converter $converter,
+        \Magento\Framework\Config\SchemaLocatorInterface $schemaLocator,
+        \Magento\Framework\Config\ValidationStateInterface $validationState,
         $fileName = 'widget.xml',
         $idAttributes = array(),
-        $domDocumentClass = 'Magento\Config\Dom',
+        $domDocumentClass = 'Magento\Framework\Config\Dom',
         $defaultScope = 'global'
     ) {
         parent::__construct(
@@ -75,7 +75,6 @@ class Reader extends \Magento\Config\Reader\Filesystem
      *
      * @param string $file
      * @return array
-     * @throws \Magento\Exception
      */
     public function readFile($file)
     {

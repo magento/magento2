@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_ImportExport
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -43,8 +40,14 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->_model = $this->getMockForAbstractClass('Magento\ImportExport\Model\Import\Entity\AbstractEntity',
-            array(), '', false, true, true, array('_saveValidatedBunches')
+        $this->_model = $this->getMockForAbstractClass(
+            'Magento\ImportExport\Model\Import\Entity\AbstractEntity',
+            array(),
+            '',
+            false,
+            true,
+            true,
+            array('_saveValidatedBunches')
         );
     }
 
@@ -64,12 +67,16 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     protected function _createSourceAdapterMock(array $columns)
     {
         /** @var $source \Magento\ImportExport\Model\Import\AbstractSource|\PHPUnit_Framework_MockObject_MockObject */
-        $source = $this->getMockForAbstractClass('Magento\ImportExport\Model\Import\AbstractSource', array(), '', false,
-            true, true, array('getColNames')
+        $source = $this->getMockForAbstractClass(
+            'Magento\ImportExport\Model\Import\AbstractSource',
+            array(),
+            '',
+            false,
+            true,
+            true,
+            array('getColNames')
         );
-        $source->expects($this->any())
-            ->method('getColNames')
-            ->will($this->returnValue($columns));
+        $source->expects($this->any())->method('getColNames')->will($this->returnValue($columns));
         $this->_model->setSource($source);
 
         return $source;
@@ -79,7 +86,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
      * Test for method validateData()
      *
      * @covers \Magento\ImportExport\Model\Import\Entity\AbstractEntity::validateData
-     * @expectedException \Magento\Core\Exception
+     * @expectedException \Magento\Framework\Model\Exception
      * @expectedExceptionMessage Columns number: "1" have empty headers
      */
     public function testValidateDataEmptyColumnName()
@@ -92,7 +99,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
      * Test for method validateData()
      *
      * @covers \Magento\ImportExport\Model\Import\Entity\AbstractEntity::validateData
-     * @expectedException \Magento\Core\Exception
+     * @expectedException \Magento\Framework\Model\Exception
      * @expectedExceptionMessage Columns number: "1" have empty headers
      */
     public function testValidateDataColumnNameWithWhitespaces()
@@ -105,7 +112,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
      * Test for method validateData()
      *
      * @covers \Magento\ImportExport\Model\Import\Entity\AbstractEntity::validateData
-     * @expectedException \Magento\Core\Exception
+     * @expectedException \Magento\Framework\Model\Exception
      * @expectedExceptionMessage Column names: "_test1" are invalid
      */
     public function testValidateDataAttributeNames()
@@ -129,8 +136,10 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     public function testIsAttributeValid($attrCode, array $attrParams, array $rowData, $rowNum, $expectedResult)
     {
         $this->_createSourceAdapterMock(array('_test1'));
-        $this->assertEquals($expectedResult,
-            $this->_model->isAttributeValid($attrCode, $attrParams, $rowData, $rowNum));
+        $this->assertEquals(
+            $expectedResult,
+            $this->_model->isAttributeValid($attrCode, $attrParams, $rowData, $rowNum)
+        );
     }
 
     /**
@@ -153,8 +162,6 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             array('dob', array('type' => 'datetime'), array('dob' => '2012-13-29 21:12:59'), 1, false),
             array('created_at', array('type' => 'datetime'), array('created_at' => '11.02.4 11:12:59'), 1, false),
             array('dob', array('type' => 'datetime'), array('dob' => '02/29/2012 11:12:67'), 1, false)
-
         );
     }
-
 }

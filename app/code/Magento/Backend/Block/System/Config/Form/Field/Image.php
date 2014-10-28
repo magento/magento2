@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,7 +27,12 @@
  */
 namespace Magento\Backend\Block\System\Config\Form\Field;
 
-class Image extends \Magento\Data\Form\Element\Image
+/**
+ * Class Image Field
+ * @method getFieldConfig()
+ * @method setFieldConfig()
+ */
+class Image extends \Magento\Framework\Data\Form\Element\Image
 {
     /**
      * Get image preview url
@@ -41,10 +44,10 @@ class Image extends \Magento\Data\Form\Element\Image
         $url = parent::_getUrl();
         $config = $this->getFieldConfig();
         /* @var $config array */
-        if (array_key_exists('base_url', $config)) {
+        if (isset($config['base_url'])) {
             $element = $config['base_url'];
             $urlType = empty($element['type']) ? 'link' : (string)$element['type'];
-            $url = $this->_urlBuilder->getBaseUrl($urlType) . $element['value'] . '/' . $url;
+            $url = $this->_urlBuilder->getBaseUrl(['_type' => $urlType]) . $element['value'] . '/' . $url;
         }
         return $url;
     }

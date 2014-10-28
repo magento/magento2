@@ -18,48 +18,19 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Tax
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tax\Model\Config\Price;
 
-class IncludePrice extends \Magento\Core\Model\Config\Value
+class IncludePrice extends \Magento\Framework\App\Config\Value
 {
     /**
-     * @var \Magento\Core\Model\App
+     * @return void
      */
-    protected $_app;
-
-    /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Config $config
-     * @param \Magento\Core\Model\App $app
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
-     * @param array $data
-     */
-    public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Config $config,
-        \Magento\Core\Model\App $app,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
-    ) {
-        $this->_app = $app;
-        parent::__construct($context, $registry, $storeManager, $config, $resource, $resourceCollection, $data);
-    }
-
     public function _afterSave()
     {
         parent::_afterSave();
-        $this->_app->cleanCache('checkout_quote');
+        $this->_cacheManager->clean(array('checkout_quote'));
     }
 }

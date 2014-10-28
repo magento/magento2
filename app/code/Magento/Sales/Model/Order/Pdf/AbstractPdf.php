@@ -18,18 +18,17 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model\Order\Pdf;
+
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Sales Order PDF abstract model
  */
-namespace Magento\Sales\Model\Order\Pdf;
-
-abstract class AbstractPdf extends \Magento\Object
+abstract class AbstractPdf extends \Magento\Framework\Object
 {
     /**
      * Y coordinate
@@ -40,7 +39,6 @@ abstract class AbstractPdf extends \Magento\Object
 
     /**
      * Item renderers with render type key
-     *
      * model    => the model name
      * renderer => the renderer model
      *
@@ -51,9 +49,11 @@ abstract class AbstractPdf extends \Magento\Object
     /**
      * Predefined constants
      */
-    const XML_PATH_SALES_PDF_INVOICE_PUT_ORDER_ID       = 'sales_pdf/invoice/put_order_id';
-    const XML_PATH_SALES_PDF_SHIPMENT_PUT_ORDER_ID      = 'sales_pdf/shipment/put_order_id';
-    const XML_PATH_SALES_PDF_CREDITMEMO_PUT_ORDER_ID    = 'sales_pdf/creditmemo/put_order_id';
+    const XML_PATH_SALES_PDF_INVOICE_PUT_ORDER_ID = 'sales_pdf/invoice/put_order_id';
+
+    const XML_PATH_SALES_PDF_SHIPMENT_PUT_ORDER_ID = 'sales_pdf/shipment/put_order_id';
+
+    const XML_PATH_SALES_PDF_CREDITMEMO_PUT_ORDER_ID = 'sales_pdf/creditmemo/put_order_id';
 
     /**
      * Zend PDF object
@@ -77,44 +77,34 @@ abstract class AbstractPdf extends \Magento\Object
     protected $_paymentData;
 
     /**
-     * @var \Magento\Stdlib\String
+     * @var \Magento\Framework\Stdlib\String
      */
     protected $string;
 
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
-    protected $locale;
+    protected $_localeDate;
 
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\ConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
-     * @var \Magento\Core\Model\Translate
-     */
-    protected $_translate;
-
-    /**
-     * @var \Magento\Filesystem\Directory\WriteInterface
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
      */
     protected $_mediaDirectory;
 
     /**
-     * @var \Magento\Filesystem\Directory\ReadInterface
+     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
      */
     protected $_rootDirectory;
 
     /**
-     * @var \Magento\Shipping\Model\Config
-     */
-    protected $_shippingConfig;
-
-    /**
-     * @var \Magento\Sales\Model\Order\Pdf\Config
+     * @var Config
      */
     protected $_pdfConfig;
 
@@ -129,44 +119,46 @@ abstract class AbstractPdf extends \Magento\Object
     protected $_pdfItemsFactory;
 
     /**
+     * @var \Magento\Framework\Translate\Inline\StateInterface
+     */
+    protected $inlineTranslation;
+
+    /**
      * @param \Magento\Payment\Helper\Data $paymentData
-     * @param \Magento\Stdlib\String $string
-     * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
-     * @param \Magento\Core\Model\Translate $translate
-     * @param \Magento\Filesystem $filesystem
-     * @param \Magento\Shipping\Model\Config $shippingConfig
-     * @param \Magento\Sales\Model\Order\Pdf\Config $pdfConfig
+     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param Config $pdfConfig
      * @param \Magento\Sales\Model\Order\Pdf\Total\Factory $pdfTotalFactory
      * @param \Magento\Sales\Model\Order\Pdf\ItemsFactory $pdfItemsFactory
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Payment\Helper\Data $paymentData,
-        \Magento\Stdlib\String $string,
-        \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
-        \Magento\Core\Model\Translate $translate,
-        \Magento\Filesystem $filesystem,
-        \Magento\Shipping\Model\Config $shippingConfig,
-        \Magento\Sales\Model\Order\Pdf\Config $pdfConfig,
+        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\Filesystem $filesystem,
+        Config $pdfConfig,
         \Magento\Sales\Model\Order\Pdf\Total\Factory $pdfTotalFactory,
         \Magento\Sales\Model\Order\Pdf\ItemsFactory $pdfItemsFactory,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
         array $data = array()
     ) {
         $this->_paymentData = $paymentData;
-        $this->locale = $locale;
+        $this->_localeDate = $localeDate;
         $this->string = $string;
-        $this->_coreStoreConfig = $coreStoreConfig;
-        $this->_translate = $translate;
-        $this->_mediaDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::MEDIA);
-        $this->_rootDirectory = $filesystem->getDirectoryRead(\Magento\Filesystem::ROOT);
-        $this->_shippingConfig = $shippingConfig;
+        $this->_scopeConfig = $scopeConfig;
+        $this->_mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->_rootDirectory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
         $this->_pdfConfig = $pdfConfig;
         $this->_pdfTotalFactory = $pdfTotalFactory;
         $this->_pdfItemsFactory = $pdfItemsFactory;
+        $this->inlineTranslation = $inlineTranslation;
         parent::__construct($data);
     }
 
@@ -186,19 +178,24 @@ abstract class AbstractPdf extends \Magento\Object
      */
     public function widthForStringUsingFontSize($string, $font, $fontSize)
     {
-        $drawingString = '"libiconv"' == ICONV_IMPL ?
-            iconv('UTF-8', 'UTF-16BE//IGNORE', $string) :
-            @iconv('UTF-8', 'UTF-16BE', $string);
+        $drawingString = '"libiconv"' == ICONV_IMPL ? iconv(
+            'UTF-8',
+            'UTF-16BE//IGNORE',
+            $string
+        ) : @iconv(
+            'UTF-8',
+            'UTF-16BE',
+            $string
+        );
 
         $characters = array();
         for ($i = 0; $i < strlen($drawingString); $i++) {
-            $characters[] = (ord($drawingString[$i++]) << 8) | ord($drawingString[$i]);
+            $characters[] = ord($drawingString[$i++]) << 8 | ord($drawingString[$i]);
         }
         $glyphs = $font->glyphNumbersForCharacters($characters);
         $widths = $font->widthsForGlyphs($glyphs);
-        $stringWidth = (array_sum($widths) / $font->getUnitsPerEm()) * $fontSize;
+        $stringWidth = array_sum($widths) / $font->getUnitsPerEm() * $fontSize;
         return $stringWidth;
-
     }
 
     /**
@@ -237,34 +234,42 @@ abstract class AbstractPdf extends \Magento\Object
     /**
      * Insert logo to pdf page
      *
-     * @param \Zend_Pdf_Page $page
+     * @param \Zend_Pdf_Page &$page
      * @param null $store
+     * @return void
      */
     protected function insertLogo(&$page, $store = null)
     {
         $this->y = $this->y ? $this->y : 815;
-        $image = $this->_coreStoreConfig->getConfig('sales/identity/logo', $store);
+        $image = $this->_scopeConfig->getValue(
+            'sales/identity/logo',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
         if ($image) {
             $imagePath = '/sales/store/logo/' . $image;
             if ($this->_mediaDirectory->isFile($imagePath)) {
-                $image       = \Zend_Pdf_Image::imageWithPath($this->_mediaDirectory->getAbsolutePath($imagePath));
-                $top         = 830; //top border of the page
-                $widthLimit  = 270; //half of the page width
-                $heightLimit = 270; //assuming the image is not a "skyscraper"
-                $width       = $image->getPixelWidth();
-                $height      = $image->getPixelHeight();
+                $image = \Zend_Pdf_Image::imageWithPath($this->_mediaDirectory->getAbsolutePath($imagePath));
+                $top = 830;
+                //top border of the page
+                $widthLimit = 270;
+                //half of the page width
+                $heightLimit = 270;
+                //assuming the image is not a "skyscraper"
+                $width = $image->getPixelWidth();
+                $height = $image->getPixelHeight();
 
                 //preserving aspect ratio (proportions)
                 $ratio = $width / $height;
                 if ($ratio > 1 && $width > $widthLimit) {
-                    $width  = $widthLimit;
+                    $width = $widthLimit;
                     $height = $width / $ratio;
                 } elseif ($ratio < 1 && $height > $heightLimit) {
                     $height = $heightLimit;
-                    $width  = $height * $ratio;
+                    $width = $height * $ratio;
                 } elseif ($ratio == 1 && $height > $heightLimit) {
                     $height = $heightLimit;
-                    $width  = $widthLimit;
+                    $width = $widthLimit;
                 }
 
                 $y1 = $top - $height;
@@ -283,8 +288,9 @@ abstract class AbstractPdf extends \Magento\Object
     /**
      * Insert address to pdf page
      *
-     * @param \Zend_Pdf_Page $page
+     * @param \Zend_Pdf_Page &$page
      * @param null $store
+     * @return void
      */
     protected function insertAddress(&$page, $store = null)
     {
@@ -293,19 +299,28 @@ abstract class AbstractPdf extends \Magento\Object
         $page->setLineWidth(0);
         $this->y = $this->y ? $this->y : 815;
         $top = 815;
-        foreach (explode("\n", $this->_coreStoreConfig->getConfig('sales/identity/address', $store)) as $value) {
+        foreach (explode(
+            "\n",
+            $this->_scopeConfig->getValue(
+                'sales/identity/address',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $store
+            )
+        ) as $value) {
             if ($value !== '') {
                 $value = preg_replace('/<br[^>]*>/i', "\n", $value);
                 foreach ($this->string->split($value, 45, true, true) as $_value) {
-                    $page->drawText(trim(strip_tags($_value)),
+                    $page->drawText(
+                        trim(strip_tags($_value)),
                         $this->getAlignRight($_value, 130, 440, $font, 10),
                         $top,
-                        'UTF-8');
+                        'UTF-8'
+                    );
                     $top -= 10;
                 }
             }
         }
-        $this->y = ($this->y > $top) ? $top : $this->y;
+        $this->y = $this->y > $top ? $top : $this->y;
     }
 
     /**
@@ -354,9 +369,10 @@ abstract class AbstractPdf extends \Magento\Object
     /**
      * Insert order to pdf page
      *
-     * @param \Zend_Pdf_Page $page
+     * @param \Zend_Pdf_Page &$page
      * @param \Magento\Sales\Model\Order $obj
      * @param bool $putOrderId
+     * @return void
      */
     protected function insertOrder(&$page, $obj, $putOrderId = true)
     {
@@ -379,16 +395,12 @@ abstract class AbstractPdf extends \Magento\Object
         $this->_setFontRegular($page, 10);
 
         if ($putOrderId) {
-            $page->drawText(
-                __('Order # ') . $order->getRealOrderId(), 35, ($top -= 30), 'UTF-8'
-            );
+            $page->drawText(__('Order # ') . $order->getRealOrderId(), 35, $top -= 30, 'UTF-8');
         }
         $page->drawText(
-            __('Order Date: ') . $this->locale->formatDate(
-                $order->getCreatedAtStoreDate(), 'medium', false
-            ),
+            __('Order Date: ') . $this->_localeDate->formatDate($order->getCreatedAtStoreDate(), 'medium', false),
             35,
-            ($top -= 15),
+            $top -= 15,
             'UTF-8'
         );
 
@@ -396,8 +408,8 @@ abstract class AbstractPdf extends \Magento\Object
         $page->setFillColor(new \Zend_Pdf_Color_Rgb(0.93, 0.92, 0.92));
         $page->setLineColor(new \Zend_Pdf_Color_GrayScale(0.5));
         $page->setLineWidth(0.5);
-        $page->drawRectangle(25, $top, 275, ($top - 25));
-        $page->drawRectangle(275, $top, 570, ($top - 25));
+        $page->drawRectangle(25, $top, 275, $top - 25);
+        $page->drawRectangle(275, $top, 570, $top - 25);
 
         /* Calculate blocks info */
 
@@ -405,9 +417,7 @@ abstract class AbstractPdf extends \Magento\Object
         $billingAddress = $this->_formatAddress($order->getBillingAddress()->format('pdf'));
 
         /* Payment */
-        $paymentInfo = $this->_paymentData->getInfoBlock($order->getPayment())
-            ->setIsSecureMode(true)
-            ->toPdf();
+        $paymentInfo = $this->_paymentData->getInfoBlock($order->getPayment())->setIsSecureMode(true)->toPdf();
         $paymentInfo = htmlspecialchars_decode($paymentInfo, ENT_QUOTES);
         $payment = explode('{{pdf_row_separator}}', $paymentInfo);
         foreach ($payment as $key => $value) {
@@ -421,17 +431,17 @@ abstract class AbstractPdf extends \Magento\Object
         if (!$order->getIsVirtual()) {
             /* Shipping Address */
             $shippingAddress = $this->_formatAddress($order->getShippingAddress()->format('pdf'));
-            $shippingMethod  = $order->getShippingDescription();
+            $shippingMethod = $order->getShippingDescription();
         }
 
         $page->setFillColor(new \Zend_Pdf_Color_GrayScale(0));
         $this->_setFontBold($page, 12);
-        $page->drawText(__('Sold to:'), 35, ($top - 15), 'UTF-8');
+        $page->drawText(__('Sold to:'), 35, $top - 15, 'UTF-8');
 
         if (!$order->getIsVirtual()) {
-            $page->drawText(__('Ship to:'), 285, ($top - 15), 'UTF-8');
+            $page->drawText(__('Ship to:'), 285, $top - 15, 'UTF-8');
         } else {
-            $page->drawText(__('Payment Method:'), 285, ($top - 15), 'UTF-8');
+            $page->drawText(__('Payment Method:'), 285, $top - 15, 'UTF-8');
         }
 
         $addressesHeight = $this->_calcAddressHeight($billingAddress);
@@ -440,7 +450,7 @@ abstract class AbstractPdf extends \Magento\Object
         }
 
         $page->setFillColor(new \Zend_Pdf_Color_GrayScale(1));
-        $page->drawRectangle(25, ($top - 25), 570, $top - 33 - $addressesHeight);
+        $page->drawRectangle(25, $top - 25, 570, $top - 33 - $addressesHeight);
         $page->setFillColor(new \Zend_Pdf_Color_GrayScale(0));
         $this->_setFontRegular($page, 10);
         $this->y = $top - 40;
@@ -464,7 +474,7 @@ abstract class AbstractPdf extends \Magento\Object
         if (!$order->getIsVirtual()) {
             $this->y = $addressesStartY;
             foreach ($shippingAddress as $value) {
-                if ($value!=='') {
+                if ($value !== '') {
                     $text = array();
                     foreach ($this->string->split($value, 45, true, true) as $_value) {
                         $text[] = $_value;
@@ -481,8 +491,8 @@ abstract class AbstractPdf extends \Magento\Object
 
             $page->setFillColor(new \Zend_Pdf_Color_Rgb(0.93, 0.92, 0.92));
             $page->setLineWidth(0.5);
-            $page->drawRectangle(25, $this->y, 275, $this->y-25);
-            $page->drawRectangle(275, $this->y, 570, $this->y-25);
+            $page->drawRectangle(25, $this->y, 275, $this->y - 25);
+            $page->drawRectangle(275, $this->y, 570, $this->y - 25);
 
             $this->y -= 15;
             $this->_setFontBold($page, 12);
@@ -490,16 +500,16 @@ abstract class AbstractPdf extends \Magento\Object
             $page->drawText(__('Payment Method'), 35, $this->y, 'UTF-8');
             $page->drawText(__('Shipping Method:'), 285, $this->y, 'UTF-8');
 
-            $this->y -=10;
+            $this->y -= 10;
             $page->setFillColor(new \Zend_Pdf_Color_GrayScale(1));
 
             $this->_setFontRegular($page, 10);
             $page->setFillColor(new \Zend_Pdf_Color_GrayScale(0));
 
             $paymentLeft = 35;
-            $yPayments   = $this->y - 15;
+            $yPayments = $this->y - 15;
         } else {
-            $yPayments   = $addressesStartY;
+            $yPayments = $addressesStartY;
             $paymentLeft = 285;
         }
 
@@ -517,15 +527,15 @@ abstract class AbstractPdf extends \Magento\Object
         if ($order->getIsVirtual()) {
             // replacement of Shipments-Payments rectangle block
             $yPayments = min($addressesEndY, $yPayments);
-            $page->drawLine(25, ($top - 25), 25, $yPayments);
-            $page->drawLine(570, ($top - 25), 570, $yPayments);
+            $page->drawLine(25, $top - 25, 25, $yPayments);
+            $page->drawLine(570, $top - 25, 570, $yPayments);
             $page->drawLine(25, $yPayments, 570, $yPayments);
 
             $this->y = $yPayments - 15;
         } else {
-            $topMargin    = 15;
+            $topMargin = 15;
             $methodStartY = $this->y;
-            $this->y     -= 15;
+            $this->y -= 15;
 
             foreach ($this->string->split($shippingMethod, 45, true, true) as $_value) {
                 $page->drawText(strip_tags(trim($_value)), 285, $this->y, 'UTF-8');
@@ -533,8 +543,11 @@ abstract class AbstractPdf extends \Magento\Object
             }
 
             $yShipments = $this->y;
-            $totalShippingChargesText = "(" . __('Total Shipping Charges') . " "
-                . $order->formatPriceTxt($order->getShippingAmount()) . ")";
+            $totalShippingChargesText = "(" . __(
+                'Total Shipping Charges'
+            ) . " " . $order->formatPriceTxt(
+                $order->getShippingAmount()
+            ) . ")";
 
             $page->drawText($totalShippingChargesText, 285, $yShipments - $topMargin, 'UTF-8');
             $yShipments -= $topMargin + 10;
@@ -559,20 +572,9 @@ abstract class AbstractPdf extends \Magento\Object
                 $yShipments -= 20;
                 $this->_setFontRegular($page, 8);
                 foreach ($tracks as $track) {
-
-                    $carrierCode = $track->getCarrierCode();
-                    if ($carrierCode != 'custom') {
-                        $carrier = $this->_shippingConfig->getCarrierInstance($carrierCode);
-                        $carrierTitle = $carrier->getConfigData('title');
-                    } else {
-                        $carrierTitle = __('Custom Value');
-                    }
-
-                    //$truncatedCarrierTitle = substr($carrierTitle, 0, 35) . (strlen($carrierTitle) > 35 ? '...' : '');
                     $maxTitleLen = 45;
                     $endOfTitle = strlen($track->getTitle()) > $maxTitleLen ? '...' : '';
                     $truncatedTitle = substr($track->getTitle(), 0, $maxTitleLen) . $endOfTitle;
-                    //$page->drawText($truncatedCarrierTitle, 285, $yShipments, 'UTF-8');
                     $page->drawText($truncatedTitle, 292, $yShipments, 'UTF-8');
                     $page->drawText($track->getNumber(), 410, $yShipments, 'UTF-8');
                     $yShipments -= $topMargin - 5;
@@ -584,9 +586,12 @@ abstract class AbstractPdf extends \Magento\Object
             $currentY = min($yPayments, $yShipments);
 
             // replacement of Shipments-Payments rectangle block
-            $page->drawLine(25, $methodStartY, 25, $currentY); //left
-            $page->drawLine(25, $currentY, 570, $currentY); //bottom
-            $page->drawLine(570, $currentY, 570, $methodStartY); //right
+            $page->drawLine(25, $methodStartY, 25, $currentY);
+            //left
+            $page->drawLine(25, $currentY, 570, $currentY);
+            //bottom
+            $page->drawLine(570, $currentY, 570, $methodStartY);
+            //right
 
             $this->y = $currentY;
             $this->y -= 15;
@@ -625,7 +630,7 @@ abstract class AbstractPdf extends \Magento\Object
             return 0;
         }
 
-        return ($a['sort_order'] > $b['sort_order']) ? 1 : -1;
+        return $a['sort_order'] > $b['sort_order'] ? 1 : -1;
     }
 
     /**
@@ -659,32 +664,28 @@ abstract class AbstractPdf extends \Magento\Object
     {
         $order = $source->getOrder();
         $totals = $this->_getTotalsList();
-        $lineBlock = array(
-            'lines'  => array(),
-            'height' => 15
-        );
+        $lineBlock = array('lines' => array(), 'height' => 15);
         foreach ($totals as $total) {
-            $total->setOrder($order)
-                ->setSource($source);
+            $total->setOrder($order)->setSource($source);
 
             if ($total->canDisplay()) {
                 $total->setFontSize(10);
                 foreach ($total->getTotalsForDisplay() as $totalData) {
                     $lineBlock['lines'][] = array(
                         array(
-                            'text'      => $totalData['label'],
-                            'feed'      => 475,
-                            'align'     => 'right',
+                            'text' => $totalData['label'],
+                            'feed' => 475,
+                            'align' => 'right',
                             'font_size' => $totalData['font_size'],
-                            'font'      => 'bold'
+                            'font' => 'bold'
                         ),
                         array(
-                            'text'      => $totalData['amount'],
-                            'feed'      => 565,
-                            'align'     => 'right',
+                            'text' => $totalData['amount'],
+                            'feed' => 565,
+                            'align' => 'right',
                             'font_size' => $totalData['font_size'],
-                            'font'      => 'bold'
-                        ),
+                            'font' => 'bold'
+                        )
                     );
                 }
             }
@@ -698,7 +699,7 @@ abstract class AbstractPdf extends \Magento\Object
     /**
      * Parse item description
      *
-     * @param  \Magento\Object $item
+     * @param  \Magento\Framework\Object $item
      * @return array
      */
     protected function _parseItemDescription($item)
@@ -714,18 +715,22 @@ abstract class AbstractPdf extends \Magento\Object
 
     /**
      * Before getPdf processing
+     *
+     * @return void
      */
     protected function _beforeGetPdf()
     {
-        $this->_translate->setTranslateInline(false);
+        $this->inlineTranslation->suspend();
     }
 
     /**
      * After getPdf processing
+     *
+     * @return void
      */
     protected function _afterGetPdf()
     {
-        $this->_translate->setTranslateInline(true);
+        $this->inlineTranslation->resume();
     }
 
     /**
@@ -748,7 +753,7 @@ abstract class AbstractPdf extends \Magento\Object
             if (isset($value['price'])) {
                 $resultValue .= " " . $order->formatPrice($value['price']);
             }
-            return  $resultValue;
+            return $resultValue;
         } else {
             return $value;
         }
@@ -758,15 +763,13 @@ abstract class AbstractPdf extends \Magento\Object
      * Initialize renderer process
      *
      * @param string $type
+     * @return void
      */
     protected function _initRenderer($type)
     {
         $rendererData = $this->_pdfConfig->getRenderersPerProduct($type);
         foreach ($rendererData as $productType => $renderer) {
-            $this->_renderers[$productType] = array(
-                'model'     => $renderer,
-                'renderer'  => null
-            );
+            $this->_renderers[$productType] = array('model' => $renderer, 'renderer' => null);
         }
     }
 
@@ -775,7 +778,7 @@ abstract class AbstractPdf extends \Magento\Object
      *
      * @param  string $type
      * @return \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function _getRenderer($type)
     {
@@ -784,7 +787,7 @@ abstract class AbstractPdf extends \Magento\Object
         }
 
         if (!isset($this->_renderers[$type])) {
-            throw new \Magento\Core\Exception(__('We found an invalid renderer model.'));
+            throw new \Magento\Framework\Model\Exception(__('We found an invalid renderer model.'));
         }
 
         if (is_null($this->_renderers[$type]['renderer'])) {
@@ -810,12 +813,12 @@ abstract class AbstractPdf extends \Magento\Object
     /**
      * Draw Item process
      *
-     * @param  \Magento\Object $item
+     * @param  \Magento\Framework\Object $item
      * @param  \Zend_Pdf_Page $page
      * @param  \Magento\Sales\Model\Order $order
      * @return \Zend_Pdf_Page
      */
-    protected function _drawItem(\Magento\Object $item, \Zend_Pdf_Page $page, \Magento\Sales\Model\Order $order)
+    protected function _drawItem(\Magento\Framework\Object $item, \Zend_Pdf_Page $page, \Magento\Sales\Model\Order $order)
     {
         $type = $item->getOrderItem()->getProductType();
         $renderer = $this->_getRenderer($type);
@@ -840,7 +843,7 @@ abstract class AbstractPdf extends \Magento\Object
     protected function _setFontRegular($object, $size = 7)
     {
         $font = \Zend_Pdf_Font::fontWithPath(
-            $this->_rootDirectory->getAbsolutePath('lib/LinLibertineFont/LinLibertine_Re-4.4.1.ttf')
+            $this->_rootDirectory->getAbsolutePath('lib/internal/LinLibertineFont/LinLibertine_Re-4.4.1.ttf')
         );
         $object->setFont($font, $size);
         return $font;
@@ -856,7 +859,7 @@ abstract class AbstractPdf extends \Magento\Object
     protected function _setFontBold($object, $size = 7)
     {
         $font = \Zend_Pdf_Font::fontWithPath(
-            $this->_rootDirectory->getAbsolutePath('lib/LinLibertineFont/LinLibertine_Bd-2.8.1.ttf')
+            $this->_rootDirectory->getAbsolutePath('lib/internal/LinLibertineFont/LinLibertine_Bd-2.8.1.ttf')
         );
         $object->setFont($font, $size);
         return $font;
@@ -872,7 +875,7 @@ abstract class AbstractPdf extends \Magento\Object
     protected function _setFontItalic($object, $size = 7)
     {
         $font = \Zend_Pdf_Font::fontWithPath(
-            $this->_rootDirectory->getAbsolutePath('lib/LinLibertineFont/LinLibertine_It-2.8.2.ttf')
+            $this->_rootDirectory->getAbsolutePath('lib/internal/LinLibertineFont/LinLibertine_It-2.8.2.ttf')
         );
         $object->setFont($font, $size);
         return $font;
@@ -882,7 +885,7 @@ abstract class AbstractPdf extends \Magento\Object
      * Set PDF object
      *
      * @param  \Zend_Pdf $pdf
-     * @return \Magento\Sales\Model\Order\Pdf\AbstractPdf
+     * @return $this
      */
     protected function _setPdf(\Zend_Pdf $pdf)
     {
@@ -893,13 +896,13 @@ abstract class AbstractPdf extends \Magento\Object
     /**
      * Retrieve PDF object
      *
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Framework\Model\Exception
      * @return \Zend_Pdf
      */
     protected function _getPdf()
     {
         if (!$this->_pdf instanceof \Zend_Pdf) {
-            throw new \Magento\Core\Exception(__('Please define the PDF object before using.'));
+            throw new \Magento\Framework\Model\Exception(__('Please define the PDF object before using.'));
         }
 
         return $this->_pdf;
@@ -924,7 +927,7 @@ abstract class AbstractPdf extends \Magento\Object
     /**
      * Draw lines
      *
-     * draw items array format:
+     * Draw items array format:
      * lines        array;array of line blocks (required)
      * shift        int; full line height (optional)
      * height       int;line spacing (default 10)
@@ -943,18 +946,18 @@ abstract class AbstractPdf extends \Magento\Object
      * @param  \Zend_Pdf_Page $page
      * @param  array $draw
      * @param  array $pageSettings
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Framework\Model\Exception
      * @return \Zend_Pdf_Page
      */
     public function drawLineBlocks(\Zend_Pdf_Page $page, array $draw, array $pageSettings = array())
     {
         foreach ($draw as $itemsProp) {
             if (!isset($itemsProp['lines']) || !is_array($itemsProp['lines'])) {
-                throw new \Magento\Core\Exception(
+                throw new \Magento\Framework\Model\Exception(
                     __('We don\'t recognize the draw line data. Please define the "lines" array.')
                 );
             }
-            $lines  = $itemsProp['lines'];
+            $lines = $itemsProp['lines'];
             $height = isset($itemsProp['height']) ? $itemsProp['height'] : 10;
 
             if (empty($itemsProp['shift'])) {
@@ -1034,7 +1037,7 @@ abstract class AbstractPdf extends \Magento\Object
                             default:
                                 break;
                         }
-                        $page->drawText($part, $feed, $this->y-$top, 'UTF-8');
+                        $page->drawText($part, $feed, $this->y - $top, 'UTF-8');
                         $top += $lineSpacing;
                     }
 

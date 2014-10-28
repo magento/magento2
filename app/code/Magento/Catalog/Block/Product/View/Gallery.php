@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,18 +25,18 @@
 /**
  * Simple product data view
  *
- * @category   Magento
- * @package    Magento_Catalog
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Product\View;
+
+use Magento\Framework\Data\Collection;
 
 class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
 {
     /**
      * Retrieve list of gallery images
      *
-     * @return array|\Magento\Data\Collection
+     * @return array|Collection
      */
     public function getGalleryImages()
     {
@@ -48,7 +46,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
     /**
      * Retrieve gallery url
      *
-     * @param null|\Magento\Object $image
+     * @param null|\Magento\Framework\Object $image
      * @return string
      */
     public function getGalleryUrl($image = null)
@@ -58,5 +56,40 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
             $params['image'] = $image->getValueId();
         }
         return $this->getUrl('catalog/product/gallery', $params);
+    }
+
+    /**
+     * Get gallery image url
+     *
+     * @param \Magento\Framework\Object $image
+     * @param string $type
+     * @param boolean $whiteBorders
+     * @param null|number $width
+     * @param null|number $height
+     * @return string
+     */
+    public function getImageUrl($image, $type, $whiteBorders = false, $width = null, $height = null)
+    {
+        $product = $this->getProduct();
+        $img = $this->_imageHelper->init($product, $type, $image->getFile());
+        if ($whiteBorders) {
+            $img->constrainOnly(true)->keepAspectRatio(true)->keepFrame(false);
+        }
+        if ($width || $height) {
+            $img->resize($width, $height);
+        }
+        return (string)$img;
+    }
+
+    /**
+     * Is product main image
+     *
+     * @param \Magento\Framework\Object $image
+     * @return bool
+     */
+    public function isMainImage($image)
+    {
+        $product = $this->getProduct();
+        return $product->getImage() == $image->getFile();
     }
 }

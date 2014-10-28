@@ -23,85 +23,14 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <referenceBlock name="head">
-        <action method="setCanLoadExtJs">
-            <argument name="flag" xsi:type="string">1</argument>
-        </action>
-        <action method="setCanLoadTinyMce">
-            <argument name="flag" xsi:type="string">1</argument>
-        </action>
-        <block class="Magento\Theme\Block\Html\Head\Css" name="jquery-fileuploader-css-jquery-fileupload-ui-css">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/fileUploader/css/jquery.fileupload-ui.css</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-fileuploader-jquery-iframe-transport-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/fileUploader/jquery.iframe-transport.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-fileuploader-jquery-fileupload-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/fileUploader/jquery.fileupload.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-fileuploader-load-image-min-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/fileUploader/load-image.min.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-fileuploader-canvas-to-blob-min-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/fileUploader/canvas-to-blob.min.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-fileuploader-jquery-fileupload-fp-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/fileUploader/jquery.fileupload-fp.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-theme-js-custom-js-list-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Theme::js/custom-js-list.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-browser-js">
-            <arguments>
-                <argument name="file" xsi:type="string">mage/adminhtml/browser.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-fileuploader-jquery-fileupload-ui-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/fileUploader/jquery.fileupload-ui.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-theme-js-form-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Theme::js/form.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-theme-js-sortable-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Theme::js/sortable.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Css" name="magento-theme-css-theme-css">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Theme::css/theme.css</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Css" name="prototype-windows-themes-default-css">
-            <arguments>
-                <argument name="file" xsi:type="string">prototype/windows/themes/default.css</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Css" name="magento-core-prototype-magento-css">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Core::prototype/magento.css</argument>
-            </arguments>
-        </block>
-    </referenceBlock>
+<page layout="admin-2columns-left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="jquery/fileUploader/css/jquery.fileupload-ui.css"/>
+        <css src="Magento_Theme::css/theme.css"/>
+        <css src="prototype/windows/themes/default.css"/>
+        <css src="Magento_Core::prototype/magento.css"/>
+        <link src="Magento_Theme::js/bootstrap.js"/>
+    </head>
     <referenceContainer name="content">
         <block class="Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit" name="theme_edit"/>
     </referenceContainer>
@@ -125,4 +54,4 @@
             </action>
         </block>
     </referenceContainer>
-</layout>
+</page>

@@ -18,14 +18,11 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Profiler;
+
 
 /**
  * Test class for \Magento\TestFramework\Profiler\OutputBamboo.
@@ -53,15 +50,17 @@ class OutputBambooTest extends \PHPUnit_Framework_TestCase
         /**
          * @link http://php.net/manual/en/wrappers.php.php
          */
-        $this->_output = new \Magento\TestFramework\Profiler\OutputBamboo(array(
-            'filePath' => 'php://filter/write=dataCollectorFilter/resource=php://memory',
-            'metrics' => array('sample metric (ms)' => array('profiler_key_for_sample_metric'))
-        ));
+        $this->_output = new \Magento\TestFramework\Profiler\OutputBamboo(
+            array(
+                'filePath' => 'php://filter/write=dataCollectorFilter/resource=php://memory',
+                'metrics' => array('sample metric (ms)' => array('profiler_key_for_sample_metric'))
+            )
+        );
     }
 
     public function testDisplay()
     {
-        $this->_output->display(new \Magento\Profiler\Driver\Standard\Stat());
+        $this->_output->display(new \Magento\Framework\Profiler\Driver\Standard\Stat());
         \Magento\Test\Profiler\OutputBambooTestFilter::assertCollectedData("Timestamp,\"sample metric (ms)\"\n%d,%d");
     }
 }

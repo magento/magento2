@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -43,8 +40,9 @@ class ProductPriceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Product');
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Product'
+        );
     }
 
     public function testGetPrice()
@@ -59,11 +57,6 @@ class ProductPriceTest extends \PHPUnit_Framework_TestCase
         $default = $this->_model->getPriceModel();
         $this->assertInstanceOf('Magento\Catalog\Model\Product\Type\Price', $default);
         $this->assertSame($default, $this->_model->getPriceModel());
-
-        $this->_model->setTypeId('configurable');
-        $type = $this->_model->getPriceModel();
-        $this->assertInstanceOf('Magento\Catalog\Model\Product\Type\Configurable\Price', $type);
-        $this->assertSame($type, $this->_model->getPriceModel());
     }
 
     /**

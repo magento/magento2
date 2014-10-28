@@ -23,18 +23,11 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page_layouts xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="../../../../../../../../app/code/Magento/Theme/etc/page_layouts.xsd">
-    <layouts default="one_column">
-        <layout id="empty">
-            <label translate="true">Empty</label>
-            <template>empty.phtml</template>
-            <layout_handle>page_empty</layout_handle>
-        </layout>
-        <layout id="one_column">
-            <label translate="true">1 column</label>
-            <template>1column.phtml</template>
-            <layout_handle>page_one_column</layout_handle>
-        </layout>
-    </layouts>
+<page_layouts xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../lib/internal/Magento/Framework/View/PageLayout/etc/layouts.xsd">
+    <layout id="empty">
+        <label translate="true">Empty</label>
+    </layout>
+    <layout id="1column">
+        <label translate="true">1 column</label>
+    </layout>
 </page_layouts>

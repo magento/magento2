@@ -18,21 +18,21 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Payment
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Payment\Model\Source;
 
 /**
  * Automatic invoice create source model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Payment\Model\Source;
-
-class Invoice implements \Magento\Core\Model\Option\ArrayInterface
+class Invoice implements \Magento\Framework\Option\ArrayInterface
 {
+    /**
+     * {@inheritdoc}
+     */
     public function toOptionArray()
     {
         return array(
@@ -40,10 +40,7 @@ class Invoice implements \Magento\Core\Model\Option\ArrayInterface
                 'value' => \Magento\Payment\Model\Method\AbstractMethod::ACTION_AUTHORIZE_CAPTURE,
                 'label' => __('Yes')
             ),
-            array(
-                'value' => '',
-                'label' => __('No')
-            ),
+            array('value' => '', 'label' => __('No'))
         );
     }
 }

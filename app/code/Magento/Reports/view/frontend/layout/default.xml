@@ -23,9 +23,8 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <referenceContainer name="right">
-        <block class="Magento\Reports\Block\Product\Viewed" name="right.reports.product.viewed" template="product_viewed.phtml"/>
-        <block class="Magento\Reports\Block\Product\Compared" name="right.reports.product.compared" template="product_compared.phtml"/>
-    </referenceContainer>
-</layout>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <referenceBlock name="head.components">
+        <block class="Magento\Framework\View\Element\Js\Components" name="reports_page_head_components" template="Magento_Reports::js/components.phtml"/>
+    </referenceBlock>
+</page>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+            Magento Design Theme Configuration File
+        </xs:documentation>
+    </xs:annotation>
+
+    <xs:element name="theme">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="title" type="title"/>
+                <xs:element name="version" type="version"/>
+                <xs:element name="parent" type="parent_theme" minOccurs="0"/>
+                <xs:element name="media" type="media" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:simpleType name="title">
+        <xs:restriction base="xs:string">
+            <xs:pattern value=".*[^\s].*"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Short theme name: '<theme>'. Fully-qualified theme name: '<path>/<theme>'. -->
+    <xs:simpleType name="parent_theme">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="([^/]+/)?[^/]+"></xs:pattern>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="version">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="(\d+.\d+.\d+(\-[a-zA-Z0-9]+)?)|\*"></xs:pattern>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="media">
+        <xs:sequence>
+            <xs:element name="preview_image" type="preview_image" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="preview_image">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="order" type="xs:integer" use="optional"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+</xs:schema>

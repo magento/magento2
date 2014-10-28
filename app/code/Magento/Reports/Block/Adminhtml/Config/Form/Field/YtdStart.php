@@ -18,34 +18,34 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Reports
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Reports\Block\Adminhtml\Config\Form\Field;
+
+use Magento\Framework\Data\Form\Element\AbstractElement;
 
 /**
  * Dashboard Year-To-Date Month and Day starts Field Renderer
  *
- * @category   Magento
- * @package    Magento_Reports
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Reports\Block\Adminhtml\Config\Form\Field;
-
 class YtdStart extends \Magento\Backend\Block\System\Config\Form\Field
 {
-    protected function _getElementHtml(\Magento\Data\Form\Element\AbstractElement $element)
+    /**
+     * @param AbstractElement $element
+     * @return string
+     */
+    protected function _getElementHtml(AbstractElement $element)
     {
         $_months = array();
         for ($i = 1; $i <= 12; $i++) {
-            $_months[$i] = $this->_locale->date(mktime(null, null, null, $i))
-                ->get(\Zend_Date::MONTH_NAME);
+            $_months[$i] = $this->_localeDate->date(mktime(null, null, null, $i))->get(\Zend_Date::MONTH_NAME);
         }
 
         $_days = array();
         for ($i = 1; $i <= 31; $i++) {
-            $_days[$i] = $i < 10 ? '0'.$i : $i;
+            $_days[$i] = $i < 10 ? '0' . $i : $i;
         }
 
         if ($element->getValue()) {
@@ -56,15 +56,21 @@ class YtdStart extends \Magento\Backend\Block\System\Config\Form\Field
 
         $element->setName($element->getName() . '[]');
 
-        $_monthsHtml = $element->setStyle('width:100px;')
-            ->setValues($_months)
-            ->setValue(isset($values[0]) ? $values[0] : null)
-            ->getElementHtml();
+        $_monthsHtml = $element->setStyle(
+            'width:100px;'
+        )->setValues(
+            $_months
+        )->setValue(
+            isset($values[0]) ? $values[0] : null
+        )->getElementHtml();
 
-        $_daysHtml = $element->setStyle('width:50px;')
-            ->setValues($_days)
-            ->setValue(isset($values[1]) ? $values[1] : null)
-            ->getElementHtml();
+        $_daysHtml = $element->setStyle(
+            'width:50px;'
+        )->setValues(
+            $_days
+        )->setValue(
+            isset($values[1]) ? $values[1] : null
+        )->getElementHtml();
 
         return sprintf('%s %s', $_monthsHtml, $_daysHtml);
     }

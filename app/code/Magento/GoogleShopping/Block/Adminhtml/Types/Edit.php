@@ -18,41 +18,40 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_GoogleShopping
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\GoogleShopping\Block\Adminhtml\Types;
 
 /**
  * Adminhtml Google Content Types Mapping form block
  */
-
-namespace Magento\GoogleShopping\Block\Adminhtml\Types;
-
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Backend\Block\Widget\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Backend\Block\Widget\Context $context,
+        \Magento\Framework\Registry $registry,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -60,12 +59,12 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         $this->_controller = 'adminhtml_types';
         $this->_mode = 'edit';
         $model = $this->_coreRegistry->registry('current_item_type');
-        $this->_removeButton('reset');
-        $this->_updateButton('save', 'label', __('Save Mapping'));
-        $this->_updateButton('save', 'id', 'save_button');
-        $this->_updateButton('delete', 'label', __('Delete Mapping'));
+        $this->buttonList->remove('reset');
+        $this->buttonList->update('save', 'label', __('Save Mapping'));
+        $this->buttonList->update('save', 'id', 'save_button');
+        $this->buttonList->update('delete', 'label', __('Delete Mapping'));
         if ($model && !$model->getId()) {
-            $this->_removeButton('delete');
+            $this->buttonList->remove('delete');
         }
     }
 
@@ -76,9 +75,11 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getFormInitScripts()
     {
-        return $this->getLayout()->createBlock('Magento\View\Element\Template')
-            ->setTemplate('Magento_GoogleShopping::types/edit.phtml')
-            ->toHtml();
+        return $this->getLayout()->createBlock(
+            'Magento\Framework\View\Element\Template'
+        )->setTemplate(
+            'Magento_GoogleShopping::types/edit.phtml'
+        )->toHtml();
     }
 
     /**

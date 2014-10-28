@@ -18,36 +18,30 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Newsletter
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Newsletter\Model\Resource;
 
 /**
  * Newsletter template resource model
  *
- * @category    Magento
- * @package     Magento_Newsletter
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Newsletter\Model\Resource;
-
-class Template extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Template extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Date
      *
-     * @var \Magento\Core\Model\Date
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
     protected $_date;
 
     /**
-     * @param \Magento\App\Resource $resource
-     * @param \Magento\Core\Model\Date $date
+     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      */
-    public function __construct(\Magento\App\Resource $resource, \Magento\Core\Model\Date $date)
+    public function __construct(\Magento\Framework\App\Resource $resource, \Magento\Framework\Stdlib\DateTime\DateTime $date)
     {
         parent::__construct($resource);
         $this->_date = $date;
@@ -56,6 +50,7 @@ class Template extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Initialize connection
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -67,15 +62,20 @@ class Template extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Newsletter\Model\Template $object
      * @param string $templateCode
-     * @return \Magento\Newsletter\Model\Resource\Template
+     * @return $this
      */
     public function loadByCode(\Magento\Newsletter\Model\Template $object, $templateCode)
     {
         $read = $this->_getReadAdapter();
         if ($read && !is_null($templateCode)) {
-            $select = $this->_getLoadSelect('template_code', $templateCode, $object)
-                ->where('template_actual = :template_actual');
-            $data = $read->fetchRow($select, array('template_actual'=>1));
+            $select = $this->_getLoadSelect(
+                'template_code',
+                $templateCode,
+                $object
+            )->where(
+                'template_actual = :template_actual'
+            );
+            $data = $read->fetchRow($select, array('template_actual' => 1));
 
             if ($data) {
                 $object->setData($data);
@@ -96,11 +96,14 @@ class Template extends \Magento\Core\Model\Resource\Db\AbstractDb
     public function checkUsageInQueue(\Magento\Newsletter\Model\Template $template)
     {
         if ($template->getTemplateActual() !== 0 && !$template->getIsSystem()) {
-            $select = $this->_getReadAdapter()->select()
-                ->from($this->getTable('newsletter_queue'), new \Zend_Db_Expr('COUNT(queue_id)'))
-                ->where('template_id = :template_id');
+            $select = $this->_getReadAdapter()->select()->from(
+                $this->getTable('newsletter_queue'),
+                new \Zend_Db_Expr('COUNT(queue_id)')
+            )->where(
+                'template_id = :template_id'
+            );
 
-            $countOfQueue = $this->_getReadAdapter()->fetchOne($select, array('template_id'=>$template->getId()));
+            $countOfQueue = $this->_getReadAdapter()->fetchOne($select, array('template_id' => $template->getId()));
 
             return $countOfQueue > 0;
         } elseif ($template->getIsSystem()) {
@@ -120,15 +123,20 @@ class Template extends \Magento\Core\Model\Resource\Db\AbstractDb
     {
         if ($template->getTemplateActual() != 0 || is_null($template->getTemplateActual())) {
             $bind = array(
-                'template_id'     => $template->getId(),
-                'template_code'   => $template->getTemplateCode(),
+                'template_id' => $template->getId(),
+                'template_code' => $template->getTemplateCode(),
                 'template_actual' => 1
             );
-            $select = $this->_getReadAdapter()->select()
-                ->from($this->getMainTable(), new \Zend_Db_Expr('COUNT(template_id)'))
-                ->where('template_id != :template_id')
-                ->where('template_code = :template_code')
-                ->where('template_actual = :template_actual');
+            $select = $this->_getReadAdapter()->select()->from(
+                $this->getMainTable(),
+                new \Zend_Db_Expr('COUNT(template_id)')
+            )->where(
+                'template_id != :template_id'
+            )->where(
+                'template_code = :template_code'
+            )->where(
+                'template_actual = :template_actual'
+            );
 
             $countOfCodes = $this->_getReadAdapter()->fetchOne($select, $bind);
 
@@ -141,14 +149,14 @@ class Template extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Perform actions before object save
      *
-     * @param \Magento\Core\Model\AbstractModel $object
-     * @return \Magento\Newsletter\Model\Resource\Template
-     * @throws \Magento\Core\Exception
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return $this
+     * @throws \Magento\Framework\Model\Exception
      */
-    protected function _beforeSave(\Magento\Core\Model\AbstractModel $object)
+    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
         if ($this->checkCodeUsage($object)) {
-            throw new \Magento\Core\Exception(__('Duplicate template code'));
+            throw new \Magento\Framework\Model\Exception(__('Duplicate template code'));
         }
 
         if (!$object->hasTemplateActual()) {

@@ -1,0 +1,96 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<fieldset id="grop_fields" class="fieldset">
+    <legend class="legend"><span><?php echo __('Product In Websites') ?></span></legend>
+    <br>
+    <?php if ($this->getProductId()): ?>
+    <div class="message info">
+        <div><?php echo __("Items that you don't want to show in the catalog or search results should have status 'Disabled' in the desired store.") ?></div>
+    </div>
+    <?php endif; ?>
+    <div class="store-scope">
+        <?php echo $this->getHintHtml() ?>
+        <div class="store-tree">
+            <?php $_websites = $this->getWebsiteCollection() ?>
+            <?php foreach ($_websites as $_website): ?>
+            <div class="website-name">
+                <input name="product[website_ids][]" value="<?php echo $_website->getId() ?>" <?php if ($this->isReadonly()): ?>  disabled="disabled"<?php endif;?> class="checkbox website-checkbox" id="product_website_<?php echo $_website->getId() ?>" type="checkbox"<?php if ($this->hasWebsite($_website->getId()) || !$this->getProductId() && count($_websites) === 1): ?> checked="checked"<?php endif; ?> />
+                <label for="product_website_<?php echo $_website->getId() ?>"><?php echo $this->escapeHtml($_website->getName()) ?></label>
+            </div>
+            <dl class="webiste-groups" id="product_website_<?php echo $_website->getId() ?>_data">
+                <?php foreach ($this->getGroupCollection($_website) as $_group): ?>
+                <dt><?php echo $this->escapeHtml($_group->getName()) ?></dt>
+                <dd>
+                    <ul>
+                        <?php foreach ($this->getStoreCollection($_group) as $_store): ?>
+                        <li>
+                            <?php echo $this->escapeHtml($_store->getName()) ?>
+                            <?php if ($this->getWebsites() && !$this->hasWebsite($_website->getId())): ?>
+                            <span class="website-<?php echo $_website->getId() ?>-select" style="display:none">
+                            <?php echo __('(Copy data from: %1)', $this->getChooseFromStoreHtml($_store)) ?>
+                            </span>
+                            <?php endif; ?>
+                        </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </dd>
+                <?php endforeach; ?>
+            </dl>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</fieldset>
+
+<script type="text/javascript">
+require(["prototype"], function(){
+
+    //<![CDATA[
+    var productWebsiteCheckboxes = $$('.website-checkbox');
+
+    for (var i = 0; i < productWebsiteCheckboxes.length; i++) {
+        Event.observe(productWebsiteCheckboxes[i], 'click', toggleStoreFromChoosers);
+    }
+
+    function toggleStoreFromChoosers(event) {
+        var element = Event.element(event);
+        var selects = $('product_website_' + element.value + '_data').getElementsBySelector('select');
+        var selectBlocks = $('product_website_' + element.value + '_data').getElementsByClassName('website-' + element.value + '-select');
+        for (var i = 0; i < selects.length; i++) {
+            selects[i].disabled = !element.checked;
+        }
+        for (var i = 0; i < selectBlocks.length; i++) {
+            if (element.checked) {
+                selectBlocks[i].show();
+            }
+            else {
+                selectBlocks[i].hide();
+            }
+        }
+    }
+    window.toggleStoreFromChoosers = toggleStoreFromChoosers;
+    //]]>
+
+});
+</script>

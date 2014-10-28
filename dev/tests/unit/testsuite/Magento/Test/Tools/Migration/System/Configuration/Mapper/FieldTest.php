@@ -18,19 +18,18 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category   Magento
- * @package    tools
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Tools\Migration\System\Configuration\Mapper;
 
-require_once realpath(__DIR__ . '/../../../../../../../../../../')
-    . '/tools/Magento/Tools/Migration/System/Configuration/Mapper/AbstractMapper.php';
-require_once realpath(__DIR__ . '/../../../../../../../../../../')
-    . '/tools/Magento/Tools/Migration/System/Configuration/Mapper/Field.php';
 
+require_once realpath(
+    __DIR__ . '/../../../../../../../../../../'
+) . '/tools/Magento/Tools/Migration/System/Configuration/Mapper/AbstractMapper.php';
+require_once realpath(
+    __DIR__ . '/../../../../../../../../../../'
+) . '/tools/Magento/Tools/Migration/System/Configuration/Mapper/Field.php';
 /**
  * Test case for Tools_Migration_System_Configuration_Mapper_Field
  */
@@ -69,18 +68,12 @@ class FieldTest extends \PHPUnit_Framework_TestCase
                 'upload_dir' => array('#text' => 'upload_dir_test'),
                 'button_url' => array('#text' => 'button_url_test'),
                 'button_label' => array('#text' => 'button_label_test'),
-                'depends' => array(
-                    'module1' => array('#text' => 'yes')
-                ),
+                'depends' => array('module1' => array('#text' => 'yes')),
                 'more_url' => array('#text' => 'more_url_test'),
                 'demo_url' => array('#text' => 'demo_url_test'),
                 'undefined' => array('#text' => 'undefined_test', '@attributes' => array('some' => 'attribute')),
-                'node' => array(
-                    'label' => array(
-                        'nodeLabel' => array('#text' => 'nodeValue')
-                    ),
-                ),
-            ),
+                'node' => array('label' => array('nodeLabel' => array('#text' => 'nodeValue')))
+            )
         );
 
         $expected = array(
@@ -99,48 +92,34 @@ class FieldTest extends \PHPUnit_Framework_TestCase
                     array('name' => 'source_model', '#text' => 'source_model_test'),
                     array('name' => 'config_path', '#text' => 'config_path_test'),
                     array('name' => 'base_url', '#text' => 'base_url_test'),
-                    array('name' => 'upload_dir','#text' => 'upload_dir_test'),
-                    array('name' => 'button_url', '#text' => 'button_url_test',),
+                    array('name' => 'upload_dir', '#text' => 'upload_dir_test'),
+                    array('name' => 'button_url', '#text' => 'button_url_test'),
                     array('name' => 'button_label', '#text' => 'button_label_test'),
                     array(
                         'name' => 'depends',
                         'subConfig' => array(
-                            array(
-                                'nodeName' => 'field',
-                                '@attributes' => array('id' => 'module1'),
-                                '#text' => 'yes'
-                            )
+                            array('nodeName' => 'field', '@attributes' => array('id' => 'module1'), '#text' => 'yes')
                         )
                     ),
                     array('name' => 'more_url', '#text' => 'more_url_test'),
                     array('name' => 'demo_url', '#text' => 'demo_url_test'),
                     array(
-                        '@attributes' => array(
-                            'type' => 'undefined',
-                            'some' => 'attribute',
-                        ),
+                        '@attributes' => array('type' => 'undefined', 'some' => 'attribute'),
                         'name' => 'attribute',
-                        '#text' => 'undefined_test',
+                        '#text' => 'undefined_test'
                     ),
                     array(
-                        '@attributes' => array(
-                            'type' => 'node'
-                        ),
+                        '@attributes' => array('type' => 'node'),
                         'name' => 'attribute',
                         'subConfig' => array(
                             array(
                                 'nodeName' => 'label',
-                                'subConfig' => array(
-                                    array(
-                                        'nodeName' => 'nodeLabel',
-                                        '#text' => 'nodeValue',
-                                    )
-                                )
+                                'subConfig' => array(array('nodeName' => 'nodeLabel', '#text' => 'nodeValue'))
                             )
                         )
                     )
-                ),
-            ),
+                )
+            )
         );
 
         $actual = $this->_object->transform($config);

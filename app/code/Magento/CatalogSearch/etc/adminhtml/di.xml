@@ -23,18 +23,15 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
-    <virtualType name="Magento\CatalogSearch\Model\Session\Storage" type="Magento\Session\Storage">
-        <param name="namespace">
-            <value>catalogsearch</value>
-        </param>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <virtualType name="Magento\CatalogSearch\Model\Session\Storage" type="Magento\Framework\Session\Storage">
+        <arguments>
+            <argument name="namespace" xsi:type="string">catalogsearch</argument>
+        </arguments>
     </virtualType>
-    <virtualType name="Magento\CatalogSearch\Model\Session" type="Magento\Session\Generic">
-        <param name="storage">
-            <instance type="Magento\CatalogSearch\Model\Session\Storage" />
-        </param>
-        <param name="sessionName">
-            <value>adminhtml</value>
-        </param>
+    <virtualType name="Magento\CatalogSearch\Model\Session" type="Magento\Framework\Session\Generic">
+        <arguments>
+            <argument name="storage" xsi:type="object">Magento\CatalogSearch\Model\Session\Storage</argument>
+        </arguments>
     </virtualType>
 </config>

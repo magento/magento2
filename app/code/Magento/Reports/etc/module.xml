@@ -23,8 +23,8 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
-    <module name="Magento_Reports" version="1.6.0.0.2" active="true">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Module/etc/module.xsd">
+    <module name="Magento_Reports" schema_version="1.6.0.0.2" active="true">
         <sequence>
             <module name="Magento_Customer"/>
             <module name="Magento_Catalog"/>
@@ -32,6 +32,7 @@
             <module name="Magento_Cms"/>
         </sequence>
         <depends>
+            <module name="Magento_Store"/>
             <module name="Magento_Eav"/>
             <module name="Magento_Customer"/>
             <module name="Magento_Catalog"/>
@@ -40,13 +41,13 @@
             <module name="Magento_Backend"/>
             <module name="Magento_Core"/>
             <module name="Magento_Widget"/>
-            <module name="Magento_Bundle"/>
             <module name="Magento_Log"/>
             <module name="Magento_Wishlist"/>
             <module name="Magento_Review"/>
             <module name="Magento_CatalogInventory"/>
             <module name="Magento_Tax"/>
-            <module name="Magento_Rating"/>
+            <module name="Magento_Downloadable"/>
+            <module name="Magento_SalesRule"/>
         </depends>
     </module>
 </config>

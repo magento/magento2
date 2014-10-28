@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -34,31 +31,35 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Core\Model\Store\Config
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_storeConfig;
+    protected $_scopeConfig;
 
     protected function setUp()
     {
-        $this->_storeConfig = $this->getMockBuilder('Magento\Core\Model\Store\Config')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_model = new \Magento\Core\Model\View\Url\Config($this->_storeConfig);
+        $this->_scopeConfig = $this->getMockBuilder(
+            'Magento\Framework\App\Config\ScopeConfigInterface'
+        )->disableOriginalConstructor()->getMock();
+        $this->_model = new \Magento\Core\Model\View\Url\Config($this->_scopeConfig);
     }
 
     /**
      * @param $path
      * @param $expectedValue
      *
-     * @dataProvider getValueDataProvider
+     * @dataProvider getConfigDataProvider
      */
     public function testGetValue($path, $expectedValue)
     {
-        $this->_storeConfig
-            ->expects($this->any())
-            ->method('getConfig')
-            ->with($path)
-            ->will($this->returnValue($expectedValue));
+        $this->_scopeConfig->expects(
+            $this->any()
+        )->method(
+            'getValue'
+        )->with(
+            $path
+        )->will(
+            $this->returnValue($expectedValue)
+        );
         $actual = $this->_model->getValue($path);
         $this->assertEquals($expectedValue, $actual);
     }
@@ -66,13 +67,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function getValueDataProvider()
+    public function getConfigDataProvider()
     {
         return array(
             array('some/valid/path1', 'someValue'),
             array('some/valid/path2', 2),
             array('some/valid/path3', false),
-            array('some/invalid/path3', null),
+            array('some/invalid/path3', null)
         );
     }
 }

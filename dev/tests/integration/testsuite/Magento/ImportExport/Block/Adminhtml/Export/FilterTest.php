@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_ImportExport
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -30,40 +27,45 @@
  */
 namespace Magento\ImportExport\Block\Adminhtml\Export;
 
-class FilterTest
-    extends \PHPUnit_Framework_TestCase
+class FilterTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @magentoAppIsolation enabled
      */
     public function testGetDateFromToHtmlWithValue()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Core\Model\App')
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()
             ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\DesignInterface')
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\View\DesignInterface')
             ->setDefaultDesignTheme();
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\ImportExport\Block\Adminhtml\Export\Filter');
         $method = new \ReflectionMethod(
-                    'Magento\ImportExport\Block\Adminhtml\Export\Filter', '_getDateFromToHtmlWithValue');
+            'Magento\ImportExport\Block\Adminhtml\Export\Filter',
+            '_getDateFromToHtmlWithValue'
+        );
         $method->setAccessible(true);
 
         $arguments = array(
             'data' => array(
                 'attribute_code' => 'date',
-                'backend_type'   => 'datetime',
+                'backend_type' => 'datetime',
                 'frontend_input' => 'date',
-                'frontend_label' => 'Date',
+                'frontend_label' => 'Date'
             )
         );
-        $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Eav\Model\Entity\Attribute', $arguments);
+        $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Eav\Model\Entity\Attribute',
+            $arguments
+        );
         $html = $method->invoke($block, $attribute, null);
         $this->assertNotEmpty($html);
 
-        $dateFormat = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Core\Model\LocaleInterface')
-            ->getDateFormat(\Magento\Core\Model\LocaleInterface::FORMAT_TYPE_SHORT);
+        $dateFormat = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\Stdlib\DateTime\TimezoneInterface'
+        )->getDateFormat(
+            \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
+        );
         $pieces = array_filter(explode('<strong>', $html));
         foreach ($pieces as $piece) {
             $this->assertContains('dateFormat: "' . $dateFormat . '",', $piece);

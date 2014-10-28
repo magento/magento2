@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Eav
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -66,14 +63,24 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $this->_attribute = $this->getMock('Magento\Eav\Model\Entity\Attribute', array(), array(), '', false);
         $this->_entityType = $this->getMock('Magento\Eav\Model\Entity\Type', array(), array(), '', false);
-        $this->_readerMock =
-            $this->getMock('Magento\Eav\Model\Entity\Attribute\Config\Reader', array(), array(), '', false);
-        $this->_cacheMock = $this->getMock('Magento\App\Cache\Type\Config', array(), array(), '', false);
+        $this->_readerMock = $this->getMock(
+            'Magento\Eav\Model\Entity\Attribute\Config\Reader',
+            array(),
+            array(),
+            '',
+            false
+        );
+        $this->_cacheMock = $this->getMock('Magento\Framework\App\Cache\Type\Config', array(), array(), '', false);
         $this->_cacheId = 'eav_attributes';
-        $this->_cacheMock->expects($this->once())
-            ->method('load')
-            ->with($this->equalTo($this->_cacheId))
-            ->will($this->returnValue(serialize(array())));
+        $this->_cacheMock->expects(
+            $this->once()
+        )->method(
+            'load'
+        )->with(
+            $this->equalTo($this->_cacheId)
+        )->will(
+            $this->returnValue(serialize(array()))
+        );
 
         $this->_model = new \Magento\Eav\Model\Entity\Attribute\Config(
             $this->_readerMock,
@@ -84,41 +91,47 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetLockedFieldsEmpty()
     {
-        $this->_entityType->expects($this->once())
-            ->method('getEntityTypeCode')
-            ->will($this->returnValue('test_code'));
-        $this->_attribute->expects($this->once())
-            ->method('getEntityType')
-            ->will($this->returnValue($this->_entityType));
+        $this->_entityType->expects($this->once())->method('getEntityTypeCode')->will($this->returnValue('test_code'));
+        $this->_attribute->expects(
+            $this->once()
+        )->method(
+            'getEntityType'
+        )->will(
+            $this->returnValue($this->_entityType)
+        );
 
-        $this->_attribute->expects($this->once())
-            ->method('getAttributeCode')
-            ->will($this->returnValue('attribute_code'));
+        $this->_attribute->expects(
+            $this->once()
+        )->method(
+            'getAttributeCode'
+        )->will(
+            $this->returnValue('attribute_code')
+        );
         $result = $this->_model->getLockedFields($this->_attribute);
         $this->assertEquals(array(), $result);
     }
 
     public function testGetLockedFields()
     {
-        $this->_entityType->expects($this->once())
-            ->method('getEntityTypeCode')
-            ->will($this->returnValue('test_code1/test_code2'));
-        $this->_attribute->expects($this->once())
-            ->method('getEntityType')
-            ->will($this->returnValue($this->_entityType));
+        $this->_entityType->expects(
+            $this->once()
+        )->method(
+            'getEntityTypeCode'
+        )->will(
+            $this->returnValue('test_code1/test_code2')
+        );
+        $this->_attribute->expects(
+            $this->once()
+        )->method(
+            'getEntityType'
+        )->will(
+            $this->returnValue($this->_entityType)
+        );
 
-        $this->_attribute->expects($this->once())
-            ->method('getAttributeCode')
-            ->will($this->returnValue('test_code'));
+        $this->_attribute->expects($this->once())->method('getAttributeCode')->will($this->returnValue('test_code'));
         $data = array(
             'test_code1' => array(
-                'test_code2' => array(
-                    'attributes' => array(
-                        'test_code' => array(
-                            'test_code1' => 'test_code1'
-                        )
-                    )
-                )
+                'test_code2' => array('attributes' => array('test_code' => array('test_code1' => 'test_code1')))
             )
         );
         $this->_model->merge($data);
@@ -132,10 +145,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'entity_code' => array(
                 'attributes' => array(
                     'attribute_code' => array(
-                        'attribute_data' => array(
-                            'locked' => 'locked_field',
-                            'code' => 'code_test'
-                        )
+                        'attribute_data' => array('locked' => 'locked_field', 'code' => 'code_test')
                     )
                 )
             )

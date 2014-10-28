@@ -18,12 +18,12 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_ProductAlert
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ProductAlert\Model;
 
+use Magento\ProductAlert\Model\Resource\Price\Customer\Collection;
 
 /**
  * ProductAlert for changed price model
@@ -47,13 +47,9 @@
  * @method int getStatus()
  * @method \Magento\ProductAlert\Model\Price setStatus(int $value)
  *
- * @category    Magento
- * @package     Magento_ProductAlert
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\ProductAlert\Model;
-
-class Price extends \Magento\Core\Model\AbstractModel
+class Price extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * @var \Magento\ProductAlert\Model\Resource\Price\Customer\CollectionFactory
@@ -61,35 +57,44 @@ class Price extends \Magento\Core\Model\AbstractModel
     protected $_customerColFactory;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\ProductAlert\Model\Resource\Price\Customer\CollectionFactory $customerColFactory
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\ProductAlert\Model\Resource\Price\Customer\CollectionFactory $customerColFactory,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_customerColFactory = $customerColFactory;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init('Magento\ProductAlert\Model\Resource\Price');
     }
 
+    /**
+     * @return Collection
+     */
     public function getCustomerCollection()
     {
         return $this->_customerColFactory->create();
     }
 
+    /**
+     * @return $this
+     */
     public function loadByParam()
     {
         if (!is_null($this->getProductId()) && !is_null($this->getCustomerId()) && !is_null($this->getWebsiteId())) {
@@ -98,6 +103,11 @@ class Price extends \Magento\Core\Model\AbstractModel
         return $this;
     }
 
+    /**
+     * @param int $customerId
+     * @param int $websiteId
+     * @return $this
+     */
     public function deleteCustomer($customerId, $websiteId = 0)
     {
         $this->getResource()->deleteCustomer($this, $customerId, $websiteId);

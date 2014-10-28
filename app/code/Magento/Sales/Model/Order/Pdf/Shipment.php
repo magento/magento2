@@ -18,66 +18,68 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model\Order\Pdf;
 
 /**
  * Sales Order Shipment PDF model
  */
-namespace Magento\Sales\Model\Order\Pdf;
-
-class Shipment extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
+class Shipment extends AbstractPdf
 {
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
+     * @var \Magento\Framework\Locale\ResolverInterface
+     */
+    protected $_localeResolver;
+
+    /**
      * @param \Magento\Payment\Helper\Data $paymentData
-     * @param \Magento\Stdlib\String $string
-     * @param \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig
-     * @param \Magento\Core\Model\Translate $translate
-     * @param \Magento\Filesystem $filesystem
-     * @param \Magento\Shipping\Model\Config $shippingConfig
-     * @param \Magento\Sales\Model\Order\Pdf\Config $pdfConfig
+     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param Config $pdfConfig
      * @param \Magento\Sales\Model\Order\Pdf\Total\Factory $pdfTotalFactory
      * @param \Magento\Sales\Model\Order\Pdf\ItemsFactory $pdfItemsFactory
-     * @param \Magento\Core\Model\LocaleInterface $locale
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Payment\Helper\Data $paymentData,
-        \Magento\Stdlib\String $string,
-        \Magento\Core\Model\Store\ConfigInterface $coreStoreConfig,
-        \Magento\Core\Model\Translate $translate,
-        \Magento\Filesystem $filesystem,
-        \Magento\Shipping\Model\Config $shippingConfig,
-        \Magento\Sales\Model\Order\Pdf\Config $pdfConfig,
+        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\Filesystem $filesystem,
+        Config $pdfConfig,
         \Magento\Sales\Model\Order\Pdf\Total\Factory $pdfTotalFactory,
         \Magento\Sales\Model\Order\Pdf\ItemsFactory $pdfItemsFactory,
-        \Magento\Core\Model\LocaleInterface $locale,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
+        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Framework\Locale\ResolverInterface $localeResolver,
         array $data = array()
     ) {
         $this->_storeManager = $storeManager;
+        $this->_localeResolver = $localeResolver;
         parent::__construct(
             $paymentData,
             $string,
-            $coreStoreConfig,
-            $translate,
+            $scopeConfig,
             $filesystem,
-            $shippingConfig,
             $pdfConfig,
             $pdfTotalFactory,
             $pdfItemsFactory,
-            $locale,
+            $localeDate,
+            $inlineTranslation,
             $data
         );
     }
@@ -95,31 +97,18 @@ class Shipment extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
         $page->setFillColor(new \Zend_Pdf_Color_RGB(0.93, 0.92, 0.92));
         $page->setLineColor(new \Zend_Pdf_Color_GrayScale(0.5));
         $page->setLineWidth(0.5);
-        $page->drawRectangle(25, $this->y, 570, $this->y-15);
+        $page->drawRectangle(25, $this->y, 570, $this->y - 15);
         $this->y -= 10;
         $page->setFillColor(new \Zend_Pdf_Color_RGB(0, 0, 0));
 
         //columns headers
-        $lines[0][] = array(
-            'text' => __('Products'),
-            'feed' => 100,
-        );
+        $lines[0][] = array('text' => __('Products'), 'feed' => 100);
 
-        $lines[0][] = array(
-            'text'  => __('Qty'),
-            'feed'  => 35
-        );
+        $lines[0][] = array('text' => __('Qty'), 'feed' => 35);
 
-        $lines[0][] = array(
-            'text'  => __('SKU'),
-            'feed'  => 565,
-            'align' => 'right'
-        );
+        $lines[0][] = array('text' => __('SKU'), 'feed' => 565, 'align' => 'right');
 
-        $lineBlock = array(
-            'lines'  => $lines,
-            'height' => 10
-        );
+        $lineBlock = array('lines' => $lines, 'height' => 10);
 
         $this->drawLineBlocks($page, array($lineBlock), array('table_header' => true));
         $page->setFillColor(new \Zend_Pdf_Color_GrayScale(0));
@@ -143,10 +132,10 @@ class Shipment extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
         $this->_setFontBold($style, 10);
         foreach ($shipments as $shipment) {
             if ($shipment->getStoreId()) {
-                $this->locale->emulate($shipment->getStoreId());
+                $this->_localeResolver->emulate($shipment->getStoreId());
                 $this->_storeManager->setCurrentStore($shipment->getStoreId());
             }
-            $page  = $this->newPage();
+            $page = $this->newPage();
             $order = $shipment->getOrder();
             /* Add image */
             $this->insertLogo($page, $shipment->getStore());
@@ -156,10 +145,12 @@ class Shipment extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
             $this->insertOrder(
                 $page,
                 $shipment,
-                $this->_coreStoreConfig->getConfigFlag(
+                $this->_scopeConfig->isSetFlag(
                     self::XML_PATH_SALES_PDF_SHIPMENT_PUT_ORDER_ID,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                     $order->getStoreId()
-            ));
+                )
+            );
             /* Add document text and number */
             $this->insertDocumentNumber($page, __('Packing Slip # ') . $shipment->getIncrementId());
             /* Add table */
@@ -176,7 +167,7 @@ class Shipment extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
         }
         $this->_afterGetPdf();
         if ($shipment->getStoreId()) {
-            $this->locale->revert();
+            $this->_localeResolver->revert();
         }
         return $pdf;
     }

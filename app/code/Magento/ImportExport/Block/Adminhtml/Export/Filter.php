@@ -18,27 +18,24 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_ImportExport
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ImportExport\Block\Adminhtml\Export;
+
+use Magento\Eav\Model\Entity\Attribute;
 
 /**
  * Export filter block
  *
- * @category    Magento
- * @package     Magento_ImportExport
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\ImportExport\Block\Adminhtml\Export;
-
 class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
      * Helper object.
      *
-     * @var \Magento\App\Helper\AbstractHelper
+     * @var \Magento\Framework\App\Helper\AbstractHelper
      */
     protected $_helper;
 
@@ -51,24 +48,24 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Url $urlModel,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\ImportExport\Helper\Data $importExportData,
         array $data = array()
     ) {
         $this->_importExportData = $importExportData;
-        parent::__construct($context, $urlModel, $backendHelper, $data);
+        parent::__construct($context, $backendHelper, $data);
     }
 
     /**
      * Set grid parameters.
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -88,47 +85,58 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Date 'from-to' filter HTML with values
      *
-     * @param \Magento\Eav\Model\Entity\Attribute $attribute
+     * @param Attribute $attribute
      * @param mixed $value
      * @return string
      */
-    protected function _getDateFromToHtmlWithValue(\Magento\Eav\Model\Entity\Attribute $attribute, $value)
+    protected function _getDateFromToHtmlWithValue(Attribute $attribute, $value)
     {
         $arguments = array(
-            'name'         => $this->getFilterElementName($attribute->getAttributeCode()) . '[]',
-            'id'           => $this->getFilterElementId($attribute->getAttributeCode()),
-            'class'        => 'input-text input-text-range-date',
-            'date_format'  => $this->_locale->getDateFormat(\Magento\Core\Model\LocaleInterface::FORMAT_TYPE_SHORT),
-            'image'        => $this->getViewFileUrl('images/grid-cal.gif')
+            'name' => $this->getFilterElementName($attribute->getAttributeCode()) . '[]',
+            'id' => $this->getFilterElementId($attribute->getAttributeCode()),
+            'class' => 'input-text input-text-range-date',
+            'date_format' => $this->_localeDate->getDateFormat(
+                \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
+            ),
+            'image' => $this->getViewFileUrl('images/grid-cal.gif')
         );
-        /** @var $selectBlock \Magento\View\Element\Html\Date */
+        /** @var $selectBlock \Magento\Framework\View\Element\Html\Date */
         $dateBlock = $this->_layout->getBlockFactory()->createBlock(
-            'Magento\View\Element\Html\Date', array('data' => $arguments)
+            'Magento\Framework\View\Element\Html\Date',
+            array('data' => $arguments)
         );
         $fromValue = null;
-        $toValue   = null;
+        $toValue = null;
         if (is_array($value) && count($value) == 2) {
             $fromValue = $this->escapeHtml(reset($value));
-            $toValue   = $this->escapeHtml(next($value));
+            $toValue = $this->escapeHtml(next($value));
         }
 
-        return '<strong>' . __('From') . ':</strong>&nbsp;'
-            . $dateBlock->setValue($fromValue)->getHtml()
-            . '&nbsp;<strong>' . __('To') . ':</strong>&nbsp;'
-            . $dateBlock->setId($dateBlock->getId() . '_to')->setValue($toValue)->getHtml();
+        return '<strong>' . __(
+            'From'
+        ) . ':</strong>&nbsp;' . $dateBlock->setValue(
+            $fromValue
+        )->getHtml() . '&nbsp;<strong>' . __(
+            'To'
+        ) . ':</strong>&nbsp;' . $dateBlock->setId(
+            $dateBlock->getId() . '_to'
+        )->setValue(
+            $toValue
+        )->getHtml();
     }
 
     /**
      * Input text filter HTML with value
      *
-     * @param \Magento\Eav\Model\Entity\Attribute $attribute
+     * @param Attribute $attribute
      * @param mixed $value
      * @return string
      */
-    protected function _getInputHtmlWithValue(\Magento\Eav\Model\Entity\Attribute $attribute, $value)
+    protected function _getInputHtmlWithValue(Attribute $attribute, $value)
     {
-        $html = '<input type="text" name="' . $this->getFilterElementName($attribute->getAttributeCode())
-             . '" class="input-text input-text-export-filter"';
+        $html = '<input type="text" name="' . $this->getFilterElementName(
+            $attribute->getAttributeCode()
+        ) . '" class="input-text input-text-export-filter"';
         if ($value) {
             $html .= ' value="' . $this->escapeHtml($value) . '"';
         }
@@ -138,11 +146,11 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Multiselect field filter HTML with selected values
      *
-     * @param \Magento\Eav\Model\Entity\Attribute $attribute
+     * @param Attribute $attribute
      * @param mixed $value
      * @return string
      */
-    protected function _getMultiSelectHtmlWithValue(\Magento\Eav\Model\Entity\Attribute $attribute, $value)
+    protected function _getMultiSelectHtmlWithValue(Attribute $attribute, $value)
     {
         if ($attribute->getFilterOptions()) {
             $options = $attribute->getFilterOptions();
@@ -156,20 +164,19 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
                 }
             }
         }
-        if (($size = count($options))) {
+        if ($size = count($options)) {
             $arguments = array(
-                'name'         => $this->getFilterElementName($attribute->getAttributeCode()). '[]',
-                'id'           => $this->getFilterElementId($attribute->getAttributeCode()),
-                'class'        => 'multiselect multiselect-export-filter',
+                'name' => $this->getFilterElementName($attribute->getAttributeCode()) . '[]',
+                'id' => $this->getFilterElementId($attribute->getAttributeCode()),
+                'class' => 'multiselect multiselect-export-filter',
                 'extra_params' => 'multiple="multiple" size="' . ($size > 5 ? 5 : ($size < 2 ? 2 : $size))
             );
-            /** @var $selectBlock \Magento\View\Element\Html\Select */
+            /** @var $selectBlock \Magento\Framework\View\Element\Html\Select */
             $selectBlock = $this->_layout->getBlockFactory()->createBlock(
-                'Magento\View\Element\Html\Select', array('data' => $arguments)
+                'Magento\Framework\View\Element\Html\Select',
+                array('data' => $arguments)
             );
-            return $selectBlock->setOptions($options)
-                ->setValue($value)
-                ->getHtml();
+            return $selectBlock->setOptions($options)->setValue($value)->getHtml();
         } else {
             return __('Attribute does not has options, so filtering is impossible');
         }
@@ -178,36 +185,49 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Number 'from-to' field filter HTML with selected value.
      *
-     * @param \Magento\Eav\Model\Entity\Attribute $attribute
+     * @param Attribute $attribute
      * @param mixed $value
      * @return string
      */
-    protected function _getNumberFromToHtmlWithValue(\Magento\Eav\Model\Entity\Attribute $attribute, $value)
+    protected function _getNumberFromToHtmlWithValue(Attribute $attribute, $value)
     {
         $fromValue = null;
         $toValue = null;
         $name = $this->getFilterElementName($attribute->getAttributeCode());
         if (is_array($value) && count($value) == 2) {
             $fromValue = $this->escapeHtml(reset($value));
-            $toValue   = $this->escapeHtml(next($value));
+            $toValue = $this->escapeHtml(next($value));
         }
 
-        return '<strong>' . __('From') . ':</strong>&nbsp;'
-             . '<input type="text" name="' . $name . '[]" class="input-text input-text-range"'
-             . ' value="' . $fromValue . '"/>&nbsp;'
-             . '<strong>' . __('To')
-             . ':</strong>&nbsp;<input type="text" name="' . $name
-             . '[]" class="input-text input-text-range" value="' . $toValue . '" />';
+        return '<strong>' . __(
+            'From'
+        ) .
+        ':</strong>&nbsp;' .
+        '<input type="text" name="' .
+        $name .
+        '[]" class="input-text input-text-range"' .
+        ' value="' .
+        $fromValue .
+        '"/>&nbsp;' .
+        '<strong>' .
+        __(
+            'To'
+        ) .
+        ':</strong>&nbsp;<input type="text" name="' .
+        $name .
+        '[]" class="input-text input-text-range" value="' .
+        $toValue .
+        '" />';
     }
 
     /**
      * Select field filter HTML with selected value.
      *
-     * @param \Magento\Eav\Model\Entity\Attribute $attribute
+     * @param Attribute $attribute
      * @param mixed $value
      * @return string
      */
-    protected function _getSelectHtmlWithValue(\Magento\Eav\Model\Entity\Attribute $attribute, $value)
+    protected function _getSelectHtmlWithValue(Attribute $attribute, $value)
     {
         if ($attribute->getFilterOptions()) {
             $options = array();
@@ -218,7 +238,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
         } else {
             $options = $attribute->getSource()->getAllOptions(false);
         }
-        if (($size = count($options))) {
+        if ($size = count($options)) {
             // add empty vaue option
             $firstOption = reset($options);
 
@@ -228,17 +248,16 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
                 array_unshift($options, array('value' => '', 'label' => ''));
             }
             $arguments = array(
-                'name'         => $this->getFilterElementName($attribute->getAttributeCode()),
-                'id'           => $this->getFilterElementId($attribute->getAttributeCode()),
-                'class'        => 'select select-export-filter'
+                'name' => $this->getFilterElementName($attribute->getAttributeCode()),
+                'id' => $this->getFilterElementId($attribute->getAttributeCode()),
+                'class' => 'select select-export-filter'
             );
-            /** @var $selectBlock \Magento\View\Element\Html\Select */
+            /** @var $selectBlock \Magento\Framework\View\Element\Html\Select */
             $selectBlock = $this->_layout->getBlockFactory()->createBlock(
-                'Magento\View\Element\Html\Select', array('data' => $arguments)
+                'Magento\Framework\View\Element\Html\Select',
+                array('data' => $arguments)
             );
-            return $selectBlock->setOptions($options)
-                ->setValue($value)
-                ->getHtml();
+            return $selectBlock->setOptions($options)->setValue($value)->getHtml();
         } else {
             return __('Attribute does not has options, so filtering is impossible');
         }
@@ -247,49 +266,64 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Add columns to grid
      *
-     * @return \Magento\ImportExport\Block\Adminhtml\Export\Filter
+     * @return $this
      */
     protected function _prepareColumns()
     {
         parent::_prepareColumns();
 
-        $this->addColumn('skip', array(
-            'header'     => __('Exclude'),
-            'type'       => 'checkbox',
-            'name'       => 'skip',
-            'field_name' => \Magento\ImportExport\Model\Export::FILTER_ELEMENT_SKIP . '[]',
-            'filter'     => false,
-            'sortable'   => false,
-            'align'      => 'center',
-            'index'      => 'attribute_id'
-        ));
-        $this->addColumn('frontend_label', array(
-            'header'   => __('Attribute Label'),
-            'index'    => 'frontend_label',
-            'sortable' => false,
-        ));
-        $this->addColumn('attribute_code', array(
-            'header' => __('Attribute Code'),
-            'index'  => 'attribute_code'
-        ));
-        $this->addColumn('filter', array(
-            'header'         => __('Filter'),
-            'sortable'       => false,
-            'filter'         => false,
-            'frame_callback' => array($this, 'decorateFilter')
-        ));
+        $this->addColumn(
+            'skip',
+            array(
+                'header' => __('Exclude'),
+                'type' => 'checkbox',
+                'name' => 'skip',
+                'field_name' => \Magento\ImportExport\Model\Export::FILTER_ELEMENT_SKIP . '[]',
+                'filter' => false,
+                'sortable' => false,
+                'index' => 'attribute_id',
+                'header_css_class' => 'col-id',
+                'column_css_class' => 'col-id'
+            )
+        );
+        $this->addColumn(
+            'frontend_label',
+            array(
+                'header' => __('Attribute Label'),
+                'index' => 'frontend_label',
+                'sortable' => false,
+                'header_css_class' => 'col-label',
+                'column_css_class' => 'col-label'
+            )
+        );
+        $this->addColumn(
+            'attribute_code',
+            array(
+                'header' => __('Attribute Code'),
+                'index' => 'attribute_code',
+                'header_css_class' => 'col-code',
+                'column_css_class' => 'col-code'
+            )
+        );
+        $this->addColumn(
+            'filter',
+            array(
+                'header' => __('Filter'),
+                'sortable' => false,
+                'filter' => false,
+                'frame_callback' => array($this, 'decorateFilter')
+            )
+        );
 
         if ($this->hasOperation()) {
             $operation = $this->getOperation();
             $skipAttr = $operation->getSkipAttr();
             if ($skipAttr) {
-                $this->getColumn('skip')
-                    ->setData('values', $skipAttr);
+                $this->getColumn('skip')->setData('values', $skipAttr);
             }
             $filter = $operation->getExportFilter();
             if ($filter) {
-                $this->getColumn('filter')
-                    ->setData('values', $filter);
+                $this->getColumn('filter')->setData('values', $filter);
             }
         }
 
@@ -300,14 +334,14 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
      * Create filter fields for 'Filter' column.
      *
      * @param mixed $value
-     * @param \Magento\Eav\Model\Entity\Attribute $row
-     * @param \Magento\Object $column
+     * @param Attribute $row
+     * @param \Magento\Framework\Object $column
      * @param boolean $isExport
      * @return string
      */
-    public function decorateFilter($value, \Magento\Eav\Model\Entity\Attribute $row, \Magento\Object $column, $isExport)
+    public function decorateFilter($value, Attribute $row, \Magento\Framework\Object $column, $isExport)
     {
-        $value  = null;
+        $value = null;
         $values = $column->getValues();
         if (is_array($values) && isset($values[$row->getAttributeCode()])) {
             $value = $values[$row->getAttributeCode()];
@@ -356,8 +390,8 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Get row edit URL.
      *
-     * @param $row
-     * @return string|boolean
+     * @param Attribute $row
+     * @return string|false
      */
     public function getRowUrl($row)
     {
@@ -367,10 +401,10 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Prepare collection by setting page number, sorting etc..
      *
-     * @param \Magento\Data\Collection $collection
+     * @param \Magento\Framework\Data\Collection $collection
      * @return \Magento\Eav\Model\Resource\Entity\Attribute\Collection
      */
-    public function prepareCollection(\Magento\Data\Collection $collection)
+    public function prepareCollection(\Magento\Framework\Data\Collection $collection)
     {
         $this->setCollection($collection);
         return $this->getCollection();

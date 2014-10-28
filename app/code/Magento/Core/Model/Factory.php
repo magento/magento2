@@ -18,12 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model;
 
 /**
@@ -32,14 +29,14 @@ namespace Magento\Core\Model;
 class Factory
 {
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManager $objectManager
      */
-    public function __construct(\Magento\ObjectManager $objectManager)
+    public function __construct(\Magento\Framework\ObjectManager $objectManager)
     {
         $this->_objectManager = $objectManager;
     }
@@ -50,15 +47,13 @@ class Factory
      * @param string $model
      * @param array $data
      * @throws \InvalidArgumentException
-     * @return \Magento\Core\Model\AbstractModel
+     * @return \Magento\Framework\Model\AbstractModel
      */
     public function create($model, array $data = array())
     {
         $modelInstance = $this->_objectManager->create($model, $data);
-        if (false == ($modelInstance instanceof \Magento\Core\Model\AbstractModel)) {
-            throw new \InvalidArgumentException(
-                $model . ' is not instance of \Magento\Core\Model\AbstractModel'
-            );
+        if (false == $modelInstance instanceof \Magento\Framework\Model\AbstractModel) {
+            throw new \InvalidArgumentException($model . ' is not instance of \Magento\Framework\Model\AbstractModel');
         }
         return $modelInstance;
     }

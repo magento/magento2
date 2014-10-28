@@ -18,29 +18,31 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_GoogleShopping
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\GoogleShopping\Model;
+
+use Magento\Framework\Model\Exception as CoreException;
+use Magento\GoogleShopping\Model\Resource\Item\Collection as ItemCollection;
 
 /**
  * Controller for mass opertions with items
  *
- * @category   Magento
- * @package    Magento_GoogleShopping
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\GoogleShopping\Model;
-
 class MassOperations
 {
     /**
+     * GoogleShopping data
+     *
      * @var \Magento\GoogleShopping\Helper\Data
      */
     protected $_gleShoppingData = null;
 
     /**
+     * GoogleShopping category
+     *
      * @var \Magento\GoogleShopping\Helper\Category|null
      */
     protected $_gleShoppingCategory = null;
@@ -48,7 +50,7 @@ class MassOperations
     /**
      * Store manager
      *
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -67,11 +69,11 @@ class MassOperations
     protected $_productFactory;
 
     /**
-     * Inbox factory
+     * Notifier
      *
-     * @var \Magento\AdminNotification\Model\InboxFactory
+     * @var \Magento\Framework\Notification\NotifierInterface
      */
-    protected $_inboxFactory;
+    protected $_notifier;
 
     /**
      * Collection factory
@@ -84,9 +86,9 @@ class MassOperations
      * @param \Magento\GoogleShopping\Model\Resource\Item\CollectionFactory $collectionFactory
      * @param \Magento\GoogleShopping\Model\ItemFactory $itemFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\AdminNotification\Model\InboxFactory $inboxFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Logger $logger
+     * @param \Magento\Framework\Notification\NotifierInterface $notifier
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Logger $logger
      * @param \Magento\GoogleShopping\Helper\Data $gleShoppingData
      * @param \Magento\GoogleShopping\Helper\Category $gleShoppingCategory
      * @param array $data
@@ -95,9 +97,9 @@ class MassOperations
         \Magento\GoogleShopping\Model\Resource\Item\CollectionFactory $collectionFactory,
         \Magento\GoogleShopping\Model\ItemFactory $itemFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\AdminNotification\Model\InboxFactory $inboxFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Logger $logger,
+        \Magento\Framework\Notification\NotifierInterface $notifier,
+        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Framework\Logger $logger,
         \Magento\GoogleShopping\Helper\Data $gleShoppingData,
         \Magento\GoogleShopping\Helper\Category $gleShoppingCategory,
         array $data = array()
@@ -105,7 +107,7 @@ class MassOperations
         $this->_collectionFactory = $collectionFactory;
         $this->_itemFactory = $itemFactory;
         $this->_productFactory = $productFactory;
-        $this->_inboxFactory = $inboxFactory;
+        $this->_notifier = $notifier;
         $this->_storeManager = $storeManager;
         $this->_gleShoppingData = $gleShoppingData;
         $this->_gleShoppingCategory = $gleShoppingCategory;
@@ -134,7 +136,9 @@ class MassOperations
     protected $_flag;
 
     /**
-     * @var \Magento\Logger
+     * Logger
+     *
+     * @var \Magento\Framework\Logger
      */
     protected $_logger;
 
@@ -142,7 +146,7 @@ class MassOperations
      * Set process locking flag.
      *
      * @param \Magento\GoogleShopping\Model\Flag $flag
-     * @return \Magento\GoogleShopping\Model\MassOperations
+     * @return $this
      */
     public function setFlag(\Magento\GoogleShopping\Model\Flag $flag)
     {
@@ -153,11 +157,10 @@ class MassOperations
     /**
      * Add product to Google Content.
      *
-     * @param array $productIds
+     * @param int[] $productIds
      * @param int $storeId
-     * @throws \Zend_Gdata_App_CaptchaRequiredException
-     * @throws \Magento\Core\Exception
-     * @return \Magento\GoogleShopping\Model\MassOperations
+     * @return $this
+     * @throws \Exception|\Zend_Gdata_App_CaptchaRequiredException
      */
     public function addProducts($productIds, $storeId)
     {
@@ -184,11 +187,19 @@ class MassOperations
                 } catch (\Zend_Db_Statement_Exception $e) {
                     $message = $e->getMessage();
                     if ($e->getCode() == self::ERROR_CODE_SQL_UNIQUE_INDEX) {
-                        $message = __("The Google Content item for product '%1' (in '%2' store) already exists.", $product->getName(), $this->_storeManager->getStore($product->getStoreId())->getName());
+                        $message = __(
+                            "The Google Content item for product '%1' (in '%2' store) already exists.",
+                            $product->getName(),
+                            $this->_storeManager->getStore($product->getStoreId())->getName()
+                        );
                     }
                     $errors[] = $message;
-                } catch (\Magento\Core\Exception $e) {
-                    $errors[] = __('The product "%1" cannot be added to Google Content. %2', $product->getName(), $e->getMessage());
+                } catch (CoreException $e) {
+                    $errors[] = __(
+                        'The product "%1" cannot be added to Google Content. %2',
+                        $product->getName(),
+                        $e->getMessage()
+                    );
                 } catch (\Exception $e) {
                     $this->_logger->logException($e);
                     $errors[] = __('The product "%1" hasn\'t been added to Google Content.', $product->getName());
@@ -200,21 +211,18 @@ class MassOperations
         }
 
         if ($totalAdded > 0) {
-            $this->_getNotifier()->addNotice(
+            $this->_notifier->addNotice(
                 __('Products were added to Google Shopping account.'),
                 __('A total of %1 product(s) have been added to Google Content.', $totalAdded)
             );
         }
 
         if (count($errors)) {
-            $this->_getNotifier()->addMajor(
-                __('Errors happened while adding products to Google Shopping.'),
-                $errors
-            );
+            $this->_notifier->addMajor(__('Errors happened while adding products to Google Shopping.'), $errors);
         }
 
         if ($this->_flag->isExpired()) {
-            $this->_getNotifier()->addMajor(
+            $this->_notifier->addMajor(
                 __('Operation of adding products to Google Shopping expired.'),
                 __('Some products may have not been added to Google Shopping bacause of expiration')
             );
@@ -226,10 +234,9 @@ class MassOperations
     /**
      * Update Google Content items.
      *
-     * @param array|\Magento\GoogleShopping\Model\Resource\Item\Collection $items
-     * @throws \Zend_Gdata_App_CaptchaRequiredException
-     * @throws \Magento\Core\Exception
-     * @return \Magento\GoogleShopping\Model\MassOperations
+     * @param int[]|ItemCollection $items
+     * @return $this
+     * @throws \Exception|\Zend_Gdata_App_CaptchaRequiredException
      */
     public function synchronizeItems($items)
     {
@@ -253,25 +260,33 @@ class MassOperations
                     $item->save();
                     // The item was updated successfully
                     $totalUpdated++;
-                } catch (\Magento\Gdata\Gshopping\HttpException $e) {
+                } catch (\Magento\Framework\Gdata\Gshopping\HttpException $e) {
                     if (in_array('notfound', $e->getCodes())) {
                         $item->delete();
                         $totalDeleted++;
                     } else {
                         $this->_addGeneralError();
-                        $errors[] = $this->_gleShoppingData
-                            ->parseGdataExceptionMessage($e->getMessage(), $item->getProduct());
+                        $errors[] = $this->_gleShoppingData->parseGdataExceptionMessage(
+                            $e->getMessage(),
+                            $item->getProduct()
+                        );
                         $totalFailed++;
                     }
                 } catch (\Zend_Gdata_App_CaptchaRequiredException $e) {
                     throw $e;
                 } catch (\Zend_Gdata_App_Exception $e) {
                     $this->_addGeneralError();
-                    $errors[] = $this->_gleShoppingData
-                        ->parseGdataExceptionMessage($e->getMessage(), $item->getProduct());
+                    $errors[] = $this->_gleShoppingData->parseGdataExceptionMessage(
+                        $e->getMessage(),
+                        $item->getProduct()
+                    );
                     $totalFailed++;
-                } catch (\Magento\Core\Exception $e) {
-                    $errors[] = __('The item "%1" cannot be updated at Google Content. %2', $item->getProduct()->getName(), $e->getMessage());
+                } catch (CoreException $e) {
+                    $errors[] = __(
+                        'The item "%1" cannot be updated at Google Content. %2',
+                        $item->getProduct()->getName(),
+                        $e->getMessage()
+                    );
                     $totalFailed++;
                 } catch (\Exception $e) {
                     $this->_logger->logException($e);
@@ -283,13 +298,17 @@ class MassOperations
             return $this;
         }
 
-        $this->_getNotifier()->addNotice(
+        $this->_notifier->addNotice(
             __('Product synchronization with Google Shopping completed'),
-            __('A total of %1 items(s) have been deleted; a total of %2 items(s) have been updated.', $totalDeleted, $totalUpdated)
+            __(
+                'A total of %1 items(s) have been deleted; a total of %2 items(s) have been updated.',
+                $totalDeleted,
+                $totalUpdated
+            )
         );
         if ($totalFailed > 0 || count($errors)) {
             array_unshift($errors, __("We cannot update %1 items.", $totalFailed));
-            $this->_getNotifier()->addMajor(
+            $this->_notifier->addMajor(
                 __('Errors happened during synchronization with Google Shopping'),
                 $errors
             );
@@ -301,9 +320,9 @@ class MassOperations
     /**
      * Remove Google Content items.
      *
-     * @param array|\Magento\GoogleShopping\Model\Resource\Item\Collection $items
-     * @throws \Zend_Gdata_App_CaptchaRequiredException
-     * @return \Magento\GoogleShopping\Model\MassOperations
+     * @param int[]|ItemCollection $items
+     * @return $this
+     * @throws \Exception|\Zend_Gdata_App_CaptchaRequiredException
      */
     public function deleteItems($items)
     {
@@ -326,8 +345,10 @@ class MassOperations
                     throw $e;
                 } catch (\Zend_Gdata_App_Exception $e) {
                     $this->_addGeneralError();
-                    $errors[] = $this->_gleShoppingData
-                        ->parseGdataExceptionMessage($e->getMessage(), $item->getProduct());
+                    $errors[] = $this->_gleShoppingData->parseGdataExceptionMessage(
+                        $e->getMessage(),
+                        $item->getProduct()
+                    );
                 } catch (\Exception $e) {
                     $this->_logger->logException($e);
                     $errors[] = __('The item "%1" hasn\'t been deleted.', $item->getProduct()->getName());
@@ -338,16 +359,13 @@ class MassOperations
         }
 
         if ($totalDeleted > 0) {
-            $this->_getNotifier()->addNotice(
+            $this->_notifier->addNotice(
                 __('Google Shopping item removal process succeded'),
                 __('Total of %1 items(s) have been removed from Google Shopping.', $totalDeleted)
             );
         }
         if (count($errors)) {
-            $this->_getNotifier()->addMajor(
-                __('Errors happened while deleting items from Google Shopping'),
-                $errors
-            );
+            $this->_notifier->addMajor(__('Errors happened while deleting items from Google Shopping'), $errors);
         }
 
         return $this;
@@ -356,14 +374,14 @@ class MassOperations
     /**
      * Return items collection by IDs
      *
-     * @param array|\Magento\GoogleShopping\Model\Resource\Item\Collection $items
-     * @throws \Magento\Core\Exception
-     * @return null|\Magento\GoogleShopping\Model\Resource\Item\Collection
+     * @param int[]|ItemCollection $items
+     * @throws CoreException
+     * @return null|ItemCollection
      */
     protected function _getItemsCollection($items)
     {
         $itemsCollection = null;
-        if ($items instanceof \Magento\GoogleShopping\Model\Resource\Item\Collection) {
+        if ($items instanceof ItemCollection) {
             $itemsCollection = $items;
         } else if (is_array($items)) {
             $itemsCollection = $this->_collectionFactory->create()->addFieldToFilter('item_id', $items);
@@ -373,25 +391,14 @@ class MassOperations
     }
 
     /**
-     * Retrieve admin notifier
-     *
-     * @return \Magento\AdminNotification\Model\Inbox
-     */
-    protected function _getNotifier()
-    {
-        return $this->_inboxFactory->create();
-    }
-
-    /**
      * Provides general error information
+     *
+     * @return void
      */
     protected function _addGeneralError()
     {
         if (!$this->_hasError) {
-            $this->_getNotifier()->addMajor(
-                __('Google Shopping Error'),
-                $this->_gleShoppingCategory->getMessage()
-            );
+            $this->_notifier->addMajor(__('Google Shopping Error'), $this->_gleShoppingCategory->getMessage());
             $this->_hasError = true;
         }
     }

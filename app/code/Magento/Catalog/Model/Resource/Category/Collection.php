@@ -18,22 +18,18 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Model\Resource\Category;
 
+use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 
 /**
  * Category resource collection
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Resource\Category;
-
 class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractCollection
 {
     /**
@@ -41,14 +37,14 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
      *
      * @var string
      */
-    protected $_eventPrefix              = 'catalog_category_collection';
+    protected $_eventPrefix = 'catalog_category_collection';
 
     /**
      * Event object name
      *
      * @var string
      */
-    protected $_eventObject              = 'category_collection';
+    protected $_eventObject = 'category_collection';
 
     /**
      * Name of product table
@@ -76,25 +72,26 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
      *
      * @var boolean
      */
-    protected $_loadWithProductCount     = false;
+    protected $_loadWithProductCount = false;
 
     /**
      * Init collection and determine table names
      *
+     * @return void
      */
     protected function _construct()
     {
         $this->_init('Magento\Catalog\Model\Category', 'Magento\Catalog\Model\Resource\Category');
 
         $this->_productWebsiteTable = $this->getTable('catalog_product_website');
-        $this->_productTable        = $this->getTable('catalog_category_product');
+        $this->_productTable = $this->getTable('catalog_category_product');
     }
 
     /**
      * Add Id filter
      *
      * @param array $categoryIds
-     * @return \Magento\Catalog\Model\Resource\Category\Collection
+     * @return $this
      */
     public function addIdFilter($categoryIds)
     {
@@ -122,7 +119,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
      * Set flag for loading product count
      *
      * @param boolean $flag
-     * @return \Magento\Catalog\Model\Resource\Category\Collection
+     * @return $this
      */
     public function setLoadProductCount($flag)
     {
@@ -133,24 +130,22 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
     /**
      * Before collection load
      *
-     * @return \Magento\Catalog\Model\Resource\Category\Collection
+     * @return $this
      */
     protected function _beforeLoad()
     {
-        $this->_eventManager->dispatch($this->_eventPrefix . '_load_before',
-                            array($this->_eventObject => $this));
+        $this->_eventManager->dispatch($this->_eventPrefix . '_load_before', array($this->_eventObject => $this));
         return parent::_beforeLoad();
     }
 
     /**
      * After collection load
      *
-     * @return \Magento\Catalog\Model\Resource\Category\Collection
+     * @return $this
      */
     protected function _afterLoad()
     {
-        $this->_eventManager->dispatch($this->_eventPrefix . '_load_after',
-                            array($this->_eventObject => $this));
+        $this->_eventManager->dispatch($this->_eventPrefix . '_load_after', array($this->_eventObject => $this));
 
         return parent::_afterLoad();
     }
@@ -159,7 +154,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
      * Set id of the store that we should count products on
      *
      * @param int $storeId
-     * @return \Magento\Catalog\Model\Resource\Category\Collection
+     * @return $this
      */
     public function setProductStoreId($storeId)
     {
@@ -175,7 +170,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
     public function getProductStoreId()
     {
         if (is_null($this->_productStoreId)) {
-            $this->_productStoreId = \Magento\Core\Model\Store::DEFAULT_STORE_ID;
+            $this->_productStoreId = \Magento\Store\Model\Store::DEFAULT_STORE_ID;
         }
         return $this->_productStoreId;
     }
@@ -185,7 +180,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
      *
      * @param bool $printQuery
      * @param bool $logQuery
-     * @return \Magento\Catalog\Model\Resource\Category\Collection
+     * @return $this
      */
     public function load($printQuery = false, $logQuery = false)
     {
@@ -210,6 +205,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
     /**
      * Load categories product count
      *
+     * @return void
      */
     protected function _loadProductCount()
     {
@@ -222,13 +218,13 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
      * @param array $items
      * @param boolean $countRegular get product count for regular (non-anchor) categories
      * @param boolean $countAnchor get product count for anchor categories
-     * @return \Magento\Catalog\Model\Resource\Category\Collection
+     * @return $this
      */
     public function loadProductCount($items, $countRegular = true, $countAnchor = true)
     {
-        $anchor     = array();
-        $regular    = array();
-        $websiteId  = $this->_storeManager->getStore($this->getProductStoreId())->getWebsiteId();
+        $anchor = array();
+        $regular = array();
+        $websiteId = $this->_storeManager->getStore($this->getProductStoreId())->getWebsiteId();
 
         foreach ($items as $item) {
             if ($item->getIsAnchor()) {
@@ -244,17 +240,22 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
             if (!empty($regularIds)) {
                 $select = $this->_conn->select();
                 $select->from(
-                        array('main_table' => $this->_productTable),
-                        array('category_id', new \Zend_Db_Expr('COUNT(main_table.product_id)'))
-                    )
-                    ->where($this->_conn->quoteInto('main_table.category_id IN(?)', $regularIds))
-                    ->group('main_table.category_id');
+                    array('main_table' => $this->_productTable),
+                    array('category_id', new \Zend_Db_Expr('COUNT(main_table.product_id)'))
+                )->where(
+                    $this->_conn->quoteInto('main_table.category_id IN(?)', $regularIds)
+                )->group(
+                    'main_table.category_id'
+                );
                 if ($websiteId) {
                     $select->join(
                         array('w' => $this->_productWebsiteTable),
-                        'main_table.product_id = w.product_id', array()
-                    )
-                    ->where('w.website_id = ?', $websiteId);
+                        'main_table.product_id = w.product_id',
+                        array()
+                    )->where(
+                        'w.website_id = ?',
+                        $websiteId
+                    );
                 }
                 $counts = $this->_conn->fetchPairs($select);
                 foreach ($regular as $item) {
@@ -271,30 +272,31 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
             // Retrieve Anchor categories product counts
             foreach ($anchor as $item) {
                 if ($allChildren = $item->getAllChildren()) {
-                    $bind = array(
-                        'entity_id' => $item->getId(),
-                        'c_path'    => $item->getPath() . '/%'
-                    );
+                    $bind = array('entity_id' => $item->getId(), 'c_path' => $item->getPath() . '/%');
                     $select = $this->_conn->select();
                     $select->from(
-                            array('main_table' => $this->_productTable),
-                            new \Zend_Db_Expr('COUNT(DISTINCT main_table.product_id)')
-                        )
-                        ->joinInner(
-                            array('e' => $this->getTable('catalog_category_entity')),
-                            'main_table.category_id=e.entity_id',
-                            array()
-                        )
-                        ->where('e.entity_id = :entity_id')
-                        ->orWhere('e.path LIKE :c_path');
+                        array('main_table' => $this->_productTable),
+                        new \Zend_Db_Expr('COUNT(DISTINCT main_table.product_id)')
+                    )->joinInner(
+                        array('e' => $this->getTable('catalog_category_entity')),
+                        'main_table.category_id=e.entity_id',
+                        array()
+                    )->where(
+                        'e.entity_id = :entity_id'
+                    )->orWhere(
+                        'e.path LIKE :c_path'
+                    );
                     if ($websiteId) {
                         $select->join(
                             array('w' => $this->_productWebsiteTable),
-                            'main_table.product_id = w.product_id', array()
-                        )
-                        ->where('w.website_id = ?', $websiteId);
+                            'main_table.product_id = w.product_id',
+                            array()
+                        )->where(
+                            'w.website_id = ?',
+                            $websiteId
+                        );
                     }
-                    $item->setProductCount((int) $this->_conn->fetchOne($select, $bind));
+                    $item->setProductCount((int)$this->_conn->fetchOne($select, $bind));
                 } else {
                     $item->setProductCount(0);
                 }
@@ -307,7 +309,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
      * Add category path filter
      *
      * @param string $regexp
-     * @return \Magento\Catalog\Model\Resource\Category\Collection
+     * @return $this
      */
     public function addPathFilter($regexp)
     {
@@ -318,19 +320,19 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
     /**
      * Joins url rewrite rules to collection
      *
-     * @return \Magento\Catalog\Model\Resource\Category\Collection
+     * @return $this
      */
     public function joinUrlRewrite()
     {
-        $storeId = $this->_storeManager->getStore()->getId();
         $this->joinTable(
-            'core_url_rewrite',
-            'category_id=entity_id',
-            array('request_path'),
-            "{{table}}.is_system=1"
-                . " AND {{table}}.product_id IS NULL"
-                . " AND {{table}}.store_id='{$storeId}'"
-                . " AND id_path LIKE 'category/%'",
+            'url_rewrite',
+            'entity_id = entity_id',
+            ['request_path'],
+            sprintf(
+                '{{table}}.is_autogenerated = 1 AND {{table}}.store_id = %d AND {{table}}.entity_type = \'%s\'',
+                $this->_storeManager->getStore()->getId(),
+                CategoryUrlRewriteGenerator::ENTITY_TYPE
+            ),
             'left'
         );
         return $this;
@@ -339,20 +341,22 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
     /**
      * Add active category filter
      *
-     * @return \Magento\Catalog\Model\Resource\Category\Collection
+     * @return $this
      */
     public function addIsActiveFilter()
     {
         $this->addAttributeToFilter('is_active', 1);
-        $this->_eventManager->dispatch($this->_eventPrefix . '_add_is_active_filter',
-                            array($this->_eventObject => $this));
+        $this->_eventManager->dispatch(
+            $this->_eventPrefix . '_add_is_active_filter',
+            array($this->_eventObject => $this)
+        );
         return $this;
     }
 
     /**
      * Add name attribute to result
      *
-     * @return \Magento\Catalog\Model\Resource\Category\Collection
+     * @return $this
      */
     public function addNameToResult()
     {
@@ -363,7 +367,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
     /**
      * Add url rewrite rules to collection
      *
-     * @return \Magento\Catalog\Model\Resource\Category\Collection
+     * @return $this
      */
     public function addUrlRewriteToResult()
     {
@@ -375,17 +379,17 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
      * Add category path filter
      *
      * @param array|string $paths
-     * @return \Magento\Catalog\Model\Resource\Category\Collection
+     * @return $this
      */
     public function addPathsFilter($paths)
     {
         if (!is_array($paths)) {
             $paths = array($paths);
         }
-        $write  = $this->getResource()->getWriteConnection();
-        $cond   = array();
+        $write = $this->getResource()->getWriteConnection();
+        $cond = array();
         foreach ($paths as $path) {
-            $cond[] = $write->quoteInto('e.path LIKE ?', "$path%");
+            $cond[] = $write->quoteInto('e.path LIKE ?', "{$path}%");
         }
         if ($cond) {
             $this->getSelect()->where(join(' OR ', $cond));
@@ -397,7 +401,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
      * Add category level filter
      *
      * @param int|string $level
-     * @return \Magento\Catalog\Model\Resource\Category\Collection
+     * @return $this
      */
     public function addLevelFilter($level)
     {
@@ -408,7 +412,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
     /**
      * Add root category filter
      *
-     * @return \Magento\Catalog\Model\Resource\Category\Collection
+     * @return $this
      */
     public function addRootLevelFilter()
     {
@@ -421,7 +425,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
      * Add order field
      *
      * @param string $field
-     * @return \Magento\Catalog\Model\Resource\Category\Collection
+     * @return $this
      */
     public function addOrderField($field)
     {

@@ -1,0 +1,86 @@
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+#grouped_grid .col-name {
+    width: 25%;
+}
+
+#grouped_grid .col-sku {
+    width: 10%;
+}
+
+#grouped_grid .col-qty {
+    width: 7%;
+}
+
+.ui-dialog.grouped .massaction {
+    display: none;
+}
+
+.ui-dialog.grouped .data {
+    table-layout: auto;
+}
+
+.ui-dialog.grouped .col-entity_id {
+    width: 2%;
+}
+
+#grouped-product-container .col-name {
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#grouped-product-container .col-sku {
+    max-width: 170px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#product_info_tabs_grouped_content .grid-container {
+    margin-bottom: 10px;
+}
+
+#product_info_tabs_grouped_content .col-draggable {
+    width: 10px;
+}
+
+#product_info_tabs_grouped_content .col-qty {
+    width: 80px;
+}
+
+#product_info_tabs_grouped_content .col-actions {
+    width: 50px;
+}
+
+#product_info_tabs_grouped_content .col-name {
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#product_info_tabs_grouped_content .col-sku {
+    max-width: 170px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

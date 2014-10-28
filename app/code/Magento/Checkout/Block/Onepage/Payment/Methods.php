@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Checkout
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,9 +25,6 @@
 /**
  * One page checkout status
  *
- * @category   Magento
- * @category   Magento
- * @package    Magento_Checkout
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Checkout\Block\Onepage\Payment;
@@ -42,23 +37,26 @@ class Methods extends \Magento\Payment\Block\Form\Container
     protected $_checkoutSession;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Payment\Helper\Data $paymentHelper
+     * @param \Magento\Payment\Model\Checks\SpecificationFactory $methodSpecificationFactory
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Payment\Helper\Data $paymentHelper,
+        \Magento\Payment\Model\Checks\SpecificationFactory $methodSpecificationFactory,
         \Magento\Checkout\Model\Session $checkoutSession,
         array $data = array()
     ) {
         $this->_checkoutSession = $checkoutSession;
-        parent::__construct($context, $paymentHelper, $data);
+        parent::__construct($context, $paymentHelper, $methodSpecificationFactory, $data);
+        $this->_isScopePrivate = true;
     }
 
     /**
-     * @return \Magento\Sales\Model\Quote|\Magento\Sales\Model\Quote
+     * @return \Magento\Sales\Model\Quote
      */
     public function getQuote()
     {
@@ -68,7 +66,7 @@ class Methods extends \Magento\Payment\Block\Form\Container
     /**
      * Check payment method model
      *
-     * @param \Magento\Payment\Model\Method\AbstractMethod $method
+     * @param \Magento\Payment\Model\MethodInterface $method
      * @return bool
      */
     protected function _canUseMethod($method)
@@ -92,21 +90,22 @@ class Methods extends \Magento\Payment\Block\Form\Container
 
     /**
      * Payment method form html getter
-     * @param \Magento\Payment\Model\Method\AbstractMethod $method
+     *
+     * @param \Magento\Payment\Model\MethodInterface $method
      * @return string
      */
-    public function getPaymentMethodFormHtml(\Magento\Payment\Model\Method\AbstractMethod $method)
+    public function getPaymentMethodFormHtml(\Magento\Payment\Model\MethodInterface $method)
     {
-         return $this->getChildHtml('payment.method.' . $method->getCode());
+        return $this->getChildHtml('payment.method.' . $method->getCode());
     }
 
     /**
      * Return method title for payment selection page
      *
-     * @param \Magento\Payment\Model\Method\AbstractMethod $method
+     * @param \Magento\Payment\Model\MethodInterface $method
      * @return string
      */
-    public function getMethodTitle(\Magento\Payment\Model\Method\AbstractMethod $method)
+    public function getMethodTitle(\Magento\Payment\Model\MethodInterface $method)
     {
         $form = $this->getChildBlock('payment.method.' . $method->getCode());
         if ($form && $form->hasMethodTitle()) {
@@ -117,9 +116,11 @@ class Methods extends \Magento\Payment\Block\Form\Container
 
     /**
      * Payment method additional label part getter
-     * @param \Magento\Payment\Model\Method\AbstractMethod $method
+     *
+     * @param \Magento\Payment\Model\MethodInterface $method
+     * @return string
      */
-    public function getMethodLabelAfterHtml(\Magento\Payment\Model\Method\AbstractMethod $method)
+    public function getMethodLabelAfterHtml(\Magento\Payment\Model\MethodInterface $method)
     {
         $form = $this->getChildBlock('payment.method.' . $method->getCode());
         if ($form) {

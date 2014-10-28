@@ -1,0 +1,73 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+
+<link rel="stylesheet" type="text/css" href="<?php echo $this->getViewFileUrl('prototype/windows/themes/default.css') ?>"/>
+<link rel="stylesheet" type="text/css" href="<?php echo $this->getViewFileUrl('Magento_Core::prototype/magento.css') ?>"/>
+<link rel="stylesheet" type="text/css" href="<?php echo $this->getViewFileUrl('mage/translate-inline.css') ?>"/>
+
+<script id="translate-inline-icon" type="text/x-jQuery-tmpl">
+    <img src="${img}" height="16" width="16" class="translate-edit-icon">
+</script>
+<script id="translate-form-template" type="text/x-jquery-tmpl">
+    <form id="${id}">
+        {{each(i, item) items}}
+            <div class="magento_table_container"><table cellspacing="0">
+                {{each item}}
+                <tr>
+                    <th class="label" style="text-transform: capitalize;">${$index}:</th>
+                    <td class="value">${$value}</td>
+                </tr>
+                {{/each}}
+                <tr>
+                    <th class="label"><label for="perstore_${i}">Store View Specific:</label></th>
+                    <td class="value">
+                        <input id="perstore_${i}" name="translate[${i}][perstore]" type="checkbox" value="1"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="label"><label for="custom_${i}">Custom:</label></th>
+                    <td class="value">
+                        <input name="translate[${i}][original]" type="hidden" value="${escape(item.original)}"/>
+                        <input id="custom_${i}" name="translate[${i}][custom]" class="input-text" value="${escape(item.translated)}" />
+                    </td>
+                </tr>
+            </table></div>
+        {{/each}}
+    </form>
+    {{if message}}<p class="a-center accent">${message}</p>{{/if}}
+</script>
+
+<div data-role="translate-dialog"
+     data-mage-init='{"translateInline":{"ajaxUrl":"<?php echo $this->getAjaxUrl() ?>"},"loader":{}}'></div>
+<script type="text/javascript">
+require([
+    "jquery",
+    "mage/edit-trigger",
+    "mage/translate-inline"
+], function($){
+        $('body').editTrigger({img: '<?php echo $this->getViewFileUrl('Magento_Core::fam_book_open.png') ?>', alwaysShown:true, singleElement:false});
+        $('body').addClass('trnslate-inline-area');
+});
+</script>

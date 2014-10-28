@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Email
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,8 +25,6 @@
 /**
  * Adminhtml system template preview block
  *
- * @category   Magento
- * @package    Magento_Email
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Email\Block\Adminhtml\Template;
@@ -36,7 +32,7 @@ namespace Magento\Email\Block\Adminhtml\Template;
 class Preview extends \Magento\Backend\Block\Widget
 {
     /**
-     * @var \Magento\Core\Model\Input\Filter\MaliciousCode
+     * @var \Magento\Framework\Filter\Input\MaliciousCode
      */
     protected $_maliciousCode;
 
@@ -47,13 +43,13 @@ class Preview extends \Magento\Backend\Block\Widget
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Input\Filter\MaliciousCode $maliciousCode
+     * @param \Magento\Framework\Filter\Input\MaliciousCode $maliciousCode
      * @param \Magento\Email\Model\TemplateFactory $emailFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Input\Filter\MaliciousCode $maliciousCode,
+        \Magento\Framework\Filter\Input\MaliciousCode $maliciousCode,
         \Magento\Email\Model\TemplateFactory $emailFactory,
         array $data = array()
     ) {
@@ -71,7 +67,7 @@ class Preview extends \Magento\Backend\Block\Widget
     {
         /** @var $template \Magento\Email\Model\Template */
         $template = $this->_emailFactory->create(
-            array('data' => array('area' => \Magento\Core\Model\App\Area::AREA_FRONTEND))
+            array('data' => array('area' => \Magento\Framework\App\Area::AREA_FRONTEND))
         );
         $id = (int)$this->getRequest()->getParam('id');
         if ($id) {
@@ -82,18 +78,15 @@ class Preview extends \Magento\Backend\Block\Widget
             $template->setTemplateStyles($this->getRequest()->getParam('styles'));
         }
 
-        $template->setTemplateText(
-            $this->_maliciousCode->filter($template->getTemplateText())
-        );
+        $template->setTemplateText($this->_maliciousCode->filter($template->getTemplateText()));
 
-        \Magento\Profiler::start("email_template_proccessing");
+        \Magento\Framework\Profiler::start("email_template_proccessing");
         $vars = array();
 
+        $store = $this->getAnyStoreView();
+        $storeId = $store ? $store->getId() : null;
         $template->setDesignConfig(
-            array(
-                'area' => $this->_design->getArea(),
-                'store' => $this->_storeManager->getDefaultStoreView()->getId()
-            )
+            array('area' => $this->_design->getArea(), 'store' => $storeId)
         );
         $templateProcessed = $template->getProcessedTemplate($vars, true);
 
@@ -101,8 +94,25 @@ class Preview extends \Magento\Backend\Block\Widget
             $templateProcessed = "<pre>" . htmlspecialchars($templateProcessed) . "</pre>";
         }
 
-        \Magento\Profiler::stop("email_template_proccessing");
+        \Magento\Framework\Profiler::stop("email_template_proccessing");
 
         return $templateProcessed;
+    }
+
+    /**
+     * Get either default or any store view
+     *
+     * @return \Magento\Store\Model\Store|null
+     */
+    protected function getAnyStoreView()
+    {
+        $store = $this->_storeManager->getDefaultStoreView();
+        if ($store) {
+            return $store;
+        }
+        foreach ($this->_storeManager->getStores() as $store) {
+            return $store;
+        }
+        return null;
     }
 }

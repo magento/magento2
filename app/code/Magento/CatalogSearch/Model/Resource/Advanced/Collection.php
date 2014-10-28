@@ -18,78 +18,86 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_CatalogSearch
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\CatalogSearch\Model\Resource\Advanced;
 
+use Magento\Catalog\Model\Product;
 
 /**
  * Collection Advanced
  *
- * @category    Magento
- * @package     Magento_CatalogSearch
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\CatalogSearch\Model\Resource\Advanced;
-
 class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
 {
     /**
-     * Date
-     *
-     * @var \Magento\Core\Model\Date
+     * List Of filters
+     * @var array
      */
-    protected $_date;
+    private $filters = [];
+
+    /**
+     * @var \Magento\Framework\Search\Request\Builder
+     */
+    private $requestBuilder;
+
+    /**
+     * @var \Magento\Search\Model\SearchEngine
+     */
+    private $searchEngine;
 
     /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\Logger $logger
-     * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
      * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Catalog\Helper\Product\Flat $catalogProductFlat
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Module\Manager $moduleManager ,
+     * @param \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
      * @param \Magento\Catalog\Model\Resource\Url $catalogUrl
-     * @param \Magento\Core\Model\LocaleInterface $locale
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Stdlib\DateTime $dateTime
-     * @param \Magento\Core\Model\Date $date
-     * @param mixed $connection
-     * 
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
+     * @param \Magento\Framework\Search\Request\Builder $requestBuilder
+     * @param \Magento\Search\Model\SearchEngine $searchEngine
+     * @param \Zend_Db_Adapter_Abstract $connection
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
-        \Magento\Logger $logger,
-        \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Logger $logger,
+        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
         \Magento\Catalog\Model\Resource\Helper $resourceHelper,
-        \Magento\Validator\UniversalFactory $universalFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Catalog\Helper\Product\Flat $catalogProductFlat,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\Framework\Validator\UniversalFactory $universalFactory,
+        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
         \Magento\Catalog\Model\Resource\Url $catalogUrl,
-        \Magento\Core\Model\LocaleInterface $locale,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Stdlib\DateTime $dateTime,
-        \Magento\Core\Model\Date $date,
+        \Magento\Framework\Stdlib\DateTime $dateTime,
+        \Magento\Framework\Search\Request\Builder $requestBuilder,
+        \Magento\Search\Model\SearchEngine $searchEngine,
         $connection = null
     ) {
-        $this->_date = $date;
+        $this->requestBuilder = $requestBuilder;
+        $this->searchEngine = $searchEngine;
         parent::__construct(
             $entityFactory,
             $logger,
@@ -101,12 +109,12 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
             $resourceHelper,
             $universalFactory,
             $storeManager,
-            $catalogData,
-            $catalogProductFlat,
-            $coreStoreConfig,
+            $moduleManager,
+            $catalogProductFlatState,
+            $scopeConfig,
             $productOptionFactory,
             $catalogUrl,
-            $locale,
+            $localeDate,
             $customerSession,
             $dateTime,
             $connection
@@ -117,104 +125,60 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * Add not indexable fields to search
      *
      * @param array $fields
-     * @return \Magento\CatalogSearch\Model\Resource\Advanced\Collection
-     * @throws \Magento\Core\Exception
+     * @return $this
+     * @throws \Magento\Framework\Model\Exception
      */
     public function addFieldsToFilter($fields)
     {
         if ($fields) {
-            $previousSelect = null;
-            $conn = $this->getConnection();
-            foreach ($fields as $table => $conditions) {
-                foreach ($conditions as $attributeId => $conditionValue) {
-                    $select = $conn->select();
-                    $select->from(array('t1' => $table), 'entity_id');
-                    $conditionData = array();
+            $this->filters = array_merge($this->filters, $fields);
+        }
+        return $this;
+    }
 
-                    if (!is_numeric($attributeId)) {
-                        $field = 't1.'.$attributeId;
+    /**
+     * @inheritdoc
+     */
+    protected function _renderFiltersBefore()
+    {
+        if ($this->filters) {
+            $this->requestBuilder->bindDimension('scope', $this->getStoreId());
+            $this->requestBuilder->setRequestName('advanced_search_container');
+            foreach ($this->filters as $attributes) {
+                foreach ($attributes as $attributeCode => $attributeValue) {
+                    if (is_numeric($attributeCode)) {
+                        $attributeCode = $this->_eavConfig->getAttribute(Product::ENTITY, $attributeCode)
+                            ->getAttributeCode();
                     }
-                    else {
-                        $storeId = $this->getStoreId();
-                        $onCondition = 't1.entity_id = t2.entity_id'
-                                . ' AND t1.attribute_id = t2.attribute_id'
-                                . ' AND t2.store_id=?';
-
-                        $select->joinLeft(
-                            array('t2' => $table),
-                            $conn->quoteInto($onCondition, $storeId),
-                            array()
-                        );
-                        $select->where('t1.store_id = ?', 0);
-                        $select->where('t1.attribute_id = ?', $attributeId);
-
-                        if (array_key_exists('price_index', $this->getSelect()->getPart(\Magento\DB\Select::FROM))) {
-                            $select->where('t1.entity_id = price_index.entity_id');
+                    if (!empty($attributeValue['from']) || !empty($attributeValue['to'])) {
+                        if (!empty($attributeValue['from'])) {
+                            $this->requestBuilder->bind("{$attributeCode}.from", $attributeValue['from']);
                         }
-
-                        $field = $this->getConnection()->getCheckSql('t2.value_id>0', 't2.value', 't1.value');
-
+                        if (!empty($attributeValue['to'])) {
+                            $this->requestBuilder->bind("{$attributeCode}.to", $attributeValue['to']);
+                        }
+                    } elseif (!is_array($attributeValue)) {
+                        $this->requestBuilder->bind($attributeCode, $attributeValue);
+                    } elseif (isset($attributeValue['like'])) {
+                        $this->requestBuilder->bind($attributeCode, trim($attributeValue['like'], '%'));
+                    } elseif (isset($attributeValue['in'])) {
+                        $this->requestBuilder->bind($attributeCode, $attributeValue['in']);
+                    } elseif (isset($attributeValue['in_set'])) {
+                        $this->requestBuilder->bind($attributeCode, implode('%', $attributeValue['in_set']));
                     }
-
-                    if (is_array($conditionValue)) {
-                        if (isset($conditionValue['in'])){
-                            $conditionData[] = array('in' => $conditionValue['in']);
-                        }
-                        elseif (isset($conditionValue['in_set'])) {
-                            $conditionParts = array();
-                            foreach ($conditionValue['in_set'] as $value) {
-                                $conditionParts[] = array('finset' => $value);
-                            }
-                            $conditionData[] = $conditionParts;
-                        }
-                        elseif (isset($conditionValue['like'])) {
-                            $conditionData[] = array ('like' => $conditionValue['like']);
-                        }
-                        elseif (isset($conditionValue['from']) && isset($conditionValue['to'])) {
-                            $invalidDateMessage = __('Please specify correct data.');
-                            if ($conditionValue['from']) {
-                                if (!\Zend_Date::isDate($conditionValue['from'])) {
-                                    throw new \Magento\Core\Exception($invalidDateMessage);
-                                }
-                                if (!is_numeric($conditionValue['from'])){
-                                    $conditionValue['from'] = $this->_date->gmtDate(null, $conditionValue['from']);
-                                    if (!$conditionValue['from']) {
-                                        $conditionValue['from'] = $this->_date->gmtDate();
-                                    }
-                                }
-                                $conditionData[] = array('gteq' => $conditionValue['from']);
-                            }
-                            if ($conditionValue['to']) {
-                                if (!\Zend_Date::isDate($conditionValue['to'])) {
-                                    throw new \Magento\Core\Exception($invalidDateMessage);
-                                }
-                                if (!is_numeric($conditionValue['to'])){
-                                    $conditionValue['to'] = $this->_date->gmtDate(null, $conditionValue['to']);
-                                    if (!$conditionValue['to']) {
-                                        $conditionValue['to'] = $this->_date->gmtDate();
-                                    }
-                                }
-                                $conditionData[] = array('lteq' => $conditionValue['to']);
-                            }
-                        }
-                    } else {
-                        $conditionData[] = array('eq' => $conditionValue);
-                    }
-
-
-                    foreach ($conditionData as $data) {
-                        $select->where($conn->prepareSqlCondition($field, $data));
-                    }
-
-                    if (!is_null($previousSelect)) {
-                        $select->where('t1.entity_id IN (?)', new \Zend_Db_Expr($previousSelect));
-                    }
-                    $previousSelect = $select;
                 }
             }
-            $this->addFieldToFilter('entity_id', array('in' => new \Zend_Db_Expr($select)));
-        }
+            $queryRequest = $this->requestBuilder->create();
+            $queryResponse = $this->searchEngine->search($queryRequest);
 
-        return $this;
+            $ids = [0];
+            /** @var \Magento\Framework\Search\Document $document */
+            foreach ($queryResponse as $document) {
+                $ids[] = $document->getId();
+            }
+
+            $this->addIdFilter($ids);
+        }
+        return parent::_renderFiltersBefore();
     }
 }

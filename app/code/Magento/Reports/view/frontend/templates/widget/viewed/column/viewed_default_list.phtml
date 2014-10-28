@@ -1,0 +1,114 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * @var $this \Magento\Reports\Block\Product\Viewed
+ */
+?>
+<?php
+if ($exist = $this->getRecentlyViewedProducts()) {
+    $type = 'widget-viewed';
+    $mode = 'list';
+
+    $type = $type . '-' . $mode;
+
+    $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
+    $image = 'recently_viewed_products_images_names_widget';
+    $title = __('Recently Viewed');
+    $items = $exist;
+
+    $showWishlist = false;
+    $showCompare = false;
+    $showCart = false;
+    $rating = false;
+    $description = false;
+}
+?>
+<?php if ($exist): ?>
+<div class="block widget viewed <?php echo $mode; ?>">
+    <div class="title">
+        <strong><?php echo $title; ?></strong>
+    </div>
+    <div class="content">
+        <?php $suffix = $this->getNameInLayout(); ?>
+        <ol class="mini products list items" id="widget-viewed-<?php echo $suffix; ?>">
+            <?php $iterator = 1; ?>
+            <?php foreach($items as $_product): ?>
+                <?php echo ($iterator++==1) ? '<li class="item product">' : '</li><li class="item product">' ?>
+                <div class="product">
+                    <a class="product photo" href="<?php echo $_product->getProductUrl() ?>"
+                       title="<?php echo $this->stripTags($_product->getName(), null, true) ?>">
+                        <?php echo $imageBlock->init($_product, $image)->toHtml() ?>
+                    </a>
+                    <div class="product details">
+                        <strong class="product name">
+                            <a href="<?php echo $_product->getProductUrl() ?>"
+                               title="<?php echo $this->stripTags($_product->getName(), null, true) ?>">
+                                <?php echo $this->helper('Magento\Catalog\Helper\Output')->productAttribute($_product, $_product->getName(), 'name') ?>
+                            </a>
+                        </strong>
+                        <?php echo $this->getProductPriceHtml(
+                            $_product,
+                            \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
+                            \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
+                            [
+                                'price_id_suffix' => '-widget-viewed-' . $suffix
+                            ]
+                        ) ?>
+                        <div class="product actions">
+                            <?php if($_product->isSaleable()): ?>
+                            <div class="primary">
+                                <?php if ($_product->getTypeInstance()->hasRequiredOptions($_product)): ?>
+                                    <button class="action tocart"
+                                            data-mage-init='{"redirectUrl": {"url": "<?php echo $this->getAddToCartUrl($_product) ?>"}}'
+                                            type="button" title="<?php echo __('Add to Cart') ?>">
+                                        <span><?php echo __('Add to Cart') ?></span>
+                                    </button>
+                                <?php else: ?>
+                                    <?php
+                                        $postDataHelper = $this->helper('Magento\Core\Helper\PostData');
+                                        $postData = $postDataHelper->getPostData($this->getAddToCartUrl($_product), ['product' => $_product->getEntityId()]);
+                                    ?>
+                                    <button type="button" class="action tocart" data-post='<?php echo $postData; ?>'>
+                                        <span><?php echo __('Add to Cart') ?></span>
+                                    </button>
+                                <?php endif; ?>
+                            </div>
+                            <?php else: ?>
+                                <?php if ($_product->getIsSalable()): ?>
+                                    <p class="stock available"><span><?php echo __('In stock') ?></span></p>
+                                <?php else: ?>
+                                    <p class="stock unavailable"><span><?php echo __('Out of stock') ?></span></p>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+                <?php echo ($iterator==count($items)+1) ? '</li>' : '' ?>
+            <?php endforeach; ?>
+        </ol>
+    </div>
+</div>
+<?php endif; ?>

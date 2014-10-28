@@ -18,19 +18,19 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Core\Model\Theme;
+
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\View\Design\Theme\FileInterface;
+use Magento\Framework\View\Design\Theme\Customization\FileInterface as CustomizationFileInterface;
 
 /**
  * Theme files model class
  */
-namespace Magento\Core\Model\Theme;
-
-class File extends \Magento\Core\Model\AbstractModel
-    implements \Magento\View\Design\Theme\FileInterface
+class File extends AbstractModel implements FileInterface
 {
     /**
      * {@inheritdoc}
@@ -47,41 +47,41 @@ class File extends \Magento\Core\Model\AbstractModel
     protected $_eventObject = 'file';
 
     /**
-     * @var \Magento\View\Design\ThemeInterface
+     * @var \Magento\Framework\View\Design\ThemeInterface
      */
     protected $_theme;
 
     /**
-     * @var \Magento\View\Design\Theme\Customization\FileServiceFactory
+     * @var \Magento\Framework\View\Design\Theme\Customization\FileServiceFactory
      */
     protected $_fileServiceFactory;
 
     /**
-     * @var \Magento\View\Design\Theme\Customization\FileInterface
+     * @var CustomizationFileInterface
      */
     protected $_fileService;
 
     /**
-     * @var \Magento\View\Design\Theme\FlyweightFactory
+     * @var \Magento\Framework\View\Design\Theme\FlyweightFactory
      */
     protected $_themeFactory;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\View\Design\Theme\FlyweightFactory $themeFactory
-     * @param \Magento\View\Design\Theme\Customization\FileServiceFactory $fileServiceFactory
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\View\Design\Theme\FlyweightFactory $themeFactory
+     * @param \Magento\Framework\View\Design\Theme\Customization\FileServiceFactory $fileServiceFactory
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\View\Design\Theme\FlyweightFactory $themeFactory,
-        \Magento\View\Design\Theme\Customization\FileServiceFactory $fileServiceFactory,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\View\Design\Theme\FlyweightFactory $themeFactory,
+        \Magento\Framework\View\Design\Theme\Customization\FileServiceFactory $fileServiceFactory,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_themeFactory = $themeFactory;
@@ -91,6 +91,8 @@ class File extends \Magento\Core\Model\AbstractModel
 
     /**
      * Theme files model initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -102,7 +104,7 @@ class File extends \Magento\Core\Model\AbstractModel
      *
      * @return $this
      */
-    public function setCustomizationService(\Magento\View\Design\Theme\Customization\FileInterface $fileService)
+    public function setCustomizationService(CustomizationFileInterface $fileService)
     {
         $this->_fileService = $fileService;
         return $this;
@@ -111,6 +113,7 @@ class File extends \Magento\Core\Model\AbstractModel
     /**
      * {@inheritdoc}
      *
+     * @return CustomizationFileInterface
      * @throws \UnexpectedValueException
      */
     public function getCustomizationService()
@@ -126,7 +129,7 @@ class File extends \Magento\Core\Model\AbstractModel
     /**
      * {@inheritdoc}
      */
-    public function setTheme(\Magento\View\Design\ThemeInterface $theme)
+    public function setTheme(\Magento\Framework\View\Design\ThemeInterface $theme)
     {
         $this->_theme = $theme;
         $this->setData('theme_id', $theme->getId());
@@ -137,13 +140,13 @@ class File extends \Magento\Core\Model\AbstractModel
     /**
      * {@inheritdoc}
      *
-     * @throws \Magento\Exception
+     * @throws \Magento\Framework\Exception
      */
     public function getTheme()
     {
         $theme = $this->_themeFactory->create($this->getData('theme_id'));
         if (!$theme) {
-            throw new \Magento\Exception('Theme id should be set');
+            throw new \Magento\Framework\Exception('Theme id should be set');
         }
         return $theme;
     }
@@ -187,8 +190,8 @@ class File extends \Magento\Core\Model\AbstractModel
     public function getFileInfo()
     {
         return array(
-            'id'        => $this->getId(),
-            'name'      => $this->getFileName(),
+            'id' => $this->getId(),
+            'name' => $this->getFileName(),
             'temporary' => $this->getData('is_temporary') ? $this->getId() : 0
         );
     }

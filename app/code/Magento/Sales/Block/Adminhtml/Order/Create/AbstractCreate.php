@@ -18,39 +18,54 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Order\Create;
+
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Adminhtml sales order create abstract block
  *
- * @category   Magento
- * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Adminhtml\Order\Create;
-
 abstract class AbstractCreate extends \Magento\Backend\Block\Widget
 {
     /**
+     * Session quote
+     *
      * @var \Magento\Backend\Model\Session\Quote
      */
     protected $_sessionQuote;
 
     /**
+     * Order create
+     *
      * @var \Magento\Sales\Model\AdminOrder\Create
      */
     protected $_orderCreate;
 
+    /**
+     * @var PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Model\Session\Quote $sessionQuote
+     * @param \Magento\Sales\Model\AdminOrder\Create $orderCreate
+     * @param PriceCurrencyInterface $priceCurrency
+     * @param array $data
+     */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Model\Session\Quote $sessionQuote,
         \Magento\Sales\Model\AdminOrder\Create $orderCreate,
+        PriceCurrencyInterface $priceCurrency,
         array $data = array()
     ) {
+        $this->priceCurrency = $priceCurrency;
         $this->_sessionQuote = $sessionQuote;
         $this->_orderCreate = $orderCreate;
         parent::__construct($context, $data);
@@ -87,16 +102,6 @@ abstract class AbstractCreate extends \Magento\Backend\Block\Widget
     }
 
     /**
-     * Retrieve customer model object
-     *
-     * @return \Magento\Customer\Model\Customer
-     */
-    public function getCustomer()
-    {
-        return $this->_getSession()->getCustomer();
-    }
-
-    /**
      * Retrieve customer identifier
      *
      * @return int
@@ -109,7 +114,7 @@ abstract class AbstractCreate extends \Magento\Backend\Block\Widget
     /**
      * Retrieve store model object
      *
-     * @return \Magento\Core\Model\Store
+     * @return \Magento\Store\Model\Store
      */
     public function getStore()
     {
@@ -129,16 +134,35 @@ abstract class AbstractCreate extends \Magento\Backend\Block\Widget
     /**
      * Retrieve formated price
      *
-     * @param   decimal $value
-     * @return  string
+     * @param float $value
+     * @return string
      */
     public function formatPrice($value)
     {
-        return $this->getStore()->formatPrice($value);
+        return $this->priceCurrency->format(
+            $value,
+            true,
+            PriceCurrencyInterface::DEFAULT_PRECISION,
+            $this->getStore()
+        );
     }
 
-    public function convertPrice($value, $format=true)
+    /**
+     * Convert price
+     *
+     * @param float $value
+     * @param bool $format
+     * @return float
+     */
+    public function convertPrice($value, $format = true)
     {
-        return $this->getStore()->convertPrice($value, $format);
+        return $format
+            ? $this->priceCurrency->convertAndFormat(
+                $value,
+                true,
+                PriceCurrencyInterface::DEFAULT_PRECISION,
+                $this->getStore()
+            )
+            : $this->priceCurrency->convert($value, $this->getStore());
     }
 }

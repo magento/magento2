@@ -18,37 +18,36 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model\Order\Invoice\Total;
 
 /**
  * Order invoice shipping total calculation model
  *
- * @category   Magento
- * @package    Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Model\Order\Invoice\Total;
-
-class Shipping extends \Magento\Sales\Model\Order\Invoice\Total\AbstractTotal
+class Shipping extends AbstractTotal
 {
+    /**
+     * @param \Magento\Sales\Model\Order\Invoice $invoice
+     * @return $this
+     */
     public function collect(\Magento\Sales\Model\Order\Invoice $invoice)
     {
         $invoice->setShippingAmount(0);
         $invoice->setBaseShippingAmount(0);
-        $orderShippingAmount        = $invoice->getOrder()->getShippingAmount();
-        $baseOrderShippingAmount    = $invoice->getOrder()->getBaseShippingAmount();
-        $shippingInclTax            = $invoice->getOrder()->getShippingInclTax();
-        $baseShippingInclTax        = $invoice->getOrder()->getBaseShippingInclTax();
+        $orderShippingAmount = $invoice->getOrder()->getShippingAmount();
+        $baseOrderShippingAmount = $invoice->getOrder()->getBaseShippingAmount();
+        $shippingInclTax = $invoice->getOrder()->getShippingInclTax();
+        $baseShippingInclTax = $invoice->getOrder()->getBaseShippingInclTax();
         if ($orderShippingAmount) {
             /**
              * Check shipping amount in previous invoices
              */
             foreach ($invoice->getOrder()->getInvoiceCollection() as $previousInvoice) {
-                if ((float)$previousInvoice->getShippingAmount() && !$previousInvoice->isCanceled()) {
+                if ((double)$previousInvoice->getShippingAmount() && !$previousInvoice->isCanceled()) {
                     return $this;
                 }
             }
@@ -57,8 +56,8 @@ class Shipping extends \Magento\Sales\Model\Order\Invoice\Total\AbstractTotal
             $invoice->setShippingInclTax($shippingInclTax);
             $invoice->setBaseShippingInclTax($baseShippingInclTax);
 
-            $invoice->setGrandTotal($invoice->getGrandTotal()+$orderShippingAmount);
-            $invoice->setBaseGrandTotal($invoice->getBaseGrandTotal()+$baseOrderShippingAmount);
+            $invoice->setGrandTotal($invoice->getGrandTotal() + $orderShippingAmount);
+            $invoice->setBaseGrandTotal($invoice->getBaseGrandTotal() + $baseOrderShippingAmount);
         }
         return $this;
     }

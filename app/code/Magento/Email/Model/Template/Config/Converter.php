@@ -25,7 +25,7 @@
  */
 namespace Magento\Email\Model\Template\Config;
 
-class Converter implements \Magento\Config\ConverterInterface
+class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
      * {@inheritdoc}
@@ -47,7 +47,7 @@ class Converter implements \Magento\Config\ConverterInterface
                 'label' => $templateLabel,
                 'file' => $templateFile,
                 'type' => $templateType,
-                'module' => $templateModule,
+                'module' => $templateModule
             );
         }
         return $result;

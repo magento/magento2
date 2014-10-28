@@ -24,13 +24,21 @@
 namespace Magento\Downloadable\Helper;
 
 use Magento\Downloadable\Helper\Download as DownloadHelper;
-use Magento\Filesystem;
-use Magento\Filesystem\File\ReadInterface as FileReadInterface;
-use Magento\Filesystem\Directory\ReadInterface as DirReadInterface;
+use Magento\Framework\Filesystem;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\File\ReadInterface as FileReadInterface;
+use Magento\Framework\Filesystem\Directory\ReadInterface as DirReadInterface;
 use Magento\Downloadable\Helper\File as DownloadableFile;
 
 /**
- * @runInSeparateProcess
+ * @bug https://github.com/sebastianbergmann/phpunit/issues/314
+ * Workaround: use the "require_once" below and declare "preserveGlobalState disabled" in the test class
+ */
+require_once __DIR__ . '/../../../../framework/bootstrap.php';
+
+/**
+ * @runTestsInSeparateProcesses
+ * @preserveGlobalState disabled
  */
 class DownloadTest extends \PHPUnit_Framework_TestCase
 {
@@ -48,6 +56,8 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
 
     /** @var DownloadableFile|\PHPUnit_Framework_MockObject_MockObject */
     protected $_downloadableFileMock;
+    /** @var  \Magento\Framework\Session\SessionManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $sessionManager;
 
     /** @var bool Result of function_exists() */
     public static $functionExists;
@@ -56,29 +66,45 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
     public static $mimeContentType;
 
     const FILE_SIZE = 4096;
+
     const FILE_PATH = '/some/path';
+
     const MIME_TYPE = 'image/png';
+
     const URL = 'http://example.com';
 
     public function setUp()
     {
-        require_once __DIR__. '/../_files/download_mock.php';
+        require_once __DIR__ . '/../_files/download_mock.php';
 
         self::$functionExists = true;
         self::$mimeContentType = self::MIME_TYPE;
 
-        $this->_filesystemMock = $this->getMock('Magento\Filesystem', [], [], '', false);
-        $this->_handleMock = $this->getMock('Magento\Filesystem\File\ReadInterface', [], [], '', false);
-        $this->_workingDirectoryMock = $this->getMock('Magento\Filesystem\Directory\ReadInterface', [], [], '', false);
-        $this->_downloadableFileMock = $this->getMock('Magento\Downloadable\Helper\File', [], [], '', false);
-
+        $this->_filesystemMock = $this->getMock('Magento\Framework\Filesystem', array(), array(), '', false);
+        $this->_handleMock = $this->getMock(
+            'Magento\Framework\Filesystem\File\ReadInterface',
+            array(),
+            array(),
+            '',
+            false
+        );
+        $this->_workingDirectoryMock = $this->getMock(
+            'Magento\Framework\Filesystem\Directory\ReadInterface',
+            array(),
+            array(),
+            '',
+            false
+        );
+        $this->_downloadableFileMock = $this->getMock('Magento\Downloadable\Helper\File', array(), array(), '', false);
+        $this->sessionManager = $this->getMockForAbstractClass('Magento\Framework\Session\SessionManagerInterface');
         $this->_helper = new DownloadHelper(
-            $this->getMock('Magento\App\Helper\Context', [], [], '', false),
-            $this->getMock('Magento\Core\Helper\Data', [], [], '', false),
+            $this->getMock('Magento\Framework\App\Helper\Context', array(), array(), '', false),
+            $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false),
             $this->_downloadableFileMock,
-            $this->getMock('Magento\Core\Helper\File\Storage\Database', [], [], '', false),
-            $this->getMock('Magento\Core\Model\Store\Config', [], [], '', false),
-            $this->_filesystemMock
+            $this->getMock('Magento\Core\Helper\File\Storage\Database', array(), array(), '', false),
+            $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface'),
+            $this->_filesystemMock,
+            $this->sessionManager
         );
     }
 
@@ -91,7 +117,7 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Core\Exception
+     * @expectedException \Magento\Framework\Model\Exception
      * @exectedExceptionMessage Please set resource file and link type.
      */
     public function testGetFileSizeNoResource()
@@ -100,7 +126,7 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Core\Exception
+     * @expectedException \Magento\Framework\Model\Exception
      * @expectedExceptionMessage Invalid download link type.
      */
     public function testGetFileSizeInvalidLinkType()
@@ -122,7 +148,7 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Core\Exception
+     * @expectedException \Magento\Framework\Model\Exception
      * @expectedExceptionMessage Invalid download link type.
      */
     public function testGetFileSizeNoFile()
@@ -147,20 +173,20 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
         self::$functionExists = $functionExistsResult;
         self::$mimeContentType = $mimeContentTypeResult;
 
-        $this->_downloadableFileMock
-            ->expects($this->once())
-            ->method('getFileType')
-            ->will($this->returnValue(self::MIME_TYPE));
+        $this->_downloadableFileMock->expects(
+            $this->once()
+        )->method(
+            'getFileType'
+        )->will(
+            $this->returnValue(self::MIME_TYPE)
+        );
 
         $this->assertEquals(self::MIME_TYPE, $this->_helper->getContentType());
     }
 
     public function dataProviderForTestGetContentTypeThroughHelper()
     {
-        return [
-            [false, ''],
-            [true, false]
-        ];
+        return array(array(false, ''), array(true, false));
     }
 
     public function testGetContentTypeUrl()
@@ -186,47 +212,73 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
     public function testGetFileNameUrlWithContentDisposition()
     {
         $fileName = 'some_other.file';
-        $this->_setupUrlMocks(self::FILE_SIZE, self::URL, ['disposition' => "inline; filename={$fileName}"]);
+        $this->_setupUrlMocks(self::FILE_SIZE, self::URL, array('disposition' => "inline; filename={$fileName}"));
         $this->assertEquals($fileName, $this->_helper->getFilename());
     }
 
     protected function _setupFileMocks($doesExist = true, $size = self::FILE_SIZE, $path = self::FILE_PATH)
     {
-        $this->_handleMock->expects($this->any())->method('stat')->will($this->returnValue(['size' => $size]));
+        $this->_handleMock->expects($this->any())->method('stat')->will($this->returnValue(array('size' => $size)));
 
-        $this->_downloadableFileMock
-            ->expects($this->any())
-            ->method('ensureFileInFilesystem')
-            ->with($path)
-            ->will($this->returnValue($doesExist));
+        $this->_downloadableFileMock->expects(
+            $this->any()
+        )->method(
+            'ensureFileInFilesystem'
+        )->with(
+            $path
+        )->will(
+            $this->returnValue($doesExist)
+        );
 
-        $this->_workingDirectoryMock
-            ->expects($doesExist ? $this->once() : $this->never())
-            ->method('openFile')
-            ->will($this->returnValue($this->_handleMock));
+        $this->_workingDirectoryMock->expects(
+            $doesExist ? $this->once() : $this->never()
+        )->method(
+            'openFile'
+        )->will(
+            $this->returnValue($this->_handleMock)
+        );
 
-        $this->_filesystemMock
-            ->expects($this->any())
-            ->method('getDirectoryRead')
-            ->with(Filesystem::MEDIA)
-            ->will($this->returnValue($this->_workingDirectoryMock));
+        $this->_filesystemMock->expects(
+            $this->any()
+        )->method(
+            'getDirectoryRead'
+        )->with(
+            DirectoryList::MEDIA
+        )->will(
+            $this->returnValue($this->_workingDirectoryMock)
+        );
 
         $this->_helper->setResource($path, DownloadHelper::LINK_TYPE_FILE);
     }
 
-    protected function _setupUrlMocks($size = self::FILE_SIZE, $url = self::URL, $additionalStatData = [])
+    protected function _setupUrlMocks($size = self::FILE_SIZE, $url = self::URL, $additionalStatData = array())
     {
-        $this->_handleMock
-            ->expects($this->any())
-            ->method('stat')
-            ->will($this->returnValue(array_merge(['size' => $size, 'type' => self::MIME_TYPE], $additionalStatData)));
+        $this->_handleMock->expects(
+            $this->any()
+        )->method(
+            'stat'
+        )->will(
+            $this->returnValue(array_merge(array('size' => $size, 'type' => self::MIME_TYPE), $additionalStatData))
+        );
 
-        $this->_filesystemMock
-            ->expects($this->once())
-            ->method('getRemoteResource')
-            ->with($url)
-            ->will($this->returnValue($this->_handleMock));
+        $this->_filesystemMock->expects(
+            $this->once()
+        )->method(
+            'getRemoteResource'
+        )->with(
+            $url
+        )->will(
+            $this->returnValue($this->_handleMock)
+        );
 
         $this->_helper->setResource($url, DownloadHelper::LINK_TYPE_URL);
+    }
+
+    public function testOutput()
+    {
+        $this->sessionManager
+            ->expects($this->once())->method('writeClose');
+        $this->_setupUrlMocks(self::FILE_SIZE, self::URL, array('disposition' => "inline; filename=test.txt"));
+        $this->_helper->output();
     }
 }

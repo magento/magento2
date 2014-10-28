@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Widget
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -38,8 +35,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Widget\Model\Widget\Config');
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Widget\Model\Widget\Config'
+        );
     }
 
     /**
@@ -49,10 +47,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPluginSettings()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\View\DesignInterface')
-            ->setDesignTheme('magento_backend');
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\View\DesignInterface'
+        )->setDesignTheme(
+            'Magento/backend'
+        );
 
-        $config = new \Magento\Object();
+        $config = new \Magento\Framework\Object();
         $settings = $this->_model->getPluginSettings($config);
 
         $this->assertArrayHasKey('widget_plugin_src', $settings);
@@ -60,7 +61,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('widget_window_url', $settings);
 
         $jsFilename = $settings['widget_plugin_src'];
-        $this->assertStringStartsWith('http://localhost/pub/lib/', $jsFilename);
+        $this->assertStringStartsWith('http://localhost/pub/static/adminhtml/Magento/backend/en_US/', $jsFilename);
         $this->assertStringEndsWith('editor_plugin.js', $jsFilename);
 
         $this->assertInternalType('array', $settings['widget_placeholders']);
@@ -73,7 +74,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetWidgetWindowUrl()
     {
-        $config = new \Magento\Object(array('widget_filters' =>  array('is_email_compatible' => 1)));
+        $config = new \Magento\Framework\Object(array('widget_filters' => array('is_email_compatible' => 1)));
 
         $url = $this->_model->getWidgetWindowUrl($config);
 

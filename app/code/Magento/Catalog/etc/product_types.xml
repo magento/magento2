@@ -23,23 +23,20 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
-    <type name="simple" label="Simple Product" modelInstance="Magento\Catalog\Model\Product\Type\Simple" indexPriority="10" />
-    <type name="grouped" label="Grouped Product" modelInstance="Magento\Catalog\Model\Product\Type\Grouped" composite='true' indexPriority="50">
-        <priceModel instance="Magento\Catalog\Model\Product\Type\Grouped\Price" />
-        <indexerModel instance="Magento\Catalog\Model\Resource\Product\Indexer\Price\Grouped" />
-        <allowProductTypes>
-            <type name="simple" />
-            <type name="virtual" />
-        </allowProductTypes>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Catalog/etc/product_types.xsd">
+    <type name="simple" label="Simple Product" modelInstance="Magento\Catalog\Model\Product\Type\Simple" indexPriority="10" sortOrder="10">
+        <customAttributes>
+            <attribute name="refundable" value="true"/>
+        </customAttributes>
     </type>
-    <type name="configurable" label="Configurable Product" modelInstance="Magento\Catalog\Model\Product\Type\Configurable" composite='true' indexPriority="30">
-        <priceModel instance="Magento\Catalog\Model\Product\Type\Configurable\Price" />
-        <indexerModel instance="Magento\Catalog\Model\Resource\Product\Indexer\Price\Configurable" />
-        <allowProductTypes>
-            <type name="simple" />
-            <type name="virtual" />
-        </allowProductTypes>
+    <type name="virtual" label="Virtual Product" modelInstance="Magento\Catalog\Model\Product\Type\Virtual" indexPriority="20" sortOrder="40">
+        <customAttributes>
+            <attribute name="is_real_product" value="false"/>
+            <attribute name="refundable" value="false"/>
+        </customAttributes>
     </type>
-    <type name="virtual" label="Virtual Product" modelInstance="Magento\Catalog\Model\Product\Type\Virtual" indexPriority="20" />
+    <composableTypes>
+        <type name="simple" />
+        <type name="virtual" />
+    </composableTypes>
 </config>

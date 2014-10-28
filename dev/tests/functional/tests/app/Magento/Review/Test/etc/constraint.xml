@@ -1,0 +1,87 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<constraint>
+    <assertProductRatingSuccessSaveMessage module="Magento_Review">
+        <severeness>high</severeness>
+    </assertProductRatingSuccessSaveMessage>
+    <assertProductRatingSuccessDeleteMessage module="Magento_Review">
+        <severeness>high</severeness>
+    </assertProductRatingSuccessDeleteMessage>
+    <assertProductRatingInGrid module="Magento_Review">
+        <severeness>middle</severeness>
+    </assertProductRatingInGrid>
+    <assertProductRatingNotInGrid module="Magento_Review">
+        <severeness>middle</severeness>
+    </assertProductRatingNotInGrid>
+    <assertProductRatingInProductPage module="Magento_Review">
+        <severeness>middle</severeness>
+    </assertProductRatingInProductPage>
+    <assertProductRatingNotInProductPage module="Magento_Review">
+        <severeness>middle</severeness>
+    </assertProductRatingNotInProductPage>
+    <assertReviewSuccessSaveMessage module="Magento_Review">
+        <severeness>high</severeness>
+    </assertReviewSuccessSaveMessage>
+    <assertReviewCreationSuccessMessage module="Magento_Review">
+        <severeness>high</severeness>
+    </assertReviewCreationSuccessMessage>
+    <assertProductReviewInGrid module="Magento_Review">
+        <severeness>low</severeness>
+    </assertProductReviewInGrid>
+    <assertProductRatingOnReviewPage module="Magento_Review">
+        <severeness>middle</severeness>
+    </assertProductRatingOnReviewPage>
+    <assertProductRatingInProductPage module="Magento_Review">
+        <severeness>middle</severeness>
+    </assertProductRatingInProductPage>
+    <assertProductReviewMassActionSuccessMessage module="Magento_Review">
+        <severeness>high</severeness>
+        <require>
+            <reviewIndex class="Magento\Review\Test\Page\Adminhtml\ReviewIndex"/>
+        </require>
+    </assertProductReviewMassActionSuccessMessage>
+    <assertProductReviewMassActionSuccessDeleteMessage module="Magento_Review">
+        <severeness>high</severeness>
+        <require>
+            <reviewIndex class="Magento\Review\Test\Page\Adminhtml\ReviewIndex"/>
+        </require>
+    </assertProductReviewMassActionSuccessDeleteMessage>
+    <assertProductReviewBackendSuccessSaveMessage module="Magento_Review">
+        <severeness>middle</severeness>
+    </assertProductReviewBackendSuccessSaveMessage>
+    <assertProductReviewNotOnProductPage module="Magento_Review">
+        <severeness>middle</severeness>
+    </assertProductReviewNotOnProductPage>
+    <assertProductReviewOnProductPage module="Magento_Review">
+        <severeness>middle</severeness>
+    </assertProductReviewOnProductPage>
+    <assertProductReviewNotInGrid module="Magento_Review">
+        <severeness>low</severeness>
+    </assertProductReviewNotInGrid>
+    <assertProductReviewInGridOnCustomerPage module="Magento_Review">
+        <severeness>low</severeness>
+    </assertProductReviewInGridOnCustomerPage>
+</constraint>

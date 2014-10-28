@@ -18,19 +18,26 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Model\Menu\Filter;
 
 /**
  * Menu filter iterator
  */
-namespace Magento\Backend\Model\Menu\Filter;
-
 class Iterator extends \FilterIterator
 {
+    /**
+     * Constructor
+     *
+     * @param \Iterator $iterator
+     */
+    public function __construct(\Iterator $iterator)
+    {
+        parent::__construct($iterator);
+    }
+
     /**
      * Check whether the current element of the iterator is acceptable
      *
@@ -38,6 +45,6 @@ class Iterator extends \FilterIterator
      */
     public function accept()
     {
-        return !($this->current()->isDisabled() || !($this->current()->isAllowed()));
+        return !($this->current()->isDisabled() || !$this->current()->isAllowed());
     }
 }

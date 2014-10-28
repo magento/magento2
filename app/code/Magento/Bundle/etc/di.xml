@@ -23,22 +23,100 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Magento\Bundle\Service\V1\Product\Link\ReadServiceInterface" type="Magento\Bundle\Service\V1\Product\Link\ReadService" />
+    <preference for="Magento\Bundle\Service\V1\Product\Link\WriteServiceInterface" type="Magento\Bundle\Service\V1\Product\Link\WriteService" />
+    <preference for="Magento\Bundle\Service\V1\Product\Option\ReadServiceInterface" type="Magento\Bundle\Service\V1\Product\Option\ReadService" />
+    <preference for="Magento\Bundle\Service\V1\Product\Option\WriteServiceInterface" type="Magento\Bundle\Service\V1\Product\Option\WriteService" />
+    <preference for="Magento\Bundle\Service\V1\Product\Option\Type\ReadServiceInterface" type="Magento\Bundle\Service\V1\Product\Option\Type\ReadService" />
     <type name="Magento\Bundle\Model\Source\Option\Type">
-        <param name="options">
-            <value>
-                <select>Drop-down</select>
-                <radio>Radio Buttons</radio>
-                <checkbox>Checkbox</checkbox>
-                <multi>Multiple Select</multi>
-            </value>
-        </param>
+        <arguments>
+            <argument name="options" xsi:type="array">
+                <item name="select" xsi:type="string">Drop-down</item>
+                <item name="radio" xsi:type="string">Radio Buttons</item>
+                <item name="checkbox" xsi:type="string">Checkbox</item>
+                <item name="multi" xsi:type="string">Multiple Select</item>
+            </argument>
+        </arguments>
     </type>
-    <type name="Magento\Module\Updater\SetupFactory">
-        <param name="resourceTypes">
-            <value>
-                <bundle_setup>Magento\Catalog\Model\Resource\Setup</bundle_setup>
-            </value>
-        </param>
+    <type name="Magento\Framework\Module\Updater\SetupFactory">
+        <arguments>
+            <argument name="resourceTypes" xsi:type="array">
+                <item name="bundle_setup" xsi:type="string">Magento\Catalog\Model\Resource\Setup</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\CatalogPrice">
+        <arguments>
+            <argument name="priceModelPool" xsi:type="array">
+                <item name="bundle" xsi:type="string">Magento\Bundle\Model\Product\CatalogPrice</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Bundle\Pricing\Adjustment\Collection" type="Magento\Framework\Pricing\Adjustment\Collection">
+    </virtualType>
+    <preference for="Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface" type="Magento\Bundle\Pricing\Adjustment\Calculator" />
+    <virtualType name="Magento\Bundle\Pricing\PriceInfo" type="Magento\Framework\Pricing\PriceInfo\Base">
+        <arguments>
+            <argument name="adjustmentCollection" xsi:type="object">Magento\Bundle\Pricing\Adjustment\Collection</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Bundle\Pricing\Price\Pool" type="Magento\Framework\Pricing\Price\Pool">
+        <arguments>
+            <argument name="prices" xsi:type="array">
+                <item name="regular_price" xsi:type="string">Magento\Catalog\Pricing\Price\RegularPrice</item>
+                <item name="final_price" xsi:type="string">Magento\Bundle\Pricing\Price\FinalPrice</item>
+                <item name="tier_price" xsi:type="string">Magento\Bundle\Pricing\Price\TierPrice</item>
+                <item name="group_price" xsi:type="string">Magento\Bundle\Pricing\Price\GroupPrice</item>
+                <item name="special_price" xsi:type="string">Magento\Bundle\Pricing\Price\SpecialPrice</item>
+                <item name="custom_option_price" xsi:type="string">Magento\Catalog\Pricing\Price\CustomOptionPrice</item>
+                <item name="base_price" xsi:type="string">Magento\Catalog\Pricing\Price\BasePrice</item>
+                <item name="configured_price" xsi:type="string">Magento\Bundle\Pricing\Price\ConfiguredPrice</item>
+                <item name="bundle_option" xsi:type="string">Magento\Bundle\Pricing\Price\BundleOptionPrice</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Bundle\Pricing\Price\Collection" type="Magento\Framework\Pricing\Price\Collection">
+        <arguments>
+            <argument name="pool" xsi:type="object">Magento\Bundle\Pricing\Price\Pool</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\Pricing\PriceInfo\Factory">
+        <arguments>
+            <argument name="types" xsi:type="array">
+                <item name="bundle" xsi:type="array">
+                    <item name="infoClass" xsi:type="string">Magento\Bundle\Pricing\PriceInfo</item>
+                    <item name="prices" xsi:type="string">Magento\Bundle\Pricing\Price\Collection</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Bundle\Pricing\Price\FinalPrice">
+        <arguments>
+            <argument name="calculator" xsi:type="object">Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Service\V1\Product\ProductLoadProcessorComposite">
+        <arguments>
+            <argument name="loadProcessors" xsi:type="array">
+                <item name="bundleProductLoadProcessor" xsi:type="array">
+                    <item name="type" xsi:type="object">Magento\Bundle\Service\V1\Product\BundleProductLoadProcessor</item>
+                    <item name="sortOrder" xsi:type="string">50</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Service\V1\Product\ProductSaveProcessorComposite">
+        <arguments>
+            <argument name="saveProcessors" xsi:type="array">
+                <item name="bundleProductSaveProcessor" xsi:type="array">
+                    <item name="type" xsi:type="object">Magento\Bundle\Service\V1\Product\BundleProductSaveProcessor</item>
+                    <item name="sortOrder" xsi:type="string">50</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Attribute\Backend\Price">
+        <plugin name="bundle" type="Magento\Bundle\Model\Plugin\PriceBackend" sortOrder="100" />
     </type>
 </config>

@@ -25,8 +25,7 @@
  */
 namespace Magento\Webapi\Controller\Rest\Response\Renderer;
 
-class Json implements
-    \Magento\Webapi\Controller\Rest\Response\RendererInterface
+class Json implements \Magento\Webapi\Controller\Rest\Response\RendererInterface
 {
     /**
      * Adapter mime type.
@@ -49,7 +48,7 @@ class Json implements
     /**
      * Convert data to JSON.
      *
-     * @param array|object $data
+     * @param object|array|int|string|bool|float|null $data
      * @return string
      */
     public function render($data)

@@ -1,0 +1,15 @@
+namespace \Magento\Framework\Service\Code\Generator;
+
+/**
+ * Builder class for \Magento\Framework\Service\Code\Generator\Sample
+ */
+class SampleBuilder extends \Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function setMessages($messages)
+    {
+        $this->_set(\Magento\Framework\Service\Code\Generator\Sample::MESSAGES, $messages);
+    }
+}

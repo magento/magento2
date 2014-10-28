@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_ImportExport
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -35,7 +32,7 @@ class EavAbstractTest extends \PHPUnit_Framework_TestCase
     /**
      * Entity type id
      */
-    const ENTITY_TYPE_ID   = 1;
+    const ENTITY_TYPE_ID = 1;
 
     /**
      * Abstract import entity eav model
@@ -50,7 +47,7 @@ class EavAbstractTest extends \PHPUnit_Framework_TestCase
     protected $_coreDataMock;
 
     /**
-     * @var \Magento\Core\Helper\String|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\String|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_string;
 
@@ -60,7 +57,7 @@ class EavAbstractTest extends \PHPUnit_Framework_TestCase
     protected $_importFactory;
 
     /**
-     * @var \Magento\App\Resource
+     * @var \Magento\Framework\App\Resource
      */
     protected $_resource;
 
@@ -70,9 +67,9 @@ class EavAbstractTest extends \PHPUnit_Framework_TestCase
     protected $_resourceHelper;
 
     /**
-     * @var \Magento\Core\Model\App
+     * @var \Magento\Framework\StoreManagerInterface
      */
-    protected $_app;
+    protected $_storeManager;
 
     /**
      * @var \Magento\ImportExport\Model\Export\Factory
@@ -87,33 +84,49 @@ class EavAbstractTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_coreDataMock = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
-        $this->_string = new \Magento\Stdlib\String;
-        $coreStoreConfig = $this->getMock('Magento\Core\Model\Store\Config', array(), array(), '', false);
+        $this->_string = new \Magento\Framework\Stdlib\String();
+        $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
-        $this->_importFactory = $this->getMock('Magento\ImportExport\Model\ImportFactory', array(), array(), '', false);
-        $this->_resource = $this->getMock('Magento\App\Resource', array(), array(), '', false);
+        $this->_importFactory = $this->getMock(
+            'Magento\ImportExport\Model\ImportFactory',
+            array(),
+            array(),
+            '',
+            false
+        );
+        $this->_resource = $this->getMock('Magento\Framework\App\Resource', array(), array(), '', false);
         $this->_resourceHelper = $this->getMock(
-            'Magento\ImportExport\Model\Resource\Helper', array(), array(), '', false
+            'Magento\ImportExport\Model\Resource\Helper',
+            array(),
+            array(),
+            '',
+            false
         );
-        $this->_app = $this->getMock('Magento\Core\Model\App', array(), array(), '', false);
+        $this->_storeManager = $this->getMock('Magento\Store\Model\StoreManager', array(), array(), '', false);
         $this->_collectionFactory = $this->getMock(
-            'Magento\ImportExport\Model\Export\Factory', array(), array(), '', false);
-        $this->_eavConfig = $this->getMock(
-            'Magento\Eav\Model\Config', array(), array(), '', false
+            'Magento\ImportExport\Model\Export\Factory',
+            array(),
+            array(),
+            '',
+            false
         );
+        $this->_eavConfig = $this->getMock('Magento\Eav\Model\Config', array(), array(), '', false);
 
-        $this->_model = $this->getMockForAbstractClass('Magento\ImportExport\Model\Import\Entity\AbstractEav', array(
-            $this->_coreDataMock,
-            $this->_string,
-            $coreStoreConfig,
-            $this->_importFactory,
-            $this->_resourceHelper,
-            $this->_resource,
-            $this->_app,
-            $this->_collectionFactory,
-            $this->_eavConfig,
-            $this->_getModelDependencies()
-        ));
+        $this->_model = $this->getMockForAbstractClass(
+            'Magento\ImportExport\Model\Import\Entity\AbstractEav',
+            array(
+                $this->_coreDataMock,
+                $this->_string,
+                $scopeConfig,
+                $this->_importFactory,
+                $this->_resourceHelper,
+                $this->_resource,
+                $this->_storeManager,
+                $this->_collectionFactory,
+                $this->_eavConfig,
+                $this->_getModelDependencies()
+            )
+        );
     }
 
     protected function tearDown()
@@ -128,26 +141,18 @@ class EavAbstractTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getModelDependencies()
     {
-        $localeMock = $this->getMock('Magento\Core\Model\Locale', array(), array(), '', false);
-        $string = new \Magento\Stdlib\String;
         $data = array(
-            'data_source_model'            => 'not_used',
-            'connection'                   => 'not_used',
-            'json_helper'                  => 'not_used',
-            'string_helper'                => new \Magento\Core\Helper\String(
-                $this->getMock('Magento\App\Helper\Context', array(), array(), '', false, false),
-                $localeMock,
-                $string,
-                new \Magento\Stdlib\String($string)
-            ),
-            'page_size'                    => 1,
-            'max_data_size'                => 1,
-            'bunch_size'                   => 1,
+            'data_source_model' => 'not_used',
+            'connection' => 'not_used',
+            'json_helper' => 'not_used',
+            'page_size' => 1,
+            'max_data_size' => 1,
+            'bunch_size' => 1,
             'collection_by_pages_iterator' => 'not_used',
-            'website_manager'              => 'not_used',
-            'store_manager'                => 'not_used',
-            'attribute_collection'         => 'not_used',
-            'entity_type_id'               => self::ENTITY_TYPE_ID,
+            'website_manager' => 'not_used',
+            'store_manager' => 'not_used',
+            'attribute_collection' => 'not_used',
+            'entity_type_id' => self::ENTITY_TYPE_ID
         );
 
         return $data;

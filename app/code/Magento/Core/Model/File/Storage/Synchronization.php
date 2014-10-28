@@ -21,12 +21,12 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\Model\File\Storage;
 
-use Magento\Filesystem\Directory\WriteInterface as DirectoryWrite,
-    Magento\Filesystem\File\Write,
-    Magento\Filesystem\FilesystemException;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\Directory\WriteInterface as DirectoryWrite;
+use Magento\Framework\Filesystem\File\Write;
+use Magento\Framework\Filesystem\FilesystemException;
 
 /**
  * Class Synchronization
@@ -49,14 +49,14 @@ class Synchronization
 
     /**
      * @param \Magento\Core\Model\File\Storage\DatabaseFactory $storageFactory
-     * @param \Magento\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      */
     public function __construct(
         \Magento\Core\Model\File\Storage\DatabaseFactory $storageFactory,
-        \Magento\Filesystem $filesystem
+        \Magento\Framework\Filesystem $filesystem
     ) {
         $this->storageFactory = $storageFactory;
-        $this->pubDirectory = $filesystem->getDirectoryWrite(\Magento\Filesystem::PUB);
+        $this->pubDirectory = $filesystem->getDirectoryWrite(DirectoryList::PUB);
     }
 
     /**
@@ -64,6 +64,7 @@ class Synchronization
      *
      * @param string $relativeFileName
      * @param string $filePath
+     * @return void
      * @throws \LogicException
      */
     public function synchronize($relativeFileName, $filePath)
@@ -77,7 +78,7 @@ class Synchronization
         if ($storage->getId()) {
             /** @var Write $file */
             $file = $this->pubDirectory->openFile($this->pubDirectory->getRelativePath($filePath), 'w');
-            try{
+            try {
                 $file->lock();
                 $file->write($storage->getContent());
                 $file->unlock();

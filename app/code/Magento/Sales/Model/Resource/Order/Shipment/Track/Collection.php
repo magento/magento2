@@ -18,49 +18,43 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Sales\Model\Resource\Order\Shipment\Track;
 
 /**
  * Flat sales order shipment tracks collection
  *
- * @category    Magento
- * @package     Magento_Sales
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Model\Resource\Order\Shipment\Track;
-
-class Collection
-    extends \Magento\Sales\Model\Resource\Order\Collection\AbstractCollection
+class Collection extends \Magento\Sales\Model\Resource\Order\Collection\AbstractCollection
 {
     /**
      * Event prefix
      *
      * @var string
      */
-    protected $_eventPrefix    = 'sales_order_shipment_track_collection';
+    protected $_eventPrefix = 'sales_order_shipment_track_collection';
 
     /**
      * Event object
      *
      * @var string
      */
-    protected $_eventObject    = 'order_shipment_track_collection';
+    protected $_eventObject = 'order_shipment_track_collection';
 
     /**
      * Order field
      *
      * @var string
      */
-    protected $_orderField     = 'order_id';
+    protected $_orderField = 'order_id';
 
     /**
      * Model initialization
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -71,7 +65,7 @@ class Collection
      * Set shipment filter
      *
      * @param int $shipmentId
-     * @return \Magento\Sales\Model\Resource\Order\Shipment\Track\Collection
+     * @return $this
      */
     public function setShipmentFilter($shipmentId)
     {

@@ -18,21 +18,22 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Core
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Core\Model\Theme;
+
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\View\Design\Theme\ListInterface;
+use Magento\Framework\View\Design\ThemeInterface;
 
 /**
  * Theme filesystem collection
  */
-namespace Magento\Core\Model\Theme;
-
-class Collection extends \Magento\Data\Collection implements \Magento\View\Design\Theme\ListInterface
+class Collection extends \Magento\Framework\Data\Collection implements ListInterface
 {
     /**
-     * @var \Magento\Filesystem\Directory\Read
+     * @var \Magento\Framework\Filesystem\Directory\Read
      */
     protected $_directory;
 
@@ -51,34 +52,26 @@ class Collection extends \Magento\Data\Collection implements \Magento\View\Desig
     protected $_targetDirs = array();
 
     /**
-     * @var \Magento\Config\FileIteratorFactory
-     */
-    protected $fileIteratorFactory;
-
-    /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\Filesystem $filesystem
-     * @param \Magento\Config\FileIteratorFactory $fileIteratorFactory
+     * @param \Magento\Framework\Filesystem $filesystem
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
-        \Magento\Filesystem $filesystem,
-        \Magento\Config\FileIteratorFactory $fileIteratorFactory
+        \Magento\Framework\Filesystem $filesystem
     ) {
         parent::__construct($entityFactory);
-        $this->_directory = $filesystem->getDirectoryRead(\Magento\Filesystem::THEMES);
-        $this->fileIteratorFactory = $fileIteratorFactory;
+        $this->_directory = $filesystem->getDirectoryRead(DirectoryList::THEMES);
     }
 
     /**
      * Add default pattern to themes configuration
      *
      * @param string $area
-     * @return \Magento\Core\Model\Theme\Collection
+     * @return $this
      */
-    public function addDefaultPattern($area = \Magento\Core\Model\App\Area::AREA_FRONTEND)
+    public function addDefaultPattern($area = \Magento\Framework\App\Area::AREA_FRONTEND)
     {
-        $this->addTargetPattern(implode('/', array($area, '*', 'theme.xml')));
+        $this->addTargetPattern(implode('/', array($area, '{*/*,*/}', 'theme.xml')));
         return $this;
     }
 
@@ -86,7 +79,7 @@ class Collection extends \Magento\Data\Collection implements \Magento\View\Desig
      * Target directory setter. Adds directory to be scanned
      *
      * @param string $relativeTarget
-     * @return \Magento\Core\Model\Theme\Collection
+     * @return $this
      */
     public function addTargetPattern($relativeTarget)
     {
@@ -100,7 +93,7 @@ class Collection extends \Magento\Data\Collection implements \Magento\View\Desig
     /**
      * Clear target patterns
      *
-     * @return \Magento\Core\Model\Theme\Collection
+     * @return $this
      */
     public function clearTargetPatterns()
     {
@@ -111,13 +104,13 @@ class Collection extends \Magento\Data\Collection implements \Magento\View\Desig
     /**
      * Return target dir for themes with theme configuration file
      *
-     * @throws \Magento\Exception
+     * @throws \Magento\Framework\Exception
      * @return array|string
      */
     public function getTargetPatterns()
     {
         if (empty($this->_targetDirs)) {
-            throw new \Magento\Exception('Please specify at least one target pattern to theme config file.');
+            throw new \Magento\Framework\Exception('Please specify at least one target pattern to theme config file.');
         }
         return $this->_targetDirs;
     }
@@ -125,11 +118,10 @@ class Collection extends \Magento\Data\Collection implements \Magento\View\Desig
     /**
      * Fill collection with theme model loaded from filesystem
      *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     *
      * @param bool $printQuery
      * @param bool $logQuery
-     * @return \Magento\Core\Model\Theme\Collection
+     * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function loadData($printQuery = false, $logQuery = false)
     {
@@ -146,11 +138,9 @@ class Collection extends \Magento\Data\Collection implements \Magento\View\Desig
             $pathsToThemeConfig = array_merge($pathsToThemeConfig, $themeConfigs);
         }
 
-        $this->_loadFromFilesystem($pathsToThemeConfig)
-            ->clearTargetPatterns()
-            ->_updateRelations()
-            ->_renderFilters()
-            ->_clearFilters();
+        $this->_loadFromFilesystem(
+            $pathsToThemeConfig
+        )->clearTargetPatterns()->_updateRelations()->_renderFilters()->_clearFilters();
 
         return $this;
     }
@@ -158,16 +148,16 @@ class Collection extends \Magento\Data\Collection implements \Magento\View\Desig
     /**
      * Set all parent themes
      *
-     * @return \Magento\Core\Model\Theme\Collection
+     * @return $this
      */
     protected function _updateRelations()
     {
         $themeItems = $this->getItems();
-        /** @var $theme \Magento\Object|\Magento\View\Design\ThemeInterface */
+        /** @var $theme \Magento\Framework\Object|ThemeInterface */
         foreach ($themeItems as $theme) {
             $parentThemePath = $theme->getData('parent_theme_path');
             if ($parentThemePath) {
-                $themePath = $theme->getArea() . \Magento\View\Design\ThemeInterface::PATH_SEPARATOR . $parentThemePath;
+                $themePath = $theme->getArea() . ThemeInterface::PATH_SEPARATOR . $parentThemePath;
                 if (isset($themeItems[$themePath])) {
                     $theme->setParentTheme($themeItems[$themePath]);
                 }
@@ -180,7 +170,7 @@ class Collection extends \Magento\Data\Collection implements \Magento\View\Desig
      * Load themes collection from file system by file list
      *
      * @param array $themeConfigPaths
-     * @return \Magento\Core\Model\Theme\Collection
+     * @return $this
      */
     protected function _loadFromFilesystem(array $themeConfigPaths)
     {
@@ -217,12 +207,7 @@ class Collection extends \Magento\Data\Collection implements \Magento\View\Desig
     public function _prepareConfigurationData($configPath)
     {
 
-        $themeConfig = $this->_getConfigModel(
-            $this->fileIteratorFactory->create(
-                $this->_directory,
-                array($this->_directory->getRelativePath($configPath))
-            )
-        );
+        $themeConfig = $this->_getConfigModel($configPath);
         $pathData = $this->_preparePathData($configPath);
         $media = $themeConfig->getMedia();
 
@@ -233,21 +218,19 @@ class Collection extends \Magento\Data\Collection implements \Magento\View\Desig
             $parentPathPieces = array_merge($pathPieces, $parentPathPieces);
         }
 
-        $themePath = implode(\Magento\View\Design\ThemeInterface::PATH_SEPARATOR, $pathData['theme_path_pieces']);
-        $themeCode = implode(\Magento\View\Design\ThemeInterface::CODE_SEPARATOR, $pathData['theme_path_pieces']);
-        $parentPath = $parentPathPieces
-            ? implode(\Magento\View\Design\ThemeInterface::PATH_SEPARATOR, $parentPathPieces)
-            : null;
+        $themePath = implode(ThemeInterface::PATH_SEPARATOR, $pathData['theme_path_pieces']);
+        $themeCode = implode(ThemeInterface::CODE_SEPARATOR, $pathData['theme_path_pieces']);
+        $parentPath = $parentPathPieces ? implode(ThemeInterface::PATH_SEPARATOR, $parentPathPieces) : null;
 
         return array(
-            'parent_id'         => null,
-            'type'              => \Magento\View\Design\ThemeInterface::TYPE_PHYSICAL,
-            'area'              => $pathData['area'],
-            'theme_path'        => $themePath,
-            'code'              => $themeCode,
-            'theme_version'     => $themeConfig->getThemeVersion(),
-            'theme_title'       => $themeConfig->getThemeTitle(),
-            'preview_image'     => $media['preview_image'] ? $media['preview_image'] : null,
+            'parent_id' => null,
+            'type' => ThemeInterface::TYPE_PHYSICAL,
+            'area' => $pathData['area'],
+            'theme_path' => $themePath,
+            'code' => $themeCode,
+            'theme_version' => $themeConfig->getThemeVersion(),
+            'theme_title' => $themeConfig->getThemeTitle(),
+            'preview_image' => $media['preview_image'] ? $media['preview_image'] : null,
             'parent_theme_path' => $parentPath
         );
     }
@@ -255,12 +238,12 @@ class Collection extends \Magento\Data\Collection implements \Magento\View\Desig
     /**
      * Apply set field filters
      *
-     * @return \Magento\Core\Model\Theme\Collection
+     * @return $this
      */
     protected function _renderFilters()
     {
         $filters = $this->getFilter(array());
-        /** @var $theme \Magento\View\Design\ThemeInterface */
+        /** @var $theme ThemeInterface */
         foreach ($this->getItems() as $itemKey => $theme) {
             $removeItem = false;
             foreach ($filters as $filter) {
@@ -278,7 +261,7 @@ class Collection extends \Magento\Data\Collection implements \Magento\View\Desig
     /**
      * Clear all added filters
      *
-     * @return \Magento\Core\Model\Theme\Collection
+     * @return $this
      */
     protected function _clearFilters()
     {
@@ -289,21 +272,23 @@ class Collection extends \Magento\Data\Collection implements \Magento\View\Desig
     /**
      * Return configuration model for themes
      *
-     * @param $configPaths
-     * @return \Magento\Config\Theme
+     * @param string $configPath
+     * @return \Magento\Framework\Config\Theme
      */
-    protected function _getConfigModel($configPaths)
+    protected function _getConfigModel($configPath)
     {
-        return new \Magento\Config\Theme($configPaths);
+        return new \Magento\Framework\Config\Theme(
+            $this->_directory->readFile($this->_directory->getRelativePath($configPath))
+        );
     }
 
     /**
      * Retrieve item id
      *
-     * @param \Magento\View\Design\ThemeInterface|\Magento\Object $item
+     * @param \Magento\Framework\Object $item
      * @return string
      */
-    protected function _getItemId(\Magento\Object $item)
+    protected function _getItemId(\Magento\Framework\Object $item)
     {
         return $item->getFullPath();
     }
@@ -323,10 +308,10 @@ class Collection extends \Magento\Data\Collection implements \Magento\View\Desig
     /**
      * Checks that a theme present in filesystem collection
      *
-     * @param \Magento\View\Design\ThemeInterface $theme
+     * @param ThemeInterface $theme
      * @return bool
      */
-    public function hasTheme(\Magento\View\Design\ThemeInterface $theme)
+    public function hasTheme(ThemeInterface $theme)
     {
         $themeItems = $this->getItems();
         return $theme->getThemePath() && isset($themeItems[$theme->getFullPath()]);
@@ -336,13 +321,12 @@ class Collection extends \Magento\Data\Collection implements \Magento\View\Desig
      * Get theme from file system by area and theme_path
      *
      * @param string $fullPath
-     * @return \Magento\View\Design\ThemeInterface
+     * @return ThemeInterface
      */
     public function getThemeByFullPath($fullPath)
     {
         list($area, $themePath) = explode('/', $fullPath, 2);
-        $this->addDefaultPattern($area)
-            ->addFilter('theme_path', $themePath);
+        $this->addDefaultPattern($area)->addFilter('theme_path', $themePath);
 
         return $this->getFirstItem();
     }

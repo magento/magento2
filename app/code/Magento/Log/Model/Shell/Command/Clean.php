@@ -23,15 +23,19 @@
  */
 namespace Magento\Log\Model\Shell\Command;
 
+use Magento\Log\Model\LogFactory;
+
 class Clean implements \Magento\Log\Model\Shell\CommandInterface
 {
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * Mutable Config
+     *
+     * @var \Magento\Framework\App\Config\MutableScopeConfigInterface
      */
-    protected $_storeManager;
+    protected $_mutableConfig;
 
     /**
-     * @var \Magento\Log\Model\LogFactory
+     * @var LogFactory
      */
     protected $_logFactory;
 
@@ -42,12 +46,17 @@ class Clean implements \Magento\Log\Model\Shell\CommandInterface
      */
     protected $_days;
 
+    /**
+     * @param \Magento\Framework\App\Config\MutableScopeConfigInterface $mutableConfig
+     * @param LogFactory $logFactory
+     * @param int $days
+     */
     public function __construct(
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Log\Model\LogFactory $logFactory,
+        \Magento\Framework\App\Config\MutableScopeConfigInterface $mutableConfig,
+        LogFactory $logFactory,
         $days
     ) {
-        $this->_storeManager = $storeManager;
+        $this->_mutableConfig = $mutableConfig;
         $this->_logFactory = $logFactory;
         $this->_days = $days;
     }
@@ -60,7 +69,11 @@ class Clean implements \Magento\Log\Model\Shell\CommandInterface
     public function execute()
     {
         if ($this->_days > 0) {
-            $this->_storeManager->getStore()->setConfig(\Magento\Log\Model\Log::XML_LOG_CLEAN_DAYS, $this->_days);
+            $this->_mutableConfig->setValue(
+                \Magento\Log\Model\Log::XML_LOG_CLEAN_DAYS,
+                $this->_days,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
         }
         /** @var $model \Magento\Log\Model\Log */
         $model = $this->_logFactory->create();

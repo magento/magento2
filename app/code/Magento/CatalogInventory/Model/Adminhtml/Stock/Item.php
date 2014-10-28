@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\CatalogInventory\Model\Adminhtml\Stock;
 
 /**
@@ -37,7 +36,7 @@ class Item extends \Magento\CatalogInventory\Model\Stock\Item
     public function getCustomerGroupId()
     {
         if ($this->_customerGroupId === null) {
-            return \Magento\Customer\Model\Group::CUST_GROUP_ALL;
+            return \Magento\Customer\Service\V1\CustomerGroupServiceInterface::CUST_GROUP_ALL;
         }
         return parent::getCustomerGroupId();
     }

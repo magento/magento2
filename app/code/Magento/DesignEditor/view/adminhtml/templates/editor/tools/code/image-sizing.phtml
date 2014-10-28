@@ -1,0 +1,49 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php /** @var $this \Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\ImageSizing */ ?>
+<div class="vde-tools-image-settings">
+    <div id="vde-tab-imagesizing-messages-placeholder"></div>
+</div>
+<div class="form-inline vde-image-sizing">
+<?php echo $this->getFormHtml(); ?>
+</div>
+<script type="text/javascript">
+require([
+    "jquery",
+    "Magento_DesignEditor/js/image-sizing"
+], function($){
+
+    $('#product_image_sizing_form').vdeImageSizing({
+        formId: '#product_image_sizing_form',
+        imageRatioClass: '.image-ratio',
+        imageWidthClass: '.image-width',
+        imageHeightClass: '.image-height',
+        formUrl: '<?php echo $this->getImageSizingUrl() ?>',
+        maxSizeValue: <?php echo \Magento\DesignEditor\Model\Editor\Tools\ImageSizing\Validator::MAX_SIZE_VALUE ?>,
+        messagesContainer: '#vde-tab-imagesizing-messages-placeholder'
+    });
+
+});
+</script>

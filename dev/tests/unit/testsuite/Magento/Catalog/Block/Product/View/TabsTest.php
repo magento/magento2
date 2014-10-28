@@ -21,35 +21,23 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Block\Product\View;
 
 class TabsTest extends \PHPUnit_Framework_TestCase
 {
     public function testAddTab()
     {
-        $tabBlock = $this->getMock('Magento\View\Element\Template', array(), array(), '', false);
-        $tabBlock->expects($this->once())
-            ->method('setTemplate')
-            ->with('template')
-            ->will($this->returnSelf());
+        $tabBlock = $this->getMock('Magento\Framework\View\Element\Template', array(), array(), '', false);
+        $tabBlock->expects($this->once())->method('setTemplate')->with('template')->will($this->returnSelf());
 
-        $layout = $this->getMock('Magento\Core\Model\Layout', array(), array(), '', false);
-        $layout->expects($this->once())
-            ->method('createBlock')
-            ->with('block')
-            ->will($this->returnValue($tabBlock));
+        $layout = $this->getMock('Magento\Framework\View\Layout', array(), array(), '', false);
+        $layout->expects($this->once())->method('createBlock')->with('block')->will($this->returnValue($tabBlock));
 
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $block = $helper->getObject('Magento\Catalog\Block\Product\View\Tabs', array(
-               'layout' => $layout
-            )
-        );
+        $block = $helper->getObject('Magento\Catalog\Block\Product\View\Tabs', array('layout' => $layout));
         $block->addTab('alias', 'title', 'block', 'template', 'header');
 
-        $expectedTabs = array(
-            array('alias' => 'alias', 'title' => 'title', 'header' => 'header')
-        );
+        $expectedTabs = array(array('alias' => 'alias', 'title' => 'title', 'header' => 'header'));
         $this->assertEquals($expectedTabs, $block->getTabs());
     }
 }

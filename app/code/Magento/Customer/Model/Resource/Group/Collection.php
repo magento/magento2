@@ -18,26 +18,22 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Customer\Model\Resource\Group;
 
 /**
  * Customer group collection
  *
- * @category    Magento
- * @package     Magento_Customer
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Customer\Model\Resource\Group;
-
-class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Resource initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -48,7 +44,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Set ignore ID filter
      *
      * @param array $indexes
-     * @return \Magento\Customer\Model\Resource\Group\Collection
+     * @return $this
      */
     public function setIgnoreIdFilter($indexes)
     {
@@ -61,7 +57,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Set real groups filter
      *
-     * @return \Magento\Customer\Model\Resource\Group\Collection
+     * @return $this
      */
     public function setRealGroupsFilter()
     {
@@ -71,13 +67,14 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Add tax class
      *
-     * @return \Magento\Customer\Model\Resource\Group\Collection
+     * @return $this
      */
     public function addTaxClass()
     {
         $this->getSelect()->joinLeft(
             array('tax_class_table' => $this->getTable('tax_class')),
-            "main_table.tax_class_id = tax_class_table.class_id");
+            "main_table.tax_class_id = tax_class_table.class_id"
+        );
         return $this;
     }
 

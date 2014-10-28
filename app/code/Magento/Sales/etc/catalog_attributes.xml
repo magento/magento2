@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Catalog/etc/catalog_attributes.xsd">
     <group name="sales_quote_item">
         <attribute name="sku"/>
         <attribute name="type_id"/>
@@ -41,11 +41,6 @@
         <attribute name="special_to_date"/>
         <attribute name="special_price"/>
         <attribute name="cost"/>
-        <attribute name="is_recurring"/>
-        <attribute name="recurring_profile"/>
         <attribute name="gift_message_available"/>
-        <attribute name="msrp_enabled"/>
-        <attribute name="msrp"/>
-        <attribute name="msrp_display_actual_price_type"/>
     </group>
 </config>

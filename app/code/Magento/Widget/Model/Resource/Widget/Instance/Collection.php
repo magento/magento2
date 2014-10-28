@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Widget
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,13 +26,11 @@
 /**
  * Widget Instance Collection
  *
- * @category    Magento
- * @package     Magento_Widget
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Widget\Model\Resource\Widget\Instance;
 
-class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
      * Fields map for corellation names & real selected fields
@@ -43,10 +39,10 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      */
     protected $_map = array('fields' => array('type' => 'instance_type'));
 
-
     /**
      * Constructor
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -57,9 +53,9 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Filter by store ids
      *
-     * @param array|integer $storeIds
-     * @param boolean $withDefaultStore if TRUE also filter by store id '0'
-     * @return \Magento\Widget\Model\Resource\Widget\Instance\Collection
+     * @param array|int $storeIds
+     * @param bool $withDefaultStore if TRUE also filter by store id '0'
+     * @return $this
      */
     public function addStoreFilter($storeIds = array(), $withDefaultStore = true)
     {

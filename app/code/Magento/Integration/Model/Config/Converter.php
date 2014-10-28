@@ -26,14 +26,17 @@ namespace Magento\Integration\Model\Config;
 /**
  * Converter of integration.xml content into array format.
  */
-class Converter implements \Magento\Config\ConverterInterface
+class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**#@+
      * Array keys for config internal representation.
      */
     const KEY_EMAIL = 'email';
+
     const KEY_AUTHENTICATION_ENDPOINT_URL = 'endpoint_url';
+
     const KEY_IDENTITY_LINKING_URL = 'identity_link_url';
+
     /**#@-*/
 
     /**

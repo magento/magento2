@@ -23,9 +23,9 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <update handle="adminhtml_sitemap_index_grid_block"/>
     <referenceContainer name="content">
         <block class="Magento\Sitemap\Block\Adminhtml\Sitemap" name="adminhtml.sitemap.container"/>
     </referenceContainer>
-</layout>
+</page>

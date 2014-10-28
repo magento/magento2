@@ -18,11 +18,10 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Customer\Model;
 
 /**
  * Customer address model
@@ -30,46 +29,44 @@
  * @method int getParentId() getParentId()
  * @method \Magento\Customer\Model\Address setParentId() setParentId(int $parentId)
  */
-namespace Magento\Customer\Model;
-
 class Address extends \Magento\Customer\Model\Address\AbstractAddress
 {
     /**
      * Customer entity
      *
-     * @var \Magento\Customer\Model\Customer
+     * @var Customer
      */
     protected $_customer;
 
     /**
-     * @var \Magento\Customer\Model\CustomerFactory
+     * @var CustomerFactory
      */
     protected $_customerFactory;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Directory\Helper\Data $directoryData
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Customer\Model\Address\Config $addressConfig
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
-     * @param \Magento\Customer\Model\CustomerFactory $customerFactory
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param CustomerFactory $customerFactory
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\Directory\Helper\Data $directoryData,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Customer\Model\Address\Config $addressConfig,
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Directory\Model\CountryFactory $countryFactory,
-        \Magento\Customer\Model\CustomerFactory $customerFactory,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        CustomerFactory $customerFactory,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_customerFactory = $customerFactory;
@@ -87,6 +84,9 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
         );
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init('Magento\Customer\Model\Resource\Address');
@@ -95,7 +95,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     /**
      * Retrieve address customer identifier
      *
-     * @return integer
+     * @return int
      */
     public function getCustomerId()
     {
@@ -105,8 +105,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     /**
      * Declare address customer identifier
      *
-     * @param integer $id
-     * @return \Magento\Customer\Model\Address
+     * @param int $id
+     * @return $this
      */
     public function setCustomerId($id)
     {
@@ -118,7 +118,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     /**
      * Retrieve address customer
      *
-     * @return \Magento\Customer\Model\Customer|bool
+     * @return Customer|false
      */
     public function getCustomer()
     {
@@ -126,8 +126,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
             return false;
         }
         if (empty($this->_customer)) {
-            $this->_customer = $this->_createCustomer()
-                ->load($this->getCustomerId());
+            $this->_customer = $this->_createCustomer()->load($this->getCustomerId());
         }
         return $this->_customer;
     }
@@ -135,10 +134,10 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     /**
      * Specify address customer
      *
-     * @param \Magento\Customer\Model\Customer $customer
-     * @return \Magento\Customer\Model\Address
+     * @param Customer $customer
+     * @return $this
      */
-    public function setCustomer(\Magento\Customer\Model\Customer $customer)
+    public function setCustomer(Customer $customer)
     {
         $this->_customer = $customer;
         $this->setCustomerId($customer->getId());
@@ -148,7 +147,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     /**
      * Delete customer address
      *
-     * @return \Magento\Customer\Model\Address
+     * @return $this
      */
     public function delete()
     {
@@ -160,20 +159,31 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     /**
      * Retrieve address entity attributes
      *
-     * @return array
+     * @return Attribute[]
      */
     public function getAttributes()
     {
         $attributes = $this->getData('attributes');
         if (is_null($attributes)) {
-            $attributes = $this->_getResource()
-                ->loadAllAttributes($this)
-                ->getSortedAttributes();
+            $attributes = $this->_getResource()->loadAllAttributes($this)->getSortedAttributes();
             $this->setData('attributes', $attributes);
         }
         return $attributes;
     }
 
+    /**
+     * Get attributes created by default
+     *
+     * @return string[]
+     */
+    public function getDefaultAttributeCodes()
+    {
+        return $this->_getResource()->getDefaultAttributes();
+    }
+
+    /**
+     * @return void
+     */
     public function __clone()
     {
         $this->setId(null);
@@ -211,23 +221,23 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      */
     public function getRegionId()
     {
-        return (int) $this->getData('region_id');
+        return (int)$this->getData('region_id');
     }
 
     /**
      * Set Region ID. $regionId is automatically converted to integer
      *
      * @param int $regionId
-     * @return \Magento\Customer\Model\Address
+     * @return $this
      */
     public function setRegionId($regionId)
     {
-        $this->setData('region_id', (int) $regionId);
+        $this->setData('region_id', (int)$regionId);
         return $this;
     }
 
     /**
-     * @return \Magento\Customer\Model\Customer
+     * @return Customer
      */
     protected function _createCustomer()
     {

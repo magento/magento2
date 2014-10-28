@@ -24,11 +24,11 @@
 return array(
     'renderers' => array(
         'type_one' => array(
-            'product_type_one' => 'Renderer_Type_One_Product_One',
-            'product_type_two' => 'Renderer_Type_One_Product_Two',
+            'product_type_one' => 'Renderer\Type\One\Product\One',
+            'product_type_two' => 'Renderer\Type\One\Product\Two',
         ),
         'type_two' => array(
-            'product_type_three' => 'Renderer_Type_Two_Product_Two',
+            'product_type_three' => 'Renderer\Type\Two\Product\Two',
         ),
     ),
     'totals' => array(
@@ -37,9 +37,9 @@ return array(
             'source_field' => 'source1',
             'title_source_field' => 'title_source1',
             'font_size' => '1',
-            'display_zero' => '0',
+            'display_zero' => 'false',
             'sort_order' => '1',
-            'model' => 'model1',
+            'model' => 'Model1',
             'amount_prefix' => 'prefix1',
         ),
         'total2' => array(
@@ -47,9 +47,9 @@ return array(
             'source_field' => 'source2',
             'title_source_field' => 'title_source2',
             'font_size' => '2',
-            'display_zero' => '1',
+            'display_zero' => 'true',
             'sort_order' => '2',
-            'model' => 'model2',
+            'model' => 'Model2',
             'amount_prefix' => 'prefix2',
         ),
         'total3' => array(
@@ -57,11 +57,10 @@ return array(
             'source_field' => 'source3',
             'title_source_field' => 'title_source3',
             'font_size' => '3',
-            'display_zero' => '0',
+            'display_zero' => 'false',
             'sort_order' => '3',
-            'model' => 'model3',
+            'model' => 'Model3',
             'amount_prefix' => 'prefix3',
         ),
     ),
 );
-

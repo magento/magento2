@@ -18,23 +18,17 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Bundle
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search;
 
 /**
  * Bundle selection product grid
  *
- * @category    Magento
- * @package     Magento_Bundle
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search;
-
-class Grid
-    extends \Magento\Backend\Block\Widget\Grid\Extended
+class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
      * Bundle data
@@ -50,7 +44,6 @@ class Grid
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Core\Model\Url $urlModel
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Bundle\Helper\Data $bundleData
@@ -58,7 +51,6 @@ class Grid
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Core\Model\Url $urlModel,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Bundle\Helper\Data $bundleData,
@@ -66,9 +58,12 @@ class Grid
     ) {
         $this->_bundleData = $bundleData;
         $this->_productFactory = $productFactory;
-        parent::__construct($context, $urlModel, $backendHelper, $data);
+        parent::__construct($context, $backendHelper, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -82,14 +77,20 @@ class Grid
 
     /**
      * Prepare grid filter buttons
+     *
+     * @return void
      */
     protected function _prepareFilterButtons()
     {
-        $this->getChildBlock('reset_filter_button')->setData(
+        $this->getChildBlock(
+            'reset_filter_button'
+        )->setData(
             'onclick',
             $this->getJsObjectName() . '.resetFilter(bSelection.gridUpdateCallback)'
         );
-        $this->getChildBlock('search_button')->setData(
+        $this->getChildBlock(
+            'search_button'
+        )->setData(
             'onclick',
             $this->getJsObjectName() . '.doFilter(bSelection.gridUpdateCallback)'
         );
@@ -113,17 +114,25 @@ class Grid
      */
     protected function _prepareCollection()
     {
-        $collection = $this->_productFactory->create()->getCollection()
-            ->setOrder('id')
-            ->setStore($this->getStore())
-            ->addAttributeToSelect('name')
-            ->addAttributeToSelect('sku')
-            ->addAttributeToSelect('price')
-            ->addAttributeToSelect('attribute_set_id')
-            ->addAttributeToFilter('entity_id', array('nin' => $this->_getSelectedProducts()))
-            ->addAttributeToFilter('type_id', array('in' => $this->getAllowedSelectionTypes()))
-            ->addFilterByRequiredOptions()
-            ->addStoreFilter();
+        $collection = $this->_productFactory->create()->getCollection()->setOrder(
+            'id'
+        )->addAttributeToSelect(
+            'name'
+        )->addAttributeToSelect(
+            'sku'
+        )->addAttributeToSelect(
+            'price'
+        )->addAttributeToSelect(
+            'attribute_set_id'
+        )->addAttributeToFilter(
+            'entity_id',
+            array('nin' => $this->_getSelectedProducts())
+        )->addAttributeToFilter(
+            'type_id',
+            array('in' => $this->getAllowedSelectionTypes())
+        )->addFilterByRequiredOptions()->addStoreFilter(
+            \Magento\Store\Model\Store::DEFAULT_STORE_ID
+        );
 
         if ($this->getFirstShow()) {
             $collection->addIdFilter('-1');
@@ -152,29 +161,36 @@ class Grid
             )
         );
 
-        $this->addColumn('name', array(
-            'header'    => __('Product'),
-            'index'     => 'name',
-            'header_css_class'=> 'col-name',
-            'column_css_class'=> 'name col-name'
-        ));
-        $this->addColumn('sku', array(
-            'header'    => __('SKU'),
-            'width'     => '80px',
-            'index'     => 'sku',
-            'header_css_class'=> 'col-sku',
-            'column_css_class'=> 'sku col-sku'
-        ));
-        $this->addColumn('price', array(
-            'header'    => __('Price'),
-            'align'     => 'center',
-            'type'      => 'currency',
-            'currency_code' => $this->getStore()->getCurrentCurrencyCode(),
-            'rate'      => $this->getStore()->getBaseCurrency()->getRate($this->getStore()->getCurrentCurrencyCode()),
-            'index'     => 'price',
-            'header_css_class'=> 'col-price',
-            'column_css_class'=> 'col-price'
-        ));
+        $this->addColumn(
+            'name',
+            array(
+                'header' => __('Product'),
+                'index' => 'name',
+                'header_css_class' => 'col-name',
+                'column_css_class' => 'name col-name'
+            )
+        );
+        $this->addColumn(
+            'sku',
+            array(
+                'header' => __('SKU'),
+                'width' => '80px',
+                'index' => 'sku',
+                'header_css_class' => 'col-sku',
+                'column_css_class' => 'sku col-sku'
+            )
+        );
+        $this->addColumn(
+            'price',
+            array(
+                'header' => __('Price'),
+                'align' => 'center',
+                'type' => 'currency',
+                'index' => 'price',
+                'header_css_class' => 'col-price',
+                'column_css_class' => 'col-price'
+            )
+        );
         return parent::_prepareColumns();
     }
 
@@ -185,9 +201,15 @@ class Grid
      */
     public function getGridUrl()
     {
-        return $this->getUrl('adminhtml/bundle_selection/grid', array('index' => $this->getIndex(), 'productss' => implode(',', $this->_getProducts())));
+        return $this->getUrl(
+            'adminhtml/bundle_selection/grid',
+            array('index' => $this->getIndex(), 'productss' => implode(',', $this->_getProducts()))
+        );
     }
 
+    /**
+     * @return mixed
+     */
     protected function _getSelectedProducts()
     {
         $products = $this->getRequest()->getPost(
@@ -197,20 +219,20 @@ class Grid
         return $products;
     }
 
+    /**
+     * @return array
+     */
     protected function _getProducts()
     {
         if ($products = $this->getRequest()->getPost('products', null)) {
             return $products;
-        } else if ($productss = $this->getRequest()->getParam('productss', null)) {
-            return explode(',', $productss);
         } else {
-            return array();
+            if ($productss = $this->getRequest()->getParam('productss', null)) {
+                return explode(',', $productss);
+            } else {
+                return array();
+            }
         }
-    }
-
-    public function getStore()
-    {
-        return $this->_storeManager->getStore();
     }
 
     /**

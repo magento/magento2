@@ -1,0 +1,508 @@
+// /**
+////  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+// *
+// * @category design
+// * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+// * @license http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+// */
+
+//  # Mobile off canvas navigation
+//
+//  The <code>.main-navigation()</code> mixin provides styles for off canvas navigation.
+//
+
+//  #  Mobile off canvas navigation variables
+//
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Global variable</th>
+//            <th class="vars_head">Default values [Allowed values]</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@_nav-bg</th>
+//            <td class="vars_value">@navigation-background</td>
+//            <td class="vars_value">@color-secondary-light</td>
+//            <td>Navigation background</td>
+//        </tr>
+//        <tr>
+//            <th>@_nav-border</th>
+//            <td class="vars_value">@navigation-border</td>
+//            <td class="vars_value">''</td>
+//            <td>Navigation border</td>
+//        </tr>
+//        <tr>
+//            <th class="vars_section" colspan="4">Navigation level 1</th>
+//        </tr>
+//        <tr>
+//            <th>@_nav-level0-font-size</th>
+//            <td class="vars_value">@navigation-level0-font-size</td>
+//            <td class="vars_value">16</td>
+//            <td>Navigation level 1 font size</td>
+//        </tr>
+//        <tr>
+//            <th>@_nav-level0-font-weight</th>
+//            <td class="vars_value">@navigation-level0-font-weight</td>
+//            <td class="vars_value">@font-weight-bold</td>
+//            <td>Navigation level 1 font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@_nav-level0-item-line-height</th>
+//            <td class="vars_value">@navigation-level0-item-line-height</td>
+//            <td class="vars_value">53px</td>
+//            <td>Navigation level 1 line height</td>
+//        </tr>
+//        <tr>
+//            <th>@_nav-level0-item-margin</th>
+//            <td class="vars_value">@navigation-level0-item-margin</td>
+//            <td class="vars_value">0</td>
+//            <td>Navigation level 1 margin</td>
+//        </tr>
+//        <tr>
+//            <th>@_nav-level0-item-padding</th>
+//            <td class="vars_value">@navigation-level0-item-padding</td>
+//            <td class="vars_value">0 20px</td>
+//            <td>Navigation level 1 padding</td>
+//        </tr>
+//        <tr>
+//            <th>@_nav-level0-text-transform</th>
+//            <td class="vars_value">@navigation-level0-text-transform</td>
+//            <td class="vars_value">uppercase</td>
+//            <td>Navigation level 1 text transform</td>
+//        </tr>
+//        <tr>
+//            <th>@_nav-level0-item-bg</th>
+//            <td class="vars_value">@navigation-level0-item-background</td>
+//            <td class="vars_value">''</td>
+//            <td>Navigation level 1 item background</td>
+//        </tr>
+//        <tr>
+//            <th>@_nav-level0-item-border</th>
+//            <td class="vars_value">@navigation-level0-item-border</td>
+//            <td class="vars_value">1px solid #d1d1d1</td>
+//            <td>Navigation level 1 item border</td>
+//        </tr>
+//        <tr>
+//            <th>@_nav-level0-item-color</th>
+//            <td class="vars_value">@navigation-level0-item-color</td>
+//            <td class="vars_value">#575757</td>
+//            <td>Navigation level 1 item color</td>
+//        </tr>
+//        <tr>
+//            <th>@_nav-level0-item-text-decoration</th>
+//            <td class="vars_value">@navigation-level0-item-text-decoration</td>
+//            <td class="vars_value">none</td>
+//            <td>Navigation level 1 item text decoration</td>
+//        </tr>
+//        <tr>
+//            <th>@_nav-level0-item-bg-active</th>
+//            <td class="vars_value">@navigation-level0-item-background-active</td>
+//            <td class="vars_value">''</td>
+//            <td>Active navigation level 1 item background</td>
+//        </tr>
+//        <tr>
+//            <th>@_nav-level0-item-border-active</th>
+//            <td class="vars_value">@navigation-level0-item-border-active</td>
+//            <td class="vars_value">''</td>
+//            <td>Active navigation level 1 item border</td>
+//        </tr>
+//        <tr>
+//            <th>@_nav-level0-item-color-active</th>
+//            <td class="vars_value">@navigation-level0-item-color-active</td>
+//            <td class="vars_value">''</td>
+//            <td>Active navigation level 1 item color</td>
+//        </tr>
+//        <tr>
+//            <th>@_nav-level0-item-text-decoration-active</th>
+//            <td class="vars_value">@navigation-level0-item-text-decoration-active</td>
+//            <td class="vars_value">''</td>
+//            <td>Active navigation level 1 item text decoration</td>
+//        </tr>
+//        <tr>
+//            <th class="vars_section" colspan="4">Subnavigation</th>
+//        </tr>
+//        <tr>
+//            <th>@_submenu-bg</th>
+//            <td class="vars_value">@submenu-background</td>
+//            <td class="vars_value">''</td>
+//            <td>Subnavigation background</td>
+//        </tr>
+//        <tr>
+//            <th>@_submenu-border</th>
+//            <td class="vars_value">@submenu-border</td>
+//            <td class="vars_value">''</td>
+//            <td>Subnavigation border</td>
+//        </tr>
+//        <tr>
+//            <th>@_submenu-padding</th>
+//            <td class="vars_value">@submenu-padding</td>
+//            <td class="vars_value">0 0 0 20px</td>
+//            <td>Subnavigation padding</td>
+//        </tr>
+//        <tr>
+//            <th>@_submenu-font-size</th>
+//            <td class="vars_value">@submenu-font-size</td>
+//            <td class="vars_value">''</td>
+//            <td>Subnavigation font size</td>
+//        </tr>
+//        <tr>
+//            <th>@_submenu-font-weight</th>
+//            <td class="vars_value">@submenu-font-weight</td>
+//            <td class="vars_value">@font-weight-bold</td>
+//            <td>Subnavigation font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@_submenu-item-bg</th>
+//            <td class="vars_value">@submenu-item-background</td>
+//            <td class="vars_value">''</td>
+//            <td>Subnavigation item background</td>
+//        </tr>
+//        <tr>
+//            <th>@_submenu-item-border</th>
+//            <td class="vars_value">@submenu-item-border</td>
+//            <td class="vars_value">''</td>
+//            <td>Subnavigation item border</td>
+//        </tr>
+//        <tr>
+//            <th>@_submenu-item-color</th>
+//            <td class="vars_value">@submenu-item-color</td>
+//            <td class="vars_value">#575757</td>
+//            <td>Subnavigation item color</td>
+//        </tr>
+//        <tr>
+//            <th>@_submenu-item-text-decoration</th>
+//            <td class="vars_value">@submenu-item-text-decoration</td>
+//            <td class="vars_value">''</td>
+//            <td>Subnavigation item text decoration</td>
+//        </tr>
+//        <tr>
+//            <th>@_submenu-item-bg-active</th>
+//            <td class="vars_value">@submenu-item-background-active</td>
+//            <td class="vars_value">''</td>
+//            <td>Active subnavigation item background</td>
+//        </tr>
+//        <tr>
+//            <th>@_submenu-item-border-active</th>
+//            <td class="vars_value">@submenu-item-border-active</td>
+//            <td class="vars_value">''</td>
+//            <td>Active subnavigation item border</td>
+//        </tr>
+//        <tr>
+//            <th>@_submenu-item-color-active</th>
+//            <td class="vars_value">@submenu-item-color-active</td>
+//            <td class="vars_value">''</td>
+//            <td>Active subnavigation item color</td>
+//        </tr>
+//        <tr>
+//            <th>@_submenu-item-text-decoration-active</th>
+//            <td class="vars_value">@submenu-item-text-decoration-active</td>
+//            <td class="vars_value">''</td>
+//            <td>Active subnavigation item text decoration</td>
+//        </tr>
+//    </table>
+//  </pre>
+
+//  # Desktop navigation
+//
+//  The <code>.main-navigation-desktop()</code> mixin provides styles for desktop navigation.
+
+//  #  Desktop navigation variables
+//
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Global variable</th>
+//            <th class="vars_head">Default values [Allowed values]</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@_nav-bg</th>
+//            <td class="vars_value">@navigation-desktop-background</td>
+//            <td class="vars_value">@color-secondary</td>
+//            <td>Navigation background</td>
+//        </tr>
+//        <tr>
+//            <th>@_nav-border</th>
+//            <td class="vars_value">@navigation-desktop-border</td>
+//            <td class="vars_value">''</td>
+//            <td>Navigation border</td>
+//        </tr>
+//        <tr>
+//            <th>@_nav-font-size</th>
+//            <td class="vars_value">@navigation-desktop-font-size</td>
+//            <td class="vars_value">''</td>
+//            <td>Navigation font size</td>
+//        </tr>
+//        <tr>
+//            <th>@_nav-font-weight</th>
+//            <td class="vars_value">@navigation-desktop-font-weight</td>
+//            <td class="vars_value">''</td>
+//            <td>Navigation font weight</td>
+//        </tr>
+//        <tr>
+//            <th class="vars_section" colspan="4">Navigation level 1</th>
+//        </tr>
+//        <tr>
+//            <th>@_nav-level0-item-line-height</th>
+//            <td class="vars_value">@navigation-desktop-level0-item-line-height</td>
+//            <td class="vars_value">53px</td>
+//            <td>Navigation level 1 line height</td>
+//        </tr>
+//        <tr>
+//            <th>@_nav-level0-item-margin</th>
+//            <td class="vars_value">@navigation-desktop-level0-item-margin</td>
+//            <td class="vars_value">0 10px 0 0</td>
+//            <td>Navigation level 1 margin</td>
+//        </tr>
+//        <tr>
+//            <th>@_nav-level0-item-padding</th>
+//            <td class="vars_value">@navigation-desktop-level0-item-padding</td>
+//            <td class="vars_value">0 12px</td>
+//            <td>Navigation level 1 padding</td>
+//        </tr>
+//        <tr>
+//            <th>@_nav-level0-item-bg</th>
+//            <td class="vars_value">@navigation-desktop-level0-item-background</td>
+//            <td class="vars_value">''</td>
+//            <td>Navigation level 1 item background</td>
+//        </tr>
+//        <tr>
+//            <th>@_nav-level0-item-border</th>
+//            <td class="vars_value">@navigation-desktop-level0-item-border</td>
+//            <td class="vars_value">''</td>
+//            <td>Navigation level 1 item border</td>
+//        </tr>
+//        <tr>
+//            <th>@_nav-level0-item-color</th>
+//            <td class="vars_value">@navigation-desktop-level0-item-color</td>
+//            <td class="vars_value">#575757</td>
+//            <td>Navigation level 1 item color</td>
+//        </tr>
+//        <tr>
+//            <th>@_nav-level0-item-text-decoration</th>
+//            <td class="vars_value">@navigation-desktop-level0-item-text-decoration</td>
+//            <td class="vars_value">none</td>
+//            <td>Navigation level 1 item text decoration</td>
+//        </tr>
+//        <tr>
+//            <th>@_nav-level0-item-bg-hover</th>
+//            <td class="vars_value">@navigation-desktop-level0-item-background-hover</td>
+//            <td class="vars_value">''</td>
+//            <td>Hovered navigation level 1 item background</td>
+//        </tr>
+//        <tr>
+//            <th>@_nav-level0-item-border-hover</th>
+//            <td class="vars_value">@navigation-desktop-level0-item-border-hover</td>
+//            <td class="vars_value">''</td>
+//            <td>Hovered navigation level 1 item border</td>
+//        </tr>
+//        <tr>
+//            <th>@_nav-level0-item-color-hover</th>
+//            <td class="vars_value">@navigation-desktop-level0-item-color-hover</td>
+//            <td class="vars_value">#333</td>
+//            <td>Hovered navigation level 1 item color</td>
+//        </tr>
+//        <tr>
+//            <th>@_nav-level0-item-text-decoration-hover</th>
+//            <td class="vars_value">@navigation-desktop-level0-item-text-decoration-hover</td>
+//            <td class="vars_value">@navigation-desktop-level0-item-text-decoration</td>
+//            <td>Hovered navigation level 1 item text decoration</td>
+//        </tr>
+//        <tr>
+//            <th>@_nav-level0-item-bg-active</th>
+//            <td class="vars_value">@navigation-desktop-level0-item-background-active</td>
+//            <td class="vars_value">''</td>
+//            <td>Active navigation level 1 item background</td>
+//        </tr>
+//        <tr>
+//            <th>@_nav-level0-item-border-active</th>
+//            <td class="vars_value">@navigation-desktop-level0-item-border-active</td>
+//            <td class="vars_value">''</td>
+//            <td>Active navigation level 1 item border</td>
+//        </tr>
+//        <tr>
+//            <th>@_nav-level0-item-color-active</th>
+//            <td class="vars_value">@navigation-desktop-level0-item-color-active</td>
+//            <td class="vars_value">@navigation-desktop-level0-item-color-hover</td>
+//            <td>Active navigation level 1 item color</td>
+//        </tr>
+//        <tr>
+//            <th>@_nav-level0-item-text-decoration-active</th>
+//            <td class="vars_value">@navigation-desktop-level0-item-text-decoration-active</td>
+//            <td class="vars_value">@navigation-desktop-level0-item-text-decoration</td>
+//            <td>Active navigation level 1 item text decoration</td>
+//        </tr>
+//        <tr>
+//            <th class="vars_section" colspan="4">Subnavigation</th>
+//        </tr>
+//        <tr>
+//            <th>@_submenu-bg</th>
+//            <td class="vars_value">@submenu-desktop-background</td>
+//            <td class="vars_value">@page-bg-color</td>
+//            <td>Subnavigation background</td>
+//        </tr>
+//        <tr>
+//            <th>@_submenu-border-width</th>
+//            <td class="vars_value">@submenu-desktop-border-width</td>
+//            <td class="vars_value">@border-width-base</td>
+//            <td>Subnavigation border width</td>
+//        </tr>
+//        <tr>
+//            <th>@_submenu-border-style</th>
+//            <td class="vars_value">@submenu-desktop-border-style</td>
+//            <td class="vars_value">solid</td>
+//            <td>Subnavigation border style</td>
+//        </tr>
+//        <tr>
+//            <th>@_submenu-border-color</th>
+//            <td class="vars_value">@submenu-desktop-border-color</td>
+//            <td class="vars_value">@border-color-base</td>
+//            <td>Subnavigation border color</td>
+//        </tr>
+//        <tr>
+//            <th>@_submenu-box-shadow</th>
+//            <td class="vars_value">@submenu-desktop-box-shadow</td>
+//            <td class="vars_value">0 5px 5px rgba(0, 0, 0, .19)</td>
+//            <td>Subnavigation box shadow</td>
+//        </tr>
+//        <tr>
+//            <th>@_submenu-font-size</th>
+//            <td class="vars_value">@submenu-desktop-font-size</td>
+//            <td class="vars_value">''</td>
+//            <td>Subnavigation font size</td>
+//        </tr>
+//        <tr>
+//            <th>@_submenu-font-weight</th>
+//            <td class="vars_value">@submenu-desktop-font-weight</td>
+//            <td class="vars_value">@font-weight-bold</td>
+//            <td>Subnavigation font weight</td>
+//        </tr>
+//        <tr>
+//            <th>@_submenu-min-width</th>
+//            <td class="vars_value">@submenu-desktop-min-width</td>
+//            <td class="vars_value">230px</td>
+//            <td>Subnavigation minimal width</td>
+//        </tr>
+//        <tr>
+//            <th>@_submenu-padding</th>
+//            <td class="vars_value">@submenu-desktop-padding</td>
+//            <td class="vars_value">15px 0</td>
+//            <td>Subnavigation padding</td>
+//        </tr>
+//        <tr>
+//            <th>@_submenu-arrow</th>
+//            <td class="vars_value">@submenu-desktop-arrow</td>
+//            <td class="vars_value">true [true | false]</td>
+//            <td>Show subnavigation top arrow</td>
+//        </tr>
+//        <tr>
+//            <th>@_submenu-arrow-size</th>
+//            <td class="vars_value">@submenu-desktop-arrow-size</td>
+//            <td class="vars_value">10px</td>
+//            <td>Subnavigation top arrow size</td>
+//        </tr>
+//        <tr>
+//            <th>@_submenu-arrow-left</th>
+//            <td class="vars_value">@submenu-desktop-arrow-left</td>
+//            <td class="vars_value">20px</td>
+//            <td>Subnavigation top arrow left</td>
+//        </tr>
+//        <tr>
+//            <th>@_submenu-item-padding</th>
+//            <td class="vars_value">@submenu-desktop-item-padding</td>
+//            <td class="vars_value">8px 20px</td>
+//            <td>Subnavigation itempadding</td>
+//        </tr>
+//        <tr>
+//            <th>@_submenu-item-bg</th>
+//            <td class="vars_value">@submenu-desktop-item-background</td>
+//            <td class="vars_value">''</td>
+//            <td>Subnavigation item background</td>
+//        </tr>
+//        <tr>
+//            <th>@_submenu-item-border</th>
+//            <td class="vars_value">@submenu-desktop-item-border</td>
+//            <td class="vars_value">''</td>
+//            <td>Subnavigation item border</td>
+//        </tr>
+//        <tr>
+//            <th>@_submenu-item-color</th>
+//            <td class="vars_value">@submenu-desktop-item-color</td>
+//            <td class="vars_value">@navigation-desktop-level0-item-color</td>
+//            <td>Subnavigation item color</td>
+//        </tr>
+//        <tr>
+//            <th>@_submenu-item-text-decoration</th>
+//            <td class="vars_value">@submenu-desktop-item-text-decoration</td>
+//            <td class="vars_value">''</td>
+//            <td>Subnavigation item text decoration</td>
+//        </tr>
+//        <tr>
+//            <th>@_submenu-item-bg-hover</th>
+//            <td class="vars_value">@submenu-desktop-item-background-hover</td>
+//            <td class="vars_value">''</td>
+//            <td>Hovered subnavigation item background</td>
+//        </tr>
+//        <tr>
+//            <th>@_submenu-item-border-hover</th>
+//            <td class="vars_value">@submenu-desktop-item-border-hover</td>
+//            <td class="vars_value">''</td>
+//            <td>Hovered subnavigation item border</td>
+//        </tr>
+//        <tr>
+//            <th>@_submenu-item-color-hover</th>
+//            <td class="vars_value">@submenu-desktop-item-color-hover</td>
+//            <td class="vars_value">@navigation-desktop-level0-item-color-hover</td>
+//            <td>Hovered subnavigation item color</td>
+//        </tr>
+//        <tr>
+//            <th>@_submenu-item-text-decoration-hover</th>
+//            <td class="vars_value">@submenu-desktop-item-text-decoration-hover</td>
+//            <td class="vars_value">@navigation-desktop-level0-item-text-decoration</td>
+//            <td>Hovered subnavigation item text decoration</td>
+//        </tr>
+//        <tr>
+//            <th>@_submenu-item-bg-active</th>
+//            <td class="vars_value">@submenu-desktop-item-background-active</td>
+//            <td class="vars_value">''</td>
+//            <td>Active subnavigation item background</td>
+//        </tr>
+//        <tr>
+//            <th>@_submenu-item-border-active</th>
+//            <td class="vars_value">@submenu-desktop-item-border-active</td>
+//            <td class="vars_value">''</td>
+//            <td>Active subnavigation item border</td>
+//        </tr>
+//        <tr>
+//            <th>@_submenu-item-color-active</th>
+//            <td class="vars_value">@submenu-desktop-item-color-active</td>
+//            <td class="vars_value">''</td>
+//            <td>Active subnavigation item color</td>
+//        </tr>
+//        <tr>
+//            <th>@_submenu-item-text-decoration-active</th>
+//            <td class="vars_value">@submenu-desktop-item-text-decoration-active</td>
+//            <td class="vars_value">''</td>
+//            <td>Active subnavigation item text decoration</td>
+//        </tr>
+//    </table>
+//  </pre>

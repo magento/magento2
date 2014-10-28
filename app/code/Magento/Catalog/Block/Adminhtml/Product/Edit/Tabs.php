@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Adminhtml
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -32,21 +30,26 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit;
 class Tabs extends \Magento\Backend\Block\Widget\Tabs
 {
     const BASIC_TAB_GROUP_CODE = 'basic';
+
     const ADVANCED_TAB_GROUP_CODE = 'advanced';
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $_attributeTabBlock = 'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes';
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $_template = 'Magento_Catalog::product/edit/tabs.phtml';
 
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
-    
+
     /**
      * Catalog data
      *
@@ -67,30 +70,37 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
     protected $_collectionFactory;
 
     /**
-     * @var \Magento\Module\Manager
+     * @var \Magento\Framework\Module\Manager
      */
     protected $_moduleManager;
 
     /**
-     * @param \Magento\Module\Manager $moduleManager
+     * @var \Magento\Framework\Translate\InlineInterface
+     */
+    protected $_translateInline;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Json\EncoderInterface $jsonEncoder
+     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Backend\Model\Auth\Session $authSession
+     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $collectionFactory
      * @param \Magento\Catalog\Helper\Catalog $helperCatalog
      * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Translate\InlineInterface $translateInline
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Json\EncoderInterface $jsonEncoder,
+        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Backend\Model\Auth\Session $authSession,
-        \Magento\Module\Manager $moduleManager,
+        \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $collectionFactory,
         \Magento\Catalog\Helper\Catalog $helperCatalog,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Translate\InlineInterface $translateInline,
         array $data = array()
     ) {
         $this->_moduleManager = $moduleManager;
@@ -98,9 +108,13 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
         $this->_helperCatalog = $helperCatalog;
         $this->_catalogData = $catalogData;
         $this->_coreRegistry = $registry;
+        $this->_translateInline = $translateInline;
         parent::__construct($context, $jsonEncoder, $authSession, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         parent::_construct();
@@ -108,6 +122,21 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
         $this->setDestElementId('product-edit-form-tabs');
     }
 
+    /**
+     * @param int $attributeSetId
+     * @return \Magento\Eav\Model\Resource\Entity\Attribute\Group\Collection
+     */
+    public function getGroupCollection($attributeSetId)
+    {
+        return $this->_collectionFactory->create()
+            ->setAttributeSetFilter($attributeSetId)
+            ->setSortOrder()
+            ->load();
+    }
+
+    /**
+     * @return $this
+     */
     protected function _prepareLayout()
     {
         $product = $this->getProduct();
@@ -117,23 +146,19 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
         }
 
         if ($setId) {
-            $groupCollection = $this->_collectionFactory->create()
-                ->setAttributeSetFilter($setId)
-                ->setSortOrder()
-                ->load();
-
             $tabAttributesBlock = $this->getLayout()->createBlock(
-                $this->getAttributeTabBlock(), $this->getNameInLayout() . '_attributes_tab'
+                $this->getAttributeTabBlock(),
+                $this->getNameInLayout() . '_attributes_tab'
             );
             $advancedGroups = array();
-            foreach ($groupCollection as $group) {
+
+            foreach ($this->getGroupCollection($setId) as $group) {
                 /** @var $group \Magento\Eav\Model\Entity\Attribute\Group*/
                 $attributes = $product->getAttributes($group->getId(), true);
 
                 foreach ($attributes as $key => $attribute) {
                     $applyTo = $attribute->getApplyTo();
-                    if (!$attribute->getIsVisible()
-                        || (!empty($applyTo) && !in_array($product->getTypeId(), $applyTo))
+                    if (!$attribute->getIsVisible() || !empty($applyTo) && !in_array($product->getTypeId(), $applyTo)
                     ) {
                         unset($attributes[$key]);
                     }
@@ -141,17 +166,15 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
 
                 if ($attributes) {
                     $tabData = array(
-                        'label'   => __($group->getAttributeGroupName()),
+                        'label' => __($group->getAttributeGroupName()),
                         'content' => $this->_translateHtml(
-                            $tabAttributesBlock->setGroup($group)
-                                ->setGroupAttributes($attributes)
-                                ->toHtml()
+                            $tabAttributesBlock->setGroup($group)->setGroupAttributes($attributes)->toHtml()
                         ),
                         'class' => 'user-defined',
                         'group_code' => $group->getTabGroupCode() ?: self::BASIC_TAB_GROUP_CODE
                     );
 
-                    if ($group->getAttributeGroupCode() === 'recurring-profile') {
+                    if ($group->getAttributeGroupCode() === 'recurring-payment') {
                         $tabData['parent_tab'] = 'advanced-pricing';
                     }
 
@@ -165,12 +188,18 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
 
             /* Don't display website tab for single mode */
             if (!$this->_storeManager->isSingleStoreMode()) {
-                $this->addTab('websites', array(
-                    'label'     => __('Websites'),
-                    'content'   => $this->_translateHtml($this->getLayout()
-                        ->createBlock('Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Websites')->toHtml()),
-                    'group_code' => self::BASIC_TAB_GROUP_CODE,
-                ));
+                $this->addTab(
+                    'websites',
+                    array(
+                        'label' => __('Websites'),
+                        'content' => $this->_translateHtml(
+                            $this->getLayout()->createBlock(
+                                'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Websites'
+                            )->toHtml()
+                        ),
+                        'group_code' => self::BASIC_TAB_GROUP_CODE
+                    )
+                );
             }
 
             if (isset($advancedGroups['advanced-pricing'])) {
@@ -179,78 +208,66 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
             }
 
             if ($this->_moduleManager->isEnabled('Magento_CatalogInventory')) {
-                $this->addTab('advanced-inventory', array(
-                    'label'     => __('Advanced Inventory'),
-                    'content'   => $this->_translateHtml($this->getLayout()
-                        ->createBlock('Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Inventory')->toHtml()),
-                    'group_code' => self::ADVANCED_TAB_GROUP_CODE,
-                ));
+                $this->addTab(
+                    'advanced-inventory',
+                    array(
+                        'label' => __('Advanced Inventory'),
+                        'content' => $this->_translateHtml(
+                            $this->getLayout()->createBlock(
+                                'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Inventory'
+                            )->toHtml()
+                        ),
+                        'group_code' => self::ADVANCED_TAB_GROUP_CODE
+                    )
+                );
             }
 
             /**
              * Do not change this tab id
-             * @see \Magento\Catalog\Block\Adminhtml\Product\Edit\Tabs\Configurable
-             * @see \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tabs
              */
-            if (!$product->isGrouped()) {
-                $this->addTab('customer_options', array(
-                    'label' => __('Custom Options'),
-                    'url'   => $this->getUrl('catalog/*/options', array('_current' => true)),
-                    'class' => 'ajax',
-                    'group_code' => self::ADVANCED_TAB_GROUP_CODE,
-                ));
+            if ($this->getChildBlock('customer_options')) {
+                $this->addTab('customer_options', 'customer_options');
+                $this->getChildBlock('customer_options')->setGroupCode(self::ADVANCED_TAB_GROUP_CODE);
             }
 
-            $this->addTab('related', array(
-                'label'     => __('Related Products'),
-                'url'       => $this->getUrl('catalog/*/related', array('_current' => true)),
-                'class'     => 'ajax',
-                'group_code' => self::ADVANCED_TAB_GROUP_CODE,
-            ));
+            $this->addTab(
+                'related',
+                array(
+                    'label' => __('Related Products'),
+                    'url' => $this->getUrl('catalog/*/related', array('_current' => true)),
+                    'class' => 'ajax',
+                    'group_code' => self::ADVANCED_TAB_GROUP_CODE
+                )
+            );
 
-            $this->addTab('upsell', array(
-                'label'     => __('Up-sells'),
-                'url'       => $this->getUrl('catalog/*/upsell', array('_current' => true)),
-                'class'     => 'ajax',
-                'group_code' => self::ADVANCED_TAB_GROUP_CODE,
-            ));
+            $this->addTab(
+                'upsell',
+                array(
+                    'label' => __('Up-sells'),
+                    'url' => $this->getUrl('catalog/*/upsell', array('_current' => true)),
+                    'class' => 'ajax',
+                    'group_code' => self::ADVANCED_TAB_GROUP_CODE
+                )
+            );
 
-            $this->addTab('crosssell', array(
-                'label'     => __('Cross-sells'),
-                'url'       => $this->getUrl('catalog/*/crosssell', array('_current' => true)),
-                'class'     => 'ajax',
-                'group_code' => self::ADVANCED_TAB_GROUP_CODE,
-            ));
+            $this->addTab(
+                'crosssell',
+                array(
+                    'label' => __('Cross-sells'),
+                    'url' => $this->getUrl('catalog/*/crosssell', array('_current' => true)),
+                    'class' => 'ajax',
+                    'group_code' => self::ADVANCED_TAB_GROUP_CODE
+                )
+            );
 
             if (isset($advancedGroups['design'])) {
                 $this->addTab('design', $advancedGroups['design']);
                 unset($advancedGroups['design']);
             }
 
-            $alertPriceAllow = $this->_storeConfig->getConfig('catalog/productalert/allow_price');
-            $alertStockAllow = $this->_storeConfig->getConfig('catalog/productalert/allow_stock');
-            if (($alertPriceAllow || $alertStockAllow) && !$product->isGrouped()) {
-                $this->addTab('product-alerts', array(
-                    'label'     => __('Product Alerts'),
-                    'content'   => $this->_translateHtml($this->getLayout()
-                        ->createBlock('Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts', 'admin.alerts.products')
-                        ->toHtml()
-                    ),
-                    'group_code' => self::ADVANCED_TAB_GROUP_CODE,
-                ));
-            }
-
-            if ($this->getRequest()->getParam('id')) {
-                if ($this->_catalogData->isModuleEnabled('Magento_Review')) {
-                    if ($this->_authorization->isAllowed('Magento_Review::reviews_all')){
-                        $this->addTab('product-reviews', array(
-                            'label' => __('Product Reviews'),
-                            'url'   => $this->getUrl('catalog/*/reviews', array('_current' => true)),
-                            'class' => 'ajax',
-                            'group_code' => self::ADVANCED_TAB_GROUP_CODE,
-                        ));
-                    }
-                }
+            if ($this->getChildBlock('product-alerts')) {
+                $this->addTab('product-alerts', 'product-alerts');
+                $this->getChildBlock('product-alerts')->setGroupCode(self::ADVANCED_TAB_GROUP_CODE);
             }
 
             if (isset($advancedGroups['autosettings'])) {
@@ -283,7 +300,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
      */
     public function getProduct()
     {
-        if (!($this->getData('product') instanceof \Magento\Catalog\Model\Product)) {
+        if (!$this->getData('product') instanceof \Magento\Catalog\Model\Product) {
             $this->setData('product', $this->_coreRegistry->registry('product'));
         }
         return $this->getData('product');
@@ -302,6 +319,10 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
         return $this->_helperCatalog->getAttributeTabBlock();
     }
 
+    /**
+     * @param string $attributeTabBlock
+     * @return $this
+     */
     public function setAttributeTabBlock($attributeTabBlock)
     {
         $this->_attributeTabBlock = $attributeTabBlock;
@@ -316,7 +337,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
      */
     protected function _translateHtml($html)
     {
-        $this->_translator->processResponseBody($html);
+        $this->_translateInline->processResponseBody($html);
         return $html;
     }
 }

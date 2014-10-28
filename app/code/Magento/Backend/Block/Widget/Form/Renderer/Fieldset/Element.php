@@ -18,34 +18,43 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Widget\Form\Renderer\Fieldset;
+
+use Magento\Framework\Data\Form\Element\AbstractElement;
 
 /**
  * Fieldset element renderer
  *
- * @category   Magento
- * @package    Magento_Backend
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Backend\Block\Widget\Form\Renderer\Fieldset;
-
-class Element extends \Magento\Backend\Block\Template
-    implements \Magento\Data\Form\Element\Renderer\RendererInterface
+class Element extends \Magento\Backend\Block\Template implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {
+    /**
+     * @var AbstractElement
+     */
     protected $_element;
 
+    /**
+     * @var string
+     */
     protected $_template = 'Magento_Backend::widget/form/renderer/fieldset/element.phtml';
 
+    /**
+     * @return AbstractElement
+     */
     public function getElement()
     {
         return $this->_element;
     }
 
-    public function render(\Magento\Data\Form\Element\AbstractElement $element)
+    /**
+     * @param AbstractElement $element
+     * @return string
+     */
+    public function render(AbstractElement $element)
     {
         $this->_element = $element;
         return $this->toHtml();

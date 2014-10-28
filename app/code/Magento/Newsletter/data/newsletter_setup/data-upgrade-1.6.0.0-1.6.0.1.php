@@ -18,26 +18,23 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Newsletter
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/* @var $installer \Magento\Core\Model\Resource\Setup */
+/* @var $installer \Magento\Framework\Module\Setup */
 $installer = $this;
 
 $subscriberTable = $installer->getTable('newsletter_subscriber');
 
-$select = $installer->getConnection()->select()
-    ->from(array('main_table' => $subscriberTable))
-    ->join(
-        array('customer' => $installer->getTable('customer_entity')),
-        'main_table.customer_id = customer.entity_id',
-        array('website_id')
-    )
-    ->where('customer.website_id = 0');
-
-$installer->getConnection()->query(
-    $installer->getConnection()->deleteFromSelect($select, 'main_table')
+$select = $installer->getConnection()->select()->from(
+    array('main_table' => $subscriberTable)
+)->join(
+    array('customer' => $installer->getTable('customer_entity')),
+    'main_table.customer_id = customer.entity_id',
+    array('website_id')
+)->where(
+    'customer.website_id = 0'
 );
+
+$installer->getConnection()->query($installer->getConnection()->deleteFromSelect($select, 'main_table'));

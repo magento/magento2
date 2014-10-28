@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     performance_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -58,7 +56,7 @@ class Testsuite
      */
     protected $_warmUpArguments = array(
         \Magento\TestFramework\Performance\Scenario::ARG_USERS => 1,
-        \Magento\TestFramework\Performance\Scenario::ARG_LOOPS => 2,
+        \Magento\TestFramework\Performance\Scenario::ARG_LOOPS => 2
     );
 
     /**
@@ -85,23 +83,14 @@ class Testsuite
      * @param \Magento\TestFramework\Application $application
      * @param \Magento\TestFramework\Performance\Scenario\HandlerInterface $scenarioHandler
      */
-    public function __construct(\Magento\TestFramework\Performance\Config $config,
+    public function __construct(
+        \Magento\TestFramework\Performance\Config $config,
         \Magento\TestFramework\Application $application,
         \Magento\TestFramework\Performance\Scenario\HandlerInterface $scenarioHandler
     ) {
         $this->_config = $config;
         $this->_application = $application;
         $this->_scenarioHandler = $scenarioHandler;
-    }
-
-    /**
-     * Get test framework application instance
-     *
-     * @return \Magento\TestFramework\Application
-     */
-    public function getApplication()
-    {
-        return $this->_application;
     }
 
     /**
@@ -153,11 +142,10 @@ class Testsuite
      */
     protected function _getScenarioReportFile(\Magento\TestFramework\Performance\Scenario $scenario)
     {
-        $basePath = $this->_config->getReportDir() . '/'
-            . pathinfo($scenario->getFile(), PATHINFO_FILENAME);
+        $basePath = $this->_config->getReportDir() . '/' . pathinfo($scenario->getFile(), PATHINFO_FILENAME);
         $iteration = 1;
         do {
-            $suffix = ($iteration == 1) ? '' : '_' . $iteration;
+            $suffix = $iteration == 1 ? '' : '_' . $iteration;
             $reportFile = $basePath . $suffix . '.jtl';
             $iteration++;
         } while (isset($this->_reportFiles[$reportFile]));

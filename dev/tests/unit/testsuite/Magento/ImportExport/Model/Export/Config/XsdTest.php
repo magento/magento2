@@ -102,15 +102,14 @@ class XsdTest extends \PHPUnit_Framework_TestCase
      */
     public function schemaCorrectlyIdentifiesExportOptionsDataProvider()
     {
-        return include(__DIR__ . '/_files/invalidExportXmlArray.php');
+        return include __DIR__ . '/_files/invalidExportXmlArray.php';
     }
-
 
     /**
      * Data provider with invalid xml array according to schema
      */
     public function schemaCorrectlyIdentifiesInvalidExportMergedXmlDataProvider()
     {
-        return include(__DIR__ . '/_files/invalidExportMergedXmlArray.php');
+        return include __DIR__ . '/_files/invalidExportMergedXmlArray.php';
     }
 }

@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_ImportExport
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -45,41 +42,21 @@ class EntityTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_importConfigMock = $this->getMock('Magento\ImportExport\Model\Import\ConfigInterface');
-        $this->_model = new \Magento\ImportExport\Model\Source\Import\Entity(
-            $this->_importConfigMock
-        );
+        $this->_model = new \Magento\ImportExport\Model\Source\Import\Entity($this->_importConfigMock);
     }
 
     public function testToOptionArray()
     {
         $entities = array(
-            'entity_name_1' => array(
-                'name' => 'entity_name_1',
-                'label' => 'entity_label_1',
-            ),
-            'entity_name_2' => array(
-                'name' => 'entity_name_2',
-                'label' => 'entity_label_2',
-            ),
+            'entity_name_1' => array('name' => 'entity_name_1', 'label' => 'entity_label_1'),
+            'entity_name_2' => array('name' => 'entity_name_2', 'label' => 'entity_label_2')
         );
         $expectedResult = array(
-            array(
-                'label' => __('-- Please Select --'),
-                'value' => '',
-            ),
-            array(
-                'label' => __('entity_label_1'),
-                'value' => 'entity_name_1',
-            ),
-            array(
-                'label' => __('entity_label_2'),
-                'value' => 'entity_name_2',
-            ),
-
+            array('label' => __('-- Please Select --'), 'value' => ''),
+            array('label' => __('entity_label_1'), 'value' => 'entity_name_1'),
+            array('label' => __('entity_label_2'), 'value' => 'entity_name_2')
         );
-        $this->_importConfigMock->expects($this->any())
-            ->method('getEntities')
-            ->will($this->returnValue($entities));
+        $this->_importConfigMock->expects($this->any())->method('getEntities')->will($this->returnValue($entities));
         $this->assertEquals($expectedResult, $this->_model->toOptionArray());
     }
 }

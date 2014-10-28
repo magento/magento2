@@ -18,12 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Tax
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tax\Model\Sales\Pdf;
 
 class Tax extends \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal
@@ -72,7 +69,7 @@ class Tax extends \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal
         $totals = array();
 
         if ($this->_taxConfig->displaySalesFullSummary($store)) {
-           $totals = $this->getFullTaxInfo();
+            $totals = $this->getFullTaxInfo();
         }
 
         $totals = array_merge($totals, parent::getTotalsForDisplay());

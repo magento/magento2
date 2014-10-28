@@ -77,7 +77,8 @@ class MemoryLimit
         list($usage, $leak) = $this->_getUsage();
         $result = array();
 
-        $msg = sprintf("Memory usage (OS):\t%s (%.2F%% of %s reported by PHP",
+        $msg = sprintf(
+            "Memory usage (OS):\t%s (%.2F%% of %s reported by PHP",
             $this->_toMb($usage),
             100 * $usage / ($usage - $leak),
             $this->_toMb($usage - $leak)
@@ -120,14 +121,16 @@ class MemoryLimit
             return null;
         }
         list($usage, $leak) = $this->_getUsage();
-        if ($this->_memCap && ($usage >= $this->_memCap)) {
+        if ($this->_memCap && $usage >= $this->_memCap) {
             throw new \LogicException(
                 "Memory limit of {$this->_toMb($this->_memCap)} ({$this->_memCap} bytes) has been reached."
             );
         }
-        if ($this->_leakCap && ($leak >= $this->_leakCap)) {
-            throw new \LogicException("Estimated memory leak limit of {$this->_toMb($this->_leakCap)}"
-                . " ({$this->_leakCap} bytes) has been reached."
+        if ($this->_leakCap && $leak >= $this->_leakCap) {
+            throw new \LogicException(
+                "Estimated memory leak limit of {$this->_toMb(
+                    $this->_leakCap
+                )}" . " ({$this->_leakCap} bytes) has been reached."
             );
         }
     }

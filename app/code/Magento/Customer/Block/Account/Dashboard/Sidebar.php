@@ -18,33 +18,34 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Customer\Block\Account\Dashboard;
+
+use Magento\Wishlist\Model\Resource\Item\Collection;
+use Magento\Wishlist\Model\Wishlist;
 
 /**
  * Account dashboard sidebar
- *
- * @category   Magento
- * @package    Magento_Customer
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Customer\Block\Account\Dashboard;
-
-class Sidebar extends \Magento\View\Element\Template
+class Sidebar extends \Magento\Framework\View\Element\Template
 {
+    /**
+     * @var int
+     */
     protected $_cartItemsCount;
 
     /**
      * Enter description here...
      *
-     * @var \Magento\Wishlist\Model\Wishlist
+     * @var Wishlist
      */
     protected $_wishlist;
 
+    /**
+     * @var int
+     */
     protected $_compareItems;
 
     /**
@@ -73,21 +74,28 @@ class Sidebar extends \Magento\View\Element\Template
     protected $_itemsCompareFactory;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @var \Magento\Customer\Helper\Session\CurrentCustomer
+     */
+    protected $currentCustomer;
+
+    /**
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
      * @param \Magento\Wishlist\Model\WishlistFactory $wishListFactory
      * @param \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemsCompareFactory
+     * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Sales\Model\QuoteFactory $quoteFactory,
         \Magento\Wishlist\Model\WishlistFactory $wishListFactory,
         \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemsCompareFactory,
+        \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
         array $data = array()
     ) {
         $this->_customerSession = $customerSession;
@@ -96,85 +104,123 @@ class Sidebar extends \Magento\View\Element\Template
         $this->_wishListFactory = $wishListFactory;
         $this->_itemsCompareFactory = $itemsCompareFactory;
         parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
+        $this->currentCustomer = $currentCustomer;
     }
 
-
+    /**
+     * @return string
+     */
     public function getShoppingCartUrl()
     {
         return $this->_urlBuilder->getUrl('checkout/cart');
     }
 
+    /**
+     * @return int
+     */
     public function getCartItemsCount()
     {
-        if( !$this->_cartItemsCount ) {
-            $this->_cartItemsCount = $this->_createQuote()
-                ->setId($this->_checkoutSession->getQuote()->getId())
-                ->getItemsCollection()
-                ->getSize();
+        if (!$this->_cartItemsCount) {
+            $this->_cartItemsCount = $this->_createQuote()->setId(
+                $this->_checkoutSession->getQuote()->getId()
+            )->getItemsCollection()->getSize();
         }
 
         return $this->_cartItemsCount;
     }
 
+    /**
+     * @return Collection
+     */
     public function getWishlist()
     {
-        if( !$this->_wishlist ) {
-            $this->_wishlist = $this->_createWishList()->loadByCustomer($this->_customerSession->getCustomer());
-            $this->_wishlist->getItemCollection()
-                ->addAttributeToSelect('name')
-                ->addAttributeToSelect('price')
-                ->addAttributeToSelect('small_image')
-                ->addAttributeToFilter('store_id', array('in' => $this->_wishlist->getSharedStoreIds()))
-                ->addAttributeToSort('added_at', 'desc')
-                ->setCurPage(1)
-                ->setPageSize(3)
-                ->load();
+        if (!$this->_wishlist) {
+            $this->_wishlist = $this->_createWishList()->loadByCustomerId($this->_customerSession->getId());
+            $this->_wishlist->getItemCollection()->addAttributeToSelect(
+                'name'
+            )->addAttributeToSelect(
+                'price'
+            )->addAttributeToSelect(
+                'small_image'
+            )->addAttributeToFilter(
+                'store_id',
+                array('in' => $this->_wishlist->getSharedStoreIds())
+            )->addAttributeToSort(
+                'added_at',
+                'desc'
+            )->setCurPage(
+                1
+            )->setPageSize(
+                3
+            )->load();
         }
 
         return $this->_wishlist->getItemCollection();
     }
 
+    /**
+     * @return int
+     */
     public function getWishlistCount()
     {
         return $this->getWishlist()->getSize();
     }
 
+    /**
+     * @param Wishlist $wishlistItem
+     * @return string
+     */
     public function getWishlistAddToCartLink($wishlistItem)
     {
         return $this->_urlBuilder->getUrl('wishlist/index/cart', array('item' => $wishlistItem->getId()));
     }
 
+    /**
+     * @return int
+     */
     public function getCompareItems()
     {
-        if( !$this->_compareItems ) {
-            $this->_compareItems =
-                $this->_createProductCompareCollection()->setStoreId($this->_storeManager->getStore()->getId());
-            $this->_compareItems->setCustomerId(
-                $this->_customerSession->getCustomerId()
+        if (!$this->_compareItems) {
+            $this->_compareItems = $this->_createProductCompareCollection()->setStoreId(
+                $this->_storeManager->getStore()->getId()
             );
-            $this->_compareItems
-                ->addAttributeToSelect('name')
-                ->useProductItem()
-                ->load();
+            $this->_compareItems->setCustomerId(
+                $this->currentCustomer->getCustomerId()
+            );
+            $this->_compareItems->setCustomerId($this->_customerSession->getCustomerId());
+            $this->_compareItems->addAttributeToSelect('name')->useProductItem()->load();
         }
         return $this->_compareItems;
     }
 
+    /**
+     * @return string
+     */
     public function getCompareJsObjectName()
     {
         return "dashboardSidebarCompareJsObject";
     }
 
+    /**
+     * @return string
+     */
     public function getCompareRemoveUrlTemplate()
     {
-        return $this->getUrl('catalog/product_compare/remove',array('product'=>'#{id}'));
+        return $this->getUrl('catalog/product_compare/remove', array('product' => '#{id}'));
     }
 
+    /**
+     * @return string
+     */
     public function getCompareAddUrlTemplate()
     {
-        return $this->getUrl('catalog/product_compare/add',array('product'=>'#{id}'));
+        return $this->getUrl('catalog/product_compare/add');
     }
 
+    /**
+     * @return string
+     */
     public function getCompareUrl()
     {
         return $this->getUrl('catalog/product_compare');
@@ -189,7 +235,7 @@ class Sidebar extends \Magento\View\Element\Template
     }
 
     /**
-     * @return \Magento\Wishlist\Model\Wishlist
+     * @return Wishlist
      */
     protected function _createWishList()
     {

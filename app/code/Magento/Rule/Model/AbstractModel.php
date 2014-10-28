@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Rule
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,7 +27,9 @@
  */
 namespace Magento\Rule\Model;
 
-abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
+use Magento\Framework\Model\Exception;
+
+abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * Store rule combine conditions model
@@ -48,7 +48,7 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
     /**
      * Store rule form instance
      *
-     * @var \Magento\Data\Form
+     * @var \Magento\Framework\Data\Form
      */
     protected $_form;
 
@@ -81,49 +81,50 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
     abstract public function getActionsInstance();
 
     /**
-     * @var \Magento\Data\FormFactory
+     * @var \Magento\Framework\Data\FormFactory
      */
     protected $_formFactory;
 
     /**
-     * @var \Magento\Core\Model\LocaleInterface
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
-    protected $_locale;
+    protected $_localeDate;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Data\FormFactory $formFactory
-     * @param \Magento\Core\Model\LocaleInterface $locale
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Data\FormFactory $formFactory
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Data\FormFactory $formFactory,
-        \Magento\Core\Model\LocaleInterface $locale,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Data\FormFactory $formFactory,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_formFactory = $formFactory;
-        $this->_locale = $locale;
+        $this->_localeDate = $localeDate;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
     /**
      * Prepare data before saving
      *
-     * @return \Magento\Rule\Model\AbstractModel
+     * @return $this
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function _beforeSave()
     {
         // Check if discount amount not negative
         if ($this->hasDiscountAmount()) {
             if ((int)$this->getDiscountAmount() < 0) {
-                throw new \Magento\Core\Exception(__('Invalid discount amount.'));
+                throw new \Magento\Framework\Model\Exception(__('Invalid discount amount.'));
             }
         }
 
@@ -169,8 +170,7 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
      * Set rule combine conditions model
      *
      * @param \Magento\Rule\Model\Condition\Combine $conditions
-     *
-     * @return \Magento\Rule\Model\AbstractModel
+     * @return $this
      */
     public function setConditions($conditions)
     {
@@ -208,8 +208,7 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
      * Set rule actions model
      *
      * @param \Magento\Rule\Model\Action\Collection $actions
-     *
-     * @return \Magento\Rule\Model\AbstractModel
+     * @return $this
      */
     public function setActions($actions)
     {
@@ -247,8 +246,7 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
      * Reset rule combine conditions
      *
      * @param null|\Magento\Rule\Model\Condition\Combine $conditions
-     *
-     * @return \Magento\Rule\Model\AbstractModel
+     * @return $this
      */
     protected function _resetConditions($conditions = null)
     {
@@ -265,8 +263,7 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
      * Reset rule actions
      *
      * @param null|\Magento\Rule\Model\Action\Collection $actions
-     *
-     * @return \Magento\Rule\Model\AbstractModel
+     * @return $this
      */
     protected function _resetActions($actions = null)
     {
@@ -282,7 +279,7 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
     /**
      * Rule form getter
      *
-     * @return \Magento\Data\Form
+     * @return \Magento\Framework\Data\Form
      */
     public function getForm()
     {
@@ -296,8 +293,7 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
      * Initialize rule model data from array
      *
      * @param array $data
-     *
-     * @return \Magento\Rule\Model\AbstractModel
+     * @return $this
      */
     public function loadPost(array $data)
     {
@@ -318,7 +314,6 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
      * Convert dates into \Zend_Date.
      *
      * @param array $data
-     *
      * @return array
      */
     protected function _convertFlatToRecursive(array $data)
@@ -329,7 +324,7 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
                 foreach ($value as $id => $data) {
                     $path = explode('--', $id);
                     $node =& $arr;
-                    for ($i = 0, $l = sizeof($path); $i < $l; $i++) {
+                    for ($i = 0,$l = sizeof($path); $i < $l; $i++) {
                         if (!isset($node[$key][$path[$i]])) {
                             $node[$key][$path[$i]] = array();
                         }
@@ -344,9 +339,9 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
                  * Convert dates into \Zend_Date
                  */
                 if (in_array($key, array('from_date', 'to_date')) && $value) {
-                    $value = $this->_locale->date(
+                    $value = $this->_localeDate->date(
                         $value,
-                        \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT,
+                        \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT,
                         null,
                         false
                     );
@@ -361,11 +356,10 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
     /**
      * Validate rule conditions to determine if rule can run
      *
-     * @param \Magento\Object $object
-     *
+     * @param \Magento\Framework\Object $object
      * @return bool
      */
-    public function validate(\Magento\Object $object)
+    public function validate(\Magento\Framework\Object $object)
     {
         return $this->getConditions()->validate($object);
     }
@@ -373,13 +367,12 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
     /**
      * Validate rule data
      *
-     * @param \Magento\Object $object
-     *
-     * @return bool|array - return true if validation passed successfully. Array with errors description otherwise
+     * @param \Magento\Framework\Object $object
+     * @return bool|string[] - return true if validation passed successfully. Array with errors description otherwise
      */
-    public function validateData(\Magento\Object $object)
+    public function validateData(\Magento\Framework\Object $object)
     {
-        $result   = array();
+        $result = array();
         $fromDate = $toDate = null;
 
         if ($object->hasFromDate() && $object->hasToDate()) {
@@ -388,8 +381,8 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
         }
 
         if ($fromDate && $toDate) {
-            $fromDate = new \Zend_Date($fromDate, \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT);
-            $toDate = new \Zend_Date($toDate, \Magento\Stdlib\DateTime::DATE_INTERNAL_FORMAT);
+            $fromDate = new \Magento\Framework\Stdlib\DateTime\Date($fromDate, \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT);
+            $toDate = new \Magento\Framework\Stdlib\DateTime\Date($toDate, \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT);
 
             if ($fromDate->compare($toDate) === 1) {
                 $result[] = __('End Date must follow Start Date.');
@@ -426,8 +419,7 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
      * Set is rule can be deleted flag
      *
      * @param bool $value
-     *
-     * @return \Magento\Rule\Model\AbstractModel
+     * @return $this
      */
     public function setIsDeleteable($value)
     {
@@ -449,8 +441,7 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
      * Set is readonly flag to rule
      *
      * @param bool $value
-     *
-     * @return \Magento\Rule\Model\AbstractModel
+     * @return $this
      */
     public function setIsReadonly($value)
     {
@@ -472,15 +463,11 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
         return $this->_getData('website_ids');
     }
 
-
-
-
     /**
-     * @deprecated since 1.7.0.0
-     *
      * @param string $format
-     *
      * @return string
+     *
+     * @deprecated since 1.7.0.0
      */
     public function asString($format = '')
     {
@@ -488,9 +475,9 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
     }
 
     /**
-     * @deprecated since 1.7.0.0
-     *
      * @return string
+     *
+     * @deprecated since 1.7.0.0
      */
     public function asHtml()
     {
@@ -500,11 +487,10 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
     /**
      * Returns rule as an array for admin interface
      *
-     * @deprecated since 1.7.0.0
-     *
      * @param array $arrAttributes
-     *
      * @return array
+     *
+     * @deprecated since 1.7.0.0
      */
     public function asArray(array $arrAttributes = array())
     {
@@ -514,9 +500,9 @@ abstract class AbstractModel extends \Magento\Core\Model\AbstractModel
     /**
      * Combine website ids to string
      *
-     * @deprecated since 1.7.0.0
+     * @return $this
      *
-     * @return \Magento\Rule\Model\AbstractModel
+     * @deprecated since 1.7.0.0
      */
     protected function _prepareWebsiteIds()
     {

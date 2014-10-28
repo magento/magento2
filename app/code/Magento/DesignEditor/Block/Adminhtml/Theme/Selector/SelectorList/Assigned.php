@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_DesignEditor
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,8 +27,7 @@
  */
 namespace Magento\DesignEditor\Block\Adminhtml\Theme\Selector\SelectorList;
 
-class Assigned
-    extends \Magento\DesignEditor\Block\Adminhtml\Theme\Selector\SelectorList\AbstractSelectorList
+class Assigned extends \Magento\DesignEditor\Block\Adminhtml\Theme\Selector\SelectorList\AbstractSelectorList
 {
     /**
      * Get list title
@@ -46,7 +43,7 @@ class Assigned
      * Add theme buttons
      *
      * @param \Magento\DesignEditor\Block\Adminhtml\Theme $themeBlock
-     * @return \Magento\DesignEditor\Block\Adminhtml\Theme\Selector\SelectorList\Assigned
+     * @return $this
      */
     protected function _addThemeButtons($themeBlock)
     {

@@ -18,20 +18,17 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_DesignEditor
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Tabs;
 
 /**
  * Block that renders tabs
  *
  * @method bool getIsActive()
  */
-namespace Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Tabs;
-
-abstract class AbstractTabs extends \Magento\View\Element\Template
+abstract class AbstractTabs extends \Magento\Framework\View\Element\Template
 {
     /**
      * Alias of tab handle block in layout
@@ -44,12 +41,12 @@ abstract class AbstractTabs extends \Magento\View\Element\Template
     const TAB_BODY_BLOCK_ALIAS = 'tab_body';
 
     /**
-     * Tab HTML identifier
+     * @var string Tab HTML identifier
      */
     protected $_htmlId;
 
     /**
-     * Tab HTML title
+     * @var string Tab HTML title
      */
     protected $_title;
 
@@ -76,7 +73,7 @@ abstract class AbstractTabs extends \Magento\View\Element\Template
     /**
      * Get tabs html
      *
-     * @return array
+     * @return string[]
      */
     public function getTabContents()
     {
@@ -84,10 +81,13 @@ abstract class AbstractTabs extends \Magento\View\Element\Template
         /** @var $tabBodyBlock \Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Tabs\Body */
         $tabBodyBlock = $this->getChildBlock(self::TAB_BODY_BLOCK_ALIAS);
         foreach ($this->getTabs() as $tab) {
-            $contents[] = $tabBodyBlock->setContentBlock($tab['content_block'])
-                ->setIsActive($tab['is_active'])
-                ->setTabId($tab['id'])
-                ->toHtml();
+            $contents[] = $tabBodyBlock->setContentBlock(
+                $tab['content_block']
+            )->setIsActive(
+                $tab['is_active']
+            )->setTabId(
+                $tab['id']
+            )->toHtml();
         }
         return $contents;
     }
@@ -95,7 +95,7 @@ abstract class AbstractTabs extends \Magento\View\Element\Template
     /**
      * Get tabs handles
      *
-     * @return array
+     * @return string[]
      */
     public function getTabHandles()
     {
@@ -104,10 +104,13 @@ abstract class AbstractTabs extends \Magento\View\Element\Template
         $handles = array();
         foreach ($this->getTabs() as $tab) {
             $href = '#' . $tab['id'];
-            $handles[] = $tabHandleBlock->setIsActive($tab['is_active'])
-                ->setHref($href)
-                ->setTitle($tab['title'])
-                ->toHtml();
+            $handles[] = $tabHandleBlock->setIsActive(
+                $tab['is_active']
+            )->setHref(
+                $href
+            )->setTitle(
+                $tab['title']
+            )->toHtml();
         }
 
         return $handles;

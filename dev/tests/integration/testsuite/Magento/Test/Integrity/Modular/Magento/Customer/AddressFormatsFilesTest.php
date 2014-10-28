@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Integrity\Modular\Magento\Customer;
 
 class AddressFormatsFilesTest extends \PHPUnit_Framework_TestCase
@@ -34,8 +33,9 @@ class AddressFormatsFilesTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         /** @var \Magento\Customer\Model\Address\Config\SchemaLocator $schemaLocator */
-        $schemaLocator = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Customer\Model\Address\Config\SchemaLocator');
+        $schemaLocator = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Customer\Model\Address\Config\SchemaLocator'
+        );
         $this->_schemaFile = $schemaLocator->getSchema();
     }
 
@@ -45,7 +45,7 @@ class AddressFormatsFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function testFileFormat($file)
     {
-        $dom = new \Magento\Config\Dom(file_get_contents($file));
+        $dom = new \Magento\Framework\Config\Dom(file_get_contents($file));
         $result = $dom->validate($this->_schemaFile, $errors);
         $this->assertTrue($result, print_r($errors, true));
     }
@@ -55,7 +55,8 @@ class AddressFormatsFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function fileFormatDataProvider()
     {
-        return
-            \Magento\TestFramework\Utility\Files::init()->getConfigFiles('{*/address_formats.xml,address_formats.xml}');
+        return \Magento\TestFramework\Utility\Files::init()->getConfigFiles(
+            '{*/address_formats.xml,address_formats.xml}'
+        );
     }
 }

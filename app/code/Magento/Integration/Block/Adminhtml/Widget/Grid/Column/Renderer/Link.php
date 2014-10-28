@@ -23,16 +23,14 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer;
 
 use Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer;
-use Magento\Customer\Block\Account\AuthorizationLink;
-use Magento\Object;
+use Magento\Framework\Object;
 
 class Link extends AbstractRenderer
 {
-    /** @var \Magento\Object */
+    /** @var \Magento\Framework\Object */
     protected $_row;
 
     /**
@@ -57,7 +55,7 @@ class Link extends AbstractRenderer
     /**
      * Render grid row
      *
-     * @param \Magento\Object $row
+     * @param \Magento\Framework\Object $row
      * @return string
      */
     public function render(Object $row)
@@ -116,9 +114,13 @@ class Link extends AbstractRenderer
      */
     public function getCaption()
     {
-        return $this->isDisabled()
-            ? $this->getColumn()->getDisabledCaption() ?: $this->getColumn()->getCaption()
-            : $this->getColumn()->getCaption();
+        return $this->isDisabled() ? $this
+            ->getColumn()
+            ->getDisabledCaption() ?: $this
+            ->getColumn()
+            ->getCaption() : $this
+            ->getColumn()
+            ->getCaption();
     }
 
     /**
@@ -128,7 +130,7 @@ class Link extends AbstractRenderer
      */
     protected function _getAttributesHtml()
     {
-        $html = [];
+        $html = array();
 
         foreach ($this->_getAttributes() as $key => $value) {
             if ($value === null || $value == '') {
@@ -149,7 +151,7 @@ class Link extends AbstractRenderer
     {
         /** @var \Magento\Core\Helper\Data $helper */
         $helper = $this->_coreHelper;
-        $attributes = ['title' => $this->getCaption()];
+        $attributes = array('title' => $this->getCaption());
 
         foreach ($this->_getDataAttributes() as $key => $attr) {
             $attributes['data-' . $key] = is_scalar($attr) ? $attr : $helper->jsonEncode($attr);
@@ -167,17 +169,17 @@ class Link extends AbstractRenderer
      */
     protected function _getDataAttributes()
     {
-        return [];
+        return array();
     }
 
     /**
      * Render URL for current item.
      *
-     * @param \Magento\Object $row
+     * @param \Magento\Framework\Object $row
      * @return string
      */
     protected function _getUrl(Object $row)
     {
-        return $this->isDisabled($row) ? '#' : $this->getUrl($this->getUrlPattern(), ['id' => $row->getId()]);
+        return $this->isDisabled($row) ? '#' : $this->getUrl($this->getUrlPattern(), array('id' => $row->getId()));
     }
 }

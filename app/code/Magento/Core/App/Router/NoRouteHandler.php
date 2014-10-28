@@ -23,20 +23,19 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Core\App\Router;
 
-class NoRouteHandler implements \Magento\App\Router\NoRouteHandlerInterface
+class NoRouteHandler implements \Magento\Framework\App\Router\NoRouteHandlerInterface
 {
     /**
-     * @var \Magento\Core\Model\Config
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_config;
 
     /**
-     * @param \Magento\Core\Model\Config $config
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      */
-    public function __construct(\Magento\Core\Model\Config $config)
+    public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $config)
     {
         $this->_config = $config;
     }
@@ -44,11 +43,11 @@ class NoRouteHandler implements \Magento\App\Router\NoRouteHandlerInterface
     /**
      * Check and process no route request
      *
-     * @param \Magento\App\RequestInterface $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @return bool
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function process(\Magento\App\RequestInterface $request)
+    public function process(\Magento\Framework\App\RequestInterface $request)
     {
         $noRoutePath = $this->_config->getValue('web/default/no_route', 'default');
 
@@ -58,13 +57,11 @@ class NoRouteHandler implements \Magento\App\Router\NoRouteHandlerInterface
             $noRoute = array();
         }
 
-        $moduleName     = isset($noRoute[0]) ? $noRoute[0] : 'core';
-        $controllerName = isset($noRoute[1]) ? $noRoute[1] : 'index';
-        $actionName     = isset($noRoute[2]) ? $noRoute[2] : 'index';
+        $moduleName = isset($noRoute[0]) ? $noRoute[0] : 'core';
+        $actionPath = isset($noRoute[1]) ? $noRoute[1] : 'index';
+        $actionName = isset($noRoute[2]) ? $noRoute[2] : 'index';
 
-        $request->setModuleName($moduleName)
-            ->setControllerName($controllerName)
-            ->setActionName($actionName);
+        $request->setModuleName($moduleName)->setControllerName($actionPath)->setActionName($actionName);
 
         return true;
     }

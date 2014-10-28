@@ -18,23 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_CatalogInventory
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\CatalogInventory\Model\Source;
 
 /**
  * CatalogInventory Stock source model
- *
- * @category   Magento
- * @package    Magento_CatalogInventory
- * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\CatalogInventory\Model\Source;
-
-class Stock implements \Magento\Core\Model\Option\ArrayInterface
+class Stock implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * Retrieve option array
@@ -44,14 +37,8 @@ class Stock implements \Magento\Core\Model\Option\ArrayInterface
     public function toOptionArray()
     {
         return array(
-            array(
-                'value' => \Magento\CatalogInventory\Model\Stock::STOCK_IN_STOCK,
-                'label' => __('In Stock')
-            ),
-            array(
-                'value' => \Magento\CatalogInventory\Model\Stock::STOCK_OUT_OF_STOCK,
-                'label' => __('Out of Stock')
-            ),
+            array('value' => \Magento\CatalogInventory\Model\Stock::STOCK_IN_STOCK, 'label' => __('In Stock')),
+            array('value' => \Magento\CatalogInventory\Model\Stock::STOCK_OUT_OF_STOCK, 'label' => __('Out of Stock'))
         );
     }
 }

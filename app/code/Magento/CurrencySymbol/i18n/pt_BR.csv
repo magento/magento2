@@ -1,10 +1,20 @@
-"Custom currency symbols were applied successfully.","Os símbolos de moeda personalizados foram aplicados com sucesso."
-"Manage Currency","Gerenciar moeda"
+Reset,Reset
+System,Sistema
+Import,Import
+"Save Currency Rates","Save Currency Rates"
 "Manage Currency Rates","Gerenciar Taxas de Câmbio"
-"Rates","Valores"
+"Import Service","Import Service"
 "Save Currency Symbols","Salvar símbolos de moeda"
-"Symbols","Símbolos"
-"System","Sistema"
-"Use Default","Utilizar padrão"
+"Currency Symbols","Currency Symbols"
 "Use Standard","Usar padrão"
-"Use Website","Usar Website"
+"Currency Rates","Currency Rates"
+"Please specify a correct Import Service.","Please specify a correct Import Service."
+"We can't initialize the import model.","We can't initialize the import model."
+"All possible rates were fetched, please click on ""Save"" to apply","All possible rates were fetched, please click on ""Save"" to apply"
+"All rates were fetched, please click on ""Save"" to apply","All rates were fetched, please click on ""Save"" to apply"
+"Please correct the input data for %1 => %2 rate","Please correct the input data for %1 => %2 rate"
+"All valid rates have been saved.","All valid rates have been saved."
+"The custom currency symbols were applied.","The custom currency symbols were applied."
+Currency,Currency
+Symbol,Symbol
+"Old rate:","Old rate:"

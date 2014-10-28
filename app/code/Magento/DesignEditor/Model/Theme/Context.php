@@ -18,17 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_DesignEditor
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\DesignEditor\Model\Theme;
+
+use Magento\Framework\Model\Exception as CoreException;
 
 /**
  * Design editor theme context
  */
-namespace Magento\DesignEditor\Model\Theme;
-
 class Context
 {
     /**
@@ -68,7 +67,7 @@ class Context
     /**
      * Reset checked theme
      *
-     * @return \Magento\DesignEditor\Model\State
+     * @return $this
      */
     public function reset()
     {
@@ -81,16 +80,16 @@ class Context
      *
      * @param int $themeId
      * @return $this
-     * @throws \Magento\Core\Exception
+     * @throws CoreException
      */
     public function setEditableThemeById($themeId)
     {
         $this->_theme = $this->_themeFactory->create();
         if (!$this->_theme->load($themeId)->getId()) {
-            throw new \Magento\Core\Exception(__('We can\'t find theme "%1".', $themeId));
+            throw new CoreException(__('We can\'t find theme "%1".', $themeId));
         }
-        if ($this->_theme->getType() === \Magento\View\Design\ThemeInterface::TYPE_STAGING) {
-            throw new \Magento\Core\Exception(__('Wrong theme type set as editable'));
+        if ($this->_theme->getType() === \Magento\Framework\View\Design\ThemeInterface::TYPE_STAGING) {
+            throw new CoreException(__('Wrong theme type set as editable'));
         }
         return $this;
     }
@@ -99,12 +98,12 @@ class Context
      * Get current editable theme
      *
      * @return \Magento\Core\Model\Theme
-     * @throws \Magento\Core\Exception
+     * @throws CoreException
      */
     public function getEditableTheme()
     {
         if (null === $this->_theme) {
-            throw new \Magento\Core\Exception(__('Theme has not been set'));
+            throw new CoreException(__('Theme has not been set'));
         }
         return $this->_theme;
     }
@@ -113,19 +112,18 @@ class Context
      * Get staging theme
      *
      * @return \Magento\Core\Model\Theme
-     * @throws \Magento\Core\Exception
+     * @throws CoreException
      */
     public function getStagingTheme()
     {
         if (null === $this->_stagingTheme) {
             $editableTheme = $this->getEditableTheme();
             if (!$editableTheme->isVirtual()) {
-                throw new \Magento\Core\Exception(
-                    __('Theme "%1" is not editable.', $editableTheme->getThemeTitle())
-                );
+                throw new CoreException(__('Theme "%1" is not editable.', $editableTheme->getThemeTitle()));
             }
-            $this->_stagingTheme = $editableTheme->getDomainModel(\Magento\View\Design\ThemeInterface::TYPE_VIRTUAL)
-                ->getStagingTheme();
+            $this->_stagingTheme = $editableTheme->getDomainModel(
+                \Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL
+            )->getStagingTheme();
         }
         return $this->_stagingTheme;
     }

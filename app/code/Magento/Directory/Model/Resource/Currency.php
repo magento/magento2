@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Directory
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,7 +27,7 @@
  */
 namespace Magento\Directory\Model\Resource;
 
-class Currency extends \Magento\Core\Model\Resource\Db\AbstractDb
+class Currency extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Currency rate table
@@ -48,6 +46,7 @@ class Currency extends \Magento\Core\Model\Resource\Db\AbstractDb
     /**
      * Define main and currency rate tables
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -78,14 +77,15 @@ class Currency extends \Magento\Core\Model\Resource\Db\AbstractDb
 
         if (!isset(self::$_rateCache[$currencyFrom][$currencyTo])) {
             $read = $this->_getReadAdapter();
-            $bind = array(
-                ':currency_from' => strtoupper($currencyFrom),
-                ':currency_to'   => strtoupper($currencyTo)
+            $bind = array(':currency_from' => strtoupper($currencyFrom), ':currency_to' => strtoupper($currencyTo));
+            $select = $read->select()->from(
+                $this->_currencyRateTable,
+                'rate'
+            )->where(
+                'currency_from = :currency_from'
+            )->where(
+                'currency_to = :currency_to'
             );
-            $select = $read->select()
-                ->from($this->_currencyRateTable, 'rate')
-                ->where('currency_from = :currency_from')
-                ->where('currency_to = :currency_to');
 
             self::$_rateCache[$currencyFrom][$currencyTo] = $read->fetchOne($select, $bind);
         }
@@ -116,21 +116,26 @@ class Currency extends \Magento\Core\Model\Resource\Db\AbstractDb
 
         if (!isset(self::$_rateCache[$currencyFrom][$currencyTo])) {
             $adapter = $this->_getReadAdapter();
-            $bind    = array(
-                ':currency_from' => strtoupper($currencyFrom),
-                ':currency_to'   => strtoupper($currencyTo)
+            $bind = array(':currency_from' => strtoupper($currencyFrom), ':currency_to' => strtoupper($currencyTo));
+            $select = $adapter->select()->from(
+                $this->_currencyRateTable,
+                'rate'
+            )->where(
+                'currency_from = :currency_from'
+            )->where(
+                'currency_to = :currency_to'
             );
-            $select  = $adapter->select()
-                ->from($this->_currencyRateTable, 'rate')
-                ->where('currency_from = :currency_from')
-                ->where('currency_to = :currency_to');
 
-            $rate    = $adapter->fetchOne($select, $bind);
+            $rate = $adapter->fetchOne($select, $bind);
             if ($rate === false) {
-                $select = $adapter->select()
-                    ->from($this->_currencyRateTable, new \Zend_Db_Expr('1/rate'))
-                    ->where('currency_to = :currency_from')
-                    ->where('currency_from = :currency_to');
+                $select = $adapter->select()->from(
+                    $this->_currencyRateTable,
+                    new \Zend_Db_Expr('1/rate')
+                )->where(
+                    'currency_to = :currency_from'
+                )->where(
+                    'currency_from = :currency_to'
+                );
                 $rate = $adapter->fetchOne($select, $bind);
             }
             self::$_rateCache[$currencyFrom][$currencyTo] = $rate;
@@ -143,31 +148,28 @@ class Currency extends \Magento\Core\Model\Resource\Db\AbstractDb
      * Saving currency rates
      *
      * @param array $rates
-     * @throws \Magento\Core\Exception
+     * @return void
+     * @throws \Magento\Framework\Model\Exception
      */
     public function saveRates($rates)
     {
         if (is_array($rates) && sizeof($rates) > 0) {
             $adapter = $this->_getWriteAdapter();
-            $data    = array();
+            $data = array();
             foreach ($rates as $currencyCode => $rate) {
                 foreach ($rate as $currencyTo => $value) {
                     $value = abs($value);
                     if ($value == 0) {
                         continue;
                     }
-                    $data[] = array(
-                        'currency_from' => $currencyCode,
-                        'currency_to'   => $currencyTo,
-                        'rate'          => $value,
-                    );
+                    $data[] = array('currency_from' => $currencyCode, 'currency_to' => $currencyTo, 'rate' => $value);
                 }
             }
             if ($data) {
                 $adapter->insertOnDuplicate($this->_currencyRateTable, $data, array('rate'));
             }
         } else {
-            throw new \Magento\Core\Exception(__('Please correct the rates received'));
+            throw new \Magento\Framework\Model\Exception(__('Please correct the rates received'));
         }
     }
 
@@ -176,18 +178,15 @@ class Currency extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Directory\Model\Currency $model
      * @param string $path
-     *
      * @return array
      */
     public function getConfigCurrencies($model, $path)
     {
         $adapter = $this->_getReadAdapter();
-        $bind    = array(':config_path' => $path);
-        $select  = $adapter->select()
-            ->from($this->getTable('core_config_data'))
-            ->where('path = :config_path');
-        $result  = array();
-        $rowSet  = $adapter->fetchAll($select, $bind);
+        $bind = array(':config_path' => $path);
+        $select = $adapter->select()->from($this->getTable('core_config_data'))->where('path = :config_path');
+        $result = array();
+        $rowSet = $adapter->fetchAll($select, $bind);
         foreach ($rowSet as $row) {
             $result = array_merge($result, explode(',', $row['value']));
         }
@@ -201,7 +200,6 @@ class Currency extends \Magento\Core\Model\Resource\Db\AbstractDb
      *
      * @param string|array $currency
      * @param array $toCurrencies
-     *
      * @return array
      */
     public function getCurrencyRates($currency, $toCurrencies = null)
@@ -228,15 +226,18 @@ class Currency extends \Magento\Core\Model\Resource\Db\AbstractDb
     protected function _getRatesByCode($code, $toCurrencies = null)
     {
         $adapter = $this->_getReadAdapter();
-        $bind    = array(
-            ':currency_from' => $code
+        $bind = array(':currency_from' => $code);
+        $select = $adapter->select()->from(
+            $this->getTable('directory_currency_rate'),
+            array('currency_to', 'rate')
+        )->where(
+            'currency_from = :currency_from'
+        )->where(
+            'currency_to IN(?)',
+            $toCurrencies
         );
-        $select  = $adapter->select()
-            ->from($this->getTable('directory_currency_rate'), array('currency_to', 'rate'))
-            ->where('currency_from = :currency_from')
-            ->where('currency_to IN(?)', $toCurrencies);
-        $rowSet  = $adapter->fetchAll($select, $bind);
-        $result  = array();
+        $rowSet = $adapter->fetchAll($select, $bind);
+        $result = array();
 
         foreach ($rowSet as $row) {
             $result[$row['currency_to']] = $row['rate'];

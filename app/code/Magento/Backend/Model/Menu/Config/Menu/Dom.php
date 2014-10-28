@@ -18,26 +18,22 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Model\Menu\Config\Menu;
 
 /**
  * Menu configuration files handler
  */
-namespace Magento\Backend\Model\Menu\Config\Menu;
-
-class Dom extends \Magento\Config\Dom
+class Dom extends \Magento\Framework\Config\Dom
 {
-
     /**
      * Getter for node by path
      *
      * @param string $nodePath
-     * @throws \Magento\Exception an exception is possible if original document contains multiple fixed nodes
-     * @return \DOMElement | null
+     * @return \DOMElement|null
+     * @throws \Magento\Framework\Exception an exception is possible if original document contains multiple fixed nodes
      */
     protected function _getMatchedNode($nodePath)
     {

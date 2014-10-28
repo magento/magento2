@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento
- * @subpackage  static_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\TestFramework\Inspection;
 
 class WordsFinderTest extends \PHPUnit_Framework_TestCase
@@ -44,26 +40,11 @@ class WordsFinderTest extends \PHPUnit_Framework_TestCase
     {
         $fixturePath = __DIR__ . '/_files/';
         return array(
-            'non-existing config file' => array(
-                $fixturePath . 'non-existing.xml',
-                $fixturePath
-            ),
-            'non-existing base dir' => array(
-                $fixturePath . 'config.xml',
-                $fixturePath . 'non-existing-dir'
-            ),
-            'broken config' => array(
-                $fixturePath . 'broken_config.xml',
-                $fixturePath
-            ),
-            'empty words config' => array(
-                $fixturePath . 'empty_words_config.xml',
-                $fixturePath
-            ),
-            'empty whitelisted path' => array(
-                $fixturePath . 'empty_whitelisted_path.xml',
-                $fixturePath
-            ),
+            'non-existing config file' => array($fixturePath . 'non-existing.xml', $fixturePath),
+            'non-existing base dir' => array($fixturePath . 'config.xml', $fixturePath . 'non-existing-dir'),
+            'broken config' => array($fixturePath . 'broken_config.xml', $fixturePath),
+            'empty words config' => array($fixturePath . 'empty_words_config.xml', $fixturePath),
+            'empty whitelisted path' => array($fixturePath . 'empty_whitelisted_path.xml', $fixturePath)
         );
     }
 
@@ -75,8 +56,10 @@ class WordsFinderTest extends \PHPUnit_Framework_TestCase
      */
     public function testFindWords($configFiles, $file, $expected)
     {
-        $wordsFinder = new \Magento\TestFramework\Inspection\WordsFinder($configFiles,
-            __DIR__ . '/_files/words_finder');
+        $wordsFinder = new \Magento\TestFramework\Inspection\WordsFinder(
+            $configFiles,
+            __DIR__ . '/_files/words_finder'
+        );
         $actual = $wordsFinder->findWords($file);
         $this->assertEquals($expected, $actual);
     }
@@ -90,21 +73,9 @@ class WordsFinderTest extends \PHPUnit_Framework_TestCase
         $additionalConfig = __DIR__ . '/_files/config_additional.xml';
         $basePath = __DIR__ . '/_files/words_finder/';
         return array(
-            'usual file' => array(
-                $mainConfig,
-                $basePath . 'buffy.php',
-                array('demon', 'vampire'),
-            ),
-            'whitelisted file' => array(
-                $mainConfig,
-                $basePath . 'twilight/eclipse.php',
-                array(),
-            ),
-            'partially whitelisted file' => array(
-                $mainConfig,
-                $basePath . 'twilight/newmoon.php',
-                array('demon')
-            ),
+            'usual file' => array($mainConfig, $basePath . 'buffy.php', array('demon', 'vampire')),
+            'whitelisted file' => array($mainConfig, $basePath . 'twilight/eclipse.php', array()),
+            'partially whitelisted file' => array($mainConfig, $basePath . 'twilight/newmoon.php', array('demon')),
             'filename with bad word' => array(
                 $mainConfig,
                 $basePath . 'interview_with_the_vampire.php',
@@ -116,18 +87,12 @@ class WordsFinderTest extends \PHPUnit_Framework_TestCase
                 array('vampire')
             ),
             'words in multiple configs' => array(
-                array(
-                    $mainConfig,
-                    $additionalConfig,
-                ),
+                array($mainConfig, $additionalConfig),
                 $basePath . 'buffy.php',
                 array('demon', 'vampire', 'darkness')
             ),
             'whitelisted paths in multiple configs' => array(
-                array(
-                    $mainConfig,
-                    $additionalConfig,
-                ),
+                array($mainConfig, $additionalConfig),
                 $basePath . 'twilight/newmoon.php',
                 array('demon')
             ),

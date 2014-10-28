@@ -18,31 +18,27 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 
 class WeightTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Data\FormFactory
+     * @var \Magento\Framework\Data\FormFactory
      */
     protected $_formFactory;
 
     protected function setUp()
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_formFactory = $this->_objectManager->create('Magento\Data\FormFactory');
+        $this->_formFactory = $this->_objectManager->create('Magento\Framework\Data\FormFactory');
     }
 
     /**
@@ -60,8 +56,11 @@ class WeightTest extends \PHPUnit_Framework_TestCase
         $form->setDataObject($currentProduct);
         $block->setForm($form);
 
-        $this->assertContains('checked="checked"', $block->getElementHtml(),
-            'Is Virtual checkbox is not selected for virtual products');
+        $this->assertContains(
+            'checked="checked"',
+            $block->getElementHtml(),
+            'Is Virtual checkbox is not selected for virtual products'
+        );
     }
 
     /**
@@ -71,7 +70,7 @@ class WeightTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array('Magento\Catalog\Model\Product\Type\Virtual'),
-            array('Magento\Downloadable\Model\Product\Type'),
+            array('Magento\Downloadable\Model\Product\Type')
         );
     }
 
@@ -91,8 +90,11 @@ class WeightTest extends \PHPUnit_Framework_TestCase
         $form->setDataObject($currentProduct);
         $block->setForm($form);
 
-        $this->assertNotContains('checked="checked"', $block->getElementHtml(),
-            'Is Virtual checkbox is selected for physical products');
+        $this->assertNotContains(
+            'checked="checked"',
+            $block->getElementHtml(),
+            'Is Virtual checkbox is selected for physical products'
+        );
     }
 
     /**
@@ -100,9 +102,6 @@ class WeightTest extends \PHPUnit_Framework_TestCase
      */
     public static function physicalTypesDataProvider()
     {
-        return array(
-            array('Magento\Catalog\Model\Product\Type\Simple'),
-            array('Magento\Bundle\Model\Product\Type'),
-        );
+        return array(array('Magento\Catalog\Model\Product\Type\Simple'), array('Magento\Bundle\Model\Product\Type'));
     }
 }

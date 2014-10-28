@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Tools\I18n\Code;
 
 use Magento\Tools\I18n\Code\Context;
@@ -31,12 +30,12 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Tools\I18n\Code\Context
      */
-    protected $_context;
+    protected $context;
 
     protected function setUp()
     {
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_context = $objectManagerHelper->getObject('Magento\Tools\I18n\Code\Context');
+        $this->context = $objectManagerHelper->getObject('Magento\Tools\I18n\Code\Context');
     }
 
     /**
@@ -46,7 +45,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetContextByPath($context, $path)
     {
-        $this->assertEquals($context, $this->_context->getContextByPath($path));
+        $this->assertEquals($context, $this->context->getContextByPath($path));
     }
 
     /**
@@ -56,8 +55,8 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array(array(Context::CONTEXT_TYPE_MODULE, 'Magento_Module'), '/app/code/Magento/Module/Block/Test.php'),
-            array(array(Context::CONTEXT_TYPE_THEME, 'theme/test.phtml'), '/app/design/theme/test.phtml'),
-            array(array(Context::CONTEXT_TYPE_PUB, 'pub/lib/module/test.phtml'), '/pub/lib/module/test.phtml'),
+            array(array(Context::CONTEXT_TYPE_THEME, 'area/theme/test.phtml'), '/app/design/area/theme/test.phtml'),
+            array(array(Context::CONTEXT_TYPE_LIB, 'lib/web/module/test.phtml'), '/lib/web/module/test.phtml'),
         );
     }
 
@@ -67,7 +66,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetContextByPathWithInvalidPath()
     {
-        $this->_context->getContextByPath('invalid_path');
+        $this->context->getContextByPath('invalid_path');
     }
 
     /**
@@ -77,8 +76,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
      */
     public function testBuildPathToLocaleDirectoryByContext($path, $context)
     {
-        $this->assertEquals($path,
-            $this->_context->buildPathToLocaleDirectoryByContext($context[0], $context[1]));
+        $this->assertEquals($path, $this->context->buildPathToLocaleDirectoryByContext($context[0], $context[1]));
     }
 
     /**
@@ -89,7 +87,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
         return array(
             array('app/code/Magento/Module/i18n/', array(Context::CONTEXT_TYPE_MODULE, 'Magento_Module')),
             array('app/design/theme/test.phtml/i18n/', array(Context::CONTEXT_TYPE_THEME, 'theme/test.phtml')),
-            array('pub/lib/i18n/', array(Context::CONTEXT_TYPE_PUB, 'pub/lib/module/test.phtml')),
+            array('lib/web/i18n/', array(Context::CONTEXT_TYPE_LIB, 'lib/web/module/test.phtml')),
         );
     }
 
@@ -99,6 +97,6 @@ class ContextTest extends \PHPUnit_Framework_TestCase
      */
     public function testBuildPathToLocaleDirectoryByContextWithInvalidType()
     {
-        $this->_context->buildPathToLocaleDirectoryByContext('invalid_type', 'Magento_Module');
+        $this->context->buildPathToLocaleDirectoryByContext('invalid_type', 'Magento_Module');
     }
 }

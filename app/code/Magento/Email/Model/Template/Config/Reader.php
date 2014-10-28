@@ -25,25 +25,36 @@
  */
 namespace Magento\Email\Model\Template\Config;
 
-class Reader extends \Magento\Config\Reader\Filesystem
+use Magento\Framework\Config\FileResolverInterface;
+use Magento\Framework\Config\ValidationStateInterface;
+
+class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**
      * List of id attributes for merge
      *
      * @var array
      */
-    protected $_idAttributes =  array(
-        '/config/template' => 'id',
-    );
+    protected $_idAttributes = array('/config/template' => 'id');
 
+    /**
+     * @param FileResolverInterface $fileResolver
+     * @param Converter $converter
+     * @param SchemaLocator $schemaLocator
+     * @param ValidationStateInterface $validationState
+     * @param string $fileName
+     * @param array $idAttributes
+     * @param string $domDocumentClass
+     * @param string $defaultScope
+     */
     public function __construct(
-        \Magento\Config\FileResolverInterface $fileResolver,
-        \Magento\Email\Model\Template\Config\Converter $converter,
-        \Magento\Email\Model\Template\Config\SchemaLocator $schemaLocator,
-        \Magento\Config\ValidationStateInterface $validationState,
+        FileResolverInterface $fileResolver,
+        Converter $converter,
+        SchemaLocator $schemaLocator,
+        ValidationStateInterface $validationState,
         $fileName = 'email_templates.xml',
         $idAttributes = array(),
-        $domDocumentClass = 'Magento\Config\Dom',
+        $domDocumentClass = 'Magento\Framework\Config\Dom',
         $defaultScope = 'global'
     ) {
         parent::__construct(

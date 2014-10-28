@@ -18,21 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Checkout
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Checkout\Block\Cart;
 
 /**
  * Cart crosssell list
  *
- * @category   Magento
- * @package    Magento_Checkout
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Checkout\Block\Cart;
-
 class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
 {
     /**
@@ -63,61 +58,40 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
     protected $_productLinkFactory;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Catalog\Model\Config $catalogConfig
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Math\Random $mathRandom
-     * @param \Magento\Checkout\Helper\Cart $cartHelper
-     * @param \Magento\Wishlist\Helper\Data $wishlistHelper
-     * @param \Magento\Catalog\Helper\Product\Compare $compareProduct
-     * @param \Magento\Theme\Helper\Layout $layoutHelper
-     * @param \Magento\Catalog\Helper\Image $imageHelper
+     * @var \Magento\Sales\Model\Quote\Item\RelatedProducts
+     */
+    protected $_itemRelationsList;
+
+    /**
+     * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
      * @param \Magento\CatalogInventory\Model\Stock $stock
      * @param \Magento\Catalog\Model\Product\LinkFactory $productLinkFactory
+     * @param \Magento\Sales\Model\Quote\Item\RelatedProducts $itemRelationsList
      * @param array $data
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Catalog\Model\Config $catalogConfig,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Tax\Helper\Data $taxData,
-        \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Math\Random $mathRandom,
-        \Magento\Checkout\Helper\Cart $cartHelper,
-        \Magento\Wishlist\Helper\Data $wishlistHelper,
-        \Magento\Catalog\Helper\Product\Compare $compareProduct,
-        \Magento\Theme\Helper\Layout $layoutHelper,
-        \Magento\Catalog\Helper\Image $imageHelper,
+        \Magento\Catalog\Block\Product\Context $context,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\CatalogInventory\Model\Stock $stock,
         \Magento\Catalog\Model\Product\LinkFactory $productLinkFactory,
+        \Magento\Sales\Model\Quote\Item\RelatedProducts $itemRelationsList,
         array $data = array()
     ) {
         $this->_checkoutSession = $checkoutSession;
         $this->_productVisibility = $productVisibility;
         $this->_stock = $stock;
         $this->_productLinkFactory = $productLinkFactory;
+        $this->_itemRelationsList = $itemRelationsList;
         parent::__construct(
             $context,
-            $catalogConfig,
-            $registry,
-            $taxData,
-            $catalogData,
-            $mathRandom,
-            $cartHelper,
-            $wishlistHelper,
-            $compareProduct,
-            $layoutHelper,
-            $imageHelper,
             $data
         );
+        $this->_isScopePrivate = true;
     }
 
     /**
@@ -132,10 +106,9 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
             $items = array();
             $ninProductIds = $this->_getCartProductIds();
             if ($ninProductIds) {
-                $lastAdded = (int) $this->_getLastAddedProductId();
+                $lastAdded = (int)$this->_getLastAddedProductId();
                 if ($lastAdded) {
-                    $collection = $this->_getCollection()
-                        ->addProductFilter($lastAdded);
+                    $collection = $this->_getCollection()->addProductFilter($lastAdded);
                     if (!empty($ninProductIds)) {
                         $collection->addExcludeProductFilter($ninProductIds);
                     }
@@ -148,19 +121,21 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
                 }
 
                 if (count($items) < $this->_maxItemCount) {
-                    $filterProductIds = array_merge($this->_getCartProductIds(), $this->_getCartProductIdsRel());
-                    $collection = $this->_getCollection()
-                        ->addProductFilter($filterProductIds)
-                        ->addExcludeProductFilter($ninProductIds)
-                        ->setPageSize($this->_maxItemCount-count($items))
-                        ->setGroupBy()
-                        ->setPositionOrder()
-                        ->load();
+                    $filterProductIds = array_merge(
+                        $this->_getCartProductIds(),
+                        $this->_itemRelationsList->getRelatedProductIds($this->getQuote()->getAllItems())
+                    );
+                    $collection = $this->_getCollection()->addProductFilter(
+                        $filterProductIds
+                    )->addExcludeProductFilter(
+                        $ninProductIds
+                    )->setPageSize(
+                        $this->_maxItemCount - count($items)
+                    )->setGroupBy()->setPositionOrder()->load();
                     foreach ($collection as $item) {
                         $items[] = $item;
                     }
                 }
-
             }
 
             $this->setData('items', $items);
@@ -200,28 +175,6 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
     }
 
     /**
-     * Retrieve Array of product ids which have special relation with products in Cart
-     * For example simple product as part of Grouped product
-     *
-     * @return array
-     */
-    protected function _getCartProductIdsRel()
-    {
-        $productIds = array();
-        foreach ($this->getQuote()->getAllItems() as $quoteItem) {
-            $productTypeOpt = $quoteItem->getOptionByCode('product_type');
-            if ($productTypeOpt instanceof \Magento\Sales\Model\Quote\Item\Option
-                && $productTypeOpt->getValue() == \Magento\Catalog\Model\Product\Type\Grouped::TYPE_CODE
-                && $productTypeOpt->getProductId()
-            ) {
-                $productIds[] = $productTypeOpt->getProductId();
-            }
-        }
-
-        return $productIds;
-    }
-
-    /**
      * Get last product ID that was added to cart and remove this information from session
      *
      * @return int
@@ -249,12 +202,13 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
     protected function _getCollection()
     {
         /** @var \Magento\Catalog\Model\Resource\Product\Link\Product\Collection $collection */
-        $collection = $this->_productLinkFactory->create()->useCrossSellLinks()
-            ->getProductCollection()
-            ->setStoreId($this->_storeManager->getStore()->getId())
-            ->addStoreFilter()
-            ->setPageSize($this->_maxItemCount)
-            ->setVisibility($this->_productVisibility->getVisibleInCatalogIds());
+        $collection = $this->_productLinkFactory->create()->useCrossSellLinks()->getProductCollection()->setStoreId(
+            $this->_storeManager->getStore()->getId()
+        )->addStoreFilter()->setPageSize(
+            $this->_maxItemCount
+        )->setVisibility(
+            $this->_productVisibility->getVisibleInCatalogIds()
+        );
         $this->_addProductAttributesAndPrices($collection);
 
         $this->_stock->addInStockFilterToCollection($collection);

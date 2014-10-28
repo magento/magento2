@@ -18,22 +18,19 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Shipping
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Shipping\Model\Config\Source;
 
-class Allmethods implements \Magento\Core\Model\Option\ArrayInterface
+class Allmethods implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
      * @var \Magento\Shipping\Model\Config
@@ -41,14 +38,14 @@ class Allmethods implements \Magento\Core\Model\Option\ArrayInterface
     protected $_shippingConfig;
 
     /**
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Shipping\Model\Config $shippingConfig
      */
     public function __construct(
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Shipping\Model\Config $shippingConfig
     ) {
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->_shippingConfig = $shippingConfig;
     }
 
@@ -59,11 +56,11 @@ class Allmethods implements \Magento\Core\Model\Option\ArrayInterface
      * @param bool $isActiveOnlyFlag
      * @return array
      */
-    public function toOptionArray($isActiveOnlyFlag=false)
+    public function toOptionArray($isActiveOnlyFlag = false)
     {
-        $methods = array(array('value'=>'', 'label'=>''));
+        $methods = array(array('value' => '', 'label' => ''));
         $carriers = $this->_shippingConfig->getAllCarriers();
-        foreach ($carriers as $carrierCode=>$carrierModel) {
+        foreach ($carriers as $carrierCode => $carrierModel) {
             if (!$carrierModel->isActive() && (bool)$isActiveOnlyFlag === true) {
                 continue;
             }
@@ -71,15 +68,15 @@ class Allmethods implements \Magento\Core\Model\Option\ArrayInterface
             if (!$carrierMethods) {
                 continue;
             }
-            $carrierTitle = $this->_coreStoreConfig->getConfig('carriers/'.$carrierCode.'/title');
-            $methods[$carrierCode] = array(
-                'label'   => $carrierTitle,
-                'value' => array(),
+            $carrierTitle = $this->_scopeConfig->getValue(
+                'carriers/' . $carrierCode . '/title',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
-            foreach ($carrierMethods as $methodCode=>$methodTitle) {
+            $methods[$carrierCode] = array('label' => $carrierTitle, 'value' => array());
+            foreach ($carrierMethods as $methodCode => $methodTitle) {
                 $methods[$carrierCode]['value'][] = array(
-                    'value' => $carrierCode.'_'.$methodCode,
-                    'label' => '['.$carrierCode.'] '.$methodTitle,
+                    'value' => $carrierCode . '_' . $methodCode,
+                    'label' => '[' . $carrierCode . '] ' . $methodTitle
                 );
             }
         }

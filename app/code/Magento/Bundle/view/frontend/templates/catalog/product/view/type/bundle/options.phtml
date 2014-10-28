@@ -1,0 +1,64 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php /** @var $this Magento\Bundle\Block\Catalog\Product\View\Type\Bundle */ ?>
+<?php
+$product = $this->getProduct();
+$helper = $this->helper('Magento\Catalog\Helper\Output');
+?>
+<?php $options = $this->decorateArray($this->getOptions()); ?>
+<?php if ($product->isSaleable()):?>
+    <?php if (count($options)): ?>
+        <script type="text/javascript">
+require([
+    "jquery",
+    "mage/mage"
+], function($){
+
+//<![CDATA[
+    $(document).ready(function() {
+        $('#product_addtocart_form').mage('bundleOption', {
+            optionConfig:<?php echo $this->getJsonConfig()?>})
+            .trigger('changeSelection');
+    });
+//]]>
+        
+});
+</script>
+        <fieldset class="fieldset bundle options">
+            <legend id="customizeTitle" class="legend title">
+                <span><?php echo __('Customize %1', $helper->productAttribute($product, $product->getName(), 'name')) ?></span>
+            </legend><br />
+            <?php echo $this->getChildHtml('product_info_bundle_options_top');?>
+            <?php foreach ($options as $option): ?>
+                <?php if (!$option->getSelections()): ?>
+                    <?php continue; ?>
+                <?php endif; ?>
+                <?php echo $this->getOptionHtml($option) ?>
+            <?php endforeach; ?>
+        </fieldset>
+    <?php else: ?>
+        <p class="empty"><?php echo __('No options of this product are available.') ?></p>
+    <?php endif; ?>
+<?php endif;?>

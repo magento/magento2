@@ -18,22 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Bundle
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option;
 
 /**
  * Bundle selection product block
  *
- * @category    Magento
- * @package     Magento_Bundle
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-
-namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option;
-
 class Search extends \Magento\Backend\Block\Widget
 {
     /**
@@ -41,6 +35,9 @@ class Search extends \Magento\Backend\Block\Widget
      */
     protected $_template = 'product/edit/bundle/option/search.phtml';
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->setId('bundle_option_selection_search');
@@ -49,7 +46,7 @@ class Search extends \Magento\Backend\Block\Widget
     /**
      * Create search grid
      *
-     * @return \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search
+     * @return $this
      */
     protected function _prepareLayout()
     {
@@ -66,12 +63,11 @@ class Search extends \Magento\Backend\Block\Widget
     /**
      * Prepare search grid
      *
-     * @return \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search
+     * @return $this
      */
     protected function _beforeToHtml()
     {
-        $this->getChildBlock('grid')->setIndex($this->getIndex())
-            ->setFirstShow($this->getFirstShow());
+        $this->getChildBlock('grid')->setIndex($this->getIndex())->setFirstShow($this->getFirstShow());
         return parent::_beforeToHtml();
     }
 }

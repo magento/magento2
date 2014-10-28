@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Checkout
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,8 +26,7 @@ require 'quote_with_address.php';
 /** @var \Magento\Sales\Model\Quote $quote */
 
 /** @var $rate \Magento\Sales\Model\Quote\Address\Rate */
-$rate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Sales\Model\Quote\Address\Rate');
+$rate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Quote\Address\Rate');
 $rate->setCode('freeshipping_freeshipping');
 $rate->getPrice(1);
 

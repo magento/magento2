@@ -18,30 +18,52 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Checkout
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Checkout\Block\Onepage;
+
+use Magento\Customer\Service\V1\CustomerAccountServiceInterface as CustomerAccountService;
+use Magento\Customer\Service\V1\CustomerAddressServiceInterface as CustomerAddressService;
+use Magento\Customer\Model\Address\Config as AddressConfig;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Directory\Model\Resource\Country\Collection;
+use Magento\Directory\Model\Resource\Region\Collection as RegionCollection;
+use Magento\Sales\Model\Quote;
 
 /**
  * One page common functionality block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Checkout\Block\Onepage;
-
-abstract class AbstractOnepage extends \Magento\View\Element\Template
+abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
 {
     /**
-     * @var \Magento\App\Cache\Type\Config
+     * @var \Magento\Framework\App\Cache\Type\Config
      */
     protected $_configCacheType;
 
+    /**
+     * @var \Magento\Customer\Service\V1\Data\Customer
+     */
     protected $_customer;
+
+    /**
+     * @var Quote
+     */
     protected $_quote;
+
+    /**
+     * @var  Collection
+     */
     protected $_countryCollection;
+
+    /**
+     * @var RegionCollection
+     */
     protected $_regionCollection;
+
+    /**
+     * @var mixed
+     */
     protected $_addressesCollection;
 
     /**
@@ -52,12 +74,12 @@ abstract class AbstractOnepage extends \Magento\View\Element\Template
     /**
      * @var \Magento\Directory\Model\Resource\Region\CollectionFactory
      */
-    protected $_regionCollFactory;
+    protected $_regionCollectionFactory;
 
     /**
      * @var \Magento\Directory\Model\Resource\Country\CollectionFactory
      */
-    protected $_countryCollFactory;
+    protected $_countryCollectionFactory;
 
     /**
      * @var \Magento\Core\Helper\Data
@@ -65,54 +87,87 @@ abstract class AbstractOnepage extends \Magento\View\Element\Template
     protected $_coreData;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @var CustomerAccountService
+     */
+    protected $_customerAccountService;
+
+    /**
+     * @var CustomerAddressService
+     */
+    protected $_customerAddressService;
+
+    /**
+     * @var \Magento\Customer\Model\Address\Config
+     */
+    private $_addressConfig;
+
+    /**
+     * @var \Magento\Framework\App\Http\Context
+     */
+    protected $httpContext;
+
+    /**
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\App\Cache\Type\Config $configCacheType
+     * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $resourceSession
-     * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollFactory
-     * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollFactory
+     * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory
+     * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory
+     * @param CustomerAccountService $customerAccountService
+     * @param CustomerAddressService $customerAddressService
+     * @param AddressConfig $addressConfig
+     * @param \Magento\Framework\App\Http\Context $httpContext
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\App\Cache\Type\Config $configCacheType,
+        \Magento\Framework\App\Cache\Type\Config $configCacheType,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $resourceSession,
-        \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollFactory,
-        \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollFactory,
+        \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory,
+        \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory,
+        CustomerAccountService $customerAccountService,
+        CustomerAddressService $customerAddressService,
+        AddressConfig $addressConfig,
+        \Magento\Framework\App\Http\Context $httpContext,
         array $data = array()
     ) {
         $this->_coreData = $coreData;
         $this->_configCacheType = $configCacheType;
         $this->_customerSession = $customerSession;
         $this->_checkoutSession = $resourceSession;
-        $this->_countryCollFactory = $countryCollFactory;
-        $this->_regionCollFactory = $regionCollFactory;
+        $this->_countryCollectionFactory = $countryCollectionFactory;
+        $this->_regionCollectionFactory = $regionCollectionFactory;
+        $this->httpContext = $httpContext;
         parent::__construct($context, $data);
+        $this->_isScopePrivate = true;
+        $this->_customerAccountService = $customerAccountService;
+        $this->_customerAddressService = $customerAddressService;
+        $this->_addressConfig = $addressConfig;
     }
 
     /**
      * Get config
      *
      * @param string $path
-     * @return mixed
+     * @return string|null
      */
     public function getConfig($path)
     {
-        return $this->_storeConfig->getConfig($path);
+        return $this->_scopeConfig->getValue($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
     /**
      * Get logged in customer
      *
-     * @return \Magento\Customer\Model\Customer
+     * @return \Magento\Customer\Service\V1\Data\Customer
      */
-    public function getCustomer()
+    protected function _getCustomerData()
     {
         if (empty($this->_customer)) {
-            $this->_customer = $this->_customerSession->getCustomer();
+            $this->_customer = $this->_customerAccountService->getCustomer($this->_customerSession->getCustomerId());
         }
         return $this->_customer;
     }
@@ -130,7 +185,7 @@ abstract class AbstractOnepage extends \Magento\View\Element\Template
     /**
      * Retrieve sales quote model
      *
-     * @return \Magento\Sales\Model\Quote
+     * @return Quote
      */
     public function getQuote()
     {
@@ -140,60 +195,96 @@ abstract class AbstractOnepage extends \Magento\View\Element\Template
         return $this->_quote;
     }
 
+    /**
+     * @return bool
+     */
     public function isCustomerLoggedIn()
     {
-        return $this->_customerSession->isLoggedIn();
+        return $this->httpContext->getValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH);
     }
 
+    /**
+     * @return Collection
+     */
     public function getCountryCollection()
     {
         if (!$this->_countryCollection) {
-            $this->_countryCollection = $this->_countryCollFactory->create()->loadByStore();
+            $this->_countryCollection = $this->_countryCollectionFactory->create()->loadByStore();
         }
         return $this->_countryCollection;
     }
 
+    /**
+     * @return RegionCollection
+     */
     public function getRegionCollection()
     {
         if (!$this->_regionCollection) {
-            $this->_regionCollection = $this->_regionCollFactory->create()
-                ->addCountryFilter($this->getAddress()->getCountryId())
-                ->load();
+            $this->_regionCollection = $this->_regionCollectionFactory->create()->addCountryFilter(
+                $this->getAddress()->getCountryId()
+            )->load();
         }
         return $this->_regionCollection;
     }
 
+    /**
+     * @return int
+     */
     public function customerHasAddresses()
     {
-        return count($this->getCustomer()->getAddresses());
+        try {
+            return count($this->_customerAddressService->getAddresses($this->_getCustomerData()->getId()));
+        } catch (NoSuchEntityException $e) {
+            return 0;
+        }
     }
 
+    /**
+     * @param string $type
+     * @return string
+     */
     public function getAddressesHtmlSelect($type)
     {
         if ($this->isCustomerLoggedIn()) {
+            $customerId = $this->_getCustomerData()->getId();
             $options = array();
-            foreach ($this->getCustomer()->getAddresses() as $address) {
-                $options[] = array(
-                    'value' => $address->getId(),
-                    'label' => $address->format('oneline')
+
+            try {
+                $addresses = $this->_customerAddressService->getAddresses($customerId);
+            } catch (NoSuchEntityException $e) {
+                $addresses = array();
+            }
+
+            foreach ($addresses as $address) {
+                /** @var \Magento\Customer\Service\V1\Data\Address $address */
+                $label = $this->_addressConfig->getFormatByCode(
+                    AddressConfig::DEFAULT_ADDRESS_FORMAT
+                )->getRenderer()->renderArray(
+                    \Magento\Customer\Service\V1\Data\AddressConverter::toFlatArray($address)
                 );
+
+                $options[] = array('value' => $address->getId(), 'label' => $label);
             }
 
             $addressId = $this->getAddress()->getCustomerAddressId();
             if (empty($addressId)) {
-                if ($type=='billing') {
-                    $address = $this->getCustomer()->getPrimaryBillingAddress();
-                } else {
-                    $address = $this->getCustomer()->getPrimaryShippingAddress();
-                }
-                if ($address) {
-                    $addressId = $address->getId();
+                try {
+                    if ($type == 'billing') {
+                        $address = $this->_customerAddressService->getDefaultBillingAddress($customerId);
+                    } else {
+                        $address = $this->_customerAddressService->getDefaultShippingAddress($customerId);
+                    }
+                    if ($address) {
+                        $addressId = $address->getId();
+                    }
+                } catch (NoSuchEntityException $e) {
+                    // Do nothing
                 }
             }
 
-            $select = $this->getLayout()->createBlock('Magento\View\Element\Html\Select')
-                ->setName($type.'_address_id')
-                ->setId($type.'-address-select')
+            $select = $this->getLayout()->createBlock('Magento\Framework\View\Element\Html\Select')
+                ->setName($type . '_address_id')
+                ->setId($type . '-address-select')
                 ->setClass('address-select')
                 //->setExtraParams('onchange="'.$type.'.newAddress(!this.value)"')
                 // temp disable inline javascript, need to clean this later
@@ -207,36 +298,62 @@ abstract class AbstractOnepage extends \Magento\View\Element\Template
         return '';
     }
 
+    /**
+     * @param string $type
+     * @return string
+     */
     public function getCountryHtmlSelect($type)
     {
         $countryId = $this->getAddress()->getCountryId();
         if (is_null($countryId)) {
             $countryId = $this->_coreData->getDefaultCountry();
         }
-        $select = $this->getLayout()->createBlock('Magento\View\Element\Html\Select')
-            ->setName($type.'[country_id]')
-            ->setId($type.':country_id')
-            ->setTitle(__('Country'))
-            ->setClass('validate-select')
-            ->setValue($countryId)
-            ->setOptions($this->getCountryOptions());
+        $select = $this->getLayout()->createBlock(
+            'Magento\Framework\View\Element\Html\Select'
+        )->setName(
+            $type . '[country_id]'
+        )->setId(
+            $type . ':country_id'
+        )->setTitle(
+            __('Country')
+        )->setClass(
+            'validate-select'
+        )->setValue(
+            $countryId
+        )->setOptions(
+            $this->getCountryOptions()
+        );
         return $select->getHtml();
     }
 
-
+    /**
+     * @param string $type
+     * @return string
+     */
     public function getRegionHtmlSelect($type)
     {
-        $select = $this->getLayout()->createBlock('Magento\View\Element\Html\Select')
-            ->setName($type.'[region]')
-            ->setId($type.':region')
-            ->setTitle(__('State/Province'))
-            ->setClass('required-entry validate-state')
-            ->setValue($this->getAddress()->getRegionId())
-            ->setOptions($this->getRegionCollection()->toOptionArray());
+        $select = $this->getLayout()->createBlock(
+            'Magento\Framework\View\Element\Html\Select'
+        )->setName(
+            $type . '[region]'
+        )->setId(
+            $type . ':region'
+        )->setTitle(
+            __('State/Province')
+        )->setClass(
+            'required-entry validate-state'
+        )->setValue(
+            $this->getAddress()->getRegionId()
+        )->setOptions(
+            $this->getRegionCollection()->toOptionArray()
+        );
 
         return $select->getHtml();
     }
 
+    /**
+     * @return mixed
+     */
     public function getCountryOptions()
     {
         $options = false;
@@ -255,7 +372,7 @@ abstract class AbstractOnepage extends \Magento\View\Element\Template
     /**
      * Get checkout steps codes
      *
-     * @return array
+     * @return string[]
      */
     protected function _getStepCodes()
     {
@@ -270,5 +387,19 @@ abstract class AbstractOnepage extends \Magento\View\Element\Template
     public function isShow()
     {
         return true;
+    }
+
+    /**
+     * Return the html text for shipping price
+     *
+     * @param \Magento\Sales\Model\Quote\Address\Rate $rate
+     * @return string
+     */
+    public function getShippingPriceHtml(\Magento\Sales\Model\Quote\Address\Rate $rate)
+    {
+        /** @var \Magento\Checkout\Block\Shipping\Price $block */
+        $block = $this->getLayout()->getBlock('checkout.shipping.price');
+        $block->setShippingRate($rate);
+        return $block->toHtml();
     }
 }

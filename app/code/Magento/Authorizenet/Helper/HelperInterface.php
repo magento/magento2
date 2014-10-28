@@ -18,12 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Authorizenet
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Authorizenet\Helper;
 
 /**
@@ -34,7 +31,7 @@ interface HelperInterface
     /**
      * Retrieve place order url
      *
-     * @param array params
+     * @param array $params
      * @return  string
      */
     public function getSuccessOrderUrl($params);
@@ -42,8 +39,16 @@ interface HelperInterface
     /**
      * Retrieve redirect ifrmae url
      *
-     * @param array params
+     * @param array $params
      * @return string
      */
     public function getRedirectIframeUrl($params);
+
+    /**
+     * Get direct post rely url
+     *
+     * @param null|int|string $storeId
+     * @return string
+     */
+    public function getRelyUrl($storeId = null);
 }

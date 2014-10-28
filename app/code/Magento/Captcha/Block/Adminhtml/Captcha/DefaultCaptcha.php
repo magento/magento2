@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Captcha
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,8 +25,6 @@
 /**
  * Captcha block for adminhtml area
  *
- * @category   Core
- * @package    Magento_Captcha
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Captcha\Block\Adminhtml\Captcha;
@@ -36,7 +32,7 @@ namespace Magento\Captcha\Block\Adminhtml\Captcha;
 class DefaultCaptcha extends \Magento\Captcha\Block\Captcha\DefaultCaptcha
 {
     /**
-     * @var \Magento\Backend\Model\Url
+     * @var \Magento\Backend\Model\UrlInterface
      */
     protected $_url;
 
@@ -46,16 +42,16 @@ class DefaultCaptcha extends \Magento\Captcha\Block\Captcha\DefaultCaptcha
     protected $_config;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Captcha\Helper\Data $captchaData
-     * @param \Magento\Backend\Model\Url $url
+     * @param \Magento\Backend\Model\UrlInterface $url
      * @param \Magento\Backend\App\ConfigInterface $config
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Captcha\Helper\Data $captchaData,
-        \Magento\Backend\Model\Url $url,
+        \Magento\Backend\Model\UrlInterface $url,
         \Magento\Backend\App\ConfigInterface $config,
         array $data = array()
     ) {
@@ -64,7 +60,6 @@ class DefaultCaptcha extends \Magento\Captcha\Block\Captcha\DefaultCaptcha
         $this->_config = $config;
     }
 
-
     /**
      * Returns URL to controller action which returns new captcha image
      *
@@ -72,9 +67,9 @@ class DefaultCaptcha extends \Magento\Captcha\Block\Captcha\DefaultCaptcha
      */
     public function getRefreshUrl()
     {
-        return $this->_url->getUrl('adminhtml/refresh/refresh', array(
-            '_secure' => $this->_config->getFlag('web/secure/use_in_adminhtml'),
-            '_nosecret' => true
-        ));
+        return $this->_url->getUrl(
+            'adminhtml/refresh/refresh',
+            array('_secure' => $this->_config->isSetFlag('web/secure/use_in_adminhtml'), '_nosecret' => true)
+        );
     }
 }

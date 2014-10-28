@@ -18,53 +18,68 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Block\Adminhtml\Items\Column;
 
+use Magento\Sales\Model\Order\Item;
+use Magento\Sales\Model\Quote\Item\AbstractItem as QuoteItem;
+use Magento\Sales\Model\Order\Invoice\Item as InvoiceItem;
+use Magento\Sales\Model\Order\Creditmemo\Item as CreditmemoItem;
 
 /**
  * Adminhtml sales order column renderer
  *
- * @category   Magento
- * @package    Magento_Sales
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Sales\Block\Adminhtml\Items\Column;
-
-class DefaultColumn extends \Magento\Backend\Block\Template
+class DefaultColumn extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 {
     /**
+     * Option factory
+     *
      * @var \Magento\Catalog\Model\Product\OptionFactory
      */
     protected $_optionFactory;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\Product\OptionFactory $optionFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService,
+        \Magento\Framework\Registry $registry,
         \Magento\Catalog\Model\Product\OptionFactory $optionFactory,
         array $data = array()
     ) {
         $this->_optionFactory = $optionFactory;
-        parent::__construct($context, $data);
+        parent::__construct($context, $stockItemService, $registry, $data);
     }
 
-
+    /**
+     * Get item
+     *
+     * @return Item|QuoteItem
+     */
     public function getItem()
     {
-        if ($this->_getData('item') instanceof \Magento\Sales\Model\Order\Item) {
-            return $this->_getData('item');
+        $item = $this->_getData('item');
+        if ($item instanceof Item || $item instanceof QuoteItem) {
+            return $item;
         } else {
-            return $this->_getData('item')->getOrderItem();
+            return $item->getOrderItem();
         }
     }
 
+    /**
+     * Get order options
+     *
+     * @return array
+     */
     public function getOrderOptions()
     {
         $result = array();
@@ -103,12 +118,40 @@ class DefaultColumn extends \Magento\Backend\Block\Template
         return $_default;
     }
 
+    /**
+     * Get sku
+     *
+     * @return string
+     */
     public function getSku()
     {
-        /*if ($this->getItem()->getProductType() == \Magento\Catalog\Model\Product\Type::TYPE_CONFIGURABLE) {
-            return $this->getItem()->getProductOptionByCode('simple_sku');
-        }*/
         return $this->getItem()->getSku();
     }
 
+
+    /**
+     * Calculate total amount for the item
+     *
+     * @param QuoteItem|Item|InvoiceItem|CreditmemoItem $item
+     * @return mixed
+     */
+    public function getTotalAmount($item)
+    {
+        $totalAmount = $item->getRowTotal() - $item->getDiscountAmount();
+
+        return $totalAmount;
+    }
+
+    /**
+     * Calculate base total amount for the item
+     *
+     * @param QuoteItem|Item|InvoiceItem|CreditmemoItem $item
+     * @return mixed
+     */
+    public function getBaseTotalAmount($item)
+    {
+        $baseTotalAmount =  $item->getBaseRowTotal() - $item->getBaseDiscountAmount();
+
+        return $baseTotalAmount;
+    }
 }

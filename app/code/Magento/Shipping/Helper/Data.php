@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Shipping
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -29,7 +27,7 @@
  */
 namespace Magento\Shipping\Helper;
 
-class Data extends \Magento\App\Helper\AbstractHelper
+class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * Allowed hash keys
@@ -48,29 +46,29 @@ class Data extends \Magento\App\Helper\AbstractHelper
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
-     * @var \Magento\Core\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @param \Magento\App\Helper\Context $context
+     * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\App\Helper\Context $context,
+        \Magento\Framework\App\Helper\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Model\Store\Config $coreStoreConfig,
-        \Magento\Core\Model\StoreManagerInterface $storeManager
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\StoreManagerInterface $storeManager
     ) {
         $this->_coreData = $coreData;
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
         parent::__construct($context);
     }
@@ -100,7 +98,7 @@ class Data extends \Magento\App\Helper\AbstractHelper
      */
     protected function _getTrackingUrl($key, $model, $method = 'getId')
     {
-        $urlPart = "{$key}:{$model->$method()}:{$model->getProtectCode()}";
+        $urlPart = "{$key}:{$model->{$method}()}:{$model->getProtectCode()}";
         $param = array('hash' => $this->_coreData->urlEncode($urlPart));
 
         $storeModel = $this->_storeManager->getStore($model->getStoreId());
@@ -123,30 +121,5 @@ class Data extends \Magento\App\Helper\AbstractHelper
             return $this->_getTrackingUrl('track_id', $model, 'getEntityId');
         }
         return '';
-    }
-
-    /**
-     * Retrieve tracking ajax url
-     *
-     * @return string
-     */
-    public function getTrackingAjaxUrl()
-    {
-        return $this->_getUrl('shipping/tracking/ajax');
-    }
-
-    /**
-     * @param string $method
-     * @param mixed $storeId
-     * @return bool
-     */
-    public function isFreeMethod($method, $storeId = null)
-    {
-        $arr = explode('_', $method, 2);
-        if (!isset($arr[1])) {
-            return false;
-        }
-        $freeMethod = $this->_coreStoreConfig->getConfig('carriers/' . $arr[0] . '/free_method', $storeId);
-        return $freeMethod == $arr[1];
     }
 }

@@ -27,13 +27,11 @@ class CrontabConfigFilesTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * attributes represent merging rules
-     * copied from original class \Magento\App\Route\Config\Reader
+     * copied from original class \Magento\Framework\App\Route\Config\Reader
      *
      * @var array
      */
-    protected $_idAttributes = array(
-        '/config/job' => 'name'
-    );
+    protected $_idAttributes = array('/config/group' => 'id', '/config/group/job' => 'name');
 
     /**
      * Path to tough XSD for merged file validation
@@ -53,18 +51,18 @@ class CrontabConfigFilesTest extends \PHPUnit_Framework_TestCase
         $invalidFiles = array();
 
         $files = \Magento\TestFramework\Utility\Files::init()->getConfigFiles('crontab.xml');
-        $mergedConfig = new \Magento\Config\Dom(
-            '<config></config>',
+        $mergedConfig = new \Magento\Framework\Config\Dom(
+            '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"></config>',
             $this->_idAttributes
         );
 
         foreach ($files as $file) {
             $content = file_get_contents($file[0]);
             try {
-                new \Magento\Config\Dom($content, $this->_idAttributes);
+                new \Magento\Framework\Config\Dom($content, $this->_idAttributes);
                 //merge won't be performed if file is invalid because of exception thrown
                 $mergedConfig->merge($content);
-            } catch (\Magento\Config\Dom\ValidationException $e) {
+            } catch (\Magento\Framework\Config\Dom\ValidationException $e) {
                 $invalidFiles[] = $file[0];
             }
         }

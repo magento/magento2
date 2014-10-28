@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_CatalogInventory
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -32,7 +30,7 @@ namespace Magento\CatalogInventory\Model\Resource\Indexer;
 class StockFactory
 {
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
@@ -44,11 +42,10 @@ class StockFactory
     protected $_defaultIndexer = 'Magento\CatalogInventory\Model\Resource\Indexer\Stock\DefaultStock';
 
     /**
-     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManager $objectManager
      */
-    public function __construct(
-        \Magento\ObjectManager $objectManager
-    ) {
+    public function __construct(\Magento\Framework\ObjectManager $objectManager)
+    {
         $this->_objectManager = $objectManager;
     }
 
@@ -66,9 +63,10 @@ class StockFactory
             $indexerClassName = $this->_defaultIndexer;
         }
         $indexer = $this->_objectManager->create($indexerClassName, $data);
-        if (false == ($indexer instanceof \Magento\CatalogInventory\Model\Resource\Indexer\Stock\StockInterface)) {
-            throw new \InvalidArgumentException($indexerClassName
-                . ' doesn\'t implement \Magento\CatalogInventory\Model\Resource\Indexer\Stock\StockInterface'
+        if (false == $indexer instanceof \Magento\CatalogInventory\Model\Resource\Indexer\Stock\StockInterface) {
+            throw new \InvalidArgumentException(
+                $indexerClassName .
+                ' doesn\'t implement \Magento\CatalogInventory\Model\Resource\Indexer\Stock\StockInterface'
             );
         }
         return $indexer;

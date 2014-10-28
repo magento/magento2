@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -27,54 +25,65 @@
 /**
  * Product gallery
  *
- * @category   Magento
- * @package    Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Product;
 
-class Gallery extends \Magento\View\Element\Template
+use Magento\Catalog\Model\Product;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Data\Collection;
+
+class Gallery extends \Magento\Framework\View\Element\Template
 {
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\View\Element\Template\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\View\Element\Template\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Framework\Registry $registry,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return $this
+     */
     protected function _prepareLayout()
     {
-        $headBlock = $this->getLayout()->getBlock('head');
-        if ($headBlock) {
-            $headBlock->setTitle($this->getProduct()->getMetaTitle());
-        }
+        $this->pageConfig->setTitle($this->getProduct()->getMetaTitle());
         return parent::_prepareLayout();
     }
 
+    /**
+     * @return Product
+     */
     public function getProduct()
     {
         return $this->_coreRegistry->registry('product');
     }
 
+    /**
+     * @return Collection
+     */
     public function getGalleryCollection()
     {
         return $this->getProduct()->getMediaGalleryImages();
     }
 
+    /**
+     * @return Image|null
+     */
     public function getCurrentImage()
     {
         $imageId = $this->getRequest()->getParam('image');
@@ -89,11 +98,17 @@ class Gallery extends \Magento\View\Element\Template
         return $image;
     }
 
+    /**
+     * @return string
+     */
     public function getImageUrl()
     {
         return $this->getCurrentImage()->getUrl();
     }
 
+    /**
+     * @return mixed
+     */
     public function getImageFile()
     {
         return $this->getCurrentImage()->getFile();
@@ -108,7 +123,7 @@ class Gallery extends \Magento\View\Element\Template
     {
         $file = $this->getCurrentImage()->getPath();
 
-        if ($this->_filesystem->getDirectoryRead(\Magento\Filesystem::MEDIA)->isFile($file)) {
+        if ($this->_filesystem->getDirectoryRead(DirectoryList::MEDIA)->isFile($file)) {
             $size = getimagesize($file);
             if (isset($size[0])) {
                 if ($size[0] > 600) {
@@ -122,6 +137,9 @@ class Gallery extends \Magento\View\Element\Template
         return false;
     }
 
+    /**
+     * @return Image|false
+     */
     public function getPreviousImage()
     {
         $current = $this->getCurrentImage();
@@ -138,6 +156,9 @@ class Gallery extends \Magento\View\Element\Template
         return $previous;
     }
 
+    /**
+     * @return Image|false
+     */
     public function getNextImage()
     {
         $current = $this->getCurrentImage();
@@ -158,6 +179,9 @@ class Gallery extends \Magento\View\Element\Template
         return $next;
     }
 
+    /**
+     * @return false|string
+     */
     public function getPreviousImageUrl()
     {
         $image = $this->getPreviousImage();
@@ -167,6 +191,9 @@ class Gallery extends \Magento\View\Element\Template
         return false;
     }
 
+    /**
+     * @return false|string
+     */
     public function getNextImageUrl()
     {
         $image = $this->getNextImage();

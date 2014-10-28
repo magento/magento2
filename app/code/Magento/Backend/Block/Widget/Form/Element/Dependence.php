@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -65,19 +63,19 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
     protected $_fieldFactory;
 
     /**
-     * @var \Magento\Json\EncoderInterface
+     * @var \Magento\Framework\Json\EncoderInterface
      */
     protected $_jsonEncoder;
 
     /**
      * @param \Magento\Backend\Block\Context $context
-     * @param \Magento\Json\EncoderInterface $jsonEncoder
+     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Backend\Model\Config\Structure\Element\Dependency\FieldFactory $fieldFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
-        \Magento\Json\EncoderInterface $jsonEncoder,
+        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Backend\Model\Config\Structure\Element\Dependency\FieldFactory $fieldFactory,
         array $data = array()
     ) {
@@ -111,10 +109,9 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
     {
         if (!is_object($refField)) {
             /** @var $refField \Magento\Backend\Model\Config\Structure\Element\Dependency\Field */
-            $refField = $this->_fieldFactory->create(array(
-                'fieldData' => array('value' => (string)$refField),
-                'fieldPrefix' => '',
-            ));
+            $refField = $this->_fieldFactory->create(
+                array('fieldData' => array('value' => (string)$refField), 'fieldPrefix' => '')
+            );
         }
         $this->_depends[$fieldName][$fieldNameFrom] = $refField;
         return $this;
@@ -141,11 +138,14 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
         if (!$this->_depends) {
             return '';
         }
-        return '<script type="text/javascript"> new FormElementDependenceController('
-            . $this->_getDependsJson()
-            . ($this->_configOptions ? ', '
-            . $this->_jsonEncoder->encode($this->_configOptions) : '')
-            . '); </script>';
+        return '<script type="text/javascript">
+            require(["mage/adminhtml/form"], function(){
+        new FormElementDependenceController(' .
+            $this->_getDependsJson() .
+            ($this->_configOptions ? ', ' .
+            $this->_jsonEncoder->encode(
+                $this->_configOptions
+            ) : '') . '); });</script>';
     }
 
     /**
@@ -160,7 +160,7 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
                 /** @var $field \Magento\Backend\Model\Config\Structure\Element\Dependency\Field */
                 $result[$this->_fields[$to]][$this->_fields[$from]] = array(
                     'values' => $field->getValues(),
-                    'negative' => $field->isNegative(),
+                    'negative' => $field->isNegative()
                 );
             }
         }

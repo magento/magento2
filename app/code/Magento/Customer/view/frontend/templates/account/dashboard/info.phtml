@@ -1,0 +1,71 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/** @var \Magento\Customer\Block\Account\Dashboard\Info $this */
+?>
+<div class="block block-dashboard-info">
+    <div class="block-title"><strong><?php echo __('Account Information') ?></strong></div>
+    <div class="block-content">
+        <div class="box box-information">
+            <strong class="box-title">
+                <span><?php echo __('Contact Information') ?></span>
+            </strong>
+            <div class="box-content">
+                <p>
+                    <?php echo $this->escapeHtml($this->getName()) ?><br>
+                    <?php echo $this->escapeHtml($this->getCustomer()->getEmail()) ?><br>
+                </p>
+            </div>
+            <div class="box-actions">
+                <a class="action edit" href="<?php echo $this->getUrl('customer/account/edit') ?>">
+                    <span><?php echo __('Edit') ?></span>
+                </a>
+                <a href="<?php echo $this->getChangePasswordUrl() ?>" class="action change-password">
+                    <?php echo __('Change Password') ?>
+                </a>
+            </div>
+        </div>
+        <?php if( $this->isNewsletterEnabled() ): ?>
+            <div class="box box-newsletter">
+                <strong class="box-title">
+                    <span><?php echo __('Newsletters') ?></span>
+                </strong>
+                <div class="box-content">
+                    <p>
+                        <?php if( $this->getIsSubscribed() ): ?>
+                            <?php echo __("You are currently subscribed to 'General Subscription'.") ?>
+                        <?php else: ?>
+                            <?php echo __('You are currently not subscribed to any newsletter.') ?>
+                        <?php endif; ?>
+                    </p>
+                    <?php /* Extensions placeholder */ ?>
+                    <?php echo $this->getChildHtml('customer.account.dashboard.info.extra')?>
+                </div>
+                <div class="box-actions">
+                    <a class="action edit" href="<?php echo $this->getUrl('newsletter/manage') ?>"><span><?php echo __('Edit') ?></span></a>
+                </div>
+            </div>
+        <?php endif; ?>
+    </div>
+</div>

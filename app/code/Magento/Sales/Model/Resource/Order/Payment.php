@@ -18,64 +18,43 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Sales\Model\Resource\Order;
+
+use Magento\Framework\App\Resource;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Sales\Model\Resource\Attribute;
+use Magento\Sales\Model\Increment;
+use Magento\Sales\Model\Resource\Entity as SalesResource;
 
 /**
  * Flat sales order payment resource
  */
-class Payment extends \Magento\Sales\Model\Resource\Order\AbstractOrder
+class Payment extends SalesResource
 {
     /**
      * Serializeable field: additional_information
      *
      * @var array
      */
-    protected $_serializableFields   = array(
-        'additional_information' => array(null, array())
-    );
+    protected $_serializableFields = ['additional_information' => [null, []]];
 
     /**
      * Event prefix
      *
      * @var string
      */
-    protected $_eventPrefix          = 'sales_order_payment_resource';
-
-    /**
-     * @var \Magento\Sales\Model\Payment\Method\Converter
-     */
-    protected $_paymentConverter;
-
-    /**
-     * @param \Magento\App\Resource $resource
-     * @param \Magento\Stdlib\DateTime $dateTime
-     * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Eav\Model\Entity\TypeFactory $eavEntityTypeFactory
-     * @param \Magento\Sales\Model\Payment\Method\Converter $paymentConverter
-     */
-    public function __construct(
-        \Magento\App\Resource $resource,
-        \Magento\Stdlib\DateTime $dateTime,
-        \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Eav\Model\Entity\TypeFactory $eavEntityTypeFactory,
-        \Magento\Sales\Model\Payment\Method\Converter $paymentConverter
-    ) {
-        $this->_paymentConverter = $paymentConverter;
-        parent::__construct($resource, $dateTime, $eventManager, $eavEntityTypeFactory);
-    }
+    protected $_eventPrefix = 'sales_order_payment_resource';
 
     /**
      * Model initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
-        $this->_converter = $this->_paymentConverter;
         $this->_init('sales_flat_order_payment', 'entity_id');
     }
 }

@@ -18,11 +18,10 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model\Order\Creditmemo;
 
 /**
  * @method \Magento\Sales\Model\Resource\Order\Creditmemo\Item _getResource()
@@ -91,13 +90,26 @@
  * @method float getBaseHiddenTaxAmount()
  * @method \Magento\Sales\Model\Order\Creditmemo\Item setBaseHiddenTaxAmount(float $value)
  */
-namespace Magento\Sales\Model\Order\Creditmemo;
-
-class Item extends \Magento\Core\Model\AbstractModel
+class Item extends \Magento\Framework\Model\AbstractModel
 {
+    /**
+     * @var string
+     */
     protected $_eventPrefix = 'sales_creditmemo_item';
+
+    /**
+     * @var string
+     */
     protected $_eventObject = 'creditmemo_item';
+
+    /**
+     * @var \Magento\Sales\Model\Order\Creditmemo|null
+     */
     protected $_creditmemo = null;
+
+    /**
+     * @var \Magento\Sales\Model\Order\Item|null
+     */
     protected $_orderItem = null;
 
     /**
@@ -106,29 +118,29 @@ class Item extends \Magento\Core\Model\AbstractModel
     protected $_orderItemFactory;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Sales\Model\Order\ItemFactory $orderItemFactory
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\Sales\Model\Order\ItemFactory $orderItemFactory,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        parent::__construct(
-            $context, $registry, $resource, $resourceCollection, $data
-        );
+        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_orderItemFactory = $orderItemFactory;
     }
 
     /**
      * Initialize resource model
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -138,8 +150,8 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Declare creditmemo instance
      *
-     * @param   \Magento\Sales\Model\Order\Creditmemo $creditmemo
-     * @return  \Magento\Sales\Model\Order\Creditmemo\Item
+     * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
+     * @return $this
      */
     public function setCreditmemo(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
     {
@@ -160,8 +172,8 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Declare order item instance
      *
-     * @param   \Magento\Sales\Model\Order\Item $item
-     * @return  \Magento\Sales\Model\Order\Creditmemo\Item
+     * @param \Magento\Sales\Model\Order\Item $item
+     * @return $this
      */
     public function setOrderItem(\Magento\Sales\Model\Order\Item $item)
     {
@@ -191,13 +203,13 @@ class Item extends \Magento\Core\Model\AbstractModel
      * Declare qty
      *
      * @param   float $qty
-     * @return  \Magento\Sales\Model\Order\Creditmemo\Item
-     * @throws \Magento\Core\Exception
+     * @return $this
+     * @throws \Magento\Framework\Model\Exception
      */
     public function setQty($qty)
     {
         if ($this->getOrderItem()->getIsQtyDecimal()) {
-            $qty = (float)$qty;
+            $qty = (double)$qty;
         } else {
             $qty = (int)$qty;
         }
@@ -208,7 +220,7 @@ class Item extends \Magento\Core\Model\AbstractModel
         if ($qty <= $this->getOrderItem()->getQtyToRefund() || $this->getOrderItem()->isDummy()) {
             $this->setData('qty', $qty);
         } else {
-            throw new \Magento\Core\Exception(
+            throw new \Magento\Framework\Model\Exception(
                 __('We found an invalid quantity to refund item "%1".', $this->getName())
             );
         }
@@ -237,18 +249,19 @@ class Item extends \Magento\Core\Model\AbstractModel
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function cancel()
     {
-        $this->getOrderItem()->setQtyRefunded(
-            $this->getOrderItem()->getQtyRefunded()-$this->getQty()
-        );
+        $this->getOrderItem()->setQtyRefunded($this->getOrderItem()->getQtyRefunded() - $this->getQty());
         $this->getOrderItem()->setTaxRefunded(
-            $this->getOrderItem()->getTaxRefunded()
-                - $this->getOrderItem()->getBaseTaxAmount() * $this->getQty() / $this->getOrderItem()->getQtyOrdered()
+            $this->getOrderItem()->getTaxRefunded() -
+            $this->getOrderItem()->getBaseTaxAmount() * $this->getQty() / $this->getOrderItem()->getQtyOrdered()
         );
         $this->getOrderItem()->setHiddenTaxRefunded(
-            $this->getOrderItem()->getHiddenTaxRefunded()
-                - $this->getOrderItem()->getHiddenTaxAmount() * $this->getQty() / $this->getOrderItem()->getQtyOrdered()
+            $this->getOrderItem()->getHiddenTaxRefunded() -
+            $this->getOrderItem()->getHiddenTaxAmount() * $this->getQty() / $this->getOrderItem()->getQtyOrdered()
         );
         return $this;
     }
@@ -260,18 +273,18 @@ class Item extends \Magento\Core\Model\AbstractModel
      */
     public function calcRowTotal()
     {
-        $creditmemo           = $this->getCreditmemo();
-        $orderItem            = $this->getOrderItem();
+        $creditmemo = $this->getCreditmemo();
+        $orderItem = $this->getOrderItem();
         $orderItemQtyInvoiced = $orderItem->getQtyInvoiced();
 
-        $rowTotal            = $orderItem->getRowInvoiced() - $orderItem->getAmountRefunded();
-        $baseRowTotal        = $orderItem->getBaseRowInvoiced() - $orderItem->getBaseAmountRefunded();
-        $rowTotalInclTax     = $orderItem->getRowTotalInclTax();
+        $rowTotal = $orderItem->getRowInvoiced() - $orderItem->getAmountRefunded();
+        $baseRowTotal = $orderItem->getBaseRowInvoiced() - $orderItem->getBaseAmountRefunded();
+        $rowTotalInclTax = $orderItem->getRowTotalInclTax();
         $baseRowTotalInclTax = $orderItem->getBaseRowTotalInclTax();
 
-        if (!$this->isLast() && $orderItemQtyInvoiced > 0) {
+        if (!$this->isLast() && $orderItemQtyInvoiced > 0 && $this->getQty() > 0) {
             $availableQty = $orderItemQtyInvoiced - $orderItem->getQtyRefunded();
-            $rowTotal     = $creditmemo->roundPrice($rowTotal / $availableQty * $this->getQty());
+            $rowTotal = $creditmemo->roundPrice($rowTotal / $availableQty * $this->getQty());
             $baseRowTotal = $creditmemo->roundPrice($baseRowTotal / $availableQty * $this->getQty(), 'base');
         }
         $this->setRowTotal($rowTotal);
@@ -297,9 +310,7 @@ class Item extends \Magento\Core\Model\AbstractModel
     public function isLast()
     {
         $orderItem = $this->getOrderItem();
-        if ((string)(float)$this->getQty() == (string)(float)$orderItem->getQtyToRefund()
-            && !$orderItem->getQtyToInvoice()
-        ) {
+        if ((string)(double)$this->getQty() == (string)(double)$orderItem->getQtyToRefund()) {
             return true;
         }
         return false;
@@ -308,7 +319,7 @@ class Item extends \Magento\Core\Model\AbstractModel
     /**
      * Before object save
      *
-     * @return \Magento\Sales\Model\Order\Creditmemo\Item
+     * @return $this
      */
     protected function _beforeSave()
     {

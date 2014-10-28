@@ -1,0 +1,122 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php /** @var $this \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Option */ ?>
+<?php echo $this->getTemplatesHtml() ?>
+<script id="custom-option-base-template" type="text/x-jquery-tmpl">
+    <div class="fieldset-wrapper collapsable-wrapper opened" id="option_${id}">
+        <div class="fieldset-wrapper-title">
+            <strong class="title" data-toggle="collapse" data-target="#${id}-content">
+                <span id="option_${id}_header_title">${title}</span>
+            </strong>
+            <div class="actions">
+                <button type="button" title="<?php echo __('Delete Custom Option'); ?>" class="action-delete" id="<?php echo $this->getFieldId() ?>_${id}_delete">
+                    <span><?php echo __('Delete Custom Option'); ?></span>
+                </button>
+            </div>
+            <div id="<?php echo $this->getFieldId() ?>_${id}_move" data-role="draggable-handle" class="draggable-handle"
+                 title="<?php echo __('Sort Custom Options'); ?>"></div>
+        </div>
+        <div class="fieldset-wrapper-content in collapse" id="${id}-content">
+            <fieldset class="fieldset">
+                <fieldset class="fieldset-alt" id="<?php echo $this->getFieldId() ?>_${id}">
+                    <input id="<?php echo $this->getFieldId() ?>_${id}_is_delete" name="<?php echo $this->getFieldName() ?>[${id}][is_delete]" type="hidden" value=""/>
+                    <input id="<?php echo $this->getFieldId() ?>_${id}_previous_type" name="<?php echo $this->getFieldName() ?>[${id}][previous_type]" type="hidden" value="${type}"/>
+                    <input id="<?php echo $this->getFieldId() ?>_${id}_previous_group" name="<?php echo $this->getFieldName() ?>[${id}][previous_group]" type="hidden" value=""/>
+                    <input id="<?php echo $this->getFieldId() ?>_${id}_id" name="<?php echo $this->getFieldName() ?>[${id}][id]" type="hidden" value="${id}"/>
+                    <input id="<?php echo $this->getFieldId() ?>_${id}_option_id" name="<?php echo $this->getFieldName() ?>[${id}][option_id]" type="hidden" value="${option_id}"/>
+                    <input name="<?php echo $this->getFieldName() ?>[${id}][sort_order]" type="hidden" value="${sort_order}"/>
+
+                    <div class="field field-option-title required">
+                        <label class="label" for="<?php echo $this->getFieldId() ?>_${id}_title">
+                            <?php echo __('Option Title') ?>
+                        </label>
+                        <div class="control">
+                            <input id="<?php echo $this->getFieldId() ?>_${id}_title"
+                                   name="<?php echo $this->getFieldName() ?>[${id}][title]"
+                                   class="required-entry input-text"
+                                   type="text"
+                                   value="${title}"
+                                   data-store-label="${title}"
+                                   {{if typeof(scopeTitleDisabled) != 'undefined' && scopeTitleDisabled != null}} disabled="disabled" {{/if}}
+                                   >
+                            {{html checkboxScopeTitle}}
+                        </div>
+                    </div>
+
+                    <div class="field field-option-input-type required">
+                        <label class="label" for="<?php echo $this->getFieldId() ?>_${id}_title">
+                            <?php echo __('Input Type') ?>
+                        </label>
+                        <div class="control opt-type">
+                            <?php echo $this->getTypeSelectHtml() ?>
+                        </div>
+                    </div>
+
+                    <div class="field field-option-req">
+                        <div class="control">
+                            <input id="<?php echo $this->getFieldId() ?>_${id}_required" class="is-required" type="checkbox" checked="checked"/>
+                            <label for="field-option-req">
+                                <?php echo __('Required')?>
+                            </label>
+                            <span style="display:none"><?php echo $this->getRequireSelectHtml() ?></span>
+                        </div>
+                    </div>
+                </fieldset>
+            </fieldset>
+        </div>
+    </div>
+</script>
+
+<div id="import-container" style="display: none;"></div>
+<?php if (!$this->isReadonly()): ?>
+<div><input type="hidden" name="affect_product_custom_options" value="1"/></div>
+<?php endif; ?>
+<script type="text/javascript">
+require([
+    "jquery",
+    "Magento_Catalog/js/custom-options"
+], function(jQuery){
+
+jQuery(function ($) {
+    var fieldSet = $('#Custom_Options');
+    fieldSet.customOptions(<?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode(
+        array(
+            'fieldId' => $this->getFieldId(),
+            'productGridUrl' => $this->getProductGridUrl(),
+            'formKey' => $this->getFormKey(),
+            'customOptionsUrl' => $this->getCustomOptionsUrl(),
+            'isReadonly' => $this->isReadonly(),
+            'itemCount' => $this->getItemCount()
+        )
+    )?>);
+    //adding data to templates
+    <?php /** @var $_value \Magento\Framework\Object */ ?>
+    <?php foreach ($this->getOptionValues() as $_value): ?>
+        fieldSet.customOptions('addOption', <?php echo $_value->toJson() ?>);
+    <?php endforeach; ?>
+});
+
+});
+</script>

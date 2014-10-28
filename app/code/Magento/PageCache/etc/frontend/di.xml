@@ -23,20 +23,13 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config>
-    <type name="Magento\PageCache\Model\Observer">
-        <param name="allowedCache">
-            <value>
-                <cms>true</cms>
-                <catalog>
-                    <category>
-                        <view>true</view>
-                    </category>
-                    <product>
-                        <view>true</view>
-                    </product>
-                </catalog>
-            </value>
-        </param>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\App\FrontControllerInterface">
+        <plugin name="front-controller-builtin-cache" type="Magento\PageCache\Model\App\FrontController\BuiltinPlugin"/>
+        <plugin name="front-controller-varnish-cache" type="Magento\PageCache\Model\App\FrontController\VarnishPlugin"/>
+        <plugin name="front-controller-message-box" type="Magento\PageCache\Model\App\FrontController\MessageBox" sortOrder="0"/>
+    </type>
+    <type name="Magento\Framework\View\Layout">
+        <plugin name="layout-model-caching-unique-name" type="Magento\PageCache\Model\Layout\LayoutPlugin"/>
     </type>
 </config>

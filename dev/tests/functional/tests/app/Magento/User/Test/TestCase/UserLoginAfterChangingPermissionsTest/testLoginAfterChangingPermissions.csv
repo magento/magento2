@@ -1,0 +1,2 @@
+"user/dataSet";"role/data/rolename";"role/data/resource_access";"role/data/roles_resources";"updatedRole/data/rolename";"updatedRole/data/resource_access";"constraint"
+"";AdminRole%isolation%;Custom;Sales;UpdatedAdminRole%isolation%;All;"assertUserSuccessLogin"

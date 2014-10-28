@@ -23,21 +23,31 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 /** @var \Magento\Customer\Model\Address $customerAddress */
-$customerAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Customer\Model\Address');
+$customerAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    'Magento\Customer\Model\Address'
+);
 $customerAddress->isObjectNew(true);
-$customerAddress->setCustomerId(1)
-    ->setData(array(
+$customerAddress->setData(
+    array(
         'entity_id' => 1,
+        'attribute_set_id' => 2,
         'telephone' => 3468676,
         'postcode' => 75477,
-        'country_id' => 'AL',
+        'country_id' => 'US',
         'city' => 'CityM',
-        'street' => 'Green str, 67',
+        'company' => 'CompanyName',
+        'street' => array('Green str, 67'),
         'lastname' => 'Smith',
         'firstname' => 'John',
-        'parent_id' => 1
-    ));
+        'parent_id' => 1,
+        'region_id' => 1
+    )
+)->setCustomerId(
+    1
+);
 $customerAddress->save();
+
+/** @var \Magento\Customer\Model\Customer $customer */
+$customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Customer\Model\Customer');
+$customer->load(1)->save();

@@ -25,7 +25,9 @@
  */
 namespace Magento\Log\App;
 
-use Magento\AppInterface;
+use Magento\Framework\App\Console\Response;
+use Magento\Framework\App\Bootstrap;
+use Magento\Framework\AppInterface;
 
 class Shell implements AppInterface
 {
@@ -42,28 +44,41 @@ class Shell implements AppInterface
     protected $_shellFactory;
 
     /**
+     * @var \Magento\Framework\App\Console\Response
+     */
+    protected $_response;
+
+    /**
      * @param string $entryFileName
      * @param \Magento\Log\Model\ShellFactory $shellFactory
+     * @param Response $response
      */
-    public function __construct(
-        $entryFileName,
-        \Magento\Log\Model\ShellFactory $shellFactory
-    ) {
+    public function __construct($entryFileName, \Magento\Log\Model\ShellFactory $shellFactory, Response $response)
+    {
         $this->_entryFileName = $entryFileName;
         $this->_shellFactory = $shellFactory;
+        $this->_response = $response;
     }
-
 
     /**
      * Run application
      *
-     * @return int
+     * @return \Magento\Framework\App\ResponseInterface
      */
-    public function execute()
+    public function launch()
     {
         /** @var $shell \Magento\Log\Model\Shell */
         $shell = $this->_shellFactory->create(array('entryPoint' => $this->_entryFileName));
         $shell->run();
-        return 0;
+        $this->_response->setCode(0);
+        return $this->_response;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function catchException(Bootstrap $bootstrap, \Exception $exception)
+    {
+        return false;
     }
 }

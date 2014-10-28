@@ -18,16 +18,14 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Config\Structure;
 
-abstract class AbstractElement
-    implements \Magento\Backend\Model\Config\Structure\ElementInterface
+use Magento\Framework\StoreManagerInterface;
+
+abstract class AbstractElement implements ElementInterface
 {
     /**
      * Element data
@@ -44,18 +42,18 @@ abstract class AbstractElement
     protected $_scope;
 
     /**
-     * Application object
+     * Store manager
      *
-     * @var \Magento\Core\Model\App
+     * @var \Magento\Framework\StoreManagerInterface
      */
-    protected $_application;
+    protected $_storeManager;
 
     /**
-     * @param \Magento\Core\Model\App $application
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      */
-    public function __construct(\Magento\Core\Model\App $application)
+    public function __construct(StoreManagerInterface $storeManager)
     {
-        $this->_application = $application;
+        $this->_storeManager = $storeManager;
     }
 
     /**
@@ -77,6 +75,7 @@ abstract class AbstractElement
      *
      * @param array $data
      * @param string $scope
+     * @return void
      */
     public function setData(array $data, $scope)
     {
@@ -153,14 +152,13 @@ abstract class AbstractElement
     public function isVisible()
     {
         $showInScope = array(
-            \Magento\Backend\Model\Config\ScopeDefiner::SCOPE_STORE => $this->_hasVisibilityValue('showInStore'),
-            \Magento\Backend\Model\Config\ScopeDefiner::SCOPE_WEBSITE => $this->_hasVisibilityValue('showInWebsite'),
-            \Magento\Backend\Model\Config\ScopeDefiner::SCOPE_DEFAULT => $this->_hasVisibilityValue('showInDefault'),
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE => $this->_hasVisibilityValue('showInStore'),
+            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE => $this->_hasVisibilityValue('showInWebsite'),
+            \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT => $this->_hasVisibilityValue('showInDefault')
         );
 
-        if ($this->_application->isSingleStoreMode()) {
-            $result = !$this->_hasVisibilityValue('hide_in_single_store_mode')
-                && array_sum($showInScope);
+        if ($this->_storeManager->isSingleStoreMode()) {
+            $result = !$this->_hasVisibilityValue('hide_in_single_store_mode') && array_sum($showInScope);
             return $result;
         }
 

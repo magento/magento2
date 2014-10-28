@@ -1,50 +1,81 @@
-"Action","操作"
-"An error occurred while creating the backup.","创建备份时发生错误。"
-"An error occurred while writing to the backup file ""%s"".","写入备份文件 ""%s"" 时遇到了一个错误。"
-"Are you sure you want to delete the selected backup(s)?","你是否确定要删除所选备份？"
-"Backup Type","备份类型"
-"Backup file ""%s"" cannot be read from or written to.","备份文件 ""%s"" 不能读取或写入。"
-"Backup file ""%s"" does not exist.","备份文件 ""%s"" 不存在。"
-"Backup file does not exist.","备份文件不存在。"
-"Backup file handler was unspecified.","未指定备份文件的处理程序。"
-"Backup file not found","备份文件未找到"
-"Backup file path was not specified.","备份文件路径未指定。"
-"Backups","备份"
-"Cannot read backup file.","无法读取备份文件。"
-"Create Backup","创建备份"
-"Database Backup","数据库备份"
-"Database and Media Backup","数据库与媒体备份"
-"Database was successfuly backed up.","数据库已成功备份。"
-"Download","下载"
-"Enable Scheduled Backup","启用计划备份"
-"Failed to connect to FTP","连接到 FTP 失败"
-"Failed to delete one or several backups.","删除一个或多个备份失败。"
-"Failed to rollback","回滚失败"
+Cancel,Cancel
+Action,操作
+failed,failed
+successful,successful
+Delete,Delete
+Name,姓名
+Type,类型
+System,System
+"We can't save the Cron expression.","We can't save the Cron expression."
+Database,Database
+Time,时间
+"System Backup",系统备份
+"Database and Media Backup",数据库与媒体备份
+"Database Backup",数据库备份
+"The archive can be uncompressed with <a href=""%1"">%2</a> on Windows systems.","The archive can be uncompressed with <a href=""%1"">%2</a> on Windows systems."
+Backups,备份
+Tools,Tools
+Backup,Backup
+"You need more permissions to activate maintenance mode right now.","You need more permissions to activate maintenance mode right now."
+"To continue with the backup, you need to either deselect ' '""Put store on the maintenance mode"" or update your permissions.","To continue with the backup, you need to either deselect ' '""Put store on the maintenance mode"" or update your permissions."
+"Something went wrong putting your store into maintenance mode.","Something went wrong putting your store into maintenance mode."
+"You need more free space to create a backup.","You need more free space to create a backup."
+"You need more permissions to create a backup.","You need more permissions to create a backup."
+"Something went wrong creating the backup.","Something went wrong creating the backup."
+"Please correct the password.","Please correct the password."
+"To continue with the rollback, you need to either deselect ' '""Put store on the maintenance mode"" or update your permissions.","To continue with the rollback, you need to either deselect ' '""Put store on the maintenance mode"" or update your permissions."
+"The backup file was not found.","The backup file was not found."
+"We couldn't connect to the FTP.","We couldn't connect to the FTP."
 "Failed to validate FTP","验证 FTP 失败"
-"Frequency","频率"
-"Invalid Password.","无效密码。"
-"Maintenance Mode","维护模式"
-"Name","姓名"
-"Not enough free space to create backup.","没有创建备份所需的足够空间。"
-"Not enough permissions to create backup.","没有创建备份所需的权限。"
-"Not enough permissions to perform rollback","没有执行回滚所需的权限"
-"Please deselect the sufficient check-box, if you want to continue backup's creation","如果你想继续创建备份，请反选一定的复选框"
-"Please deselect the sufficient check-box, if you want to continue rollback processing","如果你想继续回滚操作，请反选一定的复选框"
-"Put store on the maintenance mode while backup's creation","在创建备份时将店铺置于维护模式"
-"Rollback","回滚"
-"Scheduled Backup Settings","计划备份设置"
-"Size (bytes)","大小，字节"
-"Start Time","开始时间"
-"System Backup","系统备份"
-"System couldn't put store on the maintenance mode","系统没有将店铺置于维护模式"
-"The database and media backup has been created.","数据库与媒体备份已创建。"
-"The database backup has been created.","数据库备份已创建。"
-"The file was compressed with Zlib, but this extension is not installed on server.","该文件已使用Zlib压缩，但服务器上没有安装该扩展。"
-"The selected backup(s) has been deleted.","所选备份已删除。"
-"The system backup has been created.","系统备份已创建。"
-"Time","时间"
-"Type","类型"
-"Unable to create backup. Please, try again later.","无法创建备份。请稍候重试。"
-"Unable to save the cron expression.","无法保存Cron表达式。"
-"Warning! System couldn't put store on the maintenance mode.","警告！系统无法将店铺置于维护模式。"
-"Wrong order of creation for new backup.","创建新备份的顺序有误。"
+"Not enough permissions to perform rollback.","Not enough permissions to perform rollback."
+"Failed to rollback",回滚失败
+"We couldn't delete one or more backups.","We couldn't delete one or more backups."
+"The selected backup(s) has been deleted.",所选备份已删除。
+"Database and Media","Database and Media"
+"System (excluding Media)","System (excluding Media)"
+"The system backup has been created.",系统备份已创建。
+"The system backup (excluding media) has been created.","The system backup (excluding media) has been created."
+"The database and media backup has been created.",数据库与媒体备份已创建。
+"The database backup has been created.",数据库备份已创建。
+"Please correct the order of creation for a new backup.","Please correct the order of creation for a new backup."
+"The backup file does not exist.","The backup file does not exist."
+"The backup file path was not specified.","The backup file path was not specified."
+"The backup file ""%1"" does not exist.","The backup file ""%1"" does not exist."
+"Sorry, but we cannot read from or write to backup file ""%1"".","Sorry, but we cannot read from or write to backup file ""%1""."
+"The backup file handler was unspecified.","The backup file handler was unspecified."
+"Something went wrong writing to the backup file ""%1"".","Something went wrong writing to the backup file ""%1""."
+Warning,Warning
+"Any data created since the backup was made will be lost including admin users, customers and orders.","Any data created since the backup was made will be lost including admin users, customers and orders."
+"Are you sure you want to proceed?","Are you sure you want to proceed?"
+OK,OK
+"It will take time to create a backup.","It will take time to create a backup."
+"Please wait until the action ends.","Please wait until the action ends."
+"Are you sure you want to continue?","Are you sure you want to continue?"
+"Backup options","Backup options"
+"Please specify backup creation option.","Please specify backup creation option."
+"Backup Name","Backup Name"
+"Please use only letters (a-z or A-Z), numbers (0-9) or spaces in this field.","Please use only letters (a-z or A-Z), numbers (0-9) or spaces in this field."
+"Please put your store into maintenance mode during backup.","Please put your store into maintenance mode during backup."
+"Exclude media folder from backup","Exclude media folder from backup"
+"Please enter a password.","Please enter a password."
+"Please enter the password to confirm rollback.","Please enter the password to confirm rollback."
+"This action cannot be undone.","This action cannot be undone."
+"User Password","User Password"
+"Please put your store into maintenance mode during rollback processing.","Please put your store into maintenance mode during rollback processing."
+"Use FTP Connection","Use FTP Connection"
+"FTP credentials","FTP credentials"
+"FTP Host","FTP Host"
+"FTP Login","FTP Login"
+"FTP Password","FTP Password"
+"Magento root directory","Magento root directory"
+"Create Backup",创建备份
+Download,下载
+"Start Time","Start Time"
+Frequency,Frequency
+"Scheduled Backup Settings","Scheduled Backup Settings"
+"Enable Scheduled Backup","Enable Scheduled Backup"
+"Backup Type","Backup Type"
+"Maintenance Mode","Maintenance Mode"
+"Are you sure you want to delete the selected backup(s)?",你是否确定要删除所选备份？
+Size(bytes),Size(bytes)
+Rollback,回滚

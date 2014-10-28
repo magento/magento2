@@ -18,21 +18,19 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Adminhtml
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab;
 
 /**
  * Product inventory data
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab;
-
 class Inventory extends \Magento\Backend\Block\Widget
 {
+    /**
+     * @var string
+     */
     protected $_template = 'catalog/product/tab/inventory.phtml';
 
     /**
@@ -40,31 +38,43 @@ class Inventory extends \Magento\Backend\Block\Widget
      *
      * @var \Magento\Catalog\Helper\Data
      */
-    protected $_catalogData = null;
+    protected $catalogData;
 
     /**
      * Core registry
      *
-     * @var \Magento\Core\Model\Registry
+     * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $coreRegistry;
 
     /**
      * @var \Magento\CatalogInventory\Model\Source\Stock
      */
-    protected $_stock;
+    protected $stock;
 
     /**
      * @var \Magento\CatalogInventory\Model\Source\Backorders
      */
-    protected $_backorders;
+    protected $backorders;
+
+    /**
+     * @var \Magento\CatalogInventory\Service\V1\StockItemService
+     */
+    protected $stockItemService;
+
+    /**
+     * @var \Magento\Catalog\Helper\Product\Inventory
+     */
+    protected $inventoryHelper;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\CatalogInventory\Model\Source\Backorders $backorders
      * @param \Magento\CatalogInventory\Model\Source\Stock $stock
      * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Core\Model\Registry $coreRegistry
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
+     * @param \Magento\Catalog\Helper\Product\Inventory $inventoryHelper
      * @param array $data
      */
     public function __construct(
@@ -72,20 +82,27 @@ class Inventory extends \Magento\Backend\Block\Widget
         \Magento\CatalogInventory\Model\Source\Backorders $backorders,
         \Magento\CatalogInventory\Model\Source\Stock $stock,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Core\Model\Registry $coreRegistry,
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService,
+        \Magento\Catalog\Helper\Product\Inventory $inventoryHelper,
         array $data = array()
     ) {
-        $this->_stock = $stock;
-        $this->_backorders = $backorders;
-        $this->_catalogData = $catalogData;
-        $this->_coreRegistry = $coreRegistry;
+        $this->stock = $stock;
+        $this->backorders = $backorders;
+        $this->catalogData = $catalogData;
+        $this->coreRegistry = $coreRegistry;
+        $this->stockItemService = $stockItemService;
+        $this->inventoryHelper = $inventoryHelper;
         parent::__construct($context, $data);
     }
 
+    /**
+     * @return array
+     */
     public function getBackordersOption()
     {
-        if ($this->_catalogData->isModuleEnabled('Magento_CatalogInventory')) {
-            return $this->_backorders->toOptionArray();
+        if ($this->catalogData->isModuleEnabled('Magento_CatalogInventory')) {
+            return $this->backorders->toOptionArray();
         }
 
         return array();
@@ -98,8 +115,8 @@ class Inventory extends \Magento\Backend\Block\Widget
      */
     public function getStockOption()
     {
-        if ($this->_catalogData->isModuleEnabled('Magento_CatalogInventory')) {
-            return $this->_stock->toOptionArray();
+        if ($this->catalogData->isModuleEnabled('Magento_CatalogInventory')) {
+            return $this->stock->toOptionArray();
         }
 
         return array();
@@ -112,59 +129,59 @@ class Inventory extends \Magento\Backend\Block\Widget
      */
     public function getProduct()
     {
-        return $this->_coreRegistry->registry('product');
+        return $this->coreRegistry->registry('product');
     }
 
     /**
      * Retrieve Catalog Inventory  Stock Item Model
      *
-     * @return \Magento\CatalogInventory\Model\Stock\Item
+     * @return \Magento\CatalogInventory\Service\V1\Data\StockItem
      */
-    public function getStockItem()
+    public function getStockItemDo()
     {
-        return $this->getProduct()->getStockItem();
+        return $this->stockItemService->getStockItem($this->getProduct()->getId());
     }
 
-    public function isConfigurable()
-    {
-        return $this->getProduct()->isConfigurable();
-    }
-
+    /**
+     * @param string $field
+     * @return string|null
+     */
     public function getFieldValue($field)
     {
-        if ($this->getStockItem()) {
-            return $this->getStockItem()->getDataUsingMethod($field);
-        }
-
-        return $this->_storeConfig->getConfig(\Magento\CatalogInventory\Model\Stock\Item::XML_PATH_ITEM . $field);
+        return $this->inventoryHelper->getFieldValue($field, $this->getStockItemDo());
     }
 
+    /**
+     * @param string $field
+     * @return string|null
+     */
     public function getConfigFieldValue($field)
     {
-        if ($this->getStockItem()) {
-            if ($this->getStockItem()->getData('use_config_' . $field) == 0) {
-                return $this->getStockItem()->getData($field);
-            }
-        }
-
-        return $this->_storeConfig->getConfig(\Magento\CatalogInventory\Model\Stock\Item::XML_PATH_ITEM . $field);
+        return $this->inventoryHelper->getConfigFieldValue($field, $this->getStockItemDo());
     }
 
+    /**
+     * @param string $field
+     * @return string|null
+     */
     public function getDefaultConfigValue($field)
     {
-        return $this->_storeConfig->getConfig(\Magento\CatalogInventory\Model\Stock\Item::XML_PATH_ITEM . $field);
+        return $this->inventoryHelper->getDefaultConfigValue($field);
     }
 
     /**
      * Is readonly stock
      *
-     * @return boolean
+     * @return bool
      */
     public function isReadonly()
     {
         return $this->getProduct()->getInventoryReadonly();
     }
 
+    /**
+     * @return bool
+     */
     public function isNew()
     {
         if ($this->getProduct()->getId()) {
@@ -173,6 +190,9 @@ class Inventory extends \Magento\Backend\Block\Widget
         return true;
     }
 
+    /**
+     * @return string
+     */
     public function getFieldSuffix()
     {
         return 'product';
@@ -191,7 +211,7 @@ class Inventory extends \Magento\Backend\Block\Widget
     /**
      * Check if product type is virtual
      *
-     * @return boolean
+     * @return bool
      */
     public function isVirtual()
     {

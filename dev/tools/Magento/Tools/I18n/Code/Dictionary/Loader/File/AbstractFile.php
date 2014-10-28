@@ -21,7 +21,6 @@
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\I18n\Code\Dictionary\Loader\File;
 
 use Magento\Tools\I18n\Code\Dictionary\Loader\FileInterface;
@@ -56,7 +55,7 @@ abstract class AbstractFile implements FileInterface
     /**
      * Loader construct
      *
-     * @param \Magento\Tools\I18n\Code\Factory $factory
+     * @param Factory $factory
      */
     public function __construct(Factory $factory)
     {
@@ -75,12 +74,16 @@ abstract class AbstractFile implements FileInterface
         while ($data = $this->_readFile()) {
             $this->_position++;
             $data = array_pad($data, 4, null);
-            $dictionary->addPhrase($this->_createPhrase(array(
-                'phrase' => $data[0],
-                'translation' => $data[1],
-                'context_type' => $data[2],
-                'context_value' => $data[3],
-            )));
+            $dictionary->addPhrase(
+                $this->_createPhrase(
+                    array(
+                        'phrase' => $data[0],
+                        'translation' => $data[1],
+                        'context_type' => $data[2],
+                        'context_value' => $data[3]
+                    )
+                )
+            );
         }
         $this->_closeFile();
 
@@ -91,6 +94,7 @@ abstract class AbstractFile implements FileInterface
      * Init file handler
      *
      * @param string $file
+     * @return void
      * @throws \InvalidArgumentException
      */
     protected function _openFile($file)
@@ -109,6 +113,8 @@ abstract class AbstractFile implements FileInterface
 
     /**
      * Close file handler
+     *
+     * @return void
      */
     protected function _closeFile()
     {
@@ -137,7 +143,11 @@ abstract class AbstractFile implements FileInterface
         try {
             return $this->_factory->createPhrase($data);
         } catch (\DomainException $e) {
-            throw new \RuntimeException(sprintf('Invalid row #%d: "%s".', $this->_position, $e->getMessage()));
+            throw new \RuntimeException(
+                sprintf('Invalid row #%d: "%s".', $this->_position, $e->getMessage())
+                . "\n"
+                . 'Each row has to consist of 3 columns: original phrase, translation, context'
+            );
         }
     }
 }

@@ -18,17 +18,14 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_ImportExport
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\ImportExport\Model\Import;
 
 /**
  * Data source with columns for Magento_ImportExport
  */
-namespace Magento\ImportExport\Model\Import;
-
 abstract class AbstractSource implements \SeekableIterator
 {
     /**
@@ -105,6 +102,8 @@ abstract class AbstractSource implements \SeekableIterator
 
     /**
      * Move forward to next element (\Iterator interface)
+     *
+     * @return void
      */
     public function next()
     {
@@ -123,7 +122,7 @@ abstract class AbstractSource implements \SeekableIterator
      *
      * Return array or false on error
      *
-     * @return array|bool
+     * @return array|false
      */
     abstract protected function _getNextRow();
 
@@ -147,9 +146,10 @@ abstract class AbstractSource implements \SeekableIterator
         return -1 !== $this->_key;
     }
 
-
     /**
      * Rewind the \Iterator to the first element (\Iterator interface)
+     *
+     * @return void
      */
     public function rewind()
     {
@@ -162,6 +162,7 @@ abstract class AbstractSource implements \SeekableIterator
      * Seeks to a position (Seekable interface)
      *
      * @param int $position The position to seek to 0 or more
+     * @return void
      * @throws \OutOfBoundsException
      */
     public function seek($position)

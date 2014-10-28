@@ -18,48 +18,39 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Sales
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Sales\Model\Resource\Quote\Payment;
 
 /**
  * Quote payments collection
  */
-namespace Magento\Sales\Model\Resource\Quote\Payment;
-
-class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
-     * @var \Magento\Sales\Model\Payment\Method\Converter
-     */
-    protected $_converter;
-
-    /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\Logger $logger
-     * @param \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Event\ManagerInterface $eventManager
-     * @param \Magento\Sales\Model\Payment\Method\Converter $converter
-     * @param mixed $connection
-     * @param \Magento\Core\Model\Resource\Db\AbstractDb $resource
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Zend_Db_Adapter_Abstract $connection
+     * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
-        \Magento\Logger $logger,
-        \Magento\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Event\ManagerInterface $eventManager,
-        \Magento\Sales\Model\Payment\Method\Converter $converter,
+        \Magento\Framework\Logger $logger,
+        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
         $connection = null,
-        \Magento\Core\Model\Resource\Db\AbstractDb $resource = null
+        \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
-        $this->_converter = $converter;
     }
 
     /**
      * Resource initialization
+     *
+     * @return void
      */
     protected function _construct()
     {
@@ -70,7 +61,7 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
      * Setquote filter to result
      *
      * @param int $quoteId
-     * @return \Magento\Sales\Model\Resource\Quote\Payment\Collection
+     * @return $this
      */
     public function setQuoteFilter($quoteId)
     {
@@ -80,22 +71,13 @@ class Collection extends \Magento\Core\Model\Resource\Db\Collection\AbstractColl
     /**
      * Unserialize additional_information in each item
      *
-     * @return \Magento\Core\Model\Resource\Db\Collection\AbstractCollection
+     * @return $this
      */
     protected function _afterLoad()
     {
         foreach ($this->_items as $item) {
             $this->getResource()->unserializeFields($item);
         }
-
-        /** @var \Magento\Sales\Model\Quote\Payment $item */
-        foreach ($this->_items as $item) {
-            foreach ($item->getData() as $fieldName => $fieldValue) {
-                $item->setData($fieldName, $this->_converter->decode($item, $fieldName));
-            }
-        }
-
         return parent::_afterLoad();
     }
 }
-

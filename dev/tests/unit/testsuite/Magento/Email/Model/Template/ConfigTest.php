@@ -36,21 +36,33 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $_dataStorage;
 
     /**
-     * @var \Magento\Module\Dir\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_moduleReader;
 
     protected function setUp()
     {
         $this->_dataStorage = $this->getMock(
-            'Magento\Email\Model\Template\Config\Data', array('get'), array(), '', false
+            'Magento\Email\Model\Template\Config\Data',
+            array('get'),
+            array(),
+            '',
+            false
         );
-        $this->_dataStorage
-            ->expects($this->any())
-            ->method('get')
-            ->will($this->returnValue(require __DIR__ . '/Config/_files/email_templates_merged.php'))
-        ;
-        $this->_moduleReader = $this->getMock('Magento\Module\Dir\Reader', array('getModuleDir'), array(), '', false);
+        $this->_dataStorage->expects(
+            $this->any()
+        )->method(
+            'get'
+        )->will(
+            $this->returnValue(require __DIR__ . '/Config/_files/email_templates_merged.php')
+        );
+        $this->_moduleReader = $this->getMock(
+            'Magento\Framework\Module\Dir\Reader',
+            array('getModuleDir'),
+            array(),
+            '',
+            false
+        );
         $this->_model = new \Magento\Email\Model\Template\Config($this->_dataStorage, $this->_moduleReader);
     }
 
@@ -76,11 +88,16 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTemplateFilename()
     {
-        $this->_moduleReader
-            ->expects($this->once())
-            ->method('getModuleDir')->with('view', 'Fixture_ModuleOne')
-            ->will($this->returnValue('_files/Fixture/ModuleOne/view'))
-        ;
+        $this->_moduleReader->expects(
+            $this->once()
+        )->method(
+            'getModuleDir'
+        )->with(
+            'view',
+            'Fixture_ModuleOne'
+        )->will(
+            $this->returnValue('_files/Fixture/ModuleOne/view')
+        );
         $actualResult = $this->_model->getTemplateFilename('template_one');
         $this->assertEquals('_files/Fixture/ModuleOne/view/email/one.html', $actualResult);
     }
@@ -93,16 +110,16 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetterMethodUnknownTemplate($getterMethod)
     {
-        $this->_model->$getterMethod('unknown');
+        $this->_model->{$getterMethod}('unknown');
     }
 
     public function getterMethodUnknownTemplateDataProvider()
     {
         return array(
-            'label getter'  => array('getTemplateLabel'),
-            'type getter'   => array('getTemplateType'),
+            'label getter' => array('getTemplateLabel'),
+            'type getter' => array('getTemplateType'),
             'module getter' => array('getTemplateModule'),
-            'file getter'   => array('getTemplateFilename'),
+            'file getter' => array('getTemplateFilename')
         );
     }
 
@@ -115,42 +132,36 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetterMethodUnknownField($getterMethod, $expectedException, array $fixtureFields = array())
     {
         $this->setExpectedException('UnexpectedValueException', $expectedException);
-        $dataStorage = $this->getMock(
-            'Magento\Email\Model\Template\Config\Data', array('get'), array(), '', false
+        $dataStorage = $this->getMock('Magento\Email\Model\Template\Config\Data', array('get'), array(), '', false);
+        $dataStorage->expects(
+            $this->atLeastOnce()
+        )->method(
+            'get'
+        )->will(
+            $this->returnValue(array('fixture' => $fixtureFields))
         );
-        $dataStorage
-            ->expects($this->atLeastOnce())
-            ->method('get')
-            ->will($this->returnValue(array('fixture' => $fixtureFields)))
-        ;
         $model = new \Magento\Email\Model\Template\Config($dataStorage, $this->_moduleReader);
-        $model->$getterMethod('fixture');
+        $model->{$getterMethod}('fixture');
     }
 
     public function getterMethodUnknownFieldDataProvider()
     {
         return array(
-            'label getter' => array(
-                'getTemplateLabel',
-                "Field 'label' is not defined for email template 'fixture'.",
-            ),
-            'type getter' => array(
-                'getTemplateType',
-                "Field 'type' is not defined for email template 'fixture'.",
-            ),
+            'label getter' => array('getTemplateLabel', "Field 'label' is not defined for email template 'fixture'."),
+            'type getter' => array('getTemplateType', "Field 'type' is not defined for email template 'fixture'."),
             'module getter' => array(
                 'getTemplateModule',
-                "Field 'module' is not defined for email template 'fixture'.",
+                "Field 'module' is not defined for email template 'fixture'."
             ),
             'file getter, unknown module' => array(
                 'getTemplateFilename',
-                "Field 'module' is not defined for email template 'fixture'.",
+                "Field 'module' is not defined for email template 'fixture'."
             ),
             'file getter, unknown file' => array(
                 'getTemplateFilename',
                 "Field 'file' is not defined for email template 'fixture'.",
                 array('module' => 'Fixture_Module')
-            ),
+            )
         );
     }
 }

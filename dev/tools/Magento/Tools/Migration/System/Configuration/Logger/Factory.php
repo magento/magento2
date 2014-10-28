@@ -18,12 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category   Magento
- * @package    Tools
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Tools\Migration\System\Configuration\Logger;
 
 class Factory
@@ -42,8 +39,10 @@ class Factory
         $loggerInstance = null;
         switch ($loggerType) {
             case 'file':
-                $loggerInstance =
-                    new \Magento\Tools\Migration\System\Configuration\Logger\File($filePath, $fileManager);
+                $loggerInstance = new \Magento\Tools\Migration\System\Configuration\Logger\File(
+                    $filePath,
+                    $fileManager
+                );
                 break;
             default:
                 $loggerInstance = new \Magento\Tools\Migration\System\Configuration\Logger\Console();

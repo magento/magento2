@@ -18,13 +18,11 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_DesignEditor
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/* @var $installer \Magento\Core\Model\Resource\Setup */
+/* @var $installer \Magento\Framework\Module\Setup */
 $installer = $this;
 
 $installer->startSetup();
@@ -34,12 +32,14 @@ $connection = $installer->getConnection();
  */
 $tableCoreLayoutLink = $installer->getTable('core_layout_update');
 
-$connection->addColumn($tableCoreLayoutLink, 'is_vde',
+$connection->addColumn(
+    $tableCoreLayoutLink,
+    'is_vde',
     array(
-        'type'     => \Magento\DB\Ddl\Table::TYPE_BOOLEAN,
+        'type' => \Magento\Framework\DB\Ddl\Table::TYPE_BOOLEAN,
         'nullable' => false,
-        'default'  => '0',
-        'comment'  => 'Defines whether layout update created via design editor'
+        'default' => '0',
+        'comment' => 'Defines whether layout update created via design editor'
     )
 );
 

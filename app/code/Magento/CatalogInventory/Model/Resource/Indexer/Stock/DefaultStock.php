@@ -18,25 +18,16 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_CatalogInventory
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\CatalogInventory\Model\Resource\Indexer\Stock;
 
 /**
  * CatalogInventory Default Stock Status Indexer Resource Model
- *
- * @category    Magento
- * @package     Magento_CatalogInventory
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\CatalogInventory\Model\Resource\Indexer\Stock;
-
-class DefaultStock
-    extends \Magento\Catalog\Model\Resource\Product\Indexer\AbstractIndexer
-    implements \Magento\CatalogInventory\Model\Resource\Indexer\Stock\StockInterface
+class DefaultStock extends \Magento\Catalog\Model\Resource\Product\Indexer\AbstractIndexer implements StockInterface
 {
     /**
      * Current Product Type Id
@@ -50,34 +41,35 @@ class DefaultStock
      *
      * @var bool
      */
-    protected $_isComposite    = false;
+    protected $_isComposite = false;
 
     /**
      * Core store config
      *
-     * @var \Magento\Core\Model\Store\Config
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_coreStoreConfig;
+    protected $_scopeConfig;
 
     /**
      * Class constructor
      *
-     * @param \Magento\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Core\Model\Store\Config $coreStoreConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        \Magento\App\Resource $resource,
+        \Magento\Framework\App\Resource $resource,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Core\Model\Store\Config $coreStoreConfig
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
-        $this->_coreStoreConfig = $coreStoreConfig;
+        $this->_scopeConfig = $scopeConfig;
         parent::__construct($resource, $eavConfig);
     }
 
     /**
      * Initialize connection and define main table name
      *
+     * @return void
      */
     protected function _construct()
     {
@@ -87,7 +79,8 @@ class DefaultStock
     /**
      * Reindex all stock status data for default logic product type
      *
-     * @return \Magento\CatalogInventory\Model\Resource\Indexer\Stock\DefaultStock
+     * @return $this
+     * @throws \Exception
      */
     public function reindexAll()
     {
@@ -107,7 +100,7 @@ class DefaultStock
      * Reindex stock data for defined product ids
      *
      * @param int|array $entityIds
-     * @return \Magento\CatalogInventory\Model\Resource\Indexer\Stock\DefaultStock
+     * @return $this
      */
     public function reindexEntity($entityIds)
     {
@@ -119,7 +112,7 @@ class DefaultStock
      * Set active Product Type Id
      *
      * @param string $typeId
-     * @return \Magento\CatalogInventory\Model\Resource\Indexer\Stock\DefaultStock
+     * @return $this
      */
     public function setTypeId($typeId)
     {
@@ -131,12 +124,12 @@ class DefaultStock
      * Retrieve active Product Type Id
      *
      * @return string
-     * @throws \Magento\Core\Exception
+     * @throws \Magento\Framework\Model\Exception
      */
     public function getTypeId()
     {
         if (is_null($this->_typeId)) {
-            throw new \Magento\Core\Exception(__('Undefined product type'));
+            throw new \Magento\Framework\Model\Exception(__('Undefined product type'));
         }
         return $this->_typeId;
     }
@@ -145,11 +138,11 @@ class DefaultStock
      * Set Product Type Composite flag
      *
      * @param bool $flag
-     * @return \Magento\CatalogInventory\Model\Resource\Indexer\Stock\DefaultStock
+     * @return $this
      */
     public function setIsComposite($flag)
     {
-        $this->_isComposite = (bool)$flag;
+        $this->_isComposite = (bool) $flag;
         return $this;
     }
 
@@ -170,7 +163,10 @@ class DefaultStock
      */
     protected function _isManageStock()
     {
-        return $this->_coreStoreConfig->getConfigFlag(\Magento\CatalogInventory\Model\Stock\Item::XML_PATH_MANAGE_STOCK);
+        return $this->_scopeConfig->isSetFlag(
+            \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_MANAGE_STOCK,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
@@ -178,39 +174,46 @@ class DefaultStock
      *
      * @param int|array $entityIds
      * @param bool $usePrimaryTable use primary or temporary index table
-     * @return \Magento\DB\Select
+     * @return \Magento\Framework\DB\Select
      */
     protected function _getStockStatusSelect($entityIds = null, $usePrimaryTable = false)
     {
         $adapter = $this->_getWriteAdapter();
         $qtyExpr = $adapter->getCheckSql('cisi.qty > 0', 'cisi.qty', 0);
-        $select  = $adapter->select()
-            ->from(array('e' => $this->getTable('catalog_product_entity')), array('entity_id'));
+        $select = $adapter->select()->from(
+            array('e' => $this->getTable('catalog_product_entity')),
+            array('entity_id')
+        );
         $this->_addWebsiteJoinToSelect($select, true);
         $this->_addProductWebsiteJoinToSelect($select, 'cw.website_id', 'e.entity_id');
-        $select->columns('cw.website_id')
-            ->join(
-                array('cis' => $this->getTable('cataloginventory_stock')),
-                '',
-                array('stock_id'))
-            ->joinLeft(
-                array('cisi' => $this->getTable('cataloginventory_stock_item')),
-                'cisi.stock_id = cis.stock_id AND cisi.product_id = e.entity_id',
-                array())
-            ->columns(array('qty' => $qtyExpr))
+        $select->columns('cw.website_id')->join(
+            array('cis' => $this->getTable('cataloginventory_stock')),
+            '',
+            array('stock_id')
+        )->joinLeft(
+            array('cisi' => $this->getTable('cataloginventory_stock_item')),
+            'cisi.stock_id = cis.stock_id AND cisi.product_id = e.entity_id',
+            array()
+        )->columns(array('qty' => $qtyExpr))
             ->where('cw.website_id != 0')
             ->where('e.type_id = ?', $this->getTypeId());
 
         // add limitation of status
-        $condition = $adapter->quoteInto('=?', \Magento\Catalog\Model\Product\Status::STATUS_ENABLED);
+        $condition = $adapter->quoteInto('=?', \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
         $this->_addAttributeToSelect($select, 'status', 'e.entity_id', 'cs.store_id', $condition);
 
         if ($this->_isManageStock()) {
-            $statusExpr = $adapter->getCheckSql('cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 0',
-                1, 'cisi.is_in_stock');
+            $statusExpr = $adapter->getCheckSql(
+                'cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 0',
+                1,
+                'cisi.is_in_stock'
+            );
         } else {
-            $statusExpr = $adapter->getCheckSql('cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 1',
-                'cisi.is_in_stock', 1);
+            $statusExpr = $adapter->getCheckSql(
+                'cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 1',
+                'cisi.is_in_stock',
+                1
+            );
         }
 
         $select->columns(array('status' => $statusExpr));
@@ -225,14 +228,14 @@ class DefaultStock
     /**
      * Prepare stock status data in temporary index table
      *
-     * @param int|array $entityIds  the product limitation
-     * @return \Magento\CatalogInventory\Model\Resource\Indexer\Stock\DefaultStock
+     * @param int|array $entityIds the product limitation
+     * @return $this
      */
     protected function _prepareIndexTable($entityIds = null)
     {
         $adapter = $this->_getWriteAdapter();
-        $select  = $this->_getStockStatusSelect($entityIds);
-        $query   = $select->insertFromSelect($this->getIdxTable());
+        $select = $this->_getStockStatusSelect($entityIds);
+        $query = $select->insertFromSelect($this->getIdxTable());
         $adapter->query($query);
 
         return $this;
@@ -242,26 +245,26 @@ class DefaultStock
      * Update Stock status index by product ids
      *
      * @param array|int $entityIds
-     * @return \Magento\CatalogInventory\Model\Resource\Indexer\Stock\DefaultStock
+     * @return $this
      */
     protected function _updateIndex($entityIds)
     {
         $adapter = $this->_getWriteAdapter();
-        $select  = $this->_getStockStatusSelect($entityIds, true);
-        $query   = $adapter->query($select);
+        $select = $this->_getStockStatusSelect($entityIds, true);
+        $query = $adapter->query($select);
 
-        $i      = 0;
-        $data   = array();
+        $i = 0;
+        $data = array();
         while ($row = $query->fetch(\PDO::FETCH_ASSOC)) {
-            $i ++;
+            $i++;
             $data[] = array(
-                'product_id'    => (int)$row['entity_id'],
-                'website_id'    => (int)$row['website_id'],
-                'stock_id'      => (int)$row['stock_id'],
-                'qty'           => (float)$row['qty'],
-                'stock_status'  => (int)$row['status'],
+                'product_id' => (int)$row['entity_id'],
+                'website_id' => (int)$row['website_id'],
+                'stock_id' => (int)$row['stock_id'],
+                'qty' => (double)$row['qty'],
+                'stock_status' => (int)$row['status']
             );
-            if (($i % 1000) == 0) {
+            if ($i % 1000 == 0) {
                 $this->_updateIndexTable($data);
                 $data = array();
             }
@@ -275,7 +278,7 @@ class DefaultStock
      * Update stock status index table (INSERT ... ON DUPLICATE KEY UPDATE ...)
      *
      * @param array $data
-     * @return \Magento\CatalogInventory\Model\Resource\Indexer\Stock\DefaultStock
+     * @return $this
      */
     protected function _updateIndexTable($data)
     {

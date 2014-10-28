@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Backend
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\AdminNotification\Model\System\Message;
 
 class CacheOutdatedTest extends \PHPUnit_Framework_TestCase
@@ -51,18 +47,20 @@ class CacheOutdatedTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_authorizationMock = $this->getMock('Magento\AuthorizationInterface');
-        $this->_urlInterfaceMock = $this->getMock('Magento\UrlInterface');
-        $this->_cacheTypeListMock = $this->getMock('Magento\App\Cache\TypeListInterface');
+        $this->_authorizationMock = $this->getMock('Magento\Framework\AuthorizationInterface');
+        $this->_urlInterfaceMock = $this->getMock('Magento\Framework\UrlInterface');
+        $this->_cacheTypeListMock = $this->getMock('Magento\Framework\App\Cache\TypeListInterface');
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $arguments = array(
             'authorization' => $this->_authorizationMock,
             'urlBuilder' => $this->_urlInterfaceMock,
-            'cacheTypeList' => $this->_cacheTypeListMock,
+            'cacheTypeList' => $this->_cacheTypeListMock
         );
-        $this->_messageModel = $objectManagerHelper
-            ->getObject('Magento\AdminNotification\Model\System\Message\CacheOutdated', $arguments);
+        $this->_messageModel = $objectManagerHelper->getObject(
+            'Magento\AdminNotification\Model\System\Message\CacheOutdated',
+            $arguments
+        );
     }
 
     /**
@@ -72,8 +70,13 @@ class CacheOutdatedTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetIdentity($expectedSum, $cacheTypes)
     {
-        $this->_cacheTypeListMock->expects($this->any())->method('getInvalidated')
-            ->will($this->returnValue($cacheTypes));
+        $this->_cacheTypeListMock->expects(
+            $this->any()
+        )->method(
+            'getInvalidated'
+        )->will(
+            $this->returnValue($cacheTypes)
+        );
         $this->assertEquals($expectedSum, $this->_messageModel->getIdentity());
     }
 
@@ -100,8 +103,13 @@ class CacheOutdatedTest extends \PHPUnit_Framework_TestCase
     public function testIsDisplayed($expected, $allowed, $cacheTypes)
     {
         $this->_authorizationMock->expects($this->once())->method('isAllowed')->will($this->returnValue($allowed));
-        $this->_cacheTypeListMock->expects($this->any())->method('getInvalidated')
-            ->will($this->returnValue($cacheTypes));
+        $this->_cacheTypeListMock->expects(
+            $this->any()
+        )->method(
+            'getInvalidated'
+        )->will(
+            $this->returnValue($cacheTypes)
+        );
         $this->assertEquals($expected, $this->_messageModel->isDisplayed());
     }
 

@@ -30,9 +30,10 @@
 /** @var $banner \Magento\CatalogRule\Model\Rule */
 $catalogRule = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\CatalogRule\Model\Rule');
 
-$catalogRule->setIsActive(1)
+$catalogRule
+    ->setIsActive(1)
     ->setName('Test Catalog Rule')
-    ->setCustomerGroupIds(\Magento\Customer\Model\Group::NOT_LOGGED_IN_ID)
+    ->setCustomerGroupIds(\Magento\Customer\Service\V1\CustomerGroupServiceInterface::NOT_LOGGED_IN_ID)
     ->setDiscountAmount(10)
     ->setWebsiteIds(array(0 => 1))
     ->setSimpleAction('by_percent')

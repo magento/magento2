@@ -1,0 +1,102 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<div class="step-controls">
+    <a href="#" class="btn btn-primary" ng-click="previousState()"><?php echo $this->translate('Previous'); ?></a>
+    <a href="#" class="btn btn-primary" ng-click="nextState()"><?php echo $this->translate('Next'); ?></a>
+</div>
+
+<div class="page-header">
+    <h1>{{$state.current.header}}</h1>
+</div>
+
+<form class="form-horizontal" role="form">
+    <div class="form-group">
+        <label class="col-md-3 control-label"><?php echo $this->translate('Sample Data'); ?></label>
+        <div class="col-md-6">
+            <p class="form-control-static text-muted"><?php echo $this->translate('Using sample of "fake" data can be helpful, letting you automatically build your store with fictious products, tax, and payment settings. But it also creates a lot of extra data you need to remove later. Learn the pros and cons in out <a href="#">Guide to Using Sample Data</a>.'); ?></p>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="checkbox col-md-4 col-md-offset-3">
+            <label>
+                <input type="checkbox" ng-model="store.useSampleData" disabled>&nbsp;<span class="text-muted"><?php echo $this->translate('Use Sample Data'); ?></span>
+            </label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-3 control-label"><?php echo $this->translate('Store Default Time Zone'); ?>&nbsp;<span class="required">*</span></label>
+        <div class="col-md-6">
+            <select class="form-control"
+                    ng-model="store.timezone"
+                    tooltip-placement="right"
+                    tooltip-html-unsafe="<?php echo $this->translate('The time zone in which your online store operates. You can change this later in Magento Admin.'); ?>"
+                    tooltip-trigger="focus"
+                    tooltip-append-to-body="true">
+            <?php foreach ($this->timezone as $value => $label): ?>
+                <?php echo "<option value=\"" . $value . "\">" . $label . "</option>"; ?>
+            <?php endforeach; ?>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-3 control-label"><?php echo $this->translate('Store Default Currency'); ?>&nbsp;<span class="required">*</span></label>
+        <div class="col-md-5">
+            <select class="form-control"
+                    ng-model="store.currency"
+                    tooltip-placement="right"
+                    tooltip-html-unsafe="<?php echo $this->translate('The currency your store uses for price labeling, checkout, returns, credit and gift cards. You can change this later in Magento Admin.'); ?>"
+                    tooltip-trigger="focus"
+                    tooltip-append-to-body="true">
+            <?php foreach ($this->currency as $value => $label): ?>
+                <?php echo "<option value=\"" . $value . "\">" . $label . "</option>"; ?>
+            <?php endforeach; ?>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-3 control-label"><?php echo $this->translate('Store Default Language'); ?>&nbsp;<span class="required">*</span></label>
+        <div class="col-md-4">
+            <select class="form-control"
+                    ng-model="store.language"
+                    tooltip-placement="right"
+                    tooltip-html-unsafe="<?php echo $this->translate('The language customers will see in your store. You can change this later in Magento Set Up Tool.'); ?>"
+                    tooltip-trigger="focus"
+                    tooltip-append-to-body="true">
+            <?php foreach ($this->language as $value => $label): ?>
+                <?php echo "<option value=\"" . $value . "\">" . $label . "</option>"; ?>
+            <?php endforeach; ?>
+            </select>
+        </div>
+    </div>
+</form>
+
+<div class="step-controls">
+    <a href="#" class="btn btn-primary" ng-click="previousState()"><?php echo $this->translate('Previous'); ?></a>
+    <a href="#" class="btn btn-primary" ng-click="nextState()"><?php echo $this->translate('Next'); ?></a>
+</div>

@@ -21,9 +21,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Tools\Layout\Reference;
 
+use Magento\Framework\Filesystem;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Tools\Layout\Formatter;
 use Magento\Tools\Layout\Reference\Processor;
 
@@ -61,8 +62,10 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         }
         $this->_testDir = realpath(__DIR__ . '/_files') . '/';
 
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Filesystem');
-        $this->_varDir = $filesystem->getPath(\Magento\Filesystem::VAR_DIR) . '/references/';
+        /** @var Filesystem $filesystem */
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Framework\Filesystem');
+        $this->_varDir = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR)->getAbsolutePath('references/');
         mkdir($this->_varDir, 0777, true);
 
         $this->_formatter = new Formatter();
@@ -73,7 +76,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function tearDown()
     {
-        \Magento\System\Dirs::rm($this->_varDir);
+        \Magento\Framework\System\Dirs::rm($this->_varDir);
     }
 
     public function testGetReferences()

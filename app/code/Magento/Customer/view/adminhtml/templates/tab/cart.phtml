@@ -1,0 +1,100 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php /* @var $this \Magento\Customer\Block\Adminhtml\Edit\Tab\Cart */ ?>
+<?php if($this->getCartHeader()): ?>
+<div class="content-header skip-header">
+    <table cellspacing="0">
+        <tr>
+            <td style="width:50%;"><h4><?php echo $this->getCartHeader(); ?></h4></td>
+        </tr>
+    </table>
+</div>
+<?php endif ?>
+<?php echo $this->getGridParentHtml() ?>
+<?php if ($this->canDisplayContainer()) : ?>
+<?php
+    $listType = $this->getJsObjectName();
+?>
+<script type="text/javascript">
+require([
+    "Magento_Catalog/catalog/product/composite/configure"
+], function(){
+
+<?php echo $this->getJsObjectName() ?>cartControl = {
+    reload: function (params) {
+        if (!params) {
+            params = {};
+        }
+        <?php echo $this->getJsObjectName() ?>.reloadParams = params;
+        <?php echo $this->getJsObjectName() ?>.reload();
+        <?php echo $this->getJsObjectName() ?>.reloadParams = {};
+    },
+
+    configureItem: function (itemId) {
+        productConfigure.setOnLoadIFrameCallback('<?php echo $listType ?>', this.cbOnLoadIframe.bind(this));
+        productConfigure.showItemConfiguration('<?php echo $listType ?>', itemId);
+        return false;
+    },
+
+    cbOnLoadIframe: function (response) {
+        if (!response.ok) {
+            return;
+        }
+        this.reload();
+    },
+
+    removeItem: function (itemId) {
+        if (!itemId) {
+            alert('<?php echo $this->escapeJsQuote(__('No item specified.')) ?>');
+            return false;
+        }
+        if(!confirm('<?php echo $this->escapeJsQuote(__('Are you sure that you want to remove this item?')) ?>')) {
+            return false;
+        }
+
+        this.reload({'delete':itemId});
+
+        return false;
+    }
+};
+
+<?php
+$params = array(
+    'customer_id' => $this->getCustomerId(),
+    'website_id' => $this->getWebsiteId()
+);
+?>
+productConfigure.addListType(
+    '<?php echo $listType ?>',
+    {
+        urlFetch: '<?php echo $this->getUrl('customer/cart_product_composite_cart/configure', $params) ?>',
+        urlConfirm: '<?php echo $this->getUrl('customer/cart_product_composite_cart/update', $params) ?>'
+    }
+);
+
+});
+</script>
+<?php endif ?>
+<br />

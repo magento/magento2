@@ -25,7 +25,7 @@
  */
 namespace Magento\Sales\Model\Order\Pdf\Config;
 
-class Reader extends \Magento\Config\Reader\Filesystem
+class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**
      * List of identifier attributes for merging
@@ -35,6 +35,6 @@ class Reader extends \Magento\Config\Reader\Filesystem
     protected $_idAttributes = array(
         '/config/renderers/page' => 'type',
         '/config/renderers/page/renderer' => 'product_type',
-        '/config/totals/total' => 'name',
+        '/config/totals/total' => 'name'
     );
 }

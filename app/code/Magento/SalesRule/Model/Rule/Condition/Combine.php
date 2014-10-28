@@ -18,13 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_SalesRule
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
 namespace Magento\SalesRule\Model\Rule\Condition;
 
 class Combine extends \Magento\Rule\Model\Condition\Combine
@@ -32,7 +28,7 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Event\ManagerInterface
+     * @var \Magento\Framework\Event\ManagerInterface
      */
     protected $_eventManager = null;
 
@@ -43,13 +39,13 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
 
     /**
      * @param \Magento\Rule\Model\Condition\Context $context
-     * @param \Magento\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\SalesRule\Model\Rule\Condition\Address $conditionAddress
      * @param array $data
      */
     public function __construct(
         \Magento\Rule\Model\Condition\Context $context,
-        \Magento\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\SalesRule\Model\Rule\Condition\Address $conditionAddress,
         array $data = array()
     ) {
@@ -60,33 +56,42 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
     }
 
     /**
+     * Get new child select options
+     *
      * @return array
      */
     public function getNewChildSelectOptions()
     {
         $addressAttributes = $this->_conditionAddress->loadAttributeOptions()->getAttributeOption();
         $attributes = array();
-        foreach ($addressAttributes as $code=>$label) {
+        foreach ($addressAttributes as $code => $label) {
             $attributes[] = array(
-                'value' => 'Magento\SalesRule\Model\Rule\Condition\Address|' . $code, 'label' => $label
+                'value' => 'Magento\SalesRule\Model\Rule\Condition\Address|' . $code,
+                'label' => $label
             );
         }
 
         $conditions = parent::getNewChildSelectOptions();
-        $conditions = array_merge_recursive($conditions, array(
-            array('value' => 'Magento\SalesRule\Model\Rule\Condition\Product\Found',
-                'label' => __('Product attribute combination')
-            ),
-            array('value' => 'Magento\SalesRule\Model\Rule\Condition\Product\Subselect',
-                'label' => __('Products subselection')
-            ),
-            array('value' => 'Magento\SalesRule\Model\Rule\Condition\Combine',
-                'label' => __('Conditions combination')
-            ),
-            array('label' => __('Cart Attribute'), 'value' => $attributes),
-        ));
+        $conditions = array_merge_recursive(
+            $conditions,
+            array(
+                array(
+                    'value' => 'Magento\SalesRule\Model\Rule\Condition\Product\Found',
+                    'label' => __('Product attribute combination')
+                ),
+                array(
+                    'value' => 'Magento\SalesRule\Model\Rule\Condition\Product\Subselect',
+                    'label' => __('Products subselection')
+                ),
+                array(
+                    'value' => 'Magento\SalesRule\Model\Rule\Condition\Combine',
+                    'label' => __('Conditions combination')
+                ),
+                array('label' => __('Cart Attribute'), 'value' => $attributes)
+            )
+        );
 
-        $additional = new \Magento\Object();
+        $additional = new \Magento\Framework\Object();
         $this->_eventManager->dispatch('salesrule_rule_condition_combine', array('additional' => $additional));
         $additionalConditions = $additional->getConditions();
         if ($additionalConditions) {

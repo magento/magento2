@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_CatalogSearch
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,60 +26,78 @@
 /**
  * Catalog Search change Search Type backend model
  *
- * @category   Magento
- * @package    Magento_CatalogSearch
  * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\CatalogSearch\Model\Config\Backend\Search;
 
-class Type extends \Magento\Core\Model\Config\Value
+use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\CatalogSearch\Model\Fulltext;
+use Magento\Framework\App\Config\Value;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Registry;
+use Magento\Framework\Model\Resource\AbstractResource;
+use Magento\Framework\Data\Collection\Db;
+use Magento\Indexer\Model\IndexerFactory;
+
+class Type extends Value
 {
     /**
      * Catalog search fulltext
      *
-     * @var \Magento\CatalogSearch\Model\Fulltext
+     * @var Fulltext
      */
     protected $_catalogSearchFulltext;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Core\Model\Config $config
-     * @param \Magento\CatalogSearch\Model\Fulltext $catalogSearchFulltext
-     * @param \Magento\Core\Model\Resource\AbstractResource $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @var \Magento\Indexer\Model\IndexerFactory
+     */
+    protected $indexerFactory;
+
+    /**
+     * @param Context $context
+     * @param Registry $registry
+     * @param ScopeConfigInterface $config
+     * @param Fulltext $catalogSearchFulltext
+     * @param IndexerFactory $indexerFactory
+     * @param AbstractResource $resource
+     * @param Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Core\Model\Config $config,
-        \Magento\CatalogSearch\Model\Fulltext $catalogSearchFulltext,
-        \Magento\Core\Model\Resource\AbstractResource $resource = null,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        Context $context,
+        Registry $registry,
+        ScopeConfigInterface $config,
+        Fulltext $catalogSearchFulltext,
+        IndexerFactory $indexerFactory,
+        AbstractResource $resource = null,
+        Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_catalogSearchFulltext = $catalogSearchFulltext;
-        parent::__construct($context, $registry, $storeManager, $config, $resource, $resourceCollection, $data);
+        $this->indexerFactory = $indexerFactory;
+        parent::__construct($context, $registry, $config, $resource, $resourceCollection, $data);
     }
 
     /**
      * After change Catalog Search Type process
      *
-     * @return \Magento\CatalogSearch\Model\Config\Backend\Search\Type|\Magento\Core\Model\AbstractModel
+     * @return $this
      */
     protected function _afterSave()
     {
         $newValue = $this->getValue();
         $oldValue = $this->_config->getValue(
-            \Magento\CatalogSearch\Model\Fulltext::XML_PATH_CATALOG_SEARCH_TYPE,
+            Fulltext::XML_PATH_CATALOG_SEARCH_TYPE,
             $this->getScope(),
             $this->getScopeId()
         );
         if ($newValue != $oldValue) {
             $this->_catalogSearchFulltext->resetSearchResults();
+
+            $indexer = $this->indexerFactory->create();
+            $indexer->load(FulltextIndexer::INDEXER_ID);
+            $indexer->invalidate();
         }
 
         return $this;

@@ -18,22 +18,20 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_GoogleShopping
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\GoogleShopping\Model;
+
+use Magento\Catalog\Model\Product as CatalogModelProduct;
+use Magento\Framework\Gdata\Gshopping\Entry;
 
 /**
  * Google Content Item Types Model
  *
- * @category   Magento
- * @package    Magento_GoogleShopping
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\GoogleShopping\Model;
-
-class Type extends \Magento\Core\Model\AbstractModel
+class Type extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * Mapping attributes collection
@@ -50,7 +48,7 @@ class Type extends \Magento\Core\Model\AbstractModel
     /**
      * @var \Magento\GoogleShopping\Helper\Data
      */
-    protected $_gsData;
+    protected $_googleShoppingHelper;
 
     /**
      * Config
@@ -74,37 +72,40 @@ class Type extends \Magento\Core\Model\AbstractModel
     protected $_collectionFactory;
 
     /**
-     * @param \Magento\Core\Model\Context $context
-     * @param \Magento\Core\Model\Registry $registry
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\GoogleShopping\Model\Resource\Attribute\CollectionFactory $collectionFactory
      * @param \Magento\GoogleShopping\Model\AttributeFactory $attributeFactory
      * @param \Magento\GoogleShopping\Model\Config $config
      * @param \Magento\GoogleShopping\Helper\Product $gsProduct
-     * @param \Magento\GoogleShopping\Helper\Data $gsData
+     * @param \Magento\GoogleShopping\Helper\Data $googleShoppingHelper
      * @param \Magento\GoogleShopping\Model\Resource\Type $resource
-     * @param \Magento\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Core\Model\Context $context,
-        \Magento\Core\Model\Registry $registry,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
         \Magento\GoogleShopping\Model\Resource\Attribute\CollectionFactory $collectionFactory,
         \Magento\GoogleShopping\Model\AttributeFactory $attributeFactory,
         \Magento\GoogleShopping\Model\Config $config,
         \Magento\GoogleShopping\Helper\Product $gsProduct,
-        \Magento\GoogleShopping\Helper\Data $gsData,
+        \Magento\GoogleShopping\Helper\Data $googleShoppingHelper,
         \Magento\GoogleShopping\Model\Resource\Type $resource,
-        \Magento\Data\Collection\Db $resourceCollection = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_collectionFactory = $collectionFactory;
         $this->_attributeFactory = $attributeFactory;
         $this->_config = $config;
         $this->_gsProduct = $gsProduct;
-        $this->_gsData = $gsData;
+        $this->_googleShoppingHelper = $googleShoppingHelper;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
+    /**
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init('Magento\GoogleShopping\Model\Resource\Type');
@@ -115,19 +116,19 @@ class Type extends \Magento\Core\Model\AbstractModel
      *
      * @param int $attributeSetId Attribute Set
      * @param string $targetCountry Two-letters country ISO code
-     * @return \Magento\GoogleShopping\Model\Type
+     * @return $this
      */
     public function loadByAttributeSetId($attributeSetId, $targetCountry)
     {
-        return $this->getResource()
-            ->loadByAttributeSetIdAndTargetCountry($this, $attributeSetId, $targetCountry);
+        return $this->getResource()->loadByAttributeSetIdAndTargetCountry($this, $attributeSetId, $targetCountry);
     }
 
     /**
      * Prepare Entry data and attributes before saving in Google Content
      *
-     * @param \Magento\Gdata\Gshopping\Entry $entry
-     * @return \Magento\Gdata\Gshopping\Entry
+     * @param CatalogModelProduct $product
+     * @param Entry $entry
+     * @return Entry
      */
     public function convertProductToEntry($product, $entry)
     {
@@ -147,10 +148,10 @@ class Type extends \Magento\Core\Model\AbstractModel
     /**
      * Return Product attribute values array
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param CatalogModelProduct $product
      * @return array Product attribute values
      */
-    protected function _getAttributesMapByProduct(\Magento\Catalog\Model\Product $product)
+    protected function _getAttributesMapByProduct(CatalogModelProduct $product)
     {
         $result = array();
         $group = $this->_config->getAttributeGroupsFlat();
@@ -166,17 +167,22 @@ class Type extends \Magento\Core\Model\AbstractModel
                 }
 
                 if (!is_null($name)) {
-                    $name = $this->_gsData->normalizeName($name);
+                    $name = $this->_googleShoppingHelper->normalizeName($name);
                     if (isset($group[$name])) {
                         // if attribute is in the group
                         if (!isset($result[$group[$name]])) {
                             $result[$group[$name]] = $this->_attributeFactory->createAttribute($group[$name]);
                         }
                         // add group attribute to parent attribute
-                        $result[$group[$name]]->addData(array(
-                            'group_attribute_' . $name => $this->_attributeFactory->createAttribute($name)
-                                ->addData($attribute->getData())
-                        ));
+                        $result[$group[$name]]->addData(
+                            array(
+                                'group_attribute_' . $name => $this->_attributeFactory->createAttribute(
+                                    $name
+                                )->addData(
+                                    $attribute->getData()
+                                )
+                            )
+                        );
                         unset($group[$name]);
                     } else {
                         if (!isset($result[$name])) {
@@ -217,11 +223,10 @@ class Type extends \Magento\Core\Model\AbstractModel
     {
         $group = $this->_config->getAttributeGroupsFlat();
         foreach ($group as $child => $parent) {
-            if (isset($attributes[$parent]) &&
-                !isset($attributes[$parent]['group_attribute_' . $child])) {
-                    $attributes[$parent]->addData(
-                        array('group_attribute_' . $child => $this->_attributeFactory->createAttribute($child))
-                    );
+            if (isset($attributes[$parent]) && !isset($attributes[$parent]['group_attribute_' . $child])) {
+                $attributes[$parent]->addData(
+                    array('group_attribute_' . $child => $this->_attributeFactory->createAttribute($child))
+                );
             }
         }
 
@@ -237,8 +242,10 @@ class Type extends \Magento\Core\Model\AbstractModel
     protected function _getAttributesCollection()
     {
         if (is_null($this->_attributesCollection)) {
-            $this->_attributesCollection = $this->_collectionFactory->create()
-                ->addAttributeSetFilter($this->getAttributeSetId(), $this->getTargetCountry());
+            $this->_attributesCollection = $this->_collectionFactory->create()->addAttributeSetFilter(
+                $this->getAttributeSetId(),
+                $this->getTargetCountry()
+            );
         }
         return $this->_attributesCollection;
     }
@@ -246,9 +253,9 @@ class Type extends \Magento\Core\Model\AbstractModel
     /**
      * Remove attributes which were removed from mapping.
      *
-     * @param \Magento\Gdata\Gshopping\Entry $entry
-     * @param array $existAttributes
-     * @return \Magento\Gdata\Gshopping\Entry
+     * @param Entry $entry
+     * @param string[] $existAttributes
+     * @return Entry
      */
     protected function _removeNonexistentAttributes($entry, $existAttributes)
     {
@@ -264,10 +271,9 @@ class Type extends \Magento\Core\Model\AbstractModel
 
         $contentAttributes = $entry->getContentAttributes();
         foreach ($contentAttributes as $contentAttribute) {
-            $name = $this->_gsData->normalizeName($contentAttribute->getName());
-            if (!in_array($name, $ignoredAttributes) &&
-                !in_array($existAttributes, $existAttributes)) {
-                    $entry->removeContentAttribute($name);
+            $name = $this->_googleShoppingHelper->normalizeName($contentAttribute->getName());
+            if (!in_array($name, $ignoredAttributes) && !in_array($existAttributes, $existAttributes)) {
+                $entry->removeContentAttribute($name);
             }
         }
 

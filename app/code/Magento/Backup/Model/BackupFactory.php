@@ -32,16 +32,15 @@ namespace Magento\Backup\Model;
 class BackupFactory
 {
     /**
-     * @var \Magento\ObjectManager
+     * @var \Magento\Framework\ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @param \Magento\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManager $objectManager
      */
-    public function __construct(
-        \Magento\ObjectManager $objectManager
-    ) {
+    public function __construct(\Magento\Framework\ObjectManager $objectManager)
+    {
         $this->_objectManager = $objectManager;
     }
 
@@ -59,10 +58,15 @@ class BackupFactory
         $backupInstance = $this->_objectManager->get('Magento\Backup\Model\Backup');
         foreach ($fsCollection as $backup) {
             if ($backup->getId() == $backupId) {
-                $backupInstance->setType($backup->getType())
-                    ->setTime($backup->getTime())
-                    ->setName($backup->getName())
-                    ->setPath($backup->getPath());
+                $backupInstance->setType(
+                    $backup->getType()
+                )->setTime(
+                    $backup->getTime()
+                )->setName(
+                    $backup->getName()
+                )->setPath(
+                    $backup->getPath()
+                );
                 break;
             }
         }

@@ -18,8 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -28,8 +26,6 @@
 /**
  * Catalog Layer Decimal Attribute Filter Model
  *
- * @category    Magento
- * @package     Magento_Catalog
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Model\Layer\Filter;
@@ -46,24 +42,30 @@ class Decimal extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
     protected $_resource;
 
     /**
-     * Construct
-     *
-     * @param \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory
-     * @param \Magento\Core\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Model\Layer $catalogLayer
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
+     * @param ItemFactory $filterItemFactory
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Catalog\Model\Layer $layer
      * @param \Magento\Catalog\Model\Resource\Layer\Filter\DecimalFactory $filterDecimalFactory
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param array $data
      */
     public function __construct(
         \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory,
-        \Magento\Core\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Layer $catalogLayer,
+        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Catalog\Model\Layer $layer,
         \Magento\Catalog\Model\Resource\Layer\Filter\DecimalFactory $filterDecimalFactory,
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         array $data = array()
     ) {
         $this->_resource = $filterDecimalFactory->create();
-        parent::__construct($filterItemFactory, $storeManager, $catalogLayer, $data);
         $this->_requestVar = 'decimal';
+        $this->priceCurrency = $priceCurrency;
+        parent::__construct($filterItemFactory, $storeManager, $layer, $data);
     }
 
     /**
@@ -80,18 +82,17 @@ class Decimal extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * Apply decimal range filter to product collection
      *
      * @param \Zend_Controller_Request_Abstract $request
-     * @param \Magento\Catalog\Block\Layer\Filter\Decimal $filterBlock
-     * @return \Magento\Catalog\Model\Layer\Filter\Decimal
+     * @return $this
      */
-    public function apply(\Zend_Controller_Request_Abstract $request, $filterBlock)
+    public function apply(\Zend_Controller_Request_Abstract $request)
     {
-        parent::apply($request, $filterBlock);
+        parent::apply($request);
 
         /**
          * Filter must be string: $index, $range
          */
         $filter = $request->getParam($this->getRequestVar());
-        if (!$filter) {
+        if (!$filter || is_array($filter)) {
             return $this;
         }
 
@@ -122,8 +123,7 @@ class Decimal extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      */
     protected function _getCacheKey()
     {
-        $key = $this->getLayer()->getStateKey()
-            . '_ATTR_' . $this->getAttributeModel()->getAttributeCode();
+        $key = $this->getLayer()->getStateKey() . '_ATTR_' . $this->getAttributeModel()->getAttributeCode();
         return $key;
     }
 
@@ -136,8 +136,8 @@ class Decimal extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      */
     protected function _renderItemLabel($range, $value)
     {
-        $from   = $this->_storeManager->getStore()->formatPrice(($value - 1) * $range, false);
-        $to     = $this->_storeManager->getStore()->formatPrice($value * $range, false);
+        $from = $this->priceCurrency->format(($value - 1) * $range, false);
+        $to = $this->priceCurrency->format($value * $range, false);
         return __('%1 - %2', $from, $to);
     }
 
@@ -185,11 +185,10 @@ class Decimal extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
             $maxValue = $this->getMaxValue();
             $index = 1;
             do {
-                $range = pow(10, (strlen(floor($maxValue)) - $index));
+                $range = pow(10, strlen(floor($maxValue)) - $index);
                 $items = $this->getRangeItemCounts($range);
                 $index++;
-            }
-            while ($range > self::MIN_RANGE_POWER && count($items) < 2);
+            } while ($range > self::MIN_RANGE_POWER && count($items) < 2);
             $this->setData('range', $range);
         }
 
@@ -220,15 +219,15 @@ class Decimal extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      */
     protected function _getItemsData()
     {
-        $data       = array();
-        $range      = $this->getRange();
-        $dbRanges   = $this->getRangeItemCounts($range);
+        $data = array();
+        $range = $this->getRange();
+        $dbRanges = $this->getRangeItemCounts($range);
 
         foreach ($dbRanges as $index => $count) {
             $data[] = array(
                 'label' => $this->_renderItemLabel($range, $index),
                 'value' => $index . ',' . $range,
-                'count' => $count,
+                'count' => $count
             );
         }
 

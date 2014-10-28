@@ -35,25 +35,44 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
     public function testGetItemRenderer()
     {
-        $renderer = $this->getMock('Magento\View\Element\AbstractBlock', array(), array(), '', false);
-        $layout = $this->getMock('Magento\Core\Model\Layout', array(
-            'getChildName', 'getBlock', 'getGroupChildNames', '__wakeup'
-        ), array(), '', false);
-        $layout->expects($this->at(0))
-            ->method('getChildName')
-            ->with(null, 'some-type')
-            ->will($this->returnValue('some-block-name'));
-        $layout->expects($this->at(1))
-            ->method('getBlock')
-            ->with('some-block-name')
-            ->will($this->returnValue($renderer));
+        $renderer = $this->getMock('Magento\Framework\View\Element\AbstractBlock', array(), array(), '', false);
+        $layout = $this->getMock(
+            'Magento\Framework\View\Layout',
+            array('getChildName', 'getBlock', 'getGroupChildNames', '__wakeup'),
+            array(),
+            '',
+            false
+        );
+        $layout->expects(
+            $this->at(0)
+        )->method(
+            'getChildName'
+        )->with(
+            null,
+            'some-type'
+        )->will(
+            $this->returnValue('some-block-name')
+        );
+        $layout->expects(
+            $this->at(1)
+        )->method(
+            'getBlock'
+        )->with(
+            'some-block-name'
+        )->will(
+            $this->returnValue($renderer)
+        );
 
         /** @var $block \Magento\Sales\Block\Adminhtml\Items\AbstractItems */
-        $block = $this->_objectManager->getObject('Magento\Sales\Block\Adminhtml\Items\AbstractItems', array(
-            'context' => $this->_objectManager->getObject('Magento\Backend\Block\Template\Context', array(
-                'layout' => $layout,
-            ))
-        ));
+        $block = $this->_objectManager->getObject(
+            'Magento\Sales\Block\Adminhtml\Items\AbstractItems',
+            array(
+                'context' => $this->_objectManager->getObject(
+                    'Magento\Backend\Block\Template\Context',
+                    array('layout' => $layout)
+                )
+            )
+        );
 
         $this->assertSame($renderer, $block->getItemRenderer('some-type'));
     }
@@ -65,24 +84,43 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     public function testGetItemRendererThrowsExceptionForNonexistentRenderer()
     {
         $renderer = $this->getMock('StdClass');
-        $layout = $this->getMock('Magento\Core\Model\Layout', array(
-            'getChildName', 'getBlock', '__wakeup'
-        ), array(), '', false);
-        $layout->expects($this->at(0))
-            ->method('getChildName')
-            ->with(null, 'some-type')
-            ->will($this->returnValue('some-block-name'));
-        $layout->expects($this->at(1))
-            ->method('getBlock')
-            ->with('some-block-name')
-            ->will($this->returnValue($renderer));
+        $layout = $this->getMock(
+            'Magento\Framework\View\Layout',
+            array('getChildName', 'getBlock', '__wakeup'),
+            array(),
+            '',
+            false
+        );
+        $layout->expects(
+            $this->at(0)
+        )->method(
+            'getChildName'
+        )->with(
+            null,
+            'some-type'
+        )->will(
+            $this->returnValue('some-block-name')
+        );
+        $layout->expects(
+            $this->at(1)
+        )->method(
+            'getBlock'
+        )->with(
+            'some-block-name'
+        )->will(
+            $this->returnValue($renderer)
+        );
 
         /** @var $block \Magento\Sales\Block\Adminhtml\Items\AbstractItems */
-        $block = $this->_objectManager->getObject('Magento\Sales\Block\Adminhtml\Items\AbstractItems', array(
-            'context' => $this->_objectManager->getObject('Magento\Backend\Block\Template\Context', array(
-                'layout' => $layout,
-            ))
-        ));
+        $block = $this->_objectManager->getObject(
+            'Magento\Sales\Block\Adminhtml\Items\AbstractItems',
+            array(
+                'context' => $this->_objectManager->getObject(
+                    'Magento\Backend\Block\Template\Context',
+                    array('layout' => $layout)
+                )
+            )
+        );
 
         $block->getItemRenderer('some-type');
     }

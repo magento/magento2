@@ -18,37 +18,31 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Customer
- * @subpackage  unit_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Block\Account;
 
 class LinkTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testGetHref()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $helper = $this->getMockBuilder('Magento\Customer\Helper\Data')
-            ->disableOriginalConstructor()
-            ->setMethods(array('getAccountUrl'))
-            ->getMock();
-        $layout = $this->getMockBuilder('Magento\Core\Model\Layout')
-            ->disableOriginalConstructor()
-            ->setMethods(array('helper'))
-            ->getMock();
+        $helper = $this->getMockBuilder(
+            'Magento\Customer\Helper\Data'
+        )->disableOriginalConstructor()->setMethods(
+            array('getAccountUrl')
+        )->getMock();
+        $layout = $this->getMockBuilder(
+            'Magento\Framework\View\Layout'
+        )->disableOriginalConstructor()->setMethods(
+            array('helper')
+        )->getMock();
 
 
         $block = $objectManager->getObject(
             'Magento\Customer\Block\Account\Link',
-            array(
-                'layout' => $layout,
-                'customerHelper' => $helper,
-            )
+            array('layout' => $layout, 'customerHelper' => $helper)
         );
         $helper->expects($this->any())->method('getAccountUrl')->will($this->returnValue('account url'));
 

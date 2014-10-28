@@ -18,12 +18,9 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Integration
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Integration\Block\Adminhtml\Integration\Edit;
 
 class Tabs extends \Magento\Backend\Block\Widget\Tabs
@@ -31,6 +28,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
     /**
      * Initialize integration edit page tabs
      *
+     * @return void
      */
     protected function _construct()
     {

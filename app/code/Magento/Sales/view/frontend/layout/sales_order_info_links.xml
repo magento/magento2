@@ -23,16 +23,16 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <referenceBlock name="sales.order.info">
-        <block class="Magento\View\Element\Html\Links" as="links" name="sales.order.info.links">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <referenceContainer name="content">
+        <block class="Magento\Framework\View\Element\Html\Links" as="links" name="sales.order.info.links" before="-">
             <arguments>
-                <argument name="css_class" xsi:type="string">items</argument>
+                <argument name="css_class" xsi:type="string">items order-links</argument>
             </arguments>
-            <block class="Magento\Sales\Block\Order\Link" name="sales.order.info.links.billing-agreements">
+            <block class="Magento\Sales\Block\Order\Link" name="sales.order.info.links.information">
                 <arguments>
                     <argument name="path" xsi:type="string">sales/order/view</argument>
-                    <argument name="label" xsi:type="string">Order Information</argument>
+                    <argument name="label" xsi:type="string">Items Ordered</argument>
                 </arguments>
             </block>
             <block class="Magento\Sales\Block\Order\Link" name="sales.order.info.links.invoice">
@@ -57,5 +57,5 @@
                 </arguments>
             </block>
         </block>
-    </referenceBlock>
-</layout>
+    </referenceContainer>
+</page>

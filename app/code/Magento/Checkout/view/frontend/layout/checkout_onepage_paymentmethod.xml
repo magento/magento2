@@ -23,13 +23,11 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
  -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <block class="Magento\Checkout\Block\Onepage\Payment\Methods" name="payment_method" output="1" template="onepage/payment/methods.phtml">
-        <action method="setMethodFormTemplate">
-            <argument name="method" xsi:type="string">purchaseorder</argument>
-            <argument name="template" xsi:type="string">Magento_Payment::form/purchaseorder.phtml</argument>
-        </action>
-        <block class="Magento\View\Element\Template" name="checkout.onepage.payment.methods.scripts" as="scripts"/>
-        <block class="Magento\View\Element\Template" name="checkout.onepage.payment.methods.additional" as="additional"/>
-    </block>
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/layout_generic.xsd">
+    <container name="root">
+        <block class="Magento\Checkout\Block\Onepage\Payment\Methods" name="payment_method" template="onepage/payment/methods.phtml" cacheable="false">
+            <block class="Magento\Framework\View\Element\Template" name="checkout.onepage.payment.methods.scripts" as="scripts"/>
+            <block class="Magento\Framework\View\Element\Template" name="checkout.onepage.payment.methods.additional" as="additional"/>
+        </block>
+    </container>
 </layout>

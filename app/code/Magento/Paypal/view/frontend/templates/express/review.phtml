@@ -1,0 +1,146 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+/** @var $this \Magento\Paypal\Block\Express\Review */
+
+?>
+<hgroup class="page-title">
+    <h1 class="title"><span class="base"><?php echo __('Review Order') ?></span></h1>
+</hgroup>
+<div class="paypal-review view">
+    <div class="block block-order-details-view">
+        <div class="block-content">
+            <?php if ($this->getShippingAddress()): ?>
+                <div class="box box-order-shipping-method">
+                    <strong class="box-title"><span><?php echo __('Shipping Method') ?></span></strong>
+                    <div class="box-content">
+                        <form method="post" id="shipping-method-form"
+                              action="<?php echo $this->escapeHtml($this->getShippingMethodSubmitUrl()) ?>"
+                              class="form">
+                            <?php if ($this->getCanEditShippingMethod() || !$this->getCurrentShippingRate()): ?>
+                                <?php if ($groups = $this->getShippingRateGroups()): ?>
+                                    <?php $currentRate = $this->getCurrentShippingRate(); ?>
+                                    <div class="field shipping required">
+                                        <select name="shipping_method" id="shipping-method" class="select">
+                                            <?php if (!$currentRate): ?>
+                                                <option value="">
+                                                    <?php echo __('Please select a shipping method...') ?>
+                                                </option>
+                                            <?php endif; ?>
+                                            <?php foreach ($groups as $code => $rates): ?>
+                                                <optgroup
+                                                    label="<?php echo $this->escapeHtml($this->getCarrierName($code)) ?>">
+                                                    <?php foreach ($rates as $rate): ?>
+                                                        <option
+                                                            value="<?php echo $this->renderShippingRateValue($rate) ?>"<?php echo ($currentRate === $rate) ? ' selected="selected"' : ''; ?>>
+                                                            <?php echo $this->renderShippingRateOption($rate) ?>
+                                                        </option>
+                                                    <?php endforeach; ?>
+                                                </optgroup>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                    <div class="actions-toolbar">
+                                        <div class="primary">
+                                            <button id="update-shipping-method-submit" type="submit"
+                                                    class="action update primary">
+                                                <span><?php echo __('Update Shipping Method') ?></span></button>
+                                        </div>
+                                    </div>
+                                <?php else: ?>
+                                    <p><?php echo __('Sorry, no quotes are available for this order at this time.') ?></p>
+                                <?php endif; ?>
+                            <?php else: ?>
+                                <p><?php echo $this->renderShippingRateOption($this->getCurrentShippingRate()) ?></p>
+                            <?php endif; ?>
+                        </form>
+                    </div>
+                </div>
+                <div class="box box-order-shipping-address">
+                    <strong class="box-title"><span><?php echo __('Shipping Address') ?></span></strong>
+                    <div class="box-content">
+                        <address><?php echo $this->renderAddress($this->getShippingAddress()) ?></address>
+                    </div>
+                    <?php if ($this->getCanEditShippingAddress()): ?>
+                        <div class="box-actions">
+                            <a href="<?php echo $this->getEditUrl() ?>"
+                               class="action edit"><span><?php echo __('Edit') ?></span></a>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
+            <div class="box box-order-billing-address">
+                <strong class="box-title"><span><?php echo __('Payment Method') ?></span></strong>
+                <div class="box-content">
+                    <?php echo $this->escapeHtml($this->getPaymentMethodTitle()) ?>
+                </div>
+            <?php if ($this->getEditUrl()): ?>
+                <div class="box-actions">
+                    <a href="<?php echo $this->getEditUrl() ?>" class="action edit">
+                        <span><?php echo __('Edit Payment Information') ?></span>
+                    </a>
+                </div>
+            <?php endif ?>
+            </div>
+        </div>
+    </div>
+
+    <div class="paypal-review-items">
+        <div class="paypal-review-title">
+            <strong><?php echo __('Items in Your Shopping Cart') ?></strong>
+            <a href="<?php echo $this->getUrl('checkout/cart') ?>"
+               class="action edit"><span><?php echo __('Edit Shopping Cart') ?></span></a>
+        </div>
+
+        <div id="details-reload" class="table-wrapper order-items">
+            <?php echo $this->getChildHtml('details') ?>
+        </div>
+
+        <form method="post" id="order-review-form" action="<?php echo $this->getPlaceOrderUrl() ?>" class="form">
+            <?php echo $this->getChildHtml('agreements'); ?>
+            <div class="actions-toolbar" id="review-buttons-container">
+                <div class="primary">
+                    <button type="button" id="review-button" value="<?php echo __('Place Order') ?>"
+                            class="action checkout primary"><span><?php echo __('Place Order') ?></span></button>
+                    <button type="button" id="review-submit" value="<?php echo __('Place Order') ?>"
+                            class="action checkout primary"><span><?php echo __('Place Order') ?></span></button>
+                </div>
+                <span class="please-wait load indicator" id="review-please-wait" style="display: none;" data-text="<?php echo __('Submitting order information...') ?>">
+                   <span><?php echo __('Submitting order information...') ?></span>
+                </span>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+require(['jquery', 'mage/mage'], function(jQuery){
+
+    jQuery('#order-review-form').mage('validation', {}).mage('orderReview', {
+        shippingSubmitFormSelector: '#shipping-method-form',
+        shippingSelector: '#shipping-method',
+        shippingMethodUpdateUrl: '<?php echo $this->escapeHtml($this->getUpdateShippingMethodsUrl()) ?>',
+        isAjax: <?php echo $this->getUseAjax() ? 'true' : 'false' ?>
+    });
+
+});
+</script>

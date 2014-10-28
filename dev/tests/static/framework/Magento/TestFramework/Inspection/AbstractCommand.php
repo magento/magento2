@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento
- * @subpackage  static_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -87,7 +84,7 @@ abstract class AbstractCommand
      */
     public function canRun()
     {
-        return ($this->_execShellCmd($this->_buildVersionShellCmd()) !== false);
+        return $this->_execShellCmd($this->_buildVersionShellCmd()) !== false;
     }
 
     /**
@@ -101,7 +98,7 @@ abstract class AbstractCommand
         if (!$versionOutput) {
             return null;
         }
-        return (preg_match('/[^\d]*([^\s]+)/', $versionOutput, $matches) ? $matches[1] : $versionOutput);
+        return preg_match('/[^\d]*([^\s]+)/', $versionOutput, $matches) ? $matches[1] : $versionOutput;
     }
 
     /**
@@ -141,7 +138,7 @@ abstract class AbstractCommand
         $output = array();
         exec($shellCmd . ' 2>&1', $output, $this->_lastExitCode);
         $this->_lastOutput = implode(PHP_EOL, $output);
-        return ($this->_lastExitCode === 0 ? $this->_lastOutput : false);
+        return $this->_lastExitCode === 0 ? $this->_lastOutput : false;
     }
 
     /**

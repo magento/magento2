@@ -1,0 +1,17 @@
+namespace \Magento\Framework\Service\Code\Generator;
+
+/**
+ * SearchResultsBuilder class for \Magento\Framework\Service\Code\Generator\Sample
+ */
+class SampleSearchResultsBuilder extends \Magento\Framework\Service\V1\Data\AbstractSearchResultsBuilder
+{
+    /**
+     * SearchResultsBuilder constructor
+     *
+     * @param
+     */
+    public function __construct(\Magento\Framework\Service\Data\ObjectFactory $objectFactory, \Magento\Framework\Service\Data\AttributeValueBuilder $valueBuilder, \Magento\Framework\Service\Config\MetadataConfig $metadataService, \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder $searchCriteriaBuilder, \Magento\Framework\Service\Code\Generator\SampleBuilder $itemObjectBuilder)
+    {
+        parent::__construct($objectFactory, $valueBuilder, $metadataService, $searchCriteriaBuilder, $itemObjectBuilder);
+    }
+}

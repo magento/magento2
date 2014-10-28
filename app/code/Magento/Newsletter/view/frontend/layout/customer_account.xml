@@ -23,9 +23,9 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <referenceBlock name="customer_account_navigation">
-        <block class="Magento\View\Element\Html\Link\Current" name="customer-account-navigation-newsletter-subscriptions-link">
+        <block class="Magento\Framework\View\Element\Html\Link\Current" name="customer-account-navigation-newsletter-subscriptions-link">
             <arguments>
                 <argument name="path" xsi:type="string">newsletter/manage</argument>
                 <argument name="label" xsi:type="string">Newsletter Subscriptions</argument>
@@ -33,4 +33,4 @@
         </block>
     </referenceBlock>
     <remove name="newsletter_subscription"/>
-</layout>
+</page>

@@ -18,9 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    Magento
- * @package     Magento_Widget
- * @subpackage  integration_tests
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -35,8 +32,9 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Widget\Model\Widget\Instance');
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Widget\Model\Widget\Instance'
+        );
     }
 
     public function testSetGetType()
@@ -48,12 +46,11 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
 
     public function testSetThemeId()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\App\State')
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\State')
             ->setAreaCode('frontend');
-        $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\View\DesignInterface')
-            ->setDefaultDesignTheme()
-            ->getDesignTheme();
+        $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\View\DesignInterface'
+        )->setDefaultDesignTheme()->getDesignTheme();
         $this->_model->setThemeId($theme->getId());
 
         $this->assertEquals($theme->getId(), $this->_model->getThemeId());
@@ -64,15 +61,18 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetWidgetConfigAsArray()
     {
-        $this->markTestIncomplete('Functionality is failed because widget'
-            . ' "app/design/frontend/magento_iphone_html5/etc/widget.xml" replaces'
-            . ' "new_products" widget in Catalog module');
         $config = $this->_model->setType('Magento\Catalog\Block\Product\Widget\NewWidget')->getWidgetConfigAsArray();
         $this->assertTrue(is_array($config));
         $element = null;
-        if (isset($config['parameters']) && isset($config['parameters']['template'])
-            && isset($config['parameters']['template']['values'])
-            && isset($config['parameters']['template']['values']['list'])
+        if (isset(
+            $config['parameters']
+        ) && isset(
+            $config['parameters']['template']
+        ) && isset(
+            $config['parameters']['template']['values']
+        ) && isset(
+            $config['parameters']['template']['values']['list']
+        )
         ) {
             $element = $config['parameters']['template']['values']['list'];
         }
@@ -91,15 +91,12 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetWidgetSupportedContainers()
     {
-        $this->markTestIncomplete('Functionality is failed because widget'
-            . ' "app/design/frontend/magento_iphone_html5/etc/widget.xml" replaces'
-            . ' "new_products" widget in Catalog module');
         $this->_model->setType('Magento\Catalog\Block\Product\Widget\NewWidget');
         $containers = $this->_model->getWidgetSupportedContainers();
         $this->assertInternalType('array', $containers);
-        $this->assertContains('left', $containers);
+        $this->assertContains('sidebar.main', $containers);
         $this->assertContains('content', $containers);
-        $this->assertContains('right', $containers);
+        $this->assertContains('sidebar.additional', $containers);
         return $this->_model;
     }
 
@@ -124,13 +121,10 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGenerateLayoutUpdateXml(\Magento\Widget\Model\Widget\Instance $model)
     {
-        $params = array(
-            'display_mode' => 'fixed',
-            'types'        => array('type_1', 'type_2'),
-        );
+        $params = array('display_mode' => 'fixed', 'types' => array('type_1', 'type_2'));
         $model->setData('widget_parameters', $params);
         $this->assertEquals('', $model->generateLayoutUpdateXml('content'));
-        $model->setId('test_id')->setPackageTheme('magento_plushe');
+        $model->setId('test_id')->setPackageTheme('Magento/plushe');
         $result = $model->generateLayoutUpdateXml('content');
         $this->assertContains('<referenceContainer name="content">', $result);
         $this->assertContains('<block class="' . $model->getType() . '"', $result);

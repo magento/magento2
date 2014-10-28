@@ -18,38 +18,13 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @category    tests
- * @package     static
- * @subpackage  Legacy
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Test\Integrity;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
-    protected $_possibleLocales = array('de_DE', 'en_AU', 'en_GB', 'en_US', 'es_ES', 'es_XC', 'fr_FR', 'fr_XC',
-        'it_IT', 'ja_JP', 'nl_NL', 'pl_PL', 'zh_CN', 'zh_XC', 'pt_BR');
-
-    public function testExistingFilesDeclared()
-    {
-        $root = \Magento\TestFramework\Utility\Files::init()->getPathToSource();
-        $failures = array();
-        foreach (glob("{$root}/app/code/*/*", GLOB_ONLYDIR) as $modulePath) {
-            $localeFiles = glob("{$modulePath}/i18n/*.csv");
-            foreach ($localeFiles as $file) {
-                $file = realpath($file);
-                $assertLocale = str_replace('.csv', '', basename($file));
-                if (!in_array($assertLocale, $this->_possibleLocales)) {
-                    $failures[] = $file;
-                }
-            }
-        }
-        $this->assertEmpty($failures,
-            'Translation files exist, but not declared in configuration:' . "\n" . var_export($failures, 1));
-    }
-
     public function testPaymentMethods()
     {
         $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
@@ -65,8 +40,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                     $this->assertStringStartsWith(
                         $formalModuleName . '\Model\\',
                         (string)$node,
-                        "'$node' payment method is declared in '$configFile' module, "
-                            . "but doesn't belong to '$moduleName' module"
+                        "'{$node}' payment method is declared in '{$configFile}' module, " .
+                        "but doesn't belong to '{$moduleName}' module"
                     );
                 }
             },
