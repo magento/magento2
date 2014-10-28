@@ -49,10 +49,11 @@ class Save extends \Magento\Newsletter\Controller\Manage
                     ->create();
                 $this->_customerAccountService->updateCustomer($customerId, $customerDetails);
 
-                if ((boolean)$this->getRequest()->getParam('is_subscribed', false)) {
+                $isAlreadySubscribed = $this->_subscriberFactory->create()->loadByCustomerId($customerId)->isSubscribed();
+                if (!$isAlreadySubscribed && (boolean) $this->getRequest()->getParam('is_subscribed', false)) {
                     $this->_subscriberFactory->create()->subscribeCustomerById($customerId);
                     $this->messageManager->addSuccess(__('We saved the subscription.'));
-                } else {
+                } elseif ($isAlreadySubscribed && !(boolean) $this->getRequest()->getParam('is_subscribed', false)) {
                     $this->_subscriberFactory->create()->unsubscribeCustomerById($customerId);
                     $this->messageManager->addSuccess(__('We removed the subscription.'));
                 }
