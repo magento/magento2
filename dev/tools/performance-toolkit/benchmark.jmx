@@ -857,7 +857,7 @@ vars.put(&quot;searchData&quot;, new String(Base64Encoder.encode(searchData)));<
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.contentEncoding">UTF-8</stringProp>
-          <stringProp name="HTTPSampler.path">${base_path}${admin_path}/customer/index/limit/{$users}/filter/${searchData}</stringProp>
+          <stringProp name="HTTPSampler.path">${base_path}${admin_path}/customer/index/grid/limit/{$users}/filter/${searchData}</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
