@@ -23,18 +23,20 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <update handle="catalog_product_view"/>
-    <referenceContainer name="product.info.main">
-        <block class="Magento\Review\Block\Product\View\Other" name="product.info.other" as="other" template="Magento_Review::product/view/other.phtml" before="product.info.addto"/>
-    </referenceContainer>
-    <referenceContainer name="content">
-        <container name="product.info.details" label="invisible" htmlTag="div" htmlClass="product info detailed" after="product.info.media">
-            <block class="Magento\Review\Block\Form" name="product.review.form" as="review_form">
-                <container name="product.review.form.fields.before" as="form_fields_before" label="Review Form Fields Before" htmlTag="div" htmlClass="rewards"/>
-            </block>
-            <block class="Magento\Review\Block\Product\View\ListView" name="product.info.product_additional_data" as="product_additional_data" template="product/view/list.phtml"/>
-            <block class="Magento\Theme\Block\Html\Pager" name="product_review_list.toolbar"/>
-        </container>
-    </referenceContainer>
+    <body>
+        <referenceContainer name="product.info.main">
+            <block class="Magento\Review\Block\Product\View\Other" name="product.info.other" as="other" template="Magento_Review::product/view/other.phtml" before="product.info.addto"/>
+        </referenceContainer>
+        <referenceContainer name="content">
+            <container name="product.info.details" label="invisible" htmlTag="div" htmlClass="product info detailed" after="product.info.media">
+                <block class="Magento\Review\Block\Form" name="product.review.form" as="review_form">
+                    <container name="product.review.form.fields.before" as="form_fields_before" label="Review Form Fields Before" htmlTag="div" htmlClass="rewards"/>
+                </block>
+                <block class="Magento\Review\Block\Product\View\ListView" name="product.info.product_additional_data" as="product_additional_data" template="product/view/list.phtml"/>
+                <block class="Magento\Theme\Block\Html\Pager" name="product_review_list.toolbar"/>
+            </container>
+        </referenceContainer>
+    </body>
 </page>

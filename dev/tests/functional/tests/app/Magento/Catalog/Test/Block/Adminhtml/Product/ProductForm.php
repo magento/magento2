@@ -147,7 +147,7 @@ class ProductForm extends FormTabs
                 $category = reset($categories);
             }
             if ($category) {
-                $tabs['product-details']['category_ids']['value'] = ($category instanceof InjectableFixture )
+                $tabs['product-details']['category_ids']['value'] = ($category instanceof InjectableFixture)
                     ? $category->getName()
                     : $category->getCategoryName();
             }

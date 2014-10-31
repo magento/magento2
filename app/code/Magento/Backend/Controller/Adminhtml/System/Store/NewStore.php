@@ -27,7 +27,7 @@ namespace Magento\Backend\Controller\Adminhtml\System\Store;
 class NewStore extends \Magento\Backend\Controller\Adminhtml\System\Store
 {
     /**
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Forward
      */
     public function execute()
     {
@@ -35,6 +35,8 @@ class NewStore extends \Magento\Backend\Controller\Adminhtml\System\Store
             $this->_coreRegistry->register('store_type', 'store');
         }
         $this->_coreRegistry->register('store_action', 'add');
-        $this->_forward('editStore');
+        /** @var \Magento\Backend\Model\View\Result\Forward $resultForward */
+        $resultForward = $this->resultForwardFactory->create();
+        return $resultForward->forward('editStore');
     }
 }

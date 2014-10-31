@@ -24,11 +24,13 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <referenceContainer name="minicart.subtotal.container">
-        <block name="minicart.subtotal.msrp" before="minicart.subtotal" class="Magento\Msrp\Block\Total" template="cart/subtotal.phtml">
-            <arguments>
-                <argument name="original_block_name" xsi:type="string">minicart.subtotal</argument>
-            </arguments>
-        </block>
-    </referenceContainer>
+    <body>
+        <referenceContainer name="minicart.subtotal.container">
+            <block name="minicart.subtotal.msrp" before="minicart.subtotal" class="Magento\Msrp\Block\Total" template="cart/subtotal.phtml">
+                <arguments>
+                    <argument name="original_block_name" xsi:type="string">minicart.subtotal</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
 </page>

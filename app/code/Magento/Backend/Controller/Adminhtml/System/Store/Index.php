@@ -27,12 +27,11 @@ namespace Magento\Backend\Controller\Adminhtml\System\Store;
 class Index extends \Magento\Backend\Controller\Adminhtml\System\Store
 {
     /**
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Page
      */
     public function execute()
     {
         $this->_title->add(__('Stores'));
-        $this->_initAction();
-        $this->_view->renderLayout();
+        return $this->resultPageFactory->create();
     }
 }

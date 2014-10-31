@@ -23,16 +23,18 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page layout="2columns-left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <update handle="customer_account"/>
-    <referenceBlock name="page.main.title">
-        <action method="setPageTitle">
-            <argument translate="true" name="title" xsi:type="string">My Dashboard</argument>
-        </action>
-    </referenceBlock>
-    <referenceContainer name="content">
-        <block class="Magento\Framework\View\Element\Template" name="customer_account_dashboard_top" as="top"/>
-        <block class="Magento\Customer\Block\Account\Dashboard\Info" name="customer_account_dashboard_info" as="info" template="account/dashboard/info.phtml"/>
-        <block class="Magento\Customer\Block\Account\Dashboard\Address" name="customer_account_dashboard_address" as="address" template="account/dashboard/address.phtml"/>
-    </referenceContainer>
+    <body>
+        <referenceBlock name="page.main.title">
+            <action method="setPageTitle">
+                <argument translate="true" name="title" xsi:type="string">My Dashboard</argument>
+            </action>
+        </referenceBlock>
+        <referenceContainer name="content">
+            <block class="Magento\Framework\View\Element\Template" name="customer_account_dashboard_top" as="top"/>
+            <block class="Magento\Customer\Block\Account\Dashboard\Info" name="customer_account_dashboard_info" as="info" template="account/dashboard/info.phtml"/>
+            <block class="Magento\Customer\Block\Account\Dashboard\Address" name="customer_account_dashboard_address" as="address" template="account/dashboard/address.phtml"/>
+        </referenceContainer>
+    </body>
 </page>

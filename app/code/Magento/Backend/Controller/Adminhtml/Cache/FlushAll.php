@@ -29,7 +29,7 @@ class FlushAll extends \Magento\Backend\Controller\Adminhtml\Cache
     /**
      * Flush cache storage
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
@@ -39,6 +39,8 @@ class FlushAll extends \Magento\Backend\Controller\Adminhtml\Cache
             $cacheFrontend->getBackend()->clean();
         }
         $this->messageManager->addSuccess(__("You flushed the cache storage."));
-        $this->_redirect('adminhtml/*');
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
+        return $resultRedirect->setPath('adminhtml/*');
     }
 }

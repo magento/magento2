@@ -75,6 +75,9 @@ class SaveTest extends \PHPUnit_Framework_TestCase
      */
     protected $_sectionCheckerMock;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $resultRedirect;
+
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -138,16 +141,10 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
         $this->_cacheMock = $this->getMock('Magento\Framework\App\Cache\Type\Layout', array(), array(), '', false);
 
-        $configStructureMock->expects(
-            $this->any()
-        )->method(
-            'getElement'
-        )->will(
-            $this->returnValue($this->_sectionMock)
-        );
+        $configStructureMock->expects($this->any())->method('getElement')
+            ->will($this->returnValue($this->_sectionMock));
 
         $helperMock->expects($this->any())->method('getUrl')->will($this->returnArgument(0));
-        $this->_responseMock->expects($this->once())->method('setRedirect')->with('adminhtml/system_config/edit');
 
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $arguments = array(
@@ -167,6 +164,21 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $this->resultRedirect = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->resultRedirect->expects($this->atLeastOnce())
+            ->method('setPath')
+            ->with('adminhtml/system_config/edit')
+            ->willReturnSelf();
+        $resultRedirectFactory = $this->getMockBuilder('Magento\Backend\Model\View\Result\RedirectFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $resultRedirectFactory->expects($this->atLeastOnce())
+            ->method('create')
+            ->willReturn($this->resultRedirect);
+
         $context = $helper->getObject('Magento\Backend\App\Action\Context', $arguments);
         $this->_controller = $this->getMock(
             'Magento\Backend\Controller\Adminhtml\System\Config\Save',
@@ -177,7 +189,8 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 $this->_sectionCheckerMock,
                 $this->_configFactoryMock,
                 $this->_cacheMock,
-                new \Magento\Framework\Stdlib\String()
+                new \Magento\Framework\Stdlib\String(),
+                $resultRedirectFactory
             )
         );
     }
@@ -218,7 +231,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($backendConfigMock)
         );
 
-        $this->_controller->execute();
+        $this->assertEquals($this->resultRedirect, $this->_controller->execute());
     }
 
     public function testIndexActionSaveState()
@@ -239,7 +252,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($data)
         );
-        $this->_controller->execute();
+        $this->assertEquals($this->resultRedirect, $this->_controller->execute());
     }
 
     public function testIndexActionGetGroupForSave()
@@ -290,7 +303,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         );
         $backendConfigMock->expects($this->once())->method('save');
 
-        $this->_controller->execute();
+        $this->assertEquals($this->resultRedirect, $this->_controller->execute());
     }
 
     public function testIndexActionSaveAdvanced()
@@ -316,6 +329,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $backendConfigMock->expects($this->once())->method('save');
 
         $this->_cacheMock->expects($this->once())->method('clean')->with(\Zend_Cache::CLEANING_MODE_ALL);
-        $this->_controller->execute();
+        $this->assertEquals($this->resultRedirect, $this->_controller->execute());
     }
 }

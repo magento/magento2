@@ -23,10 +23,11 @@
 //  */
 
 .table-wrapper {
-    > table {
-        .table-caption(@_table-caption-hide: true);
-    }
     margin-bottom: @indent-base;
+}
+
+table {
+    .table-caption();
 }
 
 //

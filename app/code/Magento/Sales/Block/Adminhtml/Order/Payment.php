@@ -76,7 +76,7 @@ class Payment extends \Magento\Backend\Block\Template
      */
     public function setPayment($payment)
     {
-        $paymentInfoBlock = $this->_paymentData->getInfoBlock($payment);
+        $paymentInfoBlock = $this->_paymentData->getInfoBlock($payment, $this->getLayout());
         $this->setChild('info', $paymentInfoBlock);
         $this->setData('payment', $payment);
         return $this;

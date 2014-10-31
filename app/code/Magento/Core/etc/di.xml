@@ -83,7 +83,7 @@
     <preference for="Magento\Framework\Pricing\Amount\AmountInterface" type="Magento\Framework\Pricing\Amount\Base" />
     <preference for="Magento\Framework\Stdlib\CookieManager" type="Magento\Framework\Stdlib\Cookie\PhpCookieManager" />
     <preference for="Magento\Framework\View\Page\FaviconInterface" type="Magento\Theme\Model\Favicon\Favicon" />
-    <preference for="Magento\Framework\Api\AttributeInterface" type="Magento\Framework\Service\Data\AttributeValue" />
+    <preference for="Magento\Framework\Api\Data\AttributeInterface" type="Magento\Framework\Service\Data\AttributeValue" />
     <type name="Magento\Framework\App\DefaultPath\DefaultPath">
         <arguments>
             <argument name="parts" xsi:type="array">
@@ -339,6 +339,21 @@
         </arguments>
     </virtualType>
 
+    <virtualType name="pageLayoutRenderPool" type="Magento\Framework\View\Layout\Reader\Pool">
+        <arguments>
+            <argument name="readers" xsi:type="array">
+                <item name="container" xsi:type="string">Magento\Framework\View\Layout\Reader\Container</item>
+                <item name="move" xsi:type="string">Magento\Framework\View\Layout\Reader\Move</item>
+                <item name="remove" xsi:type="string">Magento\Framework\View\Layout\Reader\Remove</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Page\Layout\Reader">
+        <arguments>
+            <argument name="pageLayoutFileSource" xsi:type="object">pageLayoutFileCollectorAggregated</argument>
+            <argument name="reader" xsi:type="object">pageLayoutRenderPool</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\View\PageLayout\File\Collector\Aggregated">
         <arguments>
             <argument name="baseFiles" xsi:type="object">pageFileSourceBaseSorted</argument>

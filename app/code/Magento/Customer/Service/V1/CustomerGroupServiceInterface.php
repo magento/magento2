@@ -61,11 +61,11 @@ interface CustomerGroupServiceInterface
     /**
      * Get a customer group by group ID.
      *
-     * @param string $groupId
-     * @throws \Magento\Framework\Exception\NoSuchEntityException If $groupId is not found
+     * @param string $id
+     * @throws \Magento\Framework\Exception\NoSuchEntityException If $id is not found
      * @return \Magento\Customer\Service\V1\Data\CustomerGroup
      */
-    public function getGroup($groupId);
+    public function getGroup($id);
 
     /**
      * Get default group
@@ -79,11 +79,11 @@ interface CustomerGroupServiceInterface
     /**
      * Check if the group can be deleted
      *
-     * @param string $groupId
+     * @param string $id
      * @throws \Magento\Framework\Exception\NoSuchEntityException If group is not found
      * @return bool True, if this group can be deleted
      */
-    public function canDelete($groupId);
+    public function canDelete($id);
 
     /**
      * Create group
@@ -100,7 +100,7 @@ interface CustomerGroupServiceInterface
     /**
      * Update group
      *
-     * @param string $groupId
+     * @param string $id
      * @param \Magento\Customer\Service\V1\Data\CustomerGroup $group
      * @throws \Magento\Framework\Exception\InputException If there is a problem with the input
      * @throws \Magento\Framework\Exception\NoSuchEntityException If a group ID is sent but the group does not exist
@@ -109,16 +109,16 @@ interface CustomerGroupServiceInterface
      * @throws \Magento\Framework\Model\Exception If something goes wrong during save
      * @return bool True if this group was updated
      */
-    public function updateGroup($groupId, \Magento\Customer\Service\V1\Data\CustomerGroup $group);
+    public function updateGroup($id, \Magento\Customer\Service\V1\Data\CustomerGroup $group);
 
     /**
      * Delete group
      *
-     * @param string $groupId
-     * @throws \Magento\Framework\Exception\NoSuchEntityException If $groupId is not found
+     * @param string $id
+     * @throws \Magento\Framework\Exception\NoSuchEntityException If $id is not found
      * @throws \Magento\Framework\Exception\StateException Thrown if cannot delete group
      * @throws \Exception If something goes wrong during delete
      * @return bool True if the group was deleted
      */
-    public function deleteGroup($groupId);
+    public function deleteGroup($id);
 }

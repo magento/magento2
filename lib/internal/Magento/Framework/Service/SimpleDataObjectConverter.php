@@ -145,6 +145,17 @@ class SimpleDataObjectConverter
     }
 
     /**
+     * Converts an input string from snake_case to camelCase.
+     *
+     * @param string $input
+     * @return string
+     */
+    public static function snakeCaseToCamelCase($input)
+    {
+        return lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $input))));
+    }
+
+    /**
      * Convert a CamelCase string read from method into field key in snake_case
      *
      * e.g. DefaultShipping => default_shipping

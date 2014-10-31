@@ -33,7 +33,7 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
 ?>
 <tbody class="cart item">
 <tr class="item info item-info">
-    <td class="col item">
+    <td data-th="<?php echo $this->escapeHtml(__('Item')); ?>" class="col item">
         <?php if ($this->hasProductUrl()):?><a href="<?php echo $this->getProductUrl() ?>" title="<?php echo $this->escapeHtml($this->getProductName()) ?>" class="product photo product-item-photo">
             <?php else:?>
             <span class="product photo product-item-photo">

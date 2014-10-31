@@ -56,7 +56,21 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                     'subtotal' => 46
                 ]
             ],
+            'forUpdateMiniShoppingCart' => [
+                'options' => [
+                    'links' => [
+                        [
+                            'label' => 'link_0',
+                            'value' => 'Yes'
+                        ]
+                    ],
+                ],
+                'cartItem' => [
+                    'price' => 23,
+                    'subtotal' => 22.43
+                ]
+            ],
         ];
-        return isset($presets[$name]) ? $presets[$name] : null;
+        return isset($presets[$name]) ? $presets[$name] : [];
     }
 }

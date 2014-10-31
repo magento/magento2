@@ -44,6 +44,8 @@
 @addto-hover-color: @color-primary;
 @minicart-icons-color: #8f8f8f;
 
+@h1-margin-bottom-desktop: @indent-xl-base;
+
 body {
     .css(background-color, @page-bg-color);
 }
@@ -76,11 +78,13 @@ body {
         max-width: 100%;
         display: block;
     }
+   .page-print & {
+        float: none;
+    }
 }
 
 .page.main {
     > .page-title {
-        margin-bottom: @indent-xl-base;
         .title + .action {
             margin-top: @indent-l-base;
         }
@@ -139,14 +143,12 @@ body {
         border-top: 1px solid @border-color-base;
         ul {
             &:extend(.abstract-reset-list all);
-            padding: 0 50px 0 0;
         }
         .links {
             display: inline-block;
             vertical-align: top;
             margin-bottom: 20px;
-        }
-        .links {
+            padding: 0 50px 0 0;
             li {
                 margin: 0 0 8px;
             }
@@ -201,6 +203,31 @@ body {
 }
 
 //
+//    Widgets
+//--------------------------------------
+.sidebar {
+    .widget.block:not(:last-child),
+    .widget:not(:last-child) {
+        &:extend(.abstract-margin-for-blocks-and-widgets all);
+    }
+}
+
+.widget {
+    clear: both;
+    img {
+        max-width: 100%;
+    }
+    .block-title {
+        strong {
+            display: inline-block;
+            font-size: ceil((@font-size-base * 1.28)); // 18px
+            font-weight: @font-weight-light;
+            margin: 0 0 @indent-base;
+        }
+    }
+}
+
+//
 //    Desktop
 //--------------------------------------
 .responsive(@break) when (@break = @screen-m) {
@@ -246,7 +273,6 @@ body {
 
     .page.main {
         > .page-title {
-            margin-bottom: @indent-l-base;
             .title {
                 display: inline-block;
             }

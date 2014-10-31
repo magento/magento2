@@ -24,20 +24,31 @@
 
 namespace Magento\Framework\View\Result;
 
+use Magento\Framework;
 use Magento\Framework\View;
+use Magento\Framework\Controller\AbstractResult;
 use Magento\Framework\App\ResponseInterface;
 
 /**
  * A generic layout response can be used for rendering any kind of layout
  * So it comprises a response body from the layout elements it has and sets it to the HTTP response
  */
-class Layout extends View\Element\Template
-    //implements ResultInterface
+class Layout extends AbstractResult
 {
     /**
      * @var \Magento\Framework\View\LayoutFactory
      */
     protected $layoutFactory;
+
+    /**
+     * @var \Magento\Framework\View\Layout\BuilderFactory
+     */
+    protected $layoutBuilderFactory;
+
+    /**
+     * @var \Magento\Framework\View\Layout\Reader\Pool
+     */
+    protected $layoutReaderPool;
 
     /**
      * @var \Magento\Framework\View\LayoutInterface
@@ -50,42 +61,112 @@ class Layout extends View\Element\Template
     protected $translateInline;
 
     /**
+     * @var \Magento\Framework\Event\ManagerInterface
+     */
+    protected $eventManager;
+
+    /**
+     * @var \Magento\Framework\App\Request\Http
+     */
+    protected $request;
+
+    /**
+     * Constructor
+     *
      * @param View\Element\Template\Context $context
      * @param View\LayoutFactory $layoutFactory
-     * @param \Magento\Framework\Translate\InlineInterface $translateInline
-     * @param array $data
+     * @param View\Layout\Reader\Pool $layoutReaderPool
+     * @param Framework\Translate\InlineInterface $translateInline
+     * @param View\Layout\BuilderFactory $layoutBuilderFactory
+     * @param bool $isIsolated
      */
     public function __construct(
         View\Element\Template\Context $context,
         View\LayoutFactory $layoutFactory,
-        \Magento\Framework\Translate\InlineInterface $translateInline,
-        array $data = array()
+        View\Layout\Reader\Pool $layoutReaderPool,
+        Framework\Translate\InlineInterface $translateInline,
+        View\Layout\BuilderFactory $layoutBuilderFactory,
+        $isIsolated = false
     ) {
         $this->layoutFactory = $layoutFactory;
+        $this->layoutBuilderFactory = $layoutBuilderFactory;
+        $this->layoutReaderPool = $layoutReaderPool;
+        $this->eventManager = $context->getEventManager();
+        $this->request = $context->getRequest();
         $this->translateInline = $translateInline;
-        parent::__construct($context, $data);
+        // TODO Shared layout object will be deleted in MAGETWO-28359
+        $this->layout = $isIsolated
+            ? $this->layoutFactory->create(['reader' => $this->layoutReaderPool])
+            : $context->getLayout();
+        $this->initLayoutBuilder();
+    }
+
+    /**
+     * Create layout builder
+     *
+     * @return void
+     */
+    protected function initLayoutBuilder()
+    {
+        $this->layoutBuilderFactory->create(View\Layout\BuilderFactory::TYPE_LAYOUT, ['layout' => $this->layout]);
     }
 
     /**
      * Get layout instance for current page
      *
-     * TODO: This layout model must be isolated, now are used shared instance of layout (MAGETWO-26282)
-     *
      * @return \Magento\Framework\View\Layout
      */
     public function getLayout()
     {
-        return $this->_layout;
+        return $this->layout;
     }
 
     /**
-     * Create new instance of layout for current page
-     *
      * @return $this
      */
     public function initLayout()
     {
-        $this->layout = $this->layoutFactory->create();
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function addDefaultHandle()
+    {
+        $this->addHandle($this->getDefaultLayoutHandle());
+        return $this;
+    }
+
+    /**
+     * Retrieve the default layout handle name for the current action
+     *
+     * @return string
+     */
+    public function getDefaultLayoutHandle()
+    {
+        return strtolower($this->request->getFullActionName());
+    }
+
+    /**
+     * @param string|string[] $handleName
+     * @return $this
+     */
+    public function addHandle($handleName)
+    {
+        $this->getLayout()->getUpdate()->addHandle($handleName);
+        return $this;
+    }
+
+    /**
+     * Add update to merge object
+     *
+     * @param string $update
+     * @return $this
+     */
+    public function addUpdate($update)
+    {
+        $this->getLayout()->getUpdate()->addUpdate($update);
         return $this;
     }
 
@@ -97,7 +178,30 @@ class Layout extends View\Element\Template
      */
     public function renderResult(ResponseInterface $response)
     {
-        $response->appendBody($this->_layout->getOutput());
+        \Magento\Framework\Profiler::start('LAYOUT');
+        \Magento\Framework\Profiler::start('layout_render');
+
+        $this->applyHttpHeaders($response);
+        $this->render($response);
+
+        $this->eventManager->dispatch('controller_action_layout_render_before');
+        $this->eventManager->dispatch(
+            'controller_action_layout_render_before_' . $this->request->getFullActionName()
+        );
+        \Magento\Framework\Profiler::stop('layout_render');
+        \Magento\Framework\Profiler::stop('LAYOUT');
+        return $this;
+    }
+
+    /**
+     * Render current layout
+     *
+     * @param ResponseInterface $response
+     * @return $this
+     */
+    protected function render(ResponseInterface $response)
+    {
+        $response->appendBody($this->layout->getOutput());
         return $this;
     }
 }

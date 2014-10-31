@@ -98,15 +98,16 @@
                 <div class="box box-items">
                     <div class="box-content">
                         <div class="table-wrapper">
-                            <table class="items data table order review" id="overview-table-<?php echo $_address->getId() ?>">
+                            <table class="items data table table-order-review" id="overview-table-<?php echo $_address->getId() ?>">
+                                <caption class="table-caption"><?php echo __('Order Review') ?></caption>
                                 <thead>
                                 <tr>
-                                    <th class="col item"><?php echo __('Item') ?>
+                                    <th class="col item" scope="col"><?php echo __('Item') ?>
                                         <a href="<?php echo $this->getAddressesEditUrl() ?>" class="action edit"><span><?php echo __('Edit') ?></span></a>
                                     </th>
-                                    <th class="col price"><?php echo __('Price') ?></th>
-                                    <th class="col qty"><?php echo __('Qty') ?></th>
-                                    <th class="col subtotal"><?php echo __('Subtotal') ?></th>
+                                    <th class="col price" scope="col"><?php echo __('Price') ?></th>
+                                    <th class="col qty" scope="col"><?php echo __('Qty') ?></th>
+                                    <th class="col subtotal" scope="col"><?php echo __('Subtotal') ?></th>
                                 </tr>
                                 </thead>
                                 <tfoot>
@@ -135,13 +136,14 @@
             </strong>
             <?php $mergedCells = ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices() ? 2 : 1); ?>
             <div class="table-wrapper">
-                <table class="items data table order review" id="virtual-overview-table">
+                <table class="items data table table-order-review" id="virtual-overview-table">
+                    <caption class="table-caption"><?php echo __('Items') ?></caption>
                     <thead>
                         <tr>
-                            <th class="col item"><?php echo __('Product Name') ?></th>
-                            <th class="col price"><?php echo __('Price') ?></th>
-                            <th class="col qty"><?php echo __('Qty') ?></th>
-                            <th class="col subtotal"><?php echo __('Subtotal') ?></th>
+                            <th class="col item" scope="col"><?php echo __('Product Name') ?></th>
+                            <th class="col price" scope="col"><?php echo __('Price') ?></th>
+                            <th class="col qty" scope="col"><?php echo __('Qty') ?></th>
+                            <th class="col subtotal" scope="col"><?php echo __('Subtotal') ?></th>
                         </tr>
                     </thead>
                     <tfoot>

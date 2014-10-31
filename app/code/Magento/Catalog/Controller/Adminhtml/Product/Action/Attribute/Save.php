@@ -58,6 +58,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
     protected $_stockIndexerProcessor;
 
     /**
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper
      * @param \Magento\Catalog\Model\Indexer\Product\Flat\Processor $productFlatIndexerProcessor
@@ -65,6 +70,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
      * @param \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexerProcessor
      * @param \Magento\Catalog\Helper\Product $catalogProduct
      * @param \Magento\CatalogInventory\Service\V1\Data\StockItemBuilder $stockItemBuilder
+     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         Action\Context $context,
@@ -73,7 +79,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor,
         \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexerProcessor,
         \Magento\Catalog\Helper\Product $catalogProduct,
-        \Magento\CatalogInventory\Service\V1\Data\StockItemBuilder $stockItemBuilder
+        \Magento\CatalogInventory\Service\V1\Data\StockItemBuilder $stockItemBuilder,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
     ) {
         $this->_productFlatIndexerProcessor = $productFlatIndexerProcessor;
         $this->_productPriceIndexerProcessor = $productPriceIndexerProcessor;
@@ -81,17 +88,18 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         $this->_catalogProduct = $catalogProduct;
         $this->stockItemBuilder = $stockItemBuilder;
         parent::__construct($context, $attributeHelper);
+        $this->resultRedirectFactory = $resultRedirectFactory;
     }
 
     /**
      * Update product attributes
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
         if (!$this->_validateProducts()) {
-            return;
+            return $this->resultRedirectFactory->create()->setPath('catalog/product/', ['_current' => true]);
         }
 
         /* Collect Data */
@@ -210,6 +218,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
             );
         }
 
-        $this->_redirect('catalog/product/', array('store' => $this->attributeHelper->getSelectedStoreId()));
+        return $this->resultRedirectFactory->create()
+            ->setPath('catalog/product/', ['store' => $this->attributeHelper->getSelectedStoreId()]);
     }
 }

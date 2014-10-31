@@ -25,26 +25,29 @@
 // Small screens only
 .responsive-smaller(@screen-s) {}
 
-@media all and (max-width: @screen-xs) {
+@media only screen and (max-width: @screen-xs) {
     .responsive-smaller(@screen-xs);
 }
 
-@media all and (max-width: @screen-s) {
+@media only screen and (max-width: @screen-s) {
     .responsive-smaller(@screen-s);
 }
 
-@media all and (max-width: @screen-m) {
+@media only screen and (max-width: @screen-m) {
     .responsive-smaller(@screen-m);
 }
 
-@media all and (min-width: @screen-s) {
+@media all and (min-width: @screen-s),
+print {
     .responsive(@screen-s);
 }
 
-@media all and (min-width: @screen-m) {
+@media all and (min-width: @screen-m),
+print {
     .responsive(@screen-m);
 }
 
-@media all and (min-width: @screen-l) {
+@media all and (min-width: @screen-l),
+print {
     .responsive(@screen-l);
 }

@@ -25,8 +25,6 @@ namespace Magento\Catalog\Block\Adminhtml\Category;
 
 /**
  * Category container block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {

@@ -24,10 +24,12 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <block class="Magento\Framework\Pricing\Render" name="product.price.render.grouped">
-        <arguments>
-            <argument name="price_render_handle" xsi:type="string">catalog_product_prices</argument>
-            <!-- set "override" configuration settings here -->
-        </arguments>
-    </block>
+    <body>
+        <block class="Magento\Framework\Pricing\Render" name="product.price.render.grouped">
+            <arguments>
+                <argument name="price_render_handle" xsi:type="string">catalog_product_prices</argument>
+                <!-- set "override" configuration settings here -->
+            </arguments>
+        </block>
+    </body>
 </page>

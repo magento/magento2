@@ -25,8 +25,45 @@
  */
 namespace Magento\Framework\View;
 
+use Magento\Framework\View\Layout\BuilderFactory;
+
 class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Magento\Framework\View\LayoutFactory
+     */
+    protected $layoutFactory;
+
+    /**
+     * @var \Magento\Framework\View\Layout\BuilderFactory
+     */
+    protected $builderFactory;
+
+    protected function setUp()
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->layoutFactory = $objectManager->get('Magento\Framework\View\LayoutFactory');
+    }
+
+    /**
+     * Prepare a layout model with pre-loaded fixture of an update XML
+     *
+     * @param string $fixtureFile
+     * @return \Magento\Framework\View\LayoutInterface
+     */
+    protected function _getLayoutModel($fixtureFile)
+    {
+        $layout = $this->layoutFactory->create();
+        /** @var $xml \Magento\Framework\View\Layout\Element */
+        $xml = simplexml_load_file(
+            __DIR__ . "/_files/layout_directives_test/{$fixtureFile}",
+            'Magento\Framework\View\Layout\Element'
+        );
+        $layout->loadString($xml->asXml());
+        $layout->generateElements();
+        return $layout;
+    }
+
     /**
      * Test scheduled operations in the rendering of elements
      *
@@ -45,8 +82,8 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
     {
         $layout = $this->_getLayoutModel('render.xml');
         $this->assertEmpty($layout->renderElement('nonexisting_element'));
-        $this->assertEquals('124', $layout->renderElement('container1'));
-        $this->assertEquals('12', $layout->renderElement('block1'));
+        $this->assertEquals('124', $layout->renderElement('container_one'));
+        $this->assertEquals('12', $layout->renderElement('block_one'));
     }
 
     /**
@@ -58,16 +95,8 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
     public function testGetBlockUnscheduled()
     {
         $layout = $this->_getLayoutModel('get_block.xml');
-        $this->assertInstanceOf('Magento\Framework\View\Element\Text', $layout->getBlock('block1'));
-        $this->assertInstanceOf('Magento\Framework\View\Element\Text', $layout->getBlock('block2'));
-    }
-
-    /**
-     * @expectedException \Magento\Framework\Exception
-     */
-    public function testGetBlockUnscheduledException()
-    {
-        $this->_getLayoutModel('get_block_exception.xml');
+        $this->assertInstanceOf('Magento\Framework\View\Element\Text', $layout->getBlock('block_first'));
+        $this->assertInstanceOf('Magento\Framework\View\Element\Text', $layout->getBlock('block_second'));
     }
 
     public function testLayoutArgumentsDirective()
@@ -81,14 +110,11 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
     public function testLayoutArgumentsDirectiveIfComplexValues()
     {
         $layout = $this->_getLayoutModel('arguments_complex_values.xml');
-
         $this->assertEquals(
             array('parameters' => array('first' => '1', 'second' => '2')),
             $layout->getBlock('block_with_args_complex_values')->getOne()
         );
-
         $this->assertEquals('two', $layout->getBlock('block_with_args_complex_values')->getTwo());
-
         $this->assertEquals(
             array('extra' => array('key1' => 'value1', 'key2' => 'value2')),
             $layout->getBlock('block_with_args_complex_values')->getThree()
@@ -152,8 +178,8 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
     public function testActionAnonymousParentBlock()
     {
         $layout = $this->_getLayoutModel('action_for_anonymous_parent_block.xml');
-        $this->assertEquals('schedule_block', $layout->getParentName('test.block.insert'));
-        $this->assertEquals('schedule_block_1', $layout->getParentName('test.block.append'));
+        $this->assertEquals('schedule_block0', $layout->getParentName('test.block.insert'));
+        $this->assertEquals('schedule_block1', $layout->getParentName('test.block.append'));
     }
 
     /**
@@ -242,28 +268,6 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Prepare a layout model with pre-loaded fixture of an update XML
-     *
-     * @param string $fixtureFile
-     * @return \Magento\Framework\View\LayoutInterface
-     */
-    protected function _getLayoutModel($fixtureFile)
-    {
-        /** @var $layout \Magento\Framework\View\LayoutInterface */
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
-        );
-        /** @var $xml \Magento\Framework\View\Layout\Element */
-        $xml = simplexml_load_file(
-            __DIR__ . "/_files/layout_directives_test/{$fixtureFile}",
-            'Magento\Framework\View\Layout\Element'
-        );
-        $layout->loadString($xml->asXml());
-        $layout->generateElements();
-        return $layout;
-    }
-
-    /**
      * @magentoConfigFixture current_store true_options 1
      * @magentoAppIsolation enabled
      */
@@ -271,7 +275,7 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
     {
         $layout = $this->_getLayoutModel('ifconfig.xml');
         $this->assertFalse($layout->getBlock('block1'));
-        $this->assertInstanceOf('Magento\Framework\View\Element\BlockInterface', $layout->getBlock('block2'));
+        $this->assertFalse( $layout->getBlock('block2'));
         $this->assertInstanceOf('Magento\Framework\View\Element\BlockInterface', $layout->getBlock('block3'));
         $this->assertFalse($layout->getBlock('block4'));
     }

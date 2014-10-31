@@ -36,5 +36,5 @@
         <plugin name="first" type="Magento\Core\Model\Action\Plugin" />
     </type>
     <virtualType name="customStoreManagerProxy" type="Magento\Store\Model\StoreManager\Proxy" />
-    <virtualType name="customLayoutFactory" type="Magento\Framework\View\Layout\Factory" />
+    <virtualType name="customLayoutFactory" type="Magento\Framework\View\LayoutFactory" />
 </config>

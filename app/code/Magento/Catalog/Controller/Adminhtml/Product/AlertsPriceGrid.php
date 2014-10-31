@@ -24,16 +24,19 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-class AlertsPriceGrid extends \Magento\Catalog\Controller\Adminhtml\Product
+use Magento\Backend\App\Action;
+use Magento\Catalog\Controller\Adminhtml\Product;
+use Magento\Framework\Controller\Result;
+
+class AlertsPriceGrid extends AbstractProductGrid
 {
     /**
      * Get alerts price grid
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
-        $this->_view->loadLayout(false);
-        $this->_view->renderLayout();
+        return $this->resultLayoutFactory->create();
     }
 }

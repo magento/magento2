@@ -24,6 +24,7 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <update handle="msrp_popup"/>
     <!--<update handle="MAP_price_msrp_wishlist_item"/>-->
+    <update handle="msrp_popup"/>
+    <body/>
 </page>

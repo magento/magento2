@@ -26,22 +26,24 @@
  * @see \Magento\Paypal\Block\Express\Review\Details
  */
 ?>
-<table id="details-table" class="data table table-paypal-review-items">
-    <caption class="table caption"><?php echo __('Items in Your Shopping Cart') ?></caption>
-    <thead>
-    <tr>
-        <th class="col name"><?php echo __('Product Name') ?></th>
-        <th class="col price"><?php echo __('Price') ?></th>
-        <th class="col qty"><?php echo __('Qty') ?></th>
-        <th class="col subtotal"><?php echo __('Subtotal') ?></th>
-    </tr>
-    </thead>
-    <tfoot>
+<div class="table-wrapper">
+    <table id="details-table" class="data table table-paypal-review-items">
+        <caption class="table-caption"><?php echo __('Items in Your Shopping Cart') ?></caption>
+        <thead>
+        <tr>
+            <th class="col name" scope="col"><?php echo __('Product Name') ?></th>
+            <th class="col price" scope="col"><?php echo __('Price') ?></th>
+            <th class="col qty" scope="col"><?php echo __('Qty') ?></th>
+            <th class="col subtotal" scope="col"><?php echo __('Subtotal') ?></th>
+        </tr>
+        </thead>
+        <tfoot>
         <?php echo $this->getChildHtml('totals'); ?>
-    </tfoot>
-    <tbody>
-    <?php foreach ($this->getItems() as $_item): ?>
-        <?php echo $this->getItemHtml($_item) ?>
-    <?php endforeach ?>
-    </tbody>
-</table>
+        </tfoot>
+        <tbody>
+        <?php foreach ($this->getItems() as $_item): ?>
+            <?php echo $this->getItemHtml($_item) ?>
+        <?php endforeach ?>
+        </tbody>
+    </table>
+</div>

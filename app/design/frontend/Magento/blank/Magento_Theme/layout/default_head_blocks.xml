@@ -26,5 +26,6 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <head>
         <css src="css/styles.css" />
+        <css src="css/print.css" media="print" />
     </head>
 </page>

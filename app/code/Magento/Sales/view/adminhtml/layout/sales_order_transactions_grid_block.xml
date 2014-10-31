@@ -25,7 +25,8 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <update handle="sales_transactions_grid_block"/>
-    <referenceBlock name="sales.transactions.grid">
+    <body>
+        <referenceBlock name="sales.transactions.grid">
             <arguments>
                 <argument name="id" xsi:type="string">order_transactions</argument>
                 <argument name="dataSource" xsi:type="object">
@@ -39,9 +40,9 @@
                     <param name="_current">1</param>
                 </argument>
             </arguments>
-        <referenceBlock name="sales.transactions.grid.columnSet">
-            <arguments>
-                <argument name="id" xsi:type="string">order_transactions</argument>
+            <referenceBlock name="sales.transactions.grid.columnSet">
+                <arguments>
+                    <argument name="id" xsi:type="string">order_transactions</argument>
                     <argument name="rowUrl" xsi:type="array">
                         <item name="path" xsi:type="string">sales/transactions/view</item>
                         <item name="params" xsi:type="array">
@@ -52,6 +53,7 @@
                         </item>
                     </argument>
                 </arguments>
+            </referenceBlock>
         </referenceBlock>
-    </referenceBlock>
+    </body>
 </page>

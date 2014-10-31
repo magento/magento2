@@ -31,7 +31,7 @@ class MassRefresh extends \Magento\Backend\Controller\Adminhtml\Cache
     /**
      * Mass action for cache refresh
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
@@ -55,6 +55,8 @@ class MassRefresh extends \Magento\Backend\Controller\Adminhtml\Cache
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('An error occurred while refreshing cache.'));
         }
-        $this->_redirect('adminhtml/*');
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
+        return $resultRedirect->setPath('adminhtml/*');
     }
 }

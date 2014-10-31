@@ -55,9 +55,7 @@ class Samples implements FixtureInterface
     public function __construct(array $params, array $data = [])
     {
         $this->params = $params;
-        if (isset($data['preset'])) {
-            $this->data = $this->getPreset($data['preset']);
-        }
+        $this->data = isset($data['preset']) ? $this->getPreset($data['preset']) : $data;
     }
 
     /**

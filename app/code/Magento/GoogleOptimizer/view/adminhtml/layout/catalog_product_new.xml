@@ -24,10 +24,12 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <referenceBlock name="product_tabs">
-        <action method="addTab">
-            <argument name="name" xsi:type="string">google-experiment</argument>
-            <argument name="block" xsi:type="string">Magento\GoogleOptimizer\Block\Adminhtml\Catalog\Product\Edit\Tab\Googleoptimizer</argument>
-        </action>
-    </referenceBlock>
+    <body>
+        <referenceBlock name="product_tabs">
+            <action method="addTab">
+                <argument name="name" xsi:type="string">google-experiment</argument>
+                <argument name="block" xsi:type="string">Magento\GoogleOptimizer\Block\Adminhtml\Catalog\Product\Edit\Tab\Googleoptimizer</argument>
+            </action>
+        </referenceBlock>
+    </body>
 </page>

@@ -402,7 +402,7 @@ abstract class Grid extends Block
             $this->search($filter);
         }
         $location = '//div[@class="grid"]//tr[';
-        $rowTemplate = 'td[contains(text(),normalize-space("%s"))]';
+        $rowTemplate = 'td[contains(.,normalize-space("%s"))]';
         if ($isStrict) {
             $rowTemplate = 'td[text()[normalize-space()="%s"]]';
         }

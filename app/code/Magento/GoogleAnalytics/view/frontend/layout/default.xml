@@ -24,7 +24,9 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <referenceContainer name="after.body.start">
-        <block class="Magento\GoogleAnalytics\Block\Ga" name="google_analytics" as="google_analytics" template="ga.phtml"/>
-    </referenceContainer>
+    <body>
+        <referenceContainer name="after.body.start">
+            <block class="Magento\GoogleAnalytics\Block\Ga" name="google_analytics" as="google_analytics" template="ga.phtml"/>
+        </referenceContainer>
+    </body>
 </page>

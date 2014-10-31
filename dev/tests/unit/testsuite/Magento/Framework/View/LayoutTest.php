@@ -39,11 +39,6 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     protected $structureMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $blockFactoryMock;
-
-    /**
      * @var \Magento\Framework\View\Layout\ProcessorFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $processorFactoryMock;
@@ -73,13 +68,19 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
      */
     protected $schStructureMock;
 
+    /**
+     * @var \Magento\Framework\View\Layout\Generator\Block|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $generatorBlockMock;
+
+    /**
+     * @var \Magento\Framework\View\Layout\Generator\Container|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $generatorContainerMock;
+
     protected function setUp()
     {
-        $this->structureMock = $this->getMockBuilder('Magento\Framework\Data\Structure')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->blockFactoryMock = $this->getMockBuilder('Magento\Framework\View\Element\BlockFactory')
-            ->setMethods(['createBlock'])
+        $this->structureMock = $this->getMockBuilder('Magento\Framework\View\Layout\Data\Structure')
             ->disableOriginalConstructor()
             ->getMock();
         $this->processorFactoryMock = $this->getMock(
@@ -96,28 +97,35 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $this->processorMock = $this->getMock('Magento\Core\Model\Layout\Merge', [], [], '', false);
         $this->schStructureMock = $this->getMock('Magento\Framework\View\Layout\ScheduledStructure', [], [], '', false);
         $this->eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
+        $this->generatorBlockMock = $this->getMockBuilder('Magento\Framework\View\Layout\Generator\Block')
+            ->disableOriginalConstructor()->getMock();
+        $this->generatorContainerMock = $this->getMockBuilder('Magento\Framework\View\Layout\Generator\Container')
+            ->disableOriginalConstructor()->getMock();
+
+        $generatorPoolMock = $this->getMockBuilder('Magento\Framework\View\Layout\GeneratorPool')
+            ->disableOriginalConstructor()->getMock();
+        $generatorPoolMock->expects($this->any())
+            ->method('getGenerator')
+            ->will(
+                $this->returnValueMap([
+                    [\Magento\Framework\View\Layout\Generator\Block::TYPE, $this->generatorBlockMock],
+                    [\Magento\Framework\View\Layout\Generator\Container::TYPE, $this->generatorContainerMock]
+                ])
+            );
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(
             'Magento\Framework\View\Layout',
             array(
                 'structure' => $this->structureMock,
-                'blockFactory' => $this->blockFactoryMock,
                 'themeResolver' => $this->themeResolverMock,
                 'processorFactory' => $this->processorFactoryMock,
                 'appState' => $this->appStateMock,
                 'eventManager' => $this->eventManagerMock,
-                'scheduledStructure' => $this->schStructureMock
+                'scheduledStructure' => $this->schStructureMock,
+                'generatorPool' => $generatorPoolMock
             )
         );
-    }
-
-    /**
-     * @expectedException \Magento\Framework\Model\Exception
-     */
-    public function testCreateBlockException()
-    {
-        $this->model->createBlock('type', 'blockname', array());
     }
 
     public function testCreateBlockSuccess()
@@ -125,7 +133,11 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $blockMock = $this->getMockBuilder('Magento\Framework\View\Element\AbstractBlock')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->blockFactoryMock->expects($this->once())->method('createBlock')->will($this->returnValue($blockMock));
+        $this->structureMock->expects($this->once())
+            ->method('createStructuralElement')
+            ->with('blockname', \Magento\Framework\View\Layout\Element::TYPE_BLOCK, 'type')
+            ->willReturn('blockname');
+        $this->generatorBlockMock->expects($this->once())->method('createBlock')->will($this->returnValue($blockMock));
 
         $this->model->createBlock('type', 'blockname', array());
         $this->assertInstanceOf('Magento\Framework\View\Element\AbstractBlock', $this->model->getBlock('blockname'));
@@ -177,112 +189,45 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('<some_update>123</some_update>', $this->model->getNode('some_update')->asXml());
     }
 
-    /**
-     * @param string $parentName
-     * @param string $alias
-     * @param string $name
-     * @param bool $isBlock
-     * @dataProvider getChildBlockDataProvider
-     */
-    public function testGetChildBlock($parentName, $alias, $name, $isBlock)
+    public function testGetChildBlock()
+    {
+        $customBlockName = 'custom_block';
+        $customBlockParentName = 'custom_block_parent';
+        $customBlockAlias = 'custom_block_alias';
+
+        $blockMock = $this->getMockBuilder('Magento\Framework\View\Element\Template')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->structureMock->expects($this->once())
+            ->method('getChildId')
+            ->with($customBlockParentName, $customBlockAlias)
+            ->willReturn($customBlockName);
+
+        $this->structureMock->expects($this->once())
+            ->method('hasElement')
+            ->with($customBlockName)
+            ->willReturn(true);
+
+        $this->structureMock->expects($this->once())
+            ->method('getAttribute')
+            ->with($customBlockName, 'type')
+            ->willReturn(\Magento\Framework\View\Layout\Element::TYPE_BLOCK);
+
+        $this->model->setBlock($customBlockName, $blockMock);
+        $this->assertInstanceOf(
+            'Magento\Framework\View\Element\AbstractBlock',
+            $this->model->getChildBlock($customBlockParentName, $customBlockAlias)
+        );
+    }
+
+    public function testGetChildNonExistBlock()
     {
         $this->structureMock->expects($this->once())
             ->method('getChildId')
-            ->with($this->equalTo($parentName), $this->equalTo($alias))
-            ->will($this->returnValue($name));
-        $this->structureMock->expects($this->once())
-            ->method('hasElement')
-            ->with($this->equalTo($name))
-            ->will($this->returnValue($isBlock));
-        if ($isBlock) {
-            $this->schStructureMock->expects($this->once())
-                ->method('hasElement')
-                ->with($this->equalTo($name))
-                ->will($this->returnValue($isBlock));
-            $this->structureMock->expects($this->once())
-                ->method('getAttribute')
-                ->with($this->equalTo($name), $this->equalTo('type'))
-                ->will($this->returnValue(\Magento\Framework\View\Layout\Element::TYPE_BLOCK));
-            $this->prepareGenerateBlock($name);
-            $this->assertInstanceOf(
-                'Magento\Framework\View\Element\AbstractBlock',
-                $this->model->getChildBlock($parentName, $alias)
-            );
-        } else {
-            $this->assertFalse($this->model->getChildBlock($parentName, $alias));
-        }
-    }
-
-    /**
-     * @return array
-     */
-    public function getChildBlockDataProvider()
-    {
-        return [
-            ['parent_name', 'alias', 'block_name', true],
-            ['parent_name', 'alias', 'block_name', false]
-        ];
-    }
-
-    /**
-     * @param string $name
-     */
-    protected function prepareGenerateBlock($name)
-    {
-        $blockClass = 'Magento\Framework\View\Element\Template';
-        $template = 'file.phtml';
-        $ttl = 100;
-        $xmlString = '<?xml version="1.0"?><block class="' . $blockClass . '" template="' . $template
-            . '" ttl="' . $ttl . '"></block>';
-        $xml = simplexml_load_string($xmlString, 'Magento\Framework\View\Layout\Element');
-        $elementData = [\Magento\Framework\View\Layout\Element::TYPE_BLOCK, $xml, [], []];
-        $this->schStructureMock->expects($this->once())
-            ->method('getElement')
-            ->with($this->equalTo($name))
-            ->will($this->returnValue($elementData));
-        $this->schStructureMock->expects($this->once())
-            ->method('unsetElement')
-            ->with($this->equalTo($name))
-            ->will($this->returnSelf());
-        $blockMock = $this->getMockBuilder('Magento\Framework\View\Element\Template')
-            ->setMethods(['setType', 'setNameInLayout', 'addData', 'setLayout', 'setTemplate', 'setTtl'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $blockMock->expects($this->once())
-            ->method('setTemplate')
-            ->with($this->equalTo($template))
-            ->will($this->returnSelf());
-        $blockMock->expects($this->once())
-            ->method('setTtl')
-            ->with($this->equalTo($ttl))
-            ->will($this->returnSelf());
-        $blockMock->expects($this->once())
-            ->method('setType')
-            ->with($this->equalTo(get_class($blockMock)))
-            ->will($this->returnSelf());
-        $blockMock->expects($this->once())
-            ->method('setNameInLayout')
-            ->with($this->equalTo($name))
-            ->will($this->returnSelf());
-        $blockMock->expects($this->once())
-            ->method('addData')
-            ->with($this->equalTo([]))
-            ->will($this->returnSelf());
-        $blockMock->expects($this->once())
-            ->method('setLayout')
-            ->with($this->equalTo($this->model))
-            ->will($this->returnSelf());
-        $this->blockFactoryMock->expects($this->once())
-            ->method('createBlock')
-            ->with($this->equalTo('Magento\Framework\View\Element\Template'), $this->equalTo(['data' => []]))
-            ->will($this->returnValue($blockMock));
-        $this->eventManagerMock->expects($this->once())
-            ->method('dispatch')
-            ->with(
-                $this->equalTo('core_layout_block_create_after'),
-                $this->equalTo(['block' => $blockMock])
-            )
-            ->will($this->returnSelf());
+            ->with('non_exist_parent', 'non_exist_alias')
+            ->willReturn(false);
+        $this->assertFalse($this->model->getChildBlock('non_exist_parent', 'non_exist_alias'));
     }
 
     public function testSetChild()
@@ -331,7 +276,12 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $blockMock = $this->getMockBuilder('Magento\Framework\View\Element\AbstractBlock')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->blockFactoryMock->expects($this->once())->method('createBlock')->will($this->returnValue($blockMock));
+        $this->structureMock->expects($this->once())
+            ->method('createStructuralElement')
+            ->with('block_name', \Magento\Framework\View\Layout\Element::TYPE_BLOCK, 'type')
+            ->willReturn('block_name');
+        $this->generatorBlockMock->expects($this->once())->method('createBlock')->will($this->returnValue($blockMock));
+
         $this->assertSame($blockMock, $this->model->createBlock('type', 'block_name', []));
         $this->assertSame(['value1' => $blockMock], $this->model->getChildBlocks($parentName));
     }
@@ -538,25 +488,11 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->model, $this->model->removeOutputElement('name'));
     }
 
-    public function testGetBlockFactory()
-    {
-        $this->assertSame($this->blockFactoryMock, $this->model->getBlockFactory());
-    }
-
     public function testIsPrivate()
     {
         $this->assertFalse($this->model->isPrivate());
         $this->assertSame($this->model, $this->model->setIsPrivate(true));
         $this->assertTrue($this->model->isPrivate());
-    }
-
-    /**
-     * @expectedException \Magento\Framework\Model\Exception
-     * @expectedExceptionMessage Invalid block type
-     */
-    public function testGetBlockSingletonException()
-    {
-        $this->model->getBlockSingleton(false);
     }
 
     /**
@@ -567,12 +503,10 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     public function testGetBlockSingleton($type, $blockInstance, $isAbstract)
     {
         $blockMock = $this->getMock($blockInstance, [], [], '', false);
-        $this->blockFactoryMock->expects($this->once())
-            ->method('createBlock')
-            ->with($this->equalTo($type))
-            ->will($this->returnValue($blockMock));
+        $this->generatorBlockMock->expects($this->once())->method('createBlock')->will($this->returnValue($blockMock));
+
         if ($isAbstract) {
-            $blockMock->expects($this->once())
+            $blockMock->expects($this->any())
                 ->method('setLayout')
                 ->with($this->equalTo($this->model))
                 ->will($this->returnSelf());
@@ -592,11 +526,6 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
                 'some_type',
                 'Magento\Framework\View\Element\Template',
                 true,
-            ],
-            [
-                'other_type',
-                'stdClass',
-                false,
             ],
         ];
     }

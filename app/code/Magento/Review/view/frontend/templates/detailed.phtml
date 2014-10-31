@@ -23,12 +23,14 @@
  */
 ?>
 <?php if(!empty($collection) && $collection->getSize()): ?>
-    <table class="data table ratings review summary">
-        <tbody>
+    <div class="table-wrapper">
+        <table class="data table ratings review summary">
+            <caption class="table-caption"><?php echo __('Ratings Review Summary'); ?></caption>
+            <tbody>
             <?php foreach ($collection as $_rating): ?>
                 <?php if($_rating->getSummary()): ?>
                     <tr>
-                        <th class="label"><?php echo __($this->escapeHtml($_rating->getRatingCode())) ?></th>
+                        <th class="label" scope="row"><?php echo __($this->escapeHtml($_rating->getRatingCode())) ?></th>
                         <td class="value">
                             <div class="rating box">
                                 <div class="rating" style="width:<?php echo ceil($_rating->getSummary()) ?>%;"></div>
@@ -37,6 +39,7 @@
                     </tr>
                 <?php endif; ?>
             <?php endforeach; ?>
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
 <?php endif; ?>

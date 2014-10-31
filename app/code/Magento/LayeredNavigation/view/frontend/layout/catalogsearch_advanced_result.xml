@@ -24,10 +24,12 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <referenceContainer name="left">
-        <block class="Magento\LayeredNavigation\Block\Navigation\AdvancedSearch" name="advanced.search.leftnav" before="-" template="layer/view.phtml">
-            <block class="Magento\LayeredNavigation\Block\Navigation\State\AdvancedSearch" name="advanced.search.navigation.state" as="state" />
-            <block class="Magento\LayeredNavigation\Block\Navigation\FilterRenderer" name="advanced.search.navigation.renderer" as="renderer" template="layer/filter.phtml"/>
-        </block>
-    </referenceContainer>
+    <body>
+        <referenceContainer name="left">
+            <block class="Magento\LayeredNavigation\Block\Navigation\AdvancedSearch" name="advanced.search.leftnav" before="-" template="layer/view.phtml">
+                <block class="Magento\LayeredNavigation\Block\Navigation\State\AdvancedSearch" name="advanced.search.navigation.state" as="state"/>
+                <block class="Magento\LayeredNavigation\Block\Navigation\FilterRenderer" name="advanced.search.navigation.renderer" as="renderer" template="layer/filter.phtml"/>
+            </block>
+        </referenceContainer>
+    </body>
 </page>

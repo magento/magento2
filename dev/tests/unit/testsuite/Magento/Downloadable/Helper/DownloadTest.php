@@ -37,7 +37,7 @@ use Magento\Downloadable\Helper\File as DownloadableFile;
 require_once __DIR__ . '/../../../../framework/bootstrap.php';
 
 /**
- * @runTestsInSeparateProcesses
+ * @  runTestsInSeparateProcesses
  * @preserveGlobalState disabled
  */
 class DownloadTest extends \PHPUnit_Framework_TestCase

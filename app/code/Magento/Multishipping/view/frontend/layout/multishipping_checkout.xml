@@ -23,8 +23,10 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page layout="2columns-left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd" label="Multishipping Checkout" design_abstraction="custom">
-    <referenceContainer name="sidebar.main">
-        <block class="Magento\Multishipping\Block\Checkout\State" name="checkout_state" template="checkout/state.phtml"/>
-    </referenceContainer>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd" label="Multishipping Checkout" design_abstraction="custom">
+    <body>
+        <referenceContainer name="sidebar.main">
+            <block class="Magento\Multishipping\Block\Checkout\State" name="checkout_state" template="checkout/state.phtml"/>
+        </referenceContainer>
+    </body>
 </page>

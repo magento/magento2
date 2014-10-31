@@ -27,9 +27,26 @@ namespace Magento\Backend\Controller\Adminhtml\System\Config\System\Storage;
 class Status extends \Magento\Backend\Controller\Adminhtml\System\Config\System\Storage
 {
     /**
+     * @var \Magento\Framework\Controller\Result\JSONFactory
+     */
+    protected $resultJsonFactory;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+    ) {
+        parent::__construct($context);
+        $this->resultJsonFactory = $resultJsonFactory;
+    }
+
+    /**
      * Retrieve synchronize process state and it's parameters in json format
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\JSON
      */
     public function execute()
     {
@@ -111,7 +128,8 @@ class Status extends \Magento\Backend\Controller\Adminhtml\System\Config\System\
             $state = \Magento\Core\Model\File\Storage\Flag::STATE_INACTIVE;
         }
         $result['state'] = $state;
-        $result = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result);
-        $this->_response->representJson($result);
+        /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+        $resultJson = $this->resultJsonFactory->create();
+        return $resultJson->setData($result);
     }
 }

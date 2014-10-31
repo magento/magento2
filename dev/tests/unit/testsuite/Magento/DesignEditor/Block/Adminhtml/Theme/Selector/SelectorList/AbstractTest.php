@@ -39,20 +39,16 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             false,
             false,
             true,
-            array('getChildBlock')
+            array('getChildBlock', 'getLayout')
         );
 
         $themeMock = $this->getMock('Magento\DesignEditor\Block\Adminhtml\Theme', array(), array(), '', false);
 
         $listAbstractBlock->setCollection($collection);
 
-        $listAbstractBlock->expects(
-            $this->atLeastOnce()
-        )->method(
-            'getChildBlock'
-        )->will(
-            $this->returnValue($themeMock)
-        );
+        $listAbstractBlock->expects($this->atLeastOnce())
+            ->method('getChildBlock')
+            ->will($this->returnValue($themeMock));
 
         $this->assertEquals(2, count($listAbstractBlock->getListItems()));
     }

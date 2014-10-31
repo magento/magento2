@@ -27,9 +27,34 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Widget;
 class Chooser extends \Magento\Backend\App\Action
 {
     /**
+     * @var \Magento\Framework\Controller\Result\RawFactory
+     */
+    protected $resultRawFactory;
+
+    /**
+     * @var \Magento\Framework\View\LayoutFactory
+     */
+    protected $layoutFactory;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
+        \Magento\Framework\View\LayoutFactory $layoutFactory
+    ) {
+        parent::__construct($context);
+        $this->resultRawFactory = $resultRawFactory;
+        $this->layoutFactory = $layoutFactory;
+    }
+
+    /**
      * Chooser Source action
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Raw
      */
     public function execute()
     {
@@ -37,43 +62,43 @@ class Chooser extends \Magento\Backend\App\Action
         $massAction = $this->getRequest()->getParam('use_massaction', false);
         $productTypeId = $this->getRequest()->getParam('product_type_id', null);
 
-        $productsGrid = $this->_view->getLayout()->createBlock(
+        $layout = $this->layoutFactory->create();
+        $productsGrid = $layout->createBlock(
             'Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser',
             '',
-            array(
-                'data' => array(
+            [
+                'data' => [
                     'id' => $uniqId,
                     'use_massaction' => $massAction,
                     'product_type_id' => $productTypeId,
                     'category_id' => $this->getRequest()->getParam('category_id')
-                )
-            )
+                ]
+            ]
         );
 
         $html = $productsGrid->toHtml();
 
         if (!$this->getRequest()->getParam('products_grid')) {
-            $categoriesTree = $this->_view->getLayout()->createBlock(
+            $categoriesTree = $layout->createBlock(
                 'Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser',
                 '',
-                array(
-                    'data' => array(
+                [
+                    'data' => [
                         'id' => $uniqId . 'Tree',
                         'node_click_listener' => $productsGrid->getCategoryClickListenerJs(),
                         'with_empty_node' => true
-                    )
-                )
+                    ]
+                ]
             );
 
-            $html = $this->_view->getLayout()->createBlock(
-                'Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser\Container'
-            )->setTreeHtml(
-                $categoriesTree->toHtml()
-            )->setGridHtml(
-                $html
-            )->toHtml();
+            $html = $layout->createBlock('Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser\Container')
+                ->setTreeHtml($categoriesTree->toHtml())
+                ->setGridHtml($html)
+                ->toHtml();
         }
 
-        $this->getResponse()->setBody($html);
+        /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
+        $resultRaw = $this->resultRawFactory->create();
+        return $resultRaw->setContents($html);
     }
 }

@@ -44,11 +44,14 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Design
     }
 
     /**
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
         $data = $this->getRequest()->getPost();
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
+
         if ($data) {
             $data['design'] = $this->_filterPostData($data['design']);
             $id = (int)$this->getRequest()->getParam('id');
@@ -69,11 +72,10 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Design
             } catch (\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setDesignData($data);
-                $this->_redirect('adminhtml/*/edit', array('id' => $design->getId()));
-                return;
+                return $resultRedirect->setPath('adminhtml/*/', ['id' => $design->getId()]);
             }
         }
 
-        $this->_redirect('adminhtml/*/');
+        return $resultRedirect->setPath('adminhtml/*/');
     }
 }

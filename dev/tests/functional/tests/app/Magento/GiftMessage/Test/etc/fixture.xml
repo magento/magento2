@@ -29,5 +29,11 @@
         <entity_type>gift_message</entity_type>
         <collection>Magento\GiftMessage\Model\Resource\Message\Collection</collection>
         <identifier>gift_message_id</identifier>
+        <fields>
+            <items>
+                <attribute_code>giftMessageItems</attribute_code>
+                <backend_type>virtual</backend_type>
+            </items>
+        </fields>
     </giftMessage>
 </fixture>

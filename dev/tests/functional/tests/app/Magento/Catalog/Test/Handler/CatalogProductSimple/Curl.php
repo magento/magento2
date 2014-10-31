@@ -229,6 +229,10 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
             $fields['affect_product_custom_options'] = 1;
         }
 
+        if (isset($fields['product']['weight'])) {
+            unset($fields['product']['is_virtual']);
+        }
+
         return $fields;
     }
 

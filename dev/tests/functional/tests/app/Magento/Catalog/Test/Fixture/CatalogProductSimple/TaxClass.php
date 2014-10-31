@@ -30,6 +30,7 @@ use Mtf\Fixture\FixtureInterface;
 use Mtf\Util\Protocol\CurlInterface;
 use Mtf\Util\Protocol\CurlTransport;
 use Mtf\Util\Protocol\CurlTransport\BackendDecorator;
+use Magento\Tax\Test\Fixture\TaxClass as FixtureTaxClass;
 
 /**
  * Class TaxClass
@@ -66,11 +67,16 @@ class TaxClass implements FixtureInterface
      *
      * @param FixtureFactory $fixtureFactory
      * @param array $params
-     * @param array $data
+     * @param array|string $data
      */
-    public function __construct(FixtureFactory $fixtureFactory, array $params, array $data = [])
+    public function __construct(FixtureFactory $fixtureFactory, array $params, $data = [])
     {
         $this->params = $params;
+        if ((!isset($data['dataSet']) && !isset($data['tax_product_class']))) {
+            $this->data = $data;
+            return;
+        }
+
         if (isset($data['dataSet'])) {
             $this->taxClass = $fixtureFactory->createByCode('taxClass', ['dataSet' => $data['dataSet']]);
             $this->data = $this->taxClass->getClassName();
@@ -78,12 +84,12 @@ class TaxClass implements FixtureInterface
                 $this->taxClass->persist();
             }
         }
-        if (isset($data['tax_product_class'])
-            && $data['tax_product_class'] instanceof \Magento\Tax\Test\Fixture\TaxClass
-        ) {
+
+        if (isset($data['tax_product_class']) && $data['tax_product_class'] instanceof FixtureTaxClass) {
             $this->taxClass = $data['tax_product_class'];
             $this->data = $this->taxClass->getClassName();
         }
+
         if ($this->taxClass->hasData('id')) {
             $this->taxClassId = $this->taxClass->getId();
         } else {
@@ -151,7 +157,7 @@ class TaxClass implements FixtureInterface
     /**
      * Return tax class fixture
      *
-     * @return \Magento\Tax\Test\Fixture\TaxClass
+     * @return FixtureTaxClass
      */
     public function getTaxClass()
     {

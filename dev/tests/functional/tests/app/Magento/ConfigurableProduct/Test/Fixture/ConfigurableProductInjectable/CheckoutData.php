@@ -38,6 +38,8 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
      *
      * @param $name
      * @return array|null
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function getPreset($name)
     {
@@ -60,6 +62,26 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                     'price' => 172,
                     'qty' => 3,
                     'subtotal' => 516
+                ]
+            ],
+            'forUpdateMiniShoppingCart' => [
+                'options' => [
+                    'configurable_options' => [
+                        [
+                            'title' => 'attribute_key_0',
+                            'value' => 'option_key_1',
+                        ],
+                        [
+                            'title' => 'attribute_key_1',
+                            'value' => 'option_key_0',
+                        ]
+                    ],
+                ],
+                'qty' => 1,
+                'cartItem' => [
+                    'price' => 172,
+                    'qty' => 1,
+                    'subtotal' => 172
                 ]
             ],
             'two_options' => [

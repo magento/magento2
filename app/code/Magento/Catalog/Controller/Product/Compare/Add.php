@@ -29,13 +29,13 @@ class Add extends \Magento\Catalog\Controller\Product\Compare
     /**
      * Add item to compare list
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
+        $resultRedirect = $this->resultRedirectFactory->create();
         if (!$this->_formKeyValidator->validate($this->getRequest())) {
-            $this->getResponse()->setRedirect($this->_redirect->getRefererUrl());
-            return;
+            return $resultRedirect->setRefererUrl();
         }
 
         $productId = (int)$this->getRequest()->getParam('product');
@@ -53,6 +53,6 @@ class Add extends \Magento\Catalog\Controller\Product\Compare
 
             $this->_objectManager->get('Magento\Catalog\Helper\Product\Compare')->calculate();
         }
-        $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
+        return $resultRedirect->setRefererOrBaseUrl();
     }
 }

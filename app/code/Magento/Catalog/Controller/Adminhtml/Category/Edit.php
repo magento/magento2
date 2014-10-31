@@ -27,9 +27,37 @@ namespace Magento\Catalog\Controller\Adminhtml\Category;
 class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
 {
     /**
+     * @var \Magento\Framework\Controller\Result\JSONFactory
+     */
+    protected $resultJsonFactory;
+
+
+    /**
+     * @var \Magento\Framework\View\Result\PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
+        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+    ) {
+        parent::__construct($context, $resultRedirectFactory);
+        $this->resultPageFactory = $resultPageFactory;
+        $this->resultJsonFactory = $resultJsonFactory;
+    }
+
+    /**
      * Edit category page
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
@@ -44,7 +72,9 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
 
         $category = $this->_initCategory(true);
         if (!$category) {
-            return;
+            /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+            $resultRedirect = $this->resultRedirectFactory->create();
+            return $resultRedirect->setPath('catalog/*/', ['_current' => true, 'id' => null]);
         }
 
         $this->_title->add($categoryId ? $category->getName() : __('Categories'));
@@ -56,6 +86,9 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
         if (isset($data['general'])) {
             $category->addData($data['general']);
         }
+
+        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        $resultPage = $this->resultPageFactory->create();
 
         /**
          * Build response for ajax request
@@ -82,42 +115,31 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
                 }
             }
 
-            $this->_view->loadLayout();
-
-            $eventResponse = new \Magento\Framework\Object(
-                array(
-                    'content' => $this->_view->getLayout()->getBlock(
-                        'category.edit'
-                    )->getFormHtml() . $this->_view->getLayout()->getBlock(
-                        'category.tree'
-                    )->getBreadcrumbsJavascript(
-                        $breadcrumbsPath,
-                        'editingCategoryBreadcrumbs'
-                    ),
-                    'messages' => $this->_view->getLayout()->getMessagesBlock()->getGroupedHtml()
-                )
-            );
+            $eventResponse = new \Magento\Framework\Object([
+                'content' => $resultPage->getLayout()->getBlock('category.edit')->getFormHtml()
+                    . $resultPage->getLayout()->getBlock('category.tree')
+                        ->getBreadcrumbsJavascript($breadcrumbsPath, 'editingCategoryBreadcrumbs'),
+                'messages' => $resultPage->getLayout()->getMessagesBlock()->getGroupedHtml()
+            ]);
             $this->_eventManager->dispatch(
                 'category_prepare_ajax_response',
                 array('response' => $eventResponse, 'controller' => $this)
             );
-            $this->getResponse()->setHeader('Content-type', 'application/json', true);
-            $this->getResponse()->representJson(
-                $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($eventResponse->getData())
-            );
-            return;
+            /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+            $resultJson = $this->resultJsonFactory->create();
+            $resultJson->setHeader('Content-type', 'application/json', true);
+            $resultJson->setData($eventResponse->getData());
+            return $resultJson;
         }
 
-        $this->_view->loadLayout();
-        $this->_setActiveMenu('Magento_Catalog::catalog_categories');
+        $resultPage->setActiveMenu('Magento_Catalog::catalog_categories');
+        $resultPage->addBreadcrumb(__('Manage Catalog Categories'), __('Manage Categories'));
 
-        $this->_addBreadcrumb(__('Manage Catalog Categories'), __('Manage Categories'));
-
-        $block = $this->_view->getLayout()->getBlock('catalog.wysiwyg.js');
+        $block = $resultPage->getLayout()->getBlock('catalog.wysiwyg.js');
         if ($block) {
             $block->setStoreId($storeId);
         }
 
-        $this->_view->renderLayout();
+        return $resultPage;
     }
 }

@@ -55,6 +55,15 @@
         <xs:attribute name="type" type="xs:string"/>
     </xs:complexType>
 
+    <xs:complexType name="headAttributeType">
+        <xs:attribute type="xs:string" name="name"/>
+        <xs:attribute type="xs:string" name="value"/>
+    </xs:complexType>
+
+    <xs:complexType name="srcRemoveType">
+        <xs:attribute name="src" type="xs:string" use="required"/>
+    </xs:complexType>
+
     <xs:complexType name="headType">
         <xs:sequence minOccurs="0" maxOccurs="unbounded">
             <xs:element name="title" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
@@ -62,6 +71,8 @@
             <xs:element name="link" type="linkType" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="meta" type="metaType" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="script" type="scriptType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="remove" type="srcRemoveType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="attribute" type="headAttributeType" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
 </xs:schema>

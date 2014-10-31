@@ -70,6 +70,11 @@ abstract class AbstractConfigureBlock extends Form
         $typeId = isset($dataConfig['type_id']) ? $dataConfig['type_id'] : null;
         $checkoutData = null;
 
+        /** @var CatalogProductSimple $product */
+        if ($this->hasRender($typeId)) {
+            $this->callRender($typeId, 'fillOptions', ['product' => $product]);
+        }
+
         if ($product instanceof InjectableFixture) {
             /** @var CatalogProductSimple $product */
             $checkoutData = $product->getCheckoutData();
@@ -82,11 +87,6 @@ abstract class AbstractConfigureBlock extends Form
 
             $checkoutCustomOptions = $this->prepareCheckoutData($customOptions, $checkoutCustomOptions);
             $this->getCustomOptionsBlock()->fillCustomOptions($checkoutCustomOptions);
-        }
-
-        /** @var CatalogProductSimple $product */
-        if ($this->hasRender($typeId)) {
-            $this->callRender($typeId, 'fillOptions', ['product' => $product]);
         }
     }
 
@@ -117,11 +117,11 @@ abstract class AbstractConfigureBlock extends Form
                 $result[] = [
                     'type' => strtolower(preg_replace('/[^a-z]/i', '', $options[$attribute]['type'])),
                     'title' => isset($options[$attribute]['title'])
-                        ? $options[$attribute]['title']
-                        : $attribute,
+                            ? $options[$attribute]['title']
+                            : $attribute,
                     'value' => isset($options[$attribute]['options'][$option]['title'])
-                        ? $options[$attribute]['options'][$option]['title']
-                        : $option
+                            ? $options[$attribute]['options'][$option]['title']
+                            : $option
                 ];
             }
         }

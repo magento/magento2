@@ -24,12 +24,14 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <referenceBlock name="customer_account_navigation">
-        <block class="Magento\Framework\View\Element\Html\Link\Current" ifconfig="wishlist/general/active" name="customer-account-navigation-wish-list-link">
-            <arguments>
-                <argument name="path" xsi:type="string">wishlist</argument>
-                <argument name="label" xsi:type="string">My Wish List</argument>
-            </arguments>
-        </block>
-    </referenceBlock>
+    <body>
+        <referenceBlock name="customer_account_navigation">
+            <block class="Magento\Framework\View\Element\Html\Link\Current" ifconfig="wishlist/general/active" name="customer-account-navigation-wish-list-link">
+                <arguments>
+                    <argument name="path" xsi:type="string">wishlist</argument>
+                    <argument name="label" xsi:type="string">My Wish List</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+    </body>
 </page>

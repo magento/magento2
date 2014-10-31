@@ -227,7 +227,7 @@ class Stock extends \Magento\Framework\Model\AbstractModel
         $fullSaveItems = array();
         foreach ($stockInfo as $itemInfo) {
             $item->setData($itemInfo);
-            if (!$item->checkQty($qtys[$item->getProductId()])) {
+            if (!$item->hasAdminArea() && !$item->checkQty($qtys[$item->getProductId()])) {
                 $this->_getResource()->commit();
                 throw new \Magento\Framework\Model\Exception(
                     __('Not all of your products are available in the requested quantity.')

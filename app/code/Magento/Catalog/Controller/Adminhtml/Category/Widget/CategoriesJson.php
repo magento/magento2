@@ -31,22 +31,34 @@ class CategoriesJson extends \Magento\Catalog\Controller\Adminhtml\Category\Widg
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\JSONFactory
+     */
+    protected $resultJsonFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
      * @param \Magento\Framework\Registry $coreRegistry
      */
-    public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Framework\Registry $coreRegistry)
-    {
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\View\LayoutFactory $layoutFactory,
+        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory,
+        \Magento\Framework\Registry $coreRegistry
+    ) {
+        parent::__construct($context, $layoutFactory);
+        $this->resultJsonFactory = $resultJsonFactory;
         $this->_coreRegistry = $coreRegistry;
-        parent::__construct($context);
     }
 
     /**
      * Categories tree node (Ajax version)
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\JSON
      */
     public function execute()
     {
@@ -59,7 +71,9 @@ class CategoriesJson extends \Magento\Catalog\Controller\Adminhtml\Category\Widg
                 $this->_coreRegistry->register('current_category', $category);
             }
             $categoryTreeBlock = $this->_getCategoryTreeBlock()->setSelectedCategories(explode(',', $selected));
-            $this->getResponse()->representJson($categoryTreeBlock->getTreeJson($category));
+            /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+            $resultJson = $this->resultJsonFactory->create();
+            return $resultJson->setJsonData($categoryTreeBlock->getTreeJson($category));
         }
     }
 }

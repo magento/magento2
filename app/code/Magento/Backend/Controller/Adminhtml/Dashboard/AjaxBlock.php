@@ -27,7 +27,32 @@ namespace Magento\Backend\Controller\Adminhtml\Dashboard;
 class AjaxBlock extends \Magento\Backend\Controller\Adminhtml\Dashboard
 {
     /**
-     * @return void
+     * @var \Magento\Framework\Controller\Result\RawFactory
+     */
+    protected $resultRawFactory;
+
+    /**
+     * @var \Magento\Framework\View\LayoutFactory
+     */
+    protected $layoutFactory;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
+        \Magento\Framework\View\LayoutFactory $layoutFactory
+    ) {
+        parent::__construct($context);
+        $this->resultRawFactory = $resultRawFactory;
+        $this->layoutFactory = $layoutFactory;
+    }
+
+    /**
+     * @return \Magento\Framework\Controller\Result\Raw
      */
     public function execute()
     {
@@ -39,11 +64,12 @@ class AjaxBlock extends \Magento\Backend\Controller\Adminhtml\Dashboard
             ucwords(str_replace('_', ' ', $blockTab))
         );
         if (in_array($blockTab, array('tab_orders', 'tab_amounts', 'totals'))) {
-            $output = $this->_view->getLayout()->createBlock(
-                'Magento\\Backend\\Block\\Dashboard\\' . $blockClassSuffix
-            )->toHtml();
+            $output = $this->layoutFactory->create()
+                ->createBlock('Magento\\Backend\\Block\\Dashboard\\' . $blockClassSuffix)
+                ->toHtml();
         }
-        $this->getResponse()->setBody($output);
-        return;
+        /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
+        $resultRaw = $this->resultRawFactory->create();
+        return $resultRaw->setContents($output);
     }
 }

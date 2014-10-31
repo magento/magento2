@@ -42,6 +42,13 @@ class CreateProductsStep implements TestStepInterface
     protected $products;
 
     /**
+     * Product data
+     *
+     * @var array
+     */
+    protected $data;
+
+    /**
      * Factory for Fixtures
      *
      * @var FixtureFactory
@@ -54,10 +61,12 @@ class CreateProductsStep implements TestStepInterface
      * @constructor
      * @param FixtureFactory $fixtureFactory
      * @param string $products
+     * @param array $data [optional]
      */
-    public function __construct(FixtureFactory $fixtureFactory, $products)
+    public function __construct(FixtureFactory $fixtureFactory, $products, array $data = [])
     {
         $this->products = $products;
+        $this->data = $data;
         $this->fixtureFactory = $fixtureFactory;
     }
 
@@ -71,13 +80,18 @@ class CreateProductsStep implements TestStepInterface
         $products = [];
         $productsDataSets = explode(',', $this->products);
         foreach ($productsDataSets as $key => $productDataSet) {
-            list($fixtureClass, $dataSet) = explode('::', $productDataSet);
+            $productDataSet = explode('::', $productDataSet);
+            $fixtureClass = $productDataSet[0];
+            $dataSet = isset($productDataSet[1]) ? $productDataSet[1] : '';
+            $data = isset($this->data[$key]) ? $this->data[$key] : [];
             /** @var FixtureInterface[] $products */
             $products[$key] = $this->fixtureFactory->createByCode(
                 trim($fixtureClass),
-                ['dataSet' => trim($dataSet)]
+                ['dataSet' => trim($dataSet), 'data' => $data]
             );
-            $products[$key]->persist();
+            if ($products[$key]->hasData('id') === false) {
+                $products[$key]->persist();
+            }
         }
 
         return ['products' => $products];

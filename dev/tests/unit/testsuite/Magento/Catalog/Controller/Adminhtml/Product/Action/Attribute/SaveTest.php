@@ -113,6 +113,18 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $resultRedirect = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $resultRedirectFactory = $this->getMockBuilder('Magento\Backend\Model\View\Result\RedirectFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $resultRedirectFactory->expects($this->atLeastOnce())
+            ->method('create')
+            ->willReturn($resultRedirect);
+
         $this->object = (new \Magento\TestFramework\Helper\ObjectManager($this))->getObject(
             'Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute\Save',
             [
@@ -120,6 +132,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 'attributeHelper' => $this->attributeHelper,
                 'stockIndexerProcessor' => $this->stockIndexerProcessor,
                 'stockItemBuilder' => $this->stockItemBuilder,
+                'resultRedirectFactory' => $resultRedirectFactory
             ]
         );
 

@@ -59,7 +59,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         /** @var $pageConfig \Magento\Framework\View\Page\Config */
         $pageConfig = $objectManager->get('Magento\Framework\View\Page\Config');
 
-        $layout->addBlock($this->_block);
+        $layout->createBlock('Magento\Catalog\Block\Product\View');
 
         $this->assertNotEmpty($pageConfig->getTitle());
         $this->assertEquals($this->_product->getMetaTitle(), $pageConfig->getTitle());

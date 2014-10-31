@@ -27,4 +27,5 @@
     <head>
         <link src="Magento_Email::js/bootstrap.js"/>
     </head>
+    <body/>
 </page>

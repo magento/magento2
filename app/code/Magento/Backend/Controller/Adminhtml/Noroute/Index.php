@@ -27,15 +27,34 @@ namespace Magento\Backend\Controller\Adminhtml\Noroute;
 class Index extends \Magento\Backend\App\Action
 {
     /**
+     * @var \Magento\Framework\View\Result\PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory
+    ) {
+        parent::__construct($context);
+        $this->resultPageFactory = $resultPageFactory;
+    }
+
+    /**
      * Noroute action
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Page
      */
     public function execute()
     {
-        $this->getResponse()->setHeader('HTTP/1.1', '404 Not Found');
-        $this->getResponse()->setHeader('Status', '404 File not found');
-        $this->_view->loadLayout(array('default', 'adminhtml_noroute'));
-        $this->_view->renderLayout();
+        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        $resultPage = $this->resultPageFactory->create();
+        $resultPage->setHeader('HTTP/1.1', '404 Not Found');
+        $resultPage->setHeader('Status', '404 File not found');
+        $resultPage->addHandle('adminhtml_noroute');
+        return $resultPage;
     }
 }

@@ -24,9 +24,11 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <referenceContainer name="adminhtml.grid">
-        <block class="Magento\Framework\View\Element\Text\ListText" name="grid.bottom.links">
-            <block class="Magento\Review\Block\Adminhtml\Rss\Grid\Link" name="grid.rss.link"/>
-        </block>
-    </referenceContainer>
+    <body>
+        <referenceContainer name="adminhtml.grid">
+            <block class="Magento\Framework\View\Element\Text\ListText" name="grid.bottom.links">
+                <block class="Magento\Review\Block\Adminhtml\Rss\Grid\Link" name="grid.rss.link"/>
+            </block>
+        </referenceContainer>
+    </body>
 </page>

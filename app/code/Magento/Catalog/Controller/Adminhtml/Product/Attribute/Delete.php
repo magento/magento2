@@ -27,11 +27,37 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 class Delete extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 {
     /**
-     * @return void
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
+     * Constructor
+     *
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Cache\FrontendInterface $attributeLabelCache
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\Cache\FrontendInterface $attributeLabelCache,
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+    ) {
+        parent::__construct($context, $attributeLabelCache, $coreRegistry, $resultPageFactory);
+        $this->resultRedirectFactory = $resultRedirectFactory;
+    }
+
+    /**
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
         $id = $this->getRequest()->getParam('attribute_id');
+        $resultRedirect = $this->resultRedirectFactory->create();
         if ($id) {
             $model = $this->_objectManager->create('Magento\Catalog\Model\Resource\Eav\Attribute');
 
@@ -39,25 +65,22 @@ class Delete extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
             $model->load($id);
             if ($model->getEntityTypeId() != $this->_entityTypeId) {
                 $this->messageManager->addError(__('This attribute cannot be deleted.'));
-                $this->_redirect('catalog/*/');
-                return;
+                return $resultRedirect->setPath('catalog/*/');
             }
 
             try {
                 $model->delete();
                 $this->messageManager->addSuccess(__('The product attribute has been deleted.'));
-                $this->_redirect('catalog/*/');
-                return;
+                return $resultRedirect->setPath('catalog/*/');
             } catch (\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
-                $this->_redirect(
+                return $resultRedirect->setPath(
                     'catalog/*/edit',
-                    array('attribute_id' => $this->getRequest()->getParam('attribute_id'))
+                    ['attribute_id' => $this->getRequest()->getParam('attribute_id')]
                 );
-                return;
             }
         }
         $this->messageManager->addError(__('We can\'t find an attribute to delete.'));
-        $this->_redirect('catalog/*/');
+        return $resultRedirect->setPath('catalog/*/');
     }
 }

@@ -24,7 +24,9 @@
  */
 -->
 <page layout="fixture_handle_page_layout">
-    <referenceContainer name="main.container">
-        <block class="Magento\Framework\View\Element\Template" template="fixture_template_one.phtml"/>
-    </referenceContainer>
+    <body>
+        <referenceContainer name="main.container">
+            <block class="Magento\Framework\View\Element\Template" template="fixture_template_one.phtml"/>
+        </referenceContainer>
+    </body>
 </page>

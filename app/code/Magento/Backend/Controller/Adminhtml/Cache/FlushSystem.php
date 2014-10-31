@@ -30,7 +30,7 @@ class FlushSystem extends \Magento\Backend\Controller\Adminhtml\Cache
     /**
      * Flush all magento cache
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
@@ -40,6 +40,8 @@ class FlushSystem extends \Magento\Backend\Controller\Adminhtml\Cache
         }
         $this->_eventManager->dispatch('adminhtml_cache_flush_system');
         $this->messageManager->addSuccess(__("The Magento cache storage has been flushed."));
-        $this->_redirect('adminhtml/*');
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
+        return $resultRedirect->setPath('adminhtml/*');
     }
 }

@@ -26,7 +26,7 @@
 <?php $_giftMessage; ?>
 <div class="table-wrapper order-items">
     <table class="data table table-order-items" id="my-orders-table" summary="<?php echo __('Items Ordered') ?>">
-        <caption class="table caption"><?php echo __('Items Ordered') ?></caption>
+        <caption class="table-caption"><?php echo __('Items Ordered') ?></caption>
         <thead>
             <tr>
                 <th class="col name"><?php echo __('Product Name') ?></th>
@@ -48,25 +48,33 @@
             <tbody>
                 <?php echo $this->getItemHtml($_item) ?>
                 <?php if ($this->helper('Magento\GiftMessage\Helper\Message')->getIsMessagesAvailable('order_item', $_item) && $_item->getGiftMessageId()): ?>
-                <tr id="order-item-gift-message-<?php echo $_item->getId() ?>" role="region" aria-expanded="false" tabindex="-1" style="display: none;">
                     <?php $_giftMessage = $this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessageForEntity($_item); ?>
-                    <td class="col message" colspan="7">
-                        <div class="gift message details">
+                    <tr>
+                        <td class="col options" colspan="5">
                             <a href="#"
-                               title="<?php echo __('Close') ?>"
-                               aria-controls="order-item-gift-message-<?php echo $_item->getId()?>"
-                               data-item-id="<?php echo $_item->getId()?>"
-                               class="action close">
-                                <?php echo __('Close') ?>
+                               id="order-item-gift-message-link-<?php echo $_item->getId() ?>"
+                               class="action show"
+                               aria-controls="order-item-gift-message-<?php echo $_item->getId() ?>"
+                               data-item-id="<?php echo $_item->getId() ?>">
+                                <?php echo __('Gift Message') ?>
                             </a>
-                            <dl class="gift message">
-                                <dt class="gift sender"><strong class="label"><?php echo __('From:') ?></strong> <?php echo $this->escapeHtml($_giftMessage->getSender()) ?></dt>
-                                <dt class="gift recipient"><strong class="label"><?php echo __('To:') ?></strong> <?php echo $this->escapeHtml($_giftMessage->getRecipient()) ?></dt>
-                                <dd class="message text"><?php echo $this->helper('Magento\GiftMessage\Helper\Message')->getEscapedGiftMessage($_item) ?></dd>
-                            </dl>
-                        </div>
-                    </td>
-                </tr>
+                            <?php $_giftMessage = $this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessageForEntity($_item); ?>
+                            <div class="order-gift-message" id="order-item-gift-message-<?php echo $_item->getId() ?>" role="region" aria-expanded="false" tabindex="-1">
+                                <a href="#"
+                                   title="<?php echo __('Close') ?>"
+                                   aria-controls="order-item-gift-message-<?php echo $_item->getId()?>"
+                                   data-item-id="<?php echo $_item->getId()?>"
+                                   class="action close">
+                                    <?php echo __('Close') ?>
+                                </a>
+                                <dl class="item-options">
+                                    <dt class="item-sender"><strong class="label"><?php echo __('From') ?></strong><?php echo $this->escapeHtml($_giftMessage->getSender()) ?></dt>
+                                    <dt class="item-recipient"><strong class="label"><?php echo __('To') ?></strong><?php echo $this->escapeHtml($_giftMessage->getRecipient()) ?></dt>
+                                    <dd class="item-message"><?php echo $this->helper('Magento\GiftMessage\Helper\Message')->getEscapedGiftMessage($_item) ?></dd>
+                                </dl>
+                            </div>
+                        </td>
+                    </tr>
                 <?php endif ?>
             </tbody>
             <?php endforeach; ?>
@@ -77,7 +85,7 @@
 require(['jquery', "mage/mage"], function(jQuery){
 
     jQuery('a.action.show').add('a.action.close').mage('giftMessage', {});
-    
+
 });
 </script>
 <?php endif; ?>

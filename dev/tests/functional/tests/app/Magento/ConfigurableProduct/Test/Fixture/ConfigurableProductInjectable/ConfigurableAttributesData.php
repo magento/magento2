@@ -536,14 +536,17 @@ class ConfigurableAttributesData implements FixtureInterface
     {
         $this->fixtureFactory = $fixtureFactory;
         $this->params = $params;
+        $this->data = !isset($data['preset']) ? $data : [];
 
         $preset = isset($data['preset']) ? $this->getPreset($data['preset']) : [];
 
-        $this->prepareAttributes($preset);
-        $this->prepareAttributesData($preset);
-        $this->prepareProducts($preset);
-        $this->prepareVariationsMatrix($preset);
-        $this->prepareData();
+        if (!empty($preset)) {
+            $this->prepareAttributes($preset);
+            $this->prepareAttributesData($preset);
+            $this->prepareProducts($preset);
+            $this->prepareVariationsMatrix($preset);
+            $this->prepareData();
+        }
     }
 
     /**

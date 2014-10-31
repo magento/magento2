@@ -24,11 +24,13 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <referenceBlock name="invoice_totals">
-        <block class="Magento\Weee\Block\Sales\Order\Totals" name="weee_inv_totals">
-            <action method="setBeforeCondition">
-                <argument name="condition" xsi:type="string">tax</argument>
-            </action>
-        </block>
-    </referenceBlock>
+    <body>
+        <referenceBlock name="invoice_totals">
+            <block class="Magento\Weee\Block\Sales\Order\Totals" name="weee_inv_totals">
+                <action method="setBeforeCondition">
+                    <argument name="condition" xsi:type="string">tax</argument>
+                </action>
+            </block>
+        </referenceBlock>
+    </body>
 </page>

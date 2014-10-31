@@ -89,7 +89,7 @@ class View implements ViewInterface
         $this->_configScope = $configScope;
         $this->_eventManager = $eventManager;
         $this->_actionFlag = $actionFlag;
-        $this->page = $pageFactory->create();
+        $this->page = $pageFactory->create(true);
     }
 
     /**
@@ -185,19 +185,7 @@ class View implements ViewInterface
      */
     public function loadLayoutUpdates()
     {
-        \Magento\Framework\Profiler::start('LAYOUT');
-        // dispatch event for adding handles to layout update
-        $this->_eventManager->dispatch(
-            'controller_action_layout_load_before',
-            array('full_action_name' => $this->_request->getFullActionName(), 'layout' => $this->getLayout())
-        );
-
-        // load layout updates by specified handles
-        \Magento\Framework\Profiler::start('layout_load');
-        $this->getLayout()->getUpdate()->load();
-        \Magento\Framework\Profiler::stop('layout_load');
-
-        \Magento\Framework\Profiler::stop('LAYOUT');
+        $this->page->getConfig()->publicBuild();
         return $this;
     }
 
@@ -208,13 +196,7 @@ class View implements ViewInterface
      */
     public function generateLayoutXml()
     {
-        \Magento\Framework\Profiler::start('LAYOUT');
-        // generate xml from collected text updates
-        \Magento\Framework\Profiler::start('layout_generate_xml');
-        $this->getLayout()->generateXml();
-        \Magento\Framework\Profiler::stop('layout_generate_xml');
-
-        \Magento\Framework\Profiler::stop('LAYOUT');
+        $this->page->getConfig()->publicBuild();
         return $this;
     }
 
@@ -225,29 +207,7 @@ class View implements ViewInterface
      */
     public function generateLayoutBlocks()
     {
-        \Magento\Framework\Profiler::start('LAYOUT');
-
-        // dispatch event for adding xml layout elements
-        if (!$this->_actionFlag->get('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH_BLOCK_EVENT)) {
-            $this->_eventManager->dispatch(
-                'controller_action_layout_generate_blocks_before',
-                array('full_action_name' => $this->_request->getFullActionName(), 'layout' => $this->getLayout())
-            );
-        }
-
-        // generate blocks from xml layout
-        \Magento\Framework\Profiler::start('layout_generate_blocks');
-        $this->getLayout()->generateElements();
-        \Magento\Framework\Profiler::stop('layout_generate_blocks');
-
-        if (!$this->_actionFlag->get('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH_BLOCK_EVENT)) {
-            $this->_eventManager->dispatch(
-                'controller_action_layout_generate_blocks_after',
-                array('full_action_name' => $this->_request->getFullActionName(), 'layout' => $this->getLayout())
-            );
-        }
-
-        \Magento\Framework\Profiler::stop('LAYOUT');
+        $this->page->getConfig()->publicBuild();
         return $this;
     }
 

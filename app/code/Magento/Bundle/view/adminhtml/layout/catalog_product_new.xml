@@ -24,7 +24,9 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <referenceContainer name="js">
-        <block class="Magento\Framework\View\Element\Template" template="Magento_Bundle::product/stock/disabler.phtml"/>
-    </referenceContainer>
+    <body>
+        <referenceContainer name="js">
+            <block class="Magento\Framework\View\Element\Template" template="Magento_Bundle::product/stock/disabler.phtml"/>
+        </referenceContainer>
+    </body>
 </page>

@@ -108,15 +108,28 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     protected $layoutHelper;
 
     /**
-     * @var \Magento\Catalog\Controller\Category
+     * @var \Magento\Catalog\Controller\Category\View
      */
     protected $action;
+
+    /**
+     * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultFactory;
+
+    /**
+     * @var \Magento\Framework\View\Page|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $page;
 
     /**
      * @var \Magento\Framework\View\Page\Config
      */
     protected $pageConfig;
 
+    /**
+     * Set up instances and mock objects
+     */
     public function setUp()
     {
         $this->request = $this->getMock('Magento\Framework\App\RequestInterface');
@@ -135,12 +148,17 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->pageConfig->expects($this->any())->method('addBodyClass')->will($this->returnSelf());
 
         $this->page = $this->getMockBuilder('Magento\Framework\View\Page')
-            ->setMethods(['getConfig', 'initLayout'])->disableOriginalConstructor()->getMock();
+            ->setMethods(['getConfig', 'initLayout', 'addPageLayoutHandles', 'getLayout'])
+            ->disableOriginalConstructor()->getMock();
         $this->page->expects($this->any())->method('getConfig')->will($this->returnValue($this->pageConfig));
+        $this->page->expects($this->any())->method('addPageLayoutHandles')->will($this->returnSelf());
+        $this->page->expects($this->any())->method('getLayout')->will($this->returnValue($this->layout));
 
         $this->view = $this->getMock('Magento\Framework\App\ViewInterface');
         $this->view->expects($this->any())->method('getLayout')->will($this->returnValue($this->layout));
-        $this->view->expects($this->any())->method('getPage')->will($this->returnValue($this->page));
+
+        $this->resultFactory = $this->getMock('Magento\Framework\Controller\ResultFactory', [], [], '', false);
+        $this->resultFactory->expects($this->any())->method('create')->will($this->returnValue($this->page));
 
         $this->context = $this->getMock('Magento\Backend\App\Action\Context', [], [], '', false);
         $this->context->expects($this->any())->method('getRequest')->will($this->returnValue($this->request));
@@ -149,6 +167,8 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->objectManager));
         $this->context->expects($this->any())->method('getEventManager')->will($this->returnValue($this->eventManager));
         $this->context->expects($this->any())->method('getView')->will($this->returnValue($this->view));
+        $this->context->expects($this->any())->method('getResultFactory')
+            ->will($this->returnValue($this->resultFactory));
 
         $this->category = $this->getMock('Magento\Catalog\Model\Category', [], [], '', false);
         $this->categoryFactory = $this->getMock('Magento\Catalog\Model\CategoryFactory', ['create'], [], '', false);
@@ -160,11 +180,20 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->catalogDesign = $this->getMock('Magento\Catalog\Model\Design', [], [], '', false);
         $this->layoutHelper = $this->getMock('Magento\Theme\Helper\Layout', [], [], '', false);
 
+        $resultPageFactory = $this->getMockBuilder('Magento\Framework\View\Result\PageFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $resultPageFactory->expects($this->atLeastOnce())
+            ->method('create')
+            ->willReturn($this->page);
+
         $this->action = (new ObjectManager($this))->getObject('Magento\Catalog\Controller\Category\View', [
             'context' => $this->context,
             'catalogDesign' => $this->catalogDesign,
             'categoryFactory' => $this->categoryFactory,
             'storeManager' => $this->storeManager,
+            'resultPageFactory' => $resultPageFactory
         ]);
     }
 

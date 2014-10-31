@@ -32,8 +32,7 @@ use Magento\Checkout\Test\Fixture\Cart\Items;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 
 /**
- * Class AssertCartItemsOptions
- * Assert that cart item options for product(s) display with correct information block
+ * Assert that cart item options for product(s) display with correct information block.
  *
  * @SuppressWarnings(PHPMD.NPathComplexity)
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -48,17 +47,22 @@ class AssertCartItemsOptions extends AbstractAssertForm
     protected $severeness = 'low';
 
     /**
+     * Error message for verify options
+     *
+     * @var string
+     */
+    protected $errorMessage = '- %s: "%s" instead of "%s"';
+
+    /**
      * Assert that cart item options for product(s) display with correct information block
-     * (custom options, variations, links, samples, bundle items etc) according to passed from dataSet
+     * (custom options, variations, links, samples, bundle items etc) according to passed from dataSet.
      *
      * @param CheckoutCart $checkoutCart
      * @param Cart $cart
      * @return void
      */
-    public function processAssert(
-        CheckoutCart $checkoutCart,
-        Cart $cart
-    ) {
+    public function processAssert(CheckoutCart $checkoutCart, Cart $cart)
+    {
         $checkoutCart->open();
         /** @var Items $sourceProducts */
         $sourceProducts = $cart->getDataFieldConfig('items')['source'];
@@ -88,7 +92,7 @@ class AssertCartItemsOptions extends AbstractAssertForm
     }
 
     /**
-     * Verify form data contains in fixture data
+     * Verify form data contains in fixture data.
      *
      * @param array $fixtureData
      * @param array $formData
@@ -121,14 +125,10 @@ class AssertCartItemsOptions extends AbstractAssertForm
                 if (!empty($valueErrors)) {
                     $errors[$key] = $valueErrors;
                 }
+            } elseif (($key == 'value') && $this->equals($fixtureData['value'], $formData['value'])) {
+                $errors[] = $this->errorFormat($value, $formValue, $key);
             } elseif (null === strpos($value, $formValue)) {
-                if (is_array($value)) {
-                    $value = $this->arrayToString($value);
-                }
-                if (is_array($formValue)) {
-                    $formValue = $this->arrayToString($formValue);
-                }
-                $errors[] = sprintf('- %s: "%s" instead of "%s"', $key, $formValue, $value);
+                $errors[] = $this->errorFormat($value, $formValue, $key);
             }
         }
 
@@ -145,6 +145,37 @@ class AssertCartItemsOptions extends AbstractAssertForm
         return $errors;
     }
 
+    /**
+     * Check that params are equals.
+     *
+     * @param mixed $expected
+     * @param mixed $actual
+     * @return bool
+     */
+    protected function equals($expected, $actual)
+    {
+        return (null === strpos($expected, $actual));
+    }
+
+    /**
+     * Format error.
+     *
+     * @param mixed $value
+     * @param mixed $formValue
+     * @param mixed $key
+     * @return string
+     */
+    protected function errorFormat($value, $formValue, $key)
+    {
+        if (is_array($value)) {
+            $value = $this->arrayToString($value);
+        }
+        if (is_array($formValue)) {
+            $formValue = $this->arrayToString($formValue);
+        }
+
+        return sprintf($this->errorMessage, $key, $formValue, $value);
+    }
 
     /**
      * Returns a string representation of the object

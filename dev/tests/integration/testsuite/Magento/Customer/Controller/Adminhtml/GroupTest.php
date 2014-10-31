@@ -224,7 +224,7 @@ class GroupTest extends \Magento\Backend\Utility\Controller
         $this->assertSessionMessages($this->isEmpty(), MessageInterface::TYPE_SUCCESS);
         $this->assertSessionMessages($this->logicalNot($this->isEmpty()), MessageInterface::TYPE_ERROR);
         $this->assertSessionMessages(
-            $this->equalTo(['No such entity with groupId = 10000']),
+            $this->equalTo(['No such entity with id = 10000']),
             MessageInterface::TYPE_ERROR
         );
         $this->assertRedirect($this->stringStartsWith(self::BASE_CONTROLLER_URL . 'edit/'));

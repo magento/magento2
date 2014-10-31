@@ -24,13 +24,15 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <referenceBlock name="top.links">
-        <block class="Magento\Catalog\Block\Product\Compare\Link" name="catalog.compare.link" before="-" template="Magento_Catalog::product/compare/link.phtml"/>
-    </referenceBlock>
-    <referenceContainer name="sidebar.additional">
-        <block class="Magento\Catalog\Block\Product\Compare\Sidebar" name="catalog.compare.sidebar" template="product/compare/sidebar.phtml"/>
-    </referenceContainer>
-    <referenceContainer name="after.body.start">
-        <block class="Magento\Framework\View\Element\Js\Components" name="head.components" as="components" template="Magento_Catalog::js/components.phtml"/>
-    </referenceContainer>
+    <body>
+        <referenceBlock name="top.links">
+            <block class="Magento\Catalog\Block\Product\Compare\Link" name="catalog.compare.link" before="-" template="Magento_Catalog::product/compare/link.phtml"/>
+        </referenceBlock>
+        <referenceContainer name="sidebar.additional">
+            <block class="Magento\Catalog\Block\Product\Compare\Sidebar" name="catalog.compare.sidebar" template="product/compare/sidebar.phtml"/>
+        </referenceContainer>
+        <referenceContainer name="after.body.start">
+            <block class="Magento\Framework\View\Element\Js\Components" name="head.components" as="components" template="Magento_Catalog::js/components.phtml"/>
+        </referenceContainer>
+    </body>
 </page>

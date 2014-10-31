@@ -51,10 +51,8 @@ class AssertProductQtyInMiniShoppingCart extends AbstractAssertForm
      * @param Cart $cart
      * @return void
      */
-    public function processAssert(
-        CmsIndex $cmsIndex,
-        Cart $cart
-    ) {
+    public function processAssert(CmsIndex $cmsIndex, Cart $cart)
+    {
         $cmsIndex->open();
         /** @var Items $sourceProducts */
         $sourceProducts = $cart->getDataFieldConfig('items')['source'];

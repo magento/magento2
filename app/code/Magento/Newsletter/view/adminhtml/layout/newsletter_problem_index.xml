@@ -26,7 +26,9 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <update handle="formkey"/>
     <update handle="newsletter_problem_block"/>
-    <referenceContainer name="content">
-        <block class="Magento\Newsletter\Block\Adminhtml\Problem" name="adminhtml.newsletter.problem.container"/>
-    </referenceContainer>
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\Newsletter\Block\Adminhtml\Problem" name="adminhtml.newsletter.problem.container"/>
+        </referenceContainer>
+    </body>
 </page>

@@ -40,7 +40,7 @@
             <span class="toolbar-number">
             <?php if($this->getLastPageNum()>1): ?>
                 <?php echo __('Items %1 to %2 of %3 total', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
-            <?php elseif ($this->getLastPageNum() == 1): ?>
+            <?php elseif ($this->getTotalNum() == 1): ?>
                 <?php echo __('%1 Item', $this->getTotalNum()) ?>
             <?php else: ?>
                 <?php echo __('%1 Item(s)', $this->getTotalNum()) ?>

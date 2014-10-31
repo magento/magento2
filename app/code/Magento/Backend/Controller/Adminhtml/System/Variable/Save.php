@@ -29,13 +29,15 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Variable
     /**
      * Save Action
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
         $variable = $this->_initVariable();
         $data = $this->getRequest()->getPost('variable');
         $back = $this->getRequest()->getParam('back', false);
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
             $data['variable_id'] = $variable->getId();
             $variable->setData($data);
@@ -43,21 +45,19 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Variable
                 $variable->save();
                 $this->messageManager->addSuccess(__('You saved the custom variable.'));
                 if ($back) {
-                    $this->_redirect(
+                    $resultRedirect->setPath(
                         'adminhtml/*/edit',
-                        array('_current' => true, 'variable_id' => $variable->getId())
+                        ['_current' => true, 'variable_id' => $variable->getId()]
                     );
                 } else {
-                    $this->_redirect('adminhtml/*/', array());
+                    $resultRedirect->setPath('adminhtml/*/');
                 }
-                return;
+                return $resultRedirect;
             } catch (\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
-                $this->_redirect('adminhtml/*/edit', array('_current' => true));
-                return;
+                return $resultRedirect->setPath('adminhtml/*/edit', ['_current' => true]);
             }
         }
-        $this->_redirect('adminhtml/*/', array());
-        return;
+        return $resultRedirect->setPath('adminhtml/*/');
     }
 }

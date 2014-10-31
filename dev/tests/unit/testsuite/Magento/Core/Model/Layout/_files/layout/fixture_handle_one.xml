@@ -24,5 +24,7 @@
  */
 -->
 <page>
-    <block class="Magento\Framework\View\Element\Template" template="fixture_template_one.phtml"/>
+    <body>
+        <block class="Magento\Framework\View\Element\Template" template="fixture_template_one.phtml"/>
+    </body>
 </page>

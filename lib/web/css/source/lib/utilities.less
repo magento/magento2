@@ -26,13 +26,17 @@
     outline:2px dotted red;
 }
 
-.margin-top-rem(@value) {
+.margin-top-rem(
+    @value
+) when not (@value = false) and not (@value = '') {
     @_value: unit(@value);
     margin-top: @_value * 1px;
     margin-top: @_value * 1rem / @font-rem-ratio;
 }
 
-.margin-bottom-rem(@value) {
+.margin-bottom-rem(
+    @value
+) when not (@value = false) and not (@value = '') {
     @_value: unit(@value);
     margin-bottom: @_value * 1px;
     margin-bottom: @_value * 1rem / @font-rem-ratio;
@@ -43,13 +47,17 @@
     .margin-bottom-rem(@val-bottom);
 }
 
-.padding-top-rem(@value) {
+.padding-top-rem(
+    @value
+) when not (@value = false) and not (@value = '') {
     @_value: unit(@value);
     padding-top: @_value * 1px;
     padding-top: @_value * 1rem / @font-rem-ratio;
 }
 
-.padding-bottom-rem(@value) {
+.padding-bottom-rem(
+    @value
+) when not (@value = false) and not (@value = '') {
     @_value: unit(@value);
     padding-bottom: @_value * 1px;
     padding-bottom: @_value * 1rem / @font-rem-ratio;

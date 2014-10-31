@@ -24,7 +24,6 @@
  */
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-
     <xs:redefine schemaLocation="../../../Data/etc/argument/types.xsd">
         <xs:complexType name="argumentType" abstract="true" mixed="true">
             <xs:complexContent>
@@ -200,8 +199,6 @@
             </xs:documentation>
         </xs:annotation>
         <xs:sequence minOccurs="0" maxOccurs="unbounded">
-            <xs:element ref="remove" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element ref="move" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element ref="block" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element ref="container" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element ref="referenceBlock" minOccurs="0" maxOccurs="unbounded"/>
@@ -330,11 +327,8 @@
             <xs:element ref="arguments" minOccurs="0" maxOccurs="1"/>
             <xs:element ref="block" minOccurs="0"/>
             <xs:element ref="container" minOccurs="0"/>
-            <xs:element ref="remove" minOccurs="0" />
-            <xs:element ref="move" minOccurs="0" />
             <xs:element ref="referenceBlock" minOccurs="0" />
             <xs:element ref="referenceContainer" minOccurs="0"/>
-            <xs:element ref="update" minOccurs="0" />
             <xs:element ref="ui_component" minOccurs="0" />
         </xs:choice>
         <xs:attribute type="elementNameType" name="name" use="required"/>
@@ -345,10 +339,7 @@
             <xs:element ref="referenceContainer" minOccurs="0" />
             <xs:element ref="block" minOccurs="0" />
             <xs:element ref="container" minOccurs="0" />
-            <xs:element ref="remove" minOccurs="0" />
-            <xs:element ref="move" minOccurs="0" />
             <xs:element ref="referenceBlock" minOccurs="0" />
-            <xs:element ref="update" minOccurs="0" />
             <xs:element ref="ui_component" minOccurs="0" />
         </xs:choice>
         <xs:attribute type="elementNameType" name="name" use="required"/>

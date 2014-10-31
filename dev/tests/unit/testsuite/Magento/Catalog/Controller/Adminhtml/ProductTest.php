@@ -35,6 +35,9 @@ abstract class ProductTest extends \PHPUnit_Framework_TestCase
      */
     protected $action;
 
+    /** @var \Magento\Framework\View\Layout  */
+    protected $layout;
+
     /**
      *  Init context object
      */
@@ -54,21 +57,10 @@ abstract class ProductTest extends \PHPUnit_Framework_TestCase
 
         $block = $this->getMockBuilder('\Magento\Framework\View\Element\AbstractBlock')
             ->disableOriginalConstructor()->getMockForAbstractClass();
-        $layout = $this->getMockBuilder('Magento\Framework\View\Layout\Element\Layout')
+        $this->layout = $this->getMockBuilder('Magento\Framework\View\Layout')
             ->setMethods(['getBlock'])->disableOriginalConstructor()
             ->getMock();
-        $layout->expects($this->any())->method('getBlock')->will($this->returnValue($block));
-        $view = $this->getMockBuilder('Magento\Framework\App\View')
-            ->setMethods(['loadLayout', 'getLayout', 'renderLayout'])
-            ->disableOriginalConstructor()->getMock();
-        $view->expects($this->any())->method('renderLayout')->will($this->returnSelf());
-        $view->expects($this->any())->method('getLayout')->will($this->returnValue($layout));
-        $view->expects($this->any())->method('loadLayout')->with(array(
-            'default',
-            'popup',
-            'catalog_product_new',
-            'catalog_product_simple'
-        ))->will($this->returnSelf());
+        $this->layout->expects($this->any())->method('getBlock')->will($this->returnValue($block));
 
         $eventManager = $this->getMockBuilder('Magento\Framework\Event\Manager')
             ->setMethods(['dispatch'])->disableOriginalConstructor()->getMock();
@@ -109,7 +101,6 @@ abstract class ProductTest extends \PHPUnit_Framework_TestCase
 
         $this->context->expects($this->any())->method('getTitle')->will($this->returnValue($title));
         $this->context->expects($this->any())->method('getEventManager')->will($this->returnValue($eventManager));
-        $this->context->expects($this->any())->method('getView')->will($this->returnValue($view));
         $this->context->expects($this->any())->method('getRequest')->will($this->returnValue($requestInterfaceMock));
         $this->context->expects($this->any())->method('getResponse')->will($this->returnValue($responseInterfaceMock));
         $this->context->expects($this->any())->method('getObjectManager')->will($this->returnValue($objectManagerMock));

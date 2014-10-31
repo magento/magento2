@@ -23,11 +23,11 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_layout.xsd">
-    <block name="block1" class="Magento\Framework\View\Element\Text">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/layout_generic.xsd">
+    <block name="block_first" class="Magento\Framework\View\Element\Text">
         <action method="getChildBlock">
-            <argument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="value" xsi:type="string">block2</argument>
+            <argument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="value" xsi:type="string">block_second</argument>
         </action>
-        <block name="block2" class="Magento\Framework\View\Element\Text"/>
+        <block name="block_second" class="Magento\Framework\View\Element\Text"/>
     </block>
 </layout>

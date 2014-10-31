@@ -27,14 +27,15 @@ namespace Magento\Backend\Controller\Adminhtml\System\Design;
 class Edit extends \Magento\Backend\Controller\Adminhtml\System\Design
 {
     /**
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Page
      */
     public function execute()
     {
         $this->_title->add(__('Store Design'));
 
-        $this->_view->loadLayout();
-        $this->_setActiveMenu('Magento_Backend::system_design_schedule');
+        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        $resultPage = $this->resultPageFactory->create();
+        $resultPage->setActiveMenu('Magento_Backend::system_design_schedule');
 
         $id = (int)$this->getRequest()->getParam('id');
         $design = $this->_objectManager->create('Magento\Framework\App\DesignInterface');
@@ -47,11 +48,11 @@ class Edit extends \Magento\Backend\Controller\Adminhtml\System\Design
 
         $this->_coreRegistry->register('design', $design);
 
-        $this->_addContent($this->_view->getLayout()->createBlock('Magento\Backend\Block\System\Design\Edit'));
-        $this->_addLeft(
-            $this->_view->getLayout()->createBlock('Magento\Backend\Block\System\Design\Edit\Tabs', 'design_tabs')
+        $resultPage->addContent($resultPage->getLayout()->createBlock('Magento\Backend\Block\System\Design\Edit'));
+        $resultPage->addLeft(
+            $resultPage->getLayout()->createBlock('Magento\Backend\Block\System\Design\Edit\Tabs', 'design_tabs')
         );
 
-        $this->_view->renderLayout();
+        return $resultPage;
     }
 }

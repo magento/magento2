@@ -278,9 +278,13 @@ abstract class AbstractBlock extends \Magento\Framework\Object implements BlockI
      * Retrieve layout object
      *
      * @return \Magento\Framework\View\LayoutInterface
+     * @throws \Magento\Framework\Exception
      */
     public function getLayout()
     {
+        if (!$this->_layout) {
+            throw new \Magento\Framework\Exception('Layout must be initialized');
+        }
         return $this->_layout;
     }
 
@@ -292,12 +296,11 @@ abstract class AbstractBlock extends \Magento\Framework\Object implements BlockI
      */
     public function setNameInLayout($name)
     {
-        $layout = $this->getLayout();
-        if (!empty($this->_nameInLayout) && $layout) {
+        if (!empty($this->_nameInLayout) && $this->_layout) {
             if ($name === $this->_nameInLayout) {
                 return $this;
             }
-            $layout->renameElement($this->_nameInLayout, $name);
+            $this->_layout->renameElement($this->_nameInLayout, $name);
         }
         $this->_nameInLayout = $name;
         return $this;

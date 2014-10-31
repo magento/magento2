@@ -24,7 +24,9 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <referenceContainer name="form.buttons">
-        <block class="Magento\Backend\Block\Template" name="adminhtml_auth_login_forgotpassword" template="Magento_User::admin/forgotpassword_url.phtml"/>
-    </referenceContainer>
+    <body>
+        <referenceContainer name="form.buttons">
+            <block class="Magento\Backend\Block\Template" name="adminhtml_auth_login_forgotpassword" template="Magento_User::admin/forgotpassword_url.phtml"/>
+        </referenceContainer>
+    </body>
 </page>

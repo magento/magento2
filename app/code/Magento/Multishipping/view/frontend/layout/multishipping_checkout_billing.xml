@@ -25,18 +25,20 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <update handle="multishipping_checkout"/>
-    <referenceBlock name="page.main.title">
-        <action method="setPageTitle">
-            <argument translate="true" name="label" xsi:type="string">Billing Information</argument>
-        </action>
-    </referenceBlock>
-    <referenceContainer name="content">
-        <block class="Magento\Multishipping\Block\Checkout\Billing" name="checkout_billing" template="checkout/billing.phtml" cacheable="false">
-            <container name="payment_methods_before" label="Payment Methods Before"/>
-            <container name="payment_methods_after" label="Payment Methods After"/>
-        </block>
-    </referenceContainer>
-    <referenceBlock name="head.components">
-        <block class="Magento\Framework\View\Element\Js\Components" name="multishipping_checkout_billing_page_head_components" template="Magento_Checkout::js/components.phtml"/>
-    </referenceBlock>
+    <body>
+        <referenceBlock name="page.main.title">
+            <action method="setPageTitle">
+                <argument translate="true" name="label" xsi:type="string">Billing Information</argument>
+            </action>
+        </referenceBlock>
+        <referenceContainer name="content">
+            <block class="Magento\Multishipping\Block\Checkout\Billing" name="checkout_billing" template="checkout/billing.phtml" cacheable="false">
+                <container name="payment_methods_before" label="Payment Methods Before"/>
+                <container name="payment_methods_after" label="Payment Methods After"/>
+            </block>
+        </referenceContainer>
+        <referenceBlock name="head.components">
+            <block class="Magento\Framework\View\Element\Js\Components" name="multishipping_checkout_billing_page_head_components" template="Magento_Checkout::js/components.phtml"/>
+        </referenceBlock>
+    </body>
 </page>

@@ -27,33 +27,56 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Set;
 class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Set
 {
     /**
-     * @return void
+     * @var \Magento\Framework\View\Result\PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+    ) {
+        parent::__construct($context, $coreRegistry);
+        $this->resultPageFactory = $resultPageFactory;
+        $this->resultRedirectFactory = $resultRedirectFactory;
+    }
+
+    /**
+     * @return \Magento\Backend\Model\View\Result\Page
      */
     public function execute()
     {
         $this->_title->add(__('Product Templates'));
 
         $this->_setTypeId();
-        $attributeSet = $this->_objectManager->create(
-            'Magento\Eav\Model\Entity\Attribute\Set'
-        )->load(
-            $this->getRequest()->getParam('id')
-        );
+        $attributeSet = $this->_objectManager->create('Magento\Eav\Model\Entity\Attribute\Set')
+            ->load($this->getRequest()->getParam('id'));
 
         if (!$attributeSet->getId()) {
-            $this->_redirect('catalog/*/index');
-            return;
+            return $this->resultRedirectFactory->create()->setPath('catalog/*/index');
         }
 
         $this->_title->add($attributeSet->getId() ? $attributeSet->getAttributeSetName() : __('New Set'));
 
         $this->_coreRegistry->register('current_attribute_set', $attributeSet);
 
-        $this->_view->loadLayout();
-        $this->_setActiveMenu('Magento_Catalog::catalog_attributes_sets');
-        $this->_addBreadcrumb(__('Catalog'), __('Catalog'));
-        $this->_addBreadcrumb(__('Manage Product Sets'), __('Manage Product Sets'));
-
-        $this->_view->renderLayout();
+        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        $resultPage = $this->resultPageFactory->create();
+        $resultPage->setActiveMenu('Magento_Catalog::catalog_attributes_sets');
+        $resultPage->addBreadcrumb(__('Catalog'), __('Catalog'));
+        $resultPage->addBreadcrumb(__('Manage Product Sets'), __('Manage Product Sets'));
+        return $resultPage;
     }
 }

@@ -129,13 +129,14 @@ class Curl extends ProductCurl implements DownloadableProductInjectableInterface
             throw new \Exception("Product creation by curl handler was not successful! Response: $response");
         }
         preg_match("~Location: [^\s]*\/id\/(\d+)~", $response, $matches);
+        $checkoutData = isset($data['product']['checkout_data']) ? $data['product']['checkout_data'] : null;
         foreach ($data['downloadable']['link'] as $key => $link) {
             preg_match('`"link_id":"(\d*?)","title":"' . $link['title'] . '"`', $response, $linkId);
-            if (isset($data['product']['checkout_data']['options']['links'][$key]['label'])) {
-                $data['product']['checkout_data']['options']['links'][$key]['id'] = $linkId[1];
+            if (isset($checkoutData['options']['links'][$key]['label'])) {
+                $checkoutData['options']['links'][$key]['id'] = $linkId[1];
             }
         }
 
-        return ['id' => $matches[1], 'checkout_data' => $data['product']['checkout_data']];
+        return ['id' => $matches[1], 'checkout_data' => $checkoutData];
     }
 }

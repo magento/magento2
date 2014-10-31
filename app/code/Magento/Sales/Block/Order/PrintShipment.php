@@ -66,7 +66,8 @@ class PrintShipment extends \Magento\Sales\Block\Items\AbstractItems
     protected function _prepareLayout()
     {
         $this->pageConfig->setTitle(__('Print Order # %1', $this->getOrder()->getRealOrderId()));
-        $this->setChild('payment_info', $this->_paymentHelper->getInfoBlock($this->getOrder()->getPayment()));
+        $infoBlock = $this->_paymentHelper->getInfoBlock($this->getOrder()->getPayment(), $this->getLayout());
+        $this->setChild('payment_info', $infoBlock);
     }
 
     /**

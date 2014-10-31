@@ -68,7 +68,7 @@ class Grid extends GridInterface
      *
      * @var string
      */
-    protected $firstRowSelector = '//tr[1]/td[@data-column="code"]';
+    protected $firstRowSelector = '//tr[./td[contains(@class, "col-name")]][1]';
 
     /**
      * Check if specific row exists in grid

@@ -64,23 +64,35 @@ class CleanMediaTest extends \PHPUnit_Framework_TestCase
         $context->expects($this->once())->method('getResponse')->will($this->returnValue($response));
         $context->expects($this->once())->method('getSession')->will($this->returnValue($session));
         $context->expects($this->once())->method('getMessageManager')->will($this->returnValue($messageManager));
+
+        $resultRedirect = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $resultRedirectFactory = $this->getMockBuilder('Magento\Backend\Model\View\Result\RedirectFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $resultRedirectFactory->expects($this->atLeastOnce())
+            ->method('create')
+            ->willReturn($resultRedirect);
+
         $controller = $helper->getObject(
-            'Magento\Backend\Controller\Adminhtml\Cache\CleanMedia', array('context' => $context)
+            'Magento\Backend\Controller\Adminhtml\Cache\CleanMedia',
+            [
+                'context' => $context,
+                'resultRedirectFactory' => $resultRedirectFactory
+            ]
         );
 
         // Setup expectations
         $mergeService = $this->getMock('Magento\Framework\View\Asset\MergeService', array(), array(), '', false);
         $mergeService->expects($this->once())->method('cleanMergedJsCss');
 
-        $messageManager->expects(
-            $this->once()
-        )->method(
-            'addSuccess'
-        )->with(
-            'The JavaScript/CSS cache has been cleaned.'
+        $messageManager->expects($this->once())
+            ->method('addSuccess')
+            ->with('The JavaScript/CSS cache has been cleaned.'
         );
-
-        $session->expects($this->once())->method('setIsUrlNotice')->will($this->returnSelf());
 
         $valueMap = array(
             array('Magento\Framework\View\Asset\MergeService', $mergeService),
@@ -88,17 +100,11 @@ class CleanMediaTest extends \PHPUnit_Framework_TestCase
         );
         $objectManager->expects($this->any())->method('get')->will($this->returnValueMap($valueMap));
 
-        $backendHelper->expects(
-            $this->once()
-        )->method(
-            'getUrl'
-        )->with(
-            'adminhtml/*'
-        )->will(
-            $this->returnValue('redirect_url')
-        );
+        $resultRedirect->expects($this->once())
+            ->method('setPath')
+            ->with('adminhtml/*')
+            ->willReturnSelf();
 
-        $response->expects($this->once())->method('setRedirect')->with('redirect_url');
         // Run
         $controller->execute();
     }

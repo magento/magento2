@@ -31,7 +31,7 @@ class MassEnable extends \Magento\Backend\Controller\Adminhtml\Cache
     /**
      * Mass action for cache enabling
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
@@ -57,6 +57,8 @@ class MassEnable extends \Magento\Backend\Controller\Adminhtml\Cache
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('An error occurred while enabling cache.'));
         }
-        $this->_redirect('adminhtml/*');
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
+        return $resultRedirect->setPath('adminhtml/*');
     }
 }

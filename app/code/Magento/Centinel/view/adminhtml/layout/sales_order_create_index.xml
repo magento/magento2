@@ -24,9 +24,11 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <referenceBlock name="data">
-        <block class="Magento\Centinel\Block\Adminhtml\Validation" as="card_validation" name="card_validation" template="order/create/abstract.phtml">
-            <block class="Magento\Centinel\Block\Adminhtml\Validation\Form" template="validation/form.phtml" name="centinel.validation.form" as="form"/>
-        </block>
-    </referenceBlock>
+    <body>
+        <referenceBlock name="data">
+            <block class="Magento\Centinel\Block\Adminhtml\Validation" as="card_validation" name="card_validation" template="order/create/abstract.phtml">
+                <block class="Magento\Centinel\Block\Adminhtml\Validation\Form" template="validation/form.phtml" name="centinel.validation.form" as="form"/>
+            </block>
+        </referenceBlock>
+    </body>
 </page>

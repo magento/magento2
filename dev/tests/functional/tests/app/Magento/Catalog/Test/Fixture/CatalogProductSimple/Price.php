@@ -64,9 +64,11 @@ class Price implements FixtureInterface
      * @param array $params
      * @param array $data
      */
-    public function __construct(array $params, array $data = [])
+    public function __construct(array $params, $data = [])
     {
         $this->params = $params;
+        $this->data = (!isset($data['preset']) && !isset($data['value'])) ? $data : [];
+
         if (isset($data['value'])) {
             $this->data = $data['value'];
             if (is_array($this->data)) {

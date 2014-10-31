@@ -24,6 +24,8 @@
 namespace Magento\Catalog\Controller\Product;
 
 use Magento\Core\App\Action\FormKeyValidator;
+use Magento\Framework\Controller\Result;
+use Magento\Framework\View\Result\PageFactory;
 
 /**
  * Catalog compare controller
@@ -99,6 +101,18 @@ class Compare extends \Magento\Framework\App\Action\Action
     protected $_formKeyValidator;
 
     /**
+     * @var Result\Redirect
+     */
+    protected $resultRedirectFactory;
+
+    /**
+     * @var \Magento\Framework\View\Result\PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * Constructor
+     *
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Catalog\Model\Product\Compare\ItemFactory $compareItemFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
@@ -109,6 +123,8 @@ class Compare extends \Magento\Framework\App\Action\Action
      * @param \Magento\Catalog\Model\Session $catalogSession
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param FormKeyValidator $formKeyValidator
+     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -120,7 +136,9 @@ class Compare extends \Magento\Framework\App\Action\Action
         \Magento\Catalog\Model\Product\Compare\ListCompare $catalogProductCompareList,
         \Magento\Catalog\Model\Session $catalogSession,
         \Magento\Framework\StoreManagerInterface $storeManager,
-        FormKeyValidator $formKeyValidator
+        FormKeyValidator $formKeyValidator,
+        Result\RedirectFactory $resultRedirectFactory,
+        PageFactory $resultPageFactory
     ) {
         $this->_storeManager = $storeManager;
         $this->_compareItemFactory = $compareItemFactory;
@@ -131,6 +149,8 @@ class Compare extends \Magento\Framework\App\Action\Action
         $this->_catalogProductCompareList = $catalogProductCompareList;
         $this->_catalogSession = $catalogSession;
         $this->_formKeyValidator = $formKeyValidator;
+        $this->resultRedirectFactory = $resultRedirectFactory;
+        $this->resultPageFactory = $resultPageFactory;
         parent::__construct($context);
     }
 

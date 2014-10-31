@@ -59,12 +59,8 @@ class ProcessLayoutRenderElementTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_helperMock = $this->getMock('Magento\PageCache\Helper\Data', array(), array(), '', false);
 
-        $this->_model = new \Magento\PageCache\Model\Observer\ProcessLayoutRenderElement(
-            $this->_configMock,
-            $this->_helperMock
-        );
+        $this->_model = new \Magento\PageCache\Model\Observer\ProcessLayoutRenderElement($this->_configMock);
         $this->_observerMock = $this->getMock(
             'Magento\Framework\Event\Observer',
             array('getEvent'),

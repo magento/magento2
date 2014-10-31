@@ -27,11 +27,37 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 {
     /**
-     * @return void
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
+     * Constructor
+     *
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Cache\FrontendInterface $attributeLabelCache
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\Cache\FrontendInterface $attributeLabelCache,
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+    ) {
+        parent::__construct($context, $attributeLabelCache, $coreRegistry, $resultPageFactory);
+        $this->resultRedirectFactory = $resultRedirectFactory;
+    }
+
+    /**
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
         $data = $this->getRequest()->getPost();
+        $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
             /** @var $session \Magento\Backend\Model\Auth\Session */
             $session = $this->_objectManager->get('Magento\Backend\Model\Session');
@@ -51,8 +77,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
                 if ($attributeSet->getId()) {
                     $this->messageManager->addError(__('Attribute Set with name \'%1\' already exists.', $name));
                     $this->messageManager->setAttributeData($data);
-                    $this->_redirect('catalog/*/edit', array('_current' => true));
-                    return;
+                    return $resultRedirect->setPath('catalog/*/edit', ['_current' => true]);
                 }
 
                 try {
@@ -88,8 +113,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
                             $attributeCode
                         )
                     );
-                    $this->_redirect('catalog/*/edit', array('attribute_id' => $id, '_current' => true));
-                    return;
+                    return $resultRedirect->setPath('catalog/*/edit', ['attribute_id' => $id, '_current' => true]);
                 }
             }
             $data['attribute_code'] = $attributeCode;
@@ -104,8 +128,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
                     foreach ($inputType->getMessages() as $message) {
                         $this->messageManager->addError($message);
                     }
-                    $this->_redirect('catalog/*/edit', array('attribute_id' => $id, '_current' => true));
-                    return;
+                    return $resultRedirect->setPath('catalog/*/edit', ['attribute_id' => $id, '_current' => true]);
                 }
             }
 
@@ -113,15 +136,13 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
                 $model->load($id);
                 if (!$model->getId()) {
                     $this->messageManager->addError(__('This attribute no longer exists.'));
-                    $this->_redirect('catalog/*/');
-                    return;
+                    return $resultRedirect->setPath('catalog/*/');
                 }
                 // entity type check
                 if ($model->getEntityTypeId() != $this->_entityTypeId) {
                     $this->messageManager->addError(__('You can\'t update your attribute.'));
                     $session->setAttributeData($data);
-                    $this->_redirect('catalog/*/');
-                    return;
+                    return $resultRedirect->setPath('catalog/*/');
                 }
 
                 $data['attribute_code'] = $model->getAttributeCode();
@@ -193,20 +214,19 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
                     if ($isNewAttributeSet) {
                         $requestParams['new_attribute_set_id'] = $attributeSet->getId();
                     }
-                    $this->_redirect('catalog/product/addAttribute', $requestParams);
+                    $resultRedirect->setPath('catalog/product/addAttribute', $requestParams);
                 } elseif ($redirectBack) {
-                    $this->_redirect('catalog/*/edit', array('attribute_id' => $model->getId(), '_current' => true));
+                    $resultRedirect->setPath('catalog/*/edit', ['attribute_id' => $model->getId(), '_current' => true]);
                 } else {
-                    $this->_redirect('catalog/*/', array());
+                    $resultRedirect->setPath('catalog/*/');
                 }
-                return;
+                return $resultRedirect;
             } catch (\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
                 $session->setAttributeData($data);
-                $this->_redirect('catalog/*/edit', array('attribute_id' => $id, '_current' => true));
-                return;
+                return $resultRedirect->setPath('catalog/*/edit', ['attribute_id' => $id, '_current' => true]);
             }
         }
-        $this->_redirect('catalog/*/');
+        return $resultRedirect->setPath('catalog/*/');
     }
 }

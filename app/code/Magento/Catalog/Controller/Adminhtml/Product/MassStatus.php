@@ -35,17 +35,25 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
     protected $_productPriceIndexerProcessor;
 
     /**
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
      * @param Action\Context $context
      * @param Builder $productBuilder
      * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor
+     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         Product\Builder $productBuilder,
-        \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor
+        \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
     ) {
         $this->_productPriceIndexerProcessor = $productPriceIndexerProcessor;
         parent::__construct($context, $productBuilder);
+        $this->resultRedirectFactory = $resultRedirectFactory;
     }
 
     /**
@@ -70,7 +78,7 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
     /**
      * Update product(s) status action
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
@@ -92,6 +100,6 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
             $this->_getSession()->addException($e, __('Something went wrong while updating the product(s) status.'));
         }
 
-        $this->_redirect('catalog/*/', array('store' => $storeId));
+        return $this->resultRedirectFactory->create()->setPath('catalog/*/', ['store' => $storeId]);
     }
 }

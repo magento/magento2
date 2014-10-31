@@ -77,5 +77,10 @@
             <attribute_code>allow_gift_options_for_items</attribute_code>
             <backend_type>virtual</backend_type>
         </allow_gift_options_for_items>
+        <items>
+            <attribute_code>items</attribute_code>
+            <backend_type>virtual</backend_type>
+        </items>
     </fields>
+    <repository_class>Magento\GiftMessage\Test\Repository\GiftMessage</repository_class>
 </fixture>

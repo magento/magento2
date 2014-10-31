@@ -22,6 +22,8 @@
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
+@form-field-vertical-indent-desktop: 29px;
+
 .fieldset {
     .legend + .fieldset,
     .legend + div {
@@ -36,7 +38,8 @@
     &:last-child {
         margin-bottom: 0;
     }
-    > .field {
+    > .field,
+    > .fields > .field {
         .form-field();
         &.no-label {
             > .label {
@@ -92,6 +95,27 @@ select:focus ~ .tooltip .tooltip-content {
 }
 
 //
+//    Sidebar forms
+//--------------------------------------
+.sidebar {
+    .fieldset {
+        margin: 0;
+        > .field:not(.choice) >,
+        .fields > .field {
+            margin: 0 0 @form-field-vertical-indent;
+            .label {
+                padding: 0 0 5px;
+                text-align: left;
+                width: 100%
+            }
+            .control {
+                width: 100%;
+            }
+        }
+    }
+}
+
+//
 //    Desktop
 //--------------------------------------
 .responsive(@break) when (@break = @screen-m) {
@@ -101,7 +125,7 @@ select:focus ~ .tooltip .tooltip-content {
         }
         > .field {
             .form-field-type-revert();
-            margin: 0 0 29px;
+            margin: 0 0 @form-field-vertical-indent-desktop;
         }
     }
 }

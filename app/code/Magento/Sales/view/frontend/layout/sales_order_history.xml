@@ -25,10 +25,12 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <update handle="customer_account"/>
-    <referenceContainer name="content">
-        <block class="Magento\Sales\Block\Order\History" name="sales.order.history" cacheable="false">
-            <container name="sales.order.history.info" as="info" label="Order History Info"/>
-        </block>
-        <block class="Magento\Customer\Block\Account\Dashboard" name="customer.account.link.back" template="account/link/back.phtml" cacheable="false"/>
-    </referenceContainer>
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\Sales\Block\Order\History" name="sales.order.history" cacheable="false">
+                <container name="sales.order.history.info" as="info" label="Order History Info"/>
+            </block>
+            <block class="Magento\Customer\Block\Account\Dashboard" name="customer.account.link.back" template="account/link/back.phtml" cacheable="false"/>
+        </referenceContainer>
+    </body>
 </page>

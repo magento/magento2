@@ -31,6 +31,9 @@ class MassStatusTest extends \Magento\Catalog\Controller\Adminhtml\ProductTest
      */
     protected $priceProcessor;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\Model\View\Result\Redirect */
+    protected $resultRedirect;
+
     protected function setUp()
     {
         $this->priceProcessor = $this->getMockBuilder('Magento\Catalog\Model\Indexer\Product\Price\Processor')
@@ -46,10 +49,22 @@ class MassStatusTest extends \Magento\Catalog\Controller\Adminhtml\ProductTest
         $product->expects($this->any())->method('getStoreId')->will($this->returnValue('1'));
         $productBuilder->expects($this->any())->method('build')->will($this->returnValue($product));
 
+        $this->resultRedirect = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $resultRedirectFactory = $this->getMockBuilder('Magento\Backend\Model\View\Result\RedirectFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $resultRedirectFactory->expects($this->atLeastOnce())
+            ->method('create')
+            ->willReturn($this->resultRedirect);
+
         $this->action = new \Magento\Catalog\Controller\Adminhtml\Product\MassStatus(
             $this->initContext(),
             $productBuilder,
-            $this->priceProcessor
+            $this->priceProcessor,
+            $resultRedirectFactory
         );
 
     }

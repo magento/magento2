@@ -33,6 +33,13 @@ use Mtf\Block\Form;
 class LinkRow extends Form
 {
     /**
+     * Delete button selector
+     *
+     * @var string
+     */
+    protected $deleteButton = '.delete-link-item';
+
+    /**
      * Fill item link
      *
      * @param array $fields
@@ -54,5 +61,15 @@ class LinkRow extends Form
     {
         $mapping = $this->dataMapping($fields);
         return $this->_getData($mapping);
+    }
+
+    /**
+     * Click delete button
+     *
+     * @return void
+     */
+    public function clickDeleteButton()
+    {
+        $this->_rootElement->find($this->deleteButton)->click();
     }
 }

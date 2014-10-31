@@ -22,11 +22,14 @@
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
+@widgets-indent-bottom: @indent-base;
 .widget.static.block {}
 
-.widget.widget-cms-link {
+.widget-cms-link {
     display: block;
-    &:extend(.abstract-margin-for-blocks-and-widgets all);
+    .css(margin-bottom, @widgets-indent-bottom);
 }
 
-.widget.widget-cms-link-inline {}
+.widget-cms-link-inline {
+    margin: 0;
+}

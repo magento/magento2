@@ -24,9 +24,8 @@
 
 namespace Magento\GiftMessage\Test\TestCase;
 
-use Magento\Customer\Test\Page\CustomerAccountLogout;
-use Mtf\ObjectManager;
 use Mtf\TestCase\Scenario;
+use Magento\Customer\Test\Page\CustomerAccountLogout;
 
 /**
  * Test Creation for Checkout with Gift Messages
@@ -50,110 +49,12 @@ use Mtf\TestCase\Scenario;
 class CheckoutWithGiftMessagesTest extends Scenario
 {
     /**
-     * Steps for scenario
-     *
-     * @var array
-     */
-    protected $scenario = [
-        'CheckoutWithGiftMessagesTest' => [
-            'methods' => [
-                'test' => [
-                    'scenario' => [
-                        'setupConfiguration' => [
-                            'module' => 'Magento_Core',
-                            'next' => 'createProducts',
-                            'arguments' => [
-                                'configData' => 'cashondelivery, enableGiftMessages',
-                            ],
-                        ],
-                        'createProducts' => [
-                            'module' => 'Magento_Catalog',
-                            'next' => 'createCustomer',
-                        ],
-                        'createCustomer' => [
-                            'module' => 'Magento_Customer',
-                            'next' => 'addProductsToTheCart'
-                        ],
-                        'addProductsToTheCart' => [
-                            'module' => 'Magento_Checkout',
-                            'next' => 'proceedToCheckout',
-                        ],
-                        'proceedToCheckout' => [
-                            'module' => 'Magento_Checkout',
-                            'next' => 'selectCheckoutMethod',
-                        ],
-                        'selectCheckoutMethod' => [
-                            'module' => 'Magento_Checkout',
-                            'next' => 'fillBillingInformation',
-                        ],
-                        'fillBillingInformation' => [
-                            'module' => 'Magento_Checkout',
-                            'next' => 'addGiftMessage',
-                        ],
-                        'addGiftMessage' => [
-                            'module' => 'Magento_GiftMessage',
-                            'next' => 'fillShippingMethod',
-                        ],
-                        'fillShippingMethod' => [
-                            'module' => 'Magento_Checkout',
-                            'next' => 'selectPaymentMethod',
-                        ],
-                        'selectPaymentMethod' => [
-                            'module' => 'Magento_Checkout',
-                            'next' => 'placeOrder',
-                        ],
-                        'placeOrder' => [
-                            'module' => 'Magento_Checkout',
-                        ],
-                    ]
-                ]
-            ]
-        ]
-    ];
-
-    /**
-     * Configuration data set name
-     *
-     * @var string
-     */
-    protected $configuration;
-
-    /**
-     * Customer logout page
-     *
-     * @var CustomerAccountLogout
-     */
-    protected $customerAccountLogout;
-
-    /**
-     * Preparing configuration for test
-     *
-     * @param CustomerAccountLogout $customerAccountLogout
-     * @return void
-     */
-    public function __prepare(
-        CustomerAccountLogout $customerAccountLogout
-    ) {
-        $this->customerAccountLogout = $customerAccountLogout;
-    }
-
-    /**
-     * Runs one page checkout test
+     * Runs one page checkout test with gift message.
      *
      * @return void
      */
     public function test()
     {
-        $this->executeScenario($this->scenario);
-    }
-
-    /**
-     * Logout customer
-     *
-     * @return void
-     */
-    public function tearDown()
-    {
-        $this->customerAccountLogout->open();
+        $this->executeScenario();
     }
 }

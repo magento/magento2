@@ -24,7 +24,9 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <block class="Magento\Sales\Block\Adminhtml\Order\Invoice\View\Comments" name="invoice_comments">
-        <block class="Magento\Sales\Block\Adminhtml\Order\Comments\View" name="order_comments" template="order/comments/view.phtml"/>
-    </block>
+    <body>
+        <block class="Magento\Sales\Block\Adminhtml\Order\Invoice\View\Comments" name="invoice_comments">
+            <block class="Magento\Sales\Block\Adminhtml\Order\Comments\View" name="order_comments" template="order/comments/view.phtml"/>
+        </block>
+    </body>
 </page>

@@ -28,7 +28,9 @@
         <css src="Magento_Integration::integration.css"/>
     </head>
     <update handle="adminhtml_integration_edit"/>
-    <referenceBlock name="content">
-        <block class="Magento\Backend\Block\Template" name="integration.popup.container" template="Magento_Integration::integration/popup_container.phtml" before="-"/>
-    </referenceBlock>
+    <body>
+        <referenceBlock name="content">
+            <block class="Magento\Backend\Block\Template" name="integration.popup.container" template="Magento_Integration::integration/popup_container.phtml" before="-"/>
+        </referenceBlock>
+    </body>
 </page>

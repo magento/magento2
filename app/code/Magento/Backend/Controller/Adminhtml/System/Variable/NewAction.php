@@ -29,10 +29,12 @@ class NewAction extends \Magento\Backend\Controller\Adminhtml\System\Variable
     /**
      * New Action (forward to edit action)
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Forward
      */
     public function execute()
     {
-        $this->_forward('edit');
+        /** @var \Magento\Backend\Model\View\Result\Forward $resultForward */
+        $resultForward = $this->resultForwardFactory->create();
+        return $resultForward->forward('edit');
     }
 }

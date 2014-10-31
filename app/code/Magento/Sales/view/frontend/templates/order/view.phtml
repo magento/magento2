@@ -36,14 +36,14 @@
     <?php echo $this->getChildHtml('order_items') ?>
 
     <?php if($this->helper('Magento\GiftMessage\Helper\Message')->getIsMessagesAvailable('order', $_order) && $_order->getGiftMessageId()): ?>
-    <div class="block block-order-details-additional">
+    <div class="block block-order-details-gift-message">
         <div class="block-title"><strong><?php echo __('Gift Message for This Order') ?></strong></div>
         <?php $_giftMessage=$this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessageForEntity($_order); ?>
         <div class="block-content">
-            <dl class="gift-message">
-                <dt class="gift-sender"><strong class="label"><?php echo __('From:') ?></strong> <?php echo $this->escapeHtml($_giftMessage->getSender()) ?></dt>
-                <dt class="gift-recipient"><strong class="label"><?php echo __('To:') ?></strong> <?php echo $this->escapeHtml($_giftMessage->getRecipient()) ?></dt>
-                <dd class="gift-message-text"><?php echo $this->helper('Magento\GiftMessage\Helper\Message')->getEscapedGiftMessage($_order) ?></dd>
+            <dl class="item-options">
+                <dt class="item-sender"><strong class="label"><?php echo __('From') ?></strong><?php echo $this->escapeHtml($_giftMessage->getSender()) ?></dt>
+                <dt class="item-recipient"><strong class="label"><?php echo __('To') ?></strong><?php echo $this->escapeHtml($_giftMessage->getRecipient()) ?></dt>
+                <dd class="item-message"><?php echo $this->helper('Magento\GiftMessage\Helper\Message')->getEscapedGiftMessage($_order) ?></dd>
             </dl>
         </div>
     </div>

@@ -26,25 +26,27 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <update handle="customer_account"/>
     <update handle="sales_recurringpayment_view__tabs"/>
-    <referenceBlock name="sales.recurring.payment.view.tab.orders">
-        <action method="setIsViewCurrent">
-            <argument name="v" xsi:type="string">1</argument>
-        </action>
-    </referenceBlock>
-    <referenceBlock name="sales.recurring.payment.view">
-        <block class="Magento\RecurringPayment\Block\Payment\Related\Orders\Grid" name="sales.recurring.payment.view.orders" as="table" template="recurring/grid.phtml" cacheable="false">
-            <action method="setViewLabel">
-                <argument translate="true" name="value" xsi:type="string">Orders Based on This Payment</argument>
+    <body>
+        <referenceBlock name="sales.recurring.payment.view.tab.orders">
+            <action method="setIsViewCurrent">
+                <argument name="v" xsi:type="string">1</argument>
             </action>
-            <action method="setEmptyGridMessage">
-                <argument translate="true" name="value" xsi:type="string">There are no orders yet.</argument>
-            </action>
-            <action method="setGridHtmlClass">
-                <argument name="value" xsi:type="string">info-box</argument>
-            </action>
-            <action method="setGridHtmlCss">
-                <argument name="value" xsi:type="string">border:0</argument>
-            </action>
-        </block>
-    </referenceBlock>
+        </referenceBlock>
+        <referenceBlock name="sales.recurring.payment.view">
+            <block class="Magento\RecurringPayment\Block\Payment\Related\Orders\Grid" name="sales.recurring.payment.view.orders" as="table" template="recurring/grid.phtml" cacheable="false">
+                <action method="setViewLabel">
+                    <argument translate="true" name="value" xsi:type="string">Orders Based on This Payment</argument>
+                </action>
+                <action method="setEmptyGridMessage">
+                    <argument translate="true" name="value" xsi:type="string">There are no orders yet.</argument>
+                </action>
+                <action method="setGridHtmlClass">
+                    <argument name="value" xsi:type="string">info-box</argument>
+                </action>
+                <action method="setGridHtmlCss">
+                    <argument name="value" xsi:type="string">border:0</argument>
+                </action>
+            </block>
+        </referenceBlock>
+    </body>
 </page>

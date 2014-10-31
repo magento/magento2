@@ -48,7 +48,7 @@ class CheckoutAgreement extends InjectableFixture
         'name' => 'DefaultName%isolation%',
         'is_active' => 'Enabled',
         'is_html' => 'Text',
-        'stores' => ['dataSet' => 'default_store_view'],
+        'stores' => ['dataSet' => ['default']],
         'checkbox_text' => 'test_checkbox%isolation%',
         'content' => 'TestMessage%isolation%',
     ];

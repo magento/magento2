@@ -368,7 +368,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
         $parent = $this->_createBlockWithLayout('parent', 'parent');
         $block = $this->_createBlockWithLayout('');
         $parent->setChild('', $block);
-        $this->assertContains('abstractblockmock', $parent->getChildNames());
+        $this->assertContains('abstractblockmock_0', $parent->getChildNames());
     }
 
     /**

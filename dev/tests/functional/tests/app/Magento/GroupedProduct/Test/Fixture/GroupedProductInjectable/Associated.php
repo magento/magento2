@@ -56,26 +56,28 @@ class Associated implements FixtureInterface
      * @param FixtureFactory $fixtureFactory
      * @param array $data
      * @param array $params [optional]
+     *
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function __construct(FixtureFactory $fixtureFactory, array $data, array $params = [])
     {
         $this->params = $params;
+        $this->data = isset($data['preset']) ? $this->getPreset($data['preset']) : $data;
 
-        if (isset($data['preset'])) {
-            $this->data = $this->getPreset($data['preset']);
-        }
-
-        $this->data['products'] = isset($data['products']) ? explode(',', $data['products']) : $this->data['products'];
+        $this->data['products'] = (isset($data['products']) && !is_array($data['products']))
+            ? explode(',', $data['products'])
+            : $this->data['products'];
 
         foreach ($this->data['products'] as $key => $product) {
-            list($fixture, $dataSet) = explode('::', $product);
-            /** @var $productFixture InjectableFixture */
-            $productFixture = $fixtureFactory->createByCode($fixture, ['dataSet' => $dataSet]);
-            if (!$productFixture->hasData('id')) {
-                $productFixture->persist();
+            if (!($product instanceof FixtureInterface)) {
+                list($fixture, $dataSet) = explode('::', $product);
+                /** @var $productFixture InjectableFixture */
+                $product = $fixtureFactory->createByCode($fixture, ['dataSet' => $dataSet]);
             }
-
-            $this->data['products'][$key] = $productFixture;
+            if (!$product->hasData('id')) {
+                $product->persist();
+            }
+            $this->data['products'][$key] = $product;
         }
 
         $assignedProducts = & $this->data['assigned_products'];

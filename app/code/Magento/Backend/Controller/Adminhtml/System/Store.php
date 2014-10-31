@@ -47,39 +47,57 @@ class Store extends Action
     protected $filterManager;
 
     /**
+     * @var \Magento\Backend\Model\View\Result\ForwardFactory
+     */
+    protected $resultForwardFactory;
+
+    /**
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
+     * @var \Magento\Framework\View\Result\PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\Filter\FilterManager $filterManager
+     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\Filter\FilterManager $filterManager
+        \Magento\Framework\Filter\FilterManager $filterManager,
+        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->filterManager = $filterManager;
         parent::__construct($context);
+        $this->resultForwardFactory = $resultForwardFactory;
+        $this->resultRedirectFactory = $resultRedirectFactory;
+        $this->resultPageFactory = $resultPageFactory;
     }
 
     /**
      * Init actions
      *
-     * @return $this
+     * @return \Magento\Backend\Model\View\Result\Page
      */
-    protected function _initAction()
+    protected function createPage()
     {
-        // load layout, set active menu and breadcrumbs
-        $this->_view->loadLayout();
-        $this->_setActiveMenu(
-            'Magento_Backend::system_store'
-        )->_addBreadcrumb(
-            __('System'),
-            __('System')
-        )->_addBreadcrumb(
-            __('Manage Stores'),
-            __('Manage Stores')
-        );
-        return $this;
+        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        $resultPage = $this->resultPageFactory->create();
+        $resultPage->setActiveMenu('Magento_Backend::system_store')
+            ->addBreadcrumb(__('System'), __('System'))
+            ->addBreadcrumb(__('Manage Stores'), __('Manage Stores'));
+        return $resultPage;
     }
 
     /**
@@ -93,14 +111,12 @@ class Store extends Action
     /**
      * Backup database
      *
-     * @param string $failPath redirect path if backup failed
-     * @param array $arguments
-     * @return $this|void
+     * @return bool
      */
-    protected function _backupDatabase($failPath, $arguments = array())
+    protected function _backupDatabase()
     {
         if (!$this->getRequest()->getParam('create_backup')) {
-            return $this;
+            return true;
         }
         try {
             /** @var \Magento\Backup\Model\Db $backupDb */
@@ -116,17 +132,15 @@ class Store extends Action
             $this->messageManager->addSuccess(__('The database was backed up.'));
         } catch (\Magento\Framework\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
-            $this->_redirect($failPath, $arguments);
-            return;
+            return false;
         } catch (\Exception $e) {
             $this->messageManager->addException(
                 $e,
                 __('We couldn\'t create a backup right now. Please try again later.')
             );
-            $this->_redirect($failPath, $arguments);
-            return;
+            return false;
         }
-        return $this;
+        return true;
     }
 
     /**

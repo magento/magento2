@@ -205,10 +205,10 @@ interface LayoutInterface
      *
      * @param  string $type
      * @param  string $name
-     * @param  array $attributes
+     * @param  array $arguments
      * @return Element\BlockInterface
      */
-    public function createBlock($type, $name = '', array $attributes = array());
+    public function createBlock($type, $name = '', array $arguments = array());
 
     /**
      * Add a block to registry, create new object if needed
@@ -272,13 +272,6 @@ interface LayoutInterface
      * @return Element\BlockInterface
      */
     public function getBlockSingleton($type);
-
-    /**
-     * Retrieve block factory
-     *
-     * @return \Magento\Framework\View\Element\BlockFactory
-     */
-    public function getBlockFactory();
 
     /**
      * Get property value of an element

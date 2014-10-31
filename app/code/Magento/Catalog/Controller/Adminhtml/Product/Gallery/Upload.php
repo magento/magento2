@@ -29,6 +29,23 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class Upload extends \Magento\Backend\App\Action
 {
     /**
+     * @var \Magento\Framework\Controller\Result\JSONFactory
+     */
+    protected $resultJsonFactory;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+    ) {
+        parent::__construct($context);
+        $this->resultJsonFactory = $resultJsonFactory;
+    }
+
+    /**
      * @return bool
      */
     protected function _isAllowed()
@@ -37,7 +54,7 @@ class Upload extends \Magento\Backend\App\Action
     }
 
     /**
-     * @return void
+     * @return \Magento\Framework\Controller\Result\JSON
      */
     public function execute()
     {
@@ -50,11 +67,8 @@ class Upload extends \Magento\Backend\App\Action
             $uploader->setAllowRenameFiles(true);
             $uploader->setFilesDispersion(true);
             /** @var \Magento\Framework\Filesystem\Directory\Read $mediaDirectory */
-            $mediaDirectory = $this->_objectManager->get(
-                'Magento\Framework\Filesystem'
-            )->getDirectoryRead(
-                DirectoryList::MEDIA
-            );
+            $mediaDirectory = $this->_objectManager->get('Magento\Framework\Filesystem')
+                ->getDirectoryRead(DirectoryList::MEDIA);
             $config = $this->_objectManager->get('Magento\Catalog\Model\Product\Media\Config');
             $result = $uploader->save($mediaDirectory->getAbsolutePath($config->getBaseTmpMediaPath()));
 
@@ -66,18 +80,13 @@ class Upload extends \Magento\Backend\App\Action
             unset($result['tmp_name']);
             unset($result['path']);
 
-            $result['url'] = $this->_objectManager->get(
-                'Magento\Catalog\Model\Product\Media\Config'
-            )->getTmpMediaUrl(
-                $result['file']
-            );
+            $result['url'] = $this->_objectManager->get('Magento\Catalog\Model\Product\Media\Config')
+                ->getTmpMediaUrl($result['file']);
             $result['file'] = $result['file'] . '.tmp';
         } catch (\Exception $e) {
             $result = array('error' => $e->getMessage(), 'errorcode' => $e->getCode());
         }
 
-        $this->getResponse()->representJson(
-            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
-        );
+        return $this->resultJsonFactory->create()->setData($result);
     }
 }

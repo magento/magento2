@@ -41,7 +41,7 @@ interface ActionInterface
      * Dispatch request
      *
      * @param RequestInterface $request
-     * @return ResponseInterface
+     * @return \Magento\Framework\Controller\ResultInterface|ResponseInterface
      * @throws Action\NotFoundException
      */
     public function dispatch(RequestInterface $request);

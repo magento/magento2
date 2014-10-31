@@ -29,11 +29,12 @@ $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Im
     <form class="form shared wishlist" action="<?php echo $this->getUrl('*/*/update') ?>" method="post">
         <div class="wishlist table-wrapper">
             <table class="table data wishlist" id="wishlist-table">
+                <caption class="table-caption"><?php echo __('Wish List'); ?></caption>
                 <thead>
                 <tr>
-                    <th class="col product"><?php echo __('Product') ?></th>
-                    <th class="col comment"><?php echo __('Comment') ?></th>
-                    <th class="col actions"><?php echo __('Add to Cart') ?></th>
+                    <th class="col product" scope="col"><?php echo __('Product') ?></th>
+                    <th class="col comment" scope="col"><?php echo __('Comment') ?></th>
+                    <th class="col actions" scope="col"><?php echo __('Add to Cart') ?></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -43,7 +44,7 @@ $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Im
                     $isVisibleProduct = $product->isVisibleInSiteVisibility();
                     ?>
                     <tr>
-                        <td class="col product">
+                        <td data-th="<?php echo $this->escapeHtml(__('Product')) ?>" class="col product">
                             <a class="product photo" href="<?php echo $this->getProductUrl($item) ?>" title="<?php echo $this->escapeHtml($product->getName()) ?>">
                                 <?php echo $imageBlock->init($product, 'customer_shared_wishlist')->toHtml() ?>
                             </a>
@@ -62,8 +63,8 @@ $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Im
                             ?>
                             <?php echo $this->getDetailsHtml($item) ?>
                         </td>
-                        <td class="col comment"><?php echo $this->getEscapedDescription($item) ?></td>
-                        <td class="col actions" data-role="add-to-links">
+                        <td data-th="<?php echo $this->escapeHtml(__('Comment')) ?>" class="col comment"><?php echo $this->getEscapedDescription($item) ?></td>
+                        <td data-th="<?php echo $this->escapeHtml(__('Add to Cart')) ?>" class="col actions" data-role="add-to-links">
                             <?php if ($product->isSaleable()): ?>
                                 <?php if ($isVisibleProduct): ?>
                                     <button type="button" title="<?php echo __('Add to Cart') ?>" onclick="location.assign('<?php echo $this->getSharedItemAddToCartUrl($item) ?>')" class="action tocart">

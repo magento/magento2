@@ -23,226 +23,122 @@
  */
 namespace Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer;
 
-use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList;
-
 class StockItemTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\StockItem
+     * @var StockItem
      */
-    protected $model;
+    protected $stockItem;
 
     /**
-     * @var QuoteItemQtyList| \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $quoteItemQtyList;
+    protected $configMock;
 
     /**
-     * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface| \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $typeConfig;
+    protected $qtyProcessorMock;
 
-    protected function setUp()
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $itemMock;
+
+    public function setUp()
     {
-        $this->quoteItemQtyList = $this
-            ->getMockBuilder('Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList')
+        $this->configMock = $this->getMockBuilder('Magento\Catalog\Model\ProductTypes\Config')
             ->disableOriginalConstructor()
             ->getMock();
-
-        $this->typeConfig = $this
-            ->getMockBuilder('Magento\Catalog\Model\ProductTypes\ConfigInterface')
+        $this->qtyProcessorMock = $this->getMockBuilder(
+            'Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\QtyProcessor'
+        )
             ->disableOriginalConstructor()
             ->getMock();
-
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-
-        $this->model = $objectManagerHelper->getObject(
-            'Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\StockItem',
-            [
-                'quoteItemQtyList' => $this->quoteItemQtyList,
-                'typeConfig' => $this->typeConfig
-            ]
-        );
+        $this->stockItem = new StockItem($this->configMock, $this->qtyProcessorMock);
+        $this->itemMock = $this->getMockBuilder('Magento\Sales\Model\Quote\Item')
+            ->disableOriginalConstructor()
+            ->setMethods(['getParentItem', 'getProduct'])
+            ->getMock();
     }
 
-    public function testInitializeWithSubitem()
+    public function testInitialize()
     {
-        $qty = 2;
-        $parentItemQty = 3;
+        $qty = 1;
+        $rowQty = 2;
+        $qtyForCheck = 3;
 
-        $stockItem = $this->getMockBuilder('Magento\CatalogInventory\Model\Stock\Item')
-            ->setMethods(
-                [
-                    'checkQuoteItemQty',
-                    'setProductName',
-                    'setIsChildItem',
-                    'hasIsChildItem',
-                    'unsIsChildItem',
-                    '__wakeup'
-                ]
-            )
+        $stockItemMock = $this->getMockBuilder('Magento\CatalogInventory\Model\Stock\Item')
             ->disableOriginalConstructor()
+            ->setMethods(['hasIsChildItem', 'checkQuoteItemQty', 'setProduct'])
             ->getMock();
-        $quoteItem = $this->getMockBuilder('Magento\Sales\Model\Quote\Item')
-            ->setMethods(
-                [
-                    'getParentItem',
-                    'getProduct',
-                    'getId',
-                    'getQuoteId',
-                    'setIsQtyDecimal',
-                    'setData',
-                    'setUseOldQty',
-                    'setMessage',
-                    'setBackorders',
-                    '__wakeup'
-                ]
-            )
+        $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
             ->disableOriginalConstructor()
-            ->getMock();
-        $parentItem = $this->getMockBuilder('Magento\Sales\Model\Quote\Item')
-            ->setMethods(['getQty', 'setIsQtyDecimal', 'getProduct', '__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $product = $this->getMockBuilder('Magento\Catalog\Model\Product')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $parentProduct = $this->getMockBuilder('Magento\Catalog\Model\Product')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $productTypeInstance = $this->getMockBuilder('Magento\Catalog\Model\Product\Type\AbstractType')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $productTypeCustomOption = $this->getMockBuilder('Magento\Catalog\Model\Product\Configuration\Item\Option')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $result = $this->getMockBuilder('Magento\Framework\Object')
-            ->setMethods(
-                [
-                    'getItemIsQtyDecimal',
-                    'getHasQtyOptionUpdate',
-                    'getOrigQty',
-                    'getItemUseOldQty',
-                    'getMessage',
-                    'getItemBackorders',
-                ]
-            )
-            ->disableOriginalConstructor()
+            ->setMethods(['getTypeInstance', 'getForceChildItemQtyChanges', 'getCustomOption', 'getName'])
             ->getMock();
 
-        $quoteItem->expects($this->any())->method('getParentItem')->will($this->returnValue($parentItem));
-        $parentItem->expects($this->once())->method('getQty')->will($this->returnValue($parentItemQty));
-        $quoteItem->expects($this->any())->method('getProduct')->will($this->returnValue($product));
-        $product->expects($this->any())->method('getId')->will($this->returnValue('product_id'));
-        $quoteItem->expects($this->once())->method('getId')->will($this->returnValue('quote_item_id'));
-        $quoteItem->expects($this->once())->method('getQuoteId')->will($this->returnValue('quote_id'));
-        $this->quoteItemQtyList->expects($this->any())
-            ->method('getQty')
-            ->with('product_id', 'quote_item_id', 'quote_id', 0)
-            ->will($this->returnValue('summary_qty'));
-        $stockItem->expects($this->once())
-            ->method('checkQuoteItemQty')
-            ->with($parentItemQty * $qty, 'summary_qty', $qty)
-            ->will($this->returnValue($result));
-        $product->expects($this->once())
+        $customOptionMock = $this->getMockBuilder('Magneto\Framework\Object')
+            ->disableOriginalConstructor()
+            ->setMethods(['getValue'])
+            ->getMock();
+
+        $productMock->expects($this->any())
             ->method('getCustomOption')
             ->with('product_type')
-            ->will($this->returnValue($productTypeCustomOption));
-        $productTypeCustomOption->expects($this->once())
-            ->method('getValue')
-            ->will(($this->returnValue('option_value')));
-        $this->typeConfig->expects($this->once())
-            ->method('isProductSet')
-            ->with('option_value')
-            ->will($this->returnValue(true));
-        $product->expects($this->once())->method('getName')->will($this->returnValue('product_name'));
-        $stockItem->expects($this->once())->method('setProductName')->with('product_name')->will($this->returnSelf());
-        $stockItem->expects($this->once())->method('setIsChildItem')->with(true)->will($this->returnSelf());
-        $stockItem->expects($this->once())->method('hasIsChildItem')->will($this->returnValue(true));
-        $stockItem->expects($this->once())->method('unsIsChildItem');
-        $result->expects($this->exactly(3))->method('getItemIsQtyDecimal')->will($this->returnValue(true));
-        $quoteItem->expects($this->once())->method('setIsQtyDecimal')->with(true)->will($this->returnSelf());
-        $parentItem->expects($this->once())->method('setIsQtyDecimal')->with(true)->will($this->returnSelf());
-        $parentItem->expects($this->any())->method('getProduct')->will($this->returnValue($parentProduct));
-        $result->expects($this->once())->method('getHasQtyOptionUpdate')->will($this->returnValue(true));
-        $parentProduct->expects($this->once())
+            ->willReturn($customOptionMock);
+        $productMock->expects($this->any())
+            ->method('getName')
+            ->willReturn('product_name');
+        $productMock->expects($this->any())
             ->method('getTypeInstance')
-            ->will($this->returnValue($productTypeInstance));
-        $productTypeInstance->expects($this->once())
-            ->method('getForceChildItemQtyChanges')
-            ->with($product)->will($this->returnValue(true));
-        $result->expects($this->once())->method('getOrigQty')->will($this->returnValue('orig_qty'));
-        $quoteItem->expects($this->once())->method('setData')->with('qty', 'orig_qty')->will($this->returnSelf());
-        $result->expects($this->exactly(2))->method('getItemUseOldQty')->will($this->returnValue('item'));
-        $quoteItem->expects($this->once())->method('setUseOldQty')->with('item')->will($this->returnSelf());
-        $result->expects($this->exactly(2))->method('getMessage')->will($this->returnValue('message'));
-        $quoteItem->expects($this->once())->method('setMessage')->with('message')->will($this->returnSelf());
-        $result->expects($this->exactly(2))->method('getItemBackorders')->will($this->returnValue('backorders'));
-        $quoteItem->expects($this->once())->method('setBackorders')->with('backorders')->will($this->returnSelf());
+            ->willReturn('product_name');
 
-        $this->model->initialize($stockItem, $quoteItem, $qty);
-    }
+        $parentItemMock = $this->getMockBuilder('Magento\Sales\Model\Quote\Item')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $parentItemMock->expects($this->any())
+            ->method('getProduct')
+            ->willReturn($productMock);
 
-    public function testInitializeWithoutSubitem()
-    {
-        $qty = 3;
+        $itemMock = $this->getMockBuilder('Magento\Sales\Model\Quote\Item')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $itemMock->expects($this->any())
+            ->method('getProduct')
+            ->willReturn($productMock);
+        $itemMock->expects($this->any())
+            ->method('getParentItem')
+            ->willReturn($parentItemMock);
+        $this->qtyProcessorMock->expects($this->once())
+            ->method('getRowQty')
+            ->with($qty)
+            ->willReturn($rowQty);
+        $this->qtyProcessorMock->expects($this->once())
+            ->method('getQtyForCheck')
+            ->with($qty)
+            ->willReturn($qtyForCheck);
 
-        $stockItem = $this->getMockBuilder('Magento\CatalogInventory\Model\Stock\Item')
-            ->setMethods(['checkQuoteItemQty', 'setProductName', 'setIsChildItem', 'hasIsChildItem', '__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $quoteItem = $this->getMockBuilder('Magento\Sales\Model\Quote\Item')
-            ->setMethods(['getProduct', 'getParentItem', 'getQtyToAdd', 'getId', 'getQuoteId', '__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $product = $this->getMockBuilder('Magento\Catalog\Model\Product')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $productTypeCustomOption = $this->getMockBuilder('Magento\Catalog\Model\Product\Configuration\Item\Option')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $result = $this->getMockBuilder('Magento\Framework\Object')
-            ->setMethods(
-                ['getItemIsQtyDecimal', 'getHasQtyOptionUpdate', 'getItemUseOldQty', 'getMessage', 'getItemBackorders']
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $quoteItem->expects($this->once())->method('getParentItem')->will($this->returnValue(false));
-        $quoteItem->expects($this->once())->method('getQtyToAdd')->will($this->returnValue(false));
-        $product->expects($this->once())->method('getId')->will($this->returnValue('product_id'));
-        $quoteItem->expects($this->any())->method('getProduct')->will($this->returnValue($product));
-        $quoteItem->expects($this->once())->method('getId')->will($this->returnValue('quote_item_id'));
-        $quoteItem->expects($this->once())->method('getQuoteId')->will($this->returnValue('quote_id'));
-        $this->quoteItemQtyList->expects($this->any())
-            ->method('getQty')
-            ->with('product_id', 'quote_item_id', 'quote_id', $qty)
-            ->will($this->returnValue('summary_qty'));
-        $stockItem->expects($this->once())
-            ->method('checkQuoteItemQty')
-            ->with($qty, 'summary_qty', $qty)
-            ->will($this->returnValue($result));
-        $product->expects($this->once())
-            ->method('getCustomOption')
-            ->with('product_type')
-            ->will($this->returnValue($productTypeCustomOption));
-        $productTypeCustomOption->expects($this->once())
-            ->method('getValue')
-            ->will($this->returnValue('option_value'));
-        $this->typeConfig->expects($this->once())
+        $this->configMock->expects($this->any())
             ->method('isProductSet')
-            ->with('option_value')
-            ->will($this->returnValue(true));
-        $product->expects($this->once())->method('getName')->will($this->returnValue('product_name'));
-        $stockItem->expects($this->once())->method('setProductName')->with('product_name')->will($this->returnSelf());
-        $stockItem->expects($this->once())->method('setIsChildItem')->with(true)->will($this->returnSelf());
-        $stockItem->expects($this->once())->method('hasIsChildItem')->will($this->returnValue(false));
-        $result->expects($this->once())->method('getItemIsQtyDecimal')->will($this->returnValue(null));
-        $result->expects($this->once())->method('getHasQtyOptionUpdate')->will($this->returnValue(false));
-        $result->expects($this->once())->method('getItemUseOldQty')->will($this->returnValue(null));
-        $result->expects($this->once())->method('getMessage')->will($this->returnValue(null));
-        $result->expects($this->once())->method('getItemBackorders')->will($this->returnValue(null));
+            ->willReturn(true);
 
-        $this->model->initialize($stockItem, $quoteItem, $qty);
+        $stockItemMock->expects($this->any())
+            ->method('hasIsChildItem')
+            ->willReturn(true);
+        $resultMock = $this->getMockBuilder('Magento\Framework\Object')
+            ->disableOriginalConstructor()
+            ->setMethods(['getItemIsQtyDecimal', 'getHasQtyOptionUpdate'])
+            ->getMock();
+        $resultMock->expects($this->any())
+            ->method('getItemIsQtyDecimal')
+            ->willReturn(true);
+        $stockItemMock->expects($this->any())
+            ->method('checkQuoteItemQty')
+            ->willReturn($resultMock);
+
+        $this->assertInstanceOf(
+            'Magento\Framework\Object',
+            $this->stockItem->initialize($stockItemMock, $itemMock, $qty)
+        );
     }
 }

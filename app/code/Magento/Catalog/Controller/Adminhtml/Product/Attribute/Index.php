@@ -27,13 +27,14 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 class Index extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 {
     /**
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Page
      */
     public function execute()
     {
-        $this->_initAction()->_addContent(
-            $this->_view->getLayout()->createBlock('Magento\Catalog\Block\Adminhtml\Product\Attribute')
+        $resultPage = $this->createActionPage();
+        $resultPage->addContent(
+            $resultPage->getLayout()->createBlock('Magento\Catalog\Block\Adminhtml\Product\Attribute')
         );
-        $this->_view->renderLayout();
+        return $resultPage;
     }
 }

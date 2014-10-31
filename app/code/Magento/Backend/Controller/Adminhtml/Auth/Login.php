@@ -27,9 +27,36 @@ namespace Magento\Backend\Controller\Adminhtml\Auth;
 class Login extends \Magento\Backend\Controller\Adminhtml\Auth
 {
     /**
+     * @var \Magento\Framework\View\Result\PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
+     * Constructor
+     *
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+    ) {
+        $this->resultPageFactory = $resultPageFactory;
+        $this->resultRedirectFactory = $resultRedirectFactory;
+        parent::__construct($context);
+    }
+
+    /**
      * Administrator login action
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
@@ -37,10 +64,11 @@ class Login extends \Magento\Backend\Controller\Adminhtml\Auth
             if ($this->_auth->getAuthStorage()->isFirstPageAfterLogin()) {
                 $this->_auth->getAuthStorage()->setIsFirstPageAfterLogin(true);
             }
-            $this->_redirect($this->_backendUrl->getStartupPageUrl());
-            return;
+            /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+            $resultRedirect = $this->resultRedirectFactory->create();
+            $resultRedirect->setPath($this->_backendUrl->getStartupPageUrl());
+            return $resultRedirect;
         }
-        $this->_view->loadLayout(false);
-        $this->_view->renderLayout();
+        return $this->resultPageFactory->create();
     }
 }

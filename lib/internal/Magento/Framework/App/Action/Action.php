@@ -62,6 +62,7 @@ class Action extends AbstractAction
     protected $_redirect;
 
     /**
+     * @deprecated
      * @var \Magento\Framework\App\ViewInterface
      */
     protected $_view;
@@ -111,9 +112,10 @@ class Action extends AbstractAction
         );
         \Magento\Framework\Profiler::start($profilerKey);
 
+        $result = null;
         if ($request->isDispatched() && !$this->_actionFlag->get('', self::FLAG_NO_DISPATCH)) {
             \Magento\Framework\Profiler::start('action_body');
-            $this->execute();
+            $result = $this->execute();
             \Magento\Framework\Profiler::start('postdispatch');
             if (!$this->_actionFlag->get('', self::FLAG_NO_POST_DISPATCH)) {
                 $this->_eventManager->dispatch(
@@ -130,7 +132,7 @@ class Action extends AbstractAction
             \Magento\Framework\Profiler::stop('action_body');
         }
         \Magento\Framework\Profiler::stop($profilerKey);
-        return $this->_response;
+        return $result ?: $this->_response;
     }
 
     /**

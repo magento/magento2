@@ -25,28 +25,30 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <update handle="reports_report_customer_orders_grid"/>
-    <referenceBlock name="adminhtml.report.grid">
-        <arguments>
-            <argument name="id" xsi:type="string">gridTotalsCustomer</argument>
-            <argument name="dataSource" xsi:type="object">Magento\Reports\Model\Resource\Customer\Totals\Collection\Initial</argument>
-        </arguments>
-    </referenceBlock>
-    <referenceBlock name="adminhtml.report.grid.export">
-        <arguments>
-            <argument name="exportTypes" xsi:type="array">
-                <item name="csv" xsi:type="array">
-                    <item name="urlPath" xsi:type="string">*/*/exportTotalsCsv</item>
-                </item>
-                <item name="excel" xsi:type="array">
-                    <item name="urlPath" xsi:type="string">*/*/exportTotalsExcel</item>
-                </item>
-            </argument>
-        </arguments>
-    </referenceBlock>
-    <referenceBlock name="adminhtml.report.grid.columnSet">
-        <arguments>
-            <argument name="count_totals" xsi:type="string">1</argument>
-            <argument name="id" xsi:type="string">gridTotalsCustomerSet</argument>
-        </arguments>
-    </referenceBlock>
+    <body>
+        <referenceBlock name="adminhtml.report.grid">
+            <arguments>
+                <argument name="id" xsi:type="string">gridTotalsCustomer</argument>
+                <argument name="dataSource" xsi:type="object">Magento\Reports\Model\Resource\Customer\Totals\Collection\Initial</argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="adminhtml.report.grid.export">
+            <arguments>
+                <argument name="exportTypes" xsi:type="array">
+                    <item name="csv" xsi:type="array">
+                        <item name="urlPath" xsi:type="string">*/*/exportTotalsCsv</item>
+                    </item>
+                    <item name="excel" xsi:type="array">
+                        <item name="urlPath" xsi:type="string">*/*/exportTotalsExcel</item>
+                    </item>
+                </argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="adminhtml.report.grid.columnSet">
+            <arguments>
+                <argument name="count_totals" xsi:type="string">1</argument>
+                <argument name="id" xsi:type="string">gridTotalsCustomerSet</argument>
+            </arguments>
+        </referenceBlock>
+    </body>
 </page>

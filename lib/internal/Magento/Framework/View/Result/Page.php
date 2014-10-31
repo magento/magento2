@@ -24,6 +24,7 @@
 
 namespace Magento\Framework\View\Result;
 
+use Magento\Framework;
 use Magento\Framework\View;
 use Magento\Framework\App\ResponseInterface;
 
@@ -58,26 +59,92 @@ class Page extends Layout
     protected $pageConfigRenderer;
 
     /**
+     * @var \Magento\Framework\View\Page\Config\RendererFactory
+     */
+    protected $pageConfigRendererFactory;
+
+    /**
+     * @var \Magento\Framework\View\Page\Layout\Reader
+     */
+    protected $pageLayoutReader;
+
+    /**
+     * @var \Magento\Framework\View\FileSystem
+     */
+    protected $viewFileSystem;
+
+    /**
+     * @var array
+     */
+    protected $viewVars;
+
+    /**
+     * @var string
+     */
+    protected $template;
+
+    /**
      * Constructor
      *
      * @param View\Element\Template\Context $context
      * @param View\LayoutFactory $layoutFactory
-     * @param \Magento\Framework\Translate\InlineInterface $translateInline
-     * @param \Magento\Framework\View\Page\Config\Renderer $pageConfigRenderer
+     * @param View\Layout\Reader\Pool $layoutReaderPool
+     * @param Framework\Translate\InlineInterface $translateInline
+     * @param View\Layout\BuilderFactory $layoutBuilderFactory
+     * @param View\Page\Config\RendererFactory $pageConfigRendererFactory
+     * @param View\Page\Layout\Reader $pageLayoutReader
      * @param string $template
-     * @param array $data
+     * @param bool $isIsolated
      */
     public function __construct(
         View\Element\Template\Context $context,
         View\LayoutFactory $layoutFactory,
-        \Magento\Framework\Translate\InlineInterface $translateInline,
-        View\Page\Config\Renderer $pageConfigRenderer,
+        View\Layout\Reader\Pool $layoutReaderPool,
+        Framework\Translate\InlineInterface $translateInline,
+        View\Layout\BuilderFactory $layoutBuilderFactory,
+        View\Page\Config\RendererFactory $pageConfigRendererFactory,
+        View\Page\Layout\Reader $pageLayoutReader,
         $template,
-        array $data = array()
+        $isIsolated = false
     ) {
-        parent::__construct($context, $layoutFactory, $translateInline, $data);
-        $this->pageConfigRenderer = $pageConfigRenderer;
-        $this->_template = $template;
+        $this->pageConfig = $context->getPageConfig();
+        $this->pageLayoutReader = $pageLayoutReader;
+        $this->viewFileSystem = $context->getViewFileSystem();
+        $this->pageConfigRendererFactory = $pageConfigRendererFactory;
+        $this->template = $template;
+        parent::__construct(
+            $context,
+            $layoutFactory,
+            $layoutReaderPool,
+            $translateInline,
+            $layoutBuilderFactory,
+            $isIsolated
+        );
+        $this->initPageConfigReader();
+    }
+
+    /**
+     * Initialize page config reader
+     *
+     * @return void
+     */
+    protected function initPageConfigReader()
+    {
+        $this->pageConfigRenderer = $this->pageConfigRendererFactory->create(['pageConfig' => $this->pageConfig]);
+    }
+
+    /**
+     * Create layout builder
+     *
+     * @return void
+     */
+    protected function initLayoutBuilder()
+    {
+        $this->layoutBuilderFactory->create(View\Layout\BuilderFactory::TYPE_PAGE, [
+            'layout' => $this->layout,
+            'pageConfig' => $this->pageConfig,
+            'pageLayoutReader' => $this->pageLayoutReader
+        ]);
     }
 
     /**
@@ -85,13 +152,24 @@ class Page extends Layout
      */
     public function initLayout()
     {
+        $this->addHandle('default');
+        $this->addHandle($this->getDefaultLayoutHandle());
         $update = $this->getLayout()->getUpdate();
-        $update->addHandle('default');
-        $update->addHandle($this->getDefaultLayoutHandle());
         if ($update->isLayoutDefined()) {
             $update->removeHandle('default');
         }
-        return $this;
+        return parent::initLayout();
+    }
+
+    /**
+     * Add default handle
+     *
+     * @return $this
+     */
+    public function addDefaultHandle()
+    {
+        $this->addHandle('default');
+        return parent::addDefaultHandle();
     }
 
     /**
@@ -117,43 +195,35 @@ class Page extends Layout
             $pageHandles[] = $handle . '_' . $key . '_' . $value;
         }
         // Do not sort array going into add page handles. Ensure default layout handle is added first.
-        return $this->getLayout()->getUpdate()->addHandle($pageHandles);
-    }
-
-    /**
-     * Retrieve the default layout handle name for the current action
-     *
-     * @return string
-     */
-    public function getDefaultLayoutHandle()
-    {
-        return strtolower($this->_request->getFullActionName());
+        return $this->addHandle($pageHandles);
     }
 
     /**
      * @param ResponseInterface $response
      * @return $this
      */
-    public function renderResult(ResponseInterface $response)
+    protected function render(ResponseInterface $response)
     {
-        if ($this->getConfig()->getPageLayout()) {
+        $this->pageConfig->publicBuild();
+        if ($this->getPageLayout()) {
             $config = $this->getConfig();
 
             $this->addDefaultBodyClasses();
+            $requireJs = $this->getLayout()->getBlock('require.js');
             $this->assign([
-                'requireJs' => $this->_layout->getBlock('require.js')->toHtml(),
+                'requireJs' => $requireJs ? $requireJs->toHtml() : null,
                 'headContent' => $this->pageConfigRenderer->renderHeadContent(),
                 'htmlAttributes' => $this->pageConfigRenderer->renderElementAttributes($config::ELEMENT_TYPE_HTML),
                 'headAttributes' => $this->pageConfigRenderer->renderElementAttributes($config::ELEMENT_TYPE_HEAD),
                 'bodyAttributes' => $this->pageConfigRenderer->renderElementAttributes($config::ELEMENT_TYPE_BODY)
             ]);
 
-            $output = $this->_layout->getOutput();
+            $output = $this->getLayout()->getOutput();
             $this->translateInline->processResponseBody($output);
             $this->assign('layoutContent', $output);
-            $response->appendBody($this->toHtml());
+            $response->appendBody($this->renderPage());
         } else {
-            parent::renderResult($response);
+            parent::render($response);
         }
         return $this;
     }
@@ -165,11 +235,63 @@ class Page extends Layout
      */
     protected function addDefaultBodyClasses()
     {
-        $this->pageConfig->addBodyClass($this->_request->getFullActionName('-'));
-        $pageLayout = $this->pageConfig->getPageLayout();
+        $this->pageConfig->addBodyClass($this->request->getFullActionName('-'));
+        $pageLayout = $this->getPageLayout();
         if ($pageLayout) {
             $this->pageConfig->addBodyClass('page-layout-' . $pageLayout);
         }
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getPageLayout()
+    {
+        return $this->pageConfig->getPageLayout() ?: $this->getLayout()->getUpdate()->getPageLayout();
+    }
+
+    /**
+     * Assign variable
+     *
+     * @param   string|array $key
+     * @param   mixed $value
+     * @return  $this
+     */
+    public function assign($key, $value = null)
+    {
+        if (is_array($key)) {
+            foreach ($key as $subKey => $subValue) {
+                $this->assign($subKey, $subValue);
+            }
+        } else {
+            $this->viewVars[$key] = $value;
+        }
+        return $this;
+    }
+
+    /**
+     * Render page template
+     *
+     * @return string
+     * @throws \Exception
+     */
+    protected function renderPage()
+    {
+        $fileName = $this->viewFileSystem->getTemplateFileName($this->template);
+        if (!$fileName) {
+            throw new \InvalidArgumentException('Template "' . $this->template . '" is not found');
+        }
+
+        ob_start();
+        try {
+            extract($this->viewVars, EXTR_SKIP);
+            include $fileName;
+        } catch (\Exception $exception) {
+            ob_end_clean();
+            throw $exception;
+        }
+        $output = ob_get_clean();
+        return $output;
     }
 }

@@ -101,9 +101,10 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
             'image' => $this->getViewFileUrl('images/grid-cal.gif')
         );
         /** @var $selectBlock \Magento\Framework\View\Element\Html\Date */
-        $dateBlock = $this->_layout->getBlockFactory()->createBlock(
+        $dateBlock = $this->_layout->createBlock(
             'Magento\Framework\View\Element\Html\Date',
-            array('data' => $arguments)
+            '',
+            ['data' => $arguments]
         );
         $fromValue = null;
         $toValue = null;
@@ -172,9 +173,10 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
                 'extra_params' => 'multiple="multiple" size="' . ($size > 5 ? 5 : ($size < 2 ? 2 : $size))
             );
             /** @var $selectBlock \Magento\Framework\View\Element\Html\Select */
-            $selectBlock = $this->_layout->getBlockFactory()->createBlock(
+            $selectBlock = $this->_layout->createBlock(
                 'Magento\Framework\View\Element\Html\Select',
-                array('data' => $arguments)
+                '',
+                ['data' => $arguments]
             );
             return $selectBlock->setOptions($options)->setValue($value)->getHtml();
         } else {
@@ -253,9 +255,10 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
                 'class' => 'select select-export-filter'
             );
             /** @var $selectBlock \Magento\Framework\View\Element\Html\Select */
-            $selectBlock = $this->_layout->getBlockFactory()->createBlock(
+            $selectBlock = $this->_layout->createBlock(
                 'Magento\Framework\View\Element\Html\Select',
-                array('data' => $arguments)
+                '',
+                ['data' => $arguments]
             );
             return $selectBlock->setOptions($options)->setValue($value)->getHtml();
         } else {

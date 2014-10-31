@@ -27,4 +27,5 @@
     <head>
         <css src="Magento_Paypal::styles.css"/>
     </head>
+    <body/>
 </page>

@@ -29,55 +29,54 @@ use Mtf\Client\Element as ElementInterface;
 use Mtf\Client\Element\Locator;
 
 /**
- * Class DatepickerElement
  * General class for datepicker elements.
  */
 class DatepickerElement extends Element
 {
     /**
-     * DatePicker button
+     * DatePicker button.
      *
      * @var string
      */
     protected $datePickerButton = './../img[contains(@class,"ui-datepicker-trigger")]';
 
     /**
-     * DatePicker block
+     * DatePicker block.
      *
      * @var string
      */
     protected $datePickerBlock = './ancestor::body//*[@id="ui-datepicker-div"]';
 
     /**
-     * Field Month on the DatePicker
+     * Field Month on the DatePicker.
      *
      * @var string
      */
     protected $datePickerMonth = './/*[contains(@class,"ui-datepicker-month")]';
 
     /**
-     * Field Year on the DatePicker
+     * Field Year on the DatePicker.
      *
      * @var string
      */
     protected $datePickerYear = './/*[contains(@class,"ui-datepicker-year")]';
 
     /**
-     * Calendar on the DatePicker
+     * Calendar on the DatePicker.
      *
      * @var string
      */
     protected $datePickerCalendar = './/*[contains(@class,"ui-datepicker-calendar")]//*/td/a[text()="%s"]';
 
     /**
-     * DatePicker button 'Close'
+     * DatePicker button 'Close'.
      *
      * @var string
      */
     protected $datePickerButtonClose = './/*[contains(@class,"ui-datepicker-close")]';
 
     /**
-     * Set the date from datePicker
+     * Set the date from datePicker.
      *
      * @param string $value
      * @return void
@@ -97,15 +96,20 @@ class DatepickerElement extends Element
     }
 
     /**
-     * Parse date from string to array
+     * Parse date from string to array.
      *
      * @param string $value
      * @return array
      */
     protected function parseDate($value)
     {
+        $formatDate = '%b %d, %Y %I:%M %p';
+        if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') {
+            $formatDate = str_replace('%d', '%#d', $formatDate);
+        }
+
         $date = strtotime($value);
-        $date = strftime("%b %#d, %Y %I:%M %p", $date);
+        $date = strftime($formatDate, $date);
         $date = preg_split('/[,\s]/', $date);
         array_splice($date, 2, 1);
 

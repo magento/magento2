@@ -29,10 +29,13 @@
  */
 ?>
 <div class="cart-totals">
-    <table id="shopping-cart-totals-table" class="data table totals">
-        <?php echo $this->renderTotals(); ?>
-        <tfoot>
+    <div class="table-wrapper">
+        <table id="shopping-cart-totals-table" class="data table totals">
+            <caption class="table-caption"><?php echo __('Total'); ?></caption>
+            <?php echo $this->renderTotals(); ?>
+            <tfoot>
             <?php echo $this->renderTotals('footer'); ?>
-        </tfoot>
-    </table>
+            </tfoot>
+        </table>
+    </div>
 </div>

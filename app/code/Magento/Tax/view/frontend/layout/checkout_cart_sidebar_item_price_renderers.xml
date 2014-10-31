@@ -24,7 +24,9 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <referenceBlock name="minicart">
-        <block class="Magento\Tax\Block\Item\Price\Renderer" name="checkout.cart.item.price.sidebar" template="Magento_Tax::checkout/cart/item/price/sidebar.phtml"/>
-    </referenceBlock>
+    <body>
+        <referenceBlock name="minicart">
+            <block class="Magento\Tax\Block\Item\Price\Renderer" name="checkout.cart.item.price.sidebar" template="Magento_Tax::checkout/cart/item/price/sidebar.phtml"/>
+        </referenceBlock>
+    </body>
 </page>

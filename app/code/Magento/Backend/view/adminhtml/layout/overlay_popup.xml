@@ -25,9 +25,11 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <update handle="popup"/>
-    <referenceBlock name="backend.page">
-        <action method="setTemplate">
-            <argument name="template" xsi:type="string">admin/overlay_popup.phtml</argument>
-        </action>
-    </referenceBlock>
+    <body>
+        <referenceBlock name="backend.page">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">admin/overlay_popup.phtml</argument>
+            </action>
+        </referenceBlock>
+    </body>
 </page>

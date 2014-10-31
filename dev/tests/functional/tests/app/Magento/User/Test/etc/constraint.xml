@@ -128,4 +128,10 @@
             <user class="Magento\User\Test\Fixture\User" />
         </require>
     </assertUserInvalidEmailMessage>
+    <assertAccessTokensErrorRevokeMessage module="Magento_User">
+        <severeness>low</severeness>
+        <require>
+            <userEdit class="Magento\User\Test\Page\Adminhtml\UserEdit" />
+        </require>
+    </assertAccessTokensErrorRevokeMessage>
 </constraint>

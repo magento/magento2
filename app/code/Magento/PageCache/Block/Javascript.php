@@ -29,27 +29,6 @@ namespace Magento\PageCache\Block;
 class Javascript extends \Magento\Framework\View\Element\Template
 {
     /**
-     * @var \Magento\PageCache\Helper\Data
-     */
-    protected $helper;
-
-    /**
-     * Constructor
-     *
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\PageCache\Helper\Data         $helper
-     * @param array                                  $data
-     */
-    public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\PageCache\Helper\Data $helper,
-        array $data = array()
-    ) {
-        $this->helper = $helper;
-        parent::__construct($context, $data);
-    }
-
-    /**
      * Retrieve script options encoded to json
      *
      * @return string
@@ -58,7 +37,7 @@ class Javascript extends \Magento\Framework\View\Element\Template
     {
         $params = array(
             'url' => $this->getUrl('page_cache/block/render/'),
-            'handles' => $this->helper->getActualHandles(),
+            'handles' => $this->_layout->getUpdate()->getHandles(),
             'versionCookieName' => \Magento\Framework\App\PageCache\Version::COOKIE_NAME
         );
         return json_encode($params);

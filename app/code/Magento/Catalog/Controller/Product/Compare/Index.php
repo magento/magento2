@@ -29,7 +29,7 @@ class Index extends \Magento\Catalog\Controller\Product\Compare
     /**
      * Compare index action
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
@@ -47,11 +47,9 @@ class Index extends \Magento\Catalog\Controller\Product\Compare
             /** @var \Magento\Catalog\Model\Product\Compare\ListCompare $list */
             $list = $this->_catalogProductCompareList;
             $list->addProducts($items);
-            $this->_redirect('*/*/*');
-            return;
+            $resultRedirect = $this->resultRedirectFactory->create();
+            return $resultRedirect->setPath('*/*/*');
         }
-
-        $this->_view->loadLayout();
-        $this->_view->renderLayout();
+        return $this->resultPageFactory->create();
     }
 }

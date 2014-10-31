@@ -24,12 +24,14 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <referenceBlock name="root">
-        <action method="setTemplate">
-            <argument name="template" xsi:type="string">popup.phtml</argument>
-        </action>
-    </referenceBlock>
-    <referenceContainer name="content">
-        <block class="Magento\Catalog\Block\Product\Gallery" name="catalog_product_gallery" template="product/gallery.phtml"/>
-    </referenceContainer>
+    <body>
+        <referenceBlock name="root">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">popup.phtml</argument>
+            </action>
+        </referenceBlock>
+        <referenceContainer name="content">
+            <block class="Magento\Catalog\Block\Product\Gallery" name="catalog_product_gallery" template="product/gallery.phtml"/>
+        </referenceContainer>
+    </body>
 </page>

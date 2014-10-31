@@ -81,15 +81,32 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->_layoutProcessor));
         $this->_actionFlagMock = $this->getMock('Magento\Framework\App\ActionFlag', array(), array(), '', false);
         $this->_eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
+        $pageConfigMock = $this->getMockBuilder('\Magento\Framework\View\Page\Config')->disableOriginalConstructor()
+            ->getMock();
+        $pageConfigMock->expects($this->any())
+            ->method('publicBuild')
+            ->willReturnSelf();
+
+        $pageConfigRendererFactory = $this->getMockBuilder('Magento\Framework\View\Page\Config\RendererFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
         $this->resultPage = $this->getMockBuilder('Magento\Framework\View\Result\Page')
             ->setConstructorArgs(
-                $helper->getConstructArguments('Magento\Framework\View\Result\Page', ['request' => $this->_requestMock])
+                $helper->getConstructArguments('Magento\Framework\View\Result\Page', [
+                'request' => $this->_requestMock,
+                'pageConfigRendererFactory' => $pageConfigRendererFactory
+                ])
             )
-            ->setMethods(['getLayout', 'renderResult'])
+            ->setMethods(['getLayout', 'renderResult', 'getConfig'])
             ->getMock();
         $this->resultPage->expects($this->any())
             ->method('getLayout')
             ->will($this->returnValue($this->_layoutMock));
+        $this->resultPage->expects($this->any())
+            ->method('getConfig')
+            ->will($this->returnValue($pageConfigMock));
         $pageFactory = $this->getMockBuilder('Magento\Framework\View\Result\PageFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -140,34 +157,16 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue('action_name')
         );
-        $this->_layoutMock->expects(
-            $this->once()
-        )->method(
-            'generateXml'
-        )->will(
-            $this->returnValue($this->_layoutMock)
-        );
-        $this->_layoutMock->expects(
-            $this->once()
-        )->method(
-            'generateElements'
-        )->will(
-            $this->returnValue($this->_layoutMock)
-        );
         $this->_view->loadLayout();
     }
 
     public function testLoadLayoutWhenBlocksNotGenerated()
     {
-        $this->_layoutMock->expects($this->once())->method('generateXml');
-        $this->_layoutMock->expects($this->never())->method('generateElements');
         $this->_view->loadLayout('', false, true);
     }
 
     public function testLoadLayoutWhenXmlNotGenerated()
     {
-        $this->_layoutMock->expects($this->never())->method('generateElements');
-        $this->_layoutMock->expects($this->never())->method('generateXml');
         $this->_view->loadLayout('', true, false);
     }
 
@@ -214,31 +213,6 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             array('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH_BLOCK_EVENT, false)
         );
         $this->_actionFlagMock->expects($this->any())->method('get')->will($this->returnValueMap($valueMap));
-
-        $eventArgument = array('full_action_name' => 'Full_Name', 'layout' => $this->_layoutMock);
-        $this->_requestMock->expects(
-            $this->exactly(2)
-        )->method(
-            'getFullActionName'
-        )->will(
-            $this->returnValue('Full_Name')
-        );
-        $this->_eventManagerMock->expects(
-            $this->at(0)
-        )->method(
-            'dispatch'
-        )->with(
-            'controller_action_layout_generate_blocks_before',
-            $eventArgument
-        );
-        $this->_eventManagerMock->expects(
-            $this->at(1)
-        )->method(
-            'dispatch'
-        )->with(
-            'controller_action_layout_generate_blocks_after',
-            $eventArgument
-        );
         $this->_view->generateLayoutBlocks();
     }
 

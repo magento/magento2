@@ -25,7 +25,9 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <update handle="reports_report_review_customer_grid"/>
-    <referenceContainer name="content">
-        <block class="Magento\Reports\Block\Adminhtml\Review\Customer" name="adminhtml.report.grid.container"/>
-    </referenceContainer>
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\Reports\Block\Adminhtml\Review\Customer" name="adminhtml.report.grid.container"/>
+        </referenceContainer>
+    </body>
 </page>

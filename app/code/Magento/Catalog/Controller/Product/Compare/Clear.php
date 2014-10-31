@@ -29,7 +29,7 @@ class Clear extends \Magento\Catalog\Controller\Product\Compare
     /**
      * Remove all items from comparison list
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
@@ -54,6 +54,7 @@ class Clear extends \Magento\Catalog\Controller\Product\Compare
             $this->messageManager->addException($e, __('Something went wrong  clearing the comparison list.'));
         }
 
-        $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
+        $resultRedirect = $this->resultRedirectFactory->create();
+        return $resultRedirect->setRefererOrBaseUrl();
     }
 }

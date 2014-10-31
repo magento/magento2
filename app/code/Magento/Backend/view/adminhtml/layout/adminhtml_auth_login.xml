@@ -23,14 +23,16 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page layout="empty" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <referenceContainer name="main.content">
-        <block class="Magento\Backend\Block\Template" name="content" template="admin/login.phtml">
-            <block class="Magento\Backend\Block\Page\Copyright" name="copyright" as="copyright"/>
-            <container name="form.additional.info" label="Form Additional Info"/>
-            <container name="form.buttons" label="Form Buttons">
-                <block class="Magento\Backend\Block\Template" name="adminhtml_auth_login_buttons" template="admin/login_buttons.phtml"/>
-            </container>
-        </block>
-    </referenceContainer>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="empty" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="main.content">
+            <block class="Magento\Backend\Block\Template" name="content" template="admin/login.phtml">
+                <block class="Magento\Backend\Block\Page\Copyright" name="copyright" as="copyright"/>
+                <container name="form.additional.info" label="Form Additional Info"/>
+                <container name="form.buttons" label="Form Buttons">
+                    <block class="Magento\Backend\Block\Template" name="adminhtml_auth_login_buttons" template="admin/login_buttons.phtml"/>
+                </container>
+            </block>
+        </referenceContainer>
+    </body>
 </page>

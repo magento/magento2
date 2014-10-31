@@ -34,40 +34,40 @@ use Mtf\Fixture\InjectableFixture;
 
 /**
  * Class Grouped
- * Grouped product blocks on frontend
+ * Grouped product blocks on frontend.
  */
 class Grouped extends Block
 {
     /**
-     * Selector qty for sub product by id
+     * Selector qty for sub product by id.
      *
      * @var string
      */
     protected $qtySubProductById = '[name="super_group[%d]"]';
 
     /**
-     * Selector for sub product block by name
+     * Selector for sub product block by name.
      *
      * @var string
      */
     protected $subProductByName = './/tr[./td[contains(@class,"item")] and .//*[contains(.,"%s")]]';
 
     /**
-     * Selector for sub product name
+     * Selector for sub product name.
      *
      * @var string
      */
     protected $productName = '.product.name';
 
     /**
-     * Selector for sub product price
+     * Selector for sub product price.
      *
      * @var string
      */
     protected $price = '.price.price';
 
     /**
-     * Selector for qty of sub product
+     * Selector for qty of sub product.
      *
      * @var string
      */
@@ -85,7 +85,7 @@ class Grouped extends Block
     }
 
     /**
-     * Fill product options on view page
+     * Fill product options on view page.
      *
      * @param FixtureInterface $product
      * @return void
@@ -94,33 +94,33 @@ class Grouped extends Block
     {
         /** @var GroupedProductInjectable $product */
         $associatedProducts = $product->getAssociated()['products'];
-        $data = $product->getCheckoutData()['options'];
+        $checkoutData = $product->getCheckoutData();
+        if (isset($checkoutData['options'])) {
+            // Replace link key to label
+            foreach ($checkoutData['options'] as $key => $productData) {
+                $productKey = str_replace('product_key_', '', $productData['name']);
+                $checkoutData['options'][$key]['name'] = $associatedProducts[$productKey]->getName();
+            }
 
-        // Replace link key to label
-        foreach ($data as $key => $productData) {
-            $productKey = str_replace('product_key_', '', $productData['name']);
-            $data[$key]['name'] = $associatedProducts[$productKey]->getName();
-        }
-
-        // Fill
-        foreach ($data as $productData) {
-            $subProduct = $this->_rootElement->find(
-                sprintf($this->subProductByName, $productData['name']),
-                Locator::SELECTOR_XPATH
-            );
-            $subProduct->find($this->qty)->setValue($productData['qty']);
+            // Fill
+            foreach ($checkoutData['options'] as $productData) {
+                $subProduct = $this->_rootElement->find(
+                    sprintf($this->subProductByName, $productData['name']),
+                    Locator::SELECTOR_XPATH
+                );
+                $subProduct->find($this->qty)->setValue($productData['qty']);
+            }
         }
     }
 
     /**
-     * Return product options on view page
+     * Return product options on view page.
      *
      * @param FixtureInterface $product
      * @return array
      */
     public function getOptions(FixtureInterface $product)
     {
-
         $options = [];
         if ($product instanceof InjectableFixture) {
             /** @var GroupedProductInjectable $product */

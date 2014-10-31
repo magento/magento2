@@ -24,20 +24,22 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <update handle="customer_account"/>
     <head>
         <title>Recurring Payments</title>
     </head>
-    <referenceContainer name="content">
-        <block class="Magento\RecurringPayment\Block\Payments" name="sales.recurring.payments" template="recurring/payments.phtml" cacheable="false">
-            <block class="Magento\RecurringPayment\Block\Payment\Grid" name="sales.recurring.payments.grid" as="grid" template="recurring/grid.phtml" cacheable="false">
-                <action method="setEmptyGridMessage">
-                    <argument translate="true" name="value" xsi:type="string">There are no recurring payments yet.</argument>
-                </action>
-                <action method="setGridHtmlId">
-                    <argument name="value" xsi:type="string">recurring_payment_list_view</argument>
-                </action>
+    <update handle="customer_account"/>
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\RecurringPayment\Block\Payments" name="sales.recurring.payments" template="recurring/payments.phtml" cacheable="false">
+                <block class="Magento\RecurringPayment\Block\Payment\Grid" name="sales.recurring.payments.grid" as="grid" template="recurring/grid.phtml" cacheable="false">
+                    <action method="setEmptyGridMessage">
+                        <argument translate="true" name="value" xsi:type="string">There are no recurring payments yet.</argument>
+                    </action>
+                    <action method="setGridHtmlId">
+                        <argument name="value" xsi:type="string">recurring_payment_list_view</argument>
+                    </action>
+                </block>
             </block>
-        </block>
-    </referenceContainer>
+        </referenceContainer>
+    </body>
 </page>

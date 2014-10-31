@@ -66,6 +66,11 @@ class CategoriesJsonTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManagerMock;
 
+    /**
+     * @var \Magento\Framework\Controller\Result\JSON|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultJson;
+
     public function setUp()
     {
         $this->responseMock = $this->getMock('Magento\Framework\App\Response\Http', array(), array(), '', false);
@@ -93,11 +98,33 @@ class CategoriesJsonTest extends \PHPUnit_Framework_TestCase
                 )
             )
         );
+
+        $this->resultJson = $this->getMockBuilder('Magento\Framework\Controller\Result\JSON')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $resultJsonFactory = $this->getMockBuilder('Magento\Framework\Controller\Result\JSONFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $resultJsonFactory->expects($this->atLeastOnce())
+            ->method('create')
+            ->willReturn($this->resultJson);
+
+        $this->layoutMock = $this->getMock('Magento\Core\Model\Layout', array('createBlock'), array(), '', false);
+
+        $layoutFactory = $this->getMockBuilder('Magento\Framework\View\LayoutFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $layoutFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($this->layoutMock);
+
         $context->expects($this->once())->method('getRequest')->will($this->returnValue($this->requestMock));
         $context->expects($this->once())->method('getResponse')->will($this->returnValue($this->responseMock));
         $this->registryMock = $this->getMock('Magento\Framework\Registry', array(), array(), '', false);
         $this->controller = new \Magento\Catalog\Controller\Adminhtml\Category\Widget\CategoriesJson(
-            $context, $this->registryMock
+            $context, $layoutFactory, $resultJsonFactory, $this->registryMock
         );
     }
 
@@ -106,11 +133,9 @@ class CategoriesJsonTest extends \PHPUnit_Framework_TestCase
         $this->chooserBlockMock = $this->getMock(
             'Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser', array(), array(), '', false
         );
-        $this->layoutMock = $this->getMock('Magento\Core\Model\Layout', array('createBlock'), array(), '', false);
         $this->layoutMock->expects($this->once())->method('createBlock')->will(
             $this->returnValue($this->chooserBlockMock)
         );
-        $this->viewMock->expects($this->once())->method('getLayout')->will($this->returnValue($this->layoutMock));
     }
 
     public function testExecute()
@@ -130,7 +155,7 @@ class CategoriesJsonTest extends \PHPUnit_Framework_TestCase
         );
         $testHtml = '<div>Some test html</div>';
         $this->chooserBlockMock->expects($this->once())->method('getTreeJson')->will($this->returnValue($testHtml));
-        $this->responseMock->expects($this->once())->method('representJson')->with($this->equalTo($testHtml));
+        $this->resultJson->expects($this->once())->method('setJsonData')->with($testHtml)->willReturnSelf();
         $this->controller->execute();
     }
 }

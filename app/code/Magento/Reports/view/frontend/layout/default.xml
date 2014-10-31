@@ -24,7 +24,9 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <referenceBlock name="head.components">
-        <block class="Magento\Framework\View\Element\Js\Components" name="reports_page_head_components" template="Magento_Reports::js/components.phtml"/>
-    </referenceBlock>
+    <body>
+        <referenceBlock name="head.components">
+            <block class="Magento\Framework\View\Element\Js\Components" name="reports_page_head_components" template="Magento_Reports::js/components.phtml"/>
+        </referenceBlock>
+    </body>
 </page>

@@ -27,7 +27,7 @@ namespace Magento\Backend\Controller\Adminhtml\System\Store;
 class DeleteWebsite extends \Magento\Backend\Controller\Adminhtml\System\Store
 {
     /**
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
@@ -36,33 +36,27 @@ class DeleteWebsite extends \Magento\Backend\Controller\Adminhtml\System\Store
         $itemId = $this->getRequest()->getParam('item_id', null);
         if (!($model = $this->_objectManager->create('Magento\Store\Model\Website')->load($itemId))) {
             $this->messageManager->addError(__('Unable to proceed. Please, try again.'));
-            $this->_redirect('adminhtml/*/');
-            return;
+            /** @var \Magento\Backend\Model\View\Result\Redirect $redirectResult */
+            $redirectResult = $this->resultRedirectFactory->create();
+            return $redirectResult->setPath('adminhtml/*/');
         }
         if (!$model->isCanDelete()) {
             $this->messageManager->addError(__('This website cannot be deleted.'));
-            $this->_redirect('adminhtml/*/editWebsite', array('website_id' => $itemId));
-            return;
+            /** @var \Magento\Backend\Model\View\Result\Redirect $redirectResult */
+            $redirectResult = $this->resultRedirectFactory->create();
+            return $redirectResult->setPath('adminhtml/*/editWebsite', ['website_id' => $itemId]);
         }
 
         $this->_addDeletionNotice('website');
 
-        $this->_initAction()->_addBreadcrumb(
-            __('Delete Web Site'),
-            __('Delete Web Site')
-        )->_addContent(
-            $this->_view->getLayout()->createBlock(
-                'Magento\Backend\Block\System\Store\Delete'
-            )->setFormActionUrl(
-                $this->getUrl('adminhtml/*/deleteWebsitePost')
-            )->setBackUrl(
-                $this->getUrl('adminhtml/*/editWebsite', array('website_id' => $itemId))
-            )->setStoreTypeTitle(
-                __('Web Site')
-            )->setDataObject(
-                $model
-            )
-        );
-        $this->_view->renderLayout();
+        $resultPage = $this->createPage();
+        $resultPage->addBreadcrumb(__('Delete Web Site'), __('Delete Web Site'))
+            ->addContent(
+                $resultPage->getLayout()->createBlock('Magento\Backend\Block\System\Store\Delete')
+                    ->setFormActionUrl($this->getUrl('adminhtml/*/deleteWebsitePost'))
+                    ->setBackUrl($this->getUrl('adminhtml/*/editWebsite', ['website_id' => $itemId]))
+                    ->setStoreTypeTitle(__('Web Site'))->setDataObject($model)
+            );
+        return $resultPage;
     }
 }

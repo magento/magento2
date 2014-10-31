@@ -239,8 +239,12 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($handles, $this->_model->getHandles());
         $expectedResult = '
             <root>
-                <block class="Magento\Framework\View\Element\Template" template="fixture_template_one.phtml"/>
-                <block class="Magento\Framework\View\Element\Template" template="fixture_template_two.phtml"/>
+                <body>
+                    <block class="Magento\Framework\View\Element\Template" template="fixture_template_one.phtml"/>
+                </body>
+                <body>
+                    <block class="Magento\Framework\View\Element\Template" template="fixture_template_two.phtml"/>
+                </body>
             </root>
         ';
         $actualResult = '<root>' . $this->_model->asString() . '</root>';
@@ -250,28 +254,16 @@ class MergeTest extends \PHPUnit_Framework_TestCase
     public function testLoadFileSystemWithPageLayout()
     {
         $handles = ['fixture_handle_with_page_layout'];
-        $expectedHandles = ['fixture_handle_with_page_layout', 'fixture_handle_page_layout'];
+        $expectedHandles = ['fixture_handle_with_page_layout'];
         $expectedResult = '
             <root>
-                <referenceContainer name="main.container">
-                    <block class="Magento\Framework\View\Element\Template" template="fixture_template_one.phtml"/>
-                </referenceContainer>
-                <container name="main.container" />
+                <body>
+                    <referenceContainer name="main.container">
+                        <block class="Magento\Framework\View\Element\Template" template="fixture_template_one.phtml"/>
+                    </referenceContainer>
+                </body>
             </root>
         ';
-
-        $this->pageConfig->expects($this->at(0))
-            ->method('getPageLayout')
-            ->will($this->returnValue(false));
-        $this->pageConfig->expects($this->at(1))
-            ->method('getPageLayout')
-            ->will($this->returnValue(false));
-        $this->pageConfig->expects($this->at(2))
-            ->method('setPageLayout')
-            ->with('fixture_handle_page_layout');
-        $this->pageConfig->expects($this->at(3))
-            ->method('getPageLayout')
-            ->will($this->returnValue('fixture_handle_page_layout'));
 
         $this->assertEmpty($this->_model->getHandles());
         $this->assertEmpty($this->_model->asString());
@@ -280,6 +272,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedHandles, $this->_model->getHandles());
         $actualResult = '<root>' . $this->_model->asString() . '</root>';
         $this->assertXmlStringEqualsXmlString($expectedResult, $actualResult);
+        $this->assertEquals('fixture_handle_page_layout', $this->_model->getPageLayout());
     }
 
     public function testLoadCache()

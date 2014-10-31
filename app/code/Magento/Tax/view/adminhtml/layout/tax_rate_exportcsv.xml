@@ -25,5 +25,7 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <update handle="tax_rate_block"/>
-    <block class="Magento\Backend\Block\Widget\Grid\Container" name="adminhtml.tax.rate.container" template="Magento_Backend::widget/grid/container/empty.phtml"/>
+    <body>
+        <block class="Magento\Backend\Block\Widget\Grid\Container" name="adminhtml.tax.rate.container" template="Magento_Backend::widget/grid/container/empty.phtml"/>
+    </body>
 </page>

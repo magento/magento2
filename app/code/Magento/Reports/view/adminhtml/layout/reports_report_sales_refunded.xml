@@ -25,33 +25,33 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <update handle="reports_sales"/>
-    <referenceContainer name="page.main.actions">
-        <block class="Magento\Backend\Block\Store\Switcher"
-               template="Magento_Backend::store/switcher.phtml"
-               name="store.switcher">
-            <action method="setStoreVarName">
-                <argument name="var_name" xsi:type="string">store_ids</argument>
-            </action>
-            <arguments>
-                <argument name="switch_websites" xsi:type="string">1</argument>
-                <argument name="switch_store_groups" xsi:type="string">1</argument>
-                <argument name="switch_store_views" xsi:type="string">1</argument>
-                <argument name="default_selection_name" xsi:type="string" translate="true">All Websites</argument>
-            </arguments>
-        </block>
-    </referenceContainer>
-    <referenceContainer name="content">
-        <block class="Magento\Reports\Block\Adminhtml\Sales\Refunded" template="report/grid/container.phtml" name="sales.report.grid.container">
-            <block class="Magento\Sales\Block\Adminhtml\Report\Filter\Form" name="grid.filter.form">
-                <action method="addReportTypeOption">
-                    <argument name="key" xsi:type="string">created_at_order</argument>
-                    <argument translate="true" name="value" xsi:type="string">Order Created Date</argument>
+    <body>
+        <referenceContainer name="page.main.actions">
+            <block class="Magento\Backend\Block\Store\Switcher" template="Magento_Backend::store/switcher.phtml" name="store.switcher">
+                <action method="setStoreVarName">
+                    <argument name="var_name" xsi:type="string">store_ids</argument>
                 </action>
-                <action method="addReportTypeOption">
-                    <argument name="key" xsi:type="string">created_at_refunded</argument>
-                    <argument translate="true" name="value" xsi:type="string">Last Credit Memo Created Date</argument>
-                </action>
+                <arguments>
+                    <argument name="switch_websites" xsi:type="string">1</argument>
+                    <argument name="switch_store_groups" xsi:type="string">1</argument>
+                    <argument name="switch_store_views" xsi:type="string">1</argument>
+                    <argument name="default_selection_name" xsi:type="string" translate="true">All Websites</argument>
+                </arguments>
             </block>
-        </block>
-    </referenceContainer>
+        </referenceContainer>
+        <referenceContainer name="content">
+            <block class="Magento\Reports\Block\Adminhtml\Sales\Refunded" template="report/grid/container.phtml" name="sales.report.grid.container">
+                <block class="Magento\Sales\Block\Adminhtml\Report\Filter\Form" name="grid.filter.form">
+                    <action method="addReportTypeOption">
+                        <argument name="key" xsi:type="string">created_at_order</argument>
+                        <argument translate="true" name="value" xsi:type="string">Order Created Date</argument>
+                    </action>
+                    <action method="addReportTypeOption">
+                        <argument name="key" xsi:type="string">created_at_refunded</argument>
+                        <argument translate="true" name="value" xsi:type="string">Last Credit Memo Created Date</argument>
+                    </action>
+                </block>
+            </block>
+        </referenceContainer>
+    </body>
 </page>

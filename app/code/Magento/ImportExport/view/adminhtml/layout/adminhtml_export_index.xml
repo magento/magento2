@@ -24,9 +24,11 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <referenceContainer name="content">
-        <block class="Magento\Backend\Block\Template" template="Magento_ImportExport::export/form/before.phtml" name="export.form.before" as="form_before"/>
-        <block class="Magento\ImportExport\Block\Adminhtml\Export\Edit" name="export.form.container"/>
-        <block class="Magento\ImportExport\Block\Adminhtml\Form\After" template="Magento_ImportExport::export/form/after.phtml" name="export.form.after" as="form_after"/>
-    </referenceContainer>
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\Backend\Block\Template" template="Magento_ImportExport::export/form/before.phtml" name="export.form.before" as="form_before"/>
+            <block class="Magento\ImportExport\Block\Adminhtml\Export\Edit" name="export.form.container"/>
+            <block class="Magento\ImportExport\Block\Adminhtml\Form\After" template="Magento_ImportExport::export/form/after.phtml" name="export.form.after" as="form_after"/>
+        </referenceContainer>
+    </body>
 </page>

@@ -23,22 +23,24 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page layout="admin-2columns-left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <referenceContainer name="left">
-        <block class="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tabs" name="attribute_edit_tabs">
-            <container label="Main" name="main">
-                <block class="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Main" as="base"/>
-                <block class="Magento\Eav\Block\Adminhtml\Attribute\Edit\Options\Options" as="advanced"/>
-                <block class="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Advanced" as="options"/>
-            </container>
-            <block class="Magento\Eav\Block\Adminhtml\Attribute\Edit\Options\Labels" as="labels"/>
-            <block class="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Front" as="front"/>
-        </block>
-    </referenceContainer>
-    <referenceContainer name="content">
-        <block class="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit" name="attribute_edit_content"/>
-    </referenceContainer>
-    <referenceContainer name="js">
-        <block class="Magento\Backend\Block\Template" name="attribute_edit_js" template="Magento_Catalog::catalog/product/attribute/js.phtml"/>
-    </referenceContainer>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="left">
+            <block class="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tabs" name="attribute_edit_tabs">
+                <container label="Main" name="main">
+                    <block class="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Main" as="base"/>
+                    <block class="Magento\Eav\Block\Adminhtml\Attribute\Edit\Options\Options" as="advanced"/>
+                    <block class="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Advanced" as="options"/>
+                </container>
+                <block class="Magento\Eav\Block\Adminhtml\Attribute\Edit\Options\Labels" as="labels"/>
+                <block class="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Front" as="front"/>
+            </block>
+        </referenceContainer>
+        <referenceContainer name="content">
+            <block class="Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit" name="attribute_edit_content"/>
+        </referenceContainer>
+        <referenceContainer name="js">
+            <block class="Magento\Backend\Block\Template" name="attribute_edit_js" template="Magento_Catalog::catalog/product/attribute/js.phtml"/>
+        </referenceContainer>
+    </body>
 </page>

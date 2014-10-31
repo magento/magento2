@@ -24,7 +24,9 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <referenceBlock name="checkout_success">
-        <block class="Magento\Downloadable\Block\Checkout\Success" name="downloadable.checkout.success" template="checkout/success.phtml"/>
-    </referenceBlock>
+    <body>
+        <referenceBlock name="checkout_success">
+            <block class="Magento\Downloadable\Block\Checkout\Success" name="downloadable.checkout.success" template="checkout/success.phtml"/>
+        </referenceBlock>
+    </body>
 </page>

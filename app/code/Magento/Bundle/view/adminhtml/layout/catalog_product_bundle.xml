@@ -27,10 +27,12 @@
     <head>
         <css src="Magento_Bundle::css/bundle-product.css"/>
     </head>
-    <referenceBlock name="product_tabs">
-        <action method="addTab">
-            <argument name="name" xsi:type="string">bundle</argument>
-            <argument name="block" xsi:type="string">Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle</argument>
-        </action>
-    </referenceBlock>
+    <body>
+        <referenceBlock name="product_tabs">
+            <action method="addTab">
+                <argument name="name" xsi:type="string">bundle</argument>
+                <argument name="block" xsi:type="string">Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle</argument>
+            </action>
+        </referenceBlock>
+    </body>
 </page>

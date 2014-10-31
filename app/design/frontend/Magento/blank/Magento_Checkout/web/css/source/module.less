@@ -25,7 +25,7 @@
 @import "cart.less";
 @import "minicart.less";
 
-@desctop-form-field-vertical-indent: 29px;
+@desktop-form-field-vertical-indent: 29px;
 
 //
 //    One Page Checkout
@@ -128,7 +128,6 @@
     // Order review
     .data.table {
         &:extend(.abstract-product-options-list all);
-        .table-caption(@_table-caption-hide: true);
         tbody tr:first-child td {
             border-top: @border-width-base solid @border-color-base;
         }
@@ -313,7 +312,7 @@
 .checkout-onepage-success {
     .page-title {
         .print {
-            display: none;
+            &:extend(.abstract-no-display all);
         }
     }
 }
@@ -324,22 +323,22 @@
     }
 }
 
+.checkout-onepage-index {
+    .nav-toggle {
+        &:extend(.abstract-no-display all);
+    }
+    .logo {
+        margin-left: 0;
+    }
+}
+
 //
 //    Mobile
 //--------------------------------------
-.responsive-smaller(@break) when (@break = @screen-m) {
-    .checkout-onepage-index {
-        .nav-toggle {
-            display: none;
-        }
-        .logo {
-            margin-left: 0;
-        }
-    }
-
+.responsive-smaller(@break) when (@break = @screen-s) {
     .opc-wrapper {
         .data.table {
-            &:extend(.abstract-table-vertical-mobile all);
+            &:extend(.abstract-table-vertical-mobile-s all);
             &:extend(.abstract-product-items-summary all);
             tbody tr {
                 &:first-child,
@@ -351,13 +350,26 @@
                 td:last-child {
                     border-bottom: @border-width-base solid @border-color-base;
                 }
+                .product-item-name {
+                    display: inline-block;
+                }
                 .col {
-                    &.qty,
+                    &.qty {
+                        text-align: left;
+                    }
                     &.price,
                     &.subtotal {
                         text-align: left;
+                        .price-including-tax,
+                        .price-excluding-tax {
+                            display: inline-block;
+                        }
                     }
                 }
+            }
+            .mark,
+            .amount {
+                padding-left: 0;
             }
         }
     }
@@ -366,29 +378,29 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive(@break) when (@break = @screen-m) {
+.responsive(@break) when (@break = @screen-s) {
     .checkout-onepage-index .column.main {
-        &:extend(.abstract-add-clearfix-desktop all);
+        &:extend(.abstract-add-clearfix-desktop-s all);
     }
 
     .opc-wrapper {
         .layout-column(2, 2, @layout-column-checkout-main-width);
-        &:extend(.abstract-add-box-sizing-desktop all);
+        &:extend(.abstract-add-box-sizing-desktop-s all);
         .step-content {
             padding: 20px 18px 40px;
             .addresses .control {
-                margin-bottom: @desctop-form-field-vertical-indent;
+                margin-bottom: @desktop-form-field-vertical-indent;
             }
             .form {
                 &:after {
                     text-align: right;
                 }
                 &:not(.login) .actions-toolbar {
-                    &:extend(.abstract-reset-left-margin-desktop all);
+                    &:extend(.abstract-reset-left-margin-desktop-s all);
                 }
                 > .field.choice,
                 .fieldset > .field {
-                    margin: @desctop-form-field-vertical-indent 0 0;
+                    margin: @desktop-form-field-vertical-indent 0 0;
                 }
                 .fieldset.address {
                     .field:first-of-type:not(.additional) {
@@ -398,7 +410,7 @@
             }
             .fieldset.login {
                 &:after {
-                    &:extend(.abstract-margin-for-forms-desktop all);
+                    &:extend(.abstract-margin-for-forms-desktop-s all);
                     text-align: left;
                 }
             }
@@ -408,13 +420,13 @@
     .opc-block-progress {
         .layout-column(2, 1, @layout-column-checkout-left-width);
         padding-right: @layout-column-main-sidebar-offset;
-        &:extend(.abstract-add-box-sizing-desktop all);
+        &:extend(.abstract-add-box-sizing-desktop-s all);
     }
 
     .login-wrapper {
-        &:extend(.abstract-add-clearfix-desktop all);
+        &:extend(.abstract-add-clearfix-desktop-s all);
         .block {
-            &:extend(.abstract-blocks-2columns all);
+            &:extend(.abstract-blocks-2columns-s all);
         }
         .field.choice:not(.persistent) {
             &:before {
@@ -423,7 +435,7 @@
         }
         .fieldset.login {
             .actions {
-                &:extend(.abstract-margin-for-forms-desktop all);
+                &:extend(.abstract-margin-for-forms-desktop-s all);
             }
         }
     }

@@ -28,7 +28,7 @@ class ResultTest extends \PHPUnit_Framework_TestCase
     public function testSetListOrders()
     {
         /** @var $layout \Magento\Framework\View\Layout */
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Framework\View\LayoutInterface'
         );
         $layout->addBlock('Magento\Framework\View\Element\Text', 'head');

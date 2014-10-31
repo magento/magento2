@@ -39,9 +39,10 @@
             <?php endif; ?>
             <dd class="content">
                 <table class="data table">
+                    <caption class="table-caption"><?php echo __('Credit Card %1', $key + 1); ?></caption>
                     <?php foreach ($card as $_label => $_value): ?>
                         <tr>
-                            <th><?php echo $this->escapeHtml($_label) ?></th>
+                            <th scope="row"><?php echo $this->escapeHtml($_label) ?></th>
                             <td><?php echo nl2br(implode($this->getValueAsArray($_value, true), "\n")) ?></td>
                         </tr>
                     <?php endforeach; ?>

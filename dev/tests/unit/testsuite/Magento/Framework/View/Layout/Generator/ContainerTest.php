@@ -1,0 +1,205 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+
+namespace Magento\Framework\View\Layout\Generator;
+
+use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Layout\ScheduledStructure;
+use Magento\Framework\View\Layout;
+
+class ContainerTest extends \PHPUnit_Framework_TestCase
+{
+    /**
+     * @var ObjectManagerHelper
+     */
+    protected $objectManagerHelper;
+
+    /**
+     * @var Layout\Reader\Context|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $readerContextMock;
+
+    /**
+     * @var Layout\Generator\Context|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $generatorContextMock;
+
+    /**
+     * @var Container|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $container;
+
+    /**
+     * @var ScheduledStructure|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $scheduledStructureMock;
+
+    /**
+     * @var \Magento\Framework\View\Layout\Data\Structure|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $structureMock;
+
+    protected function setUp()
+    {
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
+
+        $this->scheduledStructureMock = $this->getMockBuilder('Magento\Framework\View\Layout\ScheduledStructure')
+            ->disableOriginalConstructor()->getMock();
+
+        $this->structureMock = $this->getMockBuilder('Magento\Framework\View\Layout\Data\Structure')
+            ->disableOriginalConstructor()->getMock();
+
+        $this->generatorContextMock = $this->getMockBuilder('Magento\Framework\View\Layout\Generator\Context')
+            ->disableOriginalConstructor()->getMock();
+        $this->generatorContextMock->expects($this->any())
+            ->method('getStructure')
+            ->willReturn($this->structureMock);
+
+        $this->readerContextMock = $this->getMockBuilder('Magento\Framework\View\Layout\Reader\Context')
+            ->disableOriginalConstructor()->getMock();
+        $this->readerContextMock->expects($this->any())
+            ->method('getScheduledStructure')
+            ->willReturn($this->scheduledStructureMock);
+
+        $this->container = $this->objectManagerHelper->getObject('Magento\Framework\View\Layout\Generator\Container');
+    }
+
+    /**
+     * @param array $structureElements
+     * @param array $setAttributeData
+     * @param int $setAttributeCalls
+     *
+     * @dataProvider processDataProvider
+     */
+    public function testProcess($structureElements, $setAttributeData, $setAttributeCalls)
+    {
+        $this->scheduledStructureMock->expects($this->once())
+            ->method('getElements')
+            ->willReturn($structureElements);
+
+        $this->structureMock->expects($this->exactly($setAttributeCalls))
+            ->method('setAttribute')
+            ->will($this->returnValueMap($setAttributeData));
+
+        $this->container->process($this->readerContextMock, $this->generatorContextMock);
+    }
+
+    /**
+     * @return array
+     */
+    public function processDataProvider()
+    {
+        return [
+            'sample_data' => [
+                'structureElements' => [
+                    'first_container' => [
+                        'container',
+                        [
+                            'attributes' => [
+                                Layout\Element::CONTAINER_OPT_LABEL => 'dd_label',
+                                Container::CONTAINER_OPT_HTML_TAG   => 'dd',
+                                Container::CONTAINER_OPT_HTML_CLASS => 'dd_class',
+                                Container::CONTAINER_OPT_HTML_ID    => 'dd_id',
+                            ]
+                        ]
+                    ]
+                ],
+                'setAttributeData' => [
+                    ['first_container', Layout\Element::CONTAINER_OPT_LABEL, 'dd_label'],
+                    ['first_container', Container::CONTAINER_OPT_HTML_TAG, 'dd'],
+                    ['first_container', Container::CONTAINER_OPT_HTML_CLASS, 'dd_class'],
+                    ['first_container', Container::CONTAINER_OPT_HTML_ID, 'dd_id'],
+                ],
+                'setAttributeCalls' => 4,
+            ]
+        ];
+    }
+
+    /**
+     * @param array $structureElements
+     *
+     * @dataProvider processWithExceptionDataProvider
+     * @expectedException \Magento\Framework\Exception
+     */
+    public function testProcessWithException($structureElements)
+    {
+        $this->scheduledStructureMock->expects($this->once())
+            ->method('getElements')
+            ->willReturn($structureElements);
+
+        $this->structureMock->expects($this->once())
+            ->method('setAttribute')
+            ->willReturnSelf();
+
+        $this->container->process($this->readerContextMock, $this->generatorContextMock);
+    }
+
+    /**
+     * @return array
+     */
+    public function processWithExceptionDataProvider()
+    {
+        return [
+            'wrong_html_tag' => [
+                'structureElements' => [
+                    'first_container' => [
+                        'container',
+                        [
+                            'attributes' => [
+                                Container::CONTAINER_OPT_LABEL   => 'label',
+                                Layout\Element::CONTAINER_OPT_HTML_TAG => 'custom_tag'
+                            ]
+                        ]
+                    ]
+                ],
+            ],
+            'html_id_without_tag' => [
+                'structureElements' => [
+                    'second_container' => [
+                        'container',
+                        [
+                            'attributes' => [
+                                Container::CONTAINER_OPT_LABEL   => 'label',
+                                Layout\Element::CONTAINER_OPT_HTML_ID => 'html_id'
+                            ]
+                        ]
+                    ]
+                ],
+            ],
+            'html_class_without_tag' => [
+                'structureElements' => [
+                    'third_container' => [
+                        'container',
+                        [
+                            'attributes' => [
+                                Container::CONTAINER_OPT_LABEL   => 'label',
+                                Layout\Element::CONTAINER_OPT_HTML_CLASS => 'html_class'
+                            ]
+                        ]
+                    ]
+                ],
+            ],
+        ];
+    }
+}

@@ -25,10 +25,12 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <update handle="sales_transaction_child_block"/>
-    <referenceContainer name="content">
-        <block class="Magento\Sales\Block\Adminhtml\Transactions\Detail" name="sales_transactions.detail" template="transactions/detail.phtml">
-            <block class="Magento\Sales\Block\Adminhtml\Transactions\Detail\Grid" name="sales_transactions.detail.grid" as="detail_grid"/>
-            <block class="Magento\Sales\Block\Adminhtml\Transactions" name="sales_transactions.grid.container" as="child_grid"/>
-        </block>
-    </referenceContainer>
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\Sales\Block\Adminhtml\Transactions\Detail" name="sales_transactions.detail" template="transactions/detail.phtml">
+                <block class="Magento\Sales\Block\Adminhtml\Transactions\Detail\Grid" name="sales_transactions.detail.grid" as="detail_grid"/>
+                <block class="Magento\Sales\Block\Adminhtml\Transactions" name="sales_transactions.grid.container" as="child_grid"/>
+            </block>
+        </referenceContainer>
+    </body>
 </page>

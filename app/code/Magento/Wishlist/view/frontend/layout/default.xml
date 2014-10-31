@@ -24,13 +24,15 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <referenceBlock name="head.components">
-        <block class="Magento\Framework\View\Element\Js\Components" name="wishlist_page_head_components" template="Magento_Wishlist::js/components.phtml"/>
-    </referenceBlock>
-    <referenceBlock name="top.links">
-        <block class="Magento\Wishlist\Block\Link" name="wish-list-link" after="my-account-link"/>
-    </referenceBlock>
-    <referenceContainer name="sidebar.additional">
-        <block class="Magento\Wishlist\Block\Customer\Sidebar" name="wishlist_sidebar" as="wishlist" template="Magento_Wishlist::sidebar.phtml"/>
-    </referenceContainer>
+    <body>
+        <referenceBlock name="head.components">
+            <block class="Magento\Framework\View\Element\Js\Components" name="wishlist_page_head_components" template="Magento_Wishlist::js/components.phtml"/>
+        </referenceBlock>
+        <referenceBlock name="top.links">
+            <block class="Magento\Wishlist\Block\Link" name="wish-list-link" after="my-account-link"/>
+        </referenceBlock>
+        <referenceContainer name="sidebar.additional">
+            <block class="Magento\Wishlist\Block\Customer\Sidebar" name="wishlist_sidebar" as="wishlist" template="Magento_Wishlist::sidebar.phtml"/>
+        </referenceContainer>
+    </body>
 </page>

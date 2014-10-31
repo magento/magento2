@@ -27,9 +27,26 @@ namespace Magento\Backend\Controller\Adminhtml\System\Account;
 class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
 {
     /**
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+    ) {
+        parent::__construct($context);
+        $this->resultRedirectFactory = $resultRedirectFactory;
+    }
+
+    /**
      * Saving edited user information
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
@@ -86,6 +103,8 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
         } catch (\Exception $e) {
             $this->messageManager->addError(__('An error occurred while saving account.'));
         }
-        $this->getResponse()->setRedirect($this->getUrl("*/*/"));
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
+        return $resultRedirect->setPath("*/*/");
     }
 }

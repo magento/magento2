@@ -24,10 +24,39 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 
+use Magento\Backend\App\Action;
+use Magento\Backend\Model\View\Result\RedirectFactory;
+use Magento\Framework\View\Result\PageFactory;
+
 class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 {
     /**
-     * @return void
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
+     * Constructor
+     *
+     * @param Action\Context $context
+     * @param \Magento\Framework\Cache\FrontendInterface $attributeLabelCache
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param PageFactory $resultPageFactory
+     * @param RedirectFactory $resultRedirectFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\Cache\FrontendInterface $attributeLabelCache,
+        \Magento\Framework\Registry $coreRegistry,
+        PageFactory $resultPageFactory,
+        RedirectFactory $resultRedirectFactory
+    ) {
+        $this->resultRedirectFactory = $resultRedirectFactory;
+        parent::__construct($context, $attributeLabelCache, $coreRegistry, $resultPageFactory);
+    }
+
+    /**
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
@@ -43,15 +72,15 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 
             if (!$model->getId()) {
                 $this->messageManager->addError(__('This attribute no longer exists.'));
-                $this->_redirect('catalog/*/');
-                return;
+                $resultRedirect = $this->resultRedirectFactory->create();
+                return $resultRedirect->setPath('catalog/*/');
             }
 
             // entity type check
             if ($model->getEntityTypeId() != $this->_entityTypeId) {
                 $this->messageManager->addError(__('This attribute cannot be edited.'));
-                $this->_redirect('catalog/*/');
-                return;
+                $resultRedirect = $this->resultRedirectFactory->create();
+                return $resultRedirect->setPath('catalog/*/');
             }
         }
 
@@ -67,20 +96,17 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 
         $this->_coreRegistry->register('entity_attribute', $model);
 
-        $this->_initAction();
+        $resultPage = $this->createActionPage();
 
         $this->_title->add($id ? $model->getName() : __('New Product Attribute'));
 
         $item = $id ? __('Edit Product Attribute') : __('New Product Attribute');
 
-        $this->_addBreadcrumb($item, $item);
+        $resultPage->addBreadcrumb($item, $item);
 
-        $this->_view->getLayout()->getBlock(
-            'attribute_edit_js'
-        )->setIsPopup(
-            (bool)$this->getRequest()->getParam('popup')
-        );
-
-        $this->_view->renderLayout();
+        $resultPage->getLayout()
+            ->getBlock('attribute_edit_js')
+            ->setIsPopup((bool)$this->getRequest()->getParam('popup'));
+        return $resultPage;
     }
 }

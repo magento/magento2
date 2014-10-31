@@ -112,7 +112,7 @@ class DataBuilder extends EntityAbstract
         $isSuitableMethodType = !($method->isConstructor() || $method->isFinal()
             || $method->isStatic() || $method->isDestructor());
         $isExcludedFromGeneration = in_array($method->getName(), array('__sleep', '__wakeup', '__clone'));
-        $isSuitableClass = $method->class !== 'Magento\Framework\Api\ExtensibleDataInterface';
+        $isSuitableClass = $method->class !== 'Magento\Framework\Api\Data\ExtensibleDataInterface';
         return $isGetter && $isSuitableMethodType && !$isExcludedFromGeneration && $isSuitableClass;
     }
 

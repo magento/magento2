@@ -24,10 +24,12 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <referenceBlock name="head.components">
-        <block class="Magento\Framework\View\Element\Js\Components" name="pagecache_page_head_components" template="Magento_PageCache::js/components.phtml"/>
-    </referenceBlock>
-    <referenceContainer name="content">
-        <block class="Magento\PageCache\Block\Javascript" template="Magento_PageCache::javascript.phtml" name="pageCache" as="pageCache"/>
-    </referenceContainer>
+    <body>
+        <referenceBlock name="head.components">
+            <block class="Magento\Framework\View\Element\Js\Components" name="pagecache_page_head_components" template="Magento_PageCache::js/components.phtml"/>
+        </referenceBlock>
+        <referenceContainer name="content">
+            <block class="Magento\PageCache\Block\Javascript" template="Magento_PageCache::javascript.phtml" name="pageCache" as="pageCache"/>
+        </referenceContainer>
+    </body>
 </page>

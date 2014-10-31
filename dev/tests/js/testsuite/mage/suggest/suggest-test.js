@@ -856,11 +856,11 @@ SuggestTest.prototype.testAddRecent = function() {
 SuggestTest.prototype.testRenderMultiselect = function() {
     var suggestOptions = {
             multiselect: true,
-            multiSuggestWrapper: '<div id="test-multisuggest-wrapper"></div>'
+            multiSuggestWrapper: '<div id="test-multisuggest-wrapper" data-role="parent-choice-element"></div>'
         },
         suggestInstance = this.suggestCreate(suggestOptions);
 
-    assertTrue(this.suggestElement.parent().is('#test-multisuggest-wrapper'));
+    assertTrue(this.suggestElement.closest('[data-role="parent-choice-element"]').is('#test-multisuggest-wrapper'));
     assertTrue(suggestInstance.elementWrapper.is('#test-multisuggest-wrapper'));
 };
 SuggestTest.prototype.testGetOptions = function() {

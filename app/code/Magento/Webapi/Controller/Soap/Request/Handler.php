@@ -23,7 +23,7 @@
  */
 namespace Magento\Webapi\Controller\Soap\Request;
 
-use Magento\Framework\Api\ExtensibleDataInterface;
+use Magento\Framework\Api\Data\ExtensibleDataInterface;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Webapi\Model\DataObjectProcessor;

@@ -24,7 +24,9 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <referenceContainer name="content">
-        <ui_component name="cms_block_listing" component="listing" />
-    </referenceContainer>
+    <body>
+        <referenceContainer name="content">
+            <ui_component name="cms_block_listing" component="listing"/>
+        </referenceContainer>
+    </body>
 </page>

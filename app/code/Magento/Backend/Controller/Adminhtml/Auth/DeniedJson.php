@@ -27,29 +27,45 @@ namespace Magento\Backend\Controller\Adminhtml\Auth;
 class DeniedJson extends \Magento\Backend\Controller\Adminhtml\Auth
 {
     /**
+     * @var \Magento\Framework\Controller\Result\JSONFactory
+     */
+    protected $resultJsonFactory;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+    ) {
+        parent::__construct($context);
+        $this->resultJsonFactory = $resultJsonFactory;
+    }
+
+    /**
      * Retrieve response for deniedJsonAction()
      *
-     * @return string
+     * @return array
      */
     protected function _getDeniedJson()
     {
-        return $this->_objectManager->get(
-            'Magento\Core\Helper\Data'
-        )->jsonEncode(
-            array(
-                'ajaxExpired' => 1,
-                'ajaxRedirect' => $this->_objectManager->get('Magento\Backend\Helper\Data')->getHomePageUrl()
-            )
-        );
+        return [
+            'ajaxExpired' => 1,
+            'ajaxRedirect' => $this->_helper->getHomePageUrl()
+        ];
+
     }
 
     /**
      * Denied JSON action
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\JSON
      */
     public function execute()
     {
-        $this->getResponse()->representJson($this->_getDeniedJson());
+        /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+        $resultJson = $this->resultJsonFactory->create();
+        return $resultJson->setData($this->_getDeniedJson());
     }
 }

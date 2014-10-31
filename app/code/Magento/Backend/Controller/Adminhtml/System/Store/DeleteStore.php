@@ -27,7 +27,7 @@ namespace Magento\Backend\Controller\Adminhtml\System\Store;
 class DeleteStore extends \Magento\Backend\Controller\Adminhtml\System\Store
 {
     /**
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
@@ -37,32 +37,28 @@ class DeleteStore extends \Magento\Backend\Controller\Adminhtml\System\Store
         if (!($model = $this->_objectManager->create('Magento\Store\Model\Store')->load($itemId))) {
             $this->messageManager->addError(__('Unable to proceed. Please, try again.'));
             $this->_redirect('adminhtml/*/');
-            return;
+            /** @var \Magento\Backend\Model\View\Result\Redirect $redirectResult */
+            $redirectResult = $this->resultRedirectFactory->create();
+            return $redirectResult->setPath('adminhtml/*/');
         }
         if (!$model->isCanDelete()) {
             $this->messageManager->addError(__('This store view cannot be deleted.'));
-            $this->_redirect('adminhtml/*/editStore', array('store_id' => $itemId));
-            return;
+            /** @var \Magento\Backend\Model\View\Result\Redirect $redirectResult */
+            $redirectResult = $this->resultRedirectFactory->create();
+            return $redirectResult->setPath('adminhtml/*/editStore', ['store_id' => $itemId]);
         }
 
         $this->_addDeletionNotice('store view');
 
-        $this->_initAction()->_addBreadcrumb(
-            __('Delete Store View'),
-            __('Delete Store View')
-        )->_addContent(
-            $this->_view->getLayout()->createBlock(
-                'Magento\Backend\Block\System\Store\Delete'
-            )->setFormActionUrl(
-                $this->getUrl('adminhtml/*/deleteStorePost')
-            )->setBackUrl(
-                $this->getUrl('adminhtml/*/editStore', array('store_id' => $itemId))
-            )->setStoreTypeTitle(
-                __('Store View')
-            )->setDataObject(
-                $model
-            )
-        );
-        $this->_view->renderLayout();
+        $resultPage = $this->createPage();
+        $resultPage->addBreadcrumb(__('Delete Store View'), __('Delete Store View'))
+            ->addContent(
+                $resultPage->getLayout()->createBlock('Magento\Backend\Block\System\Store\Delete')
+                    ->setFormActionUrl($this->getUrl('adminhtml/*/deleteStorePost'))
+                    ->setBackUrl($this->getUrl('adminhtml/*/editStore', ['store_id' => $itemId]))
+                    ->setStoreTypeTitle(__('Store View'))
+                    ->setDataObject($model)
+            );
+        return $resultPage;
     }
 }

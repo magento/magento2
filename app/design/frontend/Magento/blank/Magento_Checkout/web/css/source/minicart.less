@@ -54,21 +54,21 @@
     }
     > .content > .actions {
         margin-top: 15px;
-        > .secondary {
-            margin: 15px 0;
-            text-align: center;
-        }
+        text-align: center;
         > .primary {
-            margin: 0 10px;
+            margin: 0 10px 15px;
             .action.primary {
                 &:extend(.abstract-button-l all);
                 display: block;
                 width: 100%;
+                margin-bottom: 15px;
+                &:last-child {
+                    margin-bottom: 0;
+                }
             }
         }
-        .paypal-logo {
-            margin-top: 15px;
-            text-align: center;
+        > .secondary {
+            margin: 0 0 15px;
         }
     }
 }

@@ -24,5 +24,7 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <remove name="sale.reorder.sidebar"/>
+    <body>
+        <remove name="sale.reorder.sidebar"/>
+    </body>
 </page>

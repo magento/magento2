@@ -95,6 +95,70 @@
     }
 }
 
+//
+//    Account order gift message
+//--------------------------------------
+.order-details-items {
+    .order-gift-message,
+    .block-order-details-gift-message {
+        .item-options {
+            dt {
+                margin: @indent-s-base 0;
+                font-weight: @font-weight-base;
+            }
+        }
+        &:extend(.abstract-add-clearfix all);
+        dt:after {
+            content: "";
+        }
+        .label {
+            &:extend(.abstract-colon all);
+        }
+        .item-message {
+            clear: left;
+        }
+    }
+}
+
+.order-details-items .order-items {
+    .order-gift-message {
+        &:extend(.abstract-no-display all);
+        .action.close {
+            &:extend(.abstract-no-display all);
+        }
+    }
+    .action.show {
+        padding-right: 20px;
+        position: relative;
+        .icon-font(
+            @_icon-font-content: @icon-down,
+            @_icon-font-size: 22px,
+            @_icon-font-text-hide: false,
+            @_icon-font-position: after,
+            @_icon-font-display: inline-block
+        );
+        &:after {
+            position: absolute;
+            right: 0;
+            top: -4px;
+        }
+        &.expanded {
+            .icon-font-symbol(
+                @_icon-font-content: @icon-up,
+                @_icon-font-position: after
+            );
+        }
+    }
+}
+
+.block-order-details-gift-message {
+    border-top: @border-width-base solid @border-color-base;
+    padding-top: @indent-s-base;
+}
+
+//
+//    Desktop
+//--------------------------------------
 .responsive(@break) when (@break = @screen-m) {
     .gift-message {
         .item {

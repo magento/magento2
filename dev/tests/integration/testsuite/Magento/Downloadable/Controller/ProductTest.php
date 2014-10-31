@@ -35,12 +35,6 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testViewAction()
     {
         $this->dispatch('catalog/product/view/id/1');
-        $this->assertContains(
-            'catalog_product_view_type_downloadable',
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Framework\View\LayoutInterface'
-            )->getUpdate()->getHandles()
-        );
         $responseBody = $this->getResponse()->getBody();
         $this->assertContains('Downloadable Product', $responseBody);
         $this->assertContains('In stock', $responseBody);

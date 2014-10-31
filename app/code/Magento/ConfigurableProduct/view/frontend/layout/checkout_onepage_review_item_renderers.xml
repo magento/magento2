@@ -24,7 +24,9 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <referenceBlock name="checkout.onepage.review.item.renderers">
-        <block class="Magento\ConfigurableProduct\Block\Cart\Item\Renderer\Configurable" as="configurable" template="Magento_Checkout::onepage/review/item.phtml" cacheable="false"/>
-    </referenceBlock>
+    <body>
+        <referenceBlock name="checkout.onepage.review.item.renderers">
+            <block class="Magento\ConfigurableProduct\Block\Cart\Item\Renderer\Configurable" as="configurable" template="Magento_Checkout::onepage/review/item.phtml" cacheable="false"/>
+        </referenceBlock>
+    </body>
 </page>

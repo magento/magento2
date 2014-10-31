@@ -37,7 +37,7 @@
                     "selectors":{
                         "productAddToCartSelector":"button.action.tocart"}
                 }}'>
-                <caption><?php echo __('Compare Products') ?></caption>
+                <caption class="table-caption"><?php echo __('Compare Products') ?></caption>
                 <thead>
                 <tr>
                     <?php $_i=0 ?>
@@ -64,7 +64,7 @@
                         <?php if($_i++==0): ?>
                             <th scope="row" class="cell label product"><span><?php echo __('Product') ?></span></th>
                         <?php endif; ?>
-                        <td class="cell product info">
+                        <td data-th="<?php echo $this->escapeHtml(__('Product')); ?>" class="cell product info">
                             <a class="product-item-photo" href="<?php echo $this->getProductUrl($_item) ?>" title="<?php echo $this->stripTags($_item->getName(), null, true) ?>">
                                 <?php /* product_comparison_list */ ?>
                                 <?php echo $imageBlock->init($_item, 'product_comparison_list')->toHtml() ?>

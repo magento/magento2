@@ -57,8 +57,7 @@ class AssertProductAttributeAbsenceInVariationsSearch extends AbstractConstraint
      * @param CatalogProductNew $newProductPage
      * @return void
      */
-    public function processAssert
-    (
+    public function processAssert(
         CatalogProductAttribute $productAttribute,
         CatalogProductIndex $productGrid,
         CatalogProductNew $newProductPage

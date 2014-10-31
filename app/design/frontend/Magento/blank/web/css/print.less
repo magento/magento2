@@ -23,3 +23,93 @@
  */
 
 // Magento/blank
+.page-print {
+    .logo {
+        float: none;
+        display: block;
+        text-align: left;
+    }
+}
+@media print {
+    *{background: transparent !important;
+        color: black !important;
+        text-shadow: none !important;
+        filter: none !important;
+        -ms-filter: none !important;
+    }
+
+    // Black prints faster:h5bp.com/s
+    a,
+    a:visited {
+        text-decoration: underline !important;
+    }
+
+    // Don't show links for images, or javascript/internal links */
+    pre,
+    blockquote {
+        border: 1px solid #999;
+        page-break-inside: avoid;
+    }
+    thead {
+        display: table-header-group;
+    }
+    .table-wrapper table {
+        width: 100%;
+        td {
+            width: auto;
+        }
+        table-layout: fixed;
+        & > tfoot > tr:first-child {
+            border-top: 1px solid #999;
+        }
+    }
+    .box,
+    tr,
+    img {
+        page-break-inside: avoid;
+    }
+    img {
+        max-width: 100% !important;
+    }
+    @page {
+        margin: 1cm;
+    }
+    .block-content,
+    p,
+    h2,
+    h3 {
+        orphans: 3;
+        widows: 3;
+    }
+    .block-content {
+        page-break-before: avoid;
+    }
+    .block-title,
+    h2,
+    h3 {
+        page-break-after: avoid;
+    }
+    .sidebar,
+    .nav-sections,
+    .header.content > *[class],
+    .panel.wrapper > *[class],
+    .footer.content > *[class] {
+        display: none;
+    }
+    .logo,
+    .footer .copyright {
+        display: block !important;
+        margin: 10px 0;
+    }
+    .column.main {
+        width: 100% !important;
+        float: none !important;
+    }
+    .breadcrumbs {
+        margin: 0 auto;
+        text-align: right;
+    }
+    .footer.content {
+        padding: 0;
+    }
+}

@@ -58,7 +58,8 @@
 //--------------------------------------
 .responsive(@break) when (@break = @screen-m) {
     h1 {
-        font-size: @h1-font-size-desktop;
+        .css(font-size, @h1-font-size-desktop);
+        .css(margin-bottom, @h1-margin-bottom-desktop);
     }
 }
 

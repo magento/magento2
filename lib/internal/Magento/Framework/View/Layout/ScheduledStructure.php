@@ -36,6 +36,13 @@ class ScheduledStructure
     protected $_scheduledStructure;
 
     /**
+     * Scheduled structure data
+     *
+     * @var array
+     */
+    protected $_scheduledData;
+
+    /**
      * Full information about elements to be populated in the layout structure after generating structure
      *
      * @var array
@@ -71,6 +78,7 @@ class ScheduledStructure
     public function __construct(array $data = array())
     {
         $this->_scheduledStructure = isset($data['scheduledStructure']) ? $data['scheduledStructure'] : array();
+        $this->_scheduledData = isset($data['scheduledData']) ? $data['scheduledData'] : array();
         $this->_scheduledElements = isset($data['scheduledElements']) ? $data['scheduledElements'] : array();
         $this->_scheduledMoves = isset($data['scheduledMoves']) ? $data['scheduledMoves'] : array();
         $this->_scheduledRemoves = isset($data['scheduledRemoves']) ? $data['scheduledRemoves'] : array();
@@ -255,7 +263,7 @@ class ScheduledStructure
     /**
      * Add element to scheduled structure elements list
      *
-     * @param  string $elementName
+     * @param string $elementName
      * @param array $data
      * @return void
      */
@@ -273,6 +281,31 @@ class ScheduledStructure
     public function unsetStructureElement($elementName)
     {
         unset($this->_scheduledStructure[$elementName]);
+        unset($this->_scheduledData[$elementName]);
+    }
+
+    /**
+     * Get scheduled data for element
+     *
+     * @param string $elementName
+     * @param null $default
+     * @return null
+     */
+    public function getStructureElementData($elementName, $default = null)
+    {
+        return isset($this->_scheduledData[$elementName]) ? $this->_scheduledData[$elementName] : $default;
+    }
+
+    /**
+     * Set scheduled data for element
+     *
+     * @param string $elementName
+     * @param array $data
+     * @return void
+     */
+    public function setStructureElementData($elementName, array $data)
+    {
+        $this->_scheduledData[$elementName] = $data;
     }
 
     /**

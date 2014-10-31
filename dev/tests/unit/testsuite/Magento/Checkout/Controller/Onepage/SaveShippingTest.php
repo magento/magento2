@@ -211,7 +211,7 @@ class SaveShippingTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->layoutFactory->expects($this->once())
+        $this->layoutFactory->expects($this->any())
             ->method('create')
             ->willReturn($layout);
 
@@ -230,7 +230,7 @@ class SaveShippingTest extends \PHPUnit_Framework_TestCase
         $layout->expects($this->any())
             ->method('getUpdate')
             ->willReturn($update);
-        $update->expects($this->once())
+        $update->expects($this->any())
             ->method('load');
         $this->view->expects($this->any())
             ->method('getLayout')

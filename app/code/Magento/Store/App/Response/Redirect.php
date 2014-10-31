@@ -63,6 +63,8 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
     protected $_urlBuilder;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Encryption\UrlCoder $urlCoder
@@ -176,18 +178,16 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
     }
 
     /**
-     * Set redirect into response
+     * {@inheritdoc}
      *
-     * @param \Magento\Framework\App\ResponseInterface $response
-     * @param string $path
      * @param array $arguments
-     * @return void
+     * @return array
      */
-    public function redirect(\Magento\Framework\App\ResponseInterface $response, $path, $arguments = array())
+    public function updatePathParams(array $arguments)
     {
-        if ($this->_session->getCookieShouldBeReceived() &&
-            $this->_urlBuilder->getUseSession() &&
-            $this->_canUseSessionIdInParam
+        if ($this->_session->getCookieShouldBeReceived()
+            && $this->_sidResolver->getUseSessionInUrl()
+            && $this->_canUseSessionIdInParam
         ) {
             $arguments += array(
                 '_query' => array(
@@ -195,6 +195,20 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
                 )
             );
         }
+        return $arguments;
+    }
+
+    /**
+     * Set redirect into response
+     *
+     * @param \Magento\Framework\App\ResponseInterface $response
+     * @param string $path
+     * @param array $arguments
+     * @return void
+     */
+    public function redirect(\Magento\Framework\App\ResponseInterface $response, $path, $arguments = [])
+    {
+        $arguments = $this->updatePathParams($arguments);
         $response->setRedirect($this->_urlBuilder->getUrl($path, $arguments));
     }
 

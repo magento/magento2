@@ -26,11 +26,6 @@ namespace Magento\RecurringPayment\Block\Adminhtml\Product\Edit\Tab\Price;
 class RecurringTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\View\Element\BlockFactory
-     */
-    protected $_blockFactory;
-
-    /**
      * @var \Magento\Framework\Registry
      */
     protected $_registry;
@@ -55,30 +50,32 @@ class RecurringTest extends \PHPUnit_Framework_TestCase
      */
     protected $_scopeConfig;
 
+    /**
+     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $layoutMock;
+
     protected function setUp()
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-
-        $this->_blockFactory = $this->getMock(
-            'Magento\Framework\View\Element\BlockFactory',
-            array('createBlock'),
-            array(),
-            '',
-            false
-        );
 
         $this->_registry = $this->getMock('Magento\Framework\Registry', array(), array(), '', false);
 
         $this->_eventManager = $this->getMock('Magento\Framework\Event\Manager', array(), array(), '', false);
         $this->_scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->layoutMock = $this->getMockBuilder('Magento\Framework\View\LayoutInterface')->getMock();
         $this->_context = $helper->getObject(
             'Magento\Backend\Block\Template\Context',
-            array('eventManager' => $this->_eventManager, 'scopeConfig' => $this->_scopeConfig)
+            array(
+                'eventManager' => $this->_eventManager,
+                'scopeConfig' => $this->_scopeConfig,
+                'layout' => $this->layoutMock
+            )
         );
 
         $this->_testModel = $helper->getObject(
             'Magento\RecurringPayment\Block\Adminhtml\Product\Edit\Tab\Price\Recurring',
-            array('blockFactory' => $this->_blockFactory, 'registry' => $this->_registry, 'context' => $this->_context)
+            array('registry' => $this->_registry, 'context' => $this->_context)
         );
     }
 
@@ -96,10 +93,19 @@ class RecurringTest extends \PHPUnit_Framework_TestCase
                 'addConfigOptions'
             )
         );
-        $map = array(
-            array('Magento\RecurringPayment\Block\Adminhtml\Payment\Edit\Form', array(), $blockMock),
-            array('Magento\Backend\Block\Widget\Form\Element\Dependence', array(), $blockMock)
-        );
+        $map = [
+            [
+                'Magento\RecurringPayment\Block\Adminhtml\Payment\Edit\Form',
+                'adminhtml_recurring_payment_edit_form',
+                array(),
+                $blockMock],
+            [
+                'Magento\Backend\Block\Widget\Form\Element\Dependence',
+                'adminhtml_recurring_payment_edit_form_dependence',
+                array(),
+                $blockMock
+            ]
+        ];
         $paymentElement = $this->getMock(
             'Magento\Framework\Data\Form\Element\AbstractElement',
             array(),
@@ -113,8 +119,9 @@ class RecurringTest extends \PHPUnit_Framework_TestCase
 
         $product = $this->getMock('Magento\Catalog\Model\Product', array(), array(), '', false);
         $this->_registry->expects($this->once())->method('registry')->will($this->returnValue($product));
-
-        $this->_blockFactory->expects($this->any())->method('createBlock')->will($this->returnValueMap($map));
+        $this->layoutMock->expects($this->any())
+            ->method('createBlock')
+            ->will($this->returnValueMap($map));
 
         $blockMock->expects($this->any())->method('setNameInLayout');
         $blockMock->expects($this->once())->method('setProductEntity')->with($product);

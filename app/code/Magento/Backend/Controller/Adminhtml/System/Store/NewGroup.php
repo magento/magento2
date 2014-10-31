@@ -27,11 +27,13 @@ namespace Magento\Backend\Controller\Adminhtml\System\Store;
 class NewGroup extends \Magento\Backend\Controller\Adminhtml\System\Store
 {
     /**
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Forward
      */
     public function execute()
     {
         $this->_coreRegistry->register('store_type', 'group');
-        $this->_forward('newStore');
+        /** @var \Magento\Backend\Model\View\Result\Forward $resultForward */
+        $resultForward = $this->resultForwardFactory->create();
+        return $resultForward->forward('newStore');
     }
 }

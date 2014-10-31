@@ -40,6 +40,13 @@ class Item extends Sidebar
     protected $removeItem = '.action.delete';
 
     /**
+     * Selector for "Edit item" button
+     *
+     * @var string
+     */
+    protected $editItem = '.action.edit';
+
+    /**
      * Remove product item from mini cart
      *
      * @return void
@@ -48,5 +55,15 @@ class Item extends Sidebar
     {
         $this->_rootElement->find($this->removeItem)->click();
         $this->_rootElement->acceptAlert();
+    }
+
+    /**
+     * Click "Edit item" button
+     *
+     * @return void
+     */
+    public function clickEditItem()
+    {
+        $this->_rootElement->find($this->editItem)->click();
     }
 }

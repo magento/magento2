@@ -23,28 +23,28 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page layout="2columns-left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <body>
         <attribute name="class" value="page-products"/>
-    </body>
-    <referenceBlock name="page.main.title">
-        <action method="setPageTitle">
-            <argument translate="true" name="title" xsi:type="string">Catalog Advanced Search</argument>
-        </action>
-    </referenceBlock>
-    <referenceContainer name="content">
-        <block class="Magento\CatalogSearch\Block\Advanced\Result" name="catalogsearch_advanced_result" template="advanced/result.phtml">
-            <block class="Magento\CatalogSearch\Block\SearchResult\ListProduct" name="search_result_list" template="product/list.phtml">
-                <block class="Magento\Catalog\Block\Product\ProductList\Toolbar" name="product_list_toolbar" template="product/list/toolbar.phtml">
-                    <block class="Magento\Theme\Block\Html\Pager" name="product_list_toolbar_pager"/>
+        <referenceBlock name="page.main.title">
+            <action method="setPageTitle">
+                <argument translate="true" name="title" xsi:type="string">Catalog Advanced Search</argument>
+            </action>
+        </referenceBlock>
+        <referenceContainer name="content">
+            <block class="Magento\CatalogSearch\Block\Advanced\Result" name="catalogsearch_advanced_result" template="advanced/result.phtml">
+                <block class="Magento\CatalogSearch\Block\SearchResult\ListProduct" name="search_result_list" template="product/list.phtml">
+                    <block class="Magento\Catalog\Block\Product\ProductList\Toolbar" name="product_list_toolbar" template="product/list/toolbar.phtml">
+                        <block class="Magento\Theme\Block\Html\Pager" name="product_list_toolbar_pager"/>
+                    </block>
+                    <action method="setToolbarBlockName">
+                        <argument name="name" xsi:type="string">product_list_toolbar</argument>
+                    </action>
                 </block>
-                <action method="setToolbarBlockName">
-                    <argument name="name" xsi:type="string">product_list_toolbar</argument>
-                </action>
+                <action method="setListOrders"/>
+                <action method="setListModes"/>
+                <action method="setListCollection"/>
             </block>
-            <action method="setListOrders"/>
-            <action method="setListModes"/>
-            <action method="setListCollection"/>
-        </block>
-    </referenceContainer>
+        </referenceContainer>
+    </body>
 </page>

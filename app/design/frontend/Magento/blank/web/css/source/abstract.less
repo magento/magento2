@@ -55,12 +55,33 @@
     dt {
         float: left;
         clear: left;
-        margin: 0 10px 5px 0;
+        margin: 0 @indent-s-base @indent-xs-base 0;
     }
     dd {
         float: left;
         display: inline-block;
-        margin: 0 0 5px;
+        margin: 0 0 @indent-xs-base;
+    }
+}
+
+//
+//    Desktop
+//--------------------------------------
+.responsive(@break) when (@break = @screen-m) {
+    .abstract-product-options-list-desktop {
+        dt:after {
+            content: ': ';
+        }
+        dt {
+            float: left;
+            clear: left;
+            margin: 0 @indent-s-base @indent-xs-base 0;
+        }
+        dd {
+            float: left;
+            display: inline-block;
+            margin: 0 0 @indent-xs-base;
+        }
     }
 }
 
@@ -99,6 +120,19 @@
     }
 }
 
+.responsive(@break) when (@break = @screen-s) {
+    .abstract-blocks-2columns-s {
+        width: 48.8%;
+        &:nth-child(odd) {
+            float: left;
+            clear: left;
+        }
+        &:nth-child(even) {
+            float: right;
+        }
+    }
+}
+
 //
 //    Reset image alignment in container
 //--------------------------------------
@@ -123,14 +157,21 @@
 }
 
 //
+//    Abstract block title
+//--------------------------------------
+.abstract-block-title {
+    > strong {
+        .heading(h3);
+    }
+    margin-bottom: 15px;
+}
+
+//
 //    Account blocks
 //--------------------------------------
 .abstract-account-blocks {
     .block-title {
-        > strong {
-            .heading(h3);
-        }
-        margin-bottom: 15px;
+        &:extend(.abstract-block-title all);
         > .action {
             margin-left: 15px;
         }
@@ -143,7 +184,7 @@
         margin: 0 0 5px;
         > .action {
             font-weight: 400;
-            margin-left: 15px;
+            margin-left: @indent-s-base;
         }
     }
     .block-content {
@@ -232,6 +273,12 @@
     }
 }
 
+.responsive(@break) when (@break = @screen-s) {
+    .abstract-reset-left-margin-desktop-s {
+        margin-left: 0;
+    }
+}
+
 //
 //    Action with icon remove with text
 //--------------------------------------
@@ -244,7 +291,7 @@
     position: absolute;
     top: 31px; // 6px
     left: 10px;
-    margin-left: 50%; // margin-left: @form-field-type-inline-label-width + 50%;
+    margin-left: 70%; // margin-left: @form-field-type-inline-label-width + 50%;
 }
 
 //
@@ -260,12 +307,12 @@
 //
 //    Add Recipient
 //--------------------------------------
-.abstract-add-recipients {
-    .recipients {
+.abstract-add-fields {
+    .fieldset {
         margin-bottom: 50px;
-        .field {
-             .control {
-                width: 50%;
+        > .field:not(.choice) {
+            > .control {
+                width: 70%;
             }
         }
         .additional {
@@ -298,8 +345,13 @@
 //    Add Recipient for desktop
 //--------------------------------------
 .responsive(@break) when (@break = @screen-m) {
-    .abstract-add-recipients-desktop {
-        .recipients {
+    .abstract-add-fields-desktop {
+        .fieldset {
+            > .field:not(.choice) {
+                > .control {
+                    width: 50%;
+                }
+            }
             .additional {
                 .action.remove {
                     &:extend(.abstract-action-remove-desktop all);
@@ -314,6 +366,12 @@
 //--------------------------------------
 .responsive(@break) when (@break = @screen-m) {
     .abstract-margin-for-forms-desktop when not (@form-field-type-inline-label-width = false) and not (@form-field-type-inline-label-width = '') {
+        margin-left: @form-field-type-inline-label-width;
+    }
+}
+
+.responsive(@break) when (@break = @screen-s) {
+    .abstract-margin-for-forms-desktop-s when not (@form-field-type-inline-label-width = false) and not (@form-field-type-inline-label-width = '') {
         margin-left: @form-field-type-inline-label-width;
     }
 }
@@ -362,8 +420,20 @@
     }
 }
 
+.responsive(@break) when (@break = @screen-s) {
+    .abstract-add-clearfix-desktop-s {
+        .clearfix();
+    }
+}
+
 .responsive-smaller(@break) when (@break = @screen-s) {
     .abstract-add-clearfix-mobile {
+        .clearfix();
+    }
+}
+
+.responsive-smaller(@break) when (@break = @screen-m) {
+    .abstract-add-clearfix-mobile-m {
         .clearfix();
     }
 }
@@ -377,6 +447,12 @@
 
 .responsive(@break) when (@break = @screen-m) {
     .abstract-add-box-sizing-desktop {
+        .box-sizing();
+    }
+}
+
+.responsive(@break) when (@break = @screen-s) {
+    .abstract-add-box-sizing-desktop-s {
         .box-sizing();
     }
 }
@@ -505,6 +581,23 @@
     }
 }
 
+.responsive-smaller(@break) when (@break = @screen-s) {
+    .abstract-table-vertical-mobile-s {
+        .table-responsive();
+        tbody > tr {
+            > td {
+                padding-left: 0;
+                padding-right: 0;
+            }
+            &:not(:last-child) {
+                td:last-child {
+                    padding-bottom: @indent-base;
+                }
+            }
+        }
+    }
+}
+
 //
 //    Excl/Incl tax
 //--------------------------------------
@@ -584,19 +677,13 @@
 }
 
 //
-//    Checkout order product name
-//--------------------------------------
-.abstract-product-items-summary {
-    td {
-        text-align: left;
-    }
-}
-
-//
 //    Mobile checkout order product name
 //--------------------------------------
-.responsive-smaller(@break) when (@break = @screen-m) {
+.responsive-smaller(@break) when (@break = @screen-s) {
     .abstract-product-items-summary {
+        td {
+            text-align: left;
+        }
         tbody {
             .col {
                 padding: @indent-s-base 0 0;
@@ -707,4 +794,72 @@
 //--------------------------------------
 .abstract-no-display {
     display: none;
+}
+
+.responsive-smaller(@break) when (@break = @screen-s) {
+    .abstract-no-display-s {
+        display: none;
+    }
+}
+
+//
+//    Status
+//--------------------------------------
+.abstract-status {
+    display: inline-block;
+    margin-bottom: @indent-base;
+}
+
+//
+//    Pager toolbar for non-catalog pages mobile
+//--------------------------------------
+.responsive-smaller(@break) when (@break = @screen-m) {
+    .abstract-pager-toolbar-mobile {
+        .toolbar-amount,
+        .limiter,
+        .pages {
+            margin-bottom: @indent-m-base;
+        }
+    }
+}
+
+//
+//    Pager toolbar for non-catalog pages mobile
+//--------------------------------------
+.responsive-smaller(@break) when (@break = @screen-s) {
+    .abstract-pager-toolbar-mobile-s {
+        .toolbar-amount,
+        .limiter,
+        .pages {
+            margin-bottom: @indent-m-base;
+        }
+    }
+}
+
+//
+//    Pager toolbar for non-catalog pages desktop
+//--------------------------------------
+.responsive(@break) when (@break = @screen-m) {
+    .abstract-pager-toolbar {
+        margin-bottom: @indent-base;
+        position: relative;
+        &:extend(.abstract-add-clearfix-desktop all);
+        .limiter {
+            float: right;
+            position: relative;
+            z-index: 1;
+        }
+        .toolbar-amount {
+            float: left;
+            line-height: normal;
+            padding: 7px 0 0;
+            position: relative;
+            z-index: 1;
+        }
+        .pages {
+            position: absolute;
+            z-index: 0;
+            width: 100%;
+        }
+    }
 }

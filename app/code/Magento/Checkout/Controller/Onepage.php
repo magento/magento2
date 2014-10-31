@@ -62,14 +62,14 @@ class Onepage extends Action
     protected $_formKeyValidator;
 
     /**
-     * @var \Magento\Framework\View\LayoutFactory
-     */
-    protected $layoutFactory;
-
-    /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $scopeConfig;
+
+    /**
+     * @var \Magento\Framework\View\LayoutFactory
+     */
+    protected $layoutFactory;
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
@@ -208,8 +208,12 @@ class Onepage extends Action
      */
     protected function getProgressHtml($checkoutStep = '')
     {
-        $this->_view->loadLayout(['checkout_onepage_progress']);
-        $block = $this->_view->getLayout()->getBlock('progress')->setAttribute('next_step', $checkoutStep);
+        $layout = $this->layoutFactory->create();
+        $layout->getUpdate()->load(['checkout_onepage_progress']);
+        $layout->generateXml();
+        $layout->generateElements();
+
+        $block = $layout->getBlock('progress')->setAttribute('next_step', $checkoutStep);
         return $block->toHtml();
     }
 

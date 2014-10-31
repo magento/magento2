@@ -24,14 +24,16 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <referenceBlock name="database">
-        <action method="setTemplate">
-            <argument name="template" xsi:type="string">db/main.phtml</argument>
-        </action>
-        <action method="addDatabaseBlock">
-            <argument name="type" xsi:type="string">mysql4</argument>
-            <argument name="block" xsi:type="string">Magento\Install\Block\Db\Type\Mysql4</argument>
-            <argument name="template" xsi:type="string">db/mysql4.phtml</argument>
-        </action>
-    </referenceBlock>
+    <body>
+        <referenceBlock name="database">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">db/main.phtml</argument>
+            </action>
+            <action method="addDatabaseBlock">
+                <argument name="type" xsi:type="string">mysql4</argument>
+                <argument name="block" xsi:type="string">Magento\Install\Block\Db\Type\Mysql4</argument>
+                <argument name="template" xsi:type="string">db/mysql4.phtml</argument>
+            </action>
+        </referenceBlock>
+    </body>
 </page>

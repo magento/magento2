@@ -27,15 +27,36 @@ namespace Magento\Search\Controller\Adminhtml\Term;
 class Save extends \Magento\Search\Controller\Adminhtml\Term
 {
     /**
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+    ) {
+        parent::__construct($context, $resultPageFactory);
+        $this->resultRedirectFactory = $resultRedirectFactory;
+    }
+
+    /**
      * Save search query
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
         $hasError = false;
         $data = $this->getRequest()->getPost();
         $queryId = $this->getRequest()->getPost('query_id', null);
+        /** @var \Magento\Backend\Model\View\Result\Redirect $redirectResult */
+        $redirectResult = $this->resultRedirectFactory->create();
         if ($this->getRequest()->isPost() && $data) {
             /* @var $model \Magento\Search\Model\Query */
             $model = $this->_objectManager->create('Magento\Search\Model\Query');
@@ -74,9 +95,9 @@ class Save extends \Magento\Search\Controller\Adminhtml\Term
 
         if ($hasError) {
             $this->_getSession()->setPageData($data);
-            $this->_redirect('search/*/edit', array('id' => $queryId));
+            return $redirectResult->setPath('search/*/edit', ['id' => $queryId]);
         } else {
-            $this->_redirect('search/*');
+            return $redirectResult->setPath('search/*');
         }
     }
 }

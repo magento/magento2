@@ -27,7 +27,7 @@
 <?php if($_orders->getSize()): ?>
     <div class="table-wrapper orders-history">
         <table class="data table table-order-items history" id="my-orders-table">
-            <caption class="table caption"><?php echo __('Orders') ?></caption>
+            <caption class="table-caption"><?php echo __('Orders') ?></caption>
             <thead>
                 <tr>
                     <th scope="col" class="col id"><?php echo __('Order #') ?></th>
@@ -46,7 +46,7 @@
                         <td data-th="<?php echo $this->escapeHtml(__('Ship To')) ?>" class="col shipping"><?php echo $_order->getShippingAddress() ? $this->escapeHtml($_order->getShippingAddress()->getName()) : '&nbsp;' ?></td>
                         <td data-th="<?php echo $this->escapeHtml(__('Order Total')) ?>" class="col total"><?php echo $_order->formatPrice($_order->getGrandTotal()) ?></td>
                         <td data-th="<?php echo $this->escapeHtml(__('Status')) ?>" class="col status"><?php echo $_order->getStatusLabel() ?></td>
-                        <td data-th="" class="col actions">
+                        <td data-th="<?php echo $this->escapeHtml(__('Actions')) ?>" class="col actions">
                             <a href="<?php echo $this->getViewUrl($_order) ?>" class="action view">
                                 <span><?php echo __('View Order') ?></span>
                             </a>

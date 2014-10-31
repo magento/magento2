@@ -24,35 +24,36 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <block class="Magento\Weee\Block\Item\Price\Renderer" name="checkout.onepage.review.item.price.unit.excl" template="checkout/onepage/review/item/price/unit_excl_tax.phtml">
-        <arguments>
-            <argument name="zone" xsi:type="string">cart</argument>
-        </arguments>
-    </block>
-    <block class="Magento\Weee\Block\Item\Price\Renderer" name="checkout.onepage.review.item.price.unit.incl" template="checkout/onepage/review/item/price/unit_incl_tax.phtml">
-        <arguments>
-            <argument name="zone" xsi:type="string">cart</argument>
-        </arguments>
-    </block>
-    <block class="Magento\Weee\Block\Item\Price\Renderer" name="checkout.onepage.review.item.price.rowtotal.excl" template="checkout/onepage/review/item/price/row_excl_tax.phtml">
-        <arguments>
-            <argument name="zone" xsi:type="string">cart</argument>
-        </arguments>
-    </block>
-    <block class="Magento\Weee\Block\Item\Price\Renderer" name="checkout.onepage.review.item.price.rowtotal.incl" template="checkout/onepage/review/item/price/row_incl_tax.phtml">
-        <arguments>
-            <argument name="zone" xsi:type="string">cart</argument>
-        </arguments>
-    </block>
-    <block class="Magento\Weee\Block\Item\Price\Renderer" name="checkout.item.price.unit" template="item/price/unit.phtml">
-        <arguments>
-            <argument name="zone" xsi:type="string">cart</argument>
-        </arguments>
-    </block>
-    <block class="Magento\Weee\Block\Item\Price\Renderer" name="checkout.item.price.row" template="item/price/row.phtml">
-        <arguments>
-            <argument name="zone" xsi:type="string">cart</argument>
-        </arguments>
-    </block>
+    <body>
+        <block class="Magento\Weee\Block\Item\Price\Renderer" name="checkout.onepage.review.item.price.unit.excl" template="checkout/onepage/review/item/price/unit_excl_tax.phtml">
+            <arguments>
+                <argument name="zone" xsi:type="string">cart</argument>
+            </arguments>
+        </block>
+        <block class="Magento\Weee\Block\Item\Price\Renderer" name="checkout.onepage.review.item.price.unit.incl" template="checkout/onepage/review/item/price/unit_incl_tax.phtml">
+            <arguments>
+                <argument name="zone" xsi:type="string">cart</argument>
+            </arguments>
+        </block>
+        <block class="Magento\Weee\Block\Item\Price\Renderer" name="checkout.onepage.review.item.price.rowtotal.excl" template="checkout/onepage/review/item/price/row_excl_tax.phtml">
+            <arguments>
+                <argument name="zone" xsi:type="string">cart</argument>
+            </arguments>
+        </block>
+        <block class="Magento\Weee\Block\Item\Price\Renderer" name="checkout.onepage.review.item.price.rowtotal.incl" template="checkout/onepage/review/item/price/row_incl_tax.phtml">
+            <arguments>
+                <argument name="zone" xsi:type="string">cart</argument>
+            </arguments>
+        </block>
+        <block class="Magento\Weee\Block\Item\Price\Renderer" name="checkout.item.price.unit" template="item/price/unit.phtml">
+            <arguments>
+                <argument name="zone" xsi:type="string">cart</argument>
+            </arguments>
+        </block>
+        <block class="Magento\Weee\Block\Item\Price\Renderer" name="checkout.item.price.row" template="item/price/row.phtml">
+            <arguments>
+                <argument name="zone" xsi:type="string">cart</argument>
+            </arguments>
+        </block>
+    </body>
 </page>
-

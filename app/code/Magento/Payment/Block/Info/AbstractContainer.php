@@ -59,7 +59,7 @@ abstract class AbstractContainer extends \Magento\Framework\View\Element\Templat
     protected function _prepareLayout()
     {
         if ($info = $this->getPaymentInfo()) {
-            $this->setChild($this->_getInfoBlockName(), $this->_paymentData->getInfoBlock($info));
+            $this->setChild($this->_getInfoBlockName(), $this->_paymentData->getInfoBlock($info, $this->getLayout()));
         }
         return parent::_prepareLayout();
     }

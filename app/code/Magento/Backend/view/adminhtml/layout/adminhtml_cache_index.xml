@@ -26,8 +26,10 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <update handle="formkey"/>
     <update handle="adminhtml_cache_block"/>
-    <referenceContainer name="content">
-        <block class="Magento\Backend\Block\Cache" name="adminhtml.cache.container"/>
-        <block class="Magento\Backend\Block\Cache\Additional" name="cache.additional" template="Magento_Backend::system/cache/additional.phtml"/>
-    </referenceContainer>
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\Backend\Block\Cache" name="adminhtml.cache.container"/>
+            <block class="Magento\Backend\Block\Cache\Additional" name="cache.additional" template="Magento_Backend::system/cache/additional.phtml"/>
+        </referenceContainer>
+    </body>
 </page>

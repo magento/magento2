@@ -25,11 +25,13 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <update handle="msrp_popup"/>
-    <referenceContainer name="checkout.cart.totals.container">
-        <block name="checkout.cart.totals.msrp" before="checkout.cart.totals" class="Magento\Msrp\Block\Total" template="cart/totals.phtml">
-            <arguments>
-                <argument name="original_block_name" xsi:type="string">checkout.cart.totals</argument>
-            </arguments>
-        </block>
-    </referenceContainer>
+    <body>
+        <referenceContainer name="checkout.cart.totals.container">
+            <block name="checkout.cart.totals.msrp" before="checkout.cart.totals" class="Magento\Msrp\Block\Total" template="cart/totals.phtml">
+                <arguments>
+                    <argument name="original_block_name" xsi:type="string">checkout.cart.totals</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
 </page>

@@ -27,6 +27,9 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
+use Magento\Framework\Controller\Result;
+use Magento\Framework\View\Result\PageFactory;
+
 class Attribute extends \Magento\Backend\App\Action
 {
     /**
@@ -47,17 +50,27 @@ class Attribute extends \Magento\Backend\App\Action
     protected $_coreRegistry = null;
 
     /**
+     * @var \Magento\Framework\View\Result\PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * Constructor
+     *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Cache\FrontendInterface $attributeLabelCache
      * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Cache\FrontendInterface $attributeLabelCache,
-        \Magento\Framework\Registry $coreRegistry
+        \Magento\Framework\Registry $coreRegistry,
+        PageFactory $resultPageFactory
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_attributeLabelCache = $attributeLabelCache;
+        $this->resultPageFactory = $resultPageFactory;
         parent::__construct($context);
     }
 
@@ -78,36 +91,27 @@ class Attribute extends \Magento\Backend\App\Action
     }
 
     /**
-     * @return $this
+     * @return \Magento\Backend\Model\View\Result\Page
      */
-    protected function _initAction()
+    protected function createActionPage()
     {
         $this->_title->add(__('Product Attributes'));
-
+        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        $resultPage = $this->resultPageFactory->create();
         if ($this->getRequest()->getParam('popup')) {
             if ($this->getRequest()->getParam('product_tab') == 'variations') {
-                $this->_view->loadLayout(
-                    array('popup', 'catalog_product_attribute_edit_product_tab_variations_popup')
-                );
+                $resultPage->addHandle(['popup', 'catalog_product_attribute_edit_product_tab_variations_popup']);
             } else {
-                $this->_view->loadLayout(array('popup', 'catalog_product_attribute_edit_popup'));
+                $resultPage->addHandle(['popup', 'catalog_product_attribute_edit_popup']);
             }
-            /** @var \Magento\Framework\View\Page\Config $pageConfig */
-            $pageConfig = $this->_objectManager->get('Magento\Framework\View\Page\Config');
+            $pageConfig = $resultPage->getConfig();
             $pageConfig->addBodyClass('attribute-popup');
         } else {
-            $this->_view->loadLayout();
-            $this->_addBreadcrumb(
-                __('Catalog'),
-                __('Catalog')
-            )->_addBreadcrumb(
-                __('Manage Product Attributes'),
-                __('Manage Product Attributes')
-            );
-            $this->_setActiveMenu('Magento_Catalog::catalog_attributes_attributes');
+            $resultPage->addBreadcrumb(__('Catalog'), __('Catalog'))
+                ->addBreadcrumb(__('Manage Product Attributes'), __('Manage Product Attributes'))
+                ->setActiveMenu('Magento_Catalog::catalog_attributes_attributes');
         }
-
-        return $this;
+        return $resultPage;
     }
 
     /**

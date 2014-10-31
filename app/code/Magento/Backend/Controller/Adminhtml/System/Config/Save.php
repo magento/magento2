@@ -51,12 +51,18 @@ class Save extends AbstractConfig
     protected $string;
 
     /**
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Backend\Model\Config\Structure $configStructure
      * @param \Magento\Backend\Controller\Adminhtml\System\ConfigSectionChecker $sectionChecker
      * @param \Magento\Backend\Model\Config\Factory $configFactory
      * @param \Magento\Framework\Cache\FrontendInterface $cache
      * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -64,12 +70,14 @@ class Save extends AbstractConfig
         \Magento\Backend\Controller\Adminhtml\System\ConfigSectionChecker $sectionChecker,
         \Magento\Backend\Model\Config\Factory $configFactory,
         \Magento\Framework\Cache\FrontendInterface $cache,
-        \Magento\Framework\Stdlib\String $string
+        \Magento\Framework\Stdlib\String $string,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
     ) {
         parent::__construct($context, $configStructure, $sectionChecker);
         $this->_configFactory = $configFactory;
         $this->_cache = $cache;
         $this->string = $string;
+        $this->resultRedirectFactory = $resultRedirectFactory;
     }
 
     /**
@@ -157,7 +165,7 @@ class Save extends AbstractConfig
     /**
      * Save configuration
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
@@ -192,6 +200,11 @@ class Save extends AbstractConfig
         }
 
         $this->_saveState($this->getRequest()->getPost('config_state'));
-        $this->_redirect('adminhtml/system_config/edit', array('_current' => array('section', 'website', 'store')));
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
+        return $resultRedirect->setPath(
+            'adminhtml/system_config/edit',
+            ['_current' => ['section', 'website', 'store']]
+        );
     }
 }

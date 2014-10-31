@@ -24,9 +24,11 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <referenceContainer name="checkout.onepage.review.info.items.after">
-        <block class="Magento\Authorizenet\Block\Directpost\Form" name="payment.form.directpost" template="directpost/form.phtml">
-            <action method="setMethodInfo"/>
-        </block>
-    </referenceContainer>
+    <body>
+        <referenceContainer name="checkout.onepage.review.info.items.after">
+            <block class="Magento\Authorizenet\Block\Directpost\Form" name="payment.form.directpost" template="directpost/form.phtml">
+                <action method="setMethodInfo"/>
+            </block>
+        </referenceContainer>
+    </body>
 </page>

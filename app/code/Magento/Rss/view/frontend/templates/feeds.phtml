@@ -23,8 +23,9 @@
  */
 ?>
 <table class="data table rss">
+    <caption class="table-caption"><?php echo __('Feed'); ?></caption>
     <tbody>
-        <th colspan="2"><?php echo __('Miscellaneous Feeds') ?></th>
+        <th colspan="2" scope="col"><?php echo __('Miscellaneous Feeds') ?></th>
     <?php foreach($this->getFeeds() as $feed): ?>
         <?php if (!isset($feed['group'])): ?>
         <tr>
@@ -34,7 +35,7 @@
             </td>
         </tr>
         <?php else: ?>
-            <th colspan="2"><?php echo $feed['group'] ?></th>
+            <th colspan="2" scope="col"><?php echo $feed['group'] ?></th>
             <?php foreach ($feed['feeds'] as $item) :?>
                 <tr>
                     <td class="col feed"><?php echo $item['label'] ?></td>

@@ -1,3 +1,54 @@
+0.1.0-alpha102
+=============
+* Fixed bugs:
+	* Fixed an issue where the categories tree was not displayed when adding a new category during product creation
+	* Fixed an issue where the Template field on the New Email Template page was labeled as required
+	* Fixed minor UI issues in Multiple Addresses Checkout for a desktop
+	* Fixed minor UI issues with Widgets on the storefront
+	* Fixed minor UI issues with pages printing view on the storefront
+	* Fixed minor UI issues in items Gift message on the Order View frontend page
+	* Fixed an issue in the Admin panel where no message was displayed after adding a product to cart with quantity exceeding the available quantity)
+* Framework improvements:
+	* To enhance the readability of tables for screen readers, added the <caption> tag and the “scope” attribute for tables
+	* Added customer module interfaces
+	* Created the ability to generate API documentation
+* Added the following functional tests:
+	* Create gift message in the Admin panel
+	* Delete term
+	* Product type switching when editing
+	* Re-authorize tokens for the Integration
+	* Revoke all access tokens for admin without tokens
+	* Update custom order status
+	* Update a product from a mini shopping cart
+* WebApi Framework improvements:
+	* Added Web API support to add/override matching identifier parameter in the body from URL
+* Documentation:
+	* Added README files with module description for the following modules:
+		* Authorizenet
+		* Centinel
+		* Customer
+		* CustomerImportExport
+		* Dhl
+		* Fedex
+		* OfflinePayments
+		* OfflineShipping
+		* Ogone
+		* PayPalRecurringPayment
+		* Payment
+		* Paypal
+		* ProductAlert
+		* RecurringPayment
+		* Sendfriend
+		* Shipping
+		* Ups
+		* Usps
+		* Wishlist
+* Container-Based Page Layout:
+    * Distributed the responsibility of View\Layout between three classes (PageLayout, PageConfig, GenericLayout)
+    * Refactored controller actions to use ResultInterface objects:
+        * Catalog
+        * Backend
+
 0.1.0-alpha101
 =============
  * Framework improvements:

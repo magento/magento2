@@ -58,8 +58,9 @@ class BundleSelections implements FixtureInterface
     public function __construct(FixtureFactory $fixtureFactory, array $data, array $params = [])
     {
         $this->params = $params;
+        $this->data = !isset($data['preset']) ? $data : [];
 
-        if ($data['preset']) {
+        if (isset($data['preset'])) {
             $this->data = $this->getPreset($data['preset']);
             if (!empty($data['products'])) {
                 $this->data['products'] = [];
@@ -76,6 +77,10 @@ class BundleSelections implements FixtureInterface
             foreach ($productsSelections as $index => $products) {
                 $productSelection = [];
                 foreach ($products as $key => $product) {
+                    if ($product instanceof FixtureInterface) {
+                        $productSelection[$key] = $product;
+                        continue;
+                    }
                     list($fixture, $dataSet) = explode('::', $product);
                     $productSelection[$key] = $fixtureFactory->createByCode($fixture, ['dataSet' => $dataSet]);
                     $productSelection[$key]->persist();

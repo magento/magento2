@@ -47,6 +47,7 @@
 @product-name-text-decoration-hover: @link-text-decoration-hover;
 
 @toolbar-mode-icon-font-size: 26px;
+@product-h1-margin-bottom-desktop: @indent-base;
 
 @import "listings.less";
 @import "toolbar.less";
@@ -166,7 +167,6 @@
     margin-bottom: 30px;
     .table.additional.attributes {
         width: auto;
-        .table-caption(true);
         .table-resize(
             @_th-padding-left: 0,
             @_th-padding-right: @indent-l-base,
@@ -177,6 +177,11 @@
 }
 
 .product-info-main {
+    .page-title {
+        .title {
+            .css(margin-bottom, @product-h1-margin-bottom-desktop);
+        }
+    }
     .stock {
         &.available,
         &.unavailable {

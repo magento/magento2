@@ -27,7 +27,7 @@ namespace Magento\Backend\Controller\Adminhtml\System\Design;
 class Delete extends \Magento\Backend\Controller\Adminhtml\System\Design
 {
     /**
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
@@ -44,6 +44,8 @@ class Delete extends \Magento\Backend\Controller\Adminhtml\System\Design
                 $this->messageManager->addException($e, __("Cannot delete the design change."));
             }
         }
-        $this->getResponse()->setRedirect($this->getUrl('adminhtml/*/'));
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
+        return $resultRedirect->setPath('adminhtml/*/');
     }
 }

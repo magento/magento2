@@ -29,7 +29,7 @@ class WysiwygPlugin extends \Magento\Backend\Controller\Adminhtml\System\Variabl
     /**
      * WYSIWYG Plugin Action
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\JSON
      */
     public function execute()
     {
@@ -39,7 +39,8 @@ class WysiwygPlugin extends \Magento\Backend\Controller\Adminhtml\System\Variabl
         )->toOptionArray(
             true
         );
-        $variables = array($storeContactVariabls, $customVariables);
-        $this->getResponse()->representJson(\Zend_Json::encode($variables));
+        /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+        $resultJson = $this->resultJsonFactory->create();
+        return $resultJson->setData([$storeContactVariabls, $customVariables]);
     }
 }

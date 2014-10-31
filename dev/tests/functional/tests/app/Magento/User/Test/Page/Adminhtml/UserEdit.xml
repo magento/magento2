@@ -26,7 +26,7 @@
 <page mca="admin/user/edit" module="Magento_User">
     <blocks>
         <pageActions>
-            <class>Magento\Backend\Test\Block\FormPageActions</class>
+            <class>Magento\User\Test\Block\Adminhtml\User\Edit\PageActions</class>
             <locator>.page-main-actions</locator>
             <strategy>css selector</strategy>
         </pageActions>

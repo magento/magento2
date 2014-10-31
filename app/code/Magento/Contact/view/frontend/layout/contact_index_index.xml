@@ -23,13 +23,15 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <head>
         <title>Contact Us</title>
     </head>
-    <referenceContainer name="content">
-        <block class="Magento\Framework\View\Element\Template" name="contactForm" template="Magento_Contact::form.phtml">
-            <container name="form.additional.info" label="Form Additional Info"/>
-        </block>
-    </referenceContainer>
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\Framework\View\Element\Template" name="contactForm" template="Magento_Contact::form.phtml">
+                <container name="form.additional.info" label="Form Additional Info"/>
+            </block>
+        </referenceContainer>
+    </body>
 </page>

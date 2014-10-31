@@ -23,24 +23,26 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page layout="admin-2columns-left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <referenceContainer name="content">
-        <block class="Magento\Customer\Block\Adminhtml\Edit" name="customer_edit"/>
-    </referenceContainer>
-    <referenceContainer name="left">
-        <block class="Magento\Customer\Block\Adminhtml\Edit\Tabs" name="customer_edit_tabs">
-            <block class="Magento\Customer\Block\Adminhtml\Edit\Tab\View" name="customer_edit_tab_view" template="tab/view.phtml">
-                <block class="Magento\Customer\Block\Adminhtml\Edit\Tab\View\PersonalInfo" name="personal_info" template="tab/view/personal_info.phtml"/>
-                <block class="Magento\Customer\Block\Adminhtml\Edit\Tab\View\Sales" name="sales" template="tab/view/sales.phtml"/>
-                <block class="Magento\Customer\Block\Adminhtml\Edit\Tab\View\Accordion" name="accordion"/>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\Customer\Block\Adminhtml\Edit" name="customer_edit"/>
+        </referenceContainer>
+        <referenceContainer name="left">
+            <block class="Magento\Customer\Block\Adminhtml\Edit\Tabs" name="customer_edit_tabs">
+                <block class="Magento\Customer\Block\Adminhtml\Edit\Tab\View" name="customer_edit_tab_view" template="tab/view.phtml">
+                    <block class="Magento\Customer\Block\Adminhtml\Edit\Tab\View\PersonalInfo" name="personal_info" template="tab/view/personal_info.phtml"/>
+                    <block class="Magento\Customer\Block\Adminhtml\Edit\Tab\View\Sales" name="sales" template="tab/view/sales.phtml"/>
+                    <block class="Magento\Customer\Block\Adminhtml\Edit\Tab\View\Accordion" name="accordion"/>
+                </block>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">customer_edit_tab_view</argument>
+                    <argument name="block" xsi:type="string">customer_edit_tab_view</argument>
+                </action>
             </block>
-            <action method="addTab">
-                <argument name="name" xsi:type="string">customer_edit_tab_view</argument>
-                <argument name="block" xsi:type="string">customer_edit_tab_view</argument>
-            </action>
-        </block>
-    </referenceContainer>
-    <referenceContainer name="js">
-        <block class="Magento\Backend\Block\Template" template="Magento_Customer::edit/js.phtml" name="customer.edit.js" as="customer_edit_js"/>
-    </referenceContainer>
+        </referenceContainer>
+        <referenceContainer name="js">
+            <block class="Magento\Backend\Block\Template" template="Magento_Customer::edit/js.phtml" name="customer.edit.js" as="customer_edit_js"/>
+        </referenceContainer>
+    </body>
 </page>

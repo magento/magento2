@@ -27,13 +27,32 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
+     * @var \Magento\Framework\Controller\Result\JSONFactory
+     */
+    protected $resultJsonFactory;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Catalog\Controller\Adminhtml\Product\Builder $productBuilder
+     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Catalog\Controller\Adminhtml\Product\Builder $productBuilder,
+        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+    ) {
+        parent::__construct($context, $productBuilder);
+        $this->resultJsonFactory = $resultJsonFactory;
+    }
+    /**
      * Add attribute to product template
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\JSON
      */
     public function execute()
     {
         $request = $this->getRequest();
+        $resultJson = $this->resultJsonFactory->create();
         try {
             /** @var \Magento\Eav\Model\Entity\Attribute $attribute */
             $attribute = $this->_objectManager->create('Magento\Eav\Model\Entity\Attribute')
@@ -60,12 +79,13 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
                 ->setSortOrder('0')
                 ->save();
 
-            $this->getResponse()->representJson($attribute->toJson());
+            $resultJson->setJsonData($attribute->toJson());
         } catch (\Exception $e) {
             $response = new \Magento\Framework\Object();
             $response->setError(false);
             $response->setMessage($e->getMessage());
-            $this->getResponse()->representJson($response->toJson());
+            $resultJson->setJsonData($response->toJson());
         }
+        return $resultJson;
     }
 }

@@ -40,26 +40,42 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
     protected $productValidator;
 
     /**
+     * @var \Magento\Framework\Controller\Result\JSONFactory
+     */
+    protected $resultJsonFactory;
+
+    /**
+     * @var \Magento\Framework\View\LayoutFactory
+     */
+    protected $layoutFactory;
+
+    /**
      * @param Action\Context $context
      * @param Builder $productBuilder
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
      * @param \Magento\Catalog\Model\Product\Validator $productValidator
+     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         Product\Builder $productBuilder,
         \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
-        \Magento\Catalog\Model\Product\Validator $productValidator
+        \Magento\Catalog\Model\Product\Validator $productValidator,
+        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory,
+        \Magento\Framework\View\LayoutFactory $layoutFactory
     ) {
         $this->_dateFilter = $dateFilter;
         $this->productValidator = $productValidator;
         parent::__construct($context, $productBuilder);
+        $this->resultJsonFactory = $resultJsonFactory;
+        $this->layoutFactory = $layoutFactory;
     }
 
     /**
      * Validate product
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\JSON
      */
     public function execute()
     {
@@ -121,11 +137,12 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
             $response->setMessage($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addError($e->getMessage());
-            $this->_view->getLayout()->initMessages();
+            $layout = $this->layoutFactory->create();
+            $layout->initMessages();
             $response->setError(true);
-            $response->setHtmlMessage($this->_view->getLayout()->getMessagesBlock()->getGroupedHtml());
+            $response->setHtmlMessage($layout->getMessagesBlock()->getGroupedHtml());
         }
 
-        $this->getResponse()->representJson($response->toJson());
+        return $this->resultJsonFactory->create()->setJsonData($response->toJson());
     }
 }

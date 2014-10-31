@@ -47,6 +47,7 @@ class CatalogProductSimple extends AbstractRepository
             'attribute_set_id' => ['dataSet' => 'default'],
             'name' => 'Simple Product %isolation%',
             'sku' => 'sku_simple_product_%isolation%',
+            'is_virtual' => 'No',
             'weight' => 1,
             'quantity_and_stock_status' => [
                 'qty' => 25.0000,

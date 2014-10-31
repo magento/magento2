@@ -25,12 +25,14 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <update handle="customer_account"/>
-    <referenceContainer name="content">
-        <block class="Magento\Downloadable\Block\Customer\Products\ListProducts" name="downloadable_customer_products_list" template="customer/products/list.phtml"/>
-    </referenceContainer>
-    <referenceBlock name="root">
-        <action method="setHeaderTitle">
-            <argument translate="true" name="title" xsi:type="string">My Downloadable Products</argument>
-        </action>
-    </referenceBlock>
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\Downloadable\Block\Customer\Products\ListProducts" name="downloadable_customer_products_list" template="customer/products/list.phtml"/>
+        </referenceContainer>
+        <referenceBlock name="root">
+            <action method="setHeaderTitle">
+                <argument translate="true" name="title" xsi:type="string">My Downloadable Products</argument>
+            </action>
+        </referenceBlock>
+    </body>
 </page>

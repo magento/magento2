@@ -43,7 +43,9 @@ class Index extends \Magento\Framework\App\Action\Action
             \Magento\Cms\Helper\Page::XML_PATH_NO_ROUTE_PAGE,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
-        if (!$this->_objectManager->get('Magento\Cms\Helper\Page')->renderPage($this, $pageId)) {
+        /** @var \Magento\Cms\Helper\Page $pageHelper */
+        $pageHelper = $this->_objectManager->get('Magento\Cms\Helper\Page');
+        if (!$pageHelper->renderPage($this, $pageId)) {
             $this->_forward('defaultNoRoute');
         }
     }

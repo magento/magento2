@@ -24,11 +24,21 @@
  */
 -->
 <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:include schemaLocation="elements.xsd"/>
+
     <xs:complexType name="bodyType">
-        <xs:sequence>
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
             <xs:element type="bodyAttributeType" name="attribute" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element ref="block" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="referenceBlock" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="referenceContainer" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="container" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="remove" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="move" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="ui_component" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
+
     <xs:complexType name="bodyAttributeType">
         <xs:simpleContent>
             <xs:extension base="xs:string">

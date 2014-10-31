@@ -132,7 +132,7 @@
 @h1-font-weight: @heading-font-weight-base;
 @h1-font-style: @heading-font-style-base;
 @h1-line-height: @heading-line-height-base;
-@h1-margin-top: @heading-margin-top-base;
+@h1-margin-top: 0;
 @h1-margin-bottom: @heading-margin-bottom-base;
 
 @h2-font-size: ceil((@font-size-base * 1.85)); // 26px
@@ -241,16 +241,16 @@
 @table-border-width: @border-width-base;
 @table-border-style: solid;
 
-@table-caption-hide: false; // Default value false, set true to hide caption
-@table-caption-font-size: @font-size-l;
-@table-caption-color: @text-color-intense;
+@table-caption-hide: true; // true, false
+@table-caption-font-size: false;
+@table-caption-color: false;
 @table-caption-font-family: false;
 @table-caption-font-weight: false;
 @table-caption-font-style: false;
 @table-caption-line-height: false;
-@table-caption-alignment: left;
-@table-caption-margin-top: @indent-base;
-@table-caption-margin-bottom: @indent-s-base;
+@table-caption-alignment: false;
+@table-caption-margin-top: false;
+@table-caption-margin-bottom: false;
 
 @table-td-font-size: false;
 @table-td-color: false;
@@ -511,7 +511,6 @@
 @accordion-content-border: @tab-content-border;
 
 @accordion-content-margin: 0 0 5px;
-
 @accordion-content-padding: @tab-content-padding-top @tab-content-padding-right @tab-content-padding-bottom @tab-content-padding-left;
 
 //
@@ -1039,7 +1038,7 @@
 
 // Field
 @form-field-type: block; //inline
-@form-field-type-revert: inline; // block, false
+@form-field-type-revert: inline; // inline, block, false
 @form-field-border: false;
 @form-field-column: false;
 @form-field-column-padding: 0 12px 0 0;
@@ -1058,7 +1057,8 @@
 @form-field-label-font-style: false;
 @form-field-label-line-height: false;
 @form-field-type-inline-label-margin: false;
-@form-field-type-inline-label-padding: 6px 15px 0 0;
+@form-field-type-inline-label-padding-top: 6px;
+@form-field-type-inline-label-padding: @form-field-type-inline-label-padding-top 15px 0 0;
 @form-field-type-inline-label-width: 25.8%;
 @form-field-type-inline-label-align: right;
 @form-field-type-block-label-margin: 0 0 5px;
@@ -1313,7 +1313,7 @@
 //
 //    Actions-toolbar variables
 //--------------------------------------
-@actions-toolbar-actions-position: justify; // left, right, center
+@actions-toolbar-actions-position: justify; // left, right, center, justify
 // Also used in: @popup-actions-toolbar-actions-position
 @actions-toolbar-actions-reverse: false; // true
 // Also used in: @popup-actions-toolbar-actions-position-reverse
@@ -1423,13 +1423,13 @@
 @popup-content-margin: false;
 @popup-footer-margin: false;
 
-@popup-title-headings: true; //false
+@popup-title-headings: true; // false
 @popup-title-headings-level: h3; // h1, h2, h3, h4, h5, h6
 
-@popup-action-toolbar: false; //true
+@popup-action-toolbar: false; // true
 
-@popup-button-close-icon: true; //false
-@popup-button-close-reset: true; //false
+@popup-button-close-icon: true; // false
+@popup-button-close-reset: true; // false
 @popup-button-close-position: absolute;
 @popup-button-close-position-top: 10px;
 @popup-button-close-position-right: 10px;

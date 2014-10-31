@@ -25,5 +25,7 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <update handle="sales_order_grid_block"/>
-    <block class="Magento\Backend\Block\Widget\Grid\Container" name="sales_order.grid.container" template="Magento_Backend::widget/grid/container/empty.phtml"/>
+    <body>
+        <block class="Magento\Backend\Block\Widget\Grid\Container" name="sales_order.grid.container" template="Magento_Backend::widget/grid/container/empty.phtml"/>
+    </body>
 </page>

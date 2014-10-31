@@ -24,11 +24,13 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <referenceBlock name="sales.order.view">
-        <block class="Magento\Shipping\Block\Tracking\Link" name="tracking-info-link" template="tracking/link.phtml">
-            <arguments>
-                <argument name="label" xsi:type="string">Track your order</argument>
-            </arguments>
-        </block>
-    </referenceBlock>
+    <body>
+        <referenceBlock name="sales.order.view">
+            <block class="Magento\Shipping\Block\Tracking\Link" name="tracking-info-link" template="tracking/link.phtml">
+                <arguments>
+                    <argument name="label" xsi:type="string">Track your order</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+    </body>
 </page>

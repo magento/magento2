@@ -24,7 +24,9 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <referenceBlock name="minicart">
-        <block class="Magento\Checkout\Block\Cart\Sidebar" name="checkout.cart.minicart.totals" template="cart/minicart/totals.phtml"/>
-    </referenceBlock>
+    <body>
+        <referenceBlock name="minicart">
+            <block class="Magento\Checkout\Block\Cart\Sidebar" name="checkout.cart.minicart.totals" template="cart/minicart/totals.phtml"/>
+        </referenceBlock>
+    </body>
 </page>

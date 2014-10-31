@@ -24,7 +24,9 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <referenceContainer name="js">
-        <block class="Magento\Backend\Block\Template" name="attribute_edit_js_configurable" template="Magento_ConfigurableProduct::catalog/product/attribute/js.phtml" after="attribute_edit_js"/>
-    </referenceContainer>
+    <body>
+        <referenceContainer name="js">
+            <block class="Magento\Backend\Block\Template" name="attribute_edit_js_configurable" template="Magento_ConfigurableProduct::catalog/product/attribute/js.phtml" after="attribute_edit_js"/>
+        </referenceContainer>
+    </body>
 </page>

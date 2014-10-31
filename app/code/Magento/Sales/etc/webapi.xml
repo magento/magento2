@@ -79,7 +79,7 @@
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
-    <route url="/V1/order/:id" method="PUT">
+    <route url="/V1/order/:parentId" method="PUT">
         <service class="Magento\Sales\Service\V1\OrderWriteInterface" method="addressUpdate"/>
         <resources>
             <resource ref="Magento_Sales::sales" />

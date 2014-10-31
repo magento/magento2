@@ -32,12 +32,12 @@ use Magento\Bundle\Test\Fixture\BundleProduct;
 
 /**
  * Class View
- * Bundle product view block on the product page
+ * Bundle product view block on the product page.
  */
 class View extends \Magento\Catalog\Test\Block\Product\View
 {
     /**
-     * Customize and add to cart button selector
+     * Customize and add to cart button selector.
      *
      * @var string
      */
@@ -51,14 +51,14 @@ class View extends \Magento\Catalog\Test\Block\Product\View
     protected $bundleBlock = '//*[@id="product-options-wrapper"]//fieldset[contains(@class,"bundle")]';
 
     /**
-     * Selector for visible bundle options block
+     * Selector for visible bundle options block.
      *
      * @var string
      */
     protected $visibleOptions = '//*[@class="product-add-form"][contains(@style,"block")]';
 
     /**
-     * Get bundle options block
+     * Get bundle options block.
      *
      * @return Bundle
      */
@@ -82,7 +82,7 @@ class View extends \Magento\Catalog\Test\Block\Product\View
     }
 
     /**
-     * Return product options
+     * Return product options.
      *
      * @param FixtureInterface $product [optional]
      * @return array
@@ -99,7 +99,7 @@ class View extends \Magento\Catalog\Test\Block\Product\View
     }
 
     /**
-     * Fill in the option specified for the product
+     * Fill in the option specified for the product.
      *
      * @param FixtureInterface $product
      * @return void
@@ -118,17 +118,8 @@ class View extends \Magento\Catalog\Test\Block\Product\View
             $bundleCheckoutData = $product->getSelectionData();
         }
         if (!$this->getBundleBlock()->isVisible()) {
-            $this->_rootElement->find($this->customizeButton)->click();
+            $this->clickCustomize();
         }
-        $element = $this->_rootElement;
-        $this->_rootElement->waitUntil(
-            function () use ($element) {
-                $bundleOptionsBlock = $element->find($this->visibleOptions, Locator::SELECTOR_XPATH);
-                return $bundleOptionsBlock->isVisible() ? true : null;
-            }
-        );
         $this->getBundleBlock()->fillBundleOptions($bundleCheckoutData);
-
-        parent::fillOptions($product);
     }
 }

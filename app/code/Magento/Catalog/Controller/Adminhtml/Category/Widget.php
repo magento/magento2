@@ -33,19 +33,36 @@ use Magento\Framework\View\Element\BlockInterface;
 class Widget extends \Magento\Backend\App\Action
 {
     /**
+     * @var \Magento\Framework\View\LayoutFactory
+     */
+    protected $layoutFactory;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\View\LayoutFactory $layoutFactory
+    ) {
+        parent::__construct($context);
+        $this->layoutFactory = $layoutFactory;
+    }
+
+    /**
      * @return BlockInterface
      */
     protected function _getCategoryTreeBlock()
     {
-        return $this->_view->getLayout()->createBlock(
+        return $this->layoutFactory->create()->createBlock(
             'Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser',
             '',
-            array(
-                'data' => array(
+            [
+                'data' => [
                     'id' => $this->getRequest()->getParam('uniq_id'),
                     'use_massaction' => $this->getRequest()->getParam('use_massaction', false)
-                )
-            )
+                ]
+            ]
         );
     }
 }

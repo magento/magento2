@@ -23,7 +23,6 @@
  */
 namespace Magento\Framework\View\Element;
 
-
 use Magento\Framework\Object;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\View\LayoutInterface;

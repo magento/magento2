@@ -36,12 +36,12 @@
 
 <div class="table-wrapper grouped">
     <table class="table data grouped" id="super-product-table">
-        <caption class="table caption"><?php echo __('Grouped product items') ?></caption>
+        <caption class="table-caption"><?php echo __('Grouped product items') ?></caption>
         <thead>
         <tr>
-            <th class="col item"><?php echo __('Product Name') ?></th>
+            <th class="col item" scope="col"><?php echo __('Product Name') ?></th>
             <?php if ($_product->isSaleable()): ?>
-                <th class="col qty"><?php echo __('Qty') ?></th>
+                <th class="col qty" scope="col"><?php echo __('Qty') ?></th>
             <?php endif; ?>
         </tr>
         </thead>
@@ -50,7 +50,7 @@
         <?php foreach ($_associatedProducts as $_item): ?>
         <tbody>
             <tr>
-                <td class="col item">
+                <td data-th="<?php echo $this->escapeHtml(__('Product Name')); ?>" class="col item">
                     <strong class="product name"><?php echo $this->escapeHtml($_item->getName()) ?></strong>
                     <?php if ($this->getCanShowProductPrice($_product)): ?>
                         <?php if ($this->getCanShowProductPrice($_item)): ?>
@@ -59,7 +59,7 @@
                      <?php endif; ?>
                 </td>
                 <?php if ($_product->isSaleable()): ?>
-                <td class="col qty">
+                <td data-th="<?php echo $this->escapeHtml(__('Qty')); ?>"  class="col qty">
                 <?php if ($_item->isSaleable()) : ?>
                     <div class="control qty">
                         <input type="number" name="super_group[<?php echo $_item->getId() ?>]"

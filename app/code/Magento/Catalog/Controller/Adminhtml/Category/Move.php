@@ -27,16 +27,36 @@ namespace Magento\Catalog\Controller\Adminhtml\Category;
 class Move extends \Magento\Catalog\Controller\Adminhtml\Category
 {
     /**
+     * @var \Magento\Framework\Controller\Result\RawFactory
+     */
+    protected $resultRawFactory;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+     * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
+        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+    ) {
+        parent::__construct($context, $resultRedirectFactory);
+        $this->resultRawFactory = $resultRawFactory;
+    }
+
+    /**
      * Move category action
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Raw
      */
     public function execute()
     {
+        /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
+        $resultRaw = $this->resultRawFactory->create();
         $category = $this->_initCategory();
         if (!$category) {
-            $this->getResponse()->setBody(__('There was a category move error.'));
-            return;
+            return $resultRaw->setContents(__('There was a category move error.'));
         }
         /**
          * New parent category identifier
@@ -49,12 +69,13 @@ class Move extends \Magento\Catalog\Controller\Adminhtml\Category
 
         try {
             $category->move($parentNodeId, $prevNodeId);
-            $this->getResponse()->setBody('SUCCESS');
+            $resultRaw->setContents('SUCCESS');
         } catch (\Magento\Framework\Model\Exception $e) {
-            $this->getResponse()->setBody($e->getMessage());
+            $resultRaw->setContents($e->getMessage());
         } catch (\Exception $e) {
-            $this->getResponse()->setBody(__('There was a category move error %1', $e));
+            $resultRaw->setContents(__('There was a category move error %1', $e));
             $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
         }
+        return $resultRaw;
     }
 }

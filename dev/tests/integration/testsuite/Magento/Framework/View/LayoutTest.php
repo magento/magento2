@@ -38,22 +38,25 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
      */
     protected $_layout;
 
+    /**
+     * @var \Magento\Framework\View\LayoutFactory
+     */
+    protected $layoutFactory;
+
     protected function setUp()
     {
-        $this->_layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\Layout'
-        );
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->layoutFactory = $objectManager->get('Magento\Framework\View\LayoutFactory');
+        $this->_layout = $this->layoutFactory->create();
     }
 
     public function testConstructorStructure()
     {
-        $structure = new \Magento\Framework\Data\Structure();
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $structure = $objectManager->get('Magento\Framework\View\Layout\Data\Structure');
         $structure->createElement('test.container', array());
         /** @var $layout \Magento\Framework\View\LayoutInterface */
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\View\Layout',
-            array('structure' => $structure)
-        );
+        $layout = $this->layoutFactory->create(['structure' => $structure]);
         $this->assertTrue($layout->hasElement('test.container'));
     }
 
@@ -125,12 +128,12 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals(array(), $this->_layout->getAllBlocks());
         $this->_layout->generateElements();
-        $expected = array('block1', 'block1_schedule_block', 'schedule_block', 'schedule_block_1');
+        $expected = array('block1', 'block1_schedule_block0', 'schedule_block1', 'schedule_block2');
         $this->assertSame($expected, array_keys($this->_layout->getAllBlocks()));
-        $child = $this->_layout->getBlock('block1_schedule_block');
+        $child = $this->_layout->getBlock('block1_schedule_block0');
         $this->assertSame($this->_layout->getBlock('block1'), $child->getParentBlock());
-        $this->assertEquals('test', $this->_layout->getBlock('schedule_block')->getData('template'));
-        $this->assertEquals('360', $this->_layout->getBlock('schedule_block')->getData('ttl'));
+        $this->assertEquals('test', $this->_layout->getBlock('schedule_block1')->getData('template'));
+        $this->assertEquals('360', $this->_layout->getBlock('schedule_block1')->getData('ttl'));
         $this->assertFalse($this->_layout->getBlock('nonexisting'));
     }
 

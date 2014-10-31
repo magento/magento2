@@ -41,10 +41,10 @@ class EditTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepareLayout($blockAttributes, $expected)
     {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $layoutFactory = $objectManager->get('Magento\Framework\View\LayoutFactory');
         /** @var $layout \Magento\Framework\View\LayoutInterface */
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
-        );
+        $layout = $layoutFactory->create();
 
         /** @var $block \Magento\UrlRewrite\Block\Catalog\Category\Edit */
         $block = $layout->createBlock(

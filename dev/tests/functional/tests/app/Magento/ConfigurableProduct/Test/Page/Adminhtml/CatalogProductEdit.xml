@@ -25,12 +25,17 @@
 -->
 <page mca="catalog/product/edit">
     <blocks>
+        <formPageActions>
+            <renders>
+                <configurable>
+                    <class>Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\FormPageActions</class>
+                </configurable>
+            </renders>
+        </formPageActions>
         <productForm>
             <renders>
                 <configurable>
                     <class>Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\ProductForm</class>
-                    <locator>[id="page:main-container"]</locator>
-                    <strategy>css selector</strategy>
                 </configurable>
             </renders>
         </productForm>

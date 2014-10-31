@@ -409,10 +409,10 @@ class TypeProcessor
      */
     public function translateTypeName($class)
     {
-        if (preg_match('/\\\\?(.*)\\\\(.*)\\\\Service\\\\\2?(.*)/', $class, $matches)) {
+        if (preg_match('/\\\\?(.*)\\\\(.*)\\\\(Service|Api)\\\\\2?(.*)/', $class, $matches)) {
             $moduleNamespace = $matches[1] == 'Magento' ? '' : $matches[1];
             $moduleName = $matches[2];
-            $typeNameParts = explode('\\', $matches[3]);
+            $typeNameParts = explode('\\', $matches[4]);
 
             return ucfirst($moduleNamespace . $moduleName . implode('', $typeNameParts));
         }

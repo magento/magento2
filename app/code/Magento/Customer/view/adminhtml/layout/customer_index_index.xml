@@ -23,12 +23,13 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <update handle="formkey"/>
     <update handle="customer_index_grid_block"/>
-    <referenceContainer name="content">
-        <block class="Magento\Customer\Block\Adminhtml\Customer" name="admin.block.customer.grid.container">
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\Customer\Block\Adminhtml\Customer" name="admin.block.customer.grid.container">
         </block>
-    </referenceContainer>
+        </referenceContainer>
+    </body>
 </page>

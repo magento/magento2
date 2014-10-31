@@ -24,13 +24,15 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <referenceContainer name="content">
-        <block class="Magento\Core\Block\RequireCookie" name="require-cookie" template="Magento_Core::require_cookie.phtml">
-            <arguments>
-                <argument name="triggers" xsi:type="array">
-                    <item name="addToWishlistLink" xsi:type="string">.action.towishlist</item>
-                </argument>
-            </arguments>
-        </block>
-    </referenceContainer>
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\Core\Block\RequireCookie" name="require-cookie" template="Magento_Core::require_cookie.phtml">
+                <arguments>
+                    <argument name="triggers" xsi:type="array">
+                        <item name="addToWishlistLink" xsi:type="string">.action.towishlist</item>
+                    </argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
 </page>

@@ -24,16 +24,22 @@
  */
 -->
 <constraint>
-    <assertTermsSuccessSaveMessage module="Magento_CheckoutAgreements">
+    <assertTermSuccessSaveMessage module="Magento_CheckoutAgreements">
         <severeness>low</severeness>
-    </assertTermsSuccessSaveMessage>
-    <assertTermsOnCheckout module="Magento_CheckoutAgreements">
+    </assertTermSuccessSaveMessage>
+    <assertTermOnCheckout module="Magento_CheckoutAgreements">
         <severeness>low</severeness>
-    </assertTermsOnCheckout>
-    <assertTermsAbsentOnCheckout module="Magento_CheckoutAgreements">
+    </assertTermOnCheckout>
+    <assertTermAbsentOnCheckout module="Magento_CheckoutAgreements">
         <severeness>low</severeness>
-    </assertTermsAbsentOnCheckout>
-    <assertTermsInGrid module="Magento_CheckoutAgreements">
+    </assertTermAbsentOnCheckout>
+    <assertTermInGrid module="Magento_CheckoutAgreements">
         <severeness>low</severeness>
-    </assertTermsInGrid>
+    </assertTermInGrid>
+    <assertTermSuccessDeleteMessage module="Magento_CheckoutAgreements">
+        <severeness>low</severeness>
+    </assertTermSuccessDeleteMessage>
+    <assertTermAbsentInGrid module="Magento_CheckoutAgreements">
+        <severeness>low</severeness>
+    </assertTermAbsentInGrid>
 </constraint>

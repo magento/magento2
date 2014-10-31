@@ -37,13 +37,13 @@
                class="cart items data"
                data-mage-init='{"shoppingCart":{"emptyCartButton": "action.clear",
                "updateCartActionContainer": "#update_cart_action_container"}}'>
-            <caption><?php echo __('Shopping Cart Items') ?></caption>
+            <caption class="table-caption"><?php echo __('Shopping Cart Items') ?></caption>
             <thead>
                 <tr>
-                    <th class="col item"><span><?php echo __('Item') ?></span></th>
-                    <th class="col price"><span><?php echo __('Price') ?></span></th>
-                    <th class="col qty"><span><?php echo __('Qty') ?></span></th>
-                    <th class="col subtotal"><span><?php echo __('Subtotal') ?></span></th>
+                    <th class="col item" scope="col"><span><?php echo __('Item') ?></span></th>
+                    <th class="col price" scope="col"><span><?php echo __('Price') ?></span></th>
+                    <th class="col qty" scope="col"><span><?php echo __('Qty') ?></span></th>
+                    <th class="col subtotal" scope="col"><span><?php echo __('Subtotal') ?></span></th>
                 </tr>
             </thead>
             <?php foreach($this->getItems() as $_item): ?>

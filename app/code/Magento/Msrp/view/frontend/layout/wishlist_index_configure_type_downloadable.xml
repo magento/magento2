@@ -24,9 +24,11 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <referenceBlock name="product.price.link">
-        <arguments>
-            <argument name="display_msrp_help_message" xsi:type="string">1</argument>
-        </arguments>
-    </referenceBlock>
+    <body>
+        <referenceBlock name="product.price.link">
+            <arguments>
+                <argument name="display_msrp_help_message" xsi:type="string">1</argument>
+            </arguments>
+        </referenceBlock>
+    </body>
 </page>

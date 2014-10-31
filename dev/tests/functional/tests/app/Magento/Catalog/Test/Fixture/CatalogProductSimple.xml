@@ -485,6 +485,10 @@
             <backend_type>virtual</backend_type>
             <group>advanced-pricing</group>
         </recurring_payment>
+        <is_virtual>
+            <attribute_code>is_virtual</attribute_code>
+            <backend_type>virtual</backend_type>
+        </is_virtual>
     </fields>
     <data_set>
         <sku></sku>

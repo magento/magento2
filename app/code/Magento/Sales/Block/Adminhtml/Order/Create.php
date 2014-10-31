@@ -101,10 +101,20 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
             'deleteConfirm(\'' . $confirm . '\', \'' . $this->getCancelUrl() . '\')'
         );
 
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return $this
+     */
+    protected function _prepareLayout()
+    {
         $pageTitle = $this->getLayout()->createBlock('Magento\Sales\Block\Adminhtml\Order\Create\Header')->toHtml();
         if (is_object($this->getLayout()->getBlock('page-title'))) {
             $this->getLayout()->getBlock('page-title')->setPageTitle($pageTitle);
         }
+        return parent::_prepareLayout();
     }
 
     /**

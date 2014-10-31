@@ -24,11 +24,13 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <referenceContainer name="checkout.multishipping.overview.items.after">
-        <block class="Magento\Centinel\Block\Authentication" name="centinel.frame" template="authentication.phtml">
-            <action method="setAuthenticationStartMode">
-                <argument name="mode" xsi:type="string">window</argument>
-            </action>
-        </block>
-    </referenceContainer>
+    <body>
+        <referenceContainer name="checkout.multishipping.overview.items.after">
+            <block class="Magento\Centinel\Block\Authentication" name="centinel.frame" template="authentication.phtml">
+                <action method="setAuthenticationStartMode">
+                    <argument name="mode" xsi:type="string">window</argument>
+                </action>
+            </block>
+        </referenceContainer>
+    </body>
 </page>

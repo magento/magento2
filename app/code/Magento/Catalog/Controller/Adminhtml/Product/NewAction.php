@@ -35,29 +35,44 @@ class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product
     protected $stockFilter;
 
     /**
+     * @var \Magento\Framework\View\Result\PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * @var \Magento\Backend\Model\View\Result\ForwardFactory
+     */
+    protected $resultForwardFactory;
+
+    /**
      * @param Action\Context $context
      * @param Builder $productBuilder
      * @param Initialization\StockDataFilter $stockFilter
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         Product\Builder $productBuilder,
-        Initialization\StockDataFilter $stockFilter
+        Initialization\StockDataFilter $stockFilter,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
+        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
     ) {
         $this->stockFilter = $stockFilter;
         parent::__construct($context, $productBuilder);
+        $this->resultPageFactory = $resultPageFactory;
+        $this->resultForwardFactory = $resultForwardFactory;
     }
 
     /**
      * Create new product page
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
         if (!$this->getRequest()->getParam('set')) {
-            $this->_forward('noroute');
-            return;
+            return $this->resultForwardFactory->create()->forward('noroute');
         }
         $this->_title->add(__('Products'));
 
@@ -74,29 +89,20 @@ class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product
 
         $this->_eventManager->dispatch('catalog_product_new_action', array('product' => $product));
 
+        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        $resultPage = $this->resultPageFactory->create();
         if ($this->getRequest()->getParam('popup')) {
-            $this->_view->loadLayout(array(
-                'default',
-                'popup',
-                strtolower($this->_request->getFullActionName()),
-                'catalog_product_' . $product->getTypeId()
-            ));
+            $resultPage->addHandle(['popup', 'catalog_product_' . $product->getTypeId()]);
         } else {
-            $this->_view->loadLayout(
-                array(
-                    'default',
-                    strtolower($this->_request->getFullActionName()),
-                    'catalog_product_' . $product->getTypeId()
-                )
-            );
-            $this->_setActiveMenu('Magento_Catalog::catalog_products');
+            $resultPage->addHandle(['catalog_product_' . $product->getTypeId()]);
+            $resultPage->setActiveMenu('Magento_Catalog::catalog_products');
         }
 
-        $block = $this->_view->getLayout()->getBlock('catalog.wysiwyg.js');
+        $block = $resultPage->getLayout()->getBlock('catalog.wysiwyg.js');
         if ($block) {
             $block->setStoreId($product->getStoreId());
         }
 
-        $this->_view->renderLayout();
+        return $resultPage;
     }
 }

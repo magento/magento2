@@ -24,94 +24,80 @@
 ?>
 <?php /* @var $this \Magento\Sales\Block\Order\PrintOrder\Shipment */ ?>
 <?php $order = $this->getOrder(); ?>
-<div class="page-title">
-    <h1 class="title">
-        <?php echo __('Order #%1', $this->getObjectData($order, 'real_order_id')); ?>
-    </h1>
-</div>
-<p class="order-date"><?php echo __('Order Date: %1', $this->formatDate($this->getObjectData($order, 'created_at_store_date'), 'long')) ?></p>
 <?php if (!$this->getObjectData($order, 'is_virtual')): ?>
 <?php foreach ($this->getShipmentsCollection() as $shipment): ?>
-    <div class="order details view">
-        <div class="title">
+    <div class="order-details-items shipments">
+        <div class="order-title">
             <strong><?php echo __('Shipment #%1', $this->getObjectData($shipment, 'increment_id')); ?></strong>
         </div>
-
-        <div class="block order shipping address">
-            <div class="title">
-                <strong><?php echo __('Shipping Address') ?></strong>
-            </div>
-            <div class="content">
-                <address><?php echo $this->getShipmentAddressFormattedHtml($shipment); ?></address>
-            </div>
+        <div class="table-wrapper order-items-shipment">
+            <table class="data table table-order-items shipment" id="my-shipment-table-<?php echo $this->getObjectData($shipment, 'id') ?>">
+                <caption class="table-caption"><?php echo __('Items Invoiced') ?></caption>
+                <thead>
+                <tr>
+                    <th class="col name"><?php echo __('Product Name') ?></th>
+                    <th class="col sku"><?php echo __('SKU') ?></th>
+                    <th class="col price"><?php echo __('Qty Shipped') ?></th>
+                </tr>
+                </thead>
+                <?php foreach ($this->getShipmentItems($shipment) as $item): ?>
+                <tbody>
+                    <?php echo $this->getItemHtml($item) ?>
+                </tbody>
+                <?php endforeach; ?>
+            </table>
         </div>
+        <div class="block block-order-details-view">
+            <div class="block-title">
+                <strong><?php echo __('Order Information') ?></strong>
+            </div>
+            <div class="block-content">
+                <div class="box box-order-shipping-address">
+                    <div class="box-title">
+                        <strong><?php echo __('Shipping Address') ?></strong>
+                    </div>
+                    <div class="box-content">
+                        <address><?php echo $this->getShipmentAddressFormattedHtml($shipment); ?></address>
+                    </div>
+                </div>
 
-        <div class="block order billing address">
-            <div class="title">
-                <strong><?php echo __('Billing Address') ?></strong>
-            </div>
-            <div class="content">
-                <address><?php echo $this->getBillingAddressFormattedHtml($order); ?></address>
-            </div>
-        </div>
-
-        <div class="block order shipping method">
-            <div class="title">
-                <strong><?php echo __('Shipping Method') ?></strong>
-            </div>
-            <?php echo $this->escapeHtml($this->getObjectData($order, 'shipping_description')); ?>
-            <?php $tracks = $this->getShipmentTracks($shipment);
-            if ($tracks): ?>
-                <table class="data table order tracking" id="my-shipment-tracking">
-                    <thead>
-                    <tr>
-                        <th class="col label"><?php echo __('Title')?></th>
-                        <th class="col number"><?php echo __('Number')?></th>
-                    </tr>
-                    </thead>
-                    <tbody>
+                <div class="box box-order-shipping-method">
+                    <div class="box-title">
+                        <strong><?php echo __('Shipping Method') ?></strong>
+                    </div>
+                    <div class="box-content">
+                    <?php echo $this->escapeHtml($this->getObjectData($order, 'shipping_description')); ?>
+                    <?php $tracks = $this->getShipmentTracks($shipment);
+                    if ($tracks): ?>
+                        <dl class="order-tracking">
                         <?php foreach ($tracks as $track): ?>
-                    <tr>
-                        <td class="col label"><?php echo $this->escapeHtml($this->getObjectData($track, 'title')); ?></td>
-                        <td class="col number"><?php echo $this->escapeHtml($this->getObjectData($track, 'number')); ?></td>
-                    </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            <?php endif; ?>
-        </div>
+                            <dt class="tracking-title"><?php echo $this->escapeHtml($this->getObjectData($track, 'title')); ?></dt>
+                            <dd class="tracking-content"><?php echo $this->escapeHtml($this->getObjectData($track, 'number')); ?></dd>
+                            <?php endforeach; ?>
+                        </dl>
+                    <?php endif; ?>
+                    </div>
+                </div>
 
-        <div class="block order payment-method">
-            <div class="title">
-                <strong><?php echo __('Payment Method') ?></strong>
-            </div>
-            <div class="content">
-                <?php echo $this->getPaymentInfoHtml() ?>
-            </div>
-        </div>
+                <div class="box box-order-billing-method">
+                    <div class="box-title">
+                        <strong><?php echo __('Billing Address') ?></strong>
+                    </div>
+                    <div class="box-content">
+                        <address><?php echo $this->getBillingAddressFormattedHtml($order); ?></address>
+                    </div>
+                </div>
 
-    </div>
-    <div class="order-details-items">
-        <div class="order-title">
-            <strong><?php echo __('Items Shipped') ?></strong>
+                <div class="box box-order-billing-method">
+                    <div class="box-title">
+                        <strong><?php echo __('Payment Method') ?></strong>
+                    </div>
+                    <div class="box-content">
+                        <?php echo $this->getPaymentInfoHtml() ?>
+                    </div>
+                </div>
+            </div>
         </div>
-        <table class="data table order items" id="my-shipment-table-<?php echo $this->getObjectData($shipment, 'id') ?>">
-            <thead>
-            <tr>
-                <th class="col name"><?php echo __('Product Name') ?></th>
-                <th class="col sku"><?php echo __('SKU') ?></th>
-                <th class="col price"><span class="nobr"><?php echo __('Qty Shipped') ?></span></th>
-            </tr>
-            </thead>
-            <?php foreach ($this->getShipmentItems($shipment) as $item): ?>
-            <tbody>
-                <?php echo $this->getItemHtml($item) ?>
-            </tbody>
-            <?php endforeach; ?>
-        </table>
     </div>
     <?php endforeach; ?>
 <?php endif; ?>
-<script type="text/javascript">
-window.print();
-</script>

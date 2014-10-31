@@ -24,10 +24,12 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <referenceBlock name="checkout.cart.item.renderers">
-        <block class="Magento\Downloadable\Block\Checkout\Cart\Item\Renderer" as="downloadable" template="checkout/cart/item/default.phtml"/>
-    </referenceBlock>
-    <referenceBlock name="additional.product.info">
-        <block class="Magento\Framework\View\Element\Template" name="downloadable.product.links" template="Magento_Downloadable::checkout/links.phtml"/>
-    </referenceBlock>
+    <body>
+        <referenceBlock name="checkout.cart.item.renderers">
+            <block class="Magento\Downloadable\Block\Checkout\Cart\Item\Renderer" as="downloadable" template="checkout/cart/item/default.phtml"/>
+        </referenceBlock>
+        <referenceBlock name="additional.product.info">
+            <block class="Magento\Framework\View\Element\Template" name="downloadable.product.links" template="Magento_Downloadable::checkout/links.phtml"/>
+        </referenceBlock>
+    </body>
 </page>

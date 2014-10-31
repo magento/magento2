@@ -246,13 +246,13 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             ->withConsecutive(
                 [
                     $filePath,
-                    Generator::VIRTUAL_CONTENT_TYPE_LINK,
+                    Generator\Head::VIRTUAL_CONTENT_TYPE_LINK,
                     ['attributes' => ['rel' => 'icon', 'type' => 'image/x-icon']],
                     'icon'
                 ],
                 [
                     $filePath,
-                    Generator::VIRTUAL_CONTENT_TYPE_LINK,
+                    Generator\Head::VIRTUAL_CONTENT_TYPE_LINK,
                     ['attributes' => ['rel' => 'shortcut icon', 'type' => 'image/x-icon']],
                     'shortcut-icon'
                 ]

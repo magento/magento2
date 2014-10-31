@@ -27,6 +27,41 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Set;
 class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
 {
     /**
+     * @var \Magento\Framework\View\LayoutFactory
+     */
+    protected $layoutFactory;
+
+    /**
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\JSONFactory
+     */
+    protected $resultJsonFactory;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\Framework\View\LayoutFactory $layoutFactory,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
+        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+    ) {
+        parent::__construct($context, $coreRegistry);
+        $this->layoutFactory = $layoutFactory;
+        $this->resultRedirectFactory = $resultRedirectFactory;
+        $this->resultJsonFactory = $resultJsonFactory;
+    }
+
+    /**
      * Retrieve catalog product entity type id
      *
      * @return int
@@ -45,7 +80,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
      * [POST] Create attribute set from another set and redirect to edit page
      * [AJAX] Save attribute set data
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
@@ -55,11 +90,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
         $isNewSet = $this->getRequest()->getParam('gotoEdit', false) == '1';
 
         /* @var $model \Magento\Eav\Model\Entity\Attribute\Set */
-        $model = $this->_objectManager->create(
-            'Magento\Eav\Model\Entity\Attribute\Set'
-        )->setEntityTypeId(
-            $entityTypeId
-        );
+        $model = $this->_objectManager->create('Magento\Eav\Model\Entity\Attribute\Set')
+            ->setEntityTypeId($entityTypeId);
 
         /** @var $filterManager \Magento\Framework\Filter\FilterManager */
         $filterManager = $this->_objectManager->get('Magento\Framework\Filter\FilterManager');
@@ -76,11 +108,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
                 if (!$model->getId()) {
                     throw new \Magento\Framework\Model\Exception(__('This attribute set no longer exists.'));
                 }
-                $data = $this->_objectManager->get(
-                    'Magento\Core\Helper\Data'
-                )->jsonDecode(
-                    $this->getRequest()->getPost('data')
-                );
+                $data = $this->_objectManager->get('Magento\Core\Helper\Data')
+                    ->jsonDecode($this->getRequest()->getPost('data'));
 
                 //filter html tags
                 $data['attribute_set_name'] = $filterManager->stripTags($data['attribute_set_name']);
@@ -106,34 +135,35 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
         if ($isNewSet) {
             if ($this->getRequest()->getPost('return_session_messages_only')) {
                 /** @var $block \Magento\Framework\View\Element\Messages */
-                $block = $this->_objectManager->get('Magento\Framework\View\Element\Messages');
+                $block = $this->layoutFactory->create()->getMessagesBlock();
                 $block->setMessages($this->messageManager->getMessages(true));
-                $body = $this->_objectManager->get(
-                    'Magento\Core\Helper\Data'
-                )->jsonEncode(
-                    array('messages' => $block->getGroupedHtml(), 'error' => $hasError, 'id' => $model->getId())
-                );
-                $this->getResponse()->representJson($body);
+                $body = [
+                    'messages' => $block->getGroupedHtml(),
+                    'error' => $hasError,
+                    'id' => $model->getId()
+                ];
+                return $this->resultJsonFactory->create()->setData($body);
             } else {
+                $resultRedirect = $this->resultRedirectFactory->create();
                 if ($hasError) {
-                    $this->_redirect('catalog/*/add');
+                    $resultRedirect->setPath('catalog/*/add');
                 } else {
-                    $this->_redirect('catalog/*/edit', array('id' => $model->getId()));
+                    $resultRedirect->setPath('catalog/*/edit', ['id' => $model->getId()]);
                 }
+                return $resultRedirect;
             }
         } else {
             $response = array();
             if ($hasError) {
-                $this->_view->getLayout()->initMessages();
+                $layout = $this->layoutFactory->create();
+                $layout->initMessages();
                 $response['error'] = 1;
-                $response['message'] = $this->_view->getLayout()->getMessagesBlock()->getGroupedHtml();
+                $response['message'] = $layout->getMessagesBlock()->getGroupedHtml();
             } else {
                 $response['error'] = 0;
                 $response['url'] = $this->getUrl('catalog/*/');
             }
-            $this->getResponse()->representJson(
-                $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response)
-            );
+            return $this->resultJsonFactory->create()->setData($response);
         }
     }
 }

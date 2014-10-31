@@ -91,21 +91,20 @@ class View extends \Magento\Catalog\Test\Block\Product\View
         $downloadableLinks = isset($productData['downloadable_links']['downloadable']['link'])
             ? $productData['downloadable_links']['downloadable']['link']
             : [];
-        $data = $product->getCheckoutData()['options'];
+        $checkoutData = $product->getCheckoutData();
+        if (isset($checkoutData['options'])) {
+            // Replace link key to label
+            foreach ($checkoutData['options']['links'] as $key => $linkData) {
+                $linkKey = str_replace('link_', '', $linkData['label']);
 
-        // Replace link key to label
-        foreach ($data['links'] as $key => $linkData) {
-            $linkKey = str_replace('link_', '', $linkData['label']);
+                $linkData['label'] = isset($downloadableLinks[$linkKey]['title'])
+                    ? $downloadableLinks[$linkKey]['title']
+                    : $linkData['label'];
 
-            $linkData['label'] = isset($downloadableLinks[$linkKey]['title'])
-                ? $downloadableLinks[$linkKey]['title']
-                : $linkData['label'];
-
-            $data['links'][$key] = $linkData;
+                $checkoutData['options']['links'][$key] = $linkData;
+            }
+            $this->getDownloadableLinksBlock()->fill($checkoutData['options']['links']);
         }
-
-        $this->getDownloadableLinksBlock()->fill($data['links']);
-        parent::fillOptions($product);
     }
 
     /**

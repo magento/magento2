@@ -32,11 +32,12 @@
 <?php else: ?>
 
     <table class="data table">
+        <caption class="table-caption"><?php echo __('Recurring Payment'); ?></caption>
         <tbody>
         <?php foreach ($this->getRenderedInfo() as $row): ?>
             <?php $isAmount = $this->getObjectData($row, 'is_amount'); ?>
             <tr>
-                <th class="col label"><?php echo $this->escapeHtml($this->getObjectData($row, 'label')) ?>:</th>
+                <th class="col label" scope="row"><?php echo $this->escapeHtml($this->getObjectData($row, 'label')) ?>:</th>
                 <td class="col value"><?php echo $this->renderRowValue($row) ?></td>
             </tr>
         <?php endforeach; ?>

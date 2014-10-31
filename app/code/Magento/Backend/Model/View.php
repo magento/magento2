@@ -38,7 +38,7 @@ class View extends \Magento\Framework\App\View
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\View\Result\PageFactory $pageFactory
      * @param \Magento\Framework\App\ActionFlag $actionFlag
-     * @param Layout\Filter\Acl $aclFilter
+     * @param View\Layout\Filter\Acl $aclFilter
      */
     public function __construct(
         \Magento\Framework\View\LayoutInterface $layout,
@@ -48,7 +48,7 @@ class View extends \Magento\Framework\App\View
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\View\Result\PageFactory $pageFactory,
         \Magento\Framework\App\ActionFlag $actionFlag,
-        Layout\Filter\Acl $aclFilter
+        View\Layout\Filter\Acl $aclFilter
     ) {
         $this->_aclFilter = $aclFilter;
         parent::__construct($layout, $request, $response, $configScope, $eventManager, $pageFactory, $actionFlag);

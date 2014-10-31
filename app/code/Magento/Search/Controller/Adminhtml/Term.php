@@ -28,13 +28,32 @@ use Magento\Backend\App\Action;
 class Term extends \Magento\Backend\App\Action
 {
     /**
-     * @return $this
+     * @var \Magento\Framework\View\Result\PageFactory
      */
-    protected function _initAction()
+    protected $resultPageFactory;
+
+    /**
+     * @param Action\Context $context
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory
+    ) {
+        parent::__construct($context);
+        $this->resultPageFactory = $resultPageFactory;
+    }
+
+    /**
+     * @return \Magento\Backend\Model\View\Result\Page
+     */
+    protected function createPage()
     {
-        $this->_view->loadLayout();
-        $this->_setActiveMenu('Magento_Search::search_term')->_addBreadcrumb(__('Search'), __('Search'));
-        return $this;
+        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        $resultPage = $this->resultPageFactory->create();
+        $resultPage->setActiveMenu('Magento_Search::search_term')
+            ->addBreadcrumb(__('Search'), __('Search'));
+        return $resultPage;
     }
 
     /**

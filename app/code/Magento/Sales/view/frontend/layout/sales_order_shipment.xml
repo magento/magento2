@@ -25,19 +25,21 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <update handle="customer_account"/>
-    <referenceContainer name="page.main.title">
-        <block class="Magento\Sales\Block\Order\Info" name="order.status" template="order/order_status.phtml" />
-        <block class="Magento\Sales\Block\Order\Info" name="order.date" template="order/order_date.phtml" />
-        <container name="order.actions.container" htmlTag="div" htmlClass="actions-toolbar order-actions-toolbar">
-            <block class="Magento\Sales\Block\Order\Info\Buttons" as="buttons" name="sales.order.info.buttons" cacheable="false"/>
-        </container>
-    </referenceContainer>
-    <referenceContainer name="sales.order.info.buttons">
-        <block class="Magento\Sales\Block\Order\Info\Buttons\Rss" as="buttons.rss" name="sales.order.info.buttons.rss" cacheable="false"/>
-    </referenceContainer>
-    <referenceContainer name="content">
-        <block class="Magento\Sales\Block\Order\Info" as="info" name="sales.order.info" after="sales.order.shipment" />
-    </referenceContainer>
     <update handle="sales_order_info_links"/>
-    <block class="Magento\Framework\View\Element\Template" name="additional.product.info" template="Magento_Core::template.phtml"/>
+    <body>
+        <referenceContainer name="page.main.title">
+            <block class="Magento\Sales\Block\Order\Info" name="order.status" template="order/order_status.phtml"/>
+            <block class="Magento\Sales\Block\Order\Info" name="order.date" template="order/order_date.phtml"/>
+            <container name="order.actions.container" htmlTag="div" htmlClass="actions-toolbar order-actions-toolbar">
+                <block class="Magento\Sales\Block\Order\Info\Buttons" as="buttons" name="sales.order.info.buttons" cacheable="false"/>
+            </container>
+        </referenceContainer>
+        <referenceContainer name="sales.order.info.buttons">
+            <block class="Magento\Sales\Block\Order\Info\Buttons\Rss" as="buttons.rss" name="sales.order.info.buttons.rss" cacheable="false"/>
+        </referenceContainer>
+        <referenceContainer name="content">
+            <block class="Magento\Sales\Block\Order\Info" as="info" name="sales.order.info" after="sales.order.shipment"/>
+        </referenceContainer>
+        <block class="Magento\Framework\View\Element\Template" name="additional.product.info" template="Magento_Core::template.phtml"/>
+    </body>
 </page>

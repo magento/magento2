@@ -27,7 +27,7 @@ namespace Magento\Backend\Controller\Adminhtml\System\Store;
 class EditStore extends \Magento\Backend\Controller\Adminhtml\System\Store
 {
     /**
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
@@ -87,13 +87,14 @@ class EditStore extends \Magento\Backend\Controller\Adminhtml\System\Store
                 $this->messageManager->addNotice($codeBase);
             }
 
-            $this->_initAction()->_addContent(
-                $this->_view->getLayout()->createBlock('Magento\Backend\Block\System\Store\Edit')
-            );
-            $this->_view->renderLayout();
+            $resultPage = $this->createPage();
+            $resultPage->addContent($resultPage->getLayout()->createBlock('Magento\Backend\Block\System\Store\Edit'));
+            return $resultPage;
         } else {
             $this->messageManager->addError($notExists);
-            $this->_redirect('adminhtml/*/');
+            /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+            $resultRedirect = $this->resultRedirectFactory->create();
+            return $resultRedirect->setPath('adminhtml/*/');
         }
     }
 }

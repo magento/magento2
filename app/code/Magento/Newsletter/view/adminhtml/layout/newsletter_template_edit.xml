@@ -24,12 +24,14 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <update handle="editor"/>
     <head>
         <css src="jquery/fileUploader/css/jquery.fileupload-ui.css"/>
         <link src="jquery/fileUploader/bootstrap.js"/>
     </head>
-    <referenceContainer name="content">
-        <block class="Magento\Newsletter\Block\Adminhtml\Template\Edit" name="template_edit" template="template/edit.phtml"/>
-    </referenceContainer>
+    <update handle="editor"/>
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\Newsletter\Block\Adminhtml\Template\Edit" name="template_edit" template="template/edit.phtml"/>
+        </referenceContainer>
+    </body>
 </page>

@@ -24,7 +24,9 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <referenceContainer name="product.info.extrahint">
-        <block class="Magento\CatalogInventory\Block\Qtyincrements" name="product.info.extrahint.qtyincrements" template="qtyincrements.phtml"/>
-    </referenceContainer>
+    <body>
+        <referenceContainer name="product.info.extrahint">
+            <block class="Magento\CatalogInventory\Block\Qtyincrements" name="product.info.extrahint.qtyincrements" template="qtyincrements.phtml"/>
+        </referenceContainer>
+    </body>
 </page>

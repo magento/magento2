@@ -24,14 +24,16 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <referenceBlock name="product.info.main">
-        <block class="Magento\RecurringPayment\Block\Catalog\Product\View\Payment" name="product.info.additional.recurring.schedule" as="recurring_info" template="catalog/product/view/payment/schedule.phtml" group="detailed_info">
-            <action method="setTitle">
-                <argument translate="true" name="value" xsi:type="string">Recurring Payment</argument>
-            </action>
-        </block>
-    </referenceBlock>
-    <referenceBlock name="product.info.options.wrapper">
-        <block class="Magento\RecurringPayment\Block\Catalog\Product\View\Payment" name="product.info.options.recurring" as="recurring_options" template="catalog/product/view/payment/options.phtml"/>
-    </referenceBlock>
+    <body>
+        <referenceBlock name="product.info.main">
+            <block class="Magento\RecurringPayment\Block\Catalog\Product\View\Payment" name="product.info.additional.recurring.schedule" as="recurring_info" template="catalog/product/view/payment/schedule.phtml" group="detailed_info">
+                <action method="setTitle">
+                    <argument translate="true" name="value" xsi:type="string">Recurring Payment</argument>
+                </action>
+            </block>
+        </referenceBlock>
+        <referenceBlock name="product.info.options.wrapper">
+            <block class="Magento\RecurringPayment\Block\Catalog\Product\View\Payment" name="product.info.options.recurring" as="recurring_options" template="catalog/product/view/payment/options.phtml"/>
+        </referenceBlock>
+    </body>
 </page>

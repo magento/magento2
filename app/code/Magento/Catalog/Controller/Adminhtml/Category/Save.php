@@ -27,6 +27,41 @@ namespace Magento\Catalog\Controller\Adminhtml\Category;
 class Save extends \Magento\Catalog\Controller\Adminhtml\Category
 {
     /**
+     * @var \Magento\Framework\Controller\Result\RawFactory
+     */
+    protected $resultRawFactory;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\JSONFactory
+     */
+    protected $resultJsonFactory;
+
+    /**
+     * @var \Magento\Framework\View\LayoutFactory
+     */
+    protected $layoutFactory;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+     * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
+        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
+        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory,
+        \Magento\Framework\View\LayoutFactory $layoutFactory
+    ) {
+        parent::__construct($context, $resultRedirectFactory);
+        $this->resultRawFactory = $resultRawFactory;
+        $this->resultJsonFactory = $resultJsonFactory;
+        $this->layoutFactory = $layoutFactory;
+    }
+
+    /**
      * Filter category data
      *
      * @param array $rawData
@@ -46,12 +81,15 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
     /**
      * Category save
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
-        if (!($category = $this->_initCategory())) {
-            return;
+        $category = $this->_initCategory();
+        if (!$category) {
+            /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+            $resultRedirect = $this->resultRedirectFactory->create();
+            return $resultRedirect->setPath('catalog/*/', ['_current' => true, 'id' => null]);
         }
 
         $storeId = $this->getRequest()->getParam('store');
@@ -147,17 +185,16 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             // to obtain truncated category name
 
             /** @var $block \Magento\Framework\View\Element\Messages */
-            $block = $this->_objectManager->get('Magento\Framework\View\Element\Messages');
+            $block = $this->layoutFactory->create()->getMessagesBlock();
             $block->setMessages($this->messageManager->getMessages(true));
-            $body = $this->_objectManager->get(
-                'Magento\Core\Helper\Data'
-            )->jsonEncode(
-                array(
-                    'messages' => $block->getGroupedHtml(),
-                    'error' => $refreshTree !== 'true',
-                    'category' => $category->toArray()
-                )
-            );
+
+            /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+            $resultJson = $this->resultJsonFactory->create();
+            return $resultJson->setData([
+                'messages' => $block->getGroupedHtml(),
+                'error' => $refreshTree !== 'true',
+                'category' => $category->toArray()
+            ]);
         } else {
             $url = $this->getUrl('catalog/*/edit', array('_current' => true, 'id' => $category->getId()));
             $body = '<script type="text/javascript">parent.updateContent("' .
@@ -166,7 +203,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
                 $refreshTree .
                 ');</script>';
         }
-
-        $this->getResponse()->setBody($body);
+        /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
+        $resultRaw = $this->resultRawFactory->create();
+        return $resultRaw->setContents($body);
     }
 }

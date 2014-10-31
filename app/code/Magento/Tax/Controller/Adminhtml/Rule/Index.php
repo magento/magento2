@@ -36,7 +36,5 @@ class Index extends \Magento\Tax\Controller\Adminhtml\Rule
         $this->_title->add(__('Tax Rules'));
         $this->_initAction();
         $this->_view->renderLayout();
-
-        return $this;
     }
 }

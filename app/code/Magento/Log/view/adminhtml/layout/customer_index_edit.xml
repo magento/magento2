@@ -24,7 +24,9 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <referenceBlock name="personal_info">
-        <block class="Magento\Log\Block\Adminhtml\Customer\Edit\Tab\View\Status" name="view_customer_status" template="customer/status.phtml"/>
-    </referenceBlock>
+    <body>
+        <referenceBlock name="personal_info">
+            <block class="Magento\Log\Block\Adminhtml\Customer\Edit\Tab\View\Status" name="view_customer_status" template="customer/status.phtml"/>
+        </referenceBlock>
+    </body>
 </page>

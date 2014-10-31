@@ -25,12 +25,14 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <update handle="multishipping_checkout"/>
-    <referenceBlock name="page.main.title">
-        <action method="setPageTitle">
-            <argument name="label" translate="true" xsi:type="string">Change Billing Address</argument>
-        </action>
-    </referenceBlock>
-    <referenceContainer name="content">
-        <block class="Magento\Multishipping\Block\Checkout\Address\Select" name="checkout_address_select" template="checkout/address/select.phtml" cacheable="false"/>
-    </referenceContainer>
+    <body>
+        <referenceBlock name="page.main.title">
+            <action method="setPageTitle">
+                <argument name="label" translate="true" xsi:type="string">Change Billing Address</argument>
+            </action>
+        </referenceBlock>
+        <referenceContainer name="content">
+            <block class="Magento\Multishipping\Block\Checkout\Address\Select" name="checkout_address_select" template="checkout/address/select.phtml" cacheable="false"/>
+        </referenceContainer>
+    </body>
 </page>

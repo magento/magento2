@@ -29,11 +29,29 @@ namespace Magento\Catalog\Controller\Adminhtml;
 class Category extends \Magento\Backend\App\Action
 {
     /**
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+    ) {
+        parent::__construct($context);
+        $this->resultRedirectFactory = $resultRedirectFactory;
+
+    }
+
+    /**
      * Initialize requested category and put it into registry.
      * Root category can be returned, if inappropriate store/category is specified
      *
      * @param bool $getRootInstead
-     * @return \Magento\Catalog\Model\Category
+     * @return \Magento\Catalog\Model\Category|false
      */
     protected function _initCategory($getRootInstead = false)
     {
@@ -57,7 +75,6 @@ class Category extends \Magento\Backend\App\Action
                     if ($getRootInstead) {
                         $category->load($rootId);
                     } else {
-                        $this->_redirect('catalog/*/', array('_current' => true, 'id' => null));
                         return false;
                     }
                 }
@@ -70,11 +87,8 @@ class Category extends \Magento\Backend\App\Action
         }
         $this->_objectManager->get('Magento\Framework\Registry')->register('category', $category);
         $this->_objectManager->get('Magento\Framework\Registry')->register('current_category', $category);
-        $this->_objectManager->get(
-            'Magento\Cms\Model\Wysiwyg\Config'
-        )->setStoreId(
-            $this->getRequest()->getParam('store')
-        );
+        $this->_objectManager->get('Magento\Cms\Model\Wysiwyg\Config')
+            ->setStoreId($this->getRequest()->getParam('store'));
         return $category;
     }
 

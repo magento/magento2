@@ -49,7 +49,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
         );
 
         $layout = $objectManager->create('Magento\Framework\View\Layout');
-        $block = $layout->addBlock('Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Main');
+        $block = $layout->createBlock('Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Main');
         $prepareFormMethod = new \ReflectionMethod(
             'Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Main',
             '_prepareForm'

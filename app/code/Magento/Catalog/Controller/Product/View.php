@@ -24,26 +24,76 @@
  */
 namespace Magento\Catalog\Controller\Product;
 
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\Controller\Result;
+use Magento\Framework\View\Result\PageFactory;
+
 class View extends \Magento\Catalog\Controller\Product
 {
     /**
+     * @var \Magento\Catalog\Helper\Product\View
+     */
+    protected $viewHelper;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\Redirect
+     */
+    protected $resultRedirectFactory;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\ForwardFactory
+     */
+    protected $resultForwardFactory;
+
+    /**
+     * @var \Magento\Framework\View\Result\PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * Constructor
+     *
+     * @param Context $context
+     * @param \Magento\Catalog\Helper\Product\View $viewHelper
+     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
+     * @param \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory
+     * @param PageFactory $resultPageFactory
+     */
+    public function __construct(
+        Context $context,
+        \Magento\Catalog\Helper\Product\View $viewHelper,
+        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
+        \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory,
+        PageFactory $resultPageFactory
+    ) {
+        $this->viewHelper = $viewHelper;
+        $this->resultRedirectFactory = $resultRedirectFactory;
+        $this->resultForwardFactory = $resultForwardFactory;
+        $this->resultPageFactory = $resultPageFactory;
+        parent::__construct($context);
+    }
+
+    /**
      * Redirect if product failed to load
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Redirect|\Magento\Framework\Controller\Result\Forward
      */
     protected function noProductRedirect()
     {
         if (isset($_GET['store']) && !$this->getResponse()->isRedirect()) {
-            $this->_redirect('');
+            $resultRedirect = $this->resultRedirectFactory->create();
+            return $resultRedirect->setPath('');
         } elseif (!$this->getResponse()->isRedirect()) {
-            $this->_forward('noroute');
+            $resultForward = $this->resultForwardFactory->create();
+            $resultForward->forward('noroute');
+            return $resultForward;
         }
     }
 
     /**
      * Product view action
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Forward|\Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
     {
@@ -55,33 +105,35 @@ class View extends \Magento\Catalog\Controller\Product
         if ($this->getRequest()->isPost() && $this->getRequest()->getParam(self::PARAM_NAME_URL_ENCODED)) {
             $product = $this->_initProduct();
             if (!$product) {
-                $this->noProductRedirect();
+                return $this->noProductRedirect();
             }
             if ($specifyOptions) {
                 $notice = $product->getTypeInstance()->getSpecifyOptionMessage();
                 $this->messageManager->addNotice($notice);
             }
-            $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
-            return;
+            $resultRedirect = $this->resultRedirectFactory->create();
+            $resultRedirect->setRefererOrBaseUrl();
+            return $resultRedirect;
         }
 
         // Prepare helper and params
-        /** @var \Magento\Catalog\Helper\Product\View $viewHelper */
-        $viewHelper = $this->_objectManager->get('Magento\Catalog\Helper\Product\View');
-
         $params = new \Magento\Framework\Object();
         $params->setCategoryId($categoryId);
         $params->setSpecifyOptions($specifyOptions);
 
         // Render page
         try {
-            $viewHelper->prepareAndRender($productId, $this, $params);
+            $page = $this->resultPageFactory->create(false, ['isIsolated' => true]);
+            $this->viewHelper->prepareAndRender($page, $productId, $this, $params);
+            return $page;
         } catch (\Exception $e) {
-            if ($e->getCode() == $viewHelper->ERR_NO_PRODUCT_LOADED) {
-                $this->noProductRedirect();
+            if ($e->getCode() == $this->viewHelper->ERR_NO_PRODUCT_LOADED) {
+                return $this->noProductRedirect();
             } else {
                 $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
-                $this->_forward('noroute');
+                $resultForward = $this->resultForwardFactory->create();
+                $resultForward->forward('noroute');
+                return $resultForward;
             }
         }
     }

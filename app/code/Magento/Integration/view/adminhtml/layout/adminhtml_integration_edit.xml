@@ -23,20 +23,22 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page layout="admin-2columns-left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <update handle="editor"/>
-    <referenceContainer name="left">
-        <block class="Magento\Integration\Block\Adminhtml\Integration\Edit\Tabs" name="integration_edit_tabs">
-            <block class="Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info" name="integration_edit_tab_info">
-                <block class="Magento\Integration\Block\Adminhtml\Integration\Tokens" name="integration_tokens"/>
+    <body>
+        <referenceContainer name="left">
+            <block class="Magento\Integration\Block\Adminhtml\Integration\Edit\Tabs" name="integration_edit_tabs">
+                <block class="Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info" name="integration_edit_tab_info">
+                    <block class="Magento\Integration\Block\Adminhtml\Integration\Tokens" name="integration_tokens"/>
+                </block>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">info_section</argument>
+                    <argument name="block" xsi:type="string">integration_edit_tab_info</argument>
+                </action>
             </block>
-            <action method="addTab">
-                <argument name="name" xsi:type="string">info_section</argument>
-                <argument name="block" xsi:type="string">integration_edit_tab_info</argument>
-            </action>
-        </block>
-    </referenceContainer>
-    <referenceContainer name="content">
-        <block class="Magento\Integration\Block\Adminhtml\Integration\Edit" name="integration_edit_content"/>
-    </referenceContainer>
+        </referenceContainer>
+        <referenceContainer name="content">
+            <block class="Magento\Integration\Block\Adminhtml\Integration\Edit" name="integration_edit_content"/>
+        </referenceContainer>
+    </body>
 </page>

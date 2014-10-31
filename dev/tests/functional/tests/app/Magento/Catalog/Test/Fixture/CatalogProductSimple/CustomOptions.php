@@ -67,6 +67,9 @@ class CustomOptions implements FixtureInterface
     public function __construct(array $params, array $data, FixtureFactory $fixtureFactory)
     {
         $this->params = $params;
+        $this->data = (!isset($data['preset']) && !isset($data['import_products'])) ? $data : [];
+        $this->customOptions = $this->data;
+
         if (isset($data['preset'])) {
             $this->data = $this->replaceData($this->getPreset($data['preset']), mt_rand());
             $this->customOptions = $this->data;
@@ -296,6 +299,12 @@ class CustomOptions implements FixtureInterface
                             'price' => 10,
                             'price_type' => 'Percent',
                             'sku' => 'sku_drop_down_row_1'
+                        ],
+                        [
+                            'title' => '20 percent',
+                            'price' => 20,
+                            'price_type' => 'Percent',
+                            'sku' => 'sku_drop_down_row_2'
                         ]
                     ]
                 ],

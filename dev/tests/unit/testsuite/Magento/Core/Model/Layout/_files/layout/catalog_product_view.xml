@@ -24,5 +24,7 @@
  */
 -->
 <page>
-    <container name="product.info.extrahint" as="extrahint" label="Product View Extra Hint"/>
+    <body>
+        <container name="product.info.extrahint" as="extrahint" label="Product View Extra Hint"/>
+    </body>
 </page>

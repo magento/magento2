@@ -87,6 +87,7 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_escaper;
 
     /**
+     * @deprecated
      * @var \Magento\Framework\App\ViewInterface
      */
     protected $_view;
@@ -97,6 +98,8 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
     protected $pageConfig;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Cms\Model\Page $page
@@ -184,6 +187,7 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
                 $this->_design->setDesignTheme($this->_page->getCustomTheme());
             }
         }
+        $resultPage = $this->_view->getPage();
         if ($this->_page->getPageLayout()) {
             if ($this->_page->getCustomPageLayout()
                 && $this->_page->getCustomPageLayout() != 'empty'
@@ -193,36 +197,34 @@ class Page extends \Magento\Framework\App\Helper\AbstractHelper
             } else {
                 $handle = $this->_page->getPageLayout();
             }
-            $this->pageConfig->setPageLayout($handle);
+            $resultPage->getConfig()->setPageLayout($handle);
         }
-        $this->_view->getPage()->initLayout();
-        $this->_view->getLayout()->getUpdate()->addHandle('cms_page_view');
-        $this->_view->addPageLayoutHandles(array('id' => $this->_page->getIdentifier()));
+        $resultPage->initLayout();
+        $resultPage->addHandle('cms_page_view');
+        $resultPage->addPageLayoutHandles(array('id' => $this->_page->getIdentifier()));
 
         $this->_eventManager->dispatch(
             'cms_page_render',
             array('page' => $this->_page, 'controller_action' => $action)
         );
 
-        $this->_view->loadLayoutUpdates();
         if ($this->_page->getCustomLayoutUpdateXml() && $inRange) {
             $layoutUpdate = $this->_page->getCustomLayoutUpdateXml();
         } else {
             $layoutUpdate = $this->_page->getLayoutUpdateXml();
         }
         if (!empty($layoutUpdate)) {
-            $this->_view->getLayout()->getUpdate()->addUpdate($layoutUpdate);
+            $resultPage->getLayout()->getUpdate()->addUpdate($layoutUpdate);
         }
-        $this->_view->generateLayoutXml()->generateLayoutBlocks();
 
-        $contentHeadingBlock = $this->_view->getLayout()->getBlock('page_content_heading');
+        $contentHeadingBlock = $resultPage->getLayout()->getBlock('page_content_heading');
         if ($contentHeadingBlock) {
             $contentHeading = $this->_escaper->escapeHtml($this->_page->getContentHeading());
             $contentHeadingBlock->setContentHeading($contentHeading);
         }
 
         /* @TODO: Move catalog and checkout storage types to appropriate modules */
-        $messageBlock = $this->_view->getLayout()->getMessagesBlock();
+        $messageBlock = $resultPage->getLayout()->getMessagesBlock();
         $messageBlock->addStorageType($this->messageManager->getDefaultGroup());
         $messageBlock->addMessages($this->messageManager->getMessages(true));
 

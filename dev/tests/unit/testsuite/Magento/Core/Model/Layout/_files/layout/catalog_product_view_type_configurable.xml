@@ -24,5 +24,7 @@
  */
 -->
 <page>
-    <container name="product.info.configurable.extra" as="product_type_data_extra" label="Configurable Product Extra Info"/>
+    <body>
+        <container name="product.info.configurable.extra" as="product_type_data_extra" label="Configurable Product Extra Info"/>
+    </body>
 </page>

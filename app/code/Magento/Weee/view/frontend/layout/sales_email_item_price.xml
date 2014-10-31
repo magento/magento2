@@ -24,11 +24,13 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <referenceBlock name="items">
-        <block class="Magento\Weee\Block\Item\Price\Renderer" name="item_price" template="email/items/price/row.phtml">
-            <arguments>
-                <argument name="zone" xsi:type="string">email</argument>
-            </arguments>
-        </block>
-    </referenceBlock>
+    <body>
+        <referenceBlock name="items">
+            <block class="Magento\Weee\Block\Item\Price\Renderer" name="item_price" template="email/items/price/row.phtml">
+                <arguments>
+                    <argument name="zone" xsi:type="string">email</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+    </body>
 </page>

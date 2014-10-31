@@ -31,7 +31,7 @@ class CleanImages extends \Magento\Backend\Controller\Adminhtml\Cache
     /**
      * Clean JS/css files cache
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
@@ -44,6 +44,8 @@ class CleanImages extends \Magento\Backend\Controller\Adminhtml\Cache
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('An error occurred while clearing the image cache.'));
         }
-        $this->_redirect('adminhtml/*');
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
+        return $resultRedirect->setPath('adminhtml/*');
     }
 }

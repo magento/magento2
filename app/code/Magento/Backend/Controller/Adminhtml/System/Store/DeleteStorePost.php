@@ -29,24 +29,26 @@ class DeleteStorePost extends \Magento\Backend\Controller\Adminhtml\System\Store
     /**
      * Delete store view post action
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
         $itemId = $this->getRequest()->getParam('item_id');
 
+        /** @var \Magento\Backend\Model\View\Result\Redirect $redirectResult */
+        $redirectResult = $this->resultRedirectFactory->create();
         if (!($model = $this->_objectManager->create('Magento\Store\Model\Store')->load($itemId))) {
             $this->messageManager->addError(__('Unable to proceed. Please, try again'));
-            $this->_redirect('adminhtml/*/');
-            return;
+            return $redirectResult->setPath('adminhtml/*/');
         }
         if (!$model->isCanDelete()) {
             $this->messageManager->addError(__('This store view cannot be deleted.'));
-            $this->_redirect('adminhtml/*/editStore', array('store_id' => $model->getId()));
-            return;
+            return $redirectResult->setPath('adminhtml/*/editStore', ['store_id' => $model->getId()]);
         }
 
-        $this->_backupDatabase('*/*/editStore', array('store_id' => $itemId));
+        if (!$this->_backupDatabase()) {
+            return $redirectResult->setPath('*/*/editStore', ['store_id' => $itemId]);
+        }
 
         try {
             $model->delete();
@@ -54,13 +56,12 @@ class DeleteStorePost extends \Magento\Backend\Controller\Adminhtml\System\Store
             $this->_eventManager->dispatch('store_delete', array('store' => $model));
 
             $this->messageManager->addSuccess(__('The store view has been deleted.'));
-            $this->_redirect('adminhtml/*/');
-            return;
+            return $redirectResult->setPath('adminhtml/*/');
         } catch (\Magento\Framework\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('Unable to delete store view. Please, try again later.'));
         }
-        $this->_redirect('adminhtml/*/editStore', array('store_id' => $itemId));
+        return $redirectResult->setPath('adminhtml/*/editStore', ['store_id' => $itemId]);
     }
 }

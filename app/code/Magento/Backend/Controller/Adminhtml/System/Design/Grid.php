@@ -27,11 +27,10 @@ namespace Magento\Backend\Controller\Adminhtml\System\Design;
 class Grid extends \Magento\Backend\Controller\Adminhtml\System\Design
 {
     /**
-     * @return void
+     * @return \Magento\Framework\View\Result\Layout
      */
     public function execute()
     {
-        $this->_view->loadLayout(false);
-        $this->_view->renderLayout();
+        return $this->resultLayoutFactory->create();
     }
 }

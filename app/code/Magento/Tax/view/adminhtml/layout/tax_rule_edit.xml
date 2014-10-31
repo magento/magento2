@@ -29,9 +29,11 @@
         <css src="jquery/editableMultiselect/css/jquery.multiselect.css"/>
         <css src="Magento_Core::prototype/magento.css"/>
     </head>
-    <referenceContainer name="content">
-        <block class="Magento\Tax\Block\Adminhtml\Rule\Edit"/>
-        <block class="Magento\Tax\Block\Adminhtml\Rule\Edit\Form" name="tax-rule-edit" template="rule/edit.phtml"/>
-        <block class="Magento\Tax\Block\Adminhtml\Rate\Form" name="tax-rate-form" template="rule/rate/form.phtml"/>
-    </referenceContainer>
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\Tax\Block\Adminhtml\Rule\Edit"/>
+            <block class="Magento\Tax\Block\Adminhtml\Rule\Edit\Form" name="tax-rule-edit" template="rule/edit.phtml"/>
+            <block class="Magento\Tax\Block\Adminhtml\Rate\Form" name="tax-rate-form" template="rule/rate/form.phtml"/>
+        </referenceContainer>
+    </body>
 </page>

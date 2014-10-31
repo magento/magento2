@@ -35,9 +35,36 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product
     protected $_publicActions = array('edit');
 
     /**
+     * @var \Magento\Framework\View\Result\PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Catalog\Controller\Adminhtml\Product\Builder $productBuilder
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Catalog\Controller\Adminhtml\Product\Builder $productBuilder,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+    ) {
+        parent::__construct($context, $productBuilder);
+        $this->resultPageFactory = $resultPageFactory;
+        $this->resultRedirectFactory = $resultRedirectFactory;
+    }
+
+    /**
      * Product edit form
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
@@ -47,29 +74,23 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product
 
         if ($productId && !$product->getId()) {
             $this->messageManager->addError(__('This product no longer exists.'));
-            $this->_redirect('catalog/*/');
-            return;
+            /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+            $resultRedirect = $this->resultRedirectFactory->create();
+            return $resultRedirect->setPath('catalog/*/');
         }
 
         $this->_title->add($product->getName());
 
         $this->_eventManager->dispatch('catalog_product_edit_action', array('product' => $product));
 
-        $this->_view->loadLayout(
-            array(
-                'default',
-                strtolower($this->_request->getFullActionName()),
-                'catalog_product_' . $product->getTypeId()
-            )
-        );
+        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        $resultPage = $this->resultPageFactory->create();
+        $resultPage->addHandle('catalog_product_' . $product->getTypeId());
+        $resultPage->setActiveMenu('Magento_Catalog::catalog_products');
 
-        $this->_setActiveMenu('Magento_Catalog::catalog_products');
-
-        if (!$this->_objectManager->get(
-            'Magento\Framework\StoreManagerInterface'
-        )->isSingleStoreMode() && ($switchBlock = $this->_view->getLayout()->getBlock(
-            'store_switcher'
-        ))
+        if (!$this->_objectManager->get('Magento\Framework\StoreManagerInterface')->isSingleStoreMode()
+            &&
+            ($switchBlock = $resultPage->getLayout()->getBlock('store_switcher'))
         ) {
             $switchBlock->setDefaultStoreName(__('Default Values'))
                 ->setWebsiteIds($product->getWebsiteIds())
@@ -81,11 +102,11 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product
                 );
         }
 
-        $block = $this->_view->getLayout()->getBlock('catalog.wysiwyg.js');
+        $block = $resultPage->getLayout()->getBlock('catalog.wysiwyg.js');
         if ($block) {
             $block->setStoreId($product->getStoreId());
         }
 
-        $this->_view->renderLayout();
+        return $resultPage;
     }
 }

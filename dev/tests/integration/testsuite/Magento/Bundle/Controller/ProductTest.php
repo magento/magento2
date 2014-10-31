@@ -35,12 +35,6 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testViewAction()
     {
         $this->dispatch('catalog/product/view/id/3');
-        $this->assertContains(
-            'catalog_product_view_type_bundle',
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Framework\View\LayoutInterface'
-            )->getUpdate()->getHandles()
-        );
         $responseBody = $this->getResponse()->getBody();
         $this->assertContains('Bundle Product', $responseBody);
         $this->assertContains('In stock', $responseBody);

@@ -148,7 +148,19 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         );
         $contextMock->expects($this->any())->method('getTranslator')->will($this->returnValue($this->_translatorMock));
 
-        $args = array('context' => $contextMock);
+        $resultRedirect = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $resultRedirectFactory = $this->getMockBuilder('Magento\Backend\Model\View\Result\RedirectFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $resultRedirectFactory->expects($this->atLeastOnce())
+            ->method('create')
+            ->willReturn($resultRedirect);
+
+        $args = array('context' => $contextMock, 'resultRedirectFactory' => $resultRedirectFactory);
 
         $testHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_controller = $testHelper->getObject('Magento\Backend\Controller\Adminhtml\System\Account\Save', $args);

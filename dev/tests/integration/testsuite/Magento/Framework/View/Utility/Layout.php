@@ -113,22 +113,14 @@ class Layout
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         return [
             'processorFactory' => $objectManager->get('Magento\Framework\View\Layout\ProcessorFactory'),
-            'logger' => $objectManager->get('Magento\Framework\Logger'),
             'eventManager' => $objectManager->get('Magento\Framework\Event\ManagerInterface'),
-            'uiComponentFactory' => $objectManager->get('Magento\Framework\View\Element\UiComponentFactory'),
-            'blockFactory' => $objectManager->create('Magento\Framework\View\Element\BlockFactory', []),
-            'structure' => $objectManager->create('Magento\Framework\Data\Structure', []),
-            'argumentParser' => $objectManager->get('Magento\Framework\View\Layout\Argument\Parser'),
-            'argumentInterpreter' => $objectManager->get('layoutArgumentInterpreter'),
+            'structure' => $objectManager->create('Magento\Framework\View\Layout\Data\Structure', []),
             'scheduledStructure' => $objectManager->create('Magento\Framework\View\Layout\ScheduledStructure', []),
-            'scopeConfig' => $objectManager->create('Magento\Framework\App\Config\ScopeConfigInterface'),
-            'appState' => $objectManager->get('Magento\Framework\App\State'),
             'messageManager' => $objectManager->get('Magento\Framework\Message\ManagerInterface'),
             'themeResolver' => $objectManager->get('Magento\Framework\View\Design\Theme\ResolverInterface'),
-            'scopeResolver' => $objectManager->get('Magento\Framework\App\ScopeResolverInterface'),
-            'pageConfigReader' => $objectManager->get('Magento\Framework\View\Page\Config\Reader'),
-            'pageConfigGenerator' => $objectManager->get('Magento\Framework\View\Page\Config\Generator'),
-            'scopeType' => \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            'pageConfigStructure' => $objectManager->create('Magento\Framework\View\Page\Config\Structure'),
+            'reader' => $objectManager->get('commonRenderPool'),
+            'generatorPool' => $objectManager->get('Magento\Framework\View\Layout\GeneratorPool'),
         ];
     }
 }

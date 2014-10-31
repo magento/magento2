@@ -24,21 +24,10 @@
 
 namespace Magento\Backend\Block\Widget\Button;
 
+use Magento\Framework\View\LayoutInterface;
+
 class Toolbar implements ToolbarInterface
 {
-    /**
-     * @var \Magento\Framework\View\LayoutInterface
-     */
-    protected $layout;
-
-    /**
-     * @param \Magento\Framework\View\LayoutInterface $layout
-     */
-    public function __construct(\Magento\Framework\View\LayoutInterface $layout)
-    {
-        $this->layout = $layout;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -51,7 +40,7 @@ class Toolbar implements ToolbarInterface
             foreach ($buttons as $item) {
                 $containerName = $context->getNameInLayout() . '-' . $item->getButtonKey();
 
-                $container = $this->createContainer($containerName, $item);
+                $container = $this->createContainer($context->getLayout(), $containerName, $item);
 
                 if ($item->hasData('name')) {
                     $item->setData('element_name', $item->getName());
@@ -69,13 +58,14 @@ class Toolbar implements ToolbarInterface
     /**
      * Create button container
      *
+     * @param \Magento\Framework\View\LayoutInterface $layout
      * @param string $containerName
      * @param \Magento\Backend\Block\Widget\Button\Item $buttonItem
      * @return \Magento\Backend\Block\Widget\Button\Toolbar\Container
      */
-    protected function createContainer($containerName, $buttonItem)
+    protected function createContainer(LayoutInterface $layout, $containerName, $buttonItem)
     {
-        $container = $this->layout->createBlock(
+        $container = $layout->createBlock(
             '\Magento\Backend\Block\Widget\Button\Toolbar\Container',
             $containerName,
             ['data' => ['button_item' => $buttonItem]]
@@ -93,13 +83,13 @@ class Toolbar implements ToolbarInterface
     protected function getToolbar(\Magento\Framework\View\Element\AbstractBlock $context, $region)
     {
         $parent = null;
-
+        $layout = $context->getLayout();
         if (!$region || $region == 'header' || $region == 'footer') {
             $parent = $context;
         } elseif ($region == 'toolbar') {
-            $parent = $this->layout->getBlock('page.actions.toolbar');
+            $parent = $layout->getBlock('page.actions.toolbar');
         } else {
-            $parent = $this->layout->getBlock($region);
+            $parent = $layout->getBlock($region);
         }
 
         if ($parent) {

@@ -65,6 +65,14 @@ interface RedirectInterface
     public function success($defaultUrl);
 
     /**
+     * Update path params for url builder
+     *
+     * @param array $arguments
+     * @return array
+     */
+    public function updatePathParams(array $arguments);
+
+    /**
      * Set redirect into response
      *
      * @param \Magento\Framework\App\ResponseInterface $response

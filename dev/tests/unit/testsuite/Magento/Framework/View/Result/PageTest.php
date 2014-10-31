@@ -70,12 +70,27 @@ class PageTest extends \PHPUnit_Framework_TestCase
      */
     protected $pageConfigRenderer;
 
+    /**
+     * @var \Magento\Framework\View\FileSystem|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $viewFileSystem;
+
+    /**
+     * @var \Magento\Framework\View\LayoutFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $layoutFactory;
+
     protected function setUp()
     {
         $this->layout = $this->getMockBuilder('Magento\Framework\View\Layout')
+            ->setMethods(['addHandle', 'getUpdate', 'isLayoutDefined'])
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->layoutFactory = $this->getMockBuilder('Magento\Framework\View\LayoutFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->layoutFactory->expects($this->any())->method('create')->will($this->returnValue($this->layout));
         $this->layoutMerge = $this->getMockBuilder('Magento\Core\Model\Layout\Merge')
             ->disableOriginalConstructor()
             ->getMock();
@@ -92,13 +107,17 @@ class PageTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->viewFileSystem = $this->getMockBuilder('Magento\Framework\View\FileSystem')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->context = $objectManagerHelper->getObject('Magento\Framework\View\Element\Template\Context', [
             'layout' => $this->layout,
             'request' => $this->request,
+            'viewFileSystem' => $this->viewFileSystem,
             'pageConfig' => $this->pageConfig
         ]);
-
 
         $this->translateInline = $this->getMock('Magento\Framework\Translate\InlineInterface');
 
@@ -106,13 +125,24 @@ class PageTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $pageConfigRendererFactory = $this->getMockBuilder('Magento\Framework\View\Page\Config\RendererFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $pageConfigRendererFactory->expects($this->once())
+            ->method('create')
+            ->with(['pageConfig' => $this->pageConfig])
+            ->willReturn($this->pageConfigRenderer);
+
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->page = $objectManagerHelper->getObject(
             'Magento\Framework\View\Result\Page',
             [
+                'isIsolated' => true,
+                'layoutFactory' =>$this->layoutFactory,
                 'context' => $this->context,
                 'translateInline' => $this->translateInline,
-                'pageConfigRenderer' => $this->pageConfigRenderer
+                'pageConfigRendererFactory' => $pageConfigRendererFactory,
             ]
         );
     }
@@ -206,7 +236,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
             ->with($expected)
             ->willReturnSelf();
 
-        $this->assertEquals($this->layoutMerge, $this->page->addPageLayoutHandles($parameters, $defaultHandle));
+        $this->page->addPageLayoutHandles($parameters, $defaultHandle);
     }
 
     public function testAddPageLayoutHandlesWithDefaultHandle()
@@ -229,66 +259,6 @@ class PageTest extends \PHPUnit_Framework_TestCase
             ->with($expected)
             ->willReturnSelf();
 
-        $this->assertEquals($this->layoutMerge, $this->page->addPageLayoutHandles($parameters, $defaultHandle));
-    }
-
-    public function testRenderResult()
-    {
-        $pageLayout  = 'page_layout';
-        $fullActionName = 'full_action_aame';
-        $requireJs = 'require_js';
-        $layoutOutput = 'layout_output';
-        $headContent =  'head_content';
-        $attributesHtml =  'attributes_html';
-        $attributesHead =  'attributes_head';
-        $attributesBody =  'attributes_body';
-
-        $response = $this->getMock('Magento\Framework\App\ResponseInterface', ['sendResponse', 'appendBody']);
-        $response->expects($this->once())
-            ->method('appendBody');
-
-        $this->request->expects($this->atLeastOnce())
-            ->method('getFullActionName')
-            ->with('-')
-            ->willReturn($fullActionName);
-
-        $this->pageConfig->expects($this->any())
-            ->method('getPageLayout')
-            ->willReturn($pageLayout);
-        $this->pageConfig->expects($this->any())
-            ->method('addBodyClass')
-            ->withConsecutive([$fullActionName], ['page-layout-' . $pageLayout]);
-
-        $requireJsBlock = $this->getMock('Magento\Framework\View\Element\BlockInterface');
-        $requireJsBlock->expects($this->once())
-            ->method('toHtml')
-            ->willReturn($requireJs);
-
-        $this->layout->expects($this->any())
-            ->method('getBlock')
-            ->with('require.js')
-            ->willReturn($requireJsBlock);
-
-        $this->layout->expects($this->once())
-            ->method('getOutput')
-            ->willReturn($layoutOutput);
-
-        $this->translateInline->expects($this->once())
-            ->method('processResponseBody')
-            ->with($layoutOutput);
-
-        $this->pageConfigRenderer->expects($this->any())
-            ->method('renderElementAttributes')
-            ->willReturnMap([
-                [PageConfig::ELEMENT_TYPE_HTML, $attributesHtml],
-                [PageConfig::ELEMENT_TYPE_HEAD, $attributesHead],
-                [PageConfig::ELEMENT_TYPE_BODY, $attributesBody]
-            ]);
-
-        $this->pageConfigRenderer->expects($this->any())
-            ->method('renderHeadContent')
-            ->willReturn($headContent);
-
-        $this->page->renderResult($response);
+        $this->page->addPageLayoutHandles($parameters, $defaultHandle);
     }
 }

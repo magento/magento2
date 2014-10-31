@@ -95,13 +95,6 @@
                                 <strong><?php echo __('SKU') ?>:</strong>
                                 <?php echo implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($this->escapeHtml($_item->getSku()))); ?>
                             </div>
-                            <?php if($_item->getMessage(false)): ?>
-                                <?php foreach ($_item->getMessage(false) as $message): ?>
-                                <div class="<?php if($_item->getHasError()): ?>error<?php else: ?>notice<?php endif; ?>">
-                                    <?php echo $this->escapeHtml($message); ?>
-                                </div>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
                         </td>
                         <td class="col-configure">
                             <?php echo $this->getConfigureButtonHtml($_item) ?>
@@ -157,6 +150,19 @@
                                     <?php endif; ?>
                                 <?php endif; ?>
                             </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="100">
+                            <?php foreach ($_item->getMessage(false) as $message):
+                                if (empty($message)) {
+                                    continue;
+                                }
+                                ?>
+                                <div class="message <?php if($_item->getHasError()): ?>error<?php else: ?>notice<?php endif; ?>">
+                                    <?php echo $this->escapeHtml($message); ?>
+                                </div>
+                            <?php endforeach; ?>
                         </td>
                     </tr>
                     <?php echo $this->getItemExtraInfo($_item)->toHtml(); ?>

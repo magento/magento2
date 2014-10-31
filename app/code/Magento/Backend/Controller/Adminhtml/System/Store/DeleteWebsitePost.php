@@ -27,7 +27,7 @@ namespace Magento\Backend\Controller\Adminhtml\System\Store;
 class DeleteWebsitePost extends \Magento\Backend\Controller\Adminhtml\System\Store
 {
     /**
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
@@ -35,29 +35,31 @@ class DeleteWebsitePost extends \Magento\Backend\Controller\Adminhtml\System\Sto
         $model = $this->_objectManager->create('Magento\Store\Model\Website');
         $model->load($itemId);
 
+        /** @var \Magento\Backend\Model\View\Result\Redirect $redirectResult */
+        $redirectResult = $this->resultRedirectFactory->create();
+
         if (!$model) {
             $this->messageManager->addError(__('Unable to proceed. Please, try again'));
-            $this->_redirect('adminhtml/*/');
-            return;
+            return $redirectResult->setPath('adminhtml/*/');
         }
         if (!$model->isCanDelete()) {
             $this->messageManager->addError(__('This website cannot be deleted.'));
-            $this->_redirect('adminhtml/*/editWebsite', array('website_id' => $model->getId()));
-            return;
+            return $redirectResult->setPath('adminhtml/*/editWebsite', ['website_id' => $model->getId()]);
         }
 
-        $this->_backupDatabase('*/*/editWebsite', array('website_id' => $itemId));
+        if (!$this->_backupDatabase()) {
+            return $redirectResult->setPath('*/*/editWebsite', ['website_id' => $itemId]);
+        }
 
         try {
             $model->delete();
             $this->messageManager->addSuccess(__('The website has been deleted.'));
-            $this->_redirect('adminhtml/*/');
-            return;
+            return $redirectResult->setPath('adminhtml/*/');
         } catch (\Magento\Framework\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('Unable to delete website. Please, try again later.'));
         }
-        $this->_redirect('adminhtml/*/editWebsite', array('website_id' => $itemId));
+        return $redirectResult->setPath('*/*/editWebsite', ['website_id' => $itemId]);
     }
 }

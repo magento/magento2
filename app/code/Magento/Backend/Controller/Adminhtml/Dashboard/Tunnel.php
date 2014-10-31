@@ -24,14 +24,34 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Dashboard;
 
+use Magento\Backend\App\Action;
+use Magento\Framework\Controller\Result;
+
 class Tunnel extends \Magento\Backend\Controller\Adminhtml\Dashboard
 {
+    /**
+     * @var \Magento\Framework\Controller\Result\RawFactory
+     */
+    protected $resultRawFactory;
+
+    /**
+     * @param Action\Context $context
+     * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+     */
+    public function __construct(
+        Action\Context $context,
+        Result\RawFactory $resultRawFactory
+    ) {
+        parent::__construct($context);
+        $this->resultRawFactory = $resultRawFactory;
+    }
+
     /**
      * Forward request for a graph image to the web-service
      *
      * This is done in order to include the image to a HTTPS-page regardless of web-service settings
      *
-     * @return void
+     * @return  \Magento\Framework\Controller\Result\Raw
      */
     public function execute()
     {
@@ -39,6 +59,8 @@ class Tunnel extends \Magento\Backend\Controller\Adminhtml\Dashboard
         $httpCode = 400;
         $gaData = $this->_request->getParam('ga');
         $gaHash = $this->_request->getParam('h');
+        /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
+        $resultRaw = $this->resultRawFactory->create();
         if ($gaData && $gaHash) {
             /** @var $helper \Magento\Backend\Helper\Dashboard\Data */
             $helper = $this->_objectManager->get('Magento\Backend\Helper\Dashboard\Data');
@@ -61,13 +83,9 @@ class Tunnel extends \Magento\Backend\Controller\Adminhtml\Dashboard
 
                         $headers = $response->getHeaders();
 
-                        $this->_response->setHeader(
-                            'Content-type',
-                            $headers['Content-type']
-                        )->setBody(
-                            $response->getBody()
-                        );
-                        return;
+                        $resultRaw->setHeader('Content-type', $headers['Content-type'])
+                            ->setContents($response->getBody());
+                        return $resultRaw;
                     } catch (\Exception $e) {
                         $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
                         $error = __('see error log for details');
@@ -76,13 +94,9 @@ class Tunnel extends \Magento\Backend\Controller\Adminhtml\Dashboard
                 }
             }
         }
-        $this->_response->setBody(
-            __('Service unavailable: %1', $error)
-        )->setHeader(
-            'Content-Type',
-            'text/plain; charset=UTF-8'
-        )->setHttpResponseCode(
-            $httpCode
-        );
+        $resultRaw->setHeader('Content-Type', 'text/plain; charset=UTF-8')
+            ->setHttpResponseCode($httpCode)
+            ->setContents(__('Service unavailable: %1', $error));
+        return $resultRaw;
     }
 }

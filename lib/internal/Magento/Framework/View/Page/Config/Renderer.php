@@ -211,13 +211,13 @@ class Renderer
         if ($this->pageConfig->getFaviconFile()) {
             $this->pageConfig->addRemotePageAsset(
                 $this->pageConfig->getFaviconFile(),
-                Generator::VIRTUAL_CONTENT_TYPE_LINK,
+                Generator\Head::VIRTUAL_CONTENT_TYPE_LINK,
                 ['attributes' => ['rel' => 'icon', 'type' => 'image/x-icon']],
                 'icon'
             );
             $this->pageConfig->addRemotePageAsset(
                 $this->pageConfig->getFaviconFile(),
-                Generator::VIRTUAL_CONTENT_TYPE_LINK,
+                Generator\Head::VIRTUAL_CONTENT_TYPE_LINK,
                 ['attributes' => ['rel' => 'shortcut icon', 'type' => 'image/x-icon']],
                 'shortcut-icon'
             );

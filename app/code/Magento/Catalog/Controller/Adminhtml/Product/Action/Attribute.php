@@ -64,7 +64,6 @@ class Attribute extends Action
 
         if ($error) {
             $this->messageManager->addError($error);
-            $this->_redirect('catalog/product/', array('_current' => true));
         }
 
         return !$error;

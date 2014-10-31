@@ -25,14 +25,16 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <update handle="sales_order_create_item_price"/>
-    <referenceContainer name="content">
-        <block class="Magento\Sales\Block\Adminhtml\Order\Create\Items" template="order/create/items.phtml" name="items">
-            <block class="Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid" template="order/create/items/grid.phtml" name="items_grid">
-                <block class="Magento\Sales\Block\Adminhtml\Order\Create\Coupons" template="order/create/coupons/form.phtml" name="coupons">
-                    <block class="Magento\Sales\Block\Adminhtml\Order\Create\Coupons\Form" template="order/create/coupons/form.phtml" name="order.create.coupons.form" as="form"/>
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\Sales\Block\Adminhtml\Order\Create\Items" template="order/create/items.phtml" name="items">
+                <block class="Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid" template="order/create/items/grid.phtml" name="items_grid">
+                    <block class="Magento\Sales\Block\Adminhtml\Order\Create\Coupons" template="order/create/coupons/form.phtml" name="coupons">
+                        <block class="Magento\Sales\Block\Adminhtml\Order\Create\Coupons\Form" template="order/create/coupons/form.phtml" name="order.create.coupons.form" as="form"/>
+                    </block>
                 </block>
             </block>
-        </block>
-        <block class="Magento\Framework\View\Element\Text\ListText" name="order_item_extra_info"/>
-    </referenceContainer>
+            <block class="Magento\Framework\View\Element\Text\ListText" name="order_item_extra_info"/>
+        </referenceContainer>
+    </body>
 </page>

@@ -27,9 +27,36 @@ namespace Magento\Checkout\Controller\Cart;
 class Configure extends \Magento\Checkout\Controller\Cart
 {
     /**
+     * @var \Magento\Framework\View\Result\PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
+     * @param \Magento\Checkout\Model\Cart $cart
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     */
+    public function __construct(
+        \Magento\Framework\App\Action\Context $context,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
+        \Magento\Checkout\Model\Cart $cart,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory
+    ) {
+        parent::__construct($context, $scopeConfig, $checkoutSession, $storeManager, $formKeyValidator, $cart);
+        $this->resultPageFactory = $resultPageFactory;
+    }
+
+    /**
      * Action to reconfigure cart item
      *
-     * @return void
+     * @return \Magento\Framework\View\Result\Page
      */
     public function execute()
     {
@@ -52,13 +79,15 @@ class Configure extends \Magento\Checkout\Controller\Cart
             $params->setConfigureMode(true);
             $params->setBuyRequest($quoteItem->getBuyRequest());
 
-            $this->_objectManager->get(
-                'Magento\Catalog\Helper\Product\View'
-            )->prepareAndRender(
-                $quoteItem->getProduct()->getId(),
-                $this,
-                $params
-            );
+            $resultPage = $this->resultPageFactory->create();
+            $this->_objectManager->get('Magento\Catalog\Helper\Product\View')
+                ->prepareAndRender(
+                    $resultPage,
+                    $quoteItem->getProduct()->getId(),
+                    $this,
+                    $params
+                );
+            return $resultPage;
         } catch (\Exception $e) {
             $this->messageManager->addError(__('We cannot configure the product.'));
             $this->_objectManager->get('Magento\Framework\Logger')->logException($e);

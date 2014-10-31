@@ -630,6 +630,11 @@ class CatalogProductSimple extends InjectableFixture
         'group' => 'advanced-pricing'
     ];
 
+    protected $is_virtual = [
+        'attribute_code' => 'is_virtual',
+        'backend_type' => 'virtual',
+    ];
+
     public function getCategoryIds()
     {
         return $this->getData('category_ids');
@@ -948,5 +953,10 @@ class CatalogProductSimple extends InjectableFixture
     public function getRecurringPayment()
     {
         return $this->getData('recurring_payment');
+    }
+
+    public function getIsVirtual()
+    {
+        return $this->getData('is_virtual');
     }
 }

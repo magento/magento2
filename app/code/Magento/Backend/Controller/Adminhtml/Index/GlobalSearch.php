@@ -27,6 +27,11 @@ namespace Magento\Backend\Controller\Adminhtml\Index;
 class GlobalSearch extends \Magento\Backend\Controller\Adminhtml\Index
 {
     /**
+     * @var \Magento\Framework\Controller\Result\JSONFactory
+     */
+    protected $resultJsonFactory;
+
+    /**
      * Search modules list
      *
      * @var array
@@ -35,18 +40,23 @@ class GlobalSearch extends \Magento\Backend\Controller\Adminhtml\Index
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
      * @param array $searchModules
      */
-    public function __construct(\Magento\Backend\App\Action\Context $context, array $searchModules = array())
-    {
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory,
+        array $searchModules = array()
+    ) {
         $this->_searchModules = $searchModules;
         parent::__construct($context);
+        $this->resultJsonFactory = $resultJsonFactory;
     }
 
     /**
      * Global Search Action
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\JSON
      */
     public function execute()
     {
@@ -96,8 +106,8 @@ class GlobalSearch extends \Magento\Backend\Controller\Adminhtml\Index
             }
         }
 
-        $this->getResponse()->representJson(
-            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($items)
-        );
+        /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+        $resultJson = $this->resultJsonFactory->create();
+        return $resultJson->setData($items);
     }
 }

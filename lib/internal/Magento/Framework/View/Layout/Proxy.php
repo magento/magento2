@@ -504,16 +504,6 @@ class Proxy extends \Magento\Framework\View\Layout
     }
 
     /**
-     * Retrieve block factory
-     *
-     * @return \Magento\Framework\View\Element\BlockFactory
-     */
-    public function getBlockFactory()
-    {
-        return $this->getSubject()->getBlockFactory();
-    }
-
-    /**
      * @param string $namespace
      * @param string $staticType
      * @param string $dynamicType

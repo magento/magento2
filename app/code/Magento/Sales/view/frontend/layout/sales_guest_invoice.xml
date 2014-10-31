@@ -23,29 +23,31 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <update handle="sales_order_invoice_renderers" />
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <update handle="sales_order_invoice_renderers"/>
     <update handle="sales_order_item_price"/>
-    <referenceContainer name="content">
-        <block class="Magento\Sales\Block\Order\Info" as="info" name="sales.order.info">
-            <block class="Magento\Sales\Block\Order\Info\Buttons" as="buttons" name="sales.order.info.buttons" cacheable="false"/>
-        </block>
-        <block class="Magento\Sales\Block\Order\Invoice" name="sales.order.invoice" after="sales.order.info" cacheable="false">
-            <block class="Magento\Sales\Block\Order\Invoice\Items" name="invoice_items" template="order/invoice/items.phtml">
-                <block class="Magento\Framework\View\Element\RendererList" name="sales.order.invoice.renderers" as="renderer.list" />
-                <block class="Magento\Sales\Block\Order\Invoice\Totals" name="invoice_totals" template="order/totals.phtml">
-                    <arguments>
-                        <argument name="label_properties" xsi:type="string">colspan="4" class="mark"</argument>
-                        <argument name="value_properties" xsi:type="string">class="amount"</argument>
-                    </arguments>
-                    <block class="Magento\Tax\Block\Sales\Order\Tax" name="tax" template="order/tax.phtml"/>
-                </block>
-                <block class="Magento\Sales\Block\Order\Comments" name="invoice_comments" template="order/comments.phtml"/>
-            </block>
-        </block>
-    </referenceContainer>
-    <referenceContainer name="sales.order.info.buttons">
-        <block class="Magento\Sales\Block\Order\Info\Buttons\Rss" as="buttons.rss" name="sales.order.info.buttons.rss" cacheable="false"/>
-    </referenceContainer>
     <update handle="sales_order_guest_info_links"/>
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\Sales\Block\Order\Info" as="info" name="sales.order.info">
+                <block class="Magento\Sales\Block\Order\Info\Buttons" as="buttons" name="sales.order.info.buttons" cacheable="false"/>
+            </block>
+            <block class="Magento\Sales\Block\Order\Invoice" name="sales.order.invoice" after="sales.order.info" cacheable="false">
+                <block class="Magento\Sales\Block\Order\Invoice\Items" name="invoice_items" template="order/invoice/items.phtml">
+                    <block class="Magento\Framework\View\Element\RendererList" name="sales.order.invoice.renderers" as="renderer.list"/>
+                    <block class="Magento\Sales\Block\Order\Invoice\Totals" name="invoice_totals" template="order/totals.phtml">
+                        <arguments>
+                            <argument name="label_properties" xsi:type="string">colspan="4" class="mark"</argument>
+                            <argument name="value_properties" xsi:type="string">class="amount"</argument>
+                        </arguments>
+                        <block class="Magento\Tax\Block\Sales\Order\Tax" name="tax" template="order/tax.phtml"/>
+                    </block>
+                    <block class="Magento\Sales\Block\Order\Comments" name="invoice_comments" template="order/comments.phtml"/>
+                </block>
+            </block>
+        </referenceContainer>
+        <referenceContainer name="sales.order.info.buttons">
+            <block class="Magento\Sales\Block\Order\Info\Buttons\Rss" as="buttons.rss" name="sales.order.info.buttons.rss" cacheable="false"/>
+        </referenceContainer>
+    </body>
 </page>

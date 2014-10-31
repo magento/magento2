@@ -61,7 +61,7 @@ abstract class AbstractView extends \Magento\Catalog\Block\Product\AbstractProdu
     public function getProduct()
     {
         $product = parent::getProduct();
-        if (is_null($product->getTypeInstance()->getStoreFilter($product))) {
+        if ($product && is_null($product->getTypeInstance()->getStoreFilter($product))) {
             $product->getTypeInstance()->setStoreFilter($this->_storeManager->getStore(), $product);
         }
         return $product;

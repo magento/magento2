@@ -26,62 +26,64 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <update handle="customer_account"/>
     <update handle="sales_recurringpayment_view__tabs"/>
-    <referenceBlock name="sales.recurring.payment.view.tab.payment">
-        <action method="setIsViewCurrent">
-            <argument name="v" xsi:type="string">1</argument>
-        </action>
-    </referenceBlock>
-    <referenceBlock name="sales.recurring.payment.view">
-        <block class="Magento\RecurringPayment\Block\Payment\View\Schedule" name="sales.recurring.payment.view.general" as="general" template="recurring/payment/view/info.phtml" group="info_blocks_row_1">
-            <action method="setViewColumn">
-                <argument name="value" xsi:type="string">1</argument>
+    <body>
+        <referenceBlock name="sales.recurring.payment.view.tab.payment">
+            <action method="setIsViewCurrent">
+                <argument name="v" xsi:type="string">1</argument>
             </action>
-            <action method="setViewLabel">
-                <argument translate="true" name="value" xsi:type="string">Reference</argument>
-            </action>
-        </block>
-        <block class="Magento\RecurringPayment\Block\Payment\View\Item" name="sales.recurring.payment.view.item" as="item" template="recurring/payment/view/info.phtml" group="info_blocks_row_1">
-            <action method="setViewColumn">
-                <argument name="value" xsi:type="string">2</argument>
-            </action>
-            <action method="setViewLabel">
-                <argument translate="true" name="value" xsi:type="string">Purchased Item</argument>
-            </action>
-        </block>
-        <block class="Magento\RecurringPayment\Block\Payment\View\Schedule" name="sales.recurring.payment.view.schedule" as="payment" template="recurring/payment/view/info.phtml" group="info_blocks_row_2">
-            <action method="setViewColumn">
-                <argument name="value" xsi:type="string">1</argument>
-            </action>
-            <action method="setViewLabel">
-                <argument translate="true" name="value" xsi:type="string">Payment Schedule</argument>
-            </action>
-        </block>
-        <block class="Magento\RecurringPayment\Block\Payment\View\Fees" name="sales.recurring.payment.view.fees" as="fees" template="recurring/payment/view/info.phtml" group="info_blocks_row_2">
-            <action method="setViewColumn">
-                <argument name="value" xsi:type="string">2</argument>
-            </action>
-            <action method="setViewLabel">
-                <argument translate="true" name="value" xsi:type="string">Payments</argument>
-            </action>
-        </block>
-        <block class="Magento\RecurringPayment\Block\Payment\View\Address" name="sales.recurring.payment.view.billing" as="billing_address" template="recurring/payment/view/info.phtml" group="info_blocks_row_3">
-            <action method="setViewColumn">
-                <argument name="value" xsi:type="string">1</argument>
-            </action>
-            <action method="setViewLabel">
-                <argument translate="true" name="value" xsi:type="string">Billing Address</argument>
-            </action>
-        </block>
-        <block class="Magento\RecurringPayment\Block\Payment\View\Address" name="sales.recurring.payment.view.shipping" as="shipping_address" template="recurring/payment/view/info.phtml" group="info_blocks_row_3">
-            <action method="setAddressType">
-                <argument name="value" xsi:type="string">shipping</argument>
-            </action>
-            <action method="setViewColumn">
-                <argument name="value" xsi:type="string">2</argument>
-            </action>
-            <action method="setViewLabel">
-                <argument translate="true" name="value" xsi:type="string">Shipping Address</argument>
-            </action>
-        </block>
-    </referenceBlock>
+        </referenceBlock>
+        <referenceBlock name="sales.recurring.payment.view">
+            <block class="Magento\RecurringPayment\Block\Payment\View\Schedule" name="sales.recurring.payment.view.general" as="general" template="recurring/payment/view/info.phtml" group="info_blocks_row_1">
+                <action method="setViewColumn">
+                    <argument name="value" xsi:type="string">1</argument>
+                </action>
+                <action method="setViewLabel">
+                    <argument translate="true" name="value" xsi:type="string">Reference</argument>
+                </action>
+            </block>
+            <block class="Magento\RecurringPayment\Block\Payment\View\Item" name="sales.recurring.payment.view.item" as="item" template="recurring/payment/view/info.phtml" group="info_blocks_row_1">
+                <action method="setViewColumn">
+                    <argument name="value" xsi:type="string">2</argument>
+                </action>
+                <action method="setViewLabel">
+                    <argument translate="true" name="value" xsi:type="string">Purchased Item</argument>
+                </action>
+            </block>
+            <block class="Magento\RecurringPayment\Block\Payment\View\Schedule" name="sales.recurring.payment.view.schedule" as="payment" template="recurring/payment/view/info.phtml" group="info_blocks_row_2">
+                <action method="setViewColumn">
+                    <argument name="value" xsi:type="string">1</argument>
+                </action>
+                <action method="setViewLabel">
+                    <argument translate="true" name="value" xsi:type="string">Payment Schedule</argument>
+                </action>
+            </block>
+            <block class="Magento\RecurringPayment\Block\Payment\View\Fees" name="sales.recurring.payment.view.fees" as="fees" template="recurring/payment/view/info.phtml" group="info_blocks_row_2">
+                <action method="setViewColumn">
+                    <argument name="value" xsi:type="string">2</argument>
+                </action>
+                <action method="setViewLabel">
+                    <argument translate="true" name="value" xsi:type="string">Payments</argument>
+                </action>
+            </block>
+            <block class="Magento\RecurringPayment\Block\Payment\View\Address" name="sales.recurring.payment.view.billing" as="billing_address" template="recurring/payment/view/info.phtml" group="info_blocks_row_3">
+                <action method="setViewColumn">
+                    <argument name="value" xsi:type="string">1</argument>
+                </action>
+                <action method="setViewLabel">
+                    <argument translate="true" name="value" xsi:type="string">Billing Address</argument>
+                </action>
+            </block>
+            <block class="Magento\RecurringPayment\Block\Payment\View\Address" name="sales.recurring.payment.view.shipping" as="shipping_address" template="recurring/payment/view/info.phtml" group="info_blocks_row_3">
+                <action method="setAddressType">
+                    <argument name="value" xsi:type="string">shipping</argument>
+                </action>
+                <action method="setViewColumn">
+                    <argument name="value" xsi:type="string">2</argument>
+                </action>
+                <action method="setViewLabel">
+                    <argument translate="true" name="value" xsi:type="string">Shipping Address</argument>
+                </action>
+            </block>
+        </referenceBlock>
+    </body>
 </page>
