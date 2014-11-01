@@ -35,4 +35,21 @@ class Https extends Http
      * @var string
      */
     protected $scheme = 'https';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function parseUrl($path)
+    {
+        $urlProp = parent::parseUrl($path);
+
+        if ($urlProp['scheme'] === 'https') {
+            $urlProp['host'] = 'ssl://' . $urlProp['host'];
+            if (!isset($urlProp['port'])) {
+                $urlProp['port'] = 443;
+            }
+        }
+
+        return $urlProp;
+    }
 }
