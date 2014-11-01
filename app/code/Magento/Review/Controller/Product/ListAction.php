@@ -44,8 +44,10 @@ class ListAction extends \Magento\Review\Controller\Product
             $pageConfig->setPageLayout($product->getPageLayout());
         }
         $update = $this->_view->getLayout()->getUpdate();
+
+        $urlSafeSku = rawurlencode($product->getSku());
         $this->_view->addPageLayoutHandles(
-            array('id' => $product->getId(), 'sku' => $product->getSku(), 'type' => $product->getTypeId())
+            array('id' => $product->getId(), 'sku' => $urlSafeSku, 'type' => $product->getTypeId())
         );
 
         $this->_view->loadLayoutUpdates();
