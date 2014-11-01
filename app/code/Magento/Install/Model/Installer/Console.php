@@ -251,12 +251,6 @@ class Console
             }
 
             /**
-             * Skip URL validation, if set
-             */
-            $this->_installerData->setSkipUrlValidation($options['skip_url_validation']);
-            $this->_installerData->setSkipBaseUrlValidation($options['skip_url_validation']);
-
-            /**
              * Locale settings
              */
             $this->_installerData->setLocaleData(
@@ -287,6 +281,7 @@ class Console
                     'backend_frontname' => $this->_checkBackendFrontname($options['backend_frontname']),
                     'admin_no_form_key' => $this->_getFlagValue($options['admin_no_form_key']),
                     'skip_url_validation' => $this->_getFlagValue($options['skip_url_validation']),
+                    'skip_base_url_validation' => $this->_getFlagValue($options['skip_url_validation']),
                     'enable_charts' => $this->_getFlagValue($options['enable_charts']),
                     'order_increment_prefix' => $options['order_increment_prefix']
                 ]
