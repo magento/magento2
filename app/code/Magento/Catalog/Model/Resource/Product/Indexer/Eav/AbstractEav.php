@@ -174,6 +174,8 @@ abstract class AbstractEav extends \Magento\Catalog\Model\Resource\Product\Index
 
         $select = $write->select()->from($idxTable, null);
 
+        $idxTable = $write->quoteIdentifier($idxTable);
+
         $condition = $write->quoteInto('=?', \Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE);
         $this->_addAttributeToSelect(
             $select,
