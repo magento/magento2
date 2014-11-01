@@ -170,11 +170,11 @@ abstract class AbstractEav extends \Magento\Catalog\Model\Resource\Product\Index
     protected function _removeNotVisibleEntityFromIndex()
     {
         $write = $this->_getWriteAdapter();
-
         $idxTable = $this->getIdxTable();
-        $idxTable = $write->quoteIdentifier($idxTable);
 
         $select = $write->select()->from($idxTable, null);
+
+        $idxTable = $write->quoteIdentifier($idxTable);
 
         $condition = $write->quoteInto('=?', \Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE);
         $this->_addAttributeToSelect(
