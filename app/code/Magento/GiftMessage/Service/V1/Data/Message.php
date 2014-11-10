@@ -28,7 +28,7 @@ namespace Magento\GiftMessage\Service\V1\Data;
  *
  * @codeCoverageIgnore
  */
-class Message extends \Magento\Framework\Service\Data\AbstractExtensibleObject
+class Message extends \Magento\Framework\Api\AbstractExtensibleObject
 {
     /**
      * Gift message ID.

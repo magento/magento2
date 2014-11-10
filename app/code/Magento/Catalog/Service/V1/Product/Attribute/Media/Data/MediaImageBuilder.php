@@ -28,7 +28,7 @@ namespace Magento\Catalog\Service\V1\Product\Attribute\Media\Data;
  *
  * @codeCoverageIgnore
  */
-class MediaImageBuilder extends \Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder
+class MediaImageBuilder extends \Magento\Framework\Api\ExtensibleObjectBuilder
 {
     /**
      * Set attribute code

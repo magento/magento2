@@ -43,33 +43,35 @@
         </div>
         <ol class="items review-items">
         <?php foreach ($_items as $_review):?>
-            <li class="item review-item">
-                <div class="review-title"><?php echo $this->escapeHtml($_review->getTitle()) ?></div>
+            <li class="item review-item" itemscope itemprop="review" itemtype="http://schema.org/Review">
+                <div class="review-title" itemprop="name"><?php echo $this->escapeHtml($_review->getTitle()) ?></div>
                 <?php if (count($_review->getRatingVotes())): ?>
                     <div class="review-ratings">
                     <?php foreach ($_review->getRatingVotes() as $_vote): ?>
-                    <div class="rating-summary item">
+                    <div class="rating-summary item" itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
                         <span class="label rating-label"><span><?php echo $this->escapeHtml($_vote->getRatingCode()) ?></span></span>
                         <div class="rating-result" title="<?php echo $_vote->getPercent() ?>%">
+	                        <meta itemprop="worstRating" content = "1"/>
+	                        <meta itemprop="bestRating" content = "100"/>
                             <span style="width:<?php echo $_vote->getPercent() ?>%">
-                                <span><?php echo $_vote->getPercent() ?>%</span>
+                                <span itemprop="ratingValue"><?php echo $_vote->getPercent() ?>%</span>
                             </span>
                         </div>
                     </div>
                     <?php endforeach; ?>
                     </div>
                 <?php endif; ?>
-                <div class="review-content">
+                <div class="review-content" itemprop="description">
                     <?php echo nl2br($this->escapeHtml($_review->getDetail())) ?>
                 </div>
                 <div class="review-details">
                     <p class="review-author">
                         <span class="review-details-label"><?php echo __('Review by')?></span>
-                        <strong class="review-details-value"><?php echo $this->escapeHtml($_review->getNickname()) ?></strong>
+                        <strong class="review-details-value" itemprop="author"><?php echo $this->escapeHtml($_review->getNickname()) ?></strong>
                     </p>
                     <p class="review-date">
                         <span class="review-details-label"><?php echo __('Posted on') ?></span>
-                        <time class="review-details-value"><?php echo $this->formatDate($_review->getCreatedAt(), $format) ?></time>
+                        <time class="review-details-value" itemprop="datePublished" datetime="<?php echo $this->formatDate($_review->getCreatedAt(), $format) ?>"><?php echo $this->formatDate($_review->getCreatedAt(), $format) ?></time>
                     </p>
                 </div>
             </li>

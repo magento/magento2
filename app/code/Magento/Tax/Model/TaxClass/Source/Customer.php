@@ -38,12 +38,12 @@ class Customer extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     protected $taxClassService;
 
     /**
-     * @var \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
     protected $searchCriteriaBuilder;
 
     /**
-     * @var \Magento\Framework\Service\V1\Data\FilterBuilder
+     * @var \Magento\Framework\Api\FilterBuilder
      */
     protected $filterBuilder;
 
@@ -51,13 +51,13 @@ class Customer extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * Initialize dependencies.
      *
      * @param \Magento\Tax\Service\V1\TaxClassServiceInterface $taxClassService
-     * @param \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param \Magento\Framework\Service\V1\Data\FilterBuilder $filterBuilder
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      */
     public function __construct(
         \Magento\Tax\Service\V1\TaxClassServiceInterface $taxClassService,
-        \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder $searchCriteriaBuilder,
-        \Magento\Framework\Service\V1\Data\FilterBuilder $filterBuilder
+        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
+        \Magento\Framework\Api\FilterBuilder $filterBuilder
     ) {
         $this->taxClassService = $taxClassService;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;

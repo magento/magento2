@@ -26,8 +26,15 @@ return array(
     'application' => array(
         'url_host' => '127.0.0.1',
         'url_path' => '/',
-        'admin' => array('frontname' => 'backend', 'username' => 'admin', 'password' => 'password1'),
-        'installation' => array('options' => array('option1' => 'value 1', 'option2' => 'value 2'))
+        'installation' => array(
+            'options' => array(
+                'option1' => 'value 1',
+                'option2' => 'value 2',
+                'backend_frontname' => 'backend',
+                'admin_username' => 'admin',
+                'admin_password' => 'password1',
+            ),
+        ),
     ),
     'scenario' => array(
         'common_config' => array(

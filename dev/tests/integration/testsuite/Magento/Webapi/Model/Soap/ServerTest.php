@@ -52,7 +52,7 @@ class ServerTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Webapi\Model\Soap\Server\Factory */
     protected $_soapServerFactory;
 
-    /** @var \Magento\Webapi\Model\Config\ClassReflector\TypeProcessor */
+    /** @var \Magento\Framework\Reflection\TypeProcessor */
     protected $_typeProcessor;
 
     /** @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject */
@@ -86,7 +86,7 @@ class ServerTest extends \PHPUnit_Framework_TestCase
             'Magento\Webapi\Model\Soap\Server\Factory'
         )->disableOriginalConstructor()->getMock();
         $this->_typeProcessor = $this->getMock(
-            'Magento\Webapi\Model\Config\ClassReflector\TypeProcessor',
+            'Magento\Framework\Reflection\TypeProcessor',
             array(),
             array(),
             '',

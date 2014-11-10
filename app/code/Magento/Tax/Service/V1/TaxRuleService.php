@@ -27,10 +27,10 @@ namespace Magento\Tax\Service\V1;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\Exception as ModelException;
-use Magento\Framework\Service\V1\Data\FilterBuilder;
-use Magento\Framework\Service\V1\Data\Search\FilterGroup;
-use Magento\Framework\Service\V1\Data\SearchCriteria;
-use Magento\Framework\Service\V1\Data\SearchCriteriaBuilder;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\Search\FilterGroup;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Tax\Model\ClassModel as TaxClassModel;
 use Magento\Tax\Model\Calculation\Rule as TaxRuleModel;
 use Magento\Tax\Model\Calculation\RuleFactory as TaxRuleModelFactory;
@@ -39,7 +39,7 @@ use Magento\Tax\Model\Calculation\TaxRuleRegistry;
 use Magento\Tax\Model\Resource\Calculation\Rule\Collection;
 use Magento\Tax\Service\V1\Data\TaxRule;
 use Magento\Tax\Service\V1\Data\TaxRuleBuilder;
-use Magento\Framework\Service\V1\Data\SortOrder;
+use Magento\Framework\Api\SortOrder;
 
 /**
  * TaxRuleService implementation.

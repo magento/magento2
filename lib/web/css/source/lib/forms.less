@@ -33,7 +33,6 @@
     @_margin: ~"@{@{_type}-margin}",
     @_vertical-align: ~"@{@{_type}-vertical-align}",
     @_background-clip: ~"@{@{_type}-background-clip}",
-    @_outline: ~"@{@{_type}-outline}",
 
     @_font-size:  ~"@{@{_type}-font-size}",
     @_color: ~"@{@{_type}-color}",
@@ -64,7 +63,6 @@
     .css(width, @_width);
     .css(padding, @_padding);
     .css(margin, @_margin);
-    ._form-element-outline(@_outline);
 
     .css(font-size, @_font-size);
     .css(font-family, @_font-family);
@@ -386,10 +384,6 @@
         @_icon-font-position: @_note-icon-font-position,
         @_icon-font-text-hide: @_note-icon-font-text-hide
     );
-}
-
-._form-element-outline(@_form-element-outline) when (@_form-element-outline = false) {
-    outline: none;
 }
 
 ._form-element-add-opacity(@_opacity) when not (@_opacity = 1) {

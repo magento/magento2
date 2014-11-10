@@ -269,16 +269,6 @@ class Inline extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Retrieve additional url
-     *
-     * @return string
-     */
-    public function getAdditionalUrl()
-    {
-        return $this->getUrl('*/*/getAdditional');
-    }
-
-    /**
      * Check if gift messages for separate items are allowed
      *
      * @return bool

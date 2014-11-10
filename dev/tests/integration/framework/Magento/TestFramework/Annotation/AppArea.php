@@ -41,7 +41,6 @@ class AppArea
         \Magento\Framework\App\Area::AREA_GLOBAL,
         \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
         \Magento\Framework\App\Area::AREA_FRONTEND,
-        'install',
         'webapi_rest',
         'webapi_soap',
         'cron'

@@ -27,7 +27,7 @@ namespace Magento\Catalog\Service\V1\Product\CustomOptions\Data\Option;
 /**
  * @codeCoverageIgnore
  */
-class Metadata extends \Magento\Framework\Service\Data\AbstractExtensibleObject
+class Metadata extends \Magento\Framework\Api\AbstractExtensibleObject
 {
     const PRICE = 'price';
     const PRICE_TYPE = 'price_type';

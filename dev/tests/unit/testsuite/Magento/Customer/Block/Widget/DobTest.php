@@ -24,8 +24,6 @@
 namespace Magento\Customer\Block\Widget;
 
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Customer\Service\V1\Data\Eav\ValidationRule;
-use Magento\Customer\Service\V1\Data\Eav\ValidationRuleBuilder;
 
 class DobTest extends \PHPUnit_Framework_TestCase
 {
@@ -343,27 +341,32 @@ class DobTest extends \PHPUnit_Framework_TestCase
      */
     public function getMinDateRangeDataProvider()
     {
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $emptyValidationRule = $this->getMockBuilder('Magento\Customer\Api\Data\ValidationRuleInterface')
+            ->disableOriginalConstructor()
+            ->setMethods(['getName', 'getValue'])
+            ->getMockForAbstractClass();
+
+        $validationRule = $this->getMockBuilder('Magento\Customer\Api\Data\ValidationRuleInterface')
+            ->disableOriginalConstructor()
+            ->setMethods(['getName', 'getValue'])
+            ->getMockForAbstractClass();
+        $validationRule->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue(Dob::MIN_DATE_RANGE_KEY));
+        $validationRule->expects($this->any())
+            ->method('getValue')
+            ->will($this->returnValue(strtotime(self::MIN_DATE)));
+
         return array(
             array(
                 array(
-                    new ValidationRule(
-                        $helper->getObject('\Magento\Customer\Service\V1\Data\Eav\ValidationRuleBuilder')
-                            ->populateWithArray(
-                                array(
-                                    'name' => Dob::MIN_DATE_RANGE_KEY,
-                                    'value' => strtotime(self::MIN_DATE)
-                                )
-                            )
-                    )
+                    $validationRule
                 ),
                 date('Y/m/d', strtotime(self::MIN_DATE))
             ),
             array(
                 array(
-                    new ValidationRule(
-                        $helper->getObject('\Magento\Customer\Service\V1\Data\Eav\ValidationRuleBuilder')
-                    )
+                    $emptyValidationRule
                 ),
                 null
             )
@@ -409,27 +412,31 @@ class DobTest extends \PHPUnit_Framework_TestCase
      */
     public function getMaxDateRangeDataProvider()
     {
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $emptyValidationRule = $this->getMockBuilder('Magento\Customer\Api\Data\ValidationRuleInterface')
+            ->disableOriginalConstructor()
+            ->setMethods(['getName', 'getValue'])
+            ->getMockForAbstractClass();
+
+        $validationRule = $this->getMockBuilder('Magento\Customer\Api\Data\ValidationRuleInterface')
+            ->disableOriginalConstructor()
+            ->setMethods(['getName', 'getValue'])
+            ->getMockForAbstractClass();
+        $validationRule->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue(Dob::MAX_DATE_RANGE_KEY));
+        $validationRule->expects($this->any())
+            ->method('getValue')
+            ->will($this->returnValue(strtotime(self::MAX_DATE)));
         return array(
             array(
                 array(
-                    new ValidationRule(
-                        $helper->getObject('\Magento\Customer\Service\V1\Data\Eav\ValidationRuleBuilder')
-                            ->populateWithArray(
-                                array(
-                                    'name' => Dob::MAX_DATE_RANGE_KEY,
-                                    'value' => strtotime(self::MAX_DATE)
-                                )
-                            )
-                    )
+                    $validationRule
                 ),
                 date('Y/m/d', strtotime(self::MAX_DATE))
             ),
             array(
                 array(
-                    new ValidationRule(
-                        $helper->getObject('\Magento\Customer\Service\V1\Data\Eav\ValidationRuleBuilder')
-                    )
+                    $emptyValidationRule
                 ),
                 null
             )

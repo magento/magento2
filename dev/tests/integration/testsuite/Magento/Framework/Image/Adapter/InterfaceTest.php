@@ -243,7 +243,7 @@ class InterfaceTest extends \PHPUnit_Framework_TestCase
 
     public function saveDataProvider()
     {
-        $dir = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getAppInstallDir() . '/';
+        $dir = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getAppTempDir() . '/';
         return $this->_prepareData(
             array(
                 array($this->_getFixture('image_adapters_test.png'), array($dir . uniqid('test_image_adapter'))),

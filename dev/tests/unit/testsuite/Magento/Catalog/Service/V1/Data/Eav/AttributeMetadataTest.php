@@ -25,7 +25,7 @@ namespace Magento\Catalog\Service\V1\Data\Eav;
 
 class AttributeMetadataTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder|\PHPUnit_Framework_TestCase */
+    /** @var \Magento\Framework\Api\ExtensibleObjectBuilder|\PHPUnit_Framework_TestCase */
     protected $builderMock;
 
     /** @var \Magento\Catalog\Service\V1\Data\Eav\ValidationRule[] */
@@ -36,7 +36,7 @@ class AttributeMetadataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->builderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $this->builderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(array('getData'))
             ->disableOriginalConstructor()
             ->getMock();

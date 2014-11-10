@@ -23,7 +23,7 @@
  */
 namespace Magento\Sales\Service\V1;
 
-use Magento\Framework\Service\V1\Data\SearchCriteria;
+use Magento\Framework\Api\SearchCriteria;
 
 interface ShipmentReadInterface
 {
@@ -35,8 +35,8 @@ interface ShipmentReadInterface
     public function get($id);
 
     /**
-     * @param \Magento\Framework\Service\V1\Data\SearchCriteria $searchCriteria
-     * @return \Magento\Framework\Service\V1\Data\SearchResults
+     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria
+     * @return \Magento\Framework\Api\SearchResults
      */
     public function search(SearchCriteria $searchCriteria);
 

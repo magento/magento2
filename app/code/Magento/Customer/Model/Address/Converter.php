@@ -32,6 +32,7 @@ use Magento\Customer\Model\Address as AddressModel;
 use Magento\Customer\Model\Address\AbstractAddress;
 use Magento\Customer\Service\V1\Data\Region;
 use Magento\Customer\Service\V1\Data\AddressConverter;
+use Magento\Customer\Api\AddressMetadataInterface;
 
 /**
  * Customer Address Model converter.
@@ -115,7 +116,7 @@ class Converter
         $addressModel->setIsDefaultShipping($address->isDefaultShipping());
         // Need to use attribute set or future updates can cause data loss
         if (!$addressModel->getAttributeSetId()) {
-            $addressModel->setAttributeSetId(AddressMetadataServiceInterface::ATTRIBUTE_SET_ID_ADDRESS);
+            $addressModel->setAttributeSetId(AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS);
         }
     }
 

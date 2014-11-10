@@ -34,7 +34,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Catalog\Service\V1\MetadataService */
     private $_productMetadataService;
 
-    /** @var \Magento\Framework\Service\Data\AttributeValueBuilder */
+    /** @var \Magento\Framework\Api\AttributeValueBuilder */
     private $_valueBuilder;
 
     protected function setUp()
@@ -57,7 +57,7 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
             )
         );
         $this->_valueBuilder = $this->_objectManager->getObject(
-            'Magento\Framework\Service\Data\AttributeValueBuilder'
+            'Magento\Framework\Api\AttributeValueBuilder'
         );
         $this->_productBuilder = $this->_objectManager->getObject(
             'Magento\Catalog\Service\V1\Data\ProductBuilder',

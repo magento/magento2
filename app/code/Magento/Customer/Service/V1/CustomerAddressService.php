@@ -26,7 +26,6 @@ namespace Magento\Customer\Service\V1;
 use Magento\Customer\Model\Address as CustomerAddressModel;
 use Magento\Customer\Model\Address\Converter as AddressConverter;
 use Magento\Customer\Model\CustomerRegistry;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\InputException;
 
 /**

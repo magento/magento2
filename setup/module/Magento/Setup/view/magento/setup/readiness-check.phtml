@@ -23,8 +23,8 @@
  */
 ?>
 <div class="step-controls" ng-show="$state.is('root.readiness-check.progress')">
-    <a href="#" class="btn btn-primary" ng-click="$state.forceReload()" ng-disabled="checkingInProgress()"><?php echo $this->translate('Try Again'); ?></a>
-    <a href="#" class="btn btn-primary" ng-click="nextState()" ng-disabled="checkingInProgress() || hasErrors"><?php echo $this->translate('Next'); ?></a>
+    <a href="#" class="btn btn-primary" ng-click="$state.forceReload()" ng-disabled="checkingInProgress()">Try Again</a>
+    <a href="#" class="btn btn-primary" ng-click="nextState()" ng-disabled="checkingInProgress() || hasErrors">Next</a>
 </div>
 
 <div class="page-header">
@@ -32,15 +32,15 @@
 </div>
 
 <div ng-show="$state.is('root.readiness-check')" class="readiness-check-landing">
-    <p><?php echo $this->translate('Let\'s check your environment for the corrent PHP version, PHP extensions, file permissions and compatibility.'); ?></p>
+    <p>Let's check your environment for the correct PHP version, PHP extensions, file permissions and compatibility.</p>
     <div>
-        <a href="#" ng-click="$state.go('.progress')" class="btn btn-primary"><?php echo $this->translate('Start Readiness Check'); ?></a>
+        <a href="#" ng-click="$state.go('.progress')" class="btn btn-primary">Start Readiness Check</a>
     </div>
 </div>
 
 <div ui-view></div>
 
 <div class="step-controls" ng-show="$state.is('root.readiness-check.progress')">
-    <a href="#" class="btn btn-primary" ng-click="$state.forceReload()" ng-disabled="checkingInProgress()"><?php echo $this->translate('Try Again'); ?></a>
-    <a href="#" class="btn btn-primary" ng-click="nextState()" ng-disabled="checkingInProgress() || hasErrors"><?php echo $this->translate('Next'); ?></a>
+    <a href="#" class="btn btn-primary" ng-click="$state.forceReload()" ng-disabled="checkingInProgress()">Try Again</a>
+    <a href="#" class="btn btn-primary" ng-click="nextState()" ng-disabled="checkingInProgress() || hasErrors">Next</a>
 </div>

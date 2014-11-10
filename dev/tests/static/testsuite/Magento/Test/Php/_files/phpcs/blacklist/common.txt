@@ -23,8 +23,6 @@ app/code/Magento/Backend/Block/System/Store/Edit.php
 # Not magento code
 app/code/Zend
 # Not magento code
-dev/tools/Magento/Tools/I18n/Zend
-# Not magento code
 dev/tools/layout
 # PSR-1 not applied to
 dev/tests/js

@@ -127,7 +127,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $themes = array('frontend' => 'test_f', 'adminhtml' => 'test_a', 'install' => 'test_i');
+        $themes = array('frontend' => 'test_f', 'adminhtml' => 'test_a');
         $design = $objectManager->create('Magento\Core\Model\View\Design', array('themes' => $themes));
         $objectManager->addSharedInstance($design, 'Magento\Core\Model\View\Design');
 
@@ -137,8 +137,6 @@ class DesignTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('test_f', $model->getConfigurationDesignTheme('frontend'));
         $this->assertEquals('test_f', $model->getConfigurationDesignTheme('frontend', array('store' => 0)));
         $this->assertEquals('test_f', $model->getConfigurationDesignTheme('frontend', array('store' => null)));
-        $this->assertEquals('test_i', $model->getConfigurationDesignTheme('install'));
-        $this->assertEquals('test_i', $model->getConfigurationDesignTheme('install', array('store' => uniqid())));
         $this->assertEquals('test_a', $model->getConfigurationDesignTheme('adminhtml'));
         $this->assertEquals('test_a', $model->getConfigurationDesignTheme('adminhtml', array('store' => uniqid())));
     }

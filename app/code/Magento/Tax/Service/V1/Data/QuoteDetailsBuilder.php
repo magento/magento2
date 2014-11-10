@@ -23,15 +23,15 @@
  */
 namespace Magento\Tax\Service\V1\Data;
 
-use Magento\Framework\Service\Data\AttributeValueBuilder;
-use Magento\Framework\Service\Data\MetadataServiceInterface;
+use Magento\Framework\Api\AttributeValueBuilder;
+use Magento\Framework\Api\MetadataServiceInterface;
 
 /**
  * QuoteDetailsBuilder
  *
  * @method QuoteDetails create()
  */
-class QuoteDetailsBuilder extends \Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder
+class QuoteDetailsBuilder extends \Magento\Framework\Api\ExtensibleObjectBuilder
 {
     /**
      * QuoteDetails item builder
@@ -57,7 +57,7 @@ class QuoteDetailsBuilder extends \Magento\Framework\Service\Data\AbstractExtens
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Framework\Service\Data\ObjectFactory $objectFactory
+     * @param \Magento\Framework\Api\ObjectFactory $objectFactory
      * @param AttributeValueBuilder $valueBuilder
      * @param MetadataServiceInterface $metadataService
      * @param \Magento\Tax\Service\V1\Data\QuoteDetails\ItemBuilder $itemBuilder
@@ -65,7 +65,7 @@ class QuoteDetailsBuilder extends \Magento\Framework\Service\Data\AbstractExtens
      * @param \Magento\Customer\Service\V1\Data\AddressBuilder $addressBuilder
      */
     public function __construct(
-        \Magento\Framework\Service\Data\ObjectFactory $objectFactory,
+        \Magento\Framework\Api\ObjectFactory $objectFactory,
         AttributeValueBuilder $valueBuilder,
         MetadataServiceInterface $metadataService,
         \Magento\Tax\Service\V1\Data\QuoteDetails\ItemBuilder $itemBuilder,

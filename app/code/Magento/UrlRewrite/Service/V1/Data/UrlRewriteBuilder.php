@@ -23,12 +23,12 @@
  */
 namespace Magento\UrlRewrite\Service\V1\Data;
 
-use Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder;
+use Magento\Framework\Api\ExtensibleObjectBuilder;
 
 /**
  * Data builder class for url rewrite
  */
-class UrlRewriteBuilder extends AbstractExtensibleObjectBuilder
+class UrlRewriteBuilder extends ExtensibleObjectBuilder
 {
     /**
      * @var array
@@ -45,7 +45,7 @@ class UrlRewriteBuilder extends AbstractExtensibleObjectBuilder
      */
     public function getData()
     {
-        return array_merge($this->defaultValues, $this->_data);
+        return array_merge($this->defaultValues, $this->data);
     }
 
     /**

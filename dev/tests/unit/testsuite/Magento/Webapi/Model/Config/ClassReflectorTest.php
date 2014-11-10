@@ -28,7 +28,7 @@ namespace Magento\Webapi\Model\Config;
  */
 class ClassReflectorTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Webapi\Model\Config\ClassReflector\TypeProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Reflection\TypeProcessor|\PHPUnit_Framework_MockObject_MockObject */
     protected $_typeProcessor;
 
     /** @var \Magento\Webapi\Model\Config\ClassReflector */
@@ -40,7 +40,7 @@ class ClassReflectorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_typeProcessor = $this->getMock(
-            '\Magento\Webapi\Model\Config\ClassReflector\TypeProcessor',
+            '\Magento\Framework\Reflection\TypeProcessor',
             array('process'),
             array(),
             '',

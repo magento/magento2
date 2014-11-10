@@ -160,7 +160,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
                 'lastname' => 'test lastname',
                 'email' => 'example@domain.com',
                 'default_billing' => '_item1',
-                'password' => 'auto'
+                'password' => 'password',
             ),
             'address' => array(
                 '_item1' => array(
@@ -374,7 +374,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
                 'firstname' => 'test firstname',
                 'lastname' => 'test lastname',
                 'email' => 'customer@example.com',
-                'password' => 'auto'
+                'password' => 'password',
             )
         );
         $this->getRequest()->setPost($post);

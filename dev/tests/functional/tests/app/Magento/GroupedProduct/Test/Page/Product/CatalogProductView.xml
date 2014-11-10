@@ -32,5 +32,10 @@
                 </grouped>
             </renders>
         </viewBlock>
+        <groupedProductViewBlock>
+            <class>Magento\GroupedProduct\Test\Block\Catalog\Product\View</class>
+            <locator>#maincontent</locator>
+            <strategy>css selector</strategy>
+        </groupedProductViewBlock>
     </blocks>
 </page>

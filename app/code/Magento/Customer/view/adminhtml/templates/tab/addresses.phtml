@@ -163,14 +163,7 @@
                 /** @var \Magento\Customer\Service\V1\Data\Address $_address */
                 foreach ($addressCollection as $_address): ?>
                     <div class="address-item-edit-content" id="form_address_item_<?php echo $_address->getId() ?>" data-item="<?php echo $_address->getId() ?>" style="display:none" data-mage-init='{"observableInputs": {"name": "address_item_<?php echo $_address->getId() ?>"}}'>
-                        <?php
-                        $this->initForm()->getForm()
-                            ->addValues(\Magento\Customer\Service\V1\Data\AddressConverter::toFlatArray($_address))
-                            ->setHtmlIdPrefix("_item{$_address->getId()}")
-                            ->setFieldNameSuffix('address['.$_address->getId().']');
-                        $this->addValuesToNamePrefixElement($_address->getPrefix())
-                            ->addValuesToNameSuffixElement($_address->getSuffix());
-                        ?>
+                        <?php $this->initAddressForm($_address); ?>
                         <?php echo $this->getForm()->getHtml() ?>
                         <input type="hidden" name="address[<?php echo $_address->getId() ?>][_deleted]" id="deleted_address_item_<?php echo $_address->getId() ?>" />
                     </div>

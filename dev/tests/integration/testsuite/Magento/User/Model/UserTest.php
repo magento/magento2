@@ -104,7 +104,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     public function testUpdateRoleOnSave()
     {
         $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
-        $this->assertEquals('Administrators', $this->_model->getRole()->getRoleName());
+        $this->assertEquals(\Magento\TestFramework\Bootstrap::ADMIN_ROLE_NAME, $this->_model->getRole()->getRoleName());
         $this->_model->setRoleId(self::$_newRole->getId())->save();
         $this->assertEquals('admin_role', $this->_model->getRole()->getRoleName());
     }
@@ -187,9 +187,11 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
     public function testGetName()
     {
+        $firstname = \Magento\TestFramework\Bootstrap::ADMIN_FIRSTNAME;
+        $lastname = \Magento\TestFramework\Bootstrap::ADMIN_LASTNAME;
         $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
-        $this->assertEquals('firstname lastname', $this->_model->getName());
-        $this->assertEquals('firstname///lastname', $this->_model->getName('///'));
+        $this->assertEquals("$firstname $lastname", $this->_model->getName());
+        $this->assertEquals("$firstname///$lastname", $this->_model->getName('///'));
     }
 
     public function testGetUninitializedAclRole()
@@ -291,7 +293,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->_model->setFirstname('NewFirstName');
         $this->assertEquals('NewFirstName', $this->_model->getFirstname());
         $this->_model->reload();
-        $this->assertEquals('firstname', $this->_model->getFirstname());
+        $this->assertEquals(\Magento\TestFramework\Bootstrap::ADMIN_FIRSTNAME, $this->_model->getFirstname());
     }
 
     /**
@@ -335,7 +337,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         )->setLastname(
             'Doe'
         )->setEmail(
-            'jdoe@gmail.com'
+            'jdoe@example.com'
         )->setPassword(
             '123123q'
         );
@@ -421,7 +423,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         )->setLastname(
             'Doe'
         )->setEmail(
-            'jdoe@gmail.com'
+            'jdoe@example.com'
         )->setPassword(
             '1234abc'
         )->setPasswordConfirmation(

@@ -31,23 +31,31 @@
 ?>
 <?php $_items = $this->getItems()?>
 <?php if($_items): ?>
-<div class="block reorder">
-    <div class="title">
+<div class="block block-reorder">
+    <div class="block-title">
         <strong><?php echo __('My Orders') ?></strong>
     </div>
-    <div class="content">
+    <div class="block-content">
         <form method="post" class="form reorder" action="<?php echo $this->getFormActionUrl() ?>" id="reorder-validate-detail">
             <strong class="subtitle"><?php echo __('Last Ordered Items') ?></strong>
-            <ol class="items" id="cart-sidebar-reorder">
+            <ol id="cart-sidebar-reorder" class="product-items product-items-names">
             <?php $_showAddButtonFlag = false ?>
             <?php foreach ($_items as $_item): ?>
-                <li class="item">
+                <li class="product-item">
                     <?php if ($this->isItemAvailableForReorder($_item)): ?>
                         <?php $_showAddButtonFlag = true ?>
-                        <input type="checkbox" name="order_items[]" id="reorder-item-<?php echo $_item->getId() ?>" value="<?php echo $_item->getId() ?>" title="<?php echo __('Add to Cart') ?>"
-                               class="checkbox" data-validate='{"validate-one-checkbox-required-by-name": true}'/>
+                        <div class="field item choice">
+                            <label class="label" for="reorder-item-<?php echo $_item->getId() ?>"><span><?php echo __('Add to Cart') ?></span></label>
+                            <div class="control">
+                                <input type="checkbox" name="order_items[]" id="reorder-item-<?php echo $_item->getId() ?>" value="<?php echo $_item->getId() ?>" title="<?php echo __('Add to Cart') ?>"
+                                       class="checkbox" data-validate='{"validate-one-checkbox-required-by-name": true}'/>
+                            </div>
+                        </div>
                     <?php endif; ?>
-                    <strong class="product name"><a href="<?php echo $_item->getProduct()->getProductUrl() ?>"><?php echo $this->escapeHtml($_item->getName()) ?></a></strong>
+                    <strong class="product-item-name">
+                        <a href="<?php echo $_item->getProduct()->getProductUrl() ?>"
+                           class="product-item-link"><?php echo $this->escapeHtml($_item->getName()) ?></a>
+                    </strong>
                 </li>
             <?php endforeach; ?>
             </ol>

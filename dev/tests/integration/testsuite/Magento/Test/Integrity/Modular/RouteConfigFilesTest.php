@@ -52,18 +52,15 @@ class RouteConfigFilesTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        global $magentoBaseDir;
-
-        $this->_schemaFile = $magentoBaseDir . '/lib/internal/Magento/Framework/App/etc/routes.xsd';
-        $this->_mergedSchemaFile = $magentoBaseDir . '/lib/internal/Magento/Framework/App/etc/routes_merged.xsd';
+        $this->_schemaFile = BP . '/lib/internal/Magento/Framework/App/etc/routes.xsd';
+        $this->_mergedSchemaFile = BP . '/lib/internal/Magento/Framework/App/etc/routes_merged.xsd';
     }
 
     public function testRouteConfigsValidation()
     {
-        global $magentoBaseDir;
         $invalidFiles = array();
 
-        $mask = $magentoBaseDir . '/app/code/*/*/etc/*/routes.xml';
+        $mask = BP . '/app/code/*/*/etc/*/routes.xml';
         $files = glob($mask);
         $mergedConfig = new \Magento\Framework\Config\Dom('<config></config>', $this->_idAttributes);
 

@@ -66,6 +66,12 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         $this->_jsonDeserializer->deserialize(false);
     }
 
+    public function testDeserializerOauthInputException()
+    {
+        $this->setExpectedException('\Magento\Webapi\Exception', 'Request body should not be empty.');
+        $this->_jsonDeserializer->deserialize('');
+    }
+
     public function testDeserialize()
     {
         /** Prepare mocks for SUT constructor. */

@@ -22,7 +22,9 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 require __DIR__ . '/../../../bootstrap.php';
+
 $rootDir = realpath(__DIR__ . '/../../../../../');
+use Magento\Framework\ObjectManager\Code\Generator\Converter;
 use Magento\Framework\ObjectManager\Code\Generator\Factory;
 use Magento\Framework\ObjectManager\Code\Generator\Repository;
 use Magento\Framework\ObjectManager\Code\Generator\Proxy;
@@ -32,35 +34,35 @@ use Magento\Tools\Di\Compiler\Directory;
 use Magento\Tools\Di\Code\Scanner;
 use Magento\Tools\Di\Definition\Compressor;
 use Magento\Tools\Di\Definition\Serializer;
-use Magento\Framework\Service\Code\Generator\Builder;
-use Magento\Framework\Service\Code\Generator\Mapper;
-use Magento\Framework\ObjectManager\Code\Generator\Converter;
-use Magento\Framework\Service\Code\Generator\SearchResults;
-use Magento\Framework\Service\Code\Generator\SearchResultsBuilder;
+use Magento\Framework\Api\Code\Generator\Builder;
+use Magento\Framework\Api\Code\Generator\Mapper;
+use Magento\Framework\Api\Code\Generator\SearchResults;
+use Magento\Framework\Api\Code\Generator\SearchResultsBuilder;
+use Magento\Framework\Api\Code\Generator\DataBuilder;
 
-$filePatterns = array('php' => '/.*\.php$/', 'di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/');
+$filePatterns = ['php' => '/.*\.php$/', 'di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/'];
 $codeScanDir = realpath($rootDir . '/app');
 try {
     $opt = new Zend_Console_Getopt(
-        array(
-            'serializer=w' => 'serializer function that should be used (serialize|binary) default = serialize',
-            'verbose|v' => 'output report after tool run',
+        [
+            'serializer=w'         => 'serializer function that should be used (serialize|binary) default = serialize',
+            'verbose|v'            => 'output report after tool run',
             'extra-classes-file=s' => 'path to file with extra proxies and factories to generate',
-            'generation=s' => 'absolute path to generated classes, <magento_root>/var/generation by default',
-            'di=s' => 'absolute path to DI definitions directory, <magento_root>/var/di by default'
-        )
+            'generation=s'         => 'absolute path to generated classes, <magento_root>/var/generation by default',
+            'di=s'                 => 'absolute path to DI definitions directory, <magento_root>/var/di by default'
+        ]
     );
     $opt->parse();
 
     $generationDir = $opt->getOption('generation') ? $opt->getOption('generation') : $rootDir . '/var/generation';
-    (new \Magento\Framework\Autoload\IncludePath())->addIncludePath($generationDir);
+    \Magento\Framework\Code\Generator\FileResolver::addIncludePath($generationDir);
 
     $diDir = $opt->getOption('di') ? $opt->getOption('di') : $rootDir . '/var/di';
     $compiledFile = $diDir . '/definitions.php';
     $relationsFile = $diDir . '/relations.php';
     $pluginDefFile = $diDir . '/plugins.php';
 
-    $compilationDirs = array($rootDir . '/app/code', $rootDir . '/lib/internal/Magento');
+    $compilationDirs = [$rootDir . '/app/code', $rootDir . '/lib/internal/Magento'];
 
     /** @var Writer\WriterInterface $logWriter Writer model for success messages */
     $logWriter = $opt->getOption('v') ? new Writer\Console() : new Writer\Quiet();
@@ -79,8 +81,8 @@ try {
     // 1.1 Code scan
     $directoryScanner = new Scanner\DirectoryScanner();
     $files = $directoryScanner->scan($codeScanDir, $filePatterns);
-    $files['additional'] = array($opt->getOption('extra-classes-file'));
-    $entities = array();
+    $files['additional'] = [$opt->getOption('extra-classes-file')];
+    $entities = [];
 
     $scanner = new Scanner\CompositeScanner();
     $scanner->addChild(new Scanner\PhpScanner($log), 'php');
@@ -90,37 +92,43 @@ try {
 
     $interceptorScanner = new Scanner\XmlInterceptorScanner();
     $entities['interceptors'] = $interceptorScanner->collectEntities($files['di']);
+    $fileResolver = new \Magento\Framework\Code\Generator\FileResolver();
 
     // 1.2 Generation of Factory and Additional Classes
     $generatorIo = new \Magento\Framework\Code\Generator\Io(
         new \Magento\Framework\Filesystem\Driver\File(),
-        null,
+        $fileResolver,
         $generationDir
     );
     $generator = new \Magento\Framework\Code\Generator(
-        null,
+        $fileResolver,
         $generatorIo,
-        array(
+        [
+            DataBuilder::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\DataBuilder',
             \Magento\Framework\Interception\Code\Generator\Interceptor::ENTITY_TYPE =>
                 'Magento\Framework\Interception\Code\Generator\Interceptor',
-            SearchResultsBuilder::ENTITY_TYPE => 'Magento\Framework\Service\Code\Generator\SearchResultsBuilder',
+            SearchResultsBuilder::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\SearchResultsBuilder',
             Proxy::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Proxy',
             Factory::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Factory',
-            Builder::ENTITY_TYPE => 'Magento\Framework\Service\Code\Generator\Builder',
-            Mapper::ENTITY_TYPE => 'Magento\Framework\Service\Code\Generator\Mapper',
+            Builder::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\Builder',
+            Mapper::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\Mapper',
             Repository::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Repository',
             Converter::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Converter',
-            SearchResults::ENTITY_TYPE => 'Magento\Framework\Service\Code\Generator\SearchResults',
-        )
+            SearchResults::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\SearchResults',
+        ]
     );
-    $autoloader = new \Magento\Framework\Code\Generator\Autoloader($generator);
-    spl_autoload_register(array($autoloader, 'load'));
-    foreach (array('php', 'additional') as $type) {
+    $autoloader = new \Magento\Framework\Code\Generator\Autoloader($generator, $fileResolver);
+    spl_autoload_register([$autoloader, 'load']);
+    foreach (['php', 'additional'] as $type) {
         sort($entities[$type]);
         foreach ($entities[$type] as $entityName) {
             switch ($generator->generateClass($entityName)) {
                 case \Magento\Framework\Code\Generator::GENERATION_SUCCESS:
                     $log->add(Log::GENERATION_SUCCESS, $entityName);
+                    $file = $fileResolver->getFile($entityName);
+                    if ($file) {
+                        include_once $file;
+                    }
                     break;
 
                 case \Magento\Framework\Code\Generator::GENERATION_ERROR:
@@ -151,11 +159,15 @@ try {
     );
 
     // 2.1.1 Generation of Proxy and Interceptor Classes
-    foreach (array('interceptors', 'di') as $type) {
+    foreach (['interceptors', 'di'] as $type) {
         foreach ($entities[$type] as $entityName) {
             switch ($generator->generateClass($entityName)) {
                 case \Magento\Framework\Code\Generator::GENERATION_SUCCESS:
                     $log->add(Log::GENERATION_SUCCESS, $entityName);
+                    $file = $fileResolver->getFile($entityName);
+                    if ($file) {
+                        include_once $file;
+                    }
                     break;
 
                 case \Magento\Framework\Code\Generator::GENERATION_ERROR:
@@ -189,7 +201,7 @@ try {
     // 3. Plugin Definition Compilation
     $pluginScanner = new Scanner\CompositeScanner();
     $pluginScanner->addChild(new Scanner\PluginScanner(), 'di');
-    $pluginDefinitions = array();
+    $pluginDefinitions = [];
     $pluginList = $pluginScanner->collectEntities($files);
     $pluginDefinitionList = new \Magento\Framework\Interception\Definition\Runtime();
     foreach ($pluginList as $type => $entityList) {
@@ -218,5 +230,5 @@ try {
     exit(1);
 } catch (Exception $e) {
     fwrite(STDERR, "Compiler failed with exception: " . $e->getMessage());
-    exit(1);
+    throw($e);
 }

@@ -34,7 +34,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetAdjustment()
     {
         $data = ['adjustment' => 'test_value_adjustment'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -50,7 +50,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetAdjustmentNegative()
     {
         $data = ['adjustment_negative' => 'test_value_adjustment_negative'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -66,7 +66,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetAdjustmentPositive()
     {
         $data = ['adjustment_positive' => 'test_value_adjustment_positive'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -82,7 +82,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetBaseAdjustment()
     {
         $data = ['base_adjustment' => 'test_value_base_adjustment'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -98,7 +98,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetBaseAdjustmentNegative()
     {
         $data = ['base_adjustment_negative' => 'test_value_base_adjustment_negative'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -114,7 +114,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetBaseAdjustmentPositive()
     {
         $data = ['base_adjustment_positive' => 'test_value_base_adjustment_positive'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -130,7 +130,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetBaseCurrencyCode()
     {
         $data = ['base_currency_code' => 'test_value_base_currency_code'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -146,7 +146,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetBaseDiscountAmount()
     {
         $data = ['base_discount_amount' => 'test_value_base_discount_amount'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -162,7 +162,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetBaseGrandTotal()
     {
         $data = ['base_grand_total' => 'test_value_base_grand_total'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -178,7 +178,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetBaseHiddenTaxAmount()
     {
         $data = ['base_hidden_tax_amount' => 'test_value_base_hidden_tax_amount'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -194,7 +194,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetBaseShippingAmount()
     {
         $data = ['base_shipping_amount' => 'test_value_base_shipping_amount'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -210,7 +210,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetBaseShippingHiddenTaxAmnt()
     {
         $data = ['base_shipping_hidden_tax_amnt' => 'test_value_base_shipping_hidden_tax_amnt'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -226,7 +226,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetBaseShippingInclTax()
     {
         $data = ['base_shipping_incl_tax' => 'test_value_base_shipping_incl_tax'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -242,7 +242,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetBaseShippingTaxAmount()
     {
         $data = ['base_shipping_tax_amount' => 'test_value_base_shipping_tax_amount'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -258,7 +258,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetBaseSubtotal()
     {
         $data = ['base_subtotal' => 'test_value_base_subtotal'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -274,7 +274,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetBaseSubtotalInclTax()
     {
         $data = ['base_subtotal_incl_tax' => 'test_value_base_subtotal_incl_tax'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -290,7 +290,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetBaseTaxAmount()
     {
         $data = ['base_tax_amount' => 'test_value_base_tax_amount'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -306,7 +306,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetBaseToGlobalRate()
     {
         $data = ['base_to_global_rate' => 'test_value_base_to_global_rate'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -322,7 +322,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetBaseToOrderRate()
     {
         $data = ['base_to_order_rate' => 'test_value_base_to_order_rate'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -338,7 +338,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetBillingAddressId()
     {
         $data = ['billing_address_id' => 'test_value_billing_address_id'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -354,7 +354,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetCreatedAt()
     {
         $data = ['created_at' => 'test_value_created_at'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -370,7 +370,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetCreditmemoStatus()
     {
         $data = ['creditmemo_status' => 'test_value_creditmemo_status'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -386,7 +386,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetDiscountAmount()
     {
         $data = ['discount_amount' => 'test_value_discount_amount'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -402,7 +402,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetDiscountDescription()
     {
         $data = ['discount_description' => 'test_value_discount_description'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -418,7 +418,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetEmailSent()
     {
         $data = ['email_sent' => 'test_value_email_sent'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -434,7 +434,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetEntityId()
     {
         $data = ['entity_id' => 'test_value_entity_id'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -450,7 +450,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetGlobalCurrencyCode()
     {
         $data = ['global_currency_code' => 'test_value_global_currency_code'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -466,7 +466,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetGrandTotal()
     {
         $data = ['grand_total' => 'test_value_grand_total'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -482,7 +482,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetHiddenTaxAmount()
     {
         $data = ['hidden_tax_amount' => 'test_value_hidden_tax_amount'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -498,7 +498,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetIncrementId()
     {
         $data = ['increment_id' => 'test_value_increment_id'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -514,7 +514,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetInvoiceId()
     {
         $data = ['invoice_id' => 'test_value_invoice_id'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -530,7 +530,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetOrderCurrencyCode()
     {
         $data = ['order_currency_code' => 'test_value_order_currency_code'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -546,7 +546,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetOrderId()
     {
         $data = ['order_id' => 'test_value_order_id'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -562,7 +562,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetShippingAddressId()
     {
         $data = ['shipping_address_id' => 'test_value_shipping_address_id'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -578,7 +578,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetShippingAmount()
     {
         $data = ['shipping_amount' => 'test_value_shipping_amount'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -594,7 +594,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetShippingHiddenTaxAmount()
     {
         $data = ['shipping_hidden_tax_amount' => 'test_value_shipping_hidden_tax_amount'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -610,7 +610,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetShippingInclTax()
     {
         $data = ['shipping_incl_tax' => 'test_value_shipping_incl_tax'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -626,7 +626,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetShippingTaxAmount()
     {
         $data = ['shipping_tax_amount' => 'test_value_shipping_tax_amount'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -642,7 +642,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetState()
     {
         $data = ['state' => 'test_value_state'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -658,7 +658,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetStoreCurrencyCode()
     {
         $data = ['store_currency_code' => 'test_value_store_currency_code'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -674,7 +674,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetStoreId()
     {
         $data = ['store_id' => 'test_value_store_id'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -690,7 +690,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetStoreToBaseRate()
     {
         $data = ['store_to_base_rate' => 'test_value_store_to_base_rate'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -706,7 +706,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetStoreToOrderRate()
     {
         $data = ['store_to_order_rate' => 'test_value_store_to_order_rate'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -722,7 +722,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetSubtotal()
     {
         $data = ['subtotal' => 'test_value_subtotal'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -738,7 +738,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetSubtotalInclTax()
     {
         $data = ['subtotal_incl_tax' => 'test_value_subtotal_incl_tax'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -754,7 +754,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetTaxAmount()
     {
         $data = ['tax_amount' => 'test_value_tax_amount'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -770,7 +770,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetTransactionId()
     {
         $data = ['transaction_id' => 'test_value_transaction_id'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -786,7 +786,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetUpdatedAt()
     {
         $data = ['updated_at' => 'test_value_updated_at'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -802,7 +802,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
     public function testGetItems()
     {
         $data = ['items' => 'test_value_items'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();

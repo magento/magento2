@@ -30,8 +30,7 @@ use Magento\Backend\Test\Block\Widget\Form;
 use Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super\Config\Attribute\AttributeSelector;
 
 /**
- * Class Attribute
- * Attribute block in Variation section
+ * Attribute block in Variation section.
  */
 class Attribute extends Form
 {
@@ -158,6 +157,7 @@ class Attribute extends Form
 
             if (!$isExistAttribute && empty($attribute['attribute_id'])) {
                 $this->createNewVariationSet($attribute);
+                $this->waitBlock($this->newAttributeFrame);
                 $this->fillOptions($attribute);
             } else {
                 if (!$isExistAttribute) {
@@ -169,7 +169,7 @@ class Attribute extends Form
     }
 
     /**
-     * Create new variation set
+     * Create new variation set.
      *
      * @param array $attribute
      * @return void
@@ -183,7 +183,25 @@ class Attribute extends Form
         $newAttribute->getTabElement('properties')->fillFormTab($attribute);
         $newAttribute->_rootElement->find($this->saveAttribute)->click();
 
-        $this->browser->switchToFrame();
+        $this->browser->selectWindow();
+    }
+
+    /**
+     * Wait that element is not visible.
+     *
+     * @param string $selector
+     * @param mixed $browser [optional]
+     * @param string $strategy [optional]
+     * @return mixed
+     */
+    protected function waitBlock($selector, $browser = null, $strategy = Locator::SELECTOR_CSS)
+    {
+        $browser = ($browser != null) ? $browser : $this->browser;
+        return $browser->waitUntil(
+            function () use ($browser, $selector, $strategy) {
+                return $browser->find($selector, $strategy)->isVisible() == false ? true : null;
+            }
+        );
     }
 
     /**
@@ -242,7 +260,7 @@ class Attribute extends Form
                 Locator::SELECTOR_XPATH
             );
 
-            if (!$optionContainer->isVisible() && $this->isVisibleOption($attributeBlock, $count-1)) {
+            if (!$optionContainer->isVisible() && $this->isVisibleOption($attributeBlock, $count - 1)) {
                 $attributeBlock->find($this->addOption)->click();
             }
             $mapping = $this->dataMapping($option);

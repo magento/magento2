@@ -22,7 +22,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/** @var \Magento\Framework\Module\Setup $this */
+/** @var $this \Magento\Framework\Module\Setup */
 $codes = array(
     'method' => array(
         'EUROPEFIRSTINTERNATIONALPRIORITY' => 'EUROPE_FIRST_INTERNATIONAL_PRIORITY',

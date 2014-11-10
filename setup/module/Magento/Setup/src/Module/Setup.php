@@ -40,7 +40,7 @@ class Setup implements SetupInterface
     /**
      * Setup Connection
      *
-     * @var \Magento\Setup\Framework\DB\Adapter\AdapterInterface
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
     protected $connection = null;
 
@@ -92,7 +92,7 @@ class Setup implements SetupInterface
     /**
      * Get connection object
      *
-     * @return \Magento\Setup\Framework\DB\Adapter\AdapterInterface
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
     public function getConnection()
     {
@@ -364,13 +364,12 @@ class Setup implements SetupInterface
      */
     public function addConfigData($key, $value)
     {
-        $this->getConnection()->insert(
+        $this->getConnection()->insertOnDuplicate(
             $this->getTable('core_config_data'),
             array(
                 'path'  => $key,
                 'value' => $value
-            ),
-            true
+            )
         );
     }
 }

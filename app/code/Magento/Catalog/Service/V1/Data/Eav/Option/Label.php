@@ -30,7 +30,7 @@ namespace Magento\Catalog\Service\V1\Data\Eav\Option;
  *
  * @codeCoverageIgnore
  */
-class Label extends \Magento\Framework\Service\Data\AbstractExtensibleObject
+class Label extends \Magento\Framework\Api\AbstractExtensibleObject
 {
     /**
      * Constants used as keys into $_data

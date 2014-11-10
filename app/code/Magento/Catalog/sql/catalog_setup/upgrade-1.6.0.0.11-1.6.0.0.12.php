@@ -22,7 +22,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/** @var $installer \Magento\Catalog\Model\Resource\Setup */
+/** @var $installer \Magento\Setup\Module\SetupModule */
 $installer = $this;
 $indexFields = array('website_id', 'customer_group_id', 'min_price');
 $installer->getConnection()->addIndex(

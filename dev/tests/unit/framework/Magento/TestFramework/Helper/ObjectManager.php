@@ -104,7 +104,7 @@ class ObjectManager
     protected function _getResourceModelMock()
     {
         $resourceMock = $this->_testObject->getMock(
-            'Magento\Install\Model\Resource\Resource',
+            'Magento\Framework\Module\Resource',
             array('getIdFieldName', '__sleep', '__wakeup'),
             array(),
             '',
@@ -170,7 +170,7 @@ class ObjectManager
      */
     public function getObject($className, array $arguments = array())
     {
-        if (is_subclass_of($className, '\Magento\Framework\Service\Data\AbstractSimpleObjectBuilder')) {
+        if (is_subclass_of($className, '\Magento\Framework\Api\AbstractSimpleObjectBuilder')) {
             return $this->getBuilder($className, $arguments);
         }
         $constructArguments = $this->getConstructArguments($className, $arguments);
@@ -187,7 +187,7 @@ class ObjectManager
      */
     protected function getBuilder($className, array $arguments)
     {
-        $objectFactory = $this->_testObject->getMock('Magento\Framework\Service\Data\ObjectFactory', [], [], '', false);
+        $objectFactory = $this->_testObject->getMock('Magento\Framework\Api\ObjectFactory', [], [], '', false);
 
         if (!isset($arguments['objectFactory'])) {
             $arguments['objectFactory'] = $objectFactory;
@@ -303,7 +303,7 @@ class ObjectManager
      */
     private function _getMockObject($argClassName, array $arguments)
     {
-        if (is_subclass_of($argClassName, '\Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')) {
+        if (is_subclass_of($argClassName, '\Magento\Framework\Api\ExtensibleObjectBuilder')) {
             $object = $this->getBuilder($argClassName, $arguments);
             return $object;
         } else {

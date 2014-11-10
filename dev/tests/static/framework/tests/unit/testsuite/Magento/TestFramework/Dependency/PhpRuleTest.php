@@ -135,8 +135,7 @@ class PhpRuleTest extends \PHPUnit_Framework_TestCase
         $mapLayoutBlocks = array(
             'default' => array(
                 'block.name' => array(
-                    'Magento\SomeModule' => 'Magento\SomeModule',
-                    'Magento\Install' => 'Magento\Install'
+                    'Magento\SomeModule' => 'Magento\SomeModule'
                 )
             )
         );
@@ -152,7 +151,7 @@ class PhpRuleTest extends \PHPUnit_Framework_TestCase
                 '$this->getLayout()->getBlock(\'block.name\');',
                 array(
                     array(
-                        'module' => 'Magento\Install',
+                        'module' => 'Magento\SomeModule',
                         'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
                         'source' => 'getBlock(\'block.name\')'
                     )

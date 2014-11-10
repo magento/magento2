@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../lib/internal/Magento/Framework/Service/etc/data_object.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../lib/internal/Magento/Framework/Api/etc/data_object.xsd">
     <custom_attributes for="Magento\Tax\Service\V1\Data\TaxRate">
     </custom_attributes>
     <custom_attributes for="Magento\Catalog\Service\V1\Data\Product">
@@ -33,11 +33,11 @@
         <attribute code="category_attribute_1" type="Magento\Catalog\Service\V1\Data\CategoryAttributeType1" />
         <attribute code="category_attribute_2" type="Magento\Catalog\Service\V1\Data\CategoryAttributeType2" />
     </custom_attributes>
-    <custom_attributes for="Magento\Customer\Service\V1\Data\Customer">
+    <custom_attributes for="Magento\Customer\Api\Data\CustomerInterface">
         <attribute code="customer_attribute_1" type="Magento\Customer\Service\V1\Data\CustomerAttributeType1" />
         <attribute code="customer_attribute_2" type="Magento\Customer\Service\V1\Data\CustomerAttributeType2" />
     </custom_attributes>
-    <custom_attributes for="Magento\Customer\Service\V1\Data\Address">
+    <custom_attributes for="Magento\Customer\Api\Data\AddressInterface">
         <attribute code="address_attribute_1" type="Magento\Customer\Service\V1\Data\AddressAttributeType1" />
         <attribute code="address_attribute_2" type="Magento\Customer\Service\V1\Data\AddressAttributeType2" />
     </custom_attributes>

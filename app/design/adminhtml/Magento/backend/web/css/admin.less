@@ -637,7 +637,6 @@ input[type=tel]:focus,
 input[type=color]:focus,
 textarea:focus,
 select:focus {
-    outline: 0;
     border-color: #75b9f0;
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
 }
@@ -1848,9 +1847,6 @@ address {
     button:not(.primary):active {
       background-color: #cac3b4;
       border: 1px solid #989287;
-      outline: thin dotted;
-      outline: 5px auto -webkit-focus-ring-color;
-      outline-offset: -2px;
     }
     button:not(.primary):hover {
       background-color: #cac3b4;
@@ -1883,9 +1879,6 @@ address {
     button.primary:active {
       background-color: #026294;
       border: 1px solid #004c74;
-      outline: thin dotted;
-      outline: 5px auto -webkit-focus-ring-color;
-      outline-offset: -2px;
       color: #ffffff;
     }
     button.primary:hover {
@@ -2493,44 +2486,45 @@ address {
     text-shadow: 0 1px 0 #fff;
 }
 
-/*
-    Universal Sidebar Tabs
--------------------------------------- */
+//
+//    Universal Sidebar Tabs
+// --------------------------------------
 // TODO: for "Product" page only while refactoring */
-
 .side-col .ui-tabs .ui-accordion-header {
-    position: relative;
     margin: 10px 0 0;
-    padding: 5px 20px;
-    cursor: pointer;
-    color: #524c44;
-    text-shadow: 0 1px 0 #fff;
-}
-
-.side-col .ui-tabs .ui-accordion-header:focus {
-    outline: none;
-}
-
-.side-col .ui-accordion-header:before {
-    position: absolute;
-    left: 4px;
-    top: 7px;
-    font-family: 'MUI-Icons';
-    font-style: normal;
-    speak: none;
-    font-weight: normal;
-    -webkit-font-smoothing: antialiased;
-    content: '\e02a'; /* arrow right icon */
-    font-size: 14px;
-    color: #ada79e;
-}
-
-.side-col .ui-accordion-header:hover:before {
-    color: #777;
-}
-
-.side-col .ui-accordion-header-active:before {
-    content: '\e02c'; /* arrow down icon */
+    padding: 0;
+    &:focus {
+        outline: none;
+    }
+    span {
+        color: #524c44;
+        cursor: pointer;
+        display: block;
+        position: relative;
+        padding: 5px 20px;
+        text-shadow: 0 1px 0 #fff;
+        &:before {
+            position: absolute;
+            left: 4px;
+            top: 7px;
+            font-family: 'MUI-Icons';
+            font-style: normal;
+            speak: none;
+            font-weight: normal;
+            -webkit-font-smoothing: antialiased;
+            content: '\e02a'; // arrow right icon
+            font-size: 14px;
+            color: #ada79e;
+        }
+    }
+    &:hover {
+        span:before {
+            color: #777;
+        }
+    }
+    &-active span:before {
+        content: '\e02c'; // arrow down icon
+    }
 }
 
 .side-col .tabs {
@@ -2561,11 +2555,6 @@ address {
     -webkit-transition: background 0.3s ease-in-out;
     -moz-transition: background 0.3s ease-in-out;
     transition: background 0.3s ease-in-out;
-}
-
-.side-col .tabs > li a:active,
-.side-col .tabs > li a:focus {
-    outline: none;
 }
 
 .side-col .tabs > li a:hover {

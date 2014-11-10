@@ -25,12 +25,6 @@
 
 namespace Magento\Customer\Controller\Adminhtml\Customer;
 
-use Magento\Customer\Service\V1\Data\CustomerBuilder;
-use Magento\Customer\Service\V1\CustomerAddressServiceInterface;
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
-use Magento\Customer\Service\V1\Data\AddressBuilder;
-use Magento\Customer\Service\V1\Data\CustomerDetailsBuilder;
-
 /**
  *  Class to invalidate tokens for customers
  */

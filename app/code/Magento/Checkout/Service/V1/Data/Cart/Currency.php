@@ -28,7 +28,7 @@ namespace Magento\Checkout\Service\V1\Data\Cart;
  *
  * @codeCoverageIgnore
  */
-class Currency extends \Magento\Framework\Service\Data\AbstractExtensibleObject
+class Currency extends \Magento\Framework\Api\AbstractExtensibleObject
 {
     const GLOBAL_CURRENCY_CODE = 'global_currency_code';
 

@@ -22,51 +22,51 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<h1 class="text-center"><span class="glyphicon glyphicon-ok-sign text-success"></span>&nbsp;<?php echo $this->translate('Success'); ?></h1>
-<p><?php echo $this->translate('Please keep this information for your records'); ?>:</p>
+<h1 class="text-center"><span class="glyphicon glyphicon-ok-sign text-success"></span>&nbsp;Success</h1>
+<p>Please keep this information for your records:</p>
 <div id="admin-info" class="col-lg-12 p-top-10">
-    <div class="col-sm-12 bold p-top-10"><?php echo $this->translate('Magento Admin Info'); ?>:</div>
+    <div class="col-sm-12 bold p-top-10">Magento Admin Info:</div>
     <div class="row p-top-10">
-        <div class="col-sm-6"><?php echo $this->translate('Username'); ?>:</div>
+        <div class="col-sm-6">Username:</div>
         <div class="col-sm-6">{{admin.username}}</div>
     </div>
     <div class="row p-top-10">
-        <div class="col-sm-6"><?php echo $this->translate('E-Mail'); ?>:</div>
+        <div class="col-sm-6">E-Mail:</div>
         <div class="col-sm-6">{{admin.email}}</div>
     </div>
     <div class="row p-top-10">
-        <div class="col-sm-6"><?php echo $this->translate('Password'); ?>:</div>
+        <div class="col-sm-6">Password:</div>
         <div class="col-sm-6">******</div>
     </div>
     <div class="row p-top-10">
-        <div class="col-sm-6"><?php echo $this->translate('Your Store Address'); ?>:</div>
+        <div class="col-sm-6">Your Store Address:</div>
         <div class="col-sm-6"><a href="{{config.address.web}}">{{config.address.web}}</a></div>
     </div>
     <div class="row p-top-10">
-        <div class="col-sm-6"><?php echo $this->translate('Magento Admin Address'); ?>:</div>
+        <div class="col-sm-6">Magento Admin Address:</div>
         <div class="col-sm-6"><a href="{{config.address.web}}{{config.address.admin}}">{{config.address.web}}{{config.address.admin}}/</a></div>
     </div>
     <div class="row p-top-10">
-        <div class="col-sm-6"><?php echo $this->translate('Encryption Key'); ?>:</div>
+        <div class="col-sm-6">Encryption Key:</div>
         <div class="col-sm-6">{{config.encrypt.key}}</div>
     </div>
 </div>
 <div id="db-info" class="col-lg-12 p-top-10">
-    <div class="col-sm-12 bold p-top-10"><?php echo $this->translate('Database Info'); ?>:</div>
+    <div class="col-sm-12 bold p-top-10">Database Info:</div>
     <div class="row p-top-10">
-        <div class="col-sm-6"><?php echo $this->translate('Database Name'); ?>:</div>
+        <div class="col-sm-6">Database Name:</div>
         <div class="col-sm-6">{{db.name}}</div>
     </div>
     <div class="row p-top-10">
-        <div class="col-sm-6"><?php echo $this->translate('Username'); ?>:</div>
+        <div class="col-sm-6">Username:</div>
         <div class="col-sm-6">{{db.user}}</div>
     </div>
     <div class="row p-top-10">
-        <div class="col-sm-6"><?php echo $this->translate('Password'); ?>:</div>
+        <div class="col-sm-6">Password:</div>
         <div class="col-sm-6">******</div>
     </div>
 </div>
 <div class="text-center">
     <div class="bold" ng-repeat="message in messages">{{message}}</div><br/>
-    <a type="button" class="btn btn-primary" href="{{config.address.web}}{{config.address.admin}}"><?php echo $this->translate('Launch Magento Admin'); ?></a>
+    <a type="button" class="btn btn-primary" href="{{config.address.web}}{{config.address.admin}}">Launch Magento Admin</a>
 </div>

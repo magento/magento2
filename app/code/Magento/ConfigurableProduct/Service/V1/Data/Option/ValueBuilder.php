@@ -23,16 +23,16 @@
  */
 namespace Magento\ConfigurableProduct\Service\V1\Data\Option;
 
-use Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder;
+use Magento\Framework\Api\ExtensibleObjectBuilder;
 
 /**
  * @codeCoverageIgnore
  */
-class ValueBuilder extends AbstractExtensibleObjectBuilder
+class ValueBuilder extends ExtensibleObjectBuilder
 {
     /**
-     * @param float $value 
-     * @return self 
+     * @param float $value
+     * @return self
      */
     public function setPrice($value)
     {
@@ -40,8 +40,8 @@ class ValueBuilder extends AbstractExtensibleObjectBuilder
     }
 
     /**
-     * @param int $value 
-     * @return self 
+     * @param int $value
+     * @return self
      */
     public function setPercent($value)
     {

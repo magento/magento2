@@ -816,7 +816,7 @@ return array(
     array('Magento\Core\Model\Resource\Entity\Table', 'Magento\Framework\Model\Resource\Entity\Table'),
     array('Magento\Core\Model\Resource\Flag', 'Magento\Framework\Flag\Resource'),
     array('Magento\Core\Model\Resource\Iterator', 'Magento\Framework\Model\Resource\Iterator'),
-    array('Magento\Core\Model\Resource\Resource', 'Magento\Install\Model\Resource\Resource'),
+    array('Magento\Core\Model\Resource\Resource', 'Magento\Framework\Module\Resource'),
     array('Magento\Core\Model\Resource\Type\AbstractType', 'Magento\Framework\Model\Resource\Type\AbstractType'),
     array('Magento\Core\Model\Resource\Type\Db', 'Magento\Framework\Model\Resource\Type\Db'),
     array('Magento\Core\Model\Resource\Type\Db\Pdo\Mysql', 'Magento\Framework\Model\Resource\Type\Db\Pdo\Mysql'),
@@ -1259,8 +1259,8 @@ return array(
     array('Mage_Sales_Model_Order_Creditmemo_Api_V2'),
     array('Mage_Sales_Model_Order_Creditmemo_Api'),
     array('Magento\ImportExport\Model\Config'),
-    array('Magento\Install\Model\EntryPoint\Console', 'Magento\Install\App\Console'),
-    array('Magento\Install\Model\EntryPoint\Output', 'Magento\Install\App\Output'),
+    array('Magento\Install\Model\EntryPoint\Console'),
+    array('Magento\Install\Model\EntryPoint\Output'),
     array('Magento\Framework\Data\Collection\Factory', 'Magento\Framework\Data\CollectionFactory'),
     array('Magento\Customer\Block\Adminhtml\System\Config\ValidatevatFactory'),
     array('Magento\Customer\Model\Attribute\Data'),
@@ -2784,8 +2784,8 @@ return array(
     ['Magento\Framework\Module\UpdaterInterface'],
     ['Magento\Framework\App\EntryPoint\EntryPoint', 'Magento\Framework\App\Bootstrap'],
     ['Magento\Framework\App\EntryPointInterface', 'Magento\Framework\App\Bootstrap'],
-    ['Magento\Install\Model\Installer\AbstractInstaller', 'Magento\Install\Model\Installer\Console'],
-    ['Magento\Install\App\Action\Plugin\Install', 'Magento\Framework\App\Bootstrap'],
+    ['Magento\Install\Model\Installer\AbstractInstaller'],
+    ['Magento\Install\App\Action\Plugin\Install'],
     ['\Magento\Cron\App\Cron\Plugin\ApplicationInitializer', 'Magento\Framework\App\Bootstrap'],
     ['Magento\Framework\App\Error\Handler', 'Magento\Framework\App\Http'],
     ['Magento\Framework\App\State\MaintenanceMode', 'Magento\Framework\App\MaintenanceMode'],
@@ -2793,15 +2793,15 @@ return array(
     ['Magento\Framework\Error\HandlerInterface', 'Magento\Framework\App\ErrorHandler'],
     ['Magento\Index'],
     ['Magento\Catalog\Model\Resource\Product\Indexer\Eav'],
-    ['\Magento\Framework\Service\Data\Eav\AbstractObject', 'Magento\Framework\Service\Data\AbstractExtensibleObject'],
-    ['\Magento\Framework\Service\Data\AbstractObject', 'Magento\Framework\Service\Data\AbstractSimpleObject'],
+    ['\Magento\Framework\Api\Eav\AbstractObject', 'Magento\Framework\Api\AbstractExtensibleObject'],
+    ['\Magento\Framework\Api\AbstractObject', 'Magento\Framework\Api\AbstractSimpleObject'],
     [
-        '\Magento\Framework\Service\Data\Eav\AbstractObjectBuilder',
-        'Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder'
+        '\Magento\Framework\Api\Eav\AbstractObjectBuilder',
+        'Magento\Framework\Api\ExtensibleObjectBuilder'
     ],
     [
-        '\Magento\Framework\Service\Data\AbstractObjectBuilder',
-        'Magento\Framework\Service\Data\AbstractSimpleObjectBuilder'
+        '\Magento\Framework\Api\AbstractObjectBuilder',
+        'Magento\Framework\Api\AbstractSimpleObjectBuilder'
     ],
     ['Magento\Catalog\Block\Product'],
     ['\Magento\Sales\Model\Observer'],
@@ -2833,6 +2833,7 @@ return array(
     ['Magento\Wishlist\Block\Rss'],
     ['Magento\Wishlist\Controller\Index\Rss'],
     ['Magento\Checkout\Controller\Onepage\Progress'],
+    ['Magento\Checkout\Controller\Onepage\GetAdditional'],
     ['Magento\Framework\App\Filesystem', 'Magento\Framework\Filesystem'],
     ['Magento\TestFramework\App\Filesystem\DirectoryList'],
     ['Magento\Framework\App\Filesystem\DirectoryList\Configuration'],
@@ -2840,4 +2841,6 @@ return array(
     ['Magento\Framework\Filesystem\DriverFactory', 'Magento\Framework\Filesystem\DriverPool'],
     ['Magento\Framework\Filesystem\WrapperFactory'],
     ['Magento\Framework\Filesystem\WrapperInterface'],
+    ['Magento\Install'],
+    ['Magento\Install\Model\Resource\Resource', 'Magento\Framework\Module\Resource'],
 );

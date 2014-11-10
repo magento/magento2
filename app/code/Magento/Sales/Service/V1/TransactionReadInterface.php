@@ -24,7 +24,7 @@
 
 namespace Magento\Sales\Service\V1;
 
-use Magento\Framework\Service\V1\Data\SearchCriteria;
+use Magento\Framework\Api\SearchCriteria;
 
 interface TransactionReadInterface
 {
@@ -37,7 +37,7 @@ interface TransactionReadInterface
     public function get($id);
 
     /**
-     * @param \Magento\Framework\Service\V1\Data\SearchCriteria $searchCriteria
+     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria
      * @return \Magento\Sales\Service\V1\Data\TransactionSearchResults
      */
     public function search(SearchCriteria $searchCriteria);

@@ -5,3 +5,4 @@
 /config/*
 !/config/*.dist
 phpunit.xml
+/lib/Mtf/Util/Generate/testcase.xml

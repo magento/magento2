@@ -24,17 +24,16 @@
 ?>
 <?php if (($_products = $this->getProductCollection()) && $_products->getSize()): ?>
     <?php $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image'); ?>
-    <div class="widget block new photos">
-        <div class="title">
+    <div class="block widget block-new-products-images">
+        <div class="block-title">
             <strong><?php echo __('New Products') ?></strong>
         </div>
-        <div class="content">
-            <?php echo $this->getPagerHtml() ?>
+        <div class="block-content">
             <?php $suffix = $this->getNameInLayout(); ?>
-            <ol class="items" id="widget-new-products-<?php echo $suffix; ?>">
+            <ol id="widget-new-products-<?php echo $suffix; ?>" class="product-items product-items-images">
                 <?php foreach ($_products->getItems() as $_product): ?>
-                    <li class="item">
-                        <a class="product photo" href="<?php echo $_product->getProductUrl() ?>"
+                    <li class="product-item">
+                        <a class="product-item-photo" href="<?php echo $_product->getProductUrl() ?>"
                            title="<?php echo $this->stripTags($_product->getName(), null, true) ?>">
                             <?php /* new_products_images_only_widget */ ?>
                             <?php echo $imageBlock->init($_product, 'new_products_images_only_widget')->toHtml() ?>
@@ -42,6 +41,7 @@
                     </li>
                 <?php endforeach; ?>
             </ol>
+            <?php echo $this->getPagerHtml() ?>
         </div>
     </div>
 <?php endif; ?>

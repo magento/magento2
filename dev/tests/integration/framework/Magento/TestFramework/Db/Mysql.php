@@ -35,20 +35,27 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
     const DEFAULTS_EXTRA_FILE_NAME = 'defaults_extra.cnf';
 
     /**
-     * Set initial essential parameters
+     * MySQL DB dump file
      *
-     * @param string $host
-     * @param string $user
-     * @param string $password
-     * @param string $schema
-     * @param string $varPath
-     * @param \Magento\Framework\Shell $shell
-     * @throws \Magento\Framework\Exception
+     * @var string
+     */
+    private $_dbDumpFile;
+
+    /**
+     * A file that contains credentials to database, to obscure them from logs
+     *
+     * @var string
+     */
+    private $_defaultsExtraFile;
+
+    /**
+     * {@inheritdoc}
      */
     public function __construct($host, $user, $password, $schema, $varPath, \Magento\Framework\Shell $shell)
     {
         parent::__construct($host, $user, $password, $schema, $varPath, $shell);
-        $this->_createDefaultsExtra();
+        $this->_dbDumpFile = $this->_varPath . '/setup_dump_' . $this->_schema . '.sql';
+        $this->_defaultsExtraFile = rtrim($this->_varPath, '\\/') . '/' . self::DEFAULTS_EXTRA_FILE_NAME;
     }
 
     /**
@@ -56,10 +63,11 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
      */
     public function cleanup()
     {
+        $this->ensureDefaultsExtraFile();
         $this->_shell->execute(
             'mysql --defaults-extra-file=%s --host=%s %s -e %s',
             array(
-                $this->_getDefaultsExtraFileName(),
+                $this->_defaultsExtraFile,
                 $this->_host,
                 $this->_schema,
                 "DROP DATABASE `{$this->_schema}`; CREATE DATABASE `{$this->_schema}`"
@@ -74,7 +82,7 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
      */
     protected function getSetupDbDumpFilename()
     {
-        return $this->_varPath . '/setup_dump_' . $this->_schema . '.sql';
+        return $this->_dbDumpFile;
     }
 
     /**
@@ -92,40 +100,49 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
      */
     public function storeDbDump()
     {
+        $this->ensureDefaultsExtraFile();
         $this->_shell->execute(
             'mysqldump --defaults-extra-file=%s --host=%s  %s > %s',
-            array($this->_getDefaultsExtraFileName(), $this->_host, $this->_schema, $this->getSetupDbDumpFilename())
+            array($this->_defaultsExtraFile, $this->_host, $this->_schema, $this->getSetupDbDumpFilename())
         );
     }
 
     /**
-     * Restore db from setup db dump
+     * {@inheritdoc}
+     * @throws \LogicException
      */
     public function restoreFromDbDump()
     {
+        $this->ensureDefaultsExtraFile();
+        if (!$this->isDbDumpExists()) {
+            throw new \LogicException("DB dump file does not exist: " . $this->getSetupDbDumpFilename());
+        }
         $this->_shell->execute(
             'mysql --defaults-extra-file=%s --host=%s %s < %s',
-            array($this->_getDefaultsExtraFileName(), $this->_host, $this->_schema, $this->getSetupDbDumpFilename())
+            array($this->_defaultsExtraFile, $this->_host, $this->_schema, $this->getSetupDbDumpFilename())
         );
     }
 
     /**
-     * Get defaults extra file name
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    protected function _getDefaultsExtraFileName()
+    public function getVendorName()
     {
-        return rtrim($this->_varPath, '\\/') . '/' . self::DEFAULTS_EXTRA_FILE_NAME;
+        return 'mysql';
     }
 
     /**
      * Create defaults extra file
+     *
+     * @return void
      */
-    protected function _createDefaultsExtra()
+    private function ensureDefaultsExtraFile()
     {
-        $extraConfig = array('[client]', 'user=' . $this->_user, 'password="' . $this->_password . '"');
-        file_put_contents($this->_getDefaultsExtraFileName(), implode(PHP_EOL, $extraConfig));
-        chmod($this->_getDefaultsExtraFileName(), 0644);
+        if (!file_exists($this->_defaultsExtraFile)) {
+            $this->assertVarPathWritable();
+            $extraConfig = array('[client]', 'user=' . $this->_user, 'password="' . $this->_password . '"');
+            file_put_contents($this->_defaultsExtraFile, implode(PHP_EOL, $extraConfig));
+            chmod($this->_defaultsExtraFile, 0644);
+        }
     }
 }

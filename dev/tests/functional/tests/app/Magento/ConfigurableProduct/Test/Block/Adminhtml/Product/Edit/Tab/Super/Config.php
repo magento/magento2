@@ -25,8 +25,10 @@
 namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super;
 
 use Magento\Backend\Test\Block\Widget\Tab;
+use Mtf\Client\Element\Locator;
 use Mtf\Client\Element;
 use Magento\Catalog\Test\Fixture\CatalogCategory;
+use Magento\Backend\Test\Block\Template;
 
 /**
  * Class Config
@@ -63,11 +65,11 @@ class Config extends Tab
     protected $variationsMatrix = '[data-role="product-variations-matrix"]';
 
     /**
-     * Selector for variations matrix row
+     * Selector for template block.
      *
      * @var string
      */
-    protected $variationsMatrixRow = '[data-role="product-variations-matrix"] [data-role="row"]';
+    protected $template = './ancestor::body';
 
     /**
      * Selector for variations tab wrapper
@@ -146,7 +148,7 @@ class Config extends Tab
     public function generateVariations()
     {
         $this->_rootElement->find($this->generateVariations)->click();
-        $this->waitForElementVisible($this->variationsMatrixRow);
+        $this->getTemplateBlock()->waitLoader();
     }
 
     /**
@@ -157,7 +159,7 @@ class Config extends Tab
     public function getAttributeBlock()
     {
         return $this->blockFactory->create(
-            '\Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super\Config\Attribute',
+            'Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super\Config\Attribute',
             ['element' => $this->_rootElement]
         );
     }
@@ -170,8 +172,21 @@ class Config extends Tab
     public function getVariationsBlock()
     {
         return $this->blockFactory->create(
-            '\Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super\Config\Matrix',
+            'Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super\Config\Matrix',
             ['element' => $this->_rootElement->find($this->variationsMatrix)]
+        );
+    }
+
+    /**
+     * Get template block.
+     *
+     * @return Template
+     */
+    public function getTemplateBlock()
+    {
+        return $this->blockFactory->create(
+            'Magento\Backend\Test\Block\Template',
+            ['element' => $this->_rootElement->find($this->template, Locator::SELECTOR_XPATH)]
         );
     }
 

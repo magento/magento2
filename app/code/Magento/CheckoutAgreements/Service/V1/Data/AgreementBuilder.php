@@ -23,14 +23,14 @@
  */
 namespace Magento\CheckoutAgreements\Service\V1\Data;
 
-use \Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder;
+use \Magento\Framework\Api\ExtensibleObjectBuilder;
 
 /**
  * Checkout agreement data object builder.
- * 
+ *
  * @codeCoverageIgnore
  */
-class AgreementBuilder extends AbstractExtensibleObjectBuilder
+class AgreementBuilder extends ExtensibleObjectBuilder
 {
     /**
      * Sets the agreement ID.

@@ -24,7 +24,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <type name="Magento\Rss\Controller\Adminhtml\Authenticate">
-        <plugin name="adminAuthentication" type="Magento\Rss\App\Action\Plugin\Authentication"/>
+    <type name="Magento\Rss\Controller\Adminhtml\Feed">
+        <plugin name="adminAuthentication" type="Magento\Rss\App\Action\Plugin\BackendAuthentication"/>
     </type>
 </config>

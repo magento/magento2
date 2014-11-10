@@ -87,6 +87,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfigInterface->expects($this->once())->method('getValue')->will($this->returnValue(true));
         $dataProvider = $this->getMock('Magento\Framework\App\Rss\DataProviderInterface');
         $dataProvider->expects($this->once())->method('isAllowed')->will($this->returnValue(true));
+        $dataProvider->expects($this->once())->method('isAuthRequired')->will($this->returnValue(false));
 
         $rssModel = $this->getMock('Magento\Rss\Model\Rss', ['setDataProvider', 'createRssXml'], [], '', false);
         $rssModel->expects($this->once())->method('setDataProvider')->will($this->returnSelf());

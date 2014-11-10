@@ -28,8 +28,8 @@ use Magento\Directory\Model\CountryFactory;
 use Magento\Directory\Model\RegionFactory;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Model\Exception as ModelException;
-use Magento\Framework\Service\V1\Data\Search\FilterGroup;
-use Magento\Framework\Service\V1\Data\SearchCriteria;
+use Magento\Framework\Api\Search\FilterGroup;
+use Magento\Framework\Api\SearchCriteria;
 use Magento\Tax\Model\Calculation\Rate as RateModel;
 use Magento\Tax\Model\Calculation\Rate\Converter;
 use Magento\Tax\Model\Calculation\RateFactory;
@@ -37,7 +37,7 @@ use Magento\Tax\Model\Calculation\RateRegistry;
 use Magento\Tax\Model\Resource\Calculation\Rate\Collection;
 use Magento\Tax\Service\V1\Data\TaxRate as TaxRateDataObject;
 use Magento\Tax\Service\V1\Data\TaxRateBuilder;
-use Magento\Framework\Service\V1\Data\SortOrder;
+use Magento\Framework\Api\SortOrder;
 
 /**
  * Handles tax rate CRUD operations
@@ -296,8 +296,9 @@ class TaxRateService implements TaxRateServiceInterface
         }
 
         $regionCode = $taxRate->getRegionId();
+        // if regionCode eq 0 (all regions *), do not validate with existing region list
         if (\Zend_Validate::is($regionCode, 'NotEmpty') &&
-            !\Zend_Validate::is($this->regionFactory->create()->load($regionCode)->getId(), 'NotEmpty')) {
+            ($regionCode != "0" && !\Zend_Validate::is($this->regionFactory->create()->load($regionCode)->getId(), 'NotEmpty'))) {
             $exception->addError(InputException::INVALID_FIELD_VALUE, ['fieldName' => 'region_id', 'value' => $regionCode]);
         }
 

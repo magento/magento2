@@ -25,12 +25,12 @@
  */
 namespace Magento\Downloadable\Service\V1\DownloadableLink\Data;
 
-use Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder;
+use Magento\Framework\Api\ExtensibleObjectBuilder;
 
 /**
  * @codeCoverageIgnore
  */
-class DownloadableSampleInfoBuilder extends AbstractExtensibleObjectBuilder
+class DownloadableSampleInfoBuilder extends ExtensibleObjectBuilder
 {
     /**
      * @param string $value

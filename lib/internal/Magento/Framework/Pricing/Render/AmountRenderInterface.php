@@ -66,5 +66,10 @@ interface AmountRenderInterface
     /**
      * @return string
      */
+    public function getDisplayCurrencyCode();
+
+    /**
+     * @return string
+     */
     public function getAdjustmentsHtml();
 }

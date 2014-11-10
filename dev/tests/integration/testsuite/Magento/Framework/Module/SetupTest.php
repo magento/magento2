@@ -46,26 +46,19 @@ class SetupTest extends \PHPUnit_Framework_TestCase
 
     public function testApplyAllDataUpdates()
     {
-        /*reset versions*/
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            '\Magento\Framework\Module\ResourceInterface'
-        )->setDbVersion(
-            'adminnotification_setup',
-            false
-        );
+        /* reset data version */
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             '\Magento\Framework\Module\ResourceInterface'
         )->setDataVersion(
             'adminnotification_setup',
             false
         );
-        $this->_model->deleteTableRow('core_resource', 'code', 'adminnotification_setup');
-        $this->_model->getConnection()->dropTable($this->_model->getTable('adminnotification_inbox'));
-        $this->_model->getConnection()->dropTable($this->_model->getTable('admin_system_messages'));
+        /* clear table */
+        $this->_model->getConnection()->delete($this->_model->getTable('adminnotification_inbox'), 'true');
+        $this->_model->getConnection()->delete($this->_model->getTable('admin_system_messages'), 'true');
         /** @var $updater \Magento\Framework\Module\Updater */
         $updater = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Module\Updater');
         try {
-            $updater->updateScheme();
             $updater->updateData();
         } catch (\Exception $e) {
             $this->fail("Impossible to continue other tests, because database is broken: {$e}");

@@ -25,45 +25,25 @@
 namespace Magento\Setup\Module\Setup;
 
 use Zend\Stdlib\Glob;
-use Magento\Config\FileIteratorFactory;
-use Magento\Config\ConfigFactory as SystemConfigFactory;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 class FileResolver
 {
     /**
-     * File Iterator Factory
+     * Magento application's DirectoryList
      *
-     * @var FileIteratorFactory
+     * @var DirectoryList
      */
-    protected $iteratorFactory;
-
-    /**
-     * Configuration Factory
-     *
-     * @var SystemConfigFactory
-     */
-    protected $configFactory;
-
-    /**
-     * Configurations
-     *
-     * @var Config
-     */
-    protected $config;
+    private $directoryList;
 
     /**
      * Default Constructor
      *
-     * @param FileIteratorFactory $iteratorFactory
-     * @param SystemConfigFactory $configFactory
+     * @param DirectoryList $directoryList
      */
-    public function __construct(
-        FileIteratorFactory $iteratorFactory,
-        SystemConfigFactory $configFactory
-    ) {
-        $this->iteratorFactory = $iteratorFactory;
-        $this->configFactory = $configFactory;
-        $this->config = $this->configFactory->create();
+    public function __construct(DirectoryList $directoryList)
+    {
+        $this->directoryList = $directoryList;
     }
 
     /**
@@ -75,55 +55,10 @@ class FileResolver
      */
     public function getSqlSetupFiles($moduleName, $fileNamePattern = '*.php')
     {
-        $paths = [];
         $modulePath = str_replace('_', '/', $moduleName);
-        // Collect files by /app/code/{modulePath}/sql/*/*.php pattern
-        $files = $this->getFiles($this->config->getMagentoModulePath() . $modulePath . '/sql/*/' . $fileNamePattern);
-        foreach ($files as $file) {
-            $paths[] = $this->getRelativePath($file);
-        }
-
-        return $paths;
-    }
-
-    /**
-     * Retrieves relative path
-     *
-     * @param string $path
-     * @return string
-     */
-    protected function getRelativePath($path = null)
-    {
-        $basePath = $this->config->getMagentoBasePath();
-        if (strpos($path, $basePath) === 0
-            || $basePath == $path . '/') {
-            $result = substr($path, strlen($basePath));
-        } else {
-            $result = $path;
-        }
-        return $result;
-    }
-
-    /**
-     * Get Files
-     *
-     * @param string $path
-     * @return array|false
-     */
-    protected function getFiles($path)
-    {
-        return Glob::glob($this->config->getMagentoBasePath() . $path, Glob::GLOB_BRACE);
-    }
-
-    /**
-     * Get Directories
-     *
-     * @param string $path
-     * @return array|false
-     */
-    protected function getDirs($path)
-    {
-        return Glob::glob($this->config->getMagentoBasePath() . $path, Glob::GLOB_ONLYDIR);
+        $pattern = $this->directoryList->getPath(DirectoryList::MODULES)
+            . '/' . $modulePath . '/sql/*/' . $fileNamePattern;
+        return Glob::glob($pattern, Glob::GLOB_BRACE);
     }
 
     /**
@@ -139,15 +74,17 @@ class FileResolver
         $modulePath = str_replace('_', '/', $moduleName);
 
         // Collect files by /app/code/{modulePath}/sql/*/ pattern
-        $resourceDirs = $this->getDirs($this->config->getMagentoModulePath() . $modulePath . '/sql/*/');
+        $pattern = $this->directoryList->getPath(DirectoryList::MODULES) . '/' . $modulePath . '/sql/*';
+        $resourceDirs = Glob::glob($pattern, Glob::GLOB_ONLYDIR);
         if (!empty($resourceDirs)) {
             foreach ($resourceDirs as $resourceDir) {
                 $sqlResources[] = basename($resourceDir);
             }
         }
 
-        // Collect files by /app/code/{modulePath}/sql/*/ pattern
-        $resourceDirs = $this->getDirs($this->config->getMagentoModulePath() . $modulePath . '/data/*/');
+        // Collect files by /app/code/{modulePath}/data/*/ pattern
+        $pattern = $this->directoryList->getPath(DirectoryList::MODULES) . '/' . $modulePath . '/data/*';
+        $resourceDirs = Glob::glob($pattern, Glob::GLOB_ONLYDIR);
         if (!empty($resourceDirs)) {
             foreach ($resourceDirs as $resourceDir) {
                 $dataResources[] = basename($resourceDir);
@@ -156,28 +93,5 @@ class FileResolver
 
         $resources = array_unique(array_merge($sqlResources, $dataResources));
         return array_shift($resources);
-    }
-
-    /**
-     * Get Absolute Path
-     *
-     * @param string $path
-     * @return string
-     */
-    public function getAbsolutePath($path)
-    {
-        return $this->config->getMagentoBasePath() . '/' . ltrim($this->fixSeparator($path), '/');
-    }
-
-    /**
-     * Fixes path separator
-     * Utility method.
-     *
-     * @param string $path
-     * @return string
-     */
-    protected function fixSeparator($path)
-    {
-        return str_replace('\\', '/', $path);
     }
 }

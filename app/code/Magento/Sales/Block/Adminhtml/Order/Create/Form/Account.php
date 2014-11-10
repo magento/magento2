@@ -26,7 +26,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Framework\Service\ExtensibleDataObjectConverter;
+use Magento\Framework\Api\ExtensibleDataObjectConverter;
 
 /**
  * Create order account form

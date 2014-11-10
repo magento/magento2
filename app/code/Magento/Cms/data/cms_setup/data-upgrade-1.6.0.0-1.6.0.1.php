@@ -21,7 +21,8 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-/** @var \Magento\Cms\Model\Resource\Setup $this */
+
+/** @var $this \Magento\Cms\Model\Resource\Setup */
 
 $pageContent = <<<EOD
 <p style="color: #ff0000; font-weight: bold; font-size: 13px">
@@ -241,7 +242,6 @@ $privacyPageData = array(
     'sort_order' => 0
 );
 
-/** @var \Magento\Cms\Model\Page $page */
 $this->createPage()->setData($privacyPageData)->save();
 
 $footerLinksBlock = $this->createPage()->load('footer_links', 'identifier');

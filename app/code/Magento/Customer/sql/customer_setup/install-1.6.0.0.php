@@ -22,7 +22,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/* @var $installer \Magento\Customer\Model\Resource\Setup */
+/* @var $installer \Magento\Setup\Module\SetupModule */
 $installer = $this;
 $installer->startSetup();
 
@@ -1175,6 +1175,12 @@ $table = $installer->getConnection()->newTable(
     64,
     array('nullable' => true, 'default' => null),
     'Session ID'
+)->addColumn(
+    'last_visit_at',
+    \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
+    null,
+    array('nullable' => false),
+    'Last Visit Time'
 )->setComment(
     'Visitor Table'
 );

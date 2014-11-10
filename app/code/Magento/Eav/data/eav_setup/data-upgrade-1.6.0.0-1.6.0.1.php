@@ -22,7 +22,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/** @var $installer \Magento\Framework\Module\Setup\Migration */
+/** @var $this \Magento\Eav\Model\Entity\Setup  */
 $installer = $this->createMigrationSetup();
 $installer->startSetup();
 

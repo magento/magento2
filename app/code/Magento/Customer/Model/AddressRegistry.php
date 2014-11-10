@@ -81,4 +81,16 @@ class AddressRegistry
     {
         unset($this->registry[$addressId]);
     }
+
+    /**
+     * Replace existing Address Model with a new one
+     *
+     * @param Address $address
+     * @return $this
+     */
+    public function push(Address $address)
+    {
+        $this->registry[$address->getId()] = $address;
+        return $this;
+    }
 }

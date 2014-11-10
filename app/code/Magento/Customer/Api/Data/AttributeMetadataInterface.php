@@ -29,6 +29,28 @@ namespace Magento\Customer\Api\Data;
  */
 interface AttributeMetadataInterface
 {
+    /**#@+
+     * Constants used as keys of data array
+     */
+    const ATTRIBUTE_CODE = 'attribute_code';
+    const FRONTEND_INPUT = 'frontend_input';
+    const INPUT_FILTER = 'input_filter';
+    const STORE_LABEL = 'store_label';
+    const VALIDATION_RULES = 'validation_rules';
+    const OPTIONS = 'options';
+    const VISIBLE = 'visible';
+    const REQUIRED = 'required';
+    const MULTILINE_COUNT = 'multiline_count';
+    const DATA_MODEL = 'data_model';
+    const USER_DEFINED = 'user_defined';
+    const FRONTEND_CLASS = 'frontend_class';
+    const SORT_ORDER = 'sort_order';
+    const FRONTEND_LABEL = 'frontend_label';
+    const SYSTEM = 'system';
+    const NOTE = 'note';
+    const BACKEND_TYPE = 'backend_type';
+    /**#@-*/
+
     /**
      * Retrieve code of the attribute.
      *
@@ -60,7 +82,7 @@ interface AttributeMetadataInterface
     /**
      * Retrieve validation rules.
      *
-     * @return \Magento\Customer\Service\V1\Data\Eav\ValidationRule[]
+     * @return \Magento\Customer\Api\Data\ValidationRuleInterface[]
      */
     public function getValidationRules();
 
@@ -95,7 +117,7 @@ interface AttributeMetadataInterface
     /**
      * Return options of the attribute (key => value pairs for select)
      *
-     * @return \Magento\Customer\Service\V1\Data\Eav\Option[]
+     * @return \Magento\Customer\Api\Data\OptionInterface[]
      */
     public function getOptions();
 

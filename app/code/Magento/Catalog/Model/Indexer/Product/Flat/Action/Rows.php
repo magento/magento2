@@ -80,9 +80,12 @@ class Rows extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
             throw new \Magento\Framework\Model\Exception(__('Bad value was supplied.'));
         }
         foreach ($this->_storeManager->getStores() as $store) {
+            $tableExists = $this->_isFlatTableExists($store->getId());
             $idsBatches = array_chunk($ids, \Magento\Catalog\Helper\Product\Flat\Indexer::BATCH_SIZE);
             foreach ($idsBatches as $changedIds) {
-                $this->flatItemEraser->removeDeletedProducts($changedIds, $store->getId());
+                if ($tableExists) {
+                    $this->flatItemEraser->removeDeletedProducts($changedIds, $store->getId());
+                }
                 if (!empty($changedIds)) {
                     $this->_reindex($store->getId(), $changedIds);
                 }

@@ -6,4 +6,4 @@ Magento\Framework\Module is Magento framework component that allows to build mod
  * module manager that provides all information about loaded modules
  * directory reader, that allows to read configuration files from module
  * ability to turn on/off module output in separate configuration application
- * module db schema/data installers
+ * module db data installers

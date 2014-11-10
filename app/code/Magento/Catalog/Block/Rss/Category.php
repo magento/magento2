@@ -263,4 +263,12 @@ class Category extends \Magento\Framework\View\Element\AbstractBlock implements 
         }
         return $result;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isAuthRequired()
+    {
+        return false;
+    }
 }

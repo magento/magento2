@@ -39,7 +39,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Webapi\Model\Cache\Type|\PHPUnit_Framework_MockObject_MockObject */
     protected $_cacheMock;
 
-    /** @var \Magento\Webapi\Model\Config\ClassReflector\TypeProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Reflection\TypeProcessor|\PHPUnit_Framework_MockObject_MockObject */
     protected $_typeProcessor;
 
     /** @var \Magento\Framework\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -83,7 +83,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->_cacheMock->expects($this->any())->method('save')->will($this->returnValue(true));
 
         $this->_typeProcessor = $this->getMock(
-            'Magento\Webapi\Model\Config\ClassReflector\TypeProcessor',
+            'Magento\Framework\Reflection\TypeProcessor',
             array(),
             array(),
             '',

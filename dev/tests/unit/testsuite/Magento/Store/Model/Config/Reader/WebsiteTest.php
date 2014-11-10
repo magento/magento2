@@ -50,11 +50,6 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
      */
     protected $_websiteMock;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_appStateMock;
-
     protected function setUp()
     {
         $this->_initialConfigMock = $this->getMock('Magento\Framework\App\Config\Initial', array(), array(), '', false);
@@ -76,16 +71,12 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
         $this->_websiteMock = $this->getMock('Magento\Store\Model\Website', array(), array(), '', false);
         $websiteFactoryMock->expects($this->any())->method('create')->will($this->returnValue($this->_websiteMock));
 
-        $this->_appStateMock = $this->getMock('Magento\Framework\App\State', array(), array(), '', false);
-        $this->_appStateMock->expects($this->any())->method('isInstalled')->will($this->returnValue(true));
-
         $this->_model = new \Magento\Store\Model\Config\Reader\Website(
             $this->_initialConfigMock,
             $this->_scopePullMock,
             new \Magento\Framework\App\Config\Scope\Converter(),
             $this->_collectionFactory,
-            $websiteFactoryMock,
-            $this->_appStateMock
+            $websiteFactoryMock
         );
     }
 

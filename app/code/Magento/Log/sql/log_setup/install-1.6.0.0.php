@@ -22,8 +22,8 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+/* @var $installer \Magento\Setup\Module\SetupModule */
 $installer = $this;
-/* @var $installer \Magento\Framework\Module\Setup */
 
 $installer->startSetup();
 
@@ -288,15 +288,6 @@ $table = $installer->getConnection()->newTable(
     'Log Visitors Table'
 );
 $installer->getConnection()->createTable($table);
-$installer->getConnection()->addForeignKey(
-    $installer->getFkName('log_visitor', 'visitor_id', 'customer_visitor', 'visitor_id'),
-    $installer->getTable('log_visitor'),
-    'visitor_id',
-    $installer->getTable('customer_visitor'),
-    'visitor_id',
-    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
-    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
-);
 
 /**
  * Create table 'log_visitor_info'

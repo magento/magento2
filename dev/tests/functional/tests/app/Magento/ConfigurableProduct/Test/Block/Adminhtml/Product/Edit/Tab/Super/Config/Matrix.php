@@ -26,6 +26,7 @@ namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Supe
 
 use Mtf\Client\Driver\Selenium\Element;
 use Mtf\Client\Element\Locator;
+use Magento\Backend\Test\Block\Template;
 use Magento\Backend\Test\Block\Widget\Form;
 
 /**
@@ -94,19 +95,35 @@ class Matrix extends Form
     // @codingStandardsIgnoreEnd
 
     /**
-     * Fill variations
+     * Title of variation matrix css selector.
+     *
+     * @var string
+     */
+    protected $matrixTitle = 'h3.title';
+
+    /**
+     * Selector for template block.
+     *
+     * @var string
+     */
+    protected $template = './ancestor::body';
+
+    /**
+     * Fill variations.
      *
      * @param array $matrix
      * @return void
      */
     public function fillVariations(array $matrix)
     {
+        $this->_rootElement->find($this->matrixTitle)->click();
         $count = 1;
         foreach ($matrix as $variation) {
             $variationRow = $this->_rootElement->find(
                 sprintf($this->variationRowByNumber, $count),
                 Locator::SELECTOR_XPATH
             );
+            ksort($variation);
             $mapping = $this->dataMapping($variation);
 
             $this->_fill($mapping, $variationRow);
@@ -128,6 +145,7 @@ class Matrix extends Form
     protected function assignProduct(Element $variationRow, $productId)
     {
         $variationRow->find($this->configurableAttribute)->click();
+        $this->getTemplateBlock()->waitLoader();
         $this->_rootElement->find(
             sprintf($this->selectAssociatedProduct, $productId),
             Locator::SELECTOR_XPATH
@@ -174,5 +192,18 @@ class Matrix extends Form
             }
         }
         return $data;
+    }
+
+    /**
+     * Get template block.
+     *
+     * @return Template
+     */
+    public function getTemplateBlock()
+    {
+        return $this->blockFactory->create(
+            'Magento\Backend\Test\Block\Template',
+            ['element' => $this->_rootElement->find($this->template, Locator::SELECTOR_XPATH)]
+        );
     }
 }

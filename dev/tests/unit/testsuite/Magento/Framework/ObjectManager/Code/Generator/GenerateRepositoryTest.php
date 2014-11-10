@@ -91,21 +91,21 @@ class GenerateRepositoryTest extends \PHPUnit_Framework_TestCase
         $sourceClassName = 'Magento_Module_Controller_Index';
         $resultClassName = 'Magento_Module_Controller';
 
-        $includePathMock = $this->getMockBuilder('Magento\Framework\Autoload\IncludePath')
+        $fileResolverMock = $this->getMockBuilder('Magento\Framework\Code\Generator\FileResolver')
             ->disableOriginalConstructor()
             ->setMethods(['getFile'])
             ->getMock();
-        $includePathMock->expects($this->at(0))
+        $fileResolverMock->expects($this->at(0))
             ->method('getFile')
             ->with($sourceClassName)
             ->will($this->returnValue(true));
-        $includePathMock->expects($this->at(1))
+        $fileResolverMock->expects($this->at(1))
             ->method('getFile')
             ->with($resultClassName)
             ->will($this->returnValue(false));
 
         $repository = new Repository(
-            null, null, null, null, $includePathMock
+            null, null, null, null, $fileResolverMock
         );
         $repository->init($sourceClassName, $resultClassName);
         $this->assertFalse($repository->generate());

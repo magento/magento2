@@ -28,9 +28,9 @@ use Magento\Eav\Model\Resource\Entity\Attribute\Collection;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Catalog\Service\V1\Data\Eav\AttributeMetadata;
 use Magento\Catalog\Service\V1\Data\Eav\Product\Attribute\FrontendLabel;
-use Magento\Framework\Service\V1\Data\Search\FilterGroup;
-use Magento\Framework\Service\V1\Data\SearchCriteria;
-use Magento\Framework\Service\V1\Data\SortOrder;
+use Magento\Framework\Api\Search\FilterGroup;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SortOrder;
 
 /**
  * Class MetadataService
@@ -241,7 +241,7 @@ class MetadataService implements MetadataServiceInterface
     /**
      * Helper function that adds a FilterGroup to the collection.
      *
-     * @param \Magento\Framework\Service\V1\Data\Search\FilterGroup  $filterGroup
+     * @param \Magento\Framework\Api\Search\FilterGroup  $filterGroup
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Collection $collection
      * @return void
      * @throws \Magento\Framework\Exception\InputException

@@ -41,7 +41,7 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      */
     const APP_INF_NS = 'inf';
 
-    /** @var \Magento\Webapi\Model\Config\ClassReflector\TypeProcessor */
+    /** @var \Magento\Framework\Reflection\TypeProcessor */
     protected $_typeProcessor;
 
     /**
@@ -54,9 +54,9 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
     /**
      * Construct strategy with config helper.
      *
-     * @param \Magento\Webapi\Model\Config\ClassReflector\TypeProcessor $typeProcessor
+     * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
      */
-    public function __construct(\Magento\Webapi\Model\Config\ClassReflector\TypeProcessor $typeProcessor)
+    public function __construct(\Magento\Framework\Reflection\TypeProcessor $typeProcessor)
     {
         $this->_typeProcessor = $typeProcessor;
     }

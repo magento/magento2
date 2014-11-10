@@ -33,16 +33,50 @@ div.widget.category.link {
     &:extend(.abstract-margin-for-blocks-and-widgets all);
 }
 
-.block.widget.new {
+.block.widget {
+    .product-item-info {
+        width: auto;
+    }
     .pager {
-        padding: @indent-s-base;
-        background: @panel-bg;
-        margin-bottom: @indent-xl-base;
-        text-align: center;
-        .pages {
+        padding: 0;
+        .toolbar-amount {
+            float: none;
+            .font-size(12);
         }
-        .amount {
-            margin: 0 0 7px;
+        .pages-item-previous {
+            padding-left: 0;
+        }
+        .pages-item-next {
+            position: relative;
+        }
+        .items {
+            white-space: nowrap;
+        }
+    }
+}
+
+.responsive(@break) when (@break = @screen-s) {
+    .block.widget .products-grid .product-item,
+    .layout-1 .block.widget .products-grid .product-item,
+    .layout-3 .block.widget .products-grid .product-item { width: 100%/3 }
+}
+.responsive(@break) when (@break = @screen-m) {
+    .block.widget .products-grid .product-item{ width: 100%/3 }
+    .layout-1 .block.widget .products-grid .product-item { width: 100%/4 }
+    .layout-3 .block.widget .products-grid .product-item { width: 100%/2 }
+}
+.responsive(@break) when (@break = @screen-l) {
+    .block.widget .products-grid .product-item { width: 100%/5 }
+    .layout-1 .block.widget .products-grid .product-item { width: 100%/6 }
+    .layout-3 .block.widget .products-grid .product-item { width: 100%/4 }
+    .block.widget .products-grid .product-items { margin: 0; }
+    .block.widget .products-grid .product-item {
+        width: 100%/4;
+        width: 200px;
+        margin-left: calc(~"(100% - 4 * 200px) / 3");
+        padding: 0;
+        &:nth-child(4n+1) {
+            margin-left: 0;
         }
     }
 }
@@ -51,12 +85,14 @@ div.widget.category.link {
 //    Desktop
 //--------------------------------------
 .responsive(@break) when (@break = @screen-m) {
-    .block.widget.new {
-        .pager {
-            text-align: left;
-            .amount {
-                float: right;
-                margin: 7px 0 0;
+    .sidebar .block.widget .pager {
+        .item:not(.pages-item-next):not(.pages-item-previous) {
+            &:extend(.abstract-no-display-desktop all);
+        }
+        .pages-item-next {
+            padding: 0;
+            .action {
+                margin: 0;
             }
         }
     }

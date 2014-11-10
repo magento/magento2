@@ -28,7 +28,7 @@ namespace Magento\Checkout\Service\V1\Data\Cart;
  *
  * @codeCoverageIgnore
  */
-class Address extends \Magento\Framework\Service\Data\AbstractExtensibleObject
+class Address extends \Magento\Framework\Api\AbstractExtensibleObject
 {
     /**#@+
      * Constants defined for keys of array, makes typos less likely

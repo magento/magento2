@@ -146,7 +146,7 @@ lib/internal/Magento/Framework/Stdlib/DateTime.php
 lib/internal/Magento/Framework/Object.php
 lib/internal/Magento/Framework/Data/Argument
 lib/internal/Magento/Framework/ObjectManager
-lib/internal/Magento/Framework/Service
+lib/internal/Magento/Framework/Api
 lib/internal/Magento/Framework/Url/SecurityInfoInterface.php
 lib/internal/Magento/Framework/View
 lib/internal/Magento/Framework/Locale/Validator.php

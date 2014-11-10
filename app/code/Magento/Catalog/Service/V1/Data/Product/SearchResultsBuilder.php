@@ -24,11 +24,11 @@
 
 namespace Magento\Catalog\Service\V1\Data\Product;
 
-use Magento\Framework\Service\Data\AttributeValueBuilder;
-use Magento\Framework\Service\Data\MetadataServiceInterface;
-use Magento\Framework\Service\Data\ObjectFactory;
-use Magento\Framework\Service\V1\Data\SearchCriteriaBuilder;
-use Magento\Framework\Service\V1\Data\AbstractSearchResultsBuilder;
+use Magento\Framework\Api\AttributeValueBuilder;
+use Magento\Framework\Api\MetadataServiceInterface;
+use Magento\Framework\Api\ObjectFactory;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\AbstractSearchResultsBuilder;
 use Magento\Catalog\Service\V1\Data\ProductBuilder;
 
 /**

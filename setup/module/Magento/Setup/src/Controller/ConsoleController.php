@@ -29,13 +29,12 @@ use Magento\Setup\Module\Setup\Config;
 use Magento\Setup\Model\InstallerFactory;
 use Magento\Setup\Model\Installer;
 use Magento\Setup\Model\ConsoleLogger;
-use Magento\Webapi\Exception;
 use Zend\Console\Request as ConsoleRequest;
 use Zend\EventManager\EventManagerInterface;
-use Zend\Stdlib\RequestInterface as Request;
 use Zend\Mvc\Controller\AbstractActionController;
 use Magento\Setup\Model\UserConfigurationData as UserConfig;
 use Magento\Setup\Model\AdminAccount;
+use Magento\Framework\App\MaintenanceMode;
 
 /**
  * Controller that handles all setup commands via command line interface.
@@ -55,6 +54,8 @@ class ConsoleController extends AbstractActionController
     const CMD_INSTALL_USER_CONFIG = 'install-user-configuration';
     const CMD_INSTALL_ADMIN_USER = 'install-admin-user';
     const CMD_UPDATE = 'update';
+    const CMD_UNINSTALL = 'uninstall';
+    const CMD_MAINTENANCE = 'maintenance';
     /**#@- */
 
     /**#@+
@@ -79,6 +80,8 @@ class ConsoleController extends AbstractActionController
         self::CMD_INSTALL_USER_CONFIG => 'installUserConfig',
         self::CMD_INSTALL_ADMIN_USER => 'installAdminUser',
         self::CMD_UPDATE => 'update',
+        self::CMD_UNINSTALL => 'uninstall',
+        self::CMD_MAINTENANCE => 'maintenance',
     ];
 
     /**
@@ -94,6 +97,8 @@ class ConsoleController extends AbstractActionController
         self::CMD_INSTALL_USER_CONFIG,
         self::CMD_INSTALL_ADMIN_USER,
         self::CMD_UPDATE,
+        self::CMD_UNINSTALL,
+        self::CMD_MAINTENANCE,
         self::INFO_LOCALES,
         self::INFO_CURRENCIES,
         self::INFO_TIMEZONES,
@@ -172,10 +177,10 @@ class ConsoleController extends AbstractActionController
             . ' [--' . Config::KEY_DB_INIT_STATEMENTS . '=]'
             . ' [--' . Config::KEY_SESSION_SAVE . '=]'
             . ' [--' . Config::KEY_ENCRYPTION_KEY . '=]';
-        $userConfig = '--' . UserConfig::KEY_BASE_URL . '='
-            . ' --' . UserConfig::KEY_LANGUAGE . '='
-            . ' --' . UserConfig::KEY_TIMEZONE . '='
-            . ' --' . UserConfig::KEY_CURRENCY . '='
+        $userConfig = '[--' . UserConfig::KEY_BASE_URL . '=]'
+            . ' [--' . UserConfig::KEY_LANGUAGE . '=]'
+            . ' [--' . UserConfig::KEY_TIMEZONE . '=]'
+            . ' [--' . UserConfig::KEY_CURRENCY . '=]'
             . ' [--' . UserConfig::KEY_USE_SEF_URL . '=]'
             . ' [--' . UserConfig::KEY_IS_SECURE . '=]'
             . ' [--' . UserConfig::KEY_BASE_URL_SECURE . '=]'
@@ -202,6 +207,12 @@ class ConsoleController extends AbstractActionController
                 'usage' => '',
                 'usage_short' => self::CMD_UPDATE,
                 'usage_desc' => 'Update database schema and data',
+            ],
+            self::CMD_UNINSTALL => [
+                'route' => self::CMD_UNINSTALL,
+                'usage' => '',
+                'usage_short' => self::CMD_UNINSTALL,
+                'usage_desc' => 'Uninstall Magento application',
             ],
             self::CMD_INSTALL_CONFIG => [
                 'route' => self::CMD_INSTALL_CONFIG . ' ' . $deployConfig,
@@ -233,6 +244,12 @@ class ConsoleController extends AbstractActionController
                 'usage_short' => self::CMD_INSTALL_ADMIN_USER . ' <options>',
                 'usage_desc' => 'Install admin user account',
             ],
+            self::CMD_MAINTENANCE => [
+                'route' => self::CMD_MAINTENANCE . ' [--set=] [--addresses=]',
+                'usage' => '[--set=1|0] [--addresses=127.0.0.1,...|none]',
+                'usage_short' => self::CMD_MAINTENANCE,
+                'usage_desc' => 'Set maintenance mode, optionally for specified addresses',
+            ],
             self::CMD_HELP => [
                 'route' => self::CMD_HELP . ' (' . implode('|', self::$helpOptions) . '):type',
                 'usage' => '<' . implode('|', self::$helpOptions) . '>',
@@ -248,15 +265,18 @@ class ConsoleController extends AbstractActionController
      * @param ConsoleLogger $consoleLogger
      * @param Lists $options
      * @param InstallerFactory $installerFactory
+     * @param MaintenanceMode $maintenanceMode
      */
     public function __construct(
         ConsoleLogger $consoleLogger,
         Lists $options,
-        InstallerFactory $installerFactory
+        InstallerFactory $installerFactory,
+        MaintenanceMode $maintenanceMode
     ) {
         $this->log = $consoleLogger;
         $this->options = $options;
         $this->installer = $installerFactory->create($consoleLogger);
+        $this->maintenanceMode = $maintenanceMode;
     }
 
     /**
@@ -287,13 +307,9 @@ class ConsoleController extends AbstractActionController
      */
     public function installAction()
     {
-        try {
-            /** @var \Zend\Console\Request $request */
-            $request = $this->getRequest();
-            $this->installer->install($request->getParams());
-        } catch (Exception $e) {
-            $this->log->logError($e);
-        }
+        /** @var \Zend\Console\Request $request */
+        $request = $this->getRequest();
+        $this->installer->install($request->getParams());
     }
 
     /**
@@ -371,6 +387,48 @@ class ConsoleController extends AbstractActionController
     }
 
     /**
+     * Controller for Uninstall Command
+     *
+     * @return void
+     * @throws \Exception
+     */
+    public function uninstallAction()
+    {
+        $this->installer->uninstall();
+    }
+
+    /**
+     * Action for "maintenance" command
+     *
+     * @return void
+     */
+    public function maintenanceAction()
+    {
+        /** @var \Zend\Console\Request $request */
+        $request = $this->getRequest();
+        $set = $request->getParam('set');
+        $addresses = $request->getParam('addresses');
+
+        if (null !== $set) {
+            if (1 == $set) {
+                $this->log->log('Enabling maintenance mode...');
+                $this->maintenanceMode->set(true);
+            } else {
+                $this->log->log('Disabling maintenance mode...');
+                $this->maintenanceMode->set(false);
+            }
+        }
+        if (null !== $addresses) {
+            $addresses = ('none' == $addresses) ? '' : $addresses;
+            $this->maintenanceMode->setAddresses($addresses);
+        }
+
+        $this->log->log('Status: maintenance mode is ' . ($this->maintenanceMode->isOn() ? 'active' : 'not active'));
+        $addresses = implode(', ', $this->maintenanceMode->getAddressInfo());
+        $this->log->log('List of exempt IP-addresses: ' . ($addresses ? $addresses : 'none'));
+    }
+
+    /**
      * Shows necessary information for installing Magento
      *
      * @return string
@@ -407,7 +465,7 @@ class ConsoleController extends AbstractActionController
      */
     private function formatCliUsage($text)
     {
-        $result = [];
+        $result = ['required' => [], 'optional' => []];
         foreach (explode(' ', $text) as  $value) {
             if (empty($value)) {
                 continue;

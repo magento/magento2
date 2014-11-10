@@ -51,19 +51,29 @@ class Server
      */
     protected $_configScope;
 
-    /** @var \Magento\Framework\DomDocument\Factory */
+    /**
+     * @var \Magento\Framework\DomDocument\Factory
+     */
     protected $_domDocumentFactory;
 
-    /** @var \Magento\Webapi\Controller\Soap\Request */
+    /**
+     * @var \Magento\Webapi\Controller\Soap\Request
+     */
     protected $_request;
 
-    /** @var \Magento\Framework\StoreManagerInterface */
+    /**
+     * @var \Magento\Framework\StoreManagerInterface
+     */
     protected $_storeManager;
 
-    /** @var \Magento\Webapi\Model\Soap\Server\Factory */
+    /**
+     * @var \Magento\Webapi\Model\Soap\Server\Factory
+     */
     protected $_soapServerFactory;
 
-    /** @var \Magento\Webapi\Model\Config\ClassReflector\TypeProcessor */
+    /**
+     * @var \Magento\Framework\Reflection\TypeProcessor
+     */
     protected $_typeProcessor;
 
     /**
@@ -80,7 +90,7 @@ class Server
      * @param \Magento\Framework\DomDocument\Factory $domDocumentFactory
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Webapi\Model\Soap\Server\Factory $soapServerFactory
-     * @param \Magento\Webapi\Model\Config\ClassReflector\TypeProcessor $typeProcessor
+     * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @throws \Magento\Webapi\Exception
      */
@@ -91,7 +101,7 @@ class Server
         \Magento\Framework\DomDocument\Factory $domDocumentFactory,
         \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Webapi\Model\Soap\Server\Factory $soapServerFactory,
-        \Magento\Webapi\Model\Config\ClassReflector\TypeProcessor $typeProcessor,
+        \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
         if (!extension_loaded('soap')) {

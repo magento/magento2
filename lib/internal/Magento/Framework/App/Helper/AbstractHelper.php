@@ -118,7 +118,7 @@ abstract class AbstractHelper
             $class = get_class($this);
             $this->_moduleName = substr($class, 0, strpos($class, '\\Helper'));
         }
-        return str_replace(\Magento\Framework\Autoload\IncludePath::NS_SEPARATOR, '_', $this->_moduleName);
+        return str_replace('\\', '_', $this->_moduleName);
     }
 
     /**

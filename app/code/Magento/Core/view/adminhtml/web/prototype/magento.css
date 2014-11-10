@@ -162,10 +162,6 @@
     padding: 6px 0 0;
 }
 
-.popup-window [id$="_focus_anchor"]:focus {
-    outline: none;
-}
-
 .popup-window .page-actions {
     padding: 0;
     position: absolute;

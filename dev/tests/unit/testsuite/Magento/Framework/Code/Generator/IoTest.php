@@ -60,7 +60,7 @@ class IoTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\Autoload\IncludePath|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_autoLoaderMock;
+    protected $fileResolverMock;
 
     protected function setUp()
     {
@@ -72,14 +72,14 @@ class IoTest extends \PHPUnit_Framework_TestCase
             array()
         );
 
-        $this->_autoLoaderMock = $this->getMock(
-            'Magento\Framework\Autoload\IncludePath',
+        $this->fileResolverMock = $this->getMock(
+            'Magento\Framework\Code\Generator\FileResolver',
             array('getFilePath'),
             array(),
             '',
             false
         );
-        $this->_autoLoaderMock->expects(
+        $this->fileResolverMock->expects(
             $this->any()
         )->method(
             'getFilePath'
@@ -91,7 +91,7 @@ class IoTest extends \PHPUnit_Framework_TestCase
 
         $this->_object = new \Magento\Framework\Code\Generator\Io(
             $this->_filesystemDriverMock,
-            $this->_autoLoaderMock,
+            $this->fileResolverMock,
             self::GENERATION_DIRECTORY
         );
     }
@@ -100,7 +100,7 @@ class IoTest extends \PHPUnit_Framework_TestCase
     {
         unset($this->_generationDirectory);
         unset($this->_filesystemMock);
-        unset($this->_autoLoaderMock);
+        unset($this->fileResolverMock);
         unset($this->_object);
         unset($this->_filesystemDriverMock);
     }

@@ -30,7 +30,7 @@ use Magento\Tax\Service\V1\Data\TaxRule;
 use Magento\Tax\Service\V1\Data\TaxClass;
 use Magento\Tax\Model\ClassModel as TaxClassModel;
 use Magento\TestFramework\Helper\ObjectManager;
-use Magento\Framework\Service\V1\Data\SearchCriteria;
+use Magento\Framework\Api\SearchCriteria;
 
 /**
  * Class TaxRuleServiceTest
@@ -65,12 +65,12 @@ class TaxRuleServiceTest extends \PHPUnit_Framework_TestCase
     private $taxRuleModelFactoryMock;
 
     /**
-     * @var \Magento\Framework\Service\V1\Data\FilterBuilder | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\FilterBuilder | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $filterBuilderMock;
 
     /**
-     * @var \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $searchCriteriaBuilderMock;
 
@@ -113,11 +113,11 @@ class TaxRuleServiceTest extends \PHPUnit_Framework_TestCase
         $taxRuleResultsBuilder = $this->objectManager->getObject(
             'Magento\Tax\Service\V1\Data\TaxRuleSearchResultsBuilder'
         );
-        $this->filterBuilderMock = $this->getMockBuilder('\Magento\Framework\Service\V1\Data\FilterBuilder')
+        $this->filterBuilderMock = $this->getMockBuilder('\Magento\Framework\Api\FilterBuilder')
             ->disableOriginalConstructor()
             ->getMock();
         $this->searchCriteriaBuilderMock = $this->getMockBuilder(
-            '\Magento\Framework\Service\V1\Data\SearchCriteriaBuilder'
+            '\Magento\Framework\Api\SearchCriteriaBuilder'
         )
             ->disableOriginalConstructor()
             ->getMock();
@@ -460,8 +460,8 @@ class TaxRuleServiceTest extends \PHPUnit_Framework_TestCase
     public function testSearchTaxRulesEmptyResult()
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject |
-         * \Magento\Framework\Service\V1\Data\SearchCriteria $mockSearchCriteria */
-        $mockSearchCriteria = $this->getMockBuilder('\Magento\Framework\Service\V1\Data\SearchCriteria')
+         * \Magento\Framework\Api\SearchCriteria $mockSearchCriteria */
+        $mockSearchCriteria = $this->getMockBuilder('\Magento\Framework\Api\SearchCriteria')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -517,17 +517,17 @@ class TaxRuleServiceTest extends \PHPUnit_Framework_TestCase
             ->method('getSize')
             ->will($this->returnValue(1));
 
-        $filterBuilder = $this->objectManager->getObject('\Magento\Framework\Service\V1\Data\FilterBuilder');
+        $filterBuilder = $this->objectManager->getObject('\Magento\Framework\Api\FilterBuilder');
         $filter = $filterBuilder->setField('code')->setValue('code')->setConditionType('eq')->create();
 
         $filterGroupBuilder = $this->objectManager
-            ->getObject('Magento\Framework\Service\V1\Data\Search\FilterGroupBuilder');
-        /** @var \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder $searchCriteriaBuilder */
+            ->getObject('Magento\Framework\Api\Search\FilterGroupBuilder');
+        /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder */
         $searchCriteriaBuilder = $this->objectManager->getObject(
-            'Magento\Framework\Service\V1\Data\SearchCriteriaBuilder',
+            'Magento\Framework\Api\SearchCriteriaBuilder',
             ['filterGroupBuilder' => $filterGroupBuilder]
         );
-        $sortOrderBuilder = $this->objectManager->getObject('\Magento\Framework\Service\V1\Data\SortOrderBuilder');
+        $sortOrderBuilder = $this->objectManager->getObject('\Magento\Framework\Api\SortOrderBuilder');
         $sortOrder = $sortOrderBuilder
             ->setField('id')
             ->setDirection(SearchCriteria::SORT_ASC)
@@ -628,15 +628,15 @@ class TaxRuleServiceTest extends \PHPUnit_Framework_TestCase
             ->with($this->logicalOr([$filterOne], [$filterTwo]))
             ->will($this->returnSelf());
 
-        $searchCriteria = $this->getMockBuilder('\Magento\Framework\Service\V1\Data\SearchCriteria')
+        $searchCriteria = $this->getMockBuilder('\Magento\Framework\Api\SearchCriteria')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mockFilters = $this->getMockBuilder('\Magento\Framework\Service\V1\Data\Filter')
+        $mockFilters = $this->getMockBuilder('\Magento\Framework\Api\Filter')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mockFilterGroups = $this->getMockBuilder('\Magento\Framework\Service\V1\Data\Search\FilterGroup')
+        $mockFilterGroups = $this->getMockBuilder('\Magento\Framework\Api\Search\FilterGroup')
             ->disableOriginalConstructor()
             ->getMock();
 

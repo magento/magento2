@@ -215,4 +215,12 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
 
         return $data;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isAuthRequired()
+    {
+        return false;
+    }
 }

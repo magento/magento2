@@ -28,7 +28,7 @@ use Magento\Authorization\Model\UserContextInterface;
  * Save administrators group role and rules
  */
 
-/** @var \Magento\Authorization\Model\Resource\Setup $this */
+/** @var $this \Magento\Authorization\Model\Resource\Setup */
 
 $roleCollection = $this->createRoleCollection()
     ->addFieldToFilter('parent_id', 0)

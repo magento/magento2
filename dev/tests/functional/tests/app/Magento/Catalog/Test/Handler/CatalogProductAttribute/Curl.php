@@ -95,7 +95,7 @@ class Curl extends AbstractCurl implements CatalogProductAttributeInterface
         $curl->close();
 
         if (!strpos($response, 'data-ui-id="messages-message-success"')) {
-            throw new \Exception("Product Attribute creating by curl handler was not successful!");
+            throw new \Exception("Product Attribute creating by curl handler was not successful! \n" . $response);
         }
 
         $resultData = [];

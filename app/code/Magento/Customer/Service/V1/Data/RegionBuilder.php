@@ -28,7 +28,7 @@ namespace Magento\Customer\Service\V1\Data;
  *
  * @method Region create()
  */
-class RegionBuilder extends \Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder
+class RegionBuilder extends \Magento\Framework\Api\ExtensibleObjectBuilder
 {
     /**
      * Set region code
@@ -38,7 +38,7 @@ class RegionBuilder extends \Magento\Framework\Service\Data\AbstractExtensibleOb
      */
     public function setRegionCode($regionCode)
     {
-        $this->_data[Region::KEY_REGION_CODE] = $regionCode;
+        $this->data[Region::KEY_REGION_CODE] = $regionCode;
         return $this;
     }
 
@@ -50,7 +50,7 @@ class RegionBuilder extends \Magento\Framework\Service\Data\AbstractExtensibleOb
      */
     public function setRegion($regionName)
     {
-        $this->_data[Region::KEY_REGION] = $regionName;
+        $this->data[Region::KEY_REGION] = $regionName;
         return $this;
     }
 
@@ -62,7 +62,7 @@ class RegionBuilder extends \Magento\Framework\Service\Data\AbstractExtensibleOb
      */
     public function setRegionId($regionId)
     {
-        $this->_data[Region::KEY_REGION_ID] = $regionId;
+        $this->data[Region::KEY_REGION_ID] = $regionId;
         return $this;
     }
 }

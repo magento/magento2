@@ -23,12 +23,12 @@
  */
 namespace Magento\Catalog\Service\V1\Data\Eav;
 
-use Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder;
+use Magento\Framework\Api\ExtensibleObjectBuilder;
 
 /**
  * @codeCoverageIgnore
  */
-class AttributeBuilder extends AbstractExtensibleObjectBuilder
+class AttributeBuilder extends ExtensibleObjectBuilder
 {
     /**
      * Set attribute ID

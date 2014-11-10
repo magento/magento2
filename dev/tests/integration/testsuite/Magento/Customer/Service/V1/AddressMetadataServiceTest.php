@@ -38,7 +38,7 @@ class AddressMetadataServiceTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->configure(
             [
-                'Magento\Framework\Service\Config\Reader' => [
+                'Magento\Framework\Api\Config\Reader' => [
                     'arguments' => [
                         'fileResolver' => ['instance' => 'Magento\Customer\Service\V1\FileResolverStub']
                     ]

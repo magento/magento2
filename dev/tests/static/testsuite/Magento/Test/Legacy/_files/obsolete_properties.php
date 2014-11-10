@@ -360,4 +360,5 @@ return array(
     ['_formKeyValidator', 'Magento\Customer\Controller\Account\LoginPost', 'Magento\Customer\Controller\Account\LoginPost::formKeyValidator'],
     ['_openActions', 'Magento\Customer\Controller\Account', 'Magento\Customer\Controller\Account::openActions'],
     ['_session', 'Magento\Customer\Controller\Account', 'Magento\Customer\Controller\Account::session'],
+    ['_directoryData', 'Magento\Customer\Model\Attribute\Data\Postcode', 'Magento\Customer\Model\Attribute\Data\Postcode::directoryHelper'],
 );

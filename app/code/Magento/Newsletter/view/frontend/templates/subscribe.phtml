@@ -26,17 +26,15 @@
     <div class="title"><strong>Newsletter</strong></div>
     <div class="content">
         <form class="form subscribe" action="<?php echo $this->getFormActionUrl() ?>" method="post" id="newsletter-validate-detail">
-            <fieldset class="fieldset">
-                <div class="field newsletter">
-                    <label class="label" for="newsletter"><span><?php echo __('Sign Up for Our Newsletter:') ?></span></label>
-                    <div class="control">
-                        <input name="email" type="email" id="newsletter"
-                                      placeholder="<?php echo __('Enter your email address') ?>"
-                                      data-mage-init='{"newsletter":{"formSelector": "#newsletter-validate-detail", "placeholder": "<?php echo __('Enter your email address') ?>"}}'
-                                      data-validate="{required:true, 'validate-email':true}"/>
-                    </div>
+            <div class="field newsletter">
+                <label class="label" for="newsletter"><span><?php echo __('Sign Up for Our Newsletter:') ?></span></label>
+                <div class="control">
+                    <input name="email" type="email" id="newsletter"
+                                  placeholder="<?php echo __('Enter your email address') ?>"
+                                  data-mage-init='{"newsletter":{"formSelector": "#newsletter-validate-detail", "placeholder": "<?php echo __('Enter your email address') ?>"}}'
+                                  data-validate="{required:true, 'validate-email':true}"/>
                 </div>
-            </fieldset>
+            </div>
             <div class="actions">
                 <button class="action subscribe" title="<?php echo __('Subscribe') ?>" type="submit">
                     <span><?php echo __('Subscribe') ?></span>

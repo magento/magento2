@@ -156,12 +156,12 @@
             <?php /* end for each tracking information */ ?>
             <?php endforeach; ?>
         <?php else: ?>
-            <p class="empty"><?php echo __('There is no tracking available for this shipment.'); ?></p>
+            <div class="message info empty"><div><?php echo __('There is no tracking available for this shipment.'); ?></div></div>
         <?php endif; ?>
 
     <?php endforeach; ?>
     <?php else: ?>
-        <p class="empty"><?php echo __('There is no tracking available.'); ?></p>
+        <div class="message info empty"><div><?php echo __('There is no tracking available.'); ?></div></div>
     <?php endif; ?>
     <div class="actions">
         <button type="button"

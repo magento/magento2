@@ -26,8 +26,6 @@ namespace Magento\Log\Model;
 /**
  * @method Resource\Visitor _getResource()
  * @method Resource\Visitor getResource()
- * @method string getSessionId()
- * @method Visitor setSessionId(string $value)
  * @method Visitor setFirstVisitAt(string $value)
  * @method Visitor setLastVisitAt(string $value)
  * @method Visitor setVisitorId(int $value)

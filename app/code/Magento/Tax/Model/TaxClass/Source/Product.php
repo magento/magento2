@@ -38,12 +38,12 @@ class Product extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     protected $_taxClassService;
 
     /**
-     * @var \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
     protected $_searchCriteriaBuilder;
 
     /**
-     * @var \Magento\Framework\Service\V1\Data\FilterBuilder
+     * @var \Magento\Framework\Api\FilterBuilder
      */
     protected $_filterBuilder;
 
@@ -66,16 +66,16 @@ class Product extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * @param \Magento\Tax\Model\Resource\TaxClass\CollectionFactory $classesFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $optionFactory
      * @param \Magento\Tax\Service\V1\TaxClassServiceInterface $taxClassService
-     * @param \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param \Magento\Framework\Service\V1\Data\FilterBuilder $filterBuilder
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      */
     public function __construct(
         \Magento\Core\Helper\Data $coreData,
         \Magento\Tax\Model\Resource\TaxClass\CollectionFactory $classesFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $optionFactory,
         \Magento\Tax\Service\V1\TaxClassServiceInterface $taxClassService,
-        \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder $searchCriteriaBuilder,
-        \Magento\Framework\Service\V1\Data\FilterBuilder $filterBuilder
+        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
+        \Magento\Framework\Api\FilterBuilder $filterBuilder
     ) {
         $this->_coreData = $coreData;
         $this->_classesFactory = $classesFactory;

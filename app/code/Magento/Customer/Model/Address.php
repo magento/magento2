@@ -23,6 +23,13 @@
  */
 namespace Magento\Customer\Model;
 
+use Magento\Customer\Model\Data\Address as AddressData;
+use Magento\Customer\Api\Data\AddressInterface;
+use Magento\Customer\Api\AddressMetadataInterface;
+use Magento\Customer\Api\Data\AddressDataBuilder;
+use Magento\Customer\Api\Data\RegionInterface;
+use Magento\Customer\Model\Data\RegionBuilder;
+
 /**
  * Customer address model
  *
@@ -44,6 +51,26 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     protected $_customerFactory;
 
     /**
+     * @var \Magento\Customer\Service\V1\AddressMetadataServiceInterface
+     */
+    protected $_addressMetadataService;
+
+    /**
+     * @var AddressDataBuilder
+     */
+    protected $_addressBuilder;
+
+    /**
+     * @var RegionBuilder
+     */
+    protected $_regionBuilder;
+
+    /**
+     * @var \Magento\Framework\Reflection\DataObjectProcessor
+     */
+    protected $dataProcessor;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Directory\Helper\Data $directoryData
@@ -52,6 +79,10 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
      * @param CustomerFactory $customerFactory
+     * @param \Magento\Customer\Service\V1\AddressMetadataServiceInterface $addressMetadataService
+     * @param AddressDataBuilder $addressBuilder
+     * @param RegionBuilder $regionBuilder
+     * @param \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -65,11 +96,19 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Directory\Model\CountryFactory $countryFactory,
         CustomerFactory $customerFactory,
+        \Magento\Customer\Service\V1\AddressMetadataServiceInterface $addressMetadataService,
+        AddressDataBuilder $addressBuilder,
+        RegionBuilder $regionBuilder,
+        \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
+        $this->dataProcessor = $dataProcessor;
         $this->_customerFactory = $customerFactory;
+        $this->_addressMetadataService = $addressMetadataService;
+        $this->_addressBuilder = $addressBuilder;
+        $this->_regionBuilder = $regionBuilder;
         parent::__construct(
             $context,
             $registry,
@@ -90,6 +129,82 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     protected function _construct()
     {
         $this->_init('Magento\Customer\Model\Resource\Address');
+    }
+
+    /**
+     * Update Model with the data from Data Interface
+     *
+     * @param \Magento\Customer\Api\Data\AddressInterface $address
+     * @return $this
+     * @deprecated Use Api/RepositoryInterface for the operations in the Data Interfaces. Don't rely on Address Model
+     */
+    public function updateData(\Magento\Customer\Api\Data\AddressInterface $address)
+    {
+        // Set all attributes
+        $attributes = $this->dataProcessor
+            ->buildOutputDataArray($address, '\Magento\Customer\Api\Data\AddressInterface');
+
+        foreach ($attributes as $attributeCode => $attributeData) {
+            if (AddressInterface::REGION === $attributeCode) {
+                $this->setRegion($address->getRegion()->getRegion());
+                $this->setRegionCode($address->getRegion()->getRegionCode());
+                $this->setRegionId($address->getRegion()->getRegionId());
+            } else {
+                $this->setDataUsingMethod($attributeCode, $attributeData);
+            }
+        }
+        // Need to use attribute set or future updates can cause data loss
+        if (!$this->getAttributeSetId()) {
+            $this->setAttributeSetId(AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS);
+        }
+        return $this;
+    }
+
+    /**
+     * Retrieve Data Model with the Address data
+     *
+     * @return \Magento\Customer\Api\Data\AddressInterface
+     * @deprecated Use Api/Data/AddressInterface as a result of service operations. Don't rely on the model to provide
+     * the instance of Api/Data/AddressInterface
+     */
+    public function getDataModel()
+    {
+        $addressId = $this->getId();
+
+        $attributes = $this->_addressMetadataService->getAllAttributesMetadata();
+        $addressData = array();
+        foreach ($attributes as $attribute) {
+            $code = $attribute->getAttributeCode();
+            if (!is_null($this->getData($code))) {
+                $addressData[$code] = $this->getData($code);
+            }
+        }
+
+        /** @var \Magento\Customer\Api\Data\RegionInterface $region */
+        $region = $this->_regionBuilder
+            ->populateWithArray(
+                array(
+                    RegionInterface::REGION => $this->getRegion(),
+                    RegionInterface::REGION_ID => $this->getRegionId(),
+                    RegionInterface::REGION_CODE => $this->getRegionCode()
+                )
+            )
+            ->create();
+
+        $addressData[AddressData::REGION] = $region;
+
+        $this->_addressBuilder->populateWithArray($addressData);
+        if ($addressId) {
+            $this->_addressBuilder->setId($addressId);
+        }
+
+        if ($this->getCustomerId() || $this->getParentId()) {
+            $customerId = $this->getCustomerId() ?: $this->getParentId();
+            $this->_addressBuilder->setCustomerId($customerId);
+        }
+
+        $addressDataObject = $this->_addressBuilder->create();
+        return $addressDataObject;
     }
 
     /**

@@ -188,4 +188,12 @@ class Discounts extends \Magento\Framework\View\Element\AbstractBlock implements
         }
         return $data;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isAuthRequired()
+    {
+        return false;
+    }
 }

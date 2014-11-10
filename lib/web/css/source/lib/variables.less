@@ -44,6 +44,7 @@
 @panel-bg: darken(@page-bg-color, 6%);
 @color-active: #ff5501;
 @color-error: #e02b27;
+@color-focus: #68a8e0;
 
 @font-family-base: @font-family-sans-serif; // Also used in: @loader-text-font-family
 // setting font-size for HTML tag, use <b>%</b>  units
@@ -183,6 +184,9 @@
 @heading-small-color: @color-primary;
 @heading-small-line-height: 1;
 @heading-small-size: (@font-size-xs/@font-size-base) * 100%;
+
+// Focus
+@focus-box-shadow: 0 0 3px 1px @color-focus;
 
 // Code blocks
 @code-font-size: @font-size-s;
@@ -845,7 +849,6 @@
 @form-element-input-margin: false;
 @form-element-input-vertical-align: baseline;
 @form-element-input-background-clip: padding-box; // border-box, content-box
-@form-element-input-outline: true; // false
 @form-element-input-font-size: @font-size-base;
 @form-element-input-color: false;
 @form-element-input-font-family: @font-family-base;
@@ -886,7 +889,6 @@
 @input-text-margin: @form-element-input-margin;
 @input-text-vertical-align: @form-element-input-vertical-align;
 @input-text-background-clip: @form-element-input-background-clip; // border-box, content-box
-@input-text-outline: @form-element-input-outline; // false
 @input-text-font-size: @form-element-input-font-size;
 @input-text-color: @form-element-input-color;
 @input-text-font-family: @form-element-input-font-family;
@@ -921,7 +923,6 @@
 @select-margin: @form-element-input-margin;
 @select-vertical-align: @form-element-input-vertical-align;
 @select-background-clip: @form-element-input-background-clip; // border-box, content-box
-@select-outline: @form-element-input-outline; // false
 @select-font-size: @form-element-input-font-size;
 @select-color: @form-element-input-color;
 @select-font-family: @form-element-input-font-family;
@@ -956,7 +957,6 @@
 @textarea-margin: 0;
 @textarea-vertical-align: @form-element-input-vertical-align;
 @textarea-background-clip: @form-element-input-background-clip; // border-box, content-box
-@textarea-outline: @form-element-input-outline; // false
 @textarea-font-size: @form-element-input-font-size;
 @textarea-color: @form-element-input-color;
 @textarea-font-family: @form-element-input-font-family;
@@ -1122,7 +1122,7 @@
 @pager-font-size: @font-size-s;
 @pager-font-weight: @font-weight-base;
 @pager-line-height: 32px;
-@pager-item-margin: 0 1px;
+@pager-item-margin: 0 2px 0 0;
 @pager-item-padding: 0 4px;
 @pager-actions-padding: 0;
 

@@ -122,6 +122,16 @@ class View extends AbstractProduct implements \Magento\Framework\View\Block\Iden
     }
 
     /**
+     * Return wishlist widget options
+     *
+     * @return array
+     */
+    public function getWishlistOptions()
+    {
+        return ['productType' => $this->getProduct()->getTypeId()];
+    }
+
+    /**
      * Add meta information from product to head block
      *
      * @return \Magento\Catalog\Block\Product\View

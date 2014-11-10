@@ -26,7 +26,7 @@
 
 namespace Magento\Webapi\Controller\Rest;
 
-use Magento\Framework\Service\SimpleDataObjectConverter;
+use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Webapi\Model\Rest\Config as RestConfig;
 
 class Request extends \Magento\Webapi\Controller\Request

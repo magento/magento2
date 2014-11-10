@@ -26,9 +26,9 @@ namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
-use Magento\Framework\Service\Data\AbstractExtensibleObject;
-use Magento\Framework\Service\Data\AttributeValue;
-use Magento\Framework\Service\ExtensibleDataObjectConverter;
+use Magento\Framework\Api\AbstractExtensibleObject;
+use Magento\Framework\Api\AttributeValue;
+use Magento\Framework\Api\ExtensibleDataObjectConverter;
 
 class AccountTest extends \PHPUnit_Framework_TestCase
 {

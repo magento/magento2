@@ -23,7 +23,7 @@
  */
 namespace Magento\Customer\Service\V1\Data;
 
-use Magento\Framework\Service\ExtensibleDataObjectConverter;
+use Magento\Framework\Api\ExtensibleDataObjectConverter;
 
 /**
  * Class AddressConverter converts Address Service Data Object to an array

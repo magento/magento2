@@ -27,7 +27,7 @@ namespace Magento\Bundle\Service\V1\Product;
 use Magento\Bundle\Service\V1\Data\Product\Option;
 use Magento\Bundle\Service\V1\Product\Option\ReadService as OptionReadService;
 use Magento\Bundle\Service\V1\Product\Option\WriteService as OptionWriteService;
-use Magento\Framework\Service\Data\Eav\AttributeValue;
+use Magento\Framework\Api\Eav\AttributeValue;
 use Magento\Catalog\Model\Product as ProductModel;
 use Magento\Catalog\Model\ProductRepository;
 use Magento\Catalog\Model\Product\Type as ProductType;

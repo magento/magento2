@@ -23,7 +23,7 @@
  */
 namespace Magento\Catalog\Service\V1\Data\Eav\Category\Info;
 
-use Magento\Framework\Service\Data\AbstractExtensibleObject;
+use Magento\Framework\Api\AbstractExtensibleObject;
 
 /**
  * Class Metadata

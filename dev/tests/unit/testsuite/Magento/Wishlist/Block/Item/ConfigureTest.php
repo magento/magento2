@@ -66,6 +66,19 @@ class ConfigureTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testGetWishlistOptions()
+    {
+        $typeId = 'simple';
+        $product = $this->getMockBuilder('Magento\Catalog\Model\Product')->disableOriginalConstructor()->getMock();
+        $product->expects($this->once())->method('getTypeId')->willReturn($typeId);
+        $this->_mockRegistry->expects($this->once())
+            ->method('registry')
+            ->with($this->equalTo('product'))
+            ->willReturn($product);
+
+        $this->assertEquals(['productType' => $typeId], $this->_model->getWishlistOptions());
+    }
+
     public function testGetProduct()
     {
         $product = 'some test product';

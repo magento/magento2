@@ -51,7 +51,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Autoload\IncludePath
      */
-    protected $autoloader;
+    protected $fileResolver;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|Generator\Io
@@ -65,8 +65,8 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->autoloader = $this->getMock(
-            'Magento\Framework\Autoload\IncludePath',
+        $this->fileResolver = $this->getMock(
+            'Magento\Framework\Code\Generator\FileResolver',
             array('getFile'),
             array(),
             '',
@@ -80,13 +80,13 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         unset($this->model);
-        unset($this->autoloader);
+        unset($this->fileResolver);
     }
 
     public function testGetGeneratedEntities()
     {
         $this->model = new \Magento\Framework\Code\Generator(
-            $this->autoloader,
+            $this->fileResolver,
             $this->ioObjectMock,
             array('factory', 'proxy', 'interceptor')
         );
@@ -99,13 +99,13 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testGenerateClass($className, $entityType)
     {
-        $this->autoloader->expects($this->any())
+        $this->fileResolver->expects($this->any())
             ->method('getFile')
             ->with($className . $entityType)
             ->will($this->returnValue(false));
 
         $this->model = new \Magento\Framework\Code\Generator(
-            $this->autoloader,
+            $this->fileResolver,
             $this->ioObjectMock,
             array(
                 'factory' => '\Magento\Framework\ObjectManager\Code\Generator\Factory',
@@ -122,13 +122,13 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testGenerateClassWithExistName($className, $entityType)
     {
-        $this->autoloader->expects($this->once())
+        $this->fileResolver->expects($this->once())
             ->method('getFile')
             ->with($className . $entityType)
             ->will($this->returnValue(true));
 
         $this->model = new \Magento\Framework\Code\Generator(
-            $this->autoloader,
+            $this->fileResolver,
             $this->ioObjectMock,
             array(
                 'factory' => '\Magento\Framework\ObjectManager\Code\Generator\Factory',
@@ -145,9 +145,9 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testGenerateClassWithWrongName()
     {
-        $this->autoloader->expects($this->never())->method('getFile');
+        $this->fileResolver->expects($this->never())->method('getFile');
 
-        $this->model = new \Magento\Framework\Code\Generator($this->autoloader, $this->ioObjectMock);
+        $this->model = new \Magento\Framework\Code\Generator($this->fileResolver, $this->ioObjectMock);
 
         $this->assertEquals(
             \Magento\Framework\Code\Generator::GENERATION_ERROR,
@@ -160,10 +160,10 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testGenerateClassWithError()
     {
-        $this->autoloader->expects($this->once())->method('getFile')->will($this->returnValue(false));
+        $this->fileResolver->expects($this->once())->method('getFile')->will($this->returnValue(false));
 
         $this->model = new \Magento\Framework\Code\Generator(
-            $this->autoloader,
+            $this->fileResolver,
             $this->ioObjectMock,
             array(
                 'factory' => '\Magento\Framework\ObjectManager\Code\Generator\Factory',

@@ -117,16 +117,16 @@ class AdminAccount
             'password'  => $this->generatePassword(),
             'is_active' => 1,
         ];
-        $resultSet = $this->setup->getConnection()->query(
+        $result = $this->setup->getConnection()->fetchRow(
             'SELECT user_id, username, email FROM ' . $this->setup->getTable('admin_user') . ' ' .
             'WHERE username = :username OR email = :email',
             ['username' => $this->data[self::KEY_USERNAME], 'email' => $this->data[self::KEY_EMAIL]]
         );
 
-        if ($resultSet->count() > 0) {
+        if (!empty($result)) {
             // User exists, update
-            $this->validateUserMatches($resultSet->current()->username, $resultSet->current()->email);
-            $adminId = $resultSet->current()->user_id;
+            $this->validateUserMatches($result['username'], $result['email']);
+            $adminId = $result['user_id'];
             $adminData['modified'] = date('Y-m-d H:i:s');
             $this->setup->getConnection()->update(
                 $this->setup->getTable('admin_user'),
@@ -142,7 +142,7 @@ class AdminAccount
                 $this->setup->getTable('admin_user'),
                 $adminData
             );
-            $adminId = $this->setup->getConnection()->getDriver()->getLastGeneratedValue();
+            $adminId = $this->setup->getConnection()->lastInsertId();
         }
         return $adminId;
     }
@@ -185,12 +185,12 @@ class AdminAccount
      */
     private function saveAdminUserRole($adminId)
     {
-        $resultSet = $this->setup->getConnection()->query(
+        $result = $this->setup->getConnection()->fetchRow(
             'SELECT * FROM ' . $this->setup->getTable('authorization_role') . ' ' .
             'WHERE user_id = :user_id',
             ['user_id' => $adminId]
         );
-        if ($resultSet->count() < 1) {
+        if (empty($result)) {
             // No user role exists for this user id, create it
             $adminRoleData = [
                 'parent_id'  => $this->retrieveAdministratorsRoleId(),
@@ -221,18 +221,17 @@ class AdminAccount
             'user_type' => UserContextInterface::USER_TYPE_ADMIN,
             'role_name' => 'Administrators'
         ];
-
-        $resultSet = $this->setup->getConnection()->query(
+        $result = $this->setup->getConnection()->fetchRow(
             'SELECT * FROM ' . $this->setup->getTable('authorization_role') . ' ' .
             'WHERE parent_id = :parent_id AND tree_level = :tree_level AND role_type = :role_type AND ' .
             'user_id = :user_id AND user_type = :user_type AND role_name = :role_name',
             $administratorsRoleData
         );
-        if ($resultSet->count() < 1) {
+        if (empty($result)) {
             throw new \Exception('No Administrators role was found, data fixture needs to be run');
         } else {
             // Found at least one, use first
-            return $resultSet->current()->role_id;
+            return $result['role_id'];
         }
     }
 }

@@ -23,9 +23,7 @@
  */
 namespace Magento\Setup\Module\Resource;
 
-use Zend\Db\Sql\Sql;
-use Zend\Db\ResultSet;
-use Magento\Setup\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Setup\Module\ResourceInterface;
 
 /**
@@ -76,17 +74,12 @@ class Resource implements ResourceInterface
     protected function loadVersionDb()
     {
         self::$versions = array();
-        // Db version column always exists
 
+        // Db version column always exists
         if ($this->adapter->isTableExists($this->getMainTable())) {
             $select = $this->adapter->select()->from($this->getMainTable());
-            $sql = new Sql($this->adapter);
-            $selectString = $sql->getSqlStringForSqlObject($select);
-            $results = $this->adapter->query($selectString);
-            if ($results instanceof ResultSet\ResultSetInterface && $results->count()) {
-                foreach ($results as $row) {
-                    self::$versions[$row['code']] = $row['version'];
-                }
+            foreach ($this->adapter->fetchAll($select) as $row) {
+                self::$versions[$row['code']] = $row['version'];
             }
         }
 
@@ -98,9 +91,6 @@ class Resource implements ResourceInterface
      */
     public function getDbVersion($resName)
     {
-        if (!$this->adapter) {
-            return false;
-        }
         $this->loadVersionDb();
         return isset(self::$versions[$resName]) ? self::$versions[$resName] : false;
     }

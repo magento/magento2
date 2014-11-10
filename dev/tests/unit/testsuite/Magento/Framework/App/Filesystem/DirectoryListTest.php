@@ -34,10 +34,7 @@ class DirectoryListTest extends \PHPUnit_Framework_TestCase
 
     public function testDirectoriesCustomization()
     {
-        $config = [
-            DirectoryList::APP => [DirectoryList::PATH => 'foo', DirectoryList::URL_PATH => 'bar'],
-            'unknown' => [DirectoryList::PATH => '/baz'],
-        ];
+        $config = [DirectoryList::APP => [DirectoryList::PATH => 'foo', DirectoryList::URL_PATH => 'bar']];
         $object = new DirectoryList('/root/dir', $config);
         $this->assertFileExists($object->getPath(DirectoryList::SYS_TMP));
         $this->assertEquals('/root/dir/foo', $object->getPath(DirectoryList::APP));
@@ -47,5 +44,14 @@ class DirectoryListTest extends \PHPUnit_Framework_TestCase
             "Unknown directory type: 'unknown'"
         );
         $object->getPath('unknown');
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Unknown type: test
+     */
+    public function testUnknownDirectory()
+    {
+        new DirectoryList('/root/dir', ['test' => [DirectoryList::PATH => '/baz']]);
     }
 }

@@ -26,7 +26,7 @@ namespace Magento\ConfigurableProduct\Service\V1\Data\Option;
 /**
  * @codeCoverageIgnore
  */
-class Value extends \Magento\Framework\Service\Data\AbstractExtensibleObject
+class Value extends \Magento\Framework\Api\AbstractExtensibleObject
 {
     const INDEX = 'index';
     const PRICE = 'price';

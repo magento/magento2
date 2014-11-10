@@ -22,8 +22,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-$installer = $this;
-/** @var $installer \Magento\Tax\Model\Resource\Setup */
+/** @var $installer \Magento\Setup\Module\SetupModule */
 $installer = $this;
 $connection = $installer->getConnection();
 $connection->createTable(

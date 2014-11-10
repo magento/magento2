@@ -23,7 +23,7 @@
  */
 
 
-/** @var $installer \Magento\GiftMessage\Model\Resource\Setup */
+/** @var $installer \Magento\Setup\Module\SetupModule */
 $installer = $this;
 $installer->startSetup();
 

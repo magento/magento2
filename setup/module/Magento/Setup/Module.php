@@ -34,6 +34,7 @@ use Zend\Mvc\MvcEvent;
 use Zend\EventManager\EventInterface;
 use Magento\Setup\Mvc\View\Http\InjectTemplateListener;
 use Magento\Setup\Controller\ConsoleController;
+use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 
 class Module implements
     BootstrapListenerInterface,
@@ -60,16 +61,6 @@ class Module implements
         // Override Zend\Mvc\View\Http\InjectTemplateListener
         // to process templates by Vendor/Module
         $injectTemplateListener = new InjectTemplateListener();
-        $translator = $application->getServiceManager()->get('translator');
-        $sharedEvents->attach(
-            'Zend\Stdlib\DispatchableInterface',
-            MvcEvent::EVENT_DISPATCH,
-            [
-                new \Magento\Setup\Model\Location($translator),
-                'onChangeLocation'
-            ],
-            10
-        );
         $sharedEvents->attach(
             'Zend\Stdlib\DispatchableInterface',
             MvcEvent::EVENT_DISPATCH,
@@ -84,13 +75,15 @@ class Module implements
      */
     public function getConfig()
     {
-        return array_merge(
+        $result = array_merge(
             include __DIR__ . '/config/module.config.php',
             include __DIR__ . '/config/router.config.php',
             include __DIR__ . '/config/di.config.php',
             include __DIR__ . '/config/states.config.php',
             include __DIR__ . '/config/languages.config.php'
         );
+        $result = InitParamListener::attachToConsoleRoutes($result);
+        return $result;
     }
 
     /**
@@ -108,6 +101,6 @@ class Module implements
      */
     public function getConsoleUsage(AdapterInterface $console)
     {
-        return ConsoleController::getConsoleUsage();
+        return array_merge(ConsoleController::getConsoleUsage(), InitParamListener::getConsoleUsage());
     }
 }

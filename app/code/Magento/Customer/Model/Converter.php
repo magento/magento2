@@ -27,7 +27,7 @@ use Magento\Customer\Service\V1\CustomerMetadataServiceInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Customer\Service\V1\Data\Customer as CustomerDataObject;
 use Magento\Customer\Service\V1\Data\CustomerBuilder as CustomerDataObjectBuilder;
-use Magento\Framework\Service\ExtensibleDataObjectConverter;
+use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\StoreManagerInterface;
 
 /**

@@ -32,5 +32,10 @@
                 </configurable>
             </renders>
         </viewBlock>
+        <configurableAttributesBlock>
+            <class>Magento\ConfigurableProduct\Test\Block\Product\View\ConfigurableOptions</class>
+            <locator>#product-options-wrapper</locator>
+            <strategy>css selector</strategy>
+        </configurableAttributesBlock>
     </blocks>
 </page>

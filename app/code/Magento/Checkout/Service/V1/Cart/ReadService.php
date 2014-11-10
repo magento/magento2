@@ -23,13 +23,13 @@
  */
 namespace Magento\Checkout\Service\V1\Cart;
 
-use \Magento\Framework\Service\V1\Data\SearchCriteria;
+use \Magento\Framework\Api\SearchCriteria;
 use \Magento\Sales\Model\Quote;
 use \Magento\Sales\Model\QuoteRepository;
 use \Magento\Sales\Model\Resource\Quote\Collection as QuoteCollection;
 
 use \Magento\Framework\Exception\InputException;
-use \Magento\Framework\Service\V1\Data\Search\FilterGroup;
+use \Magento\Framework\Api\Search\FilterGroup;
 use \Magento\Checkout\Service\V1\Data;
 
 /** 
@@ -137,7 +137,7 @@ class ReadService implements ReadServiceInterface
     /**
      * {@inheritDoc}
      *
-     * @param \Magento\Framework\Service\V1\Data\SearchCriteria $searchCriteria The search criteria.
+     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria The search criteria.
      * @return \Magento\Checkout\Service\V1\Data\CartSearchResults Cart search results object.
      */
     public function getCartList(SearchCriteria $searchCriteria)

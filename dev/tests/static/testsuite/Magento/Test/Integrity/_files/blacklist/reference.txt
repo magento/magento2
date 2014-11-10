@@ -32,4 +32,5 @@ TestSuite
 DbTest
 Model1
 Model3
+\Magento\Wonderland\Api\Data\FakeRegionInterface
 \Magento\Framework\Error\Processor

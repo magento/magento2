@@ -31,15 +31,17 @@ use Zend\Server\Reflection\ReflectionMethod;
  */
 class ClassReflector
 {
-    /** @var \Magento\Webapi\Model\Config\ClassReflector\TypeProcessor */
+    /**
+     * @var \Magento\Framework\Reflection\TypeProcessor
+     */
     protected $_typeProcessor;
 
     /**
      * Construct reflector.
      *
-     * @param \Magento\Webapi\Model\Config\ClassReflector\TypeProcessor $typeProcessor
+     * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
      */
-    public function __construct(\Magento\Webapi\Model\Config\ClassReflector\TypeProcessor $typeProcessor)
+    public function __construct(\Magento\Framework\Reflection\TypeProcessor $typeProcessor)
     {
         $this->_typeProcessor = $typeProcessor;
     }

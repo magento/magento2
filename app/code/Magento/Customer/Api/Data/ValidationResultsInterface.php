@@ -30,6 +30,13 @@ namespace Magento\Customer\Api\Data;
  */
 interface ValidationResultsInterface
 {
+    /**#@+
+     * Constants for keys of data array
+     */
+    const VALID = 'valid';
+    const MESSAGES = 'messages';
+    /**#@-*/
+
     /**
      * Check if the provided data is valid.
      *

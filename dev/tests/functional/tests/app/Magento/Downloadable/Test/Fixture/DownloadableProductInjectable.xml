@@ -471,6 +471,11 @@
             <group />
             <source>Magento\Downloadable\Test\Fixture\DownloadableProductInjectable\CheckoutData</source>
         </checkout_data>
+        <is_virtual>
+            <attribute_code>is_virtual</attribute_code>
+            <backend_type>virtual</backend_type>
+            <group>product-details</group>
+        </is_virtual>
     </fields>
     <data_set>
         <sku></sku>

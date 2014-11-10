@@ -28,16 +28,16 @@ $_helper = $this->helper('Magento\Catalog\Helper\Product\Compare');
 $_items = $_helper->getItemCount() > 0 ? $_helper->getItemCollection() : null;
 $count = $_helper->getItemCount();
 ?>
-<div class="block compare">
-    <div class="title">
+<div class="block block-compare">
+    <div class="block-title">
         <strong><?php echo __('Compare Products') ?></strong>
         <?php if($count > 0): ?>
         <span class="counter qty"><?php echo ($count == 1) ? __('1 item') : __('%1 items',$count) ?></span>
         <?php endif; ?>
     </div>
-    <div class="content">
+    <div class="block-content">
         <?php if($_helper->getItemCount() > 0): ?>
-            <ol id="compare-items" class="items compare"
+            <ol id="compare-items" class="product-items product-items-names"
                 data-mage-init='{"compareItems":{
                     "removeConfirmMessage":"<?php echo __("Are you sure you would like to remove this item from the compare products?") ?>",
                     "removeSelector":"#compare-items a.action.delete",
@@ -45,14 +45,15 @@ $count = $_helper->getItemCount();
                     "clearAllSelector":"#compare-clear-all"
                 }}'>
             <?php foreach($_items as $_index => $_item): ?>
-            <li class="item">
+            <li class="product-item">
                 <input type="hidden" class="compare-item-id" value="<?php echo $_item->getId() ?>"/>
-                <strong class="product name">
-                    <a href="<?php echo $this->getProductUrl($_item) ?>">
+                <strong class="product-item-name">
+                    <a href="<?php echo $this->getProductUrl($_item) ?>" class="product-item-link">
                         <?php echo $this->helper('Magento\Catalog\Helper\Output')->productAttribute($_item, $_item->getName(), 'name') ?>
                     </a>
                 </strong>
                 <?php $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare');?>
+
                 <a href="#" data-post='<?php echo $compareHelper->getPostDataRemove($_item); ?>'
                    title="<?php echo __('Remove This Item') ?>"
                    class="action delete">
@@ -71,7 +72,7 @@ $count = $_helper->getItemCount();
         </div>
     </div>
     <?php else: ?>
-        <p class="empty"><?php echo __('You have no items to compare.') ?></p>
-        <?php endif; ?>
+        <div class="empty"><?php echo __('You have no items to compare.') ?></div>
+    <?php endif; ?>
     </div>
 </div>

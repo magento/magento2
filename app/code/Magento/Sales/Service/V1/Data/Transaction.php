@@ -24,7 +24,7 @@
  
 namespace Magento\Sales\Service\V1\Data;
 
-use Magento\Framework\Service\Data\AbstractExtensibleObject as DataObject;
+use Magento\Framework\Api\AbstractExtensibleObject as DataObject;
 
 /**
  * @codeCoverageIgnore

@@ -38,7 +38,7 @@ class NameBuilder
      */
     public function buildClassName($parts)
     {
-        $separator = \Magento\Framework\Autoload\IncludePath::NS_SEPARATOR;
+        $separator = '\\';
         $string = join($separator, $parts);
         $string = str_replace('_', $separator, $string);
         $className = str_replace(' ', $separator, ucwords(str_replace($separator, ' ', $string)));

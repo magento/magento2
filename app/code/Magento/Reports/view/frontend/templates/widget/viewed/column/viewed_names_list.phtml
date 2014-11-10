@@ -27,18 +27,18 @@
  * @var $this \Magento\Reports\Block\Product\Viewed
  */
 ?>
-<?php if ($_products = $this->getRecentlyViewedProducts()): ?>
-<div class="block widget viewed links">
-    <div class="title">
+<?php if (($_products = $this->getRecentlyViewedProducts()) && $_products->getSize() ): ?>
+<div class="block widget block-viewed-products-names">
+    <div class="block-title">
         <strong><?php echo __('Recently Viewed') ?></strong>
     </div>
-    <div class="content">
+    <div class="block-content">
         <?php $suffix = $this->getNameInLayout(); ?>
-        <ol id="widget-viewed-<?php echo $suffix; ?>" class="items">
+        <ol id="widget-viewed-<?php echo $suffix; ?>" class="product-items product-items-names">
         <?php foreach ($_products as $_product): ?>
-            <li class="item">
-                <strong class="product name">
-                    <a href="<?php echo $_product->getProductUrl() ?>">
+            <li class="product-item">
+                <strong class="product-item-name">
+                    <a href="<?php echo $_product->getProductUrl() ?>" class="product-item-link">
                         <?php echo $this->helper('Magento\Catalog\Helper\Output')->productAttribute($_product, $_product->getName(), 'name') ?>
                     </a>
                 </strong>

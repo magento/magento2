@@ -26,20 +26,20 @@
 $hints = [
     'address_web' => sprintf(
         '<div><p>%s</p><p>%s</p><p><a href=\'#\'>%s</a></p></div>',
-        $this->translate('Enter the base URL that brings shoppers to your store (Ex. http://example.com/).'),
-        $this->translate('We recommend not using your actual IP address when your store goes live, otherwise all your shoppers will see it.'),
-        $this->translate('Detect IP Address')
+        'Enter the base URL that brings shoppers to your store (Ex. http://example.com/).',
+        'We recommend not using your actual IP address when your store goes live, otherwise all your shoppers will see it.',
+        'Detect IP Address'
     ),
     'encrypt_key' => sprintf(
         '<p>%s</p>',
-        $this->translate('Key to encrypt sensitive data such as passwords and personally identifiable customer informaton in the Magento database. The encryption key is stored in [your Magento install dir]/app/etc/local.xml/')
+        'Key to encrypt sensitive data such as passwords and personally identifiable customer informaton in the Magento database. The encryption key is stored in [your Magento install dir]/app/etc/local.xml/'
     ),
 ];
 ?>
 
 <div class="step-controls">
-    <a href="#" class="btn btn-primary" ng-click="previousState()"><?php echo $this->translate('Previous'); ?></a>
-    <a href="#" class="btn btn-primary" ng-click="nextState()"><?php echo $this->translate('Next'); ?></a>
+    <a href="#" class="btn btn-primary" ng-click="previousState()">Previous</a>
+    <a href="#" class="btn btn-primary" ng-click="nextState()">Next</a>
 </div>
 
 <div class="page-header">
@@ -48,7 +48,7 @@ $hints = [
 
 <form novalidate name="webconfig" class="form-horizontal" role="form">
     <div class="form-group" ng-class="{'has-error': webconfig.web.$invalid && webconfig.submitted}">
-        <label class="col-md-3 control-label"><?php echo $this->translate('Your Store Address'); ?>&nbsp;<span class="required">*</span></label>
+        <label class="col-md-3 control-label">Your Store Address&nbsp;<span class="required">*</span></label>
         <div class="col-md-4">
             <input type="text"
                    name="web"
@@ -63,13 +63,13 @@ $hints = [
         </div>
         <div class="col-md-offset-3 col-md-4" ng-show="webconfig.web.$invalid && webconfig.submitted">
             <div class="error-container">
-                <span ng-show="webconfig.web.$error.required"><?php echo $this->translate('Please enter a valid base URL Admin URL path. (ex: http://www.example.com/)'); ?></span>
+                <span ng-show="webconfig.web.$error.required">Please enter a valid base URL Admin URL path. (ex: http://www.example.com/)</span>
             </div>
         </div>
     </div>
 
     <div class="form-group" ng-class="{'has-error': webconfig.admin.$invalid && webconfig.submitted}">
-        <label class="col-md-3 control-label"><?php echo $this->translate('Magento Admin Address'); ?>&nbsp;<span class="required">*</span></label>
+        <label class="col-md-3 control-label">Magento Admin Address&nbsp;<span class="required">*</span></label>
         <div class="col-md-4 input-group" style="padding-left: 15px; padding-right: 15px;">
             <span class="input-group-addon">{{config.address.web}}</span>
             <input type="text"
@@ -80,55 +80,55 @@ $hints = [
         </div>
         <div class="col-md-offset-3 col-md-4" ng-show="webconfig.admin.$invalid && webconfig.submitted">
             <div class="error-container">
-                <span ng-show="webconfig.admin.$error.required"><?php echo $this->translate('Please enter a valid admin URL path.'); ?></span>
+                <span ng-show="webconfig.admin.$error.required">Please enter a valid admin URL path.</span>
             </div>
         </div>
     </div>
 
     <div class="collapsed-options">
-        <a href="#" class="collapsed-options" ng-click="updateOnExpand(config.advanced)"><?php echo $this->translate('Advanced Options'); ?></a>
+        <a href="#" class="collapsed-options" ng-click="updateOnExpand(config.advanced)">Advanced Options</a>
         <span class="caret"></span>
     </div>
 
     <div ng-show="config.advanced.expanded">
         <div class="form-group">
-            <label class="col-md-3 control-label"><?php echo $this->translate('HTTPS Options'); ?></label>
+            <label class="col-md-3 control-label">HTTPS Options</label>
             <div class="col-md-5">
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" ng-model="config.https.front">&nbsp;<?php echo $this->translate('Use HTTPS for Magento Storefront'); ?>
+                        <input type="checkbox" ng-model="config.https.front">&nbsp;Use HTTPS for Magento Storefront
                     </label>
                 </div>
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" ng-model="config.https.admin">&nbsp;<?php echo $this->translate('Use HTTPS for Magento Admin'); ?>
+                        <input type="checkbox" ng-model="config.https.admin">&nbsp;Use HTTPS for Magento Admin
                     </label>
                 </div>
             </div>
         </div>
 
         <div class="form-group">
-            <label class="col-md-3 control-label"><?php echo $this->translate('Apache Rewrites'); ?></label>
+            <label class="col-md-3 control-label">Apache Rewrites</label>
             <div class="col-md-5">
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" ng-model="config.rewrites.allowed">&nbsp;<?php echo $this->translate('Use Web Server Apache Rewrites'); ?>
+                        <input type="checkbox" ng-model="config.rewrites.allowed">&nbsp;Use Web Server Apache Rewrites
                     </label>
                 </div>
             </div>
         </div>
 
         <div class="form-group">
-            <label class="col-md-3 control-label"><?php echo $this->translate('Encryption Key'); ?>&nbsp;<span class="required">*</span></label>
+            <label class="col-md-3 control-label">Encryption Key&nbsp;<span class="required">*</span></label>
             <div class="col-md-5">
                 <div class="radio">
                     <label>
-                        <input type="radio" ng-model="config.encrypt.type" value="magento">&nbsp;<?php echo $this->translate('I want to use a Magento generated key'); ?>
+                        <input type="radio" ng-model="config.encrypt.type" value="magento">&nbsp;I want to use a Magento generated key
                     </label>
                 </div>
                 <div class="radio">
                     <label>
-                        <input type="radio" ng-model="config.encrypt.type" value="user">&nbsp;<?php echo $this->translate('I want to use my own encryption key'); ?>
+                        <input type="radio" ng-model="config.encrypt.type" value="user">&nbsp;I want to use my own encryption key
                     </label>
                 </div>
             </div>
@@ -151,8 +151,8 @@ $hints = [
             </div>
             <div class="col-md-offset-3 col-md-4" ng-show="webconfig.key.$invalid && webconfig.submitted">
                 <div class="error-container">
-                    <span ng-show="webconfig.key.$error.required"><?php echo $this->translate('You must enter an encryption key.'); ?></span>
-                    <span ng-show="webconfig.key.$error.minlength"><?php echo $this->translate('Your encryption key must be longer and stronger.'); ?></span>
+                    <span ng-show="webconfig.key.$error.required">You must enter an encryption key.</span>
+                    <span ng-show="webconfig.key.$error.minlength">Your encryption key must be longer and stronger.</span>
                 </div>
             </div>
         </div>
@@ -160,6 +160,6 @@ $hints = [
 </form>
 
 <div class="step-controls">
-    <a href="#" class="btn btn-primary" ng-click="previousState()"><?php echo $this->translate('Previous'); ?></a>
-    <a href="#" class="btn btn-primary" ng-click="nextState()"><?php echo $this->translate('Next'); ?></a>
+    <a href="#" class="btn btn-primary" ng-click="previousState()">Previous</a>
+    <a href="#" class="btn btn-primary" ng-click="nextState()">Next</a>
 </div>

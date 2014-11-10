@@ -28,8 +28,8 @@ use Magento\Customer\Service\V1\Data\Eav\AttributeMetadataConverter;
 use Magento\Customer\Service\V1\Data\Eav\AttributeMetadataDataProvider;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Service\Config\MetadataConfig;
-use Magento\Framework\Service\SimpleDataObjectConverter;
+use Magento\Framework\Api\Config\MetadataConfig;
+use Magento\Framework\Api\SimpleDataObjectConverter;
 
 /**
  * Service to fetch customer related custom attributes
@@ -148,7 +148,7 @@ class CustomerMetadataService implements CustomerMetadataServiceInterface
         if (!$this->customerDataObjectMethods) {
             $dataObjectMethods = array_flip(get_class_methods($dataObjectClassName));
             $baseClassDataObjectMethods = array_flip(
-                get_class_methods('Magento\Framework\Service\Data\AbstractExtensibleObject')
+                get_class_methods('Magento\Framework\Api\AbstractExtensibleObject')
             );
             $this->customerDataObjectMethods = array_diff_key($dataObjectMethods, $baseClassDataObjectMethods);
         }

@@ -23,16 +23,16 @@
  */
 namespace Magento\Tax\Service\V1\Data;
 
-use Magento\Framework\Service\Data\AttributeValueBuilder;
-use Magento\Framework\Service\Data\MetadataServiceInterface;
-use Magento\Framework\Service\Data\ObjectFactory;
+use Magento\Framework\Api\AttributeValueBuilder;
+use Magento\Framework\Api\MetadataServiceInterface;
+use Magento\Framework\Api\ObjectFactory;
 
 /**
  * Builder for the TaxRate Service Data Object
  *
  * @method TaxRate create()
  */
-class TaxRateBuilder extends \Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder
+class TaxRateBuilder extends \Magento\Framework\Api\ExtensibleObjectBuilder
 {
     /**
      * ZipRange builder

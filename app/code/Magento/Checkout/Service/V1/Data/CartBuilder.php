@@ -30,7 +30,7 @@ use \Magento\Checkout\Service\V1\Data\Cart\Currency;
  *
  * @codeCoverageIgnore
  */
-class CartBuilder extends \Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder
+class CartBuilder extends \Magento\Framework\Api\ExtensibleObjectBuilder
 {
     /**
      * Cart/quote id

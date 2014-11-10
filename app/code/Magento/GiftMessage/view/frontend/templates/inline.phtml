@@ -23,16 +23,6 @@
  */
 ?>
 <?php $_giftMessage = false; ?>
-<?php if(!$this->getDontDisplayContainer()): ?>
-<script type="text/javascript">
-require(['jquery', "mage/mage"], function(jQuery){
-
-    jQuery('#checkoutSteps').mage('extraOptions', {additionalUrl: '<?php echo $this->getAdditionalUrl(); ?>'});
-
-});
-</script>
-<?php endif ?>
-
 <?php switch ($this->getCheckoutType()): ?>
 <?php case 'onepage_checkout': ?>
     <fieldset class="fieldset gift-message">

@@ -25,7 +25,7 @@
  */
 namespace Magento\Catalog\Service\V1\Product\Attribute\Media\Data;
 
-use \Magento\Framework\Service\Data\AbstractExtensibleObject;
+use \Magento\Framework\Api\AbstractExtensibleObject;
 
 /**
  * @codeCoverageIgnore

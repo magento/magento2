@@ -31,7 +31,7 @@ use Magento\Catalog\Test\Block\Product\View;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 
 /**
- * Class AssertProductTierPriceOnProductPage
+ * Assert that displayed tier price on product page equals passed from fixture.
  */
 class AssertProductTierPriceOnProductPage extends AbstractConstraint implements AssertPriceOnProductPageInterface
 {
@@ -74,7 +74,7 @@ class AssertProductTierPriceOnProductPage extends AbstractConstraint implements 
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
 
         //Process assertions
-        $this->assertPrice($product, $catalogProductView);
+        $this->assertPrice($product, $catalogProductView->getViewBlock());
     }
 
     /**
@@ -92,21 +92,18 @@ class AssertProductTierPriceOnProductPage extends AbstractConstraint implements 
      * Verify product tier price on product view page
      *
      * @param FixtureInterface $product
-     * @param CatalogProductView $catalogProductView
-     * @param string $block [optional]
+     * @param View $productViewBlock
      * @return void
      */
-    public function assertPrice(FixtureInterface $product, CatalogProductView $catalogProductView, $block = '')
+    public function assertPrice(FixtureInterface $product, View $productViewBlock)
     {
         $noError = true;
         $match = [];
         $index = 1;
-        /** @var View $viewBlock */
-        $viewBlock = $catalogProductView->{'get' . $block . 'ViewBlock'}();
         $tierPrices = $product->getTierPrice();
 
         foreach ($tierPrices as $tierPrice) {
-            $text = $viewBlock->getTierPrices($index++);
+            $text = $productViewBlock->getTierPrices($index++);
             $noError = (bool)preg_match('#^[^\d]+(\d+)[^\d]+(\d+(?:(?:,\d+)*)+(?:.\d+)*).*#i', $text, $match);
             if (!$noError) {
                 break;

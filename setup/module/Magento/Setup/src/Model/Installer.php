@@ -25,8 +25,6 @@
 namespace Magento\Setup\Model;
 
 use Magento\Setup\Module\Setup\ConfigFactory as DeploymentConfigFactory;
-use Magento\Config\ConfigFactory as SystemConfigFactory;
-use Magento\Config\Config as SystemConfig;
 use Magento\Setup\Module\Setup\Config;
 use Magento\Setup\Module\SetupFactory;
 use Magento\Setup\Module\ModuleListInterface;
@@ -37,6 +35,12 @@ use Zend\Db\Sql\Sql;
 use Magento\Framework\Shell;
 use Magento\Framework\Shell\CommandRenderer;
 use Symfony\Component\Process\PhpExecutableFinder;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\MaintenanceMode;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\FilesystemException;
+use Zend\ServiceManager\ServiceLocatorInterface;
+use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 
 /**
  * Class Installer contains the logic to install Magento application.
@@ -90,11 +94,11 @@ class Installer
     private $moduleList;
 
     /**
-     * System configuration factory
+     * List of directories of Magento application
      *
-     * @var SystemConfig
+     * @var DirectoryList
      */
-    private $systemConfig;
+    private $directoryList;
 
     /**
      * Admin account factory
@@ -146,11 +150,32 @@ class Installer
     private $progress;
 
     /**
-     * Messages
+     * Maintenance mode handler
+     *
+     * @var MaintenanceMode
+     */
+    private $maintenanceMode;
+
+    /**
+     * Magento filesystem
+     *
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
+     * Informational messages that may appear during installation routine
      *
      * @var array
      */
     private $messages = array();
+
+    /**
+     * A materialized string of initialization parameters to pass on any script that's run externally by this model
+     *
+     * @var string
+     */
+    private $execParams;
 
     /**
      * Constructor
@@ -159,34 +184,43 @@ class Installer
      * @param DeploymentConfigFactory $deploymentConfigFactory
      * @param SetupFactory $setupFactory
      * @param ModuleListInterface $moduleList
-     * @param SystemConfigFactory $systemConfigFactory
+     * @param DirectoryList $directoryList
      * @param AdminAccountFactory $adminAccountFactory
      * @param LoggerInterface $log
      * @param Random $random
      * @param ConnectionFactory $connectionFactory
+     * @param MaintenanceMode $maintenanceMode
+     * @param Filesystem $filesystem
+     * @param ServiceLocatorInterface $serviceManager
      */
     public function __construct(
         FilePermissions $filePermissions,
         DeploymentConfigFactory $deploymentConfigFactory,
         SetupFactory $setupFactory,
         ModuleListInterface $moduleList,
-        SystemConfigFactory $systemConfigFactory,
+        DirectoryList $directoryList,
         AdminAccountFactory $adminAccountFactory,
         LoggerInterface $log,
         Random $random,
-        ConnectionFactory $connectionFactory
+        ConnectionFactory $connectionFactory,
+        MaintenanceMode $maintenanceMode,
+        Filesystem $filesystem,
+        ServiceLocatorInterface $serviceManager
     ) {
         $this->filePermissions = $filePermissions;
         $this->deploymentConfigFactory = $deploymentConfigFactory;
         $this->setupFactory = $setupFactory;
         $this->moduleList = $moduleList;
-        $this->systemConfig = $systemConfigFactory->create();
+        $this->directoryList = $directoryList;
         $this->adminAccountFactory = $adminAccountFactory;
         $this->log = $log;
         $this->random = $random;
         $this->connectionFactory = $connectionFactory;
         $this->shellRenderer = new CommandRenderer;
         $this->shell = new Shell($this->shellRenderer);
+        $this->maintenanceMode = $maintenanceMode;
+        $this->filesystem = $filesystem;
+        $this->execParams = urldecode(http_build_query($serviceManager->get(InitParamListener::BOOTSTRAP_PARAM)));
     }
 
     /**
@@ -199,10 +233,10 @@ class Installer
     public function install($request)
     {
         $script[] = ['File permissions check...', 'checkInstallationFilePermissions', []];
-        $script[] = ['Enabling Maintenance Mode:', 'setMaintenanceMode', [1]];
+        $script[] = ['Enabling Maintenance Mode...', 'setMaintenanceMode', [1]];
         $script[] = ['Installing deployment configuration...', 'installDeploymentConfig', [$request]];
         if (!empty($request[self::CLEANUP_DB])) {
-            $script[] = ['Cleaning up database...', 'cleanupDb', [$request]];
+            $script[] = ['Cleaning up database...', 'cleanupDb', []];
         }
         $script[] = ['Installing database schema:', 'installSchema', []];
         $script[] = ['Installing user configuration...', 'installUserConfig', [$request]];
@@ -280,7 +314,7 @@ class Installer
     {
         $results = $this->filePermissions->getUnnecessaryWritableDirectoriesForApplication();
         if ($results) {
-            $errorMsg = 'Unnecessary writing permissions to the following directories: ';
+            $errorMsg = 'For security, remove write permissions from these directories: ';
             foreach ($results as $result) {
                 $errorMsg .= '\'' . $result . '\' ';
             }
@@ -298,8 +332,8 @@ class Installer
     public function installDeploymentConfig($data)
     {
         $data[Config::KEY_DATE] = date('r');
-        if (empty($data[config::KEY_ENCRYPTION_KEY])) {
-            $data[config::KEY_ENCRYPTION_KEY] = md5($this->random->getRandomString(10));
+        if (empty($data[Config::KEY_ENCRYPTION_KEY])) {
+            $data[Config::KEY_ENCRYPTION_KEY] = md5($this->random->getRandomString(10));
         }
         $config = $this->deploymentConfigFactory->create((array)$data);
         $config->saveToFile();
@@ -339,7 +373,8 @@ class Installer
      */
     public function installDataFixtures()
     {
-        $this->exec('-f %s', [$this->systemConfig->getMagentoBasePath() . '/dev/shell/run_data_fixtures.php']);
+        $params = [$this->directoryList->getRoot() . '/dev/shell/run_data_fixtures.php', $this->execParams];
+        $this->exec('-f %s -- --bootstrap=%s', $params);
     }
 
     /**
@@ -368,23 +403,19 @@ class Installer
 
         // get entity_type_id for order
         $select = $dbConnection->select()
-            ->from($setup->getTable('eav_entity_type'))
+            ->from($setup->getTable('eav_entity_type'), 'entity_type_id')
             ->where('entity_type_code = \'order\'');
-        $sql = new Sql($dbConnection);
-        $selectString = $sql->getSqlStringForSqlObject($select, $dbConnection->getPlatform());
-        $statement = $dbConnection->getDriver()->createStatement($selectString);
-        $selectResult = $statement->execute();
-        $entityTypeId = $selectResult->current()['entity_type_id'];
+        $entityTypeId = $dbConnection->fetchOne($select);
 
         // See if row already exists
-        $resultSet = $dbConnection->query(
+        $incrementRow = $dbConnection->fetchRow(
             'SELECT * FROM ' . $setup->getTable('eav_entity_store') . ' WHERE entity_type_id = ? AND store_id = ?',
             [$entityTypeId, Store::DISTRO_STORE_ID]
         );
 
-        if ($resultSet->count() > 0) {
+        if (!empty($incrementRow)) {
             // row exists, update it
-            $entityStoreId = $resultSet->current()->entity_store_id;
+            $entityStoreId = $incrementRow['entity_store_id'];
             $dbConnection->update(
                 $setup->getTable('eav_entity_store'),
                 ['increment_prefix' => $orderIncrementPrefix],
@@ -415,14 +446,32 @@ class Installer
     }
 
     /**
+     * Uninstall Magento application
+     *
+     * @return void
+     */
+    public function uninstall()
+    {
+        $this->log->log('Starting Magento uninstallation:');
+
+        $this->cleanupDb();
+        $this->log->log('File system cleanup:');
+        $this->deleteDirContents(DirectoryList::VAR_DIR);
+        $this->deleteDirContents(DirectoryList::STATIC_VIEW);
+        $this->deleteLocalXml();
+
+        $this->log->logSuccess('Magento uninstallation complete.');
+    }
+
+    /**
      * Enables caches after installing application
      *
      * @return void
      */
     private function enableCaches()
     {
-        $args = [$this->systemConfig->getMagentoBasePath() . '/dev/shell/cache.php'];
-        $this->exec('-f %s -- --set=1', $args);
+        $args = [$this->directoryList->getRoot() . '/dev/shell/cache.php', $this->execParams];
+        $this->exec('-f %s -- --set=1 --bootstrap=%s', $args);
     }
 
     /**
@@ -433,8 +482,7 @@ class Installer
      */
     private function setMaintenanceMode($value)
     {
-        $args = [$this->systemConfig->getMagentoBasePath() . '/dev/shell/maintenance.php', $value];
-        $this->exec('-f %s -- --set=%s', $args);
+        $this->maintenanceMode->set($value);
     }
 
     /**
@@ -480,25 +528,11 @@ class Installer
             Config::KEY_DB_USER => $dbUser,
             Config::KEY_DB_PASS => $dbPass
         ]);
-        $adapter->connect();
-        if (!$adapter->getDriver()->getConnection()->isConnected()) {
+        $adapter->getConnection();
+        if (!$adapter->isConnected()) {
             throw new \Exception('Database connection failure.');
         }
         return true;
-    }
-
-    /**
-     * Cleans up database
-     *
-     * @param \ArrayObject|array $config
-     * @return void
-     */
-    public function cleanupDb($config)
-    {
-        $adapter = $this->connectionFactory->create($config);
-        $dbName = $adapter->quoteIdentifier($config[Config::KEY_DB_NAME]);
-        $adapter->query("DROP DATABASE IF EXISTS {$dbName}");
-        $adapter->query("CREATE DATABASE IF NOT EXISTS {$dbName}");
     }
 
     /**
@@ -509,5 +543,82 @@ class Installer
     public function getMessages()
     {
         return $this->messages;
+    }
+
+
+    /**
+     * Deletes the database and creates it again
+     *
+     * @return void
+     */
+    private function cleanupDb()
+    {
+        // stops cleanup if app/etc/local.xml does not exist
+        if (!$this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->isFile('local.xml')) {
+            $this->log->log('No database connection defined - skipping database cleanup');
+            return;
+        }
+        $config = $this->deploymentConfigFactory->create();
+        $config->loadFromFile();
+        $configData = $config->getConfigData();
+        $adapter = $this->connectionFactory->create($configData);
+        try {
+            $adapter->getConnection();
+        } catch (\Exception $e) {
+            $this->log->log($e->getMessage() . ' - skipping database cleanup');
+            return;
+        }
+        $dbName = $adapter->quoteIdentifier($configData[Config::KEY_DB_NAME]);
+        $this->log->log("Recreating database {$dbName}");
+        $adapter->query("DROP DATABASE IF EXISTS {$dbName}");
+        $adapter->query("CREATE DATABASE IF NOT EXISTS {$dbName}");
+    }
+
+    /**
+     * Removes contents of a directory
+     *
+     * @param string $type
+     * @return void
+     */
+    private function deleteDirContents($type)
+    {
+        $dir = $this->filesystem->getDirectoryWrite($type);
+        $dirPath = $dir->getAbsolutePath();
+        if (!$dir->isExist()) {
+            $this->log->log("The directory '{$dirPath}' doesn't exist - skipping cleanup");
+            return;
+        }
+        foreach ($dir->read() as $path) {
+            if (preg_match('/^\./', $path)) {
+                continue;
+            }
+            $this->log->log("{$dirPath}{$path}");
+            try {
+                $dir->delete($path);
+            } catch (FilesystemException $e) {
+                $this->log->log($e->getMessage());
+            }
+        }
+    }
+
+    /**
+     * Removes deployment configuration
+     *
+     * @return void
+     */
+    private function deleteLocalXml()
+    {
+        $configDir = $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG);
+        $localXml = "{$configDir->getAbsolutePath()}local.xml";
+        if (!$configDir->isFile('local.xml')) {
+            $this->log->log("The file '{$localXml}' doesn't exist - skipping cleanup");
+            return;
+        }
+        try {
+            $this->log->log($localXml);
+            $configDir->delete('local.xml');
+        } catch (FilesystemException $e) {
+            $this->log->log($e->getMessage());
+        }
     }
 }

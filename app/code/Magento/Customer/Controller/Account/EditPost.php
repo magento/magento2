@@ -27,8 +27,8 @@ namespace Magento\Customer\Controller\Account;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
-use Magento\Customer\Service\V1\Data\CustomerBuilder;
-use Magento\Customer\Service\V1\Data\CustomerDetailsBuilder;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerDataBuilder;
 use Magento\Core\App\Action\FormKeyValidator;
 use Magento\Customer\Model\CustomerExtractor;
 use Magento\Framework\Exception\InputException;
@@ -42,11 +42,11 @@ class EditPost extends \Magento\Customer\Controller\Account
     /** @var CustomerAccountServiceInterface  */
     protected $customerAccountService;
 
-    /** @var CustomerBuilder */
-    protected $customerBuilder;
+    /** @var CustomerRepositoryInterface  */
+    protected $customerRepository;
 
-    /** @var CustomerDetailsBuilder */
-    protected $customerDetailsBuilder;
+    /** @var CustomerDataBuilder */
+    protected $customerDataBuilder;
 
     /** @var FormKeyValidator */
     protected $formKeyValidator;
@@ -58,25 +58,24 @@ class EditPost extends \Magento\Customer\Controller\Account
      * @param Context $context
      * @param Session $customerSession
      * @param CustomerAccountServiceInterface $customerAccountService
-     * @param CustomerDetailsBuilder $customerDetailsBuilder
+     * @param CustomerRepositoryInterface $customerRepository
+     * @param CustomerDataBuilder $customerDataBuilder
      * @param FormKeyValidator $formKeyValidator
-     * @param CustomerBuilder $customerBuilder
      * @param CustomerExtractor $customerExtractor
-     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,
         Session $customerSession,
         CustomerAccountServiceInterface $customerAccountService,
-        CustomerBuilder $customerBuilder,
-        CustomerDetailsBuilder $customerDetailsBuilder,
+        CustomerRepositoryInterface $customerRepository,
+        CustomerDataBuilder $customerDataBuilder,
         FormKeyValidator $formKeyValidator,
         CustomerExtractor $customerExtractor
     ) {
         $this->customerAccountService = $customerAccountService;
-        $this->customerBuilder = $customerBuilder;
-        $this->customerDetailsBuilder = $customerDetailsBuilder;
+        $this->customerRepository = $customerRepository;
+        $this->customerDataBuilder = $customerDataBuilder;
         $this->formKeyValidator = $formKeyValidator;
         $this->customerExtractor = $customerExtractor;
         parent::__construct($context, $customerSession);
@@ -98,14 +97,13 @@ class EditPost extends \Magento\Customer\Controller\Account
         if ($this->getRequest()->isPost()) {
             $customerId = $this->_getSession()->getCustomerId();
             $customer = $this->customerExtractor->extract('customer_account_edit', $this->_request);
-            $this->customerBuilder->populate($customer);
-            $this->customerBuilder->setId($customerId);
-            $customer = $this->customerBuilder->create();
+            $this->customerDataBuilder->populateWithArray($customer->__toArray());
+            $this->customerDataBuilder->setId($customerId);
 
             if ($this->getRequest()->getParam('change_password')) {
                 $currPass = $this->getRequest()->getPost('current_password');
                 $newPass = $this->getRequest()->getPost('password');
-                $confPass = $this->getRequest()->getPost('confirmation');
+                $confPass = $this->getRequest()->getPost('password_confirmation');
 
                 if (strlen($newPass)) {
                     if ($newPass == $confPass) {
@@ -128,8 +126,7 @@ class EditPost extends \Magento\Customer\Controller\Account
             }
 
             try {
-                $this->customerDetailsBuilder->setCustomer($customer);
-                $this->customerAccountService->updateCustomer($customerId, $this->customerDetailsBuilder->create());
+                $this->customerRepository->save($this->customerDataBuilder->create());
             } catch (AuthenticationException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (InputException $e) {

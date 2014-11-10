@@ -34,12 +34,13 @@ interface CustomerRepositoryInterface
      * Create customer.
      *
      * @param \Magento\Customer\Api\Data\CustomerInterface $customer
+     * @param string $passwordHash
      * @return \Magento\Customer\Api\Data\CustomerInterface
      * @throws \Magento\Framework\Exception\InputException If bad input is provided
      * @throws \Magento\Framework\Exception\State\InputMismatchException If the provided email is already used
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function save(\Magento\Customer\Api\Data\CustomerInterface $customer);
+    public function save(\Magento\Customer\Api\Data\CustomerInterface $customer, $passwordHash = null);
 
     /**
      * Retrieve customer.
@@ -47,19 +48,30 @@ interface CustomerRepositoryInterface
      * @param string $email
      * @param int|null $websiteId
      * @return \Magento\Customer\Api\Data\CustomerInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException If customer with the specified ID does not exist.
+     * @throws \Magento\Framework\Exception\NoSuchEntityException If customer with the specified email does not exist.
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function get($email, $websiteId = null);
 
     /**
+     * Retrieve customer.
+     *
+     * @param int $customerId
+     * @param int|null $websiteId
+     * @return \Magento\Customer\Api\Data\CustomerInterface
+     * @throws \Magento\Framework\Exception\NoSuchEntityException If customer with the specified ID does not exist.
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getById($customerId, $websiteId = null);
+
+    /**
      * Retrieve customers which match a specified criteria.
      *
-     * @param \Magento\Framework\Api\Data\SearchCriteriaInterface $searchCriteria
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Customer\Api\Data\CustomerSearchResultsInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getList(\Magento\Framework\Api\Data\SearchCriteriaInterface $searchCriteria);
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
     /**
      * Delete customer.

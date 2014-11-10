@@ -23,12 +23,7 @@
  */
 namespace Magento\Checkout\Block\Onepage;
 
-/**
- * One page checkout status
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
-class Review extends \Magento\Checkout\Block\Onepage\AbstractOnepage
+class Review extends AbstractOnepage
 {
     /**
      * @return void
@@ -40,7 +35,5 @@ class Review extends \Magento\Checkout\Block\Onepage\AbstractOnepage
             array('label' => __('Order Review'), 'is_show' => $this->isShow())
         );
         parent::_construct();
-
-        $this->getQuote()->collectTotals()->save();
     }
 }

@@ -28,7 +28,7 @@
  */
 ?>
 <?php
-if ($exist = $this->getRecentlyViewedProducts()) {
+if ($exist = ($this->getRecentlyViewedProducts() && $this->getRecentlyViewedProducts()->getSize())) {
     $type = 'widget-viewed';
     $mode = 'list';
 
@@ -37,7 +37,7 @@ if ($exist = $this->getRecentlyViewedProducts()) {
     $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
     $image = 'recently_viewed_products_images_names_widget';
     $title = __('Recently Viewed');
-    $items = $exist;
+    $items = $this->getRecentlyViewedProducts();
 
     $showWishlist = false;
     $showCompare = false;
@@ -47,25 +47,26 @@ if ($exist = $this->getRecentlyViewedProducts()) {
 }
 ?>
 <?php if ($exist): ?>
-<div class="block widget viewed <?php echo $mode; ?>">
-    <div class="title">
+<div class="block widget block-viewed-products-<?php echo $mode; ?>">
+    <div class="block-title">
         <strong><?php echo $title; ?></strong>
     </div>
-    <div class="content">
+    <div class="block-content">
         <?php $suffix = $this->getNameInLayout(); ?>
-        <ol class="mini products list items" id="widget-viewed-<?php echo $suffix; ?>">
+        <ol class="product-items" id="widget-viewed-<?php echo $suffix; ?>">
             <?php $iterator = 1; ?>
             <?php foreach($items as $_product): ?>
-                <?php echo ($iterator++==1) ? '<li class="item product">' : '</li><li class="item product">' ?>
-                <div class="product">
-                    <a class="product photo" href="<?php echo $_product->getProductUrl() ?>"
+                <?php echo ($iterator++==1) ? '<li class="product-item">' : '</li><li class="product-item">' ?>
+                <div class="product-item-info">
+                    <a class="product-item-photo" href="<?php echo $_product->getProductUrl() ?>"
                        title="<?php echo $this->stripTags($_product->getName(), null, true) ?>">
                         <?php echo $imageBlock->init($_product, $image)->toHtml() ?>
                     </a>
-                    <div class="product details">
-                        <strong class="product name">
+                    <div class="product-item-details">
+                        <strong class="product-item-name">
                             <a href="<?php echo $_product->getProductUrl() ?>"
-                               title="<?php echo $this->stripTags($_product->getName(), null, true) ?>">
+                               title="<?php echo $this->stripTags($_product->getName(), null, true) ?>"
+                               class="product-item-link">
                                 <?php echo $this->helper('Magento\Catalog\Helper\Output')->productAttribute($_product, $_product->getName(), 'name') ?>
                             </a>
                         </strong>
@@ -77,11 +78,11 @@ if ($exist = $this->getRecentlyViewedProducts()) {
                                 'price_id_suffix' => '-widget-viewed-' . $suffix
                             ]
                         ) ?>
-                        <div class="product actions">
+                        <div class="product-item-actions">
                             <?php if($_product->isSaleable()): ?>
-                            <div class="primary">
+                            <div class="actions-primary">
                                 <?php if ($_product->getTypeInstance()->hasRequiredOptions($_product)): ?>
-                                    <button class="action tocart"
+                                    <button class="action tocart primary"
                                             data-mage-init='{"redirectUrl": {"url": "<?php echo $this->getAddToCartUrl($_product) ?>"}}'
                                             type="button" title="<?php echo __('Add to Cart') ?>">
                                         <span><?php echo __('Add to Cart') ?></span>
@@ -91,16 +92,16 @@ if ($exist = $this->getRecentlyViewedProducts()) {
                                         $postDataHelper = $this->helper('Magento\Core\Helper\PostData');
                                         $postData = $postDataHelper->getPostData($this->getAddToCartUrl($_product), ['product' => $_product->getEntityId()]);
                                     ?>
-                                    <button type="button" class="action tocart" data-post='<?php echo $postData; ?>'>
+                                    <button type="button" class="action tocart primary" data-post='<?php echo $postData; ?>'>
                                         <span><?php echo __('Add to Cart') ?></span>
                                     </button>
                                 <?php endif; ?>
                             </div>
                             <?php else: ?>
                                 <?php if ($_product->getIsSalable()): ?>
-                                    <p class="stock available"><span><?php echo __('In stock') ?></span></p>
+                                    <div class="stock available"><span><?php echo __('In stock') ?></span></div>
                                 <?php else: ?>
-                                    <p class="stock unavailable"><span><?php echo __('Out of stock') ?></span></p>
+                                    <div class="stock unavailable"><span><?php echo __('Out of stock') ?></span></div>
                                 <?php endif; ?>
                             <?php endif; ?>
                         </div>

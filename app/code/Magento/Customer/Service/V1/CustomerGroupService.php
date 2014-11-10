@@ -30,15 +30,15 @@ use Magento\Customer\Model\GroupFactory;
 use Magento\Customer\Model\GroupRegistry;
 use Magento\Customer\Model\Resource\Group\Collection;
 use Magento\Customer\Service\V1\Data\CustomerGroup;
-use Magento\Framework\Service\V1\Data\Search\FilterGroup;
+use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
-use Magento\Framework\Service\V1\Data\SearchCriteria;
+use Magento\Framework\Api\SearchCriteria;
 use Magento\Tax\Service\V1\Data\TaxClass;
 use Magento\Tax\Service\V1\TaxClassServiceInterface;
-use Magento\Framework\Service\V1\Data\SortOrder;
+use Magento\Framework\Api\SortOrder;
 
 /**
  * Customer service is responsible for customer business workflow encapsulation

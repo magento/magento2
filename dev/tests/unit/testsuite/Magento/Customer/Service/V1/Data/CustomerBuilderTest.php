@@ -23,10 +23,7 @@
  */
 namespace Magento\Customer\Service\V1\Data;
 
-use Magento\Framework\Service\Data\AttributeValue;
-use Magento\Customer\Service\V1\Data\Eav\AttributeMetadataBuilder;
-use Magento\Framework\Service\Data\AbstractExtensibleObject;
-use Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder;
+use Magento\Framework\Api\AttributeValue;
 
 class CustomerBuilderTest extends \PHPUnit_Framework_TestCase
 {
@@ -42,7 +39,7 @@ class CustomerBuilderTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Service\V1\AddressMetadataService */
     private $_addressMetadataService;
 
-    /** @var \Magento\Framework\Service\Data\AttributeValueBuilder */
+    /** @var \Magento\Framework\Api\AttributeValueBuilder */
     private $_valueBuilder;
 
     protected function setUp()
@@ -84,7 +81,7 @@ class CustomerBuilderTest extends \PHPUnit_Framework_TestCase
                 )
             );
         $this->_valueBuilder = $this->_objectManager->getObject(
-            'Magento\Framework\Service\Data\AttributeValueBuilder'
+            'Magento\Framework\Api\AttributeValueBuilder'
         );
         $this->_customerBuilder = $this->_objectManager->getObject(
             'Magento\Customer\Service\V1\Data\CustomerBuilder',
@@ -258,13 +255,10 @@ class CustomerBuilderTest extends \PHPUnit_Framework_TestCase
     public function testSetCustomAttribute()
     {
         $this->_customerBuilder->populateWithArray(array());
-        $address = $this->_customerBuilder->setCustomAttribute(
-            'warehouse_zip',
-            '78777'
-        )->setCustomAttribute(
-                'warehouse_alternate',
-                '90051'
-            )->create();
+        $address = $this->_customerBuilder
+            ->setCustomAttribute('warehouse_zip', '78777')
+            ->setCustomAttribute('warehouse_alternate', '90051')
+            ->create();
         $this->assertEquals('78777', $address->getCustomAttribute('warehouse_zip')->getValue());
         $this->assertEquals('90051', $address->getCustomAttribute('warehouse_alternate')->getValue());
 
@@ -477,7 +471,7 @@ class CustomerBuilderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $expectedCustomerData,
-            \Magento\Framework\Service\ExtensibleDataObjectConverter::toFlatArray($customer)
+            \Magento\Framework\Api\ExtensibleDataObjectConverter::toFlatArray($customer)
         );
     }
 }

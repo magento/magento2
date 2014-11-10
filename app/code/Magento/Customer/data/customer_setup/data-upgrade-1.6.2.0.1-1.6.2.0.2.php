@@ -23,7 +23,6 @@
  */
 
 /** @var $this \Magento\Customer\Model\Resource\Setup */
-/** @var $installer \Magento\Framework\Module\Setup\Migration */
 $installer = $this->createMigrationSetup();
 $installer->startSetup();
 

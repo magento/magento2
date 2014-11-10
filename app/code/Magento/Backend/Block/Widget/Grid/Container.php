@@ -103,7 +103,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
                 $this->getLayout()->createBlock(
                     str_replace(
                         '_',
-                        \Magento\Framework\Autoload\IncludePath::NS_SEPARATOR,
+                        '\\',
                         $this->_blockGroup
                     ) . '\\Block\\' . str_replace(
                         ' ',

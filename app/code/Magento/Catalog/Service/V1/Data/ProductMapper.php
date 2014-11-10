@@ -23,7 +23,7 @@
  */
 namespace Magento\Catalog\Service\V1\Data;
 
-use \Magento\Framework\Service\ExtensibleDataObjectConverter;
+use \Magento\Framework\Api\ExtensibleDataObjectConverter;
 
 class ProductMapper
 {

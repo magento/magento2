@@ -29,7 +29,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $searchResultsMock  = $this->getMockBuilder('Magento\Framework\Service\V1\Data\SearchResults')
+        $searchResultsMock  = $this->getMockBuilder('Magento\Framework\Api\SearchResults')
             ->setMethods(['getItems'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -38,11 +38,11 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(['randomValue']));
 
         $filterBuilder = $objectManagerHelper
-            ->getObject('\Magento\Framework\Service\V1\Data\FilterBuilder');
+            ->getObject('\Magento\Framework\Api\FilterBuilder');
         $filterGroupBuilder = $objectManagerHelper
-            ->getObject('\Magento\Framework\Service\V1\Data\Search\FilterGroupBuilder');
+            ->getObject('\Magento\Framework\Api\Search\FilterGroupBuilder');
         $searchCriteriaBuilder = $objectManagerHelper->getObject(
-            'Magento\Framework\Service\V1\Data\SearchCriteriaBuilder',
+            'Magento\Framework\Api\SearchCriteriaBuilder',
             [
                 'filterGroupBuilder' => $filterGroupBuilder
             ]

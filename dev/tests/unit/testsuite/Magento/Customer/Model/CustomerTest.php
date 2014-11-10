@@ -314,40 +314,6 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testCanSkipConfirmationWithoutCustomerId()
-    {
-        $this->registryMock->expects($this->never())->method('registry');
-        $this->_model->setData('id', false);
-        $this->assertFalse($this->_model->canSkipConfirmation());
-    }
-
-    public function testCanSkipConfirmationWithoutSkip()
-    {
-        $idFieldName = 'id';
-        $this->registryMock->expects($this->once())
-            ->method('registry')
-            ->with('skip_confirmation_if_email')
-            ->will($this->returnValue(false));
-
-        $this->_model->setData($idFieldName, 1);
-        $this->assertFalse($this->_model->canSkipConfirmation());
-    }
-
-    public function testCanSkipConfirmation()
-    {
-        $customerEmail = 'test@example.com';
-        $this->registryMock->expects($this->once())
-            ->method('registry')
-            ->with('skip_confirmation_if_email')
-            ->will($this->returnValue($customerEmail));
-
-        $this->_model->setData(array(
-            'id' => 1,
-            'email' => $customerEmail,
-        ));
-        $this->assertTrue($this->_model->canSkipConfirmation());
-    }
-
     /**
      * @expectedException \Magento\Framework\Model\Exception
      * @expectedExceptionMessage Wrong transactional account email type

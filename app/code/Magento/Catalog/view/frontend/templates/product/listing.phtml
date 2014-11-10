@@ -80,8 +80,8 @@ $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Im
                                         . ' data-mage-redirect="{event: \'click\', url: \'' . $this->getAddToCartUrl($_product) . '\'}">'
                                         . '<span>' . __('Add to Cart') . '</span></button>';
                     } else {
-                        $info['button'] = $_product->getIsSalable() ?   '<p class="stock available"><span>' . __('In stock') . '</span></p>' :
-                                                                        '<p class="stock unavailable"><span>' . __('Out of stock') . '</span></p>';
+                        $info['button'] = $_product->getIsSalable() ?   '<div class="stock available"><span>' . __('In stock') . '</span></div>' :
+                                                                        '<div class="stock unavailable"><span>' . __('Out of stock') . '</span></div>';
                     }
 
                     $info['links'] = '<div class="product links" data-role="add-to-links">'

@@ -81,7 +81,7 @@ class TableDataTest extends \PHPUnit_Framework_TestCase
         )->method(
             'renameTablesBatch'
         )->with(
-            array('oldName' => 'flat_tmp', 'newName' => 'flat_table')
+            array(['oldName' => 'flat_tmp', 'newName' => 'flat_table'])
         );
 
         $this->_resourceMock->expects(

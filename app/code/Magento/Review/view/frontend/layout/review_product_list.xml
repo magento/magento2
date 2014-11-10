@@ -30,7 +30,7 @@
             <block class="Magento\Review\Block\Product\View\Other" name="product.info.other" as="other" template="Magento_Review::product/view/other.phtml" before="product.info.addto"/>
         </referenceContainer>
         <referenceContainer name="content">
-            <container name="product.info.details" label="invisible" htmlTag="div" htmlClass="product info detailed" after="product.info.media">
+            <container name="product.info.details" htmlTag="div" htmlClass="product info detailed" after="product.info.media">
                 <block class="Magento\Review\Block\Form" name="product.review.form" as="review_form">
                     <container name="product.review.form.fields.before" as="form_fields_before" label="Review Form Fields Before" htmlTag="div" htmlClass="rewards"/>
                 </block>

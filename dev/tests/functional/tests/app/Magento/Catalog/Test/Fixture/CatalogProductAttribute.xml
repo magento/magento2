@@ -293,7 +293,7 @@
             <is_required></is_required>
             <default_value></default_value>
             <input></input>
-            <source>\Magento\Catalog\Test\Fixture\CatalogProductAttribute\Options</source>
+            <source>Magento\Catalog\Test\Fixture\CatalogProductAttribute\Options</source>
             <group>manage-options</group>
         </options>
     </fields>

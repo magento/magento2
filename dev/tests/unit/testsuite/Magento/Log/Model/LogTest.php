@@ -57,7 +57,7 @@ class LogTest extends \PHPUnit_Framework_TestCase
     {
         $this->registry = $this->getMock('Magento\Framework\Registry');
         $this->scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $resource = $this->getMockBuilder('Magento\Customer\Model\Resource\Visitor')
+        $resource = $this->getMockBuilder('\Magento\Log\Model\Resource\Log')
             ->setMethods(['clean', 'getIdFieldName'])
             ->disableOriginalConstructor()
             ->getMock();

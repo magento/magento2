@@ -80,10 +80,6 @@ class CustomerExtractor
         $isGroupIdEmpty = true;
         $customerData = array();
         foreach ($allowedAttributes as $attribute) {
-            // confirmation in request param is the repeated password, not a confirmation code.
-            if ($attribute === 'confirmation') {
-                continue;
-            }
             $attributeCode = $attribute->getAttributeCode();
             if ($attributeCode == 'group_id') {
                 $isGroupIdEmpty = false;

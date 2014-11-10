@@ -28,3 +28,74 @@
         margin: 0 0 5px;
     }
 }
+
+.items-info-tabs {
+    border-bottom: @border-width-base solid @border-color-base;
+    margin-bottom: 10px;
+    .item {
+        display: inline-block;
+        margin-right: 20px;
+    }
+}
+
+.order-recurring-details {
+    > .actions-toolbar {
+        margin: 0 0 @indent-base;
+    }
+}
+
+.order-recurring-details-item {
+    margin-bottom: 40px;
+    padding: 10px;
+    .table.data {
+        .table-resize(
+            @_td-padding-left: 0,
+            @_td-padding-right: 0
+        );
+    }
+}
+
+
+//
+//    Mobile
+//--------------------------------------
+.responsive-smaller(@break) when (@break = @screen-xs) {
+    .table-recurring-payments {
+        td {
+            &:first-child {
+                span {
+                    display: block;
+                }
+            }
+        }
+    }
+}
+
+.responsive-smaller(@break) when (@break = @screen-s) {
+    .table-wrapper.recurring-payments {
+        &:extend(.abstract-account-table-border all);
+    }
+    .order-recurring-details {
+        .order-recurring-details-item {
+            padding: 10px 0;
+            .table.data {
+                .table-resize(
+                    @_td-padding-left: 0,
+                    @_td-padding-right: 0
+                );
+                th,
+                td {
+                    &:before {
+                        padding-right: 0;
+                    }
+                }
+            }
+        }
+    }
+}
+
+//
+//    Desktop
+//--------------------------------------
+.responsive(@break) when (@break = @screen-m) {
+}

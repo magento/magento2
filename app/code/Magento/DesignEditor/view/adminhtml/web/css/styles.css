@@ -89,7 +89,6 @@
 
 .theme input[type=text]:focus {
     border-color: rgba(82, 168, 236, 0.8);
-    outline: 0;
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
@@ -974,7 +973,6 @@
 
 .eq-ie8 .vde-tab-data .action-download {
     filter: none;
-    outline: none;
 }
 
 .eq-ie8 .vde-tab-data .action-download:focus:before {
@@ -1390,10 +1388,6 @@
     font: 14px/18px Helvetica, Arial, sans-serif;
     color: #f2ebde;
     padding: 20px 0 20px 20px;
-}
-
-.custom-code textarea:focus {
-    outline: none;
 }
 
 @-moz-document url-prefix() {

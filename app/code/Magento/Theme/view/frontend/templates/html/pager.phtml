@@ -128,20 +128,20 @@
         </div>
         <?php endif; ?>
 
-        <?php if($this->isShowPerPage()): ?>
-            <div class="limiter">
-                <strong class="limiter-label"><?php echo __('Show') ?></strong>
-                <select id="limiter" data-mage-redirect="{'event':'change'}" class="limiter-options">
-                    <?php foreach ($this->getAvailableLimit() as $_key => $_limit): ?>
+    <?php if($this->isShowPerPage()): ?>
+        <div class="limiter">
+            <strong class="limiter-label"><?php echo __('Show') ?></strong>
+            <select id="limiter" data-mage-redirect="{'event':'change'}" class="limiter-options">
+                <?php foreach ($this->getAvailableLimit() as $_key => $_limit): ?>
                     <option value="<?php echo $this->getLimitUrl($_key) ?>"<?php if ($this->isLimitCurrent($_key)): ?>
-                            selected="selected"<?php endif ?>>
+                        selected="selected"<?php endif ?>>
                         <?php echo $_limit ?>
                     </option>
-                    <?php endforeach; ?>
-                </select>
-                <span class="limiter-text"><?php echo __('per page') ?></span>
-            </div>
-        <?php endif ?>
+                <?php endforeach; ?>
+            </select>
+            <span class="limiter-text"><?php echo __('per page') ?></span>
+        </div>
+    <?php endif ?>
 
     <?php if($this->getUseContainer()): ?>
     </div>

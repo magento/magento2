@@ -21,6 +21,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\Customer\Model;
 
 class GroupTest extends \PHPUnit_Framework_TestCase
@@ -28,19 +29,27 @@ class GroupTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Customer\Model\Group
      */
-    protected $_model;
+    protected $groupModel;
+
+    /**
+     * @var \Magento\Customer\Api\Data\GroupDataBuilder
+     */
+    protected $groupBuilder;
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        $this->groupModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Customer\Model\Group'
+        );
+        $this->groupBuilder = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Customer\Api\Data\GroupDataBuilder'
         );
     }
 
     public function testCRUD()
     {
-        $this->_model->setCode('test');
-        $crud = new \Magento\TestFramework\Entity($this->_model, array('customer_group_code' => uniqid()));
+        $this->groupModel->setCode('test');
+        $crud = new \Magento\TestFramework\Entity($this->groupModel, array('customer_group_code' => uniqid()));
         $crud->testCrud();
     }
 }

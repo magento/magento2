@@ -25,13 +25,34 @@
 
 namespace Magento\Customer\Api\Data;
 
-use Magento\Framework\Api\Data\ExtensibleDataInterface;
+use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * Customer address interface.
  */
 interface AddressInterface extends ExtensibleDataInterface
 {
+    /**#@+
+     * Constants for keys of data array. Identical to the name of the getter in snake case
+     */
+    const ID = 'id';
+    const CUSTOMER_ID = 'customer_id';
+    const REGION = 'region';
+    const COUNTRY_ID = 'country_id';
+    const STREET = 'street';
+    const COMPANY = 'company';
+    const TELEPHONE = 'telephone';
+    const FAX = 'fax';
+    const POSTCODE = 'postcode';
+    const CITY = 'city';
+    const FIRSTNAME = 'firstname';
+    const LASTNAME = 'lastname';
+    const MIDDLENAME = 'middlename';
+    const PREFIX = 'prefix';
+    const SUFFIX = 'suffix';
+    const VAT_ID = 'vat_id';
+    /**#@-*/
+
     /**
      * Get ID
      *
@@ -54,9 +75,9 @@ interface AddressInterface extends ExtensibleDataInterface
     public function getRegion();
 
     /**
-     * Get country id
+     * Two-letter country code in ISO_3166-2 format
      *
-     * @return int|null
+     * @return string|null
      */
     public function getCountryId();
 

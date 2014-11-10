@@ -26,10 +26,10 @@ namespace Magento\Tax\Service\V1;
 
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Model\Exception as ModelException;
-use Magento\Framework\Service\V1\Data\Search\FilterGroup;
-use Magento\Framework\Service\V1\Data\FilterBuilder;
-use Magento\Framework\Service\V1\Data\SearchCriteria;
-use Magento\Framework\Service\V1\Data\SearchCriteriaBuilder;
+use Magento\Framework\Api\Search\FilterGroup;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Tax\Model\ClassModelRegistry;
 use Magento\Tax\Model\Converter;
 use Magento\Tax\Model\Resource\TaxClass\Collection as TaxClassCollection;
@@ -39,7 +39,7 @@ use Magento\Tax\Service\V1\Data\TaxClassSearchResultsBuilder;
 use Magento\Tax\Service\V1\Data\TaxClass as TaxClassDataObject;
 use Magento\Tax\Service\V1\Data\TaxClassKey;
 use Magento\Framework\Exception\CouldNotDeleteException;
-use Magento\Framework\Service\V1\Data\SortOrder;
+use Magento\Framework\Api\SortOrder;
 
 /**
  * Tax class service.
@@ -233,11 +233,11 @@ class TaxClassService implements TaxClassServiceInterface
     /**
      * Retrieve tax classes which match a specific criteria.
      *
-     * @param \Magento\Framework\Service\V1\Data\SearchCriteria $searchCriteria
+     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria
      * @return \Magento\Tax\Service\V1\Data\TaxClassSearchResults containing Data\TaxClass
      * @throws \Magento\Framework\Exception\InputException
      */
-    public function searchTaxClass(\Magento\Framework\Service\V1\Data\SearchCriteria $searchCriteria)
+    public function searchTaxClass(\Magento\Framework\Api\SearchCriteria $searchCriteria)
     {
         $this->searchResultsBuilder->setSearchCriteria($searchCriteria);
         /** @var TaxClassCollection $collection */

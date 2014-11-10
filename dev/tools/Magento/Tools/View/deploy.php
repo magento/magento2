@@ -31,8 +31,10 @@ $baseName = basename(__FILE__);
 $options = getopt('', array('langs::', 'dry-run', 'verbose::', 'help'));
 define('USAGE', "USAGE:\n\tphp -f {$baseName} -- [--langs=en_US,de_DE,...] [--verbose=0|1] [--dry-run] [--help]\n");
 require __DIR__ . '/../../../../../app/bootstrap.php';
-$autoloader = new \Magento\Framework\Autoload\IncludePath();
-$autoloader->addIncludePath([BP . '/dev/tests/static/framework', realpath(__DIR__ . '/../../..')]);
+
+\Magento\Framework\Code\Generator\FileResolver::addIncludePath(
+    [BP . '/dev/tests/static/framework', realpath(__DIR__ . '/../../..')]
+);
 
 // parse all options
 if (isset($options['help'])) {

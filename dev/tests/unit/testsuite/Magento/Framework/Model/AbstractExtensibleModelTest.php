@@ -172,13 +172,13 @@ class AbstractExtensibleModelTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string[] $attributesAsArray
      * @param \Magento\Framework\Model\AbstractExtensibleModel $model
-     * @return \Magento\Framework\Api\Data\AttributeInterface[]
+     * @return \Magento\Framework\Api\AttributeInterface[]
      */
     protected function addCustomAttributesToModel($attributesAsArray, $model)
     {
         $objectManager = new ObjectManagerHelper($this);
-        /** @var \Magento\Framework\Service\Data\AttributeValueBuilder $attributeValueBuilder */
-        $attributeValueBuilder = $objectManager->getObject('Magento\Framework\Service\Data\AttributeValueBuilder');
+        /** @var \Magento\Framework\Api\AttributeValueBuilder $attributeValueBuilder */
+        $attributeValueBuilder = $objectManager->getObject('Magento\Framework\Api\AttributeValueBuilder');
         $addedAttributes = [];
         foreach ($attributesAsArray as $attributeCode => $attributeValue) {
             $addedAttributes[$attributeCode] = $attributeValueBuilder

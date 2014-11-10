@@ -29,12 +29,13 @@ use Magento\Framework\ObjectManager\Code\Generator\Factory;
 use Magento\Framework\ObjectManager\Code\Generator\Proxy;
 use Magento\Framework\Interception\Code\Generator\Interceptor;
 use Magento\Framework\Exception;
-use Magento\Framework\Service\Code\Generator\Builder;
-use Magento\Framework\Service\Code\Generator\Mapper;
+use Magento\Framework\Api\Code\Generator\Builder;
+use Magento\Framework\Api\Code\Generator\DataBuilder;
+use Magento\Framework\Api\Code\Generator\Mapper;
 use Magento\Framework\ObjectManager\Code\Generator\Repository;
 use Magento\Framework\ObjectManager\Code\Generator\Converter;
-use Magento\Framework\Service\Code\Generator\SearchResults;
-use Magento\Framework\Service\Code\Generator\SearchResultsBuilder;
+use Magento\Framework\Api\Code\Generator\SearchResults;
+use Magento\Framework\Api\Code\Generator\SearchResultsBuilder;
 
 require __DIR__ . '/../../../../../app/bootstrap.php';
 
@@ -70,7 +71,7 @@ try {
         $generationDir = $opt->getOption('g');
     }
 } catch (\Zend_Console_Getopt_Exception $e) {
-    $generator = new Generator();
+    $generator = new Generator(new \Magento\Framework\Code\Generator\FileResolver());
     $entities = $generator->getGeneratedEntities();
 
     $allowedTypes = 'Allowed entity types are: ' . implode(', ', $entities) . '.';
@@ -85,7 +86,7 @@ try {
     exit($example);
 }
 
-(new \Magento\Framework\Autoload\IncludePath())->addIncludePath($generationDir);
+\Magento\Framework\Code\Generator\FileResolver::addIncludePath($generationDir);
 
 //reinit generator with correct generation path
 $io = new Io(new File(), null, $generationDir);
@@ -93,8 +94,9 @@ $generator = new Generator(
     null,
     $io,
     [
+        DataBuilder::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\DataBuilder',
         SearchResultsBuilder::ENTITY_TYPE =>
-            'Magento\Framework\Service\Code\Generator\SearchResultsBuilder',
+            'Magento\Framework\Api\Code\Generator\SearchResultsBuilder',
         Proxy::ENTITY_TYPE =>
             'Magento\Framework\ObjectManager\Code\Generator\Proxy',
         Factory::ENTITY_TYPE =>
@@ -102,15 +104,15 @@ $generator = new Generator(
         Interceptor::ENTITY_TYPE =>
             'Magento\Framework\Interception\Code\Generator\Interceptor',
         Builder::ENTITY_TYPE =>
-            'Magento\Framework\Service\Code\Generator\Builder',
+            'Magento\Framework\Api\Code\Generator\Builder',
         Mapper::ENTITY_TYPE =>
-            'Magento\Framework\Service\Code\Generator\Mapper',
+            'Magento\Framework\Api\Code\Generator\Mapper',
         Repository::ENTITY_TYPE =>
             'Magento\Framework\ObjectManager\Code\Generator\Repository',
         Converter::ENTITY_TYPE =>
             'Magento\Framework\ObjectManager\Code\Generator\Converter',
         SearchResults::ENTITY_TYPE =>
-            'Magento\Framework\Service\Code\Generator\SearchResults',
+            'Magento\Framework\Api\Code\Generator\SearchResults',
     ]
 );
 

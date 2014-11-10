@@ -90,6 +90,30 @@
                         margin: 0;
                     }
                 }
+                .legend.payments-title {
+                    &:extend(.abstract-visually-hidden all);
+                }
+            }
+            .methods-shipping {
+                .item-content {
+                    .fieldset {
+                        > .legend {
+                            &:extend(.abstract-visually-hidden all);
+                        }
+                        > .legend + br {
+                            &:extend(.abstract-no-display all);
+                        }
+                        > .field {
+                            margin: 20px 0 0;
+                            &:before {
+                                display: none;
+                            }
+                            .control {
+                                display: inline-block;
+                            }
+                        }
+                    }
+                }
             }
             .form {
                 .form-hasrequired(bottom);
@@ -114,6 +138,16 @@
             }
             .actions {
                 margin-top: 20px;
+            }
+        }
+    }
+
+    .step-content {
+        .field.street {
+            .field.additional {
+                .label {
+                  &:extend(.abstract-visually-hidden all);
+                }
             }
         }
     }

@@ -23,7 +23,7 @@
  */
 namespace Magento\UrlRewrite\Service\V1\Data;
 
-use Magento\Framework\Service\Data\AbstractExtensibleObject;
+use Magento\Framework\Api\AbstractExtensibleObject;
 
 /**
  * Data abstract class for url storage

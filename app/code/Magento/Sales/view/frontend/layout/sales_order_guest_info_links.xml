@@ -25,10 +25,10 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <body>
-        <referenceBlock name="sales.order.info">
-            <block class="Magento\Framework\View\Element\Html\Links" as="links" name="sales.order.info.links">
+        <referenceContainer name="content">
+            <block class="Magento\Framework\View\Element\Html\Links" as="links" name="sales.order.info.links" before="-">
                 <arguments>
-                    <argument name="css_class" xsi:type="string">items</argument>
+                    <argument name="css_class" xsi:type="string">items order-links</argument>
                 </arguments>
                 <block class="Magento\Sales\Block\Order\Link" name="sales.order.info.links.information">
                     <arguments>
@@ -58,6 +58,6 @@
                     </arguments>
                 </block>
             </block>
-        </referenceBlock>
+        </referenceContainer>
     </body>
 </page>

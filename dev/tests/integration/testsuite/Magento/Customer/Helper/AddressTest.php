@@ -55,7 +55,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             array('firstname', 'required-entry'),
             array('lastname', 'required-entry'),
             array('middlename', ''),
-            array('postcode', ' required-entry')
+            array('postcode', '')
         );
     }
 }

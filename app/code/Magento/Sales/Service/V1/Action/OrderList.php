@@ -26,7 +26,7 @@ namespace Magento\Sales\Service\V1\Action;
 use Magento\Sales\Model\OrderRepository;
 use Magento\Sales\Service\V1\Data\OrderMapper;
 use Magento\Sales\Service\V1\Data\OrderSearchResultsBuilder;
-use Magento\Framework\Service\V1\Data\SearchCriteria;
+use Magento\Framework\Api\SearchCriteria;
 
 /**
  * Class OrderList
@@ -66,7 +66,7 @@ class OrderList
     /**
      * Invoke OrderList service
      *
-     * @param \Magento\Framework\Service\V1\Data\SearchCriteria $searchCriteria
+     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria
      * @return \Magento\Sales\Service\V1\Data\OrderSearchResults
      */
     public function invoke(SearchCriteria $searchCriteria)

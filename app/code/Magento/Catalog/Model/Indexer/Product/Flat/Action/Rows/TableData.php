@@ -68,7 +68,7 @@ class TableData implements \Magento\Catalog\Model\Indexer\Product\Flat\TableData
         $connection = $this->_resource->getConnection('write');
         if (!$connection->isTableExists($flatTable)) {
             $connection->dropTable($flatDropName);
-            $connection->renameTablesBatch(array('oldName' => $temporaryFlatTableName, 'newName' => $flatTable));
+            $connection->renameTablesBatch(array(['oldName' => $temporaryFlatTableName, 'newName' => $flatTable]));
             $connection->dropTable($flatDropName);
         } else {
             $describe = $connection->describeTable($flatTable);

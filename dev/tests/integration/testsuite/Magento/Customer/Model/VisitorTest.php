@@ -77,6 +77,40 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @magentoAppArea frontend
+     */
+    public function testClean()
+    {
+        $lastVisitNow = date('Y-m-d H:i:s', time());
+        $sessionIdNow = 'asaswljxvgklasdflkjasieasd';
+        $lastVisitPast = date('Y-m-d H:i:s', time() - 172800);
+        $sessionIdPast = 'kui0aa57nqddl8vk7k6ohgi352';
+
+        /** @var \Magento\Customer\Model\Visitor $visitor */
+        $visitor = Bootstrap::getObjectManager()->get('Magento\Customer\Model\Visitor');
+        $visitor->setSessionId($sessionIdPast);
+        $visitor->setLastVisitAt($lastVisitPast);
+        $visitor->save();
+        $visitorIdPast = $visitor->getId();
+        $visitor->unsetData();
+        $visitor->setSessionId($sessionIdNow);
+        $visitor->setLastVisitAt($lastVisitNow);
+        $visitor->save();
+        $visitorIdNow = $visitor->getId();
+        $visitor->unsetData();
+
+        $visitor->clean();
+        $visitor->load($visitorIdPast);
+        $this->assertEquals([], $visitor->getData());
+        $visitor->unsetData();
+        $visitor->load($visitorIdNow);
+        $this->assertEquals(
+            ['visitor_id' => $visitorIdNow, 'session_id' => $sessionIdNow, 'last_visit_at' => $lastVisitNow],
+            $visitor->getData()
+        );
+    }
+
+    /**
      * Authenticate customer and return its DTO
      * @param string $username
      * @param string $password

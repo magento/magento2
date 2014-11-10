@@ -22,7 +22,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/** @var $this \Magento\Eav\Model\Entity\Setup */
+/** @var $this \Magento\Setup\Module\SetupModule */
 
 $this->getConnection()->changeColumn(
     $this->getTable('cataloginventory_stock_item'),

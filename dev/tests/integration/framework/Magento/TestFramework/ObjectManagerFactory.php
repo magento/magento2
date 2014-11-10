@@ -141,7 +141,9 @@ class ObjectManagerFactory extends \Magento\Framework\App\ObjectManagerFactory
                     'Magento\Framework\Interception\PluginList' => 'Magento\TestFramework\Interception\PluginList',
                     'Magento\Framework\Interception\ObjectManager\Config' =>
                         'Magento\TestFramework\ObjectManager\Config',
-                    'Magento\Framework\View\LayoutInterface' => 'Magento\TestFramework\View\Layout'
+                    'Magento\Framework\View\LayoutInterface' => 'Magento\TestFramework\View\Layout',
+                    'Magento\Framework\Model\Resource\Type\Db\Pdo\Mysql' =>
+                        'Magento\TestFramework\Db\ConnectionAdapter',
                 ]
             );
         }

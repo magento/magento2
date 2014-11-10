@@ -87,7 +87,6 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     /**
      * This test expects next themes for areas:
-     * install/design/theme/full_name   Magento/basic
      * adminhtml/design/theme/full_name Magento/backend
      *
      * @magentoAppIsolation  enabled
@@ -116,7 +115,6 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             'Magento\Core\Model\View\Design'
         );
         return array(
-            'install' => array('install', $design->getConfigurationDesignTheme('install')),
             'backend' => array('adminhtml', 'Magento/backend')
         );
     }

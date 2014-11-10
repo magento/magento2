@@ -28,6 +28,9 @@
     <div class="content" data-role="content">
     <form action="<?php echo $this->getUrl('checkout/cart/estimatePost') ?>" method="post" id="shipping-zip-form">
         <fieldset class="fieldset estimate">
+            <legend class="legend">
+                <span><?php echo __('Estimate Shipping and Tax') ?></span>
+            </legend><br>
             <p class="field note"><?php echo __('Enter your destination to get a shipping estimate.') ?></p>
             <div class="field country">
                 <label for="country" class="label"><span><?php echo __('Country') ?></span></label>

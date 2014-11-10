@@ -22,18 +22,12 @@
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+use Magento\Framework\App\Bootstrap;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Setup\Mvc\Bootstrap\InitParamListener;
+
 return [
-    'parameters' => [
-        'application' => [
-            'base_path' => realpath(__DIR__ . '/../../'),
-        ],
-        'magento' => [
-            'base_path' => realpath(__DIR__ . '/../../../'),
-            'filesystem' => [
-                'module' => '/app/code/',
-                'config' => '/app/etc/',
-                'framework' => '/lib/internal/Magento/Framework/',
-            ],
-        ],
-    ],
+    InitParamListener::BOOTSTRAP_PARAM => [
+        Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => [DirectoryList::ROOT => [DirectoryList::PATH => BP]]
+    ]
 ];

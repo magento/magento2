@@ -28,7 +28,7 @@ namespace Magento\CatalogInventory\Service\V1\Data;
  *
  * @codeCoverageIgnore
  */
-class LowStockCriteriaBuilder extends \Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder
+class LowStockCriteriaBuilder extends \Magento\Framework\Api\ExtensibleObjectBuilder
 {
     /**
      * Set page size

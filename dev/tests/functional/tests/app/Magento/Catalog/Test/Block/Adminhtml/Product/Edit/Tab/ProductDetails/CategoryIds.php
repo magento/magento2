@@ -25,6 +25,7 @@
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\ProductDetails;
 
 use Mtf\Client\Driver\Selenium\Element\MultisuggestElement;
+use Mtf\Client\Element\Locator;
 
 /**
  * Class CategoryIds
@@ -45,4 +46,23 @@ class CategoryIds extends MultisuggestElement
      * @var string
      */
     protected $resultItem = './/li/a/span[@class="category-label"][text()="%s"]';
+
+    /**
+     * Selector for click on top page.
+     *
+     * @var string
+     */
+    protected $top = './ancestor::body//form[@data-form="edit-product"]';
+
+    /**
+     * Set value
+     *
+     * @param array|string $values
+     * @return void
+     */
+    public function setValue($values)
+    {
+        $this->find($this->top, Locator::SELECTOR_XPATH)->click();
+        parent::setValue($values);
+    }
 }

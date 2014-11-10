@@ -26,7 +26,7 @@ namespace Magento\Sales\Service\V1;
 use Magento\Sales\Service\V1\Action\InvoiceGet;
 use Magento\Sales\Service\V1\Action\InvoiceList;
 use Magento\Sales\Service\V1\Action\InvoiceCommentsList;
-use Magento\Framework\Service\V1\Data\SearchCriteria;
+use Magento\Framework\Api\SearchCriteria;
 
 /**
  * Class InvoiceRead
@@ -79,8 +79,8 @@ class InvoiceRead implements InvoiceReadInterface
     }
 
     /**
-     * @param \Magento\Framework\Service\V1\Data\SearchCriteria $searchCriteria
-     * @return \Magento\Framework\Service\V1\Data\SearchResults
+     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria
+     * @return \Magento\Framework\Api\SearchResults
      */
     public function search(SearchCriteria $searchCriteria)
     {

@@ -22,7 +22,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/** @var $this \Magento\Framework\Module\Setup */
+/** @var $this \Magento\Sales\Model\Resource\Setup */
 $installer = $this;
 $connection = $installer->getConnection();
 $installer->startSetup();

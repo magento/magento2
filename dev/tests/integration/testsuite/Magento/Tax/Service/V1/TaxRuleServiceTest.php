@@ -381,9 +381,9 @@ class TaxRuleServiceTest extends \PHPUnit_Framework_TestCase
     {
         $this->setUpDefaultRules();
 
-        /** @var \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder $searchBuilder */
+        /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchBuilder */
         $searchBuilder = Bootstrap::getObjectManager()
-            ->create('Magento\Framework\Service\V1\Data\SearchCriteriaBuilder');
+            ->create('Magento\Framework\Api\SearchCriteriaBuilder');
         foreach ($filters as $filter) {
             $searchBuilder->addFilter([$filter]);
         }
@@ -433,7 +433,7 @@ class TaxRuleServiceTest extends \PHPUnit_Framework_TestCase
 
     public function searchTaxRulesDataProvider()
     {
-        $filterBuilder = Bootstrap::getObjectManager()->create('\Magento\Framework\Service\V1\Data\FilterBuilder');
+        $filterBuilder = Bootstrap::getObjectManager()->create('\Magento\Framework\Api\FilterBuilder');
 
         return [
             'code eq "Default Rule"' => [

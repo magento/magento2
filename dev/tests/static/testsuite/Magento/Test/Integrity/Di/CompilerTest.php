@@ -82,8 +82,12 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $this->_generationDir = $this->_tmpDir . '/generation';
         $this->_compilationDir = $this->_tmpDir . '/di';
 
-        (new \Magento\Framework\Autoload\IncludePath())->addIncludePath(
-            array($basePath . '/app/code', $basePath . '/lib/internal', $this->_generationDir)
+        \Magento\Framework\Code\Generator\FileResolver::addIncludePath(
+            [
+                $basePath . '/app/code',
+                $basePath . '/lib/internal',
+                $this->_generationDir
+            ]
         );
 
         $this->_command = 'php ' . $basePath . '/dev/tools/Magento/Tools/Di/compiler.php --generation=%s --di=%s';
@@ -203,10 +207,9 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
     {
         $basePath = \Magento\TestFramework\Utility\Files::init()->getPathToSource();
 
-        $basePath = str_replace('/', '\\', $basePath);
-        $libPath = $basePath . '\\lib\\internal';
-        $appPath = $basePath . '\\app\\code';
-        $generationPathPath = str_replace('/', '\\', $this->_generationDir);
+        $libPath = 'lib\\internal';
+        $appPath = 'app\\code';
+        $generationPathPath = str_replace('/', '\\', str_replace($basePath . '/', '', $this->_generationDir));
 
         $files = \Magento\TestFramework\Utility\Files::init()->getClassFiles(
             true,
@@ -224,14 +227,18 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $replacements = array('', '', '');
 
         /** Convert file names into class name format */
+        $blackList = file(__DIR__ . '/_files/blacklist.txt', FILE_IGNORE_NEW_LINES);
         $classes = array();
         foreach ($files as $file) {
-            $file = str_replace('/', '\\', $file);
-            $filePath = preg_replace($patterns, $replacements, $file);
-            $className = substr($filePath, 0, -4);
-            if (class_exists($className)) {
-                $file = str_replace('\\', DIRECTORY_SEPARATOR, $file);
-                $classes[$file] = $className;
+            $file = str_replace($basePath . '/', '', $file);
+            if (!in_array($file, $blackList)) {
+                $file = str_replace('/', '\\', $file);
+                $filePath = preg_replace($patterns, $replacements, $file);
+                $className = substr($filePath, 0, -4);
+                if (class_exists($className)) {
+                    $file = str_replace('\\', DIRECTORY_SEPARATOR, $file);
+                    $classes[$file] = $className;
+                }
             }
         }
 
@@ -316,34 +323,36 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructorIntegrity()
     {
-        $autoloader = new \Magento\Framework\Autoload\IncludePath();
+        $fileResolver = new \Magento\Framework\Code\Generator\FileResolver();
         $generatorIo = new \Magento\Framework\Code\Generator\Io(
             new \Magento\Framework\Filesystem\Driver\File(),
-            $autoloader,
+            $fileResolver,
             $this->_generationDir
         );
         $generator = new \Magento\Framework\Code\Generator(
-            $autoloader,
+            $fileResolver,
             $generatorIo,
             array(
-                \Magento\Framework\Service\Code\Generator\SearchResultsBuilder::ENTITY_TYPE
-                    => 'Magento\Framework\Service\Code\Generator\SearchResultsBuilder',
+                \Magento\Framework\Api\Code\Generator\DataBuilder::ENTITY_TYPE
+                    => 'Magento\Framework\Api\Code\Generator\DataBuilder',
+                \Magento\Framework\Api\Code\Generator\SearchResultsBuilder::ENTITY_TYPE
+                    => 'Magento\Framework\Api\Code\Generator\SearchResultsBuilder',
                 \Magento\Framework\ObjectManager\Code\Generator\Factory::ENTITY_TYPE
                     => 'Magento\Framework\ObjectManager\Code\Generator\Factory',
                 \Magento\Framework\ObjectManager\Code\Generator\Repository::ENTITY_TYPE
                     => 'Magento\Framework\ObjectManager\Code\Generator\Repository',
                 \Magento\Framework\ObjectManager\Code\Generator\Converter::ENTITY_TYPE
                     => 'Magento\Framework\ObjectManager\Code\Generator\Converter',
-                \Magento\Framework\Service\Code\Generator\Mapper::ENTITY_TYPE
-                    => 'Magento\Framework\Service\Code\Generator\Mapper',
-                \Magento\Framework\Service\Code\Generator\Builder::ENTITY_TYPE
-                    => 'Magento\Framework\Service\Code\Generator\Builder',
-                \Magento\Framework\Service\Code\Generator\SearchResults::ENTITY_TYPE
-                    => 'Magento\Framework\Service\Code\Generator\SearchResults'
+                \Magento\Framework\Api\Code\Generator\Mapper::ENTITY_TYPE
+                    => 'Magento\Framework\Api\Code\Generator\Mapper',
+                \Magento\Framework\Api\Code\Generator\Builder::ENTITY_TYPE
+                    => 'Magento\Framework\Api\Code\Generator\Builder',
+                \Magento\Framework\Api\Code\Generator\SearchResults::ENTITY_TYPE
+                    => 'Magento\Framework\Api\Code\Generator\SearchResults'
             )
         );
-        $autoloader = new \Magento\Framework\Code\Generator\Autoloader($generator);
-        spl_autoload_register(array($autoloader, 'load'));
+        $fileResolver = new \Magento\Framework\Code\Generator\Autoloader($generator, $fileResolver);
+        spl_autoload_register(array($fileResolver, 'load'));
 
         $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
         $invoker(
@@ -352,7 +361,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
             },
             $this->_phpClassesDataProvider()
         );
-        spl_autoload_unregister(array($autoloader, 'load'));
+        spl_autoload_unregister(array($fileResolver, 'load'));
     }
 
     /**

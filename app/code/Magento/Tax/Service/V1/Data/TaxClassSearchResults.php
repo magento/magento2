@@ -24,7 +24,7 @@
 
 namespace Magento\Tax\Service\V1\Data;
 
-use Magento\Framework\Service\V1\Data\SearchResults;
+use Magento\Framework\Api\SearchResults;
 
 /**
  * Data object for Tax class search results.

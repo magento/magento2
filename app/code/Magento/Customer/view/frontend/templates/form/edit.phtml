@@ -68,9 +68,9 @@
             </div>
         </div>
         <div class="field confirm password required">
-            <label class="label" for="confirmation"><span><?php echo __('Confirm New Password') ?></span></label>
+            <label class="label" for="password-confirmation"><span><?php echo __('Confirm New Password') ?></span></label>
             <div class="control">
-                <input type="password" class="input-text" name="confirmation" id="confirmation">
+                <input type="password" class="input-text" name="password_confirmation" id="password-confirmation">
             </div>
         </div>
     </fieldset>
@@ -92,7 +92,7 @@
         $('#change-password').mage('setPassword', {
             'currentPasswordId': '#current-password',
             'passwordId': '#password',
-            'confirmationId': '#confirmation',
+            'confirmationId': '#password-confirmation',
             'passwordContainer': 'fieldset.fieldset.password',
             'showOnDefault': <?php echo $this->getChangePassword() ? 'true' : 'false' ?>
         });

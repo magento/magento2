@@ -38,7 +38,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
      */
     const NO_SUCH_ENTITY_EXCEPTION = '\\Magento\Framework\Exception\NoSuchEntityException';
     const INPUT_EXCEPTION = '\\Magento\Framework\Exception\InputException';
-    const SEARCH_CRITERIA = '\\Magento\Framework\Service\V1\Data\SearchCriteria';
+    const SEARCH_CRITERIA = '\\Magento\Framework\Api\SearchCriteria';
 
     /**
      * Retrieve class properties

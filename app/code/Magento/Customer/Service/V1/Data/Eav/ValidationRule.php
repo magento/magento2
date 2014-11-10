@@ -23,7 +23,12 @@
  */
 namespace Magento\Customer\Service\V1\Data\Eav;
 
-class ValidationRule extends \Magento\Framework\Service\Data\AbstractExtensibleObject
+/**
+ * Validation rule class
+ *
+ * @deprecated
+ */
+class ValidationRule extends \Magento\Framework\Api\AbstractExtensibleObject
 {
     /**
      * Constants used as keys into $_data

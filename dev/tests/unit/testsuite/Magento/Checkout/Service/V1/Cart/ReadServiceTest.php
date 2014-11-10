@@ -24,7 +24,7 @@
 
 namespace Magento\Checkout\Service\V1\Cart;
 
-use \Magento\Framework\Service\V1\Data\SearchCriteria;
+use \Magento\Framework\Api\SearchCriteria;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -122,20 +122,20 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
     public function testGetCartListSuccess($direction, $expected)
     {
         $searchResult = $this->getMock('\Magento\Checkout\Service\V1\Data\CartSearchResults', [], [], '', false);
-        $searchCriteriaMock = $this->getMock('\Magento\Framework\Service\V1\Data\SearchCriteria', [], [], '', false);
+        $searchCriteriaMock = $this->getMock('\Magento\Framework\Api\SearchCriteria', [], [], '', false);
 
         $cartMock = $this->getMock('Magento\Payment\Model\Cart', [], [], '', false);
         $this->searchResultsBuilderMock
             ->expects($this->once())
             ->method('setSearchCriteria')
             ->will($this->returnValue($searchCriteriaMock));
-        $filterGroupMock = $this->getMock('\Magento\Framework\Service\V1\Data\Search\FilterGroup', [], [], '', false);
+        $filterGroupMock = $this->getMock('\Magento\Framework\Api\Search\FilterGroup', [], [], '', false);
         $searchCriteriaMock
             ->expects($this->any())
             ->method('getFilterGroups')
             ->will($this->returnValue([$filterGroupMock]));
 
-        $filterMock = $this->getMock('\Magento\Framework\Service\V1\Data\Filter', [], [], '', false);
+        $filterMock = $this->getMock('\Magento\Framework\Api\Filter', [], [], '', false);
         $filterGroupMock->expects($this->any())->method('getFilters')->will($this->returnValue([$filterMock]));
         $filterMock->expects($this->once())->method('getField')->will($this->returnValue('store_id'));
         $filterMock->expects($this->any())->method('getConditionType')->will($this->returnValue('eq'));
@@ -147,7 +147,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->quoteCollectionMock->expects($this->once())->method('getSize')->will($this->returnValue(10));
         $this->searchResultsBuilderMock->expects($this->once())->method('setTotalCount')->with(10);
-        $sortOrderMock = $this->getMockBuilder('Magento\Framework\Service\V1\Data\SortOrder')
+        $sortOrderMock = $this->getMockBuilder('Magento\Framework\Api\SortOrder')
             ->setMethods(['getField', 'getDirection'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -178,18 +178,18 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCartListWithNotExistingField()
     {
-        $searchCriteriaMock = $this->getMock('\Magento\Framework\Service\V1\Data\SearchCriteria', [], [], '', false);
+        $searchCriteriaMock = $this->getMock('\Magento\Framework\Api\SearchCriteria', [], [], '', false);
         $this->searchResultsBuilderMock
             ->expects($this->once())
             ->method('setSearchCriteria')
             ->will($this->returnValue($searchCriteriaMock));
 
-        $filterGroupMock = $this->getMock('\Magento\Framework\Service\V1\Data\Search\FilterGroup', [], [], '', false);
+        $filterGroupMock = $this->getMock('\Magento\Framework\Api\Search\FilterGroup', [], [], '', false);
         $searchCriteriaMock
             ->expects($this->any())
             ->method('getFilterGroups')
             ->will($this->returnValue([$filterGroupMock]));
-        $filterMock = $this->getMock('\Magento\Framework\Service\V1\Data\Filter', [], [], '', false);
+        $filterMock = $this->getMock('\Magento\Framework\Api\Filter', [], [], '', false);
         $filterGroupMock->expects($this->any())->method('getFilters')->will($this->returnValue([$filterMock]));
         $filterMock->expects($this->once())->method('getField')->will($this->returnValue('any_value'));
         $filterMock->expects($this->never())->method('getConditionType');

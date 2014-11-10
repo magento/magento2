@@ -25,15 +25,15 @@
 // Small screens only
 .responsive-smaller(@screen-s) {}
 
-@media only screen and (max-width: @screen-xs) {
+@media only screen and (max-width: (@screen-xs - 1)) {
     .responsive-smaller(@screen-xs);
 }
 
-@media only screen and (max-width: @screen-s) {
+@media only screen and (max-width: (@screen-s - 1)) {
     .responsive-smaller(@screen-s);
 }
 
-@media only screen and (max-width: @screen-m) {
+@media only screen and (max-width: (@screen-m - 1)) {
     .responsive-smaller(@screen-m);
 }
 
@@ -50,4 +50,9 @@ print {
 @media all and (min-width: @screen-l),
 print {
     .responsive(@screen-l);
+}
+
+@media all and (min-width: @screen-xl),
+print {
+    .responsive(@screen-xl);
 }

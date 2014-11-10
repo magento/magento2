@@ -24,11 +24,11 @@
 
 namespace Magento\Setup\Model;
 
-use Magento\Config\Config;
-use Magento\Config\ConfigFactory;
+use Magento\Framework\Filesystem;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
- * License model
+ * License file reader
  *
  * @package Magento\Setup\Model
  */
@@ -41,37 +41,22 @@ class License
      */
     const LICENSE_FILENAME = 'LICENSE.txt';
 
-    /**
-     * Path of license file
-     *
-     * @var string
-     */
-    protected $licenseFile;
 
     /**
-     * Configuration details
+     * Directory that contains license file
      *
-     * @var Config
+     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
      */
-    protected $config;
-
-    /**
-     * ConfigFactory to create config
-     *
-     * @var ConfigFactory
-     */
-    protected $configFactory;
+    private $dir;
 
     /**
      * Constructor
      *
-     * @param ConfigFactory $configFactory
+     * @param Filesystem $filesystem
      */
-    public function __construct(ConfigFactory $configFactory)
+    public function __construct(Filesystem $filesystem)
     {
-        $this->configFactory = $configFactory;
-        $this->config = $this->configFactory->create();
-        $this->licenseFile = $this->config->getMagentoBasePath() . DIRECTORY_SEPARATOR . self::LICENSE_FILENAME;
+        $this->dir = $filesystem->getDirectoryRead(DirectoryList::ROOT);
     }
 
     /**
@@ -81,9 +66,9 @@ class License
      */
     public function getContents()
     {
-        if (!file_exists($this->licenseFile)) {
+        if (!$this->dir->isFile(self::LICENSE_FILENAME)) {
             return false;
         }
-        return file_get_contents($this->licenseFile);
+        return $this->dir->readFile(self::LICENSE_FILENAME);
     }
 }

@@ -28,7 +28,7 @@ class OrderAddressTest extends \PHPUnit_Framework_TestCase
     public function testGetAddressType()
     {
         $data = ['address_type' => 'test_value_address_type'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -44,7 +44,7 @@ class OrderAddressTest extends \PHPUnit_Framework_TestCase
     public function testGetCity()
     {
         $data = ['city' => 'test_value_city'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -60,7 +60,7 @@ class OrderAddressTest extends \PHPUnit_Framework_TestCase
     public function testGetCompany()
     {
         $data = ['company' => 'test_value_company'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -76,7 +76,7 @@ class OrderAddressTest extends \PHPUnit_Framework_TestCase
     public function testGetCountryId()
     {
         $data = ['country_id' => 'test_value_country_id'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -92,7 +92,7 @@ class OrderAddressTest extends \PHPUnit_Framework_TestCase
     public function testGetCustomerAddressId()
     {
         $data = ['customer_address_id' => 'test_value_customer_address_id'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -108,7 +108,7 @@ class OrderAddressTest extends \PHPUnit_Framework_TestCase
     public function testGetCustomerId()
     {
         $data = ['customer_id' => 'test_value_customer_id'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -124,7 +124,7 @@ class OrderAddressTest extends \PHPUnit_Framework_TestCase
     public function testGetEmail()
     {
         $data = ['email' => 'test_value_email'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -140,7 +140,7 @@ class OrderAddressTest extends \PHPUnit_Framework_TestCase
     public function testGetEntityId()
     {
         $data = ['entity_id' => 'test_value_entity_id'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -156,7 +156,7 @@ class OrderAddressTest extends \PHPUnit_Framework_TestCase
     public function testGetFax()
     {
         $data = ['fax' => 'test_value_fax'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -172,7 +172,7 @@ class OrderAddressTest extends \PHPUnit_Framework_TestCase
     public function testGetFirstname()
     {
         $data = ['firstname' => 'test_value_firstname'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -188,7 +188,7 @@ class OrderAddressTest extends \PHPUnit_Framework_TestCase
     public function testGetLastname()
     {
         $data = ['lastname' => 'test_value_lastname'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -204,7 +204,7 @@ class OrderAddressTest extends \PHPUnit_Framework_TestCase
     public function testGetMiddlename()
     {
         $data = ['middlename' => 'test_value_middlename'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -220,7 +220,7 @@ class OrderAddressTest extends \PHPUnit_Framework_TestCase
     public function testGetParentId()
     {
         $data = ['parent_id' => 'test_value_parent_id'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -236,7 +236,7 @@ class OrderAddressTest extends \PHPUnit_Framework_TestCase
     public function testGetPostcode()
     {
         $data = ['postcode' => 'test_value_postcode'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -252,7 +252,7 @@ class OrderAddressTest extends \PHPUnit_Framework_TestCase
     public function testGetPrefix()
     {
         $data = ['prefix' => 'test_value_prefix'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -268,7 +268,7 @@ class OrderAddressTest extends \PHPUnit_Framework_TestCase
     public function testGetQuoteAddressId()
     {
         $data = ['quote_address_id' => 'test_value_quote_address_id'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -284,7 +284,7 @@ class OrderAddressTest extends \PHPUnit_Framework_TestCase
     public function testGetRegion()
     {
         $data = ['region' => 'test_value_region'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -300,7 +300,7 @@ class OrderAddressTest extends \PHPUnit_Framework_TestCase
     public function testGetRegionId()
     {
         $data = ['region_id' => 'test_value_region_id'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -316,7 +316,7 @@ class OrderAddressTest extends \PHPUnit_Framework_TestCase
     public function testGetStreet()
     {
         $data = ['street' => 'test_value_street'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -332,7 +332,7 @@ class OrderAddressTest extends \PHPUnit_Framework_TestCase
     public function testGetSuffix()
     {
         $data = ['suffix' => 'test_value_suffix'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -348,7 +348,7 @@ class OrderAddressTest extends \PHPUnit_Framework_TestCase
     public function testGetTelephone()
     {
         $data = ['telephone' => 'test_value_telephone'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -364,7 +364,7 @@ class OrderAddressTest extends \PHPUnit_Framework_TestCase
     public function testGetVatId()
     {
         $data = ['vat_id' => 'test_value_vat_id'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -380,7 +380,7 @@ class OrderAddressTest extends \PHPUnit_Framework_TestCase
     public function testGetVatIsValid()
     {
         $data = ['vat_is_valid' => 'test_value_vat_is_valid'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -396,7 +396,7 @@ class OrderAddressTest extends \PHPUnit_Framework_TestCase
     public function testGetVatRequestDate()
     {
         $data = ['vat_request_date' => 'test_value_vat_request_date'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -412,7 +412,7 @@ class OrderAddressTest extends \PHPUnit_Framework_TestCase
     public function testGetVatRequestId()
     {
         $data = ['vat_request_id' => 'test_value_vat_request_id'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -428,7 +428,7 @@ class OrderAddressTest extends \PHPUnit_Framework_TestCase
     public function testGetVatRequestSuccess()
     {
         $data = ['vat_request_success' => 'test_value_vat_request_success'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Api\ExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();

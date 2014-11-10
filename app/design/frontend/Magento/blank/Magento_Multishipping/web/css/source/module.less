@@ -42,6 +42,14 @@
                     text-align: center;
                     width: 45px;
                 }
+                .label {
+                    &:extend(.abstract-visually-hidden all);
+                }
+            }
+            &.address {
+                .label {
+                    &:extend(.abstract-visually-hidden all);
+                }
             }
             &.item {
                 .action.edit {
@@ -100,6 +108,27 @@
 
     .block {
         &:extend(.abstract-add-clearfix all);
+
+        .methods-shipping {
+            .item-content {
+                .fieldset {
+                    > .legend {
+                        &:extend(.abstract-visually-hidden all);
+                    }
+                    > .legend + br {
+                        &:extend(.abstract-no-display all);
+                    }
+                    > .field {
+                        &:before {
+                            display: none;
+                        }
+                        .control {
+                            display: inline-block;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     .block-title,
@@ -151,6 +180,15 @@
     .box-shipping-method {
         .price {
             font-weight: @font-weight-bold;
+        }
+    }
+
+    .box-billing-method {
+        .fieldset {
+            margin: 0;
+            .legend.box-title {
+                margin: 0 0 5px;
+            }
         }
     }
 

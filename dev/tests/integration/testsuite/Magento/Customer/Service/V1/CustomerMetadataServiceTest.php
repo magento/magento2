@@ -39,7 +39,7 @@ class CustomerMetadataServiceTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->configure(
             [
-                'Magento\Framework\Service\Config\Reader' => [
+                'Magento\Framework\Api\Config\Reader' => [
                     'arguments' => [
                         'fileResolver' => ['instance' => 'Magento\Customer\Service\V1\FileResolverStub']
                     ]
@@ -140,7 +140,7 @@ class CustomerMetadataServiceTest extends \PHPUnit_Framework_TestCase
         $customer = $this->_customerAccountService->getCustomer(1);
         $this->assertNotNull($customer);
 
-        $attributes = \Magento\Framework\Service\ExtensibleDataObjectConverter::toFlatArray($customer);
+        $attributes = \Magento\Framework\Api\ExtensibleDataObjectConverter::toFlatArray($customer);
         $this->assertNotEmpty($attributes);
 
         foreach ($attributes as $attributeCode => $attributeValue) {

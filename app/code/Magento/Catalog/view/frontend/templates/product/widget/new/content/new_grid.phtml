@@ -47,26 +47,26 @@ if ($exist = ($this->getProductCollection() && $this->getProductCollection()->ge
 ?>
 
 <?php if ($exist):?>
-    <div class="block widget new <?php echo $mode; ?>">
-        <div class="title">
+    <div class="block widget block-new-products <?php echo $mode; ?>">
+        <div class="block-title">
             <strong><?php echo $title; ?></strong>
         </div>
-        <div class="content">
-            <?php echo $this->getPagerHtml() ?>
+        <div class="block-content">
             <?php echo '<!-- ' . $image . '-->' ?>
-            <div class="products wrapper <?php echo $mode; ?>">
-                <ol class="products list items <?php echo $type; ?>">
+            <div class="products-<?php echo $mode; ?> <?php echo $mode; ?>">
+                <ol class="product-items <?php echo $type; ?>">
                     <?php $iterator = 1; ?>
                     <?php foreach($items as $_item): ?>
-                        <?php echo ($iterator++==1) ? '<li class="item product">' : '</li><li class="item product">' ?>
-                        <div class="product">
-                            <a href="<?php echo $this->getProductUrl($_item) ?>" class="product photo">
+                        <?php echo ($iterator++==1) ? '<li class="product-item">' : '</li><li class="product-item">' ?>
+                        <div class="product-item-info">
+                            <a href="<?php echo $this->getProductUrl($_item) ?>" class="product-item-photo">
                                 <?php echo $imageBlock->init($_item, $image)->toHtml() ?>
                             </a>
-                            <div class="product details">
-                                <strong class="product name">
+                            <div class="product-item-details">
+                                <strong class="product-item-name">
                                     <a title="<?php echo $this->escapeHtml($_item->getName()) ?>"
-                                       href="<?php echo $this->getProductUrl($_item) ?>">
+                                       href="<?php echo $this->getProductUrl($_item) ?>"
+                                       class="product-item-link">
                                         <?php echo $this->escapeHtml($_item->getName()) ?>
                                     </a>
                                 </strong>
@@ -79,9 +79,9 @@ if ($exist = ($this->getProductCollection() && $this->getProductCollection()->ge
                                 <?php endif; ?>
 
                                 <?php if($showWishlist || $showCompare || $showCart): ?>
-                                    <div class="product actions">
+                                    <div class="product-item-actions">
                                         <?php if($showCart): ?>
-                                            <div class="primary">
+                                            <div class="actions-primary">
                                                 <?php if($_item->isSaleable()): ?>
                                                     <?php if ($_item->getTypeInstance()->hasRequiredOptions($_item)): ?>
                                                         <button class="action tocart primary"
@@ -102,15 +102,15 @@ if ($exist = ($this->getProductCollection() && $this->getProductCollection()->ge
                                                     <?php endif; ?>
                                                 <?php else: ?>
                                                     <?php if ($_item->getIsSalable()): ?>
-                                                        <p class="stock available"><span><?php echo __('In stock') ?></span></p>
+                                                        <div class="stock available"><span><?php echo __('In stock') ?></span></div>
                                                     <?php else: ?>
-                                                        <p class="stock unavailable"><span><?php echo __('Out of stock') ?></span></p>
+                                                        <div class="stock unavailable"><span><?php echo __('Out of stock') ?></span></div>
                                                     <?php endif; ?>
                                                 <?php endif; ?>
                                             </div>
                                         <?php endif; ?>
                                         <?php if($showWishlist || $showCompare): ?>
-                                            <div class="secondary-addto-links" data-role="add-to-links">
+                                            <div class="actions-secondary" data-role="add-to-links">
                                                 <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow() && $showWishlist): ?>
                                                     <a href="#"
                                                        data-post='<?php echo $this->getAddToWishlistParams($_item); ?>'
@@ -137,6 +137,7 @@ if ($exist = ($this->getProductCollection() && $this->getProductCollection()->ge
                     <?php endforeach ?>
                 </ol>
             </div>
+            <?php echo $this->getPagerHtml() ?>
         </div>
     </div>
 <?php endif;?>

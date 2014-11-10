@@ -22,6 +22,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+/** @var $installer \Magento\Catalog\Model\Resource\Setup */
 $installer = $this;
 $installer->addAttribute(
     \Magento\Catalog\Model\Product::ENTITY,

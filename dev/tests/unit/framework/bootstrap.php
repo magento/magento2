@@ -26,8 +26,12 @@ if (!defined('TESTS_TEMP_DIR')) {
     define('TESTS_TEMP_DIR', dirname(__DIR__) . '/tmp');
 }
 require __DIR__ . '/../../../../app/autoload.php';
+
+$includePath = new \Magento\Framework\Autoload\IncludePath();
+spl_autoload_register([$includePath, 'load']);
+
 require BP . '/app/functions.php';
-(new \Magento\Framework\Autoload\IncludePath())->addIncludePath(
+$includePath->addIncludePath(
     array(
         __DIR__,
         realpath(__DIR__ . '/../testsuite'),
@@ -36,6 +40,7 @@ require BP . '/app/functions.php';
         realpath(BP . '/lib/internal')
     )
 );
+
 if (is_dir(TESTS_TEMP_DIR)) {
     $filesystemAdapter = new \Magento\Framework\Filesystem\Driver\File();
     $filesystemAdapter->deleteDirectory(TESTS_TEMP_DIR);

@@ -27,7 +27,7 @@ use Magento\Sales\Service\V1\Action\OrderGet;
 use Magento\Sales\Service\V1\Action\OrderList;
 use Magento\Sales\Service\V1\Action\OrderCommentsList;
 use Magento\Sales\Service\V1\Action\OrderGetStatus;
-use Magento\Framework\Service\V1\Data\SearchCriteria;
+use Magento\Framework\Api\SearchCriteria;
 
 /**
  * Class OrderRead
@@ -83,7 +83,7 @@ class OrderRead implements OrderReadInterface
     }
 
     /**
-     * @param \Magento\Framework\Service\V1\Data\SearchCriteria $searchCriteria
+     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria
      * @return \Magento\Sales\Service\V1\Data\OrderSearchResults
      */
     public function search(SearchCriteria $searchCriteria)

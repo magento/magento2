@@ -78,7 +78,7 @@ class Shell implements ShellInterface
         $this->log($output);
         if ($exitCode) {
             $commandError = new \Exception($output, $exitCode);
-            throw new Exception("Command `{$command}` returned non-zero exit code.", 0, $commandError);
+            throw new Exception("Command returned non-zero exit code:\n`{$command}`", 0, $commandError);
         }
         return $output;
     }

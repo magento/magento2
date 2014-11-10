@@ -23,7 +23,7 @@
  */
 namespace Magento\Customer\Model\Address;
 
-use Magento\Framework\Service\Data\AttributeValue;
+use Magento\Framework\Api\AttributeValue;
 
 class ConverterTest extends \PHPUnit_Framework_TestCase
 {
@@ -103,7 +103,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $addressModelMock->expects($this->once())
             ->method('setAttributeSetId')
             ->with($this->equalTo(
-                \Magento\Customer\Service\V1\AddressMetadataServiceInterface::ATTRIBUTE_SET_ID_ADDRESS
+                \Magento\Customer\Api\AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS
             ));
 
         $addressMock = $this->getMock('Magento\Customer\Service\V1\Data\Address', array(), array(), '', false);

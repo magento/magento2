@@ -27,14 +27,14 @@
 namespace Magento\Setup\Module;
 
 use Magento\Config\SchemaLocatorInterface;
-use Magento\Config\ConfigFactory;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 class SchemaLocator implements SchemaLocatorInterface
 {
     /**
-     * @var ConfigFactory
+     * @var DirectoryList
      */
-    protected $configFactory;
+    protected $directoryList;
 
     /**
      * @var string
@@ -42,15 +42,14 @@ class SchemaLocator implements SchemaLocatorInterface
     protected $schemaName;
 
     /**
-     * @param ConfigFactory $configFactory
+     * @param DirectoryList $directoryList
      * @param string $schemaName
      */
     public function __construct(
-        ConfigFactory $configFactory,
+        DirectoryList $directoryList,
         $schemaName = 'module.xsd'
     ) {
-        $this->configFactory = $configFactory;
-        $this->config = $this->configFactory->create();
+        $this->directoryList = $directoryList;
         $this->schemaName = $schemaName;
     }
 
@@ -61,10 +60,7 @@ class SchemaLocator implements SchemaLocatorInterface
      */
     public function getSchema()
     {
-        $path = $this->config->magento->basePath
-            . $this->config->magento->filesystem->framework
-            . 'Module/etc/' . $this->schemaName;
-
-        return realpath($path);
+        return $this->directoryList->getPath(DirectoryList::LIB_INTERNAL)
+            . '/Magento/Framework/Module/etc/' . $this->schemaName;
     }
 }

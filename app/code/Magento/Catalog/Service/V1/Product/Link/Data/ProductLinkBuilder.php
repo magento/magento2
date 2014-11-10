@@ -24,7 +24,7 @@
 
 namespace Magento\Catalog\Service\V1\Product\Link\Data;
 
-use Magento\Framework\Service\Data\AttributeValueBuilder;
+use Magento\Framework\Api\AttributeValueBuilder;
 
 /**
  * Builder for the ProductLink Service Data Object
@@ -32,7 +32,7 @@ use Magento\Framework\Service\Data\AttributeValueBuilder;
  * @method ProductLink create()
  * @codeCoverageIgnore
  */
-class ProductLinkBuilder extends \Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder
+class ProductLinkBuilder extends \Magento\Framework\Api\ExtensibleObjectBuilder
 {
     /**
      * @var array
@@ -40,21 +40,21 @@ class ProductLinkBuilder extends \Magento\Framework\Service\Data\AbstractExtensi
     protected $customAttributes = [];
 
     /**
-     * @param \Magento\Framework\Service\Data\ObjectFactory $objectFactory
+     * @param \Magento\Framework\Api\ObjectFactory $objectFactory
      * @param AttributeValueBuilder $valueBuilder
-     * @param \Magento\Framework\Service\Config\MetadataConfig $metadataService
+     * @param \Magento\Framework\Api\Config\MetadataConfig $metadataService
      * @param array $customAttributesCodes
      */
     public function __construct(
-        \Magento\Framework\Service\Data\ObjectFactory $objectFactory,
+        \Magento\Framework\Api\ObjectFactory $objectFactory,
         AttributeValueBuilder $valueBuilder,
-        \Magento\Framework\Service\Config\MetadataConfig $metadataService,
+        \Magento\Framework\Api\Config\MetadataConfig $metadataService,
         array $customAttributesCodes = array()
     ) {
         $this->customAttributes = $customAttributesCodes;
         parent::__construct($objectFactory, $valueBuilder, $metadataService);
     }
-    
+
     /**
      * Set type
      *

@@ -29,7 +29,6 @@ use Magento\Framework\Filesystem;
 
 class FilePermissions
 {
-
     /**
      * @var Filesystem
      */
@@ -69,15 +68,15 @@ class FilePermissions
     protected $applicationCurrentNonWritableDirectories = [];
 
     /**
-     * @param FilesystemFactory  $filesystemFactory
-     * @param DirectoryListFactory  $directoryListFactory
+     * @param Filesystem $filesystem
+     * @param DirectoryList $directoryList
      */
     public function __construct(
-        FilesystemFactory  $filesystemFactory,
-        DirectoryListFactory  $directoryListFactory
+        Filesystem $filesystem,
+        DirectoryList $directoryList
     ) {
-        $this->filesystem = $filesystemFactory->create();
-        $this->directoryList = $directoryListFactory->create();
+        $this->filesystem = $filesystem;
+        $this->directoryList = $directoryList;
     }
 
     /**

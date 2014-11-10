@@ -25,7 +25,7 @@
  */
 namespace Magento\Customer\Model\Metadata\Form;
 
-use Magento\Framework\Service\ArrayObjectSearch;
+use Magento\Framework\Api\ArrayObjectSearch;
 
 abstract class AbstractData
 {

@@ -40,11 +40,6 @@ class DefaultReaderTest extends \PHPUnit_Framework_TestCase
      */
     protected $_collectionFactory;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_appStateMock;
-
     protected function setUp()
     {
         $this->_initialConfigMock = $this->getMock('Magento\Framework\App\Config\Initial', array(), array(), '', false);
@@ -55,13 +50,10 @@ class DefaultReaderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_appStateMock = $this->getMock('Magento\Framework\App\State', array(), array(), '', false);
-        $this->_appStateMock->expects($this->any())->method('isInstalled')->will($this->returnValue(true));
         $this->_model = new \Magento\Store\Model\Config\Reader\DefaultReader(
             $this->_initialConfigMock,
             new \Magento\Framework\App\Config\Scope\Converter(),
-            $this->_collectionFactory,
-            $this->_appStateMock
+            $this->_collectionFactory
         );
     }
 

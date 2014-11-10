@@ -91,6 +91,13 @@ class ListCompare extends Block
     protected $isEmpty = 'p.empty';
 
     /**
+     * Selector for message block
+     *
+     * @var string
+     */
+    protected $messageBlock = '#messages';
+
+    /**
      * Get product info
      *
      * @param int $index
@@ -166,14 +173,22 @@ class ListCompare extends Block
     }
 
     /**
-     * Remove all products from compare product list
+     * Remove all products from compare product list.
      *
      * @return void
      */
     public function removeAllProducts()
     {
+        $this->waitForElementVisible(sprintf($this->removeButton, 1), Locator::SELECTOR_XPATH);
+        /** @var \Magento\Core\Test\Block\Messages $messageBlock */
+        $messageBlock = $this->blockFactory->create(
+            'Magento\Core\Test\Block\Messages',
+            ['element' => $this->browser->find($this->messageBlock)]
+        );
+
         while ($this->isProductVisible()) {
             $this->removeProduct();
+            $messageBlock->waitSuccessMessage();
             $this->reinitRootElement();
         }
     }

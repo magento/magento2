@@ -57,7 +57,7 @@
         <ini name="date.timezone" value="America/Los_Angeles"/>
         <ini name="xdebug.max_nesting_level" value="200"/>
         <!-- Local XML configuration file ('.dist' extension will be added, if the specified file doesn't exist) -->
-        <const name="TESTS_LOCAL_CONFIG_FILE" value="etc/local-mysql.xml"/>
+        <const name="TESTS_INSTALL_CONFIG_FILE" value="etc/install-config-mysql.php"/>
         <!-- Semicolon-separated 'glob' patterns, that match global XML configuration files -->
         <const name="TESTS_GLOBAL_CONFIG_DIR" value="../../../app/etc"/>
         <!-- Semicolon-separated 'glob' patterns, that match module declaration XML configuration files -->
@@ -67,6 +67,8 @@
         <!-- Memory usage and estimated leaks thresholds -->
         <!--<const name="TESTS_MEM_USAGE_LIMIT" value="1024M"/>-->
         <const name="TESTS_MEM_LEAK_LIMIT" value=""/>
+        <!-- Whether to output all CLI commands executed by the bootstrap and tests -->
+        <!--<const name="TESTS_EXTRA_VERBOSE_LOG" value="1"/>-->
         <!-- Path to Percona Toolkit bin directory -->
         <!--<const name="PERCONA_TOOLKIT_BIN_DIR" value=""/>-->
         <!-- CSV Profiler Output file -->

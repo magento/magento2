@@ -47,9 +47,9 @@ use Magento\Framework\Exception\StateException;
 use Magento\Framework\Logger;
 use Magento\Framework\Mail\Exception as MailException;
 use Magento\Framework\Math\Random;
-use Magento\Framework\Service\V1\Data\Search\FilterGroup;
-use Magento\Framework\Service\V1\Data\SearchCriteria;
-use Magento\Framework\Service\V1\Data\SortOrder;
+use Magento\Framework\Api\Search\FilterGroup;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SortOrder;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\StoreManagerInterface;
 use Magento\Framework\Stdlib\String as StringHelper;
@@ -382,13 +382,16 @@ class CustomerAccountService implements CustomerAccountServiceInterface
         $password = null,
         $redirectUrl = ''
     ) {
-        if ($password) {
-            $this->checkPasswordStrength($password);
-        } else {
+        if (empty($password)) {
             $password = $this->mathRandom->getRandomString(self::MIN_PASSWORD_LENGTH);
+        } else {
+            $this->checkPasswordStrength($password);
         }
-        $hash = $this->getPasswordHash($password);
-        return $this->createCustomerWithPasswordHash($customerDetails, $hash, $redirectUrl);
+        return $this->createCustomerWithPasswordHash(
+            $customerDetails,
+            $this->getPasswordHash($password),
+            $redirectUrl
+        );
     }
 
     /**
@@ -662,8 +665,8 @@ class CustomerAccountService implements CustomerAccountServiceInterface
         $length = $this->stringHelper->strlen($password);
         if ($length < self::MIN_PASSWORD_LENGTH) {
             throw new InputException(
-                'The password must have at least %min_length characters.',
-                ['min_length' => self::MIN_PASSWORD_LENGTH]
+                'The password must have at least %1 characters.',
+                [self::MIN_PASSWORD_LENGTH]
             );
         }
         if ($this->stringHelper->strlen(trim($password)) != $length) {
@@ -685,7 +688,7 @@ class CustomerAccountService implements CustomerAccountServiceInterface
     public function validateCustomerData(Data\Customer $customer, array $attributes = [])
     {
         $customerErrors = $this->validator->validateData(
-            \Magento\Framework\Service\ExtensibleDataObjectConverter::toFlatArray($customer),
+            \Magento\Framework\Api\ExtensibleDataObjectConverter::toFlatArray($customer),
             $attributes,
             'customer'
         );

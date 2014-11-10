@@ -27,4 +27,11 @@
 $item = $this->getItem();
 ?>
 
-<textarea placeholder="<?php echo $this->helper('Magento\Wishlist\Helper\Data')->defaultCommentString() ?>" name="description[<?php echo $item->getWishlistItemId() ?>]" title="<?php echo __('Comment') ?>" class="product-item-comment"><?php echo($this->escapeHtml($item->getDescription())) ?></textarea>
+<div class="field comment-box">
+    <label class="label" for="product-item-comment-<?php echo $item->getWishlistItemId() ?>">
+        <span><?php echo __('Comment') ?></span>
+    </label>
+    <div class="control">
+        <textarea id="product-item-comment-<?php echo $item->getWishlistItemId() ?>" placeholder="<?php echo $this->helper('Magento\Wishlist\Helper\Data')->defaultCommentString() ?>" name="description[<?php echo $item->getWishlistItemId() ?>]" title="<?php echo __('Comment') ?>" class="product-item-comment"><?php echo($this->escapeHtml($item->getDescription())) ?></textarea>
+    </div>
+</div>

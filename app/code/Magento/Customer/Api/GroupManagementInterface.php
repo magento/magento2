@@ -32,12 +32,12 @@ interface GroupManagementInterface
     /**
      * Check if customer group can be deleted.
      *
-     * @param int $groupId
+     * @param int $id
      * @return bool
      * @throws \Magento\Framework\Exception\NoSuchEntityException If group is not found
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function isReadonly($groupId);
+    public function isReadonly($id);
 
     /**
      * Get default customer group.

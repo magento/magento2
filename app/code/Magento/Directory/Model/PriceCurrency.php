@@ -123,7 +123,7 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
      * @param Currency|string|null $currency
      * @return Currency
      */
-    protected function getCurrency($store = null, $currency = null)
+    public function getCurrency($store = null, $currency = null)
     {
         if ($currency instanceof Currency) {
             $currentCurrency = $currency;
@@ -141,7 +141,7 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
      * Get store model
      *
      * @param null|string|bool|int|\\Magento\Store\Model\Store $store
-     * @return \\Magento\Store\Model\Store
+     * @return \Magento\Store\Model\Store
      */
     protected function getStore($store = null)
     {

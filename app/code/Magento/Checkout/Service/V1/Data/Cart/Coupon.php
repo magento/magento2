@@ -28,7 +28,7 @@ namespace Magento\Checkout\Service\V1\Data\Cart;
  *
  * @codeCoverageIgnore
  */
-class Coupon extends \Magento\Framework\Service\Data\AbstractExtensibleObject
+class Coupon extends \Magento\Framework\Api\AbstractExtensibleObject
 {
     /**
      * Coupon code.

@@ -21,13 +21,14 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 /** @var $installer \Magento\Tax\Model\Resource\Setup */
 $installer = $this;
 
-//New attributes order and properties
+// New attributes order and properties
 $properties = array('is_required', 'default_value');
 $attributesOrder = array(
-    //Product Details tab
+    // Product Details tab
     'tax_class_id' => array('Product Details' => 40, 'is_required' => 0, 'default_value' => 2),
 );
 

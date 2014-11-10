@@ -52,9 +52,6 @@ class ApplicationTest extends \Magento\TestFramework\Indexer\TestCase
         parent::setUpBeforeClass();
     }
 
-    /**
-     * @magentoAppArea install
-     */
     public function testTest()
     {
         $fixturesArray = \Magento\ToolkitFramework\FixtureSet::getInstance()->getFixtures();

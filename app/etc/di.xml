@@ -92,17 +92,17 @@
     <preference for="Magento\Framework\Mview\View\SubscriptionInterface" type="Magento\Framework\Mview\View\Subscription" />
     <preference for="Magento\Framework\Mview\View\ChangelogInterface" type="Magento\Framework\Mview\View\Changelog" />
     <preference for="Magento\Framework\View\Design\FileResolution\Fallback\CacheDataInterface" type="Magento\Framework\View\Design\FileResolution\Fallback\CacheData\Flat"/>
-    <preference for="Magento\Framework\Service\Data\AttributeMetadataBuilderInterface" type="Magento\Framework\Service\Data\AttributeMetadataBuilder"/>
-    <preference for="Magento\Framework\Service\Data\MetadataServiceInterface" type="Magento\Framework\Service\Config\MetadataConfig"/>
+    <preference for="Magento\Framework\Api\AttributeMetadataBuilderInterface" type="Magento\Framework\Api\AttributeMetadataBuilder"/>
+    <preference for="Magento\Framework\Api\MetadataServiceInterface" type="Magento\Framework\Api\Config\MetadataConfig"/>
     <preference for="Magento\Framework\App\Rss\UrlBuilderInterface" type="Magento\Framework\App\Rss\UrlBuilder"/>
     <type name="Magento\Framework\Model\Context">
         <arguments>
             <argument name="actionValidator" xsi:type="object">Magento\Framework\Model\ActionValidator\RemoveAction\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Service\V1\Data\FilterBuilder" shared="false" />
-    <type name="Magento\Framework\Service\V1\Data\SearchCriteriaBuilder" shared="false" />
-    <type name="Magento\Framework\Service\Data\AttributeValueBuilder" shared="false" />
+    <type name="Magento\Framework\Api\FilterBuilder" shared="false" />
+    <type name="Magento\Framework\Api\SearchCriteriaBuilder" shared="false" />
+    <type name="Magento\Framework\Api\AttributeValueBuilder" shared="false" />
     <type name="Magento\Framework\View\Layout\Builder" shared="false" />
     <type name="Magento\Framework\View\Page\Builder" shared="false" />
     <type name="Magento\Framework\Message\Manager">

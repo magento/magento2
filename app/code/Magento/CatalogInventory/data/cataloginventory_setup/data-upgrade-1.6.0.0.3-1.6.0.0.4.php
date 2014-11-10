@@ -22,7 +22,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/** @var $this \Magento\Catalog\Model\Resource\Setup */
+/** @var $this \Magento\Eav\Model\Entity\Setup */
 
 $groupName = 'Product Details';
 $entityTypeId = $this->getEntityTypeId(\Magento\Catalog\Model\Product::ENTITY);

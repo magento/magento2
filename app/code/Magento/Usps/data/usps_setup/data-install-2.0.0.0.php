@@ -22,6 +22,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+/* @var $installer \Magento\Framework\Module\Setup */
 $installer = $this;
 $configDataTable = $installer->getTable('core_config_data');
 $connection = $installer->getConnection();

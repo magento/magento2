@@ -55,7 +55,10 @@
                 <div class="nested">
                 <?php $_streetValidationClass = trim(str_replace('required-entry', '', $_streetValidationClass)); ?>
                 <?php for ($_i = 2, $_n = $this->helper('Magento\Customer\Helper\Address')->getStreetLines(); $_i <= $_n; $_i++): ?>
-                     <div class="field additional no-label">
+                     <div class="field additional">
+                         <label class="label" for="shipping:street<?php echo $_i ?>">
+                             <span><?php echo __('Street Address %1', $_i) ?></span>
+                         </label>
                         <div class="control">
                             <input type="text" title="<?php echo __('Street Address %1', $_i) ?>" name="shipping[street][]" id="shipping:street<?php echo $_i ?>" value="<?php echo $this->escapeHtml($this->getAddress()->getStreet($_i)) ?>" class="input-text <?php echo $_streetValidationClass ?>" />
                         </div>

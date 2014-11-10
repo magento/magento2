@@ -25,10 +25,6 @@ $basePath = realpath(__DIR__ . '/../../../');
 require_once $basePath . '/app/autoload.php';
 require __DIR__ . '/Formatter.php';
 
-(new \Magento\Framework\Autoload\IncludePath())->addIncludePath(array(
-    $basePath . '/lib/internal',
-));
-
 try{
     $opt = new Zend_Console_Getopt(array(
         'file|f=s' => 'File to process(required)',

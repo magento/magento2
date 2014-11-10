@@ -23,14 +23,12 @@
  */
 namespace Magento\TestFramework;
 
-use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\Code\Generator\FileResolver;
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Encapsulates application installation, initialization and uninstall
- *
- * @todo Implement MAGETWO-1689: Standard Installation Method for Integration Tests
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -49,9 +47,25 @@ class Application
     protected $_db;
 
     /**
-     * @var \Magento\Framework\Simplexml\Element
+     * Shell command executor
+     *
+     * @var \Magento\Framework\Shell
      */
-    protected $_localXml;
+    protected $_shell;
+
+    /**
+     * Configuration file that contains installation parameters
+     *
+     * @var string
+     */
+    private $installConfigFile;
+
+    /**
+     * The loaded installation parameters
+     *
+     * @var array
+     */
+    protected $installConfig;
 
     /**
      * Application *.xml configuration files
@@ -72,14 +86,14 @@ class Application
      *
      * @var string
      */
-    protected $_installDir;
+    protected $_tmpDir;
 
     /**
      * Installation destination directory with configuration files
      *
      * @var string
      */
-    protected $_installEtcDir;
+    protected $_configDir;
 
     /**
      * Application initialization parameters
@@ -110,58 +124,84 @@ class Application
     protected $_primaryConfigData = array();
 
     /**
+     * Object manager factory
+     *
      * @var \Magento\TestFramework\ObjectManagerFactory
      */
     protected $_factory;
 
     /**
+     * A factory method
+     *
+     * @param string $installConfigFile
+     * @param string $globalConfigDir
+     * @param array $moduleConfigFiles
+     * @param string $appMode
+     * @param string $tmpDir
+     * @param \Magento\Framework\Shell $shell
+     * @return Application
+     */
+    public static function getInstance(
+        $installConfigFile,
+        $globalConfigDir,
+        array $moduleConfigFiles,
+        $appMode,
+        $tmpDir,
+        \Magento\Framework\Shell $shell
+    ) {
+        if (!file_exists($installConfigFile)) {
+            $installConfigFile = $installConfigFile . '.dist';
+        }
+        $sandboxUniqueId = md5(sha1_file($installConfigFile));
+        $installDir = "{$tmpDir}/sandbox-{$sandboxUniqueId}";
+        FileResolver::addIncludePath($installDir . '/var/generation/');
+        return new \Magento\TestFramework\Application(
+            $shell,
+            $installDir,
+            $installConfigFile,
+            $globalConfigDir,
+            $moduleConfigFiles,
+            $appMode
+        );
+    }
+
+    /**
      * Constructor
      *
-     * @param \Magento\TestFramework\Db\AbstractDb $dbInstance
-     * @param string $installDir
-     * @param \Magento\Framework\Simplexml\Element $localXml
-     * @param $globalConfigDir
+     * @param \Magento\Framework\Shell $shell
+     * @param string $tmpDir
+     * @param array $installConfigFile
+     * @param string $globalConfigDir
      * @param array $moduleEtcFiles
      * @param string $appMode
      */
     public function __construct(
-        \Magento\TestFramework\Db\AbstractDb $dbInstance,
-        $installDir,
-        \Magento\Framework\Simplexml\Element $localXml,
+        \Magento\Framework\Shell $shell,
+        $tmpDir,
+        $installConfigFile,
         $globalConfigDir,
         array $moduleEtcFiles,
         $appMode
     ) {
-        $this->_db = $dbInstance;
-        $this->_localXml = $localXml;
+        $this->_shell = $shell;
+        $this->installConfigFile = $installConfigFile;
         $this->_globalConfigDir = realpath($globalConfigDir);
         $this->_moduleEtcFiles = $moduleEtcFiles;
         $this->_appMode = $appMode;
 
-        $this->_installDir = $installDir;
-        $this->_installEtcDir = "{$installDir}/etc";
+        $this->_tmpDir = $tmpDir;
 
-        $generationDir = "{$installDir}/generation";
-        $customDirs = array(
-            DirectoryList::CONFIG => array(DirectoryList::PATH => $this->_installEtcDir),
-            DirectoryList::VAR_DIR => array(DirectoryList::PATH => $installDir),
-            DirectoryList::MEDIA => array(DirectoryList::PATH => "{$installDir}/media"),
-            DirectoryList::STATIC_VIEW => array(DirectoryList::PATH => "{$installDir}/pub_static"),
-            DirectoryList::GENERATION => array(DirectoryList::PATH => $generationDir),
-            DirectoryList::CACHE => array(DirectoryList::PATH => $installDir . '/cache'),
-            DirectoryList::LOG => array(DirectoryList::PATH => $installDir . '/log'),
-            DirectoryList::THEMES => array(DirectoryList::PATH => BP . '/app/design'),
-            DirectoryList::SESSION => array(DirectoryList::PATH => $installDir . '/session'),
-            DirectoryList::TMP => array(DirectoryList::PATH => $installDir . '/tmp'),
-            DirectoryList::UPLOAD => array(DirectoryList::PATH => $installDir . '/upload'),
-        );
+        $customDirs = $this->getCustomDirs();
+        $dirList = new \Magento\Framework\App\Filesystem\DirectoryList(BP, $customDirs);
+
         $this->_initParams = array(
             \Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => $customDirs,
             \Magento\Framework\App\State::PARAM_MODE => $appMode
         );
-        $dirList = new \Magento\Framework\App\Filesystem\DirectoryList(BP, $customDirs);
         $driverPool = new \Magento\Framework\Filesystem\DriverPool;
         $this->_factory = new \Magento\TestFramework\ObjectManagerFactory($dirList, $driverPool);
+
+        $this->_configDir = $dirList->getPath(DirectoryList::CONFIG);
     }
 
     /**
@@ -171,15 +211,64 @@ class Application
      */
     public function getDbInstance()
     {
+        if (null === $this->_db) {
+            if ($this->isInstalled()) {
+                $localConfigFile = $this->getLocalConfig();
+                $localConfig = simplexml_load_file($localConfigFile);
+                $host = (string)$localConfig->connection->host;
+                $user = (string)$localConfig->connection->username;
+                $password = (string)$localConfig->connection->password;
+                $dbName = (string)$localConfig->connection->dbName;
+            } else {
+                $installConfig = $this->getInstallConfig();
+                $host = $installConfig['db_host'];
+                $user = $installConfig['db_user'];
+                $password = $installConfig['db_pass'];
+                $dbName = $installConfig['db_name'];
+            }
+            $this->_db = new Db\Mysql(
+                $host,
+                $user,
+                $password,
+                $dbName,
+                $this->getTempDir(),
+                $this->_shell
+            );
+        }
         return $this->_db;
     }
 
     /**
-     * Get directory path with application instance custom data (cache, temporary directory, etc...)
+     * Gets installation parameters
+     *
+     * @return array
      */
-    public function getInstallDir()
+    protected function getInstallConfig()
     {
-        return $this->_installDir;
+        if (null === $this->installConfig) {
+            $this->installConfig = include $this->installConfigFile;
+        }
+        return $this->installConfig;
+    }
+
+    /**
+     * Gets deployment configuration path
+     *
+     * @return string
+     */
+    private function getLocalConfig()
+    {
+        return $this->_configDir . '/local.xml';
+    }
+
+    /**
+     * Get path to temporary directory
+     *
+     * @return string
+     */
+    public function getTempDir()
+    {
+        return $this->_tmpDir;
     }
 
     /**
@@ -199,13 +288,14 @@ class Application
      */
     public function isInstalled()
     {
-        return is_file($this->_installEtcDir . '/local.xml');
+        return is_file($this->getLocalConfig());
     }
 
     /**
      * Initialize application
      *
      * @param array $overriddenParams
+     * @return void
      */
     public function initialize($overriddenParams = array())
     {
@@ -267,6 +357,7 @@ class Application
      * Reset and initialize again an already installed application
      *
      * @param array $overriddenParams
+     * @return void
      */
     public function reinitialize(array $overriddenParams = array())
     {
@@ -276,6 +367,8 @@ class Application
 
     /**
      * Run application normally, but with encapsulated initialization options
+     *
+     * @return void
      */
     public function run()
     {
@@ -288,94 +381,123 @@ class Application
 
     /**
      * Cleanup both the database and the file system
+     *
+     * @return void
      */
     public function cleanup()
     {
-        $this->_db->cleanup();
-        $this->_cleanupFilesystem();
+        /**
+         * @see \Magento\Setup\Mvc\Bootstrap\InitParamListener::BOOTSTRAP_PARAM
+         */
+        $this->_shell->execute(
+            'php -f %s uninstall --magento_init_params=%s',
+            [BP . '/setup/index.php', $this->getInitParamsQuery()]
+        );
     }
 
     /**
      * Install an application
      *
-     * @param string $adminUserName
-     * @param string $adminPassword
-     * @param string $adminRoleName
+     * @return void
      * @throws \Magento\Framework\Exception
      */
-    public function install($adminUserName, $adminPassword, $adminRoleName)
+    public function install()
     {
-        $this->_ensureDirExists($this->_installDir);
-        $this->_ensureDirExists($this->_installEtcDir);
-        $this->_ensureDirExists($this->_installDir . '/media');
-        $this->_ensureDirExists($this->_installDir . '/static');
+        $dirs = \Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS;
+        $this->_ensureDirExists($this->_tmpDir);
+        $this->_ensureDirExists($this->_configDir);
+        $this->_ensureDirExists($this->_initParams[$dirs][DirectoryList::MEDIA][DirectoryList::PATH]);
+        $this->_ensureDirExists($this->_initParams[$dirs][DirectoryList::STATIC_VIEW][DirectoryList::PATH]);
+        $this->_ensureDirExists($this->_initParams[$dirs][DirectoryList::VAR_DIR][DirectoryList::PATH]);
 
-        // Copy configuration files
-        $globalConfigFiles = glob($this->_globalConfigDir . '/{*,*/*}.xml', GLOB_BRACE);
+        $this->copyAppConfigFiles();
+
+        $installParams = $this->getInstallCliParams();
+
+        // performance optimization: restore DB from last good dump to make installation on top of it (much faster)
+        $db = $this->getDbInstance();
+        if ($db->isDbDumpExists()) {
+            $db->restoreFromDbDump();
+        }
+
+        // run install script
+        $this->_shell->execute(
+            'php -f %s install ' . implode(' ', array_keys($installParams)),
+            array_merge([BP . '/setup/index.php'], array_values($installParams))
+        );
+
+        // enable only specified list of caches
+        $cacheScript = BP . '/dev/shell/cache.php';
+        $initParamsQuery = $this->getInitParamsQuery();
+        $this->_shell->execute('php -f %s -- --set=0 --bootstrap=%s', [$cacheScript, $initParamsQuery]);
+        $cacheTypes = [
+            \Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER,
+            \Magento\Framework\App\Cache\Type\Layout::TYPE_IDENTIFIER,
+            \Magento\Framework\App\Cache\Type\Translate::TYPE_IDENTIFIER,
+            \Magento\Eav\Model\Cache\Type::TYPE_IDENTIFIER,
+        ];
+        $this->_shell->execute(
+            'php -f %s -- --set=1 --types=%s --bootstrap=%s',
+            [$cacheScript, implode(',', $cacheTypes), $initParamsQuery]
+        );
+
+        // right after a clean installation, store DB dump for future reuse in tests or running the test suite again
+        if (!$db->isDbDumpExists()) {
+            $this->getDbInstance()->storeDbDump();
+        }
+    }
+
+    /**
+     * Copies configuration files from the main code base, so the installation could proceed in the tests directory
+     *
+     * @return void
+     */
+    private function copyAppConfigFiles()
+    {
+        $globalConfigFiles = glob($this->_globalConfigDir . '/{di.xml,local.xml.template,*/*.xml}', GLOB_BRACE);
         foreach ($globalConfigFiles as $file) {
-            $targetFile = $this->_installEtcDir . str_replace($this->_globalConfigDir, '', $file);
+            $targetFile = $this->_configDir . str_replace($this->_globalConfigDir, '', $file);
             $this->_ensureDirExists(dirname($targetFile));
             copy($file, $targetFile);
         }
 
         foreach ($this->_moduleEtcFiles as $file) {
-            $targetModulesDir = $this->_installEtcDir . '/modules';
+            $targetModulesDir = $this->_configDir . '/modules';
             $this->_ensureDirExists($targetModulesDir);
             copy($file, $targetModulesDir . '/' . basename($file));
         }
+    }
 
-        /* Make sure that local.xml does not contain an invalid installation date */
-        $installDate = (string)$this->_localXml->install->date;
-        if ($installDate && strtotime($installDate)) {
-            throw new \Magento\Framework\Exception('Local configuration must contain an invalid installation date.');
+    /**
+     * Gets a list of CLI params for installation
+     *
+     * @return array
+     */
+    private function getInstallCliParams()
+    {
+        $params = $this->getInstallConfig();
+        /**
+         * Literal value is used instead of constant, because autoloader is not integrated with Magento Setup app
+         * @see \Magento\Setup\Mvc\Bootstrap\InitParamListener::BOOTSTRAP_PARAM
+         */
+        $params['magento_init_params'] = $this->getInitParamsQuery();
+        $result = [];
+        foreach ($params as $key => $value) {
+            if (!empty($value)) {
+                $result["--{$key}=%s"] = $value;
+            }
         }
+        return $result;
+    }
 
-        /* Replace local.xml */
-        $targetLocalXml = $this->_installEtcDir . '/local.xml';
-        $this->_localXml->asNiceXml($targetLocalXml);
-
-        /* Initialize an application in non-installed mode */
-        $this->initialize();
-
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\AreaList')
-            ->getArea('install')->load(\Magento\Framework\App\Area::PART_CONFIG);
-
-        /* Run all install and data-install scripts */
-        /** @var $updater \Magento\Framework\Module\Updater */
-        $updater = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Module\Updater');
-        $updater->updateScheme();
-        $updater->updateData();
-
-        /* Enable configuration cache by default in order to improve tests performance */
-        /** @var $cacheState \Magento\Framework\App\Cache\StateInterface */
-        $cacheState = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\Cache\StateInterface'
-        );
-        $cacheState->setEnabled(\Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER, true);
-        $cacheState->setEnabled(\Magento\Framework\App\Cache\Type\Layout::TYPE_IDENTIFIER, true);
-        $cacheState->setEnabled(\Magento\Framework\App\Cache\Type\Translate::TYPE_IDENTIFIER, true);
-        $cacheState->setEnabled(\Magento\Eav\Model\Cache\Type::TYPE_IDENTIFIER, true);
-        $cacheState->persist();
-
-        /* Fill installation date in local.xml to indicate that application is installed */
-        $localXml = file_get_contents($targetLocalXml);
-        $localXml = str_replace($installDate, date('r'), $localXml, $replacementCount);
-        if ($replacementCount != 1) {
-            throw new \Magento\Framework\Exception(
-                "Unable to replace installation date properly in '{$targetLocalXml}' file."
-            );
-        }
-        file_put_contents($targetLocalXml, $localXml, LOCK_EX);
-
-        /* Add predefined admin user to the system */
-        $this->_createAdminUser($adminUserName, $adminPassword, $adminRoleName);
-
-        /* Switch an application to installed mode */
-        $this->initialize();
-        //hot fix for \Magento\Catalog\Model\Product\Attribute\Backend\SkuTest::testGenerateUniqueLongSku
-        /** @var $appState \Magento\Framework\App\State */
-        $appState = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\State');
-        $appState->setInstallDate(date('r', strtotime('now')));
+    /**
+     * Encodes init params into a query string
+     *
+     * @return string
+     */
+    private function getInitParamsQuery()
+    {
+        return urldecode(http_build_query($this->_initParams));
     }
 
     /**
@@ -384,7 +506,7 @@ class Application
      * @param array $params
      * @return array
      */
-    private function _customizeParams($params)
+    public function _customizeParams($params)
     {
         return array_replace_recursive($this->_initParams, $params);
     }
@@ -407,8 +529,9 @@ class Application
     /**
      * Create a directory with write permissions or don't touch existing one
      *
-     * @throws \Magento\Framework\Exception
      * @param string $dir
+     * @return void
+     * @throws \Magento\Framework\Exception
      */
     protected function _ensureDirExists($dir)
     {
@@ -419,68 +542,6 @@ class Application
         } elseif (!is_dir($dir)) {
             throw new \Magento\Framework\Exception("'$dir' is not a directory.");
         }
-    }
-
-    /**
-     * Remove temporary files and directories from the filesystem
-     */
-    protected function _cleanupFilesystem()
-    {
-        if (!is_dir($this->_installDir)) {
-            return;
-        }
-        $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($this->_installDir, \FilesystemIterator::SKIP_DOTS),
-            \RecursiveIteratorIterator::CHILD_FIRST
-        );
-        foreach ($iterator as $path) {
-            $path->isFile() ? unlink($path->getPathname()) : rmdir($path->getPathname());
-        }
-        rmdir($this->_installDir);
-    }
-
-    /**
-     * Creates predefined admin user to be used by tests, where admin session is required
-     *
-     * @param string $adminUserName
-     * @param string $adminPassword
-     * @param string $adminRoleName
-     */
-    protected function _createAdminUser($adminUserName, $adminPassword, $adminRoleName)
-    {
-        /** @var $user \Magento\User\Model\User */
-        $user = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\User\Model\User');
-        $user->setData(
-            array(
-                'firstname' => 'firstname',
-                'lastname' => 'lastname',
-                'email' => 'admin@example.com',
-                'username' => $adminUserName,
-                'password' => $adminPassword,
-                'is_active' => 1
-            )
-        );
-        $user->save();
-
-        /** @var $roleAdmin \Magento\Authorization\Model\Role */
-        $roleAdmin = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Authorization\Model\Role');
-        $roleAdmin->load($adminRoleName, 'role_name');
-
-        /** @var $roleUser \Magento\Authorization\Model\Role */
-        $roleUser = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Authorization\Model\Role');
-        $roleUser->setData(
-            array(
-                'parent_id' => $roleAdmin->getId(),
-                'tree_level' => $roleAdmin->getTreeLevel() + 1,
-                'role_type' => \Magento\Authorization\Model\Acl\Role\User::ROLE_TYPE,
-                'user_id' => $user->getId(),
-                'user_type' => UserContextInterface::USER_TYPE_ADMIN,
-                'role_name' => $user->getFirstname()
-            )
-        );
-        $roleUser->save();
     }
 
     /**
@@ -496,7 +557,8 @@ class Application
     /**
      * Load application area
      *
-     * @param $areaCode
+     * @param string $areaCode
+     * @return void
      */
     public function loadArea($areaCode)
     {
@@ -516,5 +578,30 @@ class Application
         } else {
             \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea($areaCode);
         }
+    }
+
+    /**
+     * Gets customized directory paths
+     *
+     * @return array
+     */
+    protected function getCustomDirs()
+    {
+        $path = DirectoryList::PATH;
+        $var = "{$this->_tmpDir}/var";
+        $customDirs = array(
+            DirectoryList::CONFIG => array($path => "{$this->_tmpDir}/etc"),
+            DirectoryList::VAR_DIR => array($path => $var),
+            DirectoryList::MEDIA => array($path => "{$this->_tmpDir}/media"),
+            DirectoryList::STATIC_VIEW => array($path => "{$this->_tmpDir}/pub_static"),
+            DirectoryList::GENERATION => array($path => "{$var}/generation"),
+            DirectoryList::CACHE => array($path => "{$var}/cache"),
+            DirectoryList::LOG => array($path => "{$var}/log"),
+            DirectoryList::THEMES => array($path => BP . '/app/design'),
+            DirectoryList::SESSION => array($path => "{$var}/session"),
+            DirectoryList::TMP => array($path => "{$var}/tmp"),
+            DirectoryList::UPLOAD => array($path => "{$var}/upload"),
+        );
+        return $customDirs;
     }
 }

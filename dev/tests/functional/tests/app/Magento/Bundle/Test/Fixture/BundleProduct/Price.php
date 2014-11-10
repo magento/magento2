@@ -165,7 +165,7 @@ class Price implements FixtureInterface
                 'cart_price' => '100.00'
             ],
             'dynamic-50' => [
-                'price_from' => 'As low as $50.00',
+                'price_from' => '50.00',
             ],
             'fixed-115' => [
                 'price_from' => '115.00',

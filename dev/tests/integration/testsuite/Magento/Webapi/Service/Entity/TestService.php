@@ -36,10 +36,10 @@ class TestService
     }
 
     /**
-     * @param \Magento\Webapi\Service\Entity\NestedData $nested
-     * @return \Magento\Webapi\Service\Entity\NestedData
+     * @param \Magento\Webapi\Service\Entity\Nested $nested
+     * @return \Magento\Webapi\Service\Entity\Nested
      */
-    public function nestedData(NestedData $nested)
+    public function nestedData(Nested $nested)
     {
         return $nested;
     }
@@ -63,8 +63,8 @@ class TestService
     }
 
     /**
-     * @param \Magento\Webapi\Service\Entity\SimpleData[] $dataObjects
-     * @return \Magento\Webapi\Service\Entity\SimpleData[]
+     * @param \Magento\Webapi\Service\Entity\Simple[] $dataObjects
+     * @return \Magento\Webapi\Service\Entity\Simple[]
      */
     public function dataArray(array $dataObjects)
     {
@@ -72,28 +72,28 @@ class TestService
     }
 
     /**
-     * @param \Magento\Webapi\Service\Entity\SimpleArrayData $arrayData
-     * @return \Magento\Webapi\Service\Entity\SimpleArrayData
+     * @param \Magento\Webapi\Service\Entity\SimpleArray $arrayData
+     * @return \Magento\Webapi\Service\Entity\SimpleArray
      */
-    public function nestedSimpleArray(SimpleArrayData $arrayData)
+    public function nestedSimpleArray(SimpleArray $arrayData)
     {
         return $arrayData;
     }
 
     /**
-     * @param \Magento\Webapi\Service\Entity\AssociativeArrayData $associativeArrayData
-     * @return \Magento\Webapi\Service\Entity\AssociativeArrayData
+     * @param \Magento\Webapi\Service\Entity\AssociativeArray $associativeArrayData
+     * @return \Magento\Webapi\Service\Entity\AssociativeArray
      */
-    public function nestedAssociativeArray(AssociativeArrayData $associativeArrayData)
+    public function nestedAssociativeArray(AssociativeArray $associativeArrayData)
     {
         return $associativeArrayData;
     }
 
     /**
-     * @param \Magento\Webapi\Service\Entity\DataArrayData $dataObjects
-     * @return \Magento\Webapi\Service\Entity\DataArrayData
+     * @param \Magento\Webapi\Service\Entity\DataArray $dataObjects
+     * @return \Magento\Webapi\Service\Entity\DataArray
      */
-    public function nestedDataArray(DataArrayData $dataObjects)
+    public function nestedDataArray(DataArray $dataObjects)
     {
         return $dataObjects;
     }

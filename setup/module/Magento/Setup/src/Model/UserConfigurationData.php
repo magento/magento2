@@ -71,23 +71,6 @@ class UserConfigurationData
     ];
 
     /**
-     * Default data values
-     *
-     * @var array
-     */
-    private static $defaults = [
-        self::KEY_USE_SEF_URL => 0,
-        self::KEY_BASE_URL => '{{unsecure_base_url}}',
-        self::KEY_IS_SECURE => 0,
-        self::KEY_BASE_URL_SECURE => '{{unsecure_base_url}}',
-        self::KEY_IS_SECURE_ADMIN => 0,
-        self::KEY_LANGUAGE => 'en_US',
-        self::KEY_TIMEZONE => 'America/Los_Angeles',
-        self::KEY_CURRENCY => 'USD',
-        self::KEY_ADMIN_USE_SECURITY_KEY => 1,
-    ];
-
-    /**
      * Setup Instance
      *
      * @var Setup $setup
@@ -112,12 +95,9 @@ class UserConfigurationData
      */
     public function install($data)
     {
-        foreach (self::$defaults as $key => $value) {
+        foreach (self::$pathDataMap as $path => $key) {
             if (isset($data[$key])) {
-                $value = $data[$key];
-            }
-            foreach (array_keys(self::$pathDataMap, $key) as $path) {
-                $this->installData($path, $value);
+                $this->installData($path, $data[$key]);
             }
         }
     }

@@ -255,9 +255,9 @@ switch($type = $this->getType()) {
                                                 <?php endif; ?>
                                             <?php else: ?>
                                                 <?php if ($_item->getIsSalable()): ?>
-                                                    <p class="stock available"><span><?php echo __('In stock') ?></span></p>
+                                                    <div class="stock available"><span><?php echo __('In stock') ?></span></div>
                                                 <?php else: ?>
-                                                    <p class="stock unavailable"><span><?php echo __('Out of stock') ?></span></p>
+                                                    <div class="stock unavailable"><span><?php echo __('Out of stock') ?></span></div>
                                                 <?php endif; ?>
                                             <?php endif; ?>
                                         </div>

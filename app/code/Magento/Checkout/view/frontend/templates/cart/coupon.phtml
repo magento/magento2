@@ -32,7 +32,7 @@
                                                "removeCouponSelector": "#remove-coupon",
                                                "applyButton": "button.action.apply",
                                                "cancelButton": "button.action.cancel"}}'>
-            <fieldset class="fieldset coupon<?php strlen($this->getCouponCode()) ? ' applied' : ''?>">
+            <div class="fieldset coupon<?php strlen($this->getCouponCode()) ? ' applied' : ''?>">
                 <input type="hidden" name="remove" id="remove-coupon" value="0" />
                 <div class="field">
                     <label for="coupon_code" class="label"><span><?php echo __('Enter your code') ?></span></label>
@@ -53,7 +53,7 @@
                         </div>
                     <?php endif; ?>
                 </div>
-            </fieldset>
+            </div>
         </form>
     </div>
 </div>

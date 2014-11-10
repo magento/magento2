@@ -25,7 +25,7 @@
 namespace Magento\GroupedProduct\Service\V1\Product\Link\Data\ProductLink\ProductEntity;
 
 use \Magento\Catalog\Service\V1\Product\Link\Data\ProductLink;
-use \Magento\Framework\Service\Data\AttributeValue;
+use \Magento\Framework\Api\AttributeValue;
 use \Magento\Catalog\Service\V1\Product\Link\Data\ProductLink\ProductEntity\ConverterInterface;
 
 class Converter implements ConverterInterface

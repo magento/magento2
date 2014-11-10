@@ -23,6 +23,8 @@
  */
 namespace Magento\Customer\Model;
 
+use Magento\Customer\Api\Data\GroupDataBuilder;
+
 /**
  * Customer group model
  *
@@ -31,8 +33,9 @@ namespace Magento\Customer\Model;
  * @method string getCustomerGroupCode()
  * @method \Magento\Customer\Model\Group setCustomerGroupCode(string $value)
  * @method \Magento\Customer\Model\Group setTaxClassId(int $value)
+ * @method Group setTaxClassName(string $value)
  */
-class Group extends \Magento\Framework\Model\AbstractModel
+class Group extends \Magento\Framework\Model\AbstractExtensibleModel
 {
     const NOT_LOGGED_IN_ID = 0;
 
@@ -59,21 +62,35 @@ class Group extends \Magento\Framework\Model\AbstractModel
     protected $_eventObject = 'object';
 
     /**
-     * @var array
-     */
-    protected static $_taxClassIds = array();
-
-    /**
      * @var \Magento\Store\Model\StoresConfig
      */
     protected $_storesConfig;
+
+    /**
+     * @var GroupDataBuilder
+     */
+    protected $groupBuilder;
+
+    /**
+     * @var \Magento\Framework\Reflection\DataObjectProcessor
+     */
+    protected $dataObjectProcessor;
+
+    /**
+     * @var \Magento\Tax\Model\ClassModelFactory
+     */
+    protected $classModelFactory;
 
     /**
      * Constructor
      *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
      * @param \Magento\Store\Model\StoresConfig $storesConfig
+     * @param GroupDataBuilder $groupBuilder
+     * @param \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor
+     * @param \Magento\Tax\Model\ClassModelFactory $classModelFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -81,13 +98,20 @@ class Group extends \Magento\Framework\Model\AbstractModel
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
+        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
         \Magento\Store\Model\StoresConfig $storesConfig,
+        GroupDataBuilder $groupBuilder,
+        \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
+        \Magento\Tax\Model\ClassModelFactory $classModelFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_storesConfig = $storesConfig;
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        $this->dataObjectProcessor = $dataObjectProcessor;
+        $this->groupBuilder = $groupBuilder;
+        $this->classModelFactory = $classModelFactory;
+        parent::__construct($context, $registry, $metadataService, $resource, $resourceCollection, $data);
     }
 
     /**
@@ -120,21 +144,21 @@ class Group extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Get the tax class id for the specified group or this group if the groupId is null
+     * Get tax class name
      *
-     * @param int|null $groupId The id of the group whose tax class id is being sought
-     * @return int
+     * @return string
      */
-    public function getTaxClassId($groupId = null)
+    public function getTaxClassName()
     {
-        if (!is_null($groupId)) {
-            if (empty(self::$_taxClassIds[$groupId])) {
-                $this->load($groupId);
-                self::$_taxClassIds[$groupId] = $this->getData('tax_class_id');
-            }
-            $this->setData('tax_class_id', self::$_taxClassIds[$groupId]);
+        $taxClassName = $this->getData('tax_class_name');
+        if ($taxClassName) {
+            return $taxClassName;
         }
-        return $this->getData('tax_class_id');
+        $classModel = $this->classModelFactory->create();
+        $classModel->load($this->getTaxClassId());
+        $taxClassName = $classModel->getClassName();
+        $this->setData('tax_class_name', $taxClassName);
+        return $taxClassName;
     }
 
     /**

@@ -44,11 +44,11 @@ $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare');
 </div>
 <script type="text/javascript">
   require([
-    "jquery",
-    "mage/mage"
+      "jquery",
+      "mage/mage"
   ], function(jQuery){
-
-    jQuery('body').mage('addToWishlist', <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode(array('productType' => $_product->getTypeId()))?>);
-
+      jQuery('body').mage('addToWishlist',
+          <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($this->getWishlistOptions())?>
+      );
   });
 </script>

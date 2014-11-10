@@ -65,4 +65,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Reflection\DataObjectProcessor">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Webapi\Model\Cache\Type</argument>
+        </arguments>
+    </type>
 </config>

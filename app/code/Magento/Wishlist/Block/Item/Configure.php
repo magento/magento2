@@ -64,6 +64,16 @@ class Configure extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Return wishlist widget options
+     *
+     * @return array
+     */
+    public function getWishlistOptions()
+    {
+        return ['productType' => $this->getProduct()->getTypeId()];
+    }
+
+    /**
      * Returns product being edited
      *
      * @return \Magento\Catalog\Model\Product

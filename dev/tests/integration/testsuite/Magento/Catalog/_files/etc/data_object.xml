@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../lib/internal/Magento/Framework/Service/etc/data_object.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../lib/internal/Magento/Framework/Api/etc/data_object.xsd">
     <custom_attributes for="Magento\Tax\Service\V1\Data\TaxRate">
     </custom_attributes>
     <custom_attributes for="Magento\Catalog\Service\V1\Data\Product">

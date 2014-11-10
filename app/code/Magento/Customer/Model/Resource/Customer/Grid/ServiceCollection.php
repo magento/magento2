@@ -24,12 +24,12 @@
 namespace Magento\Customer\Model\Resource\Customer\Grid;
 
 use Magento\Core\Model\EntityFactory;
-use Magento\Framework\Service\AbstractServiceCollection;
+use Magento\Framework\Api\AbstractServiceCollection;
 use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
 use Magento\Customer\Service\V1\Data\CustomerDetails;
-use Magento\Framework\Service\V1\Data\FilterBuilder;
-use Magento\Framework\Service\V1\Data\SearchCriteriaBuilder;
-use Magento\Framework\Service\V1\Data\SortOrderBuilder;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SortOrderBuilder;
 
 /**
  * Customer Grid Collection backed by Services

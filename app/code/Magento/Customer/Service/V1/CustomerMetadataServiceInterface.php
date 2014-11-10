@@ -32,5 +32,5 @@ interface CustomerMetadataServiceInterface extends MetadataServiceInterface
 
     const ENTITY_TYPE_CUSTOMER = 'customer';
 
-    const DATA_OBJECT_CLASS_NAME = 'Magento\Customer\Service\V1\Data\Customer';
+    const DATA_OBJECT_CLASS_NAME = 'Magento\Customer\Api\Data\CustomerInterface';
 }

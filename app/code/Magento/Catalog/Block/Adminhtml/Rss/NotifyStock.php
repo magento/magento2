@@ -113,4 +113,12 @@ class NotifyStock extends \Magento\Backend\Block\AbstractBlock implements DataPr
     {
         return array();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isAuthRequired()
+    {
+        return true;
+    }
 }

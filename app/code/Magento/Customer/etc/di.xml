@@ -24,16 +24,48 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Magento\Customer\Api\AddressRepositoryInterface"
+                type="Magento\Customer\Model\Resource\AddressRepository" />
+    <preference for="Magento\Customer\Api\CustomerRepositoryInterface"
+                type="Magento\Customer\Model\Resource\CustomerRepository" />
+    <preference for="Magento\Customer\Api\GroupManagementInterface"
+                type="Magento\Customer\Model\GroupManagement" />
+    <preference for="Magento\Customer\Api\GroupRepositoryInterface"
+                type="Magento\Customer\Model\Resource\GroupRepository" />
+    <preference for="Magento\Customer\Api\Data\CustomerInterface" type="Magento\Customer\Model\Data\Customer" />
+    <preference for="Magento\Customer\Api\Data\AddressInterface" type="Magento\Customer\Model\Data\Address" />
+    <preference for="Magento\Customer\Api\Data\RegionInterface" type="Magento\Customer\Model\Data\Region" />
+    <preference for="Magento\Customer\Api\Data\AttributeMetadataInterface"
+                type="Magento\Customer\Model\Data\AttributeMetadata" />
+    <preference for="Magento\Customer\Api\Data\GroupInterface" type="Magento\Customer\Model\Data\Group" />
+    <preference for="Magento\Customer\Api\Data\OptionInterface" type="Magento\Customer\Model\Data\Option" />
+    <preference for="Magento\Customer\Api\Data\ValidationRuleInterface"
+                type="Magento\Customer\Model\Data\ValidationRule" />
+    <preference for="Magento\Customer\Api\Data\ValidationResultsInterface"
+                type="Magento\Customer\Model\Data\ValidationResults" />
+    <preference for="Magento\Customer\Api\Data\GroupSearchResultsInterface"
+                type="Magento\Framework\Api\SearchResults" />
+    <preference for="Magento\Customer\Api\Data\CustomerSearchResultsInterface"
+                type="Magento\Framework\Api\SearchResults" />
+    <preference for="Magento\Customer\Api\Data\AddressSearchResultsInterface"
+                type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\Customer\Service\V1\CustomerAddressServiceInterface"
                 type="Magento\Customer\Service\V1\CustomerAddressService" />
     <preference for="Magento\Customer\Service\V1\CustomerGroupServiceInterface"
                 type="Magento\Customer\Service\V1\CustomerGroupService" />
     <preference for="Magento\Customer\Service\V1\CustomerAccountServiceInterface"
                 type="Magento\Customer\Service\V1\CustomerAccountService" />
+    <preference for="Magento\Customer\Api\AccountManagementInterface"
+                type="Magento\Customer\Model\AccountManagement" />
+
     <preference for="Magento\Customer\Service\V1\CustomerMetadataServiceInterface"
                 type="Magento\Customer\Service\V1\CustomerMetadataServiceCached" />
+    <preference for="Magento\Customer\Api\CustomerMetadataInterface"
+                type="Magento\Customer\Model\Metadata\CustomerCachedMetadata" />
     <preference for="Magento\Customer\Service\V1\AddressMetadataServiceInterface"
                 type="Magento\Customer\Service\V1\AddressMetadataServiceCached" />
+    <preference for="Magento\Customer\Api\AddressMetadataInterface"
+                type="Magento\Customer\Model\Metadata\AddressCachedMetadata" />
     <type name="Magento\Customer\Model\Session">
         <arguments>
             <argument name="configShare" xsi:type="object">Magento\Customer\Model\Config\Share\Proxy</argument>
@@ -47,6 +79,16 @@
             <argument name="resourceTypes" xsi:type="array">
                 <item name="customer_setup" xsi:type="string">Magento\Customer\Model\Resource\Setup</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Api\Data\CustomerDataBuilder" shared="false">
+        <arguments>
+            <argument name="metadataService" xsi:type="object">\Magento\Customer\Api\CustomerMetadataInterface</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Api\Data\AddressDataBuilder" shared="false">
+        <arguments>
+            <argument name="metadataService" xsi:type="object">\Magento\Customer\Api\AddressMetadataInterface</argument>
         </arguments>
     </type>
     <type name="Magento\Customer\Helper\Address">
@@ -64,8 +106,10 @@
             <argument name="customerData" xsi:type="object">Magento\Customer\Helper\Data\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Model\Data\GroupBuilder" shared="false" />
     <type name="Magento\Customer\Service\V1\Data\CustomerGroupBuilder" shared="false" />
     <type name="Magento\Customer\Service\V1\Data\Eav\AttributeMetadataBuilder" shared="false" />
+    <type name="Magento\Customer\Api\Data\OptionDataBuilder" shared="false" />
     <type name="Magento\Customer\Service\V1\Data\Eav\OptionBuilder" shared="false" />
     <type name="Magento\Customer\Service\V1\Data\CustomerBuilder" shared="false" />
     <type name="Magento\Customer\Service\V1\Data\AddressBuilder" shared="false" />
@@ -84,7 +128,7 @@
             <argument name="url" xsi:type="object">Magento\Framework\Url</argument>
         </arguments>
     </type>
-    <virtualType name="Magento\Customer\Service\Config\CustomerMetadataConfig" type="Magento\Framework\Service\Config\MetadataConfig">
+    <virtualType name="Magento\Customer\Service\Config\CustomerMetadataConfig" type="Magento\Framework\Api\Config\MetadataConfig">
         <arguments>
             <argument name="attributeMetadataBuilder" xsi:type="object">Magento\Customer\Service\V1\Data\Eav\AttributeMetadataBuilder</argument>
         </arguments>
@@ -94,7 +138,7 @@
             <argument name="metadataConfig" xsi:type="object">Magento\Customer\Service\Config\CustomerMetadataConfig</argument>
         </arguments>
     </type>
-    <virtualType name="Magento\Customer\Service\Config\AddressMetadataConfig" type="Magento\Framework\Service\Config\MetadataConfig">
+    <virtualType name="Magento\Customer\Service\Config\AddressMetadataConfig" type="Magento\Framework\Api\Config\MetadataConfig">
         <arguments>
             <argument name="attributeMetadataBuilder" xsi:type="object">Magento\Customer\Service\V1\Data\Eav\AttributeMetadataBuilder</argument>
         </arguments>

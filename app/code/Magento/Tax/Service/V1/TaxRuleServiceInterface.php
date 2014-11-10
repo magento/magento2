@@ -71,11 +71,11 @@ interface TaxRuleServiceInterface
     /**
      * Search TaxRules
      *
-     * @param \Magento\Framework\Service\V1\Data\SearchCriteria $searchCriteria
+     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria
      * @return \Magento\Tax\Service\V1\Data\TaxRuleSearchResults containing Data\TaxRule objects
      * @throws \Magento\Framework\Exception\InputException If there is a problem with the input
      */
-    public function searchTaxRules(\Magento\Framework\Service\V1\Data\SearchCriteria $searchCriteria);
+    public function searchTaxRules(\Magento\Framework\Api\SearchCriteria $searchCriteria);
 
     /**
      * Get rates by customerTaxClassId and productTaxClassId

@@ -27,7 +27,7 @@ namespace Magento\Tax\Service\V1\Data;
 /**
  * Tax class data
  */
-class TaxClass extends \Magento\Framework\Service\Data\AbstractExtensibleObject
+class TaxClass extends \Magento\Framework\Api\AbstractExtensibleObject
 {
     /**#@+
      *

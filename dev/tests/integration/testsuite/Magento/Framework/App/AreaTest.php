@@ -126,7 +126,7 @@ class AreaTest extends \PHPUnit_Framework_TestCase
     public function testDetectDesignNonFrontend()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $model = $objectManager->create('Magento\Framework\App\Area', array('areaCode' => 'install'));
+        $model = $objectManager->create('Magento\Framework\App\Area', array('areaCode' => 'adminhtml'));
         /** @var $request \Magento\TestFramework\Request */
         $request = $objectManager->create('Magento\TestFramework\Request');
         $request->setServer(array('HTTP_USER_AGENT' => 'Mozilla Firefox'));

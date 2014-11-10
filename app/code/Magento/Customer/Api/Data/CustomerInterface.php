@@ -25,13 +25,37 @@
 
 namespace Magento\Customer\Api\Data;
 
-use Magento\Framework\Api\Data\ExtensibleDataInterface;
+use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * Customer interface.
  */
 interface CustomerInterface extends ExtensibleDataInterface
 {
+    /**#@+
+     * Constants defined for keys of the data array. Identical to the name of the getter in snake case
+     */
+    const ID = 'id';
+    const CONFIRMATION = 'confirmation';
+    const CREATED_AT = 'created_at';
+    const CREATED_IN = 'created_in';
+    const DOB = 'dob';
+    const EMAIL = 'email';
+    const FIRSTNAME = 'firstname';
+    const GENDER = 'gender';
+    const GROUP_ID = 'group_id';
+    const LASTNAME = 'lastname';
+    const MIDDLENAME = 'middlename';
+    const PREFIX = 'prefix';
+    const STORE_ID = 'store_id';
+    const SUFFIX = 'suffix';
+    const TAXVAT = 'taxvat';
+    const WEBSITE_ID = 'website_id';
+    const DEFAULT_BILLING = 'default_billing';
+    const DEFAULT_SHIPPING = 'default_shipping';
+    const KEY_ADDRESSES = 'addresses';
+    /**#@-*/
+
     /**
      * Get customer id
      *

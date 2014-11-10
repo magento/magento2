@@ -99,7 +99,7 @@ class RestTest extends \PHPUnit_Framework_TestCase
     protected $userContextMock;
 
     /**
-     * @var \Magento\Webapi\Model\DataObjectProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Reflection\DataObjectProcessor|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $dataObjectProcessorMock;
 
@@ -130,7 +130,7 @@ class RestTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $this->userContextMock = $this->getMockBuilder('Magento\Authorization\Model\UserContextInterface')
             ->disableOriginalConstructor()->setMethods(['getUserId'])->getMockForAbstractClass();
-        $this->dataObjectProcessorMock = $this->getMockBuilder('Magento\Webapi\Model\DataObjectProcessor')
+        $this->dataObjectProcessorMock = $this->getMockBuilder('Magento\Framework\Reflection\DataObjectProcessor')
             ->disableOriginalConstructor()->setMethods(['getMethodReturnType'])->getMockForAbstractClass();
     }
 

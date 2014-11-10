@@ -437,7 +437,8 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
                         'sort_order' => 110,
                         'validate_rules' => 'a:0:{}',
                         'data' => 'Magento\Customer\Model\Attribute\Data\Postcode',
-                        'position' => 110
+                        'position' => 110,
+                        'required' => false,
                     ),
                     'telephone' => array(
                         'type' => 'varchar',

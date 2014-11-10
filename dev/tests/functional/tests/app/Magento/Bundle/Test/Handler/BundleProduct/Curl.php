@@ -27,16 +27,22 @@ namespace Magento\Bundle\Test\Handler\BundleProduct;
 use Mtf\System\Config;
 use Mtf\Fixture\FixtureInterface;
 use Magento\Catalog\Test\Handler\CatalogProductSimple\Curl as ProductCurl;
+use Magento\Bundle\Test\Fixture\BundleProduct;
 
 /**
- * Class Curl
- * Create new bundle product via curl
+ * Create new bundle product via curl.
  */
 class Curl extends ProductCurl implements BundleProductInterface
 {
     /**
-     * Constructor
+     * Fixture product.
      *
+     * @var BundleProduct
+     */
+    protected $fixture;
+
+    /**
+     * @constructor
      * @param Config $configuration
      */
     public function __construct(Config $configuration)
@@ -78,7 +84,19 @@ class Curl extends ProductCurl implements BundleProductInterface
     }
 
     /**
-     * Prepare POST data for creating product request
+     * Post request for creating bundle product product.
+     *
+     * @param FixtureInterface|null $fixture [optional]
+     * @return array
+     */
+    public function persist(FixtureInterface $fixture = null)
+    {
+        $this->fixture = $fixture;
+        return parent::persist($fixture);
+    }
+
+    /**
+     * Prepare POST data for creating product request.
      *
      * @param FixtureInterface $fixture
      * @param string|null $prefix [optional]
@@ -114,5 +132,55 @@ class Curl extends ProductCurl implements BundleProductInterface
         $data['bundle_selections'] = $bundleSelections;
 
         return $this->replaceMappingData($data);
+    }
+
+    /**
+     * Parse response.
+     *
+     * @param string $response
+     * @return array
+     */
+    protected function parseResponse($response)
+    {
+        return array_replace_recursive(parent::parseResponse($response), $this->parseResponseSelections($response));
+    }
+
+    /**
+     * Parse bundle selections in response.
+     *
+     * @param string $response
+     * @return array
+     */
+    protected function parseResponseSelections($response)
+    {
+        $selectionIdKey = 1;
+        $optionIdKey = 2;
+        $productNameKey = 3;
+        $responseSelections = [];
+        $bundleSelections = $this->fixture->getBundleSelections();
+
+        preg_match_all(
+            '/{.*"selection_id":"(\d+)".*"option_id":"(\d+)".*"name":"([^"]+)".*}/',
+            $response,
+            $matches,
+            PREG_SET_ORDER
+        );
+        foreach ($matches as $match) {
+            $productName = $match[$productNameKey];
+            $responseSelections[$productName] = [
+                'selection_id' => $match[$selectionIdKey],
+                'option_id' => $match[$optionIdKey],
+            ];
+        }
+
+        foreach ($bundleSelections['bundle_options'] as $optionKey => $option) {
+            foreach ($option['assigned_products'] as $assignedKey => $optionValue) {
+                $productName = $optionValue['search_data']['name'];
+                $bundleSelections['bundle_options'][$optionKey]['assigned_products'][$assignedKey] +=
+                    $responseSelections[$productName];
+            }
+        }
+
+        return ['bundle_selections' => $bundleSelections];
     }
 }

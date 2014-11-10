@@ -48,6 +48,11 @@ class Address extends \Magento\Framework\App\Action\Action
     protected $_addressService;
 
     /**
+     * @var \Magento\Customer\Api\AddressRepositoryInterface
+     */
+    protected $_addressRepository;
+
+    /**
      * @var \Magento\Customer\Model\Metadata\FormFactory
      */
     protected $_formFactory;
@@ -63,6 +68,21 @@ class Address extends \Magento\Framework\App\Action\Action
     protected $_addressBuilder;
 
     /**
+     * @var \Magento\Customer\Model\Data\AddressDataBuilder
+     */
+    protected $_addressDataBuilder;
+
+    /**
+     * @var \Magento\Customer\Api\Data\RegionDataBuilder
+     */
+    protected $_regionDataBuilder;
+
+    /**
+     * @var \Magento\Framework\Reflection\DataObjectProcessor
+     */
+    protected $_dataProcessor;
+
+    /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
@@ -70,9 +90,14 @@ class Address extends \Magento\Framework\App\Action\Action
      * @param \Magento\Customer\Model\Metadata\FormFactory $formFactory
      * @param \Magento\Customer\Service\V1\Data\RegionBuilder $regionBuilder
      * @param \Magento\Customer\Service\V1\Data\AddressBuilder $addressBuilder
+     * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
+     * @param \Magento\Customer\Api\Data\AddressDataBuilder $addressDataBuilder
+     * @param \Magento\Customer\Api\Data\RegionDataBuilder $regionDataBuilder
+     * @param \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor
      * @internal param \Magento\Customer\Helper\Data $customerData
      * @internal param \Magento\Customer\Model\AddressFactory $addressFactory
      * @internal param \Magento\Customer\Model\Address\FormFactory $addressFormFactory
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -81,7 +106,11 @@ class Address extends \Magento\Framework\App\Action\Action
         \Magento\Customer\Service\V1\CustomerAddressServiceInterface $addressService,
         \Magento\Customer\Model\Metadata\FormFactory $formFactory,
         \Magento\Customer\Service\V1\Data\RegionBuilder $regionBuilder,
-        \Magento\Customer\Service\V1\Data\AddressBuilder $addressBuilder
+        \Magento\Customer\Service\V1\Data\AddressBuilder $addressBuilder,
+        \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
+        \Magento\Customer\Api\Data\AddressDataBuilder $addressDataBuilder,
+        \Magento\Customer\Api\Data\RegionDataBuilder $regionDataBuilder,
+        \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor
     ) {
         $this->_customerSession = $customerSession;
         $this->_formKeyValidator = $formKeyValidator;
@@ -89,6 +118,10 @@ class Address extends \Magento\Framework\App\Action\Action
         $this->_formFactory = $formFactory;
         $this->_regionBuilder = $regionBuilder;
         $this->_addressBuilder = $addressBuilder;
+        $this->_addressRepository = $addressRepository;
+        $this->_addressDataBuilder = $addressDataBuilder;
+        $this->_regionDataBuilder = $regionDataBuilder;
+        $this->_dataProcessor = $dataProcessor;
         parent::__construct($context);
     }
 

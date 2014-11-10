@@ -53,7 +53,7 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                 ],
                 'cartItem' => [
                     'price' => 23,
-                    'subtotal' => 46
+                    'subtotal' => 23
                 ]
             ],
             'forUpdateMiniShoppingCart' => [

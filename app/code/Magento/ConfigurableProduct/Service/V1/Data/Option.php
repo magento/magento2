@@ -26,7 +26,7 @@ namespace Magento\ConfigurableProduct\Service\V1\Data;
 /**
  * @codeCoverageIgnore
  */
-class Option extends \Magento\Framework\Service\Data\AbstractExtensibleObject
+class Option extends \Magento\Framework\Api\AbstractExtensibleObject
 {
     /**#@+
      * Constants defined for keys of array

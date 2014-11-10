@@ -29,7 +29,7 @@ namespace Magento\Checkout\Service\V1\Data\Cart;
  * 
  * @codeCoverageIgnore
  */
-class Item extends \Magento\Framework\Service\Data\AbstractExtensibleObject
+class Item extends \Magento\Framework\Api\AbstractExtensibleObject
 {
     /**
      * Item ID.

@@ -127,7 +127,7 @@ class ShellTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception
-     * @expectedExceptionMessage Command `non_existing_command 2>&1` returned non-zero exit code
+     * @expectedExceptionMessage Command returned non-zero exit code:
      * @expectedExceptionCode 0
      */
     public function testExecuteFailure()

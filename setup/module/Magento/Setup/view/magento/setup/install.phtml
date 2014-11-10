@@ -23,8 +23,8 @@
  */
 ?>
 <div class="step-controls">
-    <a href="#" class="btn btn-primary" ng-disabled="isDisabled" ng-click="previousState()"><?php echo $this->translate('Previous'); ?></a>
-    <a href="#" class="btn btn-primary" ng-disabled="isDisabled" ng-click="start()" ng-show="isStarted"><?php echo $this->translate('Try Again'); ?></a>
+    <a href="#" class="btn btn-primary" ng-disabled="isDisabled" ng-click="previousState()">Previous</a>
+    <a href="#" class="btn btn-primary" ng-disabled="isDisabled" ng-click="start()" ng-show="isStarted">Try Again</a>
 </div>
 
 <div class="page-header">
@@ -32,7 +32,7 @@
 </div>
 
 <div ng-show="!isStarted" class="text-center" style="padding-top: 50px; padding-bottom: 50px;">
-    <p><?php echo $this->translate('You\'re ready!'); ?></p>
+    <p>You're ready!</p>
     <button ng-click="start()" class="btn btn-primary">Install Now</button>
 </div>
 
@@ -40,10 +40,10 @@
     <div class="progress"><div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{progress}}%; min-width: 5em;">{{progressText}}</div></div>
     <div ng-show="isFailed" class="error-container">
         <span class="glyphicon glyphicon-remove-sign "></span>
-        <span><?php echo $this->translate('Installation is incomplete. Check the console log for errors before trying again.'); ?></span>
+        <span>Installation is incomplete. Check the console log for errors before trying again.</span>
     </div>
     <div class="collapsed-options">
-        <a href="#" class="collapsed-options" ng-click="toggleConsole()"><?php echo $this->translate('Console Log'); ?></a>
+        <a href="#" class="collapsed-options" ng-click="toggleConsole()">Console Log</a>
         <span class="caret"></span>
     </div>
     <div ng-show="isConsole" id="console">
@@ -52,6 +52,6 @@
 </div>
 
 <div class="step-controls">
-    <a href="#" class="btn btn-primary" ng-disabled="isDisabled" ng-click="previousState()"><?php echo $this->translate('Previous'); ?></a>
-    <a href="#" class="btn btn-primary" ng-disabled="isDisabled" ng-click="start()" ng-show="isStarted"><?php echo $this->translate('Try Again'); ?></a>
+    <a href="#" class="btn btn-primary" ng-disabled="isDisabled" ng-click="previousState()">Previous</a>
+    <a href="#" class="btn btn-primary" ng-disabled="isDisabled" ng-click="start()" ng-show="isStarted">Try Again</a>
 </div>

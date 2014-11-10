@@ -25,7 +25,7 @@
  */
 namespace Magento\Webapi\Controller\Rest\Request\Deserializer;
 
-use \Magento\Framework\App\State;
+use Magento\Framework\App\State;
 
 class Json implements \Magento\Webapi\Controller\Rest\Request\DeserializerInterface
 {
@@ -55,7 +55,7 @@ class Json implements \Magento\Webapi\Controller\Rest\Request\DeserializerInterf
      * @param string $encodedBody Posted content from request.
      * @return array|null Return NULL if content is invalid.
      * @throws \InvalidArgumentException
-     * @throws \Magento\Webapi\Exception If decoding error was encountered.
+     * @throws \Magento\Webapi\Exception If decoding error occurs or in case of empty argument type
      */
     public function deserialize($encodedBody)
     {
@@ -63,6 +63,9 @@ class Json implements \Magento\Webapi\Controller\Rest\Request\DeserializerInterf
             throw new \InvalidArgumentException(
                 sprintf('"%s" data type is invalid. String is expected.', gettype($encodedBody))
             );
+        }
+        if (empty($encodedBody)) {
+            throw new \Magento\Webapi\Exception(__('Request body should not be empty.'));
         }
         try {
             $decodedBody = $this->_helper->jsonDecode($encodedBody);

@@ -29,27 +29,31 @@ $wishlistHelper = $this->helper('Magento\Wishlist\Helper\Data');
 ?>
 <?php if ($wishlistHelper->isAllow()) : ?>
     <?php $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');?>
-    <div class="block wishlist">
-        <div class="title">
+    <div class="block block-wishlist">
+        <div class="block-title">
             <strong><?php echo $this->getTitle(); ?></strong>
             <?php if($count > 0): ?>
-            <span class="counter qty"><?php echo ($count == 1) ? __('1 item') : __('%1 items',$count) ?></span>
+                <span class="counter"><?php echo ($count == 1) ? __('1 item') : __('%1 items',$count) ?></span>
             <?php endif; ?>
         </div>
-        <div class="content">
+        <div class="block-content">
             <strong class="subtitle"><?php echo __('Last Added Items') ?></strong>
             <?php if ($this->hasWishlistItems()): ?>
-                <ol class="items minilist products" id="wishlist-sidebar">
+                <ol class="product-items" id="wishlist-sidebar">
                     <?php $iterator = 1; ?>
                     <?php foreach ($this->getWishlistItems() as $item): ?>
                         <?php $product = $item->getProduct(); ?>
-                        <?php echo ($iterator++ == 1) ? '<li class="item product">' : '</li><li class="item product">' ?>
-                        <div class="product">
-                            <a class="product photo" href="<?php echo $this->getProductUrl($item) ?>" title="<?php echo $this->escapeHtml($product->getName()) ?>">
+                        <?php echo ($iterator++ == 1) ? '<li class="product-item">' : '</li><li class="product-item">' ?>
+                        <div class="product-item-info">
+                            <a class="product-item-photo" href="<?php echo $this->getProductUrl($item) ?>"
+                               title="<?php echo $this->escapeHtml($product->getName()) ?>">
                                 <?php echo $imageBlock->init($product, 'wishlist_sidebar_block')->toHtml() ?>
                             </a>
-                            <div class="product details">
-                                <strong class="product name"><a href="<?php echo $this->getProductUrl($item) ?>"><?php echo $this->escapeHtml($product->getName()) ?></a></strong>
+                            <div class="product-item-details">
+                                <strong class="product-item-name">
+                                    <a href="<?php echo $this->getProductUrl($item) ?>"
+                                       class="product-item-link"><?php echo $this->escapeHtml($product->getName()) ?></a>
+                                </strong>
                                 <?php
                                     echo $this->getProductPriceHtml(
                                         $product,
@@ -58,20 +62,25 @@ $wishlistHelper = $this->helper('Magento\Wishlist\Helper\Data');
                                         ['item' => $item]
                                     );
                                 ?>
-                                <div class="product actions">
+                                <div class="product-item-actions">
                                     <?php if ($product->isSaleable() && $product->isVisibleInSiteVisibility()): ?>
-                                        <?php if ($product->getTypeInstance()->hasRequiredOptions($product)): ?>
-                                            <div class="primary"><a href="<?php echo $this->getItemAddToCartUrl($item) ?>" class="action tocart primary"><span><?php echo __('Add to Cart') ?></span></a></div>
-                                        <?php else: ?>
-                                            <?php
-                                                $postDataHelper = $this->helper('Magento\Core\Helper\PostData');
-                                                $postData = $postDataHelper->getPostData($this->getItemAddToCartUrl($item), ['product' => $product->getEntityId()])
-                                            ?>
-                                            <div class="primary"><button type="button" class="action tocart primary" data-post='<?php echo $postData; ?>'><span><?php echo __('Add to Cart') ?></span></button></div>
+                                    <div class="actions-primary">
+                                    <?php if ($product->getTypeInstance()->hasRequiredOptions($product)): ?>
+                                        <a href="<?php echo $this->getItemAddToCartUrl($item) ?>"
+                                           class="action tocart primary"><span><?php echo __('Add to Cart') ?></span></a>
+                                    <?php else: ?>
+                                        <?php
+                                            $postDataHelper = $this->helper('Magento\Core\Helper\PostData');
+                                            $postData = $postDataHelper->getPostData($this->getItemAddToCartUrl($item), ['product' => $product->getEntityId()])
+                                        ?>
+                                            <button type="button" class="action tocart primary" data-post='<?php echo $postData; ?>'><span><?php echo __('Add to Cart') ?></span></button>
                                         <?php endif; ?>
+                                    </div>
                                     <?php endif; ?>
-                                    <div class="secondary">
-                                        <a href="#" data-post='<?php echo $this->getItemRemoveParams($item) ?>' title="<?php echo __('Remove This Item') ?>" class="btn-remove action delete">
+                                    <div class="actions-secondary">
+                                        <a href="#" data-post='<?php echo $this->getItemRemoveParams($item) ?>'
+                                           title="<?php echo __('Remove This Item') ?>"
+                                           class="btn-remove action delete">
                                             <span><?php echo __('Remove This Item') ?></span>
                                         </a>
                                     </div>
@@ -81,11 +90,15 @@ $wishlistHelper = $this->helper('Magento\Wishlist\Helper\Data');
                         <?php echo ($iterator == count($this->getWishlistItems()) + 1) ? '</li>' : '' ?>
                     <?php endforeach; ?>
                 </ol>
-                <div class="actions">
-                    <a class="action details" href="<?php echo $this->helper('Magento\Wishlist\Helper\Data')->getListUrl() ?>"><span><?php echo __('Go to Wish List') ?></span></a>
+                <div class="actions-toolbar">
+                    <div class="primary">
+                        <a class="action details"
+                           href="<?php echo $this->helper('Magento\Wishlist\Helper\Data')->getListUrl() ?>"
+                           title="<?php echo __('Go to Wish List') ?>"><span><?php echo __('Go to Wish List') ?></span></a>
+                    </div>
                 </div>
             <?php else: ?>
-                <p class="message info empty"><?php echo __('You have no items in your wish list.') ?></p>
+                <div class="empty"><?php echo __('You have no items in your wish list.') ?></div>
             <?php endif ?>
         </div>
     </div>

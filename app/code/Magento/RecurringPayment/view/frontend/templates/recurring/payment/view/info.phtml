@@ -37,8 +37,8 @@
         <?php foreach ($this->getRenderedInfo() as $row): ?>
             <?php $isAmount = $this->getObjectData($row, 'is_amount'); ?>
             <tr>
-                <th class="col label" scope="row"><?php echo $this->escapeHtml($this->getObjectData($row, 'label')) ?>:</th>
-                <td class="col value"><?php echo $this->renderRowValue($row) ?></td>
+                <th class="col label" scope="row"><span><?php echo $this->escapeHtml($this->getObjectData($row, 'label')) ?>:</span></th>
+                <td class="col value"><span><?php echo $this->renderRowValue($row) ?></span></td>
             </tr>
         <?php endforeach; ?>
         </tbody>

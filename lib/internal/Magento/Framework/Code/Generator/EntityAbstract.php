@@ -23,7 +23,7 @@
  */
 namespace Magento\Framework\Code\Generator;
 
-use Magento\Framework\Autoload\IncludePath;
+use \Magento\Framework\Code\Generator\FileResolver;
 
 abstract class EntityAbstract
 {
@@ -59,9 +59,9 @@ abstract class EntityAbstract
     /**
      * Autoloader instance
      *
-     * @var IncludePath
+     * @var FileResolver
      */
-    private $_autoloader;
+    private $fileResolver;
 
     /**
      * Class generator object
@@ -75,24 +75,24 @@ abstract class EntityAbstract
      * @param null|string $resultClassName
      * @param Io $ioObject
      * @param CodeGenerator\CodeGeneratorInterface $classGenerator
-     * @param IncludePath $autoLoader
+     * @param FileResolver $fileResolver
      */
     public function __construct(
         $sourceClassName = null,
         $resultClassName = null,
         Io $ioObject = null,
         CodeGenerator\CodeGeneratorInterface $classGenerator = null,
-        IncludePath $autoLoader = null
+        FileResolver $fileResolver = null
     ) {
-        if ($autoLoader) {
-            $this->_autoloader = $autoLoader;
+        if ($fileResolver) {
+            $this->fileResolver = $fileResolver;
         } else {
-            $this->_autoloader = new IncludePath();
+            $this->fileResolver = new FileResolver();
         }
         if ($ioObject) {
             $this->_ioObject = $ioObject;
         } else {
-            $this->_ioObject = new Io(new \Magento\Framework\Filesystem\Driver\File(), $this->_autoloader);
+            $this->_ioObject = new Io(new \Magento\Framework\Filesystem\Driver\File(), $this->fileResolver);
         }
         if ($classGenerator) {
             $this->_classGenerator = $classGenerator;
@@ -100,7 +100,7 @@ abstract class EntityAbstract
             $this->_classGenerator = new CodeGenerator\Zend();
         }
 
-        $this->_sourceClassName = ltrim($sourceClassName, IncludePath::NS_SEPARATOR);
+        $this->_sourceClassName = ltrim($sourceClassName, '\\');
         if ($resultClassName) {
             $this->_resultClassName = $resultClassName;
         } elseif ($sourceClassName) {
@@ -160,7 +160,7 @@ abstract class EntityAbstract
      */
     protected function _getFullyQualifiedClassName($className)
     {
-        return IncludePath::NS_SEPARATOR . ltrim($className, IncludePath::NS_SEPARATOR);
+        return '\\' . ltrim($className, '\\');
     }
 
     /**
@@ -284,13 +284,13 @@ abstract class EntityAbstract
             $filePath = stream_resolve_include_path(str_replace('_', '/', $controllerPath) . '.php');
             $isSourceClassValid = !empty($filePath);
         } else {
-            $isSourceClassValid = $this->_autoloader->getFile($sourceClassName);
+            $isSourceClassValid = $this->fileResolver->getFile($sourceClassName);
         }
 
         if (!$isSourceClassValid) {
             $this->_addError('Source class ' . $sourceClassName . ' doesn\'t exist.');
             return false;
-        } elseif ($this->_autoloader->getFile($resultClassName)) {
+        } elseif ($this->fileResolver->getFile($resultClassName)) {
             $this->_addError('Result class ' . $resultClassName . ' already exists.');
             return false;
         } elseif (!$this->_ioObject->makeGenerationDirectory()) {

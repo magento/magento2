@@ -24,10 +24,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-$toolkitBaseDir = realpath(__DIR__ . '/..');
-$magentoBaseDir = realpath($toolkitBaseDir . '/../../../');
+$magentoBaseDir = realpath(__DIR__ . '/../../../../');
 
 require_once "$magentoBaseDir/app/bootstrap.php";
-(new \Magento\Framework\Autoload\IncludePath())->addIncludePath("$toolkitBaseDir/framework");
-
 return $magentoBaseDir;

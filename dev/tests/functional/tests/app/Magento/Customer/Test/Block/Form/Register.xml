@@ -48,7 +48,7 @@
             <input>checkbox</input>
         </is_subscribed>
         <password_confirmation>
-            <selector>[name=confirmation]</selector>
+            <selector>[name=password_confirmation]</selector>
         </password_confirmation>
     </fields>
 </mapping>

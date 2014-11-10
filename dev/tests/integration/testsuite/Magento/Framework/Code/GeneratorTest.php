@@ -75,7 +75,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->_ioObject = new \Magento\Framework\Code\Generator\Io(
             new \Magento\Framework\Filesystem\Driver\File(),
-            new \Magento\Framework\Autoload\IncludePath(),
+            new \Magento\Framework\Code\Generator\FileResolver(),
             $generationDirectory
         );
         $this->_generator = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

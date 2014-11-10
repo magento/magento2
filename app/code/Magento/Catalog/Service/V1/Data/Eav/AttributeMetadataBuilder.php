@@ -23,15 +23,15 @@
  */
 namespace Magento\Catalog\Service\V1\Data\Eav;
 
-use Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder;
-use Magento\Framework\Service\Data\AttributeMetadataBuilderInterface;
-use Magento\Framework\Service\Data\AttributeValueBuilder;
-use Magento\Framework\Service\Data\MetadataServiceInterface;
+use Magento\Framework\Api\ExtensibleObjectBuilder;
+use Magento\Framework\Api\AttributeMetadataBuilderInterface;
+use Magento\Framework\Api\AttributeValueBuilder;
+use Magento\Framework\Api\MetadataServiceInterface;
 
 /**
  * Class AttributeMetadataBuilder
  */
-class AttributeMetadataBuilder extends AbstractExtensibleObjectBuilder implements AttributeMetadataBuilderInterface
+class AttributeMetadataBuilder extends ExtensibleObjectBuilder implements AttributeMetadataBuilderInterface
 {
     /**
      * Option builder
@@ -55,7 +55,7 @@ class AttributeMetadataBuilder extends AbstractExtensibleObjectBuilder implement
     /**
      * Initializes builder.
      *
-     * @param \Magento\Framework\Service\Data\ObjectFactory $objectFactory
+     * @param \Magento\Framework\Api\ObjectFactory $objectFactory
      * @param AttributeValueBuilder $valueBuilder
      * @param MetadataServiceInterface $metadataService
      * @param OptionBuilder $optionBuilder
@@ -63,7 +63,7 @@ class AttributeMetadataBuilder extends AbstractExtensibleObjectBuilder implement
      * @param Product\Attribute\FrontendLabelBuilder $frontendLabelBuilder
      */
     public function __construct(
-        \Magento\Framework\Service\Data\ObjectFactory $objectFactory,
+        \Magento\Framework\Api\ObjectFactory $objectFactory,
         AttributeValueBuilder $valueBuilder,
         MetadataServiceInterface $metadataService,
         OptionBuilder $optionBuilder,
@@ -74,9 +74,9 @@ class AttributeMetadataBuilder extends AbstractExtensibleObjectBuilder implement
         $this->optionBuilder = $optionBuilder;
         $this->validationRuleBuilder = $validationRuleBuilder;
         $this->frontendLabelBuilder = $frontendLabelBuilder;
-        $this->_data[AttributeMetadata::OPTIONS] = array();
-        $this->_data[AttributeMetadata::VALIDATION_RULES] = array();
-        $this->_data[AttributeMetadata::FRONTEND_LABEL] = array();
+        $this->data[AttributeMetadata::OPTIONS] = array();
+        $this->data[AttributeMetadata::VALIDATION_RULES] = array();
+        $this->data[AttributeMetadata::FRONTEND_LABEL] = array();
     }
 
     /**

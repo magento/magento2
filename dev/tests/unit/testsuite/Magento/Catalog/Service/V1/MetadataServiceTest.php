@@ -116,7 +116,7 @@ class MetadataServiceTest extends \PHPUnit_Framework_TestCase
         $this->eavConfigMock->expects($this->any())->method('getAttribute')->will($this->returnValue($attributeMock));
 
         $dto = $this->service->getAttributeMetadata('entity_type', 'attr_code');
-        $this->assertInstanceOf('Magento\Framework\Service\Data\AbstractExtensibleObject', $dto);
+        $this->assertInstanceOf('Magento\Framework\Api\AbstractExtensibleObject', $dto);
         $this->assertEquals($attributeMock->getFrontendInput(), $dto->getFrontendInput());
 
         $this->assertEquals(0, $dto->getFrontendLabel()[0]->getStoreId());
@@ -155,7 +155,7 @@ class MetadataServiceTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($this->attributeCollection));
 
-        $searchCriteria = $this->getMockBuilder('\Magento\Framework\Service\V1\Data\SearchCriteria')
+        $searchCriteria = $this->getMockBuilder('\Magento\Framework\Api\SearchCriteria')
             ->disableOriginalConstructor()
             ->setMethods(['getFilterGroups'])
             ->getMock();
@@ -171,7 +171,7 @@ class MetadataServiceTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Catalog\Service\V1\Data\Product\Attribute\SearchResults $searchResult */
         $searchResult = $this->service->getAllAttributeMetadata('entity_type', $searchCriteria);
         $dto = $searchResult->getItems()[0];
-        $this->assertInstanceOf('Magento\Framework\Service\Data\AbstractExtensibleObject', $dto);
+        $this->assertInstanceOf('Magento\Framework\Api\AbstractExtensibleObject', $dto);
         $this->assertEquals($attributeMock->getFrontendInput(), $dto->getFrontendInput());
 
         $this->assertEquals(0, $dto->getFrontendLabel()[0]->getStoreId());

@@ -27,61 +27,55 @@
         xsi:noNamespaceSchemaLocation="../../../../../app/code/Magento/Webapi/etc/webapi.xsd">
     <!-- Customer Group Service-->
     <route url="/V1/customerGroups/:id" method="GET">
-        <service class="Magento\Customer\Service\V1\CustomerGroupServiceInterface" method="getGroup"/>
-        <resources>
-            <resource ref="Magento_Customer::group"/>
-        </resources>
-    </route>
-    <route url="/V1/customerGroups" method="GET">
-        <service class="Magento\Customer\Service\V1\CustomerGroupServiceInterface" method="getGroups"/>
+        <service class="Magento\Customer\Api\GroupRepositoryInterface" method="get"/>
         <resources>
             <resource ref="Magento_Customer::group"/>
         </resources>
     </route>
     <route url="/V1/customerGroups/default/:storeId" method="GET">
-        <service class="Magento\Customer\Service\V1\CustomerGroupServiceInterface" method="getDefaultGroup"/>
+        <service class="Magento\Customer\Api\GroupManagementInterface" method="getDefaultGroup"/>
         <resources>
             <resource ref="Magento_Customer::group"/>
         </resources>
     </route>
     <route url="/V1/customerGroups/default" method="GET">
-        <service class="Magento\Customer\Service\V1\CustomerGroupServiceInterface" method="getDefaultGroup"/>
+        <service class="Magento\Customer\Api\GroupManagementInterface" method="getDefaultGroup"/>
         <resources>
             <resource ref="Magento_Customer::group"/>
         </resources>
     </route>
     <route url="/V1/customerGroups/:id/permissions" method="GET">
-        <service class="Magento\Customer\Service\V1\CustomerGroupServiceInterface" method="canDelete"/>
+        <service class="Magento\Customer\Api\GroupManagementInterface" method="isReadonly"/>
         <resources>
             <resource ref="Magento_Customer::group"/>
         </resources>
     </route>
     <route url="/V1/customerGroups/search" method="POST">
-        <service class="Magento\Customer\Service\V1\CustomerGroupServiceInterface" method="searchGroups"/>
+        <service class="Magento\Customer\Api\GroupRepositoryInterface" method="getList"/>
         <resources>
             <resource ref="Magento_Customer::group"/>
         </resources>
     </route>
     <route url="/V1/customerGroups/search" method="GET">
-        <service class="Magento\Customer\Service\V1\CustomerGroupServiceInterface" method="searchGroups"/>
+        <service class="Magento\Customer\Api\GroupRepositoryInterface" method="getList"/>
         <resources>
             <resource ref="Magento_Customer::group"/>
         </resources>
     </route>
     <route url="/V1/customerGroups" method="POST">
-        <service class="Magento\Customer\Service\V1\CustomerGroupServiceInterface" method="createGroup"/>
+        <service class="Magento\Customer\Api\GroupRepositoryInterface" method="save"/>
         <resources>
             <resource ref="Magento_Customer::group"/>
         </resources>
     </route>
     <route url="/V1/customerGroups/:id" method="PUT">
-        <service class="Magento\Customer\Service\V1\CustomerGroupServiceInterface" method="updateGroup"/>
+        <service class="Magento\Customer\Api\GroupRepositoryInterface" method="save"/>
         <resources>
             <resource ref="Magento_Customer::group"/>
         </resources>
     </route>
     <route url="/V1/customerGroups/:id" method="DELETE">
-        <service class="Magento\Customer\Service\V1\CustomerGroupServiceInterface" method="deleteGroup"/>
+        <service class="Magento\Customer\Api\GroupRepositoryInterface" method="deleteById"/>
         <resources>
             <resource ref="Magento_Customer::group"/>
         </resources>

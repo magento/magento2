@@ -28,7 +28,7 @@ namespace Magento\Catalog\Service\V1\Data\Eav;
 /**
  * @codeCoverageIgnore
  */
-class AttributeGroup extends \Magento\Framework\Service\Data\AbstractExtensibleObject
+class AttributeGroup extends \Magento\Framework\Api\AbstractExtensibleObject
 {
     /**#@+
      * Constants defined for keys of array, make typos less likely

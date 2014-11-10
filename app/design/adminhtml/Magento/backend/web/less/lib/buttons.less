@@ -107,9 +107,6 @@
 //     position: relative;
 //     z-index: 1;
 //     padding: 0;
-//     &:focus {
-//         outline: none;
-//     }
 //     > span {
 //         text-indent: -999em;
 //         display: block;
@@ -144,16 +141,10 @@
         .action-default.primary {
             //&:extend(.PrimaryAddButton all);
             border-radius: 2px 0 0 2px;
-            &:focus {
-                outline: none;
-            }
         }
     }
     > .action-default.primary {
        border-radius: 2px 0 0 2px;
-        &:focus {
-            outline: none;
-        }
     }
     > .action-toggle.primary {
         &:extend(.PrimaryButton all);
@@ -169,9 +160,6 @@
         position: relative;
         z-index: 2;
         filter: none;
-        &:focus {
-            outline: none;
-        }
         &:before {
             text-align: center;
         }

@@ -103,7 +103,7 @@ class BundleProductSaveProcessorTest extends \PHPUnit_Framework_TestCase
     private $productBuilder;
 
     /**
-     * @var \Magento\Framework\Service\Data\Eav\AttributeValue|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\Eav\AttributeValue|\PHPUnit_Framework_MockObject_MockObject
      */
     private $attributeValue;
 
@@ -182,7 +182,7 @@ class BundleProductSaveProcessorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->attributeValue = $this->getMockBuilder('Magento\Framework\Service\Data\Eav\AttributeValue')
+        $this->attributeValue = $this->getMockBuilder('Magento\Framework\Api\Eav\AttributeValue')
             ->setMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMock();

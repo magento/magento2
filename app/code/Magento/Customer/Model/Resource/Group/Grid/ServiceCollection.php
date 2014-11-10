@@ -24,12 +24,12 @@
 namespace Magento\Customer\Model\Resource\Group\Grid;
 
 use Magento\Core\Model\EntityFactory;
-use Magento\Framework\Service\AbstractServiceCollection;
+use Magento\Framework\Api\AbstractServiceCollection;
 use Magento\Customer\Service\V1\CustomerGroupServiceInterface;
 use Magento\Customer\Service\V1\Data\CustomerGroup;
-use Magento\Framework\Service\V1\Data\FilterBuilder;
-use Magento\Framework\Service\V1\Data\SearchCriteriaBuilder;
-use Magento\Framework\Service\V1\Data\SortOrderBuilder;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SortOrderBuilder;
 
 /**
  * Customer group collection backed by services
@@ -76,7 +76,7 @@ class ServiceCollection extends AbstractServiceCollection
             $groups = $searchResults->getItems();
             foreach ($groups as $group) {
                 $groupItem = new \Magento\Framework\Object();
-                $groupItem->addData(\Magento\Framework\Service\SimpleDataObjectConverter::toFlatArray($group));
+                $groupItem->addData(\Magento\Framework\Api\SimpleDataObjectConverter::toFlatArray($group));
                 $this->_addItem($groupItem);
             }
             $this->_setIsLoaded();

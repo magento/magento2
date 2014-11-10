@@ -82,10 +82,10 @@ class SampleRepository
     /**
      * Find entities by criteria
      *
-     * @param \Magento\Framework\Service\V1\Data\SearchCriteria  $criteria
+     * @param \Magento\Framework\Api\SearchCriteria  $criteria
      * @return \Magento\Framework\ObjectManager\Code\Generator\Sample[]
      */
-    public function find(\Magento\Framework\Service\V1\Data\SearchCriteria $criteria)
+    public function find(\Magento\Framework\Api\SearchCriteria $criteria)
     {
         $collection = $this->sampleCollectionFactory->create();
         foreach($criteria->getFilterGroups() as $filterGroup) {

@@ -53,6 +53,7 @@ Magento/Cron/Model/Config/Backend/Product
 Magento/Customer/Block/Account/Dashboard
 Magento/Customer/Model/Config/Backend/Show
 Magento/Customer/Model/Metadata
+Magento/Customer/Service/V1
 Magento/DesignEditor/Block/Adminhtml/Editor/Tools/Code
 Magento/DesignEditor/Block/Adminhtml/Theme/Selector/Tab
 Magento/DesignEditor/Model/Url
@@ -60,7 +61,6 @@ Magento/Directory/Model
 Magento/GiftMessage/Block/Adminhtml/Sales/Order
 Magento/ImportExport/Model
 Magento/Integration/Controller/Adminhtml
-Magento/Install/Block/Db
 Magento/Newsletter/Block/Adminhtml/Template/Preview
 Magento/Newsletter/Block/Adminhtml/Queue/Preview
 Magento/Payment/Block/Form

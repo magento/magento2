@@ -501,8 +501,8 @@ class TaxRateServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      *
-     * @param \Magento\Framework\Service\V1\Data\Filter[] $filters
-     * @param \Magento\Framework\Service\V1\Data\Filter[] $filterGroup
+     * @param \Magento\Framework\Api\Filter[] $filters
+     * @param \Magento\Framework\Api\Filter[] $filterGroup
      * @param $expectedRateCodes
      *
      * @magentoDbIsolation enabled
@@ -519,9 +519,9 @@ class TaxRateServiceTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        /** @var \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder $searchBuilder */
+        /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchBuilder */
         $searchBuilder = Bootstrap::getObjectManager()
-            ->create('Magento\Framework\Service\V1\Data\SearchCriteriaBuilder');
+            ->create('Magento\Framework\Api\SearchCriteriaBuilder');
         foreach ($filters as $filter) {
             $searchBuilder->addFilter([$filter]);
         }
@@ -550,7 +550,7 @@ class TaxRateServiceTest extends \PHPUnit_Framework_TestCase
 
     public function searchTaxRatesDataProvider()
     {
-        $filterBuilder = Bootstrap::getObjectManager()->create('Magento\Framework\Service\V1\Data\FilterBuilder');
+        $filterBuilder = Bootstrap::getObjectManager()->create('Magento\Framework\Api\FilterBuilder');
 
         return [
             'eq' => [

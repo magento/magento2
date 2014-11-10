@@ -28,7 +28,7 @@ namespace Magento\Catalog\Service\V1\Data\Eav;
  *
  * @codeCoverageIgnore
  */
-class AttributeSet extends \Magento\Framework\Service\Data\AbstractExtensibleObject
+class AttributeSet extends \Magento\Framework\Api\AbstractExtensibleObject
 {
     /**
      * table field for id

@@ -27,8 +27,8 @@ use Magento\Checkout\Service\V1\Data\Cart\Address;
 use Magento\Checkout\Service\V1\Data\Cart\AddressBuilder;
 use Magento\Checkout\Service\V1\Data\Cart\Address\Region;
 use Magento\Customer\Service\V1\CustomerMetadataServiceInterface;
-use Magento\Framework\Service\Data\AttributeValue;
-use Magento\Framework\Service\SimpleDataObjectConverter;
+use Magento\Framework\Api\AttributeValue;
+use Magento\Framework\Api\SimpleDataObjectConverter;
 
 /** Quote shipping address converter service. */
 class Converter
@@ -114,7 +114,7 @@ class Converter
 
         //set custom attributes
         $customAttributes = $dataObject->getCustomAttributes();
-        /** @var \Magento\Framework\Service\Data\AttributeValue $attributeData */
+        /** @var \Magento\Framework\Api\AttributeValue $attributeData */
         foreach ($customAttributes as $attributeData) {
             $address->setData($attributeData->getAttributeCode(), $attributeData->getValue());
         }

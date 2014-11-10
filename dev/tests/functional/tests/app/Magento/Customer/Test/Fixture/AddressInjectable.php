@@ -139,7 +139,7 @@ class AddressInjectable extends InjectableFixture
     protected $postcode = [
         'attribute_code' => 'postcode',
         'backend_type' => 'varchar',
-        'is_required' => '1',
+        'is_required' => '0',
         'default_value' => '',
         'input' => 'text',
     ];

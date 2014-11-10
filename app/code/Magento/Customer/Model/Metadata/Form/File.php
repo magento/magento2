@@ -28,7 +28,7 @@ namespace Magento\Customer\Model\Metadata\Form;
 use Magento\Framework\File\UploaderFactory;
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Service\ArrayObjectSearch;
+use Magento\Framework\Api\ArrayObjectSearch;
 
 class File extends AbstractData
 {

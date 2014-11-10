@@ -22,10 +22,6 @@
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
-.debug() {
-    outline:2px dotted red;
-}
-
 .margin-top-rem(
     @value
 ) when not (@value = false) and not (@value = '') {
@@ -181,17 +177,6 @@
     @_background-gradient
 ) when (@_background-gradient-direction = vertical) and (@_background-gradient = true) {
     #gradient > .vertical(@_background-gradient-start-color, @_background-gradient-end-color);
-}
-
-//
-//    WebKit-style focus
-//--------------------------------------
-.tab-focus() {
-    // Default
-    outline: thin dotted;
-    // WebKit
-    outline: 5px auto -webkit-focus-ring-color;
-    outline-offset: -2px;
 }
 
 //

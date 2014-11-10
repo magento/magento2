@@ -80,7 +80,11 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
             '_classGenerator',
             $this->_model
         );
-        $this->assertAttributeInstanceOf('Magento\Framework\Autoload\IncludePath', '_autoloader', $this->_model);
+        $this->assertAttributeInstanceOf(
+            'Magento\Framework\Code\Generator\FileResolver',
+            'fileResolver',
+            $this->_model
+        );
 
         // with source class name
         $this->_model = $this->getMockForAbstractClass(
@@ -99,16 +103,16 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $autoloader = $this->getMock('Magento\Framework\Autoload\IncludePath', array(), array(), '', false);
+        $fileResolver = $this->getMock('Magento\Framework\Code\Generator\FileResolver', array(), array(), '', false);
 
         $this->_model = $this->getMockForAbstractClass(
             'Magento\Framework\Code\Generator\EntityAbstract',
-            array(self::SOURCE_CLASS, self::RESULT_CLASS, $ioObject, $codeGenerator, $autoloader)
+            array(self::SOURCE_CLASS, self::RESULT_CLASS, $ioObject, $codeGenerator, $fileResolver)
         );
         $this->assertAttributeEquals(self::RESULT_CLASS, '_resultClassName', $this->_model);
         $this->assertAttributeEquals($ioObject, '_ioObject', $this->_model);
         $this->assertAttributeEquals($codeGenerator, '_classGenerator', $this->_model);
-        $this->assertAttributeEquals($autoloader, '_autoloader', $this->_model);
+        $this->assertAttributeEquals($fileResolver, 'fileResolver', $this->_model);
     }
 
     /**
@@ -270,7 +274,7 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $autoloader = $this->getMock('Magento\Framework\Autoload\IncludePath', array('getFile'), array(), '', false);
+        $fileresolver = $this->getMock('Magento\Framework\Code\Generator\FileResolver', ['getFile'], [], '', false);
 
         $ioObject->expects(
             $this->any()
@@ -296,7 +300,7 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(self::RESULT_DIRECTORY)
         );
 
-        $autoloader->expects(
+        $fileresolver->expects(
             $this->at(0)
         )->method(
             'getFile'
@@ -306,7 +310,7 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($classExistsFirst)
         );
         if ($classExistsFirst) {
-            $autoloader->expects(
+            $fileresolver->expects(
                 $this->at(1)
             )->method(
                 'getFile'
@@ -321,7 +325,7 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
         if ($classExistsFirst) {
             $expectedInvocations = 2;
         }
-        $autoloader->expects($this->exactly($expectedInvocations))->method('getFile');
+        $fileresolver->expects($this->exactly($expectedInvocations))->method('getFile');
 
         $expectedInvocations = 1;
         if (!$classExistsFirst || $classExistsSecond) {
@@ -349,7 +353,7 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
             'result_class' => self::RESULT_CLASS,
             'io_object' => $ioObject,
             'code_generator' => null,
-            'autoloader' => $autoloader
+            'autoloader' => $fileresolver
         );
     }
 

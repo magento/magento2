@@ -57,11 +57,12 @@ class CheckoutData implements FixtureInterface
     public function __construct(array $params, array $data = [])
     {
         $this->params = $params;
-        $this->data = isset($data['preset']) ? $this->getPreset($data['preset']) : $data;
-
-        if (isset($data['data'])) {
-            $this->data = array_replace_recursive($this->data, $data['data']);
+        $preset = [];
+        if (isset($data['preset'])) {
+            $preset = $this->getPreset($data['preset']);
+            unset($data['preset']);
         }
+        $this->data = empty($preset) ? $data : array_replace_recursive($preset, $data);
     }
 
     /**

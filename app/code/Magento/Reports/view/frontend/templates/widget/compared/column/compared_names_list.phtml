@@ -23,17 +23,17 @@
  */
 ?>
 <?php if ($_products = $this->getRecentlyComparedProducts()): ?>
-<div class="block widget compared links">
-    <div class="title">
+<div class="block widget block-compared-products-names">
+    <div class="block-title">
         <strong><?php echo __('Recently Compared') ?></span></strong>
     </div>
-    <div class="content">
+    <div class="block-content">
         <?php $suffix = $this->getNameInLayout(); ?>
-        <ol id="widget-compared-<?php echo $suffix; ?>" class="items">
+        <ol id="widget-compared-<?php echo $suffix; ?>" class="product-items product-items-names">
         <?php $i=0; foreach ($_products as $_product): ?>
-            <li class="item">
-                <strong class="product name">
-                    <a href="<?php echo $_product->getProductUrl() ?>">
+            <li class="product-item">
+                <strong class="product-item-name">
+                    <a href="<?php echo $_product->getProductUrl() ?>" class="product-item-link">
                         <?php echo $this->helper('Magento\Catalog\Helper\Output')->productAttribute($_product, $_product->getName(), 'name') ?>
                     </a>
                 </strong>

@@ -27,6 +27,7 @@
 <?php if ($this->getProduct()->isSaleable() && $this->hasLinks()):?>
     <?php $_links = $this->getLinks(); ?>
     <?php $_isRequired = $this->getLinkSelectionRequired(); ?>
+    <legend class="legend links-title"><span><?php echo $this->getLinksTitle() ?></span></legend><br>
     <div class="field downloads<?php if ($_isRequired) echo ' required' ?>">
         <label class="label"><span><?php echo $this->getLinksTitle() ?></span></label>
         <div class="control" id="downloadable-links-list"

@@ -264,4 +264,12 @@ class Special extends \Magento\Framework\View\Element\AbstractBlock implements D
         }
         return $data;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isAuthRequired()
+    {
+        return false;
+    }
 }

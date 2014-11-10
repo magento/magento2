@@ -33,7 +33,6 @@ class LayoutRule implements \Magento\TestFramework\Dependency\RuleInterface
      * @var array
      */
     protected $_defaultModules = array(
-        'default' => 'Magento\Install',
         'frontend' => 'Magento\Theme',
         'adminhtml' => 'Magento\Adminhtml'
     );

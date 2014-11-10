@@ -33,5 +33,5 @@ interface CustomerMetadataInterface extends MetadataInterface
 
     const ENTITY_TYPE_CUSTOMER = 'customer';
 
-    const DATA_INTERFACE_NAME = 'Magento\Customer\Api\Data\Customer';
+    const DATA_INTERFACE_NAME = 'Magento\Customer\Api\Data\CustomerInterface';
 }

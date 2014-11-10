@@ -23,8 +23,8 @@
  */
 namespace Magento\Tax\Service\V1\Data\TaxDetails;
 
-use Magento\Framework\Service\Data\AttributeValueBuilder;
-use Magento\Framework\Service\Data\MetadataServiceInterface;
+use Magento\Framework\Api\AttributeValueBuilder;
+use Magento\Framework\Api\MetadataServiceInterface;
 use Magento\Tax\Service\V1\Data\TaxDetails;
 
 /**
@@ -33,7 +33,7 @@ use Magento\Tax\Service\V1\Data\TaxDetails;
  * @method Item create()
  */
 
-class ItemBuilder extends \Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder
+class ItemBuilder extends \Magento\Framework\Api\ExtensibleObjectBuilder
 {
     /**
      * Applied Tax data object builder
@@ -45,13 +45,13 @@ class ItemBuilder extends \Magento\Framework\Service\Data\AbstractExtensibleObje
     /**
      * Initialize dependencies
      *
-     * @param \Magento\Framework\Service\Data\ObjectFactory $objectFactory
+     * @param \Magento\Framework\Api\ObjectFactory $objectFactory
      * @param AttributeValueBuilder $valueBuilder
      * @param MetadataServiceInterface $metadataService
      * @param AppliedTaxBuilder $appliedTaxBuilder
      */
     public function __construct(
-        \Magento\Framework\Service\Data\ObjectFactory $objectFactory,
+        \Magento\Framework\Api\ObjectFactory $objectFactory,
         AttributeValueBuilder $valueBuilder,
         MetadataServiceInterface $metadataService,
         \Magento\Tax\Service\V1\Data\TaxDetails\AppliedTaxBuilder $appliedTaxBuilder

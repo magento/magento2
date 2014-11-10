@@ -127,9 +127,7 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
     private function _addBlock($module, $blockClass, $class, $templateBlocks)
     {
         $area = 'frontend';
-        if ($module == 'Magento_Install') {
-            $area = 'install';
-        } elseif ($module == 'Magento_Adminhtml' || strpos(
+        if ($module == 'Magento_Adminhtml' || strpos(
             $blockClass,
             '\\Adminhtml\\'
         ) || strpos(

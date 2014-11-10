@@ -26,7 +26,7 @@ namespace Magento\Customer\Service\V1\Data;
 /**
  * Class Customer
  */
-class Customer extends \Magento\Framework\Service\Data\AbstractExtensibleObject
+class Customer extends \Magento\Framework\Api\AbstractExtensibleObject
 {
     /**#@+
      * Constants defined for keys of array, makes typos less likely

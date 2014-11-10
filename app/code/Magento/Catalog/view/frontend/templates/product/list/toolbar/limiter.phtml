@@ -30,15 +30,19 @@
  */
 use \Magento\Catalog\Model\Product\ProductList\Toolbar;
 ?>
-<div class="limiter">
-    <strong class="limiter-label"><?php echo __('Show') ?></strong>
-    <select id="limiter" data-role="limiter" class="limiter-options">
-        <?php foreach ($this->getAvailableLimit() as $_key => $_limit): ?>
-            <option value="<?php echo $_key ?>"<?php if ($this->isLimitCurrent($_key)): ?>
-                selected="selected"<?php endif ?>>
-                <?php echo $_limit ?>
-            </option>
-        <?php endforeach; ?>
-    </select>
+<div class="field limiter">
+    <label class="label" for="limiter">
+        <span><?php echo __('Show') ?></span>
+    </label>
+    <div class="control">
+        <select id="limiter" data-role="limiter" class="limiter-options">
+            <?php foreach ($this->getAvailableLimit() as $_key => $_limit): ?>
+                <option value="<?php echo $_key ?>"<?php if ($this->isLimitCurrent($_key)): ?>
+                    selected="selected"<?php endif ?>>
+                    <?php echo $_limit ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </div>
     <span class="limiter-text"><?php echo __('per page') ?></span>
 </div>

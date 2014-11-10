@@ -28,8 +28,6 @@ namespace Magento\Log\Model;
  *
  * @method \Magento\Log\Model\Resource\Log _getResource()
  * @method \Magento\Log\Model\Resource\Log getResource()
- * @method string getSessionId()
- * @method \Magento\Log\Model\Log setSessionId(string $value)
  * @method string getFirstVisitAt()
  * @method \Magento\Log\Model\Log setFirstVisitAt(string $value)
  * @method string getLastVisitAt()

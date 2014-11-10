@@ -23,12 +23,12 @@
  */
 namespace Magento\Catalog\Service\V1\Data\Eav\Category;
 
-use Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder;
+use Magento\Framework\Api\ExtensibleObjectBuilder;
 
 /**
  * @codeCoverageIgnore
  */
-class TreeBuilder extends AbstractExtensibleObjectBuilder
+class TreeBuilder extends ExtensibleObjectBuilder
 {
     /**
      * Set category ID

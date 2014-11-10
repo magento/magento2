@@ -268,6 +268,12 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      */
     public function testWakeUpWithException()
     {
+        /* ensure that the test preconditions are met */
+        $objectManagerClass = new \ReflectionClass('Magento\Framework\App\ObjectManager');
+        $instanceProperty = $objectManagerClass->getProperty('_instance');
+        $instanceProperty->setAccessible(true);
+        $instanceProperty->setValue(null);
+
         $this->model->__wakeup();
         $this->assertNull($this->cookieMetadataFactoryMock);
         $this->assertNull($this->cookieManagerMock);

@@ -27,7 +27,7 @@ namespace Magento\Customer\Controller\Adminhtml\Index;
 use Magento\Customer\Service\V1\Data\Customer;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Customer\Service\V1\Data\AddressConverter;
-use Magento\Framework\Service\ExtensibleDataObjectConverter;
+use Magento\Framework\Api\ExtensibleDataObjectConverter;
 
 class Edit extends \Magento\Customer\Controller\Adminhtml\Index
 {

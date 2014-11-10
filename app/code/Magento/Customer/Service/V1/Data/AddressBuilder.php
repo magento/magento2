@@ -25,9 +25,9 @@
 namespace Magento\Customer\Service\V1\Data;
 
 use Magento\Customer\Service\V1\AddressMetadataServiceInterface;
-use Magento\Framework\Service\Data\AbstractExtensibleObject as ExtensibleObject;
-use Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder;
-use Magento\Framework\Service\Data\AttributeValueBuilder;
+use Magento\Framework\Api\AbstractExtensibleObject as ExtensibleObject;
+use Magento\Framework\Api\ExtensibleObjectBuilder;
+use Magento\Framework\Api\AttributeValueBuilder;
 
 /**
  * Builder for the Address Service Data Object
@@ -36,7 +36,7 @@ use Magento\Framework\Service\Data\AttributeValueBuilder;
  * @method Address mergeDataObjectWithArray(ExtensibleObject $dataObject, array $data)
  * @method Address mergeDataObjects(ExtensibleObject $firstDataObject, ExtensibleObject $secondDataObject)
  */
-class AddressBuilder extends AbstractExtensibleObjectBuilder
+class AddressBuilder extends ExtensibleObjectBuilder
 {
     /**
      * Region builder
@@ -46,20 +46,20 @@ class AddressBuilder extends AbstractExtensibleObjectBuilder
     protected $_regionBuilder;
 
     /**
-     * @param \Magento\Framework\Service\Data\ObjectFactory $objectFactory
+     * @param \Magento\Framework\Api\ObjectFactory $objectFactory
      * @param AttributeValueBuilder $valueBuilder
      * @param AddressMetadataServiceInterface $metadataService
      * @param RegionBuilder $regionBuilder
      */
     public function __construct(
-        \Magento\Framework\Service\Data\ObjectFactory $objectFactory,
+        \Magento\Framework\Api\ObjectFactory $objectFactory,
         AttributeValueBuilder $valueBuilder,
         AddressMetadataServiceInterface $metadataService,
         RegionBuilder $regionBuilder
     ) {
         parent::__construct($objectFactory, $valueBuilder, $metadataService);
         $this->_regionBuilder = $regionBuilder;
-        $this->_data[Address::KEY_REGION] = $regionBuilder->create();
+        $this->data[Address::KEY_REGION] = $regionBuilder->create();
     }
 
     /**

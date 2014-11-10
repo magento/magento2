@@ -43,14 +43,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->model = new \Magento\Framework\App\State($this->scopeMock, '0');
-    }
-
-    public function testIsInstalled()
-    {
-        $this->assertFalse($this->model->isInstalled());
-        $this->model->setInstallDate(strtotime('now'));
-        $this->assertTrue($this->model->isInstalled());
+        $this->model = new \Magento\Framework\App\State($this->scopeMock);
     }
 
     public function testSetGetUpdateMode()

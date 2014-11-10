@@ -28,7 +28,7 @@ use Magento\Catalog\Service\V1\Data\Eav\AttributeMetadata;
 /**
  * Class Category MetadataServiceInterface
  */
-interface MetadataServiceInterface extends \Magento\Framework\Service\Data\MetadataServiceInterface
+interface MetadataServiceInterface extends \Magento\Framework\Api\MetadataServiceInterface
 {
     /**#@+
      * Predefined constants

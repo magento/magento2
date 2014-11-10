@@ -33,7 +33,7 @@ class LifetimeTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject | CookieLifetimeValidator */
     private $validatorMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Install\Model\Resource\Resource */
+    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Module\Resource */
     private $resourceMock;
 
     /** @var \Magento\Backend\Model\Config\Backend\Cookie\Lifetime */
@@ -45,7 +45,7 @@ class LifetimeTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\Session\Config\Validator\CookieLifetimeValidator'
         )->disableOriginalConstructor()
             ->getMock();
-        $this->resourceMock = $this->getMockBuilder('Magento\Install\Model\Resource\Resource')
+        $this->resourceMock = $this->getMockBuilder('Magento\Framework\Module\Resource')
             ->disableOriginalConstructor()
             ->getMock();
 

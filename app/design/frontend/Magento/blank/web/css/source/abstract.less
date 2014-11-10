@@ -802,6 +802,12 @@
     }
 }
 
+.responsive(@break) when (@break = @screen-m) {
+    .abstract-no-display-desktop {
+        display: none;
+    }
+}
+
 //
 //    Status
 //--------------------------------------
@@ -860,6 +866,82 @@
             position: absolute;
             z-index: 0;
             width: 100%;
+        }
+    }
+}
+
+//
+//    Items counter in blocks
+//--------------------------------------
+.abstract-block-items-counter {
+    color: @color-primary-lighter;
+    .font-size(12px);
+    white-space: nowrap;
+}
+
+//
+//    Shopping cart items
+//--------------------------------------
+.abstract-shopping-cart-items {
+    .actions.main {
+        text-align: center;
+    }
+    .action {
+        &.continue {
+            .link-as-button();
+            .button(
+                @_button-padding: 7px 15px 7px 0,
+                @_button-icon-use: true,
+                @_button-font-content: @icon-prev,
+                @_button-icon-font-size: 32px,
+                @_button-icon-font-line-height: 16px,
+                @_button-icon-font-position: before
+            );
+            border-radius: 3px;
+            font-weight: bold;
+            &:active {
+                box-shadow: inset 0 3px 1px rgba(0,0,0,.29);
+            }
+        }
+        &.update {
+            .button-icon(
+                @icon-update,
+            @_icon-font-size: 32px,
+            @_icon-font-line-height: 16px
+            );
+            padding-left: 5px;
+        }
+        &.update,
+        &.continue,
+        &.clear {
+            margin: 0 auto 10px;
+        }
+        &.update,
+        &.clear {
+            display: block;
+        }
+    }
+}
+
+.responsive(@break) when (@break = @screen-m) {
+    .abstract-shopping-cart-items-desktop {
+        float: left;
+        width: 73%;
+        position: relative;
+        .actions {
+            text-align: left;
+        }
+        .action {
+            &.continue {
+                float: left;
+            }
+            &.update {
+                float: right;
+            }
+            &.clear {
+                float: right;
+                margin-right: 10px;
+            }
         }
     }
 }

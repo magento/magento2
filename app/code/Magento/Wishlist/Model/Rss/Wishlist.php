@@ -78,6 +78,16 @@ class Wishlist implements DataProviderInterface
     protected $wishlistBlock;
 
     /**
+     * @var \Magento\Framework\App\RequestInterface
+     */
+    protected $request;
+
+    /**
+     * @var \Magento\Customer\Model\CustomerFactory
+     */
+    protected $customerFactory;
+
+    /**
      * @param \Magento\Wishlist\Helper\Rss $wishlistHelper
      * @param \Magento\Wishlist\Block\Customer\Wishlist $wishlistBlock
      * @param \Magento\Catalog\Helper\Output $outputHelper
@@ -85,7 +95,11 @@ class Wishlist implements DataProviderInterface
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Framework\View\LayoutInterface $layout
+     * @param \Magento\Framework\App\RequestInterface $request
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Wishlist\Helper\Rss $wishlistHelper,
@@ -95,7 +109,9 @@ class Wishlist implements DataProviderInterface
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\View\LayoutInterface $layout
+        \Magento\Customer\Model\CustomerFactory $customerFactory,
+        \Magento\Framework\View\LayoutInterface $layout,
+        \Magento\Framework\App\RequestInterface $request
     ) {
         $this->wishlistHelper = $wishlistHelper;
         $this->wishlistBlock = $wishlistBlock;
@@ -104,7 +120,9 @@ class Wishlist implements DataProviderInterface
         $this->urlBuilder = $urlBuilder;
         $this->scopeConfig = $scopeConfig;
         $this->eventManager = $eventManager;
+        $this->customerFactory = $customerFactory;
         $this->layout = $layout;
+        $this->request = $request;
     }
 
     /**
@@ -173,7 +191,7 @@ class Wishlist implements DataProviderInterface
                 $description .= '</td></tr></table>';
 
                 $data['entries'][] = (array(
-                    'title' => $this->outputHelper->productAttribute($product, $product->getName(), 'name'),
+                    'title' => $product->getName(),
                     'link' => $productUrl,
                     'description' => $description
                 ));
@@ -213,7 +231,9 @@ class Wishlist implements DataProviderInterface
      */
     public function getHeader()
     {
-        $title = __('%1\'s Wishlist', $this->wishlistHelper->getCustomerName());
+        $customerId = $this->getWishlist()->getCustomerId();
+        $customer = $this->customerFactory->create()->load($customerId);
+        $title = __('%1\'s Wishlist', $customer->getName());
         $newUrl = $this->urlBuilder->getUrl(
             'wishlist/shared/index',
             array('code' => $this->getWishlist()->getSharingCode())
@@ -230,12 +250,6 @@ class Wishlist implements DataProviderInterface
     protected function getWishlist()
     {
         $wishlist = $this->wishlistHelper->getWishlist();
-        $currentCustomer = $this->wishlistHelper->getCustomer();
-        if (!$wishlist->getVisibility() && $currentCustomer
-            && ($wishlist->getCustomerId() != $currentCustomer->getId())
-        ) {
-            $wishlist->unsetData();
-        }
         return $wishlist;
     }
 
@@ -273,5 +287,16 @@ class Wishlist implements DataProviderInterface
     public function getFeeds()
     {
         return array();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isAuthRequired()
+    {
+        if ($this->request->getParam('sharing_code') == $this->getWishlist()->getSharingCode()) {
+            return false;
+        }
+        return true;
     }
 }

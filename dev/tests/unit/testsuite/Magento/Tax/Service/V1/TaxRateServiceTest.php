@@ -27,9 +27,9 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Tax\Model\Calculation\Rate as RateModel;
 use Magento\Tax\Service\V1\Data\TaxRate;
 use Magento\TestFramework\Helper\ObjectManager;
-use Magento\Framework\Service\V1\Data\SearchCriteriaBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Tax\Model\Calculation\RateFactory;
-use Magento\Framework\Service\V1\Data\SearchCriteria;
+use Magento\Framework\Api\SearchCriteria;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -114,10 +114,10 @@ class TaxRateServiceTest extends \PHPUnit_Framework_TestCase
             'Magento\Tax\Service\V1\Data\TaxRateSearchResultsBuilder'
         );
         $filterGroupBuilder = $this->objectManager
-            ->getObject('Magento\Framework\Service\V1\Data\Search\FilterGroupBuilder');
+            ->getObject('Magento\Framework\Api\Search\FilterGroupBuilder');
         /** @var SearchCriteriaBuilder $searchBuilder */
         $this->searchCriteriaBuilder = $this->objectManager->getObject(
-            'Magento\Framework\Service\V1\Data\SearchCriteriaBuilder',
+            'Magento\Framework\Api\SearchCriteriaBuilder',
             ['filterGroupBuilder' => $filterGroupBuilder]
         );
 
@@ -524,7 +524,7 @@ class TaxRateServiceTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $filterBuilder = $this->objectManager->getObject('\Magento\Framework\Service\V1\Data\FilterBuilder');
+        $filterBuilder = $this->objectManager->getObject('\Magento\Framework\Api\FilterBuilder');
         $filter = $filterBuilder->setField(TaxRate::KEY_REGION_ID)->setValue(self::REGION_ID)->create();
         $this->searchCriteriaBuilder->addFilter([$filter]);
 
@@ -580,9 +580,9 @@ class TaxRateServiceTest extends \PHPUnit_Framework_TestCase
             ->with($this->rateModelMock)
             ->will($this->returnValue($taxRate));
 
-        $filterBuilder = $this->objectManager->getObject('\Magento\Framework\Service\V1\Data\FilterBuilder');
+        $filterBuilder = $this->objectManager->getObject('\Magento\Framework\Api\FilterBuilder');
         $filter = $filterBuilder->setField(TaxRate::KEY_REGION_ID)->setValue(self::REGION_ID)->create();
-        $sortOrderBuilder = $this->objectManager->getObject('\Magento\Framework\Service\V1\Data\SortOrderBuilder');
+        $sortOrderBuilder = $this->objectManager->getObject('\Magento\Framework\Api\SortOrderBuilder');
         $sortOrder = $sortOrderBuilder
             ->setField(TaxRate::KEY_REGION_ID)
             ->setDirection(SearchCriteria::SORT_ASC)

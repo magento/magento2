@@ -39,16 +39,16 @@ if ($exist = $this->getRecentlyComparedProducts()) {
 }
 ?>
 <?php if ($exist): ?>
-<div class="block widget compared mini products images">
-    <div class="title">
+<div class="block widget block-compared-products-images">
+    <div class="block-title">
         <strong><?php echo $title; ?></strong>
     </div>
-    <div class="content">
+    <div class="block-content">
         <?php $suffix = $this->getNameInLayout(); ?>
-        <ol class="items" id="widget-compared-<?php echo $suffix; ?>">
+        <ol id="widget-compared-<?php echo $suffix; ?>" class="product-items product-items-images">
         <?php $i=0; foreach ($items as $_product): ?>
-            <li class="item">
-                <a class="product photo" href="<?php echo $_product->getProductUrl() ?>"
+            <li class="product-item">
+                <a class="product-item-photo" href="<?php echo $_product->getProductUrl() ?>"
                     title="<?php echo $this->stripTags($_product->getName(), null, true) ?>">
                     <?php echo $imageBlock->init($_product, $image)->toHtml() ?>
                 </a>

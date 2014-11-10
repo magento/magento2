@@ -26,7 +26,7 @@ before_script:
   # Disable xDebug
   - echo '' > ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
   # Create DB for Integration tests
-  - sh -c "if [ '$TEST_SUITE' = 'integration' ] || [ '$TEST_SUITE' = 'integration_integrity' ]; then mysql -e 'create database magento_integration_tests;'; mv dev/tests/integration/etc/local-mysql.travis.xml.dist dev/tests/integration/etc/local-mysql.xml; fi"
+  - sh -c "if [ '$TEST_SUITE' = 'integration' ] || [ '$TEST_SUITE' = 'integration_integrity' ]; then mysql -e 'create database magento_integration_tests;'; mv dev/tests/integration/etc/install-config-mysql.travis.php.dist dev/tests/integration/etc/install-config-mysql.php; fi"
   # Install tools for static tests
   - sh -c "if [ '$TEST_SUITE' = 'static_phpcs' ] || [ '$TEST_SUITE' = 'static_annotation' ]; then pear install pear/PHP_CodeSniffer-1.5.2; fi"
   # Change memmory_limit for travis server

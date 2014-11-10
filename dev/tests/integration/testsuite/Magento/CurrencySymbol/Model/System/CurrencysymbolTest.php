@@ -59,6 +59,9 @@ class CurrencysymbolTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('EUR', $currencySymbolsData, 'Default currency option for EUR is missing.');
     }
 
+    /**
+     * @magentoDbIsolation enabled
+     */
     public function testSetEmptyCurrencySymbolsData()
     {
         $currencySymbolsDataBefore = $this->currencySymbolModel->getCurrencySymbolsData();
@@ -71,6 +74,9 @@ class CurrencysymbolTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($currencySymbolsDataBefore, $currencySymbolsDataAfter);
     }
 
+    /**
+     * @magentoDbIsolation enabled
+     */
     public function testSetCurrencySymbolsData()
     {
         $currencySymbolsData = $this->currencySymbolModel->getCurrencySymbolsData();
@@ -90,15 +96,6 @@ class CurrencysymbolTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals('@', $this->currencySymbolModel->getCurrencySymbol('EUR'), 'Symbol not set correctly.');
-    }
-
-    /**
-     * @depends testSetCurrencySymbolsData
-     */
-    public function testGetCurrencySymbol()
-    {
-        //dependency is added for now since tear down (or app isolation) is not helping clear the configuration data
-        $this->assertEquals('@', $this->currencySymbolModel->getCurrencySymbol('EUR'));
     }
 
     public function testGetCurrencySymbolNonExistent()

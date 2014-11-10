@@ -107,10 +107,10 @@ class FormTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFormExistInCustomGroup()
     {
-        $builder = Bootstrap::getObjectManager()->create('Magento\Framework\Service\V1\Data\FilterBuilder');
-        /** @var \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder $searchCriteria */
+        $builder = Bootstrap::getObjectManager()->create('Magento\Framework\Api\FilterBuilder');
+        /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteria */
         $searchCriteria = Bootstrap::getObjectManager()
-            ->create('Magento\Framework\Service\V1\Data\SearchCriteriaBuilder')
+            ->create('Magento\Framework\Api\SearchCriteriaBuilder')
             ->addFilter([$builder->setField('code')->setValue('custom_group')->create()])->create();
         /** @var CustomerGroup $customerGroup */
         $customerGroup = $this->customerGroupService->searchGroups($searchCriteria)->getItems()[0];

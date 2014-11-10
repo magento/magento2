@@ -23,57 +23,115 @@
  */
 namespace Magento\Customer\Model\Attribute\Data;
 
+use Magento\Eav\Model\AttributeDataFactory;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Logger;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface as MagentoTimezone;
+use Magento\Directory\Helper\Data as DirectoryHelper;
+
 /**
  * Customer Address Postal/Zip Code Attribute Data Model
  * This Data Model Has to Be Set Up in additional EAV attribute table
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Postcode extends \Magento\Eav\Model\Attribute\Data\Text
+class Postcode extends \Magento\Eav\Model\Attribute\Data\AbstractData
 {
+    /**
+     * @var \Magento\Directory\Helper\Data
+     */
+    protected $directoryHelper;
+
+    /**
+     * @param MagentoTimezone $localeDate
+     * @param Logger $logger
+     * @param ResolverInterface $localeResolver
+     * @param DirectoryHelper $directoryHelper
+     */
+    public function __construct(
+        MagentoTimezone $localeDate,
+        Logger $logger,
+        ResolverInterface $localeResolver,
+        DirectoryHelper $directoryHelper
+    ) {
+        $this->directoryHelper = $directoryHelper;
+        parent::__construct($localeDate, $logger, $localeResolver);
+    }
+
     /**
      * Validate postal/zip code
      * Return true and skip validation if country zip code is optional
      *
      * @param array|string $value
-     * @return boolean|array
-     */
-    /**
-     * Directory data
-     *
-     * @var \Magento\Directory\Helper\Data
-     */
-    protected $_directoryData = null;
-
-    /**
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Framework\Logger $logger
-     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
-     * @param \Magento\Framework\Stdlib\String $stringHelper
-     * @param \Magento\Directory\Helper\Data $directoryData
-     */
-    public function __construct(
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Framework\Logger $logger,
-        \Magento\Framework\Locale\ResolverInterface $localeResolver,
-        \Magento\Framework\Stdlib\String $stringHelper,
-        \Magento\Directory\Helper\Data $directoryData
-    ) {
-        $this->_directoryData = $directoryData;
-        parent::__construct($localeDate, $logger, $localeResolver, $stringHelper);
-    }
-
-    /**
-     * @param string $value
-     * @return true|string[]
+     * @return array|bool
      */
     public function validateValue($value)
     {
+        $attribute = $this->getAttribute();
+        $label = __($attribute->getStoreLabel());
+
         $countryId = $this->getExtractedData('country_id');
-        $optionalZip = $this->_directoryData->getCountriesWithOptionalZip();
-        if (!in_array($countryId, $optionalZip)) {
-            return parent::validateValue($value);
+        if ($this->directoryHelper->isZipCodeOptional($countryId)) {
+            return true;
         }
-        return true;
+
+        $errors = [];
+        if (empty($value) && $value !== '0') {
+            $errors[] = __('"%1" is a required value.', $label);
+        }
+        if (count($errors) == 0) {
+            return true;
+        }
+        return $errors;
+    }
+
+    /**
+     * Extract data from request and return value
+     *
+     * @param RequestInterface $request
+     * @return array|string
+     */
+    public function extractValue(RequestInterface $request)
+    {
+        $value = $this->_getRequestValue($request);
+        return $this->_applyInputFilter($value);
+    }
+
+    /**
+     * Export attribute value to entity model
+     *
+     * @param array|string $value
+     * @return $this
+     */
+    public function compactValue($value)
+    {
+        if ($value !== false) {
+            $this->getEntity()->setDataUsingMethod($this->getAttribute()->getAttributeCode(), $value);
+        }
+        return $this;
+    }
+
+    /**
+     * Restore attribute value from SESSION to entity model
+     *
+     * @param array|string $value
+     * @return $this
+     */
+    public function restoreValue($value)
+    {
+        return $this->compactValue($value);
+    }
+
+    /**
+     * Return formated attribute value from entity model
+     *
+     * @param string $format
+     * @return string|array
+     */
+    public function outputValue($format = AttributeDataFactory::OUTPUT_FORMAT_TEXT)
+    {
+        $value = $this->getEntity()
+            ->getData($this->getAttribute()->getAttributeCode());
+        $value = $this->_applyOutputFilter($value);
+        return $value;
     }
 }

@@ -157,15 +157,15 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('/', $this->_object->getApplicationUrlPath());
     }
 
-    public function testGetAdminOptions()
-    {
-        $expectedOptions = array('frontname' => 'backend', 'username' => 'admin', 'password' => 'password1');
-        $this->assertEquals($expectedOptions, $this->_object->getAdminOptions());
-    }
-
     public function testGetInstallOptions()
     {
-        $expectedOptions = array('option1' => 'value 1', 'option2' => 'value 2');
+        $expectedOptions = array(
+            'option1' => 'value 1',
+            'option2' => 'value 2',
+            'backend_frontname' => 'backend',
+            'admin_username' => 'admin',
+            'admin_password' => 'password1',
+        );
         $this->assertEquals($expectedOptions, $this->_object->getInstallOptions());
     }
 

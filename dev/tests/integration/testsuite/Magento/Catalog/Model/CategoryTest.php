@@ -33,11 +33,6 @@ namespace Magento\Catalog\Model;
 class CategoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\TestFramework\ObjectManager
-     */
-    protected static $_objectManager;
-
-    /**
      * @var \Magento\Store\Model\Store
      */
     protected $_store;
@@ -47,26 +42,13 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $_model;
 
-    public static function setUpBeforeClass()
-    {
-        self::$_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-
-        if (\Magento\TestFramework\Helper\Bootstrap::getInstance()->getDbVendorName() != 'mysql') {
-            self::markTestIncomplete('Bug MAGETWO-8513');
-        }
-    }
-
-    public static function tearDownAfterClass()
-    {
-        self::$_objectManager = null;
-    }
-
     protected function setUp()
     {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $storeManager \Magento\Framework\StoreManagerInterface */
-        $storeManager = self::$_objectManager->get('Magento\Framework\StoreManagerInterface');
+        $storeManager = $objectManager->get('Magento\Framework\StoreManagerInterface');
         $this->_store = $storeManager->getStore();
-        $this->_model = self::$_objectManager->create('Magento\Catalog\Model\Category');
+        $this->_model = $objectManager->create('Magento\Catalog\Model\Category');
     }
 
     public function testGetUrlInstance()

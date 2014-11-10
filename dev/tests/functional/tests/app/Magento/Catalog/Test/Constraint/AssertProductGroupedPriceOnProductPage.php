@@ -69,7 +69,7 @@ class AssertProductGroupedPriceOnProductPage extends AbstractConstraint implemen
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
 
         //Process assertions
-        $this->assertPrice($product, $catalogProductView);
+        $this->assertPrice($product, $catalogProductView->getViewBlock());
     }
 
     /**
@@ -87,19 +87,14 @@ class AssertProductGroupedPriceOnProductPage extends AbstractConstraint implemen
      * Verify product special price on product view page
      *
      * @param FixtureInterface $product
-     * @param CatalogProductView $catalogProductView
-     * @param string $block [optional]
+     * @param View $productViewBlock
      * @param string $customerGroup [optional]
      * @return void
      */
-    public function assertPrice(
-        FixtureInterface $product,
-        CatalogProductView $catalogProductView,
-        $block = '',
-        $customerGroup = 'NOT LOGGED IN'
-    ) {
+    public function assertPrice(FixtureInterface $product, View $productViewBlock, $customerGroup = 'NOT LOGGED IN')
+    {
         $this->customerGroup = $customerGroup;
-        $groupPrice = $this->getGroupedPrice($catalogProductView->{'get' . $block . 'ViewBlock'}(), $product);
+        $groupPrice = $this->getGroupedPrice($productViewBlock, $product);
         \PHPUnit_Framework_Assert::assertEquals($groupPrice['fixture'], $groupPrice['onPage'], $this->errorMessage);
     }
 

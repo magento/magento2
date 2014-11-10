@@ -51,6 +51,10 @@ class Index extends \Magento\Rss\Controller\Feed
             throw new NotFoundException($e->getMessage());
         }
 
+        if ($provider->isAuthRequired() && !$this->auth()) {
+            return;
+        }
+
         if (!$provider->isAllowed()) {
             throw new NotFoundException();
         }

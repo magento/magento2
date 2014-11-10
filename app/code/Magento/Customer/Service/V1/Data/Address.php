@@ -25,7 +25,7 @@
  */
 namespace Magento\Customer\Service\V1\Data;
 
-class Address extends \Magento\Framework\Service\Data\AbstractExtensibleObject
+class Address extends \Magento\Framework\Api\AbstractExtensibleObject
 {
     // FIXME: This constant relates to a quote address object, not this Data Object
     const ADDRESS_TYPE_BILLING = 'billing';

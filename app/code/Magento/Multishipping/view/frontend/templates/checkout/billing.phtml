@@ -43,34 +43,36 @@
                 </div>
             </div>
             <div class="box box-billing-method">
-                <strong class="box-title"><span><?php echo __('Payment Method') ?></span></strong>
-                <div class="box-content">
-                    <?php echo $this->getChildHtml('payment_methods_before') ?>
-                    <?php /* Payment methods forms list */ ?>
-                    <dl class="items methods-payment" id="payment-methods">
-                        <?php
-                        $_methods       = $this->getMethods();
-                        $_methodsCount  = count($_methods);
-                        ?>
-                        <?php foreach ($_methods as $_method): $_code = $_method->getCode() ?>
-                            <dt class="item-title">
-                                <?php if ($_methodsCount > 1): ?>
-                                    <input type="radio" id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" name="payment[method]" title="<?php echo $this->escapeHtml($_method->getTitle()) ?>" <?php if ($this->getSelectedMethodCode() == $_code): ?> checked="checked"<?php endif; ?> class="radio"/>
-                                <?php else : ?>
-                                    <input type="radio" id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" name="payment[method]" checked="checked" class="radio solo method"/>
+                <fieldset class="fieldset">
+                    <legend class="legend box-title"><span><?php echo __('Payment Method') ?></span></legend><br>
+                    <div class="box-content">
+                        <?php echo $this->getChildHtml('payment_methods_before') ?>
+                        <?php /* Payment methods forms list */ ?>
+                        <dl class="items methods-payment" id="payment-methods">
+                            <?php
+                            $_methods       = $this->getMethods();
+                            $_methodsCount  = count($_methods);
+                            ?>
+                            <?php foreach ($_methods as $_method): $_code = $_method->getCode() ?>
+                                <dt class="item-title">
+                                    <?php if ($_methodsCount > 1): ?>
+                                        <input type="radio" id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" name="payment[method]" title="<?php echo $this->escapeHtml($_method->getTitle()) ?>" <?php if ($this->getSelectedMethodCode() == $_code): ?> checked="checked"<?php endif; ?> class="radio"/>
+                                    <?php else : ?>
+                                        <input type="radio" id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" name="payment[method]" checked="checked" class="radio solo method"/>
+                                    <?php endif; ?>
+                                    <label for="p_method_<?php echo $_code ?>"><?php echo $this->escapeHtml($_method->getTitle()) ?></label>
+                                </dt>
+                                <?php if ($html = $this->getChildHtml('payment.method.' . $_code)) : ?>
+                                    <dd class="item-content">
+                                        <?php echo $html; ?>
+                                    </dd>
                                 <?php endif; ?>
-                                <label for="p_method_<?php echo $_code ?>"><?php echo $this->escapeHtml($_method->getTitle()) ?></label>
-                            </dt>
-                            <?php if ($html = $this->getChildHtml('payment.method.' . $_code)) : ?>
-                                <dd class="item-content">
-                                    <?php echo $html; ?>
-                                </dd>
-                            <?php endif; ?>
-                        <?php endforeach; ?>
-                    </dl>
-                    <?php echo $this->getChildHtml('payment_methods_after') ?>
-                    <?php echo $this->getChildHtml('checkout_billing_items') ?>
-                </div>
+                            <?php endforeach; ?>
+                        </dl>
+                        <?php echo $this->getChildHtml('payment_methods_after') ?>
+                        <?php echo $this->getChildHtml('checkout_billing_items') ?>
+                    </div>
+                </fieldset>
             </div>
         </div>
     </div>

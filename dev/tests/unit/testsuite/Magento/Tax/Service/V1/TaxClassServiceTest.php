@@ -28,7 +28,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\Tax\Service\V1\Data\TaxClass;
 use Magento\Tax\Service\V1\Data\TaxClassBuilder;
 use Magento\Tax\Service\V1\Data\TaxClassKey;
-use Magento\Framework\Service\V1\Data\SearchCriteria;
+use Magento\Framework\Api\SearchCriteria;
 
 /**
  * Test for \Magento\Tax\Service\V1\TaxClassService
@@ -50,7 +50,7 @@ class TaxClassServiceTest extends \PHPUnit_Framework_TestCase
     private $searchResultBuilder;
 
     /**
-     * @var \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
     private $searchCriteriaBuilderMock;
 
@@ -85,7 +85,7 @@ class TaxClassServiceTest extends \PHPUnit_Framework_TestCase
     private $objectManager;
 
     /**
-     * @var \Magento\Framework\Service\V1\Data\SortOrderBuilder;
+     * @var \Magento\Framework\Api\SortOrderBuilder;
      */
     private $sortOrderBuilder;
 
@@ -112,7 +112,7 @@ class TaxClassServiceTest extends \PHPUnit_Framework_TestCase
         $this->taxClassService = $this->createService();
 
         $this->sortOrderBuilder = $this->objectManager->getObject(
-            'Magento\Framework\Service\V1\Data\SortOrderBuilder'
+            'Magento\Framework\Api\SortOrderBuilder'
         );
     }
 
@@ -442,7 +442,7 @@ class TaxClassServiceTest extends \PHPUnit_Framework_TestCase
             $this->searchCriteriaBuilderMock->expects($this->exactly(2))
                 ->method('addFilter')
                 ->will($this->returnValue($this->searchCriteriaBuilderMock));
-            /** @var \Magento\Framework\Service\V1\Data\SearchCriteria $searchCriteria */
+            /** @var \Magento\Framework\Api\SearchCriteria $searchCriteria */
             $searchCriteria = $this->createSearchCriteria();
             $this->searchCriteriaBuilderMock->expects($this->once())
                 ->method('create')
@@ -546,7 +546,7 @@ class TaxClassServiceTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->searchCriteriaBuilderMock = $this->getMockBuilder(
-            'Magento\Framework\Service\V1\Data\SearchCriteriaBuilder'
+            'Magento\Framework\Api\SearchCriteriaBuilder'
         )->disableOriginalConstructor()
             ->getMock();
 
@@ -565,21 +565,21 @@ class TaxClassServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Magento\Framework\Service\V1\Data\SearchCriteria
+     * @return \Magento\Framework\Api\SearchCriteria
      */
     private function createSearchCriteria()
     {
-        /** @var \Magento\Framework\Service\V1\Data\Search\FilterGroupBuilder $filterGroupBuilder */
+        /** @var \Magento\Framework\Api\Search\FilterGroupBuilder $filterGroupBuilder */
         $filterGroupBuilder = $this->objectManager->getObject(
-            'Magento\Framework\Service\V1\Data\Search\FilterGroupBuilder'
+            'Magento\Framework\Api\Search\FilterGroupBuilder'
         );
-        /** @var \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder $searchCriteriaBuilder */
+        /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder */
         $searchCriteriaBuilder = $this->objectManager->getObject(
-            'Magento\Framework\Service\V1\Data\SearchCriteriaBuilder',
+            'Magento\Framework\Api\SearchCriteriaBuilder',
             ['filterGroupBuilder' => $filterGroupBuilder]
         );
-        /** @var \Magento\Framework\Service\V1\Data\FilterBuilder $filterBuilder */
-        $filterBuilder = $this->objectManager->getObject('Magento\Framework\Service\V1\Data\FilterBuilder');
+        /** @var \Magento\Framework\Api\FilterBuilder $filterBuilder */
+        $filterBuilder = $this->objectManager->getObject('Magento\Framework\Api\FilterBuilder');
         $productTaxClass = [TaxClass::KEY_NAME => 'Taxable Goods', TaxClass::KEY_TYPE => 'PRODUCT'];
         $customerTaxClass = [TaxClass::KEY_NAME => 'Retail Customer', TaxClass::KEY_TYPE => 'CUSTOMER'];
 
@@ -602,11 +602,11 @@ class TaxClassServiceTest extends \PHPUnit_Framework_TestCase
          */
         $searchCriteriaBuilder->addFilter([$filter1, $filter2]);
         $searchCriteriaBuilder->addFilter([$filter3, $filter4]);
-        /**@var \Magento\Framework\Service\V1\Data\SortOrderBuilder $sortOrderBuilder */
+        /**@var \Magento\Framework\Api\SortOrderBuilder $sortOrderBuilder */
         $sortOrderBuilder = $this->objectManager->getObject(
-            'Magento\Framework\Service\V1\Data\SortOrderBuilder'
+            'Magento\Framework\Api\SortOrderBuilder'
         );
-        /** @var \Magento\Framework\Service\V1\Data\SortOrder $sortOrder */
+        /** @var \Magento\Framework\Api\SortOrder $sortOrder */
         $sortOrder = $sortOrderBuilder->setField('class_name')->setDirection(SearchCriteria::SORT_ASC)->create();
         $searchCriteria = $searchCriteriaBuilder
             ->setCurrentPage(1)

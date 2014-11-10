@@ -23,7 +23,9 @@
  */
 
 require __DIR__ . '/../../../../app/autoload.php';
-(new \Magento\Framework\Autoload\IncludePath())->addIncludePath(
+$includePath = new \Magento\Framework\Autoload\IncludePath();
+spl_autoload_register([$includePath, 'load']);
+$includePath->addIncludePath(
     array(__DIR__, dirname(__DIR__) . '/testsuite', BP . '/lib/internal')
 );
 \Magento\TestFramework\Utility\Files::setInstance(new \Magento\TestFramework\Utility\Files(BP));

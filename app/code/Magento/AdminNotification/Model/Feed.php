@@ -57,8 +57,16 @@ class Feed extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @var \Magento\Framework\HTTP\Adapter\CurlFactory
+     *
      */
     protected $curlFactory;
+
+    /**
+     * Application arguments
+     *
+     * @var \Magento\Framework\App\Arguments
+     */
+    protected $_args;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -66,6 +74,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Backend\App\ConfigInterface $backendConfig
      * @param \Magento\AdminNotification\Model\InboxFactory $inboxFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\App\Arguments $args
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param \Magento\Framework\HTTP\Adapter\curlFactory $curlFactory
      * @param array $data
@@ -76,6 +85,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
         \Magento\Backend\App\ConfigInterface $backendConfig,
         \Magento\AdminNotification\Model\InboxFactory $inboxFactory,
         \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory,
+        \Magento\Framework\App\Arguments $args,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -84,6 +94,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
         $this->_backendConfig = $backendConfig;
         $this->_inboxFactory = $inboxFactory;
         $this->curlFactory = $curlFactory;
+        $this->_args = $args;
     }
 
     /**
@@ -124,7 +135,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
 
         $feedXml = $this->getFeedData();
 
-        $installDate = $this->_appState->getInstallDate();
+        $installDate = strtotime($this->_args->get('install_date'));
 
         if ($feedXml && $feedXml->channel && $feedXml->channel->item) {
             foreach ($feedXml->channel->item as $item) {

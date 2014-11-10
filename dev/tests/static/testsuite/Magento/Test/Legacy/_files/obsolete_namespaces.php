@@ -62,7 +62,7 @@ return [
     ['Magento\Shell', 'Magento\Framework\Shell'],
     ['Magento\Encryption', 'Magento\Framework\Encryption'],
     ['Magento\Option', 'Magento\Framework\Option'],
-    ['Magento\Service', 'Magento\Framework\Service'],
+    ['Magento\Service', 'Magento\Framework\Api'],
     ['Magento\System', 'Magento\Framework\System'],
     ['Magento\Url', 'Magento\Framework\Url'],
     ['Magento\Mview', 'Magento\Framework\Mview'],

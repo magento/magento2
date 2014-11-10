@@ -51,32 +51,24 @@ class Website implements \Magento\Framework\App\Config\Scope\ReaderInterface
     protected $_websiteFactory;
 
     /**
-     * @var \Magento\Framework\App\State
-     */
-    protected $_appState;
-
-    /**
      * @param \Magento\Framework\App\Config\Initial $initialConfig
      * @param \Magento\Framework\App\Config\ScopePool $scopePool
      * @param \Magento\Framework\App\Config\Scope\Converter $converter
      * @param \Magento\Store\Model\Resource\Config\Collection\ScopedFactory $collectionFactory
      * @param \Magento\Store\Model\WebsiteFactory $websiteFactory
-     * @param \Magento\Framework\App\State $appState
      */
     public function __construct(
         \Magento\Framework\App\Config\Initial $initialConfig,
         \Magento\Framework\App\Config\ScopePool $scopePool,
         \Magento\Framework\App\Config\Scope\Converter $converter,
         \Magento\Store\Model\Resource\Config\Collection\ScopedFactory $collectionFactory,
-        \Magento\Store\Model\WebsiteFactory $websiteFactory,
-        \Magento\Framework\App\State $appState
+        \Magento\Store\Model\WebsiteFactory $websiteFactory
     ) {
         $this->_initialConfig = $initialConfig;
         $this->_scopePool = $scopePool;
         $this->_converter = $converter;
         $this->_collectionFactory = $collectionFactory;
         $this->_websiteFactory = $websiteFactory;
-        $this->_appState = $appState;
     }
 
     /**
@@ -92,22 +84,21 @@ class Website implements \Magento\Framework\App\Config\Scope\ReaderInterface
             $this->_initialConfig->getData("websites|{$code}")
         );
 
-        if ($this->_appState->isInstalled()) {
-            $website = $this->_websiteFactory->create();
-            $website->load($code);
-            $collection = $this->_collectionFactory->create(
-                array('scope' => \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES, 'scopeId' => $website->getId())
-            );
-            $dbWebsiteConfig = array();
-            foreach ($collection as $configValue) {
-                $dbWebsiteConfig[$configValue->getPath()] = $configValue->getValue();
-            }
-            $dbWebsiteConfig = $this->_converter->convert($dbWebsiteConfig);
-
-            if (count($dbWebsiteConfig)) {
-                $config = array_replace_recursive($config, $dbWebsiteConfig);
-            }
+        $website = $this->_websiteFactory->create();
+        $website->load($code);
+        $collection = $this->_collectionFactory->create(
+            array('scope' => \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES, 'scopeId' => $website->getId())
+        );
+        $dbWebsiteConfig = array();
+        foreach ($collection as $configValue) {
+            $dbWebsiteConfig[$configValue->getPath()] = $configValue->getValue();
         }
+        $dbWebsiteConfig = $this->_converter->convert($dbWebsiteConfig);
+
+        if (count($dbWebsiteConfig)) {
+            $config = array_replace_recursive($config, $dbWebsiteConfig);
+        }
+
         return $config;
     }
 }

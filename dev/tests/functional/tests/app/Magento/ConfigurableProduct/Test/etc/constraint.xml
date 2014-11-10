@@ -54,4 +54,10 @@
     <assertConfigurableProductInCustomerWishlistOnBackendGrid module="Magento_ConfigurableProduct">
         <severeness>low</severeness>
     </assertConfigurableProductInCustomerWishlistOnBackendGrid>
+    <assertConfigurableAttributesAbsentOnProductPage module="Magento_ConfigurableProduct">
+        <severeness>low</severeness>
+    </assertConfigurableAttributesAbsentOnProductPage>
+    <assertConfigurableAttributesBlockIsAbsentOnProductPage module="Magento_ConfigurableProduct">
+        <severeness>low</severeness>
+    </assertConfigurableAttributesBlockIsAbsentOnProductPage>
 </constraint>

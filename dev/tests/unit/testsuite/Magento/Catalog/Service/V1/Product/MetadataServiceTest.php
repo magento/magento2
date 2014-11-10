@@ -38,32 +38,32 @@ class MetadataServiceTest extends \PHPUnit_Framework_TestCase
     private $metadataService;
 
     /**
-     * @var \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
     private $searchCriteriaBuilder;
 
     /**
-     * @var \Magento\Framework\Service\V1\Data\FilterBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
     private $filterBuilder;
 
     /**
-     * @var \Magento\Framework\Service\V1\Data\Filter|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\Filter|\PHPUnit_Framework_MockObject_MockObject
      */
     private $filter;
 
     /**
-     * @var \Magento\Framework\Service\V1\Data\SearchCriteria|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\SearchCriteria|\PHPUnit_Framework_MockObject_MockObject
      */
     private $searchCriteria;
 
     /**
-     * @var \Magento\Framework\Service\V1\Data\SearchResults|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\SearchResults|\PHPUnit_Framework_MockObject_MockObject
      */
     private $searchResult;
 
     /**
-     * @var \Magento\Framework\Service\Config\MetadataConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\Config\MetadataConfig|\PHPUnit_Framework_MockObject_MockObject
      */
     private $metadataConfig;
 
@@ -71,7 +71,7 @@ class MetadataServiceTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new ObjectManager($this);
 
-        $this->metadataConfig = $this->getMockBuilder('Magento\Framework\Service\Config\MetadataConfig')
+        $this->metadataConfig = $this->getMockBuilder('Magento\Framework\Api\Config\MetadataConfig')
             ->setMethods(['getCustomAttributesMetadata'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -81,25 +81,25 @@ class MetadataServiceTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->searchCriteriaBuilder = $this->getMockBuilder('Magento\Framework\Service\V1\Data\SearchCriteriaBuilder')
+        $this->searchCriteriaBuilder = $this->getMockBuilder('Magento\Framework\Api\SearchCriteriaBuilder')
             ->setMethods(['addFilter', 'create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->filterBuilder = $this->getMockBuilder('Magento\Framework\Service\V1\Data\FilterBuilder')
+        $this->filterBuilder = $this->getMockBuilder('Magento\Framework\Api\FilterBuilder')
             ->setMethods(['setField', 'setValue', 'create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->filter = $this->getMockBuilder('Magento\Framework\Service\V1\Data\Filter')
+        $this->filter = $this->getMockBuilder('Magento\Framework\Api\Filter')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->searchCriteria = $this->getMockBuilder('Magento\Framework\Service\V1\Data\SearchCriteria')
+        $this->searchCriteria = $this->getMockBuilder('Magento\Framework\Api\SearchCriteria')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->searchResult = $this->getMockBuilder('Magento\Framework\Service\V1\Data\SearchResults')
+        $this->searchResult = $this->getMockBuilder('Magento\Framework\Api\SearchResults')
             ->setMethods(['getItems'])
             ->disableOriginalConstructor()
             ->getMock();

@@ -24,8 +24,8 @@
 
 namespace Magento\Catalog\Service\V1;
 
-use Magento\Framework\Service\V1\Data\SearchCriteria;
-use Magento\Framework\Service\V1\Data\SearchCriteriaBuilder;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 
 /**
  * Test for \Magento\Catalog\Service\V1\ProductService
@@ -115,10 +115,10 @@ class ProductServiceTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $filterGroupBuilder = $this->_objectManager
-            ->getObject('Magento\Framework\Service\V1\Data\Search\FilterGroupBuilder');
+            ->getObject('Magento\Framework\Api\Search\FilterGroupBuilder');
         /** @var SearchCriteriaBuilder $searchBuilder */
         $this->_searchBuilder = $this->_objectManager->getObject(
-            'Magento\Framework\Service\V1\Data\SearchCriteriaBuilder',
+            'Magento\Framework\Api\SearchCriteriaBuilder',
             ['filterGroupBuilder' => $filterGroupBuilder]
         );
     }
@@ -237,10 +237,10 @@ class ProductServiceTest extends \PHPUnit_Framework_TestCase
         );
 
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $filterBuilder = $helper->getObject('\Magento\Framework\Service\V1\Data\FilterBuilder');
+        $filterBuilder = $helper->getObject('\Magento\Framework\Api\FilterBuilder');
         $filter = $filterBuilder->setField('price')->setValue('10.000')->setConditionType('eq')->create();
         $this->_searchBuilder->addFilter([$filter]);
-        $sortOrderBuilder = $helper->getObject('\Magento\Framework\Service\V1\Data\SortOrderBuilder');
+        $sortOrderBuilder = $helper->getObject('\Magento\Framework\Api\SortOrderBuilder');
         $sortOrder = $sortOrderBuilder
             ->setField('price')
             ->setDirection(SearchCriteria::SORT_ASC)

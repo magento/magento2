@@ -3,18 +3,18 @@
     "description": "N/A",
     "require": {
         "php": "~5.4.11|~5.5.0",
-        "magento/module-store": "0.1.0-alpha102",
-        "magento/module-catalog": "0.1.0-alpha102",
-        "magento/module-core": "0.1.0-alpha102",
-        "magento/module-eav": "0.1.0-alpha102",
-        "magento/module-cms": "0.1.0-alpha102",
-        "magento/module-backend": "0.1.0-alpha102",
-        "magento/module-catalog-url-rewrite": "0.1.0-alpha102",
-        "magento/framework": "0.1.0-alpha102",
+        "magento/module-store": "0.1.0-alpha103",
+        "magento/module-catalog": "0.1.0-alpha103",
+        "magento/module-core": "0.1.0-alpha103",
+        "magento/module-eav": "0.1.0-alpha103",
+        "magento/module-cms": "0.1.0-alpha103",
+        "magento/module-backend": "0.1.0-alpha103",
+        "magento/module-catalog-url-rewrite": "0.1.0-alpha103",
+        "magento/framework": "0.1.0-alpha103",
         "magento/magento-composer-installer": "*"
     },
     "type": "magento2-module",
-    "version": "0.1.0-alpha102",
+    "version": "0.1.0-alpha103",
     "extra": {
         "map": [
             [

@@ -26,8 +26,8 @@ namespace Magento\Customer\Service\V1\Data;
 use Magento\Customer\Service\V1\Data\Address;
 use Magento\Customer\Service\V1\Data\AddressBuilder;
 use Magento\Customer\Service\V1\Data\RegionBuilder;
-use Magento\Framework\Service\Data\AttributeValue;
-use Magento\Framework\Service\Data\AttributeValueBuilder;
+use Magento\Framework\Api\AttributeValue;
+use Magento\Framework\Api\AttributeValueBuilder;
 
 class AddressTest extends \PHPUnit_Framework_TestCase
 {
@@ -94,7 +94,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Service\V1\CustomerMetadataService */
     private $_customerMetadataService;
 
-    /** @var \Magento\Framework\Service\Data\AttributeValueBuilder */
+    /** @var \Magento\Framework\Api\AttributeValueBuilder */
     private $_valueBuilder;
 
     /**
@@ -125,7 +125,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             )
         );
         $this->_valueBuilder = $this->objectManagerHelper
-            ->getObject('Magento\Framework\Service\Data\AttributeValueBuilder');
+            ->getObject('Magento\Framework\Api\AttributeValueBuilder');
         $this->_addressBuilder = $this->objectManagerHelper->getObject(
             'Magento\Customer\Service\V1\Data\AddressBuilder',
             [

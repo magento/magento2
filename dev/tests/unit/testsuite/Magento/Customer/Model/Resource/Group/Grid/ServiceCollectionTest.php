@@ -24,7 +24,7 @@
 
 namespace Magento\Customer\Model\Resource\Group\Grid;
 
-use Magento\Framework\Service\V1\Data\SearchCriteria;
+use Magento\Framework\Api\SearchCriteria;
 
 /**
  * Unit test for \Magento\Customer\Model\Resource\Group\Grid\ServiceCollection
@@ -34,13 +34,13 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\TestFramework\Helper\ObjectManager */
     protected $objectManager;
 
-    /** @var \Magento\Framework\Service\V1\Data\FilterBuilder */
+    /** @var \Magento\Framework\Api\FilterBuilder */
     protected $filterBuilder;
 
-    /** @var \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder */
+    /** @var \Magento\Framework\Api\SearchCriteriaBuilder */
     protected $searchCriteriaBuilder;
 
-    /** @var \Magento\Framework\Service\V1\Data\SortOrderBuilder */
+    /** @var \Magento\Framework\Api\SortOrderBuilder */
     protected $sortOrderBuilder;
 
     /** @var \Magento\Customer\Service\V1\Data\SearchResults */
@@ -55,16 +55,16 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->filterBuilder = $this->objectManager->getObject('\Magento\Framework\Service\V1\Data\FilterBuilder');
+        $this->filterBuilder = $this->objectManager->getObject('\Magento\Framework\Api\FilterBuilder');
         $filterGroupBuilder = $this->objectManager
-            ->getObject('Magento\Framework\Service\V1\Data\Search\FilterGroupBuilder');
-        /** @var \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder $searchBuilder */
+            ->getObject('Magento\Framework\Api\Search\FilterGroupBuilder');
+        /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchBuilder */
         $this->searchCriteriaBuilder = $this->objectManager->getObject(
-            'Magento\Framework\Service\V1\Data\SearchCriteriaBuilder',
+            'Magento\Framework\Api\SearchCriteriaBuilder',
             ['filterGroupBuilder' => $filterGroupBuilder]
         );
         $this->sortOrderBuilder = $this->objectManager->getObject(
-            '\Magento\Framework\Service\V1\Data\SortOrderBuilder'
+            '\Magento\Framework\Api\SortOrderBuilder'
         );
         $this->groupServiceMock = $this->getMockBuilder('\Magento\Customer\Service\V1\CustomerGroupServiceInterface')
             ->getMock();

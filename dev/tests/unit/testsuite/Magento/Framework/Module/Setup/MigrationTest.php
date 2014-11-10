@@ -259,7 +259,7 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface'),
             $this->getMock('Magento\Framework\Module\ModuleListInterface'),
             $this->getMock('Magento\Framework\Module\Dir\Reader', array(), array(), '', false, false),
-            $this->getMock('Magento\Install\Model\Resource\Resource', array(), array(), '', false),
+            $this->getMock('Magento\Framework\Module\Resource', array(), array(), '', false),
             $this->getMock('Magento\Core\Model\Resource\Theme\CollectionFactory', array(), array(), '', false),
             $this->getMock('Magento\Core\Model\Theme\CollectionFactory', array(), array(), '', false),
             $this->getMock('Magento\Framework\Module\Setup\MigrationFactory', array(), array(), '', false),

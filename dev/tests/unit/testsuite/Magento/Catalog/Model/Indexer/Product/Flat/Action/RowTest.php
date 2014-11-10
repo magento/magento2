@@ -128,5 +128,16 @@ class RowTest extends \PHPUnit_Framework_TestCase
         $this->flatItemWriter->expects($this->once())->method('write')->with('store_id_1', 'product_id_1');
         $this->model->execute('product_id_1');
     }
+
+    public function testExecuteWithExistingFlatTablesCreatesTables()
+    {
+        $this->productIndexerHelper->expects($this->any())->method('getFlatTableName')
+            ->will($this->returnValue('store_flat_table'));
+        $this->connection->expects($this->any())->method('isTableExists')->with('store_flat_table')
+            ->will($this->returnValue(true));
+        $this->flatItemEraser->expects($this->once())->method('removeDeletedProducts');
+        $this->flatTableBuilder->expects($this->never())->method('build')->with('store_id_1', array('product_id_1'));
+        $this->model->execute('product_id_1');
+    }
 }
 

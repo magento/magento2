@@ -154,7 +154,7 @@ class GroupTest extends \Magento\Backend\Utility\Controller
         /** @var \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService */
         $groupService = Bootstrap::getObjectManager()
             ->get('Magento\Customer\Service\V1\CustomerGroupServiceInterface');
-        $customerGroupData = \Magento\Framework\Service\SimpleDataObjectConverter::toFlatArray(
+        $customerGroupData = \Magento\Framework\Api\SimpleDataObjectConverter::toFlatArray(
             $groupService->getGroup($groupId)
         );
         ksort($customerGroupData);

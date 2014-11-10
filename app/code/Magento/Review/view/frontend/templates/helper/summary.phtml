@@ -26,17 +26,17 @@
 <?php $urlForm = $this->getReviewsUrl() . '#review-form'; ?>
 <?php if ($this->getReviewsCount()): ?>
 <?php $rating = $this->getRatingSummary(); ?>
-<div class="product-reviews-summary<?php echo !$rating ? ' no-rating' :''?>">
+<div class="product-reviews-summary<?php echo !$rating ? ' no-rating' :''?>" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
     <?php if ($rating):?>
     <div class="rating-summary">
          <span class="label"><span><?php echo __('Rating') ?>:</span></span>
          <div class="rating-result" title="<?php echo $rating; ?>%">
-             <span style="width:<?php echo $rating; ?>%"><span><?php echo $rating; ?>%</span></span>
+             <span style="width:<?php echo $rating; ?>%"><span><span itemprop="ratingValue"><?php echo $rating; ?></span>% of <span itemprop="bestRating">100</span></span></span>
          </div>
      </div>
     <?php endif;?>
     <div class="reviews-actions">
-        <a class="action view" href="<?php echo $url ?>"><?php echo $this->getReviewsCount() ?>&nbsp;<span><?php echo ($this->getReviewsCount() == 1) ? __('Review') : __('Reviews') ?></span></a>
+        <a class="action view" href="<?php echo $url ?>"><span itemprop="reviewCount"><?php echo $this->getReviewsCount() ?></span>&nbsp;<span><?php echo ($this->getReviewsCount() == 1) ? __('Review') : __('Reviews') ?></span></a>
         <a class="action add" href="<?php echo $urlForm ?>"><?php echo __('Add Your Review') ?></a>
     </div>
 </div>

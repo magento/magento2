@@ -24,7 +24,7 @@
 namespace Magento\Webapi\Helper;
 
 use Magento\Integration\Controller\Adminhtml\Integration as IntegrationController;
-use Magento\Framework\Service\Data\AbstractExtensibleObject;
+use Magento\Framework\Api\AbstractExtensibleObject;
 
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -107,6 +107,20 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                 $serviceVersion = $matches[3];
                 $serviceNameParts[] = $serviceVersion;
             }
+            return $serviceNameParts;
+        } elseif (preg_match(\Magento\Webapi\Model\Config::API_PATTERN, $className, $matches)) {
+            $moduleNamespace = $matches[1];
+            $moduleName = $matches[2];
+            $moduleNamespace = ($moduleNamespace == 'Magento') ? '' : $moduleNamespace;
+            $serviceNameParts = explode('\\', trim($matches[3], '\\'));
+            if ($moduleName == $serviceNameParts[0]) {
+                /** Avoid duplication of words in service name */
+                $moduleName = '';
+            }
+            $parentServiceName = $moduleNamespace . $moduleName . array_shift($serviceNameParts);
+            array_unshift($serviceNameParts, $parentServiceName);
+            //Add temporary dummy version
+            $serviceNameParts[] = 'V1';
             return $serviceNameParts;
         }
         throw new \InvalidArgumentException(sprintf('The service interface name "%s" is invalid.', $className));

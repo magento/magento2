@@ -56,6 +56,8 @@ define([
             var self = this;
             $('[data-action="add-to-wishlist"]').each(function(index, element) {
                 var params = $(element).data('post');
+                if (!params)
+                    params = {};
                 params.data = $.extend({}, params.data, dataToAdd, {'qty': $(self.options.qtyInfo).val()});
                 $(element).data('post', params);
             });

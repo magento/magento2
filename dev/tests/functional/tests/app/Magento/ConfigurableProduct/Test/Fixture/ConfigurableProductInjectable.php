@@ -32,7 +32,7 @@ use Mtf\Repository\RepositoryFactory;
 use Mtf\System\Event\EventManagerInterface;
 
 /**
- * Class ConfigurableProduct
+ * Configurable product fixture.
  *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -99,13 +99,18 @@ class ConfigurableProductInjectable extends InjectableFixture
     ];
 
     protected $defaultDataSet = [
-        'type_id' => 'configurable',
-        'attribute_set_id' => ['dataSet' => 'Default'],
         'name' => 'Configurable Product %isolation%',
         'sku' => 'sku_configurable_product_%isolation%',
+        'type_id' => 'configurable',
+        'attribute_set_id' => ['dataSet' => 'default'],
+        'website_ids' => ['Main Website'],
         'price' => ['value' => 100.00],
         'weight' => 1,
+        'quantity_and_stock_status' => [
+            'is_in_stock' => 'In Stock',
+        ],
         'url_key' => 'configurable-product-%isolation%',
+        'configurable_attributes_data' => ['preset' => 'default'],
     ];
 
     protected $category_ids = [

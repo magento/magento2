@@ -50,11 +50,6 @@ class Config
     protected $_applicationUrlPath;
 
     /**
-     * @var array
-     */
-    protected $_adminOptions = array();
-
-    /**
      * @var string
      */
     protected $_reportDir;
@@ -63,6 +58,11 @@ class Config
      * @var array
      */
     protected $_installOptions = array();
+
+    /**
+     * @var array
+     */
+    protected $_installOptionsNoValue = array();
 
     /**
      * @var array
@@ -92,10 +92,13 @@ class Config
         $this->_applicationBaseDir = $appBaseDir;
         $this->_applicationUrlHost = $applicationOptions['url_host'];
         $this->_applicationUrlPath = $applicationOptions['url_path'];
-        $this->_adminOptions = $applicationOptions['admin'];
 
         if (isset($applicationOptions['installation']['options'])) {
             $this->_installOptions = $applicationOptions['installation']['options'];
+        }
+
+        if (isset($applicationOptions['installation']['options_no_value'])) {
+            $this->_installOptionsNoValue = $applicationOptions['installation']['options_no_value'];
         }
 
         $this->_parseScenarios($configData['scenario']);
@@ -128,10 +131,12 @@ class Config
         }
 
         // Validate admin options data
-        $requiredAdminKeys = array('frontname', 'username', 'password');
+        $requiredAdminKeys = array('admin_username', 'admin_password', 'backend_frontname');
         foreach ($requiredAdminKeys as $requiredKeyName) {
-            if (empty($configData['application']['admin'][$requiredKeyName])) {
-                throw new \Magento\Framework\Exception("Admin options array must define '{$requiredKeyName}' key.");
+            if (empty($configData['application']['installation']['options'][$requiredKeyName])) {
+                throw new \Magento\Framework\Exception(
+                    "Installation options array must define '{$requiredKeyName}' key."
+                );
             }
         }
     }
@@ -281,14 +286,14 @@ class Config
      */
     protected function _getFixedScenarioArguments()
     {
-        $adminOptions = $this->getAdminOptions();
+        $options = $this->getInstallOptions();
         return array(
             \Magento\TestFramework\Performance\Scenario::ARG_HOST => $this->getApplicationUrlHost(),
             \Magento\TestFramework\Performance\Scenario::ARG_PATH => $this->getApplicationUrlPath(),
             \Magento\TestFramework\Performance\Scenario::ARG_BASEDIR => $this->getApplicationBaseDir(),
-            \Magento\TestFramework\Performance\Scenario::ARG_BACKEND_FRONTNAME => $adminOptions['frontname'],
-            \Magento\TestFramework\Performance\Scenario::ARG_ADMIN_USERNAME => $adminOptions['username'],
-            \Magento\TestFramework\Performance\Scenario::ARG_ADMIN_PASSWORD => $adminOptions['password'],
+            \Magento\TestFramework\Performance\Scenario::ARG_BACKEND_FRONTNAME => $options['backend_frontname'],
+            \Magento\TestFramework\Performance\Scenario::ARG_ADMIN_USERNAME => $options['admin_username'],
+            \Magento\TestFramework\Performance\Scenario::ARG_ADMIN_PASSWORD => $options['admin_password'],
             'jmeter.save.saveservice.output_format' => 'xml',
         );
     }
@@ -346,16 +351,6 @@ class Config
     }
 
     /**
-     * Retrieve admin options - backend path and admin user credentials
-     *
-     * @return array
-     */
-    public function getAdminOptions()
-    {
-        return $this->_adminOptions;
-    }
-
-    /**
      * Retrieve application installation options
      *
      * @return array
@@ -363,6 +358,16 @@ class Config
     public function getInstallOptions()
     {
         return $this->_installOptions;
+    }
+
+    /**
+     * Retrieve application installation options that have no value
+     *
+     * @return array
+     */
+    public function getInstallOptionsNoValue()
+    {
+        return $this->_installOptionsNoValue;
     }
 
     /**

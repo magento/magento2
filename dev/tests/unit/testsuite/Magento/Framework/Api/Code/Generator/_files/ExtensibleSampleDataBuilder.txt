@@ -1,0 +1,60 @@
+namespace Magento\Framework\Api\Code\Generator;
+
+/**
+ * DataBuilder class for
+ * \Magento\Framework\Api\Code\Generator\ExtensibleSampleInterface
+ */
+class ExtensibleSampleDataBuilder extends \Magento\Framework\Api\CompositeExtensibleDataBuilder
+{
+    /**
+     * @param array $items
+     * @return $this
+     */
+    public function setItems($items)
+    {
+        $this->set('items', $items);
+        return $this;
+    }
+
+    /**
+     * @param string $name
+     * @return $this
+     */
+    public function setName($name)
+    {
+        $this->set('name', $name);
+        return $this;
+    }
+
+    /**
+     * @param int $count
+     * @return $this
+     */
+    public function setCount($count)
+    {
+        $this->set('count', $count);
+        return $this;
+    }
+
+    /**
+     * @param int $createdAt
+     * @return $this
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->set('created_at', $createdAt);
+        return $this;
+    }
+
+    /**
+     * Initialize the builder
+     *
+     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param \Magento\Framework\ObjectManager\Config $objectManagerConfig
+     */
+    public function __construct(\Magento\Framework\ObjectManager $objectManager, \Magento\Framework\Api\MetadataServiceInterface $metadataService, \Magento\Framework\ObjectManager\Config $objectManagerConfig)
+    {
+        parent::__construct($objectManager, $metadataService, $objectManagerConfig, 'Magento\Framework\Api\Code\Generator\ExtensibleSampleInterface');
+    }
+}

@@ -26,7 +26,7 @@ namespace Magento\Sales\Service\V1\Action;
 use Magento\Sales\Model\Order\InvoiceRepository;
 use Magento\Sales\Service\V1\Data\InvoiceMapper;
 use Magento\Sales\Service\V1\Data\InvoiceSearchResultsBuilder;
-use Magento\Framework\Service\V1\Data\SearchCriteria;
+use Magento\Framework\Api\SearchCriteria;
 
 /**
  * Class InvoiceList
@@ -67,7 +67,7 @@ class InvoiceList
      * Invoke InvoiceList service
      *
      * @param SearchCriteria $searchCriteria
-     * @return \Magento\Framework\Service\V1\Data\SearchResults
+     * @return \Magento\Framework\Api\SearchResults
      */
     public function invoke(SearchCriteria $searchCriteria)
     {

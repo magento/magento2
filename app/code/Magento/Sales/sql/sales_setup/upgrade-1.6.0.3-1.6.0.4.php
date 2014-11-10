@@ -26,7 +26,7 @@
  * Create aggregation tables for updated_at fields
  */
 
-/** @var $installer \Magento\Sales\Model\Resource\Setup */
+/** @var $installer \Magento\Setup\Module\SetupModule */
 $installer = $this;
 $connection = $installer->getConnection();
 $connection->createTable(

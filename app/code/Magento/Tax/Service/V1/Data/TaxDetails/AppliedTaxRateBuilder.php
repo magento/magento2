@@ -28,7 +28,7 @@ namespace Magento\Tax\Service\V1\Data\TaxDetails;
  *
  * @method AppliedTaxRate create()
  */
-class AppliedTaxRateBuilder extends \Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder
+class AppliedTaxRateBuilder extends \Magento\Framework\Api\ExtensibleObjectBuilder
 {
     /**
      * Set code

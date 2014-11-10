@@ -55,6 +55,9 @@ class FeedTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject */
     protected $appState;
 
+    /** @var \Magento\Framework\App\Arguments|\PHPUnit_Framework_MockObject_MockObject */
+    protected $args;
+
     protected function setUp()
     {
         $this->inboxFactory = $this->getMock('Magento\AdminNotification\Model\InboxFactory', ['create']);
@@ -90,6 +93,8 @@ class FeedTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
+        $this->args = $this->getMockBuilder('\Magento\Framework\App\Arguments')
+            ->disableOriginalConstructor()->getMock();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->feed = $this->objectManagerHelper->getObject(
             'Magento\AdminNotification\Model\Feed',
@@ -98,7 +103,8 @@ class FeedTest extends \PHPUnit_Framework_TestCase
                 'cacheManager' => $this->cacheManager,
                 'inboxFactory' => $this->inboxFactory,
                 'appState' => $this->appState,
-                'curlFactory' => $this->curlFactory
+                'curlFactory' => $this->curlFactory,
+                'args' => $this->args
             ]
         );
     }
@@ -118,7 +124,8 @@ class FeedTest extends \PHPUnit_Framework_TestCase
         $this->backendConfig->expects($this->at(1))->method('getValue')
             ->will($this->returnValue('http://feed.magento.com'));
         $this->cacheManager->expects($this->once())->method('load')->will(($this->returnValue($lastUpdate)));
-        $this->appState->expects($this->once())->method('getInstallDate')->will(($this->returnValue($lastUpdate)));
+        $this->args->expects($this->once())->method('get')
+            ->with('install_date')->will($this->returnValue('Sat, 6 Sep 2014 16:46:11 UTC'));
         if ($callInbox) {
             $this->inboxFactory->expects($this->once())->method('create')
                 ->will(($this->returnValue($this->inboxModel)));

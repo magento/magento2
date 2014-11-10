@@ -34,6 +34,7 @@ use Mtf\Block\Form as FormInstance;
  * Class Form
  * Is used to represent any form on the page
  *
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 class Form extends FormInstance
 {

@@ -28,6 +28,7 @@
         <depends>
             <module name="Magento_Store"/>
             <module name="Magento_Backend"/>
+            <module name="Magento_Customer"/>
         </depends>
     </module>
 </config>

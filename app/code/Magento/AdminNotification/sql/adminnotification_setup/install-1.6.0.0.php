@@ -27,8 +27,9 @@
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
+
+/** @var $installer \Magento\Setup\Module\SetupModule */
 $installer = $this;
-/* @var $installer \Magento\Framework\Module\Setup */
 
 $installer->startSetup();
 /**

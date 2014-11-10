@@ -26,33 +26,28 @@ return array(
     'application' => array(
         'url_host' => '127.0.0.1',
         'url_path' => '/',
-        'admin' => array(
-            'frontname' => 'backend',
-            'username' => 'admin',
-            'password' => '123123q', // must be at least of 7 both numeric and alphanumeric chars
-        ),
-        /* Optional installation configuration. If omitted, no installation occurs. */
         'installation' => array(
-            /**
-             * Console installer options
-             * @see \Magento\Install\Model\Installer\Console::_installOptions
-             */
             'options' => array(
-                'license_agreement_accepted' => 'yes',
-                'locale'                     => 'en_US',
+                'language'                   => 'en_US',
                 'timezone'                   => 'America/Los_Angeles',
-                'default_currency'           => 'USD',
+                'currency'                   => 'USD',
                 'db_host'                    => 'localhost',
                 'db_name'                    => 'magento',
                 'db_user'                    => 'root',
                 'db_pass'                    => '',
-                'use_secure'                 => 'no',
-                'use_secure_admin'           => 'no',
-                'use_rewrites'               => 'no',
+                'use_secure'                 => '0',
+                'use_secure_admin'           => '0',
+                'use_rewrites'               => '0',
                 'admin_lastname'             => 'Admin',
                 'admin_firstname'            => 'Admin',
                 'admin_email'                => 'admin@example.com',
-                'admin_no_form_key'          => 'yes',
+                'admin_username'             => 'admin',
+                'admin_password'             => '123123q',
+                'admin_use_security_key'     => '0',
+                'backend_frontname'          => 'backend',
+            ),
+            'options_no_value' => array(
+                'cleanup_database',
             ),
         ),
     ),

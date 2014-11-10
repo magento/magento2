@@ -30,16 +30,47 @@ class DirectoryListTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey(DirectoryList::SYS_TMP, DirectoryList::getDefaultConfig());
     }
 
+    /**
+     * @param array $config
+     * @param string $expectedError
+     * @dataProvider validateDataProvider
+     */
+    public function testValidate($config, $expectedError)
+    {
+        $this->setExpectedException('\InvalidArgumentException', $expectedError);
+        DirectoryList::validate($config);
+    }
+
+    /**
+     * @return array
+     */
+    public function validateDataProvider()
+    {
+        return [
+            ['', 'Unexpected value type.'],
+            [1, 'Unexpected value type.'],
+            [[DirectoryList::SYS_TMP => ''], 'Unexpected value type.'],
+            [[DirectoryList::SYS_TMP => 1], 'Unexpected value type.'],
+            [[DirectoryList::SYS_TMP => []], 'Missing required keys at: ' . DirectoryList::SYS_TMP],
+        ];
+    }
+
     public function testGetters()
     {
-        $customDirs = [
-            'foo' => [DirectoryList::PATH => '/foo/dir'],
-            DirectoryList::SYS_TMP => [DirectoryList::PATH => '/bar/dir', DirectoryList::URL_PATH => 'bar']
-        ];
+        $customDirs = [DirectoryList::SYS_TMP => [DirectoryList::PATH => '/bar/dir', DirectoryList::URL_PATH => 'bar']];
         $object = new DirectoryList('/root/dir', $customDirs);
         $this->assertEquals('/bar/dir', $object->getPath(DirectoryList::SYS_TMP));
         $this->assertEquals('bar', $object->getUrlPath(DirectoryList::SYS_TMP));
         $this->assertEquals('/root/dir', $object->getRoot());
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Unknown type: foo
+     */
+    public function testUnknownType()
+    {
+        new DirectoryList('/root/dir', ['foo' => [DirectoryList::PATH => '/foo/dir']]);
     }
 
     /**

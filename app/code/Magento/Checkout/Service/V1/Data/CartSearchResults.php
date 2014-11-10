@@ -26,7 +26,7 @@ namespace Magento\Checkout\Service\V1\Data;
 /**
  * @codeCoverageIgnore
  */
-class CartSearchResults extends \Magento\Framework\Service\V1\Data\SearchResults
+class CartSearchResults extends \Magento\Framework\Api\SearchResults
 {
     /**
      * Get items

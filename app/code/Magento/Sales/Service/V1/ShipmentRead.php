@@ -27,7 +27,7 @@ use Magento\Sales\Service\V1\Action\ShipmentGet;
 use Magento\Sales\Service\V1\Action\ShipmentList;
 use Magento\Sales\Service\V1\Action\ShipmentCommentsList;
 use Magento\Sales\Service\V1\Action\ShipmentLabelGet;
-use Magento\Framework\Service\V1\Data\SearchCriteria;
+use Magento\Framework\Api\SearchCriteria;
 
 /**
  * Class ShipmentRead
@@ -83,8 +83,8 @@ class ShipmentRead implements ShipmentReadInterface
     }
 
     /**
-     * @param \Magento\Framework\Service\V1\Data\SearchCriteria $searchCriteria
-     * @return \Magento\Framework\Service\V1\Data\SearchResults
+     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria
+     * @return \Magento\Framework\Api\SearchResults
      */
     public function search(SearchCriteria $searchCriteria)
     {

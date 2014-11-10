@@ -37,6 +37,8 @@ set_include_path($path);
 
 $appRoot = dirname(dirname(dirname(dirname(__DIR__))));
 require $appRoot . '/app/bootstrap.php';
+$includePath = new \Magento\Framework\Autoload\IncludePath();
+spl_autoload_register([$includePath, 'load']);
 
 $objectManagerFactory = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, $_SERVER);
 $objectManager = $objectManagerFactory->create($_SERVER);

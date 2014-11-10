@@ -163,26 +163,6 @@ select[size] {
     height: auto;
 }
 
-input[type=text]:focus,
-input[type=password]:focus,
-input[type=datetime]:focus,
-input[type=datetime-local]:focus,
-input[type=date]:focus,
-input[type=month]:focus,
-input[type=time]:focus,
-input[type=week]:focus,
-input[type=number]:focus,
-input[type=range]:focus,
-input[type=email]:focus,
-input[type=url]:focus,
-input[type=search]:focus,
-input.search:focus,
-input[type=tel]:focus,
-input[type=color]:focus,
-textarea:focus {
-    outline: 0;
-}
-
 input[type="radio"],
 input[type="checkbox"] {
     margin: 3px 0;

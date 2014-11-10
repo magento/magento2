@@ -25,13 +25,13 @@
 namespace Magento\Tax\Service\V1\Collection;
 
 use Magento\Core\Model\EntityFactory;
-use Magento\Framework\Service\AbstractServiceCollection;
-use Magento\Framework\Service\V1\Data\FilterBuilder;
-use Magento\Framework\Service\V1\Data\SearchCriteriaBuilder;
+use Magento\Framework\Api\AbstractServiceCollection;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Tax\Model\Calculation\Rate\Converter;
 use Magento\Tax\Service\V1\TaxRateServiceInterface;
 use Magento\Tax\Service\V1\Data\TaxRate;
-use Magento\Framework\Service\V1\Data\SortOrderBuilder;
+use Magento\Framework\Api\SortOrderBuilder;
 
 /**
  * Tax rate collection for a grid backed by Services

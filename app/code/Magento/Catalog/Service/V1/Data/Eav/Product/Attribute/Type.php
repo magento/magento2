@@ -29,7 +29,7 @@ namespace Magento\Catalog\Service\V1\Data\Eav\Product\Attribute;
  * @package Magento\Catalog\Service\V1\Data\Eav\Product\Attribute
  * @codeCoverageIgnore
  */
-class Type extends \Magento\Framework\Service\Data\AbstractExtensibleObject
+class Type extends \Magento\Framework\Api\AbstractExtensibleObject
 {
     /**
      * Constants used as keys into $_data

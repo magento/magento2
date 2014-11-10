@@ -28,7 +28,7 @@ namespace Magento\Catalog\Service\V1\Product\Attribute\Media\Data;
  *
  * @codeCoverageIgnore
  */
-class MediaImage extends \Magento\Framework\Service\Data\AbstractExtensibleObject
+class MediaImage extends \Magento\Framework\Api\AbstractExtensibleObject
 {
     const CODE = 'code';
 

@@ -94,7 +94,6 @@ class SetupModule extends Setup
         $moduleName = (string)$this->moduleConfig['name'];
         foreach ($this->fileResolver->getSqlSetupFiles($moduleName, self::TYPE_DB_RECURRING . '.php') as $file) {
             try {
-                $file = $this->fileResolver->getAbsolutePath($file);
                 $this->includeFile($file);
             } catch (\Exception $e) {
                 throw new \Exception(sprintf('Error in file: "%s" - %s', $file, $e->getMessage()), 0, $e);
@@ -121,9 +120,9 @@ class SetupModule extends Setup
         foreach ($this->fileResolver->getSqlSetupFiles($moduleName, '*.{php,sql}') as $file) {
             $matches = array();
             if (preg_match($regExpDb, $file, $matches)) {
-                $dbFiles[$matches[1]] = $this->fileResolver->getAbsolutePath($file);
+                $dbFiles[$matches[1]] = $file;
             } elseif (preg_match($regExpType, $file, $matches)) {
-                $typeFiles[$matches[1]] = $this->fileResolver->getAbsolutePath($file);
+                $typeFiles[$matches[1]] = $file;
             }
         }
 

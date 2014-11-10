@@ -59,7 +59,7 @@ class ResetPasswordPost extends \Magento\Customer\Controller\Account
         $resetPasswordToken = (string)$this->getRequest()->getQuery('token');
         $customerId = (int)$this->getRequest()->getQuery('id');
         $password = (string)$this->getRequest()->getPost('password');
-        $passwordConfirmation = (string)$this->getRequest()->getPost('confirmation');
+        $passwordConfirmation = (string)$this->getRequest()->getPost('password_confirmation');
 
         if ($password !== $passwordConfirmation) {
             $this->messageManager->addError(__("New Password and Confirm New Password values didn't match."));

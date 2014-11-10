@@ -22,10 +22,9 @@
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/** @var \Magento\Framework\DB\Adapter\AdapterInterface $connection */
+/** @var $this \Magento\Setup\Module\SetupModule */
 $connection = $this->getConnection();
 
-/** @var \Magento\Catalog\Model\Resource\Setup $this */
 $connection->dropForeignKey(
     $this->getTable('catalog_category_product_index'),
     $this->getFkName('catalog_category_product_index', 'category_id', 'catalog_category_entity', 'entity_id')

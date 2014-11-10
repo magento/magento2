@@ -28,9 +28,10 @@ use Mtf\Client\Browser;
 use Mtf\Fixture\FixtureInterface;
 use Mtf\Constraint\AbstractConstraint;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
+use Magento\Catalog\Test\Block\Product\View;
 
 /**
- * Class AssertProductSpecialPriceOnProductPage
+ * Assert that displayed special price on product page equals passed from fixture.
  */
 class AssertProductSpecialPriceOnProductPage extends AbstractConstraint implements AssertPriceOnProductPageInterface
 {
@@ -61,7 +62,7 @@ class AssertProductSpecialPriceOnProductPage extends AbstractConstraint implemen
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
 
         //Process assertions
-        $this->assertPrice($product, $catalogProductView);
+        $this->assertPrice($product, $catalogProductView->getViewBlock());
     }
 
     /**
@@ -78,18 +79,14 @@ class AssertProductSpecialPriceOnProductPage extends AbstractConstraint implemen
     /**
      * Verify product special price on product view page
      *
-     * @param CatalogProductView $catalogProductView
      * @param FixtureInterface $product
-     * @param string $block [optional]
+     * @param View $productViewBlock
      * @return void
      */
-    public function assertPrice(
-        FixtureInterface $product,
-        CatalogProductView $catalogProductView,
-        $block = ''
-    ) {
+    public function assertPrice(FixtureInterface $product, View $productViewBlock)
+    {
         $fields = $product->getData();
-        $specialPrice = $catalogProductView->getViewBlock()->getPriceBlock()->getSpecialPrice();
+        $specialPrice = $productViewBlock->getPriceBlock()->getSpecialPrice();
         if (isset($fields['special_price'])) {
             \PHPUnit_Framework_Assert::assertEquals(
                 number_format($fields['special_price'], 2),

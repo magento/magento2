@@ -24,7 +24,7 @@
 
 $rootDir = realpath(__DIR__ . '/../../../..');
 require $rootDir . '/app/autoload.php';
-(new \Magento\Framework\Autoload\IncludePath())->addIncludePath(array($rootDir . '/lib', $rootDir . '/dev'));
+\Magento\Framework\Code\Generator\FileResolver::addIncludePath([$rootDir . '/lib', $rootDir . '/dev']);
 $defaultReportFile = 'report.log';
 
 try {

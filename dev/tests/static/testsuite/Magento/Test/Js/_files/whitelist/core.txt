@@ -7,7 +7,6 @@ app/code/Magento/Checkout
 app/code/Magento/Customer
 app/code/Magento/Downloadable
 app/code/Magento/GiftMessage
-app/code/Magento/Install
 app/code/Magento/Newsletter
 app/code/Magento/OfflinePayments
 app/code/Magento/Payment

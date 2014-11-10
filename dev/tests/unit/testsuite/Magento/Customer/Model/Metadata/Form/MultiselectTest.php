@@ -26,7 +26,6 @@
 namespace Magento\Customer\Model\Metadata\Form;
 
 use Magento\Customer\Model\Metadata\ElementFactory;
-use Magento\Customer\Service\V1\Data\Eav\OptionBuilder;
 
 class MultiselectTest extends AbstractFormTestCase
 {
@@ -204,7 +203,27 @@ class MultiselectTest extends AbstractFormTestCase
      */
     protected function runOutputValueTest($value, $expected, $format)
     {
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $option1 = $this->getMockBuilder('Magento\Customer\Api\Data\OptionInterface')
+            ->disableOriginalConstructor()
+            ->setMethods(['getLabel', 'getValue'])
+            ->getMockForAbstractClass();
+        $option1->expects($this->any())
+            ->method('getLabel')
+            ->will($this->returnValue('fourteen'));
+        $option1->expects($this->any())
+            ->method('getValue')
+            ->will($this->returnValue('14'));
+
+        $option2 = $this->getMockBuilder('Magento\Customer\Api\Data\OptionInterface')
+            ->disableOriginalConstructor()
+            ->setMethods(['getLabel', 'getValue'])
+            ->getMockForAbstractClass();
+        $option2->expects($this->any())
+            ->method('getLabel')
+            ->will($this->returnValue('some string'));
+        $option2->expects($this->any())
+            ->method('getValue')
+            ->will($this->returnValue('some key'));
 
         $this->attributeMetadataMock->expects(
             $this->any()
@@ -213,10 +232,8 @@ class MultiselectTest extends AbstractFormTestCase
         )->will(
             $this->returnValue(
                 array(
-                    $helper->getObject('\Magento\Customer\Service\V1\Data\Eav\OptionBuilder')
-                        ->setValue('14')->setLabel('fourteen')->create(),
-                    $helper->getObject('\Magento\Customer\Service\V1\Data\Eav\OptionBuilder')
-                        ->setValue('some key')->setLabel('some string')->create()
+                    $option1,
+                    $option2
                 )
             )
         );

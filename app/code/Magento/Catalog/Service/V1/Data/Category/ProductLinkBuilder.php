@@ -26,7 +26,7 @@ namespace Magento\Catalog\Service\V1\Data\Category;
 /**
  * @codeCoverageIgnore
  */
-class ProductLinkBuilder extends \Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder
+class ProductLinkBuilder extends \Magento\Framework\Api\ExtensibleObjectBuilder
 {
     /**
      * @param string $value

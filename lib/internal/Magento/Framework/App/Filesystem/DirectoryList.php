@@ -157,6 +157,6 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
      */
     public function __construct($root, array $config = array())
     {
-        parent::__construct($root, [self::ROOT => $root] + $config);
+        parent::__construct($root, [self::ROOT => [self::PATH => $root]] + $config);
     }
 }

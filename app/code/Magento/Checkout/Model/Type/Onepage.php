@@ -363,7 +363,7 @@ class Onepage
 
         $address = $this->getQuote()->getBillingAddress();
         $addressForm = $this->_formFactory->create(
-            \Magento\Customer\Service\V1\AddressMetadataServiceInterface::ENTITY_TYPE_ADDRESS,
+            \Magento\Customer\Api\AddressMetadataInterface::ENTITY_TYPE_ADDRESS,
             'customer_address_edit',
             array(),
             $this->_request->isAjax(),
@@ -512,7 +512,7 @@ class Onepage
         $quote = $this->getQuote();
         $isCustomerNew = !$quote->getCustomerId();
         $customer = $quote->getCustomerData();
-        $customerData = \Magento\Framework\Service\ExtensibleDataObjectConverter::toFlatArray($customer);
+        $customerData = \Magento\Framework\Api\ExtensibleDataObjectConverter::toFlatArray($customer);
 
         /** @var Form $customerForm */
         $customerForm = $this->_formFactory->create(
@@ -577,7 +577,7 @@ class Onepage
         $this->_objectCopyService->copyFieldsetToTarget(
             'customer_account',
             'to_quote',
-            \Magento\Framework\Service\ExtensibleDataObjectConverter::toFlatArray($customer),
+            \Magento\Framework\Api\ExtensibleDataObjectConverter::toFlatArray($customer),
             $quote
         );
 

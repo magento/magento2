@@ -79,11 +79,11 @@ interface TaxClassServiceInterface
     /**
      * Retrieve tax classes which match a specific criteria.
      *
-     * @param \Magento\Framework\Service\V1\Data\SearchCriteria $searchCriteria
+     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria
      * @return \Magento\Tax\Service\V1\Data\TaxClassSearchResults containing Data\TaxClass
      * @throws \Magento\Framework\Exception\InputException
      */
-    public function searchTaxClass(\Magento\Framework\Service\V1\Data\SearchCriteria $searchCriteria);
+    public function searchTaxClass(\Magento\Framework\Api\SearchCriteria $searchCriteria);
 
     /**
      * Get tax class id

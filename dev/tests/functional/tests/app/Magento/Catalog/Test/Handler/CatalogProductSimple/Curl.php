@@ -32,8 +32,7 @@ use Mtf\Handler\Curl as AbstractCurl;
 use Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 
 /**
- * Class CreateProduct
- * Create new simple product via curl
+ * Create new simple product via curl.
  */
 class Curl extends AbstractCurl implements CatalogProductSimpleInterface
 {
@@ -117,7 +116,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     ];
 
     /**
-     * Placeholder for price data sent Curl
+     * Placeholder for price data sent Curl.
      *
      * @var array
      */
@@ -139,14 +138,14 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     ];
 
     /**
-     * Select custom options
+     * Select custom options.
      *
      * @var array
      */
     protected $selectOptions = ['Drop-down', 'Radio Buttons', 'Checkbox', 'Multiple Select'];
 
     /**
-     * Post request for creating simple product
+     * Post request for creating simple product.
      *
      * @param FixtureInterface|null $fixture [optional]
      * @return array
@@ -164,7 +163,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     }
 
     /**
-     * Prepare POST data for creating product request
+     * Prepare POST data for creating product request.
      *
      * @param FixtureInterface $fixture
      * @param string|null $prefix [optional]
@@ -237,7 +236,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     }
 
     /**
-     * Preparation of custom options data
+     * Preparation of custom options data.
      *
      * @param array $fields
      * @return array
@@ -265,7 +264,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     }
 
     /**
-     * Convert option name
+     * Convert option name.
      *
      * @param string $optionName
      * @return string
@@ -281,7 +280,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     }
 
     /**
-     * Preparation of stock data
+     * Preparation of stock data.
      *
      * @param array $fields
      * @return array
@@ -318,7 +317,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     }
 
     /**
-     * Preparation of tier price data
+     * Preparation of tier price data.
      *
      * @param array $fields
      * @return array
@@ -339,7 +338,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     }
 
     /**
-     * Remove items from a null
+     * Remove items from a null.
      *
      * @param array $data
      * @return array
@@ -357,7 +356,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     }
 
     /**
-     * Create product via curl
+     * Create product via curl.
      *
      * @param array $data
      * @param array $config
@@ -376,13 +375,25 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
         if (!strpos($response, 'data-ui-id="messages-message-success"')) {
             throw new \Exception("Product creation by curl handler was not successful! Response: $response");
         }
-        preg_match("~Location: [^\s]*\/id\/(\d+)~", $response, $matches);
 
-        return ['id' => isset($matches[1]) ? $matches[1] : null];
+        return $this->parseResponse($response);
     }
 
     /**
-     * Retrieve URL for request with all necessary parameters
+     * Parse data in response.
+     *
+     * @param string $response
+     * @return array
+     */
+    protected function parseResponse($response)
+    {
+        preg_match('~Location: [^\s]*\/id\/(\d+)~', $response, $matches);
+        $id = isset($matches[1]) ? $matches[1] : null;
+        return ['id' => $id];
+    }
+
+    /**
+     * Retrieve URL for request with all necessary parameters.
      *
      * @param array $config
      * @return string

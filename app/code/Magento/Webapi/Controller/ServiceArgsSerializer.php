@@ -27,15 +27,17 @@ namespace Magento\Webapi\Controller;
 
 use Magento\Framework\ObjectManager;
 use Magento\Framework\ObjectManager\Config as ObjectManagerConfig;
-use Magento\Framework\Service\Config\Reader as ServiceConfigReader;
-use Magento\Framework\Service\Data\AttributeValue;
-use Magento\Framework\Service\Data\AttributeValueBuilder;
-use Magento\Webapi\Model\Config\ClassReflector\TypeProcessor;
-use Magento\Webapi\Model\DataObjectProcessor;
+use Magento\Framework\Api\Config\Reader as ServiceConfigReader;
+use Magento\Framework\Api\AttributeValue;
+use Magento\Framework\Api\AttributeValueBuilder;
+use Magento\Framework\Reflection\TypeProcessor;
 use Zend\Code\Reflection\ClassReflection;
 use Zend\Code\Reflection\MethodReflection;
 use Zend\Code\Reflection\ParameterReflection;
-use Magento\Framework\Service\SimpleDataObjectConverter;
+use Magento\Framework\Api\SimpleDataObjectConverter;
+use Magento\Framework\Exception\SerializationException;
+use Magento\Webapi\Exception as WebapiException;
+use Magento\Framework\Serialization\DataBuilderFactory;
 
 /**
  * Deserializes arguments from API requests.
@@ -44,11 +46,11 @@ use Magento\Framework\Service\SimpleDataObjectConverter;
  */
 class ServiceArgsSerializer
 {
-    /** @var \Magento\Webapi\Model\Config\ClassReflector\TypeProcessor */
-    protected $_typeProcessor;
+    /** @var \Magento\Framework\Reflection\TypeProcessor */
+    protected $typeProcessor;
 
-    /** @var ObjectManager */
-    protected $_objectManager;
+    /** @var DataBuilderFactory */
+    protected $builderFactory;
 
     /** @var ServiceConfigReader */
     protected $serviceConfigReader;
@@ -56,30 +58,24 @@ class ServiceArgsSerializer
     /** @var AttributeValueBuilder */
     protected $attributeValueBuilder;
 
-    /** @var \Magento\Framework\ObjectManager\Config */
-    protected $objectManagerConfig;
-
     /**
      * Initialize dependencies.
      *
      * @param TypeProcessor $typeProcessor
-     * @param ObjectManager $objectManager
+     * @param DataBuilderFactory $builderFactory
      * @param ServiceConfigReader $serviceConfigReader
      * @param AttributeValueBuilder $attributeValueBuilder
-     * @param ObjectManagerConfig $objectManagerConfig
      */
     public function __construct(
         TypeProcessor $typeProcessor,
-        ObjectManager $objectManager,
+        DataBuilderFactory $builderFactory,
         ServiceConfigReader $serviceConfigReader,
-        AttributeValueBuilder $attributeValueBuilder,
-        ObjectManagerConfig $objectManagerConfig
+        AttributeValueBuilder $attributeValueBuilder
     ) {
-        $this->_typeProcessor = $typeProcessor;
-        $this->_objectManager = $objectManager;
+        $this->typeProcessor = $typeProcessor;
+        $this->builderFactory = $builderFactory;
         $this->serviceConfigReader = $serviceConfigReader;
         $this->attributeValueBuilder = $attributeValueBuilder;
-        $this->objectManagerConfig = $objectManagerConfig;
     }
 
     /**
@@ -166,7 +162,7 @@ class ServiceArgsSerializer
         $data = is_array($data) ? $data : [];
         $class = new ClassReflection($className);
 
-        $builder = $this->getBuilder($className);
+        $builder = $this->builderFactory->getDataBuilder($className);
 
         foreach ($data as $propertyName => $value) {
             // Converts snake_case to uppercase CamelCase to help form getter/setter method names
@@ -175,7 +171,7 @@ class ServiceArgsSerializer
             $methodName = $this->_processGetterMethod($class, $camelCaseProperty);
             $methodReflection = $class->getMethod($methodName);
             if ($methodReflection->isPublic()) {
-                $returnType = $this->_typeProcessor->getGetterReturnType($methodReflection)['type'];
+                $returnType = $this->typeProcessor->getGetterReturnType($methodReflection)['type'];
                 $setterName = 'set' . $camelCaseProperty;
                 if ($camelCaseProperty === 'CustomAttributes') {
                     $setterValue = $this->convertCustomAttributeValue($value, $returnType, $className);
@@ -186,25 +182,6 @@ class ServiceArgsSerializer
             }
         }
         return $builder->create();
-    }
-
-    /**
-     * Returns a builder for a given classname.
-     *
-     * @param string $className
-     * @return object a builder instance
-     */
-    protected function getBuilder($className)
-    {
-        $paramInstanceClassName = $this->objectManagerConfig->getPreference($className);
-        if (is_subclass_of($paramInstanceClassName, '\\' . DataObjectProcessor::BASE_MODEL_CLASS)) {
-            // By convention, need to lookup the concrete class preference for the data interface type and
-            // gets its builder.
-            return $this->_objectManager->create($paramInstanceClassName . "DataBuilder");
-        }
-        // By convention, for complex parameters that don't inherit from the data interface,
-        // create the name of the builder type by appending Builder to the end
-        return $this->_objectManager->create($className . "Builder");
     }
 
     /**
@@ -290,21 +267,26 @@ class ServiceArgsSerializer
      * @param mixed $value
      * @param string $type Convert given value to the this type
      * @return mixed
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _convertValue($value, $type)
     {
-        $isArrayType = $this->_typeProcessor->isArrayType($type);
+        $isArrayType = $this->typeProcessor->isArrayType($type);
         if ($isArrayType && isset($value['item'])) {
             $value = $this->_removeSoapItemNode($value);
         }
-        if ($this->_typeProcessor->isTypeSimple($type) || $this->_typeProcessor->isTypeAny($type)) {
-            $result = $this->_typeProcessor->processSimpleAndAnyType($value, $type);
+        if ($this->typeProcessor->isTypeSimple($type) || $this->typeProcessor->isTypeAny($type)) {
+            try {
+                $result = $this->typeProcessor->processSimpleAndAnyType($value, $type);
+            } catch (SerializationException $e) {
+                throw new WebapiException($e->getMessage());
+            }
         } else {
             /** Complex type or array of complex types */
             if ($isArrayType) {
                 // Initializing the result for array type else it will return null for empty array
                 $result = is_array($value) ? [] : null;
-                $itemType = $this->_typeProcessor->getArrayItemType($type);
+                $itemType = $this->typeProcessor->getArrayItemType($type);
                 if (is_array($value)) {
                     foreach ($value as $key => $item) {
                         $result[$key] = $this->_createFromArray($itemType, $item);

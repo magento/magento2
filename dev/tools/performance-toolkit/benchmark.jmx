@@ -33,7 +33,7 @@
         <collectionProp name="Arguments.arguments">
           <elementProp name="host" elementType="Argument">
             <stringProp name="Argument.name">host</stringProp>
-            <stringProp name="Argument.value">${__P(host)}</stringProp>
+            <stringProp name="Argument.value">${__P(host,localhost)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="base_path" elementType="Argument">
@@ -689,7 +689,7 @@ productList.add(productMap);                 </stringProp>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert login form shown" enabled="true">
             <collectionProp name="Asserion.test_strings">
               <stringProp name="-1397214398">Welcome</stringProp>
-              <stringProp name="-1309286748">&lt;title&gt;Magento Admin&lt;/title&gt;</stringProp>
+              <stringProp name="-515240035">&lt;title&gt;Magento Admin&lt;/title&gt;</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
@@ -857,7 +857,7 @@ vars.put(&quot;searchData&quot;, new String(Base64Encoder.encode(searchData)));<
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.contentEncoding">UTF-8</stringProp>
-          <stringProp name="HTTPSampler.path">${base_path}${admin_path}/customer/index/limit/{$users}/filter/${searchData}</stringProp>
+          <stringProp name="HTTPSampler.path">${base_path}${admin_path}/customer/index/grid/limit/${users}/filter/${searchData}</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -3789,7 +3789,7 @@ if (emailsCount &lt; 1) {
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert success" enabled="true">
             <collectionProp name="Asserion.test_strings">
               <stringProp name="494863233">Thank you for your purchase!</stringProp>
-              <stringProp name="1635682758">Your order # is</stringProp>
+              <stringProp name="-1590086334">Your order number is</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
@@ -3937,7 +3937,7 @@ props.remove(&quot;customer_emails_list&quot;);</stringProp>
         <stringProp name="filename">${report_save_path}/detailed-urls-report.log</stringProp>
       </ResultCollector>
       <hashTree/>
-      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="false">
+      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
         <boolProp name="ResultCollector.error_logging">false</boolProp>
         <objProp>
           <name>saveConfig</name>

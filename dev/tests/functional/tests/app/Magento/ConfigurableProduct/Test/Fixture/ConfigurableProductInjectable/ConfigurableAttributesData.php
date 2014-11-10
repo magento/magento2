@@ -132,9 +132,7 @@ class ConfigurableAttributesData implements FixtureInterface
                     ]
                 ]
             ],
-            'products' => [
-
-            ],
+            'products' => [],
             'attributes' => [
                 'attribute_key_0' => 'catalogProductAttribute::attribute_type_dropdown',
                 'attribute_key_1' => 'catalogProductAttribute::attribute_type_dropdown'
@@ -303,6 +301,44 @@ class ConfigurableAttributesData implements FixtureInterface
                     'weight' => 2
                 ]
             ]
+        ],
+        'one_new_options' => [
+            'attributes_data' => [
+                'attribute_key_0' => [
+                    'options' => [
+                        'option_key_0' => [
+                            'label' => 'option_key_1_%isolation%',
+                            'pricing_value' => 1,
+                            'is_percent' => 'No',
+                            'include' => 'Yes'
+                        ]
+                    ]
+                ]
+            ],
+            'attributes' => [],
+            'products' => [],
+            'matrix' => []
+        ],
+        'two_new_options_with_zero_products' => [
+            'attributes_data' => [
+                'attribute_key_0' => [
+                    'options' => [
+                        'option_key_0' => [
+                            'label' => 'option_key_1_%isolation%',
+                            'pricing_value' => 1,
+                            'is_percent' => 'No',
+                            'include' => 'Yes'
+                        ],
+                    ]
+                ]
+            ],
+            'attributes' => [
+                'attribute_key_0' => 'catalogProductAttribute::attribute_type_dropdown_one_option',
+            ],
+            'products' => [
+                'attribute_key_0:option_key_0' => 'catalogProductSimple::out_of_stock',
+            ],
+            'matrix' => []
         ],
         'two_options_with_assigned_product' => [
             'attributes_data' => [
@@ -526,8 +562,7 @@ class ConfigurableAttributesData implements FixtureInterface
     ];
 
     /**
-     * Source constructor
-     *
+     * @constructor
      * @param FixtureFactory $fixtureFactory
      * @param array $data
      * @param array $params [optional]
@@ -536,15 +571,18 @@ class ConfigurableAttributesData implements FixtureInterface
     {
         $this->fixtureFactory = $fixtureFactory;
         $this->params = $params;
-        $this->data = !isset($data['preset']) ? $data : [];
+        $preset = [];
+        if (isset($data['preset'])) {
+            $preset = $this->getPreset($data['preset']);
+            unset($data['preset']);
+        }
+        $data = array_replace_recursive($data, $preset);
 
-        $preset = isset($data['preset']) ? $this->getPreset($data['preset']) : [];
-
-        if (!empty($preset)) {
-            $this->prepareAttributes($preset);
-            $this->prepareAttributesData($preset);
-            $this->prepareProducts($preset);
-            $this->prepareVariationsMatrix($preset);
+        if (!empty($data)) {
+            $this->prepareAttributes($data);
+            $this->prepareAttributesData($data);
+            $this->prepareProducts($data);
+            $this->prepareVariationsMatrix($data);
             $this->prepareData();
         }
     }
@@ -719,7 +757,9 @@ class ConfigurableAttributesData implements FixtureInterface
         foreach ($this->attributesData as $attributeKey => $attribute) {
             $variationsMatrix = $this->addVariationMatrix($variationsMatrix, $attribute, $attributeKey);
         }
-        $this->variationsMatrix = array_replace_recursive($variationsMatrix, $data['matrix']);
+        $this->variationsMatrix = isset($data['matrix'])
+            ? array_replace_recursive($variationsMatrix, $data['matrix'])
+            : $variationsMatrix;
 
         // assigned products
         foreach ($this->variationsMatrix as $key => $row) {
@@ -727,12 +767,30 @@ class ConfigurableAttributesData implements FixtureInterface
                 /** @var CatalogProductSimple $product */
                 $product = $this->products[$key];
                 $quantityAndStockStatus = $product->getQuantityAndStockStatus();
+                $productData = [
+                    'configurable_attribute' => $product->getId(),
+                    'name' => $product->getName(),
+                    'sku' => $product->getSku(),
+                    'quantity_and_stock_status' => [
+                        'qty' => $quantityAndStockStatus['qty']
+                    ],
+                    'weight' => $product->getWeight()
+                ];
+                $this->variationsMatrix[$key] = array_replace_recursive($this->variationsMatrix[$key], $productData);
+            } else {
+                $this->variationsMatrix[$key] = array_replace_recursive(
+                    $this->variationsMatrix[$key],
+                    [
+                        'weight' => 1,
+                        'quantity_and_stock_status' => [
+                            'qty' => 10
+                        ],
+                    ]
+                );
+            }
 
-                $this->variationsMatrix[$key]['configurable_attribute'] = $product->getId();
-                $this->variationsMatrix[$key]['name'] = $product->getName();
-                $this->variationsMatrix[$key]['sku'] = $product->getSku();
-                $this->variationsMatrix[$key]['quantity_and_stock_status']['qty'] = $quantityAndStockStatus['qty'];
-                $this->variationsMatrix[$key]['weight'] = $product->getWeight();
+            if (!isset($this->variationsMatrix[$key]['display'])) {
+                $this->variationsMatrix[$key]['display'] = 'Yes';
             }
         }
     }
@@ -762,16 +820,17 @@ class ConfigurableAttributesData implements FixtureInterface
         }
 
         foreach ($variationsMatrix as $rowKey => $row) {
+            $randIsolation = mt_rand(1, 100);
+            $row['name'] .= ' ' . $randIsolation;
+            $row['sku'] .= '_' . $randIsolation;
+            $index = 1;
             foreach ($attribute['options'] as $optionKey => $option) {
                 $compositeKey = "{$attributeKey}:{$optionKey}";
-                $optionId = $this->getAttributeOptionId($compositeKey);
-                $optionId = ($optionId !== null) ? $optionId : $rowKey . $optionKey;
-
-                $row['name'] .= '-' . $optionId;
-                $row['sku'] .= '_' . $optionId;
-
+                $row['name'] .= ' ' . $index;
+                $row['sku'] .= '_' . $index;
                 $newRowKey = $rowKey ? "{$rowKey} {$compositeKey}" : $compositeKey;
                 $result[$newRowKey] = $row;
+                $index++;
             }
         }
 
@@ -821,7 +880,9 @@ class ConfigurableAttributesData implements FixtureInterface
                 $option['label'] = isset($option['view']) ? $option['view'] : $option['label'];
                 $attribute['options'][$optionKey] = array_intersect_key($option, array_flip($optionFields));
             }
-            $attribute['label'] = isset($attribute['label']) ? $attribute['label'] : $attribute['frontend_label'];
+            $attribute['label'] = isset($attribute['label'])
+                ? $attribute['label']
+                : (isset($attribute['frontend_label']) ? $attribute['frontend_label'] : null);
             $attribute = array_intersect_key($attribute, array_flip($attributeFields));
 
             $this->data['attributes_data'][$attributeKey] = $attribute;
@@ -845,7 +906,7 @@ class ConfigurableAttributesData implements FixtureInterface
      * Return prepared data set
      *
      * @param string|null $key
-     * @return mixed
+     * @return array
      */
     public function getData($key = null)
     {

@@ -26,8 +26,10 @@
 
 $testsBaseDir = dirname(__DIR__);
 require __DIR__ . '/../../../../app/bootstrap.php';
+$includePath = new \Magento\Framework\Autoload\IncludePath();
+spl_autoload_register([$includePath, 'load']);
 $appBootstrap = \Magento\Framework\App\Bootstrap::create(BP, $_SERVER);
-(new \Magento\Framework\Autoload\IncludePath())->addIncludePath($testsBaseDir . '/framework');
+$includePath->addIncludePath($testsBaseDir . '/framework');
 $bootstrap = new \Magento\TestFramework\Performance\Bootstrap($appBootstrap, $testsBaseDir);
 $bootstrap->cleanupReports();
 return $bootstrap;

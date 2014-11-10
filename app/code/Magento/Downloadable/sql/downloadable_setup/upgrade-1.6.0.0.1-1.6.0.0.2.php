@@ -22,9 +22,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
-/** @var $this \Magento\Catalog\Model\Resource\Setup */
-/** @var $connection \Magento\Framework\DB\Adapter\Pdo\Mysql */
+/** @var $this \Magento\Setup\Module\SetupModule */
 $connection = $this->getConnection();
 $connection->changeTableEngine(
     $this->getTable('catalog_product_index_price_downlod_tmp'),

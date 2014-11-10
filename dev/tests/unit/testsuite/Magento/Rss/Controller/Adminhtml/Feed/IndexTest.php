@@ -75,8 +75,8 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
 
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->controller = $objectManagerHelper->getObject(
-            'Magento\Rss\Controller\Feed\Index',
+        $controllerArguments = $objectManagerHelper->getConstructArguments(
+            'Magento\Rss\Controller\Adminhtml\Feed\Index',
             [
                 'rssManager' => $this->rssManager,
                 'scopeConfig' => $this->scopeConfigInterface,
@@ -84,6 +84,14 @@ class IndexTest extends \PHPUnit_Framework_TestCase
                 'request' => $request,
                 'response' => $this->response
             ]
+        );
+        $objectManager = $controllerArguments['context']->getObjectManager();
+        $urlInterface = $this->getMock('Magento\Backend\Model\UrlInterface');
+        $objectManager->expects($this->at(0))->method('get')->with('Magento\Backend\Model\UrlInterface')
+            ->will($this->returnValue($urlInterface));
+        $this->controller = $objectManagerHelper->getObject(
+            'Magento\Rss\Controller\Adminhtml\Feed\Index',
+            $controllerArguments
         );
     }
 
