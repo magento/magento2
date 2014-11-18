@@ -24,15 +24,16 @@
 
 namespace Magento\Framework\Api\Search;
 
-use Magento\Framework\Api\ExtensibleObjectBuilder;
-use Magento\Framework\Api\AttributeValueBuilder;
+use Magento\Framework\Api\Builder;
+use Magento\Framework\Api\ObjectFactory;
+use Magento\Framework\Api\AttributeDataBuilder;
 use Magento\Framework\Api\MetadataServiceInterface;
 use Magento\Framework\Api\FilterBuilder;
 
 /**
  * Builder for FilterGroup Data.
  */
-class FilterGroupBuilder extends ExtensibleObjectBuilder
+class FilterGroupBuilder extends Builder
 {
     /**
      * @var FilterBuilder
@@ -40,18 +41,37 @@ class FilterGroupBuilder extends ExtensibleObjectBuilder
     protected $_filterBuilder;
 
     /**
-     * @param \Magento\Framework\Api\ObjectFactory $objectFactory
-     * @param AttributeValueBuilder $valueBuilder
+     * @param ObjectFactory $objectFactory
      * @param MetadataServiceInterface $metadataService
+     * @param AttributeDataBuilder $attributeValueBuilder
+     * @param \Magento\Framework\Reflection\DataObjectProcessor $objectProcessor
+     * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
+     * @param \Magento\Framework\Serialization\DataBuilderFactory $dataBuilderFactory
+     * @param \Magento\Framework\ObjectManager\Config $objectManagerConfig
      * @param FilterBuilder $filterBuilder
+     * @param string|null $modelClassInterface
      */
     public function __construct(
-        \Magento\Framework\Api\ObjectFactory $objectFactory,
-        AttributeValueBuilder $valueBuilder,
+        ObjectFactory $objectFactory,
         MetadataServiceInterface $metadataService,
-        FilterBuilder $filterBuilder
+        \Magento\Framework\Api\AttributeDataBuilder $attributeValueBuilder,
+        \Magento\Framework\Reflection\DataObjectProcessor $objectProcessor,
+        \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
+        \Magento\Framework\Serialization\DataBuilderFactory $dataBuilderFactory,
+        \Magento\Framework\ObjectManager\Config $objectManagerConfig,
+        FilterBuilder $filterBuilder,
+        $modelClassInterface = null
     ) {
-        parent::__construct($objectFactory, $valueBuilder, $metadataService);
+        parent::__construct(
+            $objectFactory,
+            $metadataService,
+            $attributeValueBuilder,
+            $objectProcessor,
+            $typeProcessor,
+            $dataBuilderFactory,
+            $objectManagerConfig,
+            $modelClassInterface
+        );
         $this->_filterBuilder = $filterBuilder;
     }
 

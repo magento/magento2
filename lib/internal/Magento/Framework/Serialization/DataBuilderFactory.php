@@ -48,7 +48,7 @@ class DataBuilderFactory
      * Returns a builder for a given class name.
      *
      * @param string $className
-     * @return \Magento\Framework\Api\ExtensibleDataBuilderInterface Builder Instance
+     * @return \Magento\Framework\Api\BuilderInterface Builder Instance
      */
     public function getDataBuilder($className)
     {

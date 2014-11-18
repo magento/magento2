@@ -40,7 +40,7 @@ class AttributeValueTest extends \PHPUnit_Framework_TestCase
     public function testConstructorAndGettersWithString()
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $attributeBuilder = $helper->getObject('\Magento\Framework\Api\AttributeValueBuilder')
+        $attributeBuilder = $helper->getObject('\Magento\Framework\Api\AttributeDataBuilder')
             ->setAttributeCode(self::ATTRIBUTE_CODE)
             ->setValue(self::STRING_VALUE);
         $attribute = new AttributeValue($attributeBuilder);
@@ -52,7 +52,7 @@ class AttributeValueTest extends \PHPUnit_Framework_TestCase
     public function testConstructorAndGettersWithInteger()
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $attributeBuilder = $helper->getObject('\Magento\Framework\Api\AttributeValueBuilder')
+        $attributeBuilder = $helper->getObject('\Magento\Framework\Api\AttributeDataBuilder')
             ->setAttributeCode(self::ATTRIBUTE_CODE)
             ->setValue(self::INTEGER_VALUE);
         $attribute = new AttributeValue($attributeBuilder);
@@ -64,7 +64,7 @@ class AttributeValueTest extends \PHPUnit_Framework_TestCase
     public function testConstructorAndGettersWithFloat()
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $attributeBuilder = $helper->getObject('\Magento\Framework\Api\AttributeValueBuilder')
+        $attributeBuilder = $helper->getObject('\Magento\Framework\Api\AttributeDataBuilder')
             ->setAttributeCode(self::ATTRIBUTE_CODE)
             ->setValue(self::FLOAT_VALUE);
         $attribute = new AttributeValue($attributeBuilder);
@@ -76,7 +76,7 @@ class AttributeValueTest extends \PHPUnit_Framework_TestCase
     public function testConstructorAndGettersWithBoolean()
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $attributeBuilder = $helper->getObject('\Magento\Framework\Api\AttributeValueBuilder')
+        $attributeBuilder = $helper->getObject('\Magento\Framework\Api\AttributeDataBuilder')
             ->setAttributeCode(self::ATTRIBUTE_CODE)
             ->setValue(self::BOOLEAN_VALUE);
         $attribute = new AttributeValue($attributeBuilder);

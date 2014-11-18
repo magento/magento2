@@ -37,10 +37,8 @@ class Action extends \Magento\Framework\Model\AbstractModel
      */
     protected $_productWebsiteFactory;
 
-    /**
-     * @var \Magento\Indexer\Model\IndexerInterface
-     */
-    protected $categoryIndexer;
+    /** @var \Magento\Indexer\Model\IndexerRegistry */
+    protected $indexerRegistry;
 
     /**
      * @var \Magento\Eav\Model\Config
@@ -55,8 +53,8 @@ class Action extends \Magento\Framework\Model\AbstractModel
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Catalog\Model\Product\WebsiteFactory $productWebsiteFactory
-     * @param \Magento\Indexer\Model\IndexerInterface $categoryIndexer
+     * @param WebsiteFactory $productWebsiteFactory
+     * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Indexer\Product\Eav\Processor $productEavIndexerProcessor
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
@@ -67,7 +65,7 @@ class Action extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Model\Product\WebsiteFactory $productWebsiteFactory,
-        \Magento\Indexer\Model\IndexerInterface $categoryIndexer,
+        \Magento\Indexer\Model\IndexerRegistry $indexerRegistry,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Catalog\Model\Indexer\Product\Eav\Processor $productEavIndexerProcessor,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
@@ -75,7 +73,7 @@ class Action extends \Magento\Framework\Model\AbstractModel
         array $data = array()
     ) {
         $this->_productWebsiteFactory = $productWebsiteFactory;
-        $this->categoryIndexer = $categoryIndexer;
+        $this->indexerRegistry = $indexerRegistry;
         $this->_eavConfig = $eavConfig;
         $this->_productEavIndexerProcessor = $productEavIndexerProcessor;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -89,19 +87,6 @@ class Action extends \Magento\Framework\Model\AbstractModel
     protected function _construct()
     {
         $this->_init('Magento\Catalog\Model\Resource\Product\Action');
-    }
-
-    /**
-     * Return product category indexer object
-     *
-     * @return \Magento\Indexer\Model\IndexerInterface
-     */
-    protected function getCategoryIndexer()
-    {
-        if (!$this->categoryIndexer->getId()) {
-            $this->categoryIndexer->load(\Magento\Catalog\Model\Indexer\Product\Category::INDEXER_ID);
-        }
-        return $this->categoryIndexer;
     }
 
     /**
@@ -138,8 +123,9 @@ class Action extends \Magento\Framework\Model\AbstractModel
             $this->_productEavIndexerProcessor->reindexList(array_unique($productIds));
         }
 
-        if (!$this->getCategoryIndexer()->isScheduled()) {
-            $this->getCategoryIndexer()->reindexList(array_unique($productIds));
+        $categoryIndexer = $this->indexerRegistry->get(\Magento\Catalog\Model\Indexer\Product\Category::INDEXER_ID);
+        if (!$categoryIndexer->isScheduled()) {
+            $categoryIndexer->reindexList(array_unique($productIds));
         }
         return $this;
     }
@@ -199,8 +185,9 @@ class Action extends \Magento\Framework\Model\AbstractModel
             array('product_ids' => array_unique($productIds), 'website_ids' => $websiteIds, 'action_type' => $type)
         );
 
-        if (!$this->getCategoryIndexer()->isScheduled()) {
-            $this->getCategoryIndexer()->reindexList(array_unique($productIds));
+        $categoryIndexer = $this->indexerRegistry->get(\Magento\Catalog\Model\Indexer\Product\Category::INDEXER_ID);
+        if (!$categoryIndexer->isScheduled()) {
+            $categoryIndexer->reindexList(array_unique($productIds));
         }
     }
 }

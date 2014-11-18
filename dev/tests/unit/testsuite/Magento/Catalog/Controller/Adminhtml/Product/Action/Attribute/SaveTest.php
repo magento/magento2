@@ -99,11 +99,14 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
         $this->stockItemBuilder = $this->getMock(
             'Magento\CatalogInventory\Service\V1\Data\StockItemBuilder',
-            ['mergeDataObjectWithArray'],
+            ['mergeDataObjectWithArray', 'create'],
             [],
             '',
             false
         );
+        $this->stockItemBuilder->expects($this->any())
+            ->method('mergeDataObjectWithArray')
+            ->willReturn($this->stockItemBuilder);
 
         $this->stockIndexerProcessor = $this->getMock(
             'Magento\CatalogInventory\Model\Indexer\Stock\Processor',

@@ -111,8 +111,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                     }
                 }
 
-                $this->_objectManager->create('Magento\CatalogRule\Model\Rule')->applyAllRulesToProduct($productId);
-
                 $this->messageManager->addSuccess(__('You saved the product.'));
                 if ($product->getSku() != $originalSku) {
                     $this->messageManager->addNotice(

@@ -25,10 +25,8 @@ namespace Magento\Catalog\Model\Indexer\Category\Flat\Plugin;
 
 class StoreGroup
 {
-    /**
-     * @var \Magento\Indexer\Model\IndexerInterface
-     */
-    protected $indexer;
+    /** @var \Magento\Indexer\Model\IndexerRegistry */
+    protected $indexerRegistry;
 
     /**
      * @var \Magento\Catalog\Model\Indexer\Category\Flat\State
@@ -36,28 +34,15 @@ class StoreGroup
     protected $state;
 
     /**
-     * @param \Magento\Indexer\Model\IndexerInterface $indexer
+     * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
      * @param \Magento\Catalog\Model\Indexer\Category\Flat\State $state
      */
     public function __construct(
-        \Magento\Indexer\Model\IndexerInterface $indexer,
+        \Magento\Indexer\Model\IndexerRegistry $indexerRegistry,
         \Magento\Catalog\Model\Indexer\Category\Flat\State $state
     ) {
-        $this->indexer = $indexer;
+        $this->indexerRegistry = $indexerRegistry;
         $this->state = $state;
-    }
-
-    /**
-     * Return own indexer object
-     *
-     * @return \Magento\Indexer\Model\IndexerInterface
-     */
-    protected function getIndexer()
-    {
-        if (!$this->indexer->getId()) {
-            $this->indexer->load(\Magento\Catalog\Model\Indexer\Category\Flat\State::INDEXER_ID);
-        }
-        return $this->indexer;
     }
 
     /**
@@ -87,7 +72,7 @@ class StoreGroup
         $needInvalidating = $this->validate($group);
         $objectResource = $proceed($group);
         if ($needInvalidating && $this->state->isFlatEnabled()) {
-            $this->getIndexer()->invalidate();
+            $this->indexerRegistry->get(\Magento\Catalog\Model\Indexer\Category\Flat\State::INDEXER_ID)->invalidate();
         }
 
         return $objectResource;

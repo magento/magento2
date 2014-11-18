@@ -61,7 +61,8 @@ class ParameterTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [" direct_url='about-magento-demo-store'", ['direct_url' => 'about-magento-demo-store']],
-            [" direct_url='about-magento-demo-store\\[newDemo]", ['direct_url' => 'about-magento-demo-store[newDemo]']],
+            [" direct_url='about-magento-demo-store\\[newDemo]",
+            ['direct_url' => 'about-magento-demo-store\\[newDemo]']],
             ["   ", []]
         ];
     }
@@ -70,7 +71,7 @@ class ParameterTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [" direct_url='about-magento-demo-store'", "direct_url='about-magento-demo-store'"],
-            [" direct_url='about-magento-demo-store\\[newDemo]", "direct_url='about-magento-demo-store[newDemo]"],
+            [" direct_url='about-magento-demo-store\\[newDemo]", "direct_url='about-magento-demo-store\\[newDemo]"],
             ['   ', '']
         ];
     }

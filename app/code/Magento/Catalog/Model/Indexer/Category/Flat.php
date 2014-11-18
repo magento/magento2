@@ -35,24 +35,22 @@ class Flat implements \Magento\Indexer\Model\ActionInterface, \Magento\Framework
      */
     protected $rowsActionFactory;
 
-    /**
-     * @var \Magento\Indexer\Model\IndexerInterface
-     */
-    protected $indexer;
+    /** @var \Magento\Indexer\Model\IndexerRegistry */
+    protected $indexerRegistry;
 
     /**
      * @param Flat\Action\FullFactory $fullActionFactory
      * @param Flat\Action\RowsFactory $rowsActionFactory
-     * @param \Magento\Indexer\Model\IndexerInterface $indexer
+     * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
      */
     public function __construct(
         Flat\Action\FullFactory $fullActionFactory,
         Flat\Action\RowsFactory $rowsActionFactory,
-        \Magento\Indexer\Model\IndexerInterface $indexer
+        \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
     ) {
         $this->fullActionFactory = $fullActionFactory;
         $this->rowsActionFactory = $rowsActionFactory;
-        $this->indexer = $indexer;
+        $this->indexerRegistry = $indexerRegistry;
     }
 
     /**
@@ -63,14 +61,14 @@ class Flat implements \Magento\Indexer\Model\ActionInterface, \Magento\Framework
      */
     public function execute($ids)
     {
-        $this->indexer->load(Flat\State::INDEXER_ID);
-        if ($this->indexer->isInvalid()) {
+        $indexer = $this->indexerRegistry->get(Flat\State::INDEXER_ID);
+        if ($indexer->isInvalid()) {
             return;
         }
 
         /** @var Flat\Action\Rows $action */
         $action = $this->rowsActionFactory->create();
-        if ($this->indexer->isWorking()) {
+        if ($indexer->isWorking()) {
             $action->reindex($ids, true);
         }
         $action->reindex($ids);
@@ -92,7 +90,7 @@ class Flat implements \Magento\Indexer\Model\ActionInterface, \Magento\Framework
      * @param int[] $ids
      * @return void
      */
-    public function executeList($ids)
+    public function executeList(array $ids)
     {
         $this->execute($ids);
     }

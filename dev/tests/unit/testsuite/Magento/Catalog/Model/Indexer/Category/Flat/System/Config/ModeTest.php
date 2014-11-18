@@ -41,9 +41,14 @@ class ModeTest extends \PHPUnit_Framework_TestCase
     protected $indexerStateMock;
 
     /**
+     * @var \Magento\Indexer\Model\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $indexerRegistry;
+
+    /**
      * @var \Magento\Indexer\Model\IndexerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $flatIndexerMock;
+    protected $flatIndexer;
 
     protected function setUp()
     {
@@ -55,15 +60,9 @@ class ModeTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->flatIndexerMock = $this->getMockForAbstractClass(
-            'Magento\Indexer\Model\IndexerInterface',
-            array(),
-            '',
-            false,
-            false,
-            true,
-            array('load', 'setScheduled', '__wakeup')
-        );
+        $this->indexerRegistry = $this->getMock('Magento\Indexer\Model\IndexerRegistry', [], [], '', false);
+
+        $this->flatIndexer = $this->getMock('Magento\Indexer\Model\IndexerInterface');
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -71,7 +70,7 @@ class ModeTest extends \PHPUnit_Framework_TestCase
             array(
                 'config' => $this->configMock,
                 'indexerState' => $this->indexerStateMock,
-                'flatIndexer' => $this->flatIndexerMock
+                'indexerRegistry' => $this->indexerRegistry
             )
         );
     }
@@ -105,8 +104,8 @@ class ModeTest extends \PHPUnit_Framework_TestCase
         $this->indexerStateMock->expects($this->never())->method('setStatus');
         $this->indexerStateMock->expects($this->never())->method('save');
 
-        $this->flatIndexerMock->expects($this->never())->method('load');
-        $this->flatIndexerMock->expects($this->never())->method('setScheduled');
+        $this->indexerRegistry->expects($this->never())->method('load');
+        $this->indexerRegistry->expects($this->never())->method('setScheduled');
 
         $this->model->processValue();
     }
@@ -156,8 +155,8 @@ class ModeTest extends \PHPUnit_Framework_TestCase
         );
         $this->indexerStateMock->expects($this->once())->method('save')->will($this->returnSelf());
 
-        $this->flatIndexerMock->expects($this->never())->method('load');
-        $this->flatIndexerMock->expects($this->never())->method('setScheduled');
+        $this->indexerRegistry->expects($this->never())->method('load');
+        $this->indexerRegistry->expects($this->never())->method('setScheduled');
 
         $this->model->processValue();
     }
@@ -191,16 +190,9 @@ class ModeTest extends \PHPUnit_Framework_TestCase
         $this->indexerStateMock->expects($this->never())->method('setStatus');
         $this->indexerStateMock->expects($this->never())->method('save');
 
-        $this->flatIndexerMock->expects(
-            $this->once()
-        )->method(
-            'load'
-        )->with(
-            'catalog_category_flat'
-        )->will(
-            $this->returnSelf()
-        );
-        $this->flatIndexerMock->expects($this->once())->method('setScheduled')->with(false);
+        $this->indexerRegistry->expects($this->once())->method('get')->with('catalog_category_flat')
+            ->willReturn($this->flatIndexer);
+        $this->flatIndexer->expects($this->once())->method('setScheduled')->with(false);
 
         $this->model->processValue();
     }

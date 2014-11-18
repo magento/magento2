@@ -134,7 +134,7 @@ class StockItemService implements StockItemServiceInterface
         $dataToSave = $this->stockItemBuilder->mergeDataObjectWithArray(
             $stockItemDo,
             $stockItemDetailsDo->__toArray()
-        )->__toArray();
+        )->create()->__toArray();
         return $stockItem->setData($dataToSave)->save()->getId();
     }
 

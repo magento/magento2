@@ -496,17 +496,9 @@ class StockItemServiceTest extends \PHPUnit_Framework_TestCase
         $this->stockItemRegistry->expects($this->any())->method('retrieve')
             ->will($this->returnValueMap([[$productId, $stockItem]]));
 
-        $this->stockItemBuilder->expects($this->any())
-            ->method('create')
-            ->will($this->returnValue($stockItemDataObject));
-
         $stockItemDetailsDo->expects($this->any())
             ->method('__toArray')
             ->will($this->returnValue($stockItemDetailsDoData));
-
-        $this->stockItemBuilder->expects($this->any())
-            ->method('mergeDataObjectWithArray')
-            ->will($this->returnValue($stockItemDataObjectMerged));
 
         $stockItemDataObjectMerged->expects($this->any())
             ->method('__toArray')
@@ -514,10 +506,19 @@ class StockItemServiceTest extends \PHPUnit_Framework_TestCase
 
         // 3. Set expectations
         $stockItem->expects($this->any())->method('setData')->with($dataToSave)->will($this->returnSelf());
-        $this->stockItemBuilder->expects($this->any())
+        $this->stockItemBuilder->expects($this->at(0))
             ->method('populateWithArray')
             ->with($stockItemData)
             ->will($this->returnSelf());
+        $this->stockItemBuilder->expects($this->at(1))
+            ->method('create')
+            ->will($this->returnValue($stockItemDataObject));
+        $this->stockItemBuilder->expects($this->at(2))
+            ->method('mergeDataObjectWithArray')
+            ->will($this->returnValue($this->stockItemBuilder));
+        $this->stockItemBuilder->expects($this->at(3))
+            ->method('create')
+            ->will($this->returnValue($stockItemDataObjectMerged));
 
         // 4. Run tested method
         $result = $this->model->saveStockItemBySku($productSku, $stockItemDetailsDo);

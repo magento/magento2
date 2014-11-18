@@ -34,13 +34,11 @@ class Created extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacken
     protected $dateTime;
 
     /**
-     * @param \Magento\Framework\Logger $logger
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      */
-    public function __construct(\Magento\Framework\Logger $logger, \Magento\Framework\Stdlib\DateTime $dateTime)
+    public function __construct(\Magento\Framework\Stdlib\DateTime $dateTime)
     {
         $this->dateTime = $dateTime;
-        parent::__construct($logger);
     }
 
     /**

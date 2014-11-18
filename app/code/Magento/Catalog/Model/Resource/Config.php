@@ -104,7 +104,7 @@ class Config extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function getStoreId()
     {
         if ($this->_storeId === null) {
-            return $this->_storeManager->getStore()->getId();
+            $this->_storeId = (int)$this->_storeManager->getStore()->getId();
         }
         return $this->_storeId;
     }
@@ -117,7 +117,8 @@ class Config extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function getEntityTypeId()
     {
         if ($this->_entityTypeId === null) {
-            $this->_entityTypeId = $this->_eavConfig->getEntityType(\Magento\Catalog\Model\Product::ENTITY)->getId();
+            $this->_entityTypeId = (int)$this->_eavConfig->getEntityType(\Magento\Catalog\Model\Product::ENTITY)
+                ->getId();
         }
         return $this->_entityTypeId;
     }
@@ -143,12 +144,11 @@ class Config extends \Magento\Framework\Model\Resource\Db\AbstractDb
             array('store_label' => $storeLabelExpr)
         )->where(
             'main_table.entity_type_id = ?',
-            (int)$this->getEntityTypeId()
+            $this->getEntityTypeId()
         )->where(
             'additional_table.used_in_product_listing = ?',
             1
         );
-
         return $adapter->fetchAll($select);
     }
 
@@ -169,16 +169,15 @@ class Config extends \Magento\Framework\Model\Resource\Db\AbstractDb
             array()
         )->joinLeft(
             array('al' => $this->getTable('eav_attribute_label')),
-            'al.attribute_id = main_table.attribute_id AND al.store_id = ' . (int)$this->getStoreId(),
+            'al.attribute_id = main_table.attribute_id AND al.store_id = ' . $this->getStoreId(),
             array('store_label' => $storeLabelExpr)
         )->where(
             'main_table.entity_type_id = ?',
-            (int)$this->getEntityTypeId()
+            $this->getEntityTypeId()
         )->where(
             'additional_table.used_for_sort_by = ?',
             1
         );
-
         return $adapter->fetchAll($select);
     }
 }

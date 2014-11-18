@@ -62,7 +62,6 @@
         </arguments>
     </type>
     <preference for="Magento\Framework\App\View\Deployment\Version\StorageInterface" type="Magento\Framework\App\View\Deployment\Version\Storage\File"/>
-    <preference for="Magento\Framework\App\View\Deployment\Version\GeneratorInterface" type="Magento\Framework\App\View\Deployment\Version\Generator\Timestamp"/>
     <type name="Magento\Framework\App\View\Deployment\Version\Storage\File">
         <arguments>
             <argument name="directoryCode" xsi:type="const">Magento\Framework\App\Filesystem\DirectoryList::STATIC_VIEW</argument>

@@ -23,6 +23,8 @@
  */
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin;
 
+use Magento\CatalogSearch\Model\Indexer\Fulltext;
+
 class Attribute extends AbstractPlugin
 {
     /**
@@ -43,7 +45,7 @@ class Attribute extends AbstractPlugin
         $needInvalidation = !$attribute->isObjectNew() && $attribute->dataHasChangedFor('is_searchable');
         $result = $proceed($attribute);
         if ($needInvalidation) {
-            $this->getIndexer()->invalidate();
+            $this->indexerRegistry->get(Fulltext::INDEXER_ID)->invalidate();
         }
 
         return $result;
@@ -67,7 +69,7 @@ class Attribute extends AbstractPlugin
         $needInvalidation = !$attribute->isObjectNew() && $attribute->getIsSearchable();
         $result = $proceed($attribute);
         if ($needInvalidation) {
-            $this->getIndexer()->invalidate();
+            $this->indexerRegistry->get(Fulltext::INDEXER_ID)->invalidate();
         }
 
         return $result;

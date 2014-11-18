@@ -26,6 +26,7 @@ namespace Magento\UrlRewrite\Controller;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Model\OptionProvider;
+use Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 
 /**
  * UrlRewrite Controller Router
@@ -98,13 +99,28 @@ class Router implements \Magento\Framework\App\RouterInterface
             return null;
         }
 
-        $redirectType = $rewrite->getRedirectType();
-        if ($redirectType) {
-            return $this->redirect($request, $rewrite->getTargetPath(), $redirectType);
+        if ($rewrite->getRedirectType()) {
+            return $this->processRedirect($request, $rewrite);
         }
 
         $request->setPathInfo('/' . $rewrite->getTargetPath());
         return $this->actionFactory->create('Magento\Framework\App\Action\Forward', array('request' => $request));
+    }
+
+    /**
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @param UrlRewrite $rewrite
+     * @return \Magento\Framework\App\ActionInterface|null
+     */
+    protected function processRedirect($request, $rewrite)
+    {
+        $target = $rewrite->getTargetPath();
+        if ($rewrite->getEntityType() !== Rewrite::ENTITY_TYPE_CUSTOM
+            || ($prefix = substr($target, 0, 6)) !== 'http:/' && $prefix !== 'https:'
+        ) {
+            $target = $this->url->getUrl('', array('_direct' => $target));
+        }
+        return $this->redirect($request, $target, $rewrite->getRedirectType());
     }
 
     /**
@@ -115,7 +131,7 @@ class Router implements \Magento\Framework\App\RouterInterface
      */
     protected function redirect($request, $url, $code)
     {
-        $this->response->setRedirect($this->url->getUrl('', array('_direct' => $url)), $code);
+        $this->response->setRedirect($url, $code);
         $request->setDispatched(true);
         return $this->actionFactory->create('Magento\Framework\App\Action\Redirect', array('request' => $request));
     }
@@ -127,11 +143,9 @@ class Router implements \Magento\Framework\App\RouterInterface
      */
     protected function getRewrite($requestPath, $storeId)
     {
-        return $this->urlFinder->findOneByData(
-            [
-                UrlRewrite::REQUEST_PATH => trim($requestPath, '/'),
-                UrlRewrite::STORE_ID => $storeId,
-            ]
-        );
+        return $this->urlFinder->findOneByData([
+            UrlRewrite::REQUEST_PATH => trim($requestPath, '/'),
+            UrlRewrite::STORE_ID => $storeId,
+        ]);
     }
 }

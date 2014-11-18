@@ -74,6 +74,8 @@ class FormPost extends \Magento\Customer\Controller\Address
             ->populateWithArray(array_merge($existingAddressData, $attributeValues))
             ->setCustomerId($this->_getSession()->getCustomerId())
             ->setRegion($region)
+            ->setDefaultBilling($this->getRequest()->getParam('default_billing', false))
+            ->setDefaultShipping($this->getRequest()->getParam('default_shipping', false))
             ->create();
     }
 

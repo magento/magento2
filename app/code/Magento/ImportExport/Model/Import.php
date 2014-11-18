@@ -114,9 +114,9 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     protected $_uploaderFactory;
 
     /**
-     * @var \Magento\Indexer\Model\IndexerFactory
+     * @var \Magento\Indexer\Model\IndexerRegistry
      */
-    protected $indexerFactory;
+    protected $indexerRegistry;
 
     /**
      * @var \Magento\ImportExport\Model\Source\Import\Behavior\Factory
@@ -134,14 +134,14 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * @param \Magento\Framework\Logger\AdapterFactory $adapterFactory
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
-     * @param \Magento\ImportExport\Model\Import\ConfigInterface $importConfig
-     * @param \Magento\ImportExport\Model\Import\Entity\Factory $entityFactory
-     * @param \Magento\ImportExport\Model\Resource\Import\Data $importData
-     * @param \Magento\ImportExport\Model\Export\Adapter\CsvFactory $csvFactory
-     * @param \Magento\Framework\HTTP\Adapter\FileTransferFactory $httpFactory
+     * @param Import\ConfigInterface $importConfig
+     * @param Import\Entity\Factory $entityFactory
+     * @param Resource\Import\Data $importData
+     * @param Export\Adapter\CsvFactory $csvFactory
+     * @param FileTransferFactory $httpFactory
      * @param \Magento\Core\Model\File\UploaderFactory $uploaderFactory
-     * @param \Magento\ImportExport\Model\Source\Import\Behavior\Factory $behaviorFactory
-     * @param \Magento\Indexer\Model\IndexerFactory $indexerFactory
+     * @param Source\Import\Behavior\Factory $behaviorFactory
+     * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
      * @param array $data
      */
     public function __construct(
@@ -157,7 +157,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         \Magento\Framework\HTTP\Adapter\FileTransferFactory $httpFactory,
         \Magento\Core\Model\File\UploaderFactory $uploaderFactory,
         \Magento\ImportExport\Model\Source\Import\Behavior\Factory $behaviorFactory,
-        \Magento\Indexer\Model\IndexerFactory $indexerFactory,
+        \Magento\Indexer\Model\IndexerRegistry $indexerRegistry,
         array $data = array()
     ) {
         $this->_importExportData = $importExportData;
@@ -168,7 +168,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         $this->_csvFactory = $csvFactory;
         $this->_httpFactory = $httpFactory;
         $this->_uploaderFactory = $uploaderFactory;
-        $this->indexerFactory = $indexerFactory;
+        $this->indexerRegistry = $indexerRegistry;
         $this->_behaviorFactory = $behaviorFactory;
         $this->_filesystem = $filesystem;
         parent::__construct($logger, $filesystem, $adapterFactory, $data);
@@ -573,9 +573,8 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         }
 
         foreach (array_keys($relatedIndexers) as $indexerId) {
-            $indexer = $this->indexerFactory->create();
             try {
-                $indexer->load($indexerId);
+                $indexer = $this->indexerRegistry->get($indexerId);
                 $indexer->invalidate();
             } catch (\InvalidArgumentException $e) {
             }

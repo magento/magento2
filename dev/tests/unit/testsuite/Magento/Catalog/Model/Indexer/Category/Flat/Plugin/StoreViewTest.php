@@ -41,6 +41,11 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
+     * @var \Magento\Indexer\Model\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $indexerRegistryMock;
+
+    /**
      * @var \Closure
      */
     protected $closureMock;
@@ -72,7 +77,8 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
             return false;
         };
         $this->subjectMock = $this->getMock('Magento\Store\Model\Resource\Store', array(), array(), '', false);
-        $this->model = new StoreView($this->indexerMock, $this->stateMock);
+        $this->indexerRegistryMock = $this->getMock('Magento\Indexer\Model\IndexerRegistry', ['get'], [], '', false);
+        $this->model = new StoreView($this->indexerRegistryMock, $this->stateMock);
     }
 
     public function testAroundSaveNewObject()
@@ -117,8 +123,11 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
 
     protected function mockIndexerMethods()
     {
-        $this->indexerMock->expects($this->once())->method('getId')->will($this->returnValue(1));
         $this->indexerMock->expects($this->once())->method('invalidate');
+        $this->indexerRegistryMock->expects($this->once())
+            ->method('get')
+            ->with(\Magento\Catalog\Model\Indexer\Category\Flat\State::INDEXER_ID)
+            ->will($this->returnValue($this->indexerMock));
     }
 
     protected function mockConfigFlatEnabled()

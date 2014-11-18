@@ -54,7 +54,7 @@ class Quote extends AbstractResource
      */
     protected function _construct()
     {
-        $this->_init('sales_flat_quote', 'entity_id');
+        $this->_init('sales_quote', 'entity_id');
     }
 
     /**
@@ -184,7 +184,7 @@ class Quote extends AbstractResource
         $adapter = $this->_getReadAdapter();
         $bind = array(':increment_id' => $orderIncrementId);
         $select = $adapter->select();
-        $select->from($this->getTable('sales_flat_order'), 'entity_id')->where('increment_id = :increment_id');
+        $select->from($this->getTable('sales_order'), 'entity_id')->where('increment_id = :increment_id');
         $entity_id = $adapter->fetchOne($select, $bind);
         if ($entity_id > 0) {
             return true;
@@ -200,9 +200,9 @@ class Quote extends AbstractResource
      */
     public function markQuotesRecollectOnCatalogRules()
     {
-        $tableQuote = $this->getTable('sales_flat_quote');
+        $tableQuote = $this->getTable('sales_quote');
         $subSelect = $this->_getReadAdapter()->select()->from(
-            array('t2' => $this->getTable('sales_flat_quote_item')),
+            array('t2' => $this->getTable('sales_quote_item')),
             array('entity_id' => 'quote_id')
         )->from(
             array('t3' => $this->getTable('catalogrule_product_price')),
@@ -250,7 +250,7 @@ class Quote extends AbstractResource
                 'items_count' => new \Zend_Db_Expr($adapter->quoteIdentifier('q.items_count') . ' - 1')
             )
         )->join(
-            array('qi' => $this->getTable('sales_flat_quote_item')),
+            array('qi' => $this->getTable('sales_quote_item')),
             implode(
                 ' AND ',
                 array(
@@ -262,7 +262,7 @@ class Quote extends AbstractResource
             array()
         );
 
-        $updateQuery = $adapter->updateFromSelect($subSelect, array('q' => $this->getTable('sales_flat_quote')));
+        $updateQuery = $adapter->updateFromSelect($subSelect, array('q' => $this->getTable('sales_quote')));
 
         $adapter->query($updateQuery);
 
@@ -277,8 +277,8 @@ class Quote extends AbstractResource
      */
     public function markQuotesRecollect($productIds)
     {
-        $tableQuote = $this->getTable('sales_flat_quote');
-        $tableItem = $this->getTable('sales_flat_quote_item');
+        $tableQuote = $this->getTable('sales_quote');
+        $tableItem = $this->getTable('sales_quote_item');
         $subSelect = $this->_getReadAdapter()->select()->from(
             $tableItem,
             array('entity_id' => 'quote_id')

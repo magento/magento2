@@ -116,7 +116,8 @@ class TaxRateBuilderTest extends \PHPUnit_Framework_TestCase
         $expectedTaxRate = $this->builder->populateWithArray($expectedResultsArray)->create();
         $taxRate1 = $this->builder->populateWithArray($firstRateArray)->create();
         $taxRate2 = $this->builder->populateWithArray($secondRateArray)->create();
-        $taxRateMerged = $this->builder->mergeDataObjects($taxRate1, $taxRate2);
+        $taxRateMerged = $this->builder->mergeDataObjects($taxRate1, $taxRate2)
+            ->create();
         $this->assertEquals($expectedTaxRate->__toArray(), $taxRateMerged->__toArray());
     }
 
@@ -128,7 +129,8 @@ class TaxRateBuilderTest extends \PHPUnit_Framework_TestCase
 
         $taxRate = $this->builder->populateWithArray($expectedResultsArray)->create();
         $taxRate1 = $this->builder->populateWithArray($firstRateArray)->create();
-        $taxRateMerged = $this->builder->mergeDataObjectWithArray($taxRate1, $secondRateArray);
+        $taxRateMerged = $this->builder->mergeDataObjectWithArray($taxRate1, $secondRateArray)
+            ->create();
         $this->assertEquals($taxRate->__toArray(), $taxRateMerged->__toArray());
     }
 

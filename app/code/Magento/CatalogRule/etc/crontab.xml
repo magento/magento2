@@ -25,7 +25,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Cron/etc/crontab.xsd">
     <group id="default">
-        <job name="catalogrule_apply_all" instance="Magento\CatalogRule\Model\Observer" method="dailyCatalogUpdate">
+        <job name="catalogrule_apply_all" instance="Magento\CatalogRule\Model\Cron" method="dailyCatalogUpdate">
             <schedule>0 1 * * *</schedule>
         </job>
     </group>

@@ -96,7 +96,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
 
         $objectBuilder = $this->getMockForAbstractClass(
-            '\Magento\Framework\Api\AbstractSimpleObjectBuilder',
+            '\Magento\Framework\Api\ExtensibleObjectBuilder',
             ['getData'],
             '',
             false

@@ -30,5 +30,10 @@
             <locator>.form.search.advanced</locator>
             <strategy>css selector</strategy>
         </form>
+        <widgetView>
+            <class>Magento\Widget\Test\Block\WidgetView</class>
+            <locator>.widget</locator>
+            <strategy>css selector</strategy>
+        </widgetView>
     </blocks>
 </page>

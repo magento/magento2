@@ -116,7 +116,7 @@ $quote->getShippingAddress()->setShippingMethod('flatrate_flatrate');
 $quote->getShippingAddress()->setCollectShippingRates(true);
 $quote->collectTotals()->save();
 
-$quote->getPayment()->setMethod(\Magento\Paypal\Model\Config::METHOD_WPS);
+$quote->getPayment()->setMethod(\Magento\Paypal\Model\Config::METHOD_WPS)->save();
 $quote->setCustomerEmail('admin@example.com');
 
 /** @var $service \Magento\Sales\Model\Service\Quote */

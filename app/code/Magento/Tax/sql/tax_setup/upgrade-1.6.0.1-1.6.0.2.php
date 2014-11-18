@@ -67,9 +67,9 @@ $table = $installer->getConnection()->newTable(
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
-    $installer->getFkName('sales_order_tax_item', 'item_id', 'sales_flat_order_item', 'item_id'),
+    $installer->getFkName('sales_order_tax_item', 'item_id', 'sales_order_item', 'item_id'),
     'item_id',
-    $installer->getTable('sales_flat_order_item'),
+    $installer->getTable('sales_order_item'),
     'item_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE

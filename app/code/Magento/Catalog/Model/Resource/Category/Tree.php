@@ -56,13 +56,6 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
     protected $_collection;
 
     /**
-     * Id of 'is_active' category attribute
-     *
-     * @var int
-     */
-    protected $_isActiveAttributeId = null;
-
-    /**
      * Join URL rewrites data to collection flag
      *
      * @var boolean
@@ -310,35 +303,6 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
     }
 
     /**
-     * Returns attribute id for attribute "is_active"
-     *
-     * @return int
-     */
-    protected function _getIsActiveAttributeId()
-    {
-        if (is_null($this->_isActiveAttributeId)) {
-            $bind = array(
-                'entity_type_code' => \Magento\Catalog\Model\Category::ENTITY,
-                'attribute_code' => 'is_active'
-            );
-            $select = $this->_conn->select()->from(
-                array('a' => $this->_coreResource->getTableName('eav_attribute')),
-                array('attribute_id')
-            )->join(
-                array('t' => $this->_coreResource->getTableName('eav_entity_type')),
-                'a.entity_type_id = t.entity_type_id'
-            )->where(
-                'entity_type_code = :entity_type_code'
-            )->where(
-                'attribute_code = :attribute_code'
-            );
-
-            $this->_isActiveAttributeId = $this->_conn->fetchOne($select, $bind);
-        }
-        return $this->_isActiveAttributeId;
-    }
-
-    /**
      * Retrieve inactive category item ids
      *
      * @param Collection $collection
@@ -348,7 +312,7 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
     protected function _getInactiveItemIds($collection, $storeId)
     {
         $filter = $collection->getAllIdsSql();
-        $attributeId = $this->_getIsActiveAttributeId();
+        $attributeId = $this->_catalogCategory->getIsActiveAttributeId();
 
         $conditionSql = $this->_conn->getCheckSql('c.value_id > 0', 'c.value', 'd.value');
         $table = $this->_coreResource->getTableName('catalog_category_entity_int');

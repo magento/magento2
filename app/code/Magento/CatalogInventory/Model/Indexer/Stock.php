@@ -87,7 +87,7 @@ class Stock implements \Magento\Indexer\Model\ActionInterface, \Magento\Framewor
      *
      * @return void
      */
-    public function executeList($ids)
+    public function executeList(array $ids)
     {
         $this->_productStockIndexerRows->execute($ids);
     }

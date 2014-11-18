@@ -23,6 +23,8 @@
  */
 namespace Magento\Downloadable\Model;
 
+use Magento\Store\Model\ScopeInterface;
+
 /**
  * Downloadable Products Observer
  *
@@ -171,7 +173,7 @@ class Observer
                     ->_scopeConfig
                     ->getValue(
                         \Magento\Downloadable\Model\Link::XML_PATH_LINKS_TITLE,
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                        ScopeInterface::SCOPE_STORE
                     );
                 $linkPurchased->setLinkSectionTitle($linkSectionTitle)->save();
                 foreach ($linkIds as $linkId) {
@@ -269,7 +271,7 @@ class Observer
         $downloadableItemsStatuses = array();
         $orderItemStatusToEnable = $this->_scopeConfig->getValue(
             \Magento\Downloadable\Model\Link\Purchased\Item::XML_PATH_ORDER_ITEM_STATUS,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $order->getStoreId()
         );
 
@@ -355,29 +357,29 @@ class Observer
      */
     public function isAllowedGuestCheckout(\Magento\Framework\Event\Observer $observer)
     {
-        $quote = $observer->getEvent()->getQuote();
-        /* @var $quote \Magento\Sales\Model\Quote */
         $store = $observer->getEvent()->getStore();
         $result = $observer->getEvent()->getResult();
 
-        $isContain = false;
+        $result->setIsAllowed(true);
+
+        if (!$this->_scopeConfig->isSetFlag(
+            self::XML_PATH_DISABLE_GUEST_CHECKOUT,
+            ScopeInterface::SCOPE_STORE,
+            $store
+        )) {
+            return $this;
+        }
+
+        /* @var $quote \Magento\Sales\Model\Quote */
+        $quote = $observer->getEvent()->getQuote();
 
         foreach ($quote->getAllItems() as $item) {
             if (($product = $item->getProduct())
                 && $product->getTypeId() == \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE
             ) {
-                $isContain = true;
+                $result->setIsAllowed(false);
+                break;
             }
-        }
-
-        if ($isContain
-            && $this->_scopeConfig->isSetFlag(
-                self::XML_PATH_DISABLE_GUEST_CHECKOUT,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                $store
-            )
-        ) {
-            $result->setIsAllowed(false);
         }
 
         return $this;

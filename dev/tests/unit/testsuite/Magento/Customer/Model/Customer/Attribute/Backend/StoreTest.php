@@ -38,12 +38,10 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $logger = $this->getMockBuilder('Magento\Framework\Logger')->disableOriginalConstructor()->getMock();
-        /** @var \Magento\Framework\Logger $logger */
         $storeManager = $this->storeManager = $this->getMockBuilder('Magento\Framework\StoreManagerInterface')
             ->getMock();
         /** @var \Magento\Framework\StoreManagerInterface $storeManager */
-        $this->testable = new Store($logger, $storeManager);
+        $this->testable = new Store($storeManager);
     }
 
     public function testBeforeSaveWithId()

@@ -40,24 +40,22 @@ class Product implements \Magento\Indexer\Model\ActionInterface, \Magento\Framew
      */
     protected $rowsActionFactory;
 
-    /**
-     * @var \Magento\Indexer\Model\IndexerInterface
-     */
-    protected $indexer;
+    /** @var \Magento\Indexer\Model\IndexerRegistry */
+    protected $indexerRegistry;
 
     /**
      * @param Product\Action\FullFactory $fullActionFactory
      * @param Product\Action\RowsFactory $rowsActionFactory
-     * @param \Magento\Indexer\Model\IndexerInterface $indexer
+     * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
      */
     public function __construct(
         Product\Action\FullFactory $fullActionFactory,
         Product\Action\RowsFactory $rowsActionFactory,
-        \Magento\Indexer\Model\IndexerInterface $indexer
+        \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
     ) {
         $this->fullActionFactory = $fullActionFactory;
         $this->rowsActionFactory = $rowsActionFactory;
-        $this->indexer = $indexer;
+        $this->indexerRegistry = $indexerRegistry;
     }
 
     /**
@@ -87,7 +85,7 @@ class Product implements \Magento\Indexer\Model\ActionInterface, \Magento\Framew
      * @param int[] $ids
      * @return void
      */
-    public function executeList($ids)
+    public function executeList(array $ids)
     {
         $this->executeAction($ids);
     }
@@ -112,11 +110,11 @@ class Product implements \Magento\Indexer\Model\ActionInterface, \Magento\Framew
     protected function executeAction($ids)
     {
         $ids = array_unique($ids);
-        $this->indexer->load(static::INDEXER_ID);
+        $indexer = $this->indexerRegistry->get(static::INDEXER_ID);
 
         /** @var Product\Action\Rows $action */
         $action = $this->rowsActionFactory->create();
-        if ($this->indexer->isWorking()) {
+        if ($indexer->isWorking()) {
             $action->execute($ids, true);
         }
         $action->execute($ids);

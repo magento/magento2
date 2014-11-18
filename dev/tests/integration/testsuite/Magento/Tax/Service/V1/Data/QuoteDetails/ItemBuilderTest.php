@@ -99,7 +99,8 @@ class ItemBuilderTest extends \PHPUnit_Framework_TestCase
         $itemExpected = $this->quoteDetailsItemBuilder->populateWithArray($data['dataMerged'])->create();
         $itemSomeFields = $this->quoteDetailsItemBuilder->populateWithArray($data['data1'])->create();
         $itemMoreFields = $this->quoteDetailsItemBuilder->populateWithArray($data['data2'])->create();
-        $itemMerged = $this->quoteDetailsItemBuilder->mergeDataObjects($itemSomeFields, $itemMoreFields);
+        $itemMerged = $this->quoteDetailsItemBuilder->mergeDataObjects($itemSomeFields, $itemMoreFields)
+            ->create();
         $this->assertEquals($itemExpected->__toArray(), $itemMerged->__toArray());
     }
 
@@ -108,7 +109,8 @@ class ItemBuilderTest extends \PHPUnit_Framework_TestCase
         $data = $this->getData();
         $itemExpected = $this->quoteDetailsItemBuilder->populateWithArray($data['dataMerged'])->create();
         $itemSomeFields = $this->quoteDetailsItemBuilder->populateWithArray($data['data1'])->create();
-        $itemMerged = $this->quoteDetailsItemBuilder->mergeDataObjectWithArray($itemSomeFields, $data['data2']);
+        $itemMerged = $this->quoteDetailsItemBuilder->mergeDataObjectWithArray($itemSomeFields, $data['data2'])
+            ->create();
         $this->assertEquals($itemExpected->__toArray(), $itemMerged->__toArray());
     }
 

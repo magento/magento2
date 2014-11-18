@@ -28,7 +28,7 @@ namespace Magento\Customer\Model;
 use Magento\Customer\Service\V1\Data\Eav\AttributeMetadata;
 use Magento\Customer\Service\V1\Data\CustomerBuilder;
 use Magento\Customer\Service\V1\CustomerMetadataServiceInterface;
-use Magento\Framework\Api\AttributeValueBuilder;
+use Magento\Framework\Api\AttributeDataBuilder;
 
 class ConverterTest extends \PHPUnit_Framework_TestCase
 {

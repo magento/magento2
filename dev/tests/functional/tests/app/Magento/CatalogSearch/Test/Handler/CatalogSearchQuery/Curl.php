@@ -32,8 +32,7 @@ use Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 use Mtf\Handler\Curl as AbstractCurl;
 
 /**
- * Class Curl
- * Create new search term via curl
+ * Create new search term via curl.
  */
 class Curl extends AbstractCurl implements CatalogSearchQueryInterface
 {
@@ -52,6 +51,13 @@ class Curl extends AbstractCurl implements CatalogSearchQueryInterface
     ];
 
     /**
+     * Search term url.
+     *
+     * @var string
+     */
+    protected $url = 'search/term/';
+
+    /**
      * Post request for creating search term
      *
      * @param FixtureInterface $fixture|null [optional]
@@ -67,13 +73,13 @@ class Curl extends AbstractCurl implements CatalogSearchQueryInterface
     }
 
     /**
-     * Add new search term
+     * Add new search term.
      *
      * @param array $data
      */
     protected function addNewSearchTerm(array $data)
     {
-        $url = $_ENV['app_backend_url'] . 'catalog/search/save';
+        $url = $_ENV['app_backend_url'] . $this->url . 'save';
         $curl = new BackendDecorator(new CurlTransport(), new Config);
         $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
         $curl->read();
@@ -81,7 +87,7 @@ class Curl extends AbstractCurl implements CatalogSearchQueryInterface
     }
 
     /**
-     * Getting search term id
+     * Getting search term id.
      *
      * @param string $queryText
      * @return int
@@ -90,13 +96,13 @@ class Curl extends AbstractCurl implements CatalogSearchQueryInterface
     protected function getNewSearchTermId($queryText)
     {
         $filter = base64_encode('search_query=' . $queryText);
-        $url = $_ENV['app_backend_url'] . 'catalog/search/index/filter/' . $filter;
+        $url = $_ENV['app_backend_url'] . $this->url . 'index/filter/' . $filter;
         $curl = new BackendDecorator(new CurlTransport(), new Config);
         $curl->write(CurlInterface::GET, $url, '1.0');
         $response = $curl->read();
         $curl->close();
 
-        if (!preg_match('#search/edit/id/(\d+)/"#', $response, $matches)) {
+        if (!preg_match('#' . $this->url . 'edit/id/(\d+)/"#', $response, $matches)) {
             throw new \Exception('Search term not found in grid!');
         }
 

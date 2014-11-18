@@ -27,7 +27,7 @@ use Magento\Customer\Service\V1\Data\Address;
 use Magento\Customer\Service\V1\Data\AddressBuilder;
 use Magento\Customer\Service\V1\Data\RegionBuilder;
 use Magento\Framework\Api\AttributeValue;
-use Magento\Framework\Api\AttributeValueBuilder;
+use Magento\Framework\Api\AttributeDataBuilder;
 
 class AddressTest extends \PHPUnit_Framework_TestCase
 {
@@ -94,7 +94,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Service\V1\CustomerMetadataService */
     private $_customerMetadataService;
 
-    /** @var \Magento\Framework\Api\AttributeValueBuilder */
+    /** @var \Magento\Framework\Api\AttributeDataBuilder */
     private $_valueBuilder;
 
     /**
@@ -125,7 +125,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             )
         );
         $this->_valueBuilder = $this->objectManagerHelper
-            ->getObject('Magento\Framework\Api\AttributeValueBuilder');
+            ->getObject('Magento\Framework\Api\AttributeDataBuilder');
         $this->_addressBuilder = $this->objectManagerHelper->getObject(
             'Magento\Customer\Service\V1\Data\AddressBuilder',
             [
@@ -313,10 +313,12 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         ];
 
         $attributeValue1 = $this->_valueBuilder
-            ->populateWithArray($customerAttributes['warehouse_zip'])
+            ->setValue('78777')
+            ->setAttributeCode('warehouse_zip')
             ->create();
         $attributeValue2 = $this->_valueBuilder
-            ->populateWithArray($customerAttributes['warehouse_alternate'])
+            ->setValue('90051')
+            ->setAttributeCode('warehouse_alternate')
             ->create();
 
         $address = $this->_addressBuilder

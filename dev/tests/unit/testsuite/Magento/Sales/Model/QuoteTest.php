@@ -105,6 +105,16 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     protected $quoteItemCollectionFactoryMock;
 
     /**
+     * @var \Magento\Sales\Model\Quote\PaymentFactory
+     */
+    protected $paymentFactoryMock;
+
+    /**
+     * @var \Magento\Sales\Model\Resource\Quote\Payment\CollectionFactory
+     */
+    protected $quotePaymentCollectionFactoryMock;
+
+    /**
      * @var \Magento\Framework\App\Config | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $scopeConfig;
@@ -183,6 +193,20 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->quotePaymentCollectionFactoryMock = $this->getMock(
+            'Magento\Sales\Model\Resource\Quote\Payment\CollectionFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $this->paymentFactoryMock = $this->getMock(
+            'Magento\Sales\Model\Quote\PaymentFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
         $this->scopeConfig = $this->getMockBuilder('Magento\Framework\App\Config')
             ->disableOriginalConstructor()
             ->getMock();
@@ -202,6 +226,8 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
                     'customerGroupService' => $this->customerGroupServiceMock,
                     'objectFactory' => $this->objectFactoryMock,
                     'quoteItemCollectionFactory' => $this->quoteItemCollectionFactoryMock,
+                    'quotePaymentCollectionFactory' => $this->quotePaymentCollectionFactoryMock,
+                    'quotePaymentFactory' => $this->paymentFactoryMock,
                     'scopeConfig' => $this->scopeConfig
                 ]
             );
@@ -870,5 +896,84 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$this->quoteAddressMock]);
 
         $this->assertFalse($this->quote->validateMinimumAmount());
+    }
+
+    public function testGetPaymentIsNotDeleted()
+    {
+        $this->quote->setId(1);
+        $payment = $this->getMock(
+            'Magento\Sales\Model\Quote\Payment',
+            ['setQuote', 'isDeleted', '__wakeup'],
+            [],
+            '',
+            false
+        );
+        $payment->expects($this->once())
+            ->method('setQuote');
+        $payment->expects($this->once())
+            ->method('isDeleted')
+            ->willReturn(false);
+        $quotePaymentCollectionMock = $this->getMock(
+            'Magento\Sales\Model\Resource\Quote\Payment\Collection',
+            ['setQuoteFilter', 'getFirstItem'],
+            [],
+            '',
+            false
+        );
+        $quotePaymentCollectionMock->expects($this->once())
+            ->method('setQuoteFilter')
+            ->with(1)
+            ->will($this->returnSelf());
+        $quotePaymentCollectionMock->expects($this->once())
+            ->method('getFirstItem')
+            ->willReturn($payment);
+        $this->quotePaymentCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($quotePaymentCollectionMock);
+
+        $this->assertInstanceOf('\Magento\Sales\Model\Quote\Payment', $this->quote->getPayment());
+    }
+
+    public function testGetPaymentIsDeleted()
+    {
+        $this->quote->setId(1);
+        $payment = $this->getMock(
+            'Magento\Sales\Model\Quote\Payment',
+            ['setQuote', 'isDeleted', 'getId', '__wakeup'],
+            [],
+            '',
+            false
+        );
+        $payment->expects($this->exactly(2))
+        ->method('setQuote');
+        $payment->expects($this->once())
+            ->method('isDeleted')
+            ->willReturn(true);
+        $payment->expects($this->once())
+            ->method('getId')
+            ->willReturn(1);
+        $quotePaymentCollectionMock = $this->getMock(
+            'Magento\Sales\Model\Resource\Quote\Payment\Collection',
+            ['setQuoteFilter', 'getFirstItem'],
+            [],
+            '',
+            false
+        );
+        $quotePaymentCollectionMock->expects($this->once())
+            ->method('setQuoteFilter')
+            ->with(1)
+            ->will($this->returnSelf());
+        $quotePaymentCollectionMock->expects($this->once())
+            ->method('getFirstItem')
+            ->willReturn($payment);
+        $this->quotePaymentCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($quotePaymentCollectionMock);
+
+        $this->paymentFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($payment);
+
+        $this->assertInstanceOf('\Magento\Sales\Model\Quote\Payment', $this->quote->getPayment());
     }
 }

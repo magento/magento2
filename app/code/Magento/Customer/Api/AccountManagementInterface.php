@@ -185,6 +185,27 @@ interface AccountManagementInterface
      * @param int $customerWebsiteId
      * @param int $storeId
      * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function isCustomerInStore($customerWebsiteId, $storeId);
+
+    /**
+     * Retrieve default billing address for the given customerId.
+     *
+     * @param int $customerId
+     * @return \Magento\Customer\Api\Data\AddressInterface|null
+     * @throws \Magento\Framework\Exception\NoSuchEntityException If the customer Id is invalid
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getDefaultBillingAddress($customerId);
+
+    /**
+     * Retrieve default shipping address for the given customerId.
+     *
+     * @param int $customerId
+     * @return \Magento\Customer\Api\Data\AddressInterface|null
+     * @throws \Magento\Framework\Exception\NoSuchEntityException If the customer Id is invalid
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getDefaultShippingAddress($customerId);
 }

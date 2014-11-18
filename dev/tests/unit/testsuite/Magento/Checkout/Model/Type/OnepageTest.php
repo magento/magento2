@@ -399,6 +399,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         $addressMock->expects($this->any())->method('getData')->will($this->returnValue([]));
         $quoteMock->expects($this->any())->method('getBillingAddress')->will($this->returnValue($addressMock));
         $quoteMock->expects($this->any())->method('getCustomerId')->will($this->returnValue($quoteCustomerId));
+        $quoteMock->expects($this->once())->method('save');
         $formMock = $this->getMock('Magento\Customer\Model\Metadata\Form', [], [], '', false);
         $formMock->expects($this->atLeastOnce())->method('validateData')->will($this->returnValue($validateDataResult));
         $this->requestMock

@@ -35,12 +35,12 @@ class Grid extends AbstractGrid
     /**
      * @var string
      */
-    protected $gridTableName = 'sales_flat_shipment_grid';
+    protected $gridTableName = 'sales_shipment_grid';
 
     /**
      * @var string
      */
-    protected $shipmentTableName = 'sales_flat_shipment';
+    protected $shipmentTableName = 'sales_shipment';
 
     /**
      * Refresh grid row

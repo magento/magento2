@@ -37,9 +37,14 @@ use Zend\Code\Reflection\ClassReflection;
 class DataBuilder extends EntityAbstract
 {
     /**
-     * Entity type
+     * Builder Entity, used for a builders built based on Data Objects
      */
     const ENTITY_TYPE = 'dataBuilder';
+
+    /**
+     * Builder Entity, used for a builders built based on API interfaces
+     */
+    const ENTITY_TYPE_BUILDER = 'builder';
 
     /**
      * Data Model property name
@@ -102,30 +107,60 @@ class DataBuilder extends EntityAbstract
     protected function _getDefaultConstructorDefinition()
     {
         $constructorDefinition = [
-            'name' => '__construct',
-            'parameters' => [
-                ['name' => 'objectManager', 'type' => '\Magento\Framework\ObjectManager'],
-                ['name' => 'metadataService', 'type' => '\Magento\Framework\Api\MetadataServiceInterface'],
-                ['name' => 'objectManagerConfig', 'type' => '\Magento\Framework\ObjectManager\Config'],
-            ],
-            'docblock' => [
-                'shortDescription' => 'Initialize the builder',
-                'tags' => [
+                'name' => '__construct',
+                'parameters' => [
+                    ['name' => 'objectFactory', 'type' => '\Magento\Framework\Api\ObjectFactory'],
+                    ['name' => 'metadataService', 'type' => '\Magento\Framework\Api\MetadataServiceInterface'],
+                    ['name' => 'attributeValueBuilder', 'type' => '\Magento\Framework\Api\AttributeDataBuilder'],
+                    ['name' => 'objectProcessor', 'type' => '\Magento\Framework\Reflection\DataObjectProcessor'],
+                    ['name' => 'typeProcessor', 'type' => '\Magento\Framework\Reflection\TypeProcessor'],
+                    ['name' => 'dataBuilderFactory', 'type' => '\Magento\Framework\Serialization\DataBuilderFactory'],
+                    ['name' => 'objectManagerConfig', 'type' => '\Magento\Framework\ObjectManager\Config'],
                     [
-                        'name' => 'param',
-                        'description' => '\Magento\Framework\ObjectManager $objectManager'
-                    ],
-                    [
-                        'name' => 'param',
-                        'description' => '\Magento\Framework\Api\MetadataServiceInterface $metadataService'
-                    ],
-                    [
-                        'name' => 'param',
-                        'description' => '\Magento\Framework\ObjectManager\Config $objectManagerConfig'
+                        'name' => 'modelClassInterface',
+                        'type' => 'string',
+                        'defaultValue' => $this->_getNullDefaultValue()
                     ]
-                ]
-            ],
-            'body' => "parent::__construct(\$objectManager, \$metadataService, \$objectManagerConfig, "
+                ],
+                'docblock' => [
+                    'shortDescription' => 'Initialize the builder',
+                    'tags' => [
+                        [
+                            'name' => 'param',
+                            'description' => '\Magento\Framework\Api\ObjectFactory $objectFactory'
+                        ],
+                        [
+                            'name' => 'param',
+                            'description' => '\Magento\Framework\Api\MetadataServiceInterface $metadataService'
+                        ],
+                        [
+                            'name' => 'param',
+                            'description' => '\Magento\Framework\Api\AttributeDataBuilder $attributeValueBuilder'
+                        ],
+                        [
+                            'name' => 'param',
+                            'description' => '\Magento\Framework\Reflection\DataObjectProcessor $objectProcessor'
+                        ],
+                        [
+                            'name' => 'param',
+                            'description' => '\Magento\Framework\Reflection\TypeProcessor $typeProcessor'
+                        ],
+                        [
+                            'name' => 'param',
+                            'description' => '\Magento\Framework\Serialization\DataBuilderFactory $dataBuilderFactory'
+                        ],
+                        [
+                            'name' => 'param',
+                            'description' => '\Magento\Framework\ObjectManager\Config $objectManagerConfig'
+                        ],
+                        [
+                            'name' => 'param',
+                            'description' => 'string|null $modelClassInterface'
+                        ]
+                    ]
+                ],
+            'body' => "parent::__construct(\$objectFactory, \$metadataService, \$attributeValueBuilder, "
+                . "\$objectProcessor, \$typeProcessor, \$dataBuilderFactory, \$objectManagerConfig, "
                 . "'{$this->_getSourceClassName()}');"
         ];
         return $constructorDefinition;
@@ -162,7 +197,7 @@ class DataBuilder extends EntityAbstract
      */
     protected function canUseMethodForGeneration($method)
     {
-        $isGetter = (substr($method->getName(), 0, 3) == 'get');
+        $isGetter = substr($method->getName(), 0, 3) == 'get' || substr($method->getName(), 0, 2) == 'is';
         $isSuitableMethodType = !($method->isConstructor() || $method->isFinal()
             || $method->isStatic() || $method->isDestructor());
         $isMagicMethod = in_array($method->getName(), array('__sleep', '__wakeup', '__clone'));
@@ -178,7 +213,11 @@ class DataBuilder extends EntityAbstract
      */
     protected function _getMethodInfo(\ReflectionMethod $method)
     {
-        $propertyName = substr($method->getName(), 3);
+        if (substr($method->getName(), 0, 2) == 'is') {
+            $propertyName = substr($method->getName(), 2);
+        } else {
+            $propertyName = substr($method->getName(), 3);
+        }
         $returnType = (new ClassReflection($this->_getSourceClassName()))
             ->getMethod($method->getName())
             ->getDocBlock()
@@ -190,7 +229,7 @@ class DataBuilder extends EntityAbstract
             'parameters' => [
                 ['name' => lcfirst($propertyName)]
             ],
-            'body' => "\$this->set('{$fieldName}', \$" . lcfirst($propertyName) . ");"
+            'body' => "\$this->_set('{$fieldName}', \$" . lcfirst($propertyName) . ");"
                 . PHP_EOL . "return \$this;",
             'docblock' => [
                 'tags' => [
@@ -200,31 +239,6 @@ class DataBuilder extends EntityAbstract
             ]
         ];
         return $methodInfo;
-    }
-
-    /**
-     * Validate data
-     *
-     * @return bool
-     */
-    protected function _validateData()
-    {
-        $result = parent::_validateData();
-
-        if ($result) {
-            $sourceClassName = $this->_getSourceClassName();
-            $resultClassName = $this->_getResultClassName();
-
-            if ($resultClassName !== str_replace('Interface', ucfirst(self::ENTITY_TYPE), $sourceClassName)) {
-                $this->_addError(
-                    'Invalid Builder class name [' . $resultClassName . ']. Use '
-                    . $sourceClassName
-                    . ucfirst(self::ENTITY_TYPE)
-                );
-                $result = false;
-            }
-        }
-        return $result;
     }
 
     /**
@@ -239,7 +253,7 @@ class DataBuilder extends EntityAbstract
             ->addProperties($this->_getClassProperties())
             ->addMethods($this->_getClassMethods())
             ->setClassDocBlock($this->_getClassDocBlock())
-            ->setExtendedClass('\Magento\Framework\Api\CompositeExtensibleDataBuilder');
+            ->setExtendedClass('\Magento\Framework\Api\Builder');
         return $this->_getGeneratedCode();
     }
 
@@ -248,7 +262,25 @@ class DataBuilder extends EntityAbstract
      */
     protected function _getSourceClassName()
     {
-        return parent::_getSourceClassName() . 'Interface';
+        return $this->_getDataObjectType();
+    }
+
+    /**
+     * Get data object type based on suffix
+     *
+     * @return string
+     */
+    protected function _getDataObjectType()
+    {
+        $currentBuilderClass = $this->_getResultClassName();
+        $dataBuilderSuffix = 'DataBuilder';
+        if (substr($currentBuilderClass, -strlen($dataBuilderSuffix)) === $dataBuilderSuffix) {
+            $dataObjectType = substr($currentBuilderClass, 0, -strlen($dataBuilderSuffix)) . 'Interface';
+        } else {
+            $builderSuffix = 'Builder';
+            $dataObjectType = substr($currentBuilderClass, 0, -strlen($builderSuffix));
+        }
+        return $dataObjectType;
     }
 
     /**

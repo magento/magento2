@@ -37,6 +37,8 @@
             <module name="Magento_Customer"/>
             <module name="Magento_Backend"/>
             <module name="Magento_Eav"/>
+            <module name="Magento_Indexer"/>
+            <module name="Magento_ImportExport"/>
         </depends>
     </module>
 </config>

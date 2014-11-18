@@ -26,13 +26,6 @@ namespace Magento\Rule\Model\Condition;
 class Combine extends AbstractCondition
 {
     /**
-     * Store all used condition models
-     *
-     * @var array
-     */
-    protected $_conditionModels = array();
-
-    /**
      * @var \Magento\Rule\Model\ConditionFactory
      */
     protected $_conditionFactory;
@@ -73,36 +66,6 @@ class Combine extends AbstractCondition
                 break;
             }
         }
-    }
-
-    /**
-     * Retrieve new object for each requested model.
-     * If model is requested first time, store it at static array.
-     *
-     * It's made by performance reasons to avoid initialization of same models each time when rules are being processed.
-     *
-     * @param  string $modelClass
-     * @return AbstractCondition|bool
-     */
-    protected function _getNewConditionModelInstance($modelClass)
-    {
-        if (empty($modelClass)) {
-            return false;
-        }
-
-        if (!array_key_exists($modelClass, $this->_conditionModels)) {
-            $model = $this->_conditionFactory->create($modelClass);
-            $this->_conditionModels[$modelClass] = $model;
-        } else {
-            $model = $this->_conditionModels[$modelClass];
-        }
-
-        if (!$model) {
-            return false;
-        }
-
-        $newModel = clone $model;
-        return $newModel;
     }
 
     /* start aggregator methods */
@@ -266,13 +229,11 @@ class Combine extends AbstractCondition
         );
 
         if (!empty($arr[$key]) && is_array($arr[$key])) {
-            foreach ($arr[$key] as $condArr) {
+            foreach ($arr[$key] as $conditionArr) {
                 try {
-                    $cond = $this->_getNewConditionModelInstance($condArr['type']);
-                    if ($cond) {
-                        $this->addCondition($cond);
-                        $cond->loadArray($condArr, $key);
-                    }
+                    $condition = $this->_conditionFactory->create($conditionArr['type']);
+                    $this->addCondition($condition);
+                    $condition->loadArray($conditionArr, $key);
                 } catch (\Exception $e) {
                     $this->_logger->logException($e);
                 }

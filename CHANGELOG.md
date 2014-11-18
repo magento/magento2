@@ -1,3 +1,44 @@
+0.1.0-alpha104
+=============
+* Various improvements:
+    * Merge SQL and Data Upgrades for the Sales and SalesRule modules
+    * Add getDefaultBilling and getDefaultShipping to Customer Interface
+    * Stabilized the Bundle module
+    * Stabilized the CatalogSearch module
+    * Stabilized the Cms module
+    * Stabilized the SalesRule module
+* Performance improvements:
+    * Introduced CatalogRule indexers based on Mview
+    * Significantly decreased the amount of unused objects, mostly in category and product view scenarios:
+		* Got rid of non-shared indexer instances all over the code introducing Magento\Indexer\Model\IndexerRegistry
+		* Magento\Catalog\Pricing\Price\BasePrice being created on demand only, instead of unconditioned creation in constructor
+		* Created proxies for unused objects with big amount of dependencies
+		* Fixed \Magento\Review\Block\Product\Review block which injected backend block context by mistake
+		* A customer model in \Magento\Customer\Model\Layout\DepersonalizePlugin being created on demand only, instead of constructor
+    * Introduced caching for product attribute metadata loading procedure
+    * Improved SavePayment Checkout step to save only payment related data
+    * Speed up all Checkout steps of the One Page Checkout
+    * Updated the benchmark.jmx jmeter script in the performance toolkit
+* Fixed bugs:
+    * Fixed an issue where performance toolkit generator created Products/Categories without URL rewrites due to install area elimination
+    * Fixed an issue where the Custom Options fieldset on Product Information page was collapsible
+    * Fixed an issue where the Base URL was added to target path for Custom UrlRewrite
+    * Fixed an issue where an invalid Cross-sells amount was displayed in the Shopping Cart
+    * Fixed an issue where the Mage_Catalog_Model_Product_Type_AbstractTest::testBeforeSave integration test failed when Mage_Downloadable module was not available
+    * Fixed an issue where the custom URL rewrite redirected to sub-folder when Request Path contained slash
+    * Fixed an issue where it was impossible to place an order if registering during checkout
+    * Fixed an issue where there was no possibility to save default billing and shipping addresses for customer on the store front
+    * Fixed an issue where a widget of Catalog Category Link type was not displayed on the store front
+    * Fixed an issue where the Versions tab was absent on the CMS page with version control
+    * Fixed an issue where it was impossible to insert Widgets and Images to a CMS page
+* Added the following functional tests:
+    * Create widget
+    * Print order from guest on frontend
+* Framework Improvements:
+    * Removed duplicated logic from API Builders and Builder generators. Added support for populating builders from the objects, implementing data interface
+* Processed GitHub requests:
+    * [#674](https://github.com/magento/magento2/issues/674) -- Widgets in content pages
+
 0.1.0-alpha103
 =============
 * Fixed bugs:

@@ -48,18 +48,15 @@ class Image extends AbstractBackend
     protected $_fileUploaderFactory;
 
     /**
-     * @param \Magento\Framework\Logger $logger
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Core\Model\File\UploaderFactory $fileUploaderFactory
      */
     public function __construct(
-        \Magento\Framework\Logger $logger,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Core\Model\File\UploaderFactory $fileUploaderFactory
     ) {
         $this->_filesystem = $filesystem;
         $this->_fileUploaderFactory = $fileUploaderFactory;
-        parent::__construct($logger);
     }
 
     /**

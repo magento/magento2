@@ -159,6 +159,6 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
      */
     public function getAmount()
     {
-        return $this->item ? $this->getConfiguredAmount($this->basePrice->getValue()) : parent::getAmount();
+        return $this->item ? $this->getConfiguredAmount($this->getBasePrice()->getValue()) : parent::getAmount();
     }
 }

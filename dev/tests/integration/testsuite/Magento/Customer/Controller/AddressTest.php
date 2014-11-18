@@ -94,7 +94,9 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
                 'postcode' => '55555',
                 'country_id' => 'UA',
                 'success_url' => '',
-                'error_url' => ''
+                'error_url' => '',
+                'default_billing' => true,
+                'default_shipping' => true
             )
         );
         // we are overwriting the address coming from the fixture
@@ -112,6 +114,8 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertEquals('UA', $address->getCountryId());
         $this->assertEquals('Kyiv', $address->getCity());
         $this->assertEquals('Kiev', $address->getRegion()->getRegion());
+        $this->assertTrue($address->isDefaultBilling());
+        $this->assertTrue($address->isDefaultShipping());
     }
 
     /**

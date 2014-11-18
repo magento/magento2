@@ -45,12 +45,12 @@ abstract class AbstractGrid extends AbstractDb implements GridInterface
     /**
      * @var string
      */
-    protected $orderTableName = 'sales_flat_order';
+    protected $orderTableName = 'sales_order';
 
     /**
      * @var string
      */
-    protected $addressTableName = 'sales_flat_order_address';
+    protected $addressTableName = 'sales_order_address';
 
     /**
      * @param AppResource $resource

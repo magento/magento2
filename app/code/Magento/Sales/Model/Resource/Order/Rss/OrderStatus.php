@@ -58,8 +58,8 @@ class OrderStatus
         $fields = array('notified' => 'is_customer_notified', 'comment', 'created_at');
         $commentSelects = array();
         foreach (array('invoice', 'shipment', 'creditmemo') as $entityTypeCode) {
-            $mainTable = $resource->getTableName('sales_flat_' . $entityTypeCode);
-            $slaveTable = $resource->getTableName('sales_flat_' . $entityTypeCode . '_comment');
+            $mainTable = $resource->getTableName('sales_' . $entityTypeCode);
+            $slaveTable = $resource->getTableName('sales_' . $entityTypeCode . '_comment');
             $select = $read->select()->from(
                 array('main' => $mainTable),
                 array('entity_id' => 'order_id', 'entity_type_code' => new \Zend_Db_Expr("'{$entityTypeCode}'"))
@@ -74,7 +74,7 @@ class OrderStatus
             $commentSelects[] = '(' . $select . ')';
         }
         $select = $read->select()->from(
-            $resource->getTableName('sales_flat_order_status_history'),
+            $resource->getTableName('sales_order_status_history'),
             array('entity_id' => 'parent_id', 'entity_type_code' => new \Zend_Db_Expr("'order'")) + $fields
         )->where(
             'parent_id = ?',
@@ -87,7 +87,7 @@ class OrderStatus
         $commentSelect = $read->select()->union($commentSelects, \Zend_Db_Select::SQL_UNION_ALL);
 
         $select = $read->select()->from(
-            array('orders' => $resource->getTableName('sales_flat_order')),
+            array('orders' => $resource->getTableName('sales_order')),
             array('increment_id')
         )->join(
             array('t' => $commentSelect),

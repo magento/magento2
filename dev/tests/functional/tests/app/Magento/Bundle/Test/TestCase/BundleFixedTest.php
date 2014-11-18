@@ -120,9 +120,8 @@ class BundleFixedTest extends Functional
                 'price_to' => $productViewBlock->getPriceBlock()->getPriceTo()
             ]
         );
-
-        $actualOptions = $productPage->getViewBlock()->getOptions($product)['bundle_options'];
         $expectedOptions = $product->getBundleOptions();
+        $actualOptions = $productViewBlock->getOptions($product)['bundle_options'];
         foreach ($actualOptions as $key => $actualOption) {
             $this->assertContains($expectedOptions[$key]['title'], $actualOption);
         }

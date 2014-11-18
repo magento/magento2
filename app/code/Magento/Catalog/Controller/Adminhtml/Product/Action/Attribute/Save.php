@@ -170,6 +170,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
 
                     $stockItemService->saveStockItem(
                         $this->stockItemBuilder->mergeDataObjectWithArray($stockItemDo, $inventoryData)
+                            ->create()
                     );
                 }
                 $this->_stockIndexerProcessor->reindexList($this->attributeHelper->getProductIds());

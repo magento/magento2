@@ -37,7 +37,7 @@ class Cart extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('sales_flat_quote', 'entity_id');
+        $this->_init('sales_quote', 'entity_id');
     }
 
     /**
@@ -50,7 +50,7 @@ class Cart extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $read = $this->_getReadAdapter();
         $select = $read->select()->from(
-            array('q' => $this->getTable('sales_flat_quote')),
+            array('q' => $this->getTable('sales_quote')),
             array('items_qty', 'items_count')
         )->where(
             'q.entity_id = :quote_id'
@@ -70,7 +70,7 @@ class Cart extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $read = $this->_getReadAdapter();
         $select = $read->select()->from(
-            array('qi' => $this->getTable('sales_flat_quote_item')),
+            array('qi' => $this->getTable('sales_quote_item')),
             array('id' => 'item_id', 'product_id', 'super_product_id', 'qty', 'created_at')
         )->where(
             'qi.quote_id = :quote_id'
@@ -90,7 +90,7 @@ class Cart extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $adapter = $this->_getReadAdapter();
         $exclusionSelect = $adapter->select()->from(
-            $this->getTable('sales_flat_quote_item'),
+            $this->getTable('sales_quote_item'),
             array('product_id')
         )->where(
             'quote_id = ?',

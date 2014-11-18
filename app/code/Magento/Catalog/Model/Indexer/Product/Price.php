@@ -82,7 +82,7 @@ class Price implements \Magento\Indexer\Model\ActionInterface, \Magento\Framewor
      * @param int[] $ids
      * @return void
      */
-    public function executeList($ids)
+    public function executeList(array $ids)
     {
         $this->_productPriceIndexerRows->execute($ids);
     }

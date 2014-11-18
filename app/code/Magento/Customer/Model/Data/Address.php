@@ -187,4 +187,24 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
     {
         return $this->_get(self::CUSTOMER_ID);
     }
+
+    /**
+     * Get if this address is default shipping address.
+     *
+     * @return bool|null
+     */
+    public function isDefaultShipping()
+    {
+        return $this->_get(self::DEFAULT_SHIPPING);
+    }
+
+    /**
+     * Get if this address is default billing address
+     *
+     * @return bool|null
+     */
+    public function isDefaultBilling()
+    {
+        return $this->_get(self::DEFAULT_BILLING);
+    }
 }

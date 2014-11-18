@@ -217,8 +217,12 @@ class Info extends \Magento\Framework\Model\AbstractModel
      */
     protected function _initAdditionalInformation()
     {
-        if (empty($this->_additionalInformation) && $this->_getData('additional_information')) {
-            $this->_additionalInformation = $this->_getData('additional_information');
+        $additionalInfo = $this->_getData('additional_information');
+        if (empty($this->_additionalInformation) && $additionalInfo) {
+            if (!is_array($additionalInfo)) {
+                $additionalInfo = unserialize($additionalInfo);
+            }
+            $this->_additionalInformation = $additionalInfo;
         }
     }
 }

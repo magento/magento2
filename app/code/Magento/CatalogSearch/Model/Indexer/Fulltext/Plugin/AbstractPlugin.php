@@ -27,31 +27,16 @@ use Magento\CatalogSearch\Model\Indexer\Fulltext;
 
 abstract class AbstractPlugin
 {
-    /**
-     * @var \Magento\Indexer\Model\IndexerInterface
-     */
-    protected $indexer;
+    /** @var \Magento\Indexer\Model\IndexerRegistry */
+    protected $indexerRegistry;
 
     /**
-     * @param \Magento\Indexer\Model\IndexerInterface $indexer
+     * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
      */
     public function __construct(
-        \Magento\Indexer\Model\IndexerInterface $indexer
+        \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
     ) {
-        $this->indexer = $indexer;
-    }
-
-    /**
-     * Return own indexer object
-     *
-     * @return \Magento\Indexer\Model\IndexerInterface
-     */
-    protected function getIndexer()
-    {
-        if (!$this->indexer->getId()) {
-            $this->indexer->load(Fulltext::INDEXER_ID);
-        }
-        return $this->indexer;
+        $this->indexerRegistry = $indexerRegistry;
     }
 
     /**
@@ -62,8 +47,9 @@ abstract class AbstractPlugin
      */
     protected function reindexRow($productId)
     {
-        if (!$this->getIndexer()->isScheduled()) {
-            $this->getIndexer()->reindexRow($productId);
+        $indexer = $this->indexerRegistry->get(Fulltext::INDEXER_ID);
+        if (!$indexer->isScheduled()) {
+            $indexer->reindexRow($productId);
         }
     }
 
@@ -75,8 +61,9 @@ abstract class AbstractPlugin
      */
     protected function reindexList(array $productIds)
     {
-        if (!$this->getIndexer()->isScheduled()) {
-            $this->getIndexer()->reindexList($productIds);
+        $indexer = $this->indexerRegistry->get(Fulltext::INDEXER_ID);
+        if (!$indexer->isScheduled()) {
+            $indexer->reindexList($productIds);
         }
     }
 }

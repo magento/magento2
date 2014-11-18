@@ -93,28 +93,6 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
     }
 
     /**
-     * Load all entity type attributes
-     *
-     * @param int $entityTypeId
-     * @return $this
-     */
-    protected function _loadTypeAttributes($entityTypeId)
-    {
-        if (!isset(self::$_entityAttributes[$entityTypeId])) {
-            $adapter = $this->_getReadAdapter();
-            $bind = array(':entity_type_id' => $entityTypeId);
-            $select = $adapter->select()->from($this->getMainTable())->where('entity_type_id = :entity_type_id');
-
-            $data = $adapter->fetchAll($select, $bind);
-            foreach ($data as $row) {
-                self::$_entityAttributes[$entityTypeId][$row['attribute_code']] = $row;
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * Load attribute data by attribute code
      *
      * @param EntityAttribute|\Magento\Framework\Model\AbstractModel $object

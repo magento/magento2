@@ -23,30 +23,48 @@
  */
 namespace Magento\Rule\Model;
 
+use Magento\Framework\ObjectManager;
+
 class ConditionFactory
 {
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var ObjectManager
      */
-    protected $_objectManager;
+    private $objectManager;
 
     /**
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * Store all used condition models
+     *
+     * @var array
      */
-    public function __construct(\Magento\Framework\ObjectManager $objectManager)
+    private $conditionModels = [];
+
+    /**
+     * @param ObjectManager $objectManager
+     */
+    public function __construct(ObjectManager $objectManager)
     {
-        $this->_objectManager = $objectManager;
+        $this->objectManager = $objectManager;
     }
 
     /**
-     * Create new action object
+     * Create new object for each requested model.
+     * If model is requested first time, store it at array.
+     * It's made by performance reasons to avoid initialization of same models each time when rules are being processed.
      *
      * @param string $type
-     * @param array $data
+     *
      * @return \Magento\Rule\Model\Condition\ConditionInterface
+     *
+     * @throws \LogicException
+     * @throws \BadMethodCallException
      */
-    public function create($type, array $data = array())
+    public function create($type)
     {
-        return $this->_objectManager->create($type, $data);
+        if (!array_key_exists($type, $this->conditionModels)) {
+            $this->conditionModels[$type] = $this->objectManager->create($type);
+        }
+
+        return clone $this->conditionModels[$type];
     }
 }

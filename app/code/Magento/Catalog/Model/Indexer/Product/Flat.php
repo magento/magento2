@@ -82,7 +82,7 @@ class Flat implements \Magento\Indexer\Model\ActionInterface, \Magento\Framework
      * @param int[] $ids
      * @return void
      */
-    public function executeList($ids)
+    public function executeList(array $ids)
     {
         $this->_productFlatIndexerRows->execute($ids);
     }

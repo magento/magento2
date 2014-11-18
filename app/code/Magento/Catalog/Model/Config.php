@@ -135,6 +135,7 @@ class Config extends \Magento\Eav\Model\Config
      *
      * @param \Magento\Framework\App\CacheInterface $cache
      * @param \Magento\Eav\Model\Entity\TypeFactory $entityTypeFactory
+     * @param \Magento\Eav\Model\Resource\Entity\Type\CollectionFactory $entityTypeCollectionFactory,
      * @param \Magento\Framework\App\Cache\StateInterface $cacheState
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -150,6 +151,7 @@ class Config extends \Magento\Eav\Model\Config
     public function __construct(
         \Magento\Framework\App\CacheInterface $cache,
         \Magento\Eav\Model\Entity\TypeFactory $entityTypeFactory,
+        \Magento\Eav\Model\Resource\Entity\Type\CollectionFactory $entityTypeCollectionFactory,
         \Magento\Framework\App\Cache\StateInterface $cacheState,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -168,7 +170,7 @@ class Config extends \Magento\Eav\Model\Config
         $this->_storeManager = $storeManager;
         $this->_eavConfig = $eavConfig;
 
-        parent::__construct($cache, $entityTypeFactory, $cacheState, $universalFactory);
+        parent::__construct($cache, $entityTypeFactory, $entityTypeCollectionFactory, $cacheState, $universalFactory);
     }
 
     /**

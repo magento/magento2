@@ -60,6 +60,11 @@ class ActionTest extends \PHPUnit_Framework_TestCase
      */
     protected $eavAttribute;
 
+    /**
+     * @var \Magento\Indexer\Model\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $indexerRegistryMock;
+
     public function setUp()
     {
         $eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
@@ -109,6 +114,8 @@ class ActionTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->indexerRegistryMock = $this->getMock('Magento\Indexer\Model\IndexerRegistry', ['get'], [], '', false);
+
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
             '\Magento\Catalog\Model\Product\Action',
@@ -116,7 +123,7 @@ class ActionTest extends \PHPUnit_Framework_TestCase
                 'eventDispatcher' => $eventManagerMock,
                 'resource' => $this->resource,
                 'productWebsiteFactory' => $this->productWebsiteFactory,
-                'categoryIndexer' => $this->categoryIndexer,
+                'indexerRegistry' => $this->indexerRegistryMock,
                 'eavConfig' => $this->eavConfig
             ]
         );
@@ -136,21 +143,13 @@ class ActionTest extends \PHPUnit_Framework_TestCase
 
         $this->categoryIndexer
             ->expects($this->any())
-            ->method('getId')
-            ->will($this->returnValue(false));
-        $this->categoryIndexer
-            ->expects($this->any())
-            ->method('load')
-            ->with('catalog_product_category')
-            ->will($this->returnSelf());
-        $this->categoryIndexer
-            ->expects($this->any())
             ->method('isScheduled')
             ->will($this->returnValue(false));
         $this->categoryIndexer
             ->expects($this->any())
             ->method('reindexList')
             ->will($this->returnValue($productIds));
+        $this->prepareIndexer();
         $this->eavConfig
             ->expects($this->any())
             ->method('getAttribute')
@@ -183,21 +182,13 @@ class ActionTest extends \PHPUnit_Framework_TestCase
 
         $this->categoryIndexer
             ->expects($this->any())
-            ->method('getId')
-            ->will($this->returnValue(false));
-        $this->categoryIndexer
-            ->expects($this->any())
-            ->method('load')
-            ->with('catalog_product_category')
-            ->will($this->returnSelf());
-        $this->categoryIndexer
-            ->expects($this->any())
             ->method('isScheduled')
             ->will($this->returnValue(false));
         $this->categoryIndexer
             ->expects($this->any())
             ->method('reindexList')
             ->will($this->returnValue($productIds));
+        $this->prepareIndexer();
         $this->model->updateWebsites($productIds, $websiteIds, $type);
         $this->assertEquals($this->model->getDataByKey('product_ids'), $productIdsUnique);
         $this->assertEquals($this->model->getDataByKey('website_ids'), $websiteIds);
@@ -210,5 +201,13 @@ class ActionTest extends \PHPUnit_Framework_TestCase
             ['$type' => 'add', '$methodName' => 'addProducts'],
             ['$type' => 'remove', '$methodName' => 'removeProducts']
         ];
+    }
+
+    protected function prepareIndexer()
+    {
+        $this->indexerRegistryMock->expects($this->once())
+            ->method('get')
+            ->with(\Magento\Catalog\Model\Indexer\Product\Category::INDEXER_ID)
+            ->will($this->returnValue($this->categoryIndexer));
     }
 }

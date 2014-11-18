@@ -65,4 +65,11 @@ class TaxvatTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('title="Tax/VAT number"', $block->toHtml());
         $this->assertContains('required', $block->toHtml());
     }
+
+    protected function tearDown()
+    {
+        /** @var \Magento\Eav\Model\Config $eavConfig */
+        $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Eav\Model\Config');
+        $eavConfig->clear();
+    }
 }

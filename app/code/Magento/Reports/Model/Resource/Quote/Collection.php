@@ -147,7 +147,7 @@ class Collection extends \Magento\Sales\Model\Resource\Quote\Collection
 
         $ordersSubSelect = clone $this->getSelect();
         $ordersSubSelect->reset()->from(
-            array('oi' => $this->getTable('sales_flat_order_item')),
+            array('oi' => $this->getTable('sales_order_item')),
             array('orders' => new \Zend_Db_Expr('COUNT(1)'), 'product_id')
         )->group(
             'oi.product_id'
@@ -158,7 +158,7 @@ class Collection extends \Magento\Sales\Model\Resource\Quote\Collection
         )->reset(
             \Zend_Db_Select::COLUMNS
         )->joinInner(
-            array('quote_items' => $this->getTable('sales_flat_quote_item')),
+            array('quote_items' => $this->getTable('sales_quote_item')),
             'quote_items.quote_id = main_table.entity_id',
             null
         )->joinInner(

@@ -66,11 +66,6 @@
     <type name="Magento\Catalog\Model\Resource\Attribute">
         <plugin name="catalogsearchFulltextIndexerAttribute" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Attribute"/>
     </type>
-    <type name="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\AbstractPlugin">
-        <arguments>
-            <argument name="indexer" xsi:type="object" shared="false">Magento\Indexer\Model\IndexerInterface</argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\Search\EntityMetadata" />
     <virtualType name="Magento\Framework\Search\ProductEntityMetadata" type="Magento\Framework\Search\EntityMetadata">
         <arguments>

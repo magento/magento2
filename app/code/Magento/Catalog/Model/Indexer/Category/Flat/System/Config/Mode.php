@@ -28,21 +28,17 @@ namespace Magento\Catalog\Model\Indexer\Category\Flat\System\Config;
  */
 class Mode extends \Magento\Framework\App\Config\Value
 {
-    /**
-     * @var \Magento\Indexer\Model\IndexerInterface
-     */
-    protected $flatIndexer;
-
-    /**
-     * @var \Magento\Indexer\Model\Indexer\State
-     */
+    /** @var \Magento\Indexer\Model\Indexer\State */
     protected $indexerState;
+
+    /** @var \Magento\Indexer\Model\IndexerRegistry */
+    protected $indexerRegistry;
 
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param \Magento\Indexer\Model\IndexerInterface $flatIndexer
+     * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
      * @param \Magento\Indexer\Model\Indexer\State $indexerState
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
@@ -52,15 +48,15 @@ class Mode extends \Magento\Framework\App\Config\Value
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        \Magento\Indexer\Model\IndexerInterface $flatIndexer,
+        \Magento\Indexer\Model\IndexerRegistry $indexerRegistry,
         \Magento\Indexer\Model\Indexer\State $indexerState,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        $this->flatIndexer = $flatIndexer;
-        $this->indexerState = $indexerState;
         parent::__construct($context, $registry, $config, $resource, $resourceCollection, $data);
+        $this->indexerRegistry = $indexerRegistry;
+        $this->indexerState = $indexerState;
     }
 
     /**
@@ -87,8 +83,8 @@ class Mode extends \Magento\Framework\App\Config\Value
                 $this->indexerState->setStatus(\Magento\Indexer\Model\Indexer\State::STATUS_INVALID);
                 $this->indexerState->save();
             } else {
-                $this->flatIndexer->load(\Magento\Catalog\Model\Indexer\Category\Flat\State::INDEXER_ID);
-                $this->flatIndexer->setScheduled(false);
+                $this->indexerRegistry->get(\Magento\Catalog\Model\Indexer\Category\Flat\State::INDEXER_ID)
+                    ->setScheduled(false);
             }
         }
     }

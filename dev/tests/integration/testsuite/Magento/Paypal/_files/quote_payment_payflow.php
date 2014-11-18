@@ -120,7 +120,7 @@ $quote->collectTotals()->save();
 $payment = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order\Payment');
 $payment->setMethod(\Magento\Paypal\Model\Config::METHOD_WPS);
 
-$quote->getPayment()->setMethod(\Magento\Paypal\Model\Config::METHOD_WPS);
+$quote->getPayment()->setMethod(\Magento\Paypal\Model\Config::METHOD_WPS)->save();
 
 /** @var $service \Magento\Sales\Model\Service\Quote */
 $service = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

@@ -306,7 +306,7 @@ abstract class AbstractApi extends \Magento\Framework\Object
      * @param array $publicMap
      * @return array|\Magento\Framework\Object
      */
-    public function &import($to, array $publicMap = array())
+    public function import($to, array $publicMap = array())
     {
         return \Magento\Framework\Object\Mapper::accumulateByMap(array($this, 'getDataUsingMethod'), $to, $publicMap);
     }

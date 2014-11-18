@@ -36,6 +36,7 @@ class Delete extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
         $id = $this->getRequest()->getParam('id');
         if ($id) {
             try {
+                /** @var \Magento\CatalogRule\Model\Rule $model */
                 $model = $this->_objectManager->create('Magento\CatalogRule\Model\Rule');
                 $model->load($id);
                 $model->delete();

@@ -43,13 +43,11 @@ class Customlayoutupdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Abs
     /**
      * Construct the custom layout update class
      *
-     * @param \Magento\Framework\Logger $logger
      * @param ValidatorFactory $layoutUpdateValidatorFactory
      */
-    public function __construct(\Magento\Framework\Logger $logger, ValidatorFactory $layoutUpdateValidatorFactory)
+    public function __construct(ValidatorFactory $layoutUpdateValidatorFactory)
     {
         $this->_layoutUpdateValidatorFactory = $layoutUpdateValidatorFactory;
-        parent::__construct($logger);
     }
 
     /**

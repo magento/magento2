@@ -102,7 +102,6 @@
     </type>
     <type name="Magento\Framework\Api\FilterBuilder" shared="false" />
     <type name="Magento\Framework\Api\SearchCriteriaBuilder" shared="false" />
-    <type name="Magento\Framework\Api\AttributeValueBuilder" shared="false" />
     <type name="Magento\Framework\View\Layout\Builder" shared="false" />
     <type name="Magento\Framework\View\Page\Builder" shared="false" />
     <type name="Magento\Framework\Message\Manager">

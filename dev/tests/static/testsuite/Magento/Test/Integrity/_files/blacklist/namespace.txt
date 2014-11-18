@@ -25,6 +25,8 @@ dev/tests/integration/testsuite/Magento/Framework/Api/_files/Magento/Wonderland/
 dev/tests/integration/testsuite/Magento/Framework/Api/_files/Magento/Wonderland/Api/Data/FakeRegionInterface.php
 dev/tests/integration/testsuite/Magento/Framework/Api/_files/Magento/Wonderland/Model/FakeAddress.php
 dev/tests/integration/testsuite/Magento/Framework/Api/_files/Magento/Wonderland/Model/FakeRegion.php
+dev/tests/integration/testsuite/Magento/Framework/Api/_files/Magento/Wonderland/Model/Data/FakeAddress.php
+dev/tests/integration/testsuite/Magento/Framework/Api/_files/Magento/Wonderland/Model/Data/FakeRegion.php
 dev/tests/static/testsuite/Magento/Test/Php/Exemplar/CodeMessTest/phpmd/input/coupling.php
 dev/tests/static/testsuite/Magento/Test/Php/Exemplar/CodeMessTest/phpmd/input/cyclomatic_complexity.php
 dev/tests/static/testsuite/Magento/Test/Php/Exemplar/CodeMessTest/phpmd/input/descendant_count.php

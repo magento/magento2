@@ -96,20 +96,36 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
                 'period'    => 'day',
                 'date_from' => null,
                 'date_to'   => null,
-                'expected_period' => date('Y-m-d', time())
+                'expected_period' => $this->getNow()
             ],
             [
                 'period'    => 'undefinedPeriod',
                 'date_from' => null,
                 'date_to'   => null,
-                'expected_period' => date('Y-m-d', time())
+                'expected_period' => $this->getNow()
             ],
             [
                 'period'    => null,
                 'date_from' => date('Y-m-d', strtotime('-1 year', time())),
                 'date_to'   => date('Y-m-d', time()),
-                'expected_period' => date('Y-m-d', time())
+                'expected_period' => $this->getNow()
             ]
         );
+    }
+
+    /**
+     * Retrieve date in MySQL timezone
+     *
+     * @return string
+     */
+    protected function getNow()
+    {
+        /** @var \Magento\Framework\App\Resource $resources */
+        $resources = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Framework\App\Resource'
+        );
+        $connection = $resources->getConnection('salesrule_read');
+        $now = $connection->fetchOne("SELECT CURDATE()");
+        return $now;
     }
 }

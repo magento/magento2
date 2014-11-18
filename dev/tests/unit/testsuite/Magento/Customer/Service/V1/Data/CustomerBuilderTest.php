@@ -39,7 +39,7 @@ class CustomerBuilderTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Service\V1\AddressMetadataService */
     private $_addressMetadataService;
 
-    /** @var \Magento\Framework\Api\AttributeValueBuilder */
+    /** @var \Magento\Framework\Api\AttributeDataBuilder */
     private $_valueBuilder;
 
     protected function setUp()
@@ -81,7 +81,7 @@ class CustomerBuilderTest extends \PHPUnit_Framework_TestCase
                 )
             );
         $this->_valueBuilder = $this->_objectManager->getObject(
-            'Magento\Framework\Api\AttributeValueBuilder'
+            'Magento\Framework\Api\AttributeDataBuilder'
         );
         $this->_customerBuilder = $this->_objectManager->getObject(
             'Magento\Customer\Service\V1\Data\CustomerBuilder',
@@ -110,7 +110,8 @@ class CustomerBuilderTest extends \PHPUnit_Framework_TestCase
         $middlename2 = 'Middlename2';
         $secondDataObject = $this->_customerBuilder->setLastname($lastname2)->setMiddlename($middlename2)->create();
 
-        $mergedDataObject = $this->_customerBuilder->mergeDataObjects($firstDataObject, $secondDataObject);
+        $mergedDataObject = $this->_customerBuilder->mergeDataObjects($firstDataObject, $secondDataObject)
+            ->create();
         $this->assertNotSame(
             $firstDataObject,
             $mergedDataObject,
@@ -147,11 +148,13 @@ class CustomerBuilderTest extends \PHPUnit_Framework_TestCase
             $email1
         )->create();
 
+
         $lastname2 = 'Lastname2';
         $middlename2 = 'Middlename2';
         $dataForMerge = array('lastname' => $lastname2, 'middlename' => $middlename2);
 
-        $mergedDataObject = $this->_customerBuilder->mergeDataObjectWithArray($firstDataObject, $dataForMerge);
+        $mergedDataObject = $this->_customerBuilder->mergeDataObjectWithArray($firstDataObject, $dataForMerge)
+            ->create();
         $this->assertNotSame(
             $firstDataObject,
             $mergedDataObject,
@@ -286,10 +289,12 @@ class CustomerBuilderTest extends \PHPUnit_Framework_TestCase
         ];
 
         $attributeValue1 = $this->_valueBuilder
-            ->populateWithArray($customerAttributes['warehouse_zip'])
+            ->setValue('78777')
+            ->setAttributeCode('warehouse_zip')
             ->create();
         $attributeValue2 = $this->_valueBuilder
-            ->populateWithArray($customerAttributes['warehouse_alternate'])
+            ->setValue('90051')
+            ->setAttributeCode('warehouse_alternate')
             ->create();
 
         $address = $this->_customerBuilder->setCustomAttributes([$attributeValue1, $attributeValue2])
@@ -362,7 +367,7 @@ class CustomerBuilderTest extends \PHPUnit_Framework_TestCase
                     ]
                 ]
             ]
-        );
+        )->create();
 
         $expectedData = array(
             'email' => 'test@example.com',
@@ -438,7 +443,8 @@ class CustomerBuilderTest extends \PHPUnit_Framework_TestCase
         );
         $customer1 = $this->_customerBuilder->populateWithArray($customer1Data)->create();
         $customer2 = $this->_customerBuilder->populateWithArray($customer2Data)->create();
-        $customer3 = $this->_customerBuilder->mergeDataObjects($customer1, $customer2);
+        $customer3 = $this->_customerBuilder->mergeDataObjects($customer1, $customer2)
+            ->create();
         $this->assertEquals('78666', $customer3->getCustomAttribute('warehouse_zip')->getValue());
         $this->assertEquals('90051', $customer3->getCustomAttribute('warehouse_alternate')->getValue());
         foreach ($customer3->getCustomAttributes() as $customAttribute) {

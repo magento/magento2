@@ -75,7 +75,7 @@ class Createdat extends \Magento\Sales\Model\Resource\Report\AbstractReport
 
             if ($from !== null || $to !== null) {
                 $subSelect = $this->_getTableDateRangeSelect(
-                    $this->getTable('sales_flat_order'),
+                    $this->getTable('sales_order'),
                     $aggregationField,
                     $aggregationField,
                     $from,
@@ -88,7 +88,7 @@ class Createdat extends \Magento\Sales\Model\Resource\Report\AbstractReport
 
             $periodExpr = $adapter->getDatePartSql(
                 $this->getStoreTZOffsetQuery(
-                    array('o' => $this->getTable('sales_flat_order')),
+                    array('o' => $this->getTable('sales_order')),
                     'o.' . $aggregationField,
                     $from,
                     $to
@@ -221,7 +221,7 @@ class Createdat extends \Magento\Sales\Model\Resource\Report\AbstractReport
                 'total_qty_invoiced' => new \Zend_Db_Expr('SUM(qty_invoiced)')
             );
             $selectOrderItem->from(
-                $this->getTable('sales_flat_order_item'),
+                $this->getTable('sales_order_item'),
                 $cols
             )->where(
                 'parent_item_id IS NULL'
@@ -230,7 +230,7 @@ class Createdat extends \Magento\Sales\Model\Resource\Report\AbstractReport
             );
 
             $select->from(
-                array('o' => $this->getTable('sales_flat_order')),
+                array('o' => $this->getTable('sales_order')),
                 $columns
             )->join(
                 array('oi' => $selectOrderItem),

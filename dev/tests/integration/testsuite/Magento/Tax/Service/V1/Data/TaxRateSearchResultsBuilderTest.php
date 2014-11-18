@@ -110,7 +110,7 @@ class TaxRateSearchResultsBuilderTest extends \PHPUnit_Framework_TestCase
         $taxRateSearchResultsMerged = $this->taxRateSearchResultsBuilder->mergeDataObjects(
             $taxRateSearchResults1,
             $taxRateSearchResults2
-        );
+        )->create();
         $this->assertEquals($taxRateSearchResults->__toArray(), $taxRateSearchResultsMerged->__toArray());
     }
 
@@ -124,7 +124,7 @@ class TaxRateSearchResultsBuilderTest extends \PHPUnit_Framework_TestCase
         $taxRateSearchResultsMerged = $this->taxRateSearchResultsBuilder->mergeDataObjectWithArray(
             $taxRateSearchResults1,
             $secondDataSet
-        );
+        )->create();
         $this->assertEquals($taxRateSearchResults->__toArray(), $taxRateSearchResultsMerged->__toArray());
     }
 

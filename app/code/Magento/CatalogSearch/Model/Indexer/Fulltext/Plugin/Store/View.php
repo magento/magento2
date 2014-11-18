@@ -24,6 +24,7 @@
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Store;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\AbstractPlugin;
+use Magento\CatalogSearch\Model\Indexer\Fulltext;
 
 class View extends AbstractPlugin
 {
@@ -45,9 +46,8 @@ class View extends AbstractPlugin
         $needInvalidation = $store->isObjectNew();
         $result = $proceed($store);
         if ($needInvalidation) {
-            $this->getIndexer()->invalidate();
+            $this->indexerRegistry->get(Fulltext::INDEXER_ID)->invalidate();
         }
-
         return $result;
     }
 
@@ -64,8 +64,7 @@ class View extends AbstractPlugin
         \Magento\Store\Model\Resource\Store $subject,
         \Magento\Store\Model\Resource\Store $result
     ) {
-        $this->getIndexer()->invalidate();
-
+        $this->indexerRegistry->get(Fulltext::INDEXER_ID)->invalidate();
         return $result;
     }
 }

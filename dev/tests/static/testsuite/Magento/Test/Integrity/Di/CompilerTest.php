@@ -337,6 +337,8 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
                     => 'Magento\Framework\Api\Code\Generator\DataBuilder',
                 \Magento\Framework\Api\Code\Generator\SearchResultsBuilder::ENTITY_TYPE
                     => 'Magento\Framework\Api\Code\Generator\SearchResultsBuilder',
+                \Magento\Framework\Api\Code\Generator\DataBuilder::ENTITY_TYPE_BUILDER
+                    => 'Magento\Framework\Api\Code\Generator\DataBuilder',
                 \Magento\Framework\ObjectManager\Code\Generator\Factory::ENTITY_TYPE
                     => 'Magento\Framework\ObjectManager\Code\Generator\Factory',
                 \Magento\Framework\ObjectManager\Code\Generator\Repository::ENTITY_TYPE
@@ -345,8 +347,6 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
                     => 'Magento\Framework\ObjectManager\Code\Generator\Converter',
                 \Magento\Framework\Api\Code\Generator\Mapper::ENTITY_TYPE
                     => 'Magento\Framework\Api\Code\Generator\Mapper',
-                \Magento\Framework\Api\Code\Generator\Builder::ENTITY_TYPE
-                    => 'Magento\Framework\Api\Code\Generator\Builder',
                 \Magento\Framework\Api\Code\Generator\SearchResults::ENTITY_TYPE
                     => 'Magento\Framework\Api\Code\Generator\SearchResults'
             )

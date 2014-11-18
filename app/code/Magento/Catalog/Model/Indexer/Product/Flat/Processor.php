@@ -36,14 +36,14 @@ class Processor extends \Magento\Indexer\Model\Indexer\AbstractProcessor
     protected $_state;
 
     /**
-     * @param \Magento\Indexer\Model\IndexerFactory $indexerFactory
-     * @param \Magento\Catalog\Model\Indexer\Product\Flat\State $state
+     * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
+     * @param State $state
      */
     public function __construct(
-        \Magento\Indexer\Model\IndexerFactory $indexerFactory,
+        \Magento\Indexer\Model\IndexerRegistry $indexerRegistry,
         \Magento\Catalog\Model\Indexer\Product\Flat\State $state
     ) {
-        $this->_indexer = $indexerFactory->create();
+        parent::__construct($indexerRegistry);
         $this->_state = $state;
     }
 

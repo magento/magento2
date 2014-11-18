@@ -44,6 +44,6 @@ class Item extends \Magento\Sales\Model\Resource\Entity
      */
     protected function _construct()
     {
-        $this->_init('sales_flat_invoice_item', 'entity_id');
+        $this->_init('sales_invoice_item', 'entity_id');
     }
 }

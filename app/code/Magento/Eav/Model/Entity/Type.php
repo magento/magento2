@@ -358,16 +358,6 @@ class Type extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Retrieve attribute codes
-     *
-     * @return array|null
-     */
-    public function getAttributeCodes()
-    {
-        return isset($this->_data['attribute_codes']) ? $this->_data['attribute_codes'] : null;
-    }
-
-    /**
      * Get attribute model code for entity type
      *
      * @return string

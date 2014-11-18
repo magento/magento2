@@ -212,7 +212,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      */
     protected function _prepareSummaryLive($range, $customStart, $customEnd, $isFilter = 0)
     {
-        $this->setMainTable('sales_flat_order');
+        $this->setMainTable('sales_order');
         $adapter = $this->getConnection();
 
         /**
@@ -510,7 +510,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      */
     protected function _calculateTotalsLive($isFilter = 0)
     {
-        $this->setMainTable('sales_flat_order');
+        $this->setMainTable('sales_order');
         $this->removeAllFieldsFromSelect();
 
         $adapter = $this->getConnection();
@@ -623,7 +623,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
             }
             $this->getSelect()->where('main_table.order_status NOT IN(?)', $statuses);
         } else {
-            $this->setMainTable('sales_flat_order');
+            $this->setMainTable('sales_order');
             $this->removeAllFieldsFromSelect();
 
             $expr = $this->_getSalesAmountExpression();

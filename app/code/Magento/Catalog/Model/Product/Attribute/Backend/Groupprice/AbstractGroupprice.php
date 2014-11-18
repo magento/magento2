@@ -54,7 +54,6 @@ abstract class AbstractGroupprice extends Price
     protected $_catalogProductType;
 
     /**
-     * @param \Magento\Framework\Logger $logger
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Data $catalogData
@@ -62,7 +61,6 @@ abstract class AbstractGroupprice extends Price
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      */
     public function __construct(
-        \Magento\Framework\Logger $logger,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Catalog\Helper\Data $catalogData,
@@ -70,7 +68,7 @@ abstract class AbstractGroupprice extends Price
         \Magento\Catalog\Model\Product\Type $catalogProductType
     ) {
         $this->_catalogProductType = $catalogProductType;
-        parent::__construct($logger, $currencyFactory, $storeManager, $catalogData, $config);
+        parent::__construct($currencyFactory, $storeManager, $catalogData, $config);
     }
 
     /**

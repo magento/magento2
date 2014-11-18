@@ -135,7 +135,7 @@ class Collection extends \Magento\Sales\Model\Resource\Collection\AbstractCollec
     }
 
     /**
-     * Join table sales_flat_order_address to select for billing and shipping order addresses.
+     * Join table sales_order_address to select for billing and shipping order addresses.
      * Create correlation map
      *
      * @return $this
@@ -144,7 +144,7 @@ class Collection extends \Magento\Sales\Model\Resource\Collection\AbstractCollec
     {
         $billingAliasName = 'billing_o_a';
         $shippingAliasName = 'shipping_o_a';
-        $joinTable = $this->getTable('sales_flat_order_address');
+        $joinTable = $this->getTable('sales_order_address');
 
         $this->addFilterToMap(
             'billing_firstname',

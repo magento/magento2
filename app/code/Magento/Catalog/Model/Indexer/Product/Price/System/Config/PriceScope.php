@@ -28,16 +28,14 @@ namespace Magento\Catalog\Model\Indexer\Product\Price\System\Config;
  */
 class PriceScope extends \Magento\Framework\App\Config\Value
 {
-    /**
-     * @var \Magento\Indexer\Model\IndexerInterface
-     */
-    protected $indexer;
+    /** @var \Magento\Indexer\Model\IndexerRegistry */
+    protected $indexerRegistry;
 
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param \Magento\Indexer\Model\IndexerInterface $indexer
+     * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -46,13 +44,13 @@ class PriceScope extends \Magento\Framework\App\Config\Value
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        \Magento\Indexer\Model\IndexerInterface $indexer,
+        \Magento\Indexer\Model\IndexerRegistry $indexerRegistry,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        $this->indexer = $indexer;
         parent::__construct($context, $registry, $config, $resource, $resourceCollection, $data);
+        $this->indexerRegistry = $indexerRegistry;
     }
 
     /**
@@ -74,7 +72,8 @@ class PriceScope extends \Magento\Framework\App\Config\Value
     public function processValue()
     {
         if ($this->isValueChanged()) {
-            $this->indexer->load(\Magento\Catalog\Model\Indexer\Product\Price\Processor::INDEXER_ID)->invalidate();
+            $this->indexerRegistry->get(\Magento\Catalog\Model\Indexer\Product\Price\Processor::INDEXER_ID)
+                ->invalidate();
         }
     }
 }

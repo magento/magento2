@@ -1332,40 +1332,6 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
     }
 
     /**
-     * Join prices from price rules to products collection
-     *
-     * @return $this
-     */
-    protected function _joinPriceRules()
-    {
-        if ($this->isEnabledFlat()) {
-            $customerGroup = $this->_customerSession->getCustomerGroupId();
-            $priceColumn = 'e.display_price_group_' . $customerGroup;
-            $this->getSelect()->columns(array('_rule_price' => $priceColumn));
-
-            return $this;
-        }
-        if (!$this->moduleManager->isEnabled('Magento_CatalogRule')) {
-            return $this;
-        }
-        $wId = $this->_storeManager->getWebsite()->getId();
-        $gId = $this->_customerSession->getCustomerGroupId();
-
-        $storeDate = $this->_localeDate->scopeTimeStamp($this->getStoreId());
-        $conditions = 'price_rule.product_id = e.entity_id AND ';
-        $conditions .= "price_rule.rule_date = '" . $this->dateTime->formatDate($storeDate, false) . "' AND ";
-        $conditions .= $this->getConnection()->quoteInto('price_rule.website_id = ? AND', $wId);
-        $conditions .= $this->getConnection()->quoteInto('price_rule.customer_group_id = ?', $gId);
-
-        $this->getSelect()->joinLeft(
-            array('price_rule' => $this->getTable('catalogrule_product_price')),
-            $conditions,
-            array('rule_price' => 'rule_price')
-        );
-        return $this;
-    }
-
-    /**
      * Retrieve all ids
      *
      * @param boolean $resetCache

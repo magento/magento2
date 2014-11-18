@@ -46,6 +46,11 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
     protected $subjectMock;
 
     /**
+     * @var \Magento\Indexer\Model\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $indexerRegistryMock;
+
+    /**
      * @var \Closure
      */
     protected $closureMock;
@@ -85,14 +90,20 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
         $this->closureMock = function () {
             return false;
         };
-        $this->model = new StoreGroup($this->indexerMock, $this->stateMock);
+
+        $this->indexerRegistryMock = $this->getMock('Magento\Indexer\Model\IndexerRegistry', ['get'], [], '', false);
+
+        $this->model = new StoreGroup($this->indexerRegistryMock, $this->stateMock);
     }
 
     public function testAroundSave()
     {
         $this->stateMock->expects($this->once())->method('isFlatEnabled')->will($this->returnValue(true));
-        $this->indexerMock->expects($this->once())->method('getId')->will($this->returnValue(1));
         $this->indexerMock->expects($this->once())->method('invalidate');
+        $this->indexerRegistryMock->expects($this->once())
+            ->method('get')
+            ->with(\Magento\Catalog\Model\Indexer\Category\Flat\State::INDEXER_ID)
+            ->will($this->returnValue($this->indexerMock));
         $this->groupMock->expects(
             $this->once()
         )->method(

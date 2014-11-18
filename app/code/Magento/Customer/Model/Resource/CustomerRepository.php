@@ -142,7 +142,6 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
      */
     public function save(\Magento\Customer\Api\Data\CustomerInterface $customer, $passwordHash = null)
     {
-        $isNewCustomer = $customer->getId() ? false : true;
         $this->validate($customer);
         $customerModel = $this->customerFactory->create(
             [

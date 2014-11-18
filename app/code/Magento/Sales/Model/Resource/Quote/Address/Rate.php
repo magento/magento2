@@ -37,6 +37,6 @@ class Rate extends \Magento\Sales\Model\Resource\AbstractResource
      */
     protected function _construct()
     {
-        $this->_init('sales_flat_quote_shipping_rate', 'rate_id');
+        $this->_init('sales_quote_shipping_rate', 'rate_id');
     }
 }

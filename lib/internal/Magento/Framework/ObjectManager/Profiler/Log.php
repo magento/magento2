@@ -150,16 +150,17 @@ class Log
     {
         $this->stats['used'] = count($this->used);
         $this->stats['unused'] = $this->stats['total'] - $this->stats['used'];
-        echo '<table border="1" cellspacing="0" cellpadding="2">' . PHP_EOL;
-        echo "<caption>Creation chain (Red items are never used) Total: {$this->stats['total']}\n";
-        echo "Used: {$this->stats['used']} Not used: {$this->stats['unused']}</caption>";
-        echo '<tbody>';
-        echo "<tr><th>Instance class</th></tr>";
+        echo '<table border="1" cellspacing="0" cellpadding="2">',
+            '<thead><tr><th>',
+            "Creation chain (Red items are never used) Total: {$this->stats['total']}\n",
+            "Used: {$this->stats['used']} Not used: {$this->stats['unused']}",
+            '</th></tr></thead>',
+            '<tbody>',
+            '<tr><th>Instance class</th></tr>';
         foreach ($this->roots as $root) {
             $this->displayItem($root);
         }
-        echo '</tbody>';
-        echo '</table>';
+        echo '</tbody></table>';
     }
 
     /**

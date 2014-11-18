@@ -95,7 +95,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
                 new \Magento\Framework\Object(['attribute_code' => 'locale'])
             ])
         );
-        $valueBuilder = $this->_objectManager->getObject('Magento\Framework\Api\AttributeValueBuilder');
+        $valueBuilder = $this->_objectManager->getObject('Magento\Framework\Api\AttributeDataBuilder');
         $this->_customerBuilder = $this->_objectManager->getObject(
             'Magento\Customer\Service\V1\Data\CustomerBuilder',
             [

@@ -45,6 +45,11 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
      */
     protected $indexerMock;
 
+    /**
+     * @var \Magento\Indexer\Model\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $indexerRegistryMock;
+
     protected function setUp()
     {
         $this->fullMock = $this->getMock(
@@ -73,10 +78,12 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
             array('getId', 'load', 'isInvalid', 'isWorking', '__wakeup')
         );
 
+        $this->indexerRegistryMock = $this->getMock('Magento\Indexer\Model\IndexerRegistry', ['get'], [], '', false);
+
         $this->model = new \Magento\CatalogSearch\Model\Indexer\Fulltext(
             $this->fullMock,
             $this->rowsMock,
-            $this->indexerMock
+            $this->indexerRegistryMock
         );
     }
 
@@ -84,15 +91,10 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
     {
         $ids = array(1, 2, 3);
 
-        $this->indexerMock->expects(
-            $this->once()
-        )->method(
-            'load'
-        )->with(
-            \Magento\CatalogSearch\Model\Indexer\Fulltext::INDEXER_ID
-        )->will(
-            $this->returnSelf()
-        );
+        $this->indexerRegistryMock->expects($this->once())
+            ->method('get')
+            ->with(\Magento\CatalogSearch\Model\Indexer\Fulltext::INDEXER_ID)
+            ->will($this->returnValue($this->indexerMock));
 
         $rowMock = $this->getMock(
             'Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Rows',

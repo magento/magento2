@@ -71,6 +71,7 @@ class ConfigureProductInCustomerWishlistOnFrontendTest extends AbstractWishlistT
      */
     public function test(CustomerInjectable $customer, $product)
     {
+        $this->markTestIncomplete("Bug: MAGETWO-30097");
         // Preconditions
         $product = $this->createProducts($product)[0];
         $this->loginCustomer($customer);

@@ -27,7 +27,7 @@ namespace Magento\Customer\Service\V1\Data;
 use Magento\Customer\Service\V1\AddressMetadataServiceInterface;
 use Magento\Framework\Api\AbstractExtensibleObject as ExtensibleObject;
 use Magento\Framework\Api\ExtensibleObjectBuilder;
-use Magento\Framework\Api\AttributeValueBuilder;
+use Magento\Framework\Api\AttributeDataBuilder;
 
 /**
  * Builder for the Address Service Data Object
@@ -47,13 +47,13 @@ class AddressBuilder extends ExtensibleObjectBuilder
 
     /**
      * @param \Magento\Framework\Api\ObjectFactory $objectFactory
-     * @param AttributeValueBuilder $valueBuilder
+     * @param AttributeDataBuilder $valueBuilder
      * @param AddressMetadataServiceInterface $metadataService
      * @param RegionBuilder $regionBuilder
      */
     public function __construct(
         \Magento\Framework\Api\ObjectFactory $objectFactory,
-        AttributeValueBuilder $valueBuilder,
+        AttributeDataBuilder $valueBuilder,
         AddressMetadataServiceInterface $metadataService,
         RegionBuilder $regionBuilder
     ) {

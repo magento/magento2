@@ -62,7 +62,7 @@ class FakeAddress extends AbstractExtensibleModel implements FakeAddressInterfac
     /**
      * Get region
      *
-     * @return \Magento\Wonderland\Api\Data\FakeRegionInterface|null
+     * @return \Magento\Wonderland\Api\Data\FakeRegionInterface[]|null
      */
     public function getRegions()
     {
@@ -197,5 +197,25 @@ class FakeAddress extends AbstractExtensibleModel implements FakeAddressInterfac
     public function getVatId()
     {
         return $this->getData(self::VAT_ID);
+    }
+
+    /**
+     * Get if this address is default shipping address.
+     *
+     * @return bool|null
+     */
+    public function isDefaultShipping()
+    {
+        return $this->getData(self::DEFAULT_SHIPPING);
+    }
+
+    /**
+     * Get if this address is default billing address
+     *
+     * @return bool|null
+     */
+    public function isDefaultBilling()
+    {
+        return $this->getData(self::DEFAULT_BILLING);
     }
 }

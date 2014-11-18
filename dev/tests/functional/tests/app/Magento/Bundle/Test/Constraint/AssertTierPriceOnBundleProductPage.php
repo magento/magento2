@@ -67,10 +67,10 @@ class AssertTierPriceOnBundleProductPage extends AssertProductTierPriceOnProduct
     {
         //Open product view page
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
-        $viewBlock = $catalogProductView->getViewBlock();
+        $viewBlock = $catalogProductView->getBundleViewBlock();
         $viewBlock->clickCustomize();
 
         //Process assertions
-        $this->assertPrice($product, $catalogProductView);
+        $this->assertPrice($product, $viewBlock);
     }
 }

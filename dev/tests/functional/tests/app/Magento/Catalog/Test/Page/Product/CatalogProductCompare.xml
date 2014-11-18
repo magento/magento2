@@ -35,5 +35,10 @@
             <locator>.page.messages .messages</locator>
             <strategy>css selector</strategy>
         </messagesBlock>
+        <widgetView>
+            <class>Magento\Widget\Test\Block\WidgetView</class>
+            <locator>.column.main .widget</locator>
+            <strategy>css selector</strategy>
+        </widgetView>
     </blocks>
 </page>

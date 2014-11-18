@@ -31,8 +31,6 @@ use Magento\CatalogSearch\Test\Page\AdvancedSearch;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 
 /**
- * Test Creation for AdvancedSearchEntity
- *
  * Test Flow:
  * Preconditions:
  * 1. Two specific simple product is created(unique sku,name,short/full description, tax class)
@@ -90,7 +88,7 @@ class AdvancedSearchEntityTest extends Injectable
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function testSearch(
+    public function test(
         array $products,
         CatalogProductSimple $productSearch,
         CmsIndex $cmsIndex,

@@ -59,7 +59,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     protected function _construct()
     {
         parent::_construct();
-        $this->setMainTable('sales_flat_order_grid');
+        $this->setMainTable('sales_order_grid');
     }
 
     /**

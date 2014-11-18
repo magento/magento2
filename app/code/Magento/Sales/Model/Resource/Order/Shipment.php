@@ -58,7 +58,7 @@ class Shipment extends SalesResource
      */
     protected function _construct()
     {
-        $this->_init('sales_flat_shipment', 'entity_id');
+        $this->_init('sales_shipment', 'entity_id');
     }
 
     /**

@@ -37,7 +37,7 @@ return array(
     'cat_pro',
     'table_name',
     'rule_customer',
-    'sales_flat_',
+    'sales_',
     'catalog_product_link_attribute_',
     'catalog_category_flat_',
     'catalog_category_entity_',

@@ -31,4 +31,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Persistent\Model\Observer\EmulateQuote">
+        <arguments>
+            <argument name="customerAccountService" xsi:type="object">Magento\Customer\Service\V1\CustomerAccountServiceInterface\Proxy</argument>
+        </arguments>
+    </type>
 </config>

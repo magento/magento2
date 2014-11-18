@@ -146,7 +146,8 @@ class Edit extends \Magento\Directory\Block\Data
                     'region' => $postedData['region']
                 );
             }
-            $this->_address = $this->_addressBuilder->mergeDataObjectWithArray($this->_address, $postedData);
+            $this->_address = $this->_addressBuilder->mergeDataObjectWithArray($this->_address, $postedData)
+                ->create();
         }
 
         return $this;

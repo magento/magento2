@@ -30,7 +30,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Customer\Service\V1\Data\CustomerBuilder;
-use Magento\Framework\Api\AttributeValueBuilder;
+use Magento\Framework\Api\AttributeDataBuilder;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Mail\Exception as MailException;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;

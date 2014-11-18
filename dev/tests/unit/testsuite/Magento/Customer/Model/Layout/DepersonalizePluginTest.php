@@ -116,7 +116,7 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
         );
         $this->moduleManagerMock = $this->getMock('Magento\Framework\Module\Manager', array(), array(), '', false);
         $this->visitorMock = $this->getMock('Magento\Customer\Model\Visitor', array(), array(), '', false);
-        $this->customerFactoryMock->expects($this->once())
+        $this->customerFactoryMock->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->customerMock));
         $this->cacheConfigMock = $this->getMock('Magento\PageCache\Model\Config', array(), array(), '', false);
@@ -274,7 +274,8 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
         $this->customerMock
             ->expects($this->once())
             ->method('setGroupId')
-            ->with($this->equalTo(null));
+            ->with($this->equalTo(null))
+            ->willReturnSelf();
         $this->sessionMock
             ->expects($this->once())
             ->method('setData')

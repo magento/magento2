@@ -2843,4 +2843,6 @@ return array(
     ['Magento\Framework\Filesystem\WrapperInterface'],
     ['Magento\Install'],
     ['Magento\Install\Model\Resource\Resource', 'Magento\Framework\Module\Resource'],
+    ['Magento\Framework\App\View\Deployment\Version\Generator\Timestamp', 'Magento\Framework\Stdlib\DateTime'],
+    ['Magento\Framework\App\View\Deployment\Version\GeneratorInterface'],
 );

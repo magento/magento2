@@ -102,6 +102,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     private $website;
 
     /**
+     * @var \Magento\Indexer\Model\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $indexerRegistryMock;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function setUp()
@@ -193,6 +198,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $storeManager->expects($this->any())
             ->method('getWebsite')
             ->will($this->returnValue($this->website));
+        $this->indexerRegistryMock = $this->getMock('Magento\Indexer\Model\IndexerRegistry', ['get'], [], '', false);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
@@ -200,7 +206,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             [
                 'context' => $contextMock,
                 'catalogProductType' => $this->productTypeInstanceMock,
-                'categoryIndexer' => $this->categoryIndexerMock,
                 'productFlatIndexerProcessor' => $this->productFlatProcessor,
                 'productPriceIndexerProcessor' => $this->productPriceProcessor,
                 'catalogProductOption' => $this->optionInstanceMock,
@@ -208,6 +213,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 'resource' => $this->resource,
                 'registry' => $this->registry,
                 'categoryFactory' => $this->categoryFactory,
+                'indexerRegistry' => $this->indexerRegistryMock,
                 'data' => array('id' => 1)
             ]
         );
@@ -318,6 +324,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->categoryIndexerMock->expects($this->once())->method('reindexRow');
         $this->productFlatProcessor->expects($this->once())->method('reindexRow');
         $this->productPriceProcessor->expects($this->once())->method('reindexRow');
+        $this->prepareCategoryIndexer();
         $this->assertSame($this->model, $this->model->delete());
     }
 
@@ -325,6 +332,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $this->categoryIndexerMock->expects($this->once())->method('reindexRow');
         $this->productFlatProcessor->expects($this->once())->method('reindexRow');
+        $this->prepareCategoryIndexer();
         $this->assertNull($this->model->reindex());
     }
 
@@ -464,5 +472,13 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $this->model->getResource()->expects($this->any())->method('addCommitCallback')->will($this->returnSelf());
         $this->model->getResource()->expects($this->any())->method('commit')->will($this->returnSelf());
+    }
+
+    protected function prepareCategoryIndexer()
+    {
+        $this->indexerRegistryMock->expects($this->once())
+            ->method('get')
+            ->with(\Magento\Catalog\Model\Indexer\Product\Category::INDEXER_ID)
+            ->will($this->returnValue($this->categoryIndexerMock));
     }
 }

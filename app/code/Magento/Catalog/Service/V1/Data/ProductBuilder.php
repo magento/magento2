@@ -24,7 +24,7 @@
 
 namespace Magento\Catalog\Service\V1\Data;
 
-use Magento\Framework\Api\AttributeValueBuilder;
+use Magento\Framework\Api\AttributeDataBuilder;
 
 /**
  * @codeCoverageIgnore
@@ -33,12 +33,12 @@ class ProductBuilder extends \Magento\Framework\Api\ExtensibleObjectBuilder
 {
     /**
      * @param \Magento\Framework\Api\ObjectFactory $objectFactory
-     * @param AttributeValueBuilder $valueBuilder
+     * @param AttributeDataBuilder $valueBuilder
      * @param \Magento\Catalog\Service\V1\Product\MetadataServiceInterface $metadataService
      */
     public function __construct(
         \Magento\Framework\Api\ObjectFactory $objectFactory,
-        AttributeValueBuilder $valueBuilder,
+        AttributeDataBuilder $valueBuilder,
         \Magento\Catalog\Service\V1\Product\MetadataServiceInterface $metadataService
     ) {
         parent::__construct($objectFactory, $valueBuilder, $metadataService);

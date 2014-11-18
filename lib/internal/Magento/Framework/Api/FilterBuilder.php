@@ -29,7 +29,7 @@ namespace Magento\Framework\Api;
  *
  * @method Filter create()
  */
-class FilterBuilder extends \Magento\Framework\Api\ExtensibleObjectBuilder
+class FilterBuilder extends \Magento\Framework\Api\Builder
 {
     /**
      * Set field

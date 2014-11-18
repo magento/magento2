@@ -52,6 +52,6 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Creditmemo\Collecti
     protected function _construct()
     {
         parent::_construct();
-        $this->setMainTable('sales_flat_creditmemo_grid');
+        $this->setMainTable('sales_creditmemo_grid');
     }
 }

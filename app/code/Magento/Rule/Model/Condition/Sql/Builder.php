@@ -119,7 +119,8 @@ class Builder
             /** @var $condition AbstractCondition */
             $collection->getSelect()->joinLeft(
                 [$alias => $collection->getResource()->getTable($joinTable['name'])],
-                $joinTable['condition']
+                $joinTable['condition'],
+                isset($joinTable['columns']) ? $joinTable['columns'] : '*'
             );
         }
         return $this;

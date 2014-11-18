@@ -290,6 +290,7 @@ class Observer
         $stockItemDo = $this->stockItemService->getStockItem($product->getId());
         $this->stockItemService->saveStockItem(
             $this->stockItemBuilder->mergeDataObjectWithArray($stockItemDo, $stockItemData)
+                ->create()
         );
 
         return $this;

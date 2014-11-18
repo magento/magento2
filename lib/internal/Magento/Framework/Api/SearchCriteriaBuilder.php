@@ -24,16 +24,12 @@
 
 namespace Magento\Framework\Api;
 
-use Magento\Framework\Api\ExtensibleObjectBuilder;
-use Magento\Framework\Api\AttributeValueBuilder;
-use Magento\Framework\Api\MetadataServiceInterface;
 use Magento\Framework\Api\Search\FilterGroupBuilder;
-use Magento\Framework\Api\SortOrder;
 
 /**
  * Builder for SearchCriteria Service Data Object
  */
-class SearchCriteriaBuilder extends ExtensibleObjectBuilder
+class SearchCriteriaBuilder extends Builder
 {
     /**
      * @var FilterGroupBuilder
@@ -41,18 +37,37 @@ class SearchCriteriaBuilder extends ExtensibleObjectBuilder
     protected $_filterGroupBuilder;
 
     /**
-     * @param \Magento\Framework\Api\ObjectFactory $objectFactory
-     * @param AttributeValueBuilder $valueBuilder
+     * @param ObjectFactory $objectFactory
      * @param MetadataServiceInterface $metadataService
+     * @param AttributeDataBuilder $attributeValueBuilder
+     * @param \Magento\Framework\Reflection\DataObjectProcessor $objectProcessor
+     * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
+     * @param \Magento\Framework\Serialization\DataBuilderFactory $dataBuilderFactory
+     * @param \Magento\Framework\ObjectManager\Config $objectManagerConfig
      * @param FilterGroupBuilder $filterGroupBuilder
+     * @param string|null $modelClassInterface
      */
     public function __construct(
-        \Magento\Framework\Api\ObjectFactory $objectFactory,
-        AttributeValueBuilder $valueBuilder,
+        ObjectFactory $objectFactory,
         MetadataServiceInterface $metadataService,
-        FilterGroupBuilder $filterGroupBuilder
+        AttributeDataBuilder $attributeValueBuilder,
+        \Magento\Framework\Reflection\DataObjectProcessor $objectProcessor,
+        \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
+        \Magento\Framework\Serialization\DataBuilderFactory $dataBuilderFactory,
+        \Magento\Framework\ObjectManager\Config $objectManagerConfig,
+        FilterGroupBuilder $filterGroupBuilder,
+        $modelClassInterface = null
     ) {
-        parent::__construct($objectFactory, $valueBuilder, $metadataService);
+        parent::__construct(
+            $objectFactory,
+            $metadataService,
+            $attributeValueBuilder,
+            $objectProcessor,
+            $typeProcessor,
+            $dataBuilderFactory,
+            $objectManagerConfig,
+            $modelClassInterface
+        );
         $this->_filterGroupBuilder = $filterGroupBuilder;
     }
 

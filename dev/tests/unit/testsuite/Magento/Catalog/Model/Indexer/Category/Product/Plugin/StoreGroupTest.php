@@ -41,6 +41,11 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
     protected $subject;
 
     /**
+     * @var \Magento\Indexer\Model\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $indexerRegistryMock;
+
+    /**
      * @var StoreView
      */
     protected $model;
@@ -56,8 +61,10 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
             true,
             array('getId', 'getState', '__wakeup')
         );
-        $this->model = new StoreGroup($this->indexerMock);
         $this->subject = $this->getMock('Magento\Store\Model\Resource\Group', array(), array(), '', false);
+        $this->indexerRegistryMock = $this->getMock('Magento\Indexer\Model\IndexerRegistry', ['get'], [], '', false);
+
+        $this->model = new StoreGroup($this->indexerRegistryMock);
     }
 
     /**
@@ -135,8 +142,11 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
 
     protected function mockIndexerMethods()
     {
-        $this->indexerMock->expects($this->once())->method('getId')->will($this->returnValue(1));
         $this->indexerMock->expects($this->once())->method('invalidate');
+        $this->indexerRegistryMock->expects($this->once())
+            ->method('get')
+            ->with(\Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID)
+            ->will($this->returnValue($this->indexerMock));
     }
 
     protected function mockPluginProceed($returnValue = false)

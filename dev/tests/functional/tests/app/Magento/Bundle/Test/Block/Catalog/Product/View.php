@@ -41,7 +41,7 @@ class View extends \Magento\Catalog\Test\Block\Product\View
      *
      * @var string
      */
-    protected $customizeButton = '.action.primary.customize';
+    protected $customizeButton = '.action.primary.customize span';
 
     /**
      * Bundle options block

@@ -112,7 +112,7 @@ class Bestsellers extends AbstractReport
         try {
             if ($from !== null || $to !== null) {
                 $subSelect = $this->_getTableDateRangeSelect(
-                    $this->getTable('sales_flat_order'),
+                    $this->getTable('sales_order'),
                     'created_at',
                     'updated_at',
                     $from,
@@ -126,7 +126,7 @@ class Bestsellers extends AbstractReport
             // convert dates from UTC to current admin timezone
             $periodExpr = $adapter->getDatePartSql(
                 $this->getStoreTZOffsetQuery(
-                    array('source_table' => $this->getTable('sales_flat_order')),
+                    array('source_table' => $this->getTable('sales_order')),
                     'source_table.created_at',
                     $from,
                     $to
@@ -164,10 +164,10 @@ class Bestsellers extends AbstractReport
             );
 
             $select->from(
-                array('source_table' => $this->getTable('sales_flat_order')),
+                array('source_table' => $this->getTable('sales_order')),
                 $columns
             )->joinInner(
-                array('order_item' => $this->getTable('sales_flat_order_item')),
+                array('order_item' => $this->getTable('sales_order_item')),
                 'order_item.order_id = source_table.entity_id',
                 array()
             )->where(

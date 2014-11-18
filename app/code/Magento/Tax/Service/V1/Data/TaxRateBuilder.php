@@ -23,7 +23,7 @@
  */
 namespace Magento\Tax\Service\V1\Data;
 
-use Magento\Framework\Api\AttributeValueBuilder;
+use Magento\Framework\Api\AttributeDataBuilder;
 use Magento\Framework\Api\MetadataServiceInterface;
 use Magento\Framework\Api\ObjectFactory;
 
@@ -52,14 +52,14 @@ class TaxRateBuilder extends \Magento\Framework\Api\ExtensibleObjectBuilder
      * Initialize dependencies.
      *
      * @param ObjectFactory $objectFactory
-     * @param AttributeValueBuilder $valueBuilder
+     * @param AttributeDataBuilder $valueBuilder
      * @param MetadataServiceInterface $metadataService
      * @param ZipRangeBuilder $zipRangeBuilder
      * @param TaxRateTitleBuilder $taxRateTitleBuilder
      */
     public function __construct(
         ObjectFactory $objectFactory,
-        AttributeValueBuilder $valueBuilder,
+        AttributeDataBuilder $valueBuilder,
         MetadataServiceInterface $metadataService,
         ZipRangeBuilder $zipRangeBuilder,
         TaxRateTitleBuilder $taxRateTitleBuilder

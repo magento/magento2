@@ -146,8 +146,9 @@ class DataBuilderTest extends \PHPUnit_Framework_TestCase
         //Verify if the generated code is as expected
         $this->ioObjectMock->expects($this->once())
             ->method('writeResultFile')
-            ->with($resultFileName, $generatedCode);
+            ->with($resultFileName, $generatedCode)
+            ->will($this->returnValue(true));
 
-        $this->assertTrue($this->generator->generate());
+        $this->assertTrue($this->generator->generate(), implode("\n", $this->generator->getErrors()));
     }
 }

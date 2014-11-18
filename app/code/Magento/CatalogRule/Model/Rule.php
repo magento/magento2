@@ -354,49 +354,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     }
 
     /**
-     * Apply rule to product
-     *
-     * @param int|Product $product
-     * @param array|null $websiteIds
-     *
-     * @return void
-     */
-    public function applyToProduct($product, $websiteIds = null)
-    {
-        if (is_numeric($product)) {
-            $product = $this->_productFactory->create()->load($product);
-        }
-        if (is_null($websiteIds)) {
-            $websiteIds = $this->getWebsiteIds();
-        }
-        $this->getResource()->applyToProduct($this, $product, $websiteIds);
-    }
-
-    /**
-     * Apply all price rules, invalidate related cache and refresh price index
-     *
-     * @return void
-     */
-    public function applyAll()
-    {
-        $this->getResourceCollection()->walk(array($this->_getResource(), 'updateRuleProductData'));
-        $this->_getResource()->applyAllRulesForDateRange();
-        $this->_invalidateCache();
-    }
-
-    /**
-     * Apply all price rules to product
-     *
-     * @param  int|Product $product
-     * @return void
-     */
-    public function applyAllRulesToProduct($product)
-    {
-        $this->_getResource()->applyAllRulesForDateRange(null, null, $product);
-        $this->_invalidateCache();
-    }
-
-    /**
      * Calculate price using catalog price rule of product
      *
      * @param Product $product

@@ -69,7 +69,7 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
         $this->_checkDates($from, $to);
 
         $table = $this->getMainTable();
-        $sourceTable = $this->getTable('sales_flat_order');
+        $sourceTable = $this->getTable('sales_order');
         $adapter = $this->_getWriteAdapter();
         $adapter->beginTransaction();
 

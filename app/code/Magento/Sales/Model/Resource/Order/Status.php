@@ -253,7 +253,7 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         return (bool)$this->_getWriteAdapter()->fetchOne(
             $this->_getWriteAdapter()->select()
-                ->from(['sfo' => $this->getTable('sales_flat_order')], [])
+                ->from(['sfo' => $this->getTable('sales_order')], [])
                 ->where('status = ?', $status)
                 ->limit(1)
                 ->columns([new \Zend_Db_Expr(1)])

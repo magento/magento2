@@ -42,21 +42,18 @@ class State extends \Magento\Catalog\Model\Indexer\AbstractFlatState
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Indexer\Model\IndexerInterface $flatIndexer
+     * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $flatIndexerHelper
      * @param bool $isAvailable
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Indexer\Model\IndexerInterface $flatIndexer,
+        \Magento\Indexer\Model\IndexerRegistry $indexerRegistry,
         \Magento\Catalog\Helper\Product\Flat\Indexer $flatIndexerHelper,
         $isAvailable = false
     ) {
-        $this->scopeConfig = $scopeConfig;
-        $this->flatIndexer = $flatIndexer;
+        parent::__construct($scopeConfig, $indexerRegistry, $isAvailable);
         $this->_productFlatIndexerHelper = $flatIndexerHelper;
-        $this->isAvailable = $isAvailable;
-        parent::__construct($scopeConfig, $flatIndexer, $isAvailable);
     }
 
     /**

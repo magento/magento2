@@ -159,21 +159,16 @@ class Payment extends \Magento\Payment\Model\Info
 
         $this->setMethod($data->getMethod());
         $method = $this->getMethodInstance();
+        $quote = $this->getQuote();
 
         /**
          * Payment availability related with quote totals.
          * We have to recollect quote totals before checking
          */
-        $this->getQuote()->collectTotals();
+        $quote->collectTotals();
 
-        if (!$method->isAvailable(
-            $this->getQuote()
-        ) || !$this->methodSpecificationFactory->create(
-            $data->getChecks()
-        )->isApplicable(
-            $method,
-            $this->getQuote()
-        )
+        if (!$method->isAvailable($quote)
+            || !$this->methodSpecificationFactory->create($data->getChecks())->isApplicable($method, $quote)
         ) {
             throw new \Magento\Framework\Model\Exception(__('The requested Payment Method is not available.'));
         }

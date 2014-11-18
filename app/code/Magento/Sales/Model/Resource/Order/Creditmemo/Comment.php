@@ -71,7 +71,7 @@ class Comment extends \Magento\Sales\Model\Resource\Entity
      */
     protected function _construct()
     {
-        $this->_init('sales_flat_creditmemo_comment', 'entity_id');
+        $this->_init('sales_creditmemo_comment', 'entity_id');
     }
 
     /**

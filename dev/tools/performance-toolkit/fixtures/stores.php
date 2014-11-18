@@ -55,13 +55,14 @@ for ($i = 0; $i < $websitesCount; $i++) {
         $websiteId = $defaultWebsiteId;
     }
     $website = clone $defaultWebsite;
-    $websiteCode = sprintf('website_%d', $i+1);
-    $websiteName = sprintf('Website %d', $i+1);
+    $websiteCode = sprintf('website_%d', $i + 1);
+    $websiteName = sprintf('Website %d', $i + 1);
     $website->addData(
         array(
-            'website_id' => $websiteId,
-            'code'     => $websiteCode,
-            'name'     => $websiteName
+            'website_id'    => $websiteId,
+            'code'          => $websiteCode,
+            'name'          => $websiteName,
+            'is_default'    => (int)$i == 0,
         )
     );
     $website->save();
@@ -77,7 +78,7 @@ for ($i = 0; $i < $storeGroupsCount; $i++) {
     $parentCategoryId = null;
     $categoryPath = '1';
 
-    $storeGroupName = sprintf('Store Group %d - website_id_%d', $i+1, $websiteId);
+    $storeGroupName = sprintf('Store Group %d - website_id_%d', $i + 1, $websiteId);
 
     if ($i == 0 && $websiteId == $defaultWebsiteId) {
         $groupId = $defaultStoreGroupId;
@@ -124,8 +125,8 @@ for ($i = 0; $i < $storesCount; $i++) {
         $storeId = $defaultStoreViewId;
     }
     $store = clone $defaultStoreView;
-    $storeCode = sprintf('store_view_%d_w_%d_g_%d', $i+1, $websiteId, $groupId);
-    $storeName = sprintf('Store view %d - website_id_%d - group_id_%d', $i+1, $websiteId, $groupId);
+    $storeCode = sprintf('store_view_%d_w_%d_g_%d', $i + 1, $websiteId, $groupId);
+    $storeName = sprintf('Store view %d - website_id_%d - group_id_%d', $i + 1, $websiteId, $groupId);
     $store->addData(
         array(
             'store_id'      => $storeId,

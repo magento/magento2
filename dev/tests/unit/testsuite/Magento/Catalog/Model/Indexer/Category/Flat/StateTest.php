@@ -40,6 +40,11 @@ class StateTest extends \PHPUnit_Framework_TestCase
      */
     protected $flatIndexerMock;
 
+    /**
+     * @var \Magento\Indexer\Model\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $indexerRegistryMock;
+
     protected function setUp()
     {
         $this->scopeConfigMock = $this->getMockForAbstractClass('Magento\Framework\App\Config\ScopeConfigInterface');
@@ -53,6 +58,8 @@ class StateTest extends \PHPUnit_Framework_TestCase
             true,
             array('getId', 'getState', '__wakeup')
         );
+
+        $this->indexerRegistryMock = $this->getMock('Magento\Indexer\Model\IndexerRegistry', ['get'], [], '', false);
     }
 
     public function testIsFlatEnabled()
@@ -69,7 +76,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
 
         $this->model = new \Magento\Catalog\Model\Indexer\Category\Flat\State(
             $this->scopeConfigMock,
-            $this->flatIndexerMock
+            $this->indexerRegistryMock
         );
         $this->assertEquals(true, $this->model->isFlatEnabled());
     }
@@ -83,9 +90,12 @@ class StateTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsAvailable($isAvailable, $isFlatEnabled, $isValid, $result)
     {
-        $this->flatIndexerMock->expects($this->any())->method('getId')->will($this->returnValue(null));
         $this->flatIndexerMock->expects($this->any())->method('load')->with('catalog_category_flat');
         $this->flatIndexerMock->expects($this->any())->method('isValid')->will($this->returnValue($isValid));
+        $this->indexerRegistryMock->expects($this->any())
+            ->method('get')
+            ->with(\Magento\Catalog\Model\Indexer\Category\Flat\State::INDEXER_ID)
+            ->will($this->returnValue($this->flatIndexerMock));
 
         $this->scopeConfigMock->expects(
             $this->any()
@@ -99,7 +109,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
 
         $this->model = new \Magento\Catalog\Model\Indexer\Category\Flat\State(
             $this->scopeConfigMock,
-            $this->flatIndexerMock,
+            $this->indexerRegistryMock,
             $isAvailable
         );
         $this->assertEquals($result, $this->model->isAvailable());

@@ -480,9 +480,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $dateTime;
 
     /**
-     * @var \Magento\Indexer\Model\IndexerFactory
+     * @var \Magento\Indexer\Model\IndexerRegistry
      */
-    protected $indexerFactory;
+    protected $indexerRegistry;
 
     /**
      * @var \Magento\Framework\Logger
@@ -506,24 +506,25 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\ImportExport\Model\Import\Config $importConfig
-     * @param \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory $resourceFactory
-     * @param \Magento\CatalogImportExport\Model\Import\Product\OptionFactory $optionFactory
+     * @param Proxy\Product\ResourceFactory $resourceFactory
+     * @param Product\OptionFactory $optionFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setColFactory
      * @param \Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryColFactory
      * @param \Magento\Customer\Service\V1\CustomerGroupServiceInterface $customerGroupService
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Framework\StoreManagerInterface $storeManager
-     * @param \Magento\CatalogImportExport\Model\Import\Product\Type\Factory $productTypeFactory
+     * @param Product\Type\Factory $productTypeFactory
      * @param \Magento\Catalog\Model\Resource\Product\LinkFactory $linkFactory
-     * @param \Magento\CatalogImportExport\Model\Import\Proxy\ProductFactory $proxyProdFactory
-     * @param \Magento\CatalogImportExport\Model\Import\UploaderFactory $uploaderFactory
+     * @param Proxy\ProductFactory $proxyProdFactory
+     * @param UploaderFactory $uploaderFactory
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\CatalogInventory\Model\Resource\Stock\ItemFactory $stockResItemFac
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Logger $logger
-     * @param \Magento\Indexer\Model\IndexerFactory $indexerFactory
+     * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
      * @param array $data
+     * @throws \Magento\Framework\Model\Exception
      */
     public function __construct(
         \Magento\Core\Helper\Data $coreData,
@@ -553,7 +554,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Logger $logger,
-        \Magento\Indexer\Model\IndexerFactory $indexerFactory,
+        \Magento\Indexer\Model\IndexerRegistry $indexerRegistry,
         array $data = array()
     ) {
         $this->_eventManager = $eventManager;
@@ -574,7 +575,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->_stockResItemFac = $stockResItemFac;
         $this->_localeDate = $localeDate;
         $this->dateTime = $dateTime;
-        $this->indexerFactory = $indexerFactory;
+        $this->indexerRegistry = $indexerRegistry;
         $this->_logger = $logger;
         parent::__construct($coreData, $importExportData, $importData, $config, $resource, $resourceHelper, $string);
         $this->_optionEntity = isset(
@@ -1759,7 +1760,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function _saveStockItem()
     {
-        $indexer = $this->indexerFactory->create()->load('catalog_product_category');
+        $indexer = $this->indexerRegistry->get('catalog_product_category');
         /** @var $stockResource \Magento\CatalogInventory\Model\Resource\Stock\Item */
         $stockResource = $this->_stockResItemFac->create();
         $entityTable = $stockResource->getMainTable();

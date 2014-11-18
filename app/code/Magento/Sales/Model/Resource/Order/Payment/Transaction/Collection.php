@@ -215,7 +215,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection\Abstract
         }
         if ($this->_addPaymentInformation) {
             $this->getSelect()->joinInner(
-                array('sop' => $this->getTable('sales_flat_order_payment')),
+                array('sop' => $this->getTable('sales_order_payment')),
                 'main_table.payment_id = sop.entity_id',
                 $this->_addPaymentInformation
             );
@@ -226,7 +226,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection\Abstract
         }
         if ($this->_addOrderInformation) {
             $this->getSelect()->joinInner(
-                array('so' => $this->getTable('sales_flat_order')),
+                array('so' => $this->getTable('sales_order')),
                 'main_table.order_id = so.entity_id',
                 $this->_addOrderInformation
             );

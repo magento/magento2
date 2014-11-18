@@ -72,6 +72,8 @@
             <argument name="customerData" xsi:type="object">Magento\Customer\Helper\Data\Proxy</argument>
             <argument name="customerResource" xsi:type="object">Magento\Customer\Model\Resource\Customer\Proxy</argument>
             <argument name="storage" xsi:type="object">Magento\Customer\Model\Session\Storage</argument>
+            <argument name="converter" xsi:type="object">Magento\Customer\Model\Converter\Proxy</argument>
+            <argument name="customerAccountService" xsi:type="object">Magento\Customer\Service\V1\CustomerAccountServiceInterface\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Module\Updater\SetupFactory">
@@ -104,9 +106,14 @@
     <type name="Magento\Customer\Model\Customer">
         <arguments>
             <argument name="customerData" xsi:type="object">Magento\Customer\Helper\Data\Proxy</argument>
+            <argument name="groupService" xsi:type="object">Magento\Customer\Service\V1\CustomerGroupServiceInterface\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Customer\Model\Data\GroupBuilder" shared="false" />
+    <type name="Magento\Customer\Helper\Data">
+        <arguments>
+            <argument name="groupService" xsi:type="object">Magento\Customer\Service\V1\CustomerGroupServiceInterface\Proxy</argument>
+        </arguments>
+    </type>
     <type name="Magento\Customer\Service\V1\Data\CustomerGroupBuilder" shared="false" />
     <type name="Magento\Customer\Service\V1\Data\Eav\AttributeMetadataBuilder" shared="false" />
     <type name="Magento\Customer\Api\Data\OptionDataBuilder" shared="false" />
@@ -126,6 +133,7 @@
     <type name="Magento\Customer\Service\V1\CustomerAccountService">
         <arguments>
             <argument name="url" xsi:type="object">Magento\Framework\Url</argument>
+            <argument name="converter" xsi:type="object">Magento\Customer\Model\Converter\Proxy</argument>
         </arguments>
     </type>
     <virtualType name="Magento\Customer\Service\Config\CustomerMetadataConfig" type="Magento\Framework\Api\Config\MetadataConfig">

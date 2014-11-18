@@ -112,12 +112,10 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             );
             $mock->setAttributeId($code);
 
-            $logger = $this->getMock('Magento\Framework\Logger', array(), array(), '', false);
             /** @var $backendModel \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend */
             $backendModel = $this->getMock(
                 'Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend',
-                array('getBackend', 'getBackendTable'),
-                array($logger)
+                array('getBackend', 'getBackendTable')
             );
 
             $backendModel->setAttribute($mock);
@@ -249,7 +247,6 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
         $attribute = $this->_getAttributeMock($attributeCode, $attributeSetId);
 
-        $logger = $this->getMock('Magento\Framework\Logger', array(), array(), '', false);
         /** @var $backendModel \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend */
         $backendModel = $this->getMock(
             'Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend',
@@ -260,8 +257,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
                 'isStatic',
                 'getEntityValueId',
                 'getEntityIdField'
-            ),
-            array($logger)
+            )
         );
 
         $backendModel->expects(

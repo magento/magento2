@@ -24,7 +24,7 @@
 
 namespace Magento\Wishlist\Test\Constraint;
 
-use Mtf\Constraint\AbstractConstraint;
+use Mtf\Constraint\AbstractAssertForm;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Wishlist\Test\Page\WishlistIndex;
 use Mtf\Fixture\FixtureFactory;
@@ -34,7 +34,7 @@ use Mtf\Fixture\InjectableFixture;
  * Class AssertBundleProductDetailsInWishlist
  * Assert that the correct option details are displayed on the "View Details" tool tip
  */
-class AssertProductDetailsInWishlist extends AbstractConstraint
+class AssertProductDetailsInWishlist extends AbstractAssertForm
 {
     /**
      * Constraint severeness
@@ -63,11 +63,8 @@ class AssertProductDetailsInWishlist extends AbstractConstraint
         $cartFixture = $fixtureFactory->createByCode('cart', ['data' => ['items' => ['products' => [$product]]]]);
         $expectedOptions = $cartFixture->getItems()[0]->getData()['options'];
 
-        \PHPUnit_Framework_Assert::assertEquals(
-            $expectedOptions,
-            $actualOptions,
-            "Expected product options are not equal to actual."
-        );
+        $errors = $this->verifyData($expectedOptions, $actualOptions);
+        \PHPUnit_Framework_Assert::assertEmpty($errors, $errors);
     }
 
     /**

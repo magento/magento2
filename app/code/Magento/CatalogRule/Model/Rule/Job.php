@@ -40,23 +40,23 @@
  */
 namespace Magento\CatalogRule\Model\Rule;
 
+use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
+
 class Job extends \Magento\Framework\Object
 {
     /**
-     * Instance of event manager model
-     *
-     * @var \Magento\Framework\Event\ManagerInterface
+     * @var RuleProductProcessor
      */
-    protected $_eventManager;
+    protected $ruleProcessor;
 
     /**
      * Basic object initialization
      *
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param RuleProductProcessor $ruleProcessor
      */
-    public function __construct(\Magento\Framework\Event\ManagerInterface $eventManager)
+    public function __construct(RuleProductProcessor $ruleProcessor)
     {
-        $this->_eventManager = $eventManager;
+        $this->ruleProcessor = $ruleProcessor;
     }
 
     /**
@@ -67,8 +67,8 @@ class Job extends \Magento\Framework\Object
     public function applyAll()
     {
         try {
-            $this->_eventManager->dispatch('catalogrule_apply_all');
-            $this->setSuccess(__('The rules have been applied.'));
+            $this->ruleProcessor->markIndexerAsInvalid();
+            $this->setSuccess(__('Updated rules applied.'));
         } catch (\Magento\Framework\Model\Exception $e) {
             $this->setError($e->getMessage());
         }

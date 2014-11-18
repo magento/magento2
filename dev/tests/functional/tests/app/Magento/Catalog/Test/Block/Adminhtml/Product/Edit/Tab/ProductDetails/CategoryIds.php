@@ -52,7 +52,7 @@ class CategoryIds extends MultisuggestElement
      *
      * @var string
      */
-    protected $top = './ancestor::body//form[@data-form="edit-product"]';
+    protected $top = './ancestor::body//*[@class="page-main-actions"]';
 
     /**
      * Set value

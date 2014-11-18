@@ -39,4 +39,7 @@ $catalogRule
     ->setSimpleAction('by_percent')
     ->save();
 
-$catalogRule->applyAll();
+/** @var \Magento\CatalogRule\Model\Indexer\IndexBuilder $indexBuilder */
+$indexBuilder = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->get('Magento\CatalogRule\Model\Indexer\IndexBuilder');
+$indexBuilder->reindexFull();

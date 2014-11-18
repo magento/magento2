@@ -24,10 +24,10 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Module/etc/module.xsd">
-    <module name="Magento_Ui" schema_version="1.6.0.0" active="true">
+    <module name="Magento_Ui" schema_version="2.0.0" active="true">
         <sequence>
             <module name="Magento_Backend"/>
-        	<module name="Magento_Directory"/>
+            <module name="Magento_Directory"/>
         </sequence>
         <depends>
             <module name="Magento_Backend"/>

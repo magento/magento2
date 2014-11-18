@@ -22,6 +22,8 @@ atlassian*
 
 /pub/media/*.*
 !/pub/media/.htaccess
+/pub/media/catalog/*
+!/pub/media/catalog/.htaccess
 /pub/media/customer/*
 !/pub/media/customer/.htaccess
 /pub/media/downloadable/*
@@ -29,6 +31,8 @@ atlassian*
 /pub/media/theme/*
 /pub/media/theme_customization/*
 !/pub/media/theme_customization/.htaccess
+/pub/media/tmp/*
+!/pub/media/tmp/.htaccess
 /pub/static/*
 !/pub/static/.htaccess
 

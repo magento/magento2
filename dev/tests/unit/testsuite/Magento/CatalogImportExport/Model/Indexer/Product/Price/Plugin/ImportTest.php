@@ -40,6 +40,11 @@ class ImportTest extends \PHPUnit_Framework_TestCase
      */
     protected $_indexerMock;
 
+    /**
+     * @var \Magento\Indexer\Model\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $indexerRegistryMock;
+
     public function setUp()
     {
         $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -51,17 +56,21 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_indexerMock->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $this->indexerRegistryMock = $this->getMock('Magento\Indexer\Model\IndexerRegistry', ['get'], [], '', false);
 
         $this->_model = $this->_objectManager->getObject(
             'Magento\CatalogImportExport\Model\Indexer\Product\Price\Plugin\Import',
-            array('indexer' => $this->_indexerMock)
+            array('indexerRegistry' => $this->indexerRegistryMock)
         );
     }
 
     public function testAfterImportSource()
     {
         $this->_indexerMock->expects($this->once())->method('invalidate');
+        $this->indexerRegistryMock->expects($this->once())
+            ->method('get')
+            ->with(\Magento\Catalog\Model\Indexer\Product\Price\Processor::INDEXER_ID)
+            ->will($this->returnValue($this->_indexerMock));
 
         $importMock = $this->getMock('Magento\ImportExport\Model\Import', array(), array(), '', false);
         $this->assertEquals('return_value', $this->_model->afterImportSource($importMock, 'return_value'));

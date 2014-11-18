@@ -36,13 +36,11 @@ class Website extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacken
     protected $_storeManager;
 
     /**
-     * @param \Magento\Framework\Logger $logger
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      */
-    public function __construct(\Magento\Framework\Logger $logger, \Magento\Framework\StoreManagerInterface $storeManager)
+    public function __construct(\Magento\Framework\StoreManagerInterface $storeManager)
     {
         $this->_storeManager = $storeManager;
-        parent::__construct($logger);
     }
 
     /**

@@ -33,4 +33,7 @@ DbTest
 Model1
 Model3
 \Magento\Wonderland\Api\Data\FakeRegionInterface
+\Magento\Wonderland\Api\Data\FakeAddressInterface
+\Magento\Wonderland\Model\Data\FakeRegion
+\Magento\Wonderland\Model\Data\FakeAddress
 \Magento\Framework\Error\Processor

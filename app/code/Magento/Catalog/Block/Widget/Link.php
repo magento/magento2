@@ -65,15 +65,18 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param UrlFinderInterface $urlFinder
+     * @param \Magento\Catalog\Model\Resource\AbstractResource $entityResource
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         UrlFinderInterface $urlFinder,
+        \Magento\Catalog\Model\Resource\AbstractResource $entityResource = null,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->urlFinder = $urlFinder;
+        $this->_entityResource = $entityResource;
     }
 
     /**
@@ -141,8 +144,10 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
      */
     public function getLabel()
     {
-        if (!$this->_anchorText && $this->_entityResource) {
-            if (!$this->getData('label')) {
+        if (!$this->_anchorText) {
+            if ($this->getData('anchor_text')) {
+                $this->_anchorText = $this->getData('anchor_text');
+            } else if ($this->_entityResource) {
                 $idPath = explode('/', $this->_getData('id_path'));
                 if (isset($idPath[1])) {
                     $id = $idPath[1];
@@ -154,8 +159,6 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
                         );
                     }
                 }
-            } else {
-                $this->_anchorText = $this->getData('label');
             }
         }
 

@@ -27,26 +27,26 @@ namespace Magento\Customer\Test\Block\Address;
 use Magento\Customer\Test\Fixture\AddressInjectable;
 
 /**
- * Class Renderer
- * Render output from AddressInjectable fixture according to data format type
+ * Render output from AddressInjectable fixture according to data format type.
  */
 class Renderer
 {
     /**
-     * Address format type
+     * Address format type.
      *
      * @var string
      */
     protected $type;
 
     /**
-     * AddressInjectable fixture
+     * AddressInjectable fixture.
      *
      * @var AddressInjectable
      */
     protected $address;
 
     /**
+     * @constructor
      * @param AddressInjectable $address
      * @param string $type
      */
@@ -57,7 +57,7 @@ class Renderer
     }
 
     /**
-     * Returns pattern according to address type
+     * Returns pattern according to address type.
      *
      * @return string
      */
@@ -65,6 +65,12 @@ class Renderer
     {
         $region = $this->resolveRegion();
         switch ($this->type) {
+            case "html":
+                $outputPattern = "{{depend}}{{prefix}} {{/depend}}{{firstname}} {{depend}}{{middlename}} {{/depend}}"
+                    . "{{lastname}}{{depend}} {{suffix}}{{/depend}}\n{{depend}}{{company}}\n{{/depend}}{{street}}\n"
+                    . "{{city}}, {{{$region}}}, {{postcode}}\n{{country_id}}\n{{depend}}T: {{telephone}}{{/depend}}"
+                    . "{{depend}}\nF: {{fax}}{{/depend}}{{depend}}\nVAT: {{vat_id}}{{/depend}}";
+                break;
             case "oneline":
             default:
                 $outputPattern = "{{depend}}{{prefix}} {{/depend}}{{firstname}} {{depend}}{{middlename}} {{/depend}}"
@@ -76,7 +82,7 @@ class Renderer
     }
 
     /**
-     * Render address according to format type
+     * Render address according to format type.
      *
      * @return string
      */
@@ -85,18 +91,18 @@ class Renderer
         $outputPattern = $this->getPattern();
         $fields = $this->getFieldsArray($outputPattern);
         $output = $this->preparePattern();
+        $output = str_replace(['{{depend}}', '{{/depend}}', '{', '}'], '', $output);
 
         foreach ($fields as $field) {
             $data = $this->address->getData($field);
             $output = str_replace($field, $data, $output);
         }
 
-        $output = str_replace(['{', '}'], '', $output);
         return $output;
     }
 
     /**
-     * Get an array of necessary fields from pattern
+     * Get an array of necessary fields from pattern.
      *
      * @param string $outputPattern
      * @return mixed
@@ -114,14 +120,14 @@ class Renderer
     }
 
     /**
-     * Purge fields from pattern which are not present in fixture
+     * Purge fields from pattern which are not present in fixture.
      *
      * @return string
      */
     protected function preparePattern()
     {
         $outputPattern = $this->getPattern();
-        preg_match_all('@\{\{depend\}\}(.*?)\{\{.depend\}\}@', $outputPattern, $matches);
+        preg_match_all('@\{\{depend\}\}(.*?)\{\{.depend\}\}@siu', $outputPattern, $matches);
         foreach ($matches[1] as $key => $dependPart) {
             preg_match_all('@\{\{(\w+)\}\}@', $dependPart, $depends);
             foreach ($depends[1] as $depend) {
@@ -134,7 +140,7 @@ class Renderer
     }
 
     /**
-     * Check necessary field to retrieve according to address country
+     * Check necessary field to retrieve according to address country.
      *
      * @return string
      */

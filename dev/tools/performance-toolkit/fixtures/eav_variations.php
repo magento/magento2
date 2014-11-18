@@ -96,3 +96,9 @@ $model->setAttributeSetId(ATTRIBUTE_SET_ID)
 
 $model->setAttributeSetId(ATTRIBUTE_SET_ID);
 $model->save();
+
+/* @var $cache \Magento\Framework\App\CacheInterface */
+$cache = $this->getObjectManager()->get('Magento\Framework\App\CacheInterface');
+
+$cacheKey = \Magento\Eav\Model\Config::ATTRIBUTES_CACHE_ID . \Magento\Catalog\Model\Product::ENTITY;
+$cache->remove($cacheKey);

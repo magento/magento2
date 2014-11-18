@@ -43,8 +43,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('category_ids')
         );
 
-        $logger = $this->getMock('Magento\Framework\Logger', array(), array(), '', false);
-        $model = new \Magento\Catalog\Model\Product\Attribute\Backend\Category($logger);
+        $model = new \Magento\Catalog\Model\Product\Attribute\Backend\Category();
         $model->setAttribute($categoryAttribute);
 
         $model->afterLoad($product);

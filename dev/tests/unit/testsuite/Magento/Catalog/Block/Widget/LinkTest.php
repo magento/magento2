@@ -44,6 +44,11 @@ class LinkTest extends \PHPUnit_Framework_TestCase
      */
     protected $block;
 
+    /**
+     * @var \Magento\Catalog\Model\Resource\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $entityResource;
+
     protected function setUp()
     {
         $this->storeManager = $this->getMock('Magento\Framework\StoreManagerInterface');
@@ -54,9 +59,12 @@ class LinkTest extends \PHPUnit_Framework_TestCase
             ->method('getStoreManager')
             ->will($this->returnValue($this->storeManager));
 
+        $this->entityResource = $this->getMock('Magento\Catalog\Model\Resource\AbstractResource', [], [], '', false);
+
         $this->block = (new ObjectManager($this))->getObject('Magento\Catalog\Block\Widget\Link', [
             'context' => $context,
             'urlFinder' => $this->urlFinder,
+            'entityResource' => $this->entityResource
         ]);
     }
 
@@ -155,6 +163,27 @@ class LinkTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($rewrite));
 
         $this->assertEquals($url . $separator . '___store=' . $storeCode, $this->block->getHref());
+    }
+
+    public function testGetLabelWithCustomText()
+    {
+        $customText = 'Some text';
+        $this->block->setData('anchor_text', $customText);
+        $this->assertEquals($customText, $this->block->getLabel());
+    }
+
+    public function testGetLabelWithoutCustomText()
+    {
+        $category = 'Some text';
+        $id = 1;
+        $idPath = 'id/' . $id;
+        $store = 1;
+
+        $this->block->setData('id_path', $idPath);
+        $this->storeManager->expects($this->once())->method('getStore')->will($this->returnValue($store));
+        $this->entityResource->expects($this->once())->method('getAttributeRawValue')->with($id, 'name', $store)
+            ->will($this->returnValue($category));
+        $this->assertEquals($category, $this->block->getLabel());
     }
 
     /**

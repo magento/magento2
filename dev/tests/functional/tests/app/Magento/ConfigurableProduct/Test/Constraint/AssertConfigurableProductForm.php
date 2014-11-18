@@ -66,6 +66,11 @@ class AssertConfigurableProductForm extends AssertProductForm
         'is_default',
     ];
 
+    /**
+     * Skipped variation matrix field.
+     *
+     * @var array
+     */
     protected $skippedVariationMatrixFields = [
         'configurable_attribute'
     ];

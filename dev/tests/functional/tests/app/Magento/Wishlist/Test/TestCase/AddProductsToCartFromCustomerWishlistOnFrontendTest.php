@@ -68,6 +68,7 @@ class AddProductsToCartFromCustomerWishlistOnFrontendTest extends AbstractWishli
      */
     public function test(CustomerInjectable $customer, $products, $qty, Browser $browser)
     {
+        $this->markTestIncomplete("Bug: MAGETWO-30097");
         // Preconditions
         $this->browser = $browser;
         $customer->persist();

@@ -25,7 +25,7 @@ namespace Magento\Catalog\Service\V1\Data\Eav;
 
 use Magento\Framework\Api\ExtensibleObjectBuilder;
 use Magento\Framework\Api\AttributeMetadataBuilderInterface;
-use Magento\Framework\Api\AttributeValueBuilder;
+use Magento\Framework\Api\AttributeDataBuilder;
 use Magento\Framework\Api\MetadataServiceInterface;
 
 /**
@@ -56,7 +56,7 @@ class AttributeMetadataBuilder extends ExtensibleObjectBuilder implements Attrib
      * Initializes builder.
      *
      * @param \Magento\Framework\Api\ObjectFactory $objectFactory
-     * @param AttributeValueBuilder $valueBuilder
+     * @param AttributeDataBuilder $valueBuilder
      * @param MetadataServiceInterface $metadataService
      * @param OptionBuilder $optionBuilder
      * @param ValidationRuleBuilder $validationRuleBuilder
@@ -64,7 +64,7 @@ class AttributeMetadataBuilder extends ExtensibleObjectBuilder implements Attrib
      */
     public function __construct(
         \Magento\Framework\Api\ObjectFactory $objectFactory,
-        AttributeValueBuilder $valueBuilder,
+        AttributeDataBuilder $valueBuilder,
         MetadataServiceInterface $metadataService,
         OptionBuilder $optionBuilder,
         ValidationRuleBuilder $validationRuleBuilder,

@@ -32,5 +32,10 @@
                 </bundle>
             </renders>
         </viewBlock>
+        <bundleViewBlock>
+            <class>Magento\Bundle\Test\Block\Catalog\Product\View</class>
+            <locator>#maincontent</locator>
+            <strategy>css selector</strategy>
+        </bundleViewBlock>
     </blocks>
 </page>

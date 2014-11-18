@@ -24,13 +24,22 @@
 
 namespace Magento\Framework\Api;
 
-use Magento\Framework\Api\AttributeInterface;
-
 /**
  * Custom Attribute Data object
  */
 class AttributeValue extends AbstractSimpleObject implements AttributeInterface
 {
+
+    /**
+     * Initialize internal storage
+     *
+     * @param AttributeDataBuilder $builder
+     */
+    public function __construct(AttributeDataBuilder $builder)
+    {
+        $this->_data = $builder->getData();
+    }
+
     /**
      * Get attribute code
      *

@@ -33,13 +33,11 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
     protected $_localeDate;
 
     /**
-     * @param \Magento\Framework\Logger $logger
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      */
-    public function __construct(\Magento\Framework\Logger $logger, \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate)
+    public function __construct(\Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate)
     {
         $this->_localeDate = $localeDate;
-        parent::__construct($logger);
     }
 
     /**

@@ -70,6 +70,16 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                     'subtotal' => 22.43
                 ]
             ],
+            'default' => [
+                'options' => [
+                    'links' => [
+                        [
+                            'label' => 'link_1',
+                            'value' => 'Yes'
+                        ]
+                    ],
+                ]
+            ],
         ];
         return isset($presets[$name]) ? $presets[$name] : [];
     }

@@ -52,6 +52,8 @@ use Mtf\ObjectManager;
  *     [Subtotal|is|100]
  *     {Product attribute combination|NOT FOUND|ANY:[[Attribute Set|is|Default][Attribute Set|is|Default]]}
  * ]}
+ *
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class ConditionsElement extends AbstractElement
 {
@@ -179,6 +181,13 @@ class ConditionsElement extends AbstractElement
     protected $chooserGridLocator = 'div[id*=chooser]';
 
     /**
+     * Rule param input selector.
+     *
+     * @var string
+     */
+    protected $ruleParamInput = '.element [name^="rule[conditions]"]';
+
+    /**
      * Set value to conditions
      *
      * @param string $value
@@ -247,6 +256,13 @@ class ConditionsElement extends AbstractElement
 
         $newCondition = $context->find($this->newCondition, Locator::SELECTOR_XPATH);
         $newCondition->find($this->addNew, Locator::SELECTOR_XPATH)->click();
+        $typeNew = $this->typeNew;
+        $newCondition->waitUntil(
+            function () use ($newCondition, $typeNew) {
+                $element = $newCondition->find($typeNew, Locator::SELECTOR_XPATH, 'select');
+                return $element->isVisible() ? true : null;
+            }
+        );
         $newCondition->find($this->typeNew, Locator::SELECTOR_XPATH, 'select')->setValue($condition['type']);
         $this->ruleParamWait();
 
@@ -282,7 +298,13 @@ class ConditionsElement extends AbstractElement
                 $grid->searchAndSelect([$chooserConfig[1] => $rule]);
                 continue;
             }
-
+            $input = $this->ruleParamInput;
+            $param->waitUntil(
+                function () use ($param, $input) {
+                    $element = $param->find($input);
+                    return $element->isVisible() ? true : null;
+                }
+            );
             $value = $param->find('select', Locator::SELECTOR_CSS, 'select');
             if ($value->isVisible()) {
                 $value->setValue($rule);

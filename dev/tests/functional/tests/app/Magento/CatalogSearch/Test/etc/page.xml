@@ -30,12 +30,12 @@
     </catalogsearchResult>
     <catalogSearchIndex>
         <area>adminhtml</area>
-        <mca>catalog/search/index</mca>
+        <mca>search/term</mca>
         <class>Magento\CatalogSearch\Test\Page\Adminhtml\CatalogSearchIndex</class>
     </catalogSearchIndex>
     <catalogSearchEdit>
         <area>adminhtml</area>
-        <mca>catalog/search/edit</mca>
+        <mca>search/term/edit</mca>
         <class>Magento\CatalogSearch\Test\Page\Adminhtml\CatalogSearchEdit</class>
     </catalogSearchEdit>
 </page>

@@ -72,8 +72,8 @@ class Invoiced extends AbstractReport
     protected function _aggregateByInvoiceCreatedAt($from, $to)
     {
         $table = $this->getTable('sales_invoiced_aggregated');
-        $sourceTable = $this->getTable('sales_flat_invoice');
-        $orderTable = $this->getTable('sales_flat_order');
+        $sourceTable = $this->getTable('sales_invoice');
+        $orderTable = $this->getTable('sales_order');
         $adapter = $this->_getWriteAdapter();
 
         $adapter->beginTransaction();
@@ -195,7 +195,7 @@ class Invoiced extends AbstractReport
     protected function _aggregateByOrderCreatedAt($from, $to)
     {
         $table = $this->getTable('sales_invoiced_aggregated_order');
-        $sourceTable = $this->getTable('sales_flat_order');
+        $sourceTable = $this->getTable('sales_order');
         $adapter = $this->_getWriteAdapter();
 
         if ($from !== null || $to !== null) {

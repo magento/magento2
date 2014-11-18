@@ -129,7 +129,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $customerData = $this->_customerBuilder->mergeDataObjectWithArray(
             $customerData,
             array(CustomerData::EMAIL => 'new@example.com')
-        );
+        )->create();
         $addresses = $this->_customerAddressService->getAddresses($existingCustomerId);
         $this->_serviceQuote->getQuote()->setCustomerData($customerData);
         $this->_serviceQuote->getQuote()->setCustomerAddressData($addresses);

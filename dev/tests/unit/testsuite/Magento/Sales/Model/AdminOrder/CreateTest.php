@@ -196,7 +196,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         )->method(
             'mergeDataObjectWithArray'
         )->will(
-            $this->returnArgument(0)
+            $this->returnValue($this->customerBuilderMock)
         );
 
         $this->customerGroupServiceMock->expects(

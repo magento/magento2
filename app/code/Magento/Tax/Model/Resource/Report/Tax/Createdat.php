@@ -76,7 +76,7 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
         try {
             if ($from !== null || $to !== null) {
                 $subSelect = $this->_getTableDateRangeSelect(
-                    $this->getTable('sales_flat_order'),
+                    $this->getTable('sales_order'),
                     'created_at',
                     'updated_at',
                     $from,
@@ -90,7 +90,7 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
             // convert dates from UTC to current admin timezone
             $periodExpr = $writeAdapter->getDatePartSql(
                 $this->getStoreTZOffsetQuery(
-                    array('e' => $this->getTable('sales_flat_order')),
+                    array('e' => $this->getTable('sales_order')),
                     'e.' . $aggregationField,
                     $from,
                     $to
@@ -112,7 +112,7 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
                 array('tax' => $this->getTable('sales_order_tax')),
                 $columns
             )->joinInner(
-                array('e' => $this->getTable('sales_flat_order')),
+                array('e' => $this->getTable('sales_order')),
                 'e.entity_id = tax.order_id',
                 array()
             )->useStraightJoin();

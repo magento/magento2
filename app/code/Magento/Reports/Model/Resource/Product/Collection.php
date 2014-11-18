@@ -252,10 +252,10 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         if ($this->_selectCountSqlType == self::SELECT_COUNT_SQL_TYPE_CART) {
             $countSelect = clone $this->getSelect();
             $countSelect->reset()->from(
-                array('quote_item_table' => $this->getTable('sales_flat_quote_item')),
+                array('quote_item_table' => $this->getTable('sales_quote_item')),
                 array('COUNT(DISTINCT quote_item_table.product_id)')
             )->join(
-                array('quote_table' => $this->getTable('sales_flat_quote')),
+                array('quote_table' => $this->getTable('sales_quote')),
                 'quote_table.entity_id = quote_item_table.quote_id AND quote_table.is_active = 1',
                 array()
             );
@@ -285,10 +285,10 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         $countSelect->reset();
 
         $countSelect->from(
-            array('quote_items' => $this->getTable('sales_flat_quote_item')),
+            array('quote_items' => $this->getTable('sales_quote_item')),
             'COUNT(*)'
         )->join(
-            array('quotes' => $this->getTable('sales_flat_quote')),
+            array('quotes' => $this->getTable('sales_quote')),
             'quotes.entity_id = quote_items.quote_id AND quotes.is_active = 1',
             array()
         )->where(
@@ -316,7 +316,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      */
     public function addOrdersCount($from = '', $to = '')
     {
-        $orderItemTableName = $this->getTable('sales_flat_order_item');
+        $orderItemTableName = $this->getTable('sales_order_item');
         $productFieldName = sprintf('e.%s', $this->getProductEntityId());
 
         $this->getSelect()->joinLeft(
@@ -373,10 +373,10 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         }
 
         $this->getSelect()->reset()->from(
-            array('order_items' => $this->getTable('sales_flat_order_item')),
+            array('order_items' => $this->getTable('sales_order_item')),
             array('ordered_qty' => 'SUM(order_items.qty_ordered)', 'order_items_name' => 'order_items.name')
         )->joinInner(
-            array('order' => $this->getTable('sales_flat_order')),
+            array('order' => $this->getTable('sales_order')),
             implode(' AND ', $orderJoinCondition),
             array()
         )->joinLeft(

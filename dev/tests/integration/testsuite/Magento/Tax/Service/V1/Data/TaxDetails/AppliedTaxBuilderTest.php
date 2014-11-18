@@ -164,7 +164,8 @@ class AppliedTaxBuilderTest extends \PHPUnit_Framework_TestCase
         $appliedTax = $this->builder->populateWithArray($dataMerged)->create();
         $appliedTax1 = $this->builder->populateWithArray($data1)->create();
         $appliedTax2 = $this->builder->populateWithArray($data2)->create();
-        $appliedTaxMerged = $this->builder->mergeDataObjects($appliedTax1, $appliedTax2);
+        $appliedTaxMerged = $this->builder->mergeDataObjects($appliedTax1, $appliedTax2)
+            ->create();
         $this->assertEquals($appliedTax->__toArray(), $appliedTaxMerged->__toArray());
     }
 
@@ -211,7 +212,8 @@ class AppliedTaxBuilderTest extends \PHPUnit_Framework_TestCase
 
         $appliedTax = $this->builder->populateWithArray($dataMerged)->create();
         $appliedTax1 = $this->builder->populateWithArray($data1)->create();
-        $appliedTaxMerged = $this->builder->mergeDataObjectWithArray($appliedTax1, $data2);
+        $appliedTaxMerged = $this->builder->mergeDataObjectWithArray($appliedTax1, $data2)
+            ->create();
         $this->assertEquals($appliedTax->__toArray(), $appliedTaxMerged->__toArray());
     }
 

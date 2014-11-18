@@ -187,7 +187,7 @@ class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
         }
 
         $this->getSelect()->joinLeft(
-            array('orders' => $this->getTable('sales_flat_order')),
+            array('orders' => $this->getTable('sales_order')),
             "orders.customer_id = e.entity_id" . $dateFilter,
             array()
         );
@@ -288,7 +288,7 @@ class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
 
             $select = $this->getConnection()->select();
             $select->from(
-                array('orders' => $this->getTable('sales_flat_order')),
+                array('orders' => $this->getTable('sales_order')),
                 array(
                     'orders_avg_amount' => "AVG({$totalExpr})",
                     'orders_sum_amount' => "SUM({$totalExpr})",

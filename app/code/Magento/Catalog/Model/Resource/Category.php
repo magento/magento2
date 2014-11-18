@@ -523,7 +523,7 @@ class Category extends AbstractResource
     public function getChildrenAmount($category, $isActiveFlag = true)
     {
         $storeId = $this->_storeManager->getStore()->getId();
-        $attributeId = $this->_getIsActiveAttributeId();
+        $attributeId = $this->getIsActiveAttributeId();
         $table = $this->getTable(array($this->getEntityTablePrefix(), 'int'));
         $adapter = $this->_getReadAdapter();
         $checkSql = $adapter->getCheckSql('c.value_id > 0', 'c.value', 'd.value');
@@ -559,25 +559,13 @@ class Category extends AbstractResource
      *
      * @return int
      */
-    protected function _getIsActiveAttributeId()
+    public function getIsActiveAttributeId()
     {
         if ($this->_isActiveAttributeId === null) {
-            $bind = array('catalog_category' => \Magento\Catalog\Model\Category::ENTITY, 'is_active' => 'is_active');
-            $select = $this->_getReadAdapter()->select()->from(
-                array('a' => $this->getTable('eav_attribute')),
-                array('attribute_id')
-            )->join(
-                array('t' => $this->getTable('eav_entity_type')),
-                'a.entity_type_id = t.entity_type_id'
-            )->where(
-                'entity_type_code = :catalog_category'
-            )->where(
-                'attribute_code = :is_active'
-            );
-
-            $this->_isActiveAttributeId = $this->_getReadAdapter()->fetchOne($select, $bind);
+            $this->_isActiveAttributeId = (int)$this->_eavConfig
+                ->getAttribute($this->getEntityType(), 'is_active')
+                ->getAttributeId();
         }
-
         return $this->_isActiveAttributeId;
     }
 
@@ -760,7 +748,7 @@ class Category extends AbstractResource
      */
     public function getChildren($category, $recursive = true)
     {
-        $attributeId = (int)$this->_getIsActiveAttributeId();
+        $attributeId = $this->getIsActiveAttributeId();
         $backendTable = $this->getTable(array($this->getEntityTablePrefix(), 'int'));
         $adapter = $this->_getReadAdapter();
         $checkSql = $adapter->getCheckSql('c.value_id > 0', 'c.value', 'd.value');

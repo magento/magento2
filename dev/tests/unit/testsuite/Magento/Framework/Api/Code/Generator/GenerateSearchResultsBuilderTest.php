@@ -55,6 +55,7 @@ class GenerateSearchResultsBuilderTest extends \PHPUnit_Framework_TestCase
     public function testGenerate()
     {
         require_once __DIR__ . '/_files/Sample.php';
+        /** @var \Magento\Framework\Api\Code\Generator\SearchResultsBuilder $model */
         $model = $this->getMock(
             'Magento\Framework\Api\Code\Generator\SearchResultsBuilder',
             [
@@ -80,6 +81,6 @@ class GenerateSearchResultsBuilderTest extends \PHPUnit_Framework_TestCase
         $model->expects($this->once())
             ->method('_validateData')
             ->will($this->returnValue(true));
-        $this->assertTrue($model->generate());
+        $this->assertTrue($model->generate(), implode("\n", $model->getErrors()));
     }
 }

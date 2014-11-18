@@ -56,11 +56,29 @@ class ConditionFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testCreate()
+    public function testExceptingToCallMethodCreateInObjectManager()
     {
-        $type = '1';
-        $data = ['data2', 'data3'];
-        $this->objectManagerMock->expects($this->once())->method('create')->with($type, $data);
-        $this->conditionFactory->create($type, $data);
+        $type = 'type';
+        $this->objectManagerMock
+            ->expects($this->once())
+            ->method('create')
+            ->with($type)
+            ->willReturn(new \stdClass());
+
+        $this->conditionFactory->create($type);
+    }
+
+    public function testExceptingClonedObject()
+    {
+        $origin = new \stdClass();
+
+        $this->objectManagerMock->expects($this->once())
+            ->method('create')
+            ->with('clone')
+            ->willReturn($origin);
+
+        $cloned = $this->conditionFactory->create('clone');
+
+        $this->assertNotSame($cloned, $origin);
     }
 }

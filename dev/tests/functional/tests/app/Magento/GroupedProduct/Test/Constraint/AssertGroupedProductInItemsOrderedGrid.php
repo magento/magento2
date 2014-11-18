@@ -59,16 +59,16 @@ class AssertGroupedProductInItemsOrderedGrid extends AbstractConstraint
      * Assert product was added to Items Ordered grid in customer account on Order creation page backend
      *
      * @param OrderCreateIndex $orderCreateIndex
-     * @param array $entityData
+     * @param array $products
      * @throws \Exception
      * @return void
      */
-    public function processAssert(OrderCreateIndex $orderCreateIndex, array $entityData)
+    public function processAssert(OrderCreateIndex $orderCreateIndex, array $products)
     {
-        if (!isset($entityData['products'])) {
+        if (empty($products)) {
             throw new \Exception("No products");
         }
-        $data = $this->prepareData($entityData, $orderCreateIndex->getCreateBlock()->getItemsBlock());
+        $data = $this->prepareData($products, $orderCreateIndex->getCreateBlock()->getItemsBlock());
 
         \PHPUnit_Framework_Assert::assertEquals(
             $data['fixtureData'],
@@ -87,7 +87,7 @@ class AssertGroupedProductInItemsOrderedGrid extends AbstractConstraint
     protected function prepareData(array $data, Items $itemsBlock)
     {
         $fixtureData = [];
-        foreach ($data['products'] as $product) {
+        foreach ($data as $product) {
             $products = $product->getAssociated()['products'];
             foreach ($products as $key => $value) {
                 $fixtureData[$key]['name'] = $value->getName();

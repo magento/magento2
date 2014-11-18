@@ -74,27 +74,27 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
      * @var $_flatEntityTables array
      */
     protected $_flatEntityTables = array(
-        'quote' => 'sales_flat_quote',
-        'quote_item' => 'sales_flat_quote_item',
-        'quote_address' => 'sales_flat_quote_address',
-        'quote_address_item' => 'sales_flat_quote_address_item',
-        'quote_address_rate' => 'sales_flat_quote_shipping_rate',
-        'quote_payment' => 'sales_flat_quote_payment',
-        'order' => 'sales_flat_order',
-        'order_payment' => 'sales_flat_order_payment',
-        'order_item' => 'sales_flat_order_item',
-        'order_address' => 'sales_flat_order_address',
-        'order_status_history' => 'sales_flat_order_status_history',
-        'invoice' => 'sales_flat_invoice',
-        'invoice_item' => 'sales_flat_invoice_item',
-        'invoice_comment' => 'sales_flat_invoice_comment',
-        'creditmemo' => 'sales_flat_creditmemo',
-        'creditmemo_item' => 'sales_flat_creditmemo_item',
-        'creditmemo_comment' => 'sales_flat_creditmemo_comment',
-        'shipment' => 'sales_flat_shipment',
-        'shipment_item' => 'sales_flat_shipment_item',
-        'shipment_track' => 'sales_flat_shipment_track',
-        'shipment_comment' => 'sales_flat_shipment_comment'
+        'quote' => 'sales_quote',
+        'quote_item' => 'sales_quote_item',
+        'quote_address' => 'sales_quote_address',
+        'quote_address_item' => 'sales_quote_address_item',
+        'quote_address_rate' => 'sales_quote_shipping_rate',
+        'quote_payment' => 'sales_quote_payment',
+        'order' => 'sales_order',
+        'order_payment' => 'sales_order_payment',
+        'order_item' => 'sales_order_item',
+        'order_address' => 'sales_order_address',
+        'order_status_history' => 'sales_order_status_history',
+        'invoice' => 'sales_invoice',
+        'invoice_item' => 'sales_invoice_item',
+        'invoice_comment' => 'sales_invoice_comment',
+        'creditmemo' => 'sales_creditmemo',
+        'creditmemo_item' => 'sales_creditmemo_item',
+        'creditmemo_comment' => 'sales_creditmemo_comment',
+        'shipment' => 'sales_shipment',
+        'shipment_item' => 'sales_shipment_item',
+        'shipment_track' => 'sales_shipment_track',
+        'shipment_comment' => 'sales_shipment_comment'
     );
 
     /**
@@ -232,28 +232,28 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
         $entities = array(
             'order' => array(
                 'entity_model' => 'Magento\Sales\Model\Resource\Order',
-                'table' => 'sales_flat_order',
+                'table' => 'sales_order',
                 'increment_model' => 'Magento\Eav\Model\Entity\Increment\Numeric',
                 'increment_per_store' => true,
                 'attributes' => array()
             ),
             'invoice' => array(
                 'entity_model' => 'Magento\Sales\Model\Resource\Order\Invoice',
-                'table' => 'sales_flat_invoice',
+                'table' => 'sales_invoice',
                 'increment_model' => 'Magento\Eav\Model\Entity\Increment\Numeric',
                 'increment_per_store' => true,
                 'attributes' => array()
             ),
             'creditmemo' => array(
                 'entity_model' => 'Magento\Sales\Model\Resource\Order\Creditmemo',
-                'table' => 'sales_flat_creditmemo',
+                'table' => 'sales_creditmemo',
                 'increment_model' => 'Magento\Eav\Model\Entity\Increment\Numeric',
                 'increment_per_store' => true,
                 'attributes' => array()
             ),
             'shipment' => array(
                 'entity_model' => 'Magento\Sales\Model\Resource\Order\Shipment',
-                'table' => 'sales_flat_shipment',
+                'table' => 'sales_shipment',
                 'increment_model' => 'Magento\Eav\Model\Entity\Increment\Numeric',
                 'increment_per_store' => true,
                 'attributes' => array()

@@ -25,7 +25,7 @@ Before you install Magento 2, make sure your system meets or exceeds the followi
 	
 *	<a href="https://getcomposer.org/download/" >Composer</a> (latest stable version)
 *	<a href="http://httpd.apache.org/download.cgi" >Apache 2.2</a> or later
-*	PHP 5.4.11 or 5.5.x (<a href="http://php.net/downloads.php" >installation</a> instructions, <a href="http://phpave.com/upgrade-php-5-3-php-5-5-ubuntu-12-04-lts/" >upgrade</a> instructions)
+*	PHP 5.4.11 or 5.5.x 
 *	Required PHP extensions:
 
 	*	PDO/MySQL
@@ -37,15 +37,13 @@ Before you install Magento 2, make sure your system meets or exceeds the followi
 	*	gd2, ImageMagick 6.3.7 (or later) or both
 	*	soap
 	
-*	<a href="http://dev.mysql.com/doc/refman/5.5/en/installing.html" >MySQL 5.5</a> or later
+*	<a href="http://dev.mysql.com/doc/refman/5.6/en/installing.html" >MySQL 5.6.x</a>
 *	Mail Transfer Agent (MTA) or an SMTP server
 *	Optional but recommended: 
 
 	*	<a href="http://xdebug.org/download.php" >php_xdebug2.2.0</a> or later (development environments only; can have an adverse effect on performance)
-    *	PHPUnit (as a command-line tool) 3.7 or later 
+    *	PHPUnit (as a command-line tool) 4.1 or later 
 	
-
-
 <h2 id="instgde-overview-composer">Composer and Magento</h2>
 
 We now use <a href="https://getcomposer.org/" >Composer</a> to install the Magento 2 software. Composer enables us to manage Magento 2, extensions, and their dependencies.
@@ -87,7 +85,7 @@ Use the following table to verify you have the correct prerequisites to install 
 		<td><code>php -v</code></td>
 		<td><a href="#php" >PHP</a></td>
 	</tr>
-	<tr><td>MySQL 5.5 or later</td>
+	<tr><td>MySQL 5.6.x</td>
 	<td><code>mysql -u [root user name] -p</code></td>
 	<td><a href="#mysql" >MySQL</a></td>
 	</tr>
@@ -142,7 +140,7 @@ Before you install Magento, you must do all of the following:
 </li>
 <li>Specify the type of directives that can be used in <code>.htaccess</code>. Magento uses <code>.htaccess</code> for redirects. For guidelines, see:
 <ul><li>Apache 2.2: The <a href="http://httpd.apache.org/docs/2.2/mod/core.html#allowoverride" target="_blank">Apache 2.2 documentation</a>.</li>
-<li>Apache 2.4: The <a href="http://httpd.apache.org/docs/current/mod/mod_rewrite.html" target="_blank">Apache 2.4 documentation</a>.<br>
+<li>Apache 2.4: The <a href="http://httpd.apache.org/docs/current/mod/core.html#allowoverride" target="_blank">Apache 2.4 documentation</a>.<br>
 Note that in Apache 2.4, the server's default site configuration file is <code>/etc/apache2/sites-available/000-default.conf</code><br>
 For example, you can add the following to the bottom of <code>000-default.conf</code>:<br>
 <pre>&lt;Directory "/var/www">
@@ -172,13 +170,27 @@ AllowOverride [value from Apache site]
 
 <h4>Installing MySQL on Ubuntu</h4>
 
-1.	Use the guidelines on the <a href="https://help.ubuntu.com/12.04/serverguide/mysql.html" target="_blank">Ubuntu site</a>. 
+1.	Install MySQL on <a href="https://rtcamp.com/tutorials/mysql/mysql-5-6-ubuntu-12-04/" target="_blank">Ubuntu 12</a> or <a href="http://www.tocker.ca/2014/04/21/installing-mysql-5-6-on-ubuntu-14-04-trusty-tahr.html" target="_blank">Ubuntu 14</a>. 
 2.	Configure the database instance.
 
 <h4>Installing and configuring MySQL on CentOS</h4>
 
-1.	Install and configure MySQL as discussed on the <a href="http://centoshelp.org/servers/database/installing-configuring-mysql-server/" target="_blank">CentOS help site</a>.
-2.	Configure the database instance as discussed in the next section.
+The following procedure is based on <a href="http://sharadchhetri.com/2013/12/26/install-mysql-server-5-6-in-centos-6-x-and-red-hat-6-x-linux/" target="_blank">Install MySQL Server 5.6 in CentOS 6.x and Red Hat 6.x Linux</a>.
+
+1.	Install the MySQL database:
+
+	<pre>cd /tmp
+wget http://repo.mysql.com/mysql-community-release-el6-5.noarch.rpm
+rpm -ivh mysql-community-release-el6-5.noarch.rpm
+yum -y install mysql-server</pre>
+	
+2.	Start MySQL.
+
+	`service mysqld start`
+	
+3.	Set a password for the <tt>root</tt> user and set other security-related options. Enter the following command and follow the prompts on your screen to complete the configuration.
+
+	`mysql_secure_installation`
 
 <h4>Configuring the Magento database instance</h4>
 
@@ -194,9 +206,7 @@ To configure a MySQL database instance:
 3.	Enter the MySQL `root` user's password when prompted.
 4.	Enter the following commands in the order shown to create a database instance named `magento` with user name `magento`:
 	<pre>create database magento;
-CREATE USER 'magento'@'localhost' IDENTIFIED BY 'magento';
-GRANT USAGE ON *.* TO magento@localhost IDENTIFIED BY 'magento';
-GRANT ALL ON magento.* TO magento@localhost;</pre>
+GRANT ALL ON magento.* TO magento@localhost IDENTIFIED BY 'magento';</pre>
 
 5.	Enter `exit` to quit the command prompt.
 
@@ -204,11 +214,11 @@ GRANT ALL ON magento.* TO magento@localhost;</pre>
 
 Magento 2 requires PHP 5.4.11 or later or PHP 5.5.x.
 
-**Note**: Magento 2 does not support PHP 5.6.
+**Note**: Magento 2 does *not* support PHP 5.6.
 
-<h3>PHP on Ubuntu</h3>
+<h3>PHP 5.5 or 5.4 on Ubuntu</h3>
 
-<h4>Install PHP 5.5 on Ubuntu 14</h4>
+<h5>Install PHP 5.5 on Ubuntu 14</h5>
 
 To install PHP 5.5 on Ubuntu 14:
 
@@ -223,7 +233,22 @@ To install PHP 5.5 on Ubuntu 14:
 	Zend Engine v2.5.0, Copyright (c) 1998-2014 Zend Technologies
     with Zend OPcache v7.0.3, Copyright (c) 1999-2014, by Zend Technologies</pre>
 	
-<h4>Install PHP 5.4 on Ubuntu 12</h4>
+<h5>Install PHP 5.5 on Ubuntu 12</h5>	
+
+1.	Use the following commands from <a href="http://www.dev-metal.com/how-to-setup-latest-version-of-php-5-5-on-ubuntu-12-04-lts/" target="_blank">dev-metal</a>:
+
+	<pre>add-apt-repository ppa:ondrej/php5
+	apt-get update
+	sudo apt-get install php5</pre>
+	
+2.	Verify the PHP version by entering `php -v`. Messages similar to the following should display:
+
+	<pre>PHP 5.5.18-1+deb.sury.org~precise+1 (cli) (built: Oct 17 2014 15:11:34)
+	Copyright (c) 1997-2014 The PHP Group
+	Zend Engine v2.5.0, Copyright (c) 1998-2014 Zend Technologies
+    with Zend OPcache v7.0.4-dev, Copyright (c) 1999-2014, by Zend Technologies</pre>
+	
+<h5>Install PHP 5.4 on Ubuntu 12</h5>
 
 To install PHP 5.4 on Ubuntu 12:
 
@@ -242,7 +267,7 @@ To install PHP 5.4 on Ubuntu 12:
 
 3.	Restart Apache: `service apache2 restart`
 
-<h4>Upgrade to PHP 5.4 on Ubuntu</h4>
+<h5>Upgrade to PHP 5.4 on Ubuntu</h5>
 
 To upgrade to PHP 5.4 on Ubuntu:
 
@@ -265,7 +290,7 @@ Enter the following command to install required PHP extensions:
 
 There is a <a href="https://bugs.launchpad.net/ubuntu/+source/php-mcrypt/+bug/1240590" target="_blank">known issue</a> in Ubuntu 14 with the `mcrypt` PHP extension. To work around the issue, see <a href="http://askubuntu.com/questions/450825/ubuntu-14-04-phpmyadmin-cant-find-mcrypt-extension" target="_blank">askubuntu</a>.
 
-<h4>Upgrade to PHP 5.4 on CentOS</h4>
+<h4>PHP 5.5 or 5.4 on CentOS</h4>
 
 PHP 5.3 is the default PHP version on CentOS distributions. Upgrade to PHP 5.4 using a repository like <a href="http://blog.famillecollet.com/pages/Config-en" target="_blank">remi</a>. 
 
@@ -274,6 +299,27 @@ The following resources are also available:
 *	<a href="http://kb.parallels.com/en/115875" target="_blank">kb.parallels</a>
 *	<a href="http://stackoverflow.com/questions/21502656/upgrading-php-on-centos-6-5-final" target="_blank">stackoverflow</a>
 *	<a href="http://rpms.famillecollet.com/" target="_blank">remi repository</a>
+
+To verify if PHP is installed already, enter `php -v`. If PHP is *not* installed, install it by entering the following command:
+
+<pre>yum -y install php php-xml</pre>
+
+<h5>PHP 5.5 on CentOS</h5>
+
+To upgrade to PHP 5.5:
+
+There is more than one way to upgrade CentOS 6.5 to PHP 5.5; the following is a suggestion only. Consult a reference for additional options.
+
+Enter the following commands in the order shown.
+
+<pre>cd /tmp
+rpm -Uvh https://mirror.webtatic.com/yum/el6/latest.rpm
+yum -y remove php-common-5.3.3-40.el6_6.x86_64
+yum -y install php55w php55w-opcache</pre>
+
+Restart Apache: `service httpd restart`
+
+<h5>PHP 5.4 on CentOS</h5>
 
 To upgrade to PHP 5.4:
 

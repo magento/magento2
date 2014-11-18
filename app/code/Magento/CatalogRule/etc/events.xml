@@ -27,7 +27,4 @@
     <event name="prepare_catalog_product_price_index_table">
         <observer name="catalogrule" instance="Magento\CatalogRule\Model\Observer" method="prepareCatalogProductPriceIndexTable" />
     </event>
-    <event name="catalogrule_apply_all">
-        <observer name="catalogrule" instance="Magento\CatalogRule\Model\Observer" method="processApplyAll" />
-    </event>
 </config>

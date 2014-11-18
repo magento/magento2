@@ -249,9 +249,9 @@ $table = $installer->getConnection()->newTable(
     \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
-    $installer->getFkName('downloadable_link_purchased', 'order_id', 'sales_flat_order', 'entity_id'),
+    $installer->getFkName('downloadable_link_purchased', 'order_id', 'sales_order', 'entity_id'),
     'order_id',
-    $installer->getTable('sales_flat_order'),
+    $installer->getTable('sales_order'),
     'entity_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
@@ -383,9 +383,9 @@ $table = $installer->getConnection()->newTable(
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
 )->addForeignKey(
-    $installer->getFkName('downloadable_link_purchased_item', 'order_item_id', 'sales_flat_order_item', 'item_id'),
+    $installer->getFkName('downloadable_link_purchased_item', 'order_item_id', 'sales_order_item', 'item_id'),
     'order_item_id',
-    $installer->getTable('sales_flat_order_item'),
+    $installer->getTable('sales_order_item'),
     'item_id',
     \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE

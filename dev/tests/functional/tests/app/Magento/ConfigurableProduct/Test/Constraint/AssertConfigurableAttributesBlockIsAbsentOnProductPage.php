@@ -42,7 +42,7 @@ class AssertConfigurableAttributesBlockIsAbsentOnProductPage extends AbstractCon
     protected $severeness = 'low';
 
     /**
-     * Assert that all products attributes is absent on product page on frontend.
+     * Assert that all configurable attributes is absent on product page on frontend.
      *
      * @param Browser $browser
      * @param CatalogProductView $catalogProductView
@@ -57,7 +57,7 @@ class AssertConfigurableAttributesBlockIsAbsentOnProductPage extends AbstractCon
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
         \PHPUnit_Framework_Assert::assertFalse(
             $catalogProductView->getConfigurableAttributesBlock()->isVisible(),
-            "Product attributes are present on product page on frontend."
+            "Configurable attributes are present on product page on frontend."
         );
     }
 
@@ -68,6 +68,6 @@ class AssertConfigurableAttributesBlockIsAbsentOnProductPage extends AbstractCon
      */
     public function toString()
     {
-        return "All product attributes are absent on product page on frontend.";
+        return "All configurable attributes are absent on product page on frontend.";
     }
 }

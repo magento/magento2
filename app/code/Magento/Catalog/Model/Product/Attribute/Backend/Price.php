@@ -61,14 +61,12 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * Construct
      *
-     * @param \Magento\Framework\Logger $logger
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      */
     public function __construct(
-        \Magento\Framework\Logger $logger,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Catalog\Helper\Data $catalogData,
@@ -78,7 +76,6 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $this->_storeManager = $storeManager;
         $this->_helper = $catalogData;
         $this->_config = $config;
-        parent::__construct($logger);
     }
 
     /**

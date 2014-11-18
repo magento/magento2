@@ -43,13 +43,11 @@ class Password extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
     protected $string;
 
     /**
-     * @param \Magento\Framework\Logger $logger
      * @param \Magento\Framework\Stdlib\String $string
      */
-    public function __construct(\Magento\Framework\Logger $logger, \Magento\Framework\Stdlib\String $string)
+    public function __construct(\Magento\Framework\Stdlib\String $string)
     {
         $this->string = $string;
-        parent::__construct($logger);
     }
 
     /**

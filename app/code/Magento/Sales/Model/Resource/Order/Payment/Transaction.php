@@ -128,7 +128,7 @@ class Transaction extends \Magento\Sales\Model\Resource\Entity
         $adapter = $this->_getReadAdapter();
         $bind = array(':entity_id' => $orderId);
         $select = $adapter->select()->from(
-            array('so' => $this->getTable('sales_flat_order')),
+            array('so' => $this->getTable('sales_order')),
             'cs.website_id'
         )->joinInner(
             array('cs' => $this->getTable('store')),

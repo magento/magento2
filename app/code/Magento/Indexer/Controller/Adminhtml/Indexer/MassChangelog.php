@@ -38,13 +38,9 @@ class MassChangelog extends \Magento\Indexer\Controller\Adminhtml\Indexer
             $this->messageManager->addError(__('Please select indexers.'));
         } else {
             try {
-                foreach ($indexerIds as $indexer_id) {
+                foreach ($indexerIds as $indexerId) {
                     /** @var \Magento\Indexer\Model\IndexerInterface $model */
-                    $model = $this->_objectManager->create(
-                        'Magento\Indexer\Model\IndexerInterface'
-                    )->load(
-                        $indexer_id
-                    );
+                    $model = $this->_objectManager->get('Magento\Indexer\Model\IndexerRegistry')->get($indexerId);
                     $model->setScheduled(true);
                 }
                 $this->messageManager->addSuccess(

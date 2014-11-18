@@ -26,7 +26,7 @@ namespace Magento\Customer\Model\Data;
 
 use Magento\Framework\Api\AbstractExtensibleObject as ExtensibleObject;
 use Magento\Framework\Api\ExtensibleObjectBuilder;
-use Magento\Framework\Api\AttributeValueBuilder;
+use Magento\Framework\Api\AttributeDataBuilder;
 use Magento\Customer\Service\V1\CustomerMetadataServiceInterface;
 
 /**
@@ -40,12 +40,12 @@ class CustomerBuilder extends ExtensibleObjectBuilder
 {
     /**
      * @param \Magento\Framework\Api\ObjectFactory $objectFactory
-     * @param AttributeValueBuilder $valueBuilder
+     * @param AttributeDataBuilder $valueBuilder
      * @param CustomerMetadataServiceInterface $metadataService
      */
     public function __construct(
         \Magento\Framework\Api\ObjectFactory $objectFactory,
-        AttributeValueBuilder $valueBuilder,
+        AttributeDataBuilder $valueBuilder,
         CustomerMetadataServiceInterface $metadataService
     ) {
         parent::__construct($objectFactory, $valueBuilder, $metadataService);

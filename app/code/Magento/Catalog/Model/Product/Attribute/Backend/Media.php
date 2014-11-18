@@ -87,7 +87,6 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * Construct
      *
-     * @param \Magento\Framework\Logger $logger
      * @param \Magento\Catalog\Model\Resource\ProductFactory $productFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Core\Helper\File\Storage\Database $fileStorageDb
@@ -97,7 +96,6 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $resourceProductAttribute
      */
     public function __construct(
-        \Magento\Framework\Logger $logger,
         \Magento\Catalog\Model\Resource\ProductFactory $productFactory,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Core\Helper\File\Storage\Database $fileStorageDb,
@@ -113,7 +111,6 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $this->_resourceModel = $resourceProductAttribute;
         $this->_mediaConfig = $mediaConfig;
         $this->_mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-        parent::__construct($logger);
     }
 
     /**

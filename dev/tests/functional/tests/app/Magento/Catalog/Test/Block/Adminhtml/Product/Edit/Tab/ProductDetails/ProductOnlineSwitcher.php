@@ -25,6 +25,7 @@
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\ProductDetails;
 
 use Mtf\Client\Driver\Selenium\Element;
+use Mtf\Client\Element\Locator;
 
 /**
  * Class ProductOnlineSwitcher
@@ -38,6 +39,13 @@ class ProductOnlineSwitcher extends Element
      * @var string
      */
     protected $onlineSwitcher = '#product-online-switcher%s + [for="product-online-switcher"]';
+
+    /**
+     * Selector for top page click.
+     *
+     * @var string
+     */
+    protected $topPage = './ancestor::body//*[@class="page-main-actions"]';
 
     /**
      * Set value
@@ -56,6 +64,7 @@ class ProductOnlineSwitcher extends Element
                 && $this->find(sprintf($this->onlineSwitcher, ':not(:checked)'))->isVisible()
             )
         ) {
+            $this->find($this->topPage, Locator::SELECTOR_XPATH)->click();
             $this->find(sprintf($this->onlineSwitcher, ''))->click();
         }
     }

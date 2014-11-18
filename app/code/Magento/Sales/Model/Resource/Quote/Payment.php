@@ -53,6 +53,6 @@ class Payment extends \Magento\Sales\Model\Resource\AbstractResource
      */
     protected function _construct()
     {
-        $this->_init('sales_flat_quote_payment', 'payment_id');
+        $this->_init('sales_quote_payment', 'payment_id');
     }
 }

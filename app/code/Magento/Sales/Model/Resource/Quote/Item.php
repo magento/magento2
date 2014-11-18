@@ -37,6 +37,6 @@ class Item extends \Magento\Sales\Model\Resource\AbstractResource
      */
     protected function _construct()
     {
-        $this->_init('sales_flat_quote_item', 'item_id');
+        $this->_init('sales_quote_item', 'item_id');
     }
 }

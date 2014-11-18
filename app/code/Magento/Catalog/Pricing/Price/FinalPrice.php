@@ -41,21 +41,7 @@ class FinalPrice extends AbstractPrice implements FinalPriceInterface
     /**
      * @var BasePrice
      */
-    protected $basePrice;
-
-    /**
-     * @param Product $saleableItem
-     * @param float $quantity
-     * @param CalculatorInterface $calculator
-     */
-    public function __construct(
-        Product $saleableItem,
-        $quantity,
-        CalculatorInterface $calculator
-    ) {
-        parent::__construct($saleableItem, $quantity, $calculator);
-        $this->basePrice = $this->priceInfo->getPrice(BasePrice::PRICE_CODE);
-    }
+    private $basePrice;
 
     /**
      * Get Value
@@ -64,7 +50,7 @@ class FinalPrice extends AbstractPrice implements FinalPriceInterface
      */
     public function getValue()
     {
-        return max(0, $this->basePrice->getValue());
+        return max(0, $this->getBasePrice()->getValue());
     }
 
     /**
@@ -89,5 +75,18 @@ class FinalPrice extends AbstractPrice implements FinalPriceInterface
     public function getMaximalPrice()
     {
         return $this->calculator->getAmount($this->getValue(), $this->product);
+    }
+
+    /**
+     * Retrieve base price instance lazily
+     *
+     * @return BasePrice|\Magento\Framework\Pricing\Price\PriceInterface
+     */
+    protected function getBasePrice()
+    {
+        if (!$this->basePrice) {
+            $this->basePrice = $this->priceInfo->getPrice(BasePrice::PRICE_CODE);
+        }
+        return $this->basePrice;
     }
 }

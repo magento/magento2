@@ -41,15 +41,11 @@ class Stock extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * Construct
      *
-     * @param \Magento\Framework\Logger $logger
      * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
      */
-    public function __construct(
-        \Magento\Framework\Logger $logger,
-        \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
-    ) {
+    public function __construct(\Magento\CatalogInventory\Service\V1\StockItemService $stockItemService)
+    {
         $this->stockItemService = $stockItemService;
-        parent::__construct($logger);
     }
 
     /**

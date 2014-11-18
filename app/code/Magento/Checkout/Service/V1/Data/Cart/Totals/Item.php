@@ -28,7 +28,7 @@ namespace Magento\Checkout\Service\V1\Data\Cart\Totals;
  *
  * @codeCoverageIgnore
  */
-class Item extends \Magento\Framework\Api\AbstractSimpleObject
+class Item extends \Magento\Framework\Api\AbstractExtensibleObject
 {
     /**
      * Price.

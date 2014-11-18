@@ -24,6 +24,7 @@
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Store;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\AbstractPlugin;
+use Magento\CatalogSearch\Model\Indexer\Fulltext;
 
 class Group extends AbstractPlugin
 {
@@ -45,7 +46,7 @@ class Group extends AbstractPlugin
         $needInvalidation = !$group->isObjectNew() && $group->dataHasChangedFor('website_id');
         $result = $proceed($group);
         if ($needInvalidation) {
-            $this->getIndexer()->invalidate();
+            $this->indexerRegistry->get(Fulltext::INDEXER_ID)->invalidate();
         }
 
         return $result;
@@ -64,8 +65,7 @@ class Group extends AbstractPlugin
         \Magento\Store\Model\Resource\Group $subject,
         \Magento\Store\Model\Resource\Group $result
     ) {
-        $this->getIndexer()->invalidate();
-
+        $this->indexerRegistry->get(Fulltext::INDEXER_ID)->invalidate();
         return $result;
     }
 }

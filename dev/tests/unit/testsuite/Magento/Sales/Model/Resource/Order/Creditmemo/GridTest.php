@@ -118,7 +118,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->adapterMock));
         $this->appResourceMock->expects($this->any())
             ->method('getTableName')
-            ->will($this->returnValue('sales_flat_creditmemo_grid'));
+            ->will($this->returnValue('sales_creditmemo_grid'));
         $this->adapterMock->expects($this->once())
             ->method('select')
             ->will($this->returnValue($this->selectMock));
@@ -144,7 +144,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->statementMock));
         $this->adapterMock->expects($this->once())
             ->method('insertFromSelect')
-            ->with($this->selectMock, 'sales_flat_creditmemo_grid', [], 1)
+            ->with($this->selectMock, 'sales_creditmemo_grid', [], 1)
             ->will($this->returnValue('sql-query'));
         $this->assertEquals($this->statementMock, $this->grid->refresh(1, 'fi.field'));
     }
@@ -159,10 +159,10 @@ class GridTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->adapterMock));
         $this->appResourceMock->expects($this->once())
             ->method('getTableName')
-            ->will($this->returnValue('sales_flat_creditmemo_grid'));
+            ->will($this->returnValue('sales_creditmemo_grid'));
         $this->adapterMock->expects($this->once())
             ->method('delete')
-            ->with('sales_flat_creditmemo_grid', ['fi.field = ?' => 1])
+            ->with('sales_creditmemo_grid', ['fi.field = ?' => 1])
             ->will($this->returnValue(1));
         $this->assertEquals(1, $this->grid->purge(1, 'fi.field'));
     }

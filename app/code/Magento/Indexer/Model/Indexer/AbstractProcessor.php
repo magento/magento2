@@ -33,18 +33,16 @@ abstract class AbstractProcessor
      */
     const INDEXER_ID = '';
 
-    /**
-     * @var \Magento\Indexer\Model\IndexerInterface
-     */
-    protected $_indexer;
+    /** @var \Magento\Indexer\Model\IndexerRegistry */
+    protected $indexerRegistry;
 
     /**
-     * @param \Magento\Indexer\Model\IndexerFactory $indexerFactory
+     * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
      */
     public function __construct(
-        \Magento\Indexer\Model\IndexerFactory $indexerFactory
+        \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
     ) {
-        $this->_indexer = $indexerFactory->create();
+        $this->indexerRegistry = $indexerRegistry;
     }
 
     /**
@@ -54,10 +52,7 @@ abstract class AbstractProcessor
      */
     public function getIndexer()
     {
-        if (!$this->_indexer->getId()) {
-            $this->_indexer->load(static::INDEXER_ID);
-        }
-        return $this->_indexer;
+        return $this->indexerRegistry->get(static::INDEXER_ID);
     }
 
     /**

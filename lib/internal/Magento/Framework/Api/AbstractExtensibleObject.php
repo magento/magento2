@@ -40,23 +40,23 @@ abstract class AbstractExtensibleObject extends AbstractSimpleObject implements 
      * Get an attribute value.
      *
      * @param string $attributeCode
-     * @return \Magento\Framework\Api\AttributeValue|null null if the attribute has not been set
+     * @return \Magento\Framework\Api\AttributeInterface|null null if the attribute has not been set
      */
     public function getCustomAttribute($attributeCode)
     {
-        return isset($this->_data[self::CUSTOM_ATTRIBUTES_KEY])
-            && isset($this->_data[self::CUSTOM_ATTRIBUTES_KEY][$attributeCode])
-                ? $this->_data[self::CUSTOM_ATTRIBUTES_KEY][$attributeCode]
+        return isset($this->_data[self::CUSTOM_ATTRIBUTES])
+            && isset($this->_data[self::CUSTOM_ATTRIBUTES][$attributeCode])
+                ? $this->_data[self::CUSTOM_ATTRIBUTES][$attributeCode]
                 : null;
     }
 
     /**
      * Retrieve custom attributes values.
      *
-     * @return \Magento\Framework\Api\AttributeValue[]|null
+     * @return \Magento\Framework\Api\AttributeInterface[]|null
      */
     public function getCustomAttributes()
     {
-        return isset($this->_data[self::CUSTOM_ATTRIBUTES_KEY]) ? $this->_data[self::CUSTOM_ATTRIBUTES_KEY] : array();
+        return isset($this->_data[self::CUSTOM_ATTRIBUTES]) ? $this->_data[self::CUSTOM_ATTRIBUTES] : [];
     }
 }
