@@ -43,7 +43,7 @@ class NorouteTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager');
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $responseMock = $this->getMock('Magento\Framework\App\Response\Http', array(), array(), '', false);
         $responseMock->expects(
             $this->at(0)

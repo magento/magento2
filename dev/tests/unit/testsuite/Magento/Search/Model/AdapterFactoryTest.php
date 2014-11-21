@@ -33,7 +33,7 @@ class AdapterFactoryTest extends \PHPUnit_Framework_TestCase
     private $adapterFactory;
 
     /**
-     * @var \Magento\Framework\ObjectManager |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface |\PHPUnit_Framework_MockObject_MockObject
      */
     private $objectManager;
 
@@ -49,10 +49,7 @@ class AdapterFactoryTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('some_path'), $this->equalTo('some_scopeType'))
             ->will($this->returnValue('ClassName'));
 
-        $this->objectManager = $this->getMockBuilder('Magento\Framework\ObjectManager')
-            ->setMethods(['create', 'get', 'configure'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
 
         $this->adapterFactory = $helper->getObject(
             '\Magento\Search\Model\AdapterFactory',
@@ -84,9 +81,7 @@ class AdapterFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateExceptionThrown()
     {
-        $adapter = $this->getMockBuilder('Magento\Framework\ObjectManager')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $adapter = $this->getMock('Magento\Framework\ObjectManagerInterface');
 
         $this->objectManager->expects($this->once())->method('create')
             ->with($this->equalTo('ClassName'), $this->equalTo(['input']))

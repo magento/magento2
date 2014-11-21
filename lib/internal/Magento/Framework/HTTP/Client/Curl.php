@@ -28,7 +28,7 @@ namespace Magento\Framework\HTTP\Client;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Curl implements \Magento\Framework\HTTP\IClient
+class Curl implements \Magento\Framework\HTTP\ClientInterface
 {
     /**
      * Hostname

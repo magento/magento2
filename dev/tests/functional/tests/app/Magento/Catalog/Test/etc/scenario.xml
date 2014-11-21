@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<scenarios xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Mtf/Config/etc/scenario.xsd">
+    <scenario name="CreateProductAttributeEntityFromProductPageTest" module="Magento_Catalog">
+        <methods>
+            <method name="test">
+                <steps>
+                    <first>openProductOnBackend</first>
+                    <step name="openProductOnBackend" module="Magento_Catalog">
+                        <next>addNewAttributeFromProductPage</next>
+                    </step>
+                    <step name="addNewAttributeFromProductPage" module="Magento_Catalog">
+                        <arguments>
+                            <item name="tabName">product-details</item>
+                        </arguments>
+                        <next>fillAttributeFormOnProductPage</next>
+                    </step>
+                    <step name="fillAttributeFormOnProductPage" module="Magento_Catalog">
+                        <next>saveAttributeOnProductPage</next>
+                    </step>
+                    <step name="saveAttributeOnProductPage" module="Magento_Catalog">
+                        <next>setDefaultAttributeValue</next>
+                    </step>
+                    <step name="setDefaultAttributeValue" module="Magento_Catalog">
+                        <next>saveProduct</next>
+                    </step>
+                    <step name="saveProduct" module="Magento_Catalog" />
+                </steps>
+            </method>
+        </methods>
+    </scenario>
+    <scenario name="CreateProductAttributeEntityTest" module="Magento_Catalog">
+        <methods>
+            <method name="test">
+                <steps>
+                    <first>createProductTemplate</first>
+                    <step name="createProductTemplate" module="Magento_Catalog">
+                        <next>openProductAttributesPage</next>
+                    </step>
+                    <step name="openProductAttributesPage" module="Magento_Catalog">
+                        <next>addNewAttribute</next>
+                    </step>
+                    <step name="addNewAttribute" module="Magento_Catalog">
+                        <next>fillAttributeForm</next>
+                    </step>
+                    <step name="fillAttributeForm" module="Magento_Catalog">
+                        <next>saveAttribute</next>
+                    </step>
+                    <step name="saveAttribute" module="Magento_Catalog">
+                        <next>moveAttributeToProductTemplate</next>
+                    </step>
+                    <step name="moveAttributeToProductTemplate" module="Magento_Catalog">
+                        <next>saveProductTemplate</next>
+                    </step>
+                    <step name="saveProductTemplate" module="Magento_Catalog" />
+                </steps>
+            </method>
+        </methods>
+    </scenario>
+</scenarios>

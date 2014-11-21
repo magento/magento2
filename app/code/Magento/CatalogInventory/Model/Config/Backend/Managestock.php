@@ -39,7 +39,7 @@ class Managestock extends AbstractValue
     protected function _afterSave()
     {
         if ($this->isValueChanged()) {
-            $this->_stockStatus->rebuild();
+            $this->stockIndex->rebuild();
             $this->_stockIndexerProcessor->markIndexerAsInvalid();
         }
         return $this;

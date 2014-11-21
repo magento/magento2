@@ -44,7 +44,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     protected $_infoProcessorMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\CookieManager | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\CookieManagerInterface | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $_cookieManagerMock;
 
@@ -66,7 +66,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         );
         $this->_infoProcessorMock = $this->getMock('Magento\Framework\App\Request\PathInfoProcessorInterface');
         $this->_infoProcessorMock->expects($this->any())->method('process')->will($this->returnArgument(1));
-        $this->_cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManager');
+        $this->_cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface');
     }
 
     public function testGetOriginalPathInfoWithTestUri()

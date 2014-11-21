@@ -101,8 +101,7 @@ $pattern = array(
     'use_config_notify_stock_qty'   => '1',
     'use_config_manage_stock'       => '1',
     'use_config_qty_increments'     => '1',
-    'use_config_enable_qty_inc'     => '1',
-    'stock_id'                      => \Magento\CatalogInventory\Model\Stock::DEFAULT_STOCK_ID,
+    'use_config_enable_qty_inc'     => '1'
 );
 $generator = new \Magento\ToolkitFramework\ImportExport\Fixture\Generator($pattern, $simpleProductsCount);
 /** @var \Magento\ImportExport\Model\Import $import */

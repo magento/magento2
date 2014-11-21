@@ -31,7 +31,7 @@ class ManagerInterfaceFactory
     /**
      * Object Manager instance
      *
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager = null;
 
@@ -45,11 +45,11 @@ class ManagerInterfaceFactory
     /**
      * Factory constructor
      *
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
      */
     public function __construct(
-        \Magento\Framework\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
         $instanceName = 'Magento\RecurringPayment\Model\ManagerInterface'
     ) {
         $this->_objectManager = $objectManager;

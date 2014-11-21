@@ -149,9 +149,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
         $this->_responseMock = $this->getMock(
             '\Magento\Framework\App\ResponseInterface', array('setRedirect', 'sendResponse')
         );
-        $this->_objectManagerMock = $this->getMock(
-            '\Magento\Framework\ObjectManager', array('get', 'create', 'configure'), array(), '', false
-        );
+        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->_messageManagerMock = $this->getMock('\Magento\Framework\Message\Manager', array(), array(), '', false);
         $this->_storeManagerInterfaceMock = $this->getMockForAbstractClass('Magento\Framework\StoreManagerInterface');
         $this->_storeModelMock = $this->getMock(

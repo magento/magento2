@@ -31,7 +31,7 @@ class ScoreBuilderFactory
     /**
      * Object Manager instance
      *
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager = null;
 
@@ -45,11 +45,11 @@ class ScoreBuilderFactory
     /**
      * Factory constructor
      *
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
      */
     public function __construct(
-        \Magento\Framework\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
         $instanceName = 'Magento\Framework\Search\Adapter\Mysql\ScoreBuilder'
     ) {
         $this->_objectManager = $objectManager;

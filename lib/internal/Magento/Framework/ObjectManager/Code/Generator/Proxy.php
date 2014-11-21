@@ -188,11 +188,17 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
      */
     protected function _getDefaultConstructorDefinition()
     {
-        // public function __construct(\Magento\Framework\ObjectManager $objectManager, $instanceName, $shared = false)
+        /*
+         * public function __construct(
+         *  \Magento\Framework\ObjectManagerInterface $objectManager,
+         *  $instanceName,
+         *  $shared = false
+         * )
+         */
         return array(
             'name' => '__construct',
             'parameters' => array(
-                array('name' => 'objectManager', 'type' => '\Magento\Framework\ObjectManager'),
+                array('name' => 'objectManager', 'type' => '\Magento\Framework\ObjectManagerInterface'),
                 array('name' => 'instanceName', 'defaultValue' => $this->_getSourceClassName()),
                 array('name' => 'shared', 'defaultValue' => true)
             ),
@@ -202,7 +208,10 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
             'docblock' => array(
                 'shortDescription' => ucfirst(static::ENTITY_TYPE) . ' constructor',
                 'tags' => array(
-                    array('name' => 'param', 'description' => '\Magento\Framework\ObjectManager $objectManager'),
+                    array(
+                        'name' => 'param',
+                        'description' => '\Magento\Framework\ObjectManagerInterface $objectManager'
+                    ),
                     array('name' => 'param', 'description' => 'string $instanceName'),
                     array('name' => 'param', 'description' => 'bool $shared')
                 )

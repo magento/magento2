@@ -26,7 +26,7 @@ namespace Magento\Catalog\Model;
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
 
@@ -64,7 +64,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setObjectManager()
     {
-        $this->objectManager = $this->getMock('\Magento\Framework\ObjectManager', [], [], '', false);
+        $this->objectManager = $this->getMock('\Magento\Framework\ObjectManagerInterface');
 
         $this->objectManager
             ->expects($this->any())

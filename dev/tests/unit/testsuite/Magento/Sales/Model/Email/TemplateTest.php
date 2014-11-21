@@ -50,7 +50,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager', ['create', 'configure', 'get']);
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $objectManagerMock->expects($this->once())
             ->method('get')
             ->with('Magento\Email\Model\Resource\Template')

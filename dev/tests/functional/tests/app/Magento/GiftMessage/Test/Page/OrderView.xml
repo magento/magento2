@@ -27,7 +27,7 @@
     <blocks>
         <giftMessageForOrderBlock>
             <class>Magento\GiftMessage\Test\Block\Message\Order\View</class>
-            <locator>.block-order-details-additional</locator>
+            <locator>.block-order-details-gift-message</locator>
             <strategy>css selector</strategy>
         </giftMessageForOrderBlock>
         <giftMessageForItemBlock>

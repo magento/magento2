@@ -69,9 +69,9 @@ class StoreViewService
             throw new \InvalidArgumentException(sprintf('Cannot retrieve attribute for entity type "%s"', $entityType));
         }
         $select = $this->connection->select()
-            ->from($attribute->getBackendTable(), 'store_id')
-            ->where('attribute_id = ?', $attribute->getId())
-            ->where('entity_id = ?', $entityId);
+        ->from($attribute->getBackendTable(), 'store_id')
+        ->where('attribute_id = ?', $attribute->getId())
+        ->where('entity_id = ?', $entityId);
 
         return in_array($storeId, $this->connection->fetchCol($select));
     }

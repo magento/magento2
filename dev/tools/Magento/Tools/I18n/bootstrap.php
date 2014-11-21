@@ -22,9 +22,4 @@
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 define('BP', realpath(__DIR__) . '/');
-
-$vendorDir = require BP . '../../../../../app/etc/vendor_path.php';
-$vendorAutoload = BP . "../../../../../{$vendorDir}/autoload.php";
-if (file_exists($vendorAutoload)) {
-    require_once $vendorAutoload;
-}
+require realpath(BP . '/../../../../../app/autoload.php');

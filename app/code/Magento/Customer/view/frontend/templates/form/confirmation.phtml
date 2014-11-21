@@ -37,7 +37,7 @@
             <button type="submit" class="action send primary"><span><?php echo __('Send confirmation link') ?></span></button>
         </div>
         <div class="secondary">
-            <a href="<?php echo $this->helper('Magento\Customer\Helper\Data')->getLoginUrl() ?>" class="action back"><span><?php echo __('Back to Login') ?></span></a>
+            <a href="<?php echo $this->getLoginUrl() ?>" class="action back"><span><?php echo __('Back to Login') ?></span></a>
         </div>
     </div>
 </form>

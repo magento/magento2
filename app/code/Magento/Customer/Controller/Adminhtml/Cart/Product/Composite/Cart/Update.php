@@ -39,7 +39,8 @@ class Update extends \Magento\Customer\Controller\Adminhtml\Cart\Product\Composi
 
             $buyRequest = new \Magento\Framework\Object($this->getRequest()->getParams());
             $this->_quote->updateItem($this->_quoteItem->getId(), $buyRequest);
-            $this->_quote->collectTotals()->save();
+            $this->_quote->collectTotals();
+            $this->quoteRepository->save($this->_quote);
 
             $updateResult->setOk(true);
         } catch (\Exception $e) {

@@ -94,7 +94,7 @@ class TotalsService implements TotalsServiceInterface
          *
          * @var \Magento\Sales\Model\Quote $quote
          */
-        $quote = $this->quoteRepository->get($cartId);
+        $quote = $this->quoteRepository->getActive($cartId);
 
         $this->totalsBuilder->populateWithArray($this->totalsMapper->map($quote));
         $items = [];

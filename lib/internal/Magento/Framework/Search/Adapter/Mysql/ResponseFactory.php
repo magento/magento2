@@ -31,7 +31,7 @@ class ResponseFactory
     /**
      * Object Manager instance
      *
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
 
@@ -50,12 +50,12 @@ class ResponseFactory
     protected $aggregationFactory;
 
     /**
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param DocumentFactory $documentFactory
      * @param AggregationFactory $aggregationFactory
      */
     public function __construct(
-        \Magento\Framework\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
         DocumentFactory $documentFactory,
         AggregationFactory $aggregationFactory
     ) {

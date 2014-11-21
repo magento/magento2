@@ -24,7 +24,7 @@
 
 namespace Magento\Framework\View\Asset\PreProcessor;
 
-use Magento\Framework\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * A registry of asset preprocessors (not to confuse with the "Registry" pattern)
@@ -32,14 +32,14 @@ use Magento\Framework\ObjectManager;
 class Pool
 {
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
 
     /**
-     * @param ObjectManager $objectManager
+     * @param ObjectManagerInterface $objectManager
      */
-    public function __construct(ObjectManager $objectManager)
+    public function __construct(ObjectManagerInterface $objectManager)
     {
         $this->objectManager = $objectManager;
     }

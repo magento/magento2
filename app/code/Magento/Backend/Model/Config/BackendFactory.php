@@ -28,14 +28,14 @@ class BackendFactory
     /**
      * Object manager
      *
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
 
     /**
-     * @param \Magento\Framework\ObjectManager $objectmanager
+     * @param \Magento\Framework\ObjectManagerInterface $objectmanager
      */
-    public function __construct(\Magento\Framework\ObjectManager $objectmanager)
+    public function __construct(\Magento\Framework\ObjectManagerInterface $objectmanager)
     {
         $this->_objectManager = $objectmanager;
     }

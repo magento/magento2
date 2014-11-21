@@ -25,21 +25,21 @@
  */
 namespace Magento\Framework\Acl;
 
-use Magento\Framework\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 
 class ResourceFactory
 {
     const RESOURCE_CLASS_NAME = 'Magento\Framework\Acl\Resource';
 
     /**
-     * @var ObjectManager
+     * @var ObjectManagerInterface
      */
     protected $_objectManager;
 
     /**
-     * @param ObjectManager $objectManager
+     * @param ObjectManagerInterface $objectManager
      */
-    public function __construct(ObjectManager $objectManager)
+    public function __construct(ObjectManagerInterface $objectManager)
     {
         $this->_objectManager = $objectManager;
     }

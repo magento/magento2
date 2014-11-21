@@ -82,6 +82,16 @@ abstract class AbstractHelper
     protected $_remoteAddress;
 
     /**
+     * @var \Magento\Framework\Url\EncoderInterface
+     */
+    protected $urlEncoder;
+
+    /**
+     * @var \Magento\Framework\Url\DecoderInterface
+     */
+    protected $urlDecoder;
+
+    /**
      * @param Context $context
      */
     public function __construct(Context $context)
@@ -95,6 +105,8 @@ abstract class AbstractHelper
         $this->_eventManager = $context->getEventManager();
         $this->_remoteAddress = $context->getRemoteAddress();
         $this->_cacheConfig = $context->getCacheConfig();
+        $this->urlEncoder = $context->getUrlEncoder();
+        $this->urlDecoder = $context->getUrlDecoder();
     }
 
     /**
@@ -166,23 +178,24 @@ abstract class AbstractHelper
     /**
      * base64_encode() for URLs encoding
      *
+     * @deprecated use \Magento\Framework\Url\EncoderInterface
      * @param    string $url
      * @return   string
      */
     public function urlEncode($url)
     {
-        return strtr(base64_encode($url), '+/=', '-_,');
+        return $this->urlEncoder->encode($url);
     }
 
     /**
      *  base64_decode() for URLs decoding
      *
+     * @deprecated use \Magento\Framework\Url\DecoderInterface
      * @param    string $url
      * @return   string
      */
     public function urlDecode($url)
     {
-        $url = base64_decode(strtr($url, '-_,', '+/='));
-        return $this->_urlBuilder->sessionUrlVar($url);
+        return $this->urlDecoder->decode($url);
     }
 }

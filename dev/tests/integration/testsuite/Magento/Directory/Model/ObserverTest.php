@@ -24,7 +24,7 @@
 
 namespace Magento\Directory\Model;
 
-use Magento\Framework\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -33,7 +33,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  */
 class ObserverTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var  ObjectManager */
+    /** @var  ObjectManagerInterface */
     protected $objectManager;
 
     /** @var Observer */

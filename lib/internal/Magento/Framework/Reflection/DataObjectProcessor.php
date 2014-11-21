@@ -29,7 +29,7 @@ use Zend\Code\Reflection\MethodReflection;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\ExtensibleDataInterface;
-use Magento\Framework\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Data object processor for de-serialization using class reflection

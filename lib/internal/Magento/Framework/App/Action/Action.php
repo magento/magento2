@@ -34,7 +34,7 @@ use Magento\Framework\App\ResponseInterface;
 class Action extends AbstractAction
 {
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
 

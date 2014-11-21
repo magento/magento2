@@ -24,11 +24,19 @@
 
 namespace Magento\CatalogInventory\Model\Resource;
 
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\Framework\StoreManagerInterface;
+
 /**
  * Stock resource model
  */
 class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
+    /**
+     * @var StockConfigurationInterface
+     */
+    protected $stockConfiguration;
+
     /**
      * Is initialized configuration flag
      *
@@ -72,18 +80,6 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $_configNotifyStockQty;
 
     /**
-     * Ctalog Inventory Stock instance
-     *
-     * @var \Magento\CatalogInventory\Model\Stock
-     */
-    protected $_stock;
-
-    /**
-     * @var \Magento\CatalogInventory\Service\V1\StockItemService
-     */
-    protected $stockItemService;
-
-    /**
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
@@ -91,36 +87,34 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $_scopeConfig;
 
     /**
-     * Stock model factory
-     *
-     * @var \Magento\CatalogInventory\Model\StockFactory
-     */
-    protected $_stockFactory;
-
-    /**
      * @var \Magento\Framework\Stdlib\DateTime
      */
     protected $dateTime;
 
     /**
+     * @var StoreManagerInterface
+     */
+    protected $storeManager;
+
+    /**
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\CatalogInventory\Model\StockFactory $stockFactory
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param StockConfigurationInterface $stockConfiguration
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\CatalogInventory\Model\StockFactory $stockFactory,
-        \Magento\Framework\Stdlib\DateTime $dateTime
+        \Magento\Framework\Stdlib\DateTime $dateTime,
+        StockConfigurationInterface $stockConfiguration,
+        StoreManagerInterface $storeManager
     ) {
         parent::__construct($resource);
-        $this->stockItemService = $stockItemService;
         $this->_scopeConfig = $scopeConfig;
-        $this->_stockFactory = $stockFactory;
         $this->dateTime = $dateTime;
+        $this->stockConfiguration = $stockConfiguration;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -134,35 +128,13 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
     }
 
     /**
-     * Lock product items
+     * Lock Stock Item records
      *
-     * @param \Magento\CatalogInventory\Model\Stock $stock
-     * @param int|int[] $productIds
-     * @return $this
-     */
-    public function lockProductItems($stock, $productIds)
-    {
-        $itemTable = $this->getTable('cataloginventory_stock_item');
-        $select = $this->_getWriteAdapter()->select()->from($itemTable)
-            ->where('stock_id=?', $stock->getId())
-            ->where('product_id IN(?)', $productIds)
-            ->forUpdate(true);
-        /**
-         * We use write adapter for resolving problems with replication
-         */
-        $this->_getWriteAdapter()->query($select);
-        return $this;
-    }
-
-    /**
-     * Get stock items data for requested products
-     *
-     * @param \Magento\CatalogInventory\Model\Stock $stock
      * @param int[] $productIds
-     * @param bool $lockRows
+     * @param int $websiteId
      * @return array
      */
-    public function getProductsStock($stock, $productIds, $lockRows = false)
+    public function lockProductsStock($productIds, $websiteId)
     {
         if (empty($productIds)) {
             return array();
@@ -171,74 +143,41 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $productTable = $this->getTable('catalog_product_entity');
         $select = $this->_getWriteAdapter()->select()->from(array('si' => $itemTable))
             ->join(array('p' => $productTable), 'p.entity_id=si.product_id', array('type_id'))
-            ->where('stock_id=?', $stock->getId())
+            ->where('website_id=?', $websiteId)
             ->where('product_id IN(?)', $productIds)
-            ->forUpdate($lockRows);
+            ->forUpdate(true);
         return $this->_getWriteAdapter()->fetchAll($select);
     }
 
     /**
      * Correct particular stock products qty based on operator
      *
-     * @param \Magento\CatalogInventory\Model\Stock $stock
-     * @param array $productQtys
+     * @param array $items
+     * @param int $websiteId
      * @param string $operator +/-
      * @return $this
      */
-    public function correctItemsQty($stock, $productQtys, $operator = '-')
+    public function correctItemsQty(array $items, $websiteId, $operator = '-')
     {
-        if (empty($productQtys)) {
+        if (empty($items)) {
             return $this;
         }
 
         $adapter = $this->_getWriteAdapter();
         $conditions = array();
-        foreach ($productQtys as $productId => $qty) {
+        foreach ($items as $productId => $qty) {
             $case = $adapter->quoteInto('?', $productId);
             $result = $adapter->quoteInto("qty{$operator}?", $qty);
             $conditions[$case] = $result;
         }
 
         $value = $adapter->getCaseSql('product_id', $conditions, 'qty');
-        $where = array('product_id IN (?)' => array_keys($productQtys), 'stock_id = ?' => $stock->getId());
+        $where = array('product_id IN (?)' => array_keys($items), 'website_id = ?' => $websiteId);
 
         $adapter->beginTransaction();
         $adapter->update($this->getTable('cataloginventory_stock_item'), array('qty' => $value), $where);
         $adapter->commit();
 
-        return $this;
-    }
-
-    /**
-     * Add join to select only in stock products
-     *
-     * @param \Magento\Catalog\Model\Resource\Product\Link\Product\Collection $collection
-     * @return $this
-     */
-    public function setInStockFilterToCollection($collection)
-    {
-        $manageStock = $this->_scopeConfig->getValue(
-            \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_MANAGE_STOCK,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
-        $cond = array(
-            '{{table}}.use_config_manage_stock = 0 AND {{table}}.manage_stock=1 AND {{table}}.is_in_stock=1',
-            '{{table}}.use_config_manage_stock = 0 AND {{table}}.manage_stock=0'
-        );
-
-        if ($manageStock) {
-            $cond[] = '{{table}}.use_config_manage_stock = 1 AND {{table}}.is_in_stock=1';
-        } else {
-            $cond[] = '{{table}}.use_config_manage_stock = 1';
-        }
-
-        $collection->joinField(
-            'inventory_in_stock',
-            'cataloginventory_stock_item',
-            'is_in_stock',
-            'product_id=entity_id',
-            '(' . join(') OR (', $cond) . ')'
-        );
         return $this;
     }
 
@@ -251,10 +190,10 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         if (!$this->_isConfig) {
             $configMap = array(
-                '_isConfigManageStock' => \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_MANAGE_STOCK,
-                '_isConfigBackorders' => \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_BACKORDERS,
-                '_configMinQty' => \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_MIN_QTY,
-                '_configNotifyStockQty' => \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_NOTIFY_STOCK_QTY
+                '_isConfigManageStock' => \Magento\CatalogInventory\Model\Configuration::XML_PATH_MANAGE_STOCK,
+                '_isConfigBackorders' => \Magento\CatalogInventory\Model\Configuration::XML_PATH_BACKORDERS,
+                '_configMinQty' => \Magento\CatalogInventory\Model\Configuration::XML_PATH_MIN_QTY,
+                '_configNotifyStockQty' => \Magento\CatalogInventory\Model\Configuration::XML_PATH_NOTIFY_STOCK_QTY
             );
 
             foreach ($configMap as $field => $const) {
@@ -265,18 +204,19 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
             }
 
             $this->_isConfig = true;
-            $this->_stock = $this->_stockFactory->create();
-            $this->_configTypeIds = array_keys($this->stockItemService->getIsQtyTypeIds(true));
+            $this->_configTypeIds = array_keys($this->stockConfiguration->getIsQtyTypeIds(true));
         }
     }
 
     /**
      * Set items out of stock basing on their quantities and config settings
      *
+     * @param string|int $website
      * @return void
      */
-    public function updateSetOutOfStock()
+    public function updateSetOutOfStock($website = null)
     {
+        $websiteId = $this->storeManager->getWebsite($website)->getId();
         $this->_initConfig();
         $adapter = $this->_getWriteAdapter();
         $values = array('is_in_stock' => 0, 'stock_status_changed_auto' => 1);
@@ -285,13 +225,13 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
             ->where('type_id IN(?)', $this->_configTypeIds);
 
         $where = sprintf(
-            'stock_id = %1$d' .
+            'website_id = %1$d' .
             ' AND is_in_stock = 1' .
             ' AND ((use_config_manage_stock = 1 AND 1 = %2$d) OR (use_config_manage_stock = 0 AND manage_stock = 1))' .
             ' AND ((use_config_backorders = 1 AND %3$d = %4$d) OR (use_config_backorders = 0 AND backorders = %3$d))' .
             ' AND ((use_config_min_qty = 1 AND qty <= %5$d) OR (use_config_min_qty = 0 AND qty <= min_qty))' .
             ' AND product_id IN (%6$s)',
-            $this->_stock->getId(),
+            $websiteId,
             $this->_isConfigManageStock,
             \Magento\CatalogInventory\Model\Stock::BACKORDERS_NO,
             $this->_isConfigBackorders,
@@ -305,10 +245,12 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Set items in stock basing on their quantities and config settings
      *
+     * @param int|string $website
      * @return void
      */
-    public function updateSetInStock()
+    public function updateSetInStock($website)
     {
+        $websiteId = $this->storeManager->getWebsite($website)->getId();
         $this->_initConfig();
         $adapter = $this->_getWriteAdapter();
         $values = array('is_in_stock' => 1);
@@ -317,13 +259,13 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
             ->where('type_id IN(?)', $this->_configTypeIds);
 
         $where = sprintf(
-            'stock_id = %1$d' .
+            'website_id = %1$d' .
             ' AND is_in_stock = 0' .
             ' AND stock_status_changed_auto = 1' .
             ' AND ((use_config_manage_stock = 1 AND 1 = %2$d) OR (use_config_manage_stock = 0 AND manage_stock = 1))' .
             ' AND ((use_config_min_qty = 1 AND qty > %3$d) OR (use_config_min_qty = 0 AND qty > min_qty))' .
             ' AND product_id IN (%4$s)',
-            $this->_stock->getId(),
+            $websiteId,
             $this->_isConfigManageStock,
             $this->_configMinQty,
             $select->assemble()
@@ -335,10 +277,12 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Update items low stock date basing on their quantities and config settings
      *
+     * @param int|string $website
      * @return void
      */
-    public function updateLowStockDate()
+    public function updateLowStockDate($website)
     {
+        $websiteId = $this->storeManager->getWebsite($website)->getId();
         $this->_initConfig();
 
         $adapter = $this->_getWriteAdapter();
@@ -355,10 +299,10 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
             ->where('type_id IN(?)', $this->_configTypeIds);
 
         $where = sprintf(
-            'stock_id = %1$d' .
+            'website_id = %1$d' .
             ' AND ((use_config_manage_stock = 1 AND 1 = %2$d) OR (use_config_manage_stock = 0 AND manage_stock = 1))' .
             ' AND product_id IN (%3$s)',
-            $this->_stock->getId(),
+            $websiteId,
             $this->_isConfigManageStock,
             $select->assemble()
         );

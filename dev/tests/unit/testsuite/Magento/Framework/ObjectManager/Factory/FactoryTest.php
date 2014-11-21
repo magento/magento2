@@ -74,7 +74,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
                 'firstParam' => 1
             )));
 
-        $definitionsMock = $this->getMock('\Magento\Framework\ObjectManager\Definition', array(), array(), '', false);
+        $definitionsMock = $this->getMock('Magento\Framework\ObjectManager\DefinitionInterface');
         $definitionsMock->expects($this->once())->method('getParameters')
             ->will($this->returnValue(array(array(
                 'firstParam', 'string', true, 'default_val'
@@ -149,7 +149,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateUsingReflection()
     {
         $type = 'Magento\Framework\ObjectManager\Factory\Fixture\Polymorphous';
-        $definitions = $this->getMockForAbstractClass('\Magento\Framework\ObjectManager\Definition');
+        $definitions = $this->getMock('Magento\Framework\ObjectManager\DefinitionInterface');
         // should be more than defined in "switch" of create() method
         $definitions->expects($this->once())->method('getParameters')->with($type)->will($this->returnValue(array(
             array('one', null, false, null), array('two', null, false, null), array('three', null, false, null),

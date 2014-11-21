@@ -48,7 +48,7 @@ class TaxClassServiceTest extends \PHPUnit_Framework_TestCase
     private $taxClassModel;
 
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
 

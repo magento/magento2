@@ -26,7 +26,7 @@ namespace Magento\Core\Model\View;
 class DesignTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $objectManager;
 
@@ -43,7 +43,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
         );
         $config = $this->getMockForAbstractClass('\Magento\Framework\App\Config\ScopeConfigInterface');
         $themeFactory = $this->getMock('\Magento\Core\Model\ThemeFactory');
-        $this->objectManager = $this->getMockForAbstractClass('\Magento\Framework\ObjectManager');
+        $this->objectManager = $this->getMockForAbstractClass('\Magento\Framework\ObjectManagerInterface');
         $state = $this->getMock('\Magento\Framework\App\State', array(), array(), '', false);
         $themes = array();
         $this->model = new \Magento\Core\Model\View\Design(

@@ -116,7 +116,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
         );
 
         // \Magento\Customer\Model\Session
-        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManager');
+        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->_objectManager->expects(
             $this->any()
         )->method(

@@ -101,7 +101,7 @@ class ObjectManagerFactory extends \Magento\Framework\App\ObjectManagerFactory
         $this->factory->setArguments($appArguments->get());
         $objectManager->addSharedInstance($appArguments, 'Magento\Framework\App\Arguments');
 
-        $objectManager->get('Magento\Framework\Interception\PluginList')->reset();
+        $objectManager->get('Magento\Framework\Interception\PluginListInterface')->reset();
         $objectManager->configure(
             $objectManager->get('Magento\Framework\App\ObjectManager\ConfigLoader')->load('global')
         );
@@ -130,7 +130,7 @@ class ObjectManagerFactory extends \Magento\Framework\App\ObjectManagerFactory
             $this->_primaryConfigData['preferences'] = array_replace(
                 $this->_primaryConfigData['preferences'],
                 [
-                    'Magento\Framework\Stdlib\CookieManager' => 'Magento\TestFramework\CookieManager',
+                    'Magento\Framework\Stdlib\CookieManagerInterface' => 'Magento\TestFramework\CookieManager',
                     'Magento\Framework\ObjectManager\DynamicConfigInterface' =>
                         '\Magento\TestFramework\ObjectManager\Configurator',
                     'Magento\Framework\Stdlib\Cookie' => 'Magento\TestFramework\Cookie',
@@ -138,7 +138,8 @@ class ObjectManagerFactory extends \Magento\Framework\App\ObjectManagerFactory
                     'Magento\Framework\App\Request\Http' => 'Magento\TestFramework\Request',
                     'Magento\Framework\App\ResponseInterface' => 'Magento\TestFramework\Response',
                     'Magento\Framework\App\Response\Http' => 'Magento\TestFramework\Response',
-                    'Magento\Framework\Interception\PluginList' => 'Magento\TestFramework\Interception\PluginList',
+                    'Magento\Framework\Interception\PluginListInterface'
+                        => 'Magento\TestFramework\Interception\PluginList',
                     'Magento\Framework\Interception\ObjectManager\Config' =>
                         'Magento\TestFramework\ObjectManager\Config',
                     'Magento\Framework\View\LayoutInterface' => 'Magento\TestFramework\View\Layout',

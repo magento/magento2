@@ -25,7 +25,7 @@
 namespace Magento\Customer\Controller\Account;
 
 use Magento\Customer\Helper\Address;
-use Magento\Customer\Helper\Data as CustomerData;
+use Magento\Customer\Model\Url;
 use Magento\Store\Model\ScopeInterface;
 
 class ConfirmTest extends \PHPUnit_Framework_TestCase
@@ -366,7 +366,7 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfigMock->expects($this->once())
             ->method('isSetFlag')
             ->with(
-                $this->equalTo(CustomerData::XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD),
+                $this->equalTo(Url::XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD),
                 $this->equalTo(ScopeInterface::SCOPE_STORE)
             )
             ->will($this->returnValue($isSetFlag));

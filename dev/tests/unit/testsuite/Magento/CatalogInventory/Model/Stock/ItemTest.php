@@ -41,38 +41,87 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     protected $item;
 
     /**
+     * @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $context;
+
+    /**
+     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $registry;
+
+    /**
+     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $customerSession;
+
+    /**
+     * @var \Magento\Framework\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $storeManager;
+
+    /**
+     * @var \Magento\CatalogInventory\Api\StockConfigurationInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $stockConfiguration;
+
+    /**
+     * @var \Magento\CatalogInventory\Api\StockItemRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $stockItemRepository;
+
+    /**
      * @var \Magento\CatalogInventory\Model\Resource\Stock\Item|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
 
     /**
-     * @var \Magento\Framework\Event\Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Model\Resource\Stock\Item\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $eventManager;
+    protected $resourceCollection;
 
-    /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject */
-    protected $product;
-
-    /** @var \Magento\Framework\App\Config|\PHPUnit_Framework_MockObject_MockObject */
-    protected $scopeConfig;
-
-    /** @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
-    protected $customerSession;
-
-    /** @var \Magento\CatalogInventory\Helper\Minsaleqty|\PHPUnit_Framework_MockObject_MockObject */
-    protected $catalogInventoryMinsaleqty;
-
-    /** @var \Magento\Framework\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $storeManager;
-
-    /** @var \Magento\CatalogInventory\Model\Stock\ItemRegistry|\PHPUnit_Framework_MockObject_MockObject */
-    protected $stockItemRegistry;
-
-    /** @var \Magento\CatalogInventory\Service\V1\StockItemService|\PHPUnit_Framework_MockObject_MockObject */
-    protected $stockItemService;
+    /**
+     * @var int
+     */
+    protected $storeId = 111;
 
     protected function setUp()
     {
+        $this->context = $this->getMock(
+            '\Magento\Framework\Model\Context',
+            ['getEventDispatcher'],
+            [],
+            '',
+            false
+        );
+
+        $this->registry = $this->getMock(
+            '\Magento\Framework\Registry',
+            [],
+            [],
+            '',
+            false
+        );
+
+        $this->customerSession = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
+
+        $store = $this->getMock('Magento\Store\Model\Store', ['getId', '__wakeup'], [], '', false);
+        $store->expects($this->any())->method('getId')->willReturn($this->storeId);
+        $this->storeManager = $this->getMockForAbstractClass('Magento\Framework\StoreManagerInterface', ['getStore']);
+        $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
+
+        $this->stockConfiguration = $this->getMock(
+            '\Magento\CatalogInventory\Api\StockConfigurationInterface',
+            [],
+            [],
+            '',
+            false
+        );
+
+        $this->stockItemRepository = $this->getMockForAbstractClass(
+            '\Magento\CatalogInventory\Api\StockItemRepositoryInterface'
+        );
+
         $this->resource = $this->getMock(
             'Magento\CatalogInventory\Model\Resource\Stock\Item',
             [],
@@ -80,54 +129,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->eventManager = $this->getMock(
-            'Magento\Framework\Event\Manager',
-            ['dispatch'],
-            [],
-            '',
-            false
-        );
-        $context = $this->getMock(
-            '\Magento\Framework\Model\Context',
-            ['getEventDispatcher'],
-            [],
-            '',
-            false
-        );
-        $this->customerSession = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
-        $context->expects($this->any())
-            ->method('getEventDispatcher')
-            ->will($this->returnValue($this->eventManager));
 
-        $this->product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
-        $productFactory = $this->getMock('Magento\Catalog\Model\ProductFactory', ['create'], [], '', false);
-        $productFactory->expects($this->any())
-            ->method('create')
-            ->will($this->returnValue($this->product));
-
-        $this->catalogInventoryMinsaleqty = $this->getMock(
-            'Magento\CatalogInventory\Helper\Minsaleqty',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->scopeConfig = $this->getMockBuilder('Magento\Framework\App\Config')
-            ->setMethods(['isSetFlag', 'getValue'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->storeManager = $this->getMock('Magento\Framework\StoreManagerInterface', [], [], '', false);
-
-        $this->stockItemRegistry = $this->getMock(
-            '\Magento\CatalogInventory\Model\Stock\ItemRegistry',
-            ['retrieve', '__wakeup'],
-            [],
-            '',
-            false
-        );
-
-        $this->stockItemService = $this->getMock(
-            '\Magento\CatalogInventory\Service\V1\StockItemService',
+        $this->resourceCollection = $this->getMock(
+            'Magento\CatalogInventory\Model\Resource\Stock\Item\Collection',
             [],
             [],
             '',
@@ -135,18 +139,18 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
+
         $this->item = $this->objectManagerHelper->getObject(
             'Magento\CatalogInventory\Model\Stock\Item',
             [
-                'context' => $context,
+                'context' => $this->context,
+                'registry' => $this->registry,
                 'customerSession' => $this->customerSession,
-                'catalogInventoryMinsaleqty' => $this->catalogInventoryMinsaleqty,
-                'scopeConfig' => $this->scopeConfig,
                 'storeManager' => $this->storeManager,
-                'productFactory' => $productFactory,
+                'stockConfiguration' => $this->stockConfiguration,
+                'stockItemRepository' => $this->stockItemRepository,
                 'resource' => $this->resource,
-                'stockItemRegistry' => $this->stockItemRegistry,
-                'stockItemService' => $this->stockItemService
+                'stockItemRegistry' => $this->resourceCollection
             ]
         );
     }
@@ -158,115 +162,10 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     public function testSave()
     {
-        $this->item->setData('key', 'value');
-
-        $this->eventManager->expects($this->at(0))
-            ->method('dispatch')
-            ->with('model_save_before', ['object' => $this->item]);
-        $this->eventManager->expects($this->at(1))
-            ->method('dispatch')
-            ->with('cataloginventory_stock_item_save_before', ['data_object' => $this->item, 'item' => $this->item]);
-
-        $this->resource->expects($this->once())
-            ->method('addCommitCallback')
-            ->will($this->returnValue($this->resource));
-        $this->stockItemService->expects($this->any())
-            ->method('isQty')
-            ->will($this->returnValue(true));
-
+        $this->stockItemRepository->expects($this->any())
+            ->method('save')
+            ->willReturn($this->item);
         $this->assertEquals($this->item, $this->item->save());
-    }
-
-    /**
-     * @param array $productConfig
-     * @param array $stockConfig
-     * @param float $expectedQty
-     * @dataProvider getStockQtyDataProvider
-     */
-    public function testGetStockQty($productConfig, $stockConfig, $expectedQty)
-    {
-        $productId = $productConfig['product_id'];
-        $isComposite = $productConfig['is_composite'];
-        $qty = $productConfig['qty'];
-        $useConfigManageStock = $stockConfig['use_config_manage_stock'];
-        $manageStock = $stockConfig['manage_stock'];
-        $isInStock = $productConfig['is_in_stock'];
-        $isSaleable = $productConfig['is_saleable'];
-
-        $this->setDataArrayValue('product_id', $productId);
-        $this->product->expects($this->once())
-            ->method('load')
-            ->with($this->equalTo($productId), $this->equalTo(null))
-            ->will($this->returnSelf());
-
-        $this->product->expects($this->once())
-            ->method('isComposite')
-            ->will($this->returnValue($isComposite));
-
-        $this->setDataArrayValue('qty', $qty);
-        $this->setDataArrayValue('is_in_stock', $isInStock);
-
-        if ($qty > 0 || $manageStock || $isInStock) {
-            $this->product->expects($this->any())
-                ->method('isSaleable')
-                ->will($this->returnValue($isSaleable));
-
-        }
-
-        if ($isComposite) {
-            $this->prepareNotCompositeProductMock();
-        }
-
-        $this->initManageStock($useConfigManageStock, $manageStock);
-        $this->assertSame($expectedQty, $this->item->getStockQty());
-    }
-
-    protected function prepareNotCompositeProductMock()
-    {
-        $productGroup = [
-            [$this->getGroupProductMock(0), $this->getGroupProductMock(1), $this->getGroupProductMock(2)],
-            [$this->getGroupProductMock(3), $this->getGroupProductMock(4)],
-        ];
-
-        $typeInstance = $this->getMock(
-            'Magento\Catalog\Model\Product\Type\Simple',
-            ['getProductsToPurchaseByReqGroups'],
-            [],
-            '',
-            false
-        );
-        $typeInstance->expects($this->once())
-            ->method('getProductsToPurchaseByReqGroups')
-            ->with($this->equalTo($this->product))
-            ->will($this->returnValue($productGroup));
-
-        $this->product->expects($this->once())
-            ->method('getTypeInstance')
-            ->will($this->returnValue($typeInstance));
-    }
-
-    /**
-     * @param int $at
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getGroupProductMock($at)
-    {
-        $product = $this->getMock(
-            'Magento\Catalog\Model\Product',
-            ['getStockQty', '__wakeup'],
-            [],
-            '',
-            false
-        );
-        $product->expects($this->once())
-            ->method('getStockQty')
-            ->will($this->returnValue(2));
-
-        $this->stockItemRegistry->expects($this->at($at))
-            ->method('retrieve')
-            ->will($this->returnValue($product));
-
-        return $product;
     }
 
     /**
@@ -280,79 +179,6 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $dataArray = $property->getValue($this->item);
         $dataArray[$key] = $value;
         $property->setValue($this->item, $dataArray);
-    }
-
-    /**
-     * @param bool $useConfigManageStock
-     * @param int $manageStock
-     */
-    protected function initManageStock($useConfigManageStock, $manageStock)
-    {
-        $this->setDataArrayValue('use_config_manage_stock', $useConfigManageStock);
-        if ($useConfigManageStock) {
-            $this->scopeConfig->expects($this->any())
-                ->method('isSetFlag')
-                ->with(
-                    $this->equalTo(Item::XML_PATH_MANAGE_STOCK),
-                    $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE)
-                )
-                ->will($this->returnValue($manageStock));
-        } else {
-            $this->setDataArrayValue('manage_stock', $manageStock);
-        }
-    }
-
-    /**
-     * @return array
-     */
-    public function getStockQtyDataProvider()
-    {
-        return [
-            'composite in stock' => [
-                'product config' => [
-                    'product_id' => 1,
-                    'is_composite' => false,
-                    'qty' => 5.5,
-                    'is_in_stock' => true,
-                    'is_saleable' => true
-                ],
-                'stock config' => ['use_config_manage_stock' => true, 'manage_stock' => true],
-                'expected qty' => 5.5
-            ],
-            'composite not managed' => [
-                'product config' => [
-                    'product_id' => 1,
-                    'is_composite' => false,
-                    'qty' => 2.5,
-                    'is_in_stock' => true,
-                    'is_saleable' => true
-                ],
-                'stock config' => ['use_config_manage_stock' => false, 'manage_stock' => false],
-                'expected qty' => 0.
-            ],
-            'not composite in stock' => [
-                'product config' => [
-                    'product_id' => 1,
-                    'is_composite' => true,
-                    'qty' => 5.5,
-                    'is_in_stock' => true,
-                    'is_saleable' => true
-                ],
-                'stock config' => ['use_config_manage_stock' => true, 'manage_stock' => true],
-                'expected qty' => 4.
-            ],
-            'not composite not saleable' => [
-                'product config' => [
-                    'product_id' => 1,
-                    'is_composite' => true,
-                    'qty' => 5.5,
-                    'is_in_stock' => true,
-                    'is_saleable' => false
-                ],
-                'stock config' => ['use_config_manage_stock' => true, 'manage_stock' => true],
-                'expected qty' => 0.
-            ],
-        ];
     }
 
     public function testSetProduct()
@@ -389,100 +215,13 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(
             [
                 'product_id' => 2,
-                'product_name' => 'Some Name',
-                'store_id' => 3,
                 'product_type_id' => 'simple',
+                'product_name' => 'Some Name',
                 'product_status_changed' => 1,
                 'product_changed_websites' => false,
             ],
             $this->item->getData()
         );
-    }
-
-    public function testSetProcessIndexEvents()
-    {
-        $property = new \ReflectionProperty($this->item, '_processIndexEvents');
-        $property->setAccessible(true);
-        $this->assertTrue($property->getValue($this->item));
-        $this->assertSame($this->item, $this->item->setProcessIndexEvents(false));
-        $this->assertFalse($property->getValue($this->item));
-        $this->assertSame($this->item, $this->item->setProcessIndexEvents());
-        $this->assertTrue($property->getValue($this->item));
-    }
-
-    /**
-     * @param array $config
-     * @param bool $expected
-     * @dataProvider verifyNotificationDataProvider
-     */
-    public function testVerifyNotification($config, $expected)
-    {
-        $qty = $config['qty'];
-        $defaultQty = $config['default_qty'];
-        $useConfigNotifyStockQty = $config['use_config_notify_stock_qty'];
-        $notifyStockQty = $config['notify_stock_qty'];
-
-        $this->setDataArrayValue('qty', $defaultQty);
-        $this->setDataArrayValue('use_config_notify_stock_qty', $useConfigNotifyStockQty);
-
-        if ($useConfigNotifyStockQty) {
-            $this->scopeConfig->expects($this->any())
-                ->method('getValue')
-                ->with(
-                    $this->equalTo(Item::XML_PATH_NOTIFY_STOCK_QTY),
-                    $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE)
-                )
-                ->will($this->returnValue($notifyStockQty));
-        } else {
-            $this->setDataArrayValue('notify_stock_qty', $notifyStockQty);
-        }
-
-        $this->assertSame($expected, $this->item->verifyNotification($qty));
-    }
-
-    /**
-     * @return array
-     */
-    public function verifyNotificationDataProvider()
-    {
-        return [
-            [
-                [
-                    'qty' => null,
-                    'default_qty' => 2,
-                    'use_config_notify_stock_qty' => true,
-                    'notify_stock_qty' => 3,
-                ],
-                true
-            ],
-            [
-                [
-                    'qty' => null,
-                    'default_qty' => 3,
-                    'use_config_notify_stock_qty' => true,
-                    'notify_stock_qty' => 3,
-                ],
-                false
-            ],
-            [
-                [
-                    'qty' => 3,
-                    'default_qty' => 3,
-                    'use_config_notify_stock_qty' => false,
-                    'notify_stock_qty' => 3,
-                ],
-                false
-            ],
-            [
-                [
-                    'qty' => 2,
-                    'default_qty' => 3,
-                    'use_config_notify_stock_qty' => false,
-                    'notify_stock_qty' => 3,
-                ],
-                true
-            ],
-        ];
     }
 
     /**
@@ -497,13 +236,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
         $this->setDataArrayValue('use_config_max_sale_qty', $useConfigMaxSaleQty);
         if ($useConfigMaxSaleQty) {
-            $this->scopeConfig->expects($this->any())
-                ->method('getValue')
-                ->with(
-                    $this->equalTo(Item::XML_PATH_MAX_SALE_QTY),
-                    $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE)
-                )
-                ->will($this->returnValue($maxSaleQty));
+            $this->stockConfiguration->expects($this->any())
+                ->method('getMaxSaleQty')
+                ->willReturn($maxSaleQty);
         } else {
             $this->setDataArrayValue('max_sale_qty', $maxSaleQty);
         }
@@ -542,7 +277,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->method('getCustomerGroupId')
             ->will($this->returnValue($groupId));
 
-        $property = new \ReflectionProperty($this->item, '_customerGroupId');
+        $property = new \ReflectionProperty($this->item, 'customerGroupId');
         $property->setAccessible(true);
 
         $this->assertNull($property->getValue($this->item));
@@ -570,26 +305,19 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $useConfigMinSaleQty = $config['use_config_min_sale_qty'];
         $minSaleQty = $config['min_sale_qty'];
 
-        $property = new \ReflectionProperty($this->item, '_customerGroupId');
+        $property = new \ReflectionProperty($this->item, 'customerGroupId');
         $property->setAccessible(true);
         $property->setValue($this->item, $groupId);
 
-        $property = new \ReflectionProperty($this->item, '_minSaleQtyCache');
-        $property->setAccessible(true);
-        $this->assertEmpty($property->getValue($this->item));
         $this->setDataArrayValue('use_config_min_sale_qty', $useConfigMinSaleQty);
-
         if ($useConfigMinSaleQty) {
-            $this->catalogInventoryMinsaleqty->expects($this->once())
-                ->method('getConfigValue')
-                ->with($this->equalTo($groupId))
+            $this->stockConfiguration->expects($this->once())
+                ->method('getMinSaleQty')
+                ->with($this->storeId, $this->equalTo($groupId))
                 ->will($this->returnValue($minSaleQty));
         } else {
             $this->setDataArrayValue('min_sale_qty', $minSaleQty);
         }
-
-        $this->assertSame($expected, $this->item->getMinSaleQty());
-        // check lazy load
         $this->assertSame($expected, $this->item->getMinSaleQty());
     }
 
@@ -621,7 +349,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                     'use_config_min_sale_qty' => false,
                     'min_sale_qty' => null,
                 ],
-                null
+                0.0
             ],
         ];
     }
@@ -635,12 +363,8 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     {
         $this->setDataArrayValue('use_config_min_qty', $useConfigMinQty);
         if ($useConfigMinQty) {
-            $this->scopeConfig->expects($this->any())
-                ->method('getValue')
-                ->with(
-                    $this->equalTo(Item::XML_PATH_MIN_QTY),
-                    $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE)
-                )
+            $this->stockConfiguration->expects($this->any())
+                ->method('getMinQty')
                 ->will($this->returnValue($minQty));
         } else {
             $this->setDataArrayValue('min_qty', $minQty);
@@ -669,11 +393,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function testGetStoreId($storeId, $managerStoreId, $expected)
     {
         if ($storeId) {
-            $this->setDataArrayValue('store_id', $storeId);
-        } else {
-            $storeManager = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
-            $storeManager->expects($this->once())->method('getId')->will($this->returnValue($managerStoreId));
-            $this->storeManager->expects($this->once())->method('getStore')->will($this->returnValue($storeManager));
+            $property = new \ReflectionProperty($this->item, 'storeId');
+            $property->setAccessible(true);
+            $property->setValue($this->item, $storeId);
         }
         $this->assertSame($expected, $this->item->getStoreId());
     }
@@ -684,99 +406,8 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function getStoreIdDataProvider()
     {
         return [
-            [1, null, 1],
-            [null, 2, 2],
+            [$this->storeId, 2, $this->storeId],
+            [0, 2, $this->storeId],
         ];
-    }
-
-    public function testGetStockId()
-    {
-        $this->assertSame(1, $this->item->getStockId());
-    }
-
-    public function testProcessIsInStock()
-    {
-        $this->item->setData(
-            [
-                'qty' => 100,
-                'is_in_stock' => \Magento\CatalogInventory\Model\Stock\Status::STATUS_IN_STOCK,
-                'manage_stock' => 1,
-                'use_config_manage_stock' => 0
-            ]
-        );
-        $this->item->setData('qty', 0);
-        $this->item->processIsInStock();
-        $this->assertEquals(
-            \Magento\CatalogInventory\Model\Stock\Status::STATUS_OUT_OF_STOCK,
-            $this->item->getIsInStock()
-        );
-    }
-
-    public function testAddQty()
-    {
-        $defaultQty = 5.5;
-        $qty = 3.3;
-
-        $this->setDataArrayValue('qty', $defaultQty);
-        $this->setDataArrayValue('manage_stock', true);
-
-        $this->scopeConfig->expects($this->once())
-            ->method('isSetFlag')
-            ->with(
-                $this->equalTo(Item::XML_PATH_CAN_SUBTRACT),
-                $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE)
-            )
-            ->will($this->returnValue(true));
-
-        $this->item->addQty($qty);
-        $this->assertEquals($defaultQty + $qty, $this->item->getQty());
-    }
-
-    public function testAddQtyWithManageStockFalse()
-    {
-        $qty = 1;
-        $defaultQty = 3;
-
-        $this->setDataArrayValue('qty', $defaultQty);
-        $this->setDataArrayValue('manage_stock', false);
-
-        $this->assertEquals($this->item, $this->item->addQty($qty));
-        $this->assertEquals($defaultQty, $this->item->getQty());
-    }
-
-    public function testAddQtyWithCannotSubtractConfig()
-    {
-        $qty = 1;
-        $defaultQty = 3;
-
-        $this->setDataArrayValue('qty', $defaultQty);
-        $this->setDataArrayValue('manage_stock', true);
-        $this->scopeConfig->expects($this->once())
-            ->method('isSetFlag')
-            ->with(
-                $this->equalTo(Item::XML_PATH_CAN_SUBTRACT),
-                $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE)
-            )
-            ->will($this->returnValue(false));
-
-        $this->assertEquals($this->item, $this->item->addQty($qty));
-        $this->assertEquals($defaultQty, $this->item->getQty());
-    }
-
-    public function testSubtractQty()
-    {
-        $subtractQty = 3;
-
-        $qty = 5;
-
-        $this->setDataArrayValue('qty', $qty);
-
-        $this->scopeConfig->expects($this->once())
-            ->method('isSetFlag')
-            ->with('cataloginventory/options/can_subtract', 'store')
-            ->will($this->returnValue(true));
-        $this->initManageStock(false, true);
-        $this->item->subtractQty($subtractQty);
-        $this->assertEquals($qty - $subtractQty, $this->item->getQty());
     }
 }

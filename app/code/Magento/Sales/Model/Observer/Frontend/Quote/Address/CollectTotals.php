@@ -31,9 +31,9 @@ class CollectTotals
     protected $customerAddressHelper;
 
     /**
-     * @var \Magento\Customer\Helper\Data
+     * @var \Magento\Customer\Model\Vat
      */
-    protected $customerHelper;
+    protected $customerVat;
 
     /**
      * @var VatValidator
@@ -49,17 +49,17 @@ class CollectTotals
      * Initialize dependencies.
      *
      * @param \Magento\Customer\Helper\Address $customerAddressHelper
-     * @param \Magento\Customer\Helper\Data $customerHelper
+     * @param \Magento\Customer\Model\Vat $customerVat
      * @param VatValidator $vatValidator
      * @param \Magento\Customer\Service\V1\Data\CustomerBuilder $customerBuilder
      */
     public function __construct(
         \Magento\Customer\Helper\Address $customerAddressHelper,
-        \Magento\Customer\Helper\Data $customerHelper,
+        \Magento\Customer\Model\Vat $customerVat,
         VatValidator $vatValidator,
         \Magento\Customer\Service\V1\Data\CustomerBuilder $customerBuilder
     ) {
-        $this->customerHelper = $customerHelper;
+        $this->customerVat = $customerVat;
         $this->customerAddressHelper = $customerAddressHelper;
         $this->vatValidator = $vatValidator;
         $this->customerBuilder = $customerBuilder;
@@ -90,13 +90,13 @@ class CollectTotals
         $customerCountryCode = $quoteAddress->getCountryId();
         $customerVatNumber = $quoteAddress->getVatId();
         $groupId = null;
-        if (empty($customerVatNumber) || false == $this->customerHelper->isCountryInEU($customerCountryCode)) {
-            $groupId = $customerData->getId() ? $this->customerHelper->getDefaultCustomerGroupId(
+        if (empty($customerVatNumber) || false == $this->customerVat->isCountryInEU($customerCountryCode)) {
+            $groupId = $customerData->getId() ? $this->customerVat->getDefaultCustomerGroupId(
                 $storeId
             ) : \Magento\Customer\Service\V1\CustomerGroupServiceInterface::NOT_LOGGED_IN_ID;
         } else {
             // Magento always has to emulate group even if customer uses default billing/shipping address
-            $groupId = $this->customerHelper->getCustomerGroupIdBasedOnVatNumber(
+            $groupId = $this->customerVat->getCustomerGroupIdBasedOnVatNumber(
                 $customerCountryCode,
                 $this->vatValidator->validate($quoteAddress, $storeId),
                 $storeId

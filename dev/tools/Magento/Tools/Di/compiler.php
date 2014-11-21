@@ -38,6 +38,7 @@ use Magento\Framework\Api\Code\Generator\Mapper;
 use Magento\Framework\Api\Code\Generator\SearchResults;
 use Magento\Framework\Api\Code\Generator\SearchResultsBuilder;
 use Magento\Framework\Api\Code\Generator\DataBuilder;
+use Magento\Framework\Autoload\AutoloaderRegistry;
 
 $filePatterns = ['php' => '/.*\.php$/', 'di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/'];
 $codeScanDir = realpath($rootDir . '/app');
@@ -54,8 +55,6 @@ try {
     $opt->parse();
 
     $generationDir = $opt->getOption('generation') ? $opt->getOption('generation') : $rootDir . '/var/generation';
-    \Magento\Framework\Code\Generator\FileResolver::addIncludePath($generationDir);
-
     $diDir = $opt->getOption('di') ? $opt->getOption('di') : $rootDir . '/var/di';
     $compiledFile = $diDir . '/definitions.php';
     $relationsFile = $diDir . '/relations.php';
@@ -76,6 +75,8 @@ try {
     $validator->add(new \Magento\Framework\Code\Validator\ConstructorIntegrity());
     $validator->add(new \Magento\Framework\Code\Validator\ContextAggregation());
 
+    AutoloaderRegistry::getAutoloader()->addPsr4('Magento\\', $generationDir . '/Magento/');
+
     // 1 Code generation
     // 1.1 Code scan
     $directoryScanner = new Scanner\DirectoryScanner();
@@ -91,16 +92,13 @@ try {
 
     $interceptorScanner = new Scanner\XmlInterceptorScanner();
     $entities['interceptors'] = $interceptorScanner->collectEntities($files['di']);
-    $fileResolver = new \Magento\Framework\Code\Generator\FileResolver();
 
     // 1.2 Generation of Factory and Additional Classes
     $generatorIo = new \Magento\Framework\Code\Generator\Io(
         new \Magento\Framework\Filesystem\Driver\File(),
-        $fileResolver,
         $generationDir
     );
     $generator = new \Magento\Framework\Code\Generator(
-        $fileResolver,
         $generatorIo,
         [
             DataBuilder::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\DataBuilder',
@@ -116,18 +114,15 @@ try {
             SearchResults::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\SearchResults',
         ]
     );
-    $autoloader = new \Magento\Framework\Code\Generator\Autoloader($generator, $fileResolver);
-    spl_autoload_register([$autoloader, 'load']);
+
+    $generatorAutoloader = new \Magento\Framework\Code\Generator\Autoloader($generator);
+    spl_autoload_register([$generatorAutoloader, 'load']);
     foreach (['php', 'additional'] as $type) {
         sort($entities[$type]);
         foreach ($entities[$type] as $entityName) {
             switch ($generator->generateClass($entityName)) {
                 case \Magento\Framework\Code\Generator::GENERATION_SUCCESS:
                     $log->add(Log::GENERATION_SUCCESS, $entityName);
-                    $file = $fileResolver->getFile($entityName);
-                    if ($file) {
-                        include_once $file;
-                    }
                     break;
 
                 case \Magento\Framework\Code\Generator::GENERATION_ERROR:
@@ -163,10 +158,6 @@ try {
             switch ($generator->generateClass($entityName)) {
                 case \Magento\Framework\Code\Generator::GENERATION_SUCCESS:
                     $log->add(Log::GENERATION_SUCCESS, $entityName);
-                    $file = $fileResolver->getFile($entityName);
-                    if ($file) {
-                        include_once $file;
-                    }
                     break;
 
                 case \Magento\Framework\Code\Generator::GENERATION_ERROR:

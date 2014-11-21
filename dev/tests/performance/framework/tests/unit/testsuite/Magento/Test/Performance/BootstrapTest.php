@@ -35,7 +35,7 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
         $this->appBootstrap = $this->getMock('Magento\Framework\App\Bootstrap', [], [], '', false);
         $dirList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
         $dirList->expects($this->any())->method('getRoot')->will($this->returnValue(BP));
-        $objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManager');
+        $objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->appBootstrap->expects($this->any())
             ->method('getObjectManager')
             ->will($this->returnValue($objectManager));

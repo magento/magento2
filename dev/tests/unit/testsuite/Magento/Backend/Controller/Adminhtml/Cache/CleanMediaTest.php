@@ -31,7 +31,7 @@ class CleanMediaTest extends \PHPUnit_Framework_TestCase
         $response = $this->getMock('Magento\Framework\App\Response\Http', array(), array(), '', false);
         $request = $this->getMock('Magento\Framework\App\Request\Http', array(), array(), '', false);
 
-        $objectManager = $this->getMock('Magento\Framework\ObjectManager');
+        $objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $backendHelper = $this->getMock('Magento\Backend\Helper\Data', array(), array(), '', false);
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
 

@@ -41,8 +41,6 @@ class RowsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDbIsolation enabled
-     * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      */
     public function testProductUpdate()
@@ -55,15 +53,40 @@ class RowsTest extends \PHPUnit_Framework_TestCase
             '\Magento\Catalog\Block\Product\ListProduct'
         );
 
-        /** @var \Magento\CatalogInventory\Model\Stock\Item $stockItem */
-        $stockItem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            '\Magento\CatalogInventory\Model\Stock\Item'
+        /** @var \Magento\CatalogInventory\Api\Data\StockItemInterfaceBuilder $stockRegistry */
+        $stockItemBuilder = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            '\Magento\CatalogInventory\Api\Data\StockItemInterfaceBuilder'
         );
 
-        $stockItem->loadByProduct(1);
-        $stockItem->setProcessIndexEvents(false);
-        $stockItem->addQty(11);
-        $stockItem->save();
+        /** @var \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry */
+        $stockRegistry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\CatalogInventory\Api\StockRegistryInterface'
+        );
+        /** @var \Magento\CatalogInventory\Api\StockItemRepositoryInterface $stockItemRepository */
+        $stockItemRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            '\Magento\CatalogInventory\Api\StockItemRepositoryInterface'
+        );
+
+        /** @var \Magento\CatalogInventory\Model\Resource\Stock\Item $stockItemResource */
+        $stockItemResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            '\Magento\CatalogInventory\Model\Resource\Stock\Item'
+        );
+
+        $stockItem = $stockRegistry->getStockItem(1, 1);
+
+        $stockItemData = [
+            'qty' => $stockItem->getQty() + 12
+        ];
+
+        // todo fix builder
+        $id = $stockItem->getId();
+        $stockItemBuilder = $stockItemBuilder->mergeDataObjectWithArray($stockItem, $stockItemData);
+        $stockItemBuilder->setId($id);
+        $stockItemSave = $stockItemBuilder->create();
+        $stockItemSave->setItemId($id);
+        $stockItemResource->setProcessIndexEvents(false);
+
+        $stockItemRepository->save($stockItemSave);
 
         $this->_processor->reindexList(array(1));
 
@@ -85,7 +108,7 @@ class RowsTest extends \PHPUnit_Framework_TestCase
         foreach ($productCollection as $product) {
             $this->assertEquals('Simple Product', $product->getName());
             $this->assertEquals('Short description', $product->getShortDescription());
-            $this->assertEquals(111, $product->getQty());
+            $this->assertEquals(112, $product->getQty());
         }
     }
 }

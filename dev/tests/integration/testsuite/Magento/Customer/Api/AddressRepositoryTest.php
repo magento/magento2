@@ -38,7 +38,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
     /** @var AddressRepositoryInterface */
     private $repository;
 
-    /** @var \Magento\Framework\ObjectManager */
+    /** @var \Magento\Framework\ObjectManagerInterface */
     private $_objectManager;
 
     /** @var \Magento\Customer\Model\Data\Address[] */

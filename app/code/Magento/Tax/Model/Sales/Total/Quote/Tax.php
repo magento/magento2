@@ -96,6 +96,7 @@ class Tax extends CommonTaxCollector
     public function collect(Address $address)
     {
         parent::collect($address);
+        $this->clearValues($address);
         $items = $this->_getAddressItems($address);
         if (!$items) {
             return $this;
@@ -129,6 +130,26 @@ class Tax extends CommonTaxCollector
         }
 
         return $this;
+    }
+
+    /**
+     * Clear tax related total values in address
+     *
+     * @param Address $address
+     * @return void
+     */
+    protected function clearValues(Address $address)
+    {
+        $address->setTotalAmount('subtotal', 0);
+        $address->setBaseTotalAmount('subtotal', 0);
+        $address->setTotalAmount('tax', 0);
+        $address->setBaseTotalAmount('tax', 0);
+        $address->setTotalAmount('hidden_tax', 0);
+        $address->setBaseTotalAmount('hidden_tax', 0);
+        $address->setTotalAmount('shipping_hidden_tax', 0);
+        $address->setBaseTotalAmount('shipping_hidden_tax', 0);
+        $address->setSubtotalInclTax(0);
+        $address->setBaseSubtotalInclTax(0);
     }
 
     /**

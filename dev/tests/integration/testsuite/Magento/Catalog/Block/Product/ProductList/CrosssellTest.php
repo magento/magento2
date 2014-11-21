@@ -52,7 +52,6 @@ class CrosssellTest extends \PHPUnit_Framework_TestCase
         $block->setTemplate('Magento_Catalog::product/list/items.phtml');
         $block->setType('crosssell');
         $block->setItemCount(1);
-
         $html = $block->toHtml();
         $this->assertNotEmpty($html);
         $this->assertContains('Simple Cross Sell', $html);

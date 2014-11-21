@@ -23,19 +23,19 @@
  */
 namespace Magento\Framework\Data\Form\Element;
 
-use Magento\Framework\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 
 class CollectionFactory
 {
     /**
-     * @var ObjectManager
+     * @var ObjectManagerInterface
      */
     protected $_objectManager;
 
     /**
-     * @param ObjectManager $objectManager
+     * @param ObjectManagerInterface $objectManager
      */
-    public function __construct(ObjectManager $objectManager)
+    public function __construct(ObjectManagerInterface $objectManager)
     {
         $this->_objectManager = $objectManager;
     }

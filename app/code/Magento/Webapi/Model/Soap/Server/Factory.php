@@ -28,7 +28,7 @@ namespace Magento\Webapi\Model\Soap\Server;
 class Factory
 {
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
 
@@ -40,11 +40,11 @@ class Factory
     /**
      * Initialize the class
      *
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Webapi\Controller\Soap\Request\Handler $soapHandler
      */
     public function __construct(
-        \Magento\Framework\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Webapi\Controller\Soap\Request\Handler $soapHandler
     ) {
         $this->_objectManager = $objectManager;

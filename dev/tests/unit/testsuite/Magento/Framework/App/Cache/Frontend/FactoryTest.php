@@ -156,7 +156,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             }
         };
         /** @var $objectManager \PHPUnit_Framework_MockObject_MockObject */
-        $objectManager = $this->getMock('Magento\Framework\ObjectManager', array(), array(), '', false);
+        $objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $objectManager->expects($this->any())->method('create')->will($this->returnCallback($processFrontendFunc));
 
         $dirMock = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\ReadInterface');

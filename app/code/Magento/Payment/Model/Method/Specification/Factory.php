@@ -23,7 +23,7 @@
  */
 namespace Magento\Payment\Model\Method\Specification;
 
-use Magento\Framework\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Payment\Model\Method\SpecificationInterface;
 
 /**
@@ -34,16 +34,16 @@ class Factory
     /**
      * Object Manager
      *
-     * @var ObjectManager
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
 
     /**
      * Factory constructor
      *
-     * @param ObjectManager $objectManager
+     * @param ObjectManagerInterface $objectManager
      */
-    public function __construct(ObjectManager $objectManager)
+    public function __construct(ObjectManagerInterface $objectManager)
     {
         $this->objectManager = $objectManager;
     }

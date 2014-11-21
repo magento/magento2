@@ -35,11 +35,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMockBuilder(
-            'Magento\Framework\ObjectManager'
-        )->disableOriginalConstructor()->setMethods(
-            array('create')
-        )->getMockForAbstractClass();
+        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->_soapWsdlFactory = new \Magento\Webapi\Model\Soap\Wsdl\Factory($this->_objectManagerMock);
         parent::setUp();
     }

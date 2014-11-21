@@ -119,11 +119,6 @@ class UiComponentTest extends \PHPUnit_Framework_TestCase
         $blockMock = $this->getMockBuilder('Magento\Framework\View\Element\AbstractBlock')
             ->disableOriginalConstructor()->getMock();
 
-        $blockMock->expects($this->any())
-            ->method('setLayout')
-            ->with($layoutMock)
-            ->willReturnSelf();
-
         $this->uiComponentFactoryMock->expects($this->any())
             ->method('createUiComponent')
             ->with(

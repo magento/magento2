@@ -27,7 +27,7 @@
  */
 namespace Magento\Framework\Pricing\PriceInfo;
 
-use Magento\Framework\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Pricing\Object\SaleableInterface;
 
 /**
@@ -45,7 +45,7 @@ class Factory
     /**
      * Object Manager
      *
-     * @var ObjectManager
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
 
@@ -53,11 +53,11 @@ class Factory
      * Construct
      *
      * @param array $types
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      */
     public function __construct(
         array $types,
-        ObjectManager $objectManager
+        ObjectManagerInterface $objectManager
     ) {
         $this->types = $types;
         $this->objectManager = $objectManager;

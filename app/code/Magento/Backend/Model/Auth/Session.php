@@ -23,7 +23,7 @@
  */
 namespace Magento\Backend\Model\Auth;
 
-use \Magento\Framework\Stdlib\CookieManager;
+use \Magento\Framework\Stdlib\CookieManagerInterface;
 use \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 
 /**
@@ -77,7 +77,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
      * @param \Magento\Framework\Session\SaveHandlerInterface $saveHandler
      * @param \Magento\Framework\Session\ValidatorInterface $validator
      * @param \Magento\Framework\Session\StorageInterface $storage
-     * @param CookieManager $cookieManager
+     * @param CookieManagerInterface $cookieManager
      * @param CookieMetadataFactory $cookieMetadataFactory
      * @param \Magento\Framework\Acl\Builder $aclBuilder
      * @param \Magento\Backend\Model\UrlInterface $backendUrl
@@ -90,7 +90,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
         \Magento\Framework\Session\SaveHandlerInterface $saveHandler,
         \Magento\Framework\Session\ValidatorInterface $validator,
         \Magento\Framework\Session\StorageInterface $storage,
-        CookieManager $cookieManager,
+        CookieManagerInterface $cookieManager,
         CookieMetadataFactory $cookieMetadataFactory,
         \Magento\Framework\Acl\Builder $aclBuilder,
         \Magento\Backend\Model\UrlInterface $backendUrl,

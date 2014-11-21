@@ -91,7 +91,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
     /**
      * Cookie manager
      *
-     * @var \Magento\Framework\Stdlib\CookieManager
+     * @var \Magento\Framework\Stdlib\CookieManagerInterface
      */
     protected $_cookieManager;
 
@@ -120,7 +120,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Persistent\Helper\Data $persistentData
-     * @param \Magento\Framework\Stdlib\CookieManager $cookieManager
+     * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
      * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Math\Random $mathRandom
@@ -135,7 +135,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Persistent\Helper\Data $persistentData,
-        \Magento\Framework\Stdlib\CookieManager $cookieManager,
+        \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
         \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Framework\Math\Random $mathRandom,

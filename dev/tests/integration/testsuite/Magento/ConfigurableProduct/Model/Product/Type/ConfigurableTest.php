@@ -461,14 +461,14 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     public function testGenerateSimpleProductsWithPartialData($productsData)
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService */
-        $stockItemService = $objectManager->get('Magento\CatalogInventory\Service\V1\StockItemService');
+        /** @var \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry */
+        $stockRegistry = $objectManager->get('Magento\CatalogInventory\Api\StockRegistryInterface');
         $this->_product->setNewVariationsAttributeSetId(4);
         $generatedProducts = $this->_model->generateSimpleProducts($this->_product, $productsData);
         foreach ($generatedProducts as $productId) {
-            $stockItemData = $stockItemService->getStockItem($productId);
-            $this->assertEquals('0', $stockItemData->isManageStock());
-            $this->assertEquals('1', $stockItemData->getIsInStock());
+            $stockItem = $stockRegistry->getStockItem($productId);
+            $this->assertEquals('0', $stockItem->getManageStock());
+            $this->assertEquals('1', $stockItem->getIsInStock());
         }
     }
 

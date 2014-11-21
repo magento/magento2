@@ -87,8 +87,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $customer = Bootstrap::getObjectManager()
             ->create('Magento\Customer\Model\Customer')->load(1);
 
-        $token = Bootstrap::getObjectManager()->get('Magento\Customer\Helper\Data')
-            ->generateResetPasswordLinkToken();
+        $token = Bootstrap::getObjectManager()->get('Magento\Framework\Math\Random')
+            ->getUniqueHash();
         $customer->changeResetPasswordLinkToken($token);
 
         $this->getRequest()->setParam('token', $token);
@@ -108,8 +108,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $customer = Bootstrap::getObjectManager()
             ->create('Magento\Customer\Model\Customer')->load(1);
 
-        $token = Bootstrap::getObjectManager()->get('Magento\Customer\Helper\Data')
-            ->generateResetPasswordLinkToken();
+        $token = Bootstrap::getObjectManager()->get('Magento\Framework\Math\Random')
+            ->getUniqueHash();
         $customer->changeResetPasswordLinkToken($token);
 
         $this->getRequest()->setParam('token', 'INVALIDTOKEN');
@@ -263,8 +263,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $customer = Bootstrap::getObjectManager()
             ->create('Magento\Customer\Model\Customer')->load(1);
 
-        $token = Bootstrap::getObjectManager()->get('Magento\Customer\Helper\Data')
-            ->generateResetPasswordLinkToken();
+        $token = Bootstrap::getObjectManager()->get('Magento\Framework\Math\Random')
+            ->getUniqueHash();
         $customer->changeResetPasswordLinkToken($token);
 
         $this->getRequest()->setParam('token', $token);

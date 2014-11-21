@@ -94,23 +94,4 @@ class AbstractHelperTest extends \PHPUnit_Framework_TestCase
             ['Module\\Name', 'Module\\Name', true],
         ];
     }
-
-    /**
-     * @covers \Magento\Framework\App\Helper\AbstractHelper::urlEncode
-     * @covers \Magento\Framework\App\Helper\AbstractHelper::urlDecode
-     */
-    public function testUrlDecode()
-    {
-        $data = uniqid();
-        $result = $this->helper->urlEncode($data);
-        $this->urlBuilderMock->expects($this->once())
-            ->method('sessionUrlVar')
-            ->with($this->equalTo($data))
-            ->will($this->returnValue($result));
-        $this->assertNotContains('&', $result);
-        $this->assertNotContains('%', $result);
-        $this->assertNotContains('+', $result);
-        $this->assertNotContains('=', $result);
-        $this->assertEquals($result, $this->helper->urlDecode($result));
-    }
 }

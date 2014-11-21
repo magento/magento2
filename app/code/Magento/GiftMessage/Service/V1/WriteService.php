@@ -108,7 +108,7 @@ class WriteService implements WriteServiceInterface
          *
          * @var \Magento\Sales\Model\Quote $quote
          */
-        $quote = $this->quoteRepository->get($cartId);
+        $quote = $this->quoteRepository->getActive($cartId);
 
         if (0 == $quote->getItemsCount()) {
             throw new InputException('Gift Messages is not applicable for empty cart');
@@ -136,7 +136,7 @@ class WriteService implements WriteServiceInterface
     public function setForItem($cartId, \Magento\GiftMessage\Service\V1\Data\Message $giftMessage, $itemId)
     {
         /** @var \Magento\Sales\Model\Quote $quote */
-        $quote = $this->quoteRepository->get($cartId);
+        $quote = $this->quoteRepository->getActive($cartId);
 
         if (!$item = $quote->getItemById($itemId)) {
             throw new NoSuchEntityException("There is no product with provided  itemId: $itemId in the cart");

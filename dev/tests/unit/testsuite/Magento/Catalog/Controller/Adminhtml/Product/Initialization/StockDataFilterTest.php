@@ -22,7 +22,10 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization;
-use \Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter;
+
+/**
+ * Class StockDataFilterTest
+ */
 class StockDataFilterTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -40,13 +43,24 @@ class StockDataFilterTest extends \PHPUnit_Framework_TestCase
      */
     protected $stockDataFilter;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $stockConfiguration;
+
     protected function setUp()
     {
         $this->scopeConfigMock = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
 
         $this->scopeConfigMock->expects($this->any())->method('getValue')->will($this->returnValue(1));
 
-        $this->stockDataFilter = new StockDataFilter($this->scopeConfigMock);
+        $this->stockConfiguration = $this->getMock(
+            'Magento\CatalogInventory\Model\Configuration',
+            ['getManageStock'],
+            [],
+            '',
+            false
+        );
+
+        $this->stockDataFilter = new StockDataFilter($this->scopeConfigMock, $this->stockConfiguration);
     }
 
     /**
@@ -58,6 +72,13 @@ class StockDataFilterTest extends \PHPUnit_Framework_TestCase
      */
     public function testFilter(array $inputStockData, array $outputStockData)
     {
+        if (isset($inputStockData['use_config_manage_stock']) && $inputStockData['use_config_manage_stock'] === 1) {
+            $this->stockConfiguration->expects($this->once())
+                ->method('getManageStock')
+                ->will($this->returnValue($outputStockData['manage_stock']));
+        }
+
+
         $this->assertEquals($outputStockData, $this->stockDataFilter->filter($inputStockData));
     }
 

@@ -33,7 +33,7 @@ class Proxy implements \Magento\Framework\App\Route\ConfigInterface
     /**
      * Object Manager instance
      *
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager = null;
 
@@ -61,12 +61,12 @@ class Proxy implements \Magento\Framework\App\Route\ConfigInterface
     /**
      * Proxy constructor
      *
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
      * @param bool $shared
      */
     public function __construct(
-        \Magento\Framework\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
         $instanceName = 'Magento\Framework\App\Route\ConfigInterface',
         $shared = true
     ) {

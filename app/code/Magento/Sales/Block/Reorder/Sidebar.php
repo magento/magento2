@@ -23,6 +23,7 @@
  */
 namespace Magento\Sales\Block\Reorder;
 
+use Magento\Customer\Model\Context;
 use Magento\Framework\View\Block\IdentityInterface;
 
 /**
@@ -64,9 +65,9 @@ class Sidebar extends \Magento\Framework\View\Element\Template implements Identi
     protected $httpContext;
 
     /**
-     * @var \Magento\CatalogInventory\Service\V1\StockItemService
+     * @var \Magento\CatalogInventory\Api\StockRegistryInterface
      */
-    protected $stockItemService;
+    protected $stockRegistry;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
@@ -74,7 +75,7 @@ class Sidebar extends \Magento\Framework\View\Element\Template implements Identi
      * @param \Magento\Sales\Model\Order\Config $orderConfig
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\App\Http\Context $httpContext
-     * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
+     * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param array $data
      */
     public function __construct(
@@ -83,14 +84,14 @@ class Sidebar extends \Magento\Framework\View\Element\Template implements Identi
         \Magento\Sales\Model\Order\Config $orderConfig,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\App\Http\Context $httpContext,
-        \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService,
+        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         array $data = array()
     ) {
         $this->_orderCollectionFactory = $orderCollectionFactory;
         $this->_orderConfig = $orderConfig;
         $this->_customerSession = $customerSession;
         $this->httpContext = $httpContext;
-        $this->stockItemService = $stockItemService;
+        $this->stockRegistry = $stockRegistry;
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
     }
@@ -103,7 +104,7 @@ class Sidebar extends \Magento\Framework\View\Element\Template implements Identi
     protected function _construct()
     {
         parent::_construct();
-        if ($this->httpContext->getValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH)) {
+        if ($this->httpContext->getValue(Context::CONTEXT_AUTH)) {
             $this->initOrders();
         }
     }
@@ -158,7 +159,11 @@ class Sidebar extends \Magento\Framework\View\Element\Template implements Identi
     public function isItemAvailableForReorder(\Magento\Sales\Model\Order\Item $orderItem)
     {
         if ($orderItem->getProduct()) {
-            return $this->stockItemService->getIsInStock($orderItem->getProduct()->getId());
+            $stockItem = $this->stockRegistry->getStockItem(
+                $orderItem->getProduct()->getId(),
+                $orderItem->getStore()->getWebsiteId()
+            );
+            return $stockItem->getIsInStock();
         }
         return false;
     }
@@ -196,7 +201,7 @@ class Sidebar extends \Magento\Framework\View\Element\Template implements Identi
      */
     protected function _toHtml()
     {
-        $isValid = $this->httpContext->getValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH) || $this->getCustomerId();
+        $isValid = $this->httpContext->getValue(Context::CONTEXT_AUTH) || $this->getCustomerId();
         return $isValid ? parent::_toHtml() : '';
     }
 

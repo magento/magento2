@@ -59,7 +59,10 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                     'use_custom_price' => "Yes",
                     'custom_price' => 100,
                 ],
-            ]
+            ],
+            'order_big_qty' => [
+                'qty' => 900
+            ],
         ];
         return isset($presets[$name]) ? $presets[$name] : null;
     }

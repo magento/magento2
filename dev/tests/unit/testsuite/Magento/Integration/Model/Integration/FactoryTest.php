@@ -30,9 +30,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreate()
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject */
-        $mockObjectManager = $this->getMockBuilder('Magento\Framework\ObjectManager')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mockObjectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
 
         $data = array(
             Info::DATA_NAME => 'nameTest',

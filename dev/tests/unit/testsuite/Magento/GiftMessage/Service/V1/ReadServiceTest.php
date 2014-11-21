@@ -121,7 +121,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->quoteRepositoryMock->expects($this->once())
-            ->method('get')
+            ->method('getActive')
             ->with($this->cardId)
             ->will($this->returnValue($this->quoteMock));
     }

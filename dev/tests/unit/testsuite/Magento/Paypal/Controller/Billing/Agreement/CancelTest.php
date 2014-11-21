@@ -31,7 +31,7 @@ class CancelTest extends \PHPUnit_Framework_TestCase
     protected $_controller;
 
     /**
-     * @var \Magento\Framework\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_objectManager;
 
@@ -75,7 +75,7 @@ class CancelTest extends \PHPUnit_Framework_TestCase
         $this->_agreement->expects($this->once())->method('getId')->will($this->returnValue(15));
         $this->_agreement->expects($this->once())->method('getCustomerId')->will($this->returnValue(871));
 
-        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManager');
+        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->_objectManager->expects(
             $this->atLeastOnce()
         )->method(

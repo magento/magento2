@@ -31,8 +31,7 @@ use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Block\AbstractConfigureBlock;
 
 /**
- * Class View
- * Product view block on the product page
+ * Product view block on the product page.
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
@@ -41,84 +40,84 @@ use Magento\Catalog\Test\Block\AbstractConfigureBlock;
 class View extends AbstractConfigureBlock
 {
     /**
-     * XPath selector for tab
+     * XPath selector for tab.
      *
      * @var string
      */
     protected $tabSelector = './/div[@data-role="collapsible" and a[contains(text(),"%s")]]';
 
     /**
-     * Custom options CSS selector
+     * Custom options CSS selector.
      *
      * @var string
      */
     protected $customOptionsSelector = '.product-options-wrapper';
 
     /**
-     * 'Add to Cart' button
+     * 'Add to Cart' button.
      *
      * @var string
      */
     protected $addToCart = '.tocart';
 
     /**
-     * Quantity input id
+     * Quantity input id.
      *
      * @var string
      */
     protected $qty = '#qty';
 
     /**
-     * 'Check out with PayPal' button
+     * 'Check out with PayPal' button.
      *
      * @var string
      */
     protected $paypalCheckout = '[data-action=checkout-form-submit]';
 
     /**
-     * Product name element
+     * Product name element.
      *
      * @var string
      */
     protected $productName = '.page-title.product h1.title .base';
 
     /**
-     * Product sku element
+     * Product sku element.
      *
      * @var string
      */
     protected $productSku = '[itemprop="sku"]';
 
     /**
-     * Product description element
+     * Product description element.
      *
      * @var string
      */
     protected $productDescription = '.product.attibute.description';
 
     /**
-     * Product short-description element
+     * Product short-description element.
      *
      * @var string
      */
     protected $productShortDescription = '.product.attibute.overview';
 
     /**
-     * Click for Price link on Product page
+     * Click for Price link on Product page.
      *
      * @var string
      */
     protected $clickForPrice = '[id*=msrp-popup]';
 
     /**
-     * MAP popup on Product page
+     * MAP popup on Product page.
      *
      * @var string
      */
     protected $mapPopup = '#map-popup-click-for-price';
 
     /**
-     * Stock Availability control
+     * Stock Availability control.
      *
      * @var string
      */
@@ -132,28 +131,35 @@ class View extends AbstractConfigureBlock
     protected $tierPricesSelector = "//ul[contains(@class,'tier')]//*[@class='item'][%line-number%]";
 
     /**
-     * Selector for price block
+     * Selector for price block.
      *
      * @var string
      */
     protected $priceBlock = '//*[@class="product-info-main"]//*[contains(@class,"price-box")]';
 
     /**
-     * 'Add to Compare' button
+     * 'Add to Compare' button.
      *
      * @var string
      */
     protected $clickAddToCompare = '.action.tocompare';
 
     /**
-     * "Add to Wishlist" button
+     * "Add to Wishlist" button.
      *
      * @var string
      */
     protected $addToWishlist = '[data-action="add-to-wishlist"]';
 
     /**
-     * Get block price
+     * Messages block locator.
+     *
+     * @var string
+     */
+    protected $messageBlock = '.page.messages';
+
+    /**
+     * Get block price.
      *
      * @return \Magento\Catalog\Test\Block\Product\Price
      */
@@ -166,7 +172,7 @@ class View extends AbstractConfigureBlock
     }
 
     /**
-     * Add product to shopping cart
+     * Add product to shopping cart.
      *
      * @param FixtureInterface $product
      * @return void
@@ -187,7 +193,7 @@ class View extends AbstractConfigureBlock
     }
 
     /**
-     * Click link
+     * Click link.
      *
      * @return void
      */
@@ -197,7 +203,7 @@ class View extends AbstractConfigureBlock
     }
 
     /**
-     * Set quantity and click add to cart
+     * Set quantity and click add to cart.
      *
      * @param int $qty
      * @return void
@@ -209,18 +215,20 @@ class View extends AbstractConfigureBlock
     }
 
     /**
-     * Set quantity
+     * Set quantity.
      *
      * @param int $qty
      * @return void
      */
     public function setQty($qty)
     {
-        $this->_rootElement->find($this->qty, Locator::SELECTOR_CSS)->setValue($qty);
+        $this->browser->selectWindow();
+        $this->_rootElement->find($this->qty)->keys([$qty]);
+        $this->_rootElement->click();
     }
 
     /**
-     * Find Add To Cart button
+     * Find Add To Cart button.
      *
      * @return bool
      */
@@ -230,7 +238,7 @@ class View extends AbstractConfigureBlock
     }
 
     /**
-     * Press 'Check out with PayPal' button
+     * Press 'Check out with PayPal' button.
      *
      * @return void
      */
@@ -240,7 +248,7 @@ class View extends AbstractConfigureBlock
     }
 
     /**
-     * Get product name displayed on page
+     * Get product name displayed on page.
      *
      * @return string
      */
@@ -250,7 +258,7 @@ class View extends AbstractConfigureBlock
     }
 
     /**
-     * Get product sku displayed on page
+     * Get product sku displayed on page.
      *
      * @return string
      */
@@ -260,7 +268,7 @@ class View extends AbstractConfigureBlock
     }
 
     /**
-     * Return product price excluding tax displayed on page
+     * Return product price excluding tax displayed on page.
      *
      * @return string
      */
@@ -270,7 +278,7 @@ class View extends AbstractConfigureBlock
     }
 
     /**
-     * Return product price including tax displayed on page
+     * Return product price including tax displayed on page.
      *
      * @return string
      */
@@ -280,7 +288,7 @@ class View extends AbstractConfigureBlock
     }
 
     /**
-     * Return product short description on page
+     * Return product short description on page.
      *
      * @return string|null
      */
@@ -293,7 +301,7 @@ class View extends AbstractConfigureBlock
     }
 
     /**
-     * Return product description on page
+     * Return product description on page.
      *
      * @return string|null
      */
@@ -306,7 +314,7 @@ class View extends AbstractConfigureBlock
     }
 
     /**
-     * Return product options
+     * Return product options.
      *
      * @param FixtureInterface $product
      * @return array
@@ -323,7 +331,7 @@ class View extends AbstractConfigureBlock
     }
 
     /**
-     * This method return array tier prices
+     * This method return array tier prices.
      *
      * @param int $lineNumber [optional]
      * @return array
@@ -337,7 +345,7 @@ class View extends AbstractConfigureBlock
     }
 
     /**
-     * Click "ADD TO CART" button
+     * Click "ADD TO CART" button.
      *
      * @return void
      */
@@ -347,7 +355,7 @@ class View extends AbstractConfigureBlock
     }
 
     /**
-     * Open MAP block on Product View page
+     * Open MAP block on Product View page.
      *
      * @return void
      */
@@ -358,7 +366,7 @@ class View extends AbstractConfigureBlock
     }
 
     /**
-     * Check 'Add to card' button visible
+     * Check 'Add to card' button visible.
      *
      * @return bool
      */
@@ -368,7 +376,7 @@ class View extends AbstractConfigureBlock
     }
 
     /**
-     * Get text of Stock Availability control
+     * Get text of Stock Availability control.
      *
      * @return string
      */
@@ -378,17 +386,23 @@ class View extends AbstractConfigureBlock
     }
 
     /**
-     * Click "Add to Compare" button
+     * Click "Add to Compare" button.
      *
      * @return void
      */
     public function clickAddToCompare()
     {
+        /** @var \Magento\Core\Test\Block\Messages $messageBlock */
+        $messageBlock = $this->blockFactory->create(
+            'Magento\Core\Test\Block\Messages',
+            ['element' => $this->browser->find($this->messageBlock)]
+        );
         $this->_rootElement->find($this->clickAddToCompare, Locator::SELECTOR_CSS)->click();
+        $messageBlock->waitSuccessMessage();
     }
 
     /**
-     * Add product to Wishlist
+     * Add product to Wishlist.
      *
      * @param FixtureInterface $product
      * @return void
@@ -405,7 +419,7 @@ class View extends AbstractConfigureBlock
     }
 
     /**
-     * Click "Add to Wishlist" button
+     * Click "Add to Wishlist" button.
      *
      * @return void
      */
@@ -415,7 +429,7 @@ class View extends AbstractConfigureBlock
     }
 
     /**
-     * Select tab on the product page
+     * Select tab on the product page.
      *
      * @param string $name
      * @return void

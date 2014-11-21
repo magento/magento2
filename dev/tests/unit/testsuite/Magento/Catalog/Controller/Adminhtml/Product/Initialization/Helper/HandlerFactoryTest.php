@@ -37,7 +37,7 @@ class HandlerFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock('\Magento\Framework\ObjectManager');
+        $this->_objectManagerMock = $this->getMock('\Magento\Framework\ObjectManagerInterface');
         $this->_model = new HandlerFactory($this->_objectManagerMock);
     }
 

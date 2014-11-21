@@ -30,10 +30,10 @@
  */
 namespace Magento\Framework\ObjectManager;
 
-class ObjectManager implements \Magento\Framework\ObjectManager
+class ObjectManager implements \Magento\Framework\ObjectManagerInterface
 {
     /**
-     * @var \Magento\Framework\ObjectManager\Factory
+     * @var \Magento\Framework\ObjectManager\FactoryInterface
      */
     protected $_factory;
 
@@ -50,16 +50,16 @@ class ObjectManager implements \Magento\Framework\ObjectManager
     protected $_config;
 
     /**
-     * @param Factory $factory
-     * @param Config $config
+     * @param FactoryInterface $factory
+     * @param ConfigInterface $config
      * @param array $sharedInstances
      */
-    public function __construct(Factory $factory, Config $config, array $sharedInstances = array())
+    public function __construct(FactoryInterface $factory, ConfigInterface $config, array $sharedInstances = array())
     {
         $this->_config = $config;
         $this->_factory = $factory;
         $this->_sharedInstances = $sharedInstances;
-        $this->_sharedInstances['Magento\Framework\ObjectManager'] = $this;
+        $this->_sharedInstances['Magento\Framework\ObjectManagerInterface'] = $this;
     }
 
     /**

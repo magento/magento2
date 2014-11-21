@@ -27,14 +27,14 @@ require_once __DIR__ . '/Element.php';
 class ElementFactory
 {
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
 
     /**
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      */
-    public function __construct(\Magento\Framework\ObjectManager $objectManager)
+    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
         $this->_objectManager = $objectManager;
     }

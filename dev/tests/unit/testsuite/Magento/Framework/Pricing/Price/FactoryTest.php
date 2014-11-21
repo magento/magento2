@@ -35,15 +35,13 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectManagerMock;
 
     public function setUp()
     {
-        $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManager')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject('Magento\Framework\Pricing\Price\Factory', array(

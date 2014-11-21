@@ -8,7 +8,7 @@ class Sample_Proxy extends \Magento\Framework\ObjectManager\Code\Generator\Sampl
     /**
      * Object Manager instance
      *
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager = null;
 
@@ -36,11 +36,11 @@ class Sample_Proxy extends \Magento\Framework\ObjectManager\Code\Generator\Sampl
     /**
      * Proxy constructor
      *
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
      * @param bool $shared
      */
-    public function __construct(\Magento\Framework\ObjectManager $objectManager, $instanceName = 'Magento\Framework\ObjectManager\Code\Generator\Sample', $shared = true)
+    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, $instanceName = 'Magento\Framework\ObjectManager\Code\Generator\Sample', $shared = true)
     {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;

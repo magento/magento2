@@ -47,7 +47,7 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
      */
     public function testChangeQuoteCustomerGroupIdForCustomerWithDisabledAutomaticGroupChange()
     {
-        /** @var \Magento\Framework\ObjectManager $objectManager */
+        /** @var \Magento\Framework\ObjectManagerInterface $objectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var $customer \Magento\Customer\Model\Customer */
@@ -83,7 +83,7 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
      */
     public function testChangeQuoteCustomerGroupIdForCustomerWithEnabledAutomaticGroupChange()
     {
-        /** @var \Magento\Framework\ObjectManager $objectManager */
+        /** @var \Magento\Framework\ObjectManagerInterface $objectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var $customer \Magento\Customer\Model\Customer */

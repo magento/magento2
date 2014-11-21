@@ -28,11 +28,8 @@ use Mtf\TestCase\Injectable;
 use Mtf\Fixture\FixtureFactory;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Reports\Test\Page\Adminhtml\SearchIndex;
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 
 /**
- * Test Creation for SearchTermsReportEntity
- *
  * Test Flow:
  * Preconditions:
  * 1. Products is created.
@@ -49,28 +46,28 @@ use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 class SearchTermsReportEntityTest extends Injectable
 {
     /**
-     * Index page
+     * Index page.
      *
      * @var CmsIndex
      */
     protected $cmsIndex;
 
     /**
-     * Search Index page
+     * Search Index page.
      *
      * @var SearchIndex
      */
     protected $searchIndex;
 
     /**
-     * FixtureFactory
+     * FixtureFactory.
      *
      * @var FixtureFactory
      */
     protected $fixtureFactory;
 
     /**
-     * Inject pages
+     * Inject pages.
      *
      * @param CmsIndex $cmsIndex
      * @param SearchIndex $searchIndex
@@ -85,15 +82,16 @@ class SearchTermsReportEntityTest extends Injectable
     }
 
     /**
-     * Search Terms Report
+     * Search Terms Report.
      *
-     * @param CatalogProductSimple $product
+     * @param string $product
      * @param int $countProducts
      * @param int $countSearch
      * @return array
      */
-    public function test(CatalogProductSimple $product, $countProducts, $countSearch)
+    public function test($product, $countProducts, $countSearch)
     {
+        $this->markTestIncomplete('MAGETWO-30246');
         // Preconditions
         $productName = $this->createProducts($product, $countProducts);
 
@@ -106,22 +104,27 @@ class SearchTermsReportEntityTest extends Injectable
     }
 
     /**
-     * Create products
+     * Create products.
      *
-     * @param CatalogProductSimple $product
+     * @param string $product
      * @param int $countProduct
      * @return string
      */
-    protected function createProducts(CatalogProductSimple $product, $countProduct)
+    protected function createProducts($product, $countProduct)
     {
+        $name = 'simpleProductName' . mt_rand();
         for ($i = 0; $i < $countProduct; $i++) {
-            $product->persist();
+            $productFixture = $this->fixtureFactory->createByCode(
+                'catalogProductSimple',
+                ['dataSet' => $product, 'data' => ['name' => $name]]
+            );
+            $productFixture->persist();
         }
-        return $product->getName();
+        return $name;
     }
 
     /**
-     * Search products
+     * Search products.
      *
      * @param string $productName
      * @param int $countSearch

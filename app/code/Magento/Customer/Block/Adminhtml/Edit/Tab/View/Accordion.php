@@ -41,9 +41,9 @@ class Accordion extends \Magento\Backend\Block\Widget\Accordion
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Sales\Model\QuoteFactory
+     * @var \Magento\Sales\Model\QuoteRepository
      */
-    protected $_quoteFactory;
+    protected $quoteRepository;
 
     /**
      * @var \Magento\Wishlist\Model\Resource\Item\CollectionFactory
@@ -61,7 +61,7 @@ class Accordion extends \Magento\Backend\Block\Widget\Accordion
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
+     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository
      * @param \Magento\Wishlist\Model\Resource\Item\CollectionFactory $itemsFactory
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Customer\Model\Config\Share $shareConfig
@@ -71,7 +71,7 @@ class Accordion extends \Magento\Backend\Block\Widget\Accordion
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Sales\Model\QuoteFactory $quoteFactory,
+        \Magento\Sales\Model\QuoteRepository $quoteRepository,
         \Magento\Wishlist\Model\Resource\Item\CollectionFactory $itemsFactory,
         \Magento\Framework\Registry $registry,
         \Magento\Customer\Model\Config\Share $shareConfig,
@@ -80,7 +80,7 @@ class Accordion extends \Magento\Backend\Block\Widget\Accordion
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
-        $this->_quoteFactory = $quoteFactory;
+        $this->quoteRepository = $quoteRepository;
         $this->_itemsFactory = $itemsFactory;
         $this->_shareConfig = $shareConfig;
         $this->_customerAccountService = $customerAccountService;
@@ -112,16 +112,15 @@ class Accordion extends \Magento\Backend\Block\Widget\Accordion
             $website = $this->_storeManager->getWebsite($websiteId);
 
             // count cart items
-            $cartItemsCount = $this->_quoteFactory->create()->setWebsite(
-                $website
-            )->loadByCustomer(
-                $customerId
-            )->getItemsCollection(
-                false
-            )->addFieldToFilter(
-                'parent_item_id',
-                array('null' => true)
-            )->getSize();
+            try {
+                $cartItemsCount = $this->quoteRepository->getForCustomer($customerId)
+                    ->setWebsite($website)
+                    ->getItemsCollection(false)
+                    ->addFieldToFilter('parent_item_id', array('null' => true))
+                    ->getSize();
+            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+                $cartItemsCount = 0;
+            }
             // prepare title for cart
             $title = __('Shopping Cart - %1 item(s)', $cartItemsCount);
             if (count($websiteIds) > 1) {

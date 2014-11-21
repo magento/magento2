@@ -23,6 +23,8 @@
  */
 namespace Magento\Catalog\Block\Product;
 
+use Magento\Customer\Model\Context as CustomerContext;
+
 /**
  * New products block
  *
@@ -116,7 +118,7 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct implemen
            'CATALOG_PRODUCT_NEW',
            $this->_storeManager->getStore()->getId(),
            $this->_design->getDesignTheme()->getId(),
-           $this->httpContext->getValue(\Magento\Customer\Helper\Data::CONTEXT_GROUP),
+           $this->httpContext->getValue(CustomerContext::CONTEXT_GROUP),
            'template' => $this->getTemplate(),
            $this->getProductsCount()
         );

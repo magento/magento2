@@ -69,7 +69,7 @@
     <type name="Magento\Customer\Model\Session">
         <arguments>
             <argument name="configShare" xsi:type="object">Magento\Customer\Model\Config\Share\Proxy</argument>
-            <argument name="customerData" xsi:type="object">Magento\Customer\Helper\Data\Proxy</argument>
+            <argument name="customerUrl" xsi:type="object">Magento\Customer\Model\Url\Proxy</argument>
             <argument name="customerResource" xsi:type="object">Magento\Customer\Model\Resource\Customer\Proxy</argument>
             <argument name="storage" xsi:type="object">Magento\Customer\Model\Session\Storage</argument>
             <argument name="converter" xsi:type="object">Magento\Customer\Model\Converter\Proxy</argument>
@@ -104,12 +104,6 @@
         </arguments>
     </type>
     <type name="Magento\Customer\Model\Customer">
-        <arguments>
-            <argument name="customerData" xsi:type="object">Magento\Customer\Helper\Data\Proxy</argument>
-            <argument name="groupService" xsi:type="object">Magento\Customer\Service\V1\CustomerGroupServiceInterface\Proxy</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Customer\Helper\Data">
         <arguments>
             <argument name="groupService" xsi:type="object">Magento\Customer\Service\V1\CustomerGroupServiceInterface\Proxy</argument>
         </arguments>

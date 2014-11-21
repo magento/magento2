@@ -50,10 +50,10 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
         $this->service = new ReadService($this->quoteRepositoryMock, $this->converterMock);
     }
 
-    public  function testGetAddress()
+    public function testGetAddress()
     {
         $quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
-        $this->quoteRepositoryMock->expects($this->once())->method('get')
+        $this->quoteRepositoryMock->expects($this->once())->method('getActive')
             ->with('cartId')->will($this->returnValue($quoteMock));
 
         $addressMock = $this->getMock('\Magento\Sales\Model\Quote\Address', [], [], '', false);

@@ -23,6 +23,8 @@
  */
 namespace Magento\Customer\Block\Account;
 
+use Magento\Customer\Model\Context;
+
 /**
  * Test class for \Magento\Customer\Block\Account\RegisterLink
  */
@@ -55,15 +57,15 @@ class RegisterLinkTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $httpContext->expects($this->any())
             ->method('getValue')
-            ->with(\Magento\Customer\Helper\Data::CONTEXT_AUTH)
+            ->with(Context::CONTEXT_AUTH)
             ->will($this->returnValue($isAuthenticated));
 
-        $helperMock = $this->getMockBuilder('Magento\Customer\Helper\Data')
+        $registrationMock = $this->getMockBuilder('Magento\Customer\Model\Registration')
             ->disableOriginalConstructor()
-            ->setMethods(array('isRegistrationAllowed', 'getRegisterUrl'))
+            ->setMethods(array('isAllowed'))
             ->getMock();
-        $helperMock->expects($this->any())
-            ->method('isRegistrationAllowed')
+        $registrationMock->expects($this->any())
+            ->method('isAllowed')
             ->will($this->returnValue($isRegistrationAllowed));
 
         /** @var \Magento\Customer\Block\Account\RegisterLink $link */
@@ -72,7 +74,7 @@ class RegisterLinkTest extends \PHPUnit_Framework_TestCase
             array(
                 'context' => $context,
                 'httpContext' => $httpContext,
-                'customerHelper' => $helperMock,
+                'registration' => $registrationMock,
             )
         );
 
@@ -96,7 +98,7 @@ class RegisterLinkTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $helper = $this->getMockBuilder(
-            'Magento\Customer\Helper\Data'
+            'Magento\Customer\Model\Url'
         )->disableOriginalConstructor()->setMethods(
             array('getRegisterUrl')
         )->getMock();
@@ -107,7 +109,7 @@ class RegisterLinkTest extends \PHPUnit_Framework_TestCase
 
         $block = $this->_objectManager->getObject(
             'Magento\Customer\Block\Account\RegisterLink',
-            array('context' => $context, 'customerHelper' => $helper)
+            array('context' => $context, 'customerUrl' => $helper)
         );
         $this->assertEquals('register url', $block->getHref());
     }

@@ -26,10 +26,10 @@
 /**
  * New Customer block template
  *
- * @see \Magento\Customer\Block\Form\Login
+ * @var $this \Magento\Customer\Block\Form\Login
  */
 ?>
-<?php if ($this->helper('Magento\Customer\Helper\Data')->isRegistrationAllowed()): ?>
+<?php if ($this->getRegistration()->isAllowed()): ?>
 <div class="block new customer">
     <div class="title"><strong><?php echo __('New Customers') ?></strong></div>
     <div class="content">

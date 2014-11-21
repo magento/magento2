@@ -76,4 +76,14 @@ class Groupprice extends \Magento\Catalog\Model\Product\Attribute\Backend\Groupp
     {
         return __('We found a duplicate website group price customer group.');
     }
+
+    /**
+     * By default attribute value is considered non-scalar that can be stored in a generic way
+     *
+     * @return bool
+     */
+    public function isScalar()
+    {
+        return false;
+    }
 }

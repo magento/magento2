@@ -25,9 +25,9 @@
  */
 namespace Magento\Framework\Interception\Definition;
 
-use Magento\Framework\Interception\Definition;
+use Magento\Framework\Interception\DefinitionInterface;
 
-class Compiled implements Definition
+class Compiled implements DefinitionInterface
 {
     /**
      * List of plugin definitions

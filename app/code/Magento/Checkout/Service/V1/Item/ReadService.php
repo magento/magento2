@@ -67,7 +67,7 @@ class ReadService implements ReadServiceInterface
     {
         $output = [];
         /** @var  \Magento\Sales\Model\Quote $quote */
-        $quote = $this->quoteRepository->get($cartId);
+        $quote = $this->quoteRepository->getActive($cartId);
 
         /** @var  \Magento\Sales\Model\Quote\Item  $item */
         foreach ($quote->getAllItems() as $item) {

@@ -23,6 +23,12 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
+
+/**
+ * Class StockDataFilter
+ */
 class StockDataFilter
 {
     /**
@@ -31,16 +37,25 @@ class StockDataFilter
     const MAX_QTY_VALUE = 99999999.9999;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     protected $scopeConfig;
 
     /**
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @var StockConfigurationInterface
      */
-    public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig)
-    {
+    protected $stockConfiguration;
+
+    /**
+     * @param ScopeConfigInterface $scopeConfig
+     * @param StockConfigurationInterface $stockConfiguration
+     */
+    public function __construct(
+        ScopeConfigInterface $scopeConfig,
+        StockConfigurationInterface $stockConfiguration
+    ) {
         $this->scopeConfig = $scopeConfig;
+        $this->stockConfiguration = $stockConfiguration;
     }
 
     /**
@@ -56,10 +71,7 @@ class StockDataFilter
         }
 
         if ($stockData['use_config_manage_stock'] == 1 && !isset($stockData['manage_stock'])) {
-            $stockData['manage_stock'] = $this->scopeConfig->getValue(
-                \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_MANAGE_STOCK,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            );
+            $stockData['manage_stock'] = $this->stockConfiguration->getManageStock();
         }
         if (isset($stockData['qty']) && (double)$stockData['qty'] > self::MAX_QTY_VALUE) {
             $stockData['qty'] = self::MAX_QTY_VALUE;

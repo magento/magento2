@@ -30,8 +30,7 @@ use Mtf\Factory\Factory;
 use Mtf\Client\Element\Locator;
 
 /**
- * Class SearchResultsList
- * Product list
+ * Product list.
  */
 class ListProduct extends Block
 {
@@ -57,46 +56,53 @@ class ListProduct extends Block
     protected $productDetailsSelector = '//*[contains(@class, "product details") and .//*[@title="%s"]]';
 
     /**
-     * Product name
+     * Product name.
      *
      * @var string
      */
     protected $productTitle = '.product.name [title="%s"]';
 
     /**
-     * Click for Price link on category page
+     * Click for Price link on category page.
      *
      * @var string
      */
     protected $clickForPrice = "//div[contains(@class, 'product details') and ('%s')]//a[contains(@id, 'msrp-popup')]";
 
     /**
-     * Minimum Advertised Price on category page
+     * Minimum Advertised Price on category page.
      *
      * @var string
      */
     protected $oldPrice = ".old-price .price-container";
 
     /**
-     * 'Add to Card' button
+     * 'Add to Card' button.
      *
      * @var string
      */
     protected $addToCard = "button.action.tocart";
 
     /**
-     * Price box CSS selector
-     * 
+     * Price box CSS selector.
+     *
      * @var string
      */
     protected $priceBox = '.price-box #product-price-%s .price';
 
     /**
-     * Popup map price
+     * Popup map price.
      *
      * @var string
      */
     protected $mapPopupPrice = '//ancestor::*[@id="map-popup-click-for-price"]';
+
+    /**
+     * Sorter dropdown selector.
+     *
+     * @var string
+     */
+    protected $sorter = '#sorter';
 
     /**
      * This method returns the price box block for the named product.
@@ -112,7 +118,7 @@ class ListProduct extends Block
     }
 
     /**
-     * Check if product with specified name is visible
+     * Check if product with specified name is visible.
      *
      * @param string $productName
      * @return bool
@@ -133,7 +139,7 @@ class ListProduct extends Block
     }
 
     /**
-     * Open product view page by clicking on product name
+     * Open product view page by clicking on product name.
      *
      * @param string $productName
      * @return void
@@ -169,7 +175,7 @@ class ListProduct extends Block
     }
 
     /**
-     * Open MAP block on category page
+     * Open MAP block on category page.
      *
      * @param string $productName
      * @return void
@@ -181,7 +187,7 @@ class ListProduct extends Block
     }
 
     /**
-     * Get Minimum Advertised Price on Category page
+     * Get Minimum Advertised Price on Category page.
      *
      * @return string
      */
@@ -191,7 +197,7 @@ class ListProduct extends Block
     }
 
     /**
-     * Retrieve product price by specified Id
+     * Retrieve product price by specified Id.
      *
      * @param int $productId
      * @return string
@@ -203,12 +209,22 @@ class ListProduct extends Block
     }
 
     /**
-     * Check 'Add To Card' button availability
+     * Check 'Add To Card' button availability.
      *
      * @return bool
      */
     public function checkAddToCardButton()
     {
         return $this->_rootElement->find($this->addToCard, Locator::SELECTOR_CSS)->isVisible();
+    }
+
+    /**
+     * Get all terms used in sort.
+     *
+     * @return array
+     */
+    public function getSortByValues()
+    {
+        return explode("\n", $this->_rootElement->find($this->sorter)->getText());
     }
 }

@@ -23,7 +23,7 @@
  */
 
 $rootDir = realpath(__DIR__ . '/../../../../../../../');
+$testsBaseDir = realpath(__DIR__ . '/../../../../');
+
 require_once $rootDir . '/app/bootstrap.php';
-$includePath = new \Magento\Framework\Autoload\IncludePath();
-spl_autoload_register([$includePath, 'load']);
-$includePath->addIncludePath($rootDir . '/dev/tests/integration/framework');
+require_once $testsBaseDir . '/framework/autoload.php';

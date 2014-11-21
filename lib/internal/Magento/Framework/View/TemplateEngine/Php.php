@@ -41,16 +41,16 @@ class Php implements TemplateEngineInterface
     /**
      * Helper factory
      *
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_helperFactory;
 
     /**
      * Constructor
      *
-     * @param \Magento\Framework\ObjectManager $helperFactory
+     * @param \Magento\Framework\ObjectManagerInterface $helperFactory
      */
-    public function __construct(\Magento\Framework\ObjectManager $helperFactory)
+    public function __construct(\Magento\Framework\ObjectManagerInterface $helperFactory)
     {
         $this->_helperFactory = $helperFactory;
     }

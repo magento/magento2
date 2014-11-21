@@ -28,7 +28,7 @@ use Magento\Customer\Service\V1\CustomerMetadataServiceInterface;
 use Magento\Customer\Service\V1\Data\Customer;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Customer\Helper\Address as AddressHelper;
-use Magento\Customer\Helper\Data as CustomerHelper;
+use Magento\Customer\Model\Options;
 
 /**
  * Widget for showing customer name.
@@ -44,16 +44,16 @@ class Name extends AbstractWidget
     protected $_addressMetadataService;
 
     /**
-     * @var CustomerHelper
+     * @var Options
      */
-    protected $_customerHelper;
+    protected $options;
 
     /**
      * @param Context $context
      * @param AddressHelper $addressHelper
      * @param CustomerMetadataServiceInterface $customerMetadataService
      * @param AddressMetadataServiceInterface $addressMetadataService
-     * @param CustomerHelper $customerHelper
+     * @param Options $options
      * @param array $data
      */
     public function __construct(
@@ -61,10 +61,10 @@ class Name extends AbstractWidget
         AddressHelper $addressHelper,
         CustomerMetadataServiceInterface $customerMetadataService,
         AddressMetadataServiceInterface $addressMetadataService,
-        CustomerHelper $customerHelper,
+        Options $options,
         array $data = array()
     ) {
-        $this->_customerHelper = $customerHelper;
+        $this->options = $options;
         parent::__construct($context, $addressHelper, $customerMetadataService, $data);
         $this->_addressMetadataService = $addressMetadataService;
         $this->_isScopePrivate = true;
@@ -119,7 +119,7 @@ class Name extends AbstractWidget
      */
     public function getPrefixOptions()
     {
-        $prefixOptions = $this->_customerHelper->getNamePrefixOptions();
+        $prefixOptions = $this->options->getNamePrefixOptions();
 
         if ($this->getObject() && !empty($prefixOptions)) {
             $oldPrefix = $this->escapeHtml(trim($this->getObject()->getPrefix()));
@@ -175,7 +175,7 @@ class Name extends AbstractWidget
      */
     public function getSuffixOptions()
     {
-        $suffixOptions = $this->_customerHelper->getNameSuffixOptions();
+        $suffixOptions = $this->options->getNameSuffixOptions();
         if ($this->getObject() && !empty($suffixOptions)) {
             $oldSuffix = $this->escapeHtml(trim($this->getObject()->getSuffix()));
             $suffixOptions[$oldSuffix] = $oldSuffix;

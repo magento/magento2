@@ -31,7 +31,7 @@ class DocumentFactory
     /**
      * Object Manager instance
      *
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
 
@@ -41,11 +41,11 @@ class DocumentFactory
     private $entityMetadata;
 
     /**
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Search\EntityMetadata $entityMetadata
      */
     public function __construct(
-        \Magento\Framework\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\Search\EntityMetadata $entityMetadata
     ) {
         $this->objectManager = $objectManager;

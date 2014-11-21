@@ -39,7 +39,7 @@ class FormKeyTest extends \PHPUnit_Framework_TestCase
     /**
      * Cookie mock
      *
-     * @var \Magento\Framework\Stdlib\CookieManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\CookieManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $cookieManagerMock;
 
@@ -49,8 +49,7 @@ class FormKeyTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->cookieManagerMock = $this->getMockBuilder('Magento\Framework\Stdlib\CookieManager')
-            ->disableOriginalConstructor()->getMock();
+        $this->cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface');
         $this->formKey = $objectManager->getObject(
             'Magento\Framework\App\PageCache\FormKey',
             ['cookieManager' => $this->cookieManagerMock]

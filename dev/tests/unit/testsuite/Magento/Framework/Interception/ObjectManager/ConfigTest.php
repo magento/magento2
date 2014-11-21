@@ -38,7 +38,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->interceptionConfig = $this->getMock('\Magento\Framework\Interception\Config');
+        $this->interceptionConfig = $this->getMock('\Magento\Framework\Interception\ConfigInterface');
         $this->model = new Config();
     }
 

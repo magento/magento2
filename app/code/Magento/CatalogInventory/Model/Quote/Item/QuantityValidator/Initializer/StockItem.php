@@ -23,37 +23,46 @@
  */
 namespace Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer;
 
-/**
- * Class StockItem
- */
+use Magento\CatalogInventory\Api\StockStateInterface;
+use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList;
+use Magento\Catalog\Model\ProductTypes\ConfigInterface;
+
 class StockItem
 {
     /**
-     * @var QtyProcessor
+     * @var QuoteItemQtyList
      */
-    protected $qtyProcessor;
+    protected $quoteItemQtyList;
 
     /**
-     * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface
+     * @var ConfigInterface
      */
     protected $typeConfig;
 
     /**
-     * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $typeConfig
-     * @param QtyProcessor $qtyProcessor
+     * @var StockStateInterface
+     */
+    protected $stockState;
+
+    /**
+     * @param ConfigInterface $typeConfig
+     * @param QuoteItemQtyList $quoteItemQtyList
+     * @param StockStateInterface $stockState
      */
     public function __construct(
-        \Magento\Catalog\Model\ProductTypes\ConfigInterface $typeConfig,
-        QtyProcessor $qtyProcessor
+        ConfigInterface $typeConfig,
+        QuoteItemQtyList $quoteItemQtyList,
+        StockStateInterface $stockState
     ) {
-        $this->qtyProcessor = $qtyProcessor;
+        $this->quoteItemQtyList = $quoteItemQtyList;
         $this->typeConfig = $typeConfig;
+        $this->stockState = $stockState;
     }
 
     /**
      * Initialize stock item
      *
-     * @param \Magento\CatalogInventory\Model\Stock\Item $stockItem
+     * @param \Magento\CatalogInventory\Api\Data\StockItemInterface $stockItem
      * @param \Magento\Sales\Model\Quote\Item $quoteItem
      * @param int $qty
      *
@@ -61,13 +70,30 @@ class StockItem
      * @throws \Magento\Framework\Model\Exception
      */
     public function initialize(
-        \Magento\CatalogInventory\Model\Stock\Item $stockItem,
+        \Magento\CatalogInventory\Api\Data\StockItemInterface $stockItem,
         \Magento\Sales\Model\Quote\Item $quoteItem,
         $qty
     ) {
-        $this->qtyProcessor->setItem($quoteItem);
-        $rowQty = $this->qtyProcessor->getRowQty($qty);
-        $qtyForCheck = $this->qtyProcessor->getQtyForCheck($qty);
+        /**
+         * When we work with subitem
+         */
+        if ($quoteItem->getParentItem()) {
+            $rowQty = $quoteItem->getParentItem()->getQty() * $qty;
+            /**
+             * we are using 0 because original qty was processed
+             */
+            $qtyForCheck = $this->quoteItemQtyList
+                ->getQty($quoteItem->getProduct()->getId(), $quoteItem->getId(), $quoteItem->getQuoteId(), 0);
+        } else {
+            $increaseQty = $quoteItem->getQtyToAdd() ? $quoteItem->getQtyToAdd() : $qty;
+            $rowQty = $qty;
+            $qtyForCheck = $this->quoteItemQtyList->getQty(
+                $quoteItem->getProduct()->getId(),
+                $quoteItem->getId(),
+                $quoteItem->getQuoteId(),
+                $increaseQty
+            );
+        }
 
         $productTypeCustomOption = $quoteItem->getProduct()->getCustomOption('product_type');
         if (!is_null($productTypeCustomOption)) {
@@ -79,8 +105,13 @@ class StockItem
 
         $stockItem->setProductName($quoteItem->getProduct()->getName());
 
-        $stockItem->setProduct($quoteItem->getProduct());
-        $result = $stockItem->checkQuoteItemQty($rowQty, $qtyForCheck, $qty);
+        $result = $this->stockState->checkQuoteItemQty(
+            $quoteItem->getProduct()->getId(),
+            $rowQty,
+            $qtyForCheck,
+            $qty,
+            $quoteItem->getProduct()->getStore()->getWebsiteId()
+        );
 
         if ($stockItem->hasIsChildItem()) {
             $stockItem->unsIsChildItem();
@@ -99,10 +130,10 @@ class StockItem
          * exception for updating also managed by product type
          */
         if ($result->getHasQtyOptionUpdate() && (!$quoteItem->getParentItem() ||
-            $quoteItem->getParentItem()->getProduct()->getTypeInstance()->getForceChildItemQtyChanges(
-                $quoteItem->getParentItem()->getProduct()
+                $quoteItem->getParentItem()->getProduct()->getTypeInstance()->getForceChildItemQtyChanges(
+                    $quoteItem->getParentItem()->getProduct()
+                )
             )
-        )
         ) {
             $quoteItem->setData('qty', $result->getOrigQty());
         }

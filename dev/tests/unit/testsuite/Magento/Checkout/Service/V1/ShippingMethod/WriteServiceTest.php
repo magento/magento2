@@ -106,7 +106,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         $carrierCode = 34;
         $methodCode = 56;
         $this->quoteRepositoryMock->expects($this->once())
-            ->method('get')->with($cartId)->will($this->returnValue($this->quoteMock));
+            ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
         $this->quoteMock->expects($this->once())->method('getItemsCount')->will($this->returnValue(0));
         $this->quoteMock->expects($this->never())->method('isVirtual');
 
@@ -124,7 +124,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         $methodCode = 56;
 
         $this->quoteRepositoryMock->expects($this->once())
-            ->method('get')->with($cartId)->will($this->returnValue($this->quoteMock));
+            ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
         $this->quoteMock->expects($this->once())->method('getItemsCount')->will($this->returnValue(1));
         $this->quoteMock->expects($this->once())->method('isVirtual')->will($this->returnValue(true));
 
@@ -141,7 +141,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         $carrierCode = 34;
         $methodCode = 56;
         $this->quoteRepositoryMock->expects($this->once())
-            ->method('get')->with($cartId)->will($this->returnValue($this->quoteMock));
+            ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
         $this->quoteMock->expects($this->once())->method('getItemsCount')->will($this->returnValue(1));
         $this->quoteMock->expects($this->once())->method('isVirtual')->will($this->returnValue(false));
         $this->quoteMock->expects($this->once())
@@ -163,7 +163,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         $countryId = 1;
 
         $this->quoteRepositoryMock->expects($this->once())
-            ->method('get')->with($cartId)->will($this->returnValue($this->quoteMock));
+            ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
         $this->quoteMock->expects($this->once())->method('getItemsCount')->will($this->returnValue(1));
         $this->quoteMock->expects($this->once())->method('isVirtual')->will($this->returnValue(false));
         $this->quoteMock->expects($this->once())
@@ -195,7 +195,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         $methodCode = 56;
         $countryId = 1;
         $this->quoteRepositoryMock->expects($this->once())
-            ->method('get')->with($cartId)->will($this->returnValue($this->quoteMock));
+            ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
         $this->quoteMock->expects($this->once())->method('getItemsCount')->will($this->returnValue(1));
         $this->quoteMock->expects($this->once())->method('isVirtual')->will($this->returnValue(false));
         $this->quoteMock->expects($this->once())
@@ -233,7 +233,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         $countryId = 1;
 
         $this->quoteRepositoryMock->expects($this->once())
-            ->method('get')->with($cartId)->will($this->returnValue($this->quoteMock));
+            ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
         $this->quoteMock->expects($this->once())->method('getItemsCount')->will($this->returnValue(1));
         $this->quoteMock->expects($this->once())->method('isVirtual')->will($this->returnValue(false));
         $this->quoteMock->expects($this->once())
@@ -259,7 +259,10 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
             ->method('requestShippingRates')->will($this->returnValue(true));
         $exception = new \Exception('Custom Error');
         $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnSelf());
-        $this->quoteMock->expects($this->once())->method('save')->will($this->throwException($exception));
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('save')
+            ->with($this->quoteMock)
+            ->willThrowException($exception);
 
         $this->service->setMethod($cartId, $carrierCode, $methodCode);
     }
@@ -274,7 +277,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         $carrierCode = 34;
         $methodCode = 56;
         $this->quoteRepositoryMock->expects($this->once())
-            ->method('get')->with($cartId)->will($this->returnValue($this->quoteMock));
+            ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
         $this->quoteMock->expects($this->once())->method('getItemsCount')->will($this->returnValue(1));
         $this->quoteMock->expects($this->once())->method('isVirtual')->will($this->returnValue(false));
         $this->quoteMock->expects($this->once())
@@ -291,7 +294,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         $methodCode = 56;
         $countryId = 1;
         $this->quoteRepositoryMock->expects($this->once())
-            ->method('get')->with($cartId)->will($this->returnValue($this->quoteMock));
+            ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
         $this->quoteMock->expects($this->once())->method('getItemsCount')->will($this->returnValue(1));
         $this->quoteMock->expects($this->once())->method('isVirtual')->will($this->returnValue(false));
         $this->quoteMock->expects($this->once())
@@ -316,7 +319,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         $this->shippingAddressMock->expects($this->once())
             ->method('requestShippingRates')->will($this->returnValue(true));
         $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnSelf());
-        $this->quoteMock->expects($this->once())->method('save');
+        $this->quoteRepositoryMock->expects($this->once())->method('save')->with($this->quoteMock);
 
         $this->assertTrue($this->service->setMethod($cartId, $carrierCode, $methodCode));
     }

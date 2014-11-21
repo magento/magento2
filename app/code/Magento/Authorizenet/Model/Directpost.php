@@ -78,9 +78,9 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet
     protected $_storeManager;
 
     /**
-     * @var \Magento\Sales\Model\QuoteFactory
+     * @var \Magento\Sales\Model\QuoteRepository
      */
-    protected $_quoteFactory;
+    protected $quoteRepository;
 
     /**
      * @var \Magento\Authorizenet\Model\Directpost\Response
@@ -113,7 +113,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Authorizenet\Helper\Data $authorizenetData
      * @param \Magento\Framework\StoreManagerInterface $storeManager
-     * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
+     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository
      * @param \Magento\Authorizenet\Model\Directpost\RequestFactory $directRequestFactory
      * @param \Magento\Authorizenet\Model\Directpost\Response $response
      * @param \Magento\Authorizenet\Helper\HelperInterface $helper
@@ -138,7 +138,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet
         \Magento\Framework\Session\SessionManagerInterface $session,
         \Magento\Authorizenet\Helper\Data $authorizenetData,
         \Magento\Framework\StoreManagerInterface $storeManager,
-        \Magento\Sales\Model\QuoteFactory $quoteFactory,
+        \Magento\Sales\Model\QuoteRepository $quoteRepository,
         \Magento\Authorizenet\Model\Directpost\RequestFactory $directRequestFactory,
         \Magento\Authorizenet\Model\Directpost\Response $response,
         \Magento\Authorizenet\Helper\HelperInterface $helper,
@@ -163,7 +163,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet
             $data
         );
         $this->_storeManager = $storeManager;
-        $this->_quoteFactory = $quoteFactory;
+        $this->quoteRepository = $quoteRepository;
         $this->_requestFactory = $directRequestFactory;
         $this->_response = $response;
         $this->_helper = $helper;
@@ -718,7 +718,8 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet
                 $this->orderSender->send($order);
             }
 
-            $this->_quoteFactory->create()->load($order->getQuoteId())->setIsActive(false)->save();
+            $quote = $this->quoteRepository->get($order->getQuoteId())->setIsActive(false);
+            $this->quoteRepository->save($quote);
         } catch (\Exception $e) {
             // do not cancel order if we couldn't send email
         }

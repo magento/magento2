@@ -23,7 +23,7 @@
  */
 namespace Magento\Framework\ObjectManager\Relations;
 
-class Runtime implements \Magento\Framework\ObjectManager\Relations
+class Runtime implements \Magento\Framework\ObjectManager\RelationsInterface
 {
     /**
      * @var \Magento\Framework\Code\Reader\ClassReader

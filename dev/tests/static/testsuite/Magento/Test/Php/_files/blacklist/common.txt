@@ -34,6 +34,7 @@ dev/tests/static/testsuite/Magento/Test/Php/Exemplar/CodeStyleTest/phpcs/input
 dev/tests/static/testsuite/Magento/Test/Php/Exemplar/CodeStyleTest/phpcs/expected
 dev/tests/static/testsuite/Magento/Test/Legacy/_files
 dev/tests/unit/testsuite/Magento/Core/Model/Resource/Db/AbstractTest.php
+dev/tests/unit/testsuite/Magento/Framework/Code/Validator/_files
 dev/tests/unit/testsuite/Magento/Framework/Session/ConfigTest.php
 dev/tests/unit/testsuite/Magento/Framework/View/TemplateEngine/_files
 lib/internal/Magento/Framework/App/Config/Element.php
@@ -105,7 +106,7 @@ lib/internal/Magento/Framework/HTTP/Adapter/Curl.php
 lib/internal/Magento/Framework/HTTP/Client.php
 lib/internal/Magento/Framework/HTTP/Client/Curl.php
 lib/internal/Magento/Framework/HTTP/Client/Socket.php
-lib/internal/Magento/Framework/HTTP/IClient.php
+lib/internal/Magento/Framework/HTTP/ClientInterface.php
 lib/internal/Magento/Framework/Image
 lib/internal/Magento/Framework/Image.php
 lib/internal/Magento/Framework/Io

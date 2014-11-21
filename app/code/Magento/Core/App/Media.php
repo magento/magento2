@@ -29,14 +29,14 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\State;
 use Magento\Framework\App;
 use Magento\Framework\AppInterface;
-use Magento\Framework\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Core\Model\File\Storage\Request;
 use Magento\Core\Model\File\Storage\Response;
 
 class Media implements AppInterface
 {
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
 
@@ -96,7 +96,7 @@ class Media implements AppInterface
     protected $directory;
 
     /**
-     * @param ObjectManager $objectManager
+     * @param ObjectManagerInterface $objectManager
      * @param Request $request
      * @param Response $response
      * @param \Closure $isAllowed
@@ -107,7 +107,7 @@ class Media implements AppInterface
      * @param \Magento\Framework\Filesystem $filesystem
      */
     public function __construct(
-        ObjectManager $objectManager,
+        ObjectManagerInterface $objectManager,
         Request $request,
         Response $response,
         \Closure $isAllowed,

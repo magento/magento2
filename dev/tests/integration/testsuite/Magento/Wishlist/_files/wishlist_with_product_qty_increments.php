@@ -25,7 +25,7 @@
 require __DIR__ . '/../../../Magento/Customer/_files/customer.php';
 require __DIR__ . '/../../../Magento/Catalog/_files/product_special_price.php';
 
-/** @var \Magento\Framework\ObjectManager $objectManager */
+/** @var \Magento\Framework\ObjectManagerInterface $objectManager */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 /** @var \Magento\Catalog\Model\Product $product */

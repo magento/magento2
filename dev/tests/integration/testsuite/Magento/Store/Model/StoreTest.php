@@ -69,7 +69,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             'storeManager' => $objectManager->get('Magento\Store\Model\StoreManager'),
             'sidResolver' => $objectManager->get('Magento\Framework\Session\SidResolverInterface'),
             'cookieMetadataFactory' => $objectManager->get('Magento\Framework\Stdlib\Cookie\CookieMetadataFactory'),
-            'cookieManager' => $objectManager->get('Magento\Framework\Stdlib\CookieManager'),
+            'cookieManager' => $objectManager->get('Magento\Framework\Stdlib\CookieManagerInterface'),
             'httpContext' => $objectManager->get('Magento\Framework\App\Http\Context'),
             'session' => $objectManager->get('Magento\Framework\Session\SessionManagerInterface'),
             'currencyFactory' => $objectManager->get('Magento\Directory\Model\CurrencyFactory'),

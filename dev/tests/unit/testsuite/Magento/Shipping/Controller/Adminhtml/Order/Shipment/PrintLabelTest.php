@@ -66,7 +66,7 @@ class PrintLabelTest extends \PHPUnit_Framework_TestCase
     protected $messageManagerMock;
 
     /**
-     * @var \Magento\Framework\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectManagerMock;
 
@@ -131,13 +131,7 @@ class PrintLabelTest extends \PHPUnit_Framework_TestCase
         $this->responseMock = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
         $this->sessionMock = $this->getMock('Magento\Backend\Model\Session', ['setIsUrlNotice'], [], '', false);
         $this->actionFlag = $this->getMock('Magento\Framework\App\ActionFlag', ['get'], [], '', false);
-        $this->objectManagerMock = $this->getMock(
-            'Magento\Framework\ObjectManager',
-            ['create', 'get', 'configure'],
-            [],
-            '',
-            false
-        );
+        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->helperMock = $this->getMock(
             'Magento\Backend\Helper\Data',
             ['getUrl'],

@@ -23,7 +23,7 @@
  */
 namespace Magento\Framework\View\Layout\Argument\Interpreter;
 
-use Magento\Framework\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Data\Argument\InterpreterInterface;
 
 /**
@@ -32,7 +32,7 @@ use Magento\Framework\Data\Argument\InterpreterInterface;
 class HelperMethod implements InterpreterInterface
 {
     /**
-     * @var ObjectManager
+     * @var ObjectManagerInterface
      */
     private $objectManager;
 
@@ -42,10 +42,10 @@ class HelperMethod implements InterpreterInterface
     private $paramsInterpreter;
 
     /**
-     * @param ObjectManager $objectManager
+     * @param ObjectManagerInterface $objectManager
      * @param NamedParams $paramsInterpreter
      */
-    public function __construct(ObjectManager $objectManager, NamedParams $paramsInterpreter)
+    public function __construct(ObjectManagerInterface $objectManager, NamedParams $paramsInterpreter)
     {
         $this->objectManager = $objectManager;
         $this->paramsInterpreter = $paramsInterpreter;

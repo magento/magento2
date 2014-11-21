@@ -61,23 +61,31 @@ class AbstractItems extends \Magento\Backend\Block\Template
     protected $_coreRegistry;
 
     /**
-     * @var \Magento\CatalogInventory\Service\V1\StockItemService
+     * @var \Magento\CatalogInventory\Api\StockRegistryInterface
      */
-    protected $stockItemService;
+    protected $stockRegistry;
+
+    /**
+     * @var \Magento\CatalogInventory\Api\StockConfigurationInterface
+     */
+    protected $stockConfiguration;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
+     * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
+     * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
      * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService,
+        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
+        \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
         \Magento\Framework\Registry $registry,
         array $data = array()
     ) {
-        $this->stockItemService = $stockItemService;
+        $this->stockRegistry = $stockRegistry;
+        $this->stockConfiguration = $stockConfiguration;
         $this->_coreRegistry = $registry;
         parent::__construct($context, $data);
     }
@@ -466,21 +474,12 @@ class AbstractItems extends \Magento\Backend\Block\Template
     }
 
     /**
-     * CREDITMEMO
-     *
+     * @param \Magento\Store\Model\Store $store
      * @return bool
      */
-    public function canReturnToStock()
+    public function canReturnToStock($store = null)
     {
-        $canSubtract = $this->_scopeConfig->getValue(
-            \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_CAN_SUBTRACT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
-        if ($canSubtract) {
-            return true;
-        } else {
-            return false;
-        }
+        return $this->stockConfiguration->canSubtractQty($store);
     }
 
     /**
@@ -493,21 +492,16 @@ class AbstractItems extends \Magento\Backend\Block\Template
     {
         if (null !== $item) {
             if (!$item->hasCanReturnToStock()) {
-                $productId = $item->getOrderItem()->getProductId();
-                if ($productId && $this->stockItemService->getManageStock($productId)) {
-                    $item->setCanReturnToStock(true);
-                } else {
-                    $item->setCanReturnToStock(false);
-                }
+                $stockItem = $this->stockRegistry->getStockItem(
+                    $item->getOrderItem()->getProductId(),
+                    $item->getOrderItem()->getStore()->getWebsiteId()
+                );
+                $item->setCanReturnToStock($stockItem->getManageStock());
             }
-            $canReturnToStock = $item->getCanReturnToStock();
-        } else {
-            $canReturnToStock = $this->_scopeConfig->getValue(
-                \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_CAN_SUBTRACT,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            );
+            return $item->getCanReturnToStock();
         }
-        return $canReturnToStock;
+
+        return $this->canReturnToStock();
     }
 
     /**
@@ -518,18 +512,14 @@ class AbstractItems extends \Magento\Backend\Block\Template
      */
     public function canParentReturnToStock($item = null)
     {
-        $canReturnToStock = $this->_scopeConfig->getValue(
-            \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_CAN_SUBTRACT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
         if (!is_null($item)) {
             if ($item->getCreditmemo()->getOrder()->hasCanReturnToStock()) {
-                $canReturnToStock = $item->getCreditmemo()->getOrder()->getCanReturnToStock();
+                return $item->getCreditmemo()->getOrder()->getCanReturnToStock();
             }
         } elseif ($this->getOrder()->hasCanReturnToStock()) {
-            $canReturnToStock = $this->getOrder()->getCanReturnToStock();
+            return $this->getOrder()->getCanReturnToStock();
         }
-        return $canReturnToStock;
+        return $this->canReturnToStock();
     }
 
     /**

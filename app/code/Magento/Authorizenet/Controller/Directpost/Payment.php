@@ -134,10 +134,17 @@ class Payment extends \Magento\Framework\App\Action\Action
             /* @var $order \Magento\Sales\Model\Order */
             $order = $this->_objectManager->create('Magento\Sales\Model\Order')->loadByIncrementId($incrementId);
             if ($order->getId()) {
-                $quote = $this->_objectManager->create('Magento\Sales\Model\Quote')->load($order->getQuoteId());
-                if ($quote->getId()) {
-                    $quote->setIsActive(1)->setReservedOrderId(null)->save();
+                try {
+                    /** @var \Magento\Sales\Model\QuoteRepository $quoteRepository */
+                    $quoteRepository = $this->_objectManager->create('Magento\Sales\Model\QuoteRepository');
+                    /** @var \Magento\Sales\Model\Quote $quote */
+                    $quote = $quoteRepository->get($order->getQuoteId());
+
+                    $quote->setIsActive(1)->setReservedOrderId(null);
+                    $quoteRepository->save($quote);
                     $this->_getCheckout()->replaceQuote($quote);
+                } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+
                 }
                 $this->_getDirectPostSession()->removeCheckoutOrderIncrementId($incrementId);
                 $this->_getDirectPostSession()->unsetData('quote_id');

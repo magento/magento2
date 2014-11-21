@@ -31,7 +31,7 @@ class AdapterFactory
     protected $config;
 
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
 
@@ -41,12 +41,12 @@ class AdapterFactory
     protected $adapterMap;
 
     /**
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param Adapter\ConfigInterface $config
      * @param array $adapterMap
      */
     public function __construct(
-        \Magento\Framework\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\Image\Adapter\ConfigInterface $config,
         array $adapterMap = array()
     ) {

@@ -31,7 +31,7 @@ class CssTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_objectManager;
 
@@ -47,7 +47,7 @@ class CssTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManager');
+        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->urlBuilder = $this->getMock('Magento\Backend\Model\Url', [], [], '', false);
         $this->urlCoder = $this->getMock('Magento\Framework\Encryption\UrlCoder', [], [], '', false);
 

@@ -140,6 +140,22 @@ class Calculator implements BundleCalculatorInterface
     }
 
     /**
+     * Get base amount without option
+     *
+     * @param float $amount
+     * @param Product $saleableItem
+     * @return \Magento\Framework\Pricing\Amount\AmountInterface|void
+     */
+    public function getAmountWithoutOption($amount, Product $saleableItem)
+    {
+        return $this->calculateBundleAmount(
+            $amount,
+            $saleableItem,
+            []
+        );
+    }
+
+    /**
      * Filter all options for bundle product
      *
      * @param Product $bundleProduct

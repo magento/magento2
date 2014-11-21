@@ -79,9 +79,9 @@ class Context extends \Magento\Framework\View\Element\Template\Context
     protected $reviewRenderer;
 
     /**
-     * @var \Magento\CatalogInventory\Service\V1\StockItemService
+     * @var \Magento\CatalogInventory\Api\StockRegistryInterface
      */
-    protected $stockItemService;
+    protected $stockRegistry;
 
     /**
      * @var \Magento\Framework\View\Page\Config
@@ -122,7 +122,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
      * @param \Magento\Catalog\Helper\Product\Compare $compareProduct
      * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param ReviewRendererInterface $reviewRenderer
-     * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
+     * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\Framework\View\Page\Config $pageConfig
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -162,7 +162,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
         \Magento\Catalog\Helper\Product\Compare $compareProduct,
         \Magento\Catalog\Helper\Image $imageHelper,
         ReviewRendererInterface $reviewRenderer,
-        \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
+        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
     ) {
         $this->imageHelper = $imageHelper;
         $this->compareProduct = $compareProduct;
@@ -174,7 +174,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
         $this->catalogHelper = $catalogHelper;
         $this->mathRandom = $mathRandom;
         $this->reviewRenderer = $reviewRenderer;
-        $this->stockItemService = $stockItemService;
+        $this->stockRegistry = $stockRegistry;
         parent::__construct(
             $request,
             $layout,
@@ -204,11 +204,11 @@ class Context extends \Magento\Framework\View\Element\Template\Context
     }
 
     /**
-     * @return \Magento\CatalogInventory\Service\V1\StockItemService
+     * @return \Magento\CatalogInventory\Api\StockRegistryInterface
      */
-    public function getStockItemService()
+    public function getStockRegistry()
     {
-        return $this->stockItemService;
+        return $this->stockRegistry;
     }
 
     /**

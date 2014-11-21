@@ -40,10 +40,10 @@ class ObjectManager extends \Magento\Framework\App\ObjectManager
     protected $persistedInstances = array(
         'Magento\Framework\App\Resource',
         'Magento\Framework\Config\Scope',
-        'Magento\Framework\ObjectManager\Relations',
-        'Magento\Framework\ObjectManager\Config',
-        'Magento\Framework\Interception\Definition',
-        'Magento\Framework\ObjectManager\Definition',
+        'Magento\Framework\ObjectManager\RelationsInterface',
+        'Magento\Framework\ObjectManager\ConfigInterface',
+        'Magento\Framework\Interception\DefinitionInterface',
+        'Magento\Framework\ObjectManager\DefinitionInterface',
         'Magento\Framework\Session\Config',
         'Magento\Framework\ObjectManager\Config\Mapper\Dom'
     );
@@ -63,7 +63,7 @@ class ObjectManager extends \Magento\Framework\App\ObjectManager
 
         \Magento\Framework\App\Config\Base::destroy();
         $sharedInstances = array(
-            'Magento\Framework\ObjectManager' => $this,
+            'Magento\Framework\ObjectManagerInterface' => $this,
             'Magento\Framework\App\ObjectManager' => $this
         );
         foreach ($this->persistedInstances as $persistedClass) {
@@ -101,16 +101,16 @@ class ObjectManager extends \Magento\Framework\App\ObjectManager
     /**
      * Set objectManager
      *
-     * @param \Magento\Framework\ObjectManager $objectManager
-     * @return \Magento\Framework\ObjectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @return \Magento\Framework\ObjectManagerInterface
      */
-    public static function setInstance(\Magento\Framework\ObjectManager $objectManager)
+    public static function setInstance(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
         return self::$_instance = $objectManager;
     }
 
     /**
-     * @return \Magento\Framework\ObjectManager\Factory|\Magento\Framework\ObjectManager\Factory\Factory
+     * @return \Magento\Framework\ObjectManager\FactoryInterface|\Magento\Framework\ObjectManager\Factory\Factory
      */
     public function getFactory()
     {

@@ -52,7 +52,7 @@ $this->addAttribute(
         'input' => 'select',
         'class' => '',
         'input_renderer' => 'Magento\CatalogInventory\Block\Adminhtml\Form\Field\Stock',
-        'source' => 'Magento\CatalogInventory\Model\Stock\Status',
+        'source' => 'Magento\CatalogInventory\Model\Source\Stock',
         'global' => \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_GLOBAL,
         'default' => \Magento\CatalogInventory\Model\Stock::STOCK_IN_STOCK,
         'user_defined' => false,

@@ -35,7 +35,7 @@ class Item extends \Magento\CatalogInventory\Model\Stock\Item
      */
     public function getCustomerGroupId()
     {
-        if ($this->_customerGroupId === null) {
+        if ($this->customerGroupId === null) {
             return \Magento\Customer\Service\V1\CustomerGroupServiceInterface::CUST_GROUP_ALL;
         }
         return parent::getCustomerGroupId();
@@ -65,6 +65,14 @@ class Item extends \Magento\CatalogInventory\Model\Stock\Item
      * @return bool
      */
     public function hasAdminArea()
+    {
+        return true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getShowDefaultNotificationMessage()
     {
         return true;
     }

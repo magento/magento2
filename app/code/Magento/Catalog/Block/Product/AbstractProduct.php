@@ -23,12 +23,15 @@
  */
 namespace Magento\Catalog\Block\Product;
 
+/**
+ * Class AbstractProduct
+ */
 class AbstractProduct extends \Magento\Framework\View\Element\Template
 {
     /**
      * @var array
      */
-    protected $_priceBlock = array();
+    protected $_priceBlock = [];
 
     /**
      * Flag which allow/disallow to use link for as low as price
@@ -49,7 +52,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      *
      * @var array
      */
-    protected $_columnCountLayoutDepend = array();
+    protected $_columnCountLayoutDepend = [];
 
     /**
      * Core registry
@@ -110,18 +113,16 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
     protected $reviewRenderer;
 
     /**
-     * @var \Magento\CatalogInventory\Service\V1\StockItemService
+     * @var \Magento\CatalogInventory\Api\StockRegistryInterface
      */
-    protected $stockItemService;
+    protected $stockRegistry;
 
     /**
      * @param Context $context
      * @param array $data
      */
-    public function __construct(
-        \Magento\Catalog\Block\Product\Context $context,
-        array $data = array()
-    ) {
+    public function __construct(\Magento\Catalog\Block\Product\Context $context, array $data = [])
+    {
         $this->_imageHelper = $context->getImageHelper();
         $this->_compareProduct = $context->getCompareProduct();
         $this->_wishlistHelper = $context->getWishlistHelper();
@@ -132,7 +133,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
         $this->_catalogData = $context->getCatalogHelper();
         $this->_mathRandom = $context->getMathRandom();
         $this->reviewRenderer = $context->getReviewRenderer();
-        $this->stockItemService = $context->getStockItemService();
+        $this->stockRegistry = $context->getStockRegistry();
         parent::__construct($context, $data);
     }
 
@@ -144,14 +145,14 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      * @param array $additional
      * @return string
      */
-    public function getAddToCartUrl($product, $additional = array())
+    public function getAddToCartUrl($product, $additional = [])
     {
         if ($product->getTypeInstance()->hasRequiredOptions($product)) {
             if (!isset($additional['_escape'])) {
                 $additional['_escape'] = true;
             }
             if (!isset($additional['_query'])) {
-                $additional['_query'] = array();
+                $additional['_query'] = [];
             }
             $additional['_query']['options'] = 'cart';
 
@@ -170,12 +171,12 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      * @param array $additional
      * @return string
      */
-    public function getSubmitUrl($product, $additional = array())
+    public function getSubmitUrl($product, $additional = [])
     {
         $submitRouteData = $this->getData('submit_route_data');
         if ($submitRouteData) {
             $route = $submitRouteData['route'];
-            $params = isset($submitRouteData['params']) ? $submitRouteData['params'] : array();
+            $params = isset($submitRouteData['params']) ? $submitRouteData['params'] : [];
             $submitUrl = $this->getUrl($route, array_merge($params, $additional));
         } else {
             $submitUrl = $this->getAddToCartUrl($product, $additional);
@@ -212,7 +213,8 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      */
     public function getMinimalQty($product)
     {
-        $minSaleQty = $this->stockItemService->getMinSaleQty($product->getId());
+        $stockItem = $this->stockRegistry->getStockItem($product->getId(), $product->getStore()->getWebsiteId());
+        $minSaleQty = $stockItem->getMinSaleQty();
         return $minSaleQty > 0 ? $minSaleQty : null;
     }
 
@@ -292,7 +294,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      * @param array $additional the route params
      * @return string
      */
-    public function getProductUrl($product, $additional = array())
+    public function getProductUrl($product, $additional = [])
     {
         if ($this->hasProductUrl($product)) {
             if (!isset($additional['_escape'])) {

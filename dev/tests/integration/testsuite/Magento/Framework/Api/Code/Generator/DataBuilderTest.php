@@ -32,14 +32,12 @@ use Magento\Framework\Api\AttributeInterface;
 
 class DataBuilderTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Framework\ObjectManager */
+    /** @var \Magento\Framework\ObjectManagerInterface */
     private $_objectManager;
 
     protected function setUp()
     {
-        $includePath = new \Magento\Framework\Autoload\IncludePath();
-        $includePath->addIncludePath([__DIR__ . '/../../_files']);
-        spl_autoload_register([$includePath, 'load']);
+        \Magento\Framework\Filesystem\FileResolver::addIncludePath([__DIR__ . '/../../_files']);
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_objectManager->configure(
             [

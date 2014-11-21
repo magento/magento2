@@ -53,8 +53,7 @@ class ForwardTest extends \PHPUnit_Framework_TestCase
         $cookieMetadataFactoryMock = $this->getMockBuilder(
             'Magento\Framework\Stdlib\Cookie\CookieMetadataFactory'
         )->disableOriginalConstructor()->getMock();
-        $cookieManagerMock = $this->getMockBuilder('Magento\Framework\Stdlib\CookieManager')
-            ->disableOriginalConstructor()->getMock();
+        $cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface');
         $contextMock = $this->getMockBuilder('Magento\Framework\App\Http\Context')->disableOriginalConstructor()
             ->getMock();
         $this->response = $objectManager->getObject(

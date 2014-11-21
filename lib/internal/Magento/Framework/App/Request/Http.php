@@ -100,21 +100,21 @@ class Http extends \Zend_Controller_Request_Http implements \Magento\Framework\A
     private $_pathInfoProcessor;
 
     /**
-     * @var \Magento\Framework\Stdlib\CookieManager
+     * @var \Magento\Framework\Stdlib\CookieManagerInterface
      */
     protected $_cookieManager;
 
     /**
      * @param \Magento\Framework\App\Route\ConfigInterface\Proxy $routeConfig
      * @param PathInfoProcessorInterface $pathInfoProcessor
-     * @param \Magento\Framework\Stdlib\CookieManager $cookieManager
+     * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
      * @param string $uri
      * @param array $directFrontNames
      */
     public function __construct(
         \Magento\Framework\App\Route\ConfigInterface\Proxy $routeConfig,
         PathInfoProcessorInterface $pathInfoProcessor,
-        \Magento\Framework\Stdlib\CookieManager $cookieManager,
+        \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
         $uri = null,
         $directFrontNames = array()
     ) {

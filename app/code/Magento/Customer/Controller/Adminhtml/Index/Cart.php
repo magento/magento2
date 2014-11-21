@@ -41,17 +41,23 @@ class Cart extends \Magento\Customer\Controller\Adminhtml\Index
         // delete an item from cart
         $deleteItemId = $this->getRequest()->getPost('delete');
         if ($deleteItemId) {
-            $quote = $this->_objectManager->create(
-                'Magento\Sales\Model\Quote'
-            )->setWebsite(
+            /** @var \Magento\Sales\Model\QuoteRepository $quoteRepository */
+            $quoteRepository = $this->_objectManager->create('Magento\Sales\Model\QuoteRepository');
+            /** @var \Magento\Sales\Model\Quote $quote */
+            try {
+                $quote = $quoteRepository->getForCustomer(
+                    $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID)
+                );
+            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+                $quote = $quoteRepository->create();
+            }
+            $quote->setWebsite(
                 $this->_objectManager->get('Magento\Framework\StoreManagerInterface')->getWebsite($websiteId)
-            )->loadByCustomer(
-                $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID)
             );
             $item = $quote->getItemById($deleteItemId);
             if ($item && $item->getId()) {
                 $quote->removeItem($deleteItemId);
-                $quote->collectTotals()->save();
+                $quoteRepository->save($quote->collectTotals());
             }
         }
 

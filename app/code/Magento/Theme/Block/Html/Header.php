@@ -24,8 +24,9 @@
 
 namespace Magento\Theme\Block\Html;
 
-use Magento\Customer\Helper\Data;
 use Magento\Customer\Helper\View as CustomerViewHelper;
+
+use Magento\Customer\Model\Context;
 
 /**
  * Html page header block
@@ -83,7 +84,7 @@ class Header extends \Magento\Framework\View\Element\Template
     public function getWelcome()
     {
         if (empty($this->_data['welcome'])) {
-            if ($this->httpContext->getValue(Data::CONTEXT_AUTH)) {
+            if ($this->httpContext->getValue(Context::CONTEXT_AUTH)) {
                 $customerName = $this->_customerViewHelper->getCustomerName(
                     $this->_customerSession->getCustomerDataObject()
                 );

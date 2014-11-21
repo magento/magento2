@@ -53,7 +53,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
     public function testGetAddress()
     {
         $quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
-        $this->quoteRepositoryMock->expects($this->once())->method('get')->with('cartId')->will(
+        $this->quoteRepositoryMock->expects($this->once())->method('getActive')->with('cartId')->will(
             $this->returnValue($quoteMock)
         );
 
@@ -74,7 +74,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
     public function testGetAddressOfQuoteWithVirtualProducts()
     {
         $quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
-        $this->quoteRepositoryMock->expects($this->once())->method('get')->with('cartId')->will(
+        $this->quoteRepositoryMock->expects($this->once())->method('getActive')->with('cartId')->will(
             $this->returnValue($quoteMock)
         );
 

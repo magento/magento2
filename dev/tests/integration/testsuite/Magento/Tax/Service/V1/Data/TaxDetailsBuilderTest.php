@@ -29,7 +29,7 @@ class TaxDetailsBuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * Object manager
      *
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
 

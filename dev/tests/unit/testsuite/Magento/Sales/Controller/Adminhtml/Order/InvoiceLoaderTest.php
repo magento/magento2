@@ -53,10 +53,7 @@ class InvoiceLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManager')
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
+        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->registryMock = $this->getMockBuilder('Magento\Framework\Registry')
             ->disableOriginalConstructor()
             ->setMethods([])

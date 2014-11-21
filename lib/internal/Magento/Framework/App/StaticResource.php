@@ -66,7 +66,7 @@ class StaticResource implements \Magento\Framework\AppInterface
     private $moduleList;
 
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
 
@@ -82,7 +82,7 @@ class StaticResource implements \Magento\Framework\AppInterface
      * @param \Magento\Framework\App\View\Asset\Publisher $publisher
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\Module\ModuleList $moduleList
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param ObjectManager\ConfigLoader $configLoader
      */
     public function __construct(
@@ -92,7 +92,7 @@ class StaticResource implements \Magento\Framework\AppInterface
         View\Asset\Publisher $publisher,
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\Module\ModuleList $moduleList,
-        \Magento\Framework\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
         ObjectManager\ConfigLoader $configLoader
     ) {
         $this->state = $state;

@@ -89,7 +89,7 @@ class TotalsServiceTest extends \PHPUnit_Framework_TestCase
     public function testGetTotals()
     {
         $cartId = 12;
-        $this->quoteRepositoryMock->expects($this->once())->method('get')->with($cartId)
+        $this->quoteRepositoryMock->expects($this->once())->method('getActive')->with($cartId)
             ->will($this->returnValue($this->quoteMock));
 
         $this->totalsMapperMock->expects($this->once())

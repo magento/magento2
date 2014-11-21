@@ -24,14 +24,14 @@
 
 namespace Magento\CheckoutAgreements\Test\TestCase;
 
-use Mtf\TestCase\Injectable;
 use Mtf\ObjectManager;
+use Mtf\TestCase\Injectable;
 use Magento\CheckoutAgreements\Test\Fixture\CheckoutAgreement;
 use Magento\CheckoutAgreements\Test\Page\Adminhtml\CheckoutAgreementNew;
 use Magento\CheckoutAgreements\Test\Page\Adminhtml\CheckoutAgreementIndex;
 
 /**
- * Test creation for DeleteTermEntityTest
+ * Test creation for DeleteTermEntityTest.
  *
  * Test Flow:
  *
@@ -51,34 +51,21 @@ use Magento\CheckoutAgreements\Test\Page\Adminhtml\CheckoutAgreementIndex;
 class DeleteTermEntityTest extends Injectable
 {
     /**
-     * Checkout agreement index page
+     * Checkout agreement index page.
      *
      * @var CheckoutAgreementIndex
      */
     protected $agreementIndex;
 
     /**
-     * Checkout agreement new page
+     * Checkout agreement new page.
      *
      * @var CheckoutAgreementNew
      */
     protected $agreementNew;
 
     /**
-     * Set up configuration
-     *
-     * @return void
-     */
-    public function __prepare()
-    {
-        $this->objectManager->create(
-            'Magento\Core\Test\TestStep\SetupConfigurationStep',
-            ['configData' => 'checkout_term_condition']
-        )->run();
-    }
-
-    /**
-     * Inject pages
+     * Inject data.
      *
      * @param CheckoutAgreementNew $agreementNew
      * @param CheckoutAgreementIndex $agreementIndex
@@ -90,10 +77,16 @@ class DeleteTermEntityTest extends Injectable
     ) {
         $this->agreementNew = $agreementNew;
         $this->agreementIndex = $agreementIndex;
+
+        // TODO: Move set up configuration to "__prepare" method after fix bug MAGETWO-29331
+        $this->objectManager->create(
+            'Magento\Core\Test\TestStep\SetupConfigurationStep',
+            ['configData' => 'checkout_term_condition']
+        )->run();
     }
 
     /**
-     * Delete Term Entity test
+     * Delete Term Entity test.
      *
      * @param CheckoutAgreement $agreement
      * @return void
@@ -108,12 +101,13 @@ class DeleteTermEntityTest extends Injectable
         $this->agreementNew->getPageActionsBlock()->delete();
     }
 
+    // TODO: Move set default configuration to "tearDownAfterClass" method after fix bug MAGETWO-29331
     /**
-     * Set default configuration
+     * Set default configuration.
      *
      * @return void
      */
-    public static function tearDownAfterClass()
+    public function tearDown()
     {
         ObjectManager::getInstance()->create(
             'Magento\Core\Test\TestStep\SetupConfigurationStep',

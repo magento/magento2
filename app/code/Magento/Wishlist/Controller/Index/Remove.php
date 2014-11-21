@@ -76,8 +76,17 @@ class Remove extends Action\Action implements IndexInterface
         }
 
         $this->_objectManager->get('Magento\Wishlist\Helper\Data')->calculate();
-
-        $url = $this->_redirect->getRedirectUrl($this->_url->getUrl('*/*'));
-        $this->getResponse()->setRedirect($url);
+        $request = $this->getRequest();
+        $refererUrl = (string)$request->getServer('HTTP_REFERER');
+        $url = (string)$request->getParam(\Magento\Framework\App\Response\RedirectInterface::PARAM_NAME_REFERER_URL);
+        if ($url) {
+            $refererUrl = $url;
+        }
+        if ($request->getParam(\Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED) && $refererUrl) {
+            $redirectUrl = $refererUrl;
+        } else {
+            $redirectUrl = $this->_redirect->getRedirectUrl($this->_url->getUrl('*/*'));
+        }
+        $this->getResponse()->setRedirect($redirectUrl);
     }
 }

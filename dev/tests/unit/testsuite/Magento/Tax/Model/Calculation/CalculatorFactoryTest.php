@@ -63,7 +63,7 @@ class CalculatorFactoryTest extends \PHPUnit_Framework_TestCase
         $expectedInstanceType
     ) {
         $instanceMock = $this->getMockBuilder($expectedInstanceType)->disableOriginalConstructor()->getMock();
-        $objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManager')->getMock();
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
 
         // Verify create() is called with correct concrete type
         $objectManagerMock->expects($this->once())

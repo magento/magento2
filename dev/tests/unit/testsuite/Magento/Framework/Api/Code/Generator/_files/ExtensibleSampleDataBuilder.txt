@@ -55,10 +55,10 @@ class ExtensibleSampleDataBuilder extends \Magento\Framework\Api\Builder
      * @param \Magento\Framework\Reflection\DataObjectProcessor $objectProcessor
      * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
      * @param \Magento\Framework\Serialization\DataBuilderFactory $dataBuilderFactory
-     * @param \Magento\Framework\ObjectManager\Config $objectManagerConfig
+     * @param \Magento\Framework\ObjectManager\ConfigInterface $objectManagerConfig
      * @param string|null $modelClassInterface
      */
-    public function __construct(\Magento\Framework\Api\ObjectFactory $objectFactory, \Magento\Framework\Api\MetadataServiceInterface $metadataService, \Magento\Framework\Api\AttributeDataBuilder $attributeValueBuilder, \Magento\Framework\Reflection\DataObjectProcessor $objectProcessor, \Magento\Framework\Reflection\TypeProcessor $typeProcessor, \Magento\Framework\Serialization\DataBuilderFactory $dataBuilderFactory, \Magento\Framework\ObjectManager\Config $objectManagerConfig, $modelClassInterface = null)
+    public function __construct(\Magento\Framework\Api\ObjectFactory $objectFactory, \Magento\Framework\Api\MetadataServiceInterface $metadataService, \Magento\Framework\Api\AttributeDataBuilder $attributeValueBuilder, \Magento\Framework\Reflection\DataObjectProcessor $objectProcessor, \Magento\Framework\Reflection\TypeProcessor $typeProcessor, \Magento\Framework\Serialization\DataBuilderFactory $dataBuilderFactory, \Magento\Framework\ObjectManager\ConfigInterface $objectManagerConfig, $modelClassInterface = null)
     {
         parent::__construct($objectFactory, $metadataService, $attributeValueBuilder, $objectProcessor, $typeProcessor, $dataBuilderFactory, $objectManagerConfig, 'Magento\Framework\Api\Code\Generator\ExtensibleSampleInterface');
     }

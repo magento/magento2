@@ -58,7 +58,7 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
     {
         $interpreters = array(
             'correct' => $this->getMock('Magento\Framework\Data\Argument\InterpreterInterface'),
-            'wrong' => $this->getMock('Magento\Framework\ObjectManager')
+            'wrong' => $this->getMock('Magento\Framework\ObjectManagerInterface')
         );
         new Composite($interpreters, 'interpreter');
     }

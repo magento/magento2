@@ -23,7 +23,7 @@
  */
 namespace Magento\Framework\View\Layout\Argument\Interpreter;
 
-use Magento\Framework\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Data\Argument\InterpreterInterface;
 
 /**
@@ -32,7 +32,7 @@ use Magento\Framework\Data\Argument\InterpreterInterface;
 class Object implements InterpreterInterface
 {
     /**
-     * @var ObjectManager
+     * @var ObjectManagerInterface
      */
     private $objectManager;
 
@@ -42,10 +42,10 @@ class Object implements InterpreterInterface
     private $expectedClass;
 
     /**
-     * @param ObjectManager $objectManager
+     * @param ObjectManagerInterface $objectManager
      * @param string|null $expectedClass
      */
-    public function __construct(ObjectManager $objectManager, $expectedClass = null)
+    public function __construct(ObjectManagerInterface $objectManager, $expectedClass = null)
     {
         $this->objectManager = $objectManager;
         $this->expectedClass = $expectedClass;

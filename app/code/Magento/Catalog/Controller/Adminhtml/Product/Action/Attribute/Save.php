@@ -26,6 +26,9 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute;
 
 use Magento\Backend\App\Action;
 
+/**
+ * Class Save
+ */
 class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute
 {
     /**
@@ -46,7 +49,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
     protected $_catalogProduct;
 
     /**
-     * @var \Magento\CatalogInventory\Service\V1\Data\StockItemBuilder
+     * @var \Magento\CatalogInventory\Api\Data\StockItemDataBuilder
      */
     protected $stockItemBuilder;
 
@@ -69,7 +72,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
      * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor
      * @param \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexerProcessor
      * @param \Magento\Catalog\Helper\Product $catalogProduct
-     * @param \Magento\CatalogInventory\Service\V1\Data\StockItemBuilder $stockItemBuilder
+     * @param \Magento\CatalogInventory\Api\Data\StockItemDataBuilder $stockItemBuilder
      * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      */
     public function __construct(
@@ -79,7 +82,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor,
         \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexerProcessor,
         \Magento\Catalog\Helper\Product $catalogProduct,
-        \Magento\CatalogInventory\Service\V1\Data\StockItemBuilder $stockItemBuilder,
+        \Magento\CatalogInventory\Api\Data\StockItemDataBuilder $stockItemBuilder,
         \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
     ) {
         $this->_productFlatIndexerProcessor = $productFlatIndexerProcessor;
@@ -109,7 +112,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         $websiteAddData = $this->getRequest()->getParam('add_website_ids', array());
 
         /* Prepare inventory data item options (use config settings) */
-        $options = $this->_objectManager->get('Magento\CatalogInventory\Helper\Data')->getConfigItemOptions();
+        $options = $this->_objectManager->get('Magento\CatalogInventory\Api\StockConfigurationInterface')
+            ->getConfigItemOptions();
         foreach ($options as $option) {
             if (isset($inventoryData[$option]) && !isset($inventoryData['use_config_' . $option])) {
                 $inventoryData['use_config_' . $option] = 0;
@@ -117,10 +121,10 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         }
 
         try {
+            $storeId = $this->attributeHelper->getSelectedStoreId();
             if ($attributesData) {
                 $dateFormat = $this->_objectManager->get('Magento\Framework\Stdlib\DateTime\TimezoneInterface')
                     ->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
-                $storeId = $this->attributeHelper->getSelectedStoreId();
 
                 foreach ($attributesData as $attributeCode => $value) {
                     $attribute = $this->_objectManager->get('Magento\Eav\Model\Config')
@@ -142,7 +146,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
                         $attributesData[$attributeCode] = $value;
                     } elseif ($attribute->getFrontendInput() == 'multiselect') {
                         // Check if 'Change' checkbox has been checked by admin for this attribute
-                        $isChanged = (bool) $this->getRequest()->getPost($attributeCode . '_checkbox');
+                        $isChanged = (bool)$this->getRequest()->getPost($attributeCode . '_checkbox');
                         if (!$isChanged) {
                             unset($attributesData[$attributeCode]);
                             continue;
@@ -159,19 +163,26 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
             }
 
             if ($inventoryData) {
-                /** @var \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService */
-                $stockItemService = $this->_objectManager
-                    ->create('Magento\CatalogInventory\Service\V1\StockItemService');
+                // TODO why use ObjectManager?
+                /** @var \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry */
+                $stockRegistry = $this->_objectManager
+                    ->create('Magento\CatalogInventory\Api\StockRegistryInterface');
+                /** @var \Magento\CatalogInventory\Api\StockItemRepositoryInterface $stockItemRepository */
+                $stockItemRepository = $this->_objectManager
+                    ->create('Magento\CatalogInventory\Api\StockItemRepositoryInterface');
                 foreach ($this->attributeHelper->getProductIds() as $productId) {
-                    $stockItemDo = $stockItemService->getStockItem($productId);
+                    $stockItemDo = $stockRegistry->getStockItem(
+                        $productId,
+                        $this->attributeHelper->getStoreWebsiteId($storeId)
+                    );
                     if (!$stockItemDo->getProductId()) {
                         $inventoryData[] = $productId;
                     }
 
-                    $stockItemService->saveStockItem(
-                        $this->stockItemBuilder->mergeDataObjectWithArray($stockItemDo, $inventoryData)
-                            ->create()
-                    );
+                    $stockItemId = $stockItemDo->getId();
+                    $stockItemToSave = $this->stockItemBuilder->mergeDataObjectWithArray($stockItemDo, $inventoryData);
+                    $stockItemToSave->setItemId($stockItemId);
+                    $stockItemRepository->save($stockItemToSave);
                 }
                 $this->_stockIndexerProcessor->reindexList($this->attributeHelper->getProductIds());
             }

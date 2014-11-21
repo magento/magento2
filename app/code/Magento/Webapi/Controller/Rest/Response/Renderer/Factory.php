@@ -28,7 +28,7 @@ namespace Magento\Webapi\Controller\Rest\Response\Renderer;
 class Factory
 {
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
 
@@ -41,12 +41,12 @@ class Factory
     protected $_renders;
 
     /**
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Webapi\Controller\Rest\Request $request
      * @param array $renders
      */
     public function __construct(
-        \Magento\Framework\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Webapi\Controller\Rest\Request $request,
         array $renders = array()
     ) {

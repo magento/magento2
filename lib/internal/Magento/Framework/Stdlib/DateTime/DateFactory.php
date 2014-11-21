@@ -26,7 +26,7 @@ namespace Magento\Framework\Stdlib\DateTime;
 class DateFactory
 {
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager = null;
 
@@ -36,11 +36,11 @@ class DateFactory
     protected $_instanceName = null;
 
     /**
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
      */
     public function __construct(
-        \Magento\Framework\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
         $instanceName = 'Magento\Framework\Stdlib\DateTime\DateInterface'
     ) {
         $this->_objectManager = $objectManager;

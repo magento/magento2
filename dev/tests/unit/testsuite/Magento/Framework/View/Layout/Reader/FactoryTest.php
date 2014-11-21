@@ -34,8 +34,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
         $object = (new \Magento\TestFramework\Helper\ObjectManager($this))->getObject('Magento\Framework\Object');
 
-        /** @var \Magento\Framework\ObjectManager|\PHPUnit_Framework_MockObject_MockObject $objectManager */
-        $objectManager = $this->getMock('Magento\Framework\ObjectManager', [], [], '', false);
+        /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject $objectManager */
+        $objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $objectManager->expects($this->once())->method('create')->with($className, $data)
             ->will($this->returnValue($object));
 
@@ -58,8 +58,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Framework\View\Layout\ReaderInterface|\PHPUnit_Framework_MockObject_MockObject $object */
         $object = $this->getMock('Magento\Framework\View\Layout\ReaderInterface', [], [], '', false);
 
-        /** @var \Magento\Framework\ObjectManager|\PHPUnit_Framework_MockObject_MockObject $objectManager */
-        $objectManager = $this->getMock('Magento\Framework\ObjectManager', [], [], '', false);
+        /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject $objectManager */
+        $objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $objectManager->expects($this->once())->method('create')->with($className, $data)
             ->will($this->returnValue($object));
 

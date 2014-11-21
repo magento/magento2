@@ -61,7 +61,7 @@ abstract class ThemeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManager', array(), array(), '', false);
+        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
 
         $this->_request = $this->getMock('Magento\Framework\App\Request\Http', array(), array(), '', false);
         $this->eventManager = $this->getMock('\Magento\Framework\Event\ManagerInterface', array(), array(), '', false);

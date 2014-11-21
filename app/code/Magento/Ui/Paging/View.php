@@ -61,9 +61,11 @@ class View extends AbstractView
      */
     protected function updateDataCollection()
     {
-        $this->renderContext->getStorage()->getDataCollection($this->getParentName())
-            ->setCurPage($this->renderContext->getRequestParam('page', $this->configuration->getData('current')))
-            ->setPageSize($this->renderContext->getRequestParam('limit', $this->configuration->getData('pageSize')));
+        $defaultPage = $this->configuration->getData('current');
+        $offset = $this->renderContext->getRequestParam('page', $defaultPage);
+        $defaultLimit = $this->configuration->getData('pageSize');
+        $size = $this->renderContext->getRequestParam('limit', $defaultLimit);
+        $this->renderContext->getStorage()->getDataCollection($this->getParentName())->setLimit($offset, $size);
     }
 
     /**

@@ -35,7 +35,7 @@ class ConfigurableProduct
      * @param \Magento\Sales\Model\Quote\Item\Option $option
      * @param \Magento\Sales\Model\Quote\Item $quoteItem
      *
-     * @return \Magento\CatalogInventory\Model\Stock\Item
+     * @return \Magento\CatalogInventory\Api\Data\StockItemInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundGetStockItem(

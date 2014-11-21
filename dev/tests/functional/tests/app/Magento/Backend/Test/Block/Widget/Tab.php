@@ -25,6 +25,7 @@
 namespace Magento\Backend\Test\Block\Widget;
 
 use Mtf\Client\Element;
+use Mtf\Client\Element\Locator;
 use Mtf\Block\Form as AbstractForm;
 
 /**
@@ -35,6 +36,27 @@ use Mtf\Block\Form as AbstractForm;
  */
 class Tab extends AbstractForm
 {
+    /**
+     * Field with Mage error.
+     *
+     * @var string
+     */
+    protected $mageErrorField = '//*[contains(@class,"field ")][.//*[@class="mage-error"]]';
+
+    /**
+     * Fields label with mage error.
+     *
+     * @var string
+     */
+    protected $mageErrorLabel = './label';
+
+    /**
+     * Mage error text.
+     *
+     * @var string
+     */
+    protected $mageErrorText = './/*[@class="mage-error"]';
+
     /**
      * Fill data to fields on tab
      *
@@ -72,5 +94,24 @@ class Tab extends AbstractForm
     public function updateFormTab(array $fields, Element $element = null)
     {
         $this->fillFormTab($fields, $element);
+    }
+
+    /**
+     * Get array of label => js error text.
+     *
+     * @return array
+     */
+    public function getJsErrors()
+    {
+        $data = [];
+        $elements = $this->_rootElement->find($this->mageErrorField, Locator::SELECTOR_XPATH)->getElements();
+        foreach ($elements as $element) {
+            $error = $element->find($this->mageErrorText, Locator::SELECTOR_XPATH);
+            if ($error->isVisible()) {
+                $label = $element->find($this->mageErrorLabel, Locator::SELECTOR_XPATH)->getText();
+                $data[$label] = $error->getText();
+            }
+        }
+        return $data;
     }
 }

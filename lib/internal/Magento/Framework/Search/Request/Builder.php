@@ -25,13 +25,13 @@
 namespace Magento\Framework\Search\Request;
 
 
-use Magento\Framework\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Search\RequestInterface;
 
 class Builder
 {
     /**
-     * @var ObjectManager
+     * @var ObjectManagerInterface
      */
     private $objectManager;
 
@@ -60,12 +60,12 @@ class Builder
     /**
      * Request Builder constructor
      *
-     * @param ObjectManager $objectManager
+     * @param ObjectManagerInterface $objectManager
      * @param Config $config
      * @param Binder $binder
      * @param Cleaner $cleaner
      */
-    public function __construct(ObjectManager $objectManager, Config $config, Binder $binder, Cleaner $cleaner)
+    public function __construct(ObjectManagerInterface $objectManager, Config $config, Binder $binder, Cleaner $cleaner)
     {
         $this->objectManager = $objectManager;
         $this->config = $config;

@@ -55,7 +55,7 @@ class ReaderServiceTest extends \PHPUnit_Framework_TestCase
     public  function testGetList()
     {
         $quoteMock = $this->getMock('Magento\Sales\Model\Quote', [], [], '', false);
-        $this->quoteRepositoryMock->expects($this->once())->method('get')
+        $this->quoteRepositoryMock->expects($this->once())->method('getActive')
             ->with(33)
             ->will($this->returnValue($quoteMock));
         $itemMock = $this->getMock('\Magento\Sales\Model\Quote\Item',

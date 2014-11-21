@@ -31,8 +31,6 @@ use Mtf\Client\Browser;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 
 /**
- * Test Creation for DownloadProductsReportEntity
- *
  * Test Flow:
  *
  * Preconditions:
@@ -53,31 +51,32 @@ use Magento\Sales\Test\Fixture\OrderInjectable;
 class DownloadProductsReportEntityTest extends Injectable
 {
     /**
-     * Browser Interface
+     * Browser Interface.
      *
      * @var Browser
      */
     protected $browser;
 
     /**
-     * Customer Account index page
+     * Customer Account index page.
      *
      * @var CustomerAccountIndex
      */
     protected $customerAccount;
 
     /**
-     * Downloadable Customer Products page
+     * Downloadable Customer Products page.
      *
      * @var DownloadableCustomerProducts
      */
     protected $customerProducts;
 
     /**
-     * Inject pages
+     * Inject pages.
      *
      * @param CustomerAccountIndex $customerAccount
      * @param DownloadableCustomerProducts $customerProducts
+     * @param Browser $browser
      * @return void
      */
     public function __inject(
@@ -91,7 +90,7 @@ class DownloadProductsReportEntityTest extends Injectable
     }
 
     /**
-     * Order downloadable product
+     * Order downloadable product.
      *
      * @param OrderInjectable $order
      * @param string $downloads
@@ -99,6 +98,7 @@ class DownloadProductsReportEntityTest extends Injectable
      */
     public function test(OrderInjectable $order, $downloads)
     {
+        $this->markTestIncomplete('MAGETWO-30346');
         // Preconditions
         $order->persist();
         $invoice = $this->objectManager->create('Magento\Sales\Test\TestStep\CreateInvoiceStep', ['order' => $order]);
@@ -107,7 +107,7 @@ class DownloadProductsReportEntityTest extends Injectable
     }
 
     /**
-     * Open Downloadable Link
+     * Open Downloadable Link.
      *
      * @param OrderInjectable $order
      * @param int $downloads

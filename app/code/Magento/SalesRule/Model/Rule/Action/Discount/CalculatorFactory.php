@@ -28,7 +28,7 @@ class CalculatorFactory
     /**
      * Object manager
      *
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     private $_objectManager;
 
@@ -45,10 +45,10 @@ class CalculatorFactory
     );
 
     /**
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param array $discountRules
      */
-    public function __construct(\Magento\Framework\ObjectManager $objectManager, array $discountRules = array())
+    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, array $discountRules = array())
     {
         $this->classByType = array_merge($this->classByType, $discountRules);
         $this->_objectManager = $objectManager;

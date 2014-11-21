@@ -33,13 +33,25 @@ use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
  */
 class ProductTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var ObjectManagerHelper */
+    /**
+     * @var ObjectManagerHelper
+     */
     protected $objectManagerHelper;
 
     /**
      * @var \Magento\Catalog\Model\Product
      */
     protected $model;
+
+    /**
+     * @var \Magento\Catalog\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $catalogDataMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $stockItemBuilderMock;
 
     /**
      * @var \Magento\Indexer\Model\IndexerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -113,6 +125,20 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $this->categoryIndexerMock = $this->getMockForAbstractClass('\Magento\Indexer\Model\IndexerInterface');
 
+        $this->catalogDataMock = $this->getMock(
+            'Magento\Catalog\Helper\Data',
+            ['isModuleEnabled'],
+            [],
+            '',
+            false
+        );
+        $this->stockItemBuilderMock = $this->getMock(
+            'Magento\CatalogInventory\Api\Data\StockItemDataBuilder',
+            ['populateWithArray', 'create'],
+            [],
+            '',
+            false
+        );
         $this->productFlatProcessor = $this->getMock(
             'Magento\Catalog\Model\Indexer\Product\Flat\Processor',
             array(),
@@ -213,6 +239,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 'resource' => $this->resource,
                 'registry' => $this->registry,
                 'categoryFactory' => $this->categoryFactory,
+                'catalogData' => $this->catalogDataMock,
+                'stockItemBuilder' => $this->stockItemBuilderMock,
                 'indexerRegistry' => $this->indexerRegistryMock,
                 'data' => array('id' => 1)
             ]
@@ -472,6 +500,47 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $this->model->getResource()->expects($this->any())->method('addCommitCallback')->will($this->returnSelf());
         $this->model->getResource()->expects($this->any())->method('commit')->will($this->returnSelf());
+    }
+
+    /**
+     * Run test fromArray method
+     *
+     * @return void
+     */
+    public function testFromArray()
+    {
+        $data = [
+            'stock_item' => 'stock-item-data'
+        ];
+
+        $stockItemMock = $this->getMockForAbstractClass(
+            'Magento\Framework\Api\AbstractSimpleObject',
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['setProduct']
+        );
+
+        $this->catalogDataMock->expects($this->once())
+            ->method('isModuleEnabled')
+            ->with('Magento_CatalogInventory')
+            ->will($this->returnValue(true));
+        $this->stockItemBuilderMock->expects($this->once())
+            ->method('populateWithArray')
+            ->with($data['stock_item'])
+            ->will($this->returnSelf());
+        $this->stockItemBuilderMock->expects($this->once())
+            ->method('populateWithArray')
+            ->with($data['stock_item'])
+            ->will($this->returnSelf());
+        $this->stockItemBuilderMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($stockItemMock));
+        $stockItemMock->expects($this->once())->method('setProduct')->with($this->model);
+
+        $this->assertEquals($this->model, $this->model->fromArray($data));
     }
 
     protected function prepareCategoryIndexer()

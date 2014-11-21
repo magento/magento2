@@ -29,9 +29,9 @@ use Magento\Framework\App\RequestInterface;
 class Authentication
 {
     /**
-     * @var \Magento\Customer\Helper\Data
+     * @var \Magento\Customer\Model\Url
      */
-    protected $customerHelper;
+    protected $customerUrl;
 
     /**
      * @var \Magento\Customer\Model\Session
@@ -39,14 +39,14 @@ class Authentication
     protected $customerSession;
 
     /**
-     * @param \Magento\Customer\Helper\Data $customerHelper
+     * @param \Magento\Customer\Model\Url $customerUrl
      * @param \Magento\Customer\Model\Session $customerSession
      */
     public function __construct(
-        \Magento\Customer\Helper\Data $customerHelper,
+        \Magento\Customer\Model\Url $customerUrl,
         \Magento\Customer\Model\Session $customerSession
     ) {
-        $this->customerHelper = $customerHelper;
+        $this->customerUrl = $customerUrl;
         $this->customerSession = $customerSession;
     }
 
@@ -59,7 +59,7 @@ class Authentication
      */
     public function beforeDispatch(\Magento\Framework\App\ActionInterface $subject, RequestInterface $request)
     {
-        $loginUrl = $this->customerHelper->getLoginUrl();
+        $loginUrl = $this->customerUrl->getLoginUrl();
 
         if (!$this->customerSession->authenticate($subject, $loginUrl)) {
             $subject->getActionFlag()->set('', $subject::FLAG_NO_DISPATCH, true);

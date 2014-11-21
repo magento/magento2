@@ -123,7 +123,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements Extensib
      */
     public function setData($key, $value = null)
     {
-        if ($key == self::CUSTOM_ATTRIBUTES) {
+        if ($key === self::CUSTOM_ATTRIBUTES) {
             throw new \LogicException("Custom attributes must be set only using setCustomAttribute() method.");
         }
         return parent::setData($key, $value);

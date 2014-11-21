@@ -85,7 +85,7 @@ class ReadService implements ReadServiceInterface
     public function getMethod($cartId)
     {
         /** @var \Magento\Sales\Model\Quote $quote */
-        $quote = $this->quoteRepository->get($cartId);
+        $quote = $this->quoteRepository->getActive($cartId);
 
         /** @var \Magento\Sales\Model\Quote\Address $shippingAddress */
         $shippingAddress = $quote->getShippingAddress();
@@ -143,7 +143,7 @@ class ReadService implements ReadServiceInterface
         $output = [];
 
         /** @var \Magento\Sales\Model\Quote $quote */
-        $quote = $this->quoteRepository->get($cartId);
+        $quote = $this->quoteRepository->getActive($cartId);
 
         // no methods applicable for empty carts or carts with virtual products
         if ($quote->isVirtual() || 0 == $quote->getItemsCount()) {

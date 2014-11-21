@@ -55,6 +55,7 @@ class CheckoutWithGiftMessagesTest extends Scenario
      */
     public function test()
     {
+        $this->markTestIncomplete("Bug: MAGETWO-30593");
         $this->executeScenario();
     }
 }

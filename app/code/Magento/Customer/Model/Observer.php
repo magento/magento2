@@ -55,21 +55,21 @@ class Observer
     /**
      * Customer data
      *
-     * @var \Magento\Customer\Helper\Data
+     * @var \Magento\Customer\Model\Vat
      */
-    protected $_customerData;
+    protected $_customerVat;
 
     /**
-     * @param \Magento\Customer\Helper\Data $customerData
+     * @param \Magento\Customer\Model\Vat $customerVat
      * @param \Magento\Customer\Helper\Address $customerAddress
      * @param \Magento\Framework\Registry $coreRegistry
      */
     public function __construct(
-        \Magento\Customer\Helper\Data $customerData,
+        \Magento\Customer\Model\Vat $customerVat,
         \Magento\Customer\Helper\Address $customerAddress,
         \Magento\Framework\Registry $coreRegistry
     ) {
-        $this->_customerData = $customerData;
+        $this->_customerVat = $customerVat;
         $this->_customerAddress = $customerAddress;
         $this->_coreRegistry = $coreRegistry;
     }
@@ -180,26 +180,23 @@ class Observer
         try {
             $this->_coreRegistry->register(self::VIV_PROCESSED_FLAG, true);
 
-            /** @var $customerHelper \Magento\Customer\Helper\Data */
-            $customerHelper = $this->_customerData;
-
-            if ($customerAddress->getVatId() == '' || !$this->_customerData->isCountryInEU(
+            if ($customerAddress->getVatId() == '' || !$this->_customerVat->isCountryInEU(
                 $customerAddress->getCountry()
             )
             ) {
-                $defaultGroupId = $customerHelper->getDefaultCustomerGroupId($customer->getStore());
+                $defaultGroupId = $this->_customerVat->getDefaultCustomerGroupId($customer->getStore());
 
                 if (!$customer->getDisableAutoGroupChange() && $customer->getGroupId() != $defaultGroupId) {
                     $customer->setGroupId($defaultGroupId);
                     $customer->save();
                 }
             } else {
-                $result = $customerHelper->checkVatNumber(
+                $result = $this->_customerVat->checkVatNumber(
                     $customerAddress->getCountryId(),
                     $customerAddress->getVatId()
                 );
 
-                $newGroupId = $customerHelper->getCustomerGroupIdBasedOnVatNumber(
+                $newGroupId = $this->_customerVat->getCustomerGroupIdBasedOnVatNumber(
                     $customerAddress->getCountryId(),
                     $result,
                     $customer->getStore()

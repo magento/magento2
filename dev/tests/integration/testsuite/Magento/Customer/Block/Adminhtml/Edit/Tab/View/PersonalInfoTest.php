@@ -55,7 +55,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\StoreManagerInterface */
     private $_storeManager;
 
-    /** @var \Magento\Framework\ObjectManager */
+    /** @var \Magento\Framework\ObjectManagerInterface */
     private $_objectManager;
 
     /** @var  PersonalInfo */

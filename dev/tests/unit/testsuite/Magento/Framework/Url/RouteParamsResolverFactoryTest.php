@@ -30,12 +30,12 @@ class RouteParamsResolverFactoryTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Url\RouteParamsResolverFactory */
     protected $object;
 
-    /** @var \Magento\Framework\ObjectManager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $objectManager;
 
     protected function setUp()
     {
-        $this->objectManager = $this->getMock('Magento\Framework\ObjectManager');
+        $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
 
         $objectManager = new ObjectManager($this);
         $this->object = $objectManager->getObject(

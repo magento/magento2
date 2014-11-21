@@ -94,9 +94,6 @@ class Address extends \Magento\Framework\App\Action\Action
      * @param \Magento\Customer\Api\Data\AddressDataBuilder $addressDataBuilder
      * @param \Magento\Customer\Api\Data\RegionDataBuilder $regionDataBuilder
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor
-     * @internal param \Magento\Customer\Helper\Data $customerData
-     * @internal param \Magento\Customer\Model\AddressFactory $addressFactory
-     * @internal param \Magento\Customer\Model\Address\FormFactory $addressFormFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(

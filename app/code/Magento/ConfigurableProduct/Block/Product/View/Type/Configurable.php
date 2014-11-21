@@ -198,7 +198,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
             'productId' => $currentProduct->getId(),
             'chooseText' => __('Choose an Option...'),
             'taxConfig' => $attributePrice->getTaxConfig($this->currentCustomer->getCustomerId()),
-            'images' => $options['images'],
+            'images' => isset($options['images']) ? $options['images'] : [],
             'baseImage' => $options['baseImage']
         );
 

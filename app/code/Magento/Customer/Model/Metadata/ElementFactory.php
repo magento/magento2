@@ -42,7 +42,7 @@ class ElementFactory
     // available only for multiply attributes
 
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
 
@@ -52,10 +52,10 @@ class ElementFactory
     protected $_string;
 
     /**
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Stdlib\String $string
      */
-    public function __construct(\Magento\Framework\ObjectManager $objectManager, \Magento\Framework\Stdlib\String $string)
+    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, \Magento\Framework\Stdlib\String $string)
     {
         $this->_objectManager = $objectManager;
         $this->_string = $string;

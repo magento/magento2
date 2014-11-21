@@ -113,6 +113,13 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('test', $this->_object->getId());
     }
 
+    public function testSetGetIdFieldName()
+    {
+        $name = 'entity_id_custom';
+        $this->_object->setIdFieldName($name);
+        $this->assertEquals($name, $this->_object->getIdFieldName());
+    }
+
     /**
      * Tests \Magento\Framework\Object->addData()
      */

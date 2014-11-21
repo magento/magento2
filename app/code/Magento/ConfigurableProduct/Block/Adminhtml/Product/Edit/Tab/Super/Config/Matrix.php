@@ -62,9 +62,9 @@ class Matrix extends \Magento\Backend\Block\Template
     protected $_localeCurrency;
 
     /**
-     * @var \Magento\CatalogInventory\Service\V1\StockItemServiceInterface
+     * @var \Magento\CatalogInventory\Api\StockRegistryInterface
      */
-    protected $stockItemService;
+    protected $stockRegistry;
 
     /**
      * @var \Magento\ConfigurableProduct\Model\Product\Type\VariationMatrix
@@ -78,7 +78,7 @@ class Matrix extends \Magento\Backend\Block\Template
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\Locale\CurrencyInterface $localeCurrency
-     * @param \Magento\CatalogInventory\Service\V1\StockItemServiceInterface $stockItemService
+     * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\ConfigurableProduct\Model\Product\Type\VariationMatrix $variationMatrix
      * @param array $data
      */
@@ -89,7 +89,7 @@ class Matrix extends \Magento\Backend\Block\Template
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
-        \Magento\CatalogInventory\Service\V1\StockItemServiceInterface $stockItemService,
+        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\ConfigurableProduct\Model\Product\Type\VariationMatrix $variationMatrix,
         array $data = array()
     ) {
@@ -99,7 +99,7 @@ class Matrix extends \Magento\Backend\Block\Template
         $this->_config = $config;
         $this->_coreRegistry = $coreRegistry;
         $this->_localeCurrency = $localeCurrency;
-        $this->stockItemService = $stockItemService;
+        $this->stockRegistry = $stockRegistry;
         parent::__construct($context, $data);
         $this->variationMatrix = $variationMatrix;
     }
@@ -258,11 +258,11 @@ class Matrix extends \Magento\Backend\Block\Template
     }
 
     /**
-     * @param int $productId
+     * @param Product $product
      * @return float
      */
-    public function getProductStockQty($productId)
+    public function getProductStockQty(Product $product)
     {
-        return $this->stockItemService->getStockItem($productId)->getQty();
+        return $this->stockRegistry->getStockItem($product->getId(), $product->getStore()->getWebsiteId())->getQty();
     }
 }

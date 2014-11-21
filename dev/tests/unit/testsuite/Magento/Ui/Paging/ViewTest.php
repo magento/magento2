@@ -116,7 +116,10 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $paramsPage = 1;
         $nameSpace = 'namespace';
         $configurationMock = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Element\UiComponent\ConfigInterface'
+            'Magento\Framework\View\Element\UiComponent\ConfigInterface',
+            ['getData'],
+            '',
+            false
         );
         $this->renderContextMock->expects($this->any())->method('getNamespace')->willReturn($nameSpace);
         $this->configurationFactoryMock->expects($this->once())->method('create')->willReturn($configurationMock);
@@ -124,7 +127,12 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $storageMock = $this->getMockForAbstractClass(
             'Magento\Framework\View\Element\UiComponent\ConfigStorageInterface'
         );
-        $dataCollectionMock = $this->getMock('Magento\Framework\Data\Collection', ['setCurPage'], [], '', false);
+        $dataCollectionMock = $this->getMockForAbstractClass(
+            'Magento\Framework\Api\CriteriaInterface',
+            ['setLimit'],
+            '',
+            false
+        );
 
         $this->renderContextMock->expects($this->any())->method('getStorage')->willReturn($storageMock);
         $storageMock->expects($this->once())
@@ -133,12 +141,17 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $storageMock->expects($this->once())->method('getDataCollection')->willReturn($dataCollectionMock);
 
-        $configurationMock->expects($this->at(1))->method('getData')->with('current')->willReturn($paramsSize);
-        $this->renderContextMock->expects($this->any())->method('getRequestParam')->willReturn($paramsPage);
-        $configurationMock->expects($this->at(2))->method('getData')->with('pageSize')->willReturn($paramsPage);
-        $this->renderContextMock->expects($this->any())->method('getRequestParam')->willReturn($paramsSize);
-        $dataCollectionMock->expects($this->any())->method('setCurPage')->with($paramsPage)->willReturnSelf();
-        $dataCollectionMock->expects($this->any())->method('setPageSize')->with($paramsSize)->willReturnSelf();
+        $configurationMock->expects($this->at(0))->method('getData')->with('current')->willReturn($paramsPage);
+        $this->renderContextMock->expects($this->at(3))->method('getRequestParam')->with('page', $paramsPage)
+            ->willReturn($paramsPage);
+
+        $configurationMock->expects($this->at(1))->method('getData')->with('pageSize')->willReturn($paramsSize);
+        $this->renderContextMock->expects($this->at(4))->method('getRequestParam')->with('limit')
+            ->willReturn($paramsSize);
+
+        $dataCollectionMock->expects($this->any())->method('setLimit')->with($paramsPage, $paramsSize)->willReturn(
+            null
+        );
 
         $this->assertNull($this->view->prepare());
     }

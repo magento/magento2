@@ -176,9 +176,9 @@
     <assertProductAttributeInGrid module="Magento_Catalog">
         <severeness>low</severeness>
     </assertProductAttributeInGrid>
-    <assertAttributeOnAttributeForm module="Magento_Catalog">
+    <assertAttributeForm module="Magento_Catalog">
         <severeness>low</severeness>
-    </assertAttributeOnAttributeForm>
+    </assertAttributeForm>
     <assertAddedProductAttributeOnProductForm module="Magento_Catalog">
         <severeness>low</severeness>
         <require>
@@ -225,9 +225,9 @@
     <assertProductAttributeIsUsedPromoRules module="Magento_Catalog">
         <severeness>low</severeness>
     </assertProductAttributeIsUsedPromoRules>
-    <assertProductAttributeUsedSortOnFrontend module="Magento_Catalog">
+    <assertProductAttributeIsUsedInSortOnFrontend module="Magento_Catalog">
         <severeness>low</severeness>
-    </assertProductAttributeUsedSortOnFrontend>
+    </assertProductAttributeIsUsedInSortOnFrontend>
     <assertProductAttributeIsGlobal module="Magento_Catalog">
         <severeness>low</severeness>
     </assertProductAttributeIsGlobal>

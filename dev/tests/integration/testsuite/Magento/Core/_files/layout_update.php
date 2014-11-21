@@ -22,7 +22,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/** @var $objectManager \Magento\Framework\ObjectManager */
+/** @var $objectManager \Magento\Framework\ObjectManagerInterface */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $objectManager->get('Magento\Framework\App\AreaList')
     ->getArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)

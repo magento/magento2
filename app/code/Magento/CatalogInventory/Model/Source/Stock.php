@@ -21,20 +21,21 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\CatalogInventory\Model\Source;
+
+use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 
 /**
  * CatalogInventory Stock source model
  */
-class Stock implements \Magento\Framework\Option\ArrayInterface
+class Stock extends AbstractSource
 {
     /**
      * Retrieve option array
      *
      * @return array
      */
-    public function toOptionArray()
+    public function getAllOptions()
     {
         return array(
             array('value' => \Magento\CatalogInventory\Model\Stock::STOCK_IN_STOCK, 'label' => __('In Stock')),

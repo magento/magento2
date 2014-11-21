@@ -56,6 +56,24 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                     'subtotal' => 23
                 ]
             ],
+            'with_two_bought_links' => [
+                'options' => [
+                    'links' => [
+                        [
+                            'label' => 'link_1',
+                            'value' => 'Yes'
+                        ],
+                        [
+                            'label' => 'link_2',
+                            'value' => 'Yes'
+                        ]
+                    ],
+                    'cartItem' => [
+                        'price' => 23,
+                        'subtotal' => 23
+                    ]
+                ],
+            ],
             'forUpdateMiniShoppingCart' => [
                 'options' => [
                     'links' => [

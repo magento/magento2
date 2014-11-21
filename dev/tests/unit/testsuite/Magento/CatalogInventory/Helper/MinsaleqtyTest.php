@@ -74,7 +74,7 @@ class MinsaleqtyTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with(
-                $this->equalTo(\Magento\CatalogInventory\Model\Stock\Item::XML_PATH_MIN_SALE_QTY),
+                $this->equalTo(\Magento\CatalogInventory\Model\Configuration::XML_PATH_MIN_SALE_QTY),
                 $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
                 $this->equalTo($store)
             )

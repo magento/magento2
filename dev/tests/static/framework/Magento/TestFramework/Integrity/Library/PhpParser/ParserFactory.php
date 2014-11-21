@@ -30,7 +30,7 @@ namespace Magento\TestFramework\Integrity\Library\PhpParser;
 class ParserFactory
 {
     /**
-     * @var Parser[]
+     * @var ParserInterface[]
      */
     protected $parsers = array();
 
@@ -58,7 +58,7 @@ class ParserFactory
      * Return all parsers
      *
      * @param Tokens $tokens
-     * @return Parser[]
+     * @return ParserInterface[]
      */
     public function createParsers(Tokens $tokens)
     {

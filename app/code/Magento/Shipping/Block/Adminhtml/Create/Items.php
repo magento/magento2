@@ -42,7 +42,8 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
+     * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
+     * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Sales\Helper\Data $salesData
      * @param \Magento\Shipping\Model\CarrierFactory $carrierFactory
@@ -50,7 +51,8 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService,
+        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
+        \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
         \Magento\Framework\Registry $registry,
         \Magento\Sales\Helper\Data $salesData,
         \Magento\Shipping\Model\CarrierFactory $carrierFactory,
@@ -58,7 +60,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
     ) {
         $this->_salesData = $salesData;
         $this->_carrierFactory = $carrierFactory;
-        parent::__construct($context, $stockItemService, $registry, $data);
+        parent::__construct($context, $stockRegistry, $stockConfiguration, $registry, $data);
     }
 
     /**

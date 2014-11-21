@@ -40,13 +40,7 @@ class ContentTypeFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGet($type, $contentRender, $expected)
     {
-        $objectManagerMock = $this->getMock(
-            'Magento\Framework\ObjectManager',
-            ['get', 'create', 'configure'],
-            [],
-            '',
-            false
-        );
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->contentTypeFactory = new ContentTypeFactory($objectManagerMock);
         $objectManagerMock->expects($this->once())->method('get')->with($expected)->willReturn($contentRender);
         $this->assertInstanceOf($expected, $this->contentTypeFactory->get($type));
@@ -57,13 +51,7 @@ class ContentTypeFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTypeException()
     {
-        $objectManagerMock = $this->getMock(
-            'Magento\Framework\ObjectManager',
-            ['get', 'create', 'configure'],
-            [],
-            '',
-            false
-        );
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->contentTypeFactory = new ContentTypeFactory($objectManagerMock);
         $this->contentTypeFactory->get('bad_type');
     }
@@ -73,13 +61,7 @@ class ContentTypeFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetInstanceException()
     {
-        $objectManagerMock = $this->getMock(
-            'Magento\Framework\ObjectManager',
-            ['get', 'create', 'configure'],
-            [],
-            '',
-            false
-        );
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->contentTypeFactory = new ContentTypeFactory($objectManagerMock);
         $objectManagerMock->expects($this->once())->method('get')->willReturnSelf();
         $this->contentTypeFactory->get();

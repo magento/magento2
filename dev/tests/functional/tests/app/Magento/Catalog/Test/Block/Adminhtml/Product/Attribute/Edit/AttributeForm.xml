@@ -30,7 +30,7 @@
         <strategy>css selector</strategy>
         <fields>
             <frontend_label>
-                <selector>[name^='frontend_label']</selector>
+                <selector>[name="frontend_label[0]"]</selector>
             </frontend_label>
             <frontend_input>
                 <input>select</input>
@@ -38,13 +38,13 @@
             <is_required>
                 <input>select</input>
             </is_required>
+            <options>
+                <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Edit\Options</class>
+                <selector>#manage-options-panel</selector>
+                <strategy>css selector</strategy>
+            </options>
         </fields>
     </properties>
-    <manage-options>
-        <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Edit\Tab\Options</class>
-        <selector>#product_attribute_tabs_main</selector>
-        <strategy>css selector</strategy>
-    </manage-options>
     <advanced-properties>
         <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Edit\Tab\Advanced</class>
         <selector>#product_attribute_tabs_main</selector>
@@ -55,8 +55,14 @@
             <is_global>
                 <input>select</input>
             </is_global>
-            <default_value_text>
-            </default_value_text>
+            <default_value_text />
+            <default_value_textarea />
+            <default_value_date>
+                <input>datepicker</input>
+            </default_value_date>
+            <default_value_yesno>
+                <input>select</input>
+            </default_value_yesno>
             <is_unique>
                 <input>select</input>
             </is_unique>
@@ -71,7 +77,7 @@
         <strategy>css selector</strategy>
         <fields>
             <manage_frontend_label>
-                <selector>[name^='frontend_label']</selector>
+                <selector>[name="frontend_label[1]"]</selector>
             </manage_frontend_label>
         </fields>
     </manage-labels>

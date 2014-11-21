@@ -51,7 +51,7 @@ class PrintPackageTest extends \PHPUnit_Framework_TestCase
     protected $fileFactoryMock;
 
     /**
-     * @var \Magento\Framework\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectManagerMock;
 
@@ -90,13 +90,7 @@ class PrintPackageTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', ['getParam'], [], '', false);
-        $this->objectManagerMock = $this->getMock(
-            'Magento\Framework\ObjectManager',
-            ['create', 'get', 'configure'],
-            [],
-            '',
-            false
-        );
+        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->responseMock = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
         $this->sessionMock = $this->getMock('Magento\Backend\Model\Session', ['setIsUrlNotice'], [], '', false);
         $this->actionFlag = $this->getMock('Magento\Framework\App\ActionFlag', ['get'], [], '', false);

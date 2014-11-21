@@ -35,7 +35,7 @@ class AdapterFactory
     /**
      * Object Manager instance
      *
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
 
@@ -52,13 +52,13 @@ class AdapterFactory
     protected $scope;
 
     /**
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param string $path
      * @param string $scopeType
      */
     public function __construct(
-        \Magento\Framework\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         $path,
         $scopeType

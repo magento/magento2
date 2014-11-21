@@ -67,6 +67,8 @@ class DefinitionFactoryTest extends \PHPUnit_Framework_TestCase
             '\Magento\Framework\ObjectManager\Definition\Runtime',
             $this->model->createClassDefinition(null, true)
         );
+        $autoloadFunctions = spl_autoload_functions();
+        spl_autoload_unregister(array_pop($autoloadFunctions));
     }
 
     public function testCreateDefinitionsDoesNotReadCompiledDefinitionsIfUseCompiledIsFalse()
@@ -86,8 +88,6 @@ class DefinitionFactoryTest extends \PHPUnit_Framework_TestCase
             '\Magento\Framework\ObjectManager\Definition\Compiled\Serialized',
             $this->model->createClassDefinition($this->sampleContent)
         );
-        $autoloadFunctions = spl_autoload_functions();
-        spl_autoload_unregister(array_pop($autoloadFunctions));
     }
 
     /**

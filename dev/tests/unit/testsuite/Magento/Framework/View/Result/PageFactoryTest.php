@@ -37,12 +37,12 @@ class PageFactoryTest extends \PHPUnit_Framework_TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\ObjectManager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $objectManagerMock;
 
     protected function setUp()
     {
-        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManager', [], [], '', false);
+        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->pageFactory = $this->objectManagerHelper->getObject(
             'Magento\Framework\View\Result\PageFactory',

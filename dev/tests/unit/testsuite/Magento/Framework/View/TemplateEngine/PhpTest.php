@@ -40,7 +40,7 @@ class PhpTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_helperFactoryMock = $this->getMock('Magento\Framework\ObjectManager');
+        $this->_helperFactoryMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->_phpEngine = new \Magento\Framework\View\TemplateEngine\Php($this->_helperFactoryMock);
     }
 

@@ -39,7 +39,7 @@ class RssTest extends \PHPUnit_Framework_TestCase
     protected $_coreData;
 
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
 

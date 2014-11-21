@@ -24,12 +24,12 @@
 namespace Magento\CatalogImportExport\Model\Export\RowCustomizer;
 
 use Magento\CatalogImportExport\Model\Export\RowCustomizerInterface;
-use Magento\Framework\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 
 class Composite implements RowCustomizerInterface
 {
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
 
@@ -39,10 +39,10 @@ class Composite implements RowCustomizerInterface
     protected $customizers;
 
     /**
-     * @param ObjectManager $objectManager
+     * @param ObjectManagerInterface $objectManager
      * @param array $customizers
      */
-    public function __construct(ObjectManager $objectManager, $customizers = array())
+    public function __construct(ObjectManagerInterface $objectManager, $customizers = array())
     {
         $this->objectManager = $objectManager;
         $this->customizers = $customizers;

@@ -22,7 +22,5 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 require_once dirname(__DIR__) . '/' . 'bootstrap.php';
-$includePath = new \Magento\Framework\Autoload\IncludePath();
-spl_autoload_register([$includePath, 'load']);
 $objectManager->create('Mtf\Util\Generate\Page')->launch();
 \Mtf\Util\Generate\GenerateResult::displayResults();

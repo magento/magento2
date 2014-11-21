@@ -25,31 +25,45 @@
 namespace Magento\CatalogSearch\Test\Block\Advanced;
 
 use Mtf\Client\Element;
+use Mtf\Client\Element\Locator;
 use Mtf\Fixture\FixtureInterface;
 use Mtf\Block\Form as ParentForm;
 
 /**
- * Class Form
- * Advanced search form
+ * Advanced search form.
  */
 class Form extends ParentForm
 {
     /**
-     * Search button selector
+     * Search button selector.
      *
      * @var string
      */
     protected $searchButtonSelector = '.action.search';
 
     /**
-     * Field selector select tax class
+     * Field selector select tax class.
      *
      * @var string
      */
     protected $taxClassSelector = '#tax_class_id';
 
     /**
-     * Submit search form
+     * Field selector.
+     *
+     * @var string
+     */
+    protected $fieldSelector = '//div[label and div]';
+
+    /**
+     * Label element selector.
+     *
+     * @var string
+     */
+    protected $labelSelector = 'label';
+
+    /**
+     * Submit search form.
      *
      * @return void
      */
@@ -59,7 +73,7 @@ class Form extends ParentForm
     }
 
     /**
-     * Fill the root form
+     * Fill the root form.
      *
      * @param FixtureInterface $fixture
      * @param Element|null $element
@@ -82,7 +96,7 @@ class Form extends ParentForm
     }
 
     /**
-     * Fill form with custom fields
+     * Fill form with custom fields.
      * (for End To End Tests)
      *
      * @param FixtureInterface $fixture
@@ -95,5 +109,20 @@ class Form extends ParentForm
         $dataForMapping = array_intersect_key($data, array_flip($fields));
         $mapping = $this->dataMapping($dataForMapping);
         $this->_fill($mapping, $element);
+    }
+
+    /**
+     * Get form fields.
+     *
+     * @return array
+     */
+    public function getFormLabels()
+    {
+        $labels = [];
+        $elements = $this->_rootElement->find($this->fieldSelector, Locator::SELECTOR_XPATH)->getElements();
+        foreach ($elements as $element) {
+            $labels[] = $element->find($this->labelSelector)->getText();
+        }
+        return $labels;
     }
 }

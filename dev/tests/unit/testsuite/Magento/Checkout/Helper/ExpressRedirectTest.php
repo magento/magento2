@@ -60,11 +60,7 @@ class ExpressRedirectTest extends \PHPUnit_Framework_TestCase
             array('set')
         )->getMock();
 
-        $this->_objectManager = $this->getMockBuilder(
-            'Magento\Framework\ObjectManager'
-        )->disableOriginalConstructor()->setMethods(
-            array('get', 'setFactory', 'create', 'configure')
-        )->getMock();
+        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
 
         $this->_customerSession = $this->getMockBuilder(
             'Magento\Customer\Model\Session'

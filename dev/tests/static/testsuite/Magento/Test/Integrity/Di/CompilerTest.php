@@ -81,15 +81,6 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $this->_tmpDir = realpath(__DIR__) . '/tmp';
         $this->_generationDir = $this->_tmpDir . '/generation';
         $this->_compilationDir = $this->_tmpDir . '/di';
-
-        \Magento\Framework\Code\Generator\FileResolver::addIncludePath(
-            [
-                $basePath . '/app/code',
-                $basePath . '/lib/internal',
-                $this->_generationDir
-            ]
-        );
-
         $this->_command = 'php ' . $basePath . '/dev/tools/Magento/Tools/Di/compiler.php --generation=%s --di=%s';
 
         $booleanUtils = new \Magento\Framework\Stdlib\BooleanUtils();
@@ -323,14 +314,11 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructorIntegrity()
     {
-        $fileResolver = new \Magento\Framework\Code\Generator\FileResolver();
         $generatorIo = new \Magento\Framework\Code\Generator\Io(
             new \Magento\Framework\Filesystem\Driver\File(),
-            $fileResolver,
             $this->_generationDir
         );
         $generator = new \Magento\Framework\Code\Generator(
-            $fileResolver,
             $generatorIo,
             array(
                 \Magento\Framework\Api\Code\Generator\DataBuilder::ENTITY_TYPE
@@ -351,8 +339,8 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
                     => 'Magento\Framework\Api\Code\Generator\SearchResults'
             )
         );
-        $fileResolver = new \Magento\Framework\Code\Generator\Autoloader($generator, $fileResolver);
-        spl_autoload_register(array($fileResolver, 'load'));
+        $generationAutoloader = new \Magento\Framework\Code\Generator\Autoloader($generator);
+        spl_autoload_register(array($generationAutoloader, 'load'));
 
         $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
         $invoker(
@@ -361,7 +349,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
             },
             $this->_phpClassesDataProvider()
         );
-        spl_autoload_unregister(array($fileResolver, 'load'));
+        spl_autoload_unregister(array($generationAutoloader, 'load'));
     }
 
     /**

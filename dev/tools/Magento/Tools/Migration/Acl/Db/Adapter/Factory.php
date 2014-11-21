@@ -30,9 +30,9 @@ namespace Magento\Tools\Migration\Acl\Db\Adapter;
 class Factory
 {
     /**
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      */
-    public function __construct(\Magento\Framework\ObjectManager $objectManager)
+    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
         $this->_objectManager = $objectManager;
     }

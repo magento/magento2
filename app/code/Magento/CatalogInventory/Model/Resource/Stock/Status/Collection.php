@@ -24,58 +24,20 @@
 
 namespace Magento\CatalogInventory\Model\Resource\Stock\Status;
 
+use Magento\CatalogInventory\Api\Data\StockStatusCollectionInterface;
+use Magento\Framework\Data\AbstractSearchResult;
+
 /**
- * Stock status collection resource model
+ * Class Collection
+ * @package Magento\CatalogInventory\Model\Resource\Stock\Status
  */
-class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends AbstractSearchResult implements StockStatusCollectionInterface
 {
     /**
-     * Initialize resource model
-     *
-     * @return void
+     * @inheritdoc
      */
-    protected function _construct()
+    protected function init()
     {
-        $this->_init(
-            'Magento\CatalogInventory\Model\Stock\Status',
-            'Magento\CatalogInventory\Model\Resource\Stock\Status'
-        );
-    }
-
-    /**
-     * Filter status by website
-     *
-     * @param \Magento\Store\Model\Website $website
-     * @return $this
-     */
-    public function addWebsiteFilter(\Magento\Store\Model\Website $website)
-    {
-        $this->addFieldToFilter('website_id', $website->getWebsiteId());
-        return $this;
-    }
-
-    /**
-     * Add filter by quantity to collection
-     *
-     * @param float $qty
-     * @return $this
-     */
-    public function addQtyFilter($qty)
-    {
-        return $this->addFieldToFilter('main_table.qty', ['lteq' => $qty]);
-    }
-
-    /**
-     * Initialize select object
-     *
-     * @return $this
-     */
-    protected function _initSelect()
-    {
-        return parent::_initSelect()->getSelect()->join(
-            array('cp_table' => $this->getTable('catalog_product_entity')),
-            'main_table.product_id = cp_table.entity_id',
-            array('sku', 'type_id')
-        );
+        $this->setDataInterfaceName('Magento\CatalogInventory\Api\Data\StockStatusInterface');
     }
 }

@@ -30,6 +30,11 @@
             <locator>#maincontent</locator>
             <strategy>css selector</strategy>
         </viewBlock>
+        <additionalInformationBlock>
+            <class>Magento\Catalog\Test\Block\Product\Additional</class>
+            <locator>#additional</locator>
+            <strategy>css selector</strategy>
+        </additionalInformationBlock>
         <customOptionsBlock>
             <class>Magento\Catalog\Test\Block\Product\View\CustomOptions</class>
             <locator>#product-options-wrapper</locator>

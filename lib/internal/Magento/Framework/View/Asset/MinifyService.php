@@ -38,7 +38,7 @@ class MinifyService
     /**
      * ObjectManager
      *
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
 
@@ -63,12 +63,12 @@ class MinifyService
      * Constructor
      *
      * @param ConfigInterface $config
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $appMode
      */
     public function __construct(
         ConfigInterface $config,
-        \Magento\Framework\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
         $appMode = \Magento\Framework\App\State::MODE_DEFAULT
     ) {
         $this->config = $config;

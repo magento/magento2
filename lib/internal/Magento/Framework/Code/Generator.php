@@ -23,6 +23,9 @@
  */
 namespace Magento\Framework\Code;
 
+use Magento\Framework\Code\Generator\DefinedClasses;
+use Magento\Framework\Code\Generator\EntityAbstract;
+
 class Generator
 {
     const GENERATION_SUCCESS = 'success';
@@ -32,35 +35,35 @@ class Generator
     const GENERATION_SKIP = 'skip';
 
     /**
-     * @var \Magento\Framework\Code\Generator\FileResolver
-     */
-    protected $fileResolver;
-
-    /**
      * @var \Magento\Framework\Code\Generator\Io
      */
     protected $_ioObject;
 
     /**
-     * @var string[]
+     * @var string[] of EntityAbstract classes
      */
     protected $_generatedEntities;
 
     /**
-     * @param \Magento\Framework\Code\Generator\FileResolver $fileResolver
-     * @param Generator\Io $ioObject
-     * @param array $generatedEntities
+     * @var DefinedClasses
+     */
+    protected $definedClasses;
+
+    /**
+     * @param Generator\Io   $ioObject
+     * @param array          $generatedEntities
+     * @param DefinedClasses $definedClasses
      */
     public function __construct(
-        \Magento\Framework\Code\Generator\FileResolver $fileResolver,
         \Magento\Framework\Code\Generator\Io $ioObject = null,
-        array $generatedEntities = array()
+        array $generatedEntities = [],
+        DefinedClasses $definedClasses = null
     ) {
-        $this->fileResolver = $fileResolver;
-        $this->_ioObject = $ioObject ?: new \Magento\Framework\Code\Generator\Io(
-            new \Magento\Framework\Filesystem\Driver\File(),
-            $this->fileResolver
-        );
+        $this->_ioObject = $ioObject
+            ?: new \Magento\Framework\Code\Generator\Io(
+                new \Magento\Framework\Filesystem\Driver\File()
+            );
+        $this->definedClasses = $definedClasses ?: new DefinedClasses();
         $this->_generatedEntities = $generatedEntities;
     }
 
@@ -103,8 +106,7 @@ class Generator
             return self::GENERATION_ERROR;
         }
 
-        // check if file already exists
-        if ($this->fileResolver->getFile($className)) {
+        if ($this->definedClasses->classLoadable($className)) {
             return self::GENERATION_SKIP;
         }
 
@@ -112,12 +114,23 @@ class Generator
             throw new \InvalidArgumentException('Unknown generation entity.');
         }
         $generatorClass = $this->_generatedEntities[$entity];
+        /** @var EntityAbstract $generator */
         $generator = new $generatorClass($entityName, $className, $this->_ioObject);
-        if (!$generator->generate()) {
+
+        if (!($file = $generator->generate())) {
             $errors = $generator->getErrors();
             throw new \Magento\Framework\Exception(implode(' ', $errors));
         }
-
+        $this->includeFile($file);
         return self::GENERATION_SUCCESS;
+    }
+
+    /**
+     * @param string $fileName
+     * @return void
+     */
+    public function includeFile($fileName)
+    {
+        include $fileName;
     }
 }

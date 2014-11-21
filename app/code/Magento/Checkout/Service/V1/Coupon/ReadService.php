@@ -69,7 +69,7 @@ class ReadService implements ReadServiceInterface
     public function get($cartId)
     {
         /** @var  \Magento\Sales\Model\Quote $quote */
-        $quote = $this->quoteRepository->get($cartId);
+        $quote = $this->quoteRepository->getActive($cartId);
         $data = [Coupon::COUPON_CODE => $quote->getCouponCode()];
         $output = $this->couponBuilder->populateWithArray($data)->create();
         return $output;

@@ -23,7 +23,7 @@
  */
 namespace Magento\Framework\View\Layout\Argument\Interpreter\Decorator;
 
-use Magento\Framework\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Data\Argument\InterpreterInterface;
 
 /**
@@ -32,7 +32,7 @@ use Magento\Framework\Data\Argument\InterpreterInterface;
 class Updater implements InterpreterInterface
 {
     /**
-     * @var ObjectManager
+     * @var ObjectManagerInterface
      */
     private $objectManager;
 
@@ -42,10 +42,10 @@ class Updater implements InterpreterInterface
     private $subject;
 
     /**
-     * @param ObjectManager $objectManager
+     * @param ObjectManagerInterface $objectManager
      * @param InterpreterInterface $subject
      */
-    public function __construct(ObjectManager $objectManager, InterpreterInterface $subject)
+    public function __construct(ObjectManagerInterface $objectManager, InterpreterInterface $subject)
     {
         $this->objectManager = $objectManager;
         $this->subject = $subject;

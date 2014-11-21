@@ -24,6 +24,7 @@
 
 namespace Magento\Catalog\Block\Product\Compare;
 
+use Magento\Customer\Model\Context;
 use Magento\Framework\App\Action\Action;
 use Magento\Catalog\Model\Product;
 
@@ -169,7 +170,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
             $this->_items = $this->_itemCollectionFactory->create();
             $this->_items->useProductItem(true)->setStoreId($this->_storeManager->getStore()->getId());
 
-            if ($this->httpContext->getValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH)) {
+            if ($this->httpContext->getValue(Context::CONTEXT_AUTH)) {
                 $this->_items->setCustomerId($this->currentCustomer->getCustomerId());
             } elseif ($this->_customerId) {
                 $this->_items->setCustomerId($this->_customerId);

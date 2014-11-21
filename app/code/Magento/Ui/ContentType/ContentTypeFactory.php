@@ -23,7 +23,7 @@
  */
 namespace Magento\Ui\ContentType;
 
-use Magento\Framework\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class ContentTypeFactory
@@ -49,17 +49,17 @@ class ContentTypeFactory
     /**
      * Object manager
      *
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
 
     /**
      * Constructor
      *
-     * @param ObjectManager $objectManager
+     * @param ObjectManagerInterface $objectManager
      * @param array $types
      */
-    public function __construct(ObjectManager $objectManager, array $types = [])
+    public function __construct(ObjectManagerInterface $objectManager, array $types = [])
     {
         $this->types = array_merge($this->types, $types);
         $this->objectManager = $objectManager;

@@ -25,7 +25,7 @@ namespace Magento\Search\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\Context;
-use Magento\Framework\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\String as StdlibString;
 use Magento\Store\Model\ScopeInterface;
 
@@ -47,7 +47,7 @@ class QueryFactory implements QueryFactoryInterface
     private $query;
 
     /**
-     * @var ObjectManager
+     * @var ObjectManagerInterface
      */
     private $objectManager;
 
@@ -63,13 +63,13 @@ class QueryFactory implements QueryFactoryInterface
 
     /**
      * @param Context $context
-     * @param ObjectManager $objectManager
+     * @param ObjectManagerInterface $objectManager
      * @param StdlibString $string
      * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         Context $context,
-        ObjectManager $objectManager,
+        ObjectManagerInterface $objectManager,
         StdlibString $string,
         ScopeConfigInterface $scopeConfig
     ) {

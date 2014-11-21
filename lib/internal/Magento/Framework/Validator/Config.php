@@ -253,7 +253,7 @@ class Config extends \Magento\Framework\Config\AbstractXml
          * Read constraint configurator callback
          *
          * <constraint class="Constraint">
-         *     <callback class="Magento\Customer\Helper\Data" method="configureValidator"/>
+         *     <callback class="Magento\Core\Helper\Data" method="configureValidator"/>
          * </constraint>
          */
         $callback = $this->_readCallback($children);

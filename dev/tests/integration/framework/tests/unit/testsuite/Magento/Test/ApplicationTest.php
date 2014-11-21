@@ -25,6 +25,7 @@ namespace Magento\Test;
 
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\State;
+use Magento\Framework\Autoload\AutoloaderRegistry;
 
 class ApplicationTest extends \PHPUnit_Framework_TestCase
 {
@@ -36,6 +37,8 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     public function testConstructor()
     {
         $shell = $this->getMock('\Magento\Framework\Shell', [], [], '', false);
+        $autoloadWrapper = $this->getMockBuilder('Magento\Framework\Autoload\ClassLoaderWrapper')
+            ->disableOriginalConstructor()->getMock();
         $tempDir = '/temp/dir';
         $appMode = \Magento\Framework\App\State::MODE_DEVELOPER;
 
@@ -45,7 +48,8 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             'local.xml',
             '',
             array(),
-            $appMode
+            $appMode,
+            $autoloadWrapper
         );
 
         $this->assertEquals($tempDir, $object->getTempDir(), 'Temp directory is not set in Application');

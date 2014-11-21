@@ -70,7 +70,7 @@ class ReadService implements ReadServiceInterface
          *
          * @var  \Magento\Sales\Model\Quote\Address $address
          */
-        $address = $this->quoteRepository->get($cartId)->getBillingAddress();
+        $address = $this->quoteRepository->getActive($cartId)->getBillingAddress();
         return $this->addressConverter->convertModelToDataObject($address);
     }
 }

@@ -36,15 +36,15 @@ class LayerTest extends \PHPUnit_Framework_TestCase
     protected $_scopeConfigMock;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Stock\Status|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Helper\Stock|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_stockStatusMock;
+    protected $_stockHelperMock;
 
     public function setUp()
     {
         $this->_scopeConfigMock = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->_stockStatusMock = $this->getMock(
-            '\Magento\CatalogInventory\Model\Stock\Status',
+        $this->_stockHelperMock = $this->getMock(
+            '\Magento\CatalogInventory\Helper\Stock',
             array(),
             array(),
             '',
@@ -52,7 +52,7 @@ class LayerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_model = new \Magento\CatalogInventory\Model\Plugin\Layer(
-            $this->_stockStatusMock,
+            $this->_stockHelperMock,
             $this->_scopeConfigMock
         );
     }
@@ -71,6 +71,7 @@ class LayerTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue(true)
         );
+        /** @var \Magento\Catalog\Model\Resource\Product\Collection $collectionMock */
         $collectionMock = $this->getMock(
             '\Magento\Catalog\Model\Resource\Product\Collection',
             array(),
@@ -78,7 +79,8 @@ class LayerTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_stockStatusMock->expects($this->never())->method('addIsInStockFilterToCollection');
+        $this->_stockHelperMock->expects($this->never())->method('addIsInStockFilterToCollection');
+        /** @var \Magento\Catalog\Model\Layer $subjectMock */
         $subjectMock = $this->getMock('\Magento\Catalog\Model\Layer', array(), array(), '', false);
         $this->_model->beforePrepareProductCollection($subjectMock, $collectionMock);
     }
@@ -106,7 +108,7 @@ class LayerTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->_stockStatusMock->expects(
+        $this->_stockHelperMock->expects(
             $this->once()
         )->method(
             'addIsInStockFilterToCollection'

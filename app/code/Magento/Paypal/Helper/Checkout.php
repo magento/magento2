@@ -34,20 +34,12 @@ class Checkout
     protected $_session;
 
     /**
-     * @var \Magento\Sales\Model\QuoteFactory
-     */
-    protected $_quoteFactory;
-
-    /**
      * @param \Magento\Checkout\Model\Session $session
-     * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
      */
     public function __construct(
-        \Magento\Checkout\Model\Session $session,
-        \Magento\Sales\Model\QuoteFactory $quoteFactory
+        \Magento\Checkout\Model\Session $session
     ) {
         $this->_session = $session;
-        $this->_quoteFactory = $quoteFactory;
     }
 
     /**

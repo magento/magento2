@@ -53,14 +53,14 @@ class StandardTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Stdlib\CookieManager
+     * @var \Magento\Framework\Stdlib\CookieManagerInterface
      */
     protected $_cookieManagerMock;
 
 
     public function setUp()
     {
-        $this->_cookieManagerMock = $this->getMock('\Magento\Framework\Stdlib\CookieManager');
+        $this->_cookieManagerMock = $this->getMock('\Magento\Framework\Stdlib\CookieManagerInterface');
     }
 
     /**
@@ -93,7 +93,7 @@ class StandardTest extends \PHPUnit_Framework_TestCase
      */
     public function matchDataProvider()
     {
-        $this->_cookieManagerMock = $this->getMock('\Magento\Framework\Stdlib\CookieManager');
+        $this->_cookieManagerMock = $this->getMock('\Magento\Framework\Stdlib\CookieManagerInterface');
         $uri    = self::TEST_HOST . '/' . self::VDE_FRONT_NAME . self::TEST_PATH;
         $notVdeUrl = self::TEST_HOST . self::TEST_PATH;
 

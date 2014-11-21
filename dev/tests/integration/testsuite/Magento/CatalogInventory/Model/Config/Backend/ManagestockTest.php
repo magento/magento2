@@ -56,32 +56,30 @@ class ManagestockTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveAndRebuildIndex($newStockValue, $callCount)
     {
-        /** @var \Magento\CatalogInventory\Model\Stock\Status */
-        $stockStatus = $this->getMock(
-            '\Magento\CatalogInventory\Model\Stock\Status',
+        /** @var \Magento\CatalogInventory\Model\StockIndex */
+        $stockManagement = $this->getMock(
+            '\Magento\CatalogInventory\Model\StockIndex',
             ['rebuild'],
             [],
             '',
             false
         );
 
-        $stockStatus->expects($this->exactly($callCount))
-            ->method('rebuild')
-            ->will($this->returnValue($stockStatus));
+        $stockManagement->expects($this->exactly($callCount))
+            ->method('rebuild');
 
         $manageStock = new Managestock(
             Bootstrap::getObjectManager()->get('\Magento\Framework\Model\Context'),
             Bootstrap::getObjectManager()->get('\Magento\Framework\Registry'),
             Bootstrap::getObjectManager()->get('\Magento\Framework\App\Config\ScopeConfigInterface'),
-            $stockStatus,
+            $stockManagement,
             Bootstrap::getObjectManager()->get('Magento\CatalogInventory\Model\Indexer\Stock\Processor'),
             Bootstrap::getObjectManager()->get('Magento\Core\Model\Resource\Config')
         );
 
-        $manageStock->setPath('cataloginventory/item_options/manage_stock')
-            ->setScope('default')
-            ->setScopeId(0);
-
+        $manageStock->setPath('cataloginventory/item_options/manage_stock');
+        $manageStock->setScope('default');
+        $manageStock->setScopeId(0);
         $manageStock->setValue($newStockValue);
 
         // assert

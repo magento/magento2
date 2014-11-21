@@ -30,7 +30,7 @@ namespace Magento\Sales\Model\Order\Customer;
 class Builder
 {
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
 
@@ -105,10 +105,10 @@ class Builder
     protected $customerTaxvat;
 
     /**
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      */
     public function __construct(
-        \Magento\Framework\ObjectManager $objectManager
+        \Magento\Framework\ObjectManagerInterface $objectManager
     ) {
         $this->objectManager = $objectManager;
     }

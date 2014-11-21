@@ -39,7 +39,7 @@ interface SaleableInterface
     /**
      * Returns type identifier of saleable item
      *
-     * @return string
+     * @return array|string
      */
     public function getTypeId();
 

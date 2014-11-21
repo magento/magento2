@@ -75,7 +75,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             $this->_fixtureDir . '/app_base_dir'
         );
         $this->_shell = $this->getMock('Magento\Framework\Shell', array('execute'), array(), '', false);
-        $objectManager = $this->getMockForAbstractClass('\Magento\Framework\ObjectManager');
+        $objectManager = $this->getMock('\Magento\Framework\ObjectManagerInterface');
 
         $this->_object = $this->getMock(
             'Magento\TestFramework\Application',

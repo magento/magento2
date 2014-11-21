@@ -33,7 +33,7 @@ class IndexerRegistryTest extends \PHPUnit_Framework_TestCase
         $secondIndexer = $this->getMock('Magento\Indexer\Model\IndexerInterface');
         $secondIndexer->expects($this->once())->method('load')->with('second-indexer')->willReturnSelf();
 
-        $objectManager = $this->getMock('Magento\Framework\ObjectManager', [], [], '', false);
+        $objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $objectManager->expects($this->at(0))->method('create')->willReturn($firstIndexer);
         $objectManager->expects($this->at(1))->method('create')->willReturn($secondIndexer);
 

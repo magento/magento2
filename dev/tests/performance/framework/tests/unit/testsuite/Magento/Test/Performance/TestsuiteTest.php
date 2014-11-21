@@ -81,7 +81,7 @@ class TestsuiteTest extends \PHPUnit_Framework_TestCase
         $this->_application = $this->getMock(
             'Magento\TestFramework\Application',
             array('applyFixtures'),
-            array($this->_config, $this->getMockForAbstractClass('Magento\Framework\ObjectManager'), $shell)
+            array($this->_config, $this->getMock('Magento\Framework\ObjectManagerInterface'), $shell)
         );
         $this->_handler = $this->getMockForAbstractClass(
             'Magento\TestFramework\Performance\Scenario\HandlerInterface'

@@ -130,3 +130,6 @@ Magento/Shipping/Controller/Adminhtml/Order/Shipment
 vendor
 setup/vendor
 Magento/CatalogSearch/Model/Resource/Fulltext
+lib/internal/Magento/Framework/Data
+lib/internal/Magento/Framework/Service
+app/code/Magento/CatalogInventory/Api/Data

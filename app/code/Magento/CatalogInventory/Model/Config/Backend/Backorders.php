@@ -44,7 +44,7 @@ class Backorders extends AbstractValue
                 || $this->getValue() == \Magento\CatalogInventory\Model\Stock::BACKORDERS_NO
             )
         ) {
-            $this->_stockStatus->rebuild();
+            $this->stockIndex->rebuild();
             $this->_stockIndexerProcessor->markIndexerAsInvalid();
         }
         return $this;

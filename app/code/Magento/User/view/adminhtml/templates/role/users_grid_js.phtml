@@ -105,7 +105,7 @@ require([
             roleUsersRowInit(<?php echo $myBlock->getJsObjectName() ?>, row);
         });
     }
-    document.observe('dom:loaded', function(){
+    Event.observe(window, "load", function(){
         <?php echo $myBlock->getJsObjectName() ?>.rowClickCallback = roleUsersRowClick;
         <?php echo $myBlock->getJsObjectName() ?>.initRowCallback = roleUsersRowInit;
         <?php echo $myBlock->getJsObjectName() ?>.checkboxCheckCallback = registerUserRole;

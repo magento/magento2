@@ -34,7 +34,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Stdlib\CookieManager
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Stdlib\CookieManagerInterface
      */
     protected $cookieManagerMock;
 
@@ -55,8 +55,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->cookieMetadataFactoryMock = $this->getMockBuilder(
             'Magento\Framework\Stdlib\Cookie\CookieMetadataFactory'
         )->disableOriginalConstructor()->getMock();
-        $this->cookieManagerMock = $this->getMockBuilder('Magento\Framework\Stdlib\CookieManager')
-            ->disableOriginalConstructor()->getMock();
+        $this->cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface');
         $this->contextMock = $this->getMockBuilder('Magento\Framework\App\Http\Context')->disableOriginalConstructor()
             ->getMock();
         $this->model = $objectManager->getObject(
@@ -289,7 +288,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $objectManagerMock = $this->getMock('Magento\Framework\App\ObjectManager', [], [], '', false);
         $objectManagerMock->expects($this->once())
             ->method('create')
-            ->with('Magento\Framework\Stdlib\CookieManager')
+            ->with('Magento\Framework\Stdlib\CookieManagerInterface')
             ->will($this->returnValue($this->cookieManagerMock));
 
         $objectManagerMock->expects($this->once())

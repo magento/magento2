@@ -24,11 +24,11 @@
 
 namespace Magento\Catalog\Test\TestCase\ProductAttribute;
 
-use Mtf\TestCase\Injectable;
+use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Fixture\CatalogAttributeSet;
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
-use Magento\Catalog\Test\Page\Adminhtml\CatalogProductAttributeIndex;
-use Magento\Catalog\Test\Page\Adminhtml\CatalogProductAttributeNew;
+use Mtf\ObjectManager;
+use Mtf\TestCase\Scenario;
 
 /**
  * Test Creation for CreateProductAttributeEntity
@@ -44,31 +44,37 @@ use Magento\Catalog\Test\Page\Adminhtml\CatalogProductAttributeNew;
  * @group Product_Attributes_(CS)
  * @ZephyrId MAGETWO-24767
  */
-class CreateProductAttributeEntityTest extends Injectable
+class CreateProductAttributeEntityTest extends Scenario
 {
     /**
-     * Run CreateProductAttributeEntity test
+     * CatalogProductAttribute object.
+     *
+     * @var CatalogProductAttribute
+     */
+    protected $attribute;
+
+    /**
+     * Run CreateProductAttributeEntity test.
      *
      * @param CatalogProductAttribute $productAttribute
-     * @param CatalogProductAttributeIndex $attributeIndex
-     * @param CatalogProductAttributeNew $attributeNew
-     * @param CatalogAttributeSet $productTemplate
      * @return array
      */
-    public function testCreateProductAttribute(
-        CatalogProductAttribute $productAttribute,
-        CatalogProductAttributeIndex $attributeIndex,
-        CatalogProductAttributeNew $attributeNew,
-        CatalogAttributeSet $productTemplate
-    ) {
-        //Precondition
-        $productTemplate->persist();
+    public function testCreateProductAttribute(CatalogProductAttribute $productAttribute)
+    {
+        $this->attribute = $productAttribute;
+        $this->executeScenario();
+    }
 
-        //Steps
-        $attributeIndex->open();
-        $attributeIndex->getPageActionsBlock()->addNew();
-        $attributeNew->getAttributeForm()->fill($productAttribute);
-        $attributeNew->getPageActions()->save();
-        return ['attribute' => $productAttribute];
+    /**
+     * Delete attribute after test.
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        ObjectManager::getInstance()->create(
+            'Magento\Catalog\Test\TestStep\DeleteAttributeStep',
+            ['attribute' => $this->attribute]
+        )->run();
     }
 }

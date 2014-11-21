@@ -32,15 +32,13 @@ class ValidatorFactoryTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Framework\ValidatorFactory */
     private $model;
 
-    /** @var \Magento\Framework\ObjectManager | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\ObjectManagerInterface | \PHPUnit_Framework_MockObject_MockObject */
     private $objectManagerMock;
 
     public function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManager')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->model = $objectManager->getObject('Magento\Framework\ValidatorFactory',
             ['objectManager' => $this->objectManagerMock]
         );

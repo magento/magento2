@@ -54,7 +54,7 @@ class Mapper
     private $aggregations;
 
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
 
@@ -64,7 +64,7 @@ class Mapper
     private $rootQuery = null;
 
     /**
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param array $queries
      * @param string $rootQueryName
      * @param array $aggregations
@@ -74,7 +74,7 @@ class Mapper
      * @throws StateException
      */
     public function __construct(
-        \Magento\Framework\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
         array $queries,
         $rootQueryName,
         array $aggregations = [],

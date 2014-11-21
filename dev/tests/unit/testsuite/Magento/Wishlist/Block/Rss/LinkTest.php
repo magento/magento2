@@ -53,13 +53,16 @@ class LinkTest extends \PHPUnit_Framework_TestCase
 
         $this->wishlistHelper = $this->getMock(
             'Magento\Wishlist\Helper\Data',
-            ['getWishlist', 'getCustomer'],
+            ['getWishlist', 'getCustomer', 'urlEncode'],
             [],
             '',
             false
         );
         $this->wishlistHelper->expects($this->any())->method('getWishlist')->will($this->returnValue($wishlist));
         $this->wishlistHelper->expects($this->any())->method('getCustomer')->will($this->returnValue($customer));
+        $this->wishlistHelper->expects($this->any())->method('urlEncode')->willReturnCallback(function ($url) {
+            return strtr(base64_encode($url), '+/=', '-_,');
+        });
 
         $this->urlBuilder = $this->getMock('Magento\Framework\App\Rss\UrlBuilderInterface');
         $this->scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');

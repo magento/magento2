@@ -33,17 +33,17 @@ namespace Magento\Sales\Model\AdminOrder\Product\Quote;
 class Initializer
 {
     /**
-     * @var \Magento\CatalogInventory\Service\V1\StockItemService
+     * @var \Magento\CatalogInventory\Api\StockRegistryInterface
      */
-    protected $stockItemService;
+    protected $stockRegistry;
 
     /**
-     * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
+     * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      */
     public function __construct(
-        \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
+        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
     ) {
-        $this->stockItemService = $stockItemService;
+        $this->stockRegistry = $stockRegistry;
     }
 
     /**
@@ -57,9 +57,8 @@ class Initializer
         \Magento\Catalog\Model\Product $product,
         \Magento\Framework\Object $config
     ) {
-        /** @var \Magento\CatalogInventory\Service\V1\Data\StockItem $stockItemDo */
-        $stockItemDo = $this->stockItemService->getStockItem($product->getId());
-        if ($stockItemDo->getStockId() && $stockItemDo->getIsQtyDecimal()) {
+        $stockItem = $this->stockRegistry->getStockItem($product->getId(), $quote->getStore()->getWebsiteId());
+        if ($stockItem->getIsQtyDecimal()) {
             $product->setIsQtyDecimal(1);
         } else {
             $config->setQty((int)$config->getQty());

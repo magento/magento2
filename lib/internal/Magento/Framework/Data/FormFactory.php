@@ -31,7 +31,7 @@ class FormFactory
     /**
      * Object Manager instance
      *
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
 
@@ -45,10 +45,10 @@ class FormFactory
     /**
      * Factory construct
      *
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
      */
-    public function __construct(\Magento\Framework\ObjectManager $objectManager, $instanceName = 'Magento\Framework\Data\Form')
+    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, $instanceName = 'Magento\Framework\Data\Form')
     {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;

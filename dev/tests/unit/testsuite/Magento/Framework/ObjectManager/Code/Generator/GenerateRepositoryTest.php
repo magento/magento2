@@ -63,7 +63,8 @@ class GenerateRepositoryTest extends \PHPUnit_Framework_TestCase
                 null,
                 $this->ioObjectMock,
                 null,
-                null
+                null,
+                $this->getMock('Magento\Framework\Filesystem\FileResolver')
             ]
         );
         $sampleRepositoryCode = file_get_contents(__DIR__ . '/_files/SampleRepository.txt');
@@ -80,7 +81,7 @@ class GenerateRepositoryTest extends \PHPUnit_Framework_TestCase
             );
 
         $model->expects($this->once())->method('_validateData')->will($this->returnValue(true));
-        $this->assertTrue($model->generate());
+        $this->assertEquals('SampleRepository.php', $model->generate());
     }
 
     /**
@@ -90,23 +91,8 @@ class GenerateRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $sourceClassName = 'Magento_Module_Controller_Index';
         $resultClassName = 'Magento_Module_Controller';
-
-        $fileResolverMock = $this->getMockBuilder('Magento\Framework\Code\Generator\FileResolver')
-            ->disableOriginalConstructor()
-            ->setMethods(['getFile'])
-            ->getMock();
-        $fileResolverMock->expects($this->at(0))
-            ->method('getFile')
-            ->with($sourceClassName)
-            ->will($this->returnValue(true));
-        $fileResolverMock->expects($this->at(1))
-            ->method('getFile')
-            ->with($resultClassName)
-            ->will($this->returnValue(false));
-
-        $repository = new Repository(
-            null, null, null, null, $fileResolverMock
-        );
+        
+        $repository = new Repository();
         $repository->init($sourceClassName, $resultClassName);
         $this->assertFalse($repository->generate());
     }

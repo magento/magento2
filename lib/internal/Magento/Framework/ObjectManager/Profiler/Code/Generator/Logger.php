@@ -64,7 +64,7 @@ class Logger extends \Magento\Framework\Code\Generator\EntityAbstract
                 'docblock' => array(
                     'shortDescription' => 'Object Manager instance',
                     'tags' => array(
-                        array('name' => 'var', 'description' => '\Magento\Framework\ObjectManager')
+                        array('name' => 'var', 'description' => '\Magento\Framework\ObjectManagerInterface')
                     )
                 ),
             ),

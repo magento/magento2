@@ -95,7 +95,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
     public function testGetCart()
     {
         $cartId = 12;
-        $this->quoteRepositoryMock->expects($this->once())->method('get')->with($cartId)
+        $this->quoteRepositoryMock->expects($this->once())->method('getActive')->with($cartId)
             ->will($this->returnValue($this->quoteMock));
 
         $this->cartMapperMock->expects($this->once())->method('map')->with($this->quoteMock);
@@ -106,7 +106,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
     public function testGetCartForCustomer()
     {
         $customerId = 12;
-        $this->quoteRepositoryMock->expects($this->once())->method('getForCustomer')->with($customerId)
+        $this->quoteRepositoryMock->expects($this->once())->method('getActiveForCustomer')->with($customerId)
             ->will($this->returnValue($this->quoteMock));
 
         $this->cartMapperMock->expects($this->once())->method('map')->with($this->quoteMock);

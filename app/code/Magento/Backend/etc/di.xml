@@ -104,6 +104,7 @@
             <argument name="authSession" xsi:type="object">Magento\Backend\Model\Auth\Session\Proxy</argument>
             <argument name="formKey" xsi:type="object">Magento\Framework\Data\Form\FormKey\Proxy</argument>
             <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+            <argument name="backendHelper" xsi:type="object">Magento\Backend\Helper\Data\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Backend\Helper\Dashboard\Data">
@@ -111,8 +112,8 @@
             <argument name="installDate" xsi:type="init_parameter">Magento\Framework\App\State::PARAM_INSTALL_DATE</argument>
         </arguments>
     </type>
-    <preference for="Magento\Framework\Authorization\RoleLocator" type="Magento\Backend\Model\Authorization\RoleLocator" />
-    <preference for="Magento\Framework\Authorization\Policy" type="Magento\Framework\Authorization\Policy\Acl"/>
+    <preference for="Magento\Framework\Authorization\RoleLocatorInterface" type="Magento\Backend\Model\Authorization\RoleLocator" />
+    <preference for="Magento\Framework\Authorization\PolicyInterface" type="Magento\Framework\Authorization\Policy\Acl"/>
     <preference for="Magento\Framework\Acl\Resource\ProviderInterface" type="Magento\Framework\Acl\Resource\Provider"/>
     <type name="Magento\Framework\Acl\Resource\Config\Reader\Filesystem">
         <arguments>

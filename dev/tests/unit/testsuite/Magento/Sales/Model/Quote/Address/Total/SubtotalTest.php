@@ -23,6 +23,11 @@
  */
 namespace Magento\Sales\Model\Quote\Address\Total;
 
+/**
+ * Class SubtotalTest
+ * @package Magento\Sales\Model\Quote\Address\Total
+ * TODO refactor me
+ */
 class SubtotalTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -34,6 +39,14 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Sales\Model\Quote\Address\Total\Subtotal
      */
     protected $subtotalModel;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $stockItemMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $stockRegistry;
 
     protected function setUp()
     {
@@ -63,31 +76,22 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
      */
     public function testCollect($price, $originalPrice, $itemHasParent, $expectedPrice, $expectedOriginalPrice)
     {
-        /** @var \Magento\CatalogInventory\Service\V1\Data\StockItem $stockItemDoMock */
-        $stockItemDoMock = $this->getMock(
-            '\Magento\CatalogInventory\Service\V1\Data\StockItem',
-            ['getStockId'],
+        $this->stockRegistry = $this->getMockBuilder('Magento\CatalogInventory\Model\StockRegistry')
+            ->disableOriginalConstructor()
+            ->setMethods(['getStockItem', '__wakeup'])
+            ->getMock();
+
+        $this->stockItemMock = $this->getMock(
+            'Magento\CatalogInventory\Model\Stock\Item',
+            ['getIsInStock', '__wakeup'],
             [],
             '',
             false
         );
 
-        $stockItemDoMock->expects($this->any())
-            ->method('getStockId')
-            ->will($this->returnValue(false));
-
-        /** @var \Magento\CatalogInventory\Service\V1\StockItemService $stockItemServiceMock */
-        $stockItemServiceMock = $this->getMock(
-            'Magento\CatalogInventory\Service\V1\StockItemService',
-            ['getStockItem'],
-            [],
-            '',
-            false
-        );
-
-        $stockItemServiceMock->expects($this->any())
+        $this->stockRegistry->expects($this->any())
             ->method('getStockItem')
-            ->will($this->returnValue($stockItemDoMock));
+            ->will($this->returnValue($this->stockItemMock));
 
         $priceCurrency = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
         $priceCurrency->expects($this->any())
@@ -99,8 +103,8 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
         $quoteItem = $this->objectManager->getObject(
             'Magento\Sales\Model\Quote\Item',
             [
-                'stockItemService' => $stockItemServiceMock,
-                'priceCurrency'    => $priceCurrency,
+                'stockRegistry' => $this->stockRegistry,
+                'priceCurrency' => $priceCurrency,
             ]
         );
         /** @var \Magento\Sales\Model\Quote\Address|\PHPUnit_Framework_MockObject_MockObject $address */
@@ -134,6 +138,16 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
         );
         $store = $this->objectManager->getObject('Magento\Store\Model\Store');
         $store->setCurrentCurrency('');
+
+        $store = $this->getMock('Magento\Store\Model\Store', ['getWebsiteId'], [], '', false);
+        $store->expects($this->any())
+            ->method('getWebsiteId')
+            ->will($this->returnValue(10));
+
+        $product->expects($this->any())
+            ->method('getStore')
+            ->will($this->returnValue($store));
+
         $quote->expects($this->any())->method('getStore')->will($this->returnValue($store));
         $quoteItem->setProduct($product)->setQuote($quote)->setOriginalCustomPrice($price);
 

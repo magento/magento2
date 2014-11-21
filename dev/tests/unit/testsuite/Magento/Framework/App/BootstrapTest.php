@@ -71,7 +71,7 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->objectManagerFactory = $this->getMock('\Magento\Framework\App\ObjectManagerFactory', [], [], '', false);
-        $this->objectManager = $this->getMockForAbstractClass('\Magento\Framework\ObjectManager');
+        $this->objectManager = $this->getMock('\Magento\Framework\ObjectManagerInterface');
         $this->dirs = $this->getMock('\Magento\Framework\App\Filesystem\DirectoryList', ['getPath'], [], '', false);
         $this->maintenanceMode = $this->getMock('\Magento\Framework\App\MaintenanceMode', ['isOn'], [], '', false);
         $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);

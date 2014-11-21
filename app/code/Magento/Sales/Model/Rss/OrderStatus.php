@@ -49,7 +49,7 @@ class OrderStatus implements DataProviderInterface
     protected $orderResourceFactory;
 
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
 
@@ -74,7 +74,7 @@ class OrderStatus implements DataProviderInterface
     protected $orderFactory;
 
     /**
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Sales\Model\Resource\Order\Rss\OrderStatusFactory $orderResourceFactory
@@ -83,7 +83,7 @@ class OrderStatus implements DataProviderInterface
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        \Magento\Framework\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Sales\Model\Resource\Order\Rss\OrderStatusFactory $orderResourceFactory,

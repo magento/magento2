@@ -29,7 +29,6 @@ use Mtf\Client\Element;
 use Mtf\Client\Element\Locator;
 
 /**
- * Class ItemProduct
  * Item product block on backend create order page.
  */
 class ItemProduct extends \Magento\Sales\Test\Block\Adminhtml\Order\Create\Items\ItemProduct
@@ -46,7 +45,7 @@ class ItemProduct extends \Magento\Sales\Test\Block\Adminhtml\Order\Create\Items
      *
      * @var string
      */
-    protected $giftMessageForm = '//*[@role="dialog"][*[@id="gift_options_configure"]]';
+    protected $giftMessageForm = './/*[@role="dialog"][*[@id="gift_options_configure"]]';
 
     /**
      * Magento varienLoader.js loader.
@@ -65,6 +64,13 @@ class ItemProduct extends \Magento\Sales\Test\Block\Adminhtml\Order\Create\Items
     {
         $giftOptionsLink = $this->_rootElement->find($this->giftOptionsLink);
         $giftOptionsLink->click();
+        $giftMessageFormSelector = $this->giftMessageForm;
+        $browser = $this->browser;
+        $browser->waitUntil(
+            function () use ($giftMessageFormSelector, $browser) {
+                return $browser->find($giftMessageFormSelector, Locator::SELECTOR_XPATH)->isVisible() ? true : null;
+            }
+        );
         /** @var \Magento\GiftMessage\Test\Block\Adminhtml\Order\Create\Form $giftMessageForm */
         $giftMessageForm = $this->blockFactory->create(
             'Magento\GiftMessage\Test\Block\Adminhtml\Order\Create\Form',

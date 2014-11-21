@@ -47,24 +47,24 @@ class Qtyincrements extends Template implements IdentityInterface
     protected $_coreRegistry;
 
     /**
-     * @var \Magento\CatalogInventory\Service\V1\StockItemService
+     * @var \Magento\CatalogInventory\Api\StockRegistryInterface
      */
-    protected $stockItemService;
+    protected $stockRegistry;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
+     * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService,
+        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
-        $this->stockItemService = $stockItemService;
+        $this->stockRegistry = $stockRegistry;
         parent::__construct($context, $data);
     }
 
@@ -96,7 +96,11 @@ class Qtyincrements extends Template implements IdentityInterface
     public function getProductQtyIncrements()
     {
         if ($this->_qtyIncrements === null) {
-            $this->_qtyIncrements = $this->stockItemService->getQtyIncrements($this->getProduct()->getId());
+            $stockItem = $this->stockRegistry->getStockItem(
+                $this->getProduct()->getId(),
+                $this->getProduct()->getStore()->getWebsiteId()
+            );
+            $this->_qtyIncrements = $stockItem->getQtyIncrements();
             if (!$this->getProduct()->isSaleable()) {
                 $this->_qtyIncrements = false;
             }

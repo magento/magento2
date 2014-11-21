@@ -57,7 +57,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     /** @var RestResponse */
     protected $_response;
 
-    /** @var \Magento\Framework\ObjectManager */
+    /** @var \Magento\Framework\ObjectManagerInterface */
     protected $_objectManager;
 
     /** @var \Magento\Framework\App\State */
@@ -106,7 +106,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      * @param RestRequest $request
      * @param RestResponse $response
      * @param Router $router
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\App\State $appState
      * @param AuthorizationInterface $authorization
      * @param ServiceArgsSerializer $serializer
@@ -124,7 +124,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         RestRequest $request,
         RestResponse $response,
         Router $router,
-        \Magento\Framework\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\App\State $appState,
         AuthorizationInterface $authorization,
         ServiceArgsSerializer $serializer,

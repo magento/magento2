@@ -108,9 +108,9 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     protected $_currencyFactory;
 
     /**
-     * @var \Magento\CatalogInventory\Service\V1\StockItemService
+     * @var \Magento\CatalogInventory\Api\StockRegistryInterface
      */
-    protected $stockItemService;
+    protected $stockRegistry;
 
     /**
      * Raw rate request data
@@ -133,7 +133,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Directory\Helper\Data $directoryData
-     * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
+     * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -152,7 +152,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
         \Magento\Directory\Model\CountryFactory $countryFactory,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Directory\Helper\Data $directoryData,
-        \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService,
+        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         array $data = array()
     ) {
         $this->_xmlElFactory = $xmlElFactory;
@@ -165,7 +165,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
         $this->_countryFactory = $countryFactory;
         $this->_currencyFactory = $currencyFactory;
         $this->_directoryData = $directoryData;
-        $this->stockItemService = $stockItemService;
+        $this->stockRegistry = $stockRegistry;
         parent::__construct($scopeConfig, $rateErrorFactory, $logAdapterFactory, $data);
     }
 
@@ -316,14 +316,16 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
             $product = $item->getProduct();
             if ($product && $product->getId()) {
                 $weight = $product->getWeight();
-                $stockItemData = $this->stockItemService->getStockItem($product->getId());
+                $stockItemData = $this->stockRegistry->getStockItem(
+                    $product->getId(),
+                    $item->getStore()->getWebsiteId()
+                );
                 $doValidation = true;
 
                 if ($stockItemData->getIsQtyDecimal() && $stockItemData->getIsDecimalDivided()) {
-                    if ($this->stockItemService->getEnableQtyIncrements($product->getId())
-                        && $this->stockItemService->getQtyIncrements($product->getId())
+                    if ($stockItemData->getEnableQtyIncrements() && $stockItemData->getQtyIncrements()
                     ) {
-                        $weight = $weight * $this->stockItemService->getQtyIncrements($product->getId());
+                        $weight = $weight * $stockItemData->getQtyIncrements();
                     } else {
                         $doValidation = false;
                     }
@@ -403,7 +405,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     /**
      * Prepare service name. Strip tags and entities from name
      *
-     * @param string|object $name  service name or object with implemented __toString() method
+     * @param string|object $name service name or object with implemented __toString() method
      * @return string              prepared service name
      */
     protected function _prepareServiceName($name)

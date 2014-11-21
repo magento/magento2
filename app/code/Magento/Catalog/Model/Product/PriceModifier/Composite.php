@@ -28,12 +28,12 @@ namespace Magento\Catalog\Model\Product\PriceModifier;
 
 use Magento\Catalog\Model\Product\PriceModifierInterface;
 use Magento\Catalog\Model\Product;
-use Magento\Framework\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 
 class Composite implements PriceModifierInterface
 {
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
 
@@ -43,10 +43,10 @@ class Composite implements PriceModifierInterface
     protected $modifiers;
 
     /**
-     * @param ObjectManager $objectManager
+     * @param ObjectManagerInterface $objectManager
      * @param array $modifiers
      */
-    public function __construct(ObjectManager $objectManager, array $modifiers = array())
+    public function __construct(ObjectManagerInterface $objectManager, array $modifiers = array())
     {
         $this->objectManager = $objectManager;
         $this->modifiers = $modifiers;

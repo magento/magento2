@@ -25,7 +25,7 @@
  */
 namespace Magento\Framework\ObjectManager\Relations;
 
-class Compiled implements \Magento\Framework\ObjectManager\Relations
+class Compiled implements \Magento\Framework\ObjectManager\RelationsInterface
 {
     /**
      * List of class relations

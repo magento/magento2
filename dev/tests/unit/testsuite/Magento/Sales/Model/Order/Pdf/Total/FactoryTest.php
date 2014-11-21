@@ -26,7 +26,7 @@ namespace Magento\Sales\Model\Order\Pdf\Total;
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManager
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
 
@@ -37,7 +37,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManager', array(), array(), '', false);
+        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->_factory = new \Magento\Sales\Model\Order\Pdf\Total\Factory($this->_objectManager);
     }
 

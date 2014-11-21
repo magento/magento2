@@ -24,7 +24,7 @@
 
 namespace Mtf\Util\Generate;
 
-use Magento\Framework\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App;
 
 /**
@@ -36,13 +36,13 @@ use Magento\Framework\App;
 class Factory extends AbstractGenerate
 {
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
 
     /**
      * @constructor
-     * @param ObjectManager $objectManager
+     * @param ObjectManagerInterface $objectManager
      * @param Factory\Block $block
      * @param Factory\Fixture $fixture
      * @param Factory\Handler $handler
@@ -50,7 +50,7 @@ class Factory extends AbstractGenerate
      * @param Factory\Repository $repository
      */
     public function __construct(
-        ObjectManager $objectManager,
+        ObjectManagerInterface $objectManager,
         Factory\Block $block,
         Factory\Fixture $fixture,
         Factory\Handler $handler,

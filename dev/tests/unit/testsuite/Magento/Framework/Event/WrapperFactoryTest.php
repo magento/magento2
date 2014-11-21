@@ -36,7 +36,7 @@ class WrapperFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreate()
     {
         $expectedInstance = 'Magento\Framework\Event\Observer';
-        $objectManagerMock = $this->getMock('\Magento\Framework\ObjectManager', [], [], '', false, false);
+        $objectManagerMock = $this->getMock('\Magento\Framework\ObjectManagerInterface');
 
         $wrapperFactory = new WrapperFactory($objectManagerMock);
         $arguments = ['argument' => 'value', 'data' => 'data'];

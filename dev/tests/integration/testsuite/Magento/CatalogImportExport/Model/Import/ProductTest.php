@@ -146,10 +146,12 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $existingProductIds = array(10, 11, 12);
         $stockItems = array();
         foreach ($existingProductIds as $productId) {
-            $stockItem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                'Magento\CatalogInventory\Model\Stock\Item'
+            /** @var $stockRegistry \Magento\CatalogInventory\Model\StockRegistry */
+            $stockRegistry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+                'Magento\CatalogInventory\Model\StockRegistry'
             );
-            $stockItem->loadByProduct($productId);
+
+            $stockItem = $stockRegistry->getStockItem($productId, 1);
             $stockItems[$productId] = $stockItem;
         }
 
@@ -171,11 +173,12 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         /** @var $stockItmBeforeImport \Magento\CatalogInventory\Model\Stock\Item */
         foreach ($stockItems as $productId => $stockItmBeforeImport) {
 
-            /** @var $stockItemAfterImport \Magento\CatalogInventory\Model\Stock\Item */
-            $stockItemAfterImport = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                'Magento\CatalogInventory\Model\Stock\Item'
+            /** @var $stockRegistry \Magento\CatalogInventory\Model\StockRegistry */
+            $stockRegistry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+                'Magento\CatalogInventory\Model\StockRegistry'
             );
-            $stockItemAfterImport->loadByProduct($productId);
+
+            $stockItemAfterImport = $stockRegistry->getStockItem($productId, 1);
 
             $this->assertEquals($stockItmBeforeImport->getQty(), $stockItemAfterImport->getQty());
             $this->assertEquals(1, $stockItemAfterImport->getIsInStock());

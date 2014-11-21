@@ -1,0 +1,319 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+namespace Magento\Framework\DB;
+
+/**
+ * Class AbstractMapperTest
+ */
+class AbstractMapperTest extends \PHPUnit_Framework_TestCase
+{
+    /**
+     * @var \Magento\Framework\Model\Resource\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resourceMock;
+
+    /**
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $connectionMock;
+
+    /**
+     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $selectMock;
+
+    /**
+     * @var \Magento\Framework\Logger|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $loggerMock;
+
+    /**
+     * @var \Magento\Framework\Data\Collection\Db\FetchStrategyInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $fetchStrategyMock;
+
+    /**
+     * @var \Magento\Framework\Data\ObjectFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $objectFactoryMock;
+
+    /**
+     * @var \Magento\Framework\DB\MapperFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $mapperFactoryMock;
+
+    /**
+     * @var \Magento\Framework\DB\AbstractMapper|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $mapper;
+
+    /**
+     * Set up
+     *
+     * @return void
+     */
+    protected function setUp()
+    {
+        $this->resourceMock = $this->getMockForAbstractClass(
+            'Magento\Framework\Model\Resource\Db\AbstractDb',
+            [],
+            '',
+            false,
+            true,
+            true,
+            []
+        );
+        $this->connectionMock = $this->getMockForAbstractClass(
+            'Magento\Framework\DB\Adapter\AdapterInterface',
+            [],
+            '',
+            false,
+            true,
+            true,
+            []
+        );
+        $this->selectMock = $this->getMock(
+            'Magento\Framework\DB\Select',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->loggerMock = $this->getMock(
+            'Magento\Framework\Logger',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->fetchStrategyMock = $this->getMockForAbstractClass(
+            'Magento\Framework\Data\Collection\Db\FetchStrategyInterface',
+            [],
+            '',
+            false,
+            true,
+            true,
+            []
+        );
+        $this->objectFactoryMock = $this->getMock(
+            'Magento\Framework\Data\ObjectFactory',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->mapperFactoryMock = $this->getMock(
+            'Magento\Framework\DB\MapperFactory',
+            [],
+            [],
+            '',
+            false
+        );
+    }
+
+    /**
+     * Run test map method
+     *
+     * @param array $mapperMethods
+     * @param array $criteriaParts
+     * @return void
+     *
+     * @dataProvider dataProviderMap
+     */
+    public function testMap(array $mapperMethods, array $criteriaParts)
+    {
+        /** @var \Magento\Framework\DB\AbstractMapper|\PHPUnit_Framework_MockObject_MockObject $mapper */
+        $mapper = $this->getMockForAbstractClass(
+            'Magento\Framework\DB\AbstractMapper',
+            [
+                'logger' => $this->loggerMock,
+                'fetchStrategy' => $this->fetchStrategyMock,
+                'objectFactory' => $this->objectFactoryMock,
+                'mapperFactory' => $this->mapperFactoryMock,
+                'select' => $this->selectMock
+            ],
+            '',
+            true,
+            true,
+            true,
+            $mapperMethods
+        );
+        $criteriaMock = $this->getMockForAbstractClass(
+            'Magento\Framework\Api\CriteriaInterface',
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['toArray']
+        );
+        $criteriaMock->expects($this->once())
+            ->method('toArray')
+            ->will($this->returnValue($criteriaParts));
+        foreach ($mapperMethods as $value => $method) {
+            $mapper->expects($this->once())
+                ->method($method)
+                ->with($value);
+        }
+
+        $this->assertEquals($this->selectMock, $mapper->map($criteriaMock));
+    }
+
+    /**
+     * Run test addExpressionFieldToSelect method
+     *
+     * @return void
+     */
+    public function testAddExpressionFieldToSelect()
+    {
+        $fields = [
+            'key-attribute' => 'value-attribute'
+        ];
+        /** @var \Magento\Framework\DB\AbstractMapper|\PHPUnit_Framework_MockObject_MockObject $mapper */
+        $mapper = $this->getMockForAbstractClass(
+            'Magento\Framework\DB\AbstractMapper',
+            [
+                'logger' => $this->loggerMock,
+                'fetchStrategy' => $this->fetchStrategyMock,
+                'objectFactory' => $this->objectFactoryMock,
+                'mapperFactory' => $this->mapperFactoryMock,
+                'select' => $this->selectMock
+            ],
+            '',
+            true,
+            true,
+            true,
+            []
+        );
+
+        $this->selectMock->expects($this->once())
+            ->method('columns')
+            ->with(['my-alias' => "('sub_total', 'SUM(value-attribute)', 'revenue')"]);
+
+        $mapper->addExpressionFieldToSelect('my-alias', "('sub_total', 'SUM({{key-attribute}})', 'revenue')", $fields);
+    }
+
+    /**
+     * Run test addExpressionFieldToSelect method
+     *
+     * @param mixed $field
+     * @param mixed $condition
+     * @return void
+     *
+     * @dataProvider dataProviderAddFieldToFilter
+     */
+    public function testAddFieldToFilter($field, $condition)
+    {
+        $resultCondition = 'sql-condition-value';
+
+        /** @var \Magento\Framework\DB\AbstractMapper|\PHPUnit_Framework_MockObject_MockObject $mapper */
+        $mapper = $this->getMockForAbstractClass(
+            'Magento\Framework\DB\AbstractMapper',
+            [
+                'logger' => $this->loggerMock,
+                'fetchStrategy' => $this->fetchStrategyMock,
+                'objectFactory' => $this->objectFactoryMock,
+                'mapperFactory' => $this->mapperFactoryMock,
+                'select' => $this->selectMock
+            ],
+            '',
+            true,
+            true,
+            true,
+            ['getConnection']
+        );
+        $connectionMock = $this->getMockForAbstractClass(
+            'Magento\Framework\DB\Adapter\AdapterInterface',
+            [],
+            '',
+            true,
+            true,
+            true,
+            ['quoteIdentifier', 'prepareSqlCondition']
+        );
+
+        $mapper->expects($this->any())
+            ->method('getConnection')
+            ->will($this->returnValue($connectionMock));
+        $connectionMock->expects($this->any())
+            ->method('quoteIdentifier')
+            ->with('my-field')
+            ->will($this->returnValue('quote-field'));
+        $connectionMock->expects($this->any())
+            ->method('prepareSqlCondition')
+            ->with('quote-field', $condition)
+            ->will($this->returnValue($resultCondition));
+
+        if (is_array($field)) {
+            $resultCondition = '(' . implode(') ' . \Zend_Db_Select::SQL_OR
+                    . ' (', array_fill(0, count($field), $resultCondition)) . ')';
+        }
+
+        $this->selectMock->expects($this->once())
+            ->method('where')
+            ->with($resultCondition, null, Select::TYPE_CONDITION);
+
+        $mapper->addFieldToFilter($field, $condition);
+    }
+
+    /**
+     * Data provider for map method
+     *
+     * @return array
+     */
+    public function dataProviderMap()
+    {
+        return [
+            [
+                'mapperMethods' => [
+                    'my-test-value1' => 'mapMyMapperMethodOne',
+                    'my-test-value2' => 'mapMyMapperMethodTwo'
+                ],
+                'criteriaParts' => [
+                    'my_mapper_method_one' => 'my-test-value1',
+                    'my_mapper_method_two' => 'my-test-value2'
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Data provider for addFieldToFilter method
+     *
+     * @return array
+     */
+    public function dataProviderAddFieldToFilter()
+    {
+        return [
+            [
+                'field' => 'my-field',
+                'condition' => ['condition']
+            ],
+            [
+                'field' => ['my-field', 'my-field'],
+                'condition' => null
+            ],
+        ];
+    }
+}

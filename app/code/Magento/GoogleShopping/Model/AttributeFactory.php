@@ -33,7 +33,7 @@ class AttributeFactory
     /**
      * Object manager
      *
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
 
@@ -50,12 +50,12 @@ class AttributeFactory
     protected $_string;
 
     /**
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\GoogleShopping\Helper\Data $googleShoppingHelper
      * @param \Magento\Framework\Stdlib\String $string
      */
     public function __construct(
-        \Magento\Framework\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\GoogleShopping\Helper\Data $googleShoppingHelper,
         \Magento\Framework\Stdlib\String $string
     ) {

@@ -76,9 +76,9 @@ class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
     protected $_orderEntityField;
 
     /**
-     * @var \Magento\Sales\Model\QuoteFactory
+     * @var \Magento\Sales\Model\QuoteRepository
      */
-    protected $_quoteFactory;
+    protected $quoteRepository;
 
     /**
      * @var \Magento\Sales\Model\Resource\Quote\Item\CollectionFactory
@@ -96,7 +96,7 @@ class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Framework\Object\Copy\Config $fieldsetConfig
-     * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
+     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository
      * @param \Magento\Sales\Model\Resource\Quote\Item\CollectionFactory $quoteItemFactory
      * @param mixed $connection
      * @param string $modelName
@@ -114,7 +114,7 @@ class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Framework\Object\Copy\Config $fieldsetConfig,
-        \Magento\Sales\Model\QuoteFactory $quoteFactory,
+        \Magento\Sales\Model\QuoteRepository $quoteRepository,
         \Magento\Sales\Model\Resource\Quote\Item\CollectionFactory $quoteItemFactory,
         $connection = null,
         $modelName = self::CUSTOMER_MODEL_NAME
@@ -133,7 +133,7 @@ class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
             $connection,
             $modelName
         );
-        $this->_quoteFactory = $quoteFactory;
+        $this->quoteRepository = $quoteRepository;
         $this->_quoteItemFactory = $quoteItemFactory;
     }
 
@@ -145,15 +145,15 @@ class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
     public function addCartInfo()
     {
         foreach ($this->getItems() as $item) {
-            $quote = $this->_quoteFactory->create()->loadByCustomer($item->getId());
+            try {
+                $quote = $this->quoteRepository->getForCustomer($item->getId());
 
-            if ($quote instanceof \Magento\Sales\Model\Quote) {
                 $totals = $quote->getTotals();
                 $item->setTotal($totals['subtotal']->getValue());
                 $quoteItems = $this->_quoteItemFactory->create()->setQuoteFilter($quote->getId());
                 $quoteItems->load();
                 $item->setItems($quoteItems->count());
-            } else {
+            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
                 $item->remove();
             }
         }

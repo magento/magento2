@@ -24,6 +24,8 @@
 
 namespace Magento\Customer\Model\App\Action;
 
+use Magento\Customer\Model\Context;
+
 /**
  * Class ContextPluginTest
  */
@@ -105,8 +107,8 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
             ->will(
                 $this->returnValueMap(
                     array(
-                        array(\Magento\Customer\Helper\Data::CONTEXT_GROUP, 'UAH', $this->httpContextMock),
-                        array(\Magento\Customer\Helper\Data::CONTEXT_AUTH, 0, $this->httpContextMock),
+                        array(Context::CONTEXT_GROUP, 'UAH', $this->httpContextMock),
+                        array(Context::CONTEXT_AUTH, 0, $this->httpContextMock),
                     )
                 )
             );

@@ -277,7 +277,7 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
         $productAmount = $currentProduct
             ->getPriceInfo()
             ->getPrice(\Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE)
-            ->getAmount();
+            ->getPriceWithoutOption();
 
         $baseProductAmount = $currentProduct
             ->getPriceInfo()

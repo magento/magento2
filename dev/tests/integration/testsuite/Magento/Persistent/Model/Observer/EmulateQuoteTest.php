@@ -40,7 +40,7 @@ class EmulateQuoteTest extends \PHPUnit_Framework_TestCase
     protected $_persistentSessionHelper;
 
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
 

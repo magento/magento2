@@ -25,7 +25,7 @@
 -->
 <tabs>
     <product-details>
-        <class>\Magento\Backend\Test\Block\Widget\Tab</class>
+        <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\ProductTab</class>
         <selector>#product_info_tabs_product-details</selector>
         <strategy>css selector</strategy>
         <wrapper>product</wrapper>
@@ -50,7 +50,7 @@
         <strategy>css selector</strategy>
     </bundle>
     <advanced-pricing>
-        <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\AdvancedPricingTab</class>
+        <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\ProductTab</class>
         <selector>#product_info_tabs_advanced-pricing</selector>
         <strategy>css selector</strategy>
         <wrapper>product</wrapper>

@@ -97,9 +97,7 @@ class UiComponent implements Layout\GeneratorInterface
                 $scheduledStructure->unsetElement($elementName);
             }
         }
-        foreach ($blocks as $block) {
-            $block->setLayout($layout);
-        }
+
         return $this;
     }
 

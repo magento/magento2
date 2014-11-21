@@ -53,7 +53,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
             ->with('*/*/view/frontend/layout/*.xml')
             ->will($this->returnValue($areaFiles));
         $directory->expects($this->atLeastOnce())->method('getAbsolutePath')->will($this->returnArgument(0));
-        $objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManager');
+        $objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $objectManager->expects($this->atLeastOnce())
             ->method('create')
             ->with('Magento\Framework\View\File', $this->anything())

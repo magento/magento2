@@ -24,7 +24,7 @@
 
 namespace Magento\Framework\View\File;
 
-use Magento\Framework\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Design\ThemeInterface;
 
 /**
@@ -35,16 +35,16 @@ class Factory
     /**
      * Object manager
      *
-     * @var ObjectManager
+     * @var ObjectManagerInterface
      */
     private $objectManager;
 
     /**
      * Constructor
      *
-     * @param ObjectManager $objectManager
+     * @param ObjectManagerInterface $objectManager
      */
-    public function __construct(ObjectManager $objectManager)
+    public function __construct(ObjectManagerInterface $objectManager)
     {
         $this->objectManager = $objectManager;
     }

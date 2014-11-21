@@ -28,7 +28,7 @@ namespace Magento\Core\Model\Validator;
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
 
@@ -58,7 +58,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_defaultTranslator = \Magento\Framework\Validator\AbstractValidator::getDefaultTranslator();
-        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManager');
+        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->_validatorConfig = $this->getMockBuilder(
             'Magento\Framework\Validator\Config'
         )->setMethods(

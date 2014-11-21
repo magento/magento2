@@ -26,12 +26,12 @@ namespace Magento\Framework\App;
 /**
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
-class FactoryStub implements \Magento\Framework\ObjectManager\Factory
+class FactoryStub implements \Magento\Framework\ObjectManager\FactoryInterface
 {
     /**
-     * @param \Magento\Framework\ObjectManager\Config $config
-     * @param \Magento\Framework\ObjectManager $objectManager
-     * @param \Magento\Framework\ObjectManager\Definition $definitions
+     * @param \Magento\Framework\ObjectManager\ConfigInterface $config
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param \Magento\Framework\ObjectManager\DefinitionInterface $definitions
      * @param array $globalArguments
      * @throws \BadMethodCallException
      */

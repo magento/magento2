@@ -27,15 +27,13 @@ namespace Magento\Framework\Controller\Router\Route;
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManager
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
 
     public function setUp()
     {
-        $this->objectManager = $this->getMockBuilder('Magento\Framework\ObjectManager')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
     }
 
     /**

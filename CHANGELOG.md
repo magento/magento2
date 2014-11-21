@@ -1,3 +1,44 @@
+0.1.0-alpha105
+=============
+* Various improvements:
+    * Merged SQL and Data Upgrades for the Tax, Weee, Customer, CustomerImportExport, ProductAlert, Sendfriend and Wishlist modules
+    * Added 'Interface' suffix to all interface names
+    * Stabilized functional tests for the following modules:
+        * CheckoutAgreements
+        * Customer
+        * GiftMessage
+        * Integration
+        * Msrp
+        * Reports
+* Added the following functional tests:
+    * Create product attribute from product page
+* Fixed bugs:
+    * Fixed an issue where bundle product price doubled during backend order creation
+    * Fixed an issue where an error was thrown during Tax Rate creation, deletion and update
+    * Fixed an issue where FPT was doubled when creating a refund if two FPTs were applied, and as a result the refund could not be created
+    * Fixed an issue where the subtotal including tax field was not refreshed after removing downloadable product from cart
+    * Fixed an issue where a downloadable link tax was not added to a product price on the product page if price was displayed including tax
+    * Fixed an issue with incorrect product prices for bundle products in shopping cart
+    * Fixed an issue where bundle product price was calculated incorrectly on the product page
+    * Fixed an issue where configurable product options were not updated after changing currency
+    * Fixed an issue where a standalone simple product and the same product as part of the grouped, were not recognized as one product in the shopping cart.
+    * Fixed an issue where the incorrect tier pricing information was displayed in shopping cart
+    * Fixed an issue where no notice was displayed in the shopping cart for products with MAP enabled
+    * Fixed an issue where it was impossible to place an order from customer page in Admin
+    * Fixed an issue where it was impossible to add address for a customer in Admin
+    * Fixed an issue with broken redirect URL after deleting a product from the My Wishlist widget
+    * Fixed an issue where it was impossible to assign an admin user to a user role
+* Service Contracts:
+    * Implemented Service Contracts for the CatalogInventory Module
+* Framework Improvements:
+    * Added the ability to configure the list of loaded modules before installation
+    * Added the ability to use the Composer autoloader instead of the Magento custom autoloaders for tests
+    * Introduced a repository for storing a quote entity
+* Performance improvements:
+    * Split Magento\Customer\Helper\Data
+* Processed GitHub requests:
+    * [#731](https://github.com/magento/magento2/issues/731) -- Filter grid is absent on CMS Pages in Backend
+
 0.1.0-alpha104
 =============
 * Various improvements:

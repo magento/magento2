@@ -49,7 +49,7 @@ class CreateLabelTest extends \PHPUnit_Framework_TestCase
     protected $responseMock;
 
     /**
-     * @var \Magento\Framework\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectManagerMock;
 
@@ -98,13 +98,7 @@ class CreateLabelTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->objectManagerMock = $this->getMock(
-            'Magento\Framework\ObjectManager',
-            ['create', 'get', 'configure', '__wakeup'],
-            [],
-            '',
-            false
-        );
+        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->messageManagerMock = $this->getMock(
             'Magento\Framework\Message\Manager',
             ['addSuccess', 'addError', '__wakeup'],

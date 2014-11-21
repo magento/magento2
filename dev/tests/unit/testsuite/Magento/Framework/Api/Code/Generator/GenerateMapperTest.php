@@ -63,7 +63,8 @@ class GenerateMapperTest extends \PHPUnit_Framework_TestCase
                 null,
                 $this->ioObjectMock,
                 null,
-                null
+                null,
+                $this->getMock('Magento\Framework\Filesystem\FileResolver')
             ]
         );
         $sampleMapperCode = file_get_contents(__DIR__ . '/_files/SampleMapper.txt');
@@ -78,6 +79,6 @@ class GenerateMapperTest extends \PHPUnit_Framework_TestCase
         $model->expects($this->once())
             ->method('_validateData')
             ->will($this->returnValue(true));
-        $this->assertTrue($model->generate());
+        $this->assertEquals('SampleMapper.php', $model->generate());
     }
 }

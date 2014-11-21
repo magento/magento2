@@ -155,6 +155,7 @@ class AttributePriceTest extends \PHPUnit_Framework_TestCase
         $modifiedValue = 140;
         $valueIndex = 2;
         $optionId = 1;
+
         $expected = [
             'priceOptions' =>
                 [
@@ -231,9 +232,9 @@ class AttributePriceTest extends \PHPUnit_Framework_TestCase
         $storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->priceCurrency->expects($this->once())
+        // don't do any actual conversions; just return whatever was passed in
+        $this->priceCurrency->expects($this->any())
             ->method('convert')
-            ->with($this->equalTo($modifiedValue))
             ->will($this->returnArgument(0));
 
         $this->storeManagerMock->expects($this->any())

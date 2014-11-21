@@ -34,13 +34,13 @@ class RssManagerTest extends \PHPUnit_Framework_TestCase
     protected $rssManager;
 
     /**
-     * @var \Magento\Framework\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectManager;
 
     protected function setUp()
     {
-        $this->objectManager = $this->getMock('Magento\Framework\ObjectManager');
+        $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->rssManager = $objectManagerHelper->getObject(

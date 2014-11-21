@@ -32,7 +32,7 @@ class SetupFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManager');
+        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
     }
 
     public function testCreateUsesDefaultSetupModelClassIfSetupModelIsNotDeclaredForGivenResource()

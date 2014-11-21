@@ -36,23 +36,21 @@ use Magento\Sales\Test\Page\Adminhtml\OrderInvoiceNew;
 use Magento\Reports\Test\Page\Adminhtml\SalesTaxReport;
 
 /**
- * Test Creation for SalesTaxReportEntity
- *
  * Test Flow:
  *
  * Preconditions:
- * 1. Product is created
- * 2. Customer is created
- * 3. Tax Rule is created
- * 4. Order is placed
- * 5. Refresh statistic
+ * 1. Product is created.
+ * 2. Customer is created.
+ * 3. Tax Rule is created.
+ * 4. Order is placed.
+ * 5. Refresh statistic.
  *
  * Steps:
- * 1. Login to backend
- * 2. Go to Reports > Sales > Tax
- * 3. Fill data from dataSet
- * 4. Click "Show report"
- * 5. Perform all assertions
+ * 1. Login to backend.
+ * 2. Go to Reports > Sales > Tax.
+ * 3. Fill data from dataSet.
+ * 4. Click "Show report".
+ * 5. Perform all assertions.
  *
  * @group Reports_(MX)
  * @ZephyrId MAGETWO-28515
@@ -62,63 +60,63 @@ use Magento\Reports\Test\Page\Adminhtml\SalesTaxReport;
 class SalesTaxReportEntityTest extends Injectable
 {
     /**
-     * Order index page
+     * Order index page.
      *
      * @var OrderIndex
      */
     protected $orderIndex;
 
     /**
-     * Order invoice new page
+     * Order invoice new page.
      *
      * @var OrderInvoiceNew
      */
     protected $orderInvoiceNew;
 
     /**
-     * Sales tax report page
+     * Sales tax report page.
      *
      * @var SalesTaxReport
      */
     protected $salesTaxReport;
 
     /**
-     * Order view page
+     * Order view page.
      *
      * @var OrderView
      */
     protected $orderView;
 
     /**
-     * Report statistic page
+     * Report statistic page.
      *
      * @var Statistics
      */
     protected $reportStatistic;
 
     /**
-     * Tax Rule grid page
+     * Tax Rule grid page.
      *
      * @var TaxRuleIndex
      */
     protected $taxRuleIndexPage;
 
     /**
-     * Tax Rule new and edit page
+     * Tax Rule new and edit page.
      *
      * @var TaxRuleNew
      */
     protected $taxRuleNewPage;
 
     /**
-     * Tax Rule fixture
+     * Tax Rule fixture.
      *
      * @var TaxRule
      */
     protected $taxRule;
 
     /**
-     * Delete all tax rules
+     * Delete all tax rules.
      *
      * @return void
      */
@@ -129,7 +127,7 @@ class SalesTaxReportEntityTest extends Injectable
     }
 
     /**
-     * Injection data
+     * Injection data.
      *
      * @param OrderIndex $orderIndex
      * @param OrderInvoiceNew $orderInvoiceNew
@@ -159,7 +157,7 @@ class SalesTaxReportEntityTest extends Injectable
     }
 
     /**
-     * Create tax report entity
+     * Create tax report entity.
      *
      * @param OrderInjectable $order
      * @param TaxRule $taxRule
@@ -183,7 +181,7 @@ class SalesTaxReportEntityTest extends Injectable
         $this->orderIndex->getSalesOrderGrid()->searchAndOpen(['id' => $order->getId()]);
         if ($orderStatus !== 'Pending') {
             $createInvoice = $this->objectManager->create(
-                'Magento\Sales\Test\TestStep\CreateInvoice',
+                'Magento\Sales\Test\TestStep\CreateInvoiceStep',
                 ['order' => $order, 'data' => $invoice]
             );
             $createInvoice->run();
@@ -202,7 +200,7 @@ class SalesTaxReportEntityTest extends Injectable
     }
 
     /**
-     * Delete all tax rules after test
+     * Delete all tax rules after test.
      *
      * @return void
      */

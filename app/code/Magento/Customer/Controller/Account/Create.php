@@ -26,24 +26,24 @@ namespace Magento\Customer\Controller\Account;
 
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
-use Magento\Customer\Helper\Data as CustomerHelper;
+use Magento\Customer\Model\Registration;
 
 class Create extends \Magento\Customer\Controller\Account
 {
-    /** @var CustomerHelper */
-    protected $customerHelper;
+    /** @var Registration */
+    protected $registration;
 
     /**
      * @param Context $context
      * @param Session $customerSession
-     * @param CustomerHelper $customerHelper
+     * @param Registration $registration
      */
     public function __construct(
         Context $context,
         Session $customerSession,
-        CustomerHelper $customerHelper
+        Registration $registration
     ) {
-        $this->customerHelper = $customerHelper;
+        $this->registration = $registration;
         parent::__construct($context, $customerSession);
     }
 
@@ -54,7 +54,7 @@ class Create extends \Magento\Customer\Controller\Account
      */
     public function execute()
     {
-        if ($this->_getSession()->isLoggedIn() || !$this->customerHelper->isRegistrationAllowed()) {
+        if ($this->_getSession()->isLoggedIn() || !$this->registration->isAllowed()) {
             $this->_redirect('*/*');
             return;
         }

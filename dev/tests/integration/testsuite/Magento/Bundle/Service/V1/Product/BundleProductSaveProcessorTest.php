@@ -34,7 +34,7 @@ use Magento\Catalog\Service\V1\Data\ProductMapper;
 use Magento\Catalog\Service\V1\ProductServiceInterface;
 use Magento\Catalog\Service\V1\Product\ProductLoader;
 use Magento\Catalog\Model\Product\Type;
-use Magento\Framework\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -47,7 +47,7 @@ class BundleProductSaveProcessorTest extends \PHPUnit_Framework_TestCase
     /** @var ProductMapper */
     protected $productMapper;
 
-    /** @var ObjectManager */
+    /** @var ObjectManagerInterface */
     private $objectManager;
 
     /** @var ProductLoader */

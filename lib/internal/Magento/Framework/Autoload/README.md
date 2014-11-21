@@ -1,3 +1,8 @@
 # Autoload
 
-**Autoload** library implements PSR-0 standard of autoloader with capability of class mapping in addition. The key benefit of a Class Map is that it includes files matched to their absolute system paths, which can lead to performance gains.
+**Autoload** library contains an abstract wrapper for Composer's generated autoloader.
+
+* AutoloaderInterface provides abstract ability use and modify the autoloader class.
+* AutoloaderRegistry allows the same instance of the autoloader to put accessed across the code base.
+* ClassLoaderWrapper wraps around Composer's generated autoloader in order to insulate it.
+* Populator fills in PSR-0 and PSR-4 standard namespace-directory mappings for the autoloader.

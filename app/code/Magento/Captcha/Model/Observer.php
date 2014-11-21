@@ -47,9 +47,9 @@ class Observer
     /**
      * Customer data
      *
-     * @var \Magento\Customer\Helper\Data
+     * @var \Magento\Customer\Model\Url
      */
-    protected $_customerData;
+    protected $_customerUrl;
 
     /**
      * Core data
@@ -98,7 +98,7 @@ class Observer
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Checkout\Model\Type\Onepage $typeOnepage
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Customer\Helper\Data $customerData
+     * @param \Magento\Customer\Model\Url $customerUrl
      * @param \Magento\Captcha\Helper\Data $helper
      * @param \Magento\Framework\UrlInterface $urlManager
      * @param \Magento\Framework\App\RequestInterface $request
@@ -113,7 +113,7 @@ class Observer
         \Magento\Framework\Session\SessionManagerInterface $session,
         \Magento\Checkout\Model\Type\Onepage $typeOnepage,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Customer\Helper\Data $customerData,
+        \Magento\Customer\Model\Url $customerUrl,
         \Magento\Captcha\Helper\Data $helper,
         \Magento\Framework\UrlInterface $urlManager,
         \Magento\Framework\App\RequestInterface $request,
@@ -125,7 +125,7 @@ class Observer
         $this->_session = $session;
         $this->_typeOnepage = $typeOnepage;
         $this->_coreData = $coreData;
-        $this->_customerData = $customerData;
+        $this->_customerUrl = $customerUrl;
         $this->_helper = $helper;
         $this->_urlManager = $urlManager;
         $this->_request = $request;
@@ -197,7 +197,7 @@ class Observer
                 $this->_actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
                 $this->_session->setUsername($login);
                 $beforeUrl = $this->_session->getBeforeAuthUrl();
-                $url = $beforeUrl ? $beforeUrl : $this->_customerData->getLoginUrl();
+                $url = $beforeUrl ? $beforeUrl : $this->_customerUrl->getLoginUrl();
                 $controller->getResponse()->setRedirect($url);
             }
         }

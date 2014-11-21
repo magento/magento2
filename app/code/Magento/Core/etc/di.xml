@@ -29,8 +29,8 @@
     <preference for="Magento\Framework\Module\Updater\SetupInterface" type="Magento\Framework\Module\Setup" />
     <preference for="Magento\Framework\Module\ResourceResolverInterface" type="Magento\Framework\Module\ResourceResolver" />
     <preference for="Magento\Framework\AuthorizationInterface" type="Magento\Framework\Authorization" />
-    <preference for="Magento\Framework\Authorization\Policy" type="Magento\Framework\Authorization\Policy\DefaultPolicy" />
-    <preference for="Magento\Framework\Authorization\RoleLocator" type="Magento\Framework\Authorization\RoleLocator\DefaultRoleLocator" />
+    <preference for="Magento\Framework\Authorization\PolicyInterface" type="Magento\Framework\Authorization\Policy\DefaultPolicy" />
+    <preference for="Magento\Framework\Authorization\RoleLocatorInterface" type="Magento\Framework\Authorization\RoleLocator\DefaultRoleLocator" />
     <preference for="Magento\Framework\Session\SessionManagerInterface" type="Magento\Framework\Session\Generic" />
     <preference for="Magento\Core\Model\DataService\ConfigInterface" type="Magento\Core\Model\DataService\Config" />
     <preference for="Magento\Framework\App\Config\ScopeConfigInterface" type="Magento\Framework\App\Config" />
@@ -81,7 +81,7 @@
     <preference for="Magento\Framework\App\Config\Resource\ConfigInterface" type="Magento\Core\Model\Resource\Config" />
     <preference for="Magento\Framework\App\DesignInterface" type="Magento\Core\Model\Design" />
     <preference for="Magento\Framework\Pricing\Amount\AmountInterface" type="Magento\Framework\Pricing\Amount\Base" />
-    <preference for="Magento\Framework\Stdlib\CookieManager" type="Magento\Framework\Stdlib\Cookie\PhpCookieManager" />
+    <preference for="Magento\Framework\Stdlib\CookieManagerInterface" type="Magento\Framework\Stdlib\Cookie\PhpCookieManager" />
     <preference for="Magento\Framework\View\Page\FaviconInterface" type="Magento\Theme\Model\Favicon\Favicon" />
     <preference for="Magento\Framework\Api\SearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\Framework\Api\SearchCriteriaInterface" type="Magento\Framework\Api\SearchCriteria" />

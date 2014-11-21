@@ -104,11 +104,13 @@ class Grouped extends Block
 
             // Fill
             foreach ($checkoutData['options'] as $productData) {
+                $this->browser->selectWindow();
                 $subProduct = $this->_rootElement->find(
                     sprintf($this->subProductByName, $productData['name']),
                     Locator::SELECTOR_XPATH
                 );
-                $subProduct->find($this->qty)->setValue($productData['qty']);
+                $subProduct->find($this->qty)->keys([$productData['qty']]);
+                $this->_rootElement->click();
             }
         }
     }

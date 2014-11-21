@@ -53,7 +53,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             'Magento\Eav\Model\AttributeDataFactory',
             array('create'),
             array(
-                'objectManager' => $this->getMock('Magento\Framework\ObjectManager'),
+                'objectManager' => $this->getMock('Magento\Framework\ObjectManagerInterface'),
                 'string' => $this->getMock('Magento\Framework\Stdlib\String')
             )
         );
@@ -172,7 +172,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             'Magento\Eav\Model\AttributeDataFactory',
             array('create'),
             array(
-                'objectManager' => $this->getMock('Magento\Framework\ObjectManager'),
+                'objectManager' => $this->getMock('Magento\Framework\ObjectManagerInterface'),
                 'string' => $this->getMock('Magento\Framework\Stdlib\String')
             )
         );
@@ -219,7 +219,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             'Magento\Eav\Model\AttributeDataFactory',
             array('create'),
             array(
-                'objectManager' => $this->getMock('Magento\Framework\ObjectManager'),
+                'objectManager' => $this->getMock('Magento\Framework\ObjectManagerInterface'),
                 'string' => $this->getMock('Magento\Framework\Stdlib\String')
             )
         );
@@ -261,7 +261,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             'Magento\Eav\Model\AttributeDataFactory',
             array(),
             array(
-                'objectManager' => $this->getMock('Magento\Framework\ObjectManager'),
+                'objectManager' => $this->getMock('Magento\Framework\ObjectManagerInterface'),
                 'string' => $this->getMock('Magento\Framework\Stdlib\String')
             )
         );
@@ -278,7 +278,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             'Magento\Eav\Model\AttributeDataFactory',
             array(),
             array(
-                'objectManager' => $this->getMock('Magento\Framework\ObjectManager'),
+                'objectManager' => $this->getMock('Magento\Framework\ObjectManagerInterface'),
                 'string' => $this->getMock('Magento\Framework\Stdlib\String')
             )
         );
@@ -312,7 +312,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             'Magento\Eav\Model\AttributeDataFactory',
             array('create'),
             array(
-                'objectManager' => $this->getMock('Magento\Framework\ObjectManager'),
+                'objectManager' => $this->getMock('Magento\Framework\ObjectManagerInterface'),
                 'string' => $this->getMock('Magento\Framework\Stdlib\String')
             )
         );

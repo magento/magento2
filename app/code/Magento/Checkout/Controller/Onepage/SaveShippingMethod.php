@@ -24,6 +24,9 @@
  */
 namespace Magento\Checkout\Controller\Onepage;
 
+use Magento\Customer\Service\V1\CustomerAccountServiceInterface as CustomerAccountService;
+use Magento\Customer\Service\V1\CustomerMetadataServiceInterface as CustomerMetadataService;
+
 class SaveShippingMethod extends \Magento\Checkout\Controller\Onepage
 {
     /**
@@ -57,7 +60,7 @@ class SaveShippingMethod extends \Magento\Checkout\Controller\Onepage
                 ];
                 $result['update_progress'] = ['html' => $this->getProgressHtml($result['goto_section'])];
             }
-            $this->getOnepage()->getQuote()->collectTotals()->save();
+            $this->quoteRepository->save($this->getOnepage()->getQuote()->collectTotals());
             $this->getResponse()->representJson(
                 $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
             );

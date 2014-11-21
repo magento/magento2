@@ -31,7 +31,7 @@ class DataTest extends \Magento\TestFramework\TestCase\AbstractController
     private $_wishlistHelper;
 
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
 

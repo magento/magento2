@@ -21,6 +21,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+/**
+ * @var $this \Magento\Review\Block\Form
+ */
 ?>
 <div class="block review-add">
     <div class="block-title"><strong><?php echo __('Write Your Own Review') ?></strong></div>
@@ -116,7 +119,7 @@ require([
 <?php else: ?>
     <div class="message info notlogged" id="review-form">
         <div>
-            <?php echo __('Only registered users can write reviews. Please, <a href="%1">log in</a> or <a href="%2">register</a>', $this->getLoginLink(), $this->helper('Magento\Customer\Helper\Data')->getRegisterUrl()) ?>
+            <?php echo __('Only registered users can write reviews. Please, <a href="%1">log in</a> or <a href="%2">register</a>', $this->getLoginLink(), $this->getRegisterUrl()) ?>
         </div>
     </div>
 <?php endif ?>

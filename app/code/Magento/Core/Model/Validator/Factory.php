@@ -28,7 +28,7 @@ namespace Magento\Core\Model\Validator;
 class Factory
 {
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
 
@@ -42,11 +42,11 @@ class Factory
     /**
      * Initialize dependencies
      *
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Module\Dir\Reader $moduleReader
      */
     public function __construct(
-        \Magento\Framework\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\Module\Dir\Reader $moduleReader
     ) {
         $this->_objectManager = $objectManager;

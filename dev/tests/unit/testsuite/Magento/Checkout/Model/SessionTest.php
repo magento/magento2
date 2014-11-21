@@ -62,8 +62,8 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $messageCollectionFactory = $this->getMockBuilder(
             'Magento\Framework\Message\CollectionFactory'
         )->disableOriginalConstructor()->getMock();
-        $quoteFactory = $this->getMockBuilder(
-            'Magento\Sales\Model\QuoteFactory'
+        $quoteRepository = $this->getMockBuilder(
+            'Magento\Sales\Model\QuoteRepository'
         )->disableOriginalConstructor()->getMock();
 
         $appState = $this->getMock('\Magento\Framework\App\State', array(), array(), '', false);
@@ -78,7 +78,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
                 'request' => $request,
                 'orderFactory' => $orderFactory,
                 'messageCollectionFactory' => $messageCollectionFactory,
-                'quoteFactory' => $quoteFactory,
+                'quoteRepository' => $quoteRepository,
                 'storage' => new \Magento\Framework\Session\Storage()
             )
         );
@@ -174,7 +174,13 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $order->expects($this->once())->method('getId')->will($this->returnValue($hasOrderId ? 'order id' : null));
         $orderFactory = $this->getMock('Magento\Sales\Model\OrderFactory', array('create'), array(), '', false);
         $orderFactory->expects($this->once())->method('create')->will($this->returnValue($order));
-        $quoteFactory = $this->getMock('Magento\Sales\Model\QuoteFactory', array('create'), array(), '', false);
+        $quoteRepository = $this->getMock(
+            'Magento\Sales\Model\QuoteRepository',
+            array('get', 'save'),
+            array(),
+            '',
+            false
+        );
         $storage = $this->getMock('Magento\Framework\Session\Storage', null);
         $store = $this->getMock('Magento\Store\Model\Store', array(), array(), '', false);
         $storeManager = $this->getMockForAbstractClass('Magento\Framework\StoreManagerInterface');
@@ -186,7 +192,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             'Magento\Checkout\Model\Session',
             array(
                 'orderFactory' => $orderFactory,
-                'quoteFactory' => $quoteFactory,
+                'quoteRepository' => $quoteRepository,
                 'storage' => $storage,
                 'storeManager' => $storeManager,
                 'eventManager' => $eventManager
@@ -202,29 +208,20 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             $order->setQuoteId($quoteId);
             $quote = $this->getMock(
                 'Magento\Sales\Model\Quote',
-                array('getId', 'save', 'setIsActive', 'setReservedOrderId', 'load', '__wakeup'),
+                array('setIsActive', 'getId', 'setReservedOrderId', '__wakeup'),
                 array(),
                 '',
                 false
             );
-            $quote->expects(
-                $this->any()
-            )->method(
-                'getId'
-            )->will(
-                $this->returnValue($hasQuoteId ? $anotherQuoteId : null)
-            );
-            $quote->expects(
-                $this->any()
-            )->method(
-                'load'
-            )->with(
-                $this->equalTo($quoteId)
-            )->will(
-                $this->returnValue($quote)
-            );
-            $quoteFactory->expects($this->once())->method('create')->will($this->returnValue($quote));
             if ($hasQuoteId) {
+                $quoteRepository->expects($this->once())->method('get')->with($quoteId)->willReturn($quote);
+                $quote->expects(
+                    $this->any()
+                )->method(
+                    'getId'
+                )->will(
+                    $this->returnValue($anotherQuoteId)
+                );
                 $eventManager->expects(
                     $this->once()
                 )->method(
@@ -251,8 +248,14 @@ class SessionTest extends \PHPUnit_Framework_TestCase
                 )->will(
                     $this->returnSelf()
                 );
-                $quote->expects($this->once())->method('save');
+                $quoteRepository->expects($this->once())->method('save')->with($quote);
             } else {
+                $quoteRepository->expects($this->once())
+                    ->method('get')
+                    ->with($quoteId)
+                    ->willThrowException(
+                        new \Magento\Framework\Exception\NoSuchEntityException()
+                    );
                 $quote->expects($this->never())->method('setIsActive');
                 $quote->expects($this->never())->method('setReservedOrderId');
                 $quote->expects($this->never())->method('save');

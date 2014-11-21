@@ -23,6 +23,8 @@
  */
 namespace Magento\Sales\Block\Order;
 
+use Magento\Customer\Model\Context;
+
 /**
  * Sales order view block
  *
@@ -100,7 +102,7 @@ class Creditmemo extends \Magento\Sales\Block\Order\Creditmemo\Items
      */
     public function getBackUrl()
     {
-        if ($this->httpContext->getValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH)) {
+        if ($this->httpContext->getValue(Context::CONTEXT_AUTH)) {
             return $this->getUrl('*/*/history');
         }
         return $this->getUrl('*/*/form');
@@ -113,7 +115,7 @@ class Creditmemo extends \Magento\Sales\Block\Order\Creditmemo\Items
      */
     public function getBackTitle()
     {
-        if ($this->httpContext->getValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH)) {
+        if ($this->httpContext->getValue(Context::CONTEXT_AUTH)) {
             return __('Back to My Orders');
         }
         return __('View Another Order');

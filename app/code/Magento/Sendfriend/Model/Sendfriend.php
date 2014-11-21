@@ -116,7 +116,7 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
     protected $inlineTranslation;
 
     /**
-     * @var \Magento\Framework\Stdlib\CookieManager
+     * @var \Magento\Framework\Stdlib\CookieManagerInterface
      */
     protected $cookieManager;
 
@@ -134,7 +134,7 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Sendfriend\Helper\Data $sendfriendData
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
-     * @param \Magento\Framework\Stdlib\CookieManager $cookieManager
+     * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
@@ -149,7 +149,7 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
         \Magento\Sendfriend\Helper\Data $sendfriendData,
         \Magento\Framework\Escaper $escaper,
         \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
-        \Magento\Framework\Stdlib\CookieManager $cookieManager,
+        \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,

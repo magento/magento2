@@ -41,7 +41,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     protected $sessionConfig;
 
     /**
-     * @var \Magento\Framework\Stdlib\CookieManager | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\CookieManagerInterface | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $cookieManager;
 

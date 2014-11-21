@@ -202,7 +202,13 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                             'weee_tax_amount_refunded' => 0,
                             'base_weee_tax_amount_refunded' => 0,
                             'applied_weee' => [
-                                [],
+                                [
+                                    'title' => 'recycling_fee',
+                                    'base_row_amount' => 30,
+                                    'row_amount' => 30,
+                                    'base_row_amount_incl_tax' => 32.47,
+                                    'row_amount_incl_tax' => 32.47
+                                ],
                             ],
                             'qty_invoiced' => 3,
                         ],
@@ -233,6 +239,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                     'item_1' => [
                         'applied_weee' => [
                             [
+                                'title' => 'recycling_fee',
                                 'base_row_amount' => 30,
                                 'row_amount' => 30,
                                 'base_row_amount_incl_tax' => 32.47,
@@ -278,7 +285,13 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                             'weee_tax_amount_refunded' => 0,
                             'base_weee_tax_amount_refunded' => 0,
                             'applied_weee' => [
-                                [],
+                                [
+                                    'title' => 'recycling_fee',
+                                    'base_row_amount' => 30,
+                                    'row_amount' => 30,
+                                    'base_row_amount_incl_tax' => 32.47,
+                                    'row_amount_incl_tax' => 32.47
+                                ],
                             ],
                             'qty_invoiced' => 3,
                         ],
@@ -309,6 +322,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                     'item_1' => [
                         'applied_weee' => [
                             [
+                                'title' => 'recycling_fee',
                                 'base_row_amount' => 20,
                                 'row_amount' => 20,
                                 'base_row_amount_incl_tax' => 21.65,
@@ -354,7 +368,13 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                             'weee_tax_amount_refunded' => 1.64,
                             'base_weee_tax_amount_refunded' => 1.64,
                             'applied_weee' => [
-                                [],
+                                [
+                                    'title' => 'recycling_fee',
+                                    'base_row_amount' => 30,
+                                    'row_amount' => 30,
+                                    'base_row_amount_incl_tax' => 32.47,
+                                    'row_amount_incl_tax' => 32.47
+                                ],
                             ],
                             'qty_invoiced' => 3,
                         ],
@@ -385,6 +405,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                     'item_1' => [
                         'applied_weee' => [
                             [
+                                'title' => 'recycling_fee',
                                 'base_row_amount' => 10,
                                 'row_amount' => 10,
                                 'base_row_amount_incl_tax' => 10.82,

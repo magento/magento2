@@ -23,6 +23,8 @@
  */
 namespace Magento\Checkout\Block\Onepage;
 
+use Magento\Customer\Model\Context;
+
 /**
  * One page checkout success page
  */
@@ -123,7 +125,7 @@ class Success extends \Magento\Framework\View\Element\Template
             $order = $this->_orderFactory->create()->load($orderId);
             if ($order->getId()) {
                 $isVisible = !in_array($order->getStatus(), $this->_orderConfig->getInvisibleOnFrontStatuses());
-                $canView = $this->httpContext->getValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH) && $isVisible;
+                $canView = $this->httpContext->getValue(Context::CONTEXT_AUTH) && $isVisible;
                 $this->addData(
                     array(
                         'is_order_visible' => $isVisible,

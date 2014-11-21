@@ -23,7 +23,7 @@
  */
 namespace Magento\Catalog\Model\Product\ProductList;
 
-use Magento\Framework\Stdlib\CookieManager;
+use Magento\Framework\Stdlib\CookieManagerInterface;
 
 /**
  * Class Toolbar
@@ -58,7 +58,7 @@ class Toolbar
     /**
      * Cookie manager
      *
-     * @var CookieManager
+     * @var CookieManagerInterface
      */
     protected $cookieManager;
 
@@ -70,11 +70,11 @@ class Toolbar
     protected $request;
 
     /**
-     * @param CookieManager $cookieManager
+     * @param CookieManagerInterface $cookieManager
      * @param \Magento\Framework\App\Request\Http $request
      */
     public function __construct(
-        CookieManager $cookieManager,
+        CookieManagerInterface $cookieManager,
         \Magento\Framework\App\Request\Http $request
     ) {
         $this->cookieManager = $cookieManager;

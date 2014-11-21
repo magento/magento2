@@ -393,9 +393,19 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $_catalogData = null;
 
     /**
-     * @var \Magento\CatalogInventory\Service\V1\StockItemService
+     * @var \Magento\CatalogInventory\Api\StockRegistryInterface
      */
-    protected $stockItemService;
+    protected $stockRegistry;
+
+    /**
+     * @var \Magento\CatalogInventory\Api\StockConfigurationInterface
+     */
+    protected $stockConfiguration;
+
+    /**
+     * @var \Magento\CatalogInventory\Api\StockStateInterface
+     */
+    protected $stockState;
 
     /**
      * Core event manager proxy
@@ -503,7 +513,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Stdlib\String $string
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
+     * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
+     * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
+     * @param \Magento\CatalogInventory\Api\StockStateInterface $stockState
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\ImportExport\Model\Import\Config $importConfig
      * @param Proxy\Product\ResourceFactory $resourceFactory
@@ -535,7 +547,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\Stdlib\String $string,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService,
+        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
+        \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
+        \Magento\CatalogInventory\Api\StockStateInterface $stockState,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\ImportExport\Model\Import\Config $importConfig,
         \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory $resourceFactory,
@@ -558,7 +572,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         array $data = array()
     ) {
         $this->_eventManager = $eventManager;
-        $this->stockItemService = $stockItemService;
+        $this->stockRegistry = $stockRegistry;
+        $this->stockConfiguration = $stockConfiguration;
+        $this->stockState = $stockState;
         $this->_catalogData = $catalogData;
         $this->_importConfig = $importConfig;
         $this->_resourceFactory = $resourceFactory;
@@ -1777,13 +1793,15 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     continue;
                 }
 
-                $row = array();
+                $row = [];
                 $row['product_id'] = $this->_newSku[$rowData[self::COL_SKU]]['entity_id'];
                 $productIdsToReindex[] = $row['product_id'];
-                $row['stock_id'] = \Magento\CatalogInventory\Model\Stock\Item::DEFAULT_STOCK_ID;
 
-                $stockItemDo = $this->stockItemService->getStockItem($row['product_id']);
-                $existStockData = $stockItemDo->__toArray();
+                $row['website_id'] = $this->stockConfiguration->getDefaultWebsiteId();
+                $row['stock_id'] = $this->stockRegistry->getStock($row['website_id'])->getId();
+
+                $stockItemDo = $this->stockRegistry->getStockItem($row['product_id'], $row['website_id']);
+                $existStockData = $stockItemDo->getData();
 
                 $row = array_merge(
                     $this->defaultStockData,
@@ -1792,19 +1810,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $row
                 );
 
-                if ($this->stockItemService->isQty($this->_newSku[$rowData[self::COL_SKU]]['type_id'])) {
-                    $row = $this->stockItemService->processIsInStock($row);
-                    if ($this->stockItemService->verifyNotification($row['product_id'])) {
-                        $row['low_stock_date'] = $this->_localeDate->date(
-                            null,
-                            null,
-                            null,
-                            false
-                        )->toString(
-                            \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
-                        );
+                if ($this->stockConfiguration->isQty($this->_newSku[$rowData[self::COL_SKU]]['type_id'])) {
+                    $row['is_in_stock'] = $this->stockState->verifyStock($row['product_id'], $row['website_id']);
+                    if ($this->stockState->verifyNotification($row['product_id'], $row['website_id'])) {
+                        $row['low_stock_date'] = $this->_localeDate->date(null, null, null, false)
+                            ->toString(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
                     }
-                    $row['stock_status_changed_auto'] = (int) !$this->stockItemService->verifyStock($row['product_id']);
+                    $row['stock_status_changed_auto'] = (int) !$this->stockState->verifyStock($row['product_id'], $row['website_id']);
                 } else {
                     $row['qty'] = 0;
                 }

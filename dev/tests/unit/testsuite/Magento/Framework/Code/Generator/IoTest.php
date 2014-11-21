@@ -57,11 +57,6 @@ class IoTest extends \PHPUnit_Framework_TestCase
      */
     protected $_filesystemDriverMock;
 
-    /**
-     * @var \Magento\Framework\Autoload\IncludePath|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $fileResolverMock;
-
     protected function setUp()
     {
         $this->_generationDirectory = rtrim(self::GENERATION_DIRECTORY, '/') . '/';
@@ -72,26 +67,8 @@ class IoTest extends \PHPUnit_Framework_TestCase
             array()
         );
 
-        $this->fileResolverMock = $this->getMock(
-            'Magento\Framework\Code\Generator\FileResolver',
-            array('getFilePath'),
-            array(),
-            '',
-            false
-        );
-        $this->fileResolverMock->expects(
-            $this->any()
-        )->method(
-            'getFilePath'
-        )->with(
-            self::CLASS_NAME
-        )->will(
-            $this->returnValue(self::CLASS_FILE_NAME)
-        );
-
         $this->_object = new \Magento\Framework\Code\Generator\Io(
             $this->_filesystemDriverMock,
-            $this->fileResolverMock,
             self::GENERATION_DIRECTORY
         );
     }
@@ -100,20 +77,19 @@ class IoTest extends \PHPUnit_Framework_TestCase
     {
         unset($this->_generationDirectory);
         unset($this->_filesystemMock);
-        unset($this->fileResolverMock);
         unset($this->_object);
         unset($this->_filesystemDriverMock);
     }
 
     public function testGetResultFileDirectory()
     {
-        $expectedDirectory = self::GENERATION_DIRECTORY . '/' . 'class/file/';
+        $expectedDirectory = self::GENERATION_DIRECTORY . '/' . 'class/';
         $this->assertEquals($expectedDirectory, $this->_object->getResultFileDirectory(self::CLASS_NAME));
     }
 
     public function testGetResultFileName()
     {
-        $expectedFileName = self::GENERATION_DIRECTORY . '/' . self::CLASS_FILE_NAME;
+        $expectedFileName = self::GENERATION_DIRECTORY . '/class/name.php';
         $this->assertEquals($expectedFileName, $this->_object->getResultFileName(self::CLASS_NAME));
     }
 

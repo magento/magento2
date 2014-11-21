@@ -39,9 +39,9 @@ class Register extends \Magento\Directory\Block\Data
     protected $_moduleManager;
 
     /**
-     * @var \Magento\Customer\Helper\Data
+     * @var \Magento\Customer\Model\Url
      */
-    protected $_customerHelper;
+    protected $_customerUrl;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
@@ -52,7 +52,7 @@ class Register extends \Magento\Directory\Block\Data
      * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Customer\Helper\Data $customerHelper
+     * @param \Magento\Customer\Model\Url $customerUrl
      * @param array $data
      * 
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -66,10 +66,10 @@ class Register extends \Magento\Directory\Block\Data
         \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory,
         \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Customer\Helper\Data $customerHelper,
+        \Magento\Customer\Model\Url $customerUrl,
         array $data = array()
     ) {
-        $this->_customerHelper = $customerHelper;
+        $this->_customerUrl = $customerUrl;
         $this->_moduleManager = $moduleManager;
         $this->_customerSession = $customerSession;
         parent::__construct(
@@ -111,7 +111,7 @@ class Register extends \Magento\Directory\Block\Data
      */
     public function getPostActionUrl()
     {
-        return $this->_customerHelper->getRegisterPostUrl();
+        return $this->_customerUrl->getRegisterPostUrl();
     }
 
     /**
@@ -123,7 +123,7 @@ class Register extends \Magento\Directory\Block\Data
     {
         $url = $this->getData('back_url');
         if (is_null($url)) {
-            $url = $this->_customerHelper->getLoginUrl();
+            $url = $this->_customerUrl->getLoginUrl();
         }
         return $url;
     }

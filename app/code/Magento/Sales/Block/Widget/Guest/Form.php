@@ -27,6 +27,8 @@
  */
 namespace Magento\Sales\Block\Widget\Guest;
 
+use Magento\Customer\Model\Context;
+
 class Form extends \Magento\Framework\View\Element\Template implements \Magento\Widget\Block\BlockInterface
 {
     /**
@@ -56,7 +58,7 @@ class Form extends \Magento\Framework\View\Element\Template implements \Magento\
      */
     public function isEnable()
     {
-        return !($this->httpContext->getValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH));
+        return !($this->httpContext->getValue(Context::CONTEXT_AUTH));
     }
 
     /**

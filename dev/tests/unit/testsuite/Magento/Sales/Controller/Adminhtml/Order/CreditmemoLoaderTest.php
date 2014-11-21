@@ -80,6 +80,11 @@ class CreditmemoLoaderTest extends \PHPUnit_Framework_TestCase
      */
     protected $helperMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $stockConfiguration;
+
     public function setUp()
     {
         $data = [];
@@ -120,6 +125,11 @@ class CreditmemoLoaderTest extends \PHPUnit_Framework_TestCase
             ->setMethods([])
             ->getMock();
 
+        $this->stockConfiguration = $this->getMockBuilder('Magento\CatalogInventory\Model\Configuration')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+
         $this->loader = new \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader(
             $this->creditmemoFactoryMock,
             $this->orderFactoryMock,
@@ -129,7 +139,7 @@ class CreditmemoLoaderTest extends \PHPUnit_Framework_TestCase
             $this->sessionMock,
             $this->messageManagerMock,
             $this->registryMock,
-            $this->helperMock,
+            $this->stockConfiguration,
             $data
         );
     }

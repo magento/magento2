@@ -25,6 +25,8 @@
 namespace Magento\Framework\Api;
 
 use Magento\Customer\Service\V1\Data\Customer;
+use Magento\Framework\Api\AbstractSimpleObject;
+use Magento\Framework\Data\AbstractDataObject;
 
 /**
  * Class implements tests for SimpleDataObjectConverter class.

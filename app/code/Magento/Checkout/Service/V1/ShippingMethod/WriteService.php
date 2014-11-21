@@ -77,7 +77,7 @@ class WriteService implements WriteServiceInterface
     public function setMethod($cartId, $carrierCode, $methodCode)
     {
         /** @var \Magento\Sales\Model\Quote $quote */
-        $quote = $this->quoteRepository->get($cartId);
+        $quote = $this->quoteRepository->getActive($cartId);
         if (0 == $quote->getItemsCount()) {
             throw new InputException('Shipping method is not applicable for empty cart');
         }
@@ -101,7 +101,7 @@ class WriteService implements WriteServiceInterface
             throw new NoSuchEntityException('Carrier with such method not found: ' . $carrierCode . ', ' . $methodCode);
         }
         try {
-            $quote->collectTotals()->save();
+            $this->quoteRepository->save($quote->collectTotals());
         } catch (\Exception $e) {
             throw new CouldNotSaveException('Cannot set shipping method. ' . $e->getMessage());
         }

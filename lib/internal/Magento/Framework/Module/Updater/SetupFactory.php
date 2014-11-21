@@ -25,14 +25,14 @@
  */
 namespace Magento\Framework\Module\Updater;
 
-use Magento\Framework\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 
 class SetupFactory
 {
     const INSTANCE_TYPE = 'Magento\Framework\Module\Updater\SetupInterface';
 
     /**
-     * @var ObjectManager
+     * @var ObjectManagerInterface
      */
     protected $_objectManager;
 
@@ -42,10 +42,10 @@ class SetupFactory
     protected $_resourceTypes;
 
     /**
-     * @param ObjectManager $objectManager
+     * @param ObjectManagerInterface $objectManager
      * @param array $resourceTypes
      */
-    public function __construct(ObjectManager $objectManager, array $resourceTypes)
+    public function __construct(ObjectManagerInterface $objectManager, array $resourceTypes)
     {
         $this->_objectManager = $objectManager;
         $this->_resourceTypes = $resourceTypes;

@@ -25,7 +25,7 @@
  */
 namespace Magento\Framework\ObjectManager\Definition;
 
-class Runtime implements \Magento\Framework\ObjectManager\Definition
+class Runtime implements \Magento\Framework\ObjectManager\DefinitionInterface
 {
     /**
      * @var array

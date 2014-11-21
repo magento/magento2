@@ -40,7 +40,7 @@ class PostDataTest extends \PHPUnit_Framework_TestCase
 
         $contextMock = $this->getMock(
             'Magento\Framework\App\Helper\Context',
-            array('getUrlBuilder'),
+            array('getUrlBuilder', 'getUrlEncoder'),
             array(),
             '',
             false
@@ -55,9 +55,18 @@ class PostDataTest extends \PHPUnit_Framework_TestCase
             array('getCurrentUrl')
         );
 
+        $encoder = $this->getMockBuilder('Magento\Framework\Url\EncoderInterface')->getMock();
+        $encoder->expects($this->once())
+            ->method('encode')
+            ->willReturnCallback(function ($url) {
+                return strtr(base64_encode($url), '+/=', '-_,');
+            });
         $contextMock->expects($this->once())
             ->method('getUrlBuilder')
             ->will($this->returnValue($urlBuilderMock));
+        $contextMock->expects($this->once())
+            ->method('getUrlEncoder')
+            ->willReturn($encoder);
         $urlBuilderMock->expects($this->once())
             ->method('getCurrentUrl')
             ->will($this->returnValue($url . 'for_uenc'));

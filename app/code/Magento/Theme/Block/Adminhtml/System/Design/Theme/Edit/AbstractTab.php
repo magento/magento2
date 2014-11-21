@@ -33,7 +33,7 @@ abstract class AbstractTab extends \Magento\Backend\Block\Widget\Form\Generic im
     \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
 
@@ -48,14 +48,14 @@ abstract class AbstractTab extends \Magento\Backend\Block\Widget\Form\Generic im
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
-        \Magento\Framework\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
         array $data = array()
     ) {
         parent::__construct($context, $registry, $formFactory, $data);

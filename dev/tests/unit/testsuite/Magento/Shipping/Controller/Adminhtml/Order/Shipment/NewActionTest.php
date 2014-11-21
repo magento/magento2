@@ -113,10 +113,7 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $this->objectManager = $this->getMockBuilder('Magento\Framework\ObjectManager')
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
+        $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->context = $this->getMock(
             'Magento\Backend\App\Action\Context',
             [

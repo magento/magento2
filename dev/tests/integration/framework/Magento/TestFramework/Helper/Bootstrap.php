@@ -35,7 +35,7 @@ class Bootstrap
     private static $_instance;
 
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     private static $_objectManager;
 
@@ -138,7 +138,7 @@ class Bootstrap
     /**
      * Retrieve object manager
      *
-     * @return \Magento\Framework\ObjectManager
+     * @return \Magento\Framework\ObjectManagerInterface
      */
     public static function getObjectManager()
     {
@@ -148,9 +148,9 @@ class Bootstrap
     /**
      * Set object manager
      *
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      */
-    public static function setObjectManager(\Magento\Framework\ObjectManager $objectManager)
+    public static function setObjectManager(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
         self::$_objectManager = $objectManager;
     }

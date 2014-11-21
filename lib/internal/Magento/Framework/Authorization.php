@@ -30,24 +30,24 @@ class Authorization implements \Magento\Framework\AuthorizationInterface
     /**
      * ACL policy
      *
-     * @var \Magento\Framework\Authorization\Policy
+     * @var \Magento\Framework\Authorization\PolicyInterface
      */
     protected $_aclPolicy;
 
     /**
      * ACL role locator
      *
-     * @var \Magento\Framework\Authorization\RoleLocator
+     * @var \Magento\Framework\Authorization\RoleLocatorInterface
      */
     protected $_aclRoleLocator;
 
     /**
-     * @param \Magento\Framework\Authorization\Policy $aclPolicy
-     * @param \Magento\Framework\Authorization\RoleLocator $roleLocator
+     * @param \Magento\Framework\Authorization\PolicyInterface $aclPolicy
+     * @param \Magento\Framework\Authorization\RoleLocatorInterface $roleLocator
      */
     public function __construct(
-        \Magento\Framework\Authorization\Policy $aclPolicy,
-        \Magento\Framework\Authorization\RoleLocator $roleLocator
+        \Magento\Framework\Authorization\PolicyInterface $aclPolicy,
+        \Magento\Framework\Authorization\RoleLocatorInterface $roleLocator
     ) {
         $this->_aclPolicy = $aclPolicy;
         $this->_aclRoleLocator = $roleLocator;

@@ -127,11 +127,6 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
     private $_loggerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Helper\Data
-     */
-    private $_customerHelperMock;
-
-    /**
      * @var \Magento\TestFramework\Helper\ObjectManager
      */
     protected $_objectManager;
@@ -306,15 +301,6 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
             $this->getMockBuilder('Magento\Customer\Service\V1\CustomerAddressService')
                 ->disableOriginalConstructor()
                 ->getMock();
-
-        $this->_customerHelperMock =
-            $this->getMockBuilder('Magento\Customer\Helper\Data')
-                ->disableOriginalConstructor()
-                ->setMethods(['isCustomerInStore'])
-                ->getMock();
-        $this->_customerHelperMock->expects($this->any())
-            ->method('isCustomerInStore')
-            ->will($this->returnValue(false));
 
         $this->_urlMock = $this->getMockBuilder('Magento\Framework\UrlInterface')
             ->disableOriginalConstructor()

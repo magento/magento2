@@ -24,8 +24,44 @@
  */
 namespace Magento\Checkout\Controller\Cart;
 
+use Magento\Checkout\Model\Cart as CustomerCart;
+
 class EstimatePost extends \Magento\Checkout\Controller\Cart
 {
+    /**
+     * @var \Magento\Sales\Model\QuoteRepository
+     */
+    protected $quoteRepository;
+
+    /**
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
+     * @param CustomerCart $cart
+     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository
+     */
+    public function __construct(
+        \Magento\Framework\App\Action\Context $context,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
+        CustomerCart $cart,
+        \Magento\Sales\Model\QuoteRepository $quoteRepository
+    ) {
+        $this->quoteRepository = $quoteRepository;
+        parent::__construct(
+            $context,
+            $scopeConfig,
+            $checkoutSession,
+            $storeManager,
+            $formKeyValidator,
+            $cart
+        );
+    }
+
     /**
      * Initialize shipping information
      *
@@ -52,7 +88,7 @@ class EstimatePost extends \Magento\Checkout\Controller\Cart
         )->setCollectShippingRates(
             true
         );
-        $this->cart->getQuote()->save();
+        $this->quoteRepository->save($this->cart->getQuote());
         $this->_goBack();
     }
 }

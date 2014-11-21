@@ -27,6 +27,9 @@
  */
 namespace Magento\Catalog\Helper\Product\Edit\Action;
 
+/**
+ * Class Attribute
+ */
 class Attribute extends \Magento\Backend\Helper\Data
 {
     /**
@@ -66,6 +69,11 @@ class Attribute extends \Magento\Backend\Helper\Data
     protected $_eavConfig;
 
     /**
+     * @var \Magento\Framework\StoreManagerInterface
+     */
+    protected $_storeManager;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\App\Route\Config $routeConfig
      * @param \Magento\Framework\Locale\ResolverInterface $locale
@@ -76,6 +84,7 @@ class Attribute extends \Magento\Backend\Helper\Data
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Backend\Model\Session $session
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productsFactory
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -87,11 +96,13 @@ class Attribute extends \Magento\Backend\Helper\Data
         \Magento\Framework\Math\Random $mathRandom,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Backend\Model\Session $session,
-        \Magento\Catalog\Model\Resource\Product\CollectionFactory $productsFactory
+        \Magento\Catalog\Model\Resource\Product\CollectionFactory $productsFactory,
+        \Magento\Framework\StoreManagerInterface $storeManager
     ) {
         $this->_eavConfig = $eavConfig;
         $this->_session = $session;
         $this->_productsFactory = $productsFactory;
+        $this->_storeManager = $storeManager;
         parent::__construct($context, $routeConfig, $locale, $backendUrl, $auth, $frontNameResolver, $mathRandom);
     }
 
@@ -187,5 +198,14 @@ class Attribute extends \Magento\Backend\Helper\Data
         }
 
         return $this->_attributes;
+    }
+
+    /**
+     * @param int $storeId
+     * @return int
+     */
+    public function getStoreWebsiteId($storeId)
+    {
+        return $this->_storeManager->getStore($storeId)->getWebsiteId();
     }
 }

@@ -31,7 +31,7 @@
             <strategy>css selector</strategy>
         </messagesBlock>
         <actionsBlock>
-            <class>Magento\Reports\Test\Block\Adminhtml\Product\Viewed\Action</class>
+            <class>Magento\Reports\Test\Block\Adminhtml\Viewed\Action</class>
             <locator>.page-main-actions</locator>
             <strategy>css selector</strategy>
         </actionsBlock>

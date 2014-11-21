@@ -31,7 +31,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class FormTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
 

@@ -42,20 +42,22 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
+     * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
+     * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Sales\Helper\Data $salesData
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService,
+        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
+        \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
         \Magento\Framework\Registry $registry,
         \Magento\Sales\Helper\Data $salesData,
         array $data = array()
     ) {
         $this->_salesData = $salesData;
-        parent::__construct($context, $stockItemService, $registry, $data);
+        parent::__construct($context, $stockRegistry, $stockConfiguration, $registry, $data);
     }
 
     /**
@@ -206,24 +208,6 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
     }
 
     /**
-     * Check if allow to return stock
-     *
-     * @return bool
-     */
-    public function canReturnToStock()
-    {
-        $canReturnToStock = $this->_scopeConfig->getValue(
-            \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_CAN_SUBTRACT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
-        if ($canReturnToStock) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
      * Whether to show 'Return to stock' column in creaditmemo grid
      *
      * @return bool
@@ -231,15 +215,16 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
     public function canReturnItemsToStock()
     {
         if (is_null($this->_canReturnToStock)) {
-            $this->_canReturnToStock = $this->_scopeConfig->getValue(
-                \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_CAN_SUBTRACT,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            );
+            $this->_canReturnToStock = $this->canReturnToStock();
             if ($this->_canReturnToStock) {
                 $canReturnToStock = false;
                 foreach ($this->getCreditmemo()->getAllItems() as $item) {
                     $productId = $item->getOrderItem()->getProductId();
-                    if ($productId && $this->stockItemService->getManageStock($productId)) {
+                    $stockItem = $this->stockRegistry->getStockItem(
+                        $productId,
+                        $item->getOrderItem()->getStore()->getWebsiteId()
+                    );
+                    if ($stockItem->getManageStock()) {
                         $canReturnToStock = true;
                         $item->setCanReturnToStock($canReturnToStock);
                     } else {

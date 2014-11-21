@@ -23,197 +23,131 @@
  */
 namespace Magento\Cms\Model\Resource\Page;
 
+use Magento\Cms\Api\Data\PageCollectionInterface;
+use Magento\Cms\Api\Data\PageInterface;
+use Magento\Framework\Data\AbstractSearchResult;
+use Magento\Framework\Data\Collection\EntityFactoryInterface;
+use Magento\Framework\Data\SearchResultIteratorFactory;
+use Magento\Framework\DB\QueryInterface;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\StoreManagerInterface;
+use Magento\Framework\Data\SearchResultProcessorFactory;
+use Magento\Framework\Data\SearchResultProcessor;
+
 /**
  * CMS page collection
  */
-class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends AbstractSearchResult implements PageCollectionInterface
 {
     /**
-     * Load data for preview flag
-     *
-     * @var bool
+     * @var StoreManagerInterface
      */
-    protected $_previewFlag;
+    protected $storeManager;
 
     /**
-     * Store manager
-     *
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var SearchResultProcessor
      */
-    protected $_storeManager;
+    protected $searchResultProcessor;
 
     /**
-     * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\Framework\Logger $logger
-     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
-     * @param mixed $connection
-     * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
+     * @param QueryInterface $query
+     * @param EntityFactoryInterface $entityFactory
+     * @param ManagerInterface $eventManager
+     * @param SearchResultIteratorFactory $resultIteratorFactory
+     * @param StoreManagerInterface $storeManager
+     * @param SearchResultProcessorFactory $searchResultProcessorFactory
      */
     public function __construct(
-        \Magento\Core\Model\EntityFactory $entityFactory,
-        \Magento\Framework\Logger $logger,
-        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\StoreManagerInterface $storeManager,
-        $connection = null,
-        \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
+        QueryInterface $query,
+        EntityFactoryInterface $entityFactory,
+        ManagerInterface $eventManager,
+        SearchResultIteratorFactory $resultIteratorFactory,
+        StoreManagerInterface $storeManager,
+        SearchResultProcessorFactory $searchResultProcessorFactory
     ) {
-        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
-        $this->_storeManager = $storeManager;
+        $this->storeManager = $storeManager;
+        $this->searchResultProcessor = $searchResultProcessorFactory->create($this);
+        parent::__construct($query, $entityFactory, $eventManager, $resultIteratorFactory);
     }
 
     /**
-     * Define resource model
-     *
      * @return void
      */
-    protected function _construct()
+    protected function init()
     {
-        $this->_init('Magento\Cms\Model\Page', 'Magento\Cms\Model\Resource\Page');
-        $this->_map['fields']['page_id'] = 'main_table.page_id';
-        $this->_map['fields']['store'] = 'store_table.store_id';
+        $this->setDataInterfaceName('Magento\Cms\Api\Data\PageInterface');
+        $this->query->addCountSqlSkipPart(\Zend_Db_Select::GROUP, true);
     }
 
     /**
-     * Returns pairs identifier - title for unique identifiers
-     * and pairs identifier|page_id - title for non-unique after first
-     *
      * @return array
      */
     public function toOptionIdArray()
     {
-        $res = array();
-        $existingIdentifiers = array();
-        foreach ($this as $item) {
-            $identifier = $item->getData('identifier');
+        $res = [];
+        $existingIdentifiers = [];
+        foreach ($this->getItems() as $item) {
+            /** @var PageInterface $item */
+            $identifier = $item->getIdentifier();
 
             $data['value'] = $identifier;
-            $data['label'] = $item->getData('title');
+            $data['label'] = $item->getTitle();
 
             if (in_array($identifier, $existingIdentifiers)) {
-                $data['value'] .= '|' . $item->getData('page_id');
+                $data['value'] .= '|' . $item->getPageId();
             } else {
                 $existingIdentifiers[] = $identifier;
             }
-
             $res[] = $data;
         }
-
         return $res;
     }
 
     /**
-     * Set first store flag
-     *
-     * @param bool $flag
-     * @return $this
+     * @deprecated
+     * @return void
      */
-    public function setFirstStoreFlag($flag = false)
+    public function addStoreFilter()
     {
-        $this->_previewFlag = $flag;
-        return $this;
+        //
     }
 
     /**
      * Perform operations after collection load
      *
-     * @return $this
+     * @return void
      */
-    protected function _afterLoad()
+    protected function afterLoad()
     {
-        if ($this->_previewFlag) {
-            $items = $this->getColumnValues('page_id');
-            $connection = $this->getConnection();
-            if (count($items)) {
-                $select = $connection->select()->from(
-                    array('cps' => $this->getTable('cms_page_store'))
-                )->where(
-                    'cps.page_id IN (?)',
-                    $items
-                );
+        if ($this->getSearchCriteria()->getPart('first_store_flag')) {
+            $items = $this->searchResultProcessor->getColumnValues('page_id');
 
+            $connection = $this->getQuery()->getConnection();
+            $resource = $this->getQuery()->getResource();
+            if (count($items)) {
+                $select = $connection->select()->from(['cps' => $resource->getTable('cms_page_store')])
+                    ->where('cps.page_id IN (?)', $items);
                 if ($result = $connection->fetchPairs($select)) {
-                    foreach ($this as $item) {
-                        if (!isset($result[$item->getData('page_id')])) {
+                    foreach ($this->getItems() as $item) {
+                        /** @var PageInterface $item */
+                        if (!isset($result[$item->getPageId()])) {
                             continue;
                         }
-                        if ($result[$item->getData('page_id')] == 0) {
-                            $stores = $this->_storeManager->getStores(false, true);
+                        if ($result[$item->getPageId()] == 0) {
+                            $stores = $this->storeManager->getStores(false, true);
                             $storeId = current($stores)->getId();
                             $storeCode = key($stores);
                         } else {
-                            $storeId = $result[$item->getData('page_id')];
-                            $storeCode = $this->_storeManager->getStore($storeId)->getCode();
+                            $storeId = $result[$item->getPageId()];
+                            $storeCode = $this->storeManager->getStore($storeId)->getCode();
                         }
                         $item->setData('_first_store_id', $storeId);
                         $item->setData('store_code', $storeCode);
+                        $item->setData('store_id', [$result[$item->getPageId()]]);
                     }
                 }
             }
         }
-
-        return parent::_afterLoad();
-    }
-
-    /**
-     * Add filter by store
-     *
-     * @param int|\Magento\Store\Model\Store $store
-     * @param bool $withAdmin
-     * @return $this
-     */
-    public function addStoreFilter($store, $withAdmin = true)
-    {
-        if (!$this->getFlag('store_filter_added')) {
-            if ($store instanceof \Magento\Store\Model\Store) {
-                $store = array($store->getId());
-            }
-
-            if (!is_array($store)) {
-                $store = array($store);
-            }
-
-            if ($withAdmin) {
-                $store[] = \Magento\Store\Model\Store::DEFAULT_STORE_ID;
-            }
-
-            $this->addFilter('store', array('in' => $store), 'public');
-        }
-        return $this;
-    }
-
-    /**
-     * Join store relation table if there is store filter
-     *
-     * @return void
-     */
-    protected function _renderFiltersBefore()
-    {
-        if ($this->getFilter('store')) {
-            $this->getSelect()->join(
-                array('store_table' => $this->getTable('cms_page_store')),
-                'main_table.page_id = store_table.page_id',
-                array()
-            )->group(
-                'main_table.page_id'
-            );
-        }
-        return parent::_renderFiltersBefore();
-    }
-
-    /**
-     * Get SQL for get record count.
-     * Extra GROUP BY strip added.
-     *
-     * @return \Magento\Framework\DB\Select
-     */
-    public function getSelectCountSql()
-    {
-        $countSelect = parent::getSelectCountSql();
-        $countSelect->reset(\Zend_Db_Select::GROUP);
-
-        return $countSelect;
+        parent::afterLoad();
     }
 }

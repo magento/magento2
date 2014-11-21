@@ -68,13 +68,6 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
     protected $priceList;
 
     /**
-     * Should filter by base price or not
-     *
-     * @var bool
-     */
-    protected $filterByBasePrice = true;
-
-    /**
      * @param Product $saleableItem
      * @param float $quantity
      * @param CalculatorInterface $calculator
@@ -179,11 +172,6 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
                 unset($priceList[$priceKey]);
                 continue;
             }
-            /* select a lower price between Tier price and base price */
-            if ($this->filterByBasePrice && $price['price'] > $this->getBasePrice()) {
-                unset($priceList[$priceKey]);
-                continue;
-            }
             /* select a lower price for each quantity */
             if (isset($qtyCache[$price['price_qty']])) {
                 $priceQty = $qtyCache[$price['price_qty']];
@@ -216,7 +204,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
     public function getSavePercent(AmountInterface $amount)
     {
         return ceil(
-            100 - ((100 / $this->priceInfo->getPrice(BasePrice::PRICE_CODE)->getAmount()->getBaseAmount())
+            100 - ((100 / $this->priceInfo->getPrice(RegularPrice::PRICE_CODE)->getAmount()->getBaseAmount())
                 * $amount->getBaseAmount())
         );
     }

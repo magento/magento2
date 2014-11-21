@@ -24,7 +24,7 @@
 
 namespace Magento\Framework\Serialization;
 
-use Magento\Framework\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Factory used to construct Data Builder based on interface name
@@ -32,14 +32,14 @@ use Magento\Framework\ObjectManager;
 class DataBuilderFactory
 {
     /**
-     * @var ObjectManager
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
 
     /**
-     * @param ObjectManager $objectManager
+     * @param ObjectManagerInterface $objectManager
      */
-    public function __construct(ObjectManager $objectManager)
+    public function __construct(ObjectManagerInterface $objectManager)
     {
         $this->objectManager = $objectManager;
     }

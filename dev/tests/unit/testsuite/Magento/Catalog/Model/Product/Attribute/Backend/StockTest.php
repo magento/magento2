@@ -32,26 +32,42 @@ class StockTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
 
-    /**
-     * @var \Magento\CatalogInventory\Service\V1\StockItemServiceInterface
-     */
-    protected $stockItemService;
 
     /**
      * @var \Magento\TestFramework\Helper\ObjectManager
      */
     protected $objectHelper;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $stockItemMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $stockRegistry;
+
     protected function setUp()
     {
         $this->objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->stockItemService = $this->getMockBuilder('Magento\CatalogInventory\Service\V1\StockItemService')
+        $this->stockRegistry = $this->getMockBuilder('Magento\CatalogInventory\Model\StockRegistry')
             ->disableOriginalConstructor()
+            ->setMethods(['getStockItem', '__wakeup'])
             ->getMock();
 
+        $this->stockItemMock = $this->getMock(
+            'Magento\CatalogInventory\Model\Stock\Item',
+            ['getIsInStock', 'getQty', '__wakeup'],
+            [],
+            '',
+            false
+        );
+
+        $this->stockRegistry->expects($this->any())
+            ->method('getStockItem')
+            ->will($this->returnValue($this->stockItemMock));
         $this->model = $this->objectHelper->getObject(
             'Magento\Catalog\Model\Product\Attribute\Backend\Stock',
-            array('stockItemService' => $this->stockItemService)
+            array('stockRegistry' => $this->stockRegistry)
         );
         $attribute = $this->getMock('Magento\Framework\Object', array('getAttributeCode'));
         $attribute->expects($this->atLeastOnce())
@@ -63,18 +79,15 @@ class StockTest extends \PHPUnit_Framework_TestCase
     public function testAfterLoad()
     {
         $productId = 2;
-        $stockItemDo = $this->getMockBuilder('Magento\CatalogInventory\Service\V1\Data\StockItem')
-            ->disableOriginalConstructor()
-            ->getMock();
 
-        $this->stockItemService->expects($this->once())
-            ->method('getStockItem')
-            ->with($productId)
-            ->will($this->returnValue($stockItemDo));
+        $this->stockItemMock->expects($this->once())->method('getIsInStock')->will($this->returnValue(1));
+        $this->stockItemMock->expects($this->once())->method('getQty')->will($this->returnValue(5));
 
-        $stockItemDo->expects($this->once())->method('getIsInStock')->will($this->returnValue(1));
-        $stockItemDo->expects($this->once())->method('getQty')->will($this->returnValue(5));
-        $object = new \Magento\Framework\Object(['id' => $productId]);
+        $store = $this->getMock('Magento\Store\Model\Store', ['getWebsiteId', '__wakeup'], [], '', false);
+        $store->expects($this->once())
+            ->method('getWebsiteId')
+            ->will($this->returnValue(10));
+        $object = new \Magento\Framework\Object(['id' => $productId, 'store' => $store]);
         $this->model->afterLoad($object);
         $data = $object->getData();
         $this->assertEquals(1, $data[self::ATTRIBUTE_NAME]['is_in_stock']);

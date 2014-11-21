@@ -24,6 +24,11 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Magento\Cms\Api\Data\PageInterface" type="Magento\Cms\Model\Page" />
+    <preference for="Magento\Cms\Api\Data\PageCollectionInterface" type="Magento\Cms\Model\Resource\Page\Collection" />
+    <preference for="Magento\Cms\Api\PageCriteriaInterface" type="Magento\Cms\Model\Resource\PageCriteria" />
+    <preference for="Magento\Cms\Api\PageRepositoryInterface" type="Magento\Cms\Model\PageRepository" />
+
     <type name="Magento\Cms\Model\Wysiwyg\Config">
         <arguments>
             <argument name="windowSize" xsi:type="array">

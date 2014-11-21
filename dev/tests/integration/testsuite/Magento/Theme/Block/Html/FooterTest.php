@@ -23,6 +23,8 @@
  */
 namespace Magento\Theme\Block\Html;
 
+use Magento\Customer\Model\Context;
+
 class FooterTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -44,7 +46,7 @@ class FooterTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $context = $objectManager->get('Magento\Framework\App\Http\Context');
-        $context->setValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH, false, false);
+        $context->setValue(Context::CONTEXT_AUTH, false, false);
         $block = $objectManager->get('Magento\Framework\View\LayoutInterface')
             ->createBlock('Magento\Theme\Block\Html\Footer');
         $storeId = $objectManager->get('Magento\Framework\StoreManagerInterface')->getStore()->getId();

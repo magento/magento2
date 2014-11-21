@@ -26,7 +26,7 @@ namespace Magento\Framework;
 class CurrencyFactory
 {
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager = null;
 
@@ -36,10 +36,10 @@ class CurrencyFactory
     protected $_instanceName = null;
 
     /**
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
      */
-    public function __construct(\Magento\Framework\ObjectManager $objectManager, $instanceName = 'Magento\Framework\CurrencyInterface')
+    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, $instanceName = 'Magento\Framework\CurrencyInterface')
     {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;

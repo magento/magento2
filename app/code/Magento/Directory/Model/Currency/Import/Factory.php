@@ -26,7 +26,7 @@ namespace Magento\Directory\Model\Currency\Import;
 class Factory
 {
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
 
@@ -36,11 +36,11 @@ class Factory
     protected $_serviceConfig;
 
     /**
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Directory\Model\Currency\Import\Config $serviceConfig
      */
     public function __construct(
-        \Magento\Framework\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Directory\Model\Currency\Import\Config $serviceConfig
     ) {
         $this->_objectManager = $objectManager;

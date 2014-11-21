@@ -149,7 +149,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Directory\Helper\Data $directoryData
-     * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
+     * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\Framework\Logger $logger
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Module\Dir\Reader $configReader
@@ -172,7 +172,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         \Magento\Directory\Model\CountryFactory $countryFactory,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Directory\Helper\Data $directoryData,
-        \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService,
+        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\Framework\Logger $logger,
         \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Framework\Module\Dir\Reader $configReader,
@@ -195,7 +195,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $countryFactory,
             $currencyFactory,
             $directoryData,
-            $stockItemService,
+            $stockRegistry,
             $data
         );
         $wsdlBasePath = $configReader->getModuleDir('etc', 'Magento_Fedex') . '/wsdl/';

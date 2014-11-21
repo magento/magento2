@@ -38,64 +38,67 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Simple product with stock item
-     */
-    public static function simpleProductFixture()
-    {
-        /** @var $product \Magento\Catalog\Model\Product */
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
-        );
-        $product->setTypeId('simple')
-            ->setId(1)
-            ->setAttributeSetId(4)
-            ->setName('Simple Product')
-            ->setSku('simple')
-            ->setPrice(10)
-            ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
-            ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
-            ->save();
-    }
-
-    /**
-     * @magentoDataFixture simpleProductFixture
+     * @magentoDataFixture Magento/Catalog/_files/products.php
      */
     public function testSaveWithNullQty()
     {
-        $this->_model->setProductId(1)
-            ->setTypeId(\Magento\Catalog\Model\Product\Type::DEFAULT_TYPE)
-            ->setStockId(\Magento\CatalogInventory\Model\Stock::DEFAULT_STOCK_ID)
-            ->setQty(null);
-        $this->_model->save();
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Catalog\Model\Product');
 
-        $this->_model->setQty(2);
-        $this->_model->save();
-        $this->assertEquals('2.0000', $this->_model->load(1)->getQty());
+        $product->load(1);
 
-        $this->_model->setQty(0);
-        $this->_model->save();
-        $this->assertEquals('0.0000', $this->_model->load(1)->getQty());
+        /** @var \Magento\CatalogInventory\Model\Stock\StockItemRepository $stockItemRepository */
+        $stockItemRepository = $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\CatalogInventory\Model\Stock\StockItemRepository');
 
-        $this->_model->setQty(null);
-        $this->_model->save();
-        $this->assertEquals(null, $this->_model->load(1)->getQty());
+        /** @var \Magento\CatalogInventory\Api\StockItemCriteriaInterface $stockItemCriteria */
+        $stockItemCriteria = $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\CatalogInventory\Api\StockItemCriteriaInterface');
+
+        $savedStockItem = current($stockItemRepository->getList($stockItemCriteria)->getItems());
+        $savedStockItemId = $savedStockItem->getItemId();
+
+        $savedStockItem->setQty(null);
+        $savedStockItem->save();
+
+        $savedStockItem->setQty(2);
+        $savedStockItem->save();
+        $this->assertEquals('2.0000', $savedStockItem->load($savedStockItemId)->getQty());
+
+        $savedStockItem->setQty(0);
+        $savedStockItem->save();
+        $this->assertEquals('0.0000', $savedStockItem->load($savedStockItemId)->getQty());
+
+        $savedStockItem->setQty(null);
+        $savedStockItem->save();
+
+        $this->assertEquals(null, $savedStockItem->load($savedStockItemId)->getQty());
     }
 
     /**
-     * @magentoDataFixture simpleProductFixture
+     * @magentoDataFixture Magento/Catalog/_files/products.php
      */
     public function testStockStatusChangedAuto()
     {
-        $this->_model->setProductId(1)
-            ->setTypeId(\Magento\Catalog\Model\Product\Type::DEFAULT_TYPE)
-            ->setStockId(\Magento\CatalogInventory\Model\Stock::DEFAULT_STOCK_ID)
-            ->setQty(1);
-        $this->_model->save();
-        $this->assertEquals(0, $this->_model->getStockStatusChangedAuto());
+        /** @var \Magento\CatalogInventory\Model\Stock\StockItemRepository $stockItemRepository */
+        $stockItemRepository = $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\CatalogInventory\Model\Stock\StockItemRepository');
 
-        $this->_model->setStockStatusChangedAutomaticallyFlag(1);
-        $this->_model->save();
-        $this->assertEquals(1, $this->_model->getStockStatusChangedAuto());
+        /** @var \Magento\CatalogInventory\Api\StockItemCriteriaInterface $stockItemCriteria */
+        $stockItemCriteria = $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\CatalogInventory\Api\StockItemCriteriaInterface');
+
+        $savedStockItem = current($stockItemRepository->getList($stockItemCriteria)->getItems());
+
+        $savedStockItem->setQty(1);
+        $savedStockItem->save();
+
+        $this->assertEquals(0, $savedStockItem->getStockStatusChangedAuto());
+
+        $savedStockItem->setStockStatusChangedAutomaticallyFlag(1);
+        $savedStockItem->save();
+        $this->assertEquals(1, $savedStockItem->getStockStatusChangedAuto());
     }
 
     /**

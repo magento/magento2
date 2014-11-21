@@ -44,28 +44,18 @@ class Io
     private $_generationDirectory;
 
     /**
-     * File resolver
-     *
-     * @var \Magento\Framework\Code\Generator\FileResolver
-     */
-    private $fileResolver;
-
-    /**
      * @var \Magento\Framework\Filesystem\Driver\File
      */
     private $filesystemDriver;
 
     /**
-     * @param \Magento\Framework\Filesystem\Driver\File   $filesystemDriver
-     * @param \Magento\Framework\Code\Generator\FileResolver     $fileResolver
-     * @param null $generationDirectory
+     * @param \Magento\Framework\Filesystem\Driver\File $filesystemDriver
+     * @param null|string $generationDirectory
      */
     public function __construct(
         \Magento\Framework\Filesystem\Driver\File $filesystemDriver,
-        \Magento\Framework\Code\Generator\FileResolver $fileResolver,
         $generationDirectory = null
     ) {
-        $this->fileResolver = $fileResolver;
         $this->filesystemDriver = $filesystemDriver;
         $this->initGeneratorDirectory($generationDirectory);
     }
@@ -104,8 +94,7 @@ class Io
      */
     public function getResultFileName($className)
     {
-        $resultFileName = $this->fileResolver->getFilePath($className);
-        return $this->_generationDirectory . $resultFileName;
+        return $this->_generationDirectory . ltrim(str_replace(['\\', '_'], '/', $className), '/') . '.php';
     }
 
     /**

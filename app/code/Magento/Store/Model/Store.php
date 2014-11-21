@@ -301,7 +301,7 @@ class Store extends AbstractModel implements
     protected $_cookieMetadataFactory;
 
     /**
-     * @var \Magento\Framework\Stdlib\CookieManager
+     * @var \Magento\Framework\Stdlib\CookieManagerInterface
      */
     protected $_cookieManager;
 
@@ -329,7 +329,7 @@ class Store extends AbstractModel implements
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
      * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
-     * @param \Magento\Framework\Stdlib\CookieManager $cookieManager,
+     * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
@@ -352,7 +352,7 @@ class Store extends AbstractModel implements
         \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Framework\Session\SidResolverInterface $sidResolver,
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
-        \Magento\Framework\Stdlib\CookieManager $cookieManager,
+        \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
         \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Framework\Session\SessionManagerInterface $session,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,

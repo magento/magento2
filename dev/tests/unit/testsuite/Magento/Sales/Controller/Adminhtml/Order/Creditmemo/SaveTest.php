@@ -46,7 +46,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     protected $_sessionMock;
 
     /**
-     * @var \Magento\Framework\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_objectManager;
 
@@ -79,7 +79,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             array('setFormData'),
             $constructArguments
         );
-        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManager', array(), array(), '', false);
+        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $registryMock = $this->getMock('Magento\Framework\Registry', array(), array(), '', false, false);
         $this->_objectManager->expects(
             $this->any()

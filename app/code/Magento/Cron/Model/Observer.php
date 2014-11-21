@@ -103,7 +103,7 @@ class Observer
     protected $_shell;
 
     /**
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param ScheduleFactory $scheduleFactory
      * @param \Magento\Framework\App\CacheInterface $cache
      * @param ConfigInterface $config
@@ -112,7 +112,7 @@ class Observer
      * @param \Magento\Framework\ShellInterface $shell
      */
     public function __construct(
-        \Magento\Framework\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Cron\Model\ScheduleFactory $scheduleFactory,
         \Magento\Framework\App\CacheInterface $cache,
         \Magento\Cron\Model\ConfigInterface $config,

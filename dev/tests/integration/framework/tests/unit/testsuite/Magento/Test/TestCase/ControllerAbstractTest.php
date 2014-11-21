@@ -39,10 +39,10 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
         $request = new \Magento\TestFramework\Request(
             $this->getMock('Magento\Framework\App\Route\ConfigInterface\Proxy', [], [], '', false),
             $this->getMock('Magento\Framework\App\Request\PathInfoProcessorInterface', [], [], '', false),
-            $this->getMock('Magento\Framework\Stdlib\CookieManager', [], [], '', false)
+            $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface')
         );
         $response = new \Magento\TestFramework\Response(
-            $this->getMock('Magento\Framework\Stdlib\CookieManager', [], [], '', false),
+            $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface'),
             $this->getMock('Magento\Framework\Stdlib\Cookie\CookieMetadataFactory', [], [], '', false),
             $this->getMock('Magento\Framework\App\Http\Context', [], [], '', false)
         );

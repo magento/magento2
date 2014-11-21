@@ -50,7 +50,7 @@ class Factory
     );
 
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
 
@@ -70,13 +70,13 @@ class Factory
     protected $filesystem;
 
     /**
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\Config\FileIteratorFactory $fileIteratorFactory
      * @param \Magento\Framework\Filesystem $filesystem
      */
     public function __construct(
-        \Magento\Framework\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\Config\FileIteratorFactory $fileIteratorFactory,
         \Magento\Framework\Filesystem $filesystem

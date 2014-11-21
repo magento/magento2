@@ -94,6 +94,11 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     protected $priceCurrency;
 
     /**
+     * @var \Magento\Framework\Module\Manager
+     */
+    public $moduleManager;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Catalog\Helper\Product\Configuration $productConfig
      * @param \Magento\Checkout\Model\Session $checkoutSession
@@ -101,6 +106,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
      * @param \Magento\Core\Helper\Url $urlHelper
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param PriceCurrencyInterface $priceCurrency
+     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param array $data
      */
     public function __construct(
@@ -111,6 +117,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
         \Magento\Core\Helper\Url $urlHelper,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         PriceCurrencyInterface $priceCurrency,
+        \Magento\Framework\Module\Manager $moduleManager,
         array $data = array()
     ) {
         $this->priceCurrency = $priceCurrency;
@@ -121,6 +128,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
         $this->messageManager = $messageManager;
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
+        $this->moduleManager = $moduleManager;
     }
 
     /**

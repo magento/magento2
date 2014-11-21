@@ -25,7 +25,7 @@ namespace Magento\PageCache\Model\App\FrontController;
 
 use Magento\Framework\App\FrontController;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
-use Magento\Framework\Stdlib\CookieManager;
+use Magento\Framework\Stdlib\CookieManagerInterface;
 
 class MessageBox
 {
@@ -42,7 +42,7 @@ class MessageBox
     /**
      * Cookie manager
      *
-     * @var \Magento\Framework\Stdlib\CookieManager
+     * @var \Magento\Framework\Stdlib\CookieManagerInterface
      */
     protected $cookieManager;
 
@@ -75,14 +75,14 @@ class MessageBox
     protected $messageManager;
 
     /**
-     * @param CookieManager $cookieManager
+     * @param CookieManagerInterface $cookieManager
      * @param CookieMetadataFactory $cookieMetadataFactory
      * @param \Magento\Framework\App\Request\Http $request
      * @param \Magento\PageCache\Model\Config $config
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      */
     public function __construct(
-        CookieManager $cookieManager,
+        CookieManagerInterface $cookieManager,
         CookieMetadataFactory $cookieMetadataFactory,
         \Magento\Framework\App\Request\Http $request,
         \Magento\PageCache\Model\Config $config,

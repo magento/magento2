@@ -63,10 +63,10 @@ class ConcatTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $column->expects($this->any())
             ->method('getSeparator')
-            ->willReturn('-');
+            ->will($this->returnValue('-'));
         $column->expects($this->any())
             ->method($method)
-            ->willReturn($getters);
+            ->will($this->returnValue($getters));
         $column->expects($this->any())
             ->method('getGetter')
             ->willReturn(['getTest', 'getBest']);

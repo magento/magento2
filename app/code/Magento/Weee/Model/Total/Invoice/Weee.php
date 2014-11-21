@@ -117,12 +117,16 @@ class Weee extends \Magento\Sales\Model\Order\Invoice\Total\AbstractTotal
             $item->setWeeeTaxAppliedRowAmount($weeeAmount);
             $item->setBaseWeeeTaxAppliedRowAmount($baseWeeeAmount);
             $newApplied = array();
-            $applied = $this->_weeeData->getApplied($item);
+            $applied = $this->_weeeData->getApplied($orderItem);
             foreach ($applied as $one) {
-                $one['base_row_amount'] = $baseWeeeAmount;
-                $one['row_amount'] = $weeeAmount;
-                $one['base_row_amount_incl_tax'] = $baseWeeeAmountInclTax;
-                $one['row_amount_incl_tax'] = $weeeAmountInclTax;
+                $title = $one['title'];
+                $one['base_row_amount'] = $invoice->roundPrice($one['base_row_amount'] * $ratio, $title . '_base');
+                $one['row_amount'] = $invoice->roundPrice($one['row_amount'] * $ratio, $title);
+                $one['base_row_amount_incl_tax'] = $invoice->roundPrice(
+                    $one['base_row_amount_incl_tax'] * $ratio,
+                    $title . '_base'
+                );
+                $one['row_amount_incl_tax'] = $invoice->roundPrice($one['row_amount_incl_tax'] * $ratio, $title);
 
                 $newApplied[] = $one;
             }

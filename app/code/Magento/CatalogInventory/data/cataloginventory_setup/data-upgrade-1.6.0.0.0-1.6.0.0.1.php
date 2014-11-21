@@ -22,10 +22,13 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/* @var $installer \Magento\Eav\Model\Entity\Setup */
-$installer = $this;
+/* @var $this \Magento\Eav\Model\Entity\Setup */
 
-$installer->getConnection()->insertForce(
-    $installer->getTable('cataloginventory_stock'),
-    array('stock_id' => 1, 'stock_name' => 'Default')
+$this->getConnection()->insertForce(
+    $this->getTable('cataloginventory_stock'),
+    array(
+        'stock_name' => 'Default',
+        'website_id' => \Magento\CatalogInventory\Model\Configuration::DEFAULT_WEBSITE_ID
+        // TODO iterate available websites
+    )
 );

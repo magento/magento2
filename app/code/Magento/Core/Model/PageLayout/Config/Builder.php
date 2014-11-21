@@ -31,7 +31,7 @@ namespace Magento\Core\Model\PageLayout\Config;
 class Builder
 {
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
 
@@ -46,12 +46,12 @@ class Builder
     protected $themeCollection;
 
     /**
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\View\PageLayout\File\Collector\Aggregated $fileCollector
      * @param \Magento\Core\Model\Resource\Theme\Collection $themeCollection
      */
     public function __construct(
-        \Magento\Framework\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\View\PageLayout\File\Collector\Aggregated $fileCollector,
         \Magento\Core\Model\Resource\Theme\Collection $themeCollection
     ) {

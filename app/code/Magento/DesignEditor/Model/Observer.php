@@ -31,7 +31,7 @@ use Magento\Framework\Event\Observer as EventObserver;
 class Observer
 {
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
 
@@ -46,12 +46,12 @@ class Observer
     protected $registry;
 
     /**
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\DesignEditor\Helper\Data $helper
      * @param \Magento\Framework\Registry $registry
      */
     public function __construct(
-        \Magento\Framework\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\DesignEditor\Helper\Data $helper,
         \Magento\Framework\Registry $registry
     ) {

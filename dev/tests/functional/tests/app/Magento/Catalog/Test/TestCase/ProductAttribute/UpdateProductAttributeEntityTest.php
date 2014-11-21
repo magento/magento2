@@ -56,7 +56,7 @@ class UpdateProductAttributeEntityTest extends Injectable
      * Run UpdateProductAttributeEntity test
      *
      * @param CatalogProductAttribute $productAttributeOriginal
-     * @param CatalogProductAttribute $productAttribute
+     * @param CatalogProductAttribute $attribute
      * @param CatalogAttributeSet $productTemplate
      * @param CatalogProductAttributeIndex $attributeIndex
      * @param CatalogProductAttributeNew $attributeNew
@@ -64,7 +64,7 @@ class UpdateProductAttributeEntityTest extends Injectable
      */
     public function testUpdateProductAttribute(
         CatalogProductAttribute $productAttributeOriginal,
-        CatalogProductAttribute $productAttribute,
+        CatalogProductAttribute $attribute,
         CatalogAttributeSet $productTemplate,
         CatalogProductAttributeIndex $attributeIndex,
         CatalogProductAttributeNew $attributeNew
@@ -80,7 +80,7 @@ class UpdateProductAttributeEntityTest extends Injectable
         //Steps
         $attributeIndex->open();
         $attributeIndex->getGrid()->searchAndOpen($filter);
-        $attributeNew->getAttributeForm()->fill($productAttribute);
+        $attributeNew->getAttributeForm()->fill($attribute);
         $attributeNew->getPageActions()->save();
     }
 }

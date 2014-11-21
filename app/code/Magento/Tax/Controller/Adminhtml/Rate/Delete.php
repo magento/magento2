@@ -31,7 +31,7 @@ class Delete extends \Magento\Tax\Controller\Adminhtml\Rate
     /**
      * Delete Rate and Data
      *
-     * @return bool
+     * @return void
      */
     public function execute()
     {
@@ -41,7 +41,7 @@ class Delete extends \Magento\Tax\Controller\Adminhtml\Rate
 
                 $this->messageManager->addSuccess(__('The tax rate has been deleted.'));
                 $this->getResponse()->setRedirect($this->getUrl("*/*/"));
-                return true;
+                return;
             } catch (NoSuchEntityException $e) {
                 $this->messageManager->addError(
                     __('Something went wrong deleting this rate because of an incorrect rate ID.')

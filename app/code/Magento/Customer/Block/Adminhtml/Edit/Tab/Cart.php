@@ -45,9 +45,9 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_dataCollectionFactory;
 
     /**
-     * @var \Magento\Sales\Model\QuoteFactory
+     * @var \Magento\Sales\Model\QuoteRepository
      */
-    protected $_quoteFactory;
+    protected $quoteRepository;
 
     /**
      * @var \Magento\Sales\Model\Quote
@@ -62,7 +62,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
+     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository
      * @param \Magento\Framework\Data\CollectionFactory $dataCollectionFactory
      * @param \Magento\Framework\Registry $coreRegistry
      * @param array $data
@@ -70,14 +70,14 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Sales\Model\QuoteFactory $quoteFactory,
+        \Magento\Sales\Model\QuoteRepository $quoteRepository,
         \Magento\Framework\Data\CollectionFactory $dataCollectionFactory,
         \Magento\Framework\Registry $coreRegistry,
         array $data = []
     ) {
         $this->_dataCollectionFactory = $dataCollectionFactory;
         $this->_coreRegistry = $coreRegistry;
-        $this->_quoteFactory = $quoteFactory;
+        $this->quoteRepository = $quoteRepository;
         parent::__construct($context, $backendHelper, $data);
     }
 
@@ -245,7 +245,11 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
             $customerId = $this->getCustomerId();
             $storeIds = $this->_storeManager->getWebsite($this->getWebsiteId())->getStoreIds();
 
-            $this->quote = $this->_quoteFactory->create()->setSharedStoreIds($storeIds)->loadByCustomer($customerId);
+            try {
+                $this->quote = $this->quoteRepository->getForCustomer($customerId, $storeIds);
+            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+                $this->quote = $this->quoteRepository->create()->setSharedStoreIds($storeIds);
+            }
         }
         return $this->quote;
     }

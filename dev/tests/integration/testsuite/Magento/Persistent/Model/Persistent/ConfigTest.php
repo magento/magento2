@@ -34,7 +34,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected $_model;
 
-    /** @var  \Magento\Framework\ObjectManager */
+    /** @var  \Magento\Framework\ObjectManagerInterface */
     protected $_objectManager;
 
     public function setUp()

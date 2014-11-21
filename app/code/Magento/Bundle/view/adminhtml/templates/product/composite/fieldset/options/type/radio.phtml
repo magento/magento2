@@ -38,7 +38,7 @@
             <?php echo $this->getSelectionTitlePrice($_selections[0]) ?>
             <input type="hidden" name="bundle_option[<?php echo $_option->getId() ?>]"
                    value="<?php echo $_selections[0]->getSelectionId() ?>"
-                   price="<?php echo $this->getSelectionPrice($_selections[0]) ?>"/>
+                   price="<?php echo $this->getSelectionPrice($_selections[0]) ?>" />
         <?php else:?>
             <?php if (!$_option->getRequired()): ?>
                 <div class="field choice">

@@ -32,20 +32,21 @@ use Magento\Catalog\Model\Product;
 class Stock extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
-     * Stock item service
+     * Stock Registry
      *
-     * @var \Magento\CatalogInventory\Service\V1\StockItemService
+     * @var \Magento\CatalogInventory\Api\StockRegistryInterface
      */
-    protected $stockItemService;
+    protected $stockRegistry;
 
     /**
      * Construct
      *
-     * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
+     * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      */
-    public function __construct(\Magento\CatalogInventory\Service\V1\StockItemService $stockItemService)
-    {
-        $this->stockItemService = $stockItemService;
+    public function __construct(
+        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
+    ) {
+        $this->stockRegistry = $stockRegistry;
     }
 
     /**
@@ -56,10 +57,10 @@ class Stock extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      */
     public function afterLoad($object)
     {
-        $stockItemDo = $this->stockItemService->getStockItem($object->getId());
+        $stockItem = $this->stockRegistry->getStockItem($object->getId(), $object->getStore()->getWebsiteId());
         $object->setData(
             $this->getAttribute()->getAttributeCode(),
-            array('is_in_stock' => $stockItemDo->getIsInStock(), 'qty' => $stockItemDo->getQty())
+            array('is_in_stock' => $stockItem->getIsInStock(), 'qty' => $stockItem->getQty())
         );
         return parent::afterLoad($object);
     }

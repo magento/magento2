@@ -25,7 +25,7 @@ namespace Magento\Framework\Search\Dynamic;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ScopeInterface;
-use Magento\Framework\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 
 class IntervalFactory
 {
@@ -35,19 +35,19 @@ class IntervalFactory
     private $interval;
 
     /**
-     * @var ObjectManager
+     * @var ObjectManagerInterface
      */
     private $objectManager;
 
     /**
-     * @param ObjectManager $objectManager
+     * @param ObjectManagerInterface $objectManager
      * @param ScopeConfigInterface $scopeConfig
      * @param string $configPath
      * @param string[] $intervals
      * @param string $scope
      */
     public function __construct(
-        ObjectManager $objectManager,
+        ObjectManagerInterface $objectManager,
         ScopeConfigInterface $scopeConfig,
         $configPath,
         $intervals,

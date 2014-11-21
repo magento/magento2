@@ -21,8 +21,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\CatalogInventory\Model\Resource\Stock;
+
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\CatalogInventory\Model\Indexer\Stock\Processor;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\App\Resource as AppResource;
 
 /**
  * Stock item resource model
@@ -30,21 +34,26 @@ namespace Magento\CatalogInventory\Model\Resource\Stock;
 class Item extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
-     * Core store config
+     * Whether index events should be processed immediately
      *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var bool
      */
-    protected $_scopeConfig;
+    protected $processIndexEvents = true;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @var Processor
+     */
+    protected $stockIndexerProcessor;
+
+    /**
+     * @param AppResource $resource
+     * @param Processor $processor
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        AppResource $resource,
+        Processor $processor
     ) {
-        $this->_scopeConfig = $scopeConfig;
+        $this->stockIndexerProcessor = $processor;
         parent::__construct($resource);
     }
 
@@ -61,14 +70,15 @@ class Item extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Loading stock item data by product
      *
-     * @param \Magento\CatalogInventory\Model\Stock\Item $item
+     * @param \Magento\CatalogInventory\Api\Data\StockItemInterface $item
      * @param int $productId
+     * @param int $websiteId
      * @return $this
      */
-    public function loadByProductId(\Magento\CatalogInventory\Model\Stock\Item $item, $productId)
+    public function loadByProductId(\Magento\CatalogInventory\Api\Data\StockItemInterface $item, $productId, $websiteId)
     {
-        $select = $this->_getLoadSelect('product_id', $productId, $item)->where('stock_id = :stock_id');
-        $data = $this->_getReadAdapter()->fetchRow($select, array(':stock_id' => $item->getStockId()));
+        $select = $this->_getLoadSelect('product_id', $productId, $item)->where('website_id = :website_id');
+        $data = $this->_getReadAdapter()->fetchRow($select, array(':website_id' => $websiteId));
         if ($data) {
             $item->setData($data);
         }
@@ -92,41 +102,6 @@ class Item extends \Magento\Framework\Model\Resource\Db\AbstractDb
     }
 
     /**
-     * Add join for catalog in stock field to product collection
-     *
-     * @param \Magento\Catalog\Model\Resource\Product\Collection $productCollection
-     * @param array $columns
-     * @return $this
-     */
-    public function addCatalogInventoryToProductCollection($productCollection, $columns = null)
-    {
-        if ($columns === null) {
-            $adapter = $this->_getReadAdapter();
-            $isManageStock = (int) $this->_scopeConfig->getValue(
-                \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_MANAGE_STOCK,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            );
-            $stockExpr = $adapter->getCheckSql(
-                'cisi.use_config_manage_stock = 1',
-                $isManageStock,
-                'cisi.manage_stock'
-            );
-            $stockExpr = $adapter->getCheckSql("({$stockExpr} = 1)", 'cisi.is_in_stock', '1');
-
-            $columns = array('is_saleable' => new \Zend_Db_Expr($stockExpr), 'inventory_in_stock' => 'is_in_stock');
-        }
-
-        $productCollection->joinTable(
-            array('cisi' => 'cataloginventory_stock_item'),
-            'product_id=entity_id',
-            $columns,
-            null,
-            'left'
-        );
-        return $this;
-    }
-
-    /**
      * Use qty correction for qty column update
      *
      * @param \Magento\Framework\Object $object
@@ -147,5 +122,33 @@ class Item extends \Magento\Framework\Model\Resource\Db\AbstractDb
             }
         }
         return $data;
+    }
+
+    /**
+     * Reindex CatalogInventory save event
+     *
+     * @param AbstractModel $object
+     * @return $this
+     */
+    protected function _afterSave(AbstractModel $object)
+    {
+        parent::_afterSave($object);
+        /** @var StockItemInterface $object */
+        if ($this->processIndexEvents) {
+            $this->stockIndexerProcessor->reindexRow($object->getProductId());
+        }
+        return $this;
+    }
+
+    /**
+     * Set whether index events should be processed immediately
+     *
+     * @param bool $process
+     * @return $this
+     */
+    public function setProcessIndexEvents($process = true)
+    {
+        $this->processIndexEvents = $process;
+        return $this;
     }
 }

@@ -77,7 +77,7 @@ class ReadService implements ReadServiceInterface
     public function get($cartId)
     {
         /** @var \Magento\Sales\Model\Quote $quote */
-        $quote = $this->quoteRepository->get($cartId);
+        $quote = $this->quoteRepository->getActive($cartId);
 
         $messageId = $quote->getGiftMessageId();
         if (!$messageId) {
@@ -105,7 +105,7 @@ class ReadService implements ReadServiceInterface
          *
          * @var \Magento\Sales\Model\Quote $quote
          */
-        $quote = $this->quoteRepository->get($cartId);
+        $quote = $this->quoteRepository->getActive($cartId);
         if (!$item = $quote->getItemById($itemId)) {
             throw new NoSuchEntityException('There is no item with provided id in the cart');
         };

@@ -54,6 +54,11 @@ class CompareTest extends \PHPUnit_Framework_TestCase
      */
     protected $request;
 
+    /**
+     * @var \Magento\Framework\Url\EncoderInterface | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $urlEncoder;
+
     public function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -63,17 +68,21 @@ class CompareTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Framework\App\Helper\Context $context */
         $this->context = $this->getMock(
             'Magento\Framework\App\Helper\Context',
-            array('getUrlBuilder', 'getRequest'),
+            array('getUrlBuilder', 'getRequest', 'getUrlEncoder'),
             array(),
             '',
             false
         );
+        $this->urlEncoder = $this->getMockBuilder('Magento\Framework\Url\EncoderInterface')->getMock();
         $this->context->expects($this->once())
             ->method('getUrlBuilder')
             ->will($this->returnValue($this->urlBuilder));
         $this->context->expects($this->once())
             ->method('getRequest')
             ->will($this->returnValue($this->request));
+        $this->context->expects($this->once())
+            ->method('getUrlEncoder')
+            ->will($this->returnValue($this->urlEncoder));
         $this->postDataHelper = $this->getMock(
             'Magento\Core\Helper\PostData',
             array('getPostData'),

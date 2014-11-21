@@ -100,7 +100,7 @@ class WriteService implements WriteServiceInterface
     public function setAddress($cartId, $addressData)
     {
         /** @var \Magento\Sales\Model\Quote $quote */
-        $quote = $this->quoteRepository->get($cartId);
+        $quote = $this->quoteRepository->getActive($cartId);
         if ($quote->isVirtual()) {
             throw new NoSuchEntityException(
                 'Cart contains virtual product(s) only. Shipping address is not applicable'
@@ -119,7 +119,7 @@ class WriteService implements WriteServiceInterface
         $quote->setShippingAddress($address);
         $quote->setDataChanges(true);
         try {
-            $quote->save();
+            $this->quoteRepository->save($quote);
         } catch (\Exception $e) {
             $this->logger->logException($e);
             throw new InputException('Unable to save address. Please, check input data.');

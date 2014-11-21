@@ -37,7 +37,7 @@ class VersionTest extends \PHPUnit_Framework_TestCase
     /**
      * Cookie manager mock
      *
-     * @var \Magento\Framework\Stdlib\CookieManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\CookieManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $cookieManagerMock;
 
@@ -61,8 +61,7 @@ class VersionTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->cookieManagerMock = $this->getMockBuilder('Magento\Framework\Stdlib\CookieManager')
-            ->disableOriginalConstructor()->getMock();
+        $this->cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface');
         $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
             ->disableOriginalConstructor()->getMock();
         $this->cookieMetadataFactoryMock = $this->getMockBuilder(

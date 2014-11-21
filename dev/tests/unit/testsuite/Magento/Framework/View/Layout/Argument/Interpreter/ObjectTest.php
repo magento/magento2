@@ -28,7 +28,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
     const EXPECTED_CLASS = 'Magento\Framework\View\Layout\Argument\Interpreter\ObjectTest';
 
     /**
-     * @var \Magento\Framework\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_objectManager;
 
@@ -44,7 +44,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManager');
+        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->_model = new Object($this->_objectManager, self::EXPECTED_CLASS);
     }
 
@@ -88,7 +88,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase
         return array(
             'no class' => array(array(), '\InvalidArgumentException', 'Object class name is missing'),
             'unexpected class' => array(
-                array('value' => 'Magento\Framework\ObjectManager'),
+                array('value' => 'Magento\Framework\ObjectManagerInterface'),
                 '\UnexpectedValueException',
                 'Instance of ' . self::EXPECTED_CLASS . ' is expected'
             )

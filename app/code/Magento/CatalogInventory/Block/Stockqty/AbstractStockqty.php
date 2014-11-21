@@ -44,24 +44,33 @@ abstract class AbstractStockqty extends \Magento\Framework\View\Element\Template
     protected $_coreRegistry;
 
     /**
-     * @var \Magento\CatalogInventory\Service\V1\StockItemService
+     * @var \Magento\CatalogInventory\Api\StockStateInterface
      */
-    protected $stockItemService;
+    protected $stockState;
+
+    /**
+     * @var \Magento\CatalogInventory\Api\StockRegistryInterface
+     */
+    protected $stockRegistry;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
+     * @param \Magento\CatalogInventory\Api\StockStateInterface $stockState
+     * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService,
+        \Magento\CatalogInventory\Api\StockStateInterface $stockState,
+        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
-        $this->stockItemService = $stockItemService;
+        $this->stockState = $stockState;
+        $this->stockRegistry = $stockRegistry;
+
         parent::__construct($context, $data);
     }
 
@@ -101,7 +110,7 @@ abstract class AbstractStockqty extends \Magento\Framework\View\Element\Template
      */
     public function getProductStockQty($product)
     {
-        return $this->stockItemService->getStockQty($product->getId());
+        return $this->stockState->getStockQty($product->getId(), $product->getStore()->getWebsiteId());
     }
 
     /**
@@ -112,7 +121,7 @@ abstract class AbstractStockqty extends \Magento\Framework\View\Element\Template
     public function getThresholdQty()
     {
         if (!$this->hasData('threshold_qty')) {
-            $qty = (float) $this->_scopeConfig->getValue(
+            $qty = (float)$this->_scopeConfig->getValue(
                 self::XML_PATH_STOCK_THRESHOLD_QTY,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
@@ -148,8 +157,7 @@ abstract class AbstractStockqty extends \Magento\Framework\View\Element\Template
      */
     public function getStockQtyLeft()
     {
-        /** @var \Magento\CatalogInventory\Service\V1\Data\StockItem $stockItem */
-        $stockItem = $this->stockItemService->getStockItem($this->getProduct()->getId());
+        $stockItem = $this->stockRegistry->getStockItem($this->getProduct()->getId());
         $minStockQty = $stockItem->getMinQty();
         return $this->getStockQty() - $minStockQty;
     }

@@ -40,7 +40,7 @@ class MessageBoxTest extends \PHPUnit_Framework_TestCase
     /**
      * Cookie manager mock
      *
-     * @var \Magento\Framework\Stdlib\CookieManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\CookieManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $cookieManagerMock;
 
@@ -82,9 +82,7 @@ class MessageBoxTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->cookieManagerMock = $this->getMockBuilder('Magento\Framework\Stdlib\CookieManager')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface');
         $this->cookieMetadataFactoryMock = $this->getMockBuilder(
             'Magento\Framework\Stdlib\Cookie\CookieMetadataFactory'
         )->disableOriginalConstructor()

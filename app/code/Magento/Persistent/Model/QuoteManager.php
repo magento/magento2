@@ -55,18 +55,26 @@ class QuoteManager
     protected $_setQuotePersistent = true;
 
     /**
+     * @var \Magento\Sales\Model\QuoteRepository
+     */
+    protected $quoteRepository;
+
+    /**
      * @param \Magento\Persistent\Helper\Session $persistentSession
      * @param \Magento\Persistent\Helper\Data $persistentData
      * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository
      */
     public function __construct(
         \Magento\Persistent\Helper\Session $persistentSession,
         \Magento\Persistent\Helper\Data $persistentData,
-        \Magento\Checkout\Model\Session $checkoutSession
+        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Sales\Model\QuoteRepository $quoteRepository
     ) {
         $this->persistentSession = $persistentSession;
         $this->persistentData = $persistentData;
         $this->checkoutSession = $checkoutSession;
+        $this->quoteRepository = $quoteRepository;
     }
 
     /**
@@ -106,7 +114,8 @@ class QuoteManager
             //Create guest addresses
             $quote->getShippingAddress();
             $quote->getBillingAddress();
-            $quote->collectTotals()->save();
+            $quote->collectTotals();
+            $this->quoteRepository->save($quote);
         }
 
         $this->persistentSession->getSession()->removePersistentCookie();

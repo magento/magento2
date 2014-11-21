@@ -65,10 +65,13 @@ class ItemTest extends \PHPUnit_Framework_TestCase
      */
     protected $compareHelper;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $stockItemMock;
+
     /**
-     * @var \Magento\CatalogInventory\Service\V1\Data\StockItem
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $stockItemDoMock;
+    protected $stockRegistry;
 
     const PRODUCT_ID = 1;
     const PRODUCT_TYPE = 'simple';
@@ -127,27 +130,21 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        /** @var \Magento\CatalogInventory\Service\V1\Data\StockItem $stockItemDoMock */
-        $this->stockItemDoMock = $this->getMock(
-            '\Magento\CatalogInventory\Service\V1\Data\StockItem',
-            ['getStockId', 'getIsQtyDecimal'],
+        $this->stockItemMock = $this->getMock(
+            'Magento\CatalogInventory\Model\Stock\Item',
+            ['getIsQtyDecimal', '__wakeup'],
             [],
             '',
             false
         );
 
-        /** @var \Magento\CatalogInventory\Service\V1\StockItemService $stockItemServiceMock */
-        $stockItemServiceMock = $this->getMock(
-            'Magento\CatalogInventory\Service\V1\StockItemService',
-            ['getStockItem'],
-            [],
-            '',
-            false
-        );
-
-        $stockItemServiceMock->expects($this->any())
+        $this->stockRegistry = $this->getMockBuilder('Magento\CatalogInventory\Model\StockRegistry')
+            ->disableOriginalConstructor()
+            ->setMethods(['getStockItem', '__wakeup'])
+            ->getMock();
+        $this->stockRegistry->expects($this->any())
             ->method('getStockItem')
-            ->will($this->returnValue($this->stockItemDoMock));
+            ->will($this->returnValue($this->stockItemMock));
 
         $this->model = $this->objectManagerHelper->getObject(
             '\Magento\Sales\Model\Quote\Item',
@@ -157,7 +154,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                 'statusListFactory' => $statusListFactory,
                 'itemOptionFactory' => $this->itemOptionFactory,
                 'compareHelper' => $this->compareHelper,
-                'stockItemService' => $stockItemServiceMock
+                'stockRegistry' => $this->stockRegistry
             ]
         );
     }
@@ -388,10 +385,10 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->with('sales_quote_item_set_product', ['product' => $productMock, 'quote_item' => $this->model]);
 
         $isQtyDecimal = true;
-        $this->stockItemDoMock->expects($this->any())
+        $this->stockItemMock->expects($this->any())
             ->method('getStockId')
             ->will($this->returnValue(99));
-        $this->stockItemDoMock->expects($this->once())
+        $this->stockItemMock->expects($this->once())
             ->method('getIsQtyDecimal')
             ->will($this->returnValue($isQtyDecimal));
 
@@ -455,11 +452,11 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                     'getStickWithinParent',
                     'getCustomOptions',
                     'toArray',
-                    '__wakeup'
+                    '__wakeup',
+                    'getStore'
                 ]
             )
             ->getMock();
-
 
         $productMock->expects($this->any())
             ->method('getId')
@@ -482,6 +479,14 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $productMock->expects($this->any())
             ->method('getCost')
             ->will($this->returnValue($productCost));
+        $store = $this->getMock('Magento\Store\Model\Store', ['getWebsiteId'], [], '', false);
+        $store->expects($this->any())
+            ->method('getWebsiteId')
+            ->will($this->returnValue(10));
+
+        $productMock->expects($this->any())
+            ->method('getStore')
+            ->will($this->returnValue($store));
 
         return $productMock;
     }

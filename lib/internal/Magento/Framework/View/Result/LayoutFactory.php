@@ -24,12 +24,12 @@
 
 namespace Magento\Framework\View\Result;
 
-use Magento\Framework\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 
 class LayoutFactory
 {
     /**
-     * @var ObjectManager
+     * @var ObjectManagerInterface
      */
     private $objectManager;
 
@@ -39,11 +39,13 @@ class LayoutFactory
     protected $instanceName;
 
     /**
-     * @param ObjectManager $objectManager
+     * @param ObjectManagerInterface $objectManager
      * @param string $instanceName
      */
-    public function __construct(ObjectManager $objectManager, $instanceName = 'Magento\Framework\View\Result\Layout')
-    {
+    public function __construct(
+        ObjectManagerInterface $objectManager,
+        $instanceName = 'Magento\Framework\View\Result\Layout'
+    ) {
         $this->objectManager = $objectManager;
         $this->instanceName = $instanceName;
     }

@@ -31,7 +31,7 @@ class MinifyServiceTest extends \PHPUnit_Framework_TestCase
     protected $_config;
 
     /**
-     * @var \Magento\Framework\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_objectManager;
 
@@ -43,7 +43,7 @@ class MinifyServiceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_config = $this->getMock('Magento\Framework\View\Asset\ConfigInterface', array(), array(), '', false);
-        $this->_objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManager');
+        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->_model = new MinifyService($this->_config, $this->_objectManager);
     }
 

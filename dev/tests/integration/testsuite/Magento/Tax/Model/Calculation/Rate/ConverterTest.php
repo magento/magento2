@@ -26,7 +26,7 @@ namespace Magento\Tax\Model\Calculation\Rate;
 class ConverterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
 

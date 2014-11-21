@@ -31,7 +31,7 @@ class Request extends \Zend_Controller_Request_Http implements \Magento\Framewor
     protected $_consumerId = 0;
 
     /**
-     * @var \Magento\Framework\Stdlib\CookieManager
+     * @var \Magento\Framework\Stdlib\CookieManagerInterface
      */
     protected $_cookieManager;
 
@@ -40,13 +40,13 @@ class Request extends \Zend_Controller_Request_Http implements \Magento\Framewor
      *
      * @param \Magento\Framework\App\AreaList $areaList
      * @param \Magento\Framework\Config\ScopeInterface $configScope
-     * @param \Magento\Framework\Stdlib\CookieManager $cookieManager
+     * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
      * @param null|string|\Zend_Uri $uri
      */
     public function __construct(
         \Magento\Framework\App\AreaList $areaList,
         \Magento\Framework\Config\ScopeInterface $configScope,
-        \Magento\Framework\Stdlib\CookieManager $cookieManager,
+        \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
         $uri = null
     ) {
         parent::__construct($uri);

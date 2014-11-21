@@ -132,9 +132,9 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
     protected $_requestFactory;
 
     /**
-     * @var \Magento\Sales\Model\QuoteFactory
+     * @var \Magento\Sales\Model\QuoteRepository
      */
-    protected $_quoteFactory;
+    protected $quoteRepository;
 
     /**
      * @var \Magento\Sales\Model\OrderFactory
@@ -165,7 +165,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
      * @param \Magento\Paypal\Model\Payflow\RequestFactory $requestFactory
-     * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
+     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Framework\App\RequestInterface $requestHttp
      * @param \Magento\Store\Model\WebsiteFactory $websiteFactory
@@ -188,7 +188,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
         \Magento\Framework\Math\Random $mathRandom,
         \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory,
         \Magento\Paypal\Model\Payflow\RequestFactory $requestFactory,
-        \Magento\Sales\Model\QuoteFactory $quoteFactory,
+        \Magento\Sales\Model\QuoteRepository $quoteRepository,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Framework\App\RequestInterface $requestHttp,
         \Magento\Store\Model\WebsiteFactory $websiteFactory,
@@ -196,7 +196,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
         array $data = array()
     ) {
         $this->_requestFactory = $requestFactory;
-        $this->_quoteFactory = $quoteFactory;
+        $this->quoteRepository = $quoteRepository;
         $this->_orderFactory = $orderFactory;
         $this->_requestHttp = $requestHttp;
         $this->_websiteFactory = $websiteFactory;
@@ -401,7 +401,8 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
             if ($canSendNewOrderEmail) {
                 $this->orderSender->send($order);
             }
-            $this->_quoteFactory->create()->load($order->getQuoteId())->setIsActive(false)->save();
+            $quote = $this->quoteRepository->get($order->getQuoteId())->setIsActive(false);
+            $this->quoteRepository->save($quote);
         } catch (\Exception $e) {
             throw new \Magento\Framework\Model\Exception(__('We cannot send the new order email.'));
         }

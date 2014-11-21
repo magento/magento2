@@ -201,11 +201,6 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     protected $_httpClientFactory;
 
     /**
-     * @var \Magento\CatalogInventory\Service\V1\StockItemService
-     */
-    protected $stockItemService;
-
-    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Magento\Framework\Logger\AdapterFactory $logAdapterFactory
@@ -228,7 +223,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
-     * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
+     * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param array $data
      */
     public function __construct(
@@ -245,7 +240,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         \Magento\Directory\Model\CountryFactory $countryFactory,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Directory\Helper\Data $directoryData,
-        \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService,
+        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\Shipping\Helper\Carrier $carrierHelper,
         \Magento\Framework\Stdlib\DateTime\DateTime $coreDate,
         \Magento\Framework\Module\Dir\Reader $configReader,
@@ -266,7 +261,6 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         $this->mathDivision = $mathDivision;
         $this->_dateTime = $dateTime;
         $this->_httpClientFactory = $httpClientFactory;
-        $this->stockItemService = $stockItemService;
         parent::__construct(
             $scopeConfig,
             $rateErrorFactory,
@@ -281,7 +275,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             $countryFactory,
             $currencyFactory,
             $directoryData,
-            $stockItemService,
+            $stockRegistry,
             $data
         );
         if ($this->getConfigData('content_type') == self::DHL_CONTENT_TYPE_DOC) {
@@ -711,13 +705,13 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             $itemWeight = $item->getWeight();
             if ($item->getIsQtyDecimal() && $item->getProductType() != Type::TYPE_BUNDLE) {
                 $productId = $item->getProduct()->getId();
-                $isDecimalDivided = $this->stockItemService->getStockItem($productId)
-                    ->getIsDecimalDivided();
+                $stockItemDo = $this->stockRegistry->getStockItem($productId, $item->getStore()->getWebsiteId());
+                $isDecimalDivided = $stockItemDo->getIsDecimalDivided();
                 if ($isDecimalDivided) {
-                    if ($this->stockItemService->getEnableQtyIncrements($productId)
-                        && $this->stockItemService->getQtyIncrements($productId)
+                    if ($stockItemDo->getEnableQtyIncrements()
+                        && $stockItemDo->getQtyIncrements()
                     ) {
-                        $itemWeight = $itemWeight * $this->stockItemService->getQtyIncrements($productId);
+                        $itemWeight = $itemWeight * $stockItemDo->getQtyIncrements();
                         $qty = round($item->getWeight() / $itemWeight * $qty);
                         $changeQty = false;
                     } else {

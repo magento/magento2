@@ -73,7 +73,7 @@ class WriteService implements WriteServiceInterface
     public function set($cartId, \Magento\Checkout\Service\V1\Data\Cart\Coupon $couponCodeData)
     {
         /** @var  \Magento\Sales\Model\Quote $quote */
-        $quote = $this->quoteRepository->get($cartId);
+        $quote = $this->quoteRepository->getActive($cartId);
         if (!$quote->getItemsCount()) {
             throw new NoSuchEntityException("Cart $cartId doesn't contain products");
         }
@@ -82,7 +82,7 @@ class WriteService implements WriteServiceInterface
 
         try {
             $quote->setCouponCode($couponCode);
-            $quote->collectTotals()->save();
+            $this->quoteRepository->save($quote->collectTotals());
         } catch (\Exception $e) {
             throw new CouldNotSaveException('Could not apply coupon code');
         }
@@ -103,14 +103,14 @@ class WriteService implements WriteServiceInterface
     public function delete($cartId)
     {
         /** @var  \Magento\Sales\Model\Quote $quote */
-        $quote = $this->quoteRepository->get($cartId);
+        $quote = $this->quoteRepository->getActive($cartId);
         if (!$quote->getItemsCount()) {
             throw new NoSuchEntityException("Cart $cartId doesn't contain products");
         }
         $quote->getShippingAddress()->setCollectShippingRates(true);
         try {
             $quote->setCouponCode('');
-            $quote->collectTotals()->save();
+            $this->quoteRepository->save($quote->collectTotals());
         } catch (\Exception $e) {
             throw new CouldNotDeleteException('Could not delete coupon code');
         }

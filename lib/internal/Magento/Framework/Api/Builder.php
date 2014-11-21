@@ -87,7 +87,7 @@ class Builder implements BuilderInterface
     protected $dataBuilderFactory;
 
     /**
-     * @var \Magento\Framework\ObjectManager\Config
+     * @var \Magento\Framework\ObjectManager\ConfigInterface
      */
     protected $objectManagerConfig;
 
@@ -98,7 +98,7 @@ class Builder implements BuilderInterface
      * @param \Magento\Framework\Reflection\DataObjectProcessor $objectProcessor
      * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
      * @param \Magento\Framework\Serialization\DataBuilderFactory $dataBuilderFactory
-     * @param \Magento\Framework\ObjectManager\Config $objectManagerConfig
+     * @param \Magento\Framework\ObjectManager\ConfigInterface $objectManagerConfig
      * @param string $modelClassInterface
      */
     public function __construct(
@@ -108,7 +108,7 @@ class Builder implements BuilderInterface
         \Magento\Framework\Reflection\DataObjectProcessor $objectProcessor,
         \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
         \Magento\Framework\Serialization\DataBuilderFactory $dataBuilderFactory,
-        \Magento\Framework\ObjectManager\Config $objectManagerConfig,
+        \Magento\Framework\ObjectManager\ConfigInterface $objectManagerConfig,
         $modelClassInterface = null
     ) {
         $this->objectFactory = $objectFactory;

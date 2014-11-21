@@ -37,15 +37,15 @@ class FormKey
     /**
      * CookieManager
      *
-     * @var \Magento\Framework\Stdlib\CookieManager
+     * @var \Magento\Framework\Stdlib\CookieManagerInterface
      */
     protected $cookieManager;
 
     /**
-     * @param \Magento\Framework\Stdlib\CookieManager $cookieManager
+     * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
      */
     public function __construct(
-        \Magento\Framework\Stdlib\CookieManager $cookieManager
+        \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
     ) {
         $this->cookieManager = $cookieManager;
     }

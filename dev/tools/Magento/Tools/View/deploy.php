@@ -27,13 +27,16 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+use Magento\Framework\Autoload\AutoloaderRegistry;
+
 $baseName = basename(__FILE__);
 $options = getopt('', array('langs::', 'dry-run', 'verbose::', 'help'));
 define('USAGE', "USAGE:\n\tphp -f {$baseName} -- [--langs=en_US,de_DE,...] [--verbose=0|1] [--dry-run] [--help]\n");
 require __DIR__ . '/../../../../../app/bootstrap.php';
 
-\Magento\Framework\Code\Generator\FileResolver::addIncludePath(
-    [BP . '/dev/tests/static/framework', realpath(__DIR__ . '/../../..')]
+AutoloaderRegistry::getAutoloader()->addPsr4(
+    'Magento\\',
+    [BP . '/dev/tests/static/framework/Magento/', realpath(__DIR__ . '/../../../Magento/')]
 );
 
 // parse all options

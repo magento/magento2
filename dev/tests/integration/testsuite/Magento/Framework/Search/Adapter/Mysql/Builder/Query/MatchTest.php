@@ -30,7 +30,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 class MatchTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
 

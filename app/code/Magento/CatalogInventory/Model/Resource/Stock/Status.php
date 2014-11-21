@@ -81,49 +81,39 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Save Product Status per website
      *
-     * @param Stock\Status $object
      * @param int $productId
      * @param int $status
      * @param float|int $qty
-     * @param int $stockId
      * @param int|null $websiteId
      * @return $this
      */
     public function saveProductStatus(
-        Stock\Status $object,
         $productId,
         $status,
-        $qty = 0,
-        $stockId = 1,
-        $websiteId = null
+        $qty,
+        $websiteId
     ) {
-        $websites = array_keys($object->getWebsites($websiteId));
         $adapter = $this->_getWriteAdapter();
-        foreach ($websites as $websiteId) {
-            $select = $adapter->select()->from($this->getMainTable())
-                ->where('product_id = :product_id')
-                ->where('website_id = :website_id')
-                ->where('stock_id = :stock_id');
-            $bind = array(':product_id' => $productId, ':website_id' => $websiteId, ':stock_id' => $stockId);
-            $row = $adapter->fetchRow($select, $bind);
-            if ($row) {
-                $bind = array('qty' => $qty, 'stock_status' => $status);
-                $where = array(
-                    $adapter->quoteInto('product_id=?', (int)$row['product_id']),
-                    $adapter->quoteInto('website_id=?', (int)$row['website_id']),
-                    $adapter->quoteInto('stock_id=?', (int)$row['stock_id'])
-                );
-                $adapter->update($this->getMainTable(), $bind, $where);
-            } else {
-                $bind = array(
-                    'product_id' => $productId,
-                    'website_id' => $websiteId,
-                    'stock_id' => $stockId,
-                    'qty' => $qty,
-                    'stock_status' => $status
-                );
-                $adapter->insert($this->getMainTable(), $bind);
-            }
+        $select = $adapter->select()->from($this->getMainTable())
+            ->where('product_id = :product_id')
+            ->where('website_id = :website_id');
+        $bind = array(':product_id' => $productId, ':website_id' => $websiteId);
+        $row = $adapter->fetchRow($select, $bind);
+        if ($row) {
+            $bind = array('qty' => $qty, 'stock_status' => $status);
+            $where = array(
+                $adapter->quoteInto('product_id=?', (int)$row['product_id']),
+                $adapter->quoteInto('website_id=?', (int)$row['website_id'])
+            );
+            $adapter->update($this->getMainTable(), $bind, $where);
+        } else {
+            $bind = array(
+                'product_id' => $productId,
+                'website_id' => $websiteId,
+                'qty' => $qty,
+                'stock_status' => $status
+            );
+            $adapter->insert($this->getMainTable(), $bind);
         }
 
         return $this;
@@ -135,10 +125,9 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param int[] $productIds
      * @param int $websiteId
-     * @param int $stockId
      * @return array
      */
-    public function getProductStockStatus($productIds, $websiteId, $stockId = Stock::DEFAULT_STOCK_ID)
+    public function getProductsStockStatuses($productIds, $websiteId)
     {
         if (!is_array($productIds)) {
             $productIds = array($productIds);
@@ -147,7 +136,6 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $select = $this->_getReadAdapter()->select()
             ->from($this->getMainTable(), array('product_id', 'stock_status'))
             ->where('product_id IN(?)', $productIds)
-            ->where('stock_id=?', (int) $stockId)
             ->where('website_id=?', (int) $websiteId);
         return $this->_getReadAdapter()->fetchPairs($select);
     }
@@ -241,8 +229,8 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
         );
 
         $joinCondition .= $this->_getReadAdapter()->quoteInto(
-            ' AND stock_status_index.stock_id = ?',
-            Stock::DEFAULT_STOCK_ID
+            ' AND stock_status_index.website_id = ?',
+            $websiteId
         );
 
         $collection->getSelect()->join(

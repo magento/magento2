@@ -52,7 +52,7 @@ class SuggestElement extends Element
      *
      * @var string
      */
-    protected $resultItem = './/*[contains(@class,"mage-suggest-dropdown")]/ul/li/a[text()="%s"]';
+    protected $resultItem = './/ul/li/a[text()="%s"]';
 
     /**
      * Set value
@@ -92,8 +92,8 @@ class SuggestElement extends Element
      */
     public function getValue()
     {
-        $this->_eventManager->dispatchEvent(['get_value'], [(string) $this->_locator]);
-        
+        $this->_eventManager->dispatchEvent(['get_value'], [(string)$this->_locator]);
+
         return $this->find($this->suggest)->getValue();
     }
 

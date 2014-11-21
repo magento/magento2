@@ -30,7 +30,7 @@ namespace Magento\UrlRewrite\Block\Catalog\Edit;
 class FormTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
 

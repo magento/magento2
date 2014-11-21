@@ -43,7 +43,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
      *
      * @var Configuration
      */
-    protected $_bundleProdConfigur = null;
+    protected $_bundleProductConfiguration = null;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
@@ -53,7 +53,8 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
      * @param \Magento\Core\Helper\Url $urlHelper
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param PriceCurrencyInterface $priceCurrency
-     * @param Configuration $bundleProdConfigur
+     * @param Configuration $bundleProductConfiguration
+     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param array $data
      */
     public function __construct(
@@ -64,10 +65,11 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
         \Magento\Core\Helper\Url $urlHelper,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         PriceCurrencyInterface $priceCurrency,
-        Configuration $bundleProdConfigur,
+        \Magento\Framework\Module\Manager $moduleManager,
+        Configuration $bundleProductConfiguration,
         array $data = array()
     ) {
-        $this->_bundleProdConfigur = $bundleProdConfigur;
+        $this->_bundleProductConfiguration = $bundleProductConfiguration;
         parent::__construct(
             $context,
             $productConfig,
@@ -76,6 +78,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
             $urlHelper,
             $messageManager,
             $priceCurrency,
+            $moduleManager,
             $data
         );
         $this->_isScopePrivate = true;
@@ -87,7 +90,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
     protected function _construct()
     {
         parent::_construct();
-        $this->_configurationHelper = $this->_bundleProdConfigur;
+        $this->_configurationHelper = $this->_bundleProductConfiguration;
     }
 
     /**
@@ -112,7 +115,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
      */
     protected function _getSelectionFinalPrice($selectionProduct)
     {
-        $helper = $this->_bundleProdConfigur;
+        $helper = $this->_bundleProductConfiguration;
         $result = $helper->getSelectionFinalPrice($this->getItem(), $selectionProduct);
         return $result;
     }

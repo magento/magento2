@@ -29,7 +29,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Stdlib\BooleanUtils;
 use Mtf\System\Config as SystemConfig;
 use Mtf\ObjectManager\Factory;
-use Magento\Framework\ObjectManager as MagentoObjectManager;
+use Magento\Framework\ObjectManagerInterface as MagentoObjectManager;
 
 /**
  * Class ObjectManagerFactory
@@ -76,18 +76,6 @@ class ObjectManagerFactory
         $systemConfig = new SystemConfig();
         $configuration = $systemConfig->getConfigParam();
         $diConfig->extend($configuration);
-
-        $directories = isset($arguments[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS])
-            ? $arguments[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS]
-            : array();
-        $directoryList = new \Magento\Framework\App\Filesystem\DirectoryList(
-            realpath(MTF_BP . '../../../../'),
-            $directories
-        );
-        (new \Magento\Framework\Autoload\IncludePath())->addIncludePath(
-            array($directoryList->getPath(DirectoryList::GENERATION))
-        );
-
         $factory = new Factory($diConfig);
         $argInterpreter = $this->createArgumentInterpreter(new BooleanUtils());
         $argumentMapper = new \Magento\Framework\ObjectManager\Config\Mapper\Dom($argInterpreter);

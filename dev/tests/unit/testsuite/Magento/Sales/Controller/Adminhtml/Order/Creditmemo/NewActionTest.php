@@ -69,7 +69,7 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
     protected $titleMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManager
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManagerInterface
      */
     protected $objectManagerMock;
 
@@ -127,15 +127,7 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->objectManagerMock = $this->getMockForAbstractClass(
-            'Magento\Framework\ObjectManager',
-            [],
-            '',
-            false,
-            false,
-            true,
-            []
-        );
+        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->requestMock = $this->getMockForAbstractClass(
             'Magento\Framework\App\RequestInterface',
             [],

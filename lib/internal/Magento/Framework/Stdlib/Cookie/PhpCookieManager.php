@@ -25,7 +25,7 @@
 namespace Magento\Framework\Stdlib\Cookie;
 
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Stdlib\CookieManager as CookieManager;
+use Magento\Framework\Stdlib\CookieManagerInterface;
 
 /**
  * CookieManager helps manage the setting, retrieving and deleting of cookies.
@@ -34,7 +34,7 @@ use Magento\Framework\Stdlib\CookieManager as CookieManager;
  * sensitive data so that extra protection can be added to the contents of the cookie as well as how the browser
  * stores the cookie.
  */
-class PhpCookieManager implements CookieManager
+class PhpCookieManager implements CookieManagerInterface
 {
     /**#@+
      * Constants for Cookie manager.

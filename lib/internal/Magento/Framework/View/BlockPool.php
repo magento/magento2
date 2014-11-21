@@ -26,7 +26,7 @@ namespace Magento\Framework\View;
 use Magento\Framework\View\Layout;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\Element\BlockFactory;
-use Magento\Framework\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class BlockPool

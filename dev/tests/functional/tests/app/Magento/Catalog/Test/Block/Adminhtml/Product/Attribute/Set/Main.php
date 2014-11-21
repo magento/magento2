@@ -68,7 +68,7 @@ class Main extends Block
      * @param string $attributeGroup
      * @return void
      */
-    public function moveAttribute(array $attributeData, $attributeGroup)
+    public function moveAttribute(array $attributeData, $attributeGroup = 'Product Details')
     {
         if (isset($attributeData['attribute_code'])) {
             $attribute = $attributeData['attribute_code'];

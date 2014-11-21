@@ -28,11 +28,11 @@ class AttributeFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * Get object manager mock
      *
-     * @return \Magento\Framework\ObjectManager
+     * @return \Magento\Framework\ObjectManagerInterface
      */
     protected function _createObjectManager()
     {
-        return $this->getMockBuilder('Magento\Framework\ObjectManager')
+        return $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
             ->setMethods(array('create'))
             ->getMockForAbstractClass();
     }

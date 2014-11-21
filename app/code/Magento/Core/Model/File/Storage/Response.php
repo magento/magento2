@@ -23,7 +23,7 @@
  */
 namespace Magento\Core\Model\File\Storage;
 
-use Magento\Framework\Stdlib\CookieManager;
+use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\App\Response\Http;
 
@@ -44,13 +44,13 @@ class Response extends Http implements \Magento\Framework\App\Response\FileInter
     /**
      * Constructor
      *
-     * @param \Magento\Framework\Stdlib\CookieManager $cookieManager
+     * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
      * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
      * @param \Magento\Framework\App\Http\Context $context
      * @param \Magento\Framework\File\Transfer\Adapter\Http $transferAdapter
      */
     public function __construct(
-        CookieManager $cookieManager,
+        CookieManagerInterface $cookieManager,
         CookieMetadataFactory $cookieMetadataFactory,
         \Magento\Framework\App\Http\Context $context,
         \Magento\Framework\File\Transfer\Adapter\Http $transferAdapter

@@ -41,8 +41,6 @@ class RowTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDbIsolation enabled
-     * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      */
     public function testProductUpdate()
@@ -55,17 +53,38 @@ class RowTest extends \PHPUnit_Framework_TestCase
             '\Magento\Catalog\Block\Product\ListProduct'
         );
 
-        /** @var \Magento\CatalogInventory\Model\Stock\Item $stockItem */
-        $stockItem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            '\Magento\CatalogInventory\Model\Stock\Item'
+        /** @var \Magento\CatalogInventory\Api\Data\StockItemInterfaceBuilder $stockItemBuilder */
+        $stockItemBuilder = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            '\Magento\CatalogInventory\Api\Data\StockItemInterfaceBuilder'
+        );
+
+        /** @var \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry */
+        $stockRegistry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\CatalogInventory\Api\StockRegistryInterface'
+        );
+        /** @var \Magento\CatalogInventory\Api\StockItemRepositoryInterface $stockItemRepository */
+        $stockItemRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            '\Magento\CatalogInventory\Api\StockItemRepositoryInterface'
         );
 
         $this->_processor->getIndexer()->setScheduled(false);
         $this->assertFalse($this->_processor->getIndexer()->isScheduled());
 
-        $stockItem->loadByProduct(1);
-        $stockItem->addQty(11);
-        $stockItem->save();
+        $stockItem = $stockRegistry->getStockItem(1, 1);
+
+        $this->assertNotNull($stockItem->getId());
+
+        $stockItemData = [
+            'qty' => $stockItem->getQty() + 11
+        ];
+
+        // todo fix builder
+        $id = $stockItem->getId();
+        $stockItemBuilder = $stockItemBuilder->mergeDataObjectWithArray($stockItem, $stockItemData);
+        $stockItemBuilder->setId($id);
+        $stockItemSave = $stockItemBuilder->create();
+        $stockItemSave->setItemId($id);
+        $stockItemRepository->save($stockItemSave);
 
         $category = $categoryFactory->create()->load(2);
         $layer = $listProduct->getLayer();

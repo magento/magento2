@@ -72,6 +72,11 @@ class Onepage extends Action
     protected $layoutFactory;
 
     /**
+     * @var \Magento\Sales\Model\QuoteRepository
+     */
+    protected $quoteRepository;
+
+    /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param CustomerAccountService $customerAccountService
@@ -81,6 +86,7 @@ class Onepage extends Action
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -91,13 +97,15 @@ class Onepage extends Action
         \Magento\Framework\Translate\InlineInterface $translateInline,
         \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\View\LayoutFactory $layoutFactory
+        \Magento\Framework\View\LayoutFactory $layoutFactory,
+        \Magento\Sales\Model\QuoteRepository $quoteRepository
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_translateInline = $translateInline;
         $this->_formKeyValidator = $formKeyValidator;
         $this->scopeConfig = $scopeConfig;
         $this->layoutFactory = $layoutFactory;
+        $this->quoteRepository = $quoteRepository;
         parent::__construct($context, $customerSession, $customerAccountService, $customerMetadataService);
     }
 

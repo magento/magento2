@@ -39,7 +39,7 @@ class RemoveTrackTest extends \PHPUnit_Framework_TestCase
     protected $requestMock;
 
     /**
-     * @var \Magento\Framework\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectManagerMock;
 
@@ -76,13 +76,7 @@ class RemoveTrackTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', ['getParam'], [], '', false);
-        $this->objectManagerMock = $this->getMock(
-            'Magento\Framework\ObjectManager',
-            ['create', 'get', 'configure'],
-            [],
-            '',
-            false
-        );
+        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->shipmentTrackMock = $this->getMock(
             'Magento\Sales\Model\Order\Shipment\Track',
             ['load', 'getId', 'delete', '__wakeup'],

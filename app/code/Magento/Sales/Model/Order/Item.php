@@ -260,12 +260,18 @@ class Item extends \Magento\Framework\Model\AbstractModel
     protected $_productFactory;
 
     /**
+     * @var \Magento\Framework\StoreManagerInterface
+     */
+    protected $_storeManager;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param array $data
      */
     public function __construct(
@@ -273,12 +279,14 @@ class Item extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Registry $registry,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_orderFactory = $orderFactory;
         $this->_productFactory = $productFactory;
+        $this->_storeManager = $storeManager;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -830,5 +838,19 @@ class Item extends \Magento\Framework\Model\AbstractModel
             $this->setProduct($product);
         }
         return $this->getData('product');
+    }
+
+    /**
+     * Retrieve store model instance
+     *
+     * @return \Magento\Store\Model\Store
+     */
+    public function getStore()
+    {
+        $storeId = $this->getStoreId();
+        if ($storeId) {
+            return $this->_storeManager->getStore($storeId);
+        }
+        return $this->_storeManager->getStore();
     }
 }

@@ -69,7 +69,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
         $quoteMock->expects($this->any())->method('getCouponCode')->will($this->returnValue($couponCode));
 
         $this->quoteRepositoryMock->expects($this->once())
-            ->method('get')
+            ->method('getActive')
             ->with($cartId)
             ->will($this->returnValue($quoteMock));
 

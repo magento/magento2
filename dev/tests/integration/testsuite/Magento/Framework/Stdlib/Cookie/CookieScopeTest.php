@@ -24,7 +24,7 @@
 
 namespace Magento\Framework\Stdlib\Cookie;
 
-use Magento\Framework\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -34,7 +34,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 class CookieScopeTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ObjectManager
+     * @var ObjectManagerInterface
      */
     private $objectManager;
 

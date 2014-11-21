@@ -23,6 +23,8 @@
  */
 namespace Magento\Test\Integrity\Modular;
 
+use Magento\Customer\Model\Context;
+
 /**
  * This test ensures that all blocks have the appropriate constructor arguments that allow
  * them to be instantiated via the objectManager.
@@ -46,9 +48,9 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
                 $context = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
                     'Magento\Framework\App\Http\Context'
                 );
-                $context->setValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH, false, false);
+                $context->setValue(Context::CONTEXT_AUTH, false, false);
                 $context->setValue(
-                    \Magento\Customer\Helper\Data::CONTEXT_GROUP,
+                    Context::CONTEXT_GROUP,
                     \Magento\Customer\Service\V1\CustomerGroupServiceInterface::NOT_LOGGED_IN_ID,
                     \Magento\Customer\Service\V1\CustomerGroupServiceInterface::NOT_LOGGED_IN_ID
                 );

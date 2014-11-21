@@ -46,10 +46,10 @@ class MessageList
     protected $_messages;
 
     /**
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param array $messages
      */
-    public function __construct(\Magento\Framework\ObjectManager $objectManager, $messages = array())
+    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, $messages = array())
     {
         $this->_objectManager = $objectManager;
         $this->_messageClasses = $messages;

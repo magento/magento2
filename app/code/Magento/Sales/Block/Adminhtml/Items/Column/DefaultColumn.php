@@ -44,20 +44,22 @@ class DefaultColumn extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
+     * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
+     * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\Product\OptionFactory $optionFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService,
+        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
+        \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Model\Product\OptionFactory $optionFactory,
         array $data = array()
     ) {
         $this->_optionFactory = $optionFactory;
-        parent::__construct($context, $stockItemService, $registry, $data);
+        parent::__construct($context, $stockRegistry, $stockConfiguration, $registry, $data);
     }
 
     /**

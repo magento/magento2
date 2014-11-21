@@ -40,12 +40,11 @@ class Quantity extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
      */
     public function convertAttribute($product, $entry)
     {
-        $quantity = $product->getStockItem()->getQty();
+        $quantity = $product->getStockItem() ? $product->getStockItem()->getQty() : false;
         if ($quantity) {
             $value = $quantity ? max(1, (int)$quantity) : 1;
             $this->_setAttribute($entry, 'quantity', self::ATTRIBUTE_TYPE_INT, $value);
         }
-
         return $entry;
     }
 }

@@ -62,7 +62,7 @@ class NewAction extends \Magento\Newsletter\Controller\Subscriber
                 __(
                     'Sorry, but the administrator denied subscription for guests. '
                     . 'Please <a href="%1">register</a>.',
-                    $this->_customerHelper->getRegisterUrl()
+                    $this->_customerUrl->getRegisterUrl()
                 )
             );
         }

@@ -102,7 +102,7 @@ abstract class ExpressTest extends \PHPUnit_Framework_TestCase
             ->method('getQuote')
             ->will($this->returnValue($this->quote));
         $this->session = $this->getMock('Magento\Framework\Session\Generic', [], [], '', false);
-        $objectManager = $this->getMock('Magento\Framework\ObjectManager', [], [], '', false);
+        $objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->objectManagerCallback = function ($className) {
             if ($className == 'Magento\Paypal\Model\Config') {
                 return $this->config;

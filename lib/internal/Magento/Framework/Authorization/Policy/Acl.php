@@ -27,9 +27,9 @@
 namespace Magento\Framework\Authorization\Policy;
 
 use Magento\Framework\Acl\Builder;
-use Magento\Framework\Authorization\Policy;
+use Magento\Framework\Authorization\PolicyInterface;
 
-class Acl implements Policy
+class Acl implements PolicyInterface
 {
     /**
      * @var \Magento\Framework\Acl\Builder

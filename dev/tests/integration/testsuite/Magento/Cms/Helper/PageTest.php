@@ -23,6 +23,8 @@
  */
 namespace Magento\Cms\Helper;
 
+use Magento\Customer\Model\Context;
+
 /**
  * @magentoAppArea frontend
  */
@@ -38,7 +40,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $httpContext = $objectManager->get('Magento\Framework\App\Http\Context');
-        $httpContext->setValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH, false, false);
+        $httpContext->setValue(Context::CONTEXT_AUTH, false, false);
         $objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
         $arguments = array(
             'request' => $objectManager->get('Magento\TestFramework\Request'),

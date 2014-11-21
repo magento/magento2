@@ -48,7 +48,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $stockItemService;
+    protected $stockRegistry;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -64,20 +64,19 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
             ];
             return isset($configData[$key]) ? $configData[$key] : 0;
         }));
-        $this->stockItemService = $this->getMock(
-            'Magento\CatalogInventory\Service\V1\StockItemService',
+        $this->stockRegistry = $this->getMock(
+            'Magento\CatalogInventory\Model\StockRegistry',
             [],
             [],
             '',
             false
         );
-        $this->stockItemData = $this->getMock('Magento\CatalogInventory\Service\V1\Data\StockItem', [], [], '', false);
-        $this->stockItemService->expects($this->any())->method('getStockItem')
-            ->will($this->returnValue($this->stockItemData));
+        $this->stockItemData = $this->getMock('Magento\CatalogInventory\Model\Stock\Item', [], [], '', false);
+
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->shipping = $objectManagerHelper->getObject('Magento\Shipping\Model\Shipping', [
-            'stockItemService' => $this->stockItemService
+            'stockRegistry' => $this->stockRegistry
         ]);
     }
 
@@ -90,7 +89,9 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
         /** \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface */
         $item = $this->getMockBuilder('\Magento\Sales\Model\Quote\Item')
             ->disableOriginalConstructor()
-            ->setMethods(['getQty', 'getIsQtyDecimal', 'getProductType', 'getProduct', 'getWeight', '__wakeup'])
+            ->setMethods([
+                'getQty', 'getIsQtyDecimal', 'getProductType', 'getProduct', 'getWeight', '__wakeup', 'getStore'
+            ])
             ->getMock();
         $product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
 
@@ -100,18 +101,27 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
         $item->expects($this->any())->method('getProductType')
             ->will($this->returnValue(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE));
         $item->expects($this->any())->method('getProduct')->will($this->returnValue($product));
+
+        $store = $this->getMock('Magento\Store\Model\Store', ['getWebsiteId'], [], '', false);
+        $store->expects($this->any())
+            ->method('getWebsiteId')
+            ->will($this->returnValue(10));
+        $item->expects($this->any())->method('getStore')->will($this->returnValue($store));
+
         $product->expects($this->any())->method('getId')->will($this->returnValue($this->productId));
         $request->setData('all_items', [$item]);
 
         $this->stockItemData->expects($this->any())->method('getIsDecimalDivided')->will($this->returnValue(true));
 
         /** Testable service calls to CatalogInventory module */
-        $this->stockItemService->expects($this->atLeastOnce())->method('getStockItem')->with($this->productId);
-        $this->stockItemService->expects($this->atLeastOnce())
+        $this->stockRegistry->expects($this->atLeastOnce())->method('getStockItem')
+            ->with($this->productId, 10)
+            ->will($this->returnValue($this->stockItemData));
+
+        $this->stockItemData->expects($this->atLeastOnce())
             ->method('getEnableQtyIncrements')
-            ->with($this->productId)
             ->will($this->returnValue(true));
-        $this->stockItemService->expects($this->atLeastOnce())->method('getQtyIncrements')->with($this->productId)
+        $this->stockItemData->expects($this->atLeastOnce())->method('getQtyIncrements')
             ->will($this->returnValue(0.5));
 
         $this->shipping->composePackagesForCarrier($this->carrier, $request);

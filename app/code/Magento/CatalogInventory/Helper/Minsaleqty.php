@@ -184,7 +184,7 @@ class Minsaleqty
     public function getConfigValue($customerGroupId, $store = null)
     {
         $value = $this->scopeConfig->getValue(
-            \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_MIN_SALE_QTY,
+            \Magento\CatalogInventory\Model\Configuration::XML_PATH_MIN_SALE_QTY,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );

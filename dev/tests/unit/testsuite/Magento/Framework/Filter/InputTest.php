@@ -28,7 +28,7 @@ class InputTest extends \PHPUnit_Framework_TestCase
 {
     public function testFilterZendFilterAsObject()
     {
-        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager', [], [], '', false);
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $inputFilter = new Input($objectManagerMock);
 
         /** @var \Zend_Filter_Interface $filterMock */
@@ -51,7 +51,7 @@ class InputTest extends \PHPUnit_Framework_TestCase
 
     public function testFilterZendFilterAsArray()
     {
-        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager', [], [], '', false);
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $inputFilter = new Input($objectManagerMock);
 
         /** This filter should be applied to 'field1' field value only */

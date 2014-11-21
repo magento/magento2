@@ -46,7 +46,7 @@ class TransportBuilderTest extends \PHPUnit_Framework_TestCase
     protected $messageMock;
 
     /**
-     * @var \Magento\Framework\ObjectManager | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectManagerMock;
 
@@ -65,7 +65,7 @@ class TransportBuilderTest extends \PHPUnit_Framework_TestCase
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->templateFactoryMock = $this->getMock('Magento\Framework\Mail\Template\FactoryInterface');
         $this->messageMock = $this->getMock('Magento\Framework\Mail\Message');
-        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManager');
+        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->senderResolverMock = $this->getMock('Magento\Framework\Mail\Template\SenderResolverInterface');
         $this->_mailTransportFactoryMock = $this->getMockBuilder(
             'Magento\Framework\Mail\TransportInterfaceFactory'

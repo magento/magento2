@@ -41,11 +41,6 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     const INTERFACE_NAME_WITHOUT_NAMESPACE = 'Magento\Framework\Code\GeneratorTest\SourceInterfaceWithoutNamespace';
 
     /**
-     * @var string
-     */
-    protected $_includePath;
-
-    /**
      * @var \Magento\Framework\Code\Generator
      */
     protected $_generator;
@@ -62,20 +57,14 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_includePath = get_include_path();
-
         $this->varDirectory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\Filesystem'
         )->getDirectoryWrite(
             DirectoryList::VAR_DIR
         );
         $generationDirectory = $this->varDirectory->getAbsolutePath('generation');
-
-        (new \Magento\Framework\Autoload\IncludePath())->addIncludePath($generationDirectory);
-
         $this->_ioObject = new \Magento\Framework\Code\Generator\Io(
             new \Magento\Framework\Filesystem\Driver\File(),
-            new \Magento\Framework\Code\Generator\FileResolver(),
             $generationDirectory
         );
         $this->_generator = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -95,7 +84,6 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         $this->varDirectory->delete('generation');
-        set_include_path($this->_includePath);
         unset($this->_generator);
     }
 
@@ -109,12 +97,12 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $factoryClassName = self::CLASS_NAME_WITH_NAMESPACE . 'Factory';
         $result = false;
         $generatorResult = $this->_generator->generateClass($factoryClassName);
-        if (\Magento\Framework\Code\Generator::GENERATION_SUCCESS == $generatorResult) {
+        if (\Magento\Framework\Code\Generator::GENERATION_ERROR !== $generatorResult) {
             $result = true;
         }
-        $this->assertTrue($result);
+        $this->assertTrue($result, 'Failed asserting that \'' . (string)$generatorResult . '\' equals \'success\'.');
 
-        /** @var $factory \Magento\Framework\ObjectManager\Factory */
+        /** @var $factory \Magento\Framework\ObjectManager\FactoryInterface */
         $factory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create($factoryClassName);
 
         $object = $factory->create();
@@ -137,10 +125,10 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $proxyClassName = self::CLASS_NAME_WITH_NAMESPACE . '\Proxy';
         $result = false;
         $generatorResult = $this->_generator->generateClass($proxyClassName);
-        if (\Magento\Framework\Code\Generator::GENERATION_SUCCESS == $generatorResult) {
+        if (\Magento\Framework\Code\Generator::GENERATION_ERROR !== $generatorResult) {
             $result = true;
         }
-        $this->assertTrue($result);
+        $this->assertTrue($result, 'Failed asserting that \'' . (string)$generatorResult . '\' equals \'success\'.');
 
         $proxy = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create($proxyClassName);
         $this->assertInstanceOf(self::CLASS_NAME_WITH_NAMESPACE, $proxy);
@@ -162,10 +150,10 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $interceptorClassName = self::CLASS_NAME_WITH_NAMESPACE . '\Interceptor';
         $result = false;
         $generatorResult = $this->_generator->generateClass($interceptorClassName);
-        if (\Magento\Framework\Code\Generator::GENERATION_SUCCESS == $generatorResult) {
+        if (\Magento\Framework\Code\Generator::GENERATION_ERROR !== $generatorResult) {
             $result = true;
         }
-        $this->assertTrue($result);
+        $this->assertTrue($result, 'Failed asserting that \'' . (string)$generatorResult . '\' equals \'success\'.');
 
         if (\Magento\Framework\Code\Generator::GENERATION_SUCCESS == $generatorResult) {
             $content = $this->_clearDocBlock(

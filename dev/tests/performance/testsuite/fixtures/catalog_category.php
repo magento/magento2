@@ -89,8 +89,6 @@ $stockItem->setProductId(
     $product->getId()
 )->setTypeId(
     $product->getTypeId()
-)->setStockId(
-    \Magento\CatalogInventory\Model\Stock::DEFAULT_STOCK_ID
 )->setIsInStock(
     1
 )->setQty(

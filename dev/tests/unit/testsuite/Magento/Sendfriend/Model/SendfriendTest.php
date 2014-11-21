@@ -38,7 +38,7 @@ class SendfriendTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Stdlib\CookieManager
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Stdlib\CookieManagerInterface
      */
     protected $cookieManagerMock;
 
@@ -54,8 +54,7 @@ class SendfriendTest extends \PHPUnit_Framework_TestCase
         $this->sendfriendDataMock = $this->getMockBuilder('Magento\Sendfriend\Helper\Data')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->cookieManagerMock = $this->getMockBuilder('Magento\Framework\Stdlib\CookieManager')
-            ->disableOriginalConstructor()->getMock();
+        $this->cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface');
 
         $this->model = $objectManager->getObject(
             'Magento\Sendfriend\Model\Sendfriend',

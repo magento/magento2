@@ -30,20 +30,19 @@ use Magento\Reports\Test\Page\Adminhtml\Bestsellers;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 
 /**
- * Class AssertBestsellerReportResult
- * Assert bestseller info in report: date, product name and qty
+ * Assert bestseller info in report: date, product name and qty.
  */
 class AssertBestsellerReportResult extends AbstractConstraint
 {
     /**
-     * Constraint severeness
+     * Constraint severeness.
      *
      * @var string
      */
     protected $severeness = 'low';
 
     /**
-     * Assert bestseller info in report: date, product name and qty
+     * Assert bestseller info in report: date, product name and qty.
      *
      * @param Bestsellers $bestsellers
      * @param OrderInjectable $order
@@ -54,18 +53,24 @@ class AssertBestsellerReportResult extends AbstractConstraint
      */
     public function processAssert(Bestsellers $bestsellers, OrderInjectable $order, $date)
     {
-        $products = $order->getEntityId()['products'];
-        $totalQuantity = $bestsellers->getGridBlock()->getViewsResults($products, $date);
-        $productQty = [];
-        foreach ($products as $key => $product) {
-            /** @var CatalogProductSimple $product*/
-            $productQty[$key] = $product->getCheckoutData()['qty'];
-        }
-        \PHPUnit_Framework_Assert::assertEquals($productQty, $totalQuantity);
+        /** @var CatalogProductSimple $product */
+        $product = $order->getEntityId()['products'][0];
+
+        $filter = [
+            'date' => date($date),
+            'product' => $product->getName(),
+            'price' => $product->getPrice(),
+            'orders' => $product->getCheckoutData()['qty'],
+        ];
+
+        \PHPUnit_Framework_Assert::assertTrue(
+            $bestsellers->getGridBlock()->isRowVisible($filter),
+            'Bestseller does not present in report grid.'
+        );
     }
 
     /**
-     * Returns a string representation of the object
+     * Returns a string representation of the object.
      *
      * @return string
      */

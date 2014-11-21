@@ -31,7 +31,7 @@ use Magento\Paypal\Model\Express\Checkout;
 
 class CheckoutTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Framework\ObjectManager */
+    /** @var \Magento\Framework\ObjectManagerInterface */
     protected $_objectManager;
 
     protected function setUp()

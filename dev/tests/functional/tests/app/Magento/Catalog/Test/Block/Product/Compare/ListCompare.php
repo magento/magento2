@@ -24,81 +24,88 @@
 
 namespace Magento\Catalog\Test\Block\Product\Compare;
 
+use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 use Mtf\Block\Block;
 use Mtf\Client\Element;
 use Mtf\Client\Element\Locator;
 
 /**
- * Class ListCompare
- * Compare list product block
+ * Compare list product block.
  */
 class ListCompare extends Block
 {
     /**
-     * Selector by product info
+     * Selector by product info.
      *
      * @var string
      */
     protected $productInfo = '//td[contains(@class, "cell product info")][%d]';
 
     /**
-     * Selector by product attribute
+     * Selector by product attribute.
      *
      * @var string
      */
     protected $productAttribute = '//tr[th//*[normalize-space(text()) = "%s"]]';
 
     /**
-     * Selector by name product
+     * Selector by name product.
      *
      * @var string
      */
     protected $nameSelector = './/*[contains(@class, "product-item-name")]/a';
 
     /**
-     * Selector for search product via name
+     * Selector for search product via name.
      *
      * @var string
      */
     protected $productName = '[normalize-space(text()) = "%s"]';
 
     /**
-     * Selector by price product
+     * Selector by price product.
      *
      * @var string
      */
     protected $priceSelector = './/div[contains(@class,"price-box")]';
 
     /**
-     * Selector by sku product
+     * Selector by sku product.
      *
      * @var string
      */
     protected $attributeSelector = './td[%d]/div';
 
     /**
-     * Remove button selector
+     * Global attribute selector.
+     *
+     * @var string
+     */
+    protected $attribute = 'span.attribute';
+
+    /**
+     * Remove button selector.
      *
      * @var string
      */
     protected $removeButton = './/thead//td[%d]//a[contains(@class,"action delete")]';
 
     /**
-     * Selector for empty message
+     * Selector for empty message.
      *
      * @var string
      */
     protected $isEmpty = 'p.empty';
 
     /**
-     * Selector for message block
+     * Selector for message block.
      *
      * @var string
      */
     protected $messageBlock = '#messages';
 
     /**
-     * Get product info
+     * Get product info.
      *
      * @param int $index
      * @param string $attributeKey
@@ -125,7 +132,7 @@ class ListCompare extends Block
     }
 
     /**
-     * Get item compare product info
+     * Get item compare product info.
      *
      * @param int $index
      * @return Element
@@ -136,33 +143,30 @@ class ListCompare extends Block
     }
 
     /**
-     * Get item compare product attribute
+     * Get list of comparable product attributes.
      *
-     * @param string $key
-     * @return Element
+     * @return array
      */
-    protected function getCompareProductAttribute($key)
+    public function getComparableAttributes()
     {
-        return $this->_rootElement->find(sprintf($this->productAttribute, $key), Locator::SELECTOR_XPATH);
-    }
-
-    /**
-     * Get item attribute
-     *
-     * @param int $indexProduct
-     * @param string $attributeKey
-     * @return string
-     */
-    public function getProductAttribute($indexProduct, $attributeKey)
-    {
-        return trim(
-            $this->getCompareProductAttribute($attributeKey)
-                ->find(sprintf($this->attributeSelector, $indexProduct), Locator::SELECTOR_XPATH)->getText()
+        $rootElement = $this->_rootElement;
+        $element = $this->nameSelector;
+        $this->_rootElement->waitUntil(
+            function () use ($rootElement, $element) {
+                return $rootElement->find($element, Locator::SELECTOR_XPATH)->isVisible() ? true : null;
+            }
         );
+
+        $data = [];
+        $attributes = $this->_rootElement->find($this->attribute)->getElements();
+        foreach ($attributes as $attribute) {
+            $data[] = $attribute->getText();
+        }
+        return $data;
     }
 
     /**
-     * Remove product from compare product list
+     * Remove product from compare product list.
      *
      * @param int $index [optional]
      * @return void
@@ -194,7 +198,7 @@ class ListCompare extends Block
     }
 
     /**
-     * Visible product in compare product list
+     * Visible product in compare product list.
      *
      * @param int $index [optional]
      * @return bool
@@ -205,7 +209,7 @@ class ListCompare extends Block
     }
 
     /**
-     * Verify product is visible in compare product block
+     * Verify product is visible in compare product block.
      *
      * @param string $productName
      * @return bool
@@ -217,8 +221,8 @@ class ListCompare extends Block
     }
 
     /**
-     * Get empty message on compare product block
-     * Returns message absence of compared products or false, if the message isn't visible
+     * Get empty message on compare product block.
+     * Returns message absence of compared products or false, if the message isn't visible.
      *
      * @return string|bool
      */

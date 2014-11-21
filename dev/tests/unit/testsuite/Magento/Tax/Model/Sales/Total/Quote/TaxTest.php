@@ -718,4 +718,53 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $taxTotalsCalcModel = new Tax($taxConfig, $taxCalculationService, $quoteDetailsBuilder, $taxData);
         $this->assertSame($taxTotalsCalcModel->getLabel(), __('Tax'));
     }
+
+    /**
+     * Test the case when address does not have any items
+     * Verify that fields in address are reset
+     *
+     * @return void
+     */
+    public function testEmptyAddress()
+    {
+        /** @var $address \Magento\Sales\Model\Quote\Address|PHPUnit_Framework_MockObject_MockObject */
+        $address = $this->getMockBuilder('\Magento\Sales\Model\Quote\Address')
+            ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'getAllNonNominalItems',
+                    '__wakeup'
+                ]
+            )->getMock();
+
+        $address->setTotalAmount('subtotal', 1);
+        $address->setBaseTotalAmount('subtotal', 1);
+        $address->setTotalAmount('tax', 1);
+        $address->setBaseTotalAmount('tax', 1);
+        $address->setTotalAmount('hidden_tax', 1);
+        $address->setBaseTotalAmount('hidden_tax', 1);
+        $address->setTotalAmount('shipping_hidden_tax', 1);
+        $address->setBaseTotalAmount('shipping_hidden_tax', 1);
+        $address->setSubtotalInclTax(1);
+        $address->setBaseSubtotalInclTax(1);
+
+        $address->expects($this->once())
+            ->method('getAllNonNominalItems')
+            ->will($this->returnValue([]));
+
+        $objectManager = new ObjectManager($this);
+        $taxCollector = $objectManager->getObject('Magento\Tax\Model\Sales\Total\Quote\Tax');
+        $taxCollector->collect($address);
+
+        $this->assertEquals(0, $address->getTotalAmount('subtotal'));
+        $this->assertEquals(0, $address->getTotalAmount('tax'));
+        $this->assertEquals(0, $address->getTotalAmount('hidden_tax'));
+        $this->assertEquals(0, $address->getTotalAmount('shipping_hidden_tax'));
+        $this->assertEquals(0, $address->getBaseTotalAmount('subtotal'));
+        $this->assertEquals(0, $address->getBaseTotalAmount('tax'));
+        $this->assertEquals(0, $address->getBaseTotalAmount('hidden_tax'));
+        $this->assertEquals(0, $address->getBaseTotalAmount('shipping_hidden_tax'));
+        $this->assertEquals(0, $address->getSubtotalInclTax());
+        $this->assertEquals(0, $address->getBaseSubtotalInclTax());
+    }
 }

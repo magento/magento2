@@ -40,7 +40,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     protected $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Stdlib\CookieManager
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Stdlib\CookieManagerInterface
      */
     protected $cookieManagerMock;
 
@@ -63,7 +63,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             'getCookie',
             'getDistroBaseUrl',
         ], [], '', false);
-        $this->cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManager', [], [], '', false);
+        $this->cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface');
         $this->cookieMetadataFactoryMock = $this->getMock(
             'Magento\Framework\Stdlib\Cookie\CookieMetadataFactory',
             [],

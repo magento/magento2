@@ -24,6 +24,7 @@
 namespace Magento\Framework\Data;
 
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
+use Magento\Framework\Option\ArrayInterface;
 
 /**
  * Data collection
@@ -35,7 +36,7 @@ use Magento\Framework\Data\Collection\EntityFactoryInterface;
  * TODO: Refactor use of \Magento\Framework\Option\ArrayInterface in library. Probably will be refactored while
  * moving \Magento\Core to library
  */
-class Collection implements \IteratorAggregate, \Countable, \Magento\Framework\Option\ArrayInterface
+class Collection implements \IteratorAggregate, \Countable, ArrayInterface, DataSourceInterface
 {
     const SORT_ORDER_ASC = 'ASC';
 

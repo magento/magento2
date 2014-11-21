@@ -31,7 +31,7 @@ namespace Magento\Cms\Model\Template;
 class FilterProvider
 {
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
 
@@ -51,12 +51,12 @@ class FilterProvider
     protected $_instanceList;
 
     /**
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $pageFilter
      * @param string $blockFilter
      */
     public function __construct(
-        \Magento\Framework\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
         $pageFilter = 'Magento\Cms\Model\Template\Filter',
         $blockFilter = 'Magento\Cms\Model\Template\Filter'
     ) {

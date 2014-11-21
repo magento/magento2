@@ -33,7 +33,7 @@ class ResourceFactoryTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
 
@@ -46,15 +46,7 @@ class ResourceFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $this->_objectManager = $this->getMockForAbstractClass(
-            'Magento\Framework\ObjectManager',
-            array(),
-            '',
-            true,
-            true,
-            true,
-            array('create')
-        );
+        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
 
         $this->_expectedObject = $this->getMock('Magento\Framework\Acl\Resource', array(), array(), '', false);
 

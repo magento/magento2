@@ -28,6 +28,8 @@
  */
 namespace Magento\Sales\Block\Order\Info;
 
+use Magento\Customer\Model\Context;
+
 class Buttons extends \Magento\Framework\View\Element\Template
 {
     /**
@@ -83,7 +85,7 @@ class Buttons extends \Magento\Framework\View\Element\Template
      */
     public function getPrintUrl($order)
     {
-        if (!$this->httpContext->getValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH)) {
+        if (!$this->httpContext->getValue(Context::CONTEXT_AUTH)) {
             return $this->getUrl('sales/guest/print', array('order_id' => $order->getId()));
         }
         return $this->getUrl('sales/order/print', array('order_id' => $order->getId()));
@@ -97,7 +99,7 @@ class Buttons extends \Magento\Framework\View\Element\Template
      */
     public function getReorderUrl($order)
     {
-        if (!$this->httpContext->getValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH)) {
+        if (!$this->httpContext->getValue(Context::CONTEXT_AUTH)) {
             return $this->getUrl('sales/guest/reorder', array('order_id' => $order->getId()));
         }
         return $this->getUrl('sales/order/reorder', array('order_id' => $order->getId()));

@@ -41,7 +41,7 @@ class Client
     /**
      * Factory for HTTP client
      * @param string/false $frontend  'curl'/'socket' or false for auto-detect
-     * @return \Magento\Framework\HTTP\IClient
+     * @return \Magento\Framework\HTTP\ClientInterface
      */
     public static function getInstance($frontend = false)
     {

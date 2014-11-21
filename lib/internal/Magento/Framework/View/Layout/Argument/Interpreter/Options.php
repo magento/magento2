@@ -23,7 +23,7 @@
  */
 namespace Magento\Framework\View\Layout\Argument\Interpreter;
 
-use Magento\Framework\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Data\Argument\InterpreterInterface;
 
 /**
@@ -32,14 +32,14 @@ use Magento\Framework\Data\Argument\InterpreterInterface;
 class Options implements InterpreterInterface
 {
     /**
-     * @var ObjectManager
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
 
     /**
-     * @param ObjectManager $objectManager
+     * @param ObjectManagerInterface $objectManager
      */
-    public function __construct(ObjectManager $objectManager)
+    public function __construct(ObjectManagerInterface $objectManager)
     {
         $this->objectManager = $objectManager;
     }

@@ -25,14 +25,43 @@ namespace Magento\Sales\Block\Adminhtml\Items;
 
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * Class AbstractItemsTest
+ * @package Magento\Sales\Block\Adminhtml\Items
+ * TODO refactor me PLEASE
+ */
 class AbstractItemsTest extends \PHPUnit_Framework_TestCase
 {
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $stockItemMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $stockRegistry;
+
     protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->stockRegistry = $this->getMockBuilder('Magento\CatalogInventory\Model\StockRegistry')
+            ->disableOriginalConstructor()
+            ->setMethods(['getStockItem', '__wakeup'])
+            ->getMock();
+
+        $this->stockItemMock = $this->getMock(
+            'Magento\CatalogInventory\Model\Stock\Item',
+            ['getManageStock', '__wakeup'],
+            [],
+            '',
+            false
+        );
+
+        $this->stockRegistry->expects($this->any())
+            ->method('getStockItem')
+            ->will($this->returnValue($this->stockItemMock));
     }
 
     public function testGetItemRenderer()
@@ -116,30 +145,22 @@ class AbstractItemsTest extends \PHPUnit_Framework_TestCase
      */
     public function testCanReturnItemToStock($canReturnToStock, $itemConfig, $result)
     {
-        $isItem = $itemConfig['is_item'];
         $productId = isset($itemConfig['product_id']) ? $itemConfig['product_id'] : null;
         $manageStock = isset($itemConfig['manage_stock']) ? $itemConfig['manage_stock'] : null;
-        $item = null;
-
-        if ($isItem) {
-            $item = $this->getMock(
-                'Magento\Sales\Model\Order\Creditmemo\Item',
-                ['hasCanReturnToStock', 'getOrderItem', 'setCanReturnToStock', 'getCanReturnToStock', '__wakeup'],
-                [],
-                '',
-                false
-            );
-            $dependencies = $this->prepareServiceMockDependency(
-                $item,
-                $canReturnToStock,
-                $productId,
-                $manageStock,
-                $itemConfig
-            );
-        } else {
-            $dependencies = $this->prepareScopeConfigMockDependency($canReturnToStock);
-
-        }
+        $item = $this->getMock(
+            'Magento\Sales\Model\Order\Creditmemo\Item',
+            ['hasCanReturnToStock', 'getOrderItem', 'setCanReturnToStock', 'getCanReturnToStock', '__wakeup'],
+            [],
+            '',
+            false
+        );
+        $dependencies = $this->prepareServiceMockDependency(
+            $item,
+            $canReturnToStock,
+            $productId,
+            $manageStock,
+            $itemConfig
+        );
 
         /** @var $block \Magento\Sales\Block\Adminhtml\Items\AbstractItems */
         $block = $this->objectManagerHelper->getObject(
@@ -147,29 +168,6 @@ class AbstractItemsTest extends \PHPUnit_Framework_TestCase
             $dependencies
         );
         $this->assertSame($result, $block->canReturnItemToStock($item));
-    }
-
-    /**
-     * @param bool $canReturnToStock
-     * @return array
-     */
-    protected function prepareScopeConfigMockDependency($canReturnToStock)
-    {
-        $dependencies = [];
-        $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $scopeConfig->expects($this->once())
-            ->method('getValue')
-            ->with(
-                $this->equalTo(\Magento\CatalogInventory\Model\Stock\Item::XML_PATH_CAN_SUBTRACT),
-                $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE)
-            )
-            ->will($this->returnValue($canReturnToStock));
-
-        $dependencies['context'] = $this->objectManagerHelper->getObject(
-            'Magento\Backend\Block\Template\Context',
-            array('scopeConfig' => $scopeConfig)
-        );
-        return $dependencies;
     }
 
     /**
@@ -183,37 +181,38 @@ class AbstractItemsTest extends \PHPUnit_Framework_TestCase
     protected function prepareServiceMockDependency($item, $canReturnToStock, $productId, $manageStock, $itemConfig)
     {
         $dependencies = [];
+
+        $this->stockItemMock->expects($this->any())
+            ->method('getManageStock')
+            ->will($this->returnValue($manageStock));
+        $dependencies['stockRegistry'] = $this->stockRegistry;
+
         $item->expects($this->once())
             ->method('hasCanReturnToStock')
             ->will($this->returnValue($itemConfig['has_can_return_to_stock']));
         if (!$itemConfig['has_can_return_to_stock']) {
             $orderItem = $this->getMock(
                 'Magento\Sales\Model\Order\Item',
-                ['getProductId', '__wakeup'],
+                ['getProductId', '__wakeup', 'getStore'],
                 [],
                 '',
                 false
             );
+
+            $store = $this->getMock('Magento\Store\Model\Store', ['getWebsiteId'], [], '', false);
+            $store->expects($this->once())
+                ->method('getWebsiteId')
+                ->will($this->returnValue(10));
+            $orderItem->expects($this->once())
+                ->method('getStore')
+                ->will($this->returnValue($store));
+
             $orderItem->expects($this->once())
                 ->method('getProductId')
                 ->will($this->returnValue($productId));
-            $item->expects($this->once())
+            $item->expects($this->any())
                 ->method('getOrderItem')
                 ->will($this->returnValue($orderItem));
-            if ($productId) {
-                $stockItemService = $this->getMock(
-                    'Magento\CatalogInventory\Service\V1\StockItemService',
-                    [],
-                    [],
-                    '',
-                    false
-                );
-                $stockItemService->expects($this->once())
-                    ->method('getManageStock')
-                    ->with($this->equalTo($productId))
-                    ->will($this->returnValue($manageStock));
-                $dependencies['stockItemService'] = $stockItemService;
-            }
             if ($productId && $manageStock) {
                 $canReturn = true;
             } else {
@@ -231,50 +230,38 @@ class AbstractItemsTest extends \PHPUnit_Framework_TestCase
         return $dependencies;
     }
 
+    public function testCanReturnItemToStockEmpty()
+    {
+        $stockConfiguration = $this->getMockBuilder('Magento\CatalogInventory\Model\Configuration')
+            ->disableOriginalConstructor()
+            ->setMethods(['canSubtractQty', '__wakeup'])
+            ->getMock();
+        $stockConfiguration->expects($this->once())
+            ->method('canSubtractQty')
+            ->will($this->returnValue(true));
+
+        /** @var $block \Magento\Sales\Block\Adminhtml\Items\AbstractItems */
+        $block = $this->objectManagerHelper->getObject(
+            'Magento\Sales\Block\Adminhtml\Items\AbstractItems',
+            [
+                'stockConfiguration' => $stockConfiguration
+            ]
+        );
+        $result = $block->canReturnItemToStock();
+        $this->assertTrue($result);
+    }
+
+
     /**
      * @return array
      */
     public function canReturnItemToStockDataProvider()
     {
         return [
-            [true, ['is_item' => null], true],
-            [false, ['is_item' => null], false],
-            [
-                true,
-                [
-                    'is_item' => true,
-                    'has_can_return_to_stock' => true
-                ],
-                true
-            ],
-            [
-                false,
-                [
-                    'is_item' => true,
-                    'has_can_return_to_stock' => true
-                ],
-                false
-            ],
-            [
-                false,
-                [
-                    'is_item' => true,
-                    'has_can_return_to_stock' => false,
-                    'product_id' => 2,
-                    'manage_stock' => false
-                ],
-                false
-            ],
-            [
-                true,
-                [
-                    'is_item' => true,
-                    'has_can_return_to_stock' => false,
-                    'product_id' => 2,
-                    'manage_stock' => true
-                ],
-                true
-            ],
+            [true, ['has_can_return_to_stock' => true], true],
+            [false, ['has_can_return_to_stock' => true], false],
+            [false, ['has_can_return_to_stock' => false, 'product_id' => 2, 'manage_stock' => false], false],
+            [true, ['has_can_return_to_stock' => false, 'product_id' => 2, 'manage_stock' => true], true],
         ];
     }
 }

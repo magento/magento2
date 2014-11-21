@@ -29,7 +29,7 @@ namespace Magento\Framework\App\Cache\Type;
 class FrontendPool
 {
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     private $_objectManager;
 
@@ -54,13 +54,13 @@ class FrontendPool
     private $_instances = array();
 
     /**
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\App\Arguments $arguments
      * @param \Magento\Framework\App\Cache\Frontend\Pool $frontendPool
      * @param array $typeFrontendMap Format: array('<cache_type_id>' => '<cache_frontend_id>', ...)
      */
     public function __construct(
-        \Magento\Framework\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\App\Arguments $arguments,
         \Magento\Framework\App\Cache\Frontend\Pool $frontendPool,
         array $typeFrontendMap = array()

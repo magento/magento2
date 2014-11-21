@@ -26,21 +26,21 @@ namespace Magento\Customer\Block\Account;
 class Link extends \Magento\Framework\View\Element\Html\Link
 {
     /**
-     * @var \Magento\Customer\Helper\Data
+     * @var \Magento\Customer\Model\Url
      */
-    protected $_customerHelper;
+    protected $_customerUrl;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Customer\Helper\Data $customerHelper
+     * @param \Magento\Customer\Model\Url $customerUrl
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Customer\Helper\Data $customerHelper,
+        \Magento\Customer\Model\Url $customerUrl,
         array $data = array()
     ) {
-        $this->_customerHelper = $customerHelper;
+        $this->_customerUrl = $customerUrl;
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
     }
@@ -50,6 +50,6 @@ class Link extends \Magento\Framework\View\Element\Html\Link
      */
     public function getHref()
     {
-        return $this->_customerHelper->getAccountUrl();
+        return $this->_customerUrl->getAccountUrl();
     }
 }

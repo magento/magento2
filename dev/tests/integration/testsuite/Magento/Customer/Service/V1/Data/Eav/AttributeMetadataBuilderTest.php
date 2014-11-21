@@ -31,7 +31,7 @@ class AttributeMetadataBuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * Object Manager
      *
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     private $_objectManager;
 

@@ -588,7 +588,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $totalAmountInvoiced = 0;
         foreach ($weeeTaxAppliedAmounts as $weeeTaxAppliedAmount) {
             if (isset($weeeTaxAppliedAmount[self::KEY_WEEE_AMOUNT_INVOICED])) {
-                $totalAmountInvoiced += $weeeTaxAppliedAmount[self::KEY_WEEE_AMOUNT_INVOICED];
+                $totalAmountInvoiced = $weeeTaxAppliedAmount[self::KEY_WEEE_AMOUNT_INVOICED];
+                break;
             }
         }
         return $totalAmountInvoiced;
@@ -604,7 +605,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $baseTotalAmountInvoiced = 0;
         foreach ($weeeTaxAppliedAmounts as $weeeTaxAppliedAmount) {
             if (isset($weeeTaxAppliedAmount[self::KEY_BASE_WEEE_AMOUNT_INVOICED])) {
-                $baseTotalAmountInvoiced += $weeeTaxAppliedAmount[self::KEY_BASE_WEEE_AMOUNT_INVOICED];
+                $baseTotalAmountInvoiced = $weeeTaxAppliedAmount[self::KEY_BASE_WEEE_AMOUNT_INVOICED];
+                break;
             }
         }
         return $baseTotalAmountInvoiced;
@@ -620,7 +622,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $totalTaxInvoiced = 0;
         foreach ($weeeTaxAppliedAmounts as $weeeTaxAppliedAmount) {
             if (isset($weeeTaxAppliedAmount[self::KEY_WEEE_TAX_AMOUNT_INVOICED])) {
-                $totalTaxInvoiced += $weeeTaxAppliedAmount[self::KEY_WEEE_TAX_AMOUNT_INVOICED];
+                $totalTaxInvoiced = $weeeTaxAppliedAmount[self::KEY_WEEE_TAX_AMOUNT_INVOICED];
+                break;
             }
         }
         return $totalTaxInvoiced;
@@ -636,7 +639,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $baseTotalTaxInvoiced = 0;
         foreach ($weeeTaxAppliedAmounts as $weeeTaxAppliedAmount) {
             if (isset($weeeTaxAppliedAmount[self::KEY_BASE_WEEE_TAX_AMOUNT_INVOICED])) {
-                $baseTotalTaxInvoiced += $weeeTaxAppliedAmount[self::KEY_BASE_WEEE_TAX_AMOUNT_INVOICED];
+                $baseTotalTaxInvoiced = $weeeTaxAppliedAmount[self::KEY_BASE_WEEE_TAX_AMOUNT_INVOICED];
+                break;
             }
         }
         return $baseTotalTaxInvoiced;
@@ -652,7 +656,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $totalAmountRefunded = 0;
         foreach ($weeeTaxAppliedAmounts as $weeeTaxAppliedAmount) {
             if (isset($weeeTaxAppliedAmount[self::KEY_WEEE_AMOUNT_REFUNDED])) {
-                $totalAmountRefunded += $weeeTaxAppliedAmount[self::KEY_WEEE_AMOUNT_REFUNDED];
+                $totalAmountRefunded = $weeeTaxAppliedAmount[self::KEY_WEEE_AMOUNT_REFUNDED];
+                break;
             }
         }
         return $totalAmountRefunded;
@@ -668,7 +673,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $baseTotalAmountRefunded = 0;
         foreach ($weeeTaxAppliedAmounts as $weeeTaxAppliedAmount) {
             if (isset($weeeTaxAppliedAmount[self::KEY_BASE_WEEE_AMOUNT_REFUNDED])) {
-                $baseTotalAmountRefunded += $weeeTaxAppliedAmount[self::KEY_BASE_WEEE_AMOUNT_REFUNDED];
+                $baseTotalAmountRefunded = $weeeTaxAppliedAmount[self::KEY_BASE_WEEE_AMOUNT_REFUNDED];
+                break;
             }
         }
         return $baseTotalAmountRefunded;
@@ -684,7 +690,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $totalTaxRefunded = 0;
         foreach ($weeeTaxAppliedAmounts as $weeeTaxAppliedAmount) {
             if (isset($weeeTaxAppliedAmount[self::KEY_WEEE_TAX_AMOUNT_REFUNDED])) {
-                $totalTaxRefunded += $weeeTaxAppliedAmount[self::KEY_WEEE_TAX_AMOUNT_REFUNDED];
+                $totalTaxRefunded = $weeeTaxAppliedAmount[self::KEY_WEEE_TAX_AMOUNT_REFUNDED];
+                break;
             }
         }
         return $totalTaxRefunded;
@@ -700,7 +707,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $baseTotalTaxRefunded = 0;
         foreach ($weeeTaxAppliedAmounts as $weeeTaxAppliedAmount) {
             if (isset($weeeTaxAppliedAmount[self::KEY_BASE_WEEE_TAX_AMOUNT_REFUNDED])) {
-                $baseTotalTaxRefunded += $weeeTaxAppliedAmount[self::KEY_BASE_WEEE_TAX_AMOUNT_REFUNDED];
+                $baseTotalTaxRefunded = $weeeTaxAppliedAmount[self::KEY_BASE_WEEE_TAX_AMOUNT_REFUNDED];
+                break;
             }
         }
         return $baseTotalTaxRefunded;

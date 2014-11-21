@@ -197,7 +197,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $optionMock->expects($this->any())
             ->method('getCode')
-            ->willReturn('second_key');
+            ->will($this->returnValue('second_key'));
 
         $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
             ->disableOriginalConstructor()

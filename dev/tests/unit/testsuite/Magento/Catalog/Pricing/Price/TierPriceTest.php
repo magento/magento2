@@ -184,8 +184,6 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
         $price = $this->getMock('Magento\Framework\Pricing\Price\PriceInterface', [], [], '', false);
         $price->expects($this->any())->method('getValue')->will($this->returnValue($basePrice));
 
-        $this->priceInfo->expects($this->atLeastOnce())->method('getPrice')->will($this->returnValue($price));
-
         $this->calculator->expects($this->atLeastOnce())->method('getAmount')
             ->will($this->returnArgument(0));
 
@@ -207,13 +205,6 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
                         'website_price' => '1.3',
                         'price_qty'     => '1.3',
                         'cust_group'    => $this->customerGroup + 1
-                    ],
-                    // will be ignored due to bigger price
-                    [
-                        'price'         => '50.3',
-                        'website_price' => '50.3',
-                        'price_qty'     => '10.3',
-                        'cust_group'    => Group::CUST_GROUP_ALL
                     ],
                     [
                         'price'         => '25.4',
@@ -280,7 +271,8 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
 
         $this->priceInfo->expects($this->atLeastOnce())
             ->method('getPrice')
-            ->will($this->returnValue($price));
+            ->will($this->returnValue($price))
+            ->with(RegularPrice::PRICE_CODE);
 
         $amount = $this->getMockForAbstractClass('Magento\Framework\Pricing\Amount\AmountInterface');
         $amount->expects($this->atLeastOnce())

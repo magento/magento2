@@ -25,8 +25,8 @@
  */
 namespace Magento\Webapi\Controller;
 
-use Magento\Framework\ObjectManager;
-use Magento\Framework\ObjectManager\Config as ObjectManagerConfig;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\ObjectManager\ConfigInterface as ObjectManagerConfig;
 use Magento\Framework\Api\Config\Reader as ServiceConfigReader;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\AttributeDataBuilder;

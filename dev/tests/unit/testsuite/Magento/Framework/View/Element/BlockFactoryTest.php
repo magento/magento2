@@ -31,7 +31,7 @@ class BlockFactoryTest extends \PHPUnit_Framework_TestCase
     protected $blockFactory;
 
     /**
-     * @var \Magento\Framework\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectManagerMock;
 
@@ -39,9 +39,7 @@ class BlockFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManager')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
 
         $this->blockFactory = $objectManagerHelper->getObject('Magento\Framework\View\Element\BlockFactory', array(
             'objectManager' => $this->objectManagerMock

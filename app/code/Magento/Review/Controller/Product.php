@@ -177,7 +177,7 @@ class Product extends \Magento\Framework\App\Action\Action
                     $this->_redirect->getRefererUrl()
                 );
                 $this->getResponse()->setRedirect(
-                    $this->_objectManager->get('Magento\Customer\Helper\Data')->getLoginUrl()
+                    $this->_objectManager->get('Magento\Customer\Model\Url')->getLoginUrl()
                 );
             }
         }

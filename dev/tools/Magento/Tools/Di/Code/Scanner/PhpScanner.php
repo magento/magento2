@@ -62,7 +62,7 @@ class PhpScanner implements ScannerInterface
                         continue;
                     }
                     $entityName = rtrim(substr($factoryClassName, 0, -7), '\\');
-                    if (!class_exists($entityName)) {
+                    if (!class_exists($entityName) && !interface_exists($entityName)) {
                         $this->_log->add(
                             Log::CONFIGURATION_ERROR,
                             $factoryClassName,

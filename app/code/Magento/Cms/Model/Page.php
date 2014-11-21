@@ -23,12 +23,13 @@
  */
 namespace Magento\Cms\Model;
 
+use Magento\Cms\Api\Data\PageInterface;
+
 /**
  * Cms Page Model
  *
  * @method \Magento\Cms\Model\Resource\Page _getResource()
  * @method \Magento\Cms\Model\Resource\Page getResource()
- * @method string getTitle()
  * @method \Magento\Cms\Model\Page setTitle(string $value)
  * @method string getPageLayout()
  * @method \Magento\Cms\Model\Page setPageLayout(string $value)
@@ -36,7 +37,6 @@ namespace Magento\Cms\Model;
  * @method \Magento\Cms\Model\Page setMetaKeywords(string $value)
  * @method string getMetaDescription()
  * @method \Magento\Cms\Model\Page setMetaDescription(string $value)
- * @method string getIdentifier()
  * @method \Magento\Cms\Model\Page setIdentifier(string $value)
  * @method string getContentHeading()
  * @method \Magento\Cms\Model\Page setContentHeading(string $value)
@@ -64,7 +64,7 @@ namespace Magento\Cms\Model;
  * @method \Magento\Cms\Model\Page setCustomThemeTo(string $value)
  * @method int[] getStores()
  */
-class Page extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\Object\IdentityInterface
+class Page extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\Object\IdentityInterface, PageInterface
 {
     /**
      * No route page id
@@ -103,6 +103,30 @@ class Page extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
     protected function _construct()
     {
         $this->_init('Magento\Cms\Model\Resource\Page');
+    }
+
+    /**
+     * @return int
+     */
+    public function getPageId()
+    {
+        return (int) $this->_getData(PageInterface::PAGE_ID);
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdentifier()
+    {
+        return (string) $this->_getData(PageInterface::IDENTIFIER);
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->_getData(PageInterface::TITLE);
     }
 
     /**

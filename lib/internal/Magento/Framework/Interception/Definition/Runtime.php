@@ -26,9 +26,9 @@
  */
 namespace Magento\Framework\Interception\Definition;
 
-use Magento\Framework\Interception\Definition;
+use Magento\Framework\Interception\DefinitionInterface;
 
-class Runtime implements Definition
+class Runtime implements DefinitionInterface
 {
     /**
      * @var array

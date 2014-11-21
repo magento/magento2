@@ -53,7 +53,8 @@
     </filter>
     <!-- PHP INI settings and constants definition -->
     <php>
-        <includePath>.;testsuite</includePath>
+        <includePath>.</includePath>
+        <includePath>testsuite</includePath>
         <ini name="date.timezone" value="America/Los_Angeles"/>
         <ini name="xdebug.max_nesting_level" value="200"/>
         <!-- Local XML configuration file ('.dist' extension will be added, if the specified file doesn't exist) -->

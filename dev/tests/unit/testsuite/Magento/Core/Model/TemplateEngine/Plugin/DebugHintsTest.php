@@ -52,7 +52,7 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManager');
+        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->_scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->_coreData = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
         $this->subjectMock = $this->getMock(

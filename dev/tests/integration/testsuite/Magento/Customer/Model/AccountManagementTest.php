@@ -54,7 +54,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
     /** @var AddressRepositoryInterface needed to setup tests */
     private $addressRepository;
 
-    /** @var \Magento\Framework\ObjectManager */
+    /** @var \Magento\Framework\ObjectManagerInterface */
     private $objectManager;
 
     /** @var \Magento\Customer\Service\V1\Data\Address[] */

@@ -24,6 +24,8 @@
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Items;
 
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
+use Magento\CatalogInventory\Api\StockRegistryInterface;
+use Magento\CatalogInventory\Api\StockStateInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Model\Quote\Item;
 use Magento\Framework\Session\SessionManagerInterface;
@@ -76,9 +78,14 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     protected $_messageHelper;
 
     /**
-     * @var \Magento\CatalogInventory\Service\V1\StockItemService
+     * @var StockRegistryInterface
      */
-    protected $stockItemService;
+    protected $stockRegistry;
+
+    /**
+     * @var StockStateInterface
+     */
+    protected $stockState;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -90,7 +97,8 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * @param \Magento\Tax\Model\Config $taxConfig
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\GiftMessage\Helper\Message $messageHelper
-     * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
+     * @param StockRegistryInterface $stockRegistry
+     * @param StockStateInterface $stockState
      * @param array $data
      */
     public function __construct(
@@ -103,7 +111,8 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
         \Magento\Tax\Model\Config $taxConfig,
         \Magento\Tax\Helper\Data $taxData,
         \Magento\GiftMessage\Helper\Message $messageHelper,
-        \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService,
+        StockRegistryInterface $stockRegistry,
+        StockStateInterface $stockState,
         array $data = array()
     ) {
         $this->_messageHelper = $messageHelper;
@@ -111,7 +120,8 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
         $this->_giftMessageSave = $giftMessageSave;
         $this->_taxConfig = $taxConfig;
         $this->_taxData = $taxData;
-        $this->stockItemService = $stockItemService;
+        $this->stockRegistry = $stockRegistry;
+        $this->stockState = $stockState;
         parent::__construct($context, $sessionQuote, $orderCreate, $priceCurrency, $data);
     }
 
@@ -154,11 +164,12 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
                 }
 
                 foreach ($stockItemToCheck as $productId) {
-                    $check = $this->stockItemService->checkQuoteItemQty(
+                    $check = $this->stockState->checkQuoteItemQty(
                         $productId,
                         $item->getQty(),
                         $item->getQty(),
-                        $item->getQty()
+                        $item->getQty(),
+                        $this->getQuote()->getStore()->getWebsiteId()
                     );
                     $item->setMessage($check->getMessage());
                     $item->setHasError($check->getHasError());

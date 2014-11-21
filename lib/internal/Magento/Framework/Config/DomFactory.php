@@ -33,16 +33,16 @@ class DomFactory
     /**
      * Object manager
      *
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
 
     /**
      * Constructor
      *
-     * @param \Magento\Framework\ObjectManager $objectManger
+     * @param \Magento\Framework\ObjectManagerInterface $objectManger
      */
-    public function __construct(\Magento\Framework\ObjectManager $objectManger)
+    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManger)
     {
         $this->_objectManager = $objectManger;
     }

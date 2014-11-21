@@ -176,15 +176,6 @@ class CatalogProductAttribute extends InjectableFixture
         'input' => '',
     ];
 
-    protected $default_value = [
-        'attribute_code' => 'default_value',
-        'backend_type' => 'text',
-        'is_required' => '',
-        'default_value' => '',
-        'input' => '',
-        'group' => 'advanced-properties',
-    ];
-
     protected $is_unique = [
         'attribute_code' => 'is_unique',
         'backend_type' => 'smallint',
@@ -373,8 +364,52 @@ class CatalogProductAttribute extends InjectableFixture
         'default_value' => '',
         'input' => '',
         'source' => 'Magento\Catalog\Test\Fixture\CatalogProductAttribute\Options',
-        'group' => 'manage-options'
     ];
+
+    protected $default_value_text = [
+        'attribute_code' => 'default_value_text',
+        'backend_type' => 'text',
+        'group' => 'advanced-properties',
+    ];
+
+    protected $default_value_textarea = [
+        'attribute_code' => 'default_value_textarea',
+        'backend_type' => 'text',
+        'group' => 'advanced-properties',
+    ];
+
+    protected $default_value_date = [
+        'attribute_code' => 'default_value_date',
+        'backend_type' => 'text',
+        'group' => 'advanced-properties',
+        'source' => 'Magento\Backend\Test\Fixture\Date',
+    ];
+
+    protected $default_value_yesno = [
+        'attribute_code' => 'default_value_yesno',
+        'backend_type' => 'text',
+        'group' => 'advanced-properties',
+    ];
+
+    public function getDefaultValueText()
+    {
+        return $this->getData('default_value_text');
+    }
+
+    public function getDefaultValueTextarea()
+    {
+        return $this->getData('default_value_textarea');
+    }
+
+    public function getDefaultValueDate()
+    {
+        return $this->getData('default_value_date');
+    }
+
+    public function getDefaultValueYesno()
+    {
+        return $this->getData('default_value_yesno');
+    }
 
     public function getAttributeId()
     {
@@ -449,11 +484,6 @@ class CatalogProductAttribute extends InjectableFixture
     public function getIsUserDefined()
     {
         return $this->getData('is_user_defined');
-    }
-
-    public function getDefaultValue()
-    {
-        return $this->getData('default_value');
     }
 
     public function getIsUnique()

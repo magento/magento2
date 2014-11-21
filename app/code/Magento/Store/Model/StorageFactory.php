@@ -28,7 +28,7 @@ use Magento\Framework\Profiler;
 class StorageFactory
 {
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
 
@@ -80,7 +80,7 @@ class StorageFactory
     protected $request;
 
     /**
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Logger $logger
      * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
@@ -92,7 +92,7 @@ class StorageFactory
      * @param string $writerModel
      */
     public function __construct(
-        \Magento\Framework\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Logger $logger,
         \Magento\Framework\Session\SidResolverInterface $sidResolver,

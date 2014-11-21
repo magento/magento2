@@ -28,7 +28,7 @@ namespace Magento\Framework\Mail\Template;
 class Factory implements \Magento\Framework\Mail\Template\FactoryInterface
 {
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager = null;
 
@@ -38,11 +38,11 @@ class Factory implements \Magento\Framework\Mail\Template\FactoryInterface
     protected $_instanceName = null;
 
     /**
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
      */
     public function __construct(
-        \Magento\Framework\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
         $instanceName = 'Magento\Framework\Mail\TemplateInterface'
     ) {
         $this->_objectManager = $objectManager;

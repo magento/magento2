@@ -79,7 +79,7 @@ class Design implements \Magento\Framework\View\DesignInterface
     protected $_locale;
 
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
 
@@ -93,7 +93,7 @@ class Design implements \Magento\Framework\View\DesignInterface
      * @param \Magento\Framework\View\Design\Theme\FlyweightFactory $flyweightFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Core\Model\ThemeFactory $themeFactory
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\App\State $appState
      * @param array $themes
      */
@@ -102,7 +102,7 @@ class Design implements \Magento\Framework\View\DesignInterface
         \Magento\Framework\View\Design\Theme\FlyweightFactory $flyweightFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Core\Model\ThemeFactory $themeFactory,
-        \Magento\Framework\ObjectManager $objectManager,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\App\State $appState,
         array $themes
     ) {

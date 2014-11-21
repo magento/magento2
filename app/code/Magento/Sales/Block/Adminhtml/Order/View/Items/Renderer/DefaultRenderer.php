@@ -53,7 +53,8 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\Defa
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
+     * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
+     * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\GiftMessage\Helper\Message $messageHelper
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
@@ -61,7 +62,8 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\Defa
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService,
+        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
+        \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
         \Magento\Framework\Registry $registry,
         \Magento\GiftMessage\Helper\Message $messageHelper,
         \Magento\Checkout\Helper\Data $checkoutHelper,
@@ -69,7 +71,7 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\Defa
     ) {
         $this->_checkoutHelper = $checkoutHelper;
         $this->_messageHelper = $messageHelper;
-        parent::__construct($context, $stockItemService, $registry, $data);
+        parent::__construct($context, $stockRegistry, $stockConfiguration, $registry, $data);
     }
 
     /**

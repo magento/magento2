@@ -48,7 +48,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     protected $categoryHelper;
 
     /**
-     * @var \Magento\Framework\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectManager;
 
@@ -136,7 +136,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->response = $this->getMock('Magento\Framework\App\ResponseInterface');
 
         $this->categoryHelper = $this->getMock('Magento\Catalog\Helper\Category', [], [], '', false);
-        $this->objectManager = $this->getMock('Magento\Framework\ObjectManager', [], [], '', false);
+        $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface');
 
         $this->update = $this->getMock('Magento\Framework\View\Layout\ProcessorInterface');

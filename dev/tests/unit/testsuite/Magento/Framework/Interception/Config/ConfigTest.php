@@ -70,7 +70,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->configScopeMock = $this->getMock('Magento\Framework\Config\ScopeListInterface');
         $this->cacheMock = $this->getMock('Magento\Framework\Cache\FrontendInterface');
         $this->omConfigMock = $this->getMock('Magento\Framework\Interception\ObjectManager\Config');
-        $this->definitionMock = $this->getMock('Magento\Framework\ObjectManager\Definition');
+        $this->definitionMock = $this->getMock('Magento\Framework\ObjectManager\DefinitionInterface');
     }
 
     /**

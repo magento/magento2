@@ -31,7 +31,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('LogicException', 'Request deserializer adapter is not set.');
         $interpreterFactory = new \Magento\Webapi\Controller\Rest\Request\Deserializer\Factory(
-            $this->getMock('Magento\Framework\ObjectManager'),
+            $this->getMock('Magento\Framework\ObjectManagerInterface'),
             array()
         );
         $interpreterFactory->get('contentType');
@@ -44,7 +44,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             'Magento\Webapi\Controller\Rest\Request\Deserializer\Xml'
         )->disableOriginalConstructor()->getMock();
 
-        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager');
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $objectManagerMock->expects($this->once())->method('get')->will($this->returnValue($validInterpreterMock));
 
         $interpreterFactory = new \Magento\Webapi\Controller\Rest\Request\Deserializer\Factory(
@@ -62,7 +62,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             'Server cannot understand Content-Type HTTP header media type text_xml'
         );
         $interpreterFactory = new \Magento\Webapi\Controller\Rest\Request\Deserializer\Factory(
-            $this->getMock('Magento\Framework\ObjectManager'),
+            $this->getMock('Magento\Framework\ObjectManagerInterface'),
             $expectedMetadata
         );
         $interpreterFactory->get('text_xml');
@@ -79,7 +79,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             'LogicException',
             'The deserializer must implement "Magento\Webapi\Controller\Rest\Request\DeserializerInterface".'
         );
-        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager');
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $objectManagerMock->expects($this->once())->method('get')->will($this->returnValue($invalidInterpreter));
 
         $interpreterFactory = new \Magento\Webapi\Controller\Rest\Request\Deserializer\Factory(

@@ -43,7 +43,7 @@ class AbstractCarrierOnlineTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $stockItemService;
+    protected $stockRegistry;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -52,21 +52,23 @@ class AbstractCarrierOnlineTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stockItemService = $this->getMock(
-            'Magento\CatalogInventory\Service\V1\StockItemService',
+        $this->stockRegistry = $this->getMock(
+            'Magento\CatalogInventory\Model\StockRegistry',
             [],
             [],
             '',
             false
         );
-        $this->stockItemData = $this->getMock('Magento\CatalogInventory\Service\V1\Data\StockItem', [], [], '', false);
-        $this->stockItemService->expects($this->any())->method('getStockItem')
+        $this->stockItemData = $this->getMock('Magento\CatalogInventory\Model\Stock\Item', [], [], '', false);
+
+        $this->stockRegistry->expects($this->any())->method('getStockItem')
+            ->with($this->productId, 10)
             ->will($this->returnValue($this->stockItemData));
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $carrierArgs = $objectManagerHelper->getConstructArguments(
             'Magento\Shipping\Model\Carrier\AbstractCarrierOnline',
-            ['stockItemService' => $this->stockItemService]
+            ['stockRegistry' => $this->stockRegistry]
         );
         $this->carrier = $this->getMockBuilder('Magento\Shipping\Model\Carrier\AbstractCarrierOnline')
             ->setConstructorArgs($carrierArgs)
@@ -92,21 +94,25 @@ class AbstractCarrierOnlineTest extends \PHPUnit_Framework_TestCase
 
         $item = $this->getMockBuilder('\Magento\Sales\Model\Quote\Item')
             ->disableOriginalConstructor()
-            ->setMethods(['getProduct', 'getQty', 'getWeight', '__wakeup'])
+            ->setMethods(['getProduct', 'getQty', 'getWeight', '__wakeup', 'getStore'])
             ->getMock();
         $item->expects($this->any())->method('getProduct')->will($this->returnValue($product));
+
+        $store = $this->getMock('Magento\Store\Model\Store', ['getWebsiteId'], [], '', false);
+        $store->expects($this->any())
+            ->method('getWebsiteId')
+            ->will($this->returnValue(10));
+        $item->expects($this->any())->method('getStore')->will($this->returnValue($store));
 
         $request = new RateRequest();
         $request->setData('all_items', [$item]);
         $request->setData('dest_postcode', 1);
 
         /** Testable service calls to CatalogInventory module */
-        $this->stockItemService->expects($this->atLeastOnce())->method('getStockItem')->with($this->productId);
-        $this->stockItemService->expects($this->atLeastOnce())->method('getEnableQtyIncrements')
-            ->with($this->productId)
+        $this->stockRegistry->expects($this->atLeastOnce())->method('getStockItem')->with($this->productId);
+        $this->stockItemData->expects($this->atLeastOnce())->method('getEnableQtyIncrements')
             ->will($this->returnValue(true));
-        $this->stockItemService->expects($this->atLeastOnce())->method('getQtyIncrements')
-            ->with($this->productId)
+        $this->stockItemData->expects($this->atLeastOnce())->method('getQtyIncrements')
             ->will($this->returnValue(5));
         $this->stockItemData->expects($this->atLeastOnce())->method('getIsQtyDecimal')->will($this->returnValue(true));
         $this->stockItemData->expects($this->atLeastOnce())->method('getIsDecimalDivided')

@@ -389,7 +389,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
 
                             if ($isStrictProcessMode) {
                                 $_result[0]->setCartQty($qty);
-                                $_result[0]->addCustomOption('product_type', self::TYPE_CODE, $product);
                                 $_result[0]->addCustomOption(
                                     'info_buyRequest',
                                     serialize(

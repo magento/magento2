@@ -23,6 +23,7 @@
  */
 namespace Magento\Customer\Block\Account;
 
+use Magento\Customer\Model\Context;
 use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
 
 class Customer extends \Magento\Framework\View\Element\Template
@@ -74,7 +75,7 @@ class Customer extends \Magento\Framework\View\Element\Template
      */
     public function customerLoggedIn()
     {
-        return (bool)$this->httpContext->getValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH);
+        return (bool)$this->httpContext->getValue(Context::CONTEXT_AUTH);
     }
 
     /**

@@ -24,7 +24,7 @@
 
 namespace Magento\Framework\Pricing\Price;
 
-use \Magento\Framework\ObjectManager;
+use \Magento\Framework\ObjectManagerInterface;
 use \Magento\Framework\Pricing\Object\SaleableInterface;
 
 /**

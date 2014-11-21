@@ -37,7 +37,11 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('catalog/product/view/id/3');
         $responseBody = $this->getResponse()->getBody();
         $this->assertContains('Bundle Product', $responseBody);
-        $this->assertContains('In stock', $responseBody);
+        $this->assertContains(
+            'In stock',
+            $responseBody,
+            'Bundle Product Detailed Page does not contain In Stock field'
+        );
         $addToCartCount = substr_count($responseBody, '<span>Add to Cart</span>');
         $this->assertEquals(1, $addToCartCount, '"Add to Cart" button should appear on the page exactly once.');
         $actualLinkCount = substr_count($responseBody, '>Bundle Product Items<');

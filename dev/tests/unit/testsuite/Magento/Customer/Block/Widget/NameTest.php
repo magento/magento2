@@ -66,8 +66,8 @@ class NameTest extends \PHPUnit_Framework_TestCase
     /** @var  \PHPUnit_Framework_MockObject_MockObject | AttributeMetadata */
     private $_attributeMetadata;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Helper\Data */
-    private $_customerHelper;
+    /** @var  \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Model\Options */
+    private $_options;
 
     /** @var  \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Escaper */
     private $_escaper;
@@ -95,7 +95,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
 
         $addressHelper = $this->getMock('Magento\Customer\Helper\Address', [], [], '', false);
 
-        $this->_customerHelper = $this->getMock('Magento\Customer\Helper\Data', [], [], '', false);
+        $this->_options = $this->getMock('Magento\Customer\Model\Options', [], [], '', false);
         $this->_attributeMetadata = $this->getMock(
             'Magento\Customer\Service\V1\Data\Eav\AttributeMetadata',
             [],
@@ -126,7 +126,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
             $addressHelper,
             $this->customerMetadataService,
             $this->addressMetadataService,
-            $this->_customerHelper
+            $this->_options
         );
     }
 
@@ -240,7 +240,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
         $expectedOptions = $prefixOptions;
         $expectedOptions[$prefix] = $prefix;
 
-        $this->_customerHelper->expects(
+        $this->_options->expects(
             $this->once()
         )->method(
             'getNamePrefixOptions'
@@ -258,7 +258,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
             ->setPrefix(self::PREFIX)->create();
         $this->_block->setObject($customer);
 
-        $this->_customerHelper->expects(
+        $this->_options->expects(
             $this->once()
         )->method(
             'getNamePrefixOptions'
@@ -285,7 +285,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
         $expectedOptions = $suffixOptions;
         $expectedOptions[$suffix] = $suffix;
 
-        $this->_customerHelper->expects(
+        $this->_options->expects(
             $this->once()
         )->method(
             'getNameSuffixOptions'
@@ -303,7 +303,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
             ->setSuffix('  <' . self::SUFFIX . '>  ')->create();
         $this->_block->setObject($customer);
 
-        $this->_customerHelper->expects(
+        $this->_options->expects(
             $this->once()
         )->method(
             'getNameSuffixOptions'

@@ -65,13 +65,24 @@ class CartTest extends \PHPUnit_Framework_TestCase
     protected $checkoutSessionMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Url\EncoderInterface
+     */
+    protected $urlEncoder;
+
+    /**
      * @var Cart
      */
     protected $helper;
 
     protected function setUp()
     {
-        $this->urlBuilderMock = $this->getMock('\Magento\Framework\UrlInterface');
+        $this->urlBuilderMock = $this->getMock('Magento\Framework\UrlInterface');
+        $this->urlEncoder = $this->getMockBuilder('Magento\Framework\Url\EncoderInterface')->getMock();
+        $this->urlEncoder->expects($this->any())
+            ->method('encode')
+            ->willReturnCallback(function ($url) {
+                return strtr(base64_encode($url), '+/=', '-_,');
+            });
         $this->requestMock = $this->getMock(
             '\Magento\Framework\App\RequestInterface',
             [
@@ -88,6 +99,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $contextMock = $this->getMock('\Magento\Framework\App\Helper\Context', [], [], '', false);
         $contextMock->expects($this->any())->method('getUrlBuilder')->will($this->returnValue($this->urlBuilderMock));
         $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->requestMock));
+        $contextMock->expects($this->any())->method('getUrlEncoder')->will($this->returnValue($this->urlEncoder));
         $this->storeManagerMock = $this->getMock('\Magento\Framework\StoreManagerInterface');
         $this->coreHelperMock = $this->getMock('\Magento\Core\Helper\Data', [], [], '', false);
         $this->scopeConfigMock = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
@@ -230,7 +242,9 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $context->expects($this->once())
             ->method('getUrlBuilder')
             ->will($this->returnValue($urlBuilder));
-
+        $context->expects($this->any())
+            ->method('getUrlEncoder')
+            ->willReturn($this->urlEncoder);
 
         $item = $this->getMock('Magento\Sales\Model\Quote\Item', [], [], '', false);
         $request = $this->getMock('\Magento\Framework\App\Request\Http', [], [], '', false);

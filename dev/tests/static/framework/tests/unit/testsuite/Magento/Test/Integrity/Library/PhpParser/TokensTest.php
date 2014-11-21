@@ -63,9 +63,7 @@ class TokensTest extends \PHPUnit_Framework_TestCase
      */
     public function testParseContent()
     {
-        $parser = $this->getMockBuilder(
-            'Magento\TestFramework\Integrity\Library\PhpParser\Parser'
-        )->getMockForAbstractClass();
+        $parser = $this->getMock('Magento\TestFramework\Integrity\Library\PhpParser\ParserInterface');
 
         $this->parseFactory->expects($this->any())->method('createParsers')->will($this->returnValue(array($parser)));
 

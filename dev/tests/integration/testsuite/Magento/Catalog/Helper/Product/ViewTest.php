@@ -23,6 +23,8 @@
  */
 namespace Magento\Catalog\Helper\Product;
 
+use Magento\Customer\Model\Context;
+
 /**
  * @magentoAppArea frontend
  */
@@ -44,7 +46,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     protected $page;
 
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
 
@@ -54,7 +56,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
         $this->objectManager->get('Magento\Framework\App\Http\Context')
-            ->setValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH, false, false);
+            ->setValue(Context::CONTEXT_AUTH, false, false);
         $this->objectManager->get('Magento\Framework\View\DesignInterface')
             ->setDefaultDesignTheme();
         $this->_helper = $this->objectManager->get('Magento\Catalog\Helper\Product\View');

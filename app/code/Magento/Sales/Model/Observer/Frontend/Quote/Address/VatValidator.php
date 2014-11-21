@@ -33,21 +33,21 @@ class VatValidator
     protected $customerAddress;
 
     /**
-     * Customer data
+     * Customer VAT
      *
-     * @var \Magento\Customer\Helper\Data
+     * @var \Magento\Customer\Model\Vat
      */
-    protected $customerData;
+    protected $customerVat;
 
     /**
      * @param \Magento\Customer\Helper\Address $customerAddress
-     * @param \Magento\Customer\Helper\Data $customerData
+     * @param \Magento\Customer\Model\Vat $customerVat
      */
     public function __construct(
         \Magento\Customer\Helper\Address $customerAddress,
-        \Magento\Customer\Helper\Data $customerData
+        \Magento\Customer\Model\Vat $customerVat
     ) {
-        $this->customerData = $customerData;
+        $this->customerVat = $customerVat;
         $this->customerAddress = $customerAddress;
     }
 
@@ -63,8 +63,8 @@ class VatValidator
         $customerCountryCode = $quoteAddress->getCountryId();
         $customerVatNumber = $quoteAddress->getVatId();
 
-        $merchantCountryCode = $this->customerData->getMerchantCountryCode();
-        $merchantVatNumber = $this->customerData->getMerchantVatNumber();
+        $merchantCountryCode = $this->customerVat->getMerchantCountryCode();
+        $merchantVatNumber = $this->customerVat->getMerchantVatNumber();
 
         $validationResult = null;
         if ($this->customerAddress->hasValidateOnEachTransaction(
@@ -74,7 +74,7 @@ class VatValidator
             $customerVatNumber != $quoteAddress->getValidatedVatNumber()
         ) {
             // Send request to gateway
-            $validationResult = $this->customerData->checkVatNumber(
+            $validationResult = $this->customerVat->checkVatNumber(
                 $customerCountryCode,
                 $customerVatNumber,
                 $merchantVatNumber !== '' ? $merchantCountryCode : '',

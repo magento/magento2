@@ -36,11 +36,6 @@ class InterceptorTest extends \PHPUnit_Framework_TestCase
      */
     protected $classGeneratorMock;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject
-     */
-    protected $fileResolverMock;
-
     protected function setUp()
     {
         $this->ioObjectMock = $this->getMock('\Magento\Framework\Code\Generator\Io', [], [], '', false);
@@ -51,15 +46,19 @@ class InterceptorTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->fileResolverMock = $this->getMock('Magento\Framework\Code\Generator\FileResolver', [], [], '', false);
     }
 
     public function testGetDefaultResultClassName()
     {
         // resultClassName should be stdClass_Interceptor
         $model = $this->getMock('\Magento\Framework\Interception\Code\Generator\Interceptor',
-            array('_validateData'),
-            array('Exception', null, $this->ioObjectMock, $this->classGeneratorMock, $this->fileResolverMock)
+            ['_validateData'],
+            [
+                'Exception',
+                null,
+                $this->ioObjectMock,
+                $this->classGeneratorMock,
+            ]
         );
 
         $this->classGeneratorMock->expects($this->once())->method('setName')
@@ -74,6 +73,6 @@ class InterceptorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('source code example'));
         $model->expects($this->once())->method('_validateData')->will($this->returnValue(true));
         $this->ioObjectMock->expects($this->any())->method('getResultFileName')->with('Exception_Interceptor');
-        $this->assertTrue($model->generate());
+        $this->assertEquals('', $model->generate());
     }
 }

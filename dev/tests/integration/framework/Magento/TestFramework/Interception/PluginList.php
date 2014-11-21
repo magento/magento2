@@ -34,11 +34,11 @@ class PluginList extends \Magento\Framework\Interception\PluginList\PluginList
      * @param \Magento\Framework\Config\ReaderInterface $reader
      * @param \Magento\Framework\Config\ScopeInterface $configScope
      * @param \Magento\Framework\Config\CacheInterface $cache
-     * @param \Magento\Framework\ObjectManager\Relations $relations
-     * @param \Magento\Framework\ObjectManager\Config $omConfig
-     * @param \Magento\Framework\Interception\Definition $definitions
-     * @param \Magento\Framework\ObjectManager $objectManager
-     * @param \Magento\Framework\ObjectManager\Definition $classDefinitions
+     * @param \Magento\Framework\ObjectManager\RelationsInterface $relations
+     * @param \Magento\Framework\ObjectManager\ConfigInterface $omConfig
+     * @param \Magento\Framework\Interception\DefinitionInterface $definitions
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param \Magento\Framework\ObjectManager\DefinitionInterface $classDefinitions
      * @param array $scopePriorityScheme
      * @param string $cacheId
      *
@@ -48,11 +48,11 @@ class PluginList extends \Magento\Framework\Interception\PluginList\PluginList
         \Magento\Framework\Config\ReaderInterface $reader,
         \Magento\Framework\Config\ScopeInterface $configScope,
         \Magento\Framework\Config\CacheInterface $cache,
-        \Magento\Framework\ObjectManager\Relations $relations,
-        \Magento\Framework\ObjectManager\Config $omConfig,
-        \Magento\Framework\Interception\Definition $definitions,
-        \Magento\Framework\ObjectManager $objectManager,
-        \Magento\Framework\ObjectManager\Definition $classDefinitions,
+        \Magento\Framework\ObjectManager\RelationsInterface $relations,
+        \Magento\Framework\ObjectManager\ConfigInterface $omConfig,
+        \Magento\Framework\Interception\DefinitionInterface $definitions,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
+        \Magento\Framework\ObjectManager\DefinitionInterface $classDefinitions,
         array $scopePriorityScheme,
         $cacheId = 'plugins'
     ) {

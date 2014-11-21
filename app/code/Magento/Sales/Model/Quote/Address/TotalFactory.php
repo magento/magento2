@@ -32,16 +32,16 @@ class TotalFactory
     /**
      * Object Manager instance
      *
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager = null;
 
     /**
      * Quote address factory constructor
      *
-     * @param \Magento\Framework\ObjectManager $objManager
+     * @param \Magento\Framework\ObjectManagerInterface $objManager
      */
-    public function __construct(\Magento\Framework\ObjectManager $objManager)
+    public function __construct(\Magento\Framework\ObjectManagerInterface $objManager)
     {
         $this->_objectManager = $objManager;
     }

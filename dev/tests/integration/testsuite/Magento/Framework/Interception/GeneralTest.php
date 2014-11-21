@@ -36,7 +36,7 @@ class GeneralTest extends \PHPUnit_Framework_TestCase
     protected $_configReader;
 
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
 
@@ -102,10 +102,10 @@ class GeneralTest extends \PHPUnit_Framework_TestCase
                 'Magento\Framework\Config\CacheInterface' => $cache,
                 'Magento\Framework\Config\ScopeInterface' => $configScope,
                 'Magento\Framework\Config\ReaderInterface' => $this->_configReader,
-                'Magento\Framework\ObjectManager\Relations' => $relations,
-                'Magento\Framework\ObjectManager\Config' => $config,
-                'Magento\Framework\ObjectManager\Definition' => $definitions,
-                'Magento\Framework\Interception\Definition' => $interceptionDefinitions
+                'Magento\Framework\ObjectManager\RelationsInterface' => $relations,
+                'Magento\Framework\ObjectManager\ConfigInterface' => $config,
+                'Magento\Framework\ObjectManager\DefinitionInterface' => $definitions,
+                'Magento\Framework\Interception\DefinitionInterface' => $interceptionDefinitions
             )
         );
         $factory->setObjectManager($this->_objectManager);
@@ -113,9 +113,9 @@ class GeneralTest extends \PHPUnit_Framework_TestCase
         $config->extend(
             array(
                 'preferences' => array(
-                    'Magento\Framework\Interception\PluginList' =>
+                    'Magento\Framework\Interception\PluginListInterface' =>
                         'Magento\Framework\Interception\PluginList\PluginList',
-                    'Magento\Framework\Interception\Chain' => 'Magento\Framework\Interception\Chain\Chain'
+                    'Magento\Framework\Interception\ChainInterface' => 'Magento\Framework\Interception\Chain\Chain'
                 )
             )
         );

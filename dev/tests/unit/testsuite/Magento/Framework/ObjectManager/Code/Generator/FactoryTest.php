@@ -42,7 +42,14 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $model = $this->getMock(
             '\Magento\Framework\ObjectManager\Code\Generator\Factory',
             array('_validateData'),
-            array('\Magento\Framework\ObjectManager\Code\Generator\Sample', null, $this->ioObjectMock, null, null)
+            [
+                '\Magento\Framework\ObjectManager\Code\Generator\Sample',
+                null,
+                $this->ioObjectMock,
+                null,
+                null,
+                $this->getMock('Magento\Framework\Filesystem\FileResolver')
+            ]
         );
 
         $this->ioObjectMock->expects($this->once())->method('getResultFileName')
@@ -53,6 +60,6 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             ->with('sample_file.php', $factoryCode);
 
         $model->expects($this->once())->method('_validateData')->will($this->returnValue(true));
-        $this->assertTrue($model->generate());
+        $this->assertEquals('sample_file.php', $model->generate());
     }
 }

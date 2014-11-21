@@ -24,26 +24,25 @@
 
 namespace Magento\Reports\Test\TestCase;
 
+use Mtf\ObjectManager;
 use Mtf\TestCase\Injectable;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Reports\Test\Page\Adminhtml\Bestsellers;
 
 /**
- * Test Creation for BestsellerProductsReportEntity
- *
  * Test Flow:
  * Preconditions:
- * 1. Create customer
- * 2. Create product
- * 3. Place order
- * 4. Refresh statistic
+ * 1. Create customer.
+ * 2. Create product.
+ * 3. Place order.
+ * 4. Refresh statistic.
  *
  * Steps:
- * 1. Open Backend
- * 2. Go to Reports > Products > Bestsellers
- * 3. Select time range, report period
- * 4. Click "Show report"
- * 5. Perform all assertions
+ * 1. Open Backend.
+ * 2. Go to Reports > Products > Bestsellers.
+ * 3. Select time range, report period.
+ * 4. Click "Show report".
+ * 5. Perform all assertions.
  *
  * @group Reports_(MX)
  * @ZephyrId MAGETWO-28222
@@ -51,14 +50,14 @@ use Magento\Reports\Test\Page\Adminhtml\Bestsellers;
 class BestsellerProductsReportEntityTest extends Injectable
 {
     /**
-     * Bestsellers page
+     * Bestsellers page.
      *
      * @var Bestsellers
      */
     protected $bestsellers;
 
     /**
-     * Inject pages
+     * Inject pages.
      *
      * @param Bestsellers $bestsellers
      * @return void
@@ -69,7 +68,7 @@ class BestsellerProductsReportEntityTest extends Injectable
     }
 
     /**
-     * Bestseller Products Report
+     * Bestseller Products Report.
      *
      * @param OrderInjectable $order
      * @param array $bestsellerReport

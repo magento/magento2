@@ -91,7 +91,7 @@ class AssertGroupedProductInItemsOrderedGrid extends AbstractConstraint
             $products = $product->getAssociated()['products'];
             foreach ($products as $key => $value) {
                 $fixtureData[$key]['name'] = $value->getName();
-                $fixtureData[$key]['price'] = $value->getPrice();
+                $fixtureData[$key]['price'] = number_format($value->getPrice(), 2);
             }
             $options = $product->getCheckoutData()['options'];
             foreach ($options as $key => $option) {

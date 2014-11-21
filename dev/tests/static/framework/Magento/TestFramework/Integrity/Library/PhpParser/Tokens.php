@@ -46,7 +46,7 @@ class Tokens
     /**
      * Collect all parsers
      *
-     * @var Parser[]
+     * @var ParserInterface[]
      */
     protected $parsers = array();
 
@@ -82,7 +82,7 @@ class Tokens
     /**
      * Get all parsers
      *
-     * @return Parser[]
+     * @return ParserInterface[]
      */
     protected function getParsers()
     {

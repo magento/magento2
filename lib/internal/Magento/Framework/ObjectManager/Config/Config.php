@@ -23,23 +23,23 @@
  */
 namespace Magento\Framework\ObjectManager\Config;
 
-use Magento\Framework\ObjectManager\ConfigCache;
-use Magento\Framework\ObjectManager\Definition;
-use Magento\Framework\ObjectManager\Relations;
+use Magento\Framework\ObjectManager\ConfigCacheInterface;
+use Magento\Framework\ObjectManager\DefinitionInterface;
+use Magento\Framework\ObjectManager\RelationsInterface;
 
-class Config implements \Magento\Framework\ObjectManager\Config
+class Config implements \Magento\Framework\ObjectManager\ConfigInterface
 {
     /**
      * Config cache
      *
-     * @var ConfigCache
+     * @var ConfigCacheInterface
      */
     protected $_cache;
 
     /**
      * Class definitions
      *
-     * @var \Magento\Framework\ObjectManager\Definition
+     * @var \Magento\Framework\ObjectManager\DefinitionInterface
      */
     protected $_definitions;
 
@@ -81,7 +81,7 @@ class Config implements \Magento\Framework\ObjectManager\Config
     /**
      * List of relations
      *
-     * @var Relations
+     * @var RelationsInterface
      */
     protected $_relations;
 
@@ -93,10 +93,10 @@ class Config implements \Magento\Framework\ObjectManager\Config
     protected $_mergedArguments;
 
     /**
-     * @param Relations $relations
-     * @param Definition $definitions
+     * @param RelationsInterface $relations
+     * @param DefinitionInterface $definitions
      */
-    public function __construct(Relations $relations = null, Definition $definitions = null)
+    public function __construct(RelationsInterface $relations = null, DefinitionInterface $definitions = null)
     {
         $this->_relations = $relations ?: new \Magento\Framework\ObjectManager\Relations\Runtime();
         $this->_definitions = $definitions ?: new \Magento\Framework\ObjectManager\Definition\Runtime();
@@ -105,10 +105,10 @@ class Config implements \Magento\Framework\ObjectManager\Config
     /**
      * Set class relations
      *
-     * @param Relations $relations
+     * @param RelationsInterface $relations
      * @return void
      */
-    public function setRelations(Relations $relations)
+    public function setRelations(RelationsInterface $relations)
     {
         $this->_relations = $relations;
     }
@@ -116,10 +116,10 @@ class Config implements \Magento\Framework\ObjectManager\Config
     /**
      * Set cache instance
      *
-     * @param ConfigCache $cache
+     * @param ConfigCacheInterface $cache
      * @return void
      */
-    public function setCache(ConfigCache $cache)
+    public function setCache(ConfigCacheInterface $cache)
     {
         $this->_cache = $cache;
     }

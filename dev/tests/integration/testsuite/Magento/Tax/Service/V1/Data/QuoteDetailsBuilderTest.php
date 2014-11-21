@@ -26,7 +26,7 @@ namespace Magento\Tax\Service\V1\Data;
 
 class QuoteDetailsBuilderTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Framework\ObjectManager */
+    /** @var \Magento\Framework\ObjectManagerInterface */
     private $objectManager;
 
     /** @var QuoteDetailsBuilder */

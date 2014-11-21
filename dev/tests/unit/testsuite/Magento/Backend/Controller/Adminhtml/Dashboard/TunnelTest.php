@@ -49,7 +49,7 @@ class TunnelTest extends \PHPUnit_Framework_TestCase
     {
         $this->_request = $this->getMock('Magento\Framework\App\Request\Http', array(), array(), '', false);
         $this->_response = $this->getMock('Magento\Framework\App\Response\Http', array(), array(), '', false);
-        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManager');
+        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
     }
 
     protected function tearDown()

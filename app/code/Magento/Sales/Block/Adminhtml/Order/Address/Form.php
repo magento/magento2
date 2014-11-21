@@ -53,7 +53,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Customer\Model\Metadata\FormFactory $customerFormFactory
-     * @param \Magento\Customer\Helper\Data $customerHelper
+     * @param \Magento\Customer\Model\Options $options
      * @param \Magento\Customer\Service\V1\CustomerAddressServiceInterface $addressService
      * @param \Magento\Customer\Helper\Address $addressHelper
      * @param \Magento\Framework\Registry $registry
@@ -69,7 +69,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
         \Magento\Core\Helper\Data $coreData,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Customer\Model\Metadata\FormFactory $customerFormFactory,
-        \Magento\Customer\Helper\Data $customerHelper,
+        \Magento\Customer\Model\Options $options,
         \Magento\Customer\Service\V1\CustomerAddressServiceInterface $addressService,
         \Magento\Customer\Helper\Address $addressHelper,
         \Magento\Framework\Registry $registry,
@@ -85,7 +85,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
             $coreData,
             $jsonEncoder,
             $customerFormFactory,
-            $customerHelper,
+            $options,
             $addressService,
             $addressHelper,
             $data

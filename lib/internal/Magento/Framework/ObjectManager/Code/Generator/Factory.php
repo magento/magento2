@@ -61,14 +61,17 @@ class Factory extends \Magento\Framework\Code\Generator\EntityAbstract
         return array(
             'name' => '__construct',
             'parameters' => array(
-                array('name' => 'objectManager', 'type' => '\Magento\Framework\ObjectManager'),
+                array('name' => 'objectManager', 'type' => '\Magento\Framework\ObjectManagerInterface'),
                 array('name' => 'instanceName', 'defaultValue' => $this->_getSourceClassName())
             ),
             'body' => "\$this->_objectManager = \$objectManager;\n\$this->_instanceName = \$instanceName;",
             'docblock' => array(
                 'shortDescription' => ucfirst(static::ENTITY_TYPE) . ' constructor',
                 'tags' => array(
-                    array('name' => 'param', 'description' => '\Magento\Framework\ObjectManager $objectManager'),
+                    array(
+                        'name' => 'param',
+                        'description' => '\Magento\Framework\ObjectManagerInterface $objectManager'
+                    ),
                     array('name' => 'param', 'description' => 'string $instanceName')
                 )
             )

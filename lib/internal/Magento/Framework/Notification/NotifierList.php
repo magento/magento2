@@ -32,7 +32,7 @@ class NotifierList
     /**
      * Object manager
      *
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
 
@@ -51,10 +51,10 @@ class NotifierList
     protected $isNotifiersVerified;
 
     /**
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param NotifierInterface[]|string[] $notifiers
      */
-    public function __construct(\Magento\Framework\ObjectManager $objectManager, $notifiers = array())
+    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, $notifiers = array())
     {
         $this->objectManager = $objectManager;
         $this->notifiers = $notifiers;

@@ -34,7 +34,7 @@ class Generic extends SessionManager
      * @param SaveHandlerInterface $saveHandler
      * @param ValidatorInterface $validator
      * @param StorageInterface $storage
-     * @param \Magento\Framework\Stdlib\CookieManager $cookieManager
+     * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
      * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
      */
     public function __construct(
@@ -44,7 +44,7 @@ class Generic extends SessionManager
         SaveHandlerInterface $saveHandler,
         ValidatorInterface $validator,
         StorageInterface $storage,
-        \Magento\Framework\Stdlib\CookieManager $cookieManager,
+        \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
     ) {
         parent::__construct(

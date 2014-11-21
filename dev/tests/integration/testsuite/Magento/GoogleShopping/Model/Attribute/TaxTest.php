@@ -40,7 +40,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
     protected $googleShoppingTaxAttribute;
 
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
 

@@ -31,19 +31,19 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
 
     protected function setUp()
     {
-        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManager');
+        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->_model = new \Magento\DesignEditor\Model\Url\Factory($this->_objectManager);
     }
 
     public function testConstruct()
     {
-        $this->assertAttributeInstanceOf('Magento\Framework\ObjectManager', '_objectManager', $this->_model);
+        $this->assertAttributeInstanceOf('Magento\Framework\ObjectManagerInterface', '_objectManager', $this->_model);
     }
 
     public function testReplaceClassName()

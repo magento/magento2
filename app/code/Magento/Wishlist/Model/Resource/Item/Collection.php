@@ -94,9 +94,9 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     /**
      * Catalog inventory data
      *
-     * @var \Magento\CatalogInventory\Helper\Data
+     * @var \Magento\CatalogInventory\Api\StockConfigurationInterface
      */
-    protected $_inventoryData = null;
+    protected $stockConfiguration = null;
 
     /**
      * @var \Magento\Framework\StoreManagerInterface
@@ -153,7 +153,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param \Magento\Framework\Logger $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\CatalogInventory\Helper\Data $catalogInventoryData
+     * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
      * @param \Magento\Sales\Helper\Admin $adminhtmlSales
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
@@ -175,7 +175,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Magento\Framework\Logger $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\CatalogInventory\Helper\Data $catalogInventoryData,
+        \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
         \Magento\Sales\Helper\Admin $adminhtmlSales,
         \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
@@ -190,7 +190,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Magento\Framework\App\State $appState,
         $connection = null
     ) {
-        $this->_inventoryData = $catalogInventoryData;
+        $this->stockConfiguration = $stockConfiguration;
         $this->_adminhtmlSales = $adminhtmlSales;
         $this->_storeManager = $storeManager;
         $this->_date = $date;
@@ -297,7 +297,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
             array('product_collection' => $productCollection)
         );
 
-        $checkInStock = $this->_productInStock && !$this->_inventoryData->isShowOutOfStock();
+        $checkInStock = $this->_productInStock && !$this->stockConfiguration->isShowOutOfStock();
 
         foreach ($this as $item) {
             $product = $productCollection->getItemById($item->getProductId());

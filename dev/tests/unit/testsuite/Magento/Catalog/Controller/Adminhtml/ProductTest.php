@@ -44,15 +44,7 @@ abstract class ProductTest extends \PHPUnit_Framework_TestCase
     protected function initContext()
     {
         $productActionMock = $this->getMock('Magento\Catalog\Model\Product\Action', array(), array(), '', false);
-        $objectManagerMock = $this->getMockForAbstractClass(
-            '\Magento\Framework\ObjectManager',
-            array(),
-            '',
-            true,
-            true,
-            true,
-            array('get')
-        );
+        $objectManagerMock = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
         $objectManagerMock->expects($this->any())->method('get')->will($this->returnValue($productActionMock));
 
         $block = $this->getMockBuilder('\Magento\Framework\View\Element\AbstractBlock')

@@ -73,6 +73,18 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     protected $_remoteAddress;
 
     /**
+     * @var \Magento\Framework\Url\EncoderInterface
+     */
+    protected $urlEncoder;
+
+    /**
+     * @var \Magento\Framework\Url\DecoderInterface
+     */
+    protected $urlDecoder;
+
+    /**
+     * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
+     * @param \Magento\Framework\Url\DecoderInterface $urlDecoder
      * @param \Magento\Framework\Logger $logger
      * @param \Magento\Framework\Translate\InlineInterface $translateInline
      * @param \Magento\Framework\Module\Manager $moduleManager
@@ -86,6 +98,8 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
+        \Magento\Framework\Url\EncoderInterface $urlEncoder,
+        \Magento\Framework\Url\DecoderInterface $urlDecoder,
         \Magento\Framework\Logger $logger,
         \Magento\Framework\Translate\InlineInterface $translateInline,
         \Magento\Framework\Module\Manager $moduleManager,
@@ -105,6 +119,8 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
         $this->_urlBuilder = $urlBuilder;
         $this->_httpHeader = $httpHeader;
         $this->_remoteAddress = $remoteAddress;
+        $this->urlEncoder = $urlEncoder;
+        $this->urlDecoder = $urlDecoder;
     }
 
     /**
@@ -177,5 +193,21 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     public function getRemoteAddress()
     {
         return $this->_remoteAddress;
+    }
+
+    /**
+     * @return \Magento\Framework\Url\EncoderInterface
+     */
+    public function getUrlEncoder()
+    {
+        return $this->urlEncoder;
+    }
+
+    /**
+     * @return \Magento\Framework\Url\DecoderInterface
+     */
+    public function getUrlDecoder()
+    {
+        return $this->urlDecoder;
     }
 }

@@ -31,7 +31,7 @@ class Save extends \Magento\Tax\Controller\Adminhtml\Rate
     /**
      * Save Rate and Data
      *
-     * @return bool
+     * @return void
      */
     public function execute()
     {
@@ -56,7 +56,7 @@ class Save extends \Magento\Tax\Controller\Adminhtml\Rate
 
                 $this->messageManager->addSuccess(__('The tax rate has been saved.'));
                 $this->getResponse()->setRedirect($this->getUrl("*/*/"));
-                return true;
+                return;
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData($ratePost);
                 $this->messageManager->addError($e->getMessage());

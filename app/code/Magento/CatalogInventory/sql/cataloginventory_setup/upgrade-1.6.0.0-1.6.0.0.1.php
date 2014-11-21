@@ -22,10 +22,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/** @var $installer \Magento\Setup\Module\SetupModule */
-$installer = $this;
-$connection = $installer->getConnection();
+/** @var $this \Magento\Eav\Model\Entity\Setup */
+
+/** @var $connection \Magento\Framework\DB\Adapter\Pdo\Mysql */
+$connection = $this->getConnection();
 $connection->changeTableEngine(
-    $installer->getTable('cataloginventory_stock_status_tmp'),
+    $this->getTable('cataloginventory_stock_status_tmp'),
     \Magento\Framework\DB\Adapter\Pdo\Mysql::ENGINE_MEMORY
 );

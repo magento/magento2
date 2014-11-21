@@ -36,7 +36,7 @@ class AccountTest extends \PHPUnit_Framework_TestCase
     /** @var Account */
     protected $accountBlock;
 
-    /** @var \Magento\Framework\ObjectManager */
+    /** @var \Magento\Framework\ObjectManagerInterface */
     protected $objectManager;
 
     /** @var \Magento\Framework\Registry */

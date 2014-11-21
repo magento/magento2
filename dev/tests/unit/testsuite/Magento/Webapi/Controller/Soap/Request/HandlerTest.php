@@ -34,7 +34,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Webapi\Controller\Soap\Request\Handler */
     protected $_handler;
 
-    /** @var \Magento\Framework\ObjectManager */
+    /** @var \Magento\Framework\ObjectManagerInterface */
     protected $_objectManagerMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
@@ -64,7 +64,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
         $this->_apiConfigMock = $this->getMockBuilder('Magento\Webapi\Model\Soap\Config')
             ->setMethods(array('getServiceMethodInfo'))->disableOriginalConstructor()->getMock();
         $this->_requestMock = $this->getMock('Magento\Webapi\Controller\Soap\Request', [], [], '', false);
-        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManager', [], [], '', false);
+        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->_authorizationMock = $this->getMock('Magento\Framework\AuthorizationInterface', [], [], '', false);
         $this->_dataObjectConverter = $this->getMock(
             'Magento\Framework\Api\SimpleDataObjectConverter',

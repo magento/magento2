@@ -29,68 +29,31 @@ use Magento\TestFramework\Helper\ObjectManager;
 /**
  * Class MapperTest
  */
-class SearchResultsBuilderTest extends \PHPUnit_Framework_TestCase
+class SearchResultsBuilderTest extends EntityChildTestAbstract
 {
     const SOURCE_CLASS_NAME = 'Magento\Framework\Api\Code\Generator\Sample';
     const RESULT_CLASS_NAME = 'Magento\Framework\Api\Code\Generator\SampleSearchResultsBuilder';
     const GENERATOR_CLASS_NAME = 'Magento\Framework\Api\Code\Generator\SearchResultsBuilder';
     const OUTPUT_FILE_NAME = 'SampleSearchResultsBuilder.php';
 
-    /**
-     * @var Io | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $ioObjectMock;
-
-    /**
-     * @var \Magento\Framework\Code\Generator\EntityAbstract
-     */
-    protected $generator;
-
-    /**
-     * @var \Magento\Framework\Code\Generator\FileResolver | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $fileResolverMock;
-
-    /**
-     * @var \Magento\Framework\Code\Generator\CodeGenerator\Zend | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $classGenerator;
-
-    protected function setUp()
+    protected function getSourceClassName()
     {
-        $this->ioObjectMock = $this->getMock(
-            'Magento\Framework\Code\Generator\Io',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->fileResolverMock = $this->getMock(
-            'Magento\Framework\Code\Generator\FileResolver',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->classGenerator = $this->getMock(
-            'Magento\Framework\Code\Generator\CodeGenerator\Zend',
-            [],
-            [],
-            '',
-            false
-        );
+        return self::SOURCE_CLASS_NAME;
+    }
 
-        $objectManager = new ObjectManager($this);
-        $this->generator = $objectManager->getObject(
-            self::GENERATOR_CLASS_NAME,
-            [
-                'sourceClassName' => self::SOURCE_CLASS_NAME,
-                'resultClassName' => self::RESULT_CLASS_NAME,
-                'ioObject' => $this->ioObjectMock,
-                'classGenerator' => $this->classGenerator,
-                'fileResolver' => $this->fileResolverMock
-            ]
-        );
+    protected function getResultClassName()
+    {
+        return self::RESULT_CLASS_NAME;
+    }
+
+    protected function getGeneratorClassName()
+    {
+        return self::GENERATOR_CLASS_NAME;
+    }
+
+    protected function getOutputFileName()
+    {
+        return self::OUTPUT_FILE_NAME;
     }
 
     /**
@@ -99,18 +62,9 @@ class SearchResultsBuilderTest extends \PHPUnit_Framework_TestCase
     public function testGenerate()
     {
         $generatedCode = 'Generated code';
-        $sourceFileName = 'Sample.php';
         $resultFileName = self::OUTPUT_FILE_NAME;
 
-        //Mocking _validateData call
-        $this->fileResolverMock->expects($this->at(0))
-            ->method('getFile')
-            ->with(self::SOURCE_CLASS_NAME)
-            ->will($this->returnValue($sourceFileName));
-        $this->fileResolverMock->expects($this->at(1))
-            ->method('getFile')
-            ->with(self::RESULT_CLASS_NAME)
-            ->will($this->returnValue(false));
+        $this->mockDefinedClassesCall();
 
         $this->ioObjectMock->expects($this->once())
             ->method('makeGenerationDirectory')
@@ -152,6 +106,10 @@ class SearchResultsBuilderTest extends \PHPUnit_Framework_TestCase
             ->method('writeResultFile')
             ->with($resultFileName, $generatedCode);
 
-        $this->assertTrue($this->generator->generate());
+        $this->assertEquals(
+            $resultFileName,
+            $this->generator->generate(),
+            implode("\n", $this->generator->getErrors())
+        );
     }
 }

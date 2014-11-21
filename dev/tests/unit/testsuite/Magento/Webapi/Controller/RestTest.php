@@ -59,7 +59,7 @@ class RestTest extends \PHPUnit_Framework_TestCase
     protected $_routeMock;
 
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManagerMock;
 
@@ -118,8 +118,7 @@ class RestTest extends \PHPUnit_Framework_TestCase
         $this->_routeMock = $this->getMockBuilder('Magento\Webapi\Controller\Rest\Router\Route')
             ->setMethods(['isSecure', 'getServiceMethod', 'getServiceClass', 'getAclResources', 'getParameters'])
             ->disableOriginalConstructor()->getMock();
-        $this->_objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManager')
-            ->disableOriginalConstructor()->getMock();
+        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->_serviceMock = $this->getMockBuilder(self::SERVICE_ID)->setMethods([self::SERVICE_METHOD])
             ->disableOriginalConstructor()->getMock();
         $this->_appStateMock = $this->getMockBuilder('Magento\Framework\App\State')

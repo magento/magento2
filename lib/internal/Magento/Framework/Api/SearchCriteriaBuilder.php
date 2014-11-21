@@ -43,7 +43,7 @@ class SearchCriteriaBuilder extends Builder
      * @param \Magento\Framework\Reflection\DataObjectProcessor $objectProcessor
      * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
      * @param \Magento\Framework\Serialization\DataBuilderFactory $dataBuilderFactory
-     * @param \Magento\Framework\ObjectManager\Config $objectManagerConfig
+     * @param \Magento\Framework\ObjectManager\ConfigInterface $objectManagerConfig
      * @param FilterGroupBuilder $filterGroupBuilder
      * @param string|null $modelClassInterface
      */
@@ -54,7 +54,7 @@ class SearchCriteriaBuilder extends Builder
         \Magento\Framework\Reflection\DataObjectProcessor $objectProcessor,
         \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
         \Magento\Framework\Serialization\DataBuilderFactory $dataBuilderFactory,
-        \Magento\Framework\ObjectManager\Config $objectManagerConfig,
+        \Magento\Framework\ObjectManager\ConfigInterface $objectManagerConfig,
         FilterGroupBuilder $filterGroupBuilder,
         $modelClassInterface = null
     ) {

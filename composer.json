@@ -2,13 +2,15 @@
     "name": "magento/project-community-edition",
     "description": "Magento project (Community Edition)",
     "type": "project",
-    "version": "0.1.0-alpha104",
+    "version": "0.1.0-alpha105",
     "require": {
         "php": "~5.4.11|~5.5.0",
         "zendframework/zend-stdlib": "2.0.3"
     },
     "require-dev": {
-        "phpunit/phpunit": "4.1.0"
+        "phpunit/phpunit": "4.1.0",
+        "squizlabs/php_codesniffer": "1.5.3",
+        "phpmd/phpmd": "@stable"
     },
     "replace": {
         "magento/module-admin-notification": "self.version",
@@ -178,34 +180,10 @@
         "use-include-path": true
     },
     "autoload": {
-        "psr-0": {
-            "Apache_": "lib/internal/",
-            "Cm_": "lib/internal/",
-            "Credis_": "lib/internal/",
-            "Less_": "lib/internal/",
-            "Symfony\\": "lib/internal/",
-            "Zend_Date": "app/code/",
-            "Zend_Mime": "app/code/",
-            "Zend_": "lib/internal/",
-            "Zend\\": "lib/internal/"
-        },
         "psr-4": {
-            "Magento\\Framework\\": "lib/internal/Magento/Framework/",
-            "Magento\\": [
-                "var/generation/Magento/",
-                "app/code/Magento/"
-            ],
-            "Zend\\Soap\\": "app/code/Zend/Soap/",
-            "Zend\\": "lib/internal/Zend/"
-        },
-        "classmap": [
-            "app/code/"
-        ]
+            "Magento\\Framework\\": "lib/internal/Magento/Framework/"
+        }
     },
-    "include-path": [
-        "/lib/internal/",
-        "/app/code/"
-    ],
     "autoload-dev": {
         "psr-4": {
             "Magento\\Sniffs\\": "dev/tests/static/framework/Magento/Sniffs/",

@@ -27,7 +27,7 @@
  */
 namespace Magento\Framework\Authorization\Policy;
 
-class DefaultPolicy implements \Magento\Framework\Authorization\Policy
+class DefaultPolicy implements \Magento\Framework\Authorization\PolicyInterface
 {
     /**
      * Check whether given role has access to give id

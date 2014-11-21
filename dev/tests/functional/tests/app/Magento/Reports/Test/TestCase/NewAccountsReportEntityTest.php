@@ -30,19 +30,17 @@ use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Reports\Test\Page\Adminhtml\CustomerAccounts;
 
 /**
- * Test Creation for NewAccountsReportEntity
- *
  * Test Flow:
  * Preconditions:
- * 1. Delete all existing customers
- * 2. Create customer
+ * 1. Delete all existing customers.
+ * 2. Create customer.
  *
  * Steps:
- * 1. Open Backend
- * 2. Go to Reports> Customers> New
- * 3. Select time range and report period
- * 4. Click "Refresh button"
- * 5. Perform all assertions
+ * 1. Open Backend.
+ * 2. Go to Reports> Customers> New.
+ * 3. Select time range and report period.
+ * 4. Click "Refresh button".
+ * 5. Perform all assertions.
  *
  * @group Reports_(MX)
  * @ZephyrId MAGETWO-27742
@@ -50,21 +48,21 @@ use Magento\Reports\Test\Page\Adminhtml\CustomerAccounts;
 class NewAccountsReportEntityTest extends Injectable
 {
     /**
-     * Customer Accounts pages
+     * Customer Accounts pages.
      *
      * @var CustomerAccounts
      */
     protected $customerAccounts;
 
     /**
-     * Customer index pages
+     * Customer index pages.
      *
      * @var CustomerIndex
      */
     protected $customerIndexPage;
 
     /**
-     * Inject pages
+     * Inject pages.
      *
      * @param CustomerIndex $customerIndexPage
      * @param CustomerAccounts $customerAccounts
@@ -77,7 +75,7 @@ class NewAccountsReportEntityTest extends Injectable
     }
 
     /**
-     * New Accounts Report
+     * New Accounts Report.
      *
      * @param CustomerInjectable $customer
      * @param array $customersReport
@@ -85,6 +83,7 @@ class NewAccountsReportEntityTest extends Injectable
      */
     public function test(CustomerInjectable $customer, array $customersReport)
     {
+        $this->markTestIncomplete('MAGETWO-26663');
         // Preconditions
         $this->customerIndexPage->open();
         $this->customerIndexPage->getCustomerGridBlock()->massaction([], 'Delete', true, 'Select All');

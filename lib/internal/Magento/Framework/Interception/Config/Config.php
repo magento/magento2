@@ -25,26 +25,26 @@
  */
 namespace Magento\Framework\Interception\Config;
 
-class Config implements \Magento\Framework\Interception\Config
+class Config implements \Magento\Framework\Interception\ConfigInterface
 {
     /**
      * Type configuration
      *
-     * @var \Magento\Framework\ObjectManager\Config
+     * @var \Magento\Framework\ObjectManager\ConfigInterface
      */
     protected $_omConfig;
 
     /**
      * Class relations info
      *
-     * @var \Magento\Framework\ObjectManager\Relations
+     * @var \Magento\Framework\ObjectManager\RelationsInterface
      */
     protected $_relations;
 
     /**
      * List of interceptable classes
      *
-     * @var \Magento\Framework\ObjectManager\Definition
+     * @var \Magento\Framework\ObjectManager\DefinitionInterface
      */
     protected $_classDefinitions;
 
@@ -87,18 +87,18 @@ class Config implements \Magento\Framework\Interception\Config
      * @param \Magento\Framework\Config\ReaderInterface $reader
      * @param \Magento\Framework\Config\ScopeListInterface $scopeList
      * @param \Magento\Framework\Cache\FrontendInterface $cache
-     * @param \Magento\Framework\ObjectManager\Relations $relations
+     * @param \Magento\Framework\ObjectManager\RelationsInterface $relations
      * @param \Magento\Framework\Interception\ObjectManager\Config $omConfig
-     * @param \Magento\Framework\ObjectManager\Definition $classDefinitions
+     * @param \Magento\Framework\ObjectManager\DefinitionInterface $classDefinitions
      * @param string $cacheId
      */
     public function __construct(
         \Magento\Framework\Config\ReaderInterface $reader,
         \Magento\Framework\Config\ScopeListInterface $scopeList,
         \Magento\Framework\Cache\FrontendInterface $cache,
-        \Magento\Framework\ObjectManager\Relations $relations,
+        \Magento\Framework\ObjectManager\RelationsInterface $relations,
         \Magento\Framework\Interception\ObjectManager\Config $omConfig,
-        \Magento\Framework\ObjectManager\Definition $classDefinitions,
+        \Magento\Framework\ObjectManager\DefinitionInterface $classDefinitions,
         $cacheId = 'interception'
     ) {
         $this->_omConfig = $omConfig;

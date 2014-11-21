@@ -35,7 +35,7 @@ class ApplicationTest extends \Magento\TestFramework\Indexer\TestCase
     protected static $_generatorWorkingDir;
 
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
 
@@ -43,7 +43,6 @@ class ApplicationTest extends \Magento\TestFramework\Indexer\TestCase
     {
 
         self::$_generatorWorkingDir = realpath(__DIR__ . '/../../../../../tools/performance-toolkit');
-        (new \Magento\Framework\Autoload\IncludePath())->addIncludePath([self::$_generatorWorkingDir . '/framework']);
         copy(
             self::$_generatorWorkingDir . '/fixtures/tax_rates.csv',
             self::$_generatorWorkingDir . '/fixtures/tax_rates.csv.bak'
@@ -86,7 +85,7 @@ class ApplicationTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * Get object manager
      *
-     * @return \Magento\Framework\ObjectManager
+     * @return \Magento\Framework\ObjectManagerInterface
      */
     public function getObjectManager()
     {
@@ -99,7 +98,7 @@ class ApplicationTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * Reset object manager
      *
-     * @return \Magento\Framework\ObjectManager
+     * @return \Magento\Framework\ObjectManagerInterface
      */
     public function resetObjectManager()
     {

@@ -86,11 +86,6 @@ class Index extends \Magento\Backend\App\Action
     protected $_subscriberFactory;
 
     /**
-     * @var \Magento\Customer\Helper\Data
-     */
-    protected $_dataHelper = null;
-
-    /**
      * @var \Magento\Customer\Model\Metadata\FormFactory
      */
     protected $_formFactory;
@@ -125,7 +120,6 @@ class Index extends \Magento\Backend\App\Action
      * @param CustomerAddressServiceInterface $addressService
      * @param \Magento\Customer\Service\V1\CustomerAccountServiceInterface $accountService
      * @param \Magento\Customer\Helper\View $viewHelper
-     * @param \Magento\Customer\Helper\Data $helper
      * @param \Magento\Framework\Math\Random $random
      * @param CustomerRepositoryInterface $customerRepository
      *
@@ -146,7 +140,6 @@ class Index extends \Magento\Backend\App\Action
         CustomerAddressServiceInterface $addressService,
         CustomerAccountServiceInterface $accountService,
         \Magento\Customer\Helper\View $viewHelper,
-        \Magento\Customer\Helper\Data $helper,
         \Magento\Framework\Math\Random $random,
         CustomerRepositoryInterface $customerRepository
     ) {
@@ -159,7 +152,6 @@ class Index extends \Magento\Backend\App\Action
         $this->_addressDataBuilder = $addressDataBuilder;
         $this->_addressFactory = $addressFactory;
         $this->_subscriberFactory = $subscriberFactory;
-        $this->_dataHelper = $helper;
         $this->_formFactory = $formFactory;
         $this->_addressService = $addressService;
         $this->_customerAccountService = $accountService;

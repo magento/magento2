@@ -23,24 +23,36 @@
  */
 namespace Magento\Cms\Model\Config\Source;
 
+/**
+ * Class Page
+ */
 class Page implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * @var array
      */
-    protected $_options;
+    protected $options;
 
     /**
-     * @var \Magento\Cms\Model\Resource\Page\CollectionFactory
+     * @var \Magento\Cms\Api\PageRepositoryInterface
      */
-    protected $_pageCollectionFactory;
+    protected $pageRepository;
 
     /**
-     * @param \Magento\Cms\Model\Resource\Page\CollectionFactory $pageCollectionFactory
+     * @var \Magento\Cms\Api\PageCriteriaInterfaceFactory
      */
-    public function __construct(\Magento\Cms\Model\Resource\Page\CollectionFactory $pageCollectionFactory)
-    {
-        $this->_pageCollectionFactory = $pageCollectionFactory;
+    protected $pageCriteriaFactory;
+
+    /**
+     * @param \Magento\Cms\Api\PageRepositoryInterface $pageRepository
+     * @param \Magento\Cms\Api\PageCriteriaInterfaceFactory $pageCriteriaFactory
+     */
+    public function __construct(
+        \Magento\Cms\Api\PageRepositoryInterface $pageRepository,
+        \Magento\Cms\Api\PageCriteriaInterfaceFactory $pageCriteriaFactory
+    ) {
+        $this->pageRepository = $pageRepository;
+        $this->pageCriteriaFactory = $pageCriteriaFactory;
     }
 
     /**
@@ -50,9 +62,9 @@ class Page implements \Magento\Framework\Option\ArrayInterface
      */
     public function toOptionArray()
     {
-        if (!$this->_options) {
-            $this->_options = $this->_pageCollectionFactory->create()->load()->toOptionIdArray();
+        if (!$this->options) {
+            $this->options = $this->pageRepository->getList($this->pageCriteriaFactory->create())->toOptionIdArray();
         }
-        return $this->_options;
+        return $this->options;
     }
 }

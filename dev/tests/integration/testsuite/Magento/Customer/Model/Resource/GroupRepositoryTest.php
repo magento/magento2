@@ -37,7 +37,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Api\GroupRepositoryInterface */
     private $groupRepository;
 
-    /** @var \Magento\Framework\ObjectManager */
+    /** @var \Magento\Framework\ObjectManagerInterface */
     private $objectManager;
 
     /** @var \Magento\Customer\Model\Data\GroupBuilder */

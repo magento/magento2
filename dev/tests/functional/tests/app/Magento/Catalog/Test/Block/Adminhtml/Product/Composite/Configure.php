@@ -53,6 +53,13 @@ class Configure extends AbstractConfigureBlock
     protected $okButton = '.ui-dialog-buttonset button:nth-of-type(2)';
 
     /**
+     * Backend abstract block
+     *
+     * @var string
+     */
+    protected $templateBlock = './ancestor::body';
+
+    /**
      * Set quantity
      *
      * @param int $qty
@@ -92,5 +99,19 @@ class Configure extends AbstractConfigureBlock
     public function clickOk()
     {
         $this->_rootElement->find($this->okButton)->click();
+        $this->getTemplateBlock()->waitLoader();
+    }
+
+    /**
+     * Get backend abstract block
+     *
+     * @return \Magento\Backend\Test\Block\Template
+     */
+    public function getTemplateBlock()
+    {
+        return $this->blockFactory->create(
+            'Magento\Backend\Test\Block\Template',
+            ['element' => $this->_rootElement->find($this->templateBlock, Locator::SELECTOR_XPATH)]
+        );
     }
 }

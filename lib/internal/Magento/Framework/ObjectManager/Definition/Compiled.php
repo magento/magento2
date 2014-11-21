@@ -25,7 +25,7 @@
  */
 namespace Magento\Framework\ObjectManager\Definition;
 
-abstract class Compiled implements \Magento\Framework\ObjectManager\Definition
+abstract class Compiled implements \Magento\Framework\ObjectManager\DefinitionInterface
 {
     /**
      * Class definitions

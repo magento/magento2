@@ -24,6 +24,8 @@
 
 namespace Magento\Sales\Block\Reorder;
 
+use Magento\Customer\Model\Context;
+
 class SidebarTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -40,7 +42,7 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
         $customerSession->setCustomerId($fixtureCustomerId);
         /** @var \Magento\Framework\App\Http\Context $httpContext */
         $httpContext = $objectManager->get('Magento\Framework\App\Http\Context');
-        $httpContext->setValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH, true, false);
+        $httpContext->setValue(Context::CONTEXT_AUTH, true, false);
 
         /** Execute SUT implicitly: initOrders() is called in the construct */
         /** @var \Magento\Sales\Block\Reorder\Sidebar $sidebarBlock */
@@ -70,7 +72,7 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
         $customerSession->setCustomerId($secondCustomer->getId());
         /** @var \Magento\Framework\App\Http\Context $httpContext */
         $httpContext = $objectManager->get('Magento\Framework\App\Http\Context');
-        $httpContext->setValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH, true, false);
+        $httpContext->setValue(Context::CONTEXT_AUTH, true, false);
 
         /** Execute SUT implicitly: initOrders() is called in the construct */
         /** @var \Magento\Sales\Block\Reorder\Sidebar $sidebarBlock */

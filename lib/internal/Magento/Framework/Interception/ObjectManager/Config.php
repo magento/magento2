@@ -28,17 +28,17 @@ namespace Magento\Framework\Interception\ObjectManager;
 class Config extends \Magento\Framework\ObjectManager\Config\Config
 {
     /**
-     * @var \Magento\Framework\Interception\Config
+     * @var \Magento\Framework\Interception\ConfigInterface
      */
     protected $interceptionConfig;
 
     /**
      * Set Interception config
      *
-     * @param \Magento\Framework\Interception\Config $interceptionConfig
+     * @param \Magento\Framework\Interception\ConfigInterface $interceptionConfig
      * @return void
      */
-    public function setInterceptionConfig(\Magento\Framework\Interception\Config $interceptionConfig)
+    public function setInterceptionConfig(\Magento\Framework\Interception\ConfigInterface $interceptionConfig)
     {
         $this->interceptionConfig = $interceptionConfig;
     }

@@ -30,7 +30,7 @@ class SourceClassWithNamespaceFactory
     /**
      * Object Manager instance
      *
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager = null;
 
@@ -44,10 +44,10 @@ class SourceClassWithNamespaceFactory
     /**
      * Factory constructor
      *
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string $instanceName
      */
-    public function __construct(\Magento\Framework\ObjectManager $objectManager, $instanceName = 'Magento\Framework\Code\GeneratorTest\SourceClassWithNamespace')
+    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, $instanceName = 'Magento\Framework\Code\GeneratorTest\SourceClassWithNamespace')
     {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;

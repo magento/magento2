@@ -31,7 +31,7 @@ class CompareTest extends \PHPUnit_Framework_TestCase
     protected $_helper;
 
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
 

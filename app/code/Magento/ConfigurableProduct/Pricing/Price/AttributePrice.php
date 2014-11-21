@@ -130,14 +130,17 @@ class AttributePrice extends AbstractPrice implements AttributePriceInterface
             $optionValueModified = $this->getOptionValueModified($value);
             $optionValueAmount = $this->getOptionValueAmount($value);
 
-            $price = $this->convertPrice($optionValueAmount->getValue());
+            $oldPrice = $this->convertPrice($optionValueAmount->getValue());
+            $inclTaxPrice = $price = $this->convertPrice($optionValueModified->getValue());
+            $exclTaxPrice = $this->convertPrice($optionValueModified->getBaseAmount());
+
             $optionPrices[] = [
                 'id' => $value['value_index'],
                 'label' => $value['label'],
-                'price' => $this->convertDot($optionValueModified->getValue()),
-                'oldPrice' => $this->convertDot($price),
-                'inclTaxPrice' => $this->convertDot($optionValueModified->getValue()),
-                'exclTaxPrice' => $this->convertDot($optionValueModified->getBaseAmount()),
+                'price' => $this->convertDot($price),
+                'oldPrice' => $this->convertDot($oldPrice),
+                'inclTaxPrice' => $this->convertDot($inclTaxPrice),
+                'exclTaxPrice' => $this->convertDot($exclTaxPrice),
                 'products' => $this->getProductsIndex($attributeId, $options, $value)
             ];
         }

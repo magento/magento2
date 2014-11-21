@@ -130,7 +130,7 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_arguments = ['test' => 'argument', 'scopeCode' => '', 'scopeType' => ''];
-        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManager');
+        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->_eventManagerMock = $this->getMock(
             'Magento\Framework\Event\ManagerInterface',
             [],
