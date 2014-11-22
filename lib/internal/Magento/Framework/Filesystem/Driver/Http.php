@@ -140,7 +140,7 @@ class Http extends File
      */
     public function fileOpen($path, $mode)
     {
-        $urlProp = parse_url($this->getScheme() . $path);
+        $urlProp = $this->parseUrl($this->getScheme() . $path);
 
         if (false === $urlProp) {
             throw new FilesystemException(__('Please correct the download URL.'));
@@ -235,5 +235,14 @@ class Http extends File
     {
         $scheme = $scheme ?: $this->scheme;
         return $scheme ? $scheme . '://' : '';
+    }
+
+    /**
+     * @param string $path
+     * @return array
+     */
+    protected function parseUrl($path)
+    {
+        return parse_url($path);
     }
 }
