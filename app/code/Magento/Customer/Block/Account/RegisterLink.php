@@ -27,6 +27,8 @@ use Magento\Customer\Model\Context;
 
 /**
  * Customer register link
+ *
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class RegisterLink extends \Magento\Framework\View\Element\Html\Link
 {

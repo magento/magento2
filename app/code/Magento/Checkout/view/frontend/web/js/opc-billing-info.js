@@ -67,5 +67,6 @@ define([
             });
         }
     });
-
+    
+    return $.mage.opcBillingInfo;
 });

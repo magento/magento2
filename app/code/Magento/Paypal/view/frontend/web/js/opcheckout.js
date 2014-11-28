@@ -23,12 +23,12 @@
 /*jshint browser:true jquery:true*/
 define([
     "jquery",
-    "jquery/ui",
-    "Magento_Checkout/js/opc-order-review"
-], function($){
+    "Magento_Checkout/js/opc-order-review",
+    "jquery/ui"
+], function($, opcOrderReview){
     "use strict";
 
-    $.widget('mage.opcheckoutPaypalIframe', $.mage.opcOrderReview, {
+    $.widget('mage.opcheckoutPaypalIframe', opcOrderReview, {
         options: {
             review: {
                 submitContainer: '#checkout-review-submit'
@@ -48,4 +48,6 @@ define([
             this._on(events);
         }
     });
+
+    return $.mage.opcheckoutPaypalIframe;
 });

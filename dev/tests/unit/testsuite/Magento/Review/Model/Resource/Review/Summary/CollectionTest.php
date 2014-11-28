@@ -80,7 +80,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->loggerMock = $this->getMock('Magento\Framework\Logger', array('log'), array(), '', false);
         $this->resourceMock = $this->getMock(
             'Magento\Framework\App\Resource',
-            array('getConnection', 'getTableName'),
+            array(),
             array(),
             '',
             false

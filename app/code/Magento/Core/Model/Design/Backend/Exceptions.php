@@ -61,7 +61,7 @@ class Exceptions extends \Magento\Backend\Model\Config\Backend\Serialized\ArrayS
      * @throws \Magento\Framework\Model\Exception
      * if there is no field value, search value is empty or regular expression is not valid
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
         $design = clone $this->_design;
         // For value validations
@@ -92,7 +92,7 @@ class Exceptions extends \Magento\Backend\Model\Config\Backend\Serialized\ArrayS
         }
         $this->setValue($exceptions);
 
-        return parent::_beforeSave();
+        return parent::beforeSave();
     }
 
     /**

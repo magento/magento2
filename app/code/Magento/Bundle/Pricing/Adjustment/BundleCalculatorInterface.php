@@ -41,6 +41,22 @@ interface BundleCalculatorInterface extends CalculatorInterface
     public function getMaxAmount($amount, Product $saleableItem, $exclude = null);
 
     /**
+     * @param float|string $amount
+     * @param Product $saleableItem
+     * @param null|bool $exclude
+     * @return \Magento\Framework\Pricing\Amount\AmountInterface
+     */
+    public function getMaxRegularAmount($amount, Product $saleableItem, $exclude = null);
+
+    /**
+     * @param float|string $amount
+     * @param Product $saleableItem
+     * @param null|bool $exclude
+     * @return \Magento\Framework\Pricing\Amount\AmountInterface
+     */
+    public function getMinRegularAmount($amount, Product $saleableItem, $exclude = null);
+
+    /**
      * Option amount calculation for saleable item
      *
      * @param Product $saleableItem
@@ -72,9 +88,10 @@ interface BundleCalculatorInterface extends CalculatorInterface
      *
      * @param \Magento\Bundle\Model\Option $option
      * @param Product $bundleProduct
+     * @param bool $useRegularPrice
      * @return \Magento\Bundle\Pricing\Price\BundleSelectionPrice[]
      */
-    public function createSelectionPriceList($option, $bundleProduct);
+    public function createSelectionPriceList($option, $bundleProduct, $useRegularPrice = false);
 
     /**
      * Find minimal or maximal price for existing options

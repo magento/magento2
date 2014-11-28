@@ -38,13 +38,13 @@ $taxCalculationData['excluding_tax_apply_tax_after_discount'] = [
             [
                 //tax rule for product
                 'code' => 'Product Tax Rule',
-                'tax_product_class' => [SetupUtil::PRODUCT_TAX_CLASS_1],
+                'product_tax_class_ids' => [SetupUtil::PRODUCT_TAX_CLASS_1],
             ],
             [
                 //tax rule for shipping
                 'code' => 'Shipping Tax Rule',
-                'tax_product_class' => [SetupUtil::SHIPPING_TAX_CLASS],
-                'tax_rate' => [SetupUtil::TAX_RATE_SHIPPING],
+                'product_tax_class_ids' => [SetupUtil::SHIPPING_TAX_CLASS],
+                'tax_rate_ids' => [SetupUtil::TAX_RATE_SHIPPING],
             ],
         ],
     ],

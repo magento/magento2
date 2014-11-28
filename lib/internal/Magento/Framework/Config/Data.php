@@ -49,6 +49,13 @@ class Data implements \Magento\Framework\Config\DataInterface
     protected $_cacheId;
 
     /**
+     * Cache tags
+     *
+     * @var array
+     */
+    protected $cacheTags = [];
+
+    /**
      * Config data
      *
      * @var array
@@ -97,7 +104,7 @@ class Data implements \Magento\Framework\Config\DataInterface
         $data = $this->cache->load($this->cacheId);
         if (false === $data) {
             $data = $this->reader->read();
-            $this->cache->save(serialize($data), $this->cacheId);
+            $this->cache->save(serialize($data), $this->cacheId, $this->cacheTags);
         } else {
             $data = unserialize($data);
         }

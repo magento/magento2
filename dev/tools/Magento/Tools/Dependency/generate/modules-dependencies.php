@@ -23,7 +23,7 @@
  */
 
 require_once __DIR__ . '/bootstrap.php';
-use Magento\TestFramework\Utility\Files;
+use Magento\Framework\Test\Utility\Files;
 use Magento\Tools\Dependency\ServiceLocator;
 
 try {
@@ -32,7 +32,7 @@ try {
 
     $directory = $console->getOption('directory') ?: BP;
 
-    Files::setInstance(new \Magento\TestFramework\Utility\Files($directory));
+    Files::setInstance(new \Magento\Framework\Test\Utility\Files($directory));
     $filesForParse = Files::init()->getConfigFiles('module.xml', array(), false);
 
     ServiceLocator::getDependenciesReportBuilder()->build(

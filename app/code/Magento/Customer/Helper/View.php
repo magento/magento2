@@ -23,13 +23,16 @@
  */
 namespace Magento\Customer\Helper;
 
+use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+
 /**
  * Customer helper for view.
  */
 class View extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
-     * @var \Magento\Customer\Service\V1\CustomerMetadataServiceInterface
+     * @var CustomerMetadataInterface
      */
     protected $_customerMetadataService;
 
@@ -37,11 +40,11 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
      * Initialize dependencies.
      *
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $customerMetadataService
+     * @param CustomerMetadataInterface $customerMetadataService
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $customerMetadataService
+        CustomerMetadataInterface $customerMetadataService
     ) {
         $this->_customerMetadataService = $customerMetadataService;
         parent::__construct($context);
@@ -50,10 +53,10 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Concatenate all customer name parts into full customer name.
      *
-     * @param \Magento\Customer\Service\V1\Data\Customer $customerData
+     * @param CustomerInterface $customerData
      * @return string
      */
-    public function getCustomerName(\Magento\Customer\Service\V1\Data\Customer $customerData)
+    public function getCustomerName(CustomerInterface $customerData)
     {
         $name = '';
         $prefixMetadata = $this->_customerMetadataService->getAttributeMetadata('prefix');

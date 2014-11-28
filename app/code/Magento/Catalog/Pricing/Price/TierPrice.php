@@ -26,7 +26,7 @@ namespace Magento\Catalog\Pricing\Price;
 
 use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
 use Magento\Catalog\Model\Product;
-use Magento\Customer\Model\Group;
+use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Pricing\Price\AbstractPrice;
 use Magento\Framework\Pricing\PriceInfoInterface;
@@ -71,17 +71,22 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
      * @param Product $saleableItem
      * @param float $quantity
      * @param CalculatorInterface $calculator
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param Session $customerSession
+     * @param GroupManagementInterface $groupManagement
      */
     public function __construct(
         Product $saleableItem,
         $quantity,
         CalculatorInterface $calculator,
-        Session $customerSession
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
+        Session $customerSession,
+        GroupManagementInterface $groupManagement
     ) {
         $quantity = $quantity ?: 1;
-        parent::__construct($saleableItem, $quantity, $calculator);
+        parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
         $this->customerSession = $customerSession;
+        $this->groupManagement = $groupManagement;
         if ($saleableItem->hasCustomerGroupId()) {
             $this->customerGroup = (int) $saleableItem->getCustomerGroupId();
         } else {
@@ -100,7 +105,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
             $prices = $this->getStoredTierPrices();
             $prevQty = PriceInfoInterface::PRODUCT_QUANTITY_DEFAULT;
             $this->value = $prevPrice = $tierPrice = false;
-            $priceGroup = Group::CUST_GROUP_ALL;
+            $priceGroup = $this->groupManagement->getAllCustomersGroup()->getId();
 
             foreach ($prices as $price) {
                 if (!$this->canApplyTierPrice($price, $priceGroup, $prevQty)) {
@@ -168,7 +173,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
         $qtyCache = [];
         foreach ($priceList as $priceKey => $price) {
             /* filter price by customer group */
-            if ($price['cust_group'] !== $this->customerGroup && $price['cust_group'] !== Group::CUST_GROUP_ALL) {
+            if ($price['cust_group'] !== $this->customerGroup && $price['cust_group'] !== $this->groupManagement->getAllCustomersGroup()->getId()) {
                 unset($priceList[$priceKey]);
                 continue;
             }
@@ -228,10 +233,11 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
      */
     protected function canApplyTierPrice(array $currentTierPrice, $prevPriceGroup, $prevQty)
     {
+        $custGroupAllId = $this->groupManagement->getAllCustomersGroup()->getId();
         // Tier price can be applied, if:
         // tier price is for current customer group or is for all groups
         if ($currentTierPrice['cust_group'] !== $this->customerGroup
-            && $currentTierPrice['cust_group'] !== Group::CUST_GROUP_ALL
+            && $currentTierPrice['cust_group'] !== $custGroupAllId
         ) {
             return false;
         }
@@ -245,8 +251,8 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
         }
         // and found tier qty is same as previous tier qty, but current tier group isn't ALL_GROUPS
         if ($currentTierPrice['price_qty'] == $prevQty
-            && $prevPriceGroup !== Group::CUST_GROUP_ALL
-            && $currentTierPrice['cust_group'] === Group::CUST_GROUP_ALL
+            && $prevPriceGroup !== $custGroupAllId
+            && $currentTierPrice['cust_group'] === $custGroupAllId
         ) {
             return false;
         }
@@ -273,7 +279,27 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
             if (null === $this->rawPriceList || !is_array($this->rawPriceList)) {
                 $this->rawPriceList = array();
             }
+            if (!$this->isPercentageDiscount()) {
+                foreach ($this->rawPriceList as $index => $rawPrice) {
+                    if (isset($rawPrice['price'])) {
+                        $this->rawPriceList[$index]['price'] =
+                            $this->priceCurrency->convertAndRound($rawPrice['price']);
+                    }
+                    if (isset($rawPrice['website_price'])) {
+                        $this->rawPriceList[$index]['website_price'] =
+                            $this->priceCurrency->convertAndRound($rawPrice['website_price']);
+                    }
+                }
+            }
         }
         return $this->rawPriceList;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPercentageDiscount()
+    {
+        return false;
     }
 }

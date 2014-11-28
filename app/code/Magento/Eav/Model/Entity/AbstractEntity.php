@@ -1158,23 +1158,45 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      */
     public function save(\Magento\Framework\Object $object)
     {
+        /**
+         * Direct deleted items to delete method
+         */
         if ($object->isDeleted()) {
             return $this->delete($object);
         }
-
-        if (!$this->isPartialSave()) {
-            $this->loadAllAttributes($object);
+        if (!$object->hasDataChanges()) {
+            return $this;
         }
+        $this->beginTransaction();
+        try {
+            $object->validateBeforeSave();
+            $object->beforeSave();
+            if ($object->isSaveAllowed()) {
 
-        if (!$object->getEntityTypeId()) {
-            $object->setEntityTypeId($this->getTypeId());
+                if (!$this->isPartialSave()) {
+                    $this->loadAllAttributes($object);
+                }
+
+                if (!$object->getEntityTypeId()) {
+                    $object->setEntityTypeId($this->getTypeId());
+                }
+
+                $object->setParentId((int)$object->getParentId());
+
+                $this->_beforeSave($object);
+                $this->_processSaveData($this->_collectSaveData($object));
+                $this->_afterSave($object);
+
+
+                $object->afterSave();
+            }
+            $this->addCommitCallback(array($object, 'afterCommitCallback'))->commit();
+            $object->setHasDataChanges(false);
+        } catch (\Exception $e) {
+            $this->rollBack();
+            $object->setHasDataChanges(true);
+            throw $e;
         }
-
-        $object->setParentId((int)$object->getParentId());
-
-        $this->_beforeSave($object);
-        $this->_processSaveData($this->_collectSaveData($object));
-        $this->_afterSave($object);
 
         return $this;
     }
@@ -1668,26 +1690,42 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      */
     public function delete($object)
     {
-        if (is_numeric($object)) {
-            $id = (int) $object;
-        } elseif ($object instanceof \Magento\Framework\Object) {
-            $id = (int) $object->getId();
-        }
-
-        $this->_beforeDelete($object);
-
         try {
-            $where = array($this->getEntityIdField() . '=?' => $id);
-            $this->_getWriteAdapter()->delete($this->getEntityTable(), $where);
-            $this->loadAllAttributes($object);
-            foreach ($this->getAttributesByTable() as $table => $attributes) {
-                $this->_getWriteAdapter()->delete($table, $where);
+            $this->beginTransaction();
+            if (is_numeric($object)) {
+                $id = (int) $object;
+            } elseif ($object instanceof \Magento\Framework\Object) {
+                $object->beforeDelete();
+                $id = (int) $object->getId();
+            }
+
+            $this->_beforeDelete($object);
+
+            try {
+                $where = array($this->getEntityIdField() . '=?' => $id);
+                $this->_getWriteAdapter()->delete($this->getEntityTable(), $where);
+                $this->loadAllAttributes($object);
+                foreach ($this->getAttributesByTable() as $table => $attributes) {
+                    $this->_getWriteAdapter()->delete($table, $where);
+                }
+            } catch (\Exception $e) {
+                throw $e;
+            }
+
+            $this->_afterDelete($object);
+
+            if ($object instanceof \Magento\Framework\Object) {
+                $object->isDeleted(true);
+                $object->afterDelete();
+            }
+            $this->commit();
+            if ($object instanceof \Magento\Framework\Object) {
+                $object->afterDeleteCommit();
             }
         } catch (\Exception $e) {
+            $this->rollBack();
             throw $e;
         }
-
-        $this->_afterDelete($object);
         return $this;
     }
 

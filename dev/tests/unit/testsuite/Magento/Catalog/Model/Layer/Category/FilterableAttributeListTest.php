@@ -32,12 +32,12 @@ class FilterableAttributeListTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory
      */
     protected $collectionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\StoreManagerInterface
      */
     protected $storeManagerMock;
 
@@ -59,10 +59,19 @@ class FilterableAttributeListTest extends \PHPUnit_Framework_TestCase
             'Magento\Catalog\Model\Layer\Search', array(), array(), '', false
         );
 
+        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Layer\Resolver $layerResolver */
+        $layerResolver = $this->getMockBuilder('\Magento\Catalog\Model\Layer\Resolver')
+            ->disableOriginalConstructor()
+            ->setMethods(['get', 'create'])
+            ->getMock();
+        $layerResolver->expects($this->any())
+            ->method($this->anything())
+            ->will($this->returnValue($this->layerMock));
+
         $this->model = new \Magento\Catalog\Model\Layer\Search\FilterableAttributeList(
             $this->collectionFactoryMock,
             $this->storeManagerMock,
-            $this->layerMock
+            $layerResolver
         );
 
     }

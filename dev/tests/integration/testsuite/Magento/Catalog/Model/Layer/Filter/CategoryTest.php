@@ -110,21 +110,6 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Category', $this->_model->getName());
     }
 
-    public function testGetCategory()
-    {
-        $this->assertSame($this->_category, $this->_model->getCategory());
-    }
-
-    /**
-     * @depends testApply
-     */
-    public function testGetCategoryApplied(\Magento\Catalog\Model\Layer\Filter\Category $modelApplied)
-    {
-        $category = $modelApplied->getCategory();
-        $this->assertInstanceOf('Magento\Catalog\Model\Category', $category);
-        $this->assertEquals(3, $category->getId());
-    }
-
     /**
      * @depends testApply
      */

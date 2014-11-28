@@ -49,8 +49,8 @@ class NameTest extends \PHPUnit_Framework_TestCase
      */
     public function testToHtmlSimpleName()
     {
-        /** @var \Magento\Customer\Service\V1\Data\CustomerBuilder $customerBuilder */
-        $customerBuilder = Bootstrap::getObjectManager()->get('Magento\Customer\Service\V1\Data\CustomerBuilder');
+        /** @var \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder */
+        $customerBuilder = Bootstrap::getObjectManager()->get('Magento\Customer\Api\Data\CustomerDataBuilder');
         $customerBuilder->setFirstname('Jane');
         $customerBuilder->setLastname('Doe');
         $this->_block->setObject($customerBuilder->create());
@@ -72,8 +72,8 @@ class NameTest extends \PHPUnit_Framework_TestCase
      */
     public function testToHtmlFancyName()
     {
-        /** @var \Magento\Customer\Service\V1\Data\CustomerBuilder $customerBuilder */
-        $customerBuilder = Bootstrap::getObjectManager()->get('Magento\Customer\Service\V1\Data\CustomerBuilder');
+        /** @var \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder */
+        $customerBuilder = Bootstrap::getObjectManager()->get('Magento\Customer\Api\Data\CustomerDataBuilder');
         $customerBuilder->setPrefix(
             'Dr.'
         )->setFirstname(

@@ -353,7 +353,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->productFlatProcessor->expects($this->once())->method('reindexRow');
         $this->productPriceProcessor->expects($this->once())->method('reindexRow');
         $this->prepareCategoryIndexer();
-        $this->assertSame($this->model, $this->model->delete());
+        $this->model->afterDeleteCommit();
     }
 
     public function testReindex()
@@ -366,6 +366,20 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function testPriceReindexCallback()
     {
+        $this->model = $this->objectManagerHelper->getObject(
+            'Magento\Catalog\Model\Product',
+            [
+                'catalogProductType' => $this->productTypeInstanceMock,
+                'categoryIndexer' => $this->categoryIndexerMock,
+                'productFlatIndexerProcessor' => $this->productFlatProcessor,
+                'productPriceIndexerProcessor' => $this->productPriceProcessor,
+                'catalogProductOption' => $this->optionInstanceMock,
+                'resource' => $this->resource,
+                'registry' => $this->registry,
+                'categoryFactory' => $this->categoryFactory,
+                'data' => []
+            ]
+        );
         $this->productPriceProcessor->expects($this->once())->method('reindexRow');
         $this->assertNull($this->model->priceReindexCallback());
     }
@@ -471,7 +485,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->configureSaveTest();
         $this->optionInstanceMock->expects($this->any())->method('setProduct')->will($this->returnSelf());
         $this->optionInstanceMock->expects($this->once())->method('saveOptions')->will($this->returnSelf());
-        $this->model->save();
+        $this->model->beforeSave();
+        $this->model->afterSave();
     }
 
     /**
@@ -481,7 +496,48 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $this->model->setIsDuplicate(true);
         $this->configureSaveTest();
-        $this->model->save();
+        $this->model->beforeSave();
+        $this->model->afterSave();
+    }
+
+    public function testGetIsSalableConfigurable()
+    {
+        $typeInstanceMock = $this->getMock(
+            'Magento\ConfigurableProduct\Model\Product\Type\Configurable', ['getIsSalable'], [], '', false);
+
+        $typeInstanceMock
+            ->expects($this->atLeastOnce())
+            ->method('getIsSalable')
+            ->willReturn(true);
+
+        $this->model->setTypeInstance($typeInstanceMock);
+
+        self::assertTrue($this->model->getIsSalable());
+    }
+
+    public function testGetIsSalableSimple()
+    {
+        $typeInstanceMock =
+            $this->getMock('Magento\Catalog\Model\Product\Type\Simple', ['isSalable'], [], '', false);
+        $typeInstanceMock
+            ->expects($this->atLeastOnce())
+            ->method('isSalable')
+            ->willReturn(true);
+
+        $this->model->setTypeInstance($typeInstanceMock);
+
+        self::assertTrue($this->model->getIsSalable());
+    }
+
+    public function testGetIsSalableHasDataIsSaleable()
+    {
+        $typeInstanceMock = $this->getMock('Magento\Catalog\Model\Product\Type\Simple', [], [], '', false);
+
+        $this->model->setTypeInstance($typeInstanceMock);
+        $this->model->setData('is_saleable', true);
+        $this->model->setData('is_salable', false);
+
+        self::assertTrue($this->model->getIsSalable());
     }
 
     /**

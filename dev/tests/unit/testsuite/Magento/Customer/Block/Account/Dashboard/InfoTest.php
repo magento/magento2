@@ -43,7 +43,7 @@ class InfoTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Model\Session */
     private $_customerSession;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Service\V1\Data\Customer */
+    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Api\Data\CustomerInterface */
     private $_customer;
 
     /**
@@ -102,7 +102,7 @@ class InfoTest extends \PHPUnit_Framework_TestCase
         $this->_customerSession = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
         $this->_customerSession->expects($this->any())->method('getId')->will($this->returnValue(self::CUSTOMER_ID));
 
-        $this->_customer = $this->getMock('Magento\Customer\Service\V1\Data\Customer', [], [], '', false);
+        $this->_customer = $this->getMock('Magento\Customer\Api\Data\CustomerInterface', [], [], '', false);
         $this->_customer->expects($this->any())->method('getEmail')->will($this->returnValue(self::EMAIL_ADDRESS));
         $this->_helperView = $this->getMockBuilder(
             '\Magento\Customer\Helper\View'

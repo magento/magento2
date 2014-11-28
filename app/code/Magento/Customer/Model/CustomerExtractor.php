@@ -24,7 +24,7 @@
  */
 namespace Magento\Customer\Model;
 
-use Magento\Customer\Service\V1\CustomerGroupServiceInterface;
+use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\App\RequestInterface;
 
 class CustomerExtractor
@@ -35,7 +35,7 @@ class CustomerExtractor
     protected $formFactory;
 
     /**
-     * @var \Magento\Customer\Service\V1\Data\CustomerBuilder
+     * @var \Magento\Customer\Api\Data\CustomerDataBuilder
      */
     protected $customerBuilder;
 
@@ -45,32 +45,32 @@ class CustomerExtractor
     protected $storeManager;
 
     /**
-     * @var CustomerGroupServiceInterface
+     * @var GroupManagementInterface
      */
-    protected $groupService;
+    protected $customerGroupManagement;
 
     /**
      * @param Metadata\FormFactory $formFactory
-     * @param \Magento\Customer\Service\V1\Data\CustomerBuilder $customerBuilder
+     * @param \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder
      * @param \Magento\Framework\StoreManagerInterface $storeManager
-     * @param CustomerGroupServiceInterface $groupService
+     * @param GroupManagementInterface $customerGroupManagement
      */
     public function __construct(
         \Magento\Customer\Model\Metadata\FormFactory $formFactory,
-        \Magento\Customer\Service\V1\Data\CustomerBuilder $customerBuilder,
+        \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder,
         \Magento\Framework\StoreManagerInterface $storeManager,
-        CustomerGroupServiceInterface $groupService
+        GroupManagementInterface $customerGroupManagement
     ) {
         $this->formFactory = $formFactory;
         $this->customerBuilder = $customerBuilder;
         $this->storeManager = $storeManager;
-        $this->groupService = $groupService;
+        $this->customerGroupManagement = $customerGroupManagement;
     }
 
     /**
      * @param string $formCode
      * @param RequestInterface $request
-     * @return \Magento\Customer\Service\V1\Data\Customer
+     * @return \Magento\Customer\Api\Data\CustomerInterface
      */
     public function extract($formCode, RequestInterface $request)
     {
@@ -89,7 +89,9 @@ class CustomerExtractor
         $this->customerBuilder->populateWithArray($customerData);
         $store = $this->storeManager->getStore();
         if ($isGroupIdEmpty) {
-            $this->customerBuilder->setGroupId($this->groupService->getDefaultGroup($store->getId())->getId());
+            $this->customerBuilder->setGroupId(
+                $this->customerGroupManagement->getDefaultGroup($store->getId())->getId()
+            );
         }
 
         $this->customerBuilder->setWebsiteId($store->getWebsiteId());

@@ -427,7 +427,7 @@ class Item
     {
         if ($this->_dependsOnModule) {
             $module = $this->_dependsOnModule;
-            return !!$this->_moduleList->getModule($module);
+            return $this->_moduleList->has($module);
         }
         return true;
     }

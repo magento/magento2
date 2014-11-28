@@ -134,6 +134,11 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManagerHelper;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Api\ExtensibleDataObjectConverter
+     */
+    protected $_extensibleDataObjectConverterMock;
+
     public function setUp()
     {
         $this->_customerFactoryMock = $this->getMockBuilder(
@@ -266,15 +271,23 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
             array('regionBuilder' => $regionBuilder, 'metadataService' => $addressMetadataService)
         );
 
-        $customerBuilder = $this->objectManagerHelper->getObject(
-            'Magento\Customer\Service\V1\Data\CustomerBuilder',
-            ['metadataService' => $customerMetadataService]
-        );
+        $customerBuilderMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerDataBuilder')
+            ->disableOriginalConstructor()
+            ->setMethods(['populateWithArray'])
+            ->getMock();
 
+        $this->_extensibleDataObjectConverterMock = $this->getMock(
+            'Magento\Framework\Api\ExtensibleDataObjectConverter',
+            array(),
+            array(),
+            '',
+            false
+        );
         $this->_customerConverter = new \Magento\Customer\Model\Converter(
-            $customerBuilder,
+            $customerBuilderMock,
             $this->_customerFactoryMock,
-            $this->_storeManagerMock
+            $this->_storeManagerMock,
+            $this->_extensibleDataObjectConverterMock
         );
 
         $this->_addressConverterMock = $this->getMockBuilder(

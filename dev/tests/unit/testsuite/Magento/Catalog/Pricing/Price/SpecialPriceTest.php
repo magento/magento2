@@ -31,27 +31,46 @@ class SpecialPriceTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
+    /**
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $priceCurrencyMock;
+
     public function setUp()
     {
+        $this->priceCurrencyMock = $this->getMock('\Magento\Framework\Pricing\PriceCurrencyInterface');
+
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
     }
 
     /**
      * @param bool $isValidInterval
      * @param float $specialPrice
-     * @param float|bool $expected
+     * @param float|bool $specialPriceValue
      *
      * @dataProvider specialPriceDataProvider
      */
-    public function testGetValue($isValidInterval, $specialPrice, $expected)
+    public function testGetValue($isValidInterval, $specialPrice, $specialPriceValue)
     {
+        $expected = 56.34;
         $specialPriceModel = $this->objectManager->getObject(
             'Magento\Catalog\Pricing\Price\SpecialPrice',
             [
                 'saleableItem' => $this->prepareSaleableItem($specialPrice),
-                'localeDate'  => $this->prepareLocaleDate($isValidInterval)
+                'localeDate'  => $this->prepareLocaleDate($isValidInterval),
+                'priceCurrency' => $this->priceCurrencyMock,
             ]
         );
+
+        if ($isValidInterval) {
+            $this->priceCurrencyMock->expects($this->once())
+                ->method('convertAndRound')
+                ->with($specialPriceValue)
+                ->will($this->returnValue($expected));
+        } else {
+            $expected = $specialPriceValue;
+        }
+
 
         $this->assertSame($expected, $specialPriceModel->getValue());
     }

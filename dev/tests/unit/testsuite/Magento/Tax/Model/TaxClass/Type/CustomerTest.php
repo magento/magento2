@@ -57,16 +57,16 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $customerGroupServiceMock->expects($this->once())
             ->method('searchGroups')
-            ->with($this->equalTo($expectedSearchCriteria))
-            ->will($this->returnValue($searchResultsMock));
+            ->with($expectedSearchCriteria)
+            ->willReturn($searchResultsMock);
 
         /** @var $model \Magento\Tax\Model\TaxClass\Type\Customer */
         $model = $objectManagerHelper->getObject(
             'Magento\Tax\Model\TaxClass\Type\Customer',
             [
                 'groupService' => $customerGroupServiceMock,
-                'filterBuilder' => $filterBuilder,
                 'searchCriteriaBuilder' => $searchCriteriaBuilder,
+                'filterBuilder' => $filterBuilder,
                 'data' => ['id' => 5]
             ]
         );

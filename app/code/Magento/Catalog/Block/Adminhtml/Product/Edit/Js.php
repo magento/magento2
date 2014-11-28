@@ -25,7 +25,7 @@
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit;
 
 use Magento\Customer\Helper\Session\CurrentCustomer;
-use Magento\Tax\Service\V1\TaxCalculationServiceInterface;
+use Magento\Tax\Api\TaxCalculationInterface;
 use Magento\Tax\Model\TaxClass\Source\Product as ProductTaxClassSource;
 
 class Js extends \Magento\Backend\Block\Template
@@ -38,7 +38,7 @@ class Js extends \Magento\Backend\Block\Template
     protected $coreRegistry = null;
 
     /**
-     * @var TaxCalculationServiceInterface
+     * @var TaxCalculationInterface
      */
     protected $calculationService;
 
@@ -66,7 +66,7 @@ class Js extends \Magento\Backend\Block\Template
      * @param \Magento\Framework\Registry $registry
      * @param CurrentCustomer $currentCustomer
      * @param \Magento\Core\Helper\Data $coreHelper
-     * @param TaxCalculationServiceInterface $calculationService
+     * @param TaxCalculationInterface $calculationService
      * @param ProductTaxClassSource $productTaxClassSource
      * @param array $data
      */
@@ -75,7 +75,7 @@ class Js extends \Magento\Backend\Block\Template
         \Magento\Framework\Registry $registry,
         CurrentCustomer $currentCustomer,
         \Magento\Core\Helper\Data $coreHelper,
-        TaxCalculationServiceInterface $calculationService,
+        TaxCalculationInterface $calculationService,
         ProductTaxClassSource $productTaxClassSource,
         array $data = array()
     ) {

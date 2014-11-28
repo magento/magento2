@@ -50,15 +50,10 @@ class Dom implements \Magento\Framework\Config\ConverterInterface
                 throw new \Exception("Attribute 'schema_version' is missing for module '{$name}'.");
             }
             $moduleData['schema_version'] = $versionNode->nodeValue;
-            $activeNode = $moduleAttributes->getNamedItem('active');
-            if (is_null($activeNode)) {
-                throw new \Exception("Attribute 'active' is missing for module '{$name}'.");
-            }
-            $moduleData['active'] = $activeNode->nodeValue == 'false' ? false : true;
             $moduleData['dependencies'] = array(
-                'modules' => array(),
                 'extensions' => array('strict' => array(), 'alternatives' => array())
             );
+            $moduleData['sequence'] = [];
             /** @var $childNode \DOMNode */
             foreach ($moduleNode->childNodes as $childNode) {
                 switch ($childNode->nodeName) {
@@ -69,10 +64,7 @@ class Dom implements \Magento\Framework\Config\ConverterInterface
                         );
                         break;
                     case 'sequence':
-                        $moduleData['dependencies'] = array_merge(
-                            $moduleData['dependencies'],
-                            $this->_convertModuleDependencies($childNode)
-                        );
+                        $moduleData['sequence'] = $this->_readModules($childNode);
                         break;
                 }
             }
@@ -143,25 +135,25 @@ class Dom implements \Magento\Framework\Config\ConverterInterface
     /**
      * Convert module depends node into assoc array
      *
-     * @param \DOMNode $dependsNode
+     * @param \DOMNode $node
      * @return array
      * @throws \Exception
      */
-    protected function _convertModuleDependencies(\DOMNode $dependsNode)
+    protected function _readModules(\DOMNode $node)
     {
-        $dependencies = array('modules' => array());
+        $result = [];
         /** @var $childNode \DOMNode */
-        foreach ($dependsNode->childNodes as $childNode) {
+        foreach ($node->childNodes as $childNode) {
             switch ($childNode->nodeName) {
                 case 'module':
                     $nameNode = $childNode->attributes->getNamedItem('name');
                     if (is_null($nameNode)) {
                         throw new \Exception('Attribute "name" is required for module node.');
                     }
-                    $dependencies['modules'][] = $nameNode->nodeValue;
+                    $result[] = $nameNode->nodeValue;
                     break;
             }
         }
-        return $dependencies;
+        return $result;
     }
 }

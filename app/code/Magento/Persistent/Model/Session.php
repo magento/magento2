@@ -204,9 +204,9 @@ class Session extends \Magento\Framework\Model\AbstractModel
      *
      * @return $this
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
-        parent::_beforeSave();
+        parent::beforeSave();
 
         // Setting info
         $info = array();
@@ -366,21 +366,10 @@ class Session extends \Magento\Framework\Model\AbstractModel
      *
      * @return $this
      */
-    protected function _afterDeleteCommit()
+    public function afterDeleteCommit()
     {
         $this->removePersistentCookie();
-        return parent::_afterDeleteCommit();
-    }
-
-    /**
-     * Set `updated_at` to be always changed
-     *
-     * @return $this
-     */
-    public function save()
-    {
-        $this->setUpdatedAt(gmdate('Y-m-d H:i:s'));
-        return parent::save();
+        return parent::afterDeleteCommit();
     }
 
     /**

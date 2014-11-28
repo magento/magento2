@@ -30,7 +30,7 @@ define([
     "mage/validation/validation",
     "mage/dataPost"
 ], function($){
-     "use strict";
+    "use strict";
 
     $.widget('mage.wishlist', {
         options: {
@@ -216,5 +216,5 @@ define([
         }
     });
 
-
+    return $.mage.wishlist;
 });

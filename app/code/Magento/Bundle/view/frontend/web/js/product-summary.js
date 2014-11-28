@@ -117,4 +117,6 @@ define([
             });
         }
     });
+
+    return $.mage.productSummary;
 });

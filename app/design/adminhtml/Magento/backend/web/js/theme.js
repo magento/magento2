@@ -24,11 +24,12 @@
 define([
     "jquery",
     'mage/smart-keyboard-handler',
+    "mage/backend/floating-header",
+    'mage/ie-class-fixer',
     "jquery/ui",
     "jquery/hover-intent",
     "jquery/jquery.details",
     "jquery/jquery.tabs",
-    "mage/backend/floating-header",
     "jquery/farbtastic"  // $(..).farbtastic()
 ],function($, keyboardHandler) {
     'use strict';
@@ -235,24 +236,26 @@ define([
         },
 
         _show: function() {
-            var self = this;
+            var options = this.options,
+                timeout = options.timeout;
 
-            this.element.append(this.popup);
+            $('body').trigger('processStart');
 
-            if (this.options.timeout) {
-                this.options.timeoutId = setTimeout(function() {
-                    self._hide();
-
-                    self.options.callback && self.options.callback();
-
-                    self.options.timeoutId && clearTimeout(self.options.timeoutId);
-                }, self.options.timeout);
+            if (timeout) {
+                options.timeoutId = setTimeout( this._delayedHide.bind(this), timeout);
             }
         },
 
         _hide: function() {
-            this.popup.remove();
-            this.destroy();
+            $('body').trigger('processStop');
+        },
+
+        _delayedHide: function(){
+            this._hide();
+
+            this.options.callback && this.options.callback();
+
+            this.options.timeoutId && clearTimeout(this.options.timeoutId);
         }
     });
 
@@ -432,11 +435,20 @@ define([
             });
         switcherForIe8();
 
-        keyboardHandler.init();
+        keyboardHandler.apply();
     });
 
     $(document).on('ajaxComplete', function() {
         $('details').details();
         switcherForIe8();
     });
+
+    return {
+        collapsable:        $.mage.collapsable,
+        useDefault:         $.mage.useDefault,
+        loadingPopup:       $.mage.loadingPopup,
+        modalPopup:         $.mage.modalPopup,
+        globalNavigation:   $.mage.globalNavigation,
+        globalSearch:       $.mage.globalSearch
+    };
 });

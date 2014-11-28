@@ -1,0 +1,245 @@
+// /**
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+.bundle-actions {
+    margin: 0 0 @indent-l-base;
+    .action.primary.customize {
+        &:extend(.abstract-button-l all);
+        &:extend(.abstract-button-responsive all);
+    }
+}
+
+.bundle-options-container {
+    clear: both;
+    margin-bottom: @indent-xl-base;
+
+    .legend.title {
+        .heading(h1);
+        border: 0;
+        padding: 0;
+    }
+
+    .product-add-form {
+        display: none;
+    }
+
+    .input-text.qty {
+        &:extend(.abstract-input-qty all);
+    }
+
+    .product-options-wrapper {
+        margin-bottom: @indent-l-base;
+        .fieldset > .field {
+            padding-top: @form-field-vertical-indent;
+            border-top: 1px #e4e4e4 solid;
+            &:first-of-type {
+                border-top: 0;
+                padding-top: 0;
+            }
+        }
+        .field.choice {
+            input {
+                float: left;
+            }
+            .label {
+                margin-left: 24px;
+                display: block;
+            }
+            .product-name {
+                display: block;
+            }
+            .label {
+                &:extend(.abstract-add-clearfix all);
+            }
+            .price-notice {
+                float: left;
+                &:extend(.abstract-adjustment-incl-excl-tax all);
+            }
+            .price-excluding-tax {
+                display: inline-block;
+            }
+        }
+    }
+
+    .action.back {
+        &:extend(.abstract-action-button-as-link all);
+        margin-bottom: @indent-l-base;
+    }
+
+    .block-bundle-summary {
+        > .title {
+            margin-bottom: 15px;
+            > strong {
+                .heading(h2);
+            }
+        }
+        > .title,
+        .bundle-summary .subtitle {
+            border-bottom: 1px #e4e4e4 solid;
+            padding-bottom: 16px;
+            margin-bottom: 25px;
+        }
+        .product-details {
+        }
+        .price-box {
+            margin-bottom: @indent-base;
+            .price-label {
+                display: block;
+                margin-bottom: @indent-xs-base;
+            }
+            .price {
+                font-size: @price-size;
+                line-height: @price-size;
+                font-weight: @font-weight-semibold;
+                color: @price-color;
+            }
+        }
+        .field.qty {
+        }
+
+        .bundle-summary {
+            margin-top: @indent-l-base;
+            &.empty {
+                display: none;
+            }
+            > .subtitle {
+                .heading(h2);
+                display: block;
+            }
+        }
+
+        .bundle.items {
+            &:extend(.abstract-reset-list all);
+            > li {
+                margin-bottom: @indent-base;
+            }
+        }
+
+        .box-tocart {
+            &:extend(.abstract-box-tocart all);
+            .action.primary {
+                &:extend(.abstract-button-l all);
+                &:extend(.abstract-button-responsive all);
+            }
+        }
+        .product-addto-links {
+            text-align: center;
+            > .action {
+                &:extend(.abstract-actions-addto all);
+                margin-right: 5%;
+                &.tocompare {
+                    .icon-font-symbol(
+                        @_icon-font-content: @icon-compare-full,
+                        @_icon-font-position: before
+                    );
+                }
+
+            }
+
+        }
+        .product-image-container,
+        .product.name,
+        .stock {
+            &:extend(.abstract-visually-hidden all);
+        }
+    }
+    p.required {
+        color: @form-field-label-asterisk-color;
+    }
+    .nested {
+        .field.qty {
+            .form-field-type(@_type: block);
+            .label {
+                font-weight: @form-field-label-font-weight;
+            }
+            &:last-child {
+                margin-bottom: 0;
+            }
+            margin-top: @form-field-vertical-indent;
+        }
+    }
+    .price {
+        font-weight: @font-weight-semibold;
+    }
+}
+
+//
+//    Desktop
+//--------------------------------------
+.responsive(@break) when (@break = @screen-m) {
+    .bundle-actions {
+        .action.primary.customize {
+            width: auto;
+        }
+    }
+    .bundle-options-container {
+        .legend.title {
+            font-size: @h1-font-size-desktop;
+        }
+        .bundle-options-wrapper {
+            float: left;
+            width: 57%;
+        }
+        .block-bundle-summary {
+            margin-top: 66px;
+            padding: @indent-s-base @indent-base;
+            &:extend(.abstract-add-box-sizing-desktop all);
+            float: right;
+            width: 40%;
+            position: relative;
+            > .title,
+            .bundle-summary .subtitle {
+            }
+            .price-box {
+                .price {
+                    font-size: @price-size-desktop;
+                    line-height: @price-size-desktop;
+                }
+            }
+            .price-including-tax + .price-excluding-tax {
+                .price {
+                    .font-size(14);
+                    line-height: 16px;
+                }
+            }
+            .box-tocart {
+                .action.primary {
+                    width: 49%;
+                    margin-right: 1%;
+                }
+            }
+            .product-addto-links {
+                text-align: left;
+            }
+        }
+        .bundle-options-wrapper,
+        .block-bundle-summary {
+            .page-layout-2columns-left &,
+            .page-layout-2columns-right &,
+            .page-layout-3columns & {
+                width: 48%;
+            }
+        }
+    }
+}

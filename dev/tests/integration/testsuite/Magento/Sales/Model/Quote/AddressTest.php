@@ -261,7 +261,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $orderAddress->setEmail($email);
         $this->_address->importOrderAddress($orderAddress);
 
-        $this->assertEquals($street, $this->_address->getStreet1(), 'Expected street does not exists');
+        $this->assertEquals($street, $this->_address->getStreetLine(1), 'Expected street does not exists');
         $this->assertEquals($email, $orderAddress->getEmail(), 'Expected email does not exists');
     }
 

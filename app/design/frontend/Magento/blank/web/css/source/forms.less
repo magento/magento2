@@ -25,15 +25,6 @@
 @form-field-vertical-indent-desktop: 29px;
 
 .fieldset {
-    .legend + .fieldset,
-    .legend + div {
-        clear: both;
-    }
-    .legend {
-        strong {
-            margin-left: @indent-xs-base;
-        }
-    }
     .form-fieldset();
     &:last-child {
         margin-bottom: 0;
@@ -63,17 +54,29 @@
                 margin-bottom: 0;
             }
         }
-        &.date {
-            .control > input {
-                margin-right: 10px;
-                min-width: 80px;
-                width: 25%;
-            }
+        input[type=file] {
+            margin: @indent-xs-base 0;
         }
     }
-    fieldset.field {
-        border: 0;
-        padding: 0;
+}
+.legend + .fieldset,
+.legend + div {
+    clear: both;
+}
+.legend {
+    strong {
+        margin-left: @indent-xs-base;
+    }
+}
+fieldset.field {
+    border: 0;
+    padding: 0;
+}
+.field.date {
+    .control input {
+        margin-right: 10px;
+        min-width: 80px;
+        width: 25%;
     }
 }
 

@@ -29,7 +29,7 @@
     </head>
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Customer\Block\Account\Forgotpassword" name="accountConfirmation" template="Magento_Customer::form/confirmation.phtml"/>
+            <block class="Magento\Framework\View\Element\Template" name="accountConfirmation" template="Magento_Customer::form/confirmation.phtml"/>
         </referenceContainer>
     </body>
 </page>

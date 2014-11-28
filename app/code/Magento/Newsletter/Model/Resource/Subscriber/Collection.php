@@ -168,11 +168,11 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         $adapter = $this->getConnection();
 
         $lastNameData = $this->_customerHelperData->getAttributeMetadata(
-            CustomerMetadataService::ENTITY_TYPE_CUSTOMER,
+            \Magento\Customer\Api\CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
             'lastname'
         );
         $firstNameData = $this->_customerHelperData->getAttributeMetadata(
-            CustomerMetadataService::ENTITY_TYPE_CUSTOMER,
+            \Magento\Customer\Api\CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
             'firstname'
         );
 

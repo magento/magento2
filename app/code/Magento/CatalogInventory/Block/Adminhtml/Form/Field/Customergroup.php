@@ -22,12 +22,15 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\CatalogInventory\Block\Adminhtml\Form\Field;
+
+use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 
 /**
  * HTML select element block with customer groups options
  */
-namespace Magento\CatalogInventory\Block\Adminhtml\Form\Field;
-
 class Customergroup extends \Magento\Framework\View\Element\Html\Select
 {
     /**
@@ -45,27 +48,41 @@ class Customergroup extends \Magento\Framework\View\Element\Html\Select
     protected $_addGroupAllOption = true;
 
     /**
-     * Customer group service
-     *
-     * @var \Magento\Customer\Service\V1\CustomerGroupServiceInterface
+     * @var GroupManagementInterface
      */
-    protected $_groupService;
+    protected $groupManagement;
+
+    /**
+     * @var GroupRepositoryInterface
+     */
+    protected $groupRepository;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    protected $searchCriteriaBuilder;
 
     /**
      * Construct
      *
      * @param \Magento\Framework\View\Element\Context $context
-     * @param \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService
+     * @param GroupManagementInterface $groupManagement
+     * @param GroupRepositoryInterface $groupRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
-        \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService,
+        GroupManagementInterface $groupManagement,
+        GroupRepositoryInterface $groupRepository,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
         array $data = array()
     ) {
         parent::__construct($context, $data);
 
-        $this->_groupService = $groupService;
+        $this->groupManagement = $groupManagement;
+        $this->groupRepository = $groupRepository;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
@@ -78,10 +95,11 @@ class Customergroup extends \Magento\Framework\View\Element\Html\Select
     {
         if (is_null($this->_customerGroups)) {
             $this->_customerGroups = array();
-            foreach ($this->_groupService->getGroups() as $item) {
-                /* @var $item \Magento\Customer\Service\V1\Data\CustomerGroup */
+            foreach ($this->groupRepository->getList($this->searchCriteriaBuilder->create())->getItems() as $item) {
                 $this->_customerGroups[$item->getId()] = $item->getCode();
             }
+            $notLoggedInGroup = $this->groupManagement->getNotLoggedInGroup();
+            $this->_customerGroups[$notLoggedInGroup->getId()] = $notLoggedInGroup->getCode();
         }
         if (!is_null($groupId)) {
             return isset($this->_customerGroups[$groupId]) ? $this->_customerGroups[$groupId] : null;
@@ -108,7 +126,7 @@ class Customergroup extends \Magento\Framework\View\Element\Html\Select
         if (!$this->getOptions()) {
             if ($this->_addGroupAllOption) {
                 $this->addOption(
-                    \Magento\Customer\Service\V1\CustomerGroupServiceInterface::CUST_GROUP_ALL,
+                    $this->groupManagement->getAllCustomersGroup()->getId(),
                     __('ALL GROUPS')
                 );
             }

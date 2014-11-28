@@ -147,5 +147,5 @@ define([
         }
     });
 
-
+    return $.mage.directpost;
 });

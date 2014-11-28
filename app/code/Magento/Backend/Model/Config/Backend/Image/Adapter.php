@@ -65,7 +65,7 @@ class Adapter extends \Magento\Framework\App\Config\Value
      * @throws \Magento\Framework\Model\Exception If some of adapter dependencies was not loaded
      * @return \Magento\Backend\Model\Config\Backend\File
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
         try {
             $this->_imageFactory->create($this->getValue());

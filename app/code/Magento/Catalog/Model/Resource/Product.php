@@ -59,8 +59,21 @@ class Product extends AbstractResource
     protected $_categoryCollectionFactory;
 
     /**
-     * Construct
-     *
+     * @var \Magento\Framework\Event\ManagerInterface
+     */
+    protected $eventManager;
+
+    /**
+     * @var \Magento\Eav\Model\Entity\Attribute\SetFactory
+     */
+    protected $setFactory;
+
+    /**
+     * @var \Magento\Eav\Model\Entity\TypeFactory
+     */
+    protected $typeFactory;
+
+    /**
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Eav\Model\Entity\Attribute\Set $attrSetEntity
@@ -69,8 +82,11 @@ class Product extends AbstractResource
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Factory $modelFactory
-     * @param \Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryCollectionFactory
+     * @param Category\CollectionFactory $categoryCollectionFactory
      * @param Category $catalogCategory
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Eav\Model\Entity\Attribute\SetFactory $setFactory
+     * @param \Magento\Eav\Model\Entity\TypeFactory $typeFactory
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -86,10 +102,16 @@ class Product extends AbstractResource
         \Magento\Catalog\Model\Factory $modelFactory,
         \Magento\Catalog\Model\Resource\Category\CollectionFactory $categoryCollectionFactory,
         Category $catalogCategory,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Eav\Model\Entity\Attribute\SetFactory $setFactory,
+        \Magento\Eav\Model\Entity\TypeFactory $typeFactory,
         $data = array()
     ) {
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_catalogCategory = $catalogCategory;
+        $this->eventManager = $eventManager;
+        $this->setFactory = $setFactory;
+        $this->typeFactory = $typeFactory;
         parent::__construct(
             $resource,
             $eavConfig,
@@ -244,6 +266,19 @@ class Product extends AbstractResource
     {
         $this->_saveWebsiteIds($product)->_saveCategories($product);
         return parent::_afterSave($product);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function delete($object)
+    {
+        $result = parent::delete($object);
+        $this->eventManager->dispatch(
+            'catalog_product_delete_after_done',
+            array('product' => $object)
+        );
+        return $result;
     }
 
     /**
@@ -598,5 +633,20 @@ class Product extends AbstractResource
         $select->from($this->getEntityTable(), 'COUNT(*)');
         $result = (int)$adapter->fetchOne($select);
         return $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validate($object)
+    {
+        //validate attribute set entity type
+        $entityType = $this->typeFactory->create()->loadByCode(\Magento\Catalog\Model\Product::ENTITY);
+        $attributeSet = $this->setFactory->create()->load($object->getAttributeSetId());
+        if ($attributeSet->getEntityTypeId() != $entityType->getId()) {
+            return ['attribute_set' => 'Invalid attribute set entity type'];
+        }
+
+        return parent::validate($object);
     }
 }

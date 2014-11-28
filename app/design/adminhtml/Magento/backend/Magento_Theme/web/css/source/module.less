@@ -24,9 +24,6 @@
 
 // @group Header
 
-@layout-min-width: 960px;
-@layout-max-width: 1300px;
-@layout-indent: 15px;
 
 // Base
 
@@ -34,6 +31,7 @@ html {
     font-size: 62.5%;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
+    font-size-adjust: 100%;
 }
 
 body,
@@ -52,12 +50,16 @@ body {
 }
 
 .page-wrapper {
-    display: flex;
-    flex-direction: column;
+    .vendor-prefix-display(flex);
+    .vendor-prefix-flex-direction(column);
     min-height: 100%;
     width: 100%;
     max-width: 100%;
     min-width: @layout-min-width + 2 * @layout-indent;
+    .ie10 &,
+    .ie11 & {
+        height: 100%;
+    }
 }
 .page-header {
     &-wrapper {
@@ -183,12 +185,12 @@ body {
     padding: 15px;
     margin-left: auto;
     margin-right: auto;
-    .box-sizing();
+    box-sizing: border-box;
     .page-actions {
         float: right;
         .page-actions-buttons {
             float: right;
-            display: flex;
+            .vendor-prefix-display(flex);
             justify-content: flex-end;
         }
         button {
@@ -199,14 +201,14 @@ body {
                 //     float: right;
                 // }
                 float: right;
-                order: 2;
+                .vendor-prefix-order(2);
             }
             &.save:not(.primary) {
                 // &:not(:last-child) {
                 //     float: right;
                 // }
                 float: right;
-                order: 1;
+                .vendor-prefix-order(1);
             }
             &.back,
             &.action-back,
@@ -220,12 +222,12 @@ body {
             &.delete {
                 color: #e22626;
                 float: left;
-                order: -1;
+                .vendor-prefix-order(-1);
             }
             &.back,
             &.action-back {
                 float: left;
-                order: -1;
+                .vendor-prefix-order(-1);
                 .icon-font(
                     @_icon-font-content: @icon-arrow-left-thin,
                     @_icon-font-line-height: normal,
@@ -239,7 +241,7 @@ body {
             //     float: right;
             // }
             float: right;
-            order: 2;
+            .vendor-prefix-order(2);
             button {
                 &.primary {
                     float: left;
@@ -257,12 +259,9 @@ body {
             right: 0;
             z-index: 998;
             padding: 0;
-            background: -moz-linear-gradient(top, rgba(245, 242, 237, 1) 0%, rgba(245, 242, 237, 1) 56%, rgba(245, 242, 237, 0) 100%); /* FF3.6+ */
-            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(245, 242, 237, 1)), color-stop(56%, rgba(245, 242, 237, 1)), color-stop(100%, rgba(245, 242, 237, 0))); /* Chrome,Safari4+ */
-            background: -webkit-linear-gradient(top, rgba(245, 242, 237, 1) 0%, rgba(245, 242, 237, 1) 56%, rgba(245, 242, 237, 0) 100%); /* Chrome10+,Safari5.1+ */
-            background: -o-linear-gradient(top, rgba(245, 242, 237, 1) 0%, rgba(245, 242, 237, 1) 56%, rgba(245, 242, 237, 0) 100%); /* Opera 11.10+ */
-            background: -ms-linear-gradient(top, rgba(245, 242, 237, 1) 0%, rgba(245, 242, 237, 1) 56%, rgba(245, 242, 237, 0) 100%); /* IE10+ */
-            background: linear-gradient(to bottom, rgba(245, 242, 237, 1) 0%, rgba(245, 242, 237, 1) 56%, rgba(245, 242, 237, 0) 100%); /* W3C */
+            background: -webkit-linear-gradient(top, rgba(245, 242, 237, 1) 0%, rgba(245, 242, 237, 1) 56%, rgba(245, 242, 237, 0) 100%); // Use in 4.3 Android
+            background: -ms-linear-gradient(top, rgba(245, 242, 237, 1) 0%, rgba(245, 242, 237, 1) 56%, rgba(245, 242, 237, 0) 100%); // Use in 10 IE
+            background: linear-gradient(to bottom, rgba(245, 242, 237, 1) 0%, rgba(245, 242, 237, 1) 56%, rgba(245, 242, 237, 0) 100%);
             background: #e0dace;
             .page-actions-inner {
                 position: relative;
@@ -271,7 +270,7 @@ body {
                 min-height: 36px;
                 text-align: right;
                 .clearfix();
-                .box-sizing();
+                box-sizing: border-box;
                 &:before {
                     text-align: left;
                     content: attr(data-title);
@@ -523,27 +522,6 @@ button {
         background-position: 0 -35px;
         background-size: 109px 70px;
         background-repeat: no-repeat;
-    }
-}
-
-.no-flexboxlegacy {
-    .page-wrapper {
-        position: relative;
-        z-index: 1;
-        &:after {
-            content:"";
-            display:block;
-            height: 1px;
-            overflow: hidden;
-        }
-    }
-    .page-content {
-        margin-bottom: 90px;
-    }
-    .page-footer-wrapper {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
     }
 }
 

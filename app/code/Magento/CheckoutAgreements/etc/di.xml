@@ -28,7 +28,7 @@
     <type name="Magento\Framework\Module\Updater\SetupFactory">
         <arguments>
             <argument name="resourceTypes" xsi:type="array">
-                <item name="checkoutagreements_setup" xsi:type="string">Magento\Framework\Module\Setup</item>
+                <item name="checkoutagreements_setup" xsi:type="string">Magento\Framework\Module\DataSetup</item>
             </argument>
         </arguments>
     </type>

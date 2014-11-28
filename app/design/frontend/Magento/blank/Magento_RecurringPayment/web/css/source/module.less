@@ -55,6 +55,11 @@
     }
 }
 
+.field.payment-product-options {
+    .control input {
+        width: 160px;
+    }
+}
 
 //
 //    Mobile
@@ -72,9 +77,6 @@
 }
 
 .responsive-smaller(@break) when (@break = @screen-s) {
-    .table-wrapper.recurring-payments {
-        &:extend(.abstract-account-table-border all);
-    }
     .order-recurring-details {
         .order-recurring-details-item {
             padding: 10px 0;

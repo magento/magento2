@@ -111,8 +111,6 @@
     <type name="Magento\Customer\Service\V1\Data\CustomerGroupBuilder" shared="false" />
     <type name="Magento\Customer\Service\V1\Data\Eav\AttributeMetadataBuilder" shared="false" />
     <type name="Magento\Customer\Api\Data\OptionDataBuilder" shared="false" />
-    <type name="Magento\Customer\Service\V1\Data\Eav\OptionBuilder" shared="false" />
-    <type name="Magento\Customer\Service\V1\Data\CustomerBuilder" shared="false" />
     <type name="Magento\Customer\Service\V1\Data\AddressBuilder" shared="false" />
     <type name="Magento\Customer\Service\V1\Data\RegionBuilder" shared="false" />
     <!--<type name="Magento\Customer\Service\V1\Data\Response\CreateCustomerAccountResponseBuilder" shared="false" />-->
@@ -169,6 +167,11 @@
                 <item name="google2" xsi:type="string">Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)</item>
                 <item name="google3" xsi:type="string">Googlebot/2.1 (+http://www.googlebot.com/bot.html)</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Model\Resource\Group" shared="false">
+        <arguments>
+            <argument name="groupManagement" xsi:type="object">Magento\Customer\Api\GroupManagementInterface\Proxy</argument>
         </arguments>
     </type>
 </config>

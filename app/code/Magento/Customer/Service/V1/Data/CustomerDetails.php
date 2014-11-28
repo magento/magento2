@@ -45,7 +45,7 @@ class CustomerDetails extends \Magento\Framework\Api\AbstractExtensibleObject
     /**
      * Get customer
      *
-     * @return \Magento\Customer\Service\V1\Data\Customer
+     * @return \Magento\Customer\Api\Data\CustomerInterface
      */
     public function getCustomer()
     {

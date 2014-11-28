@@ -25,11 +25,16 @@ namespace Magento\Catalog\Service\V1\Product\Attribute\Option;
 
 /**
  * Interface WriteServiceInterface
+ * @deprecated
+ * @see \Magento\Eav\Api\AttributeOptionManagementInterface
  */
 interface WriteServiceInterface
 {
     /**
      * Add option to attribute
+     *
+     * @deprecated
+     * @see \Magento\Eav\Api\AttributeOptionManagementInterface::addOption
      *
      * @param string $id
      * @param \Magento\Catalog\Service\V1\Data\Eav\Option $option
@@ -40,6 +45,9 @@ interface WriteServiceInterface
 
     /**
      * Delete option from attribute
+     *
+     * @deprecated
+     * @see \Magento\Eav\Api\AttributeOptionManagementInterface::removeOption
      *
      * @param string $id
      * @param int $optionId

@@ -30,5 +30,4 @@ use Magento\Framework\Search\AbstractKeyValuePair;
  */
 class Dimension extends AbstractKeyValuePair
 {
-    const SCOPE = 'scope';
 }

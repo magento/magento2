@@ -158,7 +158,7 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
     public function testAppendClassAliasReplace()
     {
         $moduleListMock = $this->getMock('Magento\Framework\Module\ModuleListInterface');
-        $moduleListMock->expects($this->once())->method('getModule')->will($this->returnValue(array()));
+        $moduleListMock->expects($this->once())->method('getOne')->will($this->returnValue(array()));
 
         $filesystemMock = $this->getMock('Magento\Framework\Filesystem', array(), array(), '', false);
         $modulesDirMock = $this->getMock('Magento\Framework\Filesystem\Directory\Read', array(), array(), '', false);
@@ -223,25 +223,6 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider updateClassAliasesDataProvider
-     * @covers \Magento\Framework\Module\Setup\Migration::doUpdateClassAliases
-     * @covers \Magento\Framework\Module\Setup\Migration::_updateClassAliasesInTable
-     * @covers \Magento\Framework\Module\Setup\Migration::_getRowsCount
-     * @covers \Magento\Framework\Module\Setup\Migration::_applyFieldRule
-     * @covers \Magento\Framework\Module\Setup\Migration::_updateRowsData
-     * @covers \Magento\Framework\Module\Setup\Migration::_getTableData
-     * @covers \Magento\Framework\Module\Setup\Migration::_getReplacement
-     * @covers \Magento\Framework\Module\Setup\Migration::_getCorrespondingClassName
-     * @covers \Magento\Framework\Module\Setup\Migration::_getModelReplacement
-     * @covers \Magento\Framework\Module\Setup\Migration::_getPatternReplacement
-     * @covers \Magento\Framework\Module\Setup\Migration::_getClassName
-     * @covers \Magento\Framework\Module\Setup\Migration::_isFactoryName
-     * @covers \Magento\Framework\Module\Setup\Migration::_getModuleName
-     * @covers \Magento\Framework\Module\Setup\Migration::_getCompositeModuleName
-     * @covers \Magento\Framework\Module\Setup\Migration::_getAliasFromMap
-     * @covers \Magento\Framework\Module\Setup\Migration::_pushToMap
-     * @covers \Magento\Framework\Module\Setup\Migration::_getAliasesMap
-     * @covers \Magento\Framework\Module\Setup\Migration::_getAliasInSerializedStringReplacement
-     * @covers \Magento\Framework\Module\Setup\Migration::_parseSerializedString
      */
     public function testDoUpdateClassAliases($replaceRules, $tableData, $expected, $aliasesMap = array())
     {

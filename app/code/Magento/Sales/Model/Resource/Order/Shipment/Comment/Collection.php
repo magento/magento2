@@ -23,12 +23,15 @@
  */
 namespace Magento\Sales\Model\Resource\Order\Shipment\Comment;
 
+use Magento\Sales\Api\Data\ShipmentCommentSearchResultInterface;
+use Magento\Sales\Model\Resource\Order\Comment\Collection\AbstractCollection;
+
 /**
  * Flat sales order shipment comments collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\Sales\Model\Resource\Order\Comment\Collection\AbstractCollection
+class Collection extends AbstractCollection implements ShipmentCommentSearchResultInterface
 {
     /**
      * Event prefix

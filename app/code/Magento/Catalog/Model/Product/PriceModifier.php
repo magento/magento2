@@ -30,6 +30,20 @@ use Magento\Framework\Exception\CouldNotSaveException;
 class PriceModifier
 {
     /**
+     * @var \Magento\Catalog\Model\ProductRepository
+     */
+    protected $productRepository;
+
+    /**
+     * @param \Magento\Catalog\Model\ProductRepository $productRepository
+     */
+    public function __construct(
+        \Magento\Catalog\Model\ProductRepository $productRepository
+    ) {
+        $this->productRepository = $productRepository;
+    }
+
+    /**
      * @param \Magento\Catalog\Model\Product $product
      * @param int $customerGroupId
      * @param int $websiteId
@@ -47,7 +61,8 @@ class PriceModifier
 
         foreach ($prices as $key => $groupPrice) {
             if ($groupPrice['cust_group'] == $customerGroupId
-                && intval($groupPrice['website_id']) === intval($websiteId)) {
+                && intval($groupPrice['website_id']) === intval($websiteId)
+            ) {
                 unset ($prices[$key]);
             }
         }
@@ -59,7 +74,7 @@ class PriceModifier
         }
         $product->setData('group_price', $prices);
         try {
-            $product->save();
+            $this->productRepository->save($product);
         } catch (\Exception $exception) {
             throw new CouldNotSaveException("Invalid data provided for group price");
         }
@@ -85,10 +100,12 @@ class PriceModifier
 
         foreach ($prices as $key => $tierPrice) {
             if ($customerGroupId == 'all' && $tierPrice['price_qty'] == $qty
-                && $tierPrice['all_groups'] == 1 && intval($tierPrice['website_id']) === intval($websiteId)) {
+                && $tierPrice['all_groups'] == 1 && intval($tierPrice['website_id']) === intval($websiteId)
+            ) {
                 unset ($prices[$key]);
             } elseif ($tierPrice['price_qty'] == $qty && $tierPrice['cust_group'] == $customerGroupId
-                && intval($tierPrice['website_id']) === intval($websiteId)) {
+                && intval($tierPrice['website_id']) === intval($websiteId)
+            ) {
                 unset ($prices[$key]);
             }
         }
@@ -101,7 +118,7 @@ class PriceModifier
         }
         $product->setData('tier_price', $prices);
         try {
-            $product->save();
+            $this->productRepository->save($product);
         } catch (\Exception $exception) {
             throw new CouldNotSaveException("Invalid data provided for tier_price");
         }

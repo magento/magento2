@@ -32,7 +32,7 @@ class HandlesTest extends \PHPUnit_Framework_TestCase
      */
     public function testHandleDeclarations()
     {
-        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * Test dependencies between handle attributes that is out of coverage by XSD
@@ -54,13 +54,13 @@ class HandlesTest extends \PHPUnit_Framework_TestCase
                     $this->fail("Issues found in handle declaration:\n" . implode("\n", $issues) . "\n");
                 }
             },
-            \Magento\TestFramework\Utility\Files::init()->getLayoutFiles()
+            \Magento\Framework\Test\Utility\Files::init()->getLayoutFiles()
         );
     }
 
     public function testContainerDeclarations()
     {
-        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * Test dependencies between container attributes that is out of coverage by XSD
@@ -88,13 +88,13 @@ class HandlesTest extends \PHPUnit_Framework_TestCase
                     );
                 }
             },
-            \Magento\TestFramework\Utility\Files::init()->getLayoutFiles()
+            \Magento\Framework\Test\Utility\Files::init()->getLayoutFiles()
         );
     }
 
     public function testHeadBlockUsage()
     {
-        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
         $invoker(
         /**
          * Test validate that head block doesn't exist in layout
@@ -109,7 +109,7 @@ class HandlesTest extends \PHPUnit_Framework_TestCase
                     $this->fail('Following file contains deprecated head block. File Path:' . "\n" . $layoutFile);
                 }
             },
-            \Magento\TestFramework\Utility\Files::init()->getLayoutFiles()
+            \Magento\Framework\Test\Utility\Files::init()->getLayoutFiles()
         );
     }
 }

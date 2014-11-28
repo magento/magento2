@@ -330,16 +330,14 @@ class Full
                 }
 
                 $productAttr = $productAttributes[$productData['entity_id']];
-                if (!isset(
-                    $productAttr[$visibility->getId()]
-                    ) || !in_array(
-                        $productAttr[$visibility->getId()],
-                        $allowedVisibility
-                    )
+                if (!isset($productAttr[$visibility->getId()])
+                    || !in_array($productAttr[$visibility->getId()], $allowedVisibility)
                 ) {
                     continue;
                 }
-                if (!isset($productAttr[$status->getId()]) || !in_array($productAttr[$status->getId()], $statusIds)) {
+                if (!isset($productAttr[$status->getId()])
+                    || !in_array($productAttr[$status->getId()], $statusIds)
+                ) {
                     continue;
                 }
 
@@ -397,16 +395,17 @@ class Full
         $websiteId = $this->storeManager->getStore($storeId)->getWebsiteId();
         $writeAdapter = $this->getWriteAdapter();
 
-        $select = $writeAdapter->select()->useStraightJoin(
-            true
-        )->from(
-            ['e' => $this->getTable('catalog_product_entity')],
-            array_merge(['entity_id', 'type_id'], $staticFields)
-        )->join(
-            ['website' => $this->getTable('catalog_product_website')],
-            $writeAdapter->quoteInto('website.product_id = e.entity_id AND website.website_id = ?', $websiteId),
-            []
-        );
+        $select = $writeAdapter->select()
+            ->useStraightJoin(true)
+            ->from(
+                ['e' => $this->getTable('catalog_product_entity')],
+                array_merge(['entity_id', 'type_id'], $staticFields)
+            )
+            ->join(
+                ['website' => $this->getTable('catalog_product_website')],
+                $writeAdapter->quoteInto('website.product_id = e.entity_id AND website.website_id = ?', $websiteId),
+                []
+            );
 
         if (!is_null($productIds)) {
             $select->where('e.entity_id IN (?)', $productIds);
@@ -720,55 +719,29 @@ class Full
      * Retrieve attribute source value for search
      *
      * @param int $attributeId
-     * @param mixed $value
+     * @param mixed $valueId
      * @param int $storeId
      * @return mixed
      */
-    protected function getAttributeValue($attributeId, $value, $storeId)
+    protected function getAttributeValue($attributeId, $valueId, $storeId)
     {
         $attribute = $this->getSearchableAttribute($attributeId);
-        if (!$attribute->getIsSearchable()) {
-            if ($this->engineProvider->get()->allowAdvancedIndex()) {
-                if ($attribute->getAttributeCode() == 'visibility') {
-                    return $value;
-                } elseif (!($attribute->getIsVisibleInAdvancedSearch() ||
-                    $attribute->getIsFilterable() ||
-                    $attribute->getIsFilterableInSearch() ||
-                    $attribute->getUsedForSortBy())
-                ) {
-                    return null;
-                }
-            } else {
-                return null;
-            }
-        }
+        $value = $this->engineProvider->get()->processAttributeValue($attribute, $valueId);
 
-        if ($attribute->usesSource()) {
-            if ($this->engineProvider->get()->allowAdvancedIndex()) {
-                return $value;
-            }
-
+        if ($attribute->getIsSearchable()
+            && $attribute->usesSource()
+        ) {
             $attribute->setStoreId($storeId);
-            $value = $attribute->getSource()->getIndexOptionText($value);
+            $valueText = $attribute->getSource()->getIndexOptionText($valueId);
 
-            if (is_array($value)) {
-                $value = implode($this->separator, $value);
-            } elseif (empty($value)) {
-                $inputType = $attribute->getFrontend()->getInputType();
-                if ($inputType == 'select' || $inputType == 'multiselect') {
-                    return null;
-                }
-            }
-        } elseif ($attribute->getBackendType() == 'datetime') {
-            $value = $this->getStoreDate($storeId, $value);
-        } else {
-            $inputType = $attribute->getFrontend()->getInputType();
-            if ($inputType == 'price') {
-                $value = $this->priceCurrency->round($value);
+            if (is_array($valueText)) {
+                $value .=  $this->separator . implode($this->separator, $valueText);
+            } else {
+                $value .= $this->separator . $valueText;
             }
         }
 
-        $value = preg_replace("#\s+#siu", ' ', trim(strip_tags($value)));
+        $value = preg_replace('/\\s+/siu', ' ', trim(strip_tags($value)));
 
         return $value;
     }

@@ -78,7 +78,7 @@ class LayoutFilesTest extends \PHPUnit_Framework_TestCase
         $areas = ['adminhtml', 'frontend', 'email'];
         $data = [];
         foreach ($areas as $area) {
-            $layoutFiles = \Magento\TestFramework\Utility\Files::init()->getLayoutFiles(['area' => $area], false);
+            $layoutFiles = \Magento\Framework\Test\Utility\Files::init()->getLayoutFiles(['area' => $area], false);
             foreach ($layoutFiles as $layoutFile) {
                 $data[substr($layoutFile, strlen(BP))] = [$area, $layoutFile];
             }

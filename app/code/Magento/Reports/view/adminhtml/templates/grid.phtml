@@ -112,11 +112,11 @@ require([
     <script type="text/javascript">
 require([
     "jquery",
+    "validation",
     "mage/mage",
     "mage/adminhtml/grid"
 ], function(jQuery){
 
-        jQuery.mage.load('validation');
         //<![CDATA[
             <?php echo $this->getJsObjectName() ?> = new varienGrid('<?php echo $this->getId() ?>', '<?php echo $this->getGridUrl() ?>', '<?php echo $this->getVarNamePage() ?>', '<?php echo $this->getVarNameSort() ?>', '<?php echo $this->getVarNameDir() ?>', '<?php echo $this->getVarNameFilter() ?>');
             <?php echo $this->getJsObjectName() ?>.useAjax = '<?php if ($this->getUseAjax()): echo $this->getUseAjax(); endif; ?>';

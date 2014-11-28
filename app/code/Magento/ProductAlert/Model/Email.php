@@ -53,7 +53,7 @@ class Email extends \Magento\Framework\Model\AbstractModel
     /**
      * Customer model
      *
-     * @var \Magento\Customer\Service\V1\Data\Customer
+     * @var \Magento\Customer\Api\Data\CustomerInterface
      */
     protected $_customer;
 
@@ -105,9 +105,9 @@ class Email extends \Magento\Framework\Model\AbstractModel
     protected $_storeManager;
 
     /**
-     * @var \Magento\Customer\Service\V1\CustomerAccountServiceInterface
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
      */
-    protected $_customerAccountService;
+    protected $customerRepository;
 
     /**
      * @var \Magento\Core\Model\App\Emulation
@@ -130,7 +130,7 @@ class Email extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\ProductAlert\Helper\Data $productAlertData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\StoreManagerInterface $storeManager
-     * @param \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService
+     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param \Magento\Customer\Helper\View $customerHelper
      * @param \Magento\Core\Model\App\Emulation $appEmulation
      * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
@@ -144,7 +144,7 @@ class Email extends \Magento\Framework\Model\AbstractModel
         \Magento\ProductAlert\Helper\Data $productAlertData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\StoreManagerInterface $storeManager,
-        \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService,
+        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \Magento\Customer\Helper\View $customerHelper,
         \Magento\Core\Model\App\Emulation $appEmulation,
         \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
@@ -155,7 +155,7 @@ class Email extends \Magento\Framework\Model\AbstractModel
         $this->_productAlertData = $productAlertData;
         $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
-        $this->_customerAccountService = $customerAccountService;
+        $this->customerRepository = $customerRepository;
         $this->_appEmulation = $appEmulation;
         $this->_transportBuilder = $transportBuilder;
         $this->_customerHelper = $customerHelper;
@@ -215,14 +215,14 @@ class Email extends \Magento\Framework\Model\AbstractModel
      */
     public function setCustomerId($customerId)
     {
-        $this->_customer = $this->_customerAccountService->getCustomer($customerId);
+        $this->_customer = $this->customerRepository->getById($customerId);
         return $this;
     }
 
     /**
      * Set customer model
      *
-     * @param \Magento\Customer\Service\V1\Data\Customer $customer
+     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @return $this
      */
     public function setCustomerData($customer)

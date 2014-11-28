@@ -29,7 +29,7 @@ class Priority extends \Magento\Framework\App\Config\Value
      * @return $this
      * @throws \Exception
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
         $value = $this->getValue();
         if ($value < 0 || $value > 1) {

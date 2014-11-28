@@ -28,27 +28,27 @@
 ?>
 <?php if ($this->displayBoth()):?>
 <tr class="totals sub excl">
-    <td style="<?php echo $this->getStyle() ?>" class="mark" colspan="<?php echo $this->getColspan(); ?>">
+    <th style="<?php echo $this->getStyle() ?>" class="mark" colspan="<?php echo $this->getColspan(); ?>" scope="row">
         <?php echo __('Subtotal (Excl. Tax)') ?>
-    </td>
-    <td style="<?php echo $this->getStyle() ?>" class="amount">
+    </th>
+    <td style="<?php echo $this->getStyle() ?>" class="amount" data-th="<?php echo $this->escapeHtml(__('Subtotal (Excl. Tax)')); ?>">
         <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($this->getTotal()->getValueExclTax()) ?>
     </td>
 </tr>
 <tr class="totals sub incl">
-    <td style="<?php echo $this->getStyle() ?>" class="mark" colspan="<?php echo $this->getColspan(); ?>">
+    <th style="<?php echo $this->getStyle() ?>" class="mark" colspan="<?php echo $this->getColspan(); ?>" scope="row">
         <?php echo __('Subtotal (Incl. Tax)') ?>
-    </td>
-    <td style="<?php echo $this->getStyle() ?>" class="amount">
+    </th>
+    <td style="<?php echo $this->getStyle() ?>" class="amount" data-th="<?php echo $this->escapeHtml(__('Subtotal (Incl. Tax)')); ?>">
         <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($this->getTotal()->getValueInclTax()) ?>
     </td>
 </tr>
 <?php else : ?>
 <tr class="totals sub">
-    <td style="<?php echo $this->getStyle() ?>" class="mark" colspan="<?php echo $this->getColspan(); ?>">
+    <th style="<?php echo $this->getStyle() ?>" class="mark" colspan="<?php echo $this->getColspan(); ?>" scope="row">
         <?php echo $this->getTotal()->getTitle() ?>
-    </td>
-    <td style="<?php echo $this->getStyle() ?>" class="amount">
+    </th>
+    <td style="<?php echo $this->getStyle() ?>" class="amount" data-th="<?php echo $this->escapeHtml($this->getTotal()->getTitle()); ?>">
         <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($this->getTotal()->getValue()) ?>
     </td>
 </tr>

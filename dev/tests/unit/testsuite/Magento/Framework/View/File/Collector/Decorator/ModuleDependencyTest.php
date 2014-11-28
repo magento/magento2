@@ -43,21 +43,11 @@ class ModuleDependencyTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $modulesConfig = array(
-            'Fixture_ModuleB' => array(
-                'name' => 'Fixture_ModuleB',
-            ),
-            'Fixture_ModuleA' => array(
-                'name' => 'Fixture_ModuleA',
-                'depends' => array(
-                    'module' => array('Fixture_ModuleB'),
-                )
-            ),
-        );
-
         $this->_fileSource = $this->getMockForAbstractClass('Magento\Framework\View\File\CollectorInterface');
         $this->_moduleListMock = $this->getMock('Magento\Framework\Module\ModuleListInterface');
-        $this->_moduleListMock->expects($this->any())->method('getModules')->will($this->returnValue($modulesConfig));
+        $this->_moduleListMock->expects($this->any())
+            ->method('getNames')
+            ->will($this->returnValue(['Fixture_ModuleB', 'Fixture_ModuleA']));
         $this->_model = new \Magento\Framework\View\File\Collector\Decorator\ModuleDependency(
             $this->_fileSource, $this->_moduleListMock
         );

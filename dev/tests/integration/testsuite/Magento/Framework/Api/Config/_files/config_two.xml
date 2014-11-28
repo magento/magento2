@@ -24,8 +24,8 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../lib/internal/Magento/Framework/Api/etc/data_object.xsd">
-    <custom_attributes for="Magento\Customer\Service\V1\Data\Customer">
-        <attribute code="custom_2" type="Magento\CustomerExtra\Service\V1\Data\CustomerCustom22" />
-        <attribute code="custom_3" type="Magento\Customer\Service\V1\Data\CustomerCustom3" />
+    <custom_attributes for="Magento\Customer\Api\Data\CustomerInterface">
+        <attribute code="custom_2" type="Magento\CustomerExtra\Api\Data\CustomerCustom22" />
+        <attribute code="custom_3" type="Magento\Customer\Api\Data\CustomerCustom3" />
     </custom_attributes>
 </config>

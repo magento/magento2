@@ -23,19 +23,22 @@
  */
 namespace Magento\Sales\Model\Resource\Order\Payment;
 
+use Magento\Sales\Model\Resource\Entity;
+use Magento\Sales\Model\Spi\TransactionResourceInterface;
+
 /**
  * Sales transaction resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Transaction extends \Magento\Sales\Model\Resource\Entity
+class Transaction extends Entity implements TransactionResourceInterface
 {
     /**
      * Serializeable field: additional_information
      *
      * @var array
      */
-    protected $_serializableFields = array('additional_information' => array(null, array()));
+    protected $_serializableFields = ['additional_information' => [null, []]];
 
     /**
      * Initialize main table and the primary key field name
@@ -67,7 +70,7 @@ class Transaction extends \Magento\Sales\Model\Resource\Entity
             $verificationRow = $adapter->fetchRow(
                 $adapter->select()->from(
                     $this->getMainTable(),
-                    array('payment_id', 'order_id')
+                    ['payment_id', 'order_id']
                 )->where(
                     "{$this->getIdFieldName()} = ?",
                     (int)$id
@@ -79,14 +82,14 @@ class Transaction extends \Magento\Sales\Model\Resource\Entity
             list($paymentId, $orderId) = array_values($verificationRow);
 
             // inject
-            $where = array(
+            $where = [
                 $adapter->quoteIdentifier($this->getIdFieldName()) . '!=?' => $id,
                 new \Zend_Db_Expr('parent_id IS NULL'),
                 'payment_id = ?' => (int)$paymentId,
                 'order_id = ?' => (int)$orderId,
                 'parent_txn_id = ?' => $txnId
-            );
-            $adapter->update($this->getMainTable(), array('parent_id' => $id), $where);
+            ];
+            $adapter->update($this->getMainTable(), ['parent_id' => $id], $where);
         }
     }
 
@@ -126,12 +129,12 @@ class Transaction extends \Magento\Sales\Model\Resource\Entity
     public function getOrderWebsiteId($orderId)
     {
         $adapter = $this->_getReadAdapter();
-        $bind = array(':entity_id' => $orderId);
+        $bind = [':entity_id' => $orderId];
         $select = $adapter->select()->from(
-            array('so' => $this->getTable('sales_order')),
+            ['so' => $this->getTable('sales_order')],
             'cs.website_id'
         )->joinInner(
-            array('cs' => $this->getTable('store')),
+            ['cs' => $this->getTable('store')],
             'cs.store_id = so.store_id'
         )->where(
             'so.entity_id = :entity_id'
@@ -143,9 +146,9 @@ class Transaction extends \Magento\Sales\Model\Resource\Entity
      * Lookup for parent_id in already saved transactions of this payment by the order_id
      * Also serialize additional information, if any
      *
-     * @param \Magento\Sales\Model\Order\Payment\Transaction $transaction
-     * @return $this
+     * @param \Magento\Framework\Model\AbstractModel|\Magento\Sales\Model\Order\Payment\Transaction $transaction
      * @throws \Magento\Framework\Model\Exception
+     * @return $this
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $transaction)
     {

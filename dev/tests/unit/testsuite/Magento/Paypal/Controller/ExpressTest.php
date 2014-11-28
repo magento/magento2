@@ -51,7 +51,7 @@ abstract class ExpressTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Sales\Model\Quote|\PHPUnit_Framework_MockObject_MockObject */
     protected $quote;
 
-    /** @var \Magento\Customer\Service\V1\Data\Customer|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Api\Data\CustomerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $customerData;
 
     /** @var \Magento\Paypal\Model\Express\Checkout|\PHPUnit_Framework_MockObject_MockObject */
@@ -87,7 +87,7 @@ abstract class ExpressTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
         $this->redirect = $this->getMockForAbstractClass('Magento\Framework\App\Response\RedirectInterface');
         $this->response = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
-        $this->customerData = $this->getMock('Magento\Customer\Service\V1\Data\Customer', [], [], '', false);
+        $this->customerData = $this->getMock('Magento\Customer\Api\Data\CustomerInterface', [], [], '', false);
         $this->checkout = $this->getMock('Magento\Paypal\Model\Express\Checkout', [], [], '', false);
         $this->customerSession = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
         $this->customerSession->expects($this->any())

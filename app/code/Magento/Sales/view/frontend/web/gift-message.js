@@ -33,6 +33,7 @@ define([
             linkPrefix: '#order-item-gift-message-link-', // Selector prefix for the 'Gift Message' link.
             duration: 100, // Toggle duration.
             expandedClass: 'expanded', // Class added/removed to/from the 'Gift Message' link.
+            expandedContentClass: 'expanded-content', // Class added/removed to/from the 'Gift Message' content.
             lastClass: 'last' // Class added/removed to/from the last item's row in the products table.
         },
 
@@ -56,7 +57,7 @@ define([
                 link = $(options.linkPrefix + itemId), // The 'Gift Message' expandable link.
                 row = $(options.rowPrefix + itemId), // The item's row in the products table.
                 region = $('#' + element.attr('aria-controls')); // The gift message container region.
-            region.toggle(options.duration, function() {
+            region.toggleClass(options.expandedContentClass, options.duration, function() {
                 if (region.attr('aria-expanded') === "true") {
                     region.attr('aria-expanded', "false");
                     if (region.hasClass(options.lastClass)) {
@@ -73,5 +74,6 @@ define([
             event.preventDefault(); // Prevent event propagation and avoid going to the link's href.
         }
     });
-
+    
+    return $.mage.giftMessage;
 });

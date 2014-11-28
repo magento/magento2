@@ -36,7 +36,7 @@ class Base extends AbstractCurrency
      * @return $this
      * @throws \Magento\Framework\Model\Exception
      */
-    protected function _afterSave()
+    public function afterSave()
     {
         if (!in_array($this->getValue(), $this->_getInstalledCurrencies())) {
             throw new \Magento\Framework\Model\Exception(__('Sorry, we haven\'t installed the base currency you selected.'));

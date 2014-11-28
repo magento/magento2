@@ -22,7 +22,6 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
 /**
  * Catalog Layer Decimal Attribute Filter Model
  *
@@ -32,7 +31,6 @@ namespace Magento\Catalog\Model\Layer\Filter;
 
 class Decimal extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
 {
-    const MIN_RANGE_POWER = 10;
 
     /**
      * Resource instance
@@ -47,9 +45,15 @@ class Decimal extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
     protected $priceCurrency;
 
     /**
+     * @var DataProvider\Decimal
+     */
+    private $dataProvider;
+
+    /**
      * @param ItemFactory $filterItemFactory
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Layer $layer
+     * @param \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder $itemDataBuilder
      * @param \Magento\Catalog\Model\Resource\Layer\Filter\DecimalFactory $filterDecimalFactory
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param array $data
@@ -58,33 +62,24 @@ class Decimal extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
         \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory,
         \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Layer $layer,
-        \Magento\Catalog\Model\Resource\Layer\Filter\DecimalFactory $filterDecimalFactory,
+        \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder $itemDataBuilder,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
+        \Magento\Catalog\Model\Layer\Filter\DataProvider\DecimalFactory $dataProviderFactory,
         array $data = array()
     ) {
-        $this->_resource = $filterDecimalFactory->create();
         $this->_requestVar = 'decimal';
         $this->priceCurrency = $priceCurrency;
-        parent::__construct($filterItemFactory, $storeManager, $layer, $data);
-    }
-
-    /**
-     * Retrieve resource instance
-     *
-     * @return \Magento\Catalog\Model\Resource\Layer\Filter\Decimal
-     */
-    protected function _getResource()
-    {
-        return $this->_resource;
+        parent::__construct($filterItemFactory, $storeManager, $layer, $itemDataBuilder, $data);
+        $this->dataProvider = $dataProviderFactory->create(['layer' => $this->getLayer()]);
     }
 
     /**
      * Apply decimal range filter to product collection
      *
-     * @param \Zend_Controller_Request_Abstract $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @return $this
      */
-    public function apply(\Zend_Controller_Request_Abstract $request)
+    public function apply(\Magento\Framework\App\RequestInterface $request)
     {
         parent::apply($request);
 
@@ -103,28 +98,17 @@ class Decimal extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
 
         list($index, $range) = $filter;
         if ((int)$index && (int)$range) {
-            $this->setRange((int)$range);
+            $this->dataProvider->setRange((int)$range);
 
-            $this->_getResource()->applyFilterToCollection($this, $range, $index);
+            $this->dataProvider->getResource()->applyFilterToCollection($this, $range, $index);
             $this->getLayer()->getState()->addFilter(
                 $this->_createItem($this->_renderItemLabel($range, $index), $filter)
             );
 
-            $this->_items = array();
+            $this->_items = [];
         }
 
         return $this;
-    }
-
-    /**
-     * Retrieve price aggreagation data cache key
-     *
-     * @return string
-     */
-    protected function _getCacheKey()
-    {
-        $key = $this->getLayer()->getStateKey() . '_ATTR_' . $this->getAttributeModel()->getAttributeCode();
-        return $key;
     }
 
     /**
@@ -142,95 +126,23 @@ class Decimal extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
     }
 
     /**
-     * Retrieve maximum value from layer products set
-     *
-     * @return float
-     */
-    public function getMaxValue()
-    {
-        $max = $this->getData('max_value');
-        if (is_null($max)) {
-            list($min, $max) = $this->_getResource()->getMinMax($this);
-            $this->setData('max_value', $max);
-            $this->setData('min_value', $min);
-        }
-        return $max;
-    }
-
-    /**
-     * Retrieve minimal value from layer products set
-     *
-     * @return float
-     */
-    public function getMinValue()
-    {
-        $min = $this->getData('min_value');
-        if (is_null($min)) {
-            list($min, $max) = $this->_getResource()->getMinMax($this);
-            $this->setData('max_value', $max);
-            $this->setData('min_value', $min);
-        }
-        return $min;
-    }
-
-    /**
-     * Retrieve range for building filter steps
-     *
-     * @return int
-     */
-    public function getRange()
-    {
-        $range = $this->getData('range');
-        if (!$range) {
-            $maxValue = $this->getMaxValue();
-            $index = 1;
-            do {
-                $range = pow(10, strlen(floor($maxValue)) - $index);
-                $items = $this->getRangeItemCounts($range);
-                $index++;
-            } while ($range > self::MIN_RANGE_POWER && count($items) < 2);
-            $this->setData('range', $range);
-        }
-
-        return $range;
-    }
-
-    /**
-     * Retrieve information about products count in range
-     *
-     * @param int $range
-     * @return int
-     */
-    public function getRangeItemCounts($range)
-    {
-        $rangeKey = 'range_item_counts_' . $range;
-        $items = $this->getData($rangeKey);
-        if (is_null($items)) {
-            $items = $this->_getResource()->getCount($this, $range);
-            $this->setData($rangeKey, $items);
-        }
-        return $items;
-    }
-
-    /**
      * Retrieve data for build decimal filter items
      *
      * @return array
      */
     protected function _getItemsData()
     {
-        $data = array();
-        $range = $this->getRange();
-        $dbRanges = $this->getRangeItemCounts($range);
+        $range = $this->dataProvider->getRange($this);
+        $dbRanges = $this->dataProvider->getRangeItemCounts($range, $this);
 
         foreach ($dbRanges as $index => $count) {
-            $data[] = array(
-                'label' => $this->_renderItemLabel($range, $index),
-                'value' => $index . ',' . $range,
-                'count' => $count
+            $this->itemDataBuilder->addItemData(
+                $this->_renderItemLabel($range, $index),
+                $index . ',' . $range,
+                $count
             );
         }
 
-        return $data;
+        return $this->itemDataBuilder->build();
     }
 }

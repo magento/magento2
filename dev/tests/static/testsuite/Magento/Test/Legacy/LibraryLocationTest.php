@@ -38,7 +38,7 @@ class LibraryLocationTest extends \PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        self::$root = \Magento\TestFramework\Utility\Files::init()->getPathToSource();
+        self::$root = \Magento\Framework\Test\Utility\Files::init()->getPathToSource();
     }
 
     public function testOldWebLibrariesLocation()

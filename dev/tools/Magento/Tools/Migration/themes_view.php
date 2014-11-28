@@ -53,8 +53,8 @@ try {
  */
 function updateFieldForTable($objectManager, $table, $col)
 {
-    /** @var $installer \Magento\Framework\Module\Setup */
-    $installer = $objectManager->create('Magento\Framework\Module\Setup');
+    /** @var $installer \Magento\Framework\Module\DataSetup */
+    $installer = $objectManager->create('Magento\Framework\Module\DataSetup');
     $installer->startSetup();
 
     $table = $installer->getTable($table);

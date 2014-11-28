@@ -27,6 +27,8 @@ use Magento\Customer\Model\Context;
 
 /**
  * "Orders and Returns" link
+ *
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Link extends \Magento\Framework\View\Element\Html\Link\Current
 {

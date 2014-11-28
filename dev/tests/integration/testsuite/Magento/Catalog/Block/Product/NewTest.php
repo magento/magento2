@@ -37,13 +37,20 @@ class NewTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        /**
+         * @var \Magento\Customer\Api\GroupManagementInterface $groupManagement
+         */
+        $groupManagement = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('\Magento\Customer\Api\GroupManagementInterface');
+        $notLoggedInId = $groupManagement->getNotLoggedInGroup()->getId();
+
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea(\Magento\Framework\App\Area::AREA_FRONTEND);
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\App\Http\Context'
         )->setValue(
             \Magento\Customer\Model\Context::CONTEXT_GROUP,
-            \Magento\Customer\Service\V1\CustomerGroupServiceInterface::NOT_LOGGED_IN_ID,
-            \Magento\Customer\Service\V1\CustomerGroupServiceInterface::NOT_LOGGED_IN_ID
+            $notLoggedInId,
+            $notLoggedInId
         );
         $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\View\LayoutInterface'

@@ -534,7 +534,7 @@ class RecurringPayment extends \Magento\Framework\Model\AbstractModel
      * @return void
      * @throws \Magento\Framework\Model\Exception
      */
-    protected function _validateBeforeSave()
+    public function validateBeforeSave()
     {
         if (!$this->isValid()) {
             throw new \Magento\Framework\Model\Exception($this->getValidationErrors());

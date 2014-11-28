@@ -48,19 +48,19 @@ class Customer extends \Magento\Framework\Object
     protected $_adminhtmlData = null;
 
     /**
-     * @var \Magento\Customer\Service\V1\CustomerAccountService
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
      */
-    protected $_customerService;
+    protected $customerRepository;
 
     /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
-    protected $_searchCriteriaBuilder;
+    protected $searchCriteriaBuilder;
 
     /**
      * @var \Magento\Framework\Api\FilterBuilder
      */
-    protected $_filterBuilder;
+    protected $filterBuilder;
 
     /**
      * @var \Magento\Customer\Helper\View
@@ -71,22 +71,22 @@ class Customer extends \Magento\Framework\Object
      * Initialize dependencies.
      *
      * @param \Magento\Backend\Helper\Data $adminhtmlData
-     * @param \Magento\Customer\Service\V1\CustomerAccountService $customerService
+     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param \Magento\Customer\Helper\View $customerViewHelper
      */
     public function __construct(
         \Magento\Backend\Helper\Data $adminhtmlData,
-        \Magento\Customer\Service\V1\CustomerAccountService $customerService,
+        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
         \Magento\Customer\Helper\View $customerViewHelper
     ) {
         $this->_adminhtmlData = $adminhtmlData;
-        $this->_customerService = $customerService;
-        $this->_searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->_filterBuilder = $filterBuilder;
+        $this->customerRepository = $customerRepository;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->filterBuilder = $filterBuilder;
         $this->_customerViewHelper = $customerViewHelper;
     }
 
@@ -103,39 +103,37 @@ class Customer extends \Magento\Framework\Object
             return $this;
         }
 
-        $this->_searchCriteriaBuilder->setCurrentPage($this->getStart());
-        $this->_searchCriteriaBuilder->setPageSize($this->getLimit());
+        $this->searchCriteriaBuilder->setCurrentPage($this->getStart());
+        $this->searchCriteriaBuilder->setPageSize($this->getLimit());
         $searchFields = ['firstname', 'lastname', 'company'];
         $filters = [];
         foreach ($searchFields as $field) {
-            $filters[] = $this->_filterBuilder
+            $filters[] = $this->filterBuilder
                 ->setField($field)
                 ->setConditionType('like')
                 ->setValue($this->getQuery() . '%')
                 ->create();
         }
-        $this->_searchCriteriaBuilder->addFilter($filters);
-        $searchCriteria = $this->_searchCriteriaBuilder->create();
-        $searchResults = $this->_customerService->searchCustomers($searchCriteria);
+        $this->searchCriteriaBuilder->addFilter($filters);
+        $searchCriteria = $this->searchCriteriaBuilder->create();
+        $searchResults = $this->customerRepository->getList($searchCriteria);
 
-        /** @var \Magento\Customer\Service\V1\Data\CustomerDetails $customerDetails */
-        foreach ($searchResults->getItems() as $customerDetails) {
-            $customerData = $customerDetails->getCustomer();
-            $customerAddresses = $customerDetails->getAddresses();
+        foreach ($searchResults->getItems() as $customer) {
+            $customerAddresses = $customer->getAddresses();
             /** Look for a company name defined in default billing address */
             $company = null;
             foreach ($customerAddresses as $customerAddress) {
-                if ($customerAddress->isDefaultBilling()) {
+                if ($customerAddress->getId() == $customer->getDefaultBilling()) {
                     $company = $customerAddress->getCompany();
                     break;
                 }
             }
             $result[] = array(
-                'id' => 'customer/1/' . $customerData->getId(),
+                'id' => 'customer/1/' . $customer->getId(),
                 'type' => __('Customer'),
-                'name' => $this->_customerViewHelper->getCustomerName($customerData),
+                'name' => $this->_customerViewHelper->getCustomerName($customer),
                 'description' => $company,
-                'url' => $this->_adminhtmlData->getUrl('customer/index/edit', array('id' => $customerData->getId()))
+                'url' => $this->_adminhtmlData->getUrl('customer/index/edit', array('id' => $customer->getId()))
             );
         }
         $this->setResults($result);

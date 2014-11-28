@@ -25,7 +25,6 @@
 namespace Magento\Tax\Pricing\Price\Plugin;
 
 use Magento\Tax\Model\ClassModel;
-use Magento\Tax\Service\V1\TaxRuleFixtureFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Tax\Model\Config;
 
@@ -71,14 +70,14 @@ class AttributePriceTest extends \PHPUnit_Framework_TestCase
     /**
      * Helps in creating required tax rules.
      *
-     * @var \Magento\Tax\Service\V1\TaxRuleFixtureFactory
+     * @var \Magento\Tax\Model\TaxRuleFixtureFactory
      */
     private $taxRuleFixtureFactory;
 
     public function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->taxRuleFixtureFactory = new \Magento\Tax\Service\V1\TaxRuleFixtureFactory();
+        $this->taxRuleFixtureFactory = new \Magento\Tax\Model\TaxRuleFixtureFactory();
     }
 
     public function tearDown()

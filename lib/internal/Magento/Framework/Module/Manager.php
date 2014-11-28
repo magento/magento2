@@ -77,7 +77,7 @@ class Manager
      */
     public function isEnabled($moduleName)
     {
-        return !!$this->_moduleList->getModule($moduleName);
+        return $this->_moduleList->has($moduleName);
     }
 
     /**
@@ -152,7 +152,7 @@ class Manager
      */
     private function isModuleVersionEqual($moduleName, $version)
     {
-        $module = $this->_moduleList->getModule($moduleName);
+        $module = $this->_moduleList->getOne($moduleName);
         if (empty($module['schema_version'])) {
             throw new \UnexpectedValueException("Schema version for module '$moduleName' is not specified");
         }

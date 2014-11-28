@@ -24,8 +24,6 @@
 
 /**
  * Layered navigation state
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\LayeredNavigation\Block\Navigation;
 
@@ -47,15 +45,15 @@ class State extends \Magento\Framework\View\Element\Template
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Catalog\Model\Layer $catalogLayer
+     * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Catalog\Model\Layer $catalogLayer,
+        \Magento\Catalog\Model\Layer\Resolver $layerResolver,
         array $data = array()
     ) {
-        $this->_catalogLayer = $catalogLayer;
+        $this->_catalogLayer = $layerResolver->get();
         parent::__construct($context, $data);
     }
 

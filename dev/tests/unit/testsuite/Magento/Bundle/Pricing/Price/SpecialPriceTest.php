@@ -45,6 +45,11 @@ class SpecialPriceTest extends \PHPUnit_Framework_TestCase
      */
     protected $localeDate;
 
+    /**
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $priceCurrencyMock;
+
     public function setUp()
     {
         $this->saleable = $this->getMockBuilder('Magento\Catalog\Model\Product')
@@ -58,10 +63,13 @@ class SpecialPriceTest extends \PHPUnit_Framework_TestCase
             ->method('getPriceInfo')
             ->will($this->returnValue($this->priceInfo));
 
+        $this->priceCurrencyMock = $this->getMock('\Magento\Framework\Pricing\PriceCurrencyInterface');
+
         $objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->model = $objectHelper->getObject('Magento\Bundle\Pricing\Price\SpecialPrice', [
             'saleableItem' => $this->saleable,
-            'localeDate' => $this->localeDate
+            'localeDate' => $this->localeDate,
+            'priceCurrency' => $this->priceCurrencyMock,
         ]);
     }
 
@@ -99,6 +107,9 @@ class SpecialPriceTest extends \PHPUnit_Framework_TestCase
             ->method('isScopeDateInInterval')
             ->with($store, $specialFromDate, $specialToDate)
             ->will($this->returnValue($isScopeDateInInterval));
+
+        $this->priceCurrencyMock->expects($this->never())
+            ->method('convertAndRound');
 
         if ($isScopeDateInInterval) {
             $price = $this->getMock('Magento\Framework\Pricing\Price\PriceInterface');

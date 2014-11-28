@@ -46,4 +46,5 @@ define([
         }
     });
 
+    return $.mage.cookieBlock;
 });

@@ -30,27 +30,33 @@ use Mtf\Client\Element;
 use Mtf\Client\Element\Locator;
 
 /**
- * Class Links
- * Page Top Links block
+ * Page Top Links block.
  */
 class Links extends Block
 {
     /**
-     * Selector for qty products on compare
+     * Selector for qty products on compare.
      *
      * @var string
      */
     protected $qtyCompareProducts = '.compare .counter.qty';
 
     /**
-     * Link selector
+     * Link selector.
      *
      * @var string
      */
     protected $link = '//a[contains(text(), "%s")]';
 
     /**
-     * Open Link by title
+     * Welcome message on frontend.
+     *
+     * @var string
+     */
+    protected $welcomeMessage = '.greet.welcome';
+
+    /**
+     * Open Link by title.
      *
      * @param string $linkTitle
      * @return void
@@ -61,7 +67,7 @@ class Links extends Block
     }
 
     /**
-     * Is visible Link by title
+     * Is visible Link by title.
      *
      * @param string $linkTitle
      * @return bool
@@ -72,7 +78,7 @@ class Links extends Block
     }
 
     /**
-     * Get the number of products added to compare list
+     * Get the number of products added to compare list.
      *
      * @return string
      */
@@ -85,7 +91,7 @@ class Links extends Block
     }
 
     /**
-     * Get url from link
+     * Get url from link.
      *
      * @param string $linkTitle
      * @return string
@@ -93,5 +99,15 @@ class Links extends Block
     public function getLinkUrl($linkTitle)
     {
         return trim($this->_rootElement->find(sprintf($this->link, $linkTitle), Locator::SELECTOR_XPATH)->getUrl());
+    }
+
+    /**
+     * Waiter for welcome message.
+     *
+     * @return void
+     */
+    public function waitWelcomeMessage()
+    {
+        $this->waitForElementVisible($this->welcomeMessage);
     }
 }

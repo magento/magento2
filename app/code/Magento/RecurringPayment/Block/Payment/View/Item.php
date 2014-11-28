@@ -25,6 +25,8 @@ namespace Magento\RecurringPayment\Block\Payment\View;
 
 /**
  * Recurring payment view item
+ *
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Item extends \Magento\RecurringPayment\Block\Payment\View
 {

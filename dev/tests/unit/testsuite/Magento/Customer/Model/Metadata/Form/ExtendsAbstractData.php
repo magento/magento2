@@ -66,7 +66,7 @@ class ExtendsAbstractData extends AbstractData
     }
 
     /**
-     * @param \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata $attribute
+     * @param \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute
      */
     public function setAttribute($attribute)
     {

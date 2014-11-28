@@ -27,8 +27,8 @@ namespace Magento\Test\Js;
  * Duplicating the same namespace in the "use" below is a workaround to comply with
  * \Magento\Test\Integrity\ClassesTest::testClassReferences()
  */
-use Magento\TestFramework\Utility\Files;
-use Magento\TestFramework\Utility\AggregateInvoker;
+use Magento\Framework\Test\Utility\Files;
+use Magento\Framework\Test\Utility\AggregateInvoker;
 
 /**
  * JSHint static code analysis tests for javascript files

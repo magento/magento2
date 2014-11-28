@@ -44,10 +44,10 @@ define([
         },
 
         _create: function() {
-            this._bind($(this.options.modeControl), this.options.modeCookie);
+            /*this._bind($(this.options.modeControl), this.options.modeCookie);
             this._bind($(this.options.directionControl), this.options.directionCookie);
             this._bind($(this.options.orderControl), this.options.orderCookie);
-            this._bind($(this.options.limitControl), this.options.limitCookie);
+            this._bind($(this.options.limitControl), this.options.limitCookie);*/
         },
 
         _bind: function(element, cookieValue) {
@@ -76,5 +76,7 @@ define([
             $.cookie(cookieName, cookieValue, {path: '/'});
         }
     });
+    
 
+    return $.mage.productListToolbarForm;
 });

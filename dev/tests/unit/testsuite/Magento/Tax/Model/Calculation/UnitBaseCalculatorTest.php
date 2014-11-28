@@ -36,14 +36,17 @@ class UnitBaseCalculatorTest extends \PHPUnit_Framework_TestCase
     const TYPE = 'TYPE';
     const ROW_TAX = 44.954135954136;
 
-    /** @var \Magento\Tax\Service\V1\Data\TaxDetails\ItemBuilder | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $mockTaxItemDetailsBuilder;
 
-    /** @var \Magento\Tax\Model\Calculation | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $mockCalculationTool;
 
-    /** @var \Magento\Tax\Model\Config | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $mockConfig;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $mockAppliedTaxRateBuilder;
 
     /** @var UnitBaseCalculator */
     protected $model;
@@ -52,8 +55,12 @@ class UnitBaseCalculatorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->mockTaxItemDetailsBuilder = $this->getMockBuilder('\Magento\Tax\Service\V1\Data\TaxDetails\ItemBuilder')
-            ->disableOriginalConstructor()
+        $this->mockTaxItemDetailsBuilder = $this->getMockBuilder('Magento\Tax\Api\Data\TaxDetailsItemDataBuilder')
+            ->setMethods([
+                'setCode', 'setType', 'setTaxPercent', 'setPrice', 'setPriceInclTax', 'setRowTotal',
+                'setRowTotalInclTax', 'setRowTax', 'create', 'populateWithArray', 'setTaxableAmount',
+                'setDiscountAmount', 'setDiscountTaxCompensationAmount', 'setAppliedTaxes', 'setAssociatedItemCode'
+            ])->disableOriginalConstructor()
             ->getMock();
         $this->mockCalculationTool = $this->getMockBuilder('\Magento\Tax\Model\Calculation')
             ->disableOriginalConstructor()
@@ -68,13 +75,31 @@ class UnitBaseCalculatorTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->addressRateRequest = new \Magento\Framework\Object();
 
+        $this->mockAppliedTaxRateBuilder = $this->getMock(
+            'Magento\Tax\Api\Data\AppliedTaxRateDataBuilder',
+            ['setAmount', 'setTaxRateKey', 'setPercent', 'setRates', 'create', 'populateWithArray'],
+            [],
+            '',
+            false
+        );
+
+        $appliedTaxBuilder = $this->getMock(
+            'Magento\Tax\Api\Data\AppliedTaxDataBuilder',
+            ['setAmount', 'setTaxRateKey', 'setPercent', 'setRates', 'create', 'populateWithArray'],
+            [],
+            '',
+            false
+        );
+
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $arguments = [
             'taxDetailsItemBuilder' => $this->mockTaxItemDetailsBuilder,
             'calculationTool'       => $this->mockCalculationTool,
             'config'                => $this->mockConfig,
             'storeId'               => self::STORE_ID,
-            'addressRateRequest'    => $this->addressRateRequest
+            'addressRateRequest'    => $this->addressRateRequest,
+            'appliedRateBuilder'    => $this->mockAppliedTaxRateBuilder,
+            'appliedTaxBuilder'    => $appliedTaxBuilder,
         ];
         $this->model = $objectManager->getObject('Magento\Tax\Model\Calculation\UnitBaseCalculator', $arguments);
     }
@@ -106,12 +131,6 @@ class UnitBaseCalculatorTest extends \PHPUnit_Framework_TestCase
             ->withAnyParameters()
             ->will($this->returnValue([]));
 
-        $mockAppliedTaxRateBuilder = $this->getMockBuilder('Magento\Tax\Service\V1\Data\TaxDetails\AppliedTaxBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->mockTaxItemDetailsBuilder->expects($this->once())
-            ->method('getAppliedTaxBuilder')
-            ->will($this->returnValue($mockAppliedTaxRateBuilder));
         $this->mockTaxItemDetailsBuilder->expects($this->once())
             ->method('setCode')
             ->with(self::CODE);
@@ -149,12 +168,6 @@ class UnitBaseCalculatorTest extends \PHPUnit_Framework_TestCase
             ->withAnyParameters()
             ->will($this->returnValue([['id' => 0, 'percent' => 0, 'rates' => []]]));
 
-        $mockAppliedTaxRateBuilder = $this->getMockBuilder('Magento\Tax\Service\V1\Data\TaxDetails\AppliedTaxBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->mockTaxItemDetailsBuilder->expects($this->once())
-            ->method('getAppliedTaxBuilder')
-            ->will($this->returnValue($mockAppliedTaxRateBuilder));
         $this->mockTaxItemDetailsBuilder->expects($this->once())
             ->method('setCode')
             ->with(self::CODE);
@@ -173,12 +186,12 @@ class UnitBaseCalculatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Magento\Tax\Service\V1\Data\QuoteDetails\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function getMockItem()
     {
-        /** @var $mockItem \Magento\Tax\Service\V1\Data\QuoteDetails\Item | \PHPUnit_Framework_MockObject_MockObject */
-        $mockItem = $this->getMockBuilder('Magento\Tax\Service\V1\Data\QuoteDetails\Item')
+        /** @var $mockItem \PHPUnit_Framework_MockObject_MockObject */
+        $mockItem = $this->getMockBuilder('Magento\Tax\Api\Data\QuoteDetailsItemInterface')
             ->disableOriginalConstructor()
             ->getMock();
         $mockItem->expects($this->once())

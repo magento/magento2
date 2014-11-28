@@ -267,7 +267,7 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getAssignedTheme()
     {
-        return new \Magento\Framework\Object(array('id' => 1, 'theme_path' => 'Magento/plushe'));
+        return new \Magento\Framework\Object(array('id' => 1, 'theme_path' => 'Magento/luma'));
     }
 
     /**

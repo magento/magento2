@@ -70,6 +70,11 @@ class PriceTest extends \PHPUnit_Framework_TestCase
      */
     protected $priceCurrency;
 
+    /**
+     * @var \Magento\Customer\Api\GroupManagementInterface
+     */
+    protected $groupManagement;
+
     protected function setUp()
     {
         $this->ruleFactoryMock = $this->getMock(
@@ -86,6 +91,8 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         $this->catalogHelperMock = $this->getMock('\Magento\Catalog\Helper\Data', array(), array(), '', false);
         $this->storeMock = $this->getMock('\Magento\Store\Model\Store', array(), array(), '', false);
         $this->priceCurrency = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
+        $this->groupManagement = $this->getMockBuilder('Magento\Customer\Api\GroupManagementInterface')
+            ->getMockForAbstractClass();
 
         $this->model = new \Magento\Bundle\Model\Product\Price(
             $this->ruleFactoryMock,
@@ -94,6 +101,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             $this->customerSessionMock,
             $this->eventManagerMock,
             $this->priceCurrency,
+            $this->groupManagement,
             $this->catalogHelperMock
         );
     }

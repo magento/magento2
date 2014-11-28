@@ -123,7 +123,7 @@
                             <?php echo $this->getItemRowTotalHtml($_item); ?>
                         </td>
                         <td class="col-discount col-price">
-                            <?php echo $this->formatPrice(-$_item->getDiscountAmount()) ?><br />
+                            <?php echo $this->formatPrice(-$_item->getTotalDiscountAmount()) ?><br />
                             <input id="item_use_discount_<?php echo $_item->getId() ?>" name="item[<?php echo $_item->getId() ?>][use_discount]"<?php if (!$_item->getNoDiscount()): ?>checked="checked"<?php endif; ?> value="1" type="checkbox" />
                             <label for="item_use_discount_<?php echo $_item->getId() ?>" class="normal"><?php echo __('Apply') ?></label>
                         </td>

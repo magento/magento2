@@ -185,7 +185,7 @@ interface CustomerInterface extends ExtensibleDataInterface
     /**
      * Get customer addresses.
      *
-     * @return \Magento\Customer\Api\Data\AddressInterface[]
+     * @return \Magento\Customer\Api\Data\AddressInterface[]|null
      */
     public function getAddresses();
 }

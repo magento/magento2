@@ -47,12 +47,7 @@ class AbstractWidgetTest extends \PHPUnit_Framework_TestCase
         $this->_block = new AbstractWidget(
             $this->getMock('Magento\Framework\View\Element\Template\Context', array(), array(), '', false),
             $this->_addressHelper,
-            $this->getMockForAbstractClass(
-                'Magento\Customer\Service\V1\CustomerMetadataServiceInterface',
-                array(),
-                '',
-                false
-            )
+            $this->getMockBuilder('\Magento\Customer\Api\CustomerMetadataInterface')->getMockForAbstractClass()
         );
     }
 

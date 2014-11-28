@@ -34,7 +34,7 @@
         <?php echo ($this->getPriceDisplayLabel()) ? 'data-label="' . $this->getPriceDisplayLabel() . $this->getPriceDisplayInclExclTaxes() . '"' : '' ?>
         class="price-wrapper <?php echo $this->getPriceWrapperCss(); ?>"
         <?php echo $this->getSchema() ? ' itemprop="price"' : '' ?>>
-        <?php echo $this->convertAndFormatCurrency($this->getDisplayValue(), (bool)$this->getIncludeContainer()) ?>
+        <?php echo $this->formatCurrency($this->getDisplayValue(), (bool)$this->getIncludeContainer()) ?>
     </span>
     <?php if ($this->hasAdjustmentsHtml()): ?>
         <?php echo $this->getAdjustmentsHtml() ?>

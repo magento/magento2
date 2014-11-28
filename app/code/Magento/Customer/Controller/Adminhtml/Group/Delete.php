@@ -38,7 +38,7 @@ class Delete extends \Magento\Customer\Controller\Adminhtml\Group
         $id = $this->getRequest()->getParam('id');
         if ($id) {
             try {
-                $this->_groupService->deleteGroup($id);
+                $this->groupRepository->deleteById($id);
                 $this->messageManager->addSuccess(__('The customer group has been deleted.'));
                 $this->getResponse()->setRedirect($this->getUrl('customer/group'));
                 return;

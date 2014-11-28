@@ -73,7 +73,6 @@
         </xs:all>
         <xs:attribute name="name" type="moduleName" use="required" />
         <xs:attribute name="schema_version" type="schemaVersion" use="optional" />
-        <xs:attribute name="active" type="xs:boolean" use="optional" />
     </xs:complexType>
 
     <xs:complexType name="moduleDependency">

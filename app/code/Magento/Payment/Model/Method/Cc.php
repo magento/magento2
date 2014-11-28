@@ -384,7 +384,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
      */
     public function getIsCentinelValidationEnabled()
     {
-        return null !== $this->_moduleList->getModule('Magento_Centinel') && 1 == $this->getConfigData('centinel');
+        return $this->_moduleList->has('Magento_Centinel') && 1 == $this->getConfigData('centinel');
     }
 
     /**

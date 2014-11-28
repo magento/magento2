@@ -24,7 +24,8 @@
 
 namespace Magento\Customer\Helper;
 
-use Magento\Customer\Service\V1\AddressMetadataServiceInterface;
+use Magento\Customer\Api\AddressMetadataInterface;
+use Magento\Customer\Api\CustomerMetadataInterface;
 
 class AddressTest extends \PHPUnit_Framework_TestCase
 {
@@ -43,13 +44,13 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $scopeConfig;
 
-    /** @var \Magento\Customer\Service\V1\CustomerMetadataServiceInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CustomerMetadataInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $customerMetadataService;
 
     /** @var \Magento\Customer\Model\Address\Config|\PHPUnit_Framework_MockObject_MockObject */
     protected $addressConfig;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|AddressMetadataServiceInterface */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|AddressMetadataInterface */
     private $addressMetadataService;
 
     protected function setUp()
@@ -67,14 +68,13 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\App\Config\ScopeConfigInterface'
         )->disableOriginalConstructor()->getMock();
         $this->customerMetadataService = $this->getMockBuilder(
-            'Magento\Customer\Service\V1\CustomerMetadataServiceInterface'
+            'Magento\Customer\Api\CustomerMetadataInterface'
         )->disableOriginalConstructor()->getMock();
         $this->addressConfig = $this->getMockBuilder(
             'Magento\Customer\Model\Address\Config'
         )->disableOriginalConstructor()->getMock();
 
-        $this->addressMetadataService = $this->getMockBuilder('Magento\Customer\Service\V1\AddressMetadataService')
-            ->disableOriginalConstructor()
+        $this->addressMetadataService = $this->getMockBuilder('Magento\Customer\Api\AddressMetadataInterface')
             ->getMock();
 
         $this->helper = new \Magento\Customer\Helper\Address(
@@ -96,8 +96,8 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     public function testGetStreetLines($numLines, $expectedNumLines)
     {
         $attributeMock = $this->getMockBuilder(
-            'Magento\Customer\Service\V1\Data\Eav\AttributeMetadata'
-        )->disableOriginalConstructor()->getMock();
+            'Magento\Customer\Api\Data\AttributeMetadataInterface'
+        )->getMock();
         $attributeMock->expects($this->any())->method('getMultilineCount')->will($this->returnValue($numLines));
 
         $this->addressMetadataService
@@ -193,12 +193,10 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAttributeValidationClass($attrCode, $attrClass, $customAttrClass, $result)
     {
-        $attributeMock = $this->getMockBuilder('Magento\Customer\Service\V1\Data\Eav\AttributeMetadata')
-            ->disableOriginalConstructor()->getMock();
+        $attributeMock = $this->getMockBuilder('Magento\Customer\Api\Data\AttributeMetadataInterface')->getMock();
         $attributeMock->expects($this->any())->method('getFrontendClass')->will($this->returnValue($attrClass));
 
-        $customAttrMock = $this->getMockBuilder('Magento\Customer\Service\V1\Data\Eav\AttributeMetadata')
-            ->disableOriginalConstructor()->getMock();
+        $customAttrMock = $this->getMockBuilder('Magento\Customer\Api\Data\AttributeMetadataInterface')->getMock();
         $customAttrMock->expects($this->any())->method('isVisible')->will($this->returnValue(true));
         $customAttrMock->expects($this->any())->method('getFrontendClass')->will($this->returnValue($customAttrClass));
 

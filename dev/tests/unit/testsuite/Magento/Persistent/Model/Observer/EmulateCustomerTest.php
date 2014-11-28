@@ -102,7 +102,7 @@ class EmulateCustomerTest extends \PHPUnit_Framework_TestCase
         $customerId = 1;
         $customerGroupId = 2;
         $sessionMock = $this->getMock('Magento\Persistent\Model\Session', ['getCustomerId', '__wakeUp'], [], '', false);
-        $customerMock = $this->getMock('\Magento\Customer\Service\V1\Data\Customer', [], [], '', false);
+        $customerMock = $this->getMock('\Magento\Customer\Api\Data\CustomerInterface', [], [], '', false);
         $this->helperMock
             ->expects($this->once())
             ->method('canProcess')

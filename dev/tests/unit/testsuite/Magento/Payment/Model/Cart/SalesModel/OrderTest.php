@@ -33,36 +33,18 @@ class OrderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_orderMock = $this->getMock('Magento\Sales\Model\Order', array(), array(), '', false);
+        $this->_orderMock = $this->getMock('Magento\Sales\Model\Order', [], [], '', false);
         $this->_model = new \Magento\Payment\Model\Cart\SalesModel\Order($this->_orderMock);
-    }
-
-    /**
-     * @param string $getterMethod
-     * @dataProvider gettersDataProvider
-     */
-    public function testGetters($getterMethod)
-    {
-        $this->_orderMock->expects(
-            $this->once()
-        )->method(
-            '__call'
-        )->with(
-            $getterMethod
-        )->will(
-            $this->returnValue('some value')
-        );
-        $this->assertEquals('some value', $this->_model->{$getterMethod}());
     }
 
     public function gettersDataProvider()
     {
-        return array(
-            array('getBaseSubtotal'),
-            array('getBaseTaxAmount'),
-            array('getBaseShippingAmount'),
-            array('getBaseDiscountAmount')
-        );
+        return [
+            ['getBaseSubtotal'],
+            ['getBaseTaxAmount'],
+            ['getBaseShippingAmount'],
+            ['getBaseDiscountAmount']
+        ];
     }
 
     public function testGetDataUsingMethod()
@@ -87,46 +69,46 @@ class OrderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAllItems()
     {
-        $items = array(
+        $items = [
             new \Magento\Framework\Object(
-                array('parent_item' => 'parent item 1', 'name' => 'name 1', 'qty_ordered' => 1, 'base_price' => 0.1)
+                ['parent_item' => 'parent item 1', 'name' => 'name 1', 'qty_ordered' => 1, 'base_price' => 0.1]
             ),
             new \Magento\Framework\Object(
-                array('parent_item' => 'parent item 2', 'name' => 'name 2', 'qty_ordered' => 2, 'base_price' => 1.2)
+                ['parent_item' => 'parent item 2', 'name' => 'name 2', 'qty_ordered' => 2, 'base_price' => 1.2]
             ),
             new \Magento\Framework\Object(
-                array('parent_item' => 'parent item 3', 'name' => 'name 3', 'qty_ordered' => 3, 'base_price' => 2.3)
+                ['parent_item' => 'parent item 3', 'name' => 'name 3', 'qty_ordered' => 3, 'base_price' => 2.3]
             )
-        );
-        $expected = array(
+        ];
+        $expected = [
             new \Magento\Framework\Object(
-                array(
+                [
                     'parent_item' => 'parent item 1',
                     'name' => 'name 1',
                     'qty' => 1,
                     'price' => 0.1,
                     'original_item' => $items[0]
-                )
+                ]
             ),
             new \Magento\Framework\Object(
-                array(
+                [
                     'parent_item' => 'parent item 2',
                     'name' => 'name 2',
                     'qty' => 2,
                     'price' => 1.2,
                     'original_item' => $items[1]
-                )
+                ]
             ),
             new \Magento\Framework\Object(
-                array(
+                [
                     'parent_item' => 'parent item 3',
                     'name' => 'name 3',
                     'qty' => 3,
                     'price' => 2.3,
                     'original_item' => $items[2]
-                )
+                ]
             )
-        );
+        ];
         $this->_orderMock->expects($this->once())->method('getAllItems')->will($this->returnValue($items));
         $this->assertEquals($expected, $this->_model->getAllItems());
     }

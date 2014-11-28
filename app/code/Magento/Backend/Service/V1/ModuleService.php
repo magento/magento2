@@ -49,11 +49,6 @@ class ModuleService implements ModuleServiceInterface
      */
     public function getModules()
     {
-        $result = [];
-        $modules = $this->moduleList->getModules();
-        foreach ($modules as $module) {
-            $result[] = $module['name'];
-        }
-        return $result;
+        return $this->moduleList->getNames();
     }
 }

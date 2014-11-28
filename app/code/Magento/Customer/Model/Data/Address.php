@@ -41,7 +41,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
     /**
      * Get region
      *
-     * @return \Magento\Customer\Service\V1\Data\Region|null
+     * @return \Magento\Customer\Api\Data\RegionInterface|null
      */
     public function getRegion()
     {

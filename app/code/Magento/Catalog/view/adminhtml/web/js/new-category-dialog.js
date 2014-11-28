@@ -150,4 +150,6 @@ define([
             });
         }
     });
+    
+    return $.mage.newCategoryDialog;
 });

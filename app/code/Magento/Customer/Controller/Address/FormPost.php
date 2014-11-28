@@ -32,14 +32,14 @@ class FormPost extends \Magento\Customer\Controller\Address
     /**
      * Extract address from request
      *
-     * @return \Magento\Customer\Service\V1\Data\Address
+     * @return \Magento\Customer\Api\Data\AddressInterface
      */
     protected function _extractAddress()
     {
         $addressId = $this->getRequest()->getParam('id');
         $existingAddressData = array();
         if ($addressId) {
-            $existingAddress = $this->_addressRepository->get($addressId);
+            $existingAddress = $this->_addressRepository->getById($addressId);
 
             $existingAddressData = $this->_dataProcessor
                 ->buildOutputDataArray($existingAddress, '\Magento\Customer\Api\Data\AddressInterface');

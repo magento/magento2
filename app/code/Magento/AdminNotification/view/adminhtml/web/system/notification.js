@@ -63,4 +63,5 @@ define([
         });
     });
 
+    return $.mage.systemMessageDialog;
 });

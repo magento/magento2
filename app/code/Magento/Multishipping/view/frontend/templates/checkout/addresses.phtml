@@ -75,7 +75,7 @@
                                 </div>
                             <?php endif; ?>
                         </td>
-                        <td class="col actions" data-th="">
+                        <td class="col actions" data-th="<?php echo $this->escapeHtml(__('Actions'));?>">
                             <a href="<?php echo $this->getItemDeleteUrl($_item) ?>" title="<?php echo __('Remove Item') ?>" class="action delete">
                                 <span><?php echo __('Remove item') ?></span>
                             </a>

@@ -74,8 +74,7 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $moduleList = array('Test_Module' => array());
-        $this->_moduleListMock->expects($this->any())->method('getModules')->will($this->returnValue($moduleList));
+        $this->_moduleListMock->expects($this->any())->method('getNames')->will($this->returnValue(['Test_Module']));
 
         $resourceList = array('catalog_setup');
         $this->_resourceResolver->expects($this->any())

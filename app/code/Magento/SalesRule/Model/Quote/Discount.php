@@ -25,6 +25,7 @@ namespace Magento\SalesRule\Model\Quote;
 
 use Magento\Sales\Model\Quote\Address;
 use Magento\Sales\Model\Quote\Item\AbstractItem;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 class Discount extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
 {
@@ -48,19 +49,27 @@ class Discount extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
     protected $_storeManager;
 
     /**
+     * @var PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\SalesRule\Model\Validator $validator
+     * @param PriceCurrencyInterface $priceCurrency
      */
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\StoreManagerInterface $storeManager,
-        \Magento\SalesRule\Model\Validator $validator
+        \Magento\SalesRule\Model\Validator $validator,
+        PriceCurrencyInterface $priceCurrency
     ) {
         $this->_eventManager = $eventManager;
         $this->setCode('discount');
         $this->_calculator = $validator;
         $this->_storeManager = $storeManager;
+        $this->priceCurrency = $priceCurrency;
     }
 
     /**
@@ -98,12 +107,18 @@ class Discount extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
             if ($item->getNoDiscount() || !$this->_calculator->canApplyDiscount($item)) {
                 $item->setDiscountAmount(0);
                 $item->setBaseDiscountAmount(0);
+
+                // ensure my children are zeroed out
+                if ($item->getHasChildren() && $item->isChildrenCalculated()) {
+                    foreach ($item->getChildren() as $child) {
+                        $child->setDiscountAmount(0);
+                        $child->setBaseDiscountAmount(0);
+                    }
+                }
                 continue;
             }
-            /**
-             * Child item discount we calculate for parent
-             */
-            if ($item->getParentItemId()) {
+            // to determine the child item discount, we calculate the parent
+            if ($item->getParentItem()) {
                 continue;
             }
 
@@ -111,20 +126,14 @@ class Discount extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
             $this->_eventManager->dispatch('sales_quote_address_discount_item', $eventArgs);
 
             if ($item->getHasChildren() && $item->isChildrenCalculated()) {
-                $isMatchedParent = $this->_calculator->canApplyRules($item);
-                $this->_calculator->setSkipActionsValidation($isMatchedParent);
+                $this->_calculator->process($item);
+                $this->distributeDiscount($item);
                 foreach ($item->getChildren() as $child) {
-                    $this->_calculator->process($child);
-                    if ($isMatchedParent) {
-                        $this->_recalculateChildDiscount($child);
-                    }
-
                     $eventArgs['item'] = $child;
                     $this->_eventManager->dispatch('sales_quote_address_discount_item', $eventArgs);
 
                     $this->_aggregateItemDiscount($child);
                 }
-                $this->_calculator->setSkipActionsValidation(false);
             } else {
                 $this->_calculator->process($item);
                 $this->_aggregateItemDiscount($item);
@@ -160,19 +169,40 @@ class Discount extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
     }
 
     /**
-     * Recalculate child discount. Separate discount between children
+     * Distribute discount at parent item to children items
      *
-     * @param AbstractItem $child
+     * @param AbstractItem $item
      * @return $this
      */
-    protected function _recalculateChildDiscount($child)
+    protected function distributeDiscount(AbstractItem $item)
     {
-        $item = $child->getParentItem();
-        $prices = array('base' => $item->getBaseOriginalPrice(), 'current' => $item->getPrice());
-        $keys = array('discount_amount', 'original_discount_amount');
+        $parentBaseRowTotal = $item->getBaseRowTotal();
+        $keys = [
+            'discount_amount',
+            'base_discount_amount',
+            'original_discount_amount',
+            'base_original_discount_amount',
+        ];
+        $roundingDelta = [];
         foreach ($keys as $key) {
-            $child->setData($key, $child->getData($key) * $child->getPrice() / $prices['current']);
-            $child->setData('base_' . $key, $child->getData('base_' . $key) * $child->getPrice() / $prices['base']);
+            //Initialize the rounding delta to a tiny number to avoid floating point precision problem
+            $roundingDelta[$key] = 0.0000001;
+        }
+        foreach ($item->getChildren() as $child) {
+            $ratio = $child->getBaseRowTotal() / $parentBaseRowTotal;
+            foreach ($keys as $key) {
+                if (!$item->hasData($key)) {
+                    continue;
+                }
+                $value = $item->getData($key) * $ratio;
+                $roundedValue = $this->priceCurrency->round($value + $roundingDelta[$key]);
+                $roundingDelta[$key] += $value - $roundedValue;
+                $child->setData($key, $roundedValue);
+            }
+        }
+
+        foreach ($keys as $key) {
+            $item->setData($key, 0);
         }
         return $this;
     }

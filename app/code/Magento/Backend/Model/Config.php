@@ -362,6 +362,41 @@ class Config extends \Magento\Framework\Object
     }
 
     /**
+     * Add data by path section/group/field
+     *
+     * @param string $path
+     * @param mixed $value
+     * @return void
+     * @throws \UnexpectedValueException
+     */
+    public function setDataByPath($path, $value)
+    {
+        $path = trim($path);
+        if ($path === '') {
+            throw new \UnexpectedValueException('Path must not be empty');
+        }
+        $pathParts = explode('/', $path);
+        $keyDepth = count($pathParts);
+        if ($keyDepth !== 3) {
+            throw new \UnexpectedValueException(
+                "Allowed depth of configuration is 3 (<section>/<group>/<field>). Your configuration depth is "
+                . $keyDepth . " for path '$path'"
+            );
+        }
+        $data = [
+            'section' => $pathParts[0],
+            'groups' => [
+                $pathParts[1] => [
+                    'fields' => [
+                        $pathParts[2] => ['value' => $value],
+                    ],
+                ],
+            ],
+        ];
+        $this->addData($data);
+    }
+
+    /**
      * Get scope name and scopeId
      * @todo refactor to scope resolver
      * @return void

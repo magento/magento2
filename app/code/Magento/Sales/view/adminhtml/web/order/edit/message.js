@@ -85,5 +85,6 @@ define([
                 });
         }
     });
-
+    
+    return $.mage.orderEditDialog;
 });

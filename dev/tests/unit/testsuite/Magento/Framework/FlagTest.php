@@ -56,7 +56,7 @@ class FlagTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
         $appResource = $this->getMock(
             'Magento\Framework\App\Resource',
-            ['beginTransaction', 'getConnection'],
+            [],
             [],
             '',
             false,
@@ -148,6 +148,6 @@ class FlagTest extends \PHPUnit_Framework_TestCase
     {
         $this->createInstance();
         $this->flag->setData('block', 'blockNmae');
-        $this->flag->save();
+        $this->flag->beforeSave();
     }
 }

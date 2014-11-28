@@ -1511,7 +1511,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     {
         // merge street addresses into 1
         if ($address->hasStreet2()) {
-            $address->setStreet(implode("\n", array($address->getStreet(), $address->getStreet2())));
+            $address->setStreet(implode("\n", array($address->getStreet(), $address->getStreetLine(2))));
             $address->unsStreet2();
         }
         // attempt to fetch region_id from directory

@@ -240,7 +240,7 @@
 ) {
     @{_options-selector} {
         .list-reset-styles();
-        .box-sizing();
+        box-sizing: border-box;
         .css(background, @_dropdown-list-background);
         .css(border, @_dropdown-list-border);
         position: absolute;
@@ -454,15 +454,11 @@
     @_dropdown-split-button-border-radius-fix
 ) when (@_dropdown-split-toggle-position = right) and (@_dropdown-split-button-border-radius-fix = true) {
     button@{_button-selector} {
-        -webkit-border-top-right-radius: 0;
-        -webkit-border-bottom-right-radius: 0;
         border-top-right-radius: 0;
         border-bottom-right-radius: 0;
     }
     button + @{_toggle-selector} {
         border-left: 0;
-        -webkit-border-top-left-radius: 0;
-        -webkit-border-bottom-left-radius: 0;
         border-top-left-radius: 0;
         border-bottom-left-radius: 0;
     }
@@ -478,15 +474,11 @@
     @_dropdown-split-button-border-radius-fix
 ) when (@_dropdown-split-toggle-position = left) and (@_dropdown-split-button-border-radius-fix = true) {
     button@{_button-selector} {
-        -webkit-border-top-left-radius: 0;
-        -webkit-border-bottom-left-radius: 0;
         border-top-left-radius: 0;
         border-bottom-left-radius: 0;
     }
     button + @{_toggle-selector} {
         border-right: 0;
-        -webkit-border-top-right-radius: 0;
-        -webkit-border-bottom-right-radius: 0;
         border-top-right-radius: 0;
         border-bottom-right-radius: 0;
     }
@@ -591,5 +583,5 @@
 ._dropdown-list-shadow(
     @_dropdown-list-shadow
 ) when not (@_dropdown-list-shadow = '') and not (@_dropdown-list-shadow = none) {
-    .box-shadow(@_dropdown-list-shadow);
+    .css(box-shadow, @_dropdown-list-shadow);
 }

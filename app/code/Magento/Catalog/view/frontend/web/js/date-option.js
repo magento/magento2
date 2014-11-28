@@ -25,6 +25,7 @@ define([
     "jquery",
     "jquery/ui"
 ], function($){
+    "use strict";
     
     $.widget('mage.dateOption', {
         options: {
@@ -108,4 +109,6 @@ define([
             }
         }
     });
+    
+    return $.mage.dateOption;
 });

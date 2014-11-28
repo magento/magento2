@@ -93,7 +93,7 @@ class Reader
     public function getConfigurationFiles($filename)
     {
         $result = array();
-        foreach (array_keys($this->modulesList->getModules()) as $moduleName) {
+        foreach ($this->modulesList->getNames() as $moduleName) {
             $file = $this->getModuleDir('etc', $moduleName) . '/' . $filename;
             $path = $this->modulesDirectory->getRelativePath($file);
             if ($this->modulesDirectory->isExist($path)) {
@@ -111,7 +111,7 @@ class Reader
     public function getActionFiles()
     {
         $actions = array();
-        foreach (array_keys($this->modulesList->getModules()) as $moduleName) {
+        foreach ($this->modulesList->getNames() as $moduleName) {
             $actionDir = $this->getModuleDir('Controller', $moduleName);
             if (!file_exists($actionDir)) {
                 continue;

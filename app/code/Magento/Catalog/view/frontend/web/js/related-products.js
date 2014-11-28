@@ -112,4 +112,6 @@ define([
             return o;
         }
     });
+
+    return $.mage.relatedProducts;
 });

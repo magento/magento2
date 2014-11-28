@@ -81,7 +81,7 @@ class Cron extends \Magento\Framework\App\Config\Value
      * @return void
      * @throws \Magento\Framework\Model\Exception
      */
-    protected function _afterSave()
+    public function afterSave()
     {
         $enabled = $this->getData(self::XML_PATH_BACKUP_ENABLED);
         $time = $this->getData(self::XML_PATH_BACKUP_TIME);

@@ -59,7 +59,7 @@
                 </arguments>
             </block>
         </referenceContainer>
-        <move element="product.info" destination="content" after="product.info.main" />
+        <move element="product.info" destination="content" after="product.info.media" />
         <move element="product.info.social" destination="product.info.options.wrapper.bottom" after="-" />
     </body>
 </page>

@@ -49,7 +49,9 @@
 }
 
 .account .table-wrapper .data.table.wishlist {
-    .table-bordered(@_type: horizontal);
+    .table-bordered(
+        @_table_type: horizontal
+    );
     thead > tr > th {
         border-bottom: 0;
     }
@@ -107,11 +109,9 @@
 .products-grid.wishlist {
     .product {
         &-item {
-            &-info {
-            }
             &-photo {
                 margin-bottom: @indent-s-base;
-                display: inline-block;
+                display: block;
             }
             &-name {
                 margin-top: 0;
@@ -242,16 +242,8 @@
     .products-grid.wishlist {
         .product {
             &-item {
-                &-info {
-                }
-                &-photo {
-                }
-                &-name {
-                }
                 &-tooltip {
                     display: inline-block;
-                }
-                &-comment {
                 }
                 &-actions {
                     margin: @indent-s-base 0 0;
@@ -263,6 +255,9 @@
                     .field.qty {
                         padding-right: @indent-s-base;
                         margin-bottom: @indent-s-base;
+                        .label {
+                            width: auto;
+                        }
                     }
                 }
                 .box-tocart {
@@ -280,35 +275,21 @@
         .product {
             &-item {
                 &-info {
-                    width: 200px;
+                    width: 250px;
                 }
             }
         }
     }
 }
 
-.responsive(@break) when (@break = @screen-s) {
-    //.wishlist-index-index .products-grid .product-item { width: 100%/3 }
-}
-.responsive(@break) when (@break = @screen-m) {
-    //.wishlist-index-index .products-grid .product-item { width: 100%/3 }
-}
 .responsive(@break) when (@break = @screen-l) {
     .wishlist-index-index .products-grid .product-items { margin: 0; }
     .wishlist-index-index .products-grid .product-item {
-        width: 100%/4;
-        width: 200px;
-        //margin: 0;
-        margin-left: calc(~"(100% - 4 * 200px) / 3");
+        width: 24%;
+        margin-left: calc(~"(100% - 4 * 24%) / 3");
         padding: 0;
         &:nth-child(4n+1) {
             margin-left: 0;
-        }
-    }
-    .products-grid.wishlist {
-        .product {
-            &-item {
-            }
         }
     }
 }

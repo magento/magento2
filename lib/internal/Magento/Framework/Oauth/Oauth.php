@@ -55,12 +55,13 @@ class Oauth implements OauthInterface
         Helper\Oauth $oauthHelper,
         NonceGeneratorInterface $nonceGenerator,
         TokenProviderInterface $tokenProvider,
-        \Zend_Oauth_Http_Utility $httpUtility
+        \Zend_Oauth_Http_Utility $httpUtility = null
     ) {
         $this->_oauthHelper = $oauthHelper;
         $this->_nonceGenerator = $nonceGenerator;
         $this->_tokenProvider = $tokenProvider;
-        $this->_httpUtility = $httpUtility;
+        // null default to prevent ObjectManagerFactory from injecting, see MAGETWO-30809
+        $this->_httpUtility = $httpUtility ?: new \Zend_Oauth_Http_Utility();
     }
 
     /**

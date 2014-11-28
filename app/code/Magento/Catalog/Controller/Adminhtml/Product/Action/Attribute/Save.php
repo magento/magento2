@@ -200,13 +200,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
                 }
 
                 $this->_eventManager->dispatch('catalog_product_to_website_change', array('products' => $productIds));
-
-                $this->messageManager->addNotice(
-                    __(
-                        'Please refresh "Product EAV" in System -> <a href="%1">Index Management</a>.',
-                        $this->getUrl('adminhtml/process/list')
-                    )
-                );
             }
 
             $this->messageManager->addSuccess(

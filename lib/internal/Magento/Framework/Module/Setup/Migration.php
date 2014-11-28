@@ -30,7 +30,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Migration extends \Magento\Framework\Module\Setup
+class Migration extends \Magento\Framework\Module\DataSetup
 {
     /**#@+
      * Type of field content where class alias is used

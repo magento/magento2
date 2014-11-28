@@ -98,9 +98,9 @@ define([
                 templatesToRender = [],
                 extendPointsToRender = [];
 
-            templateContainer = document.createDocumentFragment();
+            templateContainer = document.createElement('div');
 
-            wrap(toArray($(rawHtml)), templateContainer);
+            wrap(toArray($.parseHTML(rawHtml)), templateContainer);
 
             extendNodes          = getExtendNodesFrom(templateContainer);
             templatesToRender    = extendNodes.map(extractTemplatePath, this)
@@ -113,7 +113,7 @@ define([
                     args = toArray(arguments);
 
                 args.forEach(function(renderedNodes, idx) {
-                    container = document.createDocumentFragment();
+                    container = document.createElement('div');
                     wrap(renderedNodes, container);
 
                     correspondingExtendNode = extendNodes[idx];
@@ -121,9 +121,8 @@ define([
 
                     $(correspondingExtendNode).empty();
 
-                    this._overridePartsOf(container)
-                        .by(newParts)
-                        .appendTo(correspondingExtendNode);
+                    this._overridePartsOf(container, newParts)
+                        .replace(correspondingExtendNode);
 
                 }, this);
 
@@ -168,47 +167,34 @@ define([
         },
 
         /**
-         * Caches template and returns object for the sake of chaining
+         * Loops over newParts map and invokes override actions for each found.
          * @param  {HTMLElement} template - container to look for parts to be overrided by new ones.
+         * @param  {Object} newParts - the result of _buildPartsMapFrom method.
          * @return {Object}
          */
-        _overridePartsOf: function(template) {
+        _overridePartsOf: function(template, newParts) {
+            var oldElement;
+
+            _.each(newParts, function(actions, partName) {
+                _.each(actions, function(newElements, action) {
+
+                    oldElement = template.querySelector(createPartSelectorFor(partName));
+                    overrides[action](
+                        oldElement,
+                        newElements
+                    );
+
+                });
+            });
+
             return {
 
                 /**
-                 * Loops over newParts map and invokes override actions for each found.
-                 * @param  {Object} newParts - the result of _buildPartsMapFrom method.
-                 * @return {Object} - Returns object for the sake of chaining
+                 * Replaces extendNode with the result of overrides
+                 * @param  {HTMLElement} extendNode - initial container of new parts declarations
                  */
-                by: function(newParts) {
-                    var oldElement;
-
-                    _.each(newParts, function(actions, partName) {
-                        _.each(actions, function(newElements, action) {
-
-                            oldElement = template.querySelector(createPartSelectorFor(partName));
-                            overrides[action](
-                                oldElement,
-                                newElements
-                            );
-
-                        });
-                    });
-
-                    return {
-
-                        /**
-                         * Appends template's (overrided already) children to extendNode.
-                         * @param  {HTMLElement} extendNode - initial container of new parts declarations
-                         */
-                        appendTo: function(extendNode) {
-                            if (template.hasChildNodes()) {
-                                toArray(template.childNodes).forEach(function (child) {
-                                    extendNode.appendChild(child);
-                                });
-                            }
-                        }
-                    }
+                replace: function(extendNode) {
+                    $(extendNode).replaceWith(template.childNodes);
                 }
             }
         }

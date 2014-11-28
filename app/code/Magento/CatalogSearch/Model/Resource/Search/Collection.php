@@ -70,6 +70,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection impl
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory
      * @param \Zend_Db_Adapter_Abstract $connection
      *
@@ -94,6 +95,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection impl
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Stdlib\DateTime $dateTime,
+        \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory,
         $connection = null
     ) {
@@ -117,6 +119,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection impl
             $localeDate,
             $customerSession,
             $dateTime,
+            $groupManagement,
             $connection
         );
     }

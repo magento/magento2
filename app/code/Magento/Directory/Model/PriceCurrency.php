@@ -23,8 +23,10 @@
  */
 namespace Magento\Directory\Model;
 
+use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\StoreManagerInterface;
 use Magento\Framework\Logger;
+use Magento\Store\Model\Store;
 
 /**
  * Class PriceCurrency model for convert and format price value
@@ -62,98 +64,101 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
     }
 
     /**
-     * Convert and format price value for specified store or passed currency
-     *
-     * @param float $amount
-     * @param null|string|bool|int|\Magento\Store\Model\Store $store
-     * @param Currency|string|null $currency
-     * @return float
+     * {@inheritdoc}
      */
-    public function convert($amount, $store = null, $currency = null)
+    public function convert($amount, $scope = null, $currency = null)
     {
-        $currentCurrency = $this->getCurrency($store, $currency);
-        return $this->getStore($store)->getBaseCurrency()->convert($amount, $currentCurrency);
+        $currentCurrency = $this->getCurrency($scope, $currency);
+
+        return $this->getStore($scope)
+            ->getBaseCurrency()
+            ->convert($amount, $currentCurrency);
     }
 
     /**
-     * Format price value for specified store or passed currency
+     * Convert and round price value for specified store or passed currency
      *
      * @param float $amount
-     * @param bool $includeContainer
-     * @param int $precision
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
      * @param Currency|string|null $currency
-     * @return string
+     * @param int $precision
+     * @return float
+     */
+    public function convertAndRound($amount, $store = null, $currency = null, $precision = self::DEFAULT_PRECISION)
+    {
+        $currentCurrency = $this->getCurrency($store, $currency);
+        $convertedValue = $this->getStore($store)->getBaseCurrency()->convert($amount, $currentCurrency);
+        return round($convertedValue, $precision);
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function format(
         $amount,
         $includeContainer = true,
         $precision = self::DEFAULT_PRECISION,
-        $store = null,
+        $scope = null,
         $currency = null
     ) {
-        return $this->getCurrency($store, $currency)->formatPrecision($amount, $precision, [], $includeContainer);
+        return $this->getCurrency($scope, $currency)
+            ->formatPrecision($amount, $precision, [], $includeContainer);
     }
 
     /**
-     * Convert and format price value
-     *
-     * @param float $amount
-     * @param bool $includeContainer
-     * @param int $precision
-     * @param null|string|bool|int|\Magento\Store\Model\Store $store
-     * @param Currency|string|null $currency
-     * @return string
+     * {@inheritdoc}
      */
     public function convertAndFormat(
         $amount,
         $includeContainer = true,
         $precision = self::DEFAULT_PRECISION,
-        $store = null,
+        $scope = null,
         $currency = null
     ) {
-        $amount = $this->convert($amount, $store, $currency);
-        return $this->format($amount, $includeContainer, $precision, $store, $currency);
+        $amount = $this->convert($amount, $scope, $currency);
+
+        return $this->format($amount, $includeContainer, $precision, $scope, $currency);
     }
 
     /**
-     * Get currency model
-     *
-     * @param null|string|bool|int|\Magento\Store\Model\Store $store
-     * @param Currency|string|null $currency
-     * @return Currency
+     * {@inheritdoc}
      */
-    public function getCurrency($store = null, $currency = null)
+    public function getCurrency($scope = null, $currency = null)
     {
         if ($currency instanceof Currency) {
             $currentCurrency = $currency;
         } elseif (is_string($currency)) {
-            $currency = $this->currencyFactory->create()->load($currency);
-            $baseCurrency = $this->getStore($store)->getBaseCurrency();
+            $currency = $this->currencyFactory->create()
+                ->load($currency);
+            $baseCurrency = $this->getStore($scope)
+                ->getBaseCurrency();
             $currentCurrency = $baseCurrency->getRate($currency) ? $currency : $baseCurrency;
         } else {
-            $currentCurrency = $this->getStore($store)->getCurrentCurrency();
+            $currentCurrency = $this->getStore($scope)
+                ->getCurrentCurrency();
         }
+
         return $currentCurrency;
     }
 
     /**
      * Get store model
      *
-     * @param null|string|bool|int|\\Magento\Store\Model\Store $store
-     * @return \Magento\Store\Model\Store
+     * @param null|string|bool|int|ScopeInterface $scope
+     * @return Store
      */
-    protected function getStore($store = null)
+    protected function getStore($scope = null)
     {
         try {
-            if (!$store instanceof \Magento\Store\Model\Store) {
-                $store = $this->storeManager->getStore($store);
+            if (!$scope instanceof Store) {
+                $scope = $this->storeManager->getStore($scope);
             }
         } catch (\Exception $e) {
             $this->logger->logException($e);
-            $store = $this->storeManager->getStore();
+            $scope = $this->storeManager->getStore();
         }
-        return $store;
+
+        return $scope;
     }
 
     /**

@@ -56,6 +56,11 @@ class CustomOptionPriceTest extends \PHPUnit_Framework_TestCase
     protected $amount;
 
     /**
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $priceCurrencyMock;
+
+    /**
      * SetUp
      */
     protected function setUp()
@@ -96,10 +101,13 @@ class CustomOptionPriceTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $this->priceCurrencyMock = $this->getMock('\Magento\Framework\Pricing\PriceCurrencyInterface');
+
         $this->object = new CustomOptionPrice(
             $this->product,
             PriceInfoInterface::PRODUCT_QUANTITY_DEFAULT,
-            $this->calculator
+            $this->calculator,
+            $this->priceCurrencyMock
         );
     }
 

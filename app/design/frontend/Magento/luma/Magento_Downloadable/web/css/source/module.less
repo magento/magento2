@@ -1,0 +1,178 @@
+// /**
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+.table-downloadable-products {
+    .product-name {
+        font-weight: @font-weight-base;
+        margin-right: 15px;
+    }
+    .action.download {
+        .icon-font(
+            @_icon-font-content: @icon-download,
+            @_icon-font-margin: 0 5px 0 0
+        );
+    }
+}
+.page-product-downloadable {
+    .product-add-form {
+        clear: both;
+        margin-bottom: @indent-m-base;
+        &:extend(.abstract-add-clearfix all);
+    }
+    .product-options-bottom {
+        .field.qty {
+            display: none;
+        }
+    }
+    .product-options-wrapper {
+        .fieldset {
+            .legend.links-title {
+                &:extend(.abstract-visually-hidden all);
+            }
+        }
+    }
+}
+.samples {
+    &-item-title {
+        font-size: 1.4rem;
+        font-weight: 600;
+        margin: 0 0 @indent-s-base;
+    }
+    &-item {
+        margin: 0 0 @indent-s-base;
+    }
+}
+.field.downloads {
+    margin-bottom: @indent-s-base;
+    .page-product-downloadable .product-add-form .product-options-wrapper & > .control {
+        width: 100%;
+    }
+    .price-container {
+        display: inline;
+        white-space: nowrap;
+        &:before {
+            content: " + ";
+            display: inline;
+        }
+    }
+    .price-excluding-tax {
+        display: inline;
+        &:before {
+            content: " ("attr(data-label) ": ";
+        }
+        &:after {
+            content: ")";
+        }
+    }
+    .price-including-tax {
+        display: inline;
+        font-weight:  @font-weight-semibold;
+        .font-size(14);
+    }
+    .field.choice {
+        box-sizing: border-box;
+        border-bottom: 1px solid #ebebeb;
+        padding-bottom: @indent-s-base;
+        margin-bottom: @indent-s-base;
+        &:extend(.clearer all);
+        width: 100%;
+        position: relative;
+        z-index: 1;
+        input {
+            position: absolute;
+            left: 0;
+            top: 2px;
+        }
+        padding-left: 25px;
+    }
+    .field.choice:last-child {
+        padding-left: 0;
+        border-bottom: 0;
+    }
+    .sample.link {
+        float: right;
+    }
+    &-all {
+        .label {
+            .link();
+            cursor: pointer;
+        }
+        input {
+            opacity: 0;
+        }
+    }
+    &.downloads-no-separately {
+        .field.choice {
+            padding-left: 0;
+        }
+    }
+}
+
+//
+//    Mobile
+//--------------------------------------
+.responsive-smaller(@break) when (@break = @screen-s) {
+    .page-product-downloadable .product-options-wrapper {
+        margin-bottom: @indent-m-base;
+    }
+    .table-downloadable-products {
+        .product-name {
+            display: block;
+            .css(margin-bottom, @indent-xs-base);
+        }
+        .col.title {
+            &:before {
+                &:extend(.abstract-visually-hidden-mobile all);
+            }
+        }
+    }
+    .page-product-downloadable .product-info-price ~ *:last-child:after {
+        border-bottom: 1px #c1c1c1 solid;
+        content: '';
+        display: block;
+        height: 0;
+        overflow: hidden;
+        width: auto;
+        margin: @indent-m-base -@indent-s-base @indent-m-base;
+    }
+}
+
+//
+// Product view Desktop
+//--------------------------------------
+.responsive(@break) when (@break = @screen-m) {
+.page-product-downloadable {
+        .product-add-form {
+            &:extend(.clearer all);
+        }
+        .product-options-wrapper {
+            float: left;
+            width: 55%;
+        }
+        .product-options-bottom {
+            float: right;
+            width: 40%;
+        }
+    }
+}

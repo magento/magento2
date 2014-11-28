@@ -46,6 +46,7 @@ class Container implements Layout\GeneratorInterface
         'div',
         'dl',
         'fieldset',
+        'main',
         'header',
         'footer',
         'hgroup',

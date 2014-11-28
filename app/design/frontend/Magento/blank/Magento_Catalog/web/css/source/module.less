@@ -135,10 +135,7 @@
 //--------------------------------------
 .product.media {
     .product.photo .photo.image {
-        display: block;
-        margin: 0 auto;
-        max-width: 100%;
-        height: auto;
+        &:extend(.abstract-adaptive-images-centered);
     }
     .placeholder .photo.container {
         max-width: 100%;
@@ -163,7 +160,7 @@
 .product.info.detailed {
     clear: both;
     margin-bottom: 30px;
-    .table.additional.attributes {
+    .additional-attributes {
         width: auto;
         .table-resize(
             @_th-padding-left: 0,
@@ -259,10 +256,8 @@
         }
         .input-text.qty {
             @tocart-input-size: @button-l-line-height + 28px;
-            .form-element-size(
-                @_width: @tocart-input-size + 2px,
-                @_height: @tocart-input-size + 2px
-            );
+            width: @tocart-input-size + 2px;
+            height: @tocart-input-size + 2px;
             text-align: center;
         }
         .actions {
@@ -304,6 +299,12 @@
     .button-as-link();
 }
 
+.block.related {
+    .action.select {
+        margin: 0 @indent-xs-base;
+    }
+}
+
 //
 //    Sidebar product view
 //--------------------------------------
@@ -342,7 +343,7 @@
         }
         .counter {
             color: @color-primary-lighter;
-            font-size: 12px;
+            .font-size(12);
             white-space: nowrap;
         }
         .minilist {
@@ -397,11 +398,26 @@
 //    Mobile
 //--------------------------------------
 .responsive-smaller(@break) when (@break = @screen-m) {
+    .catalog-product-view {
+        .column.main {
+            .vendor-prefix-display(flex);
+            flex-direction: column;
+        }
+        .product.media {
+            .vendor-prefix-order(-1);
+        }
+    }
     .product-info-main .box-tocart {
         .actions {
             .action.tocart {
                 &:extend(.abstract-button-responsive-smaller all);
             }
+        }
+    }
+    .block.related {
+        .action.select {
+            margin: @indent-xs-base 0;
+            display: block;
         }
     }
 }
@@ -434,7 +450,7 @@
                         left: auto;
                         top: auto;
                         float: left;
-                        margin: 0 @indent-s-base  @indent-s-base 0;
+                        margin: 0 @indent-s-base @indent-s-base 0;
                     }
                 }
                 &-details {
@@ -566,20 +582,14 @@ body.catalog-product-compare-index {
         }
     }
 
-    .cell.label {
-        border-right: 1px solid #e5e5e5;
-
-        .attribute.label {
-            display: block;
-            width: 100%;
-            word-break: break-all;
-        }
+    .cell.label,
+    td:last-child {
+        border-right: @table-border-width @table-border-style @table-border-color;
     }
 
     .cell {
         width: 140px;
         padding: 15px;
-
         .attibute.value {
             width: 100%;
             overflow: hidden;
@@ -587,25 +597,25 @@ body.catalog-product-compare-index {
 
         &.product.info,
         &.product.label {
-            border-bottom: 1px solid #e5e5e5;
+            border-bottom: @table-border-width @table-border-style @table-border-color;
         }
-    }
-
-    .cell.attribute {
-        font-size: 13px;
-
-        img {
-            max-width: 100%;
-            height: auto;
+        &.label {
+            .attribute.label {
+                display: block;
+                width: 100%;
+                word-break: break-all;
+            }
         }
-    }
-
-    td:last-child {
-        border-right: 1px solid #e5e5e5;
+        &.attribute {
+            .font-size(13);
+            img {
+                max-width: 100%;
+                height: auto;
+            }
+        }
     }
 
     .product-item-photo {
-        text-align: left;
         display: block;
         margin: 0 auto 15px;
     }
@@ -647,6 +657,11 @@ body.catalog-product-compare-index {
             + .actions-secondary {
                 margin-top: @indent-s-base;
             }
+        }
+    }
+    .action {
+        &.tocart {
+            white-space: nowrap;
         }
     }
 }

@@ -23,7 +23,7 @@
  */
 namespace Magento\CatalogSearch\Block\Advanced;
 
-use Magento\Catalog\Model\Layer\Search as Layer;
+use Magento\Catalog\Model\Layer\Resolver as LayerResolver;
 use Magento\CatalogSearch\Model\Advanced;
 use Magento\CatalogSearch\Model\Resource\Advanced\Collection;
 use Magento\Framework\UrlFactory;
@@ -46,7 +46,7 @@ class Result extends Template
     /**
      * Catalog layer
      *
-     * @var Layer
+     * @var \Magento\Catalog\Model\Layer
      */
     protected $_catalogLayer;
 
@@ -60,19 +60,19 @@ class Result extends Template
     /**
      * @param Context $context
      * @param Advanced $catalogSearchAdvanced
-     * @param Layer $layer
+     * @param LayerResolver $layerResolver
      * @param UrlFactory $urlFactory
      * @param array $data
      */
     public function __construct(
         Context $context,
         Advanced $catalogSearchAdvanced,
-        Layer $layer,
+        LayerResolver $layerResolver,
         UrlFactory $urlFactory,
         array $data = array()
     ) {
         $this->_catalogSearchAdvanced = $catalogSearchAdvanced;
-        $this->_catalogLayer = $layer;
+        $this->_catalogLayer = $layerResolver->get();
         $this->_urlFactory = $urlFactory;
         parent::__construct($context, $data);
     }

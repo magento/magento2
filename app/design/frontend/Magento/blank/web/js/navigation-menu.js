@@ -30,6 +30,7 @@ define([
     "mage/terms"
 ],function($) {
     'use strict';
+
     $.widget('mage.navigationMenu', {
         options: {
             itemsContainer: '> ul',
@@ -568,4 +569,6 @@ define([
             }
         }
     });
+
+    return $.mage.navigationMenu;
 });

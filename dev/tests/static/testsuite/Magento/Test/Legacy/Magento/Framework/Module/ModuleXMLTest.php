@@ -40,6 +40,10 @@ class ModuleXMLTest extends \PHPUnit_Framework_TestCase
             $xml->xpath('/config/module/@version'),
             'The "version" attribute is obsolete. Use "schema_version" instead.'
         );
+        $this->assertEmpty(
+            $xml->xpath('/config/module/@active'),
+            'The "active" attribute is obsolete. The list of active modules is defined in deployment configuration.'
+        );
     }
 
     /**
@@ -47,6 +51,6 @@ class ModuleXMLTest extends \PHPUnit_Framework_TestCase
      */
     public function moduleXmlDataProvider()
     {
-        return \Magento\TestFramework\Utility\Files::init()->getConfigFiles('module.xml');
+        return \Magento\Framework\Test\Utility\Files::init()->getConfigFiles('module.xml');
     }
 }

@@ -46,19 +46,28 @@
                         </block>
                         <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Options" name="customer.wishlist.item.options" cacheable="false"/>
                     </block>
-                    <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Comment" name="customer.wishlist.item.comment" template="item/column/comment.phtml" cacheable="false">
+                    <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Actions" name="customer.wishlist.item.inner" template="item/column/actions.phtml" cacheable="false">
                         <arguments>
-                            <argument name="title" translate="true" xsi:type="string">Product Details and Comment</argument>
+                            <argument name="css_class" xsi:type="string">product-item-inner</argument>
                         </arguments>
-                    </block>
-                    <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Cart" name="customer.wishlist.item.cart" template="item/column/cart.phtml" cacheable="false">
-                        <arguments>
-                            <argument name="title" translate="true" xsi:type="string">Add to Cart</argument>
-                        </arguments>
-                    </block>
-                    <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Actions" name="customer.wishlist.item.actions" template="item/column/actions.phtml" cacheable="false">
-                        <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Edit" name="customer.wishlist.item.edit" template="item/column/edit.phtml" before="-" cacheable="false"/>
-                        <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Remove" name="customer.wishlist.item.remove" template="item/column/remove.phtml" cacheable="false"/>
+                        <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Comment" name="customer.wishlist.item.comment" template="item/column/comment.phtml" cacheable="false">
+                            <arguments>
+                                <argument name="title" translate="true" xsi:type="string">Product Details and Comment</argument>
+                            </arguments>
+                        </block>
+                        <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Cart" name="customer.wishlist.item.cart" template="item/column/cart.phtml" cacheable="false">
+                            <arguments>
+                                <argument name="title" translate="true" xsi:type="string">Add to Cart</argument>
+                            </arguments>
+                        </block>
+
+                        <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Actions" name="customer.wishlist.item.actions" template="item/column/actions.phtml" cacheable="false">
+                            <arguments>
+                                <argument name="css_class" xsi:type="string">product-item-actions</argument>
+                            </arguments>
+                            <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Edit" name="customer.wishlist.item.edit" template="item/column/edit.phtml" before="-" cacheable="false"/>
+                            <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Remove" name="customer.wishlist.item.remove" template="item/column/remove.phtml" cacheable="false"/>
+                        </block>
                     </block>
                 </block>
                 <container name="customer.wishlist.buttons" as="control_buttons" label="Wishlist Control Buttons">

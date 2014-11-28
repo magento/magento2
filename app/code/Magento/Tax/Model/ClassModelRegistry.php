@@ -27,7 +27,7 @@ namespace Magento\Tax\Model;
 use Magento\Tax\Model\ClassModelFactory as TaxClassModelFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Tax\Model\ClassModel as TaxClassModel;
-use Magento\Tax\Service\V1\Data\TaxClass;
+use Magento\Tax\Api\Data\TaxClassInterface;
 
 /**
  * Registry for the tax class models
@@ -85,7 +85,7 @@ class ClassModelRegistry
         $taxClassModel = $this->taxClassModelFactory->create()->load($taxClassId);
         if (!$taxClassModel->getId()) {
             // tax class does not exist
-            throw NoSuchEntityException::singleField(TaxClass::KEY_ID, $taxClassId);
+            throw NoSuchEntityException::singleField(TaxClassInterface::KEY_ID, $taxClassId);
         }
         $this->taxClassRegistryById[$taxClassModel->getId()] = $taxClassModel;
         return $taxClassModel;

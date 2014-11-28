@@ -217,7 +217,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
      *
      * @return \Magento\Framework\Model\AbstractModel
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
         $this->_dataSaveAllowed = true;
         if ($this->getId()) {
@@ -226,7 +226,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
             }
         }
         $this->setLastModified($this->getReportLastModified());
-        return parent::_beforeSave();
+        return parent::beforeSave();
     }
 
     /**

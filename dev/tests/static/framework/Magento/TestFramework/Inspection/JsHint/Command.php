@@ -134,7 +134,13 @@ class Command extends \Magento\TestFramework\Inspection\AbstractCommand
      */
     protected function _getJsHintOptions()
     {
-        $jsHintOptionsArray = array('eqnull' => 'true', 'browser' => 'true', 'jquery' => 'true');
+        $jsHintOptionsArray = array(
+            'browser' => 'true',
+            'eqnull' => 'true',
+            'expr' => 'true',
+            'jquery' => 'true',
+            'supernew' => 'true'
+        );
         $jsHintOptions = null;
         if ($this->_isOsWin()) {
             foreach ($jsHintOptionsArray as $key => $value) {

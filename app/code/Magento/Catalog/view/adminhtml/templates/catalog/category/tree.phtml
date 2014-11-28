@@ -49,7 +49,13 @@
 </div>
 <script type="text/javascript">
 var tree;
-require(["jquery", "jquery/ui", "prototype", "mage/adminhtml/form", "mage/translate"], function(jQuery){
+require([
+    "jquery",
+    "jquery/ui",
+    "prototype",
+    "mage/adminhtml/form",
+    "mage/translate"
+], function(jQuery){
 
 /**
  * Fix ext compatibility with prototype 1.6
@@ -171,9 +177,7 @@ Ext.extend(Ext.tree.TreePanel.Enhanced, Ext.tree.TreePanel, {
     },
 
     categoryClick:function (node, e) {
-        var baseUrl = '<?php echo $this->getEditUrl() ?>';
-        var urlExt = (this.storeId ? 'store/' + this.storeId + '/' : '') + 'id/' + node.id + '/';
-        var url = parseSidUrl(baseUrl, urlExt);
+        var url = this.buildUrl(node.id);
 
         this.currentNodeId = node.id;
         if (!this.useAjax) {
@@ -184,6 +188,16 @@ Ext.extend(Ext.tree.TreePanel.Enhanced, Ext.tree.TreePanel, {
             var params = {active_tab_id:this.activeTab};
         }
         updateContent(url, params);
+    },
+
+    buildUrl: function(id){
+        var urlExt = (this.storeId ? 'store/' + this.storeId + '/' : '') + 'id/' + id + '/';
+
+        return parseSidUrl(this.baseUrl, urlExt);
+    },
+
+    getBaseUrl: function(){
+        return this.baseUrl;
     }
 });
 
@@ -249,6 +263,7 @@ function _renderNewTree(config, scopeParams) {
         tree.el.dom.innerHTML = '';
     }
     tree = new Ext.tree.TreePanel.Enhanced('tree-div', newTreeParams);
+
     tree.loadTree(config, true);
 
     // try to select current category
@@ -276,17 +291,14 @@ Ext.onReady(function () {
         dataUrl:'<?php echo $this->getLoadTreeUrl() ?>'
     });
 
-    categoryLoader.createNode = function (config) {
-        var node;
-        var _node = Object.clone(config);
-        if (config.children && !config.children.length) {
-            delete(config.children);
-            node = new Ext.tree.AsyncTreeNode(config);
-        } else {
-            node = new Ext.tree.TreeNode(config);
-        }
+    categoryLoader.processResponse = function(response, parent, callback) {
+        var config = JSON.parse(response.responseText);
 
-        return node;
+        this.buildCategoryTree(parent, config);
+
+        if (typeof callback == "function") {
+            callback(this, parent);
+        }
     };
 
     categoryLoader.buildCategoryTree = function (parent, config) {
@@ -347,7 +359,7 @@ Ext.onReady(function () {
     });
 
     categoryLoader.on("load", function (treeLoader, node, config) {
-        varienWindowOnload();
+        //varienWindowOnload();
     });
 
     scopeSwitcherHandler = reRenderTree;
@@ -362,7 +374,8 @@ Ext.onReady(function () {
         useAjax: <?php echo $this->getUseAjax() ?>,
         switchTreeUrl:'<?php echo $this->getSwitchTreeUrl() ?>',
         editUrl:'<?php echo $this->getEditUrl() ?>',
-        currentNodeId: <?php echo (int)$this->getCategoryId() ?>
+        currentNodeId: <?php echo (int)$this->getCategoryId() ?>,
+        baseUrl: '<?php echo $this->getEditUrl() ?>'
     };
 
     defaultLoadTreeParams = {
@@ -516,23 +529,17 @@ function categoryMove(obj) {
     }
     pd.splice(pd.length - 1, 1);
     mageDialog.onOk(function() {
-        new Ajax.Request(
-            '<?php echo $this->getMoveUrl() ?>',
-            {
-                method:'POST',
-                parameters:pd.join(""),
-                onSuccess:success,
-                onFailure: failure,
-                onCreate: function() { jQuery('body').loader('show'); },
-                onComplete: function() { jQuery('body').loader('hide'); }
-            }
-        );
+        jQuery.ajax('<?php echo $this->getMoveUrl() ?>', {
+            method:'POST',
+            data: pd.join(""),
+            success: success,
+            showLoader: true
+        });
     }).onCancel(function() {
         reRenderTree();
     }).show();
 }
     window.addNew = addNew;
-
 });
 </script>
 <?php endif; ?>

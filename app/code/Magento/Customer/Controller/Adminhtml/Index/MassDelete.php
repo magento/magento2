@@ -36,7 +36,7 @@ class MassDelete extends \Magento\Customer\Controller\Adminhtml\Index
         $customerIds = $this->getRequest()->getParam('customer');
         $customersDeleted = $this->actUponMultipleCustomers(
             function ($customerId) {
-                $this->_customerAccountService->deleteCustomer($customerId);
+                $this->_customerRepository->deleteById($customerId);
             },
             $customerIds
         );

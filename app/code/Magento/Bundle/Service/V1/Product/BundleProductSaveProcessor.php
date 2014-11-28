@@ -36,6 +36,7 @@ use Magento\Catalog\Service\V1\Product\ProductSaveProcessorInterface;
 
 /**
  * Class to save bundle products
+ * @deprecated
  */
 class BundleProductSaveProcessor implements ProductSaveProcessorInterface
 {

@@ -44,14 +44,16 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Sales\Model\Order $order */
         $order = Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order');
-        /** @var \Magento\Customer\Service\V1\CustomerAddressServiceInterface $customerAddressService */
-        $customerAddressService = Bootstrap::getObjectManager()->get(
-            'Magento\Customer\Service\V1\CustomerAddressServiceInterface'
-        );
         $order->loadByIncrementId('100000001');
         $this->_model->setOrder($order);
-        $this->_model->setData($customerAddressService->getAddress(1)->__toArray());
         $this->_model->setEmail('co@co.co');
+        $this->_model->setPostcode('12345');
+        $this->_model->setLastname('LastName');
+        $this->_model->setStreet('Street');
+        $this->_model->setCity('City');
+        $this->_model->setTelephone('123-45-67');
+        $this->_model->setCountryId(1);
+        $this->_model->setFirstname('FirstName');
         $this->_model->setAddressType('billing');
         $this->_model->setRegionId(1);
         $this->_model->save();

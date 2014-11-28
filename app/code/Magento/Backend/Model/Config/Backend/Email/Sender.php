@@ -35,7 +35,7 @@ class Sender extends \Magento\Framework\App\Config\Value
      * @return $this
      * @throws \Magento\Framework\Model\Exception
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
         $value = $this->getValue();
         if (!preg_match("/^[\S ]+$/", $value)) {

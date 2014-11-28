@@ -105,9 +105,9 @@ abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
      *
      * @return $this
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
-        parent::_beforeSave();
+        parent::beforeSave();
 
         if (!$this->hasVisitorId()) {
             $this->setVisitorId($this->getVisitorId());

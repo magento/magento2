@@ -66,8 +66,8 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($subscriber->isSubscribed());
         $this->assertEquals(0, (int)$subscriber->getCustomerId());
 
-        /** @var \Magento\Customer\Service\V1\Data\CustomerBuilder $customerBuilder */
-        $customerBuilder = $objectManager->get('Magento\Customer\Service\V1\Data\CustomerBuilder');
+        /** @var \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder */
+        $customerBuilder = $objectManager->get('Magento\Customer\Api\Data\CustomerDataBuilder');
         $customerBuilder->setFirstname('Firstname')
             ->setLastname('Lastname')
             ->setEmail('customer_two@example.com');
@@ -92,8 +92,8 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $this->verifySubscriptionNotExist('customer@example.com');
 
         $objectManager = Bootstrap::getObjectManager();
-        /** @var \Magento\Customer\Service\V1\Data\CustomerBuilder $customerBuilder */
-        $customerBuilder = $objectManager->get('Magento\Customer\Service\V1\Data\CustomerBuilder');
+        /** @var \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder */
+        $customerBuilder = $objectManager->get('Magento\Customer\Api\Data\CustomerDataBuilder');
         $customerBuilder->setFirstname('Firstname')
             ->setLastname('Lastname')
             ->setEmail('customer@example.com');
@@ -120,8 +120,8 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, (int)$subscriber->getCustomerId());
 
         $customer = $this->accountService->getCustomer(1);
-        /** @var \Magento\Customer\Service\V1\Data\CustomerBuilder $customerBuilder */
-        $customerBuilder = $objectManager->get('Magento\Customer\Service\V1\Data\CustomerBuilder');
+        /** @var \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder */
+        $customerBuilder = $objectManager->get('Magento\Customer\Api\Data\CustomerDataBuilder');
         $customerBuilder->populate($customer)
             ->setEmail('new@example.com');
         /** @var \Magento\Customer\Service\V1\Data\CustomerDetailsBuilder $customerDetailsBuilder */

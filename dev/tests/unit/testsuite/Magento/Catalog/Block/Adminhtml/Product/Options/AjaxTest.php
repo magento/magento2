@@ -56,7 +56,7 @@ class AjaxTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->encoderInterface= $this->getMock('Magento\Framework\Json\EncoderInterface');
-        $this->productFactory= $this->getMock('Magento\Catalog\Model\ProductFactory', ['create']);
+        $this->productFactory= $this->getMock('Magento\Catalog\Model\ProductFactory', ['create'], [], '', false);
         $this->coreHelper= $this->getMock('Magento\Core\Helper\Data', [], [], '', false);
         $this->registry= $this->getMock('Magento\Framework\Registry');
 

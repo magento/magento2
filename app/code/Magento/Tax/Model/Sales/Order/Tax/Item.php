@@ -24,17 +24,48 @@
 namespace Magento\Tax\Model\Sales\Order\Tax;
 
 /**
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @codeCoverageIgnore
  */
-class Item extends \Magento\Framework\Model\AbstractModel
+class Item extends \Magento\Framework\Model\AbstractExtensibleModel implements
+    \Magento\Tax\Api\Data\OrderTaxDetailsItemInterface
 {
     /**
-     * Initialization
-     *
-     * @return void
+     * {@inheritdoc}
      */
     protected function _construct()
     {
         $this->_init('Magento\Tax\Model\Resource\Sales\Order\Tax\Item');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getType()
+    {
+        return $this->getData(self::KEY_TYPE);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getItemId()
+    {
+        return $this->getData(self::KEY_ITEM_ID);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAssociatedItemId()
+    {
+        return $this->getData(self::KEY_ASSOCIATED_ITEM_ID);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAppliedTaxes()
+    {
+        return $this->getData(self::KEY_APPLIED_TAXES);
     }
 }

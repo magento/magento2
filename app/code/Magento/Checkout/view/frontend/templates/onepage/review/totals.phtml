@@ -32,10 +32,10 @@
     <?php echo $this->renderTotals('footer', $_colspan); ?>
     <?php if ($this->needDisplayBaseGrandtotal()):?>
     <tr class="totals charge">
-        <td class="mark" colspan="<?php echo $_colspan; ?>">
+        <th class="mark" colspan="<?php echo $_colspan; ?>" scope="row">
             <?php echo __('Your credit card will be charged for') ?>
-        </td>
-        <td class="amount">
+        </th>
+        <td class="amount" data-th="<?php echo $this->escapeHtml(__('Your credit card will be charged for')); ?>">
             <?php echo $this->displayBaseGrandtotal() ?>
         </td>
     </tr>

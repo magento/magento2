@@ -1,7 +1,5 @@
 <?php
 /**
- * List of application active application modules.
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -25,60 +23,127 @@
  */
 namespace Magento\Framework\Module;
 
-use Magento\Framework\Config\CacheInterface;
-use Magento\Framework\Module\Declaration\Reader\Filesystem;
+use Magento\Framework\App\DeploymentConfig;
 
-class ModuleList implements \Magento\Framework\Module\ModuleListInterface
+/**
+ * A list of modules in the Magento application
+ *
+ * Encapsulates information about whether modules are enabled or not.
+ * Represents only enabled modules through its interface
+ */
+class ModuleList implements ModuleListInterface
 {
     /**
-     * Configuration data
+     * Deployment configuration
      *
-     * @var array
+     * @var DeploymentConfig
      */
-    protected $_data;
+    private $config;
 
     /**
-     * Configuration scope
+     * Loader of module information from source code
      *
-     * @var string
+     * @var ModuleList\Loader
      */
-    protected $_scope = 'global';
+    private $loader;
 
     /**
-     * @param Filesystem $reader
-     * @param CacheInterface $cache
-     * @param string $cacheId
+     * An associative array of modules
+     *
+     * The possible values are 1 (enabled) or 0 (disabled)
+     *
+     * @var int[]
      */
-    public function __construct(Filesystem $reader, CacheInterface $cache, $cacheId = 'modules_declaration_cache')
+    private $configData;
+
+    /**
+     * Enumeration of the enabled module names
+     *
+     * @var string[]
+     */
+    private $enabled;
+
+    /**
+     * Constructor
+     *
+     * @param DeploymentConfig $config
+     * @param ModuleList\Loader $loader
+     */
+    public function __construct(DeploymentConfig $config, ModuleList\Loader $loader)
     {
-        $data = $cache->load($this->_scope . '::' . $cacheId);
-        if (!$data) {
-            $data = $reader->read($this->_scope);
-            $cache->save(serialize($data), $this->_scope . '::' . $cacheId);
-        } else {
-            $data = unserialize($data);
+        $this->config = $config;
+        $this->loader = $loader;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * Note that this triggers loading definitions of all existing modules in the system.
+     * Use this method only when you actually need modules' declared meta-information.
+     *
+     * @see getNames()
+     */
+    public function getAll()
+    {
+        if (null === $this->enabled) {
+            $all = $this->loader->load();
+            if (empty($all)) {
+                return []; // don't record erroneous value into memory
+            }
+            $this->enabled = [];
+            foreach ($all as $key => $value) {
+                if ($this->has($key)) {
+                    $this->enabled[$key] = $value;
+                }
+            }
         }
-        $this->_data = $data;
+        return $this->enabled;
     }
 
     /**
-     * Get configuration of all declared active modules
-     *
-     * @return array
+     * {@inheritdoc}
+     * @see has()
      */
-    public function getModules()
+    public function getOne($name)
     {
-        return $this->_data;
+        $enabled = $this->getAll();
+        return isset($enabled[$name]) ? $enabled[$name] : null;
     }
 
     /**
-     * Get module configuration
-     *
-     * @param string $moduleName
-     * @return array|null
+     * {@inheritdoc}
      */
-    public function getModule($moduleName)
+    public function getNames()
     {
-        return isset($this->_data[$moduleName]) ? $this->_data[$moduleName] : null;
+        $this->loadConfigData();
+        if (!$this->configData) {
+            return [];
+        }
+        $result = array_keys(array_filter($this->configData));
+        return $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function has($name)
+    {
+        $this->loadConfigData();
+        if (!$this->configData) {
+            return false;
+        }
+        return !empty($this->configData[$name]);
+    }
+
+    /**
+     * Loads configuration data only
+     *
+     * @return void
+     */
+    private function loadConfigData()
+    {
+        if (null === $this->configData) {
+            $this->configData = $this->config->getSegment(ModuleList\DeploymentConfig::CONFIG_KEY);
+        }
     }
 }

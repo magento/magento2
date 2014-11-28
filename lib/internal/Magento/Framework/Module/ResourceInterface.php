@@ -37,15 +37,6 @@ interface ResourceInterface
     public function getDbVersion($resName);
 
     /**
-     * Set module version into DB
-     *
-     * @param string $resName
-     * @param string $version
-     * @return int
-     */
-    public function setDbVersion($resName, $version);
-
-    /**
      * Get resource data version
      *
      * @param string $resName
@@ -54,11 +45,20 @@ interface ResourceInterface
     public function getDataVersion($resName);
 
     /**
-     * Specify resource data version
+     * Set Module version
      *
      * @param string $resName
      * @param string $version
-     * @return $this
+     * @return int
+     */
+    public function setDbVersion($resName, $version);
+
+    /**
+     * Set resource data version
+     *
+     * @param string $resName
+     * @param string $version
+     * @return void
      */
     public function setDataVersion($resName, $version);
 }

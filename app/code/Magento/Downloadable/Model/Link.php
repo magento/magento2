@@ -102,10 +102,10 @@ class Link extends \Magento\Framework\Model\AbstractModel
      *
      * @return $this
      */
-    protected function _afterSave()
+    public function afterSave()
     {
         $this->getResource()->saveItemTitleAndPrice($this);
-        return parent::_afterSave();
+        return parent::afterSave();
     }
 
     /**

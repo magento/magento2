@@ -35,4 +35,5 @@ $flag->lock();
 $flagResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create('Magento\Framework\Flag\Resource');
 $flag->setLastUpdate(date('Y-m-d H:i:s', time() - \Magento\GoogleShopping\Model\Flag::FLAG_TTL - 1));
+$flag->setKeepUpdateDate(true);
 $flagResource->save($flag);

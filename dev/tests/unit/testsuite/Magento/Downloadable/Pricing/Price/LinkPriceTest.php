@@ -55,6 +55,11 @@ class LinkPriceTest extends \PHPUnit_Framework_TestCase
     protected $linkMock;
 
     /**
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $priceCurrencyMock;
+
+    /**
      * Test setUp
      */
     protected function setUp()
@@ -70,12 +75,15 @@ class LinkPriceTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->linkPrice = new LinkPrice($this->saleableItemMock, 1, $this->calculatorMock);
+        $this->priceCurrencyMock = $this->getMock('\Magento\Framework\Pricing\PriceCurrencyInterface');
+
+        $this->linkPrice = new LinkPrice($this->saleableItemMock, 1, $this->calculatorMock, $this->priceCurrencyMock);
     }
 
     public function testGetLinkAmount()
     {
         $amount = 100;
+        $convertedAmount = 50;
 
         $this->linkMock->expects($this->once())
             ->method('getPrice')
@@ -83,13 +91,17 @@ class LinkPriceTest extends \PHPUnit_Framework_TestCase
         $this->linkMock->expects($this->once())
             ->method('getProduct')
             ->will($this->returnValue($this->saleableItemMock));
+        $this->priceCurrencyMock->expects($this->once())
+            ->method('convertAndRound')
+            ->with($amount)
+            ->will($this->returnValue($convertedAmount));
         $this->calculatorMock->expects($this->once())
             ->method('getAmount')
-            ->with($amount, $this->equalTo($this->saleableItemMock))
-            ->will($this->returnValue($amount));
+            ->with($convertedAmount, $this->equalTo($this->saleableItemMock))
+            ->will($this->returnValue($convertedAmount));
 
         $result = $this->linkPrice->getLinkAmount($this->linkMock);
-        $this->assertEquals($amount, $result);
+        $this->assertEquals($convertedAmount, $result);
     }
 
 } 

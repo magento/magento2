@@ -54,25 +54,38 @@ class AlgorithmBaseTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store catalog/search/engine Magento\CatalogSearch\Model\Resource\Fulltext\Engine
+     * @magentoConfigFixture current_store catalog/search/engine Magento\CatalogSearch\Model\Resource\Engine
      * @dataProvider pricesSegmentationDataProvider
+     * @covers \Magento\Framework\Search\Dynamic\Algorithm::calculateSeparators
      */
-    public function testPricesSegmentation($categoryId, $intervalsNumber, $intervalItems)
+    public function testPricesSegmentation($categoryId, array $entityIds, array $intervalItems)
     {
-        $layer = Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Layer\Category');
-        $priceResource = Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Resource\Layer\Filter\Price', ['layer' => $layer]);
-        $interval = Bootstrap::getObjectManager()
-            ->create('Magento\CatalogSearch\Model\Price\Interval', ['resource' => $priceResource]);
-        $objectManager = $this->getMockBuilder('Magento\Framework\ObjectManager\ObjectManager')
-                ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $objectManager->expects($this->once())->method('create')->willReturn($interval);
-        $intervalFactory = Bootstrap::getObjectManager()
-            ->create('Magento\Framework\Search\Dynamic\IntervalFactory', ['objectManager' => $objectManager]);
-        $model = Bootstrap::getObjectManager()
-            ->create('Magento\Framework\Search\Dynamic\Algorithm', ['intervalFactory' => $intervalFactory]);
+        $objectManager = Bootstrap::getObjectManager();
+        $layer = $objectManager->create('Magento\Catalog\Model\Layer\Category');
+        /** @var \Magento\Framework\Search\Request\Aggregation\TermBucket $termBucket */
+        $termBucket = $objectManager->create(
+            'Magento\Framework\Search\Request\Aggregation\TermBucket',
+            ['name' => 'name', 'field' => 'price', 'metrics' => []]
+        );
+
+        $dimensions = [
+            'scope' => $objectManager->create(
+                'Magento\Framework\Search\Request\Dimension',
+                ['name' => 'someName', 'value' => 'default']
+            )
+        ];
+
+        /** @var \Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider $dataProvider */
+        $dataProvider = $objectManager->create('Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider');
+        $select = $dataProvider->getDataSet($termBucket, $dimensions);
+        $select->where('main_table.entity_id IN (?)', $entityIds);
+
+        /** @var \Magento\Framework\Search\Adapter\Mysql\Aggregation\IntervalFactory $intervalFactory */
+        $intervalFactory = $objectManager->create('Magento\Framework\Search\Adapter\Mysql\Aggregation\IntervalFactory');
+        $interval = $intervalFactory->create(['select' => $select]);
+
+        /** @var \Magento\Framework\Search\Dynamic\Algorithm $model */
+        $model = $objectManager->create('Magento\Framework\Search\Dynamic\Algorithm');
 
         $layer->setCurrentCategory($categoryId);
         $collection = $layer->getProductCollection();
@@ -82,13 +95,10 @@ class AlgorithmBaseTest extends \PHPUnit_Framework_TestCase
             $collection->getMinPrice(),
             $collection->getMaxPrice(),
             $collection->getPriceStandardDeviation(),
-            $collection->getSize()
+            $collection->getPricesCount()
         );
-        if (!is_null($intervalsNumber)) {
-            $this->assertEquals($intervalsNumber, $model->getIntervalsNumber());
-        }
 
-        $items = $model->calculateSeparators();
+        $items = $model->calculateSeparators($interval);
         $this->assertEquals(array_keys($intervalItems), array_keys($items));
 
         for ($i = 0; $i < count($intervalItems); ++$i) {
@@ -98,20 +108,23 @@ class AlgorithmBaseTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals($intervalItems[$i]['count'], $items[$i]['count']);
         }
 
-        // Algorythm should use less than 10M
+        // Algorithm should use less than 10M
         $this->assertLessThan(10 * 1024 * 1024, memory_get_usage() - $memoryUsedBefore);
     }
 
+    /**
+     * @return array
+     */
     public function pricesSegmentationDataProvider()
     {
         $testCases = include __DIR__ . '/_files/_algorithm_base_data.php';
-        $result = array();
+        $result = [];
         foreach ($testCases as $index => $testCase) {
-            $result[] = array(
+            $result[] = [
                 $index + 4, //category id
                 $testCase[1],
                 $testCase[2]
-            );
+            ];
         }
 
         return $result;

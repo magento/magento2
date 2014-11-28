@@ -52,4 +52,5 @@ define([
         }
     });
 
+    return $.mage.creditCardType;
 });

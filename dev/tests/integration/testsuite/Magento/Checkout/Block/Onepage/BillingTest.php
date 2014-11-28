@@ -35,7 +35,7 @@ class BillingTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Sales\Model\Quote\AddressFactory */
     protected $_quoteAddressFactory;
 
-    /** @var  \Magento\Customer\Service\V1\Data\CustomerBuilder */
+    /** @var  \Magento\Customer\Api\Data\CustomerDataBuilder */
     protected $_customerBuilder;
 
     /** @var \Magento\Customer\Service\V1\CustomerAccountService */
@@ -53,7 +53,7 @@ class BillingTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $objectManager = Bootstrap::getObjectManager();
-        $this->_customerBuilder = $objectManager->create('Magento\Customer\Service\V1\Data\CustomerBuilder');
+        $this->_customerBuilder = $objectManager->create('Magento\Customer\Api\Data\CustomerDataBuilder');
         $this->_customerService = $objectManager->create('Magento\Customer\Service\V1\CustomerAccountService');
         $customerData = $this->_customerService->getCustomer(self::FIXTURE_CUSTOMER_ID);
 

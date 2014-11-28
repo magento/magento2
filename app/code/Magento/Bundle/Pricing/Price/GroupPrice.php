@@ -80,4 +80,12 @@ class GroupPrice extends \Magento\Catalog\Pricing\Price\GroupPrice implements Di
     {
         return $this->priceInfo->getPrice(RegularPrice::PRICE_CODE)->getValue();
     }
+
+    /**
+     * @return bool
+     */
+    public function isPercentageDiscount()
+    {
+        return true;
+    }
 }

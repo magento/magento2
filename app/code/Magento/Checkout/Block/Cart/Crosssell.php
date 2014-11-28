@@ -72,7 +72,7 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
      * @param \Magento\Sales\Model\Quote\Item\RelatedProducts $itemRelationsList
      * @param StockHelper $stockHelper
      * @param array $data
-     * 
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(

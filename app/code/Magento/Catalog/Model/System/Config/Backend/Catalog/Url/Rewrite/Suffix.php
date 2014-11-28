@@ -86,7 +86,7 @@ class Suffix extends \Magento\Framework\App\Config\Value
      *
      * @return $this
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
         $this->urlRewriteHelper->validateSuffix($this->getValue());
         return $this;
@@ -95,12 +95,12 @@ class Suffix extends \Magento\Framework\App\Config\Value
     /**
      * @return $this
      */
-    protected function _afterSave()
+    public function afterSave()
     {
         if ($this->isValueChanged()) {
             $this->updateSuffixForUrlRewrites();
         }
-        return parent::_afterSave();
+        return parent::afterSave();
     }
 
     /**

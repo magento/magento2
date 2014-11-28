@@ -33,11 +33,17 @@
 @icon-font-path: "@{baseDir}fonts/Blank-Theme-Icons/Blank-Theme-Icons";
 @icon-font-name: 'icons-blank-theme';
 
+// Colors
+
+@color-gray56: #8f8f8f;
+
+//
+
 @color-primary: #333;
-@color-primary-dark: darken(@color-primary, 35%);  //  #000
+@color-primary-dark: darken(@color-primary, 35%);  // #000
 @color-primary-darker: darken(@color-primary, 13.5%);  // #111
-@color-primary-lighter: lighten(@color-primary, 29%);  //  #7d7d7d
-@color-primary-light: lighten(@color-primary, 45%);  //  #a6a6a6
+@color-primary-lighter: lighten(@color-primary, 29%);  // #7d7d7d
+@color-primary-light: lighten(@color-primary, 45%);  // #a6a6a6
 @color-secondary: #e8e8e8;
 @color-secondary-light: lighten(@color-secondary, 5%);
 @page-bg-color: #fff;
@@ -99,8 +105,8 @@
 @link-text-decoration-active: underline;
 
 // Lists
-@list-color-base: ''; // @text-color
-@list-font-size-base: false; // @font-size-base
+@list-color-base: false;
+@list-font-size-base: false;
 @list-margin-top: 0;
 @list-margin-bottom: @indent-m-base;
 @list-item-margin-top: 0;
@@ -119,11 +125,11 @@
 @p-margin-bottom: @indent-s-base;
 
 // Headings
-@heading-font-family-base: false; // @font-family-base
+@heading-font-family-base: false;
 @heading-font-weight-base: @font-weight-light;
 @heading-line-height-base: 1.1;
-@heading-color-base: false; // @text-color
-@heading-font-style-base: false; // @font-style-base
+@heading-color-base: false;
+@heading-font-style-base: false;
 @heading-margin-top-base: @indent-base;
 @heading-margin-bottom-base: @indent-base;
 
@@ -189,35 +195,36 @@
 @focus-box-shadow: 0 0 3px 1px @color-focus;
 
 // Code blocks
-@code-font-size: @font-size-s;
-@code-color: @color-primary-darker;
 @code-bg: @panel-bg;
+@code-color: @color-primary-darker;
+@code-font-size: @font-size-s;
 @code-padding: 2px 4px;
 
-@pre-color: @color-primary-darker;
 @pre-bg: @panel-bg;
 @pre-border-color: @border-color-base;
 @pre-border-width: @border-width-base;
+@pre-color: @color-primary-darker;
 
-@kbd-color: @color-primary-darker;
 @kbd-bg: @panel-bg;
+@kbd-color: @color-primary-darker;
 
 // Blockquote
-@blockquote-font-size: @font-size-base;
-@blockquote-font-style: @font-style-emphasis;
 @blockquote-border-color: @border-color-base;
 @blockquote-border-width: 0;
-@blockquote-padding: 0;
-@blockquote-margin: 0 0 @indent-base @indent-xl-base;
 @blockquote-before-content: '\2014 \00A0'; // em dash, nbsp
+@blockquote-font-size: @font-size-base;
+@blockquote-font-style: @font-style-emphasis;
+@blockquote-margin: 0 0 @indent-base @indent-xl-base;
+@blockquote-padding: 0;
 @blockquote-small-color: @color-primary;
 @blockquote-small-font-size: @font-size-xs;
+
 @cite-font-style: @font-style-base;
 
 // Misc
 @hr-border-color: @border-color-base;
 @hr-border-style: solid;
-@hr-border-width: 1px;
+@hr-border-width: @border-width-base;
 
 @mark-color: @color-primary-dark;
 @mark-bg: @panel-bg;
@@ -276,6 +283,7 @@
 
 @table-bg-responsive: @table-bg;
 @table-th-bg-responsive: false;
+@table-responsive-cell-padding: @indent-xs-base 0;
 
 //
 //    Page layout variables
@@ -430,9 +438,9 @@
 
 // Tabs controls
 @tab-control-font-size: @font-size-base;
-@tab-control-font-family: @font-family-base;
+@tab-control-font-family: false;
 @tab-control-font-weight: @font-weight-semibold;
-@tab-control-font-style: @font-style-base;
+@tab-control-font-style: false;
 @tab-control-line-height: @tab-control-height;
 
 // Current tab
@@ -457,8 +465,8 @@
 
 @tab-control-padding-top: @indent-xs-base;
 @tab-control-padding-right: @indent-base;
-@tab-control-padding-left: @tab-control-padding-right;
 @tab-control-padding-bottom: @tab-control-padding-top;
+@tab-control-padding-left: @tab-control-padding-right;
 
 // Tabs content
 @tab-content-bg: @tab-control-bg-active;
@@ -473,8 +481,8 @@
 
 @tab-content-padding-top: @indent-base;
 @tab-content-padding-right: @indent-base;
-@tab-content-padding-left: @tab-content-padding-right;
 @tab-content-padding-bottom: @tab-content-padding-top;
+@tab-content-padding-left: @tab-content-padding-right;
 
 // Accordions variables
 @accordion-control-font-family: @tab-control-font-family;
@@ -514,7 +522,7 @@
 @accordion-content-bg: @tab-control-bg-active;
 @accordion-content-border: @tab-content-border;
 
-@accordion-content-margin: 0 0 5px;
+@accordion-content-margin: 0 0 @indent-xs-base;
 @accordion-content-padding: @tab-content-padding-top @tab-content-padding-right @tab-content-padding-bottom @tab-content-padding-left;
 
 //
@@ -528,7 +536,7 @@
 @button-line-height: @font-size-base + 2;
 @button-margin: 0;
 @button-padding: 7px 15px; // is set up to false when buttons don't depend of side paddings or have fixed width, Also used in @button-primary-padding
-@button-width: ''; // is set up to false when buttons depend of side paddings or to fixed value when needed
+@button-width: false; // is set up to false when buttons depend of side paddings or to fixed value when needed
 
 // Buttons display settings
 @button-display: inline-block;
@@ -549,9 +557,9 @@
 @button-gradient-start-color-hover: false;
 @button-gradient-end-color-hover: false;
 
-@button-background-active: #e2e2e2;
-@button-color-active: #333;
-@button-border-active: 1px solid #cdcdcd;
+@button-color-active: @button-color;
+@button-background-active: @button-background-hover;
+@button-border-active: @button-border;
 @button-gradient-start-color-active: false;
 @button-gradient-end-color-active: false;
 
@@ -571,13 +579,13 @@
 
 @button-primary-background-hover: #006bb4;
 @button-primary-border-hover: 1px solid #006bb4;
-@button-primary-color-hover: #fff;
+@button-primary-color-hover: @button-primary-color;
 @button-primary-gradient-start-color-hover: false;
 @button-primary-gradient-end-color-hover: false;
 
-@button-primary-background-active: #006bb4;
-@button-primary-border-active: 1px solid #006bb4;
-@button-primary-color-active: #fff;
+@button-primary-background-active: @button-primary-background-hover;
+@button-primary-border-active: @button-primary-border-hover;
+@button-primary-color-active: @button-primary-color;
 @button-primary-gradient-start-color-active: false;
 @button-primary-gradient-end-color-active: false;
 
@@ -608,7 +616,7 @@
 // Small button
 @button-s-font-size: 11px;
 @button-s-line-height: @button-s-font-size + 1;
-@button-s-padding: 5px 8px;
+@button-s-padding: @indent-xs-base 8px;
 
 //
 //    Icons variables
@@ -792,14 +800,12 @@
 //
 //    Tooltips variables
 //--------------------------------------
+@tooltip-background: #fff;
 @tooltip-border-color: #bbb;
 @tooltip-border-width: 1px;
-@tooltip-background: #fff;
-@tooltip-cursor: help;
 @tooltip-border-radius: false;
-@tooltip-arrow-size: 5px;
-@tooltip-arrow-offset: 10px;
 @tooltip-color: #333;
+@tooltip-cursor: help;
 @tooltip-font-size: false;
 @tooltip-font-family: false;
 @tooltip-font-weight: false;
@@ -809,6 +815,8 @@
 @tooltip-padding: 12px 16px;
 @tooltip-min-width: 210px;
 @tooltip-max-width: 360px;
+@tooltip-arrow-size: 5px;
+@tooltip-arrow-offset: 10px;
 @tooltip-z-index: 100;
 
 //
@@ -845,16 +853,16 @@
 @form-element-input-border-radius: 1px;
 @form-element-input-height: 32px;
 @form-element-input-width: 100%;
-@form-element-input-padding: 0 9px;
 @form-element-input-margin: false;
+@form-element-input-padding: 0 9px;
 @form-element-input-vertical-align: baseline;
 @form-element-input-background-clip: padding-box; // border-box, content-box
 @form-element-input-font-size: @font-size-base;
 @form-element-input-color: false;
 @form-element-input-font-family: @font-family-base;
 @form-element-input-font-weight: false;
-@form-element-input-line-height: @line-height-base;
 @form-element-input-font-style: false;
+@form-element-input-line-height: @line-height-base;
 
 // Placeholder
 @form-element-input-placeholder-color: #c2c2c2;
@@ -876,7 +884,7 @@
 // Form elements choice default variables
 @form-element-choice-type: ''; //radio, checkbox
 @form-element-choice-vertical-align: false;
-@form-element-choice-margin: 2px 5px 0 0;
+@form-element-choice-margin: 2px @indent-xs-base 0 0;
 @form-element-choice-disabled-opacity: @form-element-input-disabled-opacity;
 
 // Input-text
@@ -885,16 +893,16 @@
 @input-text-border-radius: @form-element-input-border-radius;
 @input-text-height: @form-element-input-height;
 @input-text-width: @form-element-input-width;
-@input-text-padding: @form-element-input-padding;
 @input-text-margin: @form-element-input-margin;
+@input-text-padding: @form-element-input-padding;
 @input-text-vertical-align: @form-element-input-vertical-align;
 @input-text-background-clip: @form-element-input-background-clip; // border-box, content-box
 @input-text-font-size: @form-element-input-font-size;
 @input-text-color: @form-element-input-color;
 @input-text-font-family: @form-element-input-font-family;
 @input-text-font-weight: @form-element-input-font-weight;
-@input-text-line-height: @form-element-input-line-height;
 @input-text-font-style: @form-element-input-font-style;
+@input-text-line-height: @form-element-input-line-height;
 
 // Placeholder
 @input-text-placeholder-color: @form-element-input-placeholder-color;
@@ -919,16 +927,16 @@
 @select-border-radius: @form-element-input-border-radius;
 @select-height: @form-element-input-height;
 @select-width: @form-element-input-width;
-@select-padding: 5px 10px 4px;
 @select-margin: @form-element-input-margin;
+@select-padding: 5px 10px 4px;
 @select-vertical-align: @form-element-input-vertical-align;
 @select-background-clip: @form-element-input-background-clip; // border-box, content-box
 @select-font-size: @form-element-input-font-size;
 @select-color: @form-element-input-color;
 @select-font-family: @form-element-input-font-family;
 @select-font-weight: @form-element-input-font-weight;
-@select-line-height: @form-element-input-line-height;
 @select-font-style: @form-element-input-font-style;
+@select-line-height: @form-element-input-line-height;
 
 // Placeholder
 @select-placeholder-color: false;
@@ -953,7 +961,7 @@
 @textarea-border-radius: @form-element-input-border-radius;
 @textarea-height: auto;
 @textarea-width: @form-element-input-width;
-@textarea-padding: 10px;
+@textarea-padding: @indent-s-base;
 @textarea-margin: 0;
 @textarea-vertical-align: @form-element-input-vertical-align;
 @textarea-background-clip: @form-element-input-background-clip; // border-box, content-box
@@ -961,8 +969,8 @@
 @textarea-color: @form-element-input-color;
 @textarea-font-family: @form-element-input-font-family;
 @textarea-font-weight: @form-element-input-font-weight;
-@textarea-line-height: @form-element-input-line-height;
 @textarea-font-style: @form-element-input-font-style;
+@textarea-line-height: @form-element-input-line-height;
 @textarea-resize: vertical; // none | both | horizontal | vertical | inherit
 
 // Placeholder
@@ -993,12 +1001,12 @@
 @input-checkbox-disabled-opacity: @form-element-choice-disabled-opacity;
 
 // Validation variables
-@form-validation-note-font-size: @font-size-s;
 @form-validation-note-color-error: @color-error;
+@form-validation-note-font-size: @font-size-s;
 @form-validation-note-font-family: false;
+@form-validation-note-font-style: false;
 @form-validation-note-font-weight: false;
 @form-validation-note-line-height: false;
-@form-validation-note-font-style: false;
 @form-validation-note-margin: 3px 0 0;
 @form-validation-note-padding: false;
 
@@ -1024,7 +1032,7 @@
 
 // Fieldset
 @form-fieldset-border: 0;
-@form-fieldset-margin: 0 0 40px;
+@form-fieldset-margin: 0 0 @indent-xl-base;
 @form-fieldset-padding: 0;
 @form-fieldset-legend-color: false;
 @form-fieldset-legend-font-size: 20px;
@@ -1032,7 +1040,7 @@
 @form-fieldset-legend-font-weight: false;
 @form-fieldset-legend-font-style: false;
 @form-fieldset-legend-line-height: 1.2;
-@form-fieldset-legend-margin: 0 0 25px; // 0 0 25px @form-field-type-inline-label-width
+@form-fieldset-legend-margin: 0 0 @indent-m-base;
 @form-fieldset-legend-padding: 0;
 @form-fieldset-legend-width: false; // @form-field-type-inline-control-width
 
@@ -1043,7 +1051,7 @@
 @form-field-column: false;
 @form-field-column-padding: 0 12px 0 0;
 @form-field-column-number: 2;
-@form-field-vertical-indent: 20px;
+@form-field-vertical-indent: @indent-base;
 @form-field-additional-vertical-indent: @form-field-vertical-indent/2;
 @form-field-type-block-margin: 0 0 @form-field-vertical-indent;
 @form-field-type-inline-margin: 0 0 @form-field-vertical-indent;
@@ -1061,7 +1069,7 @@
 @form-field-type-inline-label-padding: @form-field-type-inline-label-padding-top 15px 0 0;
 @form-field-type-inline-label-width: 25.8%;
 @form-field-type-inline-label-align: right;
-@form-field-type-block-label-margin: 0 0 5px;
+@form-field-type-block-label-margin: 0 0 @indent-xs-base;
 @form-field-type-block-label-padding: false;
 @form-field-type-block-label-align: @form-field-label-align;
 
@@ -1075,15 +1083,15 @@
 @form-field-label-asterisk-font-weight: false;
 @form-field-label-asterisk-font-style: false;
 @form-field-label-asterisk-line-height: false;
-@form-field-label-asterisk-margin: 0 0 0 5px;
+@form-field-label-asterisk-margin: 0 0 0 @indent-xs-base;
 
 // Form field note
 @form-field-note-color: false;
 @form-field-note-font-size: @font-size-s;
 @form-field-note-font-family: false;
 @form-field-note-font-weight: false;
-@form-field-note-line-height: false;
 @form-field-note-font-style: false;
+@form-field-note-line-height: false;
 @form-field-note-margin: 3px 0 0;
 @form-field-note-padding: 0;
 
@@ -1109,7 +1117,7 @@
 @form-hasrequired-font-style: false;
 @form-hasrequired-line-height: false;
 @form-hasrequired-border: false;
-@form-hasrequired-margin: 10px 0 0;
+@form-hasrequired-margin: @indent-s-base 0 0;
 @form-hasrequired-padding: false;
 
 //
@@ -1120,7 +1128,7 @@
 @pager-reset-spaces: true;  // reset spaces between inline-block elements
 
 @pager-font-size: @font-size-s;
-@pager-font-weight: @font-weight-base;
+@pager-font-weight: @font-weight-bold;
 @pager-line-height: 32px;
 @pager-item-margin: 0 2px 0 0;
 @pager-item-padding: 0 4px;
@@ -1197,14 +1205,14 @@
 @pager-action-gradient-end-color: false;
 
 // Pager link.action visited
-@pager-action-color-visited: @text-color-muted;
+@pager-action-color-visited: @pager-action-color;
 @pager-action-border-visited: false;
 @pager-action-background-visited: false;
 @pager-action-gradient-start-color-visited: false;
 @pager-action-gradient-end-color-visited: false;
 
 // Pager link.action hover
-@pager-action-color-hover: @text-color-muted;
+@pager-action-color-hover: @pager-action-color;
 @pager-action-border-hover: false;
 @pager-action-background-hover: false;
 @pager-action-text-decoration-hover: @pager-text-decoration-hover;
@@ -1212,7 +1220,7 @@
 @pager-action-gradient-end-color-hover: false;
 
 // Pager link.action active
-@pager-action-color-active: @text-color-muted;
+@pager-action-color-active: @pager-action-color;
 @pager-action-border-active: false;
 @pager-action-background-active: false;
 @pager-action-gradient-start-color-active: false;
@@ -1240,9 +1248,9 @@
 @dropdown-list-width: false; // Also used in: @dropdown-split-list-width
 @dropdown-list-height: false; // Also used in: @dropdown-split-list-height
 @dropdown-list-position-top: 100%;
+@dropdown-list-position-right: false;
 @dropdown-list-position-bottom: false;
 @dropdown-list-position-left: false;
-@dropdown-list-position-right: false;
 @dropdown-list-pointer: true; // true | false
 @dropdown-list-background: #fff;
 @dropdown-list-border: 1px solid #bbb;
@@ -1271,17 +1279,17 @@
 @dropdown-toggle-icon-text-hide: @button-icon-font-text-hide;
 
 // Variables split dropdown
-@dropdown-split-actions-padding: 0 5px;
-@dropdown-split-toggle-actions-padding: 4px 5px;
+@dropdown-split-actions-padding: 0 @indent-xs-base;
+@dropdown-split-toggle-actions-padding: 4px @indent-xs-base;
 @dropdown-split-button-actions-padding: false;
 @dropdown-split-toggle-position: right; // Also used in: @dropdown-split-list-pointer-position
 @dropdown-split-list-min-width: @dropdown-list-min-width;
 @dropdown-split-list-width: @dropdown-list-width;
 @dropdown-split-list-height: @dropdown-list-height;
 @dropdown-split-list-position-top: @dropdown-list-position-top;
+@dropdown-split-list-position-right: @dropdown-list-position-right;
 @dropdown-split-list-position-bottom: @dropdown-list-position-bottom;
 @dropdown-split-list-position-left: @dropdown-list-position-left;
-@dropdown-split-list-position-right: @dropdown-list-position-right;
 @dropdown-split-list-background: @dropdown-list-background;
 @dropdown-split-list-border: @dropdown-list-border;
 @dropdown-split-list-pointer: @dropdown-list-pointer;
@@ -1320,7 +1328,7 @@
 @actions-toolbar-margin: false; // Also used in: @popup-actions-toolbar-margins
 @actions-toolbar-padding: false; // Also used in: @popup-actions-toolbar-padding
 @actions-toolbar-actions-margin: false; // Also used in: @popup-actions-toolbar-actions-margin
-@actions-toolbar-primary-actions-margin: 0 5px 0 0; // Also used in: @popup-actions-toolbar-primary-actions-margin
+@actions-toolbar-primary-actions-margin: 0 @indent-xs-base 0 0; // Also used in: @popup-actions-toolbar-primary-actions-margin
 @actions-toolbar-secondary-actions-margin: false; // Also used in: @popup-actions-toolbar-secondary-actions-margin
 @actions-toolbar-actions-links-margin-top: false; // Also used in: @popup-actions-toolbar-actions-links-margin-top
 @actions-toolbar-primary-actions-links-margin-top: false; // Also used in: @popup-actions-primary-toolbar-actions-links-margin-top
@@ -1330,7 +1338,9 @@
 //    Breadcrumbs variables
 //--------------------------------------
 @breadcrumbs-font-size: @font-size-s;
-@breadcrumbs-container-margin: 0 0 20px;
+@breadcrumbs-display: false;
+@breadcrumbs-container-margin: 0 0 @indent-base;
+@breadcrumbs-padding: false;
 
 @breadcrumbs-separator-symbol: false;
 @breadcrumbs-separator-color: @breadcrumbs-current-color;
@@ -1343,9 +1353,6 @@
 @breadcrumbs-icon-font-color: false;
 @breadcrumbs-icon-font-margin: 0;
 @breadcrumbs-icon-font-vertical-align: top;
-
-@breadcrumbs-display: false;
-@breadcrumbs-padding: false;
 
 // Breadcrumbs - current page
 @breadcrumbs-current-color: #a3a3a3;
@@ -1426,8 +1433,6 @@
 @popup-title-headings: true; // false
 @popup-title-headings-level: h3; // h1, h2, h3, h4, h5, h6
 
-@popup-action-toolbar: false; // true
-
 @popup-button-close-icon: true; // false
 @popup-button-close-reset: true; // false
 @popup-button-close-position: absolute;
@@ -1437,6 +1442,7 @@
 @popup-button-close-position-left: '';
 
 // Actions toolbar variables
+@popup-action-toolbar: false; // true
 @popup-actions-toolbar-actions-position: @actions-toolbar-actions-position;
 @popup-actions-toolbar-actions-reverse: @actions-toolbar-actions-reverse;
 @popup-actions-toolbar-margin: @actions-toolbar-margin;

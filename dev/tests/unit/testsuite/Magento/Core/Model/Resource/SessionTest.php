@@ -101,7 +101,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     {
         $resource = $this->getMock(
             'Magento\Framework\App\Resource',
-            array('getTableName', 'getConnection'),
+            array(),
             array(),
             '',
             false,

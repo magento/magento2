@@ -89,9 +89,9 @@ class Attribute extends \Magento\Framework\Model\AbstractModel
      *
      * @return $this
      */
-    protected function _afterSave()
+    public function afterSave()
     {
-        parent::_afterSave();
+        parent::afterSave();
         $this->_getResource()->saveLabel($this);
         $this->_getResource()->savePrices($this);
         return $this;

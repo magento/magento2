@@ -37,7 +37,7 @@ class Ttl extends \Magento\Framework\App\Config\Value
      * @return $this
      * @throws \Magento\Framework\Model\Exception
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
         $value = $this->getValue();
         if ($value < 0 || !preg_match('/^[0-9]+$/', $value)) {

@@ -41,7 +41,7 @@ class Edit extends \Magento\Tax\Controller\Adminhtml\Rule
         $backendSession = $this->_objectManager->get('Magento\Backend\Model\Session');
         if ($taxRuleId) {
             try {
-                $taxRule = $this->ruleService->getTaxRule($taxRuleId);
+                $taxRule = $this->ruleService->get($taxRuleId);
                 $pageTitle = sprintf("%s", $taxRule->getCode());
             } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
                 $backendSession->unsRuleData();

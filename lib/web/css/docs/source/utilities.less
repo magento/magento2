@@ -1,0 +1,358 @@
+// /**
+////  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+// *
+// * @category design
+// * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+// * @license http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+// */
+
+
+//  # Utilities
+//  <code>utilities.less</code> is a reuseable collection of basic Less mixins.
+//
+// # .clearfix()
+//
+//  The <code>.clearfix()</code> mixin is a modern solution for healing container`s height which have floated elements. Also its applying prevents top-margins from collapsing.
+//
+
+.example-clearfix-container-1 {
+    border: 1px solid #f00;
+}
+
+.example-clearfix-container-2 {
+    .clearfix();
+    border: 1px solid #0f0;
+}
+
+.example-clearfix-item.left {
+    float: left;
+}
+.example-clearfix-item.right {
+    float: right;
+}
+
+// Container with floated child elements without <code>.clearfix()</code>
+//  ```
+//  <div class="example-clearfix-container-1">
+//      <div class="example-clearfix-item left">
+//          Float left
+//      </div>
+//      <div class="example-clearfix-item right">
+//          Float right
+//      </div>
+//  </div>
+//  ```
+
+// Container with floated child elements with <code>.clearfix()</code>
+//  ```
+//  <div class="example-clearfix-container-2">
+//      <div class="example-clearfix-item left">
+//          Float left
+//      </div>
+//      <div class="example-clearfix-item right">
+//          Float right
+//      </div>
+//  </div>
+//  ```
+
+// # .visibility-hidden()
+//
+//  The <code>.visibility-hidden()()</code> mixin changes element`s visibility to hidden and height to 0.
+//
+
+.example-visibility-hidden {
+    .visibility-hidden();
+}
+
+//
+//  This is a block with applied <code>.visibility-hidden()</code> mixin.
+
+//
+//  ```
+//  <div class="example-visibility-hidden">
+//      <div>
+//          This is hidden text
+//      </div>
+//  </div>
+//  ```
+
+// # .visually-hidden()
+//
+//  The <code>.visually-hidden()</code> mixin safely hides the element for accessibility reasons.
+//
+
+.example-visually-hidden-1 {
+    .visually-hidden();
+}
+
+//
+//  This is a block with applied <code>.visually-hidden()</code> mixin.
+
+//
+//  ```
+//  <div class="example-visually-hidden-1">
+//      <div>
+//          This is hidden text
+//      </div>
+//  </div>
+//  ```
+
+// # .visually-hidden-reset()
+//
+//  The <code>.visually-hidden-reset()</code> mixin resets hidden visibility and makes element again visible.
+//
+
+.example-visually-hidden-2 {
+    background: #fdf0d5;
+    padding: 5px;
+    .visually-hidden();
+}
+
+.example-visually-hidden-2 {
+    .visually-hidden-reset();
+}
+
+//
+//  This is a block with applied <code>.visually-hidden-reset()</code> mixin after <code>.visually-hidden()</code> applying.
+
+//
+//  ```
+//  <div class="example-visually-hidden-2">
+//      <div>
+//          The text is visible again
+//      </div>
+//  </div>
+//  ```
+
+// # .css()
+//
+//  The <code>.css()</code> mixin is used to set any css property if there is a value passed to it by a variable. Also <code>.css()</code> can add -ms-, -webkit- and -moz- prefixes if needed.
+//
+
+.example-css-container {
+    .css(padding, @indent-base);
+    .css(background, @color-secondary);
+}
+
+//
+//  If the variable is set to <code>false</code>, the <code>.css()</code> mixin will add nothing to the code.
+//
+//  ```
+//  <div class="example-css-container">
+//      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt..
+//  </div>
+//  ```
+//
+
+.example-css-container-2 {
+    .css(background, false);
+}
+
+//  ```
+//  <div class="example-css-container-2">
+//      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt..
+//  </div>
+//  ```
+//
+
+//  # .css() variables
+//
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Default value </th>
+//            <th class="vars_head">Allowed values</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@_property</th>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Any css property</td>
+//        </tr>
+//        <tr>
+//            <th>@_value</th>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Any css value</td>
+//        </tr>
+//        <tr>
+//            <th>@_prefix</th>
+//            <td class="vars_value">0</td>
+//            <td class="vars_value">'' | false | 1</td>
+//            <td>If set to "1" adds -ms-, -webkit- and -moz- prefixes to the property</td>
+//        </tr>
+//    </table>
+//  </pre>
+
+// # .rotate()
+//
+//  The <code>.rotate()</code> mixin is a wrapper for css3 transform property with rotate value.
+//
+
+.example-rotate {
+    background: #f00;
+    position: absolute;
+    height: 20px;
+    width: 40px;
+    .rotate(
+        @rotation: 45deg;
+    );
+}
+
+//
+//  ```
+//  <div class="example-rotate"></div>
+//  ```
+
+//  #  .rotate() variables
+//
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Default value </th>
+//            <th class="vars_head">Allowed values</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@rotation</th>
+//            <td class="vars_value">''</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Transform rotate value, false or ''</td>
+//        </tr>
+//    </table>
+//  </pre>
+
+// # .input-placeholder()
+//
+//  The <code>.input-placeholder()</code> mixin is used to change placeholder font-color and font-weight.
+//
+
+.example-placeholder {
+    .input-placeholder(#808080, bold);
+}
+
+//
+//  ```
+//  <input placeholder="Default text" class="example-placeholder" type="text" />
+//  ```
+//
+
+//  #  .input-placeholder() variables
+//
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Allowed values</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@_input-placeholder-color</th>
+//            <td class="vars_value">@form-element-input-placeholder-color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Input placeholder color</td>
+//        </tr>
+//        <tr>
+//            <th>@_input-placeholder-font-weight</th>
+//            <td class="vars_value">@form-element-input-font-weight</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Input placeholder font-weight</td>
+//        </tr>
+//    </table>
+//  </pre>
+
+// # .background-gradient()
+//
+//  The <code>.background-gradient()</code> mixin is used for applying custom css3 gradient.
+//
+
+.example-background-gradient-1 {
+    .background-gradient(
+        @_background-gradient: true,
+        @_background-gradient-direction: vertical,
+        @_background-gradient-start-color: #cff,
+        @_background-gradient-end-color: #ccf
+    );
+}
+
+.example-background-gradient-2 {
+    .background-gradient(
+        @_background-gradient: true,
+        @_background-gradient-direction: horizontal,
+        @_background-gradient-start-color: #cff,
+        @_background-gradient-end-color: #ccf
+    );
+}
+
+//
+//  ```
+// <div class="example-background-gradient-1">
+//      Hey! I`m gradient with vertical direction!
+//</div>
+//  ```
+//
+
+//
+//  ```
+// <div class="example-background-gradient-2">
+//      Hey! I`m gradient with horizontal direction!
+//</div>
+//  ```
+//
+
+//  # .background-gradient() variables
+//
+//  <pre>
+//    <table>
+//        <tr>
+//            <th class="vars_head">Mixin variable</th>
+//            <th class="vars_head">Default value </th>
+//            <th class="vars_head">Allowed values</th>
+//            <th class="vars_head">Comment</th>
+//        </tr>
+//        <tr>
+//            <th>@_background-gradient</th>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | true</td>
+//            <td>If set to 'true' the element has gradient background</td>
+//        </tr>
+//        <tr>
+//            <th>@_background-gradient-direction</th>
+//            <td class="vars_value">''</td>
+//            <td class="vars_value">'' | horizontal | vertical</td>
+//            <td>Gradient direction (horizontal or vertical)</td>
+//        </tr>
+//        <tr>
+//            <th>@_background-gradient-start-color</th>
+//            <td class="vars_value">''</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Gradient start color (any css color)</td>
+//        </tr>
+//        <tr>
+//            <th>@_background-gradient-end-color</th>
+//            <td class="vars_value">''</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Gradient end color (any css color) </td>
+//        </tr>
+//    </table>
+//  </pre>

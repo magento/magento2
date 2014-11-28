@@ -290,15 +290,13 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
             $key = md5($this->_currentCacheKey . serialize($configuration));
             $cached = $this->_cache->get($key);
             if ($cached) {
-                list($this->_arguments,
-                    $this
-                    ->_nonShared,
-                    $this
-                    ->_preferences,
-                    $this
-                    ->_virtualTypes,
-                    $this
-                    ->_mergedArguments) = $cached;
+                list(
+                    $this->_arguments,
+                    $this->_nonShared,
+                    $this->_preferences,
+                    $this->_virtualTypes,
+                    $this->_mergedArguments
+                ) = $cached;
             } else {
                 $this->_mergeConfiguration($configuration);
                 if (!$this->_mergedArguments) {

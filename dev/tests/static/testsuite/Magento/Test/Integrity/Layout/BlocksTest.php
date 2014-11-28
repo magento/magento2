@@ -42,7 +42,7 @@ class BlocksTest extends \PHPUnit_Framework_TestCase
      */
     public static function setUpBeforeClass()
     {
-        foreach (\Magento\TestFramework\Utility\Files::init()->getLayoutFiles(array(), false) as $file) {
+        foreach (\Magento\Framework\Test\Utility\Files::init()->getLayoutFiles(array(), false) as $file) {
             $xml = simplexml_load_file($file);
             $elements = $xml->xpath('/layout//*[self::container or self::block]') ?: array();
             /** @var $node \SimpleXMLElement */
@@ -64,7 +64,7 @@ class BlocksTest extends \PHPUnit_Framework_TestCase
 
     public function testBlocksNotContainers()
     {
-        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * Check that containers are not used as blocks in templates
@@ -112,8 +112,8 @@ class BlocksTest extends \PHPUnit_Framework_TestCase
     public function getChildBlockDataProvider()
     {
         $result = array();
-        foreach (\Magento\TestFramework\Utility\Files::init()->getPhpFiles(true, false, true, false) as $file) {
-            $aliases = \Magento\TestFramework\Utility\Classes::getAllMatches(
+        foreach (\Magento\Framework\Test\Utility\Files::init()->getPhpFiles(true, false, true, false) as $file) {
+            $aliases = \Magento\Framework\Test\Utility\Classes::getAllMatches(
                 file_get_contents($file),
                 '/\->getChildBlock\(\'([^\']+)\'\)/x'
             );

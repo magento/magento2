@@ -54,17 +54,8 @@ class ReverseResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetModuleName($path, $expectedResult)
     {
-        $this->_moduleList->expects(
-            $this->once()
-        )->method(
-            'getModules'
-        )->will(
-            $this->returnValue(
-                array(
-                    'Fixture_ModuleOne' => array('name' => 'Fixture_ModuleOne'),
-                    'Fixture_ModuleTwo' => array('name' => 'Fixture_ModuleTwo')
-                )
-            )
+        $this->_moduleList->expects($this->once())->method('getNames')->will(
+            $this->returnValue(array('Fixture_ModuleOne', 'Fixture_ModuleTwo'))
         );
         $this->_moduleDirs->expects(
             $this->atLeastOnce()

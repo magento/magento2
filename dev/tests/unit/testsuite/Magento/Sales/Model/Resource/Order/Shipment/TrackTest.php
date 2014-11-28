@@ -74,7 +74,7 @@ class TrackTest extends \PHPUnit_Framework_TestCase
         );
         $this->adapterMock = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
-            ['describeTable', 'insert', 'lastInsertId'],
+            [],
             [],
             '',
             false
@@ -96,6 +96,8 @@ class TrackTest extends \PHPUnit_Framework_TestCase
             ->method('insert');
         $this->adapterMock->expects($this->any())
             ->method('lastInsertId');
+        $this->trackModelMock->expects($this->any())->method('hasDataChanges')->will($this->returnValue(true));
+        $this->trackModelMock->expects($this->any())->method('isSaveAllowed')->will($this->returnValue(true));
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->trackResource = $objectManager->getObject(

@@ -40,6 +40,14 @@ define([
             this.observe('output', '');
         },
 
-        isEmpty: function(){}
+        isEmpty: function () {},
+
+        /**
+         * Returns alias for filter item template
+         * @return {String}
+         */
+        getTemplate: function () {
+            return this.module + '/filter/' + this.type;
+        }
     });
 });

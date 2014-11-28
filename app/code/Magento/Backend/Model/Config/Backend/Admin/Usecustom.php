@@ -65,7 +65,7 @@ class Usecustom extends \Magento\Framework\App\Config\Value
      * @return $this
      * @throws \Magento\Framework\Model\Exception
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
         $value = $this->getValue();
         if ($value == 1) {
@@ -83,7 +83,7 @@ class Usecustom extends \Magento\Framework\App\Config\Value
      *
      * @return $this
      */
-    protected function _afterSave()
+    public function afterSave()
     {
         $value = $this->getValue();
 

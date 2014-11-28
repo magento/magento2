@@ -66,7 +66,7 @@ class Allow extends AbstractCurrency
      * @return $this
      * @throws \Magento\Framework\Model\Exception
      */
-    protected function _afterSave()
+    public function afterSave()
     {
         $exceptions = array();
         foreach ($this->_getAllowedCurrencies() as $currencyCode) {

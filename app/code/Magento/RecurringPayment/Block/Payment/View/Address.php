@@ -25,6 +25,8 @@ namespace Magento\RecurringPayment\Block\Payment\View;
 
 /**
  * Recurring payment address view
+ *
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Address extends \Magento\RecurringPayment\Block\Payment\View
 {

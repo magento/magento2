@@ -24,42 +24,12 @@
 ?>
 <?php
 /**
- * @var \Magento\Ui\Paging\View $this
+ * @var \Magento\Ui\Component\Paging $this
  */
-
 ?>
-<?php if (true): ?>
-    <script data-mage-apply='{"Magento_Ui/js/listing/paging" : ""}' type="application/json">
-        <?php echo $this->getConfigurationBuilder()->toJson($this->getConfiguration()); ?>
-    </script>
-    <div data-bind="scope: '<?php echo $this->getParentName(); ?>:<?php echo $this->getName(); ?>'" class="pager">
-        <!-- ko template: 'ui/pagination' --><!-- /ko -->
-    </div>
-<?php else: ?>
-    <div class="pager" data-mage-apply='{"Magento_Ui/js/listing/paging" : ""}'>
-        <span data-part="left">
-            <span class="pages-total-found">Total <strong data-bind-="text: totalCount"><?php echo $this->getTotalCount(); ?></strong> records</span>
-            <label class="view-pages">
-                View
-                <?php echo $this->renderElement('select', (array)$this->getOptions()); ?>
-                per page.
-            </label>
-        </span>
-        <span data-part="right">
-            <span data-bind-="css: { disabled: isFirst() }, click: prev" class="action-previous">
-                <span>Previous page</span>
-            </span>
-            <?php echo $this->renderElement('input', [
-                    'type' => 'text',
-                    'css_classes' => 'input-text page'
-                ]); ?>
-            <span class="pages-total">
-                of
-                <span data-bind-="text: pages" style="vertical-align: top;"><?php echo $this->getTotalPages() ?></span>
-            </span>
-            <span data-bind-="css: { disabled: isLast() }, click: next" class="action-next">
-                <span>Next page</span>
-            </span>
-        </span>
-    </div>
-<?php endif; ?>
+<script data-mage-init='{"Magento_Ui/js/listing/paging" : ""}' type="application/json">
+    <?php echo $this->getConfigBuilder()->toJson($this->getConfig()); ?>
+</script>
+<div data-bind="scope: '<?php echo $this->getParentName(); ?>:<?php echo $this->getName(); ?>'" class="pager">
+    <!-- ko template: 'ui/pagination' --><!-- /ko -->
+</div>

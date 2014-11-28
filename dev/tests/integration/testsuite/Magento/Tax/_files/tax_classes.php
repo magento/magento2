@@ -74,9 +74,9 @@ $ruleData = array(
     'code' => 'Test Rule',
     'priority' => '0',
     'position' => '0',
-    'tax_customer_class' => array($customerTaxClass1->getId(), $customerTaxClass2->getId()),
-    'tax_product_class' => array($productTaxClass1->getId(), $productTaxClass2->getId()),
-    'tax_rate' => array($rate->getId())
+    'customer_tax_class_ids' => array($customerTaxClass1->getId(), $customerTaxClass2->getId()),
+    'product_tax_class_ids' => array($productTaxClass1->getId(), $productTaxClass2->getId()),
+    'tax_rate_ids' => array($rate->getId())
 );
 
 $taxRule = $objectManager->create('Magento\Tax\Model\Calculation\Rule')->setData($ruleData)->save();

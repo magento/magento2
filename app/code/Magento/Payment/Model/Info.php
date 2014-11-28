@@ -23,10 +23,12 @@
  */
 namespace Magento\Payment\Model;
 
+use Magento\Framework\Model\AbstractExtensibleModel;
+
 /**
  * Payment information model
  */
-class Info extends \Magento\Framework\Model\AbstractModel
+class Info extends AbstractExtensibleModel
 {
     /**
      * Additional information container
@@ -50,6 +52,7 @@ class Info extends \Magento\Framework\Model\AbstractModel
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
@@ -59,6 +62,7 @@ class Info extends \Magento\Framework\Model\AbstractModel
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
+        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
@@ -67,7 +71,7 @@ class Info extends \Magento\Framework\Model\AbstractModel
     ) {
         $this->_paymentData = $paymentData;
         $this->_encryptor = $encryptor;
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        parent::__construct($context, $registry, $metadataService, $resource, $resourceCollection, $data);
     }
 
     /**

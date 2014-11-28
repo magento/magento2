@@ -74,7 +74,7 @@ class CodeStyleTest extends \PHPUnit_Framework_TestCase
      */
     public function testRule()
     {
-        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * @param string $inputFile

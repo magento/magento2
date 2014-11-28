@@ -25,7 +25,8 @@ define([
 	"jquery/ui",
 	"Magento_Catalog/catalog/product"
 ], function($){
-
+    "use strict";
+    
     $.widget("mage.configurableAttribute", $.mage.productAttributes, {
         _prepareUrl: function() {
             var name = $('#configurable-attribute-selector').val();
@@ -37,4 +38,5 @@ define([
         }
     });
 
+    return $.mage.configurableAttribute;
 });

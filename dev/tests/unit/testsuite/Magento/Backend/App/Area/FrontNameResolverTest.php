@@ -42,8 +42,13 @@ class FrontNameResolverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $deploymentConfigMock = $this->getMock('\Magento\Framework\App\DeploymentConfig', array(), array(), '', false);
+        $deploymentConfigMock->expects($this->once())
+            ->method('get')
+            ->with(FrontNameResolver::PARAM_BACKEND_FRONT_NAME)
+            ->will($this->returnValue($this->_defaultFrontName));
         $this->_configMock = $this->getMock('\Magento\Backend\App\Config', array(), array(), '', false);
-        $this->_model = new \Magento\Backend\App\Area\FrontNameResolver($this->_configMock, $this->_defaultFrontName);
+        $this->_model = new \Magento\Backend\App\Area\FrontNameResolver($this->_configMock, $deploymentConfigMock);
     }
 
     public function testIfCustomPathUsed()

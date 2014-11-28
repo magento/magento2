@@ -25,7 +25,7 @@
 namespace Magento\Customer\Block\Adminhtml\Group\Edit;
 
 use Magento\Customer\Controller\RegistryConstants;
-use Magento\Customer\Service\V1\Data\CustomerGroup;
+use Magento\Customer\Api\Data\GroupInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -41,9 +41,14 @@ class FormTest extends \PHPUnit_Framework_TestCase
     private $layout;
 
     /**
-     * @var \Magento\Customer\Service\V1\CustomerGroupService
+     * @var \Magento\Customer\Api\GroupRepositoryInterface
      */
-    private $customerGroupService;
+    private $groupRepository;
+
+    /**
+     * @var \Magento\Customer\Api\GroupManagementInterface
+     */
+    private $groupManagement;
 
     /**
      * @var \Magento\Framework\Registry
@@ -59,8 +64,10 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->layout = Bootstrap::getObjectManager()->create(
             'Magento\Framework\View\Layout'
         );
-        $this->customerGroupService = Bootstrap::getObjectManager()
-            ->get('Magento\Customer\Service\V1\CustomerGroupServiceInterface');
+        $this->groupRepository = Bootstrap::getObjectManager()
+            ->get('Magento\Customer\Api\GroupRepositoryInterface');
+        $this->groupManagement = Bootstrap::getObjectManager()
+            ->get('Magento\Customer\Api\GroupManagementInterface');
         $this->registry = Bootstrap::getObjectManager()->get('Magento\Framework\Registry');
     }
 
@@ -78,7 +85,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
     public function testGetForm()
     {
         $this->registry
-            ->register(RegistryConstants::CURRENT_GROUP_ID, $this->customerGroupService->getDefaultGroup(0)->getId());
+            ->register(RegistryConstants::CURRENT_GROUP_ID, $this->groupManagement->getDefaultGroup(0)->getId());
 
         /** @var $block Form */
         $block = $this->layout->createBlock('Magento\Customer\Block\Adminhtml\Group\Edit\Form', 'block');
@@ -111,9 +118,9 @@ class FormTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteria */
         $searchCriteria = Bootstrap::getObjectManager()
             ->create('Magento\Framework\Api\SearchCriteriaBuilder')
-            ->addFilter([$builder->setField('code')->setValue('custom_group')->create()])->create();
-        /** @var CustomerGroup $customerGroup */
-        $customerGroup = $this->customerGroupService->searchGroups($searchCriteria)->getItems()[0];
+            ->addFilter([$builder->setField('code')->setValue('custom_group')->create()]);
+        /** @var GroupInterface $customerGroup */
+        $customerGroup = $this->groupRepository->getList($searchCriteria->create())->getItems()[0];
         $this->registry->register(RegistryConstants::CURRENT_GROUP_ID, $customerGroup->getId());
 
         /** @var $block Form */

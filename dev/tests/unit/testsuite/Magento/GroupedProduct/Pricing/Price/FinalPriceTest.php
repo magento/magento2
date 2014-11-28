@@ -45,6 +45,11 @@ class FinalPriceTest extends \PHPUnit_Framework_TestCase
     protected $calculatorMock;
 
     /**
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $priceCurrencyMock;
+
+    /**
      * Setup
      */
     public function setUp()
@@ -52,11 +57,14 @@ class FinalPriceTest extends \PHPUnit_Framework_TestCase
         $this->saleableItemMock =  $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
         $this->calculatorMock = $this->getMock('Magento\Framework\Pricing\Adjustment\Calculator', [], [], '', false);
 
+        $this->priceCurrencyMock = $this->getMock('\Magento\Framework\Pricing\PriceCurrencyInterface');
+
         $this->finalPrice = new \Magento\GroupedProduct\Pricing\Price\FinalPrice
         (
             $this->saleableItemMock,
             null,
-            $this->calculatorMock
+            $this->calculatorMock,
+            $this->priceCurrencyMock
         );
     }
 

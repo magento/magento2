@@ -26,9 +26,9 @@
 require realpath(dirname(dirname(dirname(dirname(dirname(__DIR__)))))) . '/dev/tests/static/framework/bootstrap.php';
 
 // PHP code
-foreach (\Magento\TestFramework\Utility\Files::init()->getPhpFiles(true, true, true, false) as $file) {
+foreach (\Magento\Framework\Test\Utility\Files::init()->getPhpFiles(true, true, true, false) as $file) {
     $content = file_get_contents($file);
-    $classes = \Magento\TestFramework\Utility\Classes::collectPhpCodeClasses($content);
+    $classes = \Magento\Framework\Test\Utility\Classes::collectPhpCodeClasses($content);
     $factoryNames = array_filter($classes, 'isFactoryName');
     if (!$factoryNames) {
         continue;
@@ -51,10 +51,10 @@ foreach (\Magento\TestFramework\Utility\Files::init()->getPhpFiles(true, true, t
 }
 
 // layouts
-$layouts = \Magento\TestFramework\Utility\Files::init()->getLayoutFiles(array(), false);
+$layouts = \Magento\Framework\Test\Utility\Files::init()->getLayoutFiles(array(), false);
 foreach ($layouts as $file) {
     $xml = simplexml_load_file($file);
-    $classes = \Magento\TestFramework\Utility\Classes::collectLayoutClasses($xml);
+    $classes = \Magento\Framework\Test\Utility\Classes::collectLayoutClasses($xml);
     $factoryNames = array_filter($classes, 'isFactoryName');
     if (!$factoryNames) {
         continue;
@@ -69,14 +69,14 @@ foreach ($layouts as $file) {
 }
 
 // modules in configuration and layouts
-$configs = \Magento\TestFramework\Utility\Files::init()->getConfigFiles(
+$configs = \Magento\Framework\Test\Utility\Files::init()->getConfigFiles(
     '*.xml',
     array('wsdl.xml', 'wsdl2.xml', 'wsi.xml'),
     false
 );
 foreach (array_merge($layouts, $configs) as $file) {
     $modules = array_unique(
-        \Magento\TestFramework\Utility\Classes::getXmlAttributeValues(
+        \Magento\Framework\Test\Utility\Classes::getXmlAttributeValues(
             simplexml_load_file($file),
             '//@module',
             'module'

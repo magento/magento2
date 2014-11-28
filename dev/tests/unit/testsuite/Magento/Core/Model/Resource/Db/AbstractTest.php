@@ -41,7 +41,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_resource = $this->getMock('Magento\Framework\App\Resource', array('getConnection'), array(), '', false, false);
+        $this->_resource = $this->getMock('Magento\Framework\App\Resource', array(), array(), '', false, false);
         $this->_model = $this->getMock(
             'Magento\Framework\Model\Resource\Db\AbstractDb',
             array('_construct', '_getWriteAdapter'),
@@ -64,14 +64,14 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetConnectionInMemoryCaching()
     {
-        $filesystem = $this->getMock('Magento\Framework\Filesystem', array(), array(), '', false);
-        $string = $this->getMock('Magento\Framework\Stdlib\String', array(), array(), '', false);
-        $dateTime = $this->getMock('Magento\Framework\Stdlib\DateTime', null, array(), '', true);
+        $string = $this->getMock('Magento\Framework\Stdlib\String', [], [], '', false);
+        $dateTime = $this->getMock('Magento\Framework\Stdlib\DateTime', null, [], '', true);
+        $logger = $this->getMockForAbstractClass('Magento\Framework\DB\LoggerInterface');
         $connection = new \Magento\Framework\DB\Adapter\Pdo\Mysql(
-            $filesystem,
             $string,
             $dateTime,
-            array('dbname' => 'test_dbname', 'username' => 'test_username', 'password' => 'test_password')
+            $logger,
+            ['dbname' => 'test_dbname', 'username' => 'test_username', 'password' => 'test_password']
         );
         $this->_resource->expects(
             $this->atLeastOnce()

@@ -32,7 +32,7 @@
                 <span data-bind="text: $t('Advanced filter')"></span>
             </legend><br />
             <!-- ko foreach: { data: filters, as: 'item' } -->
-            <!-- ko template: $parent.getTemplateFor(item) --><!-- /ko -->
+            <!-- ko template: item.getTemplate() --><!-- /ko -->
             <!-- /ko -->
         </fieldset>
         <div class="actions filters-actions">
@@ -46,7 +46,7 @@
             <!-- ko foreach: { data: active, as: 'filter' } -->
 
             <li class="filters-item item">
-                <strong class="item-label" data-bind="text: $t(filter.title)"></strong>
+                <strong class="item-label" data-bind="text: $t(filter.label)"></strong>
                 <span class="item-value" data-bind="text: $t(filter.output)"></span>
                 <button data-bind="click: $parent.onClear(filter)" type="button" class="action action-remove"><span data-bind="text: $t('Remove')"></span></button>
             </li>

@@ -25,7 +25,8 @@
 namespace Magento\Catalog\Service\V1\Product\CustomOptions\Data\Option;
 
 /**
- * @codeCoverageIgnore
+ * @deprecated
+ * @see \Magento\Catalog\Api\Data\ProductCustomOptionAttributeInterface
  */
 class Metadata extends \Magento\Framework\Api\AbstractExtensibleObject
 {

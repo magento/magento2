@@ -24,16 +24,14 @@
 
 namespace Magento\Tax\Test\TestCase;
 
-use Magento\Tax\Test\Fixture\TaxRate;
-use Magento\Tax\Test\Page\Adminhtml\TaxRateIndex;
-use Magento\Tax\Test\Page\Adminhtml\TaxRateNew;
 use Mtf\TestCase\Injectable;
+use Magento\Tax\Test\Fixture\TaxRate;
+use Magento\Tax\Test\Page\Adminhtml\TaxRateNew;
+use Magento\Tax\Test\Page\Adminhtml\TaxRateIndex;
 
 /**
- * Test Creation for CreateTaxRateEntity
- *
  * Test Flow:
- * Steps:
+ *
  * 1. Log in as default admin user.
  * 2. Go to Stores > Taxes > Tax Zones and Rates.
  * 3. Click 'Add New Tax Rate' button.
@@ -47,21 +45,21 @@ use Mtf\TestCase\Injectable;
 class CreateTaxRateEntityTest extends Injectable
 {
     /**
-     * Tax Rate grid page
+     * Tax Rate grid page.
      *
      * @var TaxRateIndex
      */
     protected $taxRateIndexPage;
 
     /**
-     * Tax Rate new/edit page
+     * Tax Rate new/edit page.
      *
      * @var TaxRateNew
      */
     protected $taxRateNewPage;
 
     /**
-     * Injection data
+     * Injection data.
      *
      * @param TaxRateIndex $taxRateIndexPage
      * @param TaxRateNew $taxRateNewPage
@@ -76,7 +74,7 @@ class CreateTaxRateEntityTest extends Injectable
     }
 
     /**
-     * Create Tax Rate Entity test
+     * Create Tax Rate Entity test.
      *
      * @param TaxRate $taxRate
      * @return void

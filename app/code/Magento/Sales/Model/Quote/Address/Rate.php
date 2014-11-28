@@ -71,9 +71,9 @@ class Rate extends AbstractModel
     /**
      * @return $this
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
-        parent::_beforeSave();
+        parent::beforeSave();
         if ($this->getAddress()) {
             $this->setAddressId($this->getAddress()->getId());
         }

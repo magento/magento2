@@ -121,7 +121,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
             '\Magento\Sales\Model\Quote',
             [
                 'setTotalsCollectedFlag', '__wakeup', 'getPaymentsCollection', 'getPayment',
-                'getItemsCollection', 'isVirtual', 'getBillingAddress', 'collectTotals'
+                'getItemsCollection', 'isVirtual', 'getBillingAddress', 'collectTotals', 'save'
             ], [], '', false
         );
         $quoteMock->expects($this->any())
@@ -279,7 +279,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
             '\Magento\Sales\Model\Quote',
             [
                 'setTotalsCollectedFlag', '__wakeup', 'getPaymentsCollection', 'getPayment',
-                'getItemsCollection', 'isVirtual', 'getShippingAddress', 'collectTotals'
+                'getItemsCollection', 'isVirtual', 'getShippingAddress', 'collectTotals', 'save'
             ], [], '', false
         );
         $quoteMock->expects($this->any())

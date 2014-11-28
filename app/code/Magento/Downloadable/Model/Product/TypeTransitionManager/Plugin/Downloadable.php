@@ -68,7 +68,18 @@ class Downloadable
                 \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE
             )
         );
-        $hasDownloadableData = $this->request->getPost('downloadable');
+        $downloadableData = $this->request->getPost('downloadable');
+        $hasDownloadableData = false;
+        if (isset($downloadableData)) {
+            foreach ($downloadableData as $data) {
+                foreach ($data as $rowData) {
+                    if (empty($rowData['is_delete'])) {
+                        $hasDownloadableData = true;
+                        break;
+                    }
+                }
+            }
+        }
         if ($isTypeCompatible && $hasDownloadableData && $product->hasIsVirtual()) {
             $product->setTypeId(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE);
             return;

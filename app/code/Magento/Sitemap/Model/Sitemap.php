@@ -292,7 +292,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
      * @return \Magento\Framework\Model\AbstractModel
      * @throws \Magento\Framework\Model\Exception
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
         $path = $this->getSitemapPath();
 
@@ -335,7 +335,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
 
         $this->setSitemapPath(rtrim(str_replace(str_replace('\\', '/', $this->_getBaseDir()), '', $path), '/') . '/');
 
-        return parent::_beforeSave();
+        return parent::beforeSave();
     }
 
     /**

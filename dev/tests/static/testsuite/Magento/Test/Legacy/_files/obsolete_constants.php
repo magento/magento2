@@ -683,6 +683,10 @@ return array(
     ['SSH2', 'Magento\Framework\Filesystem'],
     ['HTTP', 'Magento\Framework\Filesystem', '\Magento\Framework\Filesystem\DriverPool::HTTP'],
     ['HTTPS', 'Magento\Framework\Filesystem', '\Magento\Framework\Filesystem\DriverPool::HTTPS'],
+    ['SEARCH_TYPE_LIKE', 'Magento\CatalogSearch\Model\Fulltext'],
+    ['SEARCH_TYPE_FULLTEXT', 'Magento\CatalogSearch\Model\Fulltext'],
+    ['SEARCH_TYPE_COMBINE', 'Magento\CatalogSearch\Model\Fulltext'],
+    ['XML_PATH_CATALOG_SEARCH_TYPE', 'Magento\CatalogSearch\Model\Fulltext'],
     ['VAT_CLASS_ERROR', 'Magento\Customer\Helper\Data', 'Magento\Customer\Model\Vat::VAT_CLASS_ERROR'],
     ['VAT_CLASS_INVALID', 'Magento\Customer\Helper\Data', 'Magento\Customer\Model\Vat::VAT_CLASS_INVALID'],
     ['VAT_CLASS_INTRA_UNION', 'Magento\Customer\Helper\Data', 'Magento\Customer\Model\Vat::VAT_CLASS_INTRA_UNION'],
@@ -703,4 +707,12 @@ return array(
     ['XML_PATH_SUPPORT_EMAIL', 'Magento\Customer\Helper\Data'],
     ['CONTEXT_GROUP', 'Magento\Customer\Helper\Data', 'Magento\Customer\Model\Context::CONTEXT_GROUP'],
     ['CONTEXT_AUTH', 'Magento\Customer\Helper\Data', 'Magento\Customer\Model\Context::CONTEXT_AUTH'],
+    ['DEBUG_CONNECT', 'Magento\Framework\DB\Adapter\Pdo\Mysql', 'Magento\Framework\DB\LoggerInterface::TYPE_CONNECT'],
+    ['DEBUG_TRANSACTION', 'Magento\Framework\DB\Adapter\Pdo\Mysql', 'Magento\Framework\DB\LoggerInterface::TYPE_TRANSACTION'],
+    ['DEBUG_QUERY', 'Magento\Framework\DB\Adapter\Pdo\Mysql', 'Magento\Framework\DB\LoggerInterface::TYPE_QUERY'],
+    [
+        'PARAM_ALLOWED_MODULES',
+        'Magento\Framework\Module\Declaration\Reader\Filesystem',
+        'Magento\Framework\App\ObjectManagerFactory::INIT_PARAM_DEPLOYMENT_CONFIG'
+    ],
 );

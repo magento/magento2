@@ -24,7 +24,7 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
-use \Magento\Customer\Service\V1\Data\Customer;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Message\Error;
 
 class Validate extends \Magento\Customer\Controller\Adminhtml\Index
@@ -33,7 +33,7 @@ class Validate extends \Magento\Customer\Controller\Adminhtml\Index
      * Customer validation
      *
      * @param \Magento\Framework\Object $response
-     * @return Customer|null
+     * @return CustomerInterface|null
      */
     protected function _validateCustomer($response)
     {
@@ -41,13 +41,13 @@ class Validate extends \Magento\Customer\Controller\Adminhtml\Index
         $errors = null;
 
         try {
-            /** @var Customer $customer */
-            $customer = $this->_customerBuilder->create();
+            /** @var CustomerInterface $customer */
+            $customer = $this->customerDataBuilder->create();
 
             $customerForm = $this->_formFactory->create(
                 'customer',
                 'adminhtml_customer',
-                \Magento\Framework\Api\ExtensibleDataObjectConverter::toFlatArray($customer),
+                $this->_extensibleDataObjectConverter->toFlatArray($customer),
                 true
             );
             $customerForm->setInvisibleIgnored(true);
@@ -58,8 +58,8 @@ class Validate extends \Magento\Customer\Controller\Adminhtml\Index
                 unset($data['website_id']);
             }
 
-            $customer = $this->_customerBuilder->populateWithArray($data)->create();
-            $errors = $this->_customerAccountService->validateCustomerData($customer);
+            $customer = $this->customerDataBuilder->populateWithArray($data)->create();
+            $errors = $this->customerAccountManagement->validate($customer);
         } catch (\Magento\Framework\Model\Exception $exception) {
             /* @var $error Error */
             foreach ($exception->getMessages(\Magento\Framework\Message\MessageInterface::TYPE_ERROR) as $error) {
@@ -85,25 +85,27 @@ class Validate extends \Magento\Customer\Controller\Adminhtml\Index
      */
     protected function _validateCustomerAddress($response)
     {
-        $addressesData = $this->getRequest()->getParam('address');
-        if (is_array($addressesData)) {
-            foreach (array_keys($addressesData) as $index) {
-                if ($index == '_template_') {
-                    continue;
+        $customerData =  $this->getRequest()->getParam('account');
+        $addresses = isset($customerData['customer_address']) ? $customerData['customer_address'] : [];
+        if (!is_array($addresses)) {
+            return;
+        }
+        foreach (array_keys($addresses) as $index) {
+            if ($index == '_template_') {
+                continue;
+            }
+
+            $addressForm = $this->_formFactory->create('customer_address', 'adminhtml_customer_address');
+
+            $requestScope = sprintf('account/customer_address/%s', $index);
+            $formData = $addressForm->extractData($this->getRequest(), $requestScope);
+
+            $errors = $addressForm->validateData($formData);
+            if ($errors !== true) {
+                foreach ($errors as $error) {
+                    $this->messageManager->addError($error);
                 }
-
-                $addressForm = $this->_formFactory->create('customer_address', 'adminhtml_customer_address');
-
-                $requestScope = sprintf('address/%s', $index);
-                $formData = $addressForm->extractData($this->getRequest(), $requestScope);
-
-                $errors = $addressForm->validateData($formData);
-                if ($errors !== true) {
-                    foreach ($errors as $error) {
-                        $this->messageManager->addError($error);
-                    }
-                    $response->setError(1);
-                }
+                $response->setError(1);
             }
         }
     }

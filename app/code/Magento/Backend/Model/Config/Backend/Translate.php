@@ -80,7 +80,7 @@ class Translate extends \Magento\Framework\App\Config\Value
      *
      * @return $this
      */
-    protected function _afterSave()
+    public function afterSave()
     {
         $types = array_keys(
             $this->_scopeConfig->getValue(

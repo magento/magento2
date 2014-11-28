@@ -206,6 +206,59 @@ class StructureTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($elementMock, $this->_model->getElement('section_1/group_level_1/field_3'));
     }
 
+    public function testGetElementByPathPartsIfSectionDataIsEmpty()
+    {
+        $elementMock = $this->getMock(
+            'Magento\Backend\Model\Config\Structure\Element\Field',
+            array(),
+            array(),
+            '',
+            false
+        );
+        $fieldData = [
+            'id' => 'field_3',
+            'path' => 'section_1/group_level_1',
+            '_elementType' => 'field',
+        ];
+        $elementMock->expects($this->once())->method('setData')->with($fieldData, 'scope');
+
+        $this->_flyweightFactory->expects(
+            $this->once()
+        )->method(
+                'create'
+            )->with(
+                'field'
+            )->will(
+                $this->returnValue($elementMock)
+            );
+
+        $structureDataMock = $this->getMock(
+            'Magento\Backend\Model\Config\Structure\Data',
+            array(),
+            array(),
+            '',
+            false
+        );
+
+        $structureDataMock->expects(
+            $this->once()
+        )->method(
+                'get'
+            )->will(
+                $this->returnValue([])
+            );
+
+        $structureMock = new \Magento\Backend\Model\Config\Structure(
+            $structureDataMock,
+            $this->_tabIteratorMock,
+            $this->_flyweightFactory,
+            $this->_scopeDefinerMock
+        );
+
+        $pathParts = explode('/', 'section_1/group_level_1/field_3');
+        $this->assertEquals($elementMock, $structureMock->getElementByPathParts($pathParts));
+    }
+
     public function testGetFirstSectionReturnsFirstAllowedSection()
     {
         $tabMock = $this->getMock(

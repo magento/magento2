@@ -40,7 +40,7 @@
                data-role="website-id" data-param="<?php echo $this->getWebsiteVarName() ?>"
                value="<?php echo $this->escapeHtml($this->getWebsiteId()) ?>"
                onchange="switchScope(this);"<?php echo $this->getUiId()?> />
-        <button class="action toggle" data-toggle="dropdown" aria-haspopup="true">
+        <button class="action toggle" data-mage-init='{"dropdown":{}}' data-toggle="dropdown" aria-haspopup="true">
             <span><?php echo $this->getCurrentSelectionName() ?></span>
         </button>
         <ul class="dropdown-menu" data-role="stores-list">

@@ -28,9 +28,17 @@ use Magento\Framework\App\Action\Context;
 use Magento\CatalogSearch\Model\Advanced as ModelAdvanced;
 use Magento\Framework\Session\Generic;
 use Magento\Framework\UrlFactory;
+use Magento\Catalog\Model\Layer\Resolver;
 
 class Result extends \Magento\Framework\App\Action\Action
 {
+    /**
+     * Catalog Layer Resolver
+     *
+     * @var Resolver
+     */
+    private $layerResolver;
+
     /**
      * Url factory
      *
@@ -51,15 +59,18 @@ class Result extends \Magento\Framework\App\Action\Action
      * @param Context $context
      * @param ModelAdvanced $catalogSearchAdvanced
      * @param UrlFactory $urlFactory
+     * @param Resolver $layerResolver
      */
     public function __construct(
         Context $context,
         ModelAdvanced $catalogSearchAdvanced,
-        UrlFactory $urlFactory
+        UrlFactory $urlFactory,
+        Resolver $layerResolver
     ) {
+        parent::__construct($context);
         $this->_catalogSearchAdvanced = $catalogSearchAdvanced;
         $this->_urlFactory = $urlFactory;
-        parent::__construct($context);
+        $this->layerResolver = $layerResolver;
     }
 
     /**
@@ -68,6 +79,7 @@ class Result extends \Magento\Framework\App\Action\Action
     public function execute()
     {
         try {
+            $this->layerResolver->create('advanced');
             $this->_catalogSearchAdvanced->addFilters($this->getRequest()->getQuery());
             $this->_view->loadLayout();
             $this->_view->renderLayout();

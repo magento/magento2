@@ -53,6 +53,11 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
      */
     protected $addressMetadataServiceMock;
 
+    /**
+     * @var \Magento\Customer\Model\Address\Mapper|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $addressMapperMock;
+
     protected function setUp()
     {
         $this->addressBuilderMock = $this->getMock(
@@ -87,15 +92,27 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $this->addressMapperMock = $this->getMock(
+            'Magento\Customer\Model\Address\Mapper',
+            array('toFlatArray'),
+            array(),
+            '',
+            false
+        );
+
         $this->model = new Converter(
             $this->addressBuilderMock,
             $this->addressFactoryMock,
-            $this->addressMetadataServiceMock
+            $this->addressMetadataServiceMock,
+            $this->addressMapperMock
         );
     }
 
     public function testUpdateAddressModel()
     {
+        $this->addressMapperMock->expects($this->once())
+            ->method('toFlatArray')
+            ->will($this->returnValue(array()));
         $addressModelMock = $this->getAddressModelMock();
         $addressModelMock->expects($this->once())
             ->method('getAttributeSetId')
@@ -107,10 +124,6 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             ));
 
         $addressMock = $this->getMock('Magento\Customer\Service\V1\Data\Address', array(), array(), '', false);
-        $addressMock->expects($this->once())
-            ->method('__toArray')
-            ->will($this->returnValue(array()));
-
         $this->model->updateAddressModel($addressModelMock, $addressMock);
     }
 
@@ -144,12 +157,13 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $regionMock->expects($this->once())->method('getRegionCode');
         $regionMock->expects($this->once())->method('getRegionId');
         $addressMock = $this->getMock('Magento\Customer\Service\V1\Data\Address', array(), array(), '', false);
-        $addressMock->expects($this->once())
-            ->method('__toArray')
-            ->will($this->returnValue($attributes));
         $addressMock->expects($this->exactly(4))
             ->method('getRegion')
             ->will($this->returnValue($regionMock));
+
+        $this->addressMapperMock->expects($this->once())
+            ->method('toFlatArray')
+            ->will($this->returnValue($attributes));
 
         $this->model->updateAddressModel($addressModelMock, $addressMock);
     }

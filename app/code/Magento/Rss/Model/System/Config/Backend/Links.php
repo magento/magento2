@@ -61,7 +61,7 @@ class Links extends \Magento\Framework\App\Config\Value
      *
      * @return void
      */
-    protected function _afterSave()
+    public function afterSave()
     {
         if ($this->isValueChanged()) {
             $this->_cacheTypeList->invalidate(\Magento\Framework\View\Element\AbstractBlock::CACHE_GROUP);

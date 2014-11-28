@@ -23,7 +23,7 @@
  */
 namespace Magento\Store\Ui\DataType;
 
-use Magento\Ui\DataType\AbstractDataType;
+use Magento\Ui\Component\Form\Element\DataType\AbstractDataType;
 
 /**
  * Class Store

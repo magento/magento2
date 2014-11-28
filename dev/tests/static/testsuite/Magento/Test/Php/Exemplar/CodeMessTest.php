@@ -105,7 +105,7 @@ class CodeMessTest extends \PHPUnit_Framework_TestCase
      */
     public function testRuleViolation()
     {
-        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * @param string $inputFile

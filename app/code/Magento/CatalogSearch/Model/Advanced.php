@@ -357,8 +357,9 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
                 ? __('Yes')
                 : __('No');
         }
-
-        $this->_searchCriterias[] = array('name' => $name, 'value' => $value);
+        if (!empty($value)) {
+            $this->_searchCriterias[] = array('name' => $name, 'value' => $value);
+        }
         return $this;
     }
 

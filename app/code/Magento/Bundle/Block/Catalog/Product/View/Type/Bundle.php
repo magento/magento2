@@ -24,7 +24,7 @@
 namespace Magento\Bundle\Block\Catalog\Product\View\Type;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Tax\Service\V1\TaxCalculationServiceInterface;
+use Magento\Tax\Api\TaxCalculationInterface;
 
 /**
  * Catalog bundle product info block
@@ -46,9 +46,9 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
      * @var array
      */
     protected $mapping = [
-        TaxCalculationServiceInterface::CALC_UNIT_BASE => self::UNIT_ROUNDING,
-        TaxCalculationServiceInterface::CALC_ROW_BASE => self::ROW_ROUNDING,
-        TaxCalculationServiceInterface::CALC_TOTAL_BASE => self::TOTAL_ROUNDING,
+        TaxCalculationInterface::CALC_UNIT_BASE => self::UNIT_ROUNDING,
+        TaxCalculationInterface::CALC_ROW_BASE => self::ROW_ROUNDING,
+        TaxCalculationInterface::CALC_TOTAL_BASE => self::TOTAL_ROUNDING,
     ];
 
     /**
@@ -178,6 +178,7 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
             $defaultValues = array();
         }
 
+        $isFixedPrice = $this->getProduct()->getPriceType() == \Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED;
 
         $position = 0;
         foreach ($optionsArray as $optionItem) {
@@ -216,11 +217,10 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
                     $priceBaseAmount = $bundleProductPrice->getLowestPrice($currentProduct, $priceBaseAmount);
                     $priceValue = $bundleProductPrice->getLowestPrice($currentProduct, $priceValue);
 
-                    $tierPriceInfo['price'] = $this->priceCurrency->convert(
-                        $this->_taxData->displayPriceIncludingTax() ? $priceValue : $priceBaseAmount
-                    );
-                    $tierPriceInfo['exclTaxPrice'] = $this->priceCurrency->convert($priceBaseAmount);
-                    $tierPriceInfo['inclTaxPrice'] = $this->priceCurrency->convert($priceValue);
+                    $tierPriceInfo['price'] = $this->_taxData->displayPriceIncludingTax()
+                        ? $priceValue : $priceBaseAmount;
+                    $tierPriceInfo['exclTaxPrice'] = $priceBaseAmount;
+                    $tierPriceInfo['inclTaxPrice'] = $priceValue;
                 }
                 // break the reference with the last element
 
@@ -232,8 +232,8 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
                 $selection = array(
                     'qty' => $qty,
                     'customQty' => $selectionItem->getSelectionCanChangeQty(),
-                    'inclTaxPrice' => $this->priceCurrency->convert($priceInclTax),
-                    'exclTaxPrice' => $this->priceCurrency->convert($priceExclTax),
+                    'inclTaxPrice' => $priceInclTax,
+                    'exclTaxPrice' => $priceExclTax,
                     'priceType' => $selectionItem->getSelectionPriceType(),
                     'tierPrice' => $tierPrices,
                     'name' => $selectionItem->getName(),
@@ -272,7 +272,6 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
                 }
             }
         }
-        $isFixedPrice = $this->getProduct()->getPriceType() == \Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED;
 
         $productAmount = $currentProduct
             ->getPriceInfo()
@@ -289,12 +288,12 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
             'selected' => $selected,
             'bundleId' => $currentProduct->getId(),
             'priceFormat' => $this->_localeFormat->getPriceFormat(),
-            'basePrice' => $this->priceCurrency->convert($baseProductAmount->getValue()),
+            'basePrice' => $baseProductAmount->getValue(),
             'finalBasePriceInclTax' => $isFixedPrice
-                ? $this->priceCurrency->convert($productAmount->getValue())
+                ? $productAmount->getValue()
                 : 0,
             'finalBasePriceExclTax' => $isFixedPrice
-                ? $this->priceCurrency->convert($productAmount->getBaseAmount())
+                ? $productAmount->getBaseAmount()
                 : 0,
             'priceType' => $currentProduct->getPriceType(),
             'specialPrice' => $currentProduct

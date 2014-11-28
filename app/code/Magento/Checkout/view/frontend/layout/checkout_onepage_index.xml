@@ -38,8 +38,8 @@
                 </block>
                 <block class="Magento\Checkout\Block\Onepage\Shipping" name="checkout.onepage.shipping" as="shipping" template="onepage/shipping.phtml" cacheable="false"/>
                 <block class="Magento\Checkout\Block\Onepage\Shipping\Method" name="checkout.onepage.shipping_method" as="shipping_method" template="onepage/shipping_method.phtml" cacheable="false">
-                    <block class="Magento\Checkout\Block\Onepage\Shipping\Method\Available" name="checkout.onepage.shipping_method.available" as="available" template="onepage/shipping_method/available.phtml"/>
-                    <block class="Magento\Checkout\Block\Onepage\Shipping\Method\Additional" name="checkout.onepage.shipping_method.additional" as="additional" template="onepage/shipping_method/additional.phtml"/>
+                    <container name="shipping_method.available" label="invisible" as="available"/>
+                    <container name="shipping_method.additional" label="invisible" as="additional"/>
                 </block>
                 <block class="Magento\Checkout\Block\Onepage\Payment" name="checkout.onepage.payment" as="payment" template="onepage/payment.phtml" cacheable="false">
                     <block class="Magento\Checkout\Block\Onepage\Payment\Methods" name="checkout.payment.methods" as="methods" template="onepage/payment/methods.phtml" cacheable="false"/>

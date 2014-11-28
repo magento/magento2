@@ -39,7 +39,7 @@
                         <div class="field field-username">
                             <label for="username" class="label"><span><?php echo __('User Name:') ?></span></label>
                             <div class="control">
-                                <input type="text" id="username" name="login[username]" value="" class="required-entry input-text" placeholder="<?php echo __('user name') ?>" />
+                                <input type="text" id="username" name="login[username]" autofocus value="" class="required-entry input-text" placeholder="<?php echo __('user name') ?>" />
                             </div>
                         </div>
                         <div class="field field-password">
@@ -57,16 +57,27 @@
                     </fieldset>
                 </form>
                 <script type="text/javascript">
+                    function initForm($){
+                        $('#login-form').form().validation();
+                    }
+
+                    function focusInput(){
+                        var username            = document.getElementById('username'),
+                            autofocusSupport    = typeof username.autofocus !== 'undefined';
+                        
+                        if(!autofocusSupport){
+                            username.focus();
+                        }
+                    }
+
                     require([
                         "jquery",
                         "mage/backend/form",
                         "mage/backend/validation"
-                    ], function(jQuery){
-                        jQuery('#login-form').form().validation();
-                    });
-                    jQuery(window).load(function(){
-                        jQuery('#username').focus();
-                    });
+                    ], initForm);
+
+                    focusInput();
+
                 </script>
             </div>
         </div>

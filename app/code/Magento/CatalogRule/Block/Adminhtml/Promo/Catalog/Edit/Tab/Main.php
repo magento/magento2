@@ -41,9 +41,14 @@ class Main extends Generic implements TabInterface
     protected $_systemStore;
 
     /**
-     * @var \Magento\Customer\Service\V1\CustomerGroupServiceInterface
+     * @var \Magento\Customer\Api\GroupRepositoryInterface
      */
-    protected $_customerGroup;
+    protected $_groupRepository;
+
+    /**
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     */
+    protected $_searchCriteriaBuilder;
 
     /**
      * @var \Magento\Framework\Convert\Object
@@ -54,7 +59,8 @@ class Main extends Generic implements TabInterface
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param \Magento\Customer\Service\V1\CustomerGroupServiceInterface $customerGroup
+     * @param \Magento\Customer\Api\GroupRepositoryInterface $groupRepository
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Framework\Convert\Object $objectConverter
      * @param \Magento\Store\Model\System\Store $systemStore
      * @param array $data
@@ -63,13 +69,15 @@ class Main extends Generic implements TabInterface
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
-        \Magento\Customer\Service\V1\CustomerGroupServiceInterface $customerGroup,
+        \Magento\Customer\Api\GroupRepositoryInterface $groupRepository,
+        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Framework\Convert\Object $objectConverter,
         \Magento\Store\Model\System\Store $systemStore,
         array $data = array()
     ) {
         $this->_systemStore = $systemStore;
-        $this->_customerGroup = $customerGroup;
+        $this->_groupRepository = $groupRepository;
+        $this->_searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->_objectConverter = $objectConverter;
         parent::__construct($context, $registry, $formFactory, $data);
     }
@@ -182,6 +190,7 @@ class Main extends Generic implements TabInterface
             $field->setRenderer($renderer);
         }
 
+        $customerGroups = $this->_groupRepository->getList($this->_searchCriteriaBuilder->create())->getItems();
         $fieldset->addField(
             'customer_group_ids',
             'multiselect',
@@ -190,11 +199,13 @@ class Main extends Generic implements TabInterface
                 'label' => __('Customer Groups'),
                 'title' => __('Customer Groups'),
                 'required' => true,
-                'values' => $this->_objectConverter->toOptionArray($this->_customerGroup->getGroups(), 'id', 'code')
+                'values' => $this->_objectConverter->toOptionArray($customerGroups, 'id', 'code')
             )
         );
 
-        $dateFormat = $this->_localeDate->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
+        $dateFormat = $this->_localeDate->getDateFormat(
+            \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
+        );
         $fieldset->addField(
             'from_date',
             'date',

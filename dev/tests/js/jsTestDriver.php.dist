@@ -51,7 +51,6 @@ return array(
         '/lib/web/mage/gallery.js',
         '/lib/web/mage/gallery-fullscreen.js',
         '/lib/web/mage/zoom.js',
-        '/lib/internal/Magento/Framework/RequireJs/paths-updater.js',
     ),
     'test' => array('/dev/tests/js/testsuite'),
     'JsTestDriver' => '{{path_to_jstestdriver_jar}}'

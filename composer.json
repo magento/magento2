@@ -2,7 +2,7 @@
     "name": "magento/project-community-edition",
     "description": "Magento project (Community Edition)",
     "type": "project",
-    "version": "0.1.0-alpha105",
+    "version": "0.1.0-alpha106",
     "require": {
         "php": "~5.4.11|~5.5.0",
         "zendframework/zend-stdlib": "2.0.3"
@@ -98,7 +98,7 @@
         "magento/module-wishlist": "self.version",
         "magento/theme-adminhtml-backend": "self.version",
         "magento/theme-frontend-blank": "self.version",
-        "magento/theme-frontend-plushe": "self.version",
+        "magento/theme-frontend-luma": "self.version",
         "magento/language-de_de": "self.version",
         "magento/language-en_us": "self.version",
         "magento/language-es_es": "self.version",

@@ -27,6 +27,10 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
 {
+
+    /** @var \Magento\Customer\Api\AccountManagementInterface */
+    private $accountManagement;
+
     protected function setUp()
     {
         parent::setUp();
@@ -35,10 +39,10 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
             'Magento\Customer\Model\Session',
             array($logger)
         );
-        $service = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Service\V1\CustomerAccountService'
+        $this->accountManagement = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Customer\Api\AccountManagementInterface'
         );
-        $customer = $service->authenticate('customer@example.com', 'password');
+        $customer = $this->accountManagement->authenticate('customer@example.com', 'password');
         $session->setCustomerDataAsLoggedIn($customer);
     }
 
@@ -107,9 +111,7 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
             $this->equalTo(array('The address has been saved.')),
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
-        /** @var \Magento\Customer\Service\V1\CustomerAddressService $addressService */
-        $addressService = Bootstrap::getObjectManager()->create('Magento\Customer\Service\V1\CustomerAddressService');
-        $address = $addressService->getAddress(2);
+        $address = $this->accountManagement->getDefaultBillingAddress(1);
 
         $this->assertEquals('UA', $address->getCountryId());
         $this->assertEquals('Kyiv', $address->getCity());

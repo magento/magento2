@@ -301,10 +301,10 @@ class Review extends \Magento\Framework\Model\AbstractModel
      *
      * @return \Magento\Framework\Model\AbstractModel
      */
-    protected function _afterDeleteCommit()
+    public function afterDeleteCommit()
     {
         $this->getResource()->afterDeleteCommit($this);
-        return parent::_afterDeleteCommit();
+        return parent::afterDeleteCommit();
     }
 
     /**
@@ -338,16 +338,6 @@ class Review extends \Magento\Framework\Model\AbstractModel
         }
 
         return $this;
-    }
-
-    /**
-     * Validate user before delete
-     *
-     * @return $this
-     */
-    protected function _beforeDelete()
-    {
-        return parent::_beforeDelete();
     }
 
     /**

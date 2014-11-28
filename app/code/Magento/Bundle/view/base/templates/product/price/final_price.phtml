@@ -24,39 +24,89 @@
 ?>
 
 <?php
+$idSuffix = $this->getIdSuffix() ? $this->getIdSuffix() : '';
 /** @var \Magento\Bundle\Pricing\Render\FinalPriceBox $this */
 $productId = $this->getSaleableItem()->getId();
 /** @var \Magento\Bundle\Pricing\Price\FinalPrice $finalPriceModel */
 $finalPriceModel = $this->getPrice();
+$minimalPrice = $finalPriceModel->getMinimalPrice();
+$maximalPrice = $finalPriceModel->getMaximalPrice();
+$hasSpecialPrice = $this->hasSpecialPrice();
+if ($hasSpecialPrice) {
+    /** @var \Magento\Bundle\Pricing\Price\BundleRegularPrice $regularPriceModel */
+    $regularPriceModel = $this->getPriceType('regular_price');
+    $maximalRegularPrice = $regularPriceModel->getMaximalPrice();
+    $minimalRegularPrice = $regularPriceModel->getMinimalPrice();
+}
 ?>
 <?php if ($this->getSaleableItem()->getPriceView()): ?>
     <p class="minimal-price">
-        <?php echo $this->renderAmount($finalPriceModel->getMinimalPrice(), [
+        <?php echo $this->renderAmount($minimalPrice, [
             'display_label'     => __('As low as'),
             'price_id'          => $this->getPriceId('from-'),
             'include_container' => true
         ]); ?>
+        <?php if ($hasSpecialPrice): ?>
+            <span class="old-price">
+                <?php echo $this->renderAmount($minimalRegularPrice, [
+                    'display_label'     => __('Regular Price'),
+                    'price_id'          => $this->getPriceId('old-price-' . $idSuffix),
+                    'include_container' => true,
+                    'skip_adjustments'  => true
+                ]); ?>
+            </span>
+        <?php endif ?>
     </p>
 <?php else: ?>
     <?php if ($this->showRangePrice()): ?>
         <p class="price-from">
-            <?php echo $this->renderAmount($finalPriceModel->getMinimalPrice(), [
+            <?php echo $this->renderAmount($minimalPrice, [
                 'display_label'     => __('From'),
                 'price_id'          => $this->getPriceId('from-'),
                 'include_container' => true
             ]); ?>
+            <?php if ($hasSpecialPrice): ?>
+                <span class="old-price">
+                    <?php echo $this->renderAmount($minimalRegularPrice, [
+                        'display_label'     => __('Regular Price'),
+                        'price_id'          => $this->getPriceId('old-price-' . $idSuffix),
+                        'include_container' => true,
+                        'skip_adjustments'  => true
+                    ]); ?>
+                </span>
+            <?php endif ?>
         </p>
         <p class="price-to">
-            <?php echo $this->renderAmount($finalPriceModel->getMaximalPrice(), [
+            <?php echo $this->renderAmount($maximalPrice, [
                 'display_label'     => __('To'),
                 'price_id'          => $this->getPriceId('to-'),
                 'include_container' => true
             ]); ?>
+            <?php if ($hasSpecialPrice): ?>
+                <span class="old-price">
+                    <?php echo $this->renderAmount($maximalRegularPrice, [
+                        'display_label'     => __('Regular Price'),
+                        'price_id'          => $this->getPriceId('old-price-' . $idSuffix),
+                        'include_container' => true,
+                        'skip_adjustments'  => true
+                    ]); ?>
+                </span>
+            <?php endif ?>
         </p>
     <?php else: ?>
-        <?php echo $this->renderAmount($finalPriceModel->getMinimalPrice(), [
+        <?php echo $this->renderAmount($minimalPrice, [
             'price_id'          => $this->getPriceId('product-price-'),
             'include_container' => true
         ]); ?>
+        <?php if ($hasSpecialPrice): ?>
+            <span class="old-price">
+                <?php echo $this->renderAmount($minimalRegularPrice, [
+                    'display_label'     => __('Regular Price'),
+                    'price_id'          => $this->getPriceId('old-price-' . $idSuffix),
+                    'include_container' => true,
+                    'skip_adjustments'  => true
+                ]); ?>
+            </span>
+        <?php endif ?>
     <?php endif ?>
 <?php endif ?>

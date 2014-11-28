@@ -35,9 +35,9 @@ class Expirationperiod extends \Magento\Framework\App\Config\Value
      *
      * @return $this
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
-        parent::_beforeSave();
+        parent::beforeSave();
         $resetPasswordLinkExpirationPeriod = (int)$this->getValue();
 
         if ($resetPasswordLinkExpirationPeriod < 1) {

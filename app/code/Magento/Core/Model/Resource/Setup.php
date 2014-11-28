@@ -26,7 +26,7 @@ namespace Magento\Core\Model\Resource;
 /**
  * Core resource setup
  */
-class Setup extends \Magento\Framework\Module\Setup
+class Setup extends \Magento\Framework\Module\DataSetup
 {
     /**
      * @var \Magento\Core\Model\Resource\Theme\CollectionFactory

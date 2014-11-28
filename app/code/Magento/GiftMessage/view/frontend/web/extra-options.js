@@ -58,5 +58,6 @@ define([
             });
         }
     });
-
+    
+    return $.mage.extraOptions;
 });

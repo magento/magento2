@@ -219,7 +219,8 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
             'disabled',
             'readonly',
             'tabindex',
-            'placeholder'
+            'placeholder',
+            'data-form-part'
         );
         $this->assertEquals($htmlAttributes, $this->_model->getHtmlAttributes());
     }

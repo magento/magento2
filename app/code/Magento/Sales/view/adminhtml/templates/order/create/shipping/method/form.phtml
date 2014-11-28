@@ -107,5 +107,8 @@ require(['prototype'], function(){
         order.overlay('shipping-method-overlay', <?php if ($this->getQuote()->isVirtual()): ?>false<?php else: ?>true<?php endif; ?>);
         order.overlay('address-shipping-overlay', <?php if ($this->getQuote()->isVirtual()): ?>false<?php else: ?>true<?php endif; ?>);
 
+        <?php if ($this->getQuote()->isVirtual()): ?>
+            order.isOnlyVirtualProduct = true;
+        <?php endif; ?>
     });
 </script>

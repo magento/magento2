@@ -27,7 +27,7 @@
         xsi:noNamespaceSchemaLocation="../../../../../app/code/Magento/Webapi/etc/webapi.xsd">
     <!-- Customer Group Service-->
     <route url="/V1/customerGroups/:id" method="GET">
-        <service class="Magento\Customer\Api\GroupRepositoryInterface" method="get"/>
+        <service class="Magento\Customer\Api\GroupRepositoryInterface" method="getById"/>
         <resources>
             <resource ref="Magento_Customer::group"/>
         </resources>

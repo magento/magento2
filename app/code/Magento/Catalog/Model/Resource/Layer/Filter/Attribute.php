@@ -43,11 +43,12 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Apply attribute filter to product collection
      *
-     * @param \Magento\Catalog\Model\Layer\Filter\Attribute $filter
+     * @param \Magento\Catalog\Model\Layer\Filter\FilterInterface $filter
      * @param int $value
+     * @throws \Magento\Framework\Model\Exception
      * @return $this
      */
-    public function applyFilterToCollection($filter, $value)
+    public function applyFilterToCollection(\Magento\Catalog\Model\Layer\Filter\FilterInterface $filter, $value)
     {
         $collection = $filter->getLayer()->getProductCollection();
         $attribute = $filter->getAttributeModel();
@@ -72,10 +73,11 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Retrieve array with products counts per attribute option
      *
-     * @param \Magento\Catalog\Model\Layer\Filter\Attribute $filter
+     * @param \Magento\Catalog\Model\Layer\Filter\FilterInterface $filter
+     * @throws \Magento\Framework\Model\Exception
      * @return array
      */
-    public function getCount($filter)
+    public function getCount(\Magento\Catalog\Model\Layer\Filter\FilterInterface $filter)
     {
         // clone select from collection with filters
         $select = clone $filter->getLayer()->getProductCollection()->getSelect();

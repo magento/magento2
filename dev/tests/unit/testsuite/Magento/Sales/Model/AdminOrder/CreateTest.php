@@ -41,7 +41,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Model\Metadata\FormFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $formFactoryMock;
 
-    /** @var \Magento\Customer\Service\V1\Data\CustomerBuilder|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Api\Data\CustomerDataBuilder|\PHPUnit_Framework_MockObject_MockObject */
     protected $customerBuilderMock;
 
     /** @var \Magento\Customer\Service\V1\CustomerGroupServiceInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -49,6 +49,9 @@ class CreateTest extends \PHPUnit_Framework_TestCase
 
     /** @var \Magento\Sales\Model\Quote\Item\Updater|\PHPUnit_Framework_MockObject_MockObject */
     protected $itemUpdater;
+
+    /** @var \Magento\Framework\Api\ExtensibleDataObjectConverter|\PHPUnit_Framework_MockObject_MockObject */
+    protected $extensibleDataObjectConverterMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -82,8 +85,8 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->customerBuilderMock = $this->getMock(
-            'Magento\Customer\Service\V1\Data\CustomerBuilder',
-            array(),
+            'Magento\Customer\Api\Data\CustomerDataBuilder',
+            ['mergeDataObjectWithArray', 'populateWithArray', 'create'],
             array(),
             '',
             false
@@ -96,6 +99,10 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
+
+        $this->extensibleDataObjectConverterMock = $this->getMockBuilder(
+            'Magento\Framework\Api\ExtensibleDataObjectConverter'
+        )->setMethods(['toFlatArray'])->disableOriginalConstructor()->getMock();
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->adminOrderCreate = $objectManagerHelper->getObject(
@@ -116,6 +123,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
                 'customerBuilder' => $this->customerBuilderMock,
                 'customerGroupService' => $this->customerGroupServiceMock,
                 'quoteItemUpdater' => $this->itemUpdater,
+                'extensibleDataObjectConverter' => $this->extensibleDataObjectConverterMock,
                 'objectFactory' => $this->objectFactory
             )
         );
@@ -162,14 +170,9 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->getMock('Magento\Framework\App\RequestInterface'))
         );
 
-        $customerMock = $this->getMock('Magento\Customer\Service\V1\Data\Customer', array(), array(), '', false);
-        $customerMock->expects(
-            $this->any()
-        )->method(
-            '__toArray'
-        )->will(
-            $this->returnValue(array('email' => 'user@example.com', 'group_id' => 1))
-        );
+        $customerMock = $this->getMock('Magento\Customer\Api\Data\CustomerInterface', array(), array(), '', false);
+        $this->extensibleDataObjectConverterMock->expects($this->any())->method('toFlatArray')
+            ->will($this->returnValue(array('email' => 'user@example.com', 'group_id' => 1)));
         $quoteMock = $this->getMock('Magento\Sales\Model\Quote', array(), array(), '', false);
         $quoteMock->expects($this->any())->method('getCustomerData')->will($this->returnValue($customerMock));
 

@@ -37,7 +37,6 @@ use Magento\Downloadable\Helper\File as DownloadableFile;
 require_once __DIR__ . '/../../../../framework/bootstrap.php';
 
 /**
- * @  runTestsInSeparateProcesses
  * @preserveGlobalState disabled
  */
 class DownloadTest extends \PHPUnit_Framework_TestCase
@@ -58,6 +57,8 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
     protected $_downloadableFileMock;
     /** @var  \Magento\Framework\Session\SessionManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $sessionManager;
+    /** @var \Magento\Framework\Filesystem\File\ReadFactory|\PHPUnit_Framework_MockObject_MockObject */
+    protected $fileReadFactory;
 
     /** @var bool Result of function_exists() */
     public static $functionExists;
@@ -97,14 +98,16 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
         );
         $this->_downloadableFileMock = $this->getMock('Magento\Downloadable\Helper\File', array(), array(), '', false);
         $this->sessionManager = $this->getMockForAbstractClass('Magento\Framework\Session\SessionManagerInterface');
-        $this->_helper = new DownloadHelper(
-            $this->getMock('Magento\Framework\App\Helper\Context', array(), array(), '', false),
-            $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false),
-            $this->_downloadableFileMock,
-            $this->getMock('Magento\Core\Helper\File\Storage\Database', array(), array(), '', false),
-            $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface'),
-            $this->_filesystemMock,
-            $this->sessionManager
+        $this->fileReadFactory = $this->getMock('Magento\Framework\Filesystem\File\ReadFactory', [], [], '', false);
+
+        $this->_helper = (new \Magento\TestFramework\Helper\ObjectManager($this))->getObject(
+            'Magento\Downloadable\Helper\Download',
+            [
+                'downloadableFile' => $this->_downloadableFileMock,
+                'filesystem'       => $this->_filesystemMock,
+                'session'          => $this->sessionManager,
+                'fileReadFactory'  => $this->fileReadFactory,
+            ]
         );
     }
 
@@ -219,35 +222,12 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
     protected function _setupFileMocks($doesExist = true, $size = self::FILE_SIZE, $path = self::FILE_PATH)
     {
         $this->_handleMock->expects($this->any())->method('stat')->will($this->returnValue(array('size' => $size)));
-
-        $this->_downloadableFileMock->expects(
-            $this->any()
-        )->method(
-            'ensureFileInFilesystem'
-        )->with(
-            $path
-        )->will(
-            $this->returnValue($doesExist)
-        );
-
-        $this->_workingDirectoryMock->expects(
-            $doesExist ? $this->once() : $this->never()
-        )->method(
-            'openFile'
-        )->will(
-            $this->returnValue($this->_handleMock)
-        );
-
-        $this->_filesystemMock->expects(
-            $this->any()
-        )->method(
-            'getDirectoryRead'
-        )->with(
-            DirectoryList::MEDIA
-        )->will(
-            $this->returnValue($this->_workingDirectoryMock)
-        );
-
+        $this->_downloadableFileMock->expects($this->any())->method('ensureFileInFilesystem')->with($path)
+            ->will($this->returnValue($doesExist));
+        $this->_workingDirectoryMock->expects($doesExist ? $this->once() : $this->never())->method('openFile')
+            ->will($this->returnValue($this->_handleMock));
+        $this->_filesystemMock->expects($this->any())->method('getDirectoryRead')->with(DirectoryList::MEDIA)
+            ->will($this->returnValue($this->_workingDirectoryMock));
         $this->_helper->setResource($path, DownloadHelper::LINK_TYPE_FILE);
     }
 
@@ -261,12 +241,10 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(array_merge(array('size' => $size, 'type' => self::MIME_TYPE), $additionalStatData))
         );
 
-        $this->_filesystemMock->expects(
+        $this->fileReadFactory->expects(
             $this->once()
         )->method(
-            'getRemoteResource'
-        )->with(
-            $url
+            'create'
         )->will(
             $this->returnValue($this->_handleMock)
         );

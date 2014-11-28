@@ -125,8 +125,8 @@ class LinksTest extends \PHPUnit_Framework_TestCase
     {
         $regularPrice = 11.;
         $finalPrice = 10.;
-        $price = 5.;
-        $oldPrice = 4.;
+        $price = 10.;
+        $oldPrice = 11.;
 
         $linkPrice = 3.;
         $linkIncludeTaxPrice = 4.;
@@ -184,24 +184,8 @@ class LinksTest extends \PHPUnit_Framework_TestCase
 
         $this->coreHelper->expects($this->at(0))
             ->method('currency')
-            ->with($finalPrice, false, false)
-            ->will($this->returnValue($price));
-        $this->coreHelper->expects($this->at(1))
-            ->method('currency')
-            ->with($regularPrice, false, false)
-            ->will($this->returnValue($oldPrice));
-        $this->coreHelper->expects($this->at(2))
-            ->method('currency')
             ->with($linkPrice, false, false)
             ->will($this->returnValue($linkPrice));
-        $this->coreHelper->expects($this->at(3))
-            ->method('currency')
-            ->with($linkIncludeTaxPrice, false, false)
-            ->will($this->returnValue($linkIncludeTaxPrice));
-        $this->coreHelper->expects($this->at(4))
-            ->method('currency')
-            ->with($linkExcludeTaxPrice, false, false)
-            ->will($this->returnValue($linkExcludeTaxPrice));
 
         $this->priceInfoMock->expects($this->at(0))
             ->method('getPrice')
@@ -216,7 +200,8 @@ class LinksTest extends \PHPUnit_Framework_TestCase
             ->with(FinalPrice::PRICE_CODE)
             ->will($this->returnValue($finalPriceMock));
 
-        $this->assertEquals(json_encode($config), $this->linksBlock->getJsonConfig());
+        $encodedJsonConfig = $this->linksBlock->getJsonConfig();
+        $this->assertEquals(json_encode($config), $encodedJsonConfig);
     }
 
     protected function getLinkMock($linkPrice, $linkId)

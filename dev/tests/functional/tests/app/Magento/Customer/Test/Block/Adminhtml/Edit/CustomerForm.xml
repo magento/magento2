@@ -26,7 +26,7 @@
 <tabs>
     <account_information>
         <class>\Magento\Backend\Test\Block\Widget\Tab</class>
-        <selector>#customer_info_tabs_account</selector>
+        <selector>#tab_account</selector>
         <strategy>css selector</strategy>
         <wrapper>account</wrapper>
         <fields>

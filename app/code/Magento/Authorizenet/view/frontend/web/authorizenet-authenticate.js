@@ -83,4 +83,5 @@ define([
         }
     });
 
+    return $.mage.authorizenetAuthenticate;
 });

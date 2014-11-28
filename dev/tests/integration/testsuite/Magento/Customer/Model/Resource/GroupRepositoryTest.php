@@ -60,7 +60,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetGroup($testGroup)
     {
-        $group = $this->groupRepository->get($testGroup[GroupInterface::ID]);
+        $group = $this->groupRepository->getById($testGroup[GroupInterface::ID]);
         $this->assertEquals($testGroup[GroupInterface::ID], $group->getId());
         $this->assertEquals($testGroup[GroupInterface::CODE], $group->getCode());
         $this->assertEquals($testGroup[GroupInterface::TAX_CLASS_ID], $group->getTaxClassId());
@@ -85,7 +85,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetGroupException()
     {
-        $this->groupRepository->get(9999);
+        $this->groupRepository->getById(9999);
     }
 
     /**
@@ -97,7 +97,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
         $groupId = $this->groupRepository->save($group)->getId();
         $this->assertNotNull($groupId);
 
-        $newGroup = $this->groupRepository->get($groupId);
+        $newGroup = $this->groupRepository->getById($groupId);
         $this->assertEquals($groupId, $newGroup->getId());
         $this->assertEquals($group->getCode(), $newGroup->getCode());
         $this->assertEquals($group->getTaxClassId(), $newGroup->getTaxClassId());
@@ -112,7 +112,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
         $groupId = $this->groupRepository->save($group)->getId();
         $this->assertNotNull($groupId);
 
-        $newGroup = $this->groupRepository->get($groupId);
+        $newGroup = $this->groupRepository->getById($groupId);
         $this->assertEquals($groupId, $newGroup->getId());
         $this->assertEquals($group->getCode(), $newGroup->getCode());
         $this->assertEquals(GroupRepository::DEFAULT_TAX_CLASS_ID, $newGroup->getTaxClassId());
@@ -127,14 +127,14 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
         $groupId = $this->groupRepository->save($group)->getId();
         $this->assertNotNull($groupId);
 
-        $newGroup = $this->groupRepository->get($groupId);
+        $newGroup = $this->groupRepository->getById($groupId);
         $this->assertEquals($groupId, $newGroup->getId());
         $this->assertEquals($group->getCode(), $newGroup->getCode());
         $this->assertEquals($group->getTaxClassId(), $newGroup->getTaxClassId());
 
         $updates = $this->groupBuilder->setId($groupId)->setCode('Updated Group')->setTaxClassId(3)->create();
         $this->assertNotNull($this->groupRepository->save($updates));
-        $updatedGroup = $this->groupRepository->get($groupId);
+        $updatedGroup = $this->groupRepository->getById($groupId);
         $this->assertEquals($updates->getCode(), $updatedGroup->getCode(), 'Code not updated.');
         $this->assertEquals($updates->getTaxClassId(), $updatedGroup->getTaxClassId(), 'Tax Class should not change.');
     }
@@ -150,14 +150,14 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
         $groupId = $this->groupRepository->save($group)->getId();
         $this->assertNotNull($groupId);
 
-        $newGroup = $this->groupRepository->get($groupId);
+        $newGroup = $this->groupRepository->getById($groupId);
         $this->assertEquals($groupId, $newGroup->getId());
         $this->assertEquals($group->getCode(), $newGroup->getCode());
         $this->assertEquals($group->getTaxClassId(), $newGroup->getTaxClassId());
 
         $updates = $this->groupBuilder->setId($groupId)->setCode('Updated Group')->setTaxClassId(9999)->create();
         $this->groupRepository->save($updates);
-        $updatedGroup = $this->groupRepository->get($groupId);
+        $updatedGroup = $this->groupRepository->getById($groupId);
         $this->assertEquals($updates->getCode(), $updatedGroup->getCode());
         $this->assertEquals($updates->getTaxClassId(), $updatedGroup->getTaxClassId());
     }
@@ -169,7 +169,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $group = $this->groupBuilder->setId(null)->setCode('New Group')->setTaxClassId(3)->create();
         $groupId = $this->groupRepository->save($group)->getId();
-        $newGroup = $this->groupRepository->get($groupId);
+        $newGroup = $this->groupRepository->getById($groupId);
         $this->assertTrue($this->groupRepository->delete($newGroup));
     }
 
@@ -190,6 +190,14 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testDeleteDoesNotExist()
     {
         $this->assertFalse($this->groupRepository->deleteById(9999));
+    }
+
+    public function testGetAllGroups()
+    {
+        $searchResults = $this->groupRepository->getList($this->searchCriteriaBuilder->create());
+        /** @var GroupInterface[] $results */
+        $results = $searchResults->getItems();
+        $this->assertEquals(4, count($results));
     }
 
     /**

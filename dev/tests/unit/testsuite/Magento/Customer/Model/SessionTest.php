@@ -53,9 +53,9 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     protected $urlFactoryMock;
 
     /**
-     * @var \Magento\Customer\Service\V1\CustomerAccountService|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerAccountServiceMock;
+    protected $customerRepositoryMock;
 
     /**
      * @var \Magento\Customer\Model\Session
@@ -75,8 +75,8 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $this->_eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
         $this->_httpContextMock = $this->getMock('Magento\Framework\App\Http\Context', [], [], '', false);
         $this->urlFactoryMock = $this->getMock('Magento\Framework\UrlFactory', [], [], '', false);
-        $this->customerAccountServiceMock = $this->getMock(
-            'Magento\Customer\Service\V1\CustomerAccountService',
+        $this->customerRepositoryMock = $this->getMock(
+            'Magento\Customer\Api\CustomerRepositoryInterface',
             [],
             [],
             '',
@@ -91,7 +91,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
                 'eventManager' => $this->_eventManagerMock,
                 'httpContext' => $this->_httpContextMock,
                 'urlFactory' => $this->urlFactoryMock,
-                'customerAccountService' => $this->customerAccountServiceMock,
+                'customerRepository' => $this->customerRepositoryMock,
             ]
         );
     }
@@ -99,7 +99,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     public function testSetCustomerAsLoggedIn()
     {
         $customer = $this->getMock('Magento\Customer\Model\Customer', [], [], '', false);
-        $customerDto = $this->getMock('Magento\Customer\Service\V1\Data\Customer', [], [], '', false);
+        $customerDto = $this->getMock('Magento\Customer\Api\Data\CustomerInterface', [], [], '', false);
         $this->_converterMock->expects($this->any())
             ->method('createCustomerFromModel')
             ->will($this->returnValue($customerDto));
@@ -119,7 +119,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     public function testSetCustomerDataAsLoggedIn()
     {
         $customer = $this->getMock('Magento\Customer\Model\Customer', [], [], '', false);
-        $customerDto = $this->getMock('Magento\Customer\Service\V1\Data\Customer', [], [], '', false);
+        $customerDto = $this->getMock('Magento\Customer\Api\Data\CustomerInterface', [], [], '', false);
 
         $this->_converterMock->expects($this->any())
             ->method('createCustomerModel')
@@ -169,8 +169,8 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 
         $customerDataMock = $this->prepareLoginDataMock($customerId);
 
-        $this->customerAccountServiceMock->expects($this->once())
-            ->method('getCustomer')
+        $this->customerRepositoryMock->expects($this->once())
+            ->method('getById')
             ->with($this->equalTo($customerId))
             ->will($this->returnValue($customerDataMock));
 
@@ -183,7 +183,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
      */
     protected function prepareLoginDataMock($customerId)
     {
-        $customerDataMock = $this->getMock('Magento\Customer\Service\V1\Data\Customer', array(), array(), '', false);
+        $customerDataMock = $this->getMock('Magento\Customer\Api\Data\CustomerInterface', array(), array(), '', false);
         $customerDataMock->expects($this->once())
             ->method('getId')
             ->will($this->returnValue($customerId));
@@ -223,12 +223,12 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($customerId));
 
         if ($isCustomerIdValid) {
-            $this->customerAccountServiceMock->expects($this->once())
-                ->method('getCustomer')
+            $this->customerRepositoryMock->expects($this->once())
+                ->method('getById')
                 ->with($customerId);
         } else {
-            $this->customerAccountServiceMock->expects($this->once())
-                ->method('getCustomer')
+            $this->customerRepositoryMock->expects($this->once())
+                ->method('getById')
                 ->with($customerId)
                 ->will($this->throwException(new \Exception('Customer ID is invalid.')));
         }

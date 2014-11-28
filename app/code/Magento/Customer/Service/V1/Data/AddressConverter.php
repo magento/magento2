@@ -38,7 +38,7 @@ class AddressConverter
      */
     public static function toFlatArray(Address $addressDataObject)
     {
-        $flatAddressArray = ExtensibleDataObjectConverter::toFlatArray($addressDataObject);
+        $flatAddressArray = ExtensibleDataObjectConverter::toFlatArrayStatic($addressDataObject);
         //preserve street
         $street = $addressDataObject->getStreet();
         if (!empty($street)) {

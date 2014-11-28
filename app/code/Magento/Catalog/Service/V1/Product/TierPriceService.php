@@ -26,9 +26,13 @@ namespace Magento\Catalog\Service\V1\Product;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\ProductRepository;
 use Magento\Catalog\Service\V1\Data\Product;
+use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class TierPriceService implements TierPriceServiceInterface
 {
     /**
@@ -57,9 +61,14 @@ class TierPriceService implements TierPriceServiceInterface
     protected $config;
 
     /**
-     * @var \Magento\Customer\Service\V1\CustomerGroupServiceInterface
+     * @var \Magento\Customer\Api\GroupRepositoryInterface
      */
-    protected $customerGroupService;
+    protected $groupRepository;
+
+    /**
+     * @var GroupManagementInterface
+     */
+    protected $groupManagement;
 
     /**
      * @param ProductRepository $productRepository
@@ -67,7 +76,8 @@ class TierPriceService implements TierPriceServiceInterface
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Product\PriceModifier $priceModifier
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param \Magento\Customer\Service\V1\CustomerGroupServiceInterface $customerGroupService
+     * @param \Magento\Customer\Api\GroupRepositoryInterface $groupRepository
+     * @param GroupManagementInterface $groupManagement
      */
     public function __construct(
         ProductRepository $productRepository,
@@ -75,14 +85,16 @@ class TierPriceService implements TierPriceServiceInterface
         \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\PriceModifier $priceModifier,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        \Magento\Customer\Service\V1\CustomerGroupServiceInterface $customerGroupService
+        \Magento\Customer\Api\GroupRepositoryInterface $groupRepository,
+        GroupManagementInterface $groupManagement
     ) {
         $this->productRepository = $productRepository;
         $this->priceBuilder = $priceBuilder;
         $this->storeManager = $storeManager;
         $this->priceModifier = $priceModifier;
         $this->config = $config;
-        $this->customerGroupService = $customerGroupService;
+        $this->groupRepository = $groupRepository;
+        $this->groupManagement = $groupManagement;
     }
 
     /**
@@ -92,7 +104,7 @@ class TierPriceService implements TierPriceServiceInterface
      */
     public function set($productSku, $customerGroupId, \Magento\Catalog\Service\V1\Data\Product\TierPrice $price)
     {
-        $product = $this->productRepository->get($productSku, true);
+        $product = $this->productRepository->get($productSku, ['edit_mode' => true]);
 
         $tierPrices = $product->getData('tier_price');
         $websiteId = 0;
@@ -117,8 +129,8 @@ class TierPriceService implements TierPriceServiceInterface
         }
         if (!$found) {
             $mappedCustomerGroupId = 'all' == $customerGroupId
-                ? \Magento\Customer\Service\V1\CustomerGroupServiceInterface::CUST_GROUP_ALL
-                : $this->customerGroupService->getGroup($customerGroupId)->getId();
+                ? $this->groupManagement->getAllCustomersGroup()->getId()
+                : $this->groupRepository->getById($customerGroupId)->getId();
 
             $tierPrices[] = array(
                 'cust_group' => $mappedCustomerGroupId,
@@ -150,7 +162,7 @@ class TierPriceService implements TierPriceServiceInterface
      */
     public function delete($productSku, $customerGroupId, $qty)
     {
-        $product = $this->productRepository->get($productSku, true);
+        $product = $this->productRepository->get($productSku, ['edit_mode' => true]);
         if ($this->config->getValue('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE) == 0) {
             $websiteId = 0;
         } else {
@@ -165,7 +177,7 @@ class TierPriceService implements TierPriceServiceInterface
      */
     public function getList($productSku, $customerGroupId)
     {
-        $product = $this->productRepository->get($productSku, true);
+        $product = $this->productRepository->get($productSku, ['edit_mode' => true]);
 
         $priceKey = 'website_price';
         if ($this->config->getValue('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE) == 0) {

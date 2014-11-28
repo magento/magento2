@@ -63,5 +63,6 @@ define([
             $(this.options.canContinueFlag).val(parseInt($(event.currentTarget).data('flag'), 10));
         }
     });
-
+    
+    return $.mage.multiShipping;
 });

@@ -152,37 +152,37 @@
 }
 
 .table-bordered(
-    @_type: normal,
-    @_border-width: @table-border-width,
-    @_border-style: @table-border-style,
-    @_border-color: @table-border-color
-) when (@_type = normal){
-    .css(border, @_border-width @_border-style @_border-color);
+    @_table_type: normal,
+    @_table_border-width: @table-border-width,
+    @_table_border-style: @table-border-style,
+    @_table_border-color: @table-border-color
+) when (@_table_type = normal){
+    .css(border, @_table_border-width @_table_border-style @_table_border-color);
     > thead,
     > tbody,
     > tfoot {
         > tr {
             > th,
             > td {
-                .css(border, @_border-width @_border-style @_border-color);
+                .css(border, @_table_border-width @_table_border-style @_table_border-color);
             }
         }
     }
 }
 
 .table-bordered(
-    @_type: normal,
-    @_border-width: @table-border-width,
-    @_border-style: @table-border-style,
-    @_border-color: @table-border-color
-) when (@_type = horizontal){
+    @_table_type: normal,
+    @_table_border-width: @table-border-width,
+    @_table_border-style: @table-border-style,
+    @_table_border-color: @table-border-color
+) when (@_table_type = horizontal){
     > thead,
     > tbody,
     > tfoot {
         > tr {
             > th,
             > td {
-                .css(border-top, @_border-width @_border-style @_border-color);
+                .css(border-top, @_table_border-width @_table_border-style @_table_border-color);
             }
         }
     }
@@ -197,23 +197,42 @@
         }
     }
     > tbody + tbody {
-        .css(border-top, @_border-width @_border-style @_border-color);
+        .css(border-top, @_table_border-width @_table_border-style @_table_border-color);
     }
 }
 
 .table-bordered(
-    @_type: normal,
-    @_border-width: @table-border-width,
-    @_border-style: @table-border-style,
-    @_border-color: @table-border-color
-) when (@_type = vertical){
+    @_table_type: normal,
+    @_table_border-width: @table-border-width,
+    @_table_border-style: @table-border-style,
+    @_table_border-color: @table-border-color
+) when (@_table_type = horizontal_body){
+    > tbody {
+        > tr {
+            > th,
+            > td {
+                .css(border-top, @_table_border-width @_table_border-style @_table_border-color);
+            }
+        }
+    }
+    > tbody + tbody {
+        .css(border-top, @_table_border-width @_table_border-style @_table_border-color);
+    }
+}
+
+.table-bordered(
+    @_table_type: normal,
+    @_table_border-width: @table-border-width,
+    @_table_border-style: @table-border-style,
+    @_table_border-color: @table-border-color
+) when (@_table_type = vertical){
     > thead,
     > tbody,
     > tfoot {
         > tr {
             > th,
             > td {
-                .css(border-left, @_border-width @_border-style @_border-color);
+                .css(border-left, @_table_border-width @_table_border-style @_table_border-color);
                 &:first-child {
                     border-left: none;
                 }
@@ -223,11 +242,11 @@
 }
 
 .table-bordered(
-    @_type: normal,
-    @_border-width: @table-border-width,
-    @_border-style: @table-border-style,
-    @_border-color: @table-border-color
-) when (@_type = light){
+    @_table_type: normal,
+    @_table_border-width: @table-border-width,
+    @_table_border-style: @table-border-style,
+    @_table_border-color: @table-border-color
+) when (@_table_type = light){
     border: none;
     > thead,
     > tbody,
@@ -243,18 +262,18 @@
         > tr {
             > th,
             > td {
-                .css(border-bottom, @_border-width @_border-style @_border-color);
+                .css(border-bottom, @_table_border-width @_table_border-style @_table_border-color);
             }
         }
     }
 }
 
 .table-bordered(
-    @_type: normal,
-    @_border-width: @table-border-width,
-    @_border-style: @table-border-style,
-    @_border-color: @table-border-color
-) when (@_type = clear){
+    @_table_type: normal,
+    @_table_border-width: @table-border-width,
+    @_table_border-style: @table-border-style,
+    @_table_border-color: @table-border-color
+) when (@_table_type = clear){
     border: none;
     > thead,
     > tbody,
@@ -273,7 +292,7 @@
     @_stripped-color: @table-cell-color-stripped,
     @_stripped-direction: horizontal,
     @_stripped-highlight: odd
-    ) when (@_stripped-highlight = odd) and (@_stripped-direction = horizontal){
+) when (@_stripped-highlight = odd) and (@_stripped-direction = horizontal){
     > tbody > tr:nth-child(odd) {
         > td,
         > th {
@@ -337,19 +356,19 @@
 }
 
 .table-hover(
-    @_cell-bg-hover: @table-cell-bg-hover,
-    @_cell-odd-bg-hover: @_cell-bg-hover
+    @_table_cell-bg-hover: @table-cell-bg-hover,
+    @_table_cell-odd-bg-hover: @_table_cell-bg-hover
 ) {
     > tbody > tr:nth-child(even):hover {
         > td,
         > th {
-            .css(background, @_cell-bg-hover);
+            .css(background, @_table_cell-bg-hover);
         }
     }
     > tbody > tr:nth-child(odd):hover {
         > td,
         > th {
-            .css(background, @_cell-odd-bg-hover);
+            .css(background, @_table_cell-odd-bg-hover);
         }
     }
 }
@@ -361,27 +380,19 @@
     overflow-x: auto;
     -ms-overflow-style: -ms-autohiding-scrollbar;
     -webkit-overflow-scrolling: touch;
-    > table {
-        > thead,
-        > tbody,
-        > tfoot {
-            > tr {
-                > th,
-                > td {
-                    //white-space: nowrap;
-                }
-            }
-        }
-    }
 }
 
 .table-responsive(
     @_table-bg-responsive: @table-bg-responsive,
-    @_table-th-bg-responsive: @table-head-bg,
+    @_table-th-bg-responsive: @table-th-bg-responsive,
     @_reset-table-striped: false,
-    @_reset-table-hover: false
+    @_reset-table-hover: false,
+    @_table-responsive-cell-padding: @table-responsive-cell-padding
 ) when (@_reset-table-striped = false) and (@_reset-table-hover = false){
-    ._responsive-table(@_table-bg-responsive: @_table-bg-responsive);
+    ._responsive-table(
+        @_table-bg-responsive: @_table-bg-responsive,
+        @_table-responsive-cell-padding: @_table-responsive-cell-padding
+    );
     > tbody > tr > th {
         .css(background-color, @_table-th-bg-responsive);
     }
@@ -389,16 +400,20 @@
 
 .table-responsive(
     @_table-bg-responsive: @table-bg-responsive,
-    @_table-th-bg-responsive: @table-head-bg,
+    @_table-th-bg-responsive: @table-th-bg-responsive,
     @_reset-table-striped: false,
-    @_reset-table-hover: false
+    @_reset-table-hover: false,
+    @_table-responsive-cell-padding: @table-responsive-cell-padding
 ) when (@_reset-table-striped = true) and (@_reset-table-hover = true){
     .table-striped(@_stripped-bg: @_table-bg-responsive);
     .table-hover(
-        @_cell-bg-hover: @_table-bg-responsive,
-        @_cell-odd-bg-hover: @_table-bg-responsive
-        );
-    ._responsive-table(@_table-bg-responsive: @_table-bg-responsive);
+        @_table_cell-bg-hover: @_table-bg-responsive,
+        @_table_cell-odd-bg-hover: @_table-bg-responsive
+    );
+    ._responsive-table(
+        @_table-bg-responsive: @_table-bg-responsive,
+        @_table-responsive-cell-padding: @_table-responsive-cell-padding
+    );
     > tbody > tr > th {
         background-color: @_table-th-bg-responsive !important;
     }
@@ -406,26 +421,34 @@
 
 .table-responsive(
     @_table-bg-responsive: @table-bg-responsive,
-    @_table-th-bg-responsive: @table-head-bg,
+    @_table-th-bg-responsive: @table-th-bg-responsive,
     @_reset-table-striped: false,
-    @_reset-table-hover: false
+    @_reset-table-hover: false,
+    @_table-responsive-cell-padding: @table-responsive-cell-padding
 ) when (@_reset-table-striped = true) and (@_reset-table-hover = false){
     .table-striped(@_stripped-bg: @_table-bg-responsive);
-    ._responsive-table(@_table-bg-responsive: @_table-bg-responsive);
+    ._responsive-table(
+        @_table-bg-responsive: @_table-bg-responsive,
+        @_table-responsive-cell-padding: @_table-responsive-cell-padding
+    );
     .css(background-color, @_table-th-bg-responsive);
 }
 
 .table-responsive(
     @_table-bg-responsive: @table-bg-responsive,
-    @_table-th-bg-responsive: @table-head-bg,
+    @_table-th-bg-responsive: @table-th-bg-responsive,
     @_reset-table-striped: false,
-    @_reset-table-hover: false
+    @_reset-table-hover: false,
+    @_table-responsive-cell-padding: @table-responsive-cell-padding
 ) when (@_reset-table-striped = false) and (@_reset-table-hover = true){
     .table-hover(
-        @_cell-bg-hover: @_table-bg-responsive,
-        @_cell-odd-bg-hover: @_table-bg-responsive
-        );
-    ._responsive-table(@_table-bg-responsive: @_table-bg-responsive);
+        @_table_cell-bg-hover: @_table-bg-responsive,
+        @_table_cell-odd-bg-hover: @_table-bg-responsive
+    );
+    ._responsive-table(
+        @_table-bg-responsive: @_table-bg-responsive,
+        @_table-responsive-cell-padding: @_table-responsive-cell-padding
+    );
     > tbody > tr > th {
         background-color: @_table-th-bg-responsive !important;
     }
@@ -475,40 +498,40 @@
     }
 }
 
-._responsive-table(@_table-bg-responsive: @_table-bg-responsive) {
+._responsive-table(
+    @_table-bg-responsive: @_table-bg-responsive,
+    @_table-responsive-cell-padding: @_table-responsive-cell-padding
+) {
     border: none;
     .css(background, @_table-bg-responsive);
     > thead > tr > th {
         display: none;
     }
-    > tbody > tr {
-        td,
-        th {
-            display: block;
-            padding: (@table-cell-padding-vertical / 2) @table-cell-padding-horizontal;
-            border-bottom: none;
-            &:before {
-                content: attr(data-th)"";
-                display: inline-block;
-                .css(padding-right, @table-cell-padding-horizontal);
-                .typography (
-                    @_font-size: @table-th-font-size,
-                    @_color: @table-th-color,
-                    @_font-family: @table-th-font-family,
-                    @_font-weight: @table-th-font-weight,
-                    @_line-height: @table-th-line-height,
-                    @_font-style: @table-th-font-style
-                );
+    > tbody,
+    > tfoot {
+        > tr {
+            td,
+            th {
+                border-bottom: none;
+                display: block;
+                padding: @_table-responsive-cell-padding;
+                &:before {
+                    content: attr(data-th)": ";
+                    display: inline-block;
+                    .css(padding-right, @table-cell-padding-horizontal);
+                    .typography (
+                        @_font-size: @table-th-font-size,
+                        @_color: @table-th-color,
+                        @_font-family: @table-th-font-family,
+                        @_font-weight: @table-th-font-weight,
+                        @_line-height: @table-th-line-height,
+                        @_font-style: @table-th-font-style
+                    );
+                }
             }
         }
     }
     > tbody > tr > td {
         .css(background, @_table-bg-responsive);
-    }
-    > tfoot > tr > {
-        td,
-        th {
-            display: block;
-        }
     }
 }

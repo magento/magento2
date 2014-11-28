@@ -56,7 +56,6 @@ class RowsTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testProductsUpdate()
     {
-        $this->markTestSkipped('Should be fixed in MAGETWO-25641');
         $this->_product->load(1);
 
         $this->_processor->reindexList(array($this->_product->getId()));

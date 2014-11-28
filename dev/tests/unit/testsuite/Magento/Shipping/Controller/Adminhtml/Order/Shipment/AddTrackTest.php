@@ -169,7 +169,13 @@ class AddTrackTest extends \PHPUnit_Framework_TestCase
         $orderId = 10003;
         $tracking = [];
         $shipmentData = ['items' => [], 'send_email' => ''];
-        $shipment = $this->getMock('Magento\Sales\Model\Order\Shipment', ['addTrack', '__wakeup'], [], '', false);
+        $shipment = $this->getMock(
+            'Magento\Sales\Model\Order\Shipment',
+            ['addTrack', '__wakeup', 'save'],
+            [],
+            '',
+            false
+        );
         $this->request->expects($this->any())
             ->method('getParam')
             ->will(
@@ -259,4 +265,3 @@ class AddTrackTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->controller->execute());
     }
 }
- 

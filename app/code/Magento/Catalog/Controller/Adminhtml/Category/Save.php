@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -24,6 +23,9 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
+/**
+ * Class Save
+ */
 class Save extends \Magento\Catalog\Controller\Adminhtml\Category
 {
     /**
@@ -42,6 +44,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
     protected $layoutFactory;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
@@ -85,15 +89,17 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
      */
     public function execute()
     {
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
+
         $category = $this->_initCategory();
+
         if (!$category) {
-            /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-            $resultRedirect = $this->resultRedirectFactory->create();
             return $resultRedirect->setPath('catalog/*/', ['_current' => true, 'id' => null]);
         }
 
         $storeId = $this->getRequest()->getParam('store');
-        $refreshTree = 'false';
+        $refreshTree = false;
         $data = $this->getRequest()->getPost();
         if ($data) {
             $category->addData($this->_filterCategoryPostData($data['general']));
@@ -133,7 +139,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             }
             $this->_eventManager->dispatch(
                 'catalog_category_prepare_save',
-                array('category' => $category, 'request' => $this->getRequest())
+                ['category' => $category, 'request' => $this->getRequest()]
             );
 
             /**
@@ -172,39 +178,38 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
 
                 $category->save();
                 $this->messageManager->addSuccess(__('You saved the category.'));
-                $refreshTree = 'true';
+                $refreshTree = true;
             } catch (\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
                 $this->_getSession()->setCategoryData($data);
-                $refreshTree = 'false';
+                $refreshTree = false;
             }
         }
 
         if ($this->getRequest()->getPost('return_session_messages_only')) {
             $category->load($category->getId());
             // to obtain truncated category name
-
             /** @var $block \Magento\Framework\View\Element\Messages */
             $block = $this->layoutFactory->create()->getMessagesBlock();
             $block->setMessages($this->messageManager->getMessages(true));
 
             /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
             $resultJson = $this->resultJsonFactory->create();
-            return $resultJson->setData([
-                'messages' => $block->getGroupedHtml(),
-                'error' => $refreshTree !== 'true',
-                'category' => $category->toArray()
-            ]);
-        } else {
-            $url = $this->getUrl('catalog/*/edit', array('_current' => true, 'id' => $category->getId()));
-            $body = '<script type="text/javascript">parent.updateContent("' .
-                $url .
-                '", {}, ' .
-                $refreshTree .
-                ');</script>';
+            return $resultJson->setData(
+                [
+                    'messages' => $block->getGroupedHtml(),
+                    'error' => !$refreshTree,
+                    'category' => $category->toArray()
+                ]
+            );
         }
-        /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
-        $resultRaw = $this->resultRawFactory->create();
-        return $resultRaw->setContents($body);
+
+        return $resultRedirect->setPath(
+            'catalog/*/edit',
+            [
+                '_current' => true,
+                'id' => $category->getId()
+            ]
+        );
     }
 }

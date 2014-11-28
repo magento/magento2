@@ -107,7 +107,6 @@ class WriteService implements WriteServiceInterface
         } catch (\Exception $e) {
             throw new StateException('Cannot delete category with id %category_id', ['category_id' => $categoryId], $e);
         }
-
         return true;
     }
 
@@ -124,7 +123,6 @@ class WriteService implements WriteServiceInterface
         } catch (\Exception $e) {
             throw new CouldNotSaveException('Could not save category', [], $e);
         }
-
         return true;
     }
 

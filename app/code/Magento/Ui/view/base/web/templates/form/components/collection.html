@@ -1,0 +1,63 @@
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<div class="ui-tabs">
+    <ul class="address-list ui-tabs-nav">
+
+        <!-- ko foreach: { data: element.elems, as: 'element' } -->
+            <li class="address-list-item" data-bind="css: { 'ui-state-active': element.active }, click: activate">
+                <div class="address-list-item-actions">
+                    <button class="action-delete" type="button" data-bind="attr: { title: $parent.removeLabel }, click: $parent.removeChild(element)">
+                        <span data-bind="text: element.removeLabel"></span>
+                    </button>
+                </div>
+                <!-- ko template: previewTpl --><!-- /ko -->
+                <div data-bind="foreach: { data: element.head, as: 'element' }, stopPropagation: true">
+                    <!-- ko template: element.getTemplate() --><!-- /ko -->
+                </div>
+            </li>
+        <!-- /ko -->
+
+        <li class="address-list-actions last">
+            <button data-bind="attr: { title: element.addLabel }, click: element.addChild" type="button" class="scalable add">
+                <span data-bind="text: element.addLabel"></span>
+            </button>
+        </li>
+    </ul>
+    <!-- ko foreach: { data: element.elems, as: 'element' } -->
+    <div class="address-item-edit" data-bind="visible: element.active">
+        <div class="address-item-edit-content">
+            <fieldset class="fieldset">
+                <legend style="display: none;" class="legend">
+                    <span data-bind="text: $parent.label"></span>
+                </legend>
+                <br>
+                <!-- ko foreach: { data: element.body, as: 'element' } -->
+                    <!-- ko template: element.getTemplate() --><!-- /ko -->
+                <!-- /ko -->
+            </fieldset>
+        </div>
+    </div>
+    <!-- /ko -->
+</div>

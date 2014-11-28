@@ -113,6 +113,22 @@ abstract class AbstractAdjustment extends Template implements AdjustmentRenderIn
     }
 
     /**
+     * Format price value
+     *
+     * @param float $amount
+     * @param bool $includeContainer
+     * @param int $precision
+     * @return string
+     */
+    public function formatCurrency(
+        $amount,
+        $includeContainer = true,
+        $precision = PriceCurrencyInterface::DEFAULT_PRECISION
+    ) {
+        return $this->priceCurrency->format($amount, $includeContainer, $precision);
+    }
+
+    /**
      * Convert and format price value
      *
      * @param float $amount

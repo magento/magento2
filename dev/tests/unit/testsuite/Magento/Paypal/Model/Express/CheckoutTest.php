@@ -103,6 +103,21 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $paypalConfigMock = $this->getMock('Magento\Paypal\Model\Config', [], [], '', false);
+
+        $customerBuilder = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerDataBuilder')
+            ->setMethods(['populateWithArray', 'setEmail', 'setPrefix', 'setFirstname', 'setMiddlename', 'setLastname',
+                    'setSuffix', 'create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $customerBuilder->expects($this->any())
+            ->method('populateWithArray')
+            ->will($this->returnSelf());
+        $customerData = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
+            ->getMock();
+        $customerBuilder->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($customerData));
+
         $this->checkoutModel = $this->objectManager->getObject(
             'Magento\Paypal\Model\Express\Checkout',
             [
@@ -114,7 +129,8 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
                 'customerAccountService' => $this->customerAccountServiceMock,
                 'serviceQuoteFactory'    => $this->quoteFactoryMock,
                 'addressBuilderFactory'  => $this->addressBuilderFactoryMock,
-                'objectCopyService'      => $this->objectCopyServiceMock
+                'objectCopyService'      => $this->objectCopyServiceMock,
+                'customerBuilder'        => $customerBuilder
             ]
         );
         parent::setUp();
@@ -122,8 +138,8 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
 
     public function testSetCustomerData()
     {
-        /** @var \Magento\Customer\Service\V1\Data\Customer $customerDataMock */
-        $customerDataMock = $this->getMock('Magento\Customer\Service\V1\Data\Customer', [], [], '', false);
+        /** @var \Magento\Customer\Api\Data\CustomerInterface $customerDataMock */
+        $customerDataMock = $this->getMock('Magento\Customer\Api\Data\CustomerInterface', [], [], '', false);
         $this->quoteMock->expects($this->once())->method('assignCustomer')->with($customerDataMock);
         $customerDataMock->expects($this->once())->method('getId');
         $this->checkoutModel->setCustomerData($customerDataMock);
@@ -131,8 +147,8 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
 
     public function testSetCustomerWithAddressChange()
     {
-        /** @var \Magento\Customer\Service\V1\Data\Customer $customerDataMock */
-        $customerDataMock = $this->getMock('Magento\Customer\Service\V1\Data\Customer', [], [], '', false);
+        /** @var \Magento\Customer\Api\Data\CustomerInterface $customerDataMock */
+        $customerDataMock = $this->getMock('Magento\Customer\Api\Data\CustomerInterface', [], [], '', false);
         /** @var \Magento\Sales\Model\Quote\Address $customerDataMock */
         $quoteAddressMock = $this->getMock('Magento\Sales\Model\Quote\Address', [], [], '', false);
         $this->quoteMock
@@ -205,7 +221,7 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
                     ->getMock()
             );
 
-        $customerDataMock = $this->getMock('Magento\Customer\Service\V1\Data\Customer', [], [], '', false);
+        $customerDataMock = $this->getMock('Magento\Customer\Api\Data\CustomerInterface', [], [], '', false);
         $this->customerAccountServiceMock->expects($this->any())
             ->method('getCustomer')
             ->willReturn($customerDataMock);

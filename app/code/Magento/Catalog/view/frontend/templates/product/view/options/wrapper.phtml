@@ -29,7 +29,7 @@ if ($this->hasRequiredOptions()) {
 }
 ?>
 <div class="product-options-wrapper" id="product-options-wrapper"<?php echo $required; ?>>
-    <fieldset class="fieldset">
+    <fieldset class="fieldset" tabindex="0">
         <?php echo $this->getChildHtml('', true);?>
     </fieldset>
 </div>

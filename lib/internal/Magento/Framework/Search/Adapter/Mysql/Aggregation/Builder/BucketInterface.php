@@ -23,16 +23,23 @@
  */
 namespace Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder;
 
-use Magento\Framework\DB\Select;
+use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface;
 use Magento\Framework\Search\Request\BucketInterface as RequestBucketInterface;
+use Magento\Framework\Search\Request\Dimension;
 
 interface BucketInterface
 {
     /**
-     * @param Select $baseQuery
+     * @param DataProviderInterface $dataProvider
+     * @param Dimension[] $dimensions
      * @param RequestBucketInterface $bucket
      * @param array $entityIds
-     * @return Select
+     * @return array
      */
-    public function build(Select $baseQuery, RequestBucketInterface $bucket, array $entityIds);
+    public function build(
+        DataProviderInterface $dataProvider,
+        array $dimensions,
+        RequestBucketInterface $bucket,
+        array $entityIds
+    );
 }

@@ -28,5 +28,5 @@
 $_item = $this->getItem();
 ?>
 
-<?php $_rowTotalWithoutDiscount = $_item->getRowTotal() - $_item->getDiscountAmount(); ?>
+<?php $_rowTotalWithoutDiscount = $_item->getRowTotal() - $_item->getTotalDiscountAmount(); ?>
 <?php echo $this->formatPrice(max(0, $_rowTotalWithoutDiscount)) ?>

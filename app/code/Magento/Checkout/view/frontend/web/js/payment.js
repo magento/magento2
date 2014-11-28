@@ -135,4 +135,6 @@ define([
             }
         }
     });
+    
+    return $.mage.payment;
 });

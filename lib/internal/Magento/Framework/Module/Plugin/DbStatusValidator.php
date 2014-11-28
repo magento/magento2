@@ -100,7 +100,7 @@ class DbStatusValidator
      */
     private function isDbUpToDate()
     {
-        foreach (array_keys($this->moduleList->getModules()) as $moduleName) {
+        foreach ($this->moduleList->getNames() as $moduleName) {
             foreach ($this->resourceResolver->getResourceList($moduleName) as $resourceName) {
                 $isSchemaUpToDate = $this->moduleManager->isDbSchemaUpToDate($moduleName, $resourceName);
                 $isDataUpToDate = $this->moduleManager->isDbDataUpToDate($moduleName, $resourceName);

@@ -24,15 +24,15 @@
 
 namespace Magento\Tax\Test\TestCase;
 
-use Magento\Tax\Test\Fixture\TaxRule;
-use Magento\Tax\Test\Page\Adminhtml\TaxRuleIndex;
-use Magento\Tax\Test\Page\Adminhtml\TaxRuleNew;
+use Mtf\ObjectManager;
 use Mtf\TestCase\Injectable;
+use Magento\Tax\Test\Fixture\TaxRule;
+use Magento\Tax\Test\Page\Adminhtml\TaxRuleNew;
+use Magento\Tax\Test\Page\Adminhtml\TaxRuleIndex;
 
 /**
- * Test Creation for CreateTaxRuleEntity
- *
  * Test Flow:
+ *
  * 1. Log in as default admin user.
  * 2. Go to Stores > Tax Rules.
  * 3. Click 'Add New Tax Rule' button.
@@ -46,18 +46,25 @@ use Mtf\TestCase\Injectable;
 class CreateTaxRuleEntityTest extends Injectable
 {
     /**
+     * Tax rule index page.
+     *
      * @var TaxRuleIndex
      */
     protected $taxRuleIndexPage;
 
     /**
+     * Tax rule form page.
+     *
      * @var TaxRuleNew
      */
     protected $taxRuleNewPage;
 
     /**
+     * Injection data.
+     *
      * @param TaxRuleIndex $taxRuleIndexPage
      * @param TaxRuleNew $taxRuleNewPage
+     * @return void
      */
     public function __inject(
         TaxRuleIndex $taxRuleIndexPage,
@@ -68,7 +75,10 @@ class CreateTaxRuleEntityTest extends Injectable
     }
 
     /**
+     * Test create tax rule.
+     *
      * @param TaxRule $taxRule
+     * @return void
      */
     public function testCreateTaxRule(TaxRule $taxRule)
     {
@@ -77,5 +87,15 @@ class CreateTaxRuleEntityTest extends Injectable
         $this->taxRuleIndexPage->getGridPageActions()->addNew();
         $this->taxRuleNewPage->getTaxRuleForm()->fill($taxRule);
         $this->taxRuleNewPage->getFormPageActions()->save();
+    }
+
+    /**
+     * Delete all tax rules.
+     *
+     * @return void
+     */
+    public static function tearDownAfterClass()
+    {
+        ObjectManager::getInstance()->create('Magento\Tax\Test\TestStep\DeleteAllTaxRulesStep', [])->run();
     }
 }

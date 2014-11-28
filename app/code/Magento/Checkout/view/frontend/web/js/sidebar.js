@@ -43,4 +43,5 @@ define([
         }
     });
 
+    return $.mage.sidebar;
 });

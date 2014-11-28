@@ -141,9 +141,9 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
      *
      * @return $this
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
-        parent::_beforeSave();
+        parent::beforeSave();
         if (!$this->hasStoreId()) {
             $this->setStoreId($this->_storeManager->getStore()->getId());
         }

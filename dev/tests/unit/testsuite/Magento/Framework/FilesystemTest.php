@@ -39,9 +39,6 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\App\Filesystem\DirectoryList|\PHPUnit_Framework_MockObject_MockObject  */
     protected $_directoryListMock;
 
-    /** @var \Magento\Framework\Filesystem\File\ReadFactory|\PHPUnit_Framework_MockObject_MockObject  */
-    protected $_fileReadFactoryMock;
-
     public function setUp()
     {
         $this->_dirReadFactoryMock = $this->getMock(
@@ -65,19 +62,10 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_fileReadFactoryMock = $this->getMock(
-            'Magento\Framework\Filesystem\File\ReadFactory',
-            array(),
-            array(),
-            '',
-            false
-        );
-
         $this->_filesystem = new Filesystem(
             $this->_directoryListMock,
             $this->_dirReadFactoryMock,
-            $this->_dirWriteFactoryMock,
-            $this->_fileReadFactoryMock
+            $this->_dirWriteFactoryMock
         );
     }
 
@@ -95,24 +83,6 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $dirWriteMock = $this->getMock('Magento\Framework\Filesystem\Directory\WriteInterface');
         $this->_dirWriteFactoryMock->expects($this->once())->method('create')->will($this->returnValue($dirWriteMock));
         $this->assertEquals($dirWriteMock, $this->_filesystem->getDirectoryWrite(DirectoryList::ROOT));
-    }
-
-    public function testGetRemoteResource()
-    {
-        $fileReadMock = $this->getMock('Magento\Framework\Filesystem\File\ReadInterface', array(), array(), '', false);
-
-        $this->_fileReadFactoryMock->expects(
-            $this->once()
-        )->method(
-            'create'
-        )->with(
-            'example.com',
-            'http'
-        )->will(
-            $this->returnValue($fileReadMock)
-        );
-
-        $this->assertEquals($fileReadMock, $this->_filesystem->getRemoteResource('http://example.com'));
     }
 
     public function testGetUri()

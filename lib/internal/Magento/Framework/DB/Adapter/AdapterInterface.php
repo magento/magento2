@@ -24,6 +24,7 @@
 namespace Magento\Framework\DB\Adapter;
 
 use Magento\Framework\DB\Ddl\Table;
+use Magento\Framework\DB\LoggerInterface;
 
 /**
  * Magento Database Adapter Interface

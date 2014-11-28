@@ -97,6 +97,17 @@ class ReadService implements ReadServiceInterface
     public function getList($productSku)
     {
         $product = $this->getProduct($productSku);
+        return $this->getListForProduct($product);
+    }
+
+    /**
+     * Get list of options for product
+     *
+     * @param \Magento\Catalog\Api\Data\ProductInterface $product
+     * @return \Magento\Bundle\Service\V1\Data\Product\Option[]
+     */
+    public function getListForProduct(\Magento\Catalog\Api\Data\ProductInterface $product)
+    {
         $optionCollection = $this->type->getOptionsCollection($product);
 
         /** @var \Magento\Bundle\Service\V1\Data\Product\Option[] $optionDtoList */

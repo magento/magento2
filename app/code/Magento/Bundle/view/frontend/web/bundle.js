@@ -331,5 +331,5 @@ define([
         }
     });
 
-
+    return $.mage.bundleOption;
 });

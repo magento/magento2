@@ -112,10 +112,7 @@ class ModuleDependency implements CollectorInterface
     protected function getModulePriority($moduleName)
     {
         if ($this->orderedModules === null) {
-            $this->orderedModules = array();
-            foreach ($this->moduleList->getModules() as $module) {
-                $this->orderedModules[] = $module['name'];
-            }
+            $this->orderedModules = $this->moduleList->getNames();
         }
         $result = array_search($moduleName, $this->orderedModules);
         // Assume unknown modules have the same priority, distinctive from known modules

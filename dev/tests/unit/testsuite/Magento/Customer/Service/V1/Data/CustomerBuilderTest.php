@@ -42,6 +42,11 @@ class CustomerBuilderTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Api\AttributeDataBuilder */
     private $_valueBuilder;
 
+    /**
+     * @var \Magento\Framework\Api\ExtensibleDataObjectConverter
+     */
+    protected $_extensibleDataObjectConverter;
+
     protected function setUp()
     {
         $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -89,6 +94,15 @@ class CustomerBuilderTest extends \PHPUnit_Framework_TestCase
                 'valueBuilder' => $this->_valueBuilder,
                 'metadataService' => $this->_customerMetadataService
             ]
+        );
+        $typeProcessor = $this->_objectManager->getObject('Magento\Framework\Reflection\TypeProcessor');
+        $dataObjectProcessor = $this->_objectManager->getObject(
+            'Magento\Framework\Reflection\DataObjectProcessor',
+            ['typeProcessor' => $typeProcessor]
+        );
+        $this->_extensibleDataObjectConverter = $this->_objectManager->getObject(
+            'Magento\Framework\Api\ExtensibleDataObjectConverter',
+            ['dataObjectProcessor' => $dataObjectProcessor]
         );
         parent::setUp();
     }
@@ -471,13 +485,16 @@ class CustomerBuilderTest extends \PHPUnit_Framework_TestCase
             'firstname' => 'John',
             'lastname' => 'Doe',
             'warehouse_zip' => '78777',
-            'warehouse_alternate' => '90051'
+            'warehouse_alternate' => '90051',
+            'website_id' => 0
         );
         $customer = $this->_customerBuilder->populateWithArray($customerData)->create();
 
+        /* website_id gets returned because of the typecasting in
+        \Magento\Customer\Service\V1\Data\Customer::getWebsiteId */
         $this->assertEquals(
             $expectedCustomerData,
-            \Magento\Framework\Api\ExtensibleDataObjectConverter::toFlatArray($customer)
+            $this->_extensibleDataObjectConverter->toFlatArray($customer)
         );
     }
 }

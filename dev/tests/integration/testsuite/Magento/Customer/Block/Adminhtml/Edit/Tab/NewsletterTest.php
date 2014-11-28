@@ -79,7 +79,7 @@ class NewsletterTest extends \PHPUnit_Framework_TestCase
     public function testToHtml()
     {
         $this->coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, 1);
-        $html = $this->block->initForm()->toHtml();
+        $html = $this->block->toHtml();
 
         $this->assertStringStartsWith("<div class=\"entry-edit\">", $html);
         $this->assertContains("<span>Newsletter Information</span>", $html);

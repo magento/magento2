@@ -24,23 +24,21 @@
 
 namespace Magento\Tax\Test\TestCase;
 
+use Mtf\ObjectManager;
 use Mtf\TestCase\Injectable;
 use Mtf\Fixture\FixtureFactory;
 use Magento\Cms\Test\Page\CmsIndex;
+use Magento\Tax\Test\Fixture\TaxRule;
+use Magento\Core\Test\Fixture\ConfigData;
+use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Customer\Test\Page\CustomerAccountLogin;
 use Magento\Customer\Test\Fixture\CustomerInjectable;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
-use Magento\Core\Test\Fixture\ConfigData;
-use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\SalesRule\Test\Fixture\SalesRuleInjectable;
-use Magento\Tax\Test\Fixture\TaxRule;
-use Mtf\ObjectManager;
 
 /**
- * Test TaxCalculationTest
- *
  * Test Flow:
- * Steps:
+ *
  * 1. Log in as default admin user.
  * 2. Go to Stores > Taxes > Tax Rules.
  * 3. Click 'Add New Tax Rule' button.
@@ -61,73 +59,73 @@ use Mtf\ObjectManager;
 class TaxCalculationTest extends Injectable
 {
     /**
-     * Catalog product page
+     * Catalog product page.
      *
      * @var CheckoutCart
      */
     protected $checkoutCart;
 
     /**
-     * Cms index page
+     * Cms index page.
      *
      * @var CmsIndex
      */
     protected $cmsIndex;
 
     /**
-     * Customer login page
+     * Customer login page.
      *
      * @var CustomerAccountLogin
      */
     protected $customerAccountLogin;
 
     /**
-     * Fixture factory
+     * Fixture factory.
      *
      * @var FixtureFactory
      */
     protected $fixtureFactory;
 
     /**
-     * Fixture customer
+     * Fixture customer.
      *
      * @var CustomerInjectable
      */
     protected $customer;
 
     /**
-     * Fixture SalesRule
+     * Fixture SalesRule.
      *
      * @var SalesRuleInjectable
      */
     protected $salesRule;
 
     /**
-     * Sales Rule Id
+     * Sales Rule Id.
      *
      * @var array
      */
     public static $salesRuleName;
 
     /**
-     * Tax Rule Id
+     * Tax Rule Id.
      *
      * @var array
      */
     public static $taxRuleCode;
 
     /**
-     * Skip failed tests
+     * Skip failed tests.
      *
      * @return void
      */
     public static function setUpBeforeClass()
     {
-        self::markTestIncomplete("MAGETWO-23964, MAGETWO-28454");
+        self::markTestIncomplete("MAGETWO-28454");
     }
 
     /**
-     * Prepare data
+     * Prepare data.
      *
      * @param FixtureFactory $fixtureFactory
      * @param SalesRuleInjectable $salesRule
@@ -147,7 +145,7 @@ class TaxCalculationTest extends Injectable
     }
 
     /**
-     * Injection data
+     * Injection data.
      *
      * @param CmsIndex $cmsIndex
      * @param CheckoutCart $checkoutCart
@@ -165,7 +163,7 @@ class TaxCalculationTest extends Injectable
     }
 
     /**
-     * Login customer
+     * Login customer.
      *
      * @return void
      */
@@ -178,7 +176,7 @@ class TaxCalculationTest extends Injectable
     }
 
     /**
-     * Clear shopping cart
+     * Clear shopping cart.
      *
      * @return void
      */
@@ -189,7 +187,7 @@ class TaxCalculationTest extends Injectable
     }
 
     /**
-     * Test product prices with tax
+     * Test product prices with tax.
      *
      * @param CatalogProductSimple $product
      * @param TaxRule $taxRule
@@ -210,7 +208,7 @@ class TaxCalculationTest extends Injectable
     }
 
     /**
-     * Tear down after each test
+     * Tear down after each test.
      *
      * @return void
      */
@@ -224,7 +222,7 @@ class TaxCalculationTest extends Injectable
     }
 
     /**
-     * Tear down after tests
+     * Tear down after tests.
      *
      * @return void
      */

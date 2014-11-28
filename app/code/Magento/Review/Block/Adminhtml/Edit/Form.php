@@ -37,9 +37,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_reviewData = null;
 
     /**
-     * @var \Magento\Customer\Service\V1\CustomerAccountServiceInterface
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
      */
-    protected $customerAccount;
+    protected $customerRepository;
 
     /**
      * Catalog product factory
@@ -60,7 +60,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Store\Model\System\Store $systemStore
-     * @param \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccount
+     * @param \Magento\Customer\APi\CustomerRepositoryInterface $customerRepository
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Review\Helper\Data $reviewData
      * @param array $data
@@ -70,13 +70,13 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Store\Model\System\Store $systemStore,
-        \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccount,
+        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Review\Helper\Data $reviewData,
         array $data = array()
     ) {
         $this->_reviewData = $reviewData;
-        $this->customerAccount = $customerAccount;
+        $this->customerRepository = $customerRepository;
         $this->_productFactory = $productFactory;
         $this->_systemStore = $systemStore;
         parent::__construct($context, $registry, $formFactory, $data);
@@ -129,7 +129,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         );
 
         try {
-            $customer = $this->customerAccount->getCustomer($review->getCustomerId());
+            $customer = $this->customerRepository->getById($review->getCustomerId());
             $customerText = __(
                 '<a href="%1" onclick="this.target=\'blank\'">%2 %3</a> <a href="mailto:%4">(%4)</a>',
                 $this->getUrl('customer/index/edit', array('id' => $customer->getId(), 'active_tab'=>'review')),

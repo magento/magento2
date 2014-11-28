@@ -49,15 +49,15 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
     {
         $properties = [
             [
-                'name' => $this->_getSourceFactoryPropertyName(),
+                'name' => $this->_getSourcePersistorPropertyName(),
                 'visibility' => 'protected',
                 'docblock' => [
-                    'shortDescription' =>  $this->_getSourceFactoryPropertyName(),
+                    'shortDescription' => $this->_getSourcePersistorPropertyName(),
                     'tags' => [
                         [
                             'name' => 'var',
                             'description' =>
-                                $this->_getFullyQualifiedClassName($this->_getSourceClassName()) . 'Factory'
+                                $this->_getFullyQualifiedClassName($this->_getSourceClassName()) . 'Persistor'
                         ]
                     ]
                 ]
@@ -66,7 +66,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                 'name' => $this->_getSourceCollectionFactoryPropertyName(),
                 'visibility' => 'protected',
                 'docblock' => [
-                    'shortDescription' =>  'Collection Factory',
+                    'shortDescription' => 'Collection Factory',
                     'tags' => [
                         [
                             'name' => 'var',
@@ -99,10 +99,10 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
      *
      * @return string
      */
-    protected function _getSourceFactoryPropertyName()
+    protected function _getSourcePersistorPropertyName()
     {
         $parts = explode('\\', $this->_getSourceClassName());
-        return lcfirst(end($parts)) . 'Factory';
+        return lcfirst(end($parts)) . 'Persistor';
     }
 
     /**
@@ -112,7 +112,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
     protected function _getSourceCollectionFactoryPropertyName()
     {
         $parts = explode('\\', $this->_getSourceClassName());
-        return lcfirst(end($parts)) . 'CollectionFactory';
+        return lcfirst(end($parts)) . 'SearchResultFactory';
     }
 
     /**
@@ -122,12 +122,9 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
      */
     protected function _getCollectionFactoryClassName()
     {
-        $parts = explode('\\', $this->_getSourceClassName());
-        $parts = array_reverse($parts);
-        $className = '\\' . array_pop($parts) . '\\' . array_pop($parts) . '\\' . array_pop($parts) . '\\Resource\\';
-        $parts = array_reverse($parts);
-        return $className . implode('\\', $parts) . '\\CollectionFactory';
-
+        return
+            str_replace('Interface', '', $this->_getFullyQualifiedClassName($this->_getSourceClassName()))
+            . 'SearchResultInterfaceFactory';
     }
 
     /**
@@ -141,8 +138,8 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
             'name' => '__construct',
             'parameters' => [
                 [
-                    'name' => $this->_getSourceFactoryPropertyName(),
-                    'type' => $this->_getFullyQualifiedClassName($this->_getSourceClassName()) . 'Factory'
+                    'name' => $this->_getSourcePersistorPropertyName(),
+                    'type' => $this->_getFullyQualifiedClassName($this->_getSourceClassName()) . 'Persistor'
                 ],
                 [
                     'name' => $this->_getSourceCollectionFactoryPropertyName(),
@@ -150,8 +147,8 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                 ],
             ],
             'body' => "\$this->"
-                . $this->_getSourceFactoryPropertyName()
-                . " = \$" . $this->_getSourceFactoryPropertyName() . ";\n"
+                . $this->_getSourcePersistorPropertyName()
+                . " = \$" . $this->_getSourcePersistorPropertyName() . ";\n"
                 . "\$this->"
                 . $this->_getSourceCollectionFactoryPropertyName()
                 . " = \$" . $this->_getSourceCollectionFactoryPropertyName() . ";"
@@ -162,7 +159,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                     [
                         'name' => 'param',
                         'description' => '\\' . $this->_getSourceClassName()
-                            . " \$" . $this->_getSourceFactoryPropertyName()
+                            . " \$" . $this->_getSourcePersistorPropertyName()
                     ],
                     [
                         'name' => 'param',
@@ -185,7 +182,8 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
             . "    throw new " . self::INPUT_EXCEPTION . "('ID required');\n"
             . "}\n"
             . "if (!isset(\$this->registry[\$id])) {\n"
-            . "    \$entity = \$this->" . $this->_getSourceFactoryPropertyName() . "->create()->load(\$id);\n"
+            . "    \$entity = \$this->" . $this->_getSourcePersistorPropertyName()
+            . "->loadEntity(\$id);\n"
             . "    if (!\$entity->getId()) {\n"
             . "        throw new " . self::NO_SUCH_ENTITY_EXCEPTION . "('Requested entity doesn\\'t exist');\n"
             . "    }\n"
@@ -230,27 +228,24 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
      *
      * @return string
      */
-    protected function _getRegisterMethod()
+    protected function _getCreateFromArrayMethod()
     {
-        $body = "if (\$object->getId() && !isset(\$this->registry[\$object->getId()])) {\n"
-            . "    \$object->load(\$object->getId());\n"
-            . "    \$this->registry[\$object->getId()] = \$object;\n"
-            . "}\nreturn \$this;";
+        $body = "return \$this->{$this->_getSourcePersistorPropertyName()}->registerFromArray(\$data);";
         return [
-            'name' => 'register',
+            'name' => 'createFromArray',
             'parameters' => [
                 [
-                    'name' => 'object',
-                    'type' => $this->_getFullyQualifiedClassName($this->_getSourceClassName())
+                    'name' => 'data',
+                    'type' => 'array'
                 ]
             ],
             'body' => $body,
             'docblock' => [
-                'shortDescription' => 'Register entity',
+                'shortDescription' => 'Register entity to create',
                 'tags' => [
                     [
                         'name' => 'param',
-                        'description' => $this->_getFullyQualifiedClassName($this->_getSourceClassName()) . ' $object'
+                        'description' => 'array $data'
                     ],
                     [
                         'name' => 'return',
@@ -262,11 +257,190 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
     }
 
     /**
+     * Returns register() method
+     *
+     * @return string
+     */
+    protected function _getCreateMethod()
+    {
+        $body = "return \$this->{$this->_getSourcePersistorPropertyName()}->registerNew(\$entity);";
+        return [
+            'name' => 'create',
+            'parameters' => [
+                [
+                    'name' => 'entity',
+                    'type' => $this->_getFullyQualifiedClassName($this->_getSourceClassName())
+                ]
+            ],
+            'body' => $body,
+            'docblock' => [
+                'shortDescription' => 'Register entity to create',
+                'tags' => [
+                    [
+                        'name' => 'param',
+                        'description' => 'array $data'
+                    ],
+                    [
+                        'name' => 'return',
+                        'description' => $this->_getFullyQualifiedClassName($this->_getSourceClassName()),
+                    ]
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Returns register() method
+     *
+     * @return string
+     */
+    protected function _getFlushMethod()
+    {
+        $body = "\$ids = \$this->{$this->_getSourcePersistorPropertyName()}->doPersist();\n"
+            . "foreach (\$ids as \$id) {\n"
+            . "unset(\$this->registry[\$id]);\n"
+            . "}";
+        return [
+            'name' => 'flush',
+            'parameters' => [],
+            'body' => $body,
+            'docblock' => [
+                'shortDescription' => 'Perform persist operations',
+                'tags' => []
+            ]
+        ];
+    }
+
+    /**
+     * Returns persist() method
+     *
+     * @return string
+     */
+    protected function _getSaveMethod()
+    {
+        $body = "\$this->{$this->_getSourcePersistorPropertyName()}->doPersistEntity(\$entity);\n"
+            . "return \$entity;";
+        return [
+            'name' => 'save',
+            'parameters' => [
+                [
+                    'name' => 'entity',
+                    'type' => $this->_getFullyQualifiedClassName($this->_getSourceClassName())
+                ]
+            ],
+            'body' => $body,
+            'docblock' => [
+                'shortDescription' => 'Perform persist operations for one entity',
+                'tags' => [
+                    [
+                        'name' => 'param',
+                        'description' => $this->_getFullyQualifiedClassName($this->_getSourceClassName()) . " \$entity",
+                    ],
+                    [
+                        'name' => 'return',
+                        'description' => $this->_getFullyQualifiedClassName($this->_getSourceClassName()),
+                    ]
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Return remove() method
+     *
+     * @return array
+     */
+    protected function _getDeleteMethod()
+    {
+        $body = "\$this->{$this->_getSourcePersistorPropertyName()}->registerDeleted(\$entity);\n"
+            . "return \$this->{$this->_getSourcePersistorPropertyName()}->doPersistEntity(\$entity);";
+        return [
+            'name' => 'delete',
+            'parameters' => [
+                [
+                    'name' => 'entity',
+                    'type' => $this->_getFullyQualifiedClassName($this->_getSourceClassName())
+                ]
+            ],
+            'body' => $body,
+            'docblock' => [
+                'shortDescription' => 'Register entity to delete',
+                'tags' => [
+                    [
+                        'name' => 'param',
+                        'description' => $this->_getFullyQualifiedClassName($this->_getSourceClassName()) . ' $entity'
+                    ]
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Return remove() method
+     *
+     * @return array
+     */
+    protected function _getDeleteByIdMethod()
+    {
+        $body = "\$entity = \$this->get(\$id);\n"
+            . "\$this->{$this->_getSourcePersistorPropertyName()}->registerDeleted(\$entity);\n"
+            . "return \$this->{$this->_getSourcePersistorPropertyName()}->doPersistEntity(\$entity);";
+        return [
+            'name' => 'deleteById',
+            'parameters' => [
+                [
+                    'name' => 'id',
+                    'type' => 'int'
+                ]
+            ],
+            'body' => $body,
+            'docblock' => [
+                'shortDescription' => 'Delete entity by Id',
+                'tags' => [
+                    [
+                        'name' => 'param',
+                        'description' => 'int $id'
+                    ]
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Return remove() method
+     *
+     * @return array
+     */
+    protected function _getRemoveMethod()
+    {
+        $body = "\$this->{$this->_getSourcePersistorPropertyName()}->registerDeleted(\$entity);";
+        return [
+            'name' => 'remove',
+            'parameters' => [
+                [
+                    'name' => 'entity',
+                    'type' => $this->_getFullyQualifiedClassName($this->_getSourceClassName())
+                ]
+            ],
+            'body' => $body,
+            'docblock' => [
+                'shortDescription' => 'Register entity to delete',
+                'tags' => [
+                    [
+                        'name' => 'param',
+                        'description' => $this->_getFullyQualifiedClassName($this->_getSourceClassName()) . ' $entity'
+                    ]
+                ]
+            ]
+        ];
+    }
+
+    /**
      * Returns find() method
      *
      * @return string
      */
-    protected function _getFindMethod()
+    protected function _getGetListMethod()
     {
         $body = "\$collection = \$this->" . $this->_getSourceCollectionFactoryPropertyName() . "->create();\n"
         . "foreach(\$criteria->getFilterGroups() as \$filterGroup) {\n"
@@ -277,13 +451,9 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
         . "}\n"
         . "\$collection->setCurPage(\$criteria->getCurrentPage());\n"
         . "\$collection->setPageSize(\$criteria->getPageSize());\n"
-        . "foreach (\$collection as \$object) {\n"
-        . "    \$this->register(\$object);\n"
-        . "}\n"
-        . "\$objectIds = \$collection->getAllIds();\n"
-        . "return array_intersect_key(\$this->registry, array_flip(\$objectIds));\n";
+        . "return \$collection;\n";
         return [
-            'name' => 'find',
+            'name' => 'getList',
             'parameters' => [
                 [
                     'name' => 'criteria',
@@ -317,8 +487,14 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
         return [
             $this->_getDefaultConstructorDefinition(),
             $this->_getGetMethod(),
-            $this->_getRegisterMethod(),
-            $this->_getFindMethod()
+            $this->_getCreateMethod(),
+            $this->_getCreateFromArrayMethod(),
+            $this->_getGetListMethod(),
+            $this->_getRemoveMethod(),
+            $this->_getDeleteMethod(),
+            $this->_getDeleteByIdMethod(),
+            $this->_getFlushMethod(),
+            $this->_getSaveMethod()
         ];
     }
 
@@ -333,7 +509,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
             $sourceClassName = $this->_getSourceClassName();
             $resultClassName = $this->_getResultClassName();
 
-            if ($resultClassName !== $sourceClassName . 'Repository') {
+            if ($resultClassName !== str_replace('Interface', '', $sourceClassName) . '\\Repository') {
                 $this->_addError(
                     'Invalid Factory class name [' . $resultClassName . ']. Use ' . $sourceClassName . 'Repository'
                 );
@@ -341,5 +517,39 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
             }
         }
         return $result;
+    }
+
+    /**
+     * Generate code
+     *
+     * @return string
+     */
+    protected function _generateCode()
+    {
+        $className = str_replace('Interface', '', str_replace('Data\\', '', $this->_getSourceClassName()));
+        $this->_classGenerator->setName(
+            $this->_getResultClassName()
+        )->addProperties(
+            $this->_getClassProperties()
+        )->addMethods(
+            $this->_getClassMethods()
+        )->setClassDocBlock(
+            $this->_getClassDocBlock()
+        )->setImplementedInterfaces(
+            [
+                '\\' . $className . 'RepositoryInterface'
+            ]
+        );
+        return $this->_getGeneratedCode();
+    }
+
+    /**
+     * Get source class name
+     *
+     * @return string
+     */
+    protected function _getSourceClassName()
+    {
+        return parent::_getSourceClassName() . 'Interface';
     }
 }

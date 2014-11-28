@@ -40,7 +40,7 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
     {
         $this->_resourcesMock = $this->getMock(
             '\Magento\Framework\App\Resource',
-            ['getConnection', 'getTableName', 'getTable'],
+            [],
             [],
             '',
             false
@@ -293,7 +293,7 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
             false,
             true,
             true,
-            ['__wakeup', 'getId']
+            ['__wakeup', 'getId', 'beforeDelete', 'afterDelete', 'afterDeleteCommit']
         );
         $this->_resourcesMock->expects($this->any())
             ->method('getConnection')
@@ -317,6 +317,9 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
         $idFieldNameReflection->setValue($this->_model, 'idFieldName');
         $adapterInterfaceMock->expects($this->any())->method('delete')->with('tableName', 'idFieldName');
         $adapterInterfaceMock->expects($this->any())->method('quoteInto')->will($this->returnValue('idFieldName'));
+        $abstractModelMock->expects($this->once())->method('beforeDelete');
+        $abstractModelMock->expects($this->once())->method('afterDelete');
+        $abstractModelMock->expects($this->once())->method('afterDeleteCommit');
         $this->assertInstanceOf(
             'Magento\Framework\Model\Resource\Db\AbstractDb',
             $this->_model->delete($abstractModelMock)

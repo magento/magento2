@@ -41,7 +41,7 @@ class Varnish extends \Magento\Framework\App\Config\Value
      * @return $this|\Magento\Framework\Model\AbstractModel
      * @throws \Magento\Framework\Model\Exception
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
         $data = $this->_getDefaultValues();
         $currentValue = $this->getValue();

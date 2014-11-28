@@ -356,7 +356,7 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
     public function loadByCustomerId($customerId)
     {
         try {
-            /** @var \Magento\Customer\Service\V1\Data\Customer $customerData */
+            /** @var \Magento\Customer\Api\Data\CustomerInterface $customerData */
             $customerData = $this->_customerAccountService->getCustomer($customerId);
             $data = $this->getResource()->loadByCustomerData($customerData);
             $this->addData($data);

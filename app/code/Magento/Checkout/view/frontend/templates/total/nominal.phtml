@@ -32,19 +32,19 @@
 <?php foreach ($this->getTotalItems() as $i => $item): ?>
     <?php foreach ($this->getTotalItemDetails($item) as $j => $row):?>
         <tr class="totals nominal details">
-            <td colspan="<?php echo $this->getColspan(); ?>" style="<?php echo $this->getTotalStyle() ?>" class="mark">
+            <th colspan="<?php echo $this->getColspan(); ?>" style="<?php echo $this->getTotalStyle() ?>" class="mark" scope="row">
                 <?php echo $this->escapeHtml($this->getItemDetailsRowLabel($row)) ?>
-            </td>
-            <td class="amount">
+            </th>
+            <td class="amount" data-th="<?php echo $this->escapeHtml($this->getItemDetailsRowLabel($row)) ?>">
                 <?php echo $this->formatPrice($this->getItemDetailsRowAmount($row)) ?>
             </td>
         </tr>
     <?php endforeach; ?>
     <tr class="totals nominal summary">
-        <td class="mark" colspan="<?php echo $this->getColspan(); ?>" style="<?php echo $this->getTotalStyle() ?>">
+        <th class="mark" colspan="<?php echo $this->getColspan(); ?>" style="<?php echo $this->getTotalStyle() ?>" scope="row">
             <div class="detailed"><?php echo $this->escapeHtml($this->getItemName($item)); ?></div>
-        </td>
-        <td class="amount">
+        </th>
+        <td class="amount" data-th="<?php echo $this->escapeHtml($this->getItemName($item)); ?>">
             <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($this->getItemRowTotal($item)) ?>
         </td>
     </tr>

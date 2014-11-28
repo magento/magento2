@@ -429,6 +429,7 @@ class Config
         if ($code instanceof \Magento\Eav\Model\Entity\Attribute\AttributeInterface) {
             return $code;
         }
+        \Magento\Framework\Profiler::start('EAV: ' . __METHOD__, array('group' => 'EAV', 'method' => __METHOD__));
         $this->_initAttributes($entityType);
 
         $entityTypeCode = $this->getEntityType($entityType)->getEntityTypeCode();

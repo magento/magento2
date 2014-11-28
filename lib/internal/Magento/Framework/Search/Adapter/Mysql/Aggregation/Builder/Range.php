@@ -25,6 +25,7 @@ namespace Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder;
 
 use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Select;
+use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface;
 use Magento\Framework\Search\Request\Aggregation\Range as AggregationRange;
 use Magento\Framework\Search\Request\Aggregation\RangeBucket;
 use Magento\Framework\Search\Request\BucketInterface as RequestBucketInterface;
@@ -56,21 +57,27 @@ class Range implements BucketInterface
     /**
      * {@inheritdoc}
      */
-    public function build(Select $baseQuery, RequestBucketInterface $bucket, array $entityIds)
-    {
+    public function build(
+        DataProviderInterface $dataProvider,
+        array $dimensions,
+        RequestBucketInterface $bucket,
+        array $entityIds
+    ) {
         /** @var RangeBucket $bucket */
+        $select = $dataProvider->getDataSet($bucket, $dimensions);
         $metrics = $this->metricsBuilder->build($bucket);
 
-        $baseQuery->where('main_table.entity_id IN (?)', $entityIds);
+        $select->where('main_table.entity_id IN (?)', $entityIds);
 
         /** @var Select $fullQuery */
-        $fullQuery = $this->getConnection()->select();
-        $fullQuery->from(['main_table' => $baseQuery], null);
+        $fullQuery = $this->getConnection()
+            ->select();
+        $fullQuery->from(['main_table' => $select], null);
         $fullQuery = $this->generateCase($fullQuery, $bucket->getRanges());
         $fullQuery->columns($metrics);
-        $fullQuery->group(RequestBucketInterface::FIELD_VALUE);
+        $fullQuery->group(new \Zend_Db_Expr('1'));
 
-        return $fullQuery;
+        return $dataProvider->execute($fullQuery);
     }
 
     /**
@@ -98,14 +105,16 @@ class Range implements BucketInterface
                     $casesResults,
                     ["`{$field}` BETWEEN {$from} AND {$to}" => "'{$from}_{$to}'"]
                 );
-            } elseif ($from && !$to) {
+            } elseif ($from) {
                 $casesResults = array_merge($casesResults, ["`{$field}` >= {$from}" => "'{$from}_*'"]);
-            } elseif (!$from && $to) {
+            } elseif ($to) {
                 $casesResults = array_merge($casesResults, ["`{$field}` < {$to}" => "'*_{$to}'"]);
             }
         }
-        $cases = $this->getConnection()->getCaseSql('', $casesResults);
+        $cases = $this->getConnection()
+            ->getCaseSql('', $casesResults);
         $select->columns([RequestBucketInterface::FIELD_VALUE => $cases]);
+
         return $select;
     }
 }

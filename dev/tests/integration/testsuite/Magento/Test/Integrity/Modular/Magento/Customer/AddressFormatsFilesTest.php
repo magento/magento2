@@ -55,7 +55,7 @@ class AddressFormatsFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function fileFormatDataProvider()
     {
-        return \Magento\TestFramework\Utility\Files::init()->getConfigFiles(
+        return \Magento\Framework\Test\Utility\Files::init()->getConfigFiles(
             '{*/address_formats.xml,address_formats.xml}'
         );
     }

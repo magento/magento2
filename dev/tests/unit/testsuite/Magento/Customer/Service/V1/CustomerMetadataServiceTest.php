@@ -41,12 +41,12 @@ class CustomerMetadataServiceTest extends \PHPUnit_Framework_TestCase
     const FRONTEND_CLASS = 'frontend class';
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Service\V1\Data\Eav\AttributeMetadataDataProvider
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Model\AttributeMetadataDataProvider
      */
     protected $attributeMetadataDataProvider;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Service\V1\Data\Eav\AttributeMetadataConverter
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Model\AttributeMetadataConverter
      */
     protected $attributeMetadataConverter;
 
@@ -74,12 +74,12 @@ class CustomerMetadataServiceTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->attributeMetadataDataProvider = $this
-            ->getMockBuilder('Magento\Customer\Service\V1\Data\Eav\AttributeMetadataDataProvider')
+            ->getMockBuilder('Magento\Customer\Model\AttributeMetadataDataProvider')
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->attributeMetadataConverter = $this
-            ->getMockBuilder('Magento\Customer\Service\V1\Data\Eav\AttributeMetadataConverter')
+            ->getMockBuilder('Magento\Customer\Model\AttributeMetadataConverter')
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -129,9 +129,9 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
     /**
      * @return $this|\Magento\Sales\Model\Quote\Item\AbstractItem
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
-        parent::_beforeSave();
+        parent::beforeSave();
         if ($this->getAddress()) {
             $this->setQuoteAddressId($this->getAddress()->getId());
         }

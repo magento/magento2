@@ -51,7 +51,7 @@ interface GroupRepositoryInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException If $groupId is not found
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function get($id);
+    public function getById($id);
 
     /**
      * Retrieve customer groups.

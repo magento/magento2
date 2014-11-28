@@ -143,10 +143,13 @@ class Structure implements \Magento\Backend\Model\Config\Structure\SearchInterfa
         if (isset($this->_elements[$path])) {
             return $this->_elements[$path];
         }
-        $children = $this->_data['sections'];
+        $children = [];
+        if ($this->_data) {
+            $children = $this->_data['sections'];
+        }
         $child = array();
         foreach ($pathParts as $pathPart) {
-            if (array_key_exists($pathPart, $children)) {
+            if ($children && (array_key_exists($pathPart, $children))) {
                 $child = $children[$pathPart];
                 $children = array_key_exists('children', $child) ? $child['children'] : array();
             } else {

@@ -47,33 +47,33 @@
                     <item name="item_action" xsi:type="string">edit</item>
                     <item name="fields" xsi:type="array">
                         <item name="block_id" xsi:type="array">
-                            <item name="title" xsi:type="string" translate="true">ID</item>
+                            <item name="label" xsi:type="string" translate="true">ID</item>
                             <item name="align" xsi:type="string">left</item>
                             <item name="data_type" xsi:type="string">text</item>
                             <item name="filter_type" xsi:type="string">filter_range</item>
                         </item>
                         <item name="title" xsi:type="array">
-                            <item name="title" xsi:type="string" translate="true">Title</item>
+                            <item name="label" xsi:type="string" translate="true">Title</item>
                             <item name="align" xsi:type="string">left</item>
                             <item name="data_type" xsi:type="string">text</item>
                             <item name="filter_type" xsi:type="string">filter_input</item>
                         </item>
                         <item name="identifier" xsi:type="array">
-                            <item name="title" xsi:type="string" translate="true">Identifier</item>
+                            <item name="label" xsi:type="string" translate="true">Identifier</item>
                             <item name="align" xsi:type="string">left</item>
                             <item name="data_type" xsi:type="string">text</item>
                             <item name="filter_type" xsi:type="string">filter_input</item>
                         </item>
                         <item name="store_id" xsi:type="array">
-                            <item name="title" xsi:type="string" translate="true">Store View</item>
+                            <item name="label" xsi:type="string" translate="true">Store View</item>
                             <item name="align" xsi:type="string">left</item>
                             <item name="data_type" xsi:type="string">store</item>
                             <item name="sortable" xsi:type="boolean">false</item>
                             <item name="filter_type" xsi:type="string">filter_store</item>
-                            <item name="options_provider" xsi:type="string">Magento\Ui\DataProvider\Options\Store</item>
+                            <item name="options_provider" xsi:type="string">Magento\Store\Ui\DataProvider\Options</item>
                         </item>
                         <item name="is_active" xsi:type="array">
-                            <item name="title" xsi:type="string" translate="true">Status</item>
+                            <item name="label" xsi:type="string" translate="true">Status</item>
                             <item name="align" xsi:type="string">left</item>
                             <item name="data_type" xsi:type="string">text</item>
                             <item name="filter_type" xsi:type="string">filter_select</item>
@@ -89,16 +89,24 @@
                             </item>
                         </item>
                         <item name="creation_time" xsi:type="array">
-                            <item name="title" xsi:type="string" translate="true">Created</item>
+                            <item name="label" xsi:type="string" translate="true">Created</item>
                             <item name="align" xsi:type="string">left</item>
                             <item name="data_type" xsi:type="string">date</item>
                             <item name="filter_type" xsi:type="string">filter_date</item>
                         </item>
                         <item name="update_time" xsi:type="array">
-                            <item name="title" xsi:type="string" translate="true">Modified</item>
+                            <item name="label" xsi:type="string" translate="true">Modified</item>
                             <item name="align" xsi:type="string">left</item>
                             <item name="data_type" xsi:type="string">date</item>
                             <item name="filter_type" xsi:type="string">filter_date</item>
+                        </item>
+                        <item name="actions" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">Action</item>
+                            <item name="align" xsi:type="string">left</item>
+                            <item name="data_type" xsi:type="string">actions</item>
+                            <item name="filterable" xsi:type="boolean">false</item>
+                            <item name="sortable" xsi:type="boolean">false</item>
+                            <item name="visible" xsi:type="boolean">false</item>
                         </item>
                     </item>
                 </argument>
@@ -107,44 +115,41 @@
                         <item name="class" xsi:type="string">Magento\Cms\Ui\DataProvider\Block\Row\Actions</item>
                     </item>
                     <item name="store_id" xsi:type="array">
-                        <item name="class" xsi:type="string">Magento\Ui\DataProvider\Row\Store</item>
+                        <item name="class" xsi:type="string">Magento\Store\Ui\DataProvider\Row</item>
                     </item>
                 </argument>
             </arguments>
-            <referenceBlock name="listing_before">
-                <block class="Magento\Ui\ListingContainer\Massaction\View" name="massaction_top">
-                    <arguments>
-                        <argument name="content_template" xsi:type="string">Magento_Ui::listingcontainer/massaction/default.phtml</argument>
-                        <argument name="config" xsi:type="array">
-                            <item name="actions" xsi:type="array">
-                                <item name="delete" xsi:type="array">
-                                    <item name="label" xsi:type="string" translate="true">Delete</item>
-                                    <item name="url" xsi:type="string">cms/block/massDelete</item>
-                                </item>
-                            </item>
-                        </argument>
-                    </arguments>
-                </block>
-                <referenceBlock name="filter_base">
-                    <arguments>
-                        <argument name="config" xsi:type="array">
-                            <item name="types" xsi:type="array">
-                                <item name="filter_store" xsi:type="array">
-                                    <item name="content_template" xsi:type="string">Magento_Store/templates/filter/store.html</item>
-                                    <item name="control" xsi:type="string">Magento_Store/js/listing/filter/store</item>
-                                </item>
-                            </item>
-                        </argument>
-                    </arguments>
-                </referenceBlock>
-                <referenceBlock name="sorting_base">
-                    <arguments>
-                        <argument name="config" xsi:type="array">
-                            <item name="field" xsi:type="string">block_id</item>
-                        </argument>
-                    </arguments>
-                </referenceBlock>
-            </referenceBlock>
+        </referenceBlock>
+        <referenceBlock name="sorting">
+            <arguments>
+                <argument name="config" xsi:type="array">
+                    <item name="field" xsi:type="string">block_id</item>
+                </argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="filters">
+            <arguments>
+                <argument name="config" xsi:type="array">
+                    <item name="types" xsi:type="array">
+                        <item name="filter_store" xsi:type="array">
+                            <item name="module" xsi:type="string">store</item>
+                            <item name="control" xsi:type="string">Magento_Store/js/listing/filter/store</item>
+                        </item>
+                    </item>
+                </argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="massactions">
+            <arguments>
+                <argument name="config" xsi:type="array">
+                    <item name="actions" xsi:type="array">
+                        <item name="delete" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">Delete</item>
+                            <item name="url" xsi:type="string">cms/block/massDelete</item>
+                        </item>
+                    </item>
+                </argument>
+            </arguments>
         </referenceBlock>
     </body>
 </page>

@@ -37,9 +37,9 @@ class TaxTest extends \PHPUnit_Framework_TestCase
     protected $mockTaxHelper;
 
     /**
-     * @var \Magento\Tax\Service\V1\TaxRuleService | \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $mockTaxRuleService;
+    protected $mockTaxRateManagement;
 
     /**
      * @var \Magento\GoogleShopping\Model\Config | \PHPUnit_Framework_MockObject_MockObject
@@ -57,17 +57,17 @@ class TaxTest extends \PHPUnit_Framework_TestCase
     protected $mockGroupService;
 
     /**
-     * @var \Magento\Tax\Service\V1\Data\QuoteDetailsBuilder | \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $mockQuoteDetailsBuilder;
 
     /**
-     * @var \Magento\Tax\Service\V1\TaxCalculationService | \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $mockTaxCalculationService;
 
     /**
-     * @var \Magento\Directory\Model\RegionFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $mockRegionFactory;
 
@@ -81,7 +81,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $this->mockTaxHelper = $this->getMockBuilder('\Magento\Tax\Helper\Data')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mockTaxRuleService = $this->getMockBuilder('Magento\Tax\Service\V1\TaxRuleService')
+        $this->mockTaxRateManagement = $this->getMockBuilder('\Magento\Tax\Api\TaxRateManagementInterface')
             ->disableOriginalConstructor()
             ->getMock();
         $this->mockConfig = $this->getMockBuilder('\Magento\GoogleShopping\Model\Config')
@@ -90,10 +90,11 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $this->mockGroupService = $this->getMockBuilder('\Magento\Customer\Service\V1\CustomerGroupServiceInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mockQuoteDetailsBuilder = $this->getMockBuilder('\Magento\Tax\Service\V1\Data\QuoteDetailsBuilder')
+        $this->mockQuoteDetailsBuilder = $this->getMockBuilder('\Magento\Tax\Api\Data\QuoteDetailsDataBuilder')
             ->disableOriginalConstructor()
+            ->setMethods(['populateWithArray', 'create'])
             ->getMock();
-        $this->mockTaxCalculationService = $this->getMockBuilder('\Magento\Tax\Service\V1\TaxCalculationService')
+        $this->mockTaxCalculationService = $this->getMockBuilder('Magento\Tax\Api\TaxCalculationInterface')
             ->disableOriginalConstructor()
             ->getMock();
         $this->mockRegionFactory = $this->getMockBuilder('\Magento\Directory\Model\RegionFactory')
@@ -103,7 +104,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $arguments = [
             'taxData' => $this->mockTaxHelper,
-            'taxRuleService' => $this->mockTaxRuleService,
+            'taxRateManagement' => $this->mockTaxRateManagement,
             'groupServiceInterface' => $this->mockGroupService,
             'config' => $this->mockConfig,
             'quoteDetailsBuilder' => $this->mockQuoteDetailsBuilder,
@@ -151,11 +152,11 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $this->setUpGetRegionsByRegionId($postCode, '*');
         $this->mockTaxHelper->expects($this->any())->method('getConfig')->will($this->returnSelf());
         $this->mockTaxHelper->expects($this->any())->method('priceIncludesTax')->will($this->returnValue(false));
-        $mockTaxRate = $this->getMockBuilder('Magento\Tax\Service\V1\Data\TaxRate')
+        $mockTaxRate = $this->getMockBuilder('\Magento\Tax\Api\Data\TaxRateInterface')
             ->disableOriginalConstructor()
             ->getMock();
         $rates = [$mockTaxRate];
-        $this->mockTaxRuleService->expects($this->once())->method('getRatesByCustomerAndProductTaxClassId')->with(
+        $this->mockTaxRateManagement->expects($this->once())->method('getRatesByCustomerAndProductTaxClassId')->with(
             $customerTaxClassId,
             $productTaxClassId
         )->will($this->returnValue($rates));
@@ -163,9 +164,9 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $this->mockConfig->expects($this->once())->method('getTargetCountry')->with($productStoreId)->will(
             $this->returnValue($targetCountry)
         );
-        $mockTaxRate->expects($this->once())->method('getCountryId')->will($this->returnValue($targetCountry));
-        $mockTaxRate->expects($this->once())->method('getPostcode')->will($this->returnValue($postCode));
-        $mockTaxRate->expects($this->any())->method('getRegionId')->will($this->returnValue($postCode));
+        $mockTaxRate->expects($this->once())->method('getTaxCountryId')->will($this->returnValue($targetCountry));
+        $mockTaxRate->expects($this->once())->method('getTaxPostcode')->will($this->returnValue($postCode));
+        $mockTaxRate->expects($this->any())->method('getTaxRegionId')->will($this->returnValue($postCode));
 
         $this->mockQuoteDetailsBuilder->expects($this->once())->method('populateWithArray')
             ->with(
@@ -201,14 +202,12 @@ class TaxTest extends \PHPUnit_Framework_TestCase
                 ]
             )
             ->will($this->returnSelf());
-        /** @var \Magento\Tax\Service\V1\Data\QuoteDetails
-         * | \PHPUnit_Framework_MockObject_MockObject $quoteDetailsObject */
-        $quoteDetailsObject = $this->getMockBuilder('Magento\Tax\Service\V1\Data\QuoteDetails')
+        $quoteDetailsObject = $this->getMockBuilder('Magento\Tax\Api\Data\QuoteDetailsInterface')
             ->disableOriginalConstructor()->getMock();
         $this->mockQuoteDetailsBuilder->expects($this->once())->method('create')->will(
             $this->returnValue($quoteDetailsObject)
         );
-        $taxDetailsObject = $this->getMockBuilder('\Magento\Tax\Service\V1\Data\TaxDetails')
+        $taxDetailsObject = $this->getMockBuilder('\Magento\Tax\Api\Data\TaxDetailsInterface')
             ->disableOriginalConstructor()->getMock();
         $this->mockTaxCalculationService->expects($this->once())->method('calculateTax')->with(
             $quoteDetailsObject,
@@ -222,6 +221,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         // mock product
         $mockProduct = $this->getMockProduct($productStoreId, $productTaxClassId, $sku, $price, $name);
         $mockEntry = $this->getMockEntry();
+        $mockEntry->expects($this->once())->method('cleanTaxes');
         $mockEntry->expects($this->once())
             ->method('addTax')
             ->with(

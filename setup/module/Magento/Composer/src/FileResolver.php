@@ -24,39 +24,50 @@
 
 namespace Magento\Composer;
 
-use Zend\Stdlib\Glob;
-use Magento\Config\FileResolverInterface;
-use Magento\Config\FileIterator;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Config\FileIteratorFactory;
 
-class FileResolver implements FileResolverInterface
+class FileResolver implements \Magento\Framework\Config\FileResolverInterface
 {
     /**
-     * Magento application's DirectoryList
+     * Directory reader
      *
-     * @var DirectoryList
+     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
      */
-    private $directoryList;
+    protected $directoryRead;
 
     /**
-     * Constructor
+     * File Iterator
      *
-     * @param DirectoryList $directoryList
+     * @var \Magento\Framework\Config\FileIteratorFactory
      */
-    public function __construct(DirectoryList $directoryList)
-    {
-        $this->directoryList = $directoryList;
+    protected $iteratorFactory;
+
+    /**
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Framework\Config\FileIteratorFactory $iteratorFactory
+     */
+    public function __construct(
+        \Magento\Framework\Filesystem $filesystem,
+        FileIteratorFactory $iteratorFactory
+    ) {
+        $this->directoryRead = $filesystem->getDirectoryRead(DirectoryList::MODULES);
+        $this->iteratorFactory = $iteratorFactory;
     }
 
     /**
      * Collect files and wrap them into an Iterator object
      *
      * @param string $filename
-     * @return FileIterator
+     * @param string $scope
+     * @return \Magento\Framework\Config\FileIterator
      */
-    public function get($filename)
+    public function get($filename, $scope)
     {
-        $pattern = $this->directoryList->getPath(DirectoryList::MODULES) . '/*/*/' . $filename;
-        return new FileIterator(Glob::glob($pattern));
+        $iterator = $this->iteratorFactory->create(
+            $this->directoryRead,
+            $this->directoryRead->search('/*/*/' . $filename)
+        );
+        return $iterator;
     }
 }

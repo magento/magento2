@@ -31,7 +31,7 @@ use Magento\Framework\Search\Request\FilterInterface as RequestFilterInterface;
 class Range implements FilterInterface
 {
     const CONDITION_PART_GREATER_THAN = '>=';
-    const CONDITION_PART_LOWER_THAN = '<';
+    const CONDITION_PART_LOWER_THAN = '<=';
 
     /**
      * @var ConditionManager

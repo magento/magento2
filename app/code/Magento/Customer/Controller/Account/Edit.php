@@ -26,30 +26,30 @@ namespace Magento\Customer\Controller\Account;
 
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
-use Magento\Customer\Service\V1\Data\CustomerBuilder;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerDataBuilder;
 
 class Edit extends \Magento\Customer\Controller\Account
 {
-    /** @var CustomerAccountServiceInterface  */
-    protected $customerAccountService;
+    /** @var CustomerRepositoryInterface  */
+    protected $customerRepository;
 
-    /** @var CustomerBuilder */
+    /** @var CustomerDataBuilder */
     protected $customerBuilder;
 
     /**
      * @param Context $context
      * @param Session $customerSession
-     * @param CustomerAccountServiceInterface $customerAccountService
-     * @param CustomerBuilder $customerBuilder
+     * @param CustomerRepositoryInterface $customerRepository
+     * @param CustomerDataBuilder $customerBuilder
      */
     public function __construct(
         Context $context,
         Session $customerSession,
-        CustomerAccountServiceInterface $customerAccountService,
-        CustomerBuilder $customerBuilder
+        CustomerRepositoryInterface $customerRepository,
+        CustomerDataBuilder $customerBuilder
     ) {
-        $this->customerAccountService = $customerAccountService;
+        $this->customerRepository = $customerRepository;
         $this->customerBuilder = $customerBuilder;
         parent::__construct($context, $customerSession);
     }
@@ -71,7 +71,7 @@ class Edit extends \Magento\Customer\Controller\Account
 
         $data = $this->_getSession()->getCustomerFormData(true);
         $customerId = $this->_getSession()->getCustomerId();
-        $customerDataObject = $this->customerAccountService->getCustomer($customerId);
+        $customerDataObject = $this->customerRepository->getById($customerId);
         if (!empty($data)) {
             $customerDataObject = $this->customerBuilder->mergeDataObjectWithArray($customerDataObject, $data)
                 ->create();

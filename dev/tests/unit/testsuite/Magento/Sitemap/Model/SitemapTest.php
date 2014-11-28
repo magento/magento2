@@ -177,7 +177,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
     {
         $model = $this->_getModelMock();
         $model->setSitemapPath('../');
-        $model->save();
+        $model->beforeSave();
     }
 
     /**
@@ -191,7 +191,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
         $this->_directoryMock->expects($this->once())->method('isExist')->will($this->returnValue(false));
 
         $model = $this->_getModelMock();
-        $model->save();
+        $model->beforeSave();
     }
 
     /**
@@ -206,7 +206,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
         $this->_directoryMock->expects($this->once())->method('isWritable')->will($this->returnValue(false));
 
         $model = $this->_getModelMock();
-        $model->save();
+        $model->beforeSave();
     }
 
     //@codingStandardsIgnoreStart
@@ -225,7 +225,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
 
         $model = $this->_getModelMock();
         $model->setSitemapFilename('*sitemap?.xml');
-        $model->save();
+        $model->beforeSave();
     }
 
     /**
@@ -523,7 +523,7 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
             '_getDocumentRoot'
         );
         if ($mockBeforeSave) {
-            $methods[] = '_beforeSave';
+            $methods[] = 'beforeSave';
         }
 
         $this->_sitemapCategoryMock->expects(

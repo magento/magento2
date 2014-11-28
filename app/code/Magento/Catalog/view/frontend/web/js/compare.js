@@ -27,7 +27,8 @@ define([
     "jquery/ui",
     "mage/decorate"
 ], function($){
-    
+    "use strict";
+
     $.widget('mage.compareItems', {
         _create: function() {
             this.element.decorate('list', true);
@@ -48,4 +49,6 @@ define([
             });
         }
     });
+
+    return $.mage.compareItems;
 });

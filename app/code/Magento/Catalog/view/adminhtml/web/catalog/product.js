@@ -53,14 +53,12 @@ window.Product = {};
                     iframe.width($(this).outerWidth() + 'px');
                 }
             });
-            wrapper.trigger('processStart');
             var iframe = $('<iframe id="create_new_attribute_container">').attr({
                 src: this._prepareUrl(event),
                 frameborder: 0,
                 style: "position:absolute;top:58px;left:0px;right:0px;bottom:0px"
             });
             iframe.on('load', function () {
-                wrapper.trigger('processStop');
                 $(this).css({
                     height:  wrapper.outerHeight() + 'px',
                     width: wrapper.outerWidth() + 'px'
@@ -144,5 +142,6 @@ window.disableFieldEditMode = disableFieldEditMode;
 window.toogleFieldEditMode = toogleFieldEditMode;
 
 Event.observe(window, 'load', onCompleteDisableInited);
-
+    
+return jQuery.mage.productAttributes;
 });

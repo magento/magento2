@@ -31,14 +31,14 @@
         <?php echo $this->getChildHtml($_total->getBlockName(), false); ?>
     <?php else:?>
     <tr class="<?php echo $_code?>">
-        <td <?php echo $this->getLabelProperties()?>>
+        <th <?php echo $this->getLabelProperties()?> scope="row">
             <?php if ($_total->getStrong()):?>
             <strong><?php echo $this->escapeHtml($_total->getLabel());?></strong>
             <?php else:?>
             <?php echo $this->escapeHtml($_total->getLabel());?>
             <?php endif?>
-        </td>
-        <td <?php echo $this->getValueProperties()?>>
+        </th>
+        <td <?php echo $this->getValueProperties()?> data-th="<?php echo $this->escapeHtml($_total->getLabel());?>">
             <?php if ($_total->getStrong()):?>
             <strong><?php echo $this->formatValue($_total) ?></strong>
             <?php else:?>

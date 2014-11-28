@@ -24,6 +24,9 @@
 
 namespace Mtf\App\State;
 
+use \Magento\Framework\App\DeploymentConfig\DbConfig;
+use \Magento\Framework\App\Filesystem\DirectoryList;
+
 /**
  * Abstract class AbstractState
  *
@@ -54,13 +57,17 @@ abstract class AbstractState implements StateInterface
      */
     public function clearInstance()
     {
-        $magentoBaseDir = dirname(dirname(dirname(MTF_BP)));
-        $config = simplexml_load_file($magentoBaseDir . '/app/etc/local.xml');
-
-        $host = (string)$config->connection->host;
-        $user = (string)$config->connection->username;
-        $password = (string)$config->connection->password;
-        $database = (string)$config->connection->dbName;
+        $dirList = \Mtf\ObjectManagerFactory::getObjectManager()->get('\Magento\Framework\Filesystem\DirectoryList');
+        $deploymentConfig = new \Magento\Framework\App\DeploymentConfig(
+            new \Magento\Framework\App\DeploymentConfig\Reader($dirList),
+            []
+        );
+        $dbConfig = new DbConfig($deploymentConfig->getSegment(DbConfig::CONFIG_KEY));
+        $dbInfo = $dbConfig->getConnection('default');
+        $host = $dbInfo['host'];
+        $user = $dbInfo['username'];
+        $password = $dbInfo['password'];
+        $database = $dbInfo['dbname'];
 
         $fileName = MTF_BP . '/' . $database . '.sql';
         if (!file_exists($fileName)) {
@@ -86,7 +93,7 @@ abstract class AbstractState implements StateInterface
         }
 
         // Clear cache
-        exec("rm -rf {$magentoBaseDir}/var/*", $output, $result);
+        exec("rm -rf {$dirList->getPath(DirectoryList::VAR_DIR)}/*", $output, $result);
         if ($result) {
             throw new \Exception('Cleaning Magento cache has been failed: ' . $output);
         }

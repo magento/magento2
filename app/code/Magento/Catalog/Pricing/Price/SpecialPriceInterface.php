@@ -54,4 +54,9 @@ interface SpecialPriceInterface
      * @return bool
      */
     public function isScopeDateInInterval();
+
+    /**
+     * @return bool
+     */
+    public function isPercentageDiscount();
 }

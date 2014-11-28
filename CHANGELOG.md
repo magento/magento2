@@ -1,3 +1,90 @@
+0.1.0-alpha106
+=============
+* Various improvements:
+    * Refactored Service Layer of the Magento_Tax Module
+    * Stabilized functional tests for the Backend module
+    * Stabilized functional tests for the CatalogRule module
+    * Stabilized functional tests for the Checkout module
+    * Stabilized functional tests for the CurrencySymbol module
+    * Stabilized functional tests for the Shipping module
+    * Stabilized functional tests for the Tax module
+    * Stabilized functional tests for the User module
+* Added Readme.md files to the following modules:
+    * Magento\RequireJs
+    * Magento\Ui
+* Fixed bugs:
+    * Fixed an issue where product image assignment to a store view was not considered when displaying a product
+    * Fixed shipping address area blinking when billing address is filled during checkout with a virtual product
+    * Fixed an issue where filter_store.html was not found
+    * Fixed an issue where the customer account access menu did not expand on the storefront
+    * Fixed an issue where CMS blocks did not open when clicking from a grid
+    * Fixed an issue where the Create Product page was completely blocked after closing the New Attribute pop-up
+    * Fixed an issue where Stock Status was disabled for Bundle and Grouped products
+    * Fixed an issue where a product could not be saved without filling a not required bundle option
+    * Fixed broken "per page" selectors on the Customer's account pages
+    * Fixed the wrong behavior of JS loaders on the storefront pages
+    * Fixed Shopping cart price rule form validation
+    * Fixed an issue where the 'Please wait' spinner persisted when creating a customer custom attribute with existing code
+    * Fixed a Google Chrome specific issue where subcategories were not displayed correctly on the first hover for category item
+    * Fixed an issue where the 'Please wait' spinner did not disappear when creating customer with invalid email
+    * Fixed an issue where the Username field auto-focus on admin login page revealed password in case of fast typing
+    * Fixed an issue where Bundle Product original Price was not displayed in case of discount
+    * Fixed wrong discount calculation for bundle options
+    * Fixed an issue where wrong discount and total amounts were displayed on the order creation page when reordering an order with a bundle product in the Admin panel
+    * Fixed an issue where admin tax notifications did not appear/disappear unless cache was flushed or disabled
+    * Fixed an issue where catalog price and shopping cart price did not match when display currency was different from the base currency
+    * Fixed an issue where Tax classes did not allow 'None' as a valid 'product tax class'
+    * Fixed an issue where token-based authentication did not work if compilation was enabled
+    * Fixed the sample code in index.php illustrating multi websites set up
+    * Fixed commands in Setup CLI to match the ones displayed in help
+    * Fixed an issue where searching by a part of a product name in Advanced Search did not give correct results
+    * Fixed an issue where 404 page is displayed after Search Term mass deletion
+    * Fixed an issue where Popular Search Terms were not displayed on the storefront
+    * Fixed an issue where it was impossible to add Gift Message during one page checkout
+    * Fixed an issue where the optional Postal code setting did not work correctly
+    * Fixed an issue where product price details were missing in summary block in the shopping cart when the Back to shopping cart link was clicked on multishipping page
+    * Fixed an issue where the 404 error page was displayed instead of the Index Management page after saving mass update
+    * Fixed an issue where the "Out of Stock" message was not displayed for a bundle product when there was not enough of one of the associated products in stock
+    * Fixed an issue with the Newsletters Report page in the Admin panel
+    * Fixed an issue where Catalog price rule was not applying correct rates on specific products
+    * Fixed an issue where a fatal error was thrown after clicking a link to a downloadable product
+    * Fixed an issue a warning page for Grouped product with enabled MAP
+    * Fixed an issue where a configurable product was not displayed in catalog product grid after updating with "Add configurable attributes to the new set based on current"
+    * Fixed the inconsistent behavior in the integration tests for the Indexer functionality
+    * Fixed an issue where the What's this? information tip link was not presented on product page with configured Minimum Advertised Price (MAP)
+* Processed GitHub requests:
+    * [#742](https://github.com/magento/magento2/issues/742) -- Admin notifications count overflow
+    * [#720](https://github.com/magento/magento2/issues/720) -- https filedriver is not working
+    * [#686](https://github.com/magento/magento2/issues/686) -- Product save validation errors in the admin don't hide the overlay
+    * [#702](https://github.com/magento/magento2/issues/702) -- Base table or view not found
+    * [#652](https://github.com/magento/magento2/issues/652) -- Multishipping checkout not to change the Billing address js issue
+    * [#648](https://github.com/magento/magento2/issues/648) -- An equal (=) sign in the hash of the product page to to break the tabs functionality
+* Service Contracts:
+    * Refactored usage of new API of the Customer module
+    * Implemented Service Contracts for the Sales module
+    * Refactored Service Contracts for the Catalog module
+    * Refactored Service Contracts for the Grouped module
+* UI Improvements:
+    * Implemented the Form component in Magento UI Library
+    * Removed extra JS loaders for category saving
+    * Improved the behavior of Categories management in the Admin panel
+    * Implemented the keyboard navigation through HTML elements
+    * Improved the HTML structure and UI of the Catalog Category Link, Catalog Product Link and CMS Static Block widgets
+    * Added UI Library documentation
+    * Fixed Blank & Luma themes UI bugs
+    * Fixed footer alignment
+    * Published the Luma theme and removed the Plushe theme
+* Framework Improvements:
+    * Added the ability to configure the list of loaded modules before installation
+    * Merged SQL and Data Upgrades
+    * Moved \Magento\TestFramework\Utility\Files to Magento Framework
+* Setup tool improvements:
+    * Removed duplication with Framework
+    * Deployment configuration is refactored from XML format in local.xml to associated array in config.php
+    * Improved performance
+* Search improvements:
+    * Integrated the Full Text Search library into the Layered Navigation functionality
+
 0.1.0-alpha105
 =============
 * Various improvements:
@@ -1891,7 +1978,7 @@
   * LESS styles library added in pub/lib/css/
   * A new Blank theme set as default
 * GitHub requests:
-  * [#491](https://github.com/magento/magento2/pull/491) -- Fixed bug, incorrect auto-generation Category URL for some groups of symbols (idish, cirrilic, é, ä, and other).
+  * [#491](https://github.com/magento/magento2/pull/491) -- Fixed bug, incorrect auto-generation Category URL for some groups of symbols (idish, cirrilic, e, a, and other).
   * [#480](https://github.com/magento/magento2/pull/480) -- Fixing a bug for loading config from local.xml
   * [#472](https://github.com/magento/magento2/issues/472) -- Params passed in pub/index.php being overwritten
   * [#461](https://github.com/magento/magento2/pull/461) -- Use translates for Quote\Address\Total\Shipping

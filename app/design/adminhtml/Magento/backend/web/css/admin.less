@@ -587,8 +587,6 @@ textarea,
     height: 30px;
     .style9();
     border: 1px solid #ada89e;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
     box-sizing: border-box;
     border-radius: 2px;
 }
@@ -608,9 +606,6 @@ select {
     margin: 0 0 8px;
     border: 1px solid #ada89e;
     border-radius: 2px;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -ms-box-sizing: border-box;
     box-sizing: border-box;
 }
 
@@ -713,8 +708,6 @@ fieldset.field [class^='fields-group-'] .field .control {
 }
 
 .form-inline .field-service {
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
     box-sizing: border-box;
     float: left;
     width: 20%;
@@ -840,8 +833,6 @@ input.mage-error ~ .addafter {
     position: static;
     float: left;
     width: 100%;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
     box-sizing: border-box;
     padding: 0;
     border-bottom: 1px solid #cac3b4;
@@ -921,10 +912,9 @@ input.mage-error ~ .addafter {
 .fieldset-wrapper .fieldset-wrapper.opened .fieldset-wrapper-title {
     border-bottom: 1px solid #cccbca;
     -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
+    -webkit-user-select: none; // use in 41 Chrome
+    -moz-user-select: none; // use in 36 Firefox
+    -ms-user-select: none; // use in 11 IE
     min-height: 39px;
 }
 
@@ -1741,7 +1731,7 @@ address {
     height: 100px;
     margin-top: -100px;
     position: relative;
-    .box-sizing();
+    box-sizing: border-box;
 }
 
 .page-login .footer-content {
@@ -1836,9 +1826,6 @@ address {
       font-size: 13px;
       font-weight: 500;
       line-height: 26px;
-      -moz-box-sizing: border-box;
-      -webkit-box-sizing: border-box;
-      -ms-box-sizing: border-box;
       box-sizing: border-box;
       margin: 0;
       vertical-align: middle;
@@ -1869,9 +1856,6 @@ address {
       font-size: 13px;
       font-weight: 500;
       line-height: 26px;
-      -moz-box-sizing: border-box;
-      -webkit-box-sizing: border-box;
-      -ms-box-sizing: border-box;
       box-sizing: border-box;
       vertical-align: middle;
     }
@@ -1947,8 +1931,6 @@ address {
 .page-login .form-actions {
     padding: 0;
     margin: 0;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
 
@@ -2410,9 +2392,6 @@ address {
     position: relative;
     width: 80%;
     padding: 0 20px 20px;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -ms-box-sizing: border-box;
     box-sizing: border-box;
 }
 
@@ -2552,8 +2531,6 @@ address {
     padding: 8px 18px;
     text-decoration: none;
     color: #676056;
-    -webkit-transition: background 0.3s ease-in-out;
-    -moz-transition: background 0.3s ease-in-out;
     transition: background 0.3s ease-in-out;
 }
 
@@ -2706,8 +2683,6 @@ address {
     padding: 8px 18px;
     text-decoration: none;
     color: #676056;
-    -webkit-transition: background 0.3s ease-in-out;
-    -moz-transition: background 0.3s ease-in-out;
     transition: background 0.3s ease-in-out;
 }
 
@@ -2766,10 +2741,9 @@ address {
 -------------------------------------- */
 .switcher {
     -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
+    -webkit-user-select: none; // use in 41 Chrome
+    -moz-user-select: none; // use in 36 Firefox
+    -ms-user-select: none; // use in 11 IE
     user-select: none;
     cursor: pointer;
     display: inline-block;
@@ -2958,10 +2932,6 @@ tr.dynamic-grid input.input-text {
                 overflow: hidden;
                 white-space: nowrap;
                 width: 18px;
-                -webkit-transition: color 150ms linear;
-                -moz-transition: color 150ms linear;
-                -o-transition: color 150ms linear;
-                -ms-transition: color 150ms linear;
                 transition: color 150ms linear;
             }
         }

@@ -25,6 +25,8 @@
  */
 namespace Magento\Framework\Model\Resource\Db;
 
+use Magento\Framework\App\DeploymentConfig\DbConfig;
+
 class ProfilerTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -61,13 +63,13 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
     protected function _getConnectionRead()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $localConfig = $objectManager->get('Magento\Framework\App\Arguments');
-        $connectionConfig = $localConfig->getConnection('default');
+        $deploymentConfig = $objectManager->get('Magento\Framework\App\DeploymentConfig');
+        $dbConfig = new DbConfig($deploymentConfig->getSegment(DbConfig::CONFIG_KEY));
+        $connectionConfig = $dbConfig->getConnection('default');
         $connectionConfig['profiler'] = array(
             'class' => 'Magento\Framework\Model\Resource\Db\Profiler',
             'enabled' => 'true'
         );
-        $connectionConfig['dbname'] = $connectionConfig['dbName'];
 
         return $objectManager->create('Magento\TestFramework\Db\Adapter\Mysql', array('config' => $connectionConfig));
     }

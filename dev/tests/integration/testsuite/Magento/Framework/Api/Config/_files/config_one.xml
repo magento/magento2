@@ -24,13 +24,13 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../lib/internal/Magento/Framework/Api/etc/data_object.xsd">
-    <custom_attributes for="Magento\Tax\Service\V1\Data\TaxRate">
+    <custom_attributes for="Magento\Tax\Api\Data\TaxRateInterface">
     </custom_attributes>
-    <custom_attributes for="Magento\Catalog\Service\Data\V1\Product">
-        <attribute code="stock_item" type="Magento\CatalogInventory\Service\Data\V1\StockItem" />
+    <custom_attributes for="Magento\Catalog\Api\Data\Product">
+        <attribute code="stock_item" type="Magento\CatalogInventory\Api\Data\StockItem" />
     </custom_attributes>
-    <custom_attributes for="Magento\Customer\Service\V1\Data\Customer">
-        <attribute code="custom_1" type="Magento\Customer\Service\V1\Data\CustomerCustom" />
+    <custom_attributes for="Magento\Customer\Api\Data\CustomerInterface">
+        <attribute code="custom_1" type="Magento\Customer\Api\Data\CustomerCustom" />
         <attribute code="custom_2" type="Magento\CustomerExtra\Service\V1\Data\CustomerCustom21" />
     </custom_attributes>
 </config>

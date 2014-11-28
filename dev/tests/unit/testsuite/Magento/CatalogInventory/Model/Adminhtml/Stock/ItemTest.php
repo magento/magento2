@@ -44,9 +44,28 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         );
         $objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
+        $groupManagement = $this->getMockBuilder('Magento\Customer\Api\GroupManagementInterface')
+            ->setMethods(['getAllCustomersGroup'])
+            ->getMockForAbstractClass();
+
+        $allGroup = $this->getMockBuilder('Magento\Customer\Api\Data\GroupInterface')
+            ->setMethods(['getId'])
+            ->getMockForAbstractClass();
+
+        $allGroup->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue(32000));
+
+        $groupManagement->expects($this->any())
+            ->method('getAllCustomersGroup')
+            ->will($this->returnValue($allGroup));
+
         $this->_model = $objectHelper->getObject(
             '\Magento\CatalogInventory\Model\Adminhtml\Stock\Item',
-            array('resource' => $resourceMock)
+            array(
+                'resource' => $resourceMock,
+                'groupManagement' => $groupManagement
+            )
         );
     }
 

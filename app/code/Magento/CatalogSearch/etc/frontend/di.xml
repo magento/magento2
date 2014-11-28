@@ -39,7 +39,4 @@
             <argument name="catalogLayer" xsi:type="object">Magento\Catalog\Model\Layer\Search</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Catalog\Model\Layer\Search\AvailabilityFlag">
-        <plugin name="catalogSearch" type="Magento\CatalogSearch\Model\Layer\Search\AvailabilityFlag\Plugin" sortOrder="50"/>
-    </type>
 </config>

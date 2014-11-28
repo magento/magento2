@@ -465,6 +465,20 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('getDirectoryWrite')
             ->will($this->returnValue($dirMock));
 
+        $deploymentConfigMock = $this->getMock('\Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $deploymentConfigMock->expects($this->at(0))
+            ->method('get')
+            ->with(Config::PARAM_SESSION_SAVE_METHOD, 'files')
+            ->will($this->returnValue('files'));
+        $deploymentConfigMock->expects($this->at(1))
+            ->method('get')
+            ->with(Config::PARAM_SESSION_SAVE_PATH)
+            ->will($this->returnValue(null));
+        $deploymentConfigMock->expects($this->at(2))
+            ->method('get')
+            ->with(Config::PARAM_SESSION_CACHE_LIMITER)
+            ->will($this->returnValue('files'));
+
         $this->config = $this->helper->getObject(
             'Magento\Framework\Session\Config',
             [
@@ -475,6 +489,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 'lifetimePath' => 'test_web/test_cookie/test_cookie_lifetime',
                 'request' => $this->requestMock,
                 'filesystem' => $filesystemMock,
+                'deploymentConfig' => $deploymentConfigMock,
             ]
 
         );

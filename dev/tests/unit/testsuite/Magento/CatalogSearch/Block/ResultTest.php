@@ -55,6 +55,14 @@ class ResultTest extends \PHPUnit_Framework_TestCase
     {
         $this->contextMock = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
         $this->layerMock = $this->getMock('Magento\Catalog\Model\Layer\Search', [], [], '', false);
+        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Layer\Resolver $layerResolver */
+        $layerResolver = $this->getMockBuilder('\Magento\Catalog\Model\Layer\Resolver')
+            ->disableOriginalConstructor()
+            ->setMethods(['get', 'create'])
+            ->getMock();
+        $layerResolver->expects($this->any())
+            ->method($this->anything())
+            ->will($this->returnValue($this->layerMock));
         $this->dataMock = $this->getMock('Magento\CatalogSearch\Helper\Data', [], [], '', false);
         $this->queryMock = $this->getMockBuilder('Magento\Search\Model\Query')
             ->disableOriginalConstructor()
@@ -63,7 +71,7 @@ class ResultTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['get'])
             ->getMock();
-        $this->model = new Result($this->contextMock, $this->layerMock, $this->dataMock, $this->queryFactoryMock);
+        $this->model = new Result($this->contextMock, $layerResolver, $this->dataMock, $this->queryFactoryMock);
     }
 
     public function testGetSearchQueryText()

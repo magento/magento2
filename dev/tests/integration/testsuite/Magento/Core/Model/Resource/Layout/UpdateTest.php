@@ -78,6 +78,7 @@ class UpdateTest extends \PHPUnit_Framework_TestCase
         $layoutUpdate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Core\Model\Layout\Update'
         );
+        $layoutUpdate->setHasDataChanges(true);
         $this->_resourceModel->save($layoutUpdate);
 
         $this->assertNotEmpty($appCache->load('APPLICATION_FIXTURE'), 'Non-layout cache must be kept');

@@ -29,7 +29,7 @@ use Magento\Customer\Controller\RegistryConstants;
 /**
  * Renderer for customer group ID
  *
- * @method \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata getDisableAutoGroupChangeAttribute()
+ * @method \Magento\Customer\Api\Data\AttributeMetadataInterface getDisableAutoGroupChangeAttribute()
  * @method mixed getDisableAutoGroupChangeAttributeValue()
  */
 class Group extends Element

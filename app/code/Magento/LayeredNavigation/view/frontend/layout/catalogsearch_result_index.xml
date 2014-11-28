@@ -27,7 +27,7 @@
     <body>
         <referenceContainer name="sidebar.main">
             <block class="Magento\LayeredNavigation\Block\Navigation\Search" name="catalogsearch.leftnav" before="-" template="layer/view.phtml">
-                <block class="Magento\LayeredNavigation\Block\Navigation\State\Search" name="catalogsearch.navigation.state" as="state"/>
+                <block class="Magento\LayeredNavigation\Block\Navigation\State" name="catalogsearch.navigation.state" as="state" />
                 <block class="Magento\LayeredNavigation\Block\Navigation\FilterRenderer" name="catalogsearch.navigation.renderer" as="renderer" template="layer/filter.phtml"/>
             </block>
         </referenceContainer>

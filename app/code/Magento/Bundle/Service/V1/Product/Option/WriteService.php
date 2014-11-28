@@ -102,9 +102,22 @@ class WriteService implements WriteServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function add($productSku, Option $option)
+    public function add($productSku, \Magento\Bundle\Service\V1\Data\Product\Option $option)
     {
         $product = $this->getProduct($productSku);
+        return $this->addOptionToProduct($product, $option);
+    }
+
+    /**
+     * Add option to provided product
+     *
+     * @param \Magento\Catalog\Api\Data\ProductInterface $product
+     * @param Option $option
+     * @return mixed
+     * @throws CouldNotSaveException
+     */
+    public function addOptionToProduct(\Magento\Catalog\Api\Data\ProductInterface $product, Option $option)
+    {
         $optionModel = $this->optionConverter->createModelFromData($option, $product);
         $optionModel->setStoreId($this->storeManager->getStore()->getId());
 
@@ -117,7 +130,7 @@ class WriteService implements WriteServiceInterface
         $optionId = $optionModel->getId();
         if (is_array($option->getProductLinks())) {
             foreach ($option->getProductLinks() as $link) {
-                $this->linkWriteService->addChild($productSku, $optionId, $link);
+                $this->linkWriteService->addChildForProduct($product, $optionId, $link);
             }
         }
 
@@ -168,7 +181,7 @@ class WriteService implements WriteServiceInterface
          */
         $linksToAdd = array_udiff($newProductLinks, $existingProductLinks, array($this, 'compareLinks'));
         foreach ($linksToAdd as $link) {
-            $this->linkWriteService->addChild($productSku, $option->getId(), $link);
+            $this->linkWriteService->addChild($product, $option->getId(), $link);
         }
 
         try {

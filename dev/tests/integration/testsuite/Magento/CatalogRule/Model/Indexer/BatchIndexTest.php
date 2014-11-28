@@ -1,0 +1,124 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *   
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+
+namespace Magento\CatalogRule\Model\Indexer;
+
+use Magento\TestFramework\Helper\Bootstrap;
+
+/**
+ * @magentoAppIsolation enabled
+ * @magentoAppArea adminhtml
+ * @magentoDataFixture Magento/CatalogRule/_files/two_rules.php
+ * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+ */
+class BatchIndexTest extends \PHPUnit_Framework_TestCase
+{
+    /**
+     * @var \Magento\Catalog\Model\Product
+     */
+    protected $product;
+
+    /**
+     * @var \Magento\CatalogRule\Model\Resource\Rule
+     */
+    protected $resourceRule;
+
+    protected function setUp()
+    {
+        $this->resourceRule = Bootstrap::getObjectManager()->get('Magento\CatalogRule\Model\Resource\Rule');
+        $this->product = Bootstrap::getObjectManager()->get('Magento\Catalog\Model\Product');
+    }
+
+    /**
+     * @magentoDbIsolation enabled
+     * @dataProvider dataProvider
+     */
+    public function testPriceForSmallBatch($batchCount, $price, $expectedPrice)
+    {
+        $productIds = $this->prepareProducts($price);
+
+        /**
+         * @var IndexBuilder $indexerBuilder
+         */
+        $indexerBuilder = Bootstrap::getObjectManager()->create(
+            'Magento\CatalogRule\Model\Indexer\IndexBuilder',
+            ['batchCount' => $batchCount]
+        );
+
+        $indexerBuilder->reindexFull();
+
+        foreach ([0, 1] as $customerGroupId) {
+            foreach ($productIds as $productId) {
+                $this->assertEquals(
+                    $expectedPrice,
+                    $this->resourceRule->getRulePrice(true, 1, $customerGroupId, $productId)
+                );
+            }
+        }
+    }
+
+    /**
+     * @return array
+     */
+    protected function prepareProducts($price)
+    {
+        $this->product->load(1);
+        $productSecond = clone $this->product;
+        $productSecond->setId(null)
+            ->setUrlKey(null)
+            ->setSku(uniqid($this->product->getSku() . '-'))
+            ->setName(uniqid($this->product->getName() . '-'))
+            ->setWebsiteIds([1]);
+        $productSecond->save();
+        $productSecond->setPrice($price)->save();
+        $productThird = clone $this->product;
+        $productThird->setId(null)
+            ->setUrlKey(null)
+            ->setSku(uniqid($this->product->getSku() . '-'))
+            ->setName(uniqid($this->product->getName() . '-'))
+            ->setWebsiteIds([1])
+            ->save();
+        $productThird->setPrice($price)->save();
+        return [
+            $productSecond->getId(),
+            $productThird->getId(),
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProvider()
+    {
+        return [
+            [1, 20, 17],
+            [3, 40, 36],
+            [3, 60, 55],
+            [5, 100, 93],
+            [8, 200, 188],
+            [10, 500, 473],
+            [11, 760, 720],
+        ];
+    }
+}

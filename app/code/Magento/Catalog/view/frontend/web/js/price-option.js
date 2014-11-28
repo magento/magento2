@@ -245,4 +245,6 @@ define([
             }
         }
     });
+    
+    return $.mage.priceOption;
 });

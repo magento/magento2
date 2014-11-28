@@ -26,6 +26,7 @@ define([
     "jquery/template",
     "mage/adminhtml/form"
 ], function($){
+    "use strict";
 
     $.widget('mage.fptAttribute', {
         _create: function () {
@@ -109,5 +110,6 @@ define([
             }
         }
     });
-
+    
+    return $.mage.fptAttribute;
 });

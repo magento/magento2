@@ -23,13 +23,13 @@
  */
 namespace Magento\Paypal\Block\Adminhtml\Customer\Edit\Tab;
 
+use Magento\Ui\Component\Layout\Tabs\TabInterface;
 use Magento\Customer\Controller\RegistryConstants;
 
 /**
  * Adminhtml customer billing agreement tab
  */
-class Agreement extends \Magento\Paypal\Block\Adminhtml\Billing\Agreement\Grid implements
-    \Magento\Backend\Block\Widget\Tab\TabInterface
+class Agreement extends \Magento\Paypal\Block\Adminhtml\Billing\Agreement\Grid implements TabInterface
 {
     /**
      * Columns, that should be removed from grid
@@ -118,6 +118,36 @@ class Agreement extends \Magento\Paypal\Block\Adminhtml\Billing\Agreement\Grid i
     public function getGridUrl()
     {
         return $this->getUrl('paypal/billing_agreement/customerGrid', array('_current' => true));
+    }
+
+    /**
+     * Tab class getter
+     *
+     * @return string
+     */
+    public function getTabClass()
+    {
+        return '';
+    }
+
+    /**
+     * Return URL link to Tab content
+     *
+     * @return string
+     */
+    public function getTabUrl()
+    {
+        return '';
+    }
+
+    /**
+     * Tab should be loaded trough Ajax call
+     *
+     * @return bool
+     */
+    public function isAjaxLoaded()
+    {
+        return false;
     }
 
     /**

@@ -64,14 +64,14 @@ class ElementFactory
     /**
      * Create Form Element
      *
-     * @param \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata $attribute
+     * @param \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute
      * @param string|int|bool $value
      * @param string $entityTypeCode
      * @param bool $isAjax
      * @return \Magento\Customer\Model\Metadata\Form\AbstractData
      */
     public function create(
-        \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata $attribute,
+        \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute,
         $value,
         $entityTypeCode,
         $isAjax = false

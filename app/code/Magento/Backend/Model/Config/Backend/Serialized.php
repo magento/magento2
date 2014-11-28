@@ -39,7 +39,7 @@ class Serialized extends \Magento\Framework\App\Config\Value
     /**
      * @return void
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
         if (is_array($this->getValue())) {
             $this->setValue(serialize($this->getValue()));

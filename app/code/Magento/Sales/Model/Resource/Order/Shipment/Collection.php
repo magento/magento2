@@ -23,12 +23,15 @@
  */
 namespace Magento\Sales\Model\Resource\Order\Shipment;
 
+use Magento\Sales\Api\Data\ShipmentSearchResultInterface;
+use Magento\Sales\Model\Resource\Order\Collection\AbstractCollection;
+
 /**
  * Sales order shipment collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\Sales\Model\Resource\Order\Collection\AbstractCollection
+class Collection extends AbstractCollection implements ShipmentSearchResultInterface
 {
     /**
      * Event prefix

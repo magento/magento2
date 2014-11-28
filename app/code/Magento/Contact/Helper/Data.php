@@ -24,7 +24,7 @@
 
 namespace Magento\Contact\Helper;
 
-use Magento\Customer\Service\V1\Data\Customer;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Helper\View as CustomerViewHelper;
 
 /**
@@ -92,7 +92,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             return '';
         }
         /**
-         * @var Customer $customer
+         * @var \Magento\Customer\Api\Data\CustomerInterface $customer
          */
         $customer = $this->_customerSession->getCustomerDataObject();
         return trim($this->_customerViewHelper->getCustomerName($customer));
@@ -109,7 +109,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             return '';
         }
         /**
-         * @var Customer $customer
+         * @var CustomerInterface $customer
          */
         $customer = $this->_customerSession->getCustomerDataObject();
         return $customer->getEmail();

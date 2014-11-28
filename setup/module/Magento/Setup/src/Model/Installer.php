@@ -24,14 +24,14 @@
 
 namespace Magento\Setup\Model;
 
-use Magento\Setup\Module\Setup\ConfigFactory as DeploymentConfigFactory;
-use Magento\Setup\Module\Setup\Config;
+use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Setup\Module\SetupFactory;
-use Magento\Setup\Module\ModuleListInterface;
+use Magento\Framework\Module\ModuleListInterface;
+use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
+use Magento\Framework\Module\ModuleList\DeploymentConfig;
 use Magento\Store\Model\Store;
 use Magento\Framework\Math\Random;
-use Magento\Setup\Module\Setup\ConnectionFactory;
-use Zend\Db\Sql\Sql;
+use Magento\Setup\Module\ConnectionFactory;
 use Magento\Framework\Shell;
 use Magento\Framework\Shell\CommandRenderer;
 use Symfony\Component\Process\PhpExecutableFinder;
@@ -41,6 +41,13 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\FilesystemException;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
+use Magento\Framework\App\DeploymentConfig\BackendConfig;
+use Magento\Framework\App\DeploymentConfig\DbConfig;
+use Magento\Framework\App\DeploymentConfig\EncryptConfig;
+use Magento\Framework\App\DeploymentConfig\InstallConfig;
+use Magento\Framework\App\DeploymentConfig\SessionConfig;
+use Magento\Framework\App\DeploymentConfig\ResourceConfig;
+use Magento\Setup\Module\Setup\ConfigMapper;
 
 /**
  * Class Installer contains the logic to install Magento application.
@@ -52,6 +59,13 @@ class Installer
      * Parameter indicating command whether to cleanup database in the install routine
      */
     const CLEANUP_DB = 'cleanup_database';
+
+    /**#@+
+     * Parameters for enabling/disabling modules
+     */
+    const ENABLE_MODULES = 'enable_modules';
+    const DISABLE_MODULES = 'disable_modules';
+    /**#@- */
 
     /**
      * Parameter to specify an order_increment_prefix
@@ -65,6 +79,8 @@ class Installer
     const PROGRESS_LOG_REGEX = '/\[Progress: (\d+) \/ (\d+)\]/s';
     /**#@- */
 
+    const INFO_MESSAGE = 'message';
+
     /**
      * File permissions checker
      *
@@ -73,11 +89,11 @@ class Installer
     private $filePermissions;
 
     /**
-     * Deployment configuration factory
+     * Deployment configuration repository
      *
-     * @var DeploymentConfigFactory
+     * @var Writer
      */
-    private $deploymentConfigFactory;
+    private $deploymentConfigWriter;
 
     /**
      * Resource setup factory
@@ -87,11 +103,18 @@ class Installer
     private $setupFactory;
 
     /**
-     * Module Lists
+     * Module list
      *
      * @var ModuleListInterface
      */
     private $moduleList;
+
+    /**
+     * Module list loader
+     *
+     * @var ModuleLoader
+     */
+    private $moduleLoader;
 
     /**
      * List of directories of Magento application
@@ -164,11 +187,11 @@ class Installer
     private $filesystem;
 
     /**
-     * Informational messages that may appear during installation routine
+     * Installation information
      *
      * @var array
      */
-    private $messages = array();
+    private $installInfo = array();
 
     /**
      * A materialized string of initialization parameters to pass on any script that's run externally by this model
@@ -181,9 +204,10 @@ class Installer
      * Constructor
      *
      * @param FilePermissions $filePermissions
-     * @param DeploymentConfigFactory $deploymentConfigFactory
+     * @param Writer $deploymentConfigWriter
      * @param SetupFactory $setupFactory
      * @param ModuleListInterface $moduleList
+     * @param ModuleLoader $moduleLoader
      * @param DirectoryList $directoryList
      * @param AdminAccountFactory $adminAccountFactory
      * @param LoggerInterface $log
@@ -195,9 +219,10 @@ class Installer
      */
     public function __construct(
         FilePermissions $filePermissions,
-        DeploymentConfigFactory $deploymentConfigFactory,
+        Writer $deploymentConfigWriter,
         SetupFactory $setupFactory,
         ModuleListInterface $moduleList,
+        ModuleLoader $moduleLoader,
         DirectoryList $directoryList,
         AdminAccountFactory $adminAccountFactory,
         LoggerInterface $log,
@@ -208,9 +233,10 @@ class Installer
         ServiceLocatorInterface $serviceManager
     ) {
         $this->filePermissions = $filePermissions;
-        $this->deploymentConfigFactory = $deploymentConfigFactory;
+        $this->deploymentConfigWriter = $deploymentConfigWriter;
         $this->setupFactory = $setupFactory;
         $this->moduleList = $moduleList;
+        $this->moduleLoader = $moduleLoader;
         $this->directoryList = $directoryList;
         $this->adminAccountFactory = $adminAccountFactory;
         $this->log = $log;
@@ -221,6 +247,7 @@ class Installer
         $this->maintenanceMode = $maintenanceMode;
         $this->filesystem = $filesystem;
         $this->execParams = urldecode(http_build_query($serviceManager->get(InitParamListener::BOOTSTRAP_PARAM)));
+        $this->installInfo[self::INFO_MESSAGE] = array();
     }
 
     /**
@@ -253,7 +280,8 @@ class Installer
         $script[] = ['Disabling Maintenance Mode:', 'setMaintenanceMode', [0]];
         $script[] = ['Post installation file permissions check...', 'checkApplicationFilePermissions', []];
 
-        $total = count($script) + count($this->moduleList->getModules());
+        $estimatedModules = $this->createModulesConfig($request);
+        $total = count($script) + count(array_filter($estimatedModules->getData()));
         $this->progress = new Installer\Progress($total, 0);
 
         $this->log->log('Starting Magento installation:');
@@ -269,6 +297,139 @@ class Installer
         if ($this->progress->getCurrent() != $this->progress->getTotal()) {
             throw new \LogicException('Installation progress did not finish properly.');
         }
+    }
+
+    /**
+     * Creates modules deployment configuration segment
+     *
+     * @param \ArrayObject|array $request
+     * @return DeploymentConfig
+     * @throws \LogicException
+     */
+    private function createModulesConfig($request)
+    {
+        $all = array_keys($this->moduleLoader->load());
+        $enable = $this->readListOfModules($all, $request, self::ENABLE_MODULES) ?: $all;
+        $disable = $this->readListOfModules($all, $request, self::DISABLE_MODULES);
+        $toEnable = array_diff($enable, $disable);
+        if (empty($toEnable)) {
+            throw new \LogicException('Unable to determine list of enabled modules.');
+        }
+        $result = [];
+        foreach ($all as $module) {
+            $key = array_search($module, $toEnable);
+            $result[$module] = false !== $key;
+        }
+        return new DeploymentConfig($result);
+    }
+
+    /**
+     * Creates backend deployment configuration segment
+     *
+     * @param \ArrayObject|array $data
+     * @return \Magento\Framework\App\DeploymentConfig\SegmentInterface
+     */
+    private function createBackendConfig($data)
+    {
+        $backendConfigData = array(
+            ConfigMapper::$paramMap[ConfigMapper::KEY_BACKEND_FRONTNAME] => $data[ConfigMapper::KEY_BACKEND_FRONTNAME]
+        );
+        return new BackendConfig($backendConfigData);
+    }
+
+    /**
+     * Creates encrypt deployment configuration segment
+     *
+     * @param \ArrayObject|array $data
+     * @return \Magento\Framework\App\DeploymentConfig\SegmentInterface
+     */
+    private function createEncryptConfig($data)
+    {
+        $cryptConfigData =
+            array(ConfigMapper::$paramMap[ConfigMapper::KEY_ENCRYPTION_KEY] => $data[ConfigMapper::KEY_ENCRYPTION_KEY]);
+        return new EncryptConfig($cryptConfigData);
+    }
+
+    /**
+     * Creates db deployment configuration segment
+     *
+     * @param \ArrayObject|array $data
+     * @return \Magento\Framework\App\DeploymentConfig\SegmentInterface
+     */
+    private function createDbConfig($data)
+    {
+        $defaultConnection = [
+            ConfigMapper::$paramMap[ConfigMapper::KEY_DB_HOST] => $data[ConfigMapper::KEY_DB_HOST],
+            ConfigMapper::$paramMap[ConfigMapper::KEY_DB_INIT_STATEMENTS] =>
+                isset($data[ConfigMapper::KEY_DB_INIT_STATEMENTS]) ? $data[ConfigMapper::KEY_DB_INIT_STATEMENTS] : null,
+            ConfigMapper::$paramMap[ConfigMapper::KEY_DB_MODEL] => isset($data[ConfigMapper::KEY_DB_MODEL]) ?
+                $data[ConfigMapper::KEY_DB_MODEL] : null,
+            ConfigMapper::$paramMap[ConfigMapper::KEY_DB_NAME] => $data[ConfigMapper::KEY_DB_NAME],
+            ConfigMapper::$paramMap[ConfigMapper::KEY_DB_PASS] => isset($data[ConfigMapper::KEY_DB_PASS]) ?
+                $data[ConfigMapper::KEY_DB_PASS] : null,
+            ConfigMapper::$paramMap[ConfigMapper::KEY_DB_USER] => $data[ConfigMapper::KEY_DB_USER],
+        ];
+
+        $dbConfigData = array(
+            ConfigMapper::$paramMap[ConfigMapper::KEY_DB_PREFIX] => isset($data[ConfigMapper::KEY_DB_PREFIX]) ?
+                    $data[ConfigMapper::KEY_DB_PREFIX] : null,
+            'connection' => [
+                'default' => $defaultConnection,
+            ]
+        );
+        return new DbConfig($dbConfigData);
+    }
+
+    /**
+     * Creates session deployment configuration segment
+     *
+     * @param \ArrayObject|array $data
+     * @return \Magento\Framework\App\DeploymentConfig\SegmentInterface
+     */
+    private function createSessionConfig($data)
+    {
+        $sessionConfigData = array(ConfigMapper::$paramMap[ConfigMapper::KEY_SESSION_SAVE] =>
+            isset($data[ConfigMapper::KEY_SESSION_SAVE]) ? $data[ConfigMapper::KEY_SESSION_SAVE] : null);
+        return new SessionConfig($sessionConfigData);
+    }
+
+    /**
+     * Creates install deployment configuration segment
+     *
+     * @param \ArrayObject|array $data
+     * @return \Magento\Framework\App\DeploymentConfig\SegmentInterface
+     */
+    private function createInstallConfig($data)
+    {
+        $installConfigData = array(ConfigMapper::$paramMap[ConfigMapper::KEY_DATE] => $data[ConfigMapper::KEY_DATE]);
+        return new InstallConfig($installConfigData);
+    }
+
+    /**
+     * Determines list of modules from request based on list of all modules
+     *
+     * @param string[] $all
+     * @param array $request
+     * @param string $key
+     * @return string[]
+     * @throws \LogicException
+     */
+    private function readListOfModules($all, $request, $key)
+    {
+        $result = [];
+        if (!empty($request[$key])) {
+            if ($request[$key] == 'all') {
+                $result = $all;
+            } else {
+                $result = explode(',', $request[$key]);
+                foreach ($result as $module) {
+                    if (!in_array($module, $all)) {
+                        throw new \LogicException("Unknown module in the requested list: '{$module}'");
+                    }
+                }
+            }
+        }
+        return $result;
     }
 
     /**
@@ -319,7 +480,7 @@ class Installer
                 $errorMsg .= '\'' . $result . '\' ';
             }
             $this->log->log($errorMsg);
-            $this->messages[] = $errorMsg;
+            $this->installInfo[self::INFO_MESSAGE][] = $errorMsg;
         }
     }
 
@@ -327,17 +488,26 @@ class Installer
      * Installs deployment configuration
      *
      * @param \ArrayObject|array $data
-     * @return Config
+     * @return void
      */
     public function installDeploymentConfig($data)
     {
-        $data[Config::KEY_DATE] = date('r');
-        if (empty($data[Config::KEY_ENCRYPTION_KEY])) {
-            $data[Config::KEY_ENCRYPTION_KEY] = md5($this->random->getRandomString(10));
+        $data[InstallConfig::KEY_DATE] = date('r');
+        if (empty($data[EncryptConfig::KEY_ENCRYPTION_KEY])) {
+            $data[EncryptConfig::KEY_ENCRYPTION_KEY] = md5($this->random->getRandomString(10));
         }
-        $config = $this->deploymentConfigFactory->create((array)$data);
-        $config->saveToFile();
-        return $config;
+        $this->installInfo[EncryptConfig::KEY_ENCRYPTION_KEY] = $data[EncryptConfig::KEY_ENCRYPTION_KEY];
+
+        $configs = [
+            $this->createBackendConfig($data),
+            $this->createDbConfig($data),
+            $this->createEncryptConfig($data),
+            $this->createInstallConfig($data),
+            $this->createSessionConfig($data),
+            new ResourceConfig(),
+            $this->createModulesConfig($data),
+        ];
+        $this->deploymentConfigWriter->create($configs);
     }
 
     /**
@@ -347,7 +517,7 @@ class Installer
      */
     public function installSchema()
     {
-        $moduleNames = array_keys($this->moduleList->getModules());
+        $moduleNames = $this->moduleList->getNames();
 
         $this->log->log('Schema creation/updates:');
         foreach ($moduleNames as $moduleName) {
@@ -385,9 +555,14 @@ class Installer
      */
     public function installUserConfig($data)
     {
-        $setup = $this->setupFactory->createSetup($this->log);
-        $userConfig = new UserConfigurationData($setup);
-        $userConfig->install($data);
+        $userConfig = new UserConfigurationDataMapper();
+        $configData = $userConfig->getConfigData($data);
+        if (count($configData) === 0) {
+            return;
+        }
+        $data = urldecode(http_build_query($configData));
+        $params = [$this->directoryList->getRoot() . '/dev/shell/user_config_data.php', $data, $this->execParams];
+        $this->exec('-f %s -- --data=%s --bootstrap=%s', $params);
     }
 
     /**
@@ -458,7 +633,7 @@ class Installer
         $this->log->log('File system cleanup:');
         $this->deleteDirContents(DirectoryList::VAR_DIR);
         $this->deleteDirContents(DirectoryList::STATIC_VIEW);
-        $this->deleteLocalXml();
+        $this->deleteDeploymentConfig();
 
         $this->log->logSuccess('Magento uninstallation complete.');
     }
@@ -522,14 +697,15 @@ class Installer
      */
     public function checkDatabaseConnection($dbName, $dbHost, $dbUser, $dbPass = '')
     {
-        $adapter = $this->connectionFactory->create([
-            Config::KEY_DB_NAME => $dbName,
-            Config::KEY_DB_HOST => $dbHost,
-            Config::KEY_DB_USER => $dbUser,
-            Config::KEY_DB_PASS => $dbPass
+        $connection = $this->connectionFactory->create([
+            'dbname' => $dbName,
+            'host' => $dbHost,
+            'username' => $dbUser,
+            'password' => $dbPass,
+            'active' => true,
         ]);
-        $adapter->getConnection();
-        if (!$adapter->isConnected()) {
+
+        if (!$connection) {
             throw new \Exception('Database connection failure.');
         }
         return true;
@@ -540,9 +716,9 @@ class Installer
      *
      * @return array
      */
-    public function getMessages()
+    public function getInstallInfo()
     {
-        return $this->messages;
+        return $this->installInfo;
     }
 
 
@@ -553,25 +729,30 @@ class Installer
      */
     private function cleanupDb()
     {
-        // stops cleanup if app/etc/local.xml does not exist
-        if (!$this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->isFile('local.xml')) {
-            $this->log->log('No database connection defined - skipping database cleanup');
-            return;
+        // stops cleanup if app/etc/config.php does not exist
+        if ($this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->isFile('config.php')) {
+            $reader = new \Magento\Framework\App\DeploymentConfig\Reader($this->directoryList);
+            $deploymentConfig = new \Magento\Framework\App\DeploymentConfig($reader, []);
+            $dbConfig = new DbConfig($deploymentConfig->getSegment(DbConfig::CONFIG_KEY));
+            $config = $dbConfig->getConnection(\Magento\Framework\App\Resource\Config::DEFAULT_SETUP_CONNECTION);
+            if ($config) {
+                try {
+                    $connection = $this->connectionFactory->create($config);
+                    if (!$connection) {
+                        $this->log->log("Can't create connection to database - skipping database cleanup");
+                    }
+                } catch (\Exception $e) {
+                    $this->log->log($e->getMessage() . ' - skipping database cleanup');
+                    return;
+                }
+                $dbName = $connection->quoteIdentifier($config['dbname']);
+                $this->log->log("Recreating database {$dbName}");
+                $connection->query("DROP DATABASE IF EXISTS {$dbName}");
+                $connection->query("CREATE DATABASE IF NOT EXISTS {$dbName}");
+                return;
+            }
         }
-        $config = $this->deploymentConfigFactory->create();
-        $config->loadFromFile();
-        $configData = $config->getConfigData();
-        $adapter = $this->connectionFactory->create($configData);
-        try {
-            $adapter->getConnection();
-        } catch (\Exception $e) {
-            $this->log->log($e->getMessage() . ' - skipping database cleanup');
-            return;
-        }
-        $dbName = $adapter->quoteIdentifier($configData[Config::KEY_DB_NAME]);
-        $this->log->log("Recreating database {$dbName}");
-        $adapter->query("DROP DATABASE IF EXISTS {$dbName}");
-        $adapter->query("CREATE DATABASE IF NOT EXISTS {$dbName}");
+        $this->log->log('No database connection defined - skipping database cleanup');
     }
 
     /**
@@ -606,17 +787,18 @@ class Installer
      *
      * @return void
      */
-    private function deleteLocalXml()
+    private function deleteDeploymentConfig()
     {
         $configDir = $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG);
-        $localXml = "{$configDir->getAbsolutePath()}local.xml";
-        if (!$configDir->isFile('local.xml')) {
-            $this->log->log("The file '{$localXml}' doesn't exist - skipping cleanup");
+        $file = 'config.php';
+        $absolutePath = $configDir->getAbsolutePath($file);
+        if (!$configDir->isFile($file)) {
+            $this->log->log("The file '{$absolutePath}' doesn't exist - skipping cleanup");
             return;
         }
         try {
-            $this->log->log($localXml);
-            $configDir->delete('local.xml');
+            $this->log->log($absolutePath);
+            $configDir->delete($file);
         } catch (FilesystemException $e) {
             $this->log->log($e->getMessage());
         }

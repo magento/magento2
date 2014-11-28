@@ -28,6 +28,8 @@ namespace Magento\Catalog\Service\V1\Product\Link\Data;
  * ProductLink Service Data Object
  *
  * @codeCoverageIgnore
+ * @deprecated
+ * @see \Magento\Catalog\Api\Data\ProductLinkInterface
  */
 class ProductLink extends \Magento\Framework\Api\AbstractExtensibleObject
 {
@@ -35,7 +37,6 @@ class ProductLink extends \Magento\Framework\Api\AbstractExtensibleObject
      * Constants for Data Object keys
      */
     const TYPE = 'type';
-    const ATTRIBUTE_SET_ID = 'attribute_set_id';
     const SKU = 'sku';
     const POSITION = 'position';
 

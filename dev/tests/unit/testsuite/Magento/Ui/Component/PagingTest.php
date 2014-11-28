@@ -1,0 +1,197 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+namespace Magento\Ui\Component;
+
+use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\View\Element\Template;
+use Magento\Ui\ContentType\ContentTypeFactory;
+use Magento\Ui\Component\Paging;
+use Magento\Framework\View\Element\UiComponent\Context;
+use Magento\Framework\View\Element\UiComponent\ConfigFactory;
+use Magento\Framework\View\Element\UiComponent\ConfigBuilderInterface;
+use Magento\Framework\View\Element\Template\Context as TemplateContext;
+
+class PagingTest extends \PHPUnit_Framework_TestCase
+{
+    /**
+     * @var Paging
+     */
+    protected $view;
+
+    /**
+     * @var ConfigBuilderInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $configurationBuilderMock;
+
+    /**
+     * @var TemplateContext|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $contextMock;
+
+    /**
+     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $renderContextMock;
+
+    /**
+     * @var ContentTypeFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $contentTypeFactoryMock;
+
+    /**
+     * @var ConfigFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $configFactoryMock;
+
+    /**
+     * @var ConfigBuilderInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $configBuilderMock;
+
+    /**
+     * @var \Magento\Ui\DataProvider\Factory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $dataProviderFactoryMock;
+
+    /**
+     * @var \Magento\Ui\DataProvider\Manager|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $dataProviderManagerMock;
+
+    /**
+     * @var Repository|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $assetRepoMock;
+
+    public function setUp()
+    {
+        $this->renderContextMock = $this->getMock(
+            'Magento\Framework\View\Element\UiComponent\Context',
+            ['getNamespace', 'getStorage', 'getRequestParam'],
+            [],
+            '',
+            false
+        );
+        $this->contextMock = $this->getMock(
+            'Magento\Framework\View\Element\Template\Context',
+            ['getAssetRepository'],
+            [],
+            '',
+            false
+        );
+        $this->contentTypeFactoryMock = $this->getMock('Magento\Ui\ContentType\ContentTypeFactory', [], [], '', false);
+        $this->configurationBuilderMock = $this->getMockForAbstractClass(
+            'Magento\Framework\View\Element\UiComponent\ConfigBuilderInterface'
+        );
+        $this->assetRepoMock = $this->getMock('Magento\Framework\View\Asset\Repository', [], [], '', false);
+        $this->contextMock->expects($this->any())->method('getAssetRepository')->willReturn($this->assetRepoMock);
+
+        $this->configFactoryMock = $this->getMock(
+            'Magento\Framework\View\Element\UiComponent\ConfigFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $this->configBuilderMock = $this->getMockForAbstractClass(
+            'Magento\Framework\View\Element\UiComponent\ConfigBuilderInterface',
+            [],
+            '',
+            false
+        );
+        $this->dataProviderFactoryMock = $this->getMock(
+            'Magento\Ui\DataProvider\Factory',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->dataProviderManagerMock = $this->getMock(
+            'Magento\Ui\DataProvider\Manager',
+            [],
+            [],
+            '',
+            false
+        );
+
+        $this->view = new \Magento\Ui\Component\Paging(
+            $this->contextMock,
+            $this->renderContextMock,
+            $this->contentTypeFactoryMock,
+            $this->configFactoryMock,
+            $this->configBuilderMock,
+            $this->dataProviderFactoryMock,
+            $this->dataProviderManagerMock
+        );
+    }
+
+    public function testPrepare()
+    {
+        $paramsSize = 20;
+        $paramsPage = 1;
+        $nameSpace = 'namespace';
+        $configurationMock = $this->getMockForAbstractClass(
+            'Magento\Framework\View\Element\UiComponent\ConfigInterface',
+            ['getData'],
+            '',
+            false
+        );
+        $this->renderContextMock->expects($this->any())->method('getNamespace')->willReturn($nameSpace);
+        $this->configFactoryMock->expects($this->once())->method('create')->willReturn($configurationMock);
+
+        $storageMock = $this->getMockForAbstractClass(
+            'Magento\Framework\View\Element\UiComponent\ConfigStorageInterface'
+        );
+        $dataCollectionMock = $this->getMockForAbstractClass(
+            'Magento\Framework\Data\Collection',
+            ['setCurPage', 'setPageSize'],
+            '',
+            false
+        );
+
+        $this->renderContextMock->expects($this->any())->method('getStorage')->willReturn($storageMock);
+        $storageMock->expects($this->once())
+            ->method('addComponentsData')
+            ->with($configurationMock)
+            ->willReturnSelf();
+        $storageMock->expects($this->once())->method('getDataCollection')->willReturn($dataCollectionMock);
+
+        $configurationMock->expects($this->at(1))->method('getData')->with('current')->willReturn($paramsPage);
+        $this->renderContextMock->expects($this->any())->method('getRequestParam')->willReturn($paramsPage);
+
+        $configurationMock->expects($this->at(2))->method('getData')->with('pageSize')->willReturn($paramsSize);
+        $this->renderContextMock->expects($this->any())->method('getRequestParam')->willReturn($paramsSize);
+
+        $dataCollectionMock->expects($this->any())
+            ->method('setCurPage')
+            ->with($paramsPage)->willReturnSelf();
+        $dataCollectionMock->expects($this->any())
+            ->method('setPageSize')
+            ->with($paramsSize)->willReturn(
+            null
+        );
+
+        $this->assertNull($this->view->prepare());
+    }
+}

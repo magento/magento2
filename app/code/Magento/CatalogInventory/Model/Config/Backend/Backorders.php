@@ -37,7 +37,7 @@ class Backorders extends AbstractValue
      *
      * @return $this
      */
-    protected function _afterSave()
+    public function afterSave()
     {
         if ($this->isValueChanged() && (
                 $this->getOldValue() == \Magento\CatalogInventory\Model\Stock::BACKORDERS_NO

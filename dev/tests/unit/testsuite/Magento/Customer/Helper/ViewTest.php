@@ -23,6 +23,8 @@
  */
 namespace Magento\Customer\Helper;
 
+use Magento\Customer\Api\CustomerMetadataInterface;
+
 class ViewTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Framework\App\Helper\Context|\PHPUnit_Framework_MockObject_MockObject */
@@ -31,7 +33,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Helper\View|\PHPUnit_Framework_MockObject_MockObject */
     protected $object;
 
-    /** @var \Magento\Customer\Service\V1\CustomerMetadataServiceInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CustomerMetadataInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $customerMetadataService;
 
     public function setUp()
@@ -39,13 +41,9 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->context = $this->getMockBuilder('Magento\Framework\App\Helper\Context')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->customerMetadataService = $this->getMockBuilder(
-            'Magento\Customer\Service\V1\CustomerMetadataServiceInterface'
-        )->disableOriginalConstructor()->getMock();
+        $this->customerMetadataService = $this->getMock('Magento\Customer\Api\CustomerMetadataInterface');
 
-        $attributeMetadata = $this->getMockBuilder('Magento\Customer\Service\V1\Data\Eav\AttributeMetadata')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $attributeMetadata = $this->getMock('Magento\Customer\Api\Data\AttributeMetadataInterface');
         $attributeMetadata->expects($this->any())->method('isVisible')->will($this->returnValue(true));
         $this->customerMetadataService->expects($this->any())
             ->method('getAttributeMetadata')
@@ -59,7 +57,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCustomerName($prefix, $firstName, $middleName, $lastName, $suffix, $result)
     {
-        $customerData = $this->getMockBuilder('Magento\Customer\Service\V1\Data\Customer')
+        $customerData = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
             ->disableOriginalConstructor()
             ->getMock();
         $customerData->expects($this->any())

@@ -51,7 +51,7 @@
         <tbody>
             <tr>
                 <td data-th="<?php echo $this->escapeHtml(__('Product Name')); ?>" class="col item">
-                    <strong class="product name"><?php echo $this->escapeHtml($_item->getName()) ?></strong>
+                    <strong class="product-item-name"><?php echo $this->escapeHtml($_item->getName()) ?></strong>
                     <?php if ($this->getCanShowProductPrice($_product)): ?>
                         <?php if ($this->getCanShowProductPrice($_item)): ?>
                             <?php echo $this->getProductPrice($_item) ?>

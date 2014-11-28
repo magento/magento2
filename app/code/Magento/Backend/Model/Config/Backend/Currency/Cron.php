@@ -62,7 +62,7 @@ class Cron extends \Magento\Framework\App\Config\Value
      * @return void
      * @throws \Exception
      */
-    protected function _afterSave()
+    public function afterSave()
     {
         $time = $this->getData('groups/import/fields/time/value');
         $frequency = $this->getData('groups/import/fields/frequency/value');

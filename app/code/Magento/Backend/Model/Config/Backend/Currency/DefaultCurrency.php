@@ -37,7 +37,7 @@ class DefaultCurrency extends AbstractCurrency
      * @return $this
      * @throws \Magento\Framework\Model\Exception
      */
-    protected function _afterSave()
+    public function afterSave()
     {
         if (!in_array($this->getValue(), $this->_getInstalledCurrencies())) {
             throw new \Magento\Framework\Model\Exception(

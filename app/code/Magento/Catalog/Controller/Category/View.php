@@ -25,6 +25,7 @@
 namespace Magento\Catalog\Controller\Category;
 
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Catalog\Model\Layer\Resolver;
 
 class View extends \Magento\Framework\App\Action\Action
 {
@@ -72,6 +73,13 @@ class View extends \Magento\Framework\App\Action\Action
     protected $resultPageFactory;
 
     /**
+     * Catalog Layer Resolver
+     *
+     * @var Resolver
+     */
+    private $layerResolver;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\App\Action\Context $context
@@ -81,6 +89,7 @@ class View extends \Magento\Framework\App\Action\Action
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator
+     * @param Resolver $layerResolver
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      */
     public function __construct(
@@ -91,8 +100,10 @@ class View extends \Magento\Framework\App\Action\Action
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator,
-        PageFactory $resultPageFactory
+        PageFactory $resultPageFactory,
+        Resolver $layerResolver
     ) {
+        parent::__construct($context);
         $this->_storeManager = $storeManager;
         $this->_categoryFactory = $categoryFactory;
         $this->_catalogDesign = $catalogDesign;
@@ -100,7 +111,7 @@ class View extends \Magento\Framework\App\Action\Action
         $this->_coreRegistry = $coreRegistry;
         $this->categoryUrlPathGenerator = $categoryUrlPathGenerator;
         $this->resultPageFactory = $resultPageFactory;
-        parent::__construct($context);
+        $this->layerResolver = $layerResolver;
     }
 
     /**
@@ -153,6 +164,7 @@ class View extends \Magento\Framework\App\Action\Action
         }
         $category = $this->_initCategory();
         if ($category) {
+            $this->layerResolver->create(Resolver::CATALOG_LAYER_CATEGORY);
             $settings = $this->_catalogDesign->getDesignSettings($category);
 
             // apply custom design

@@ -24,6 +24,10 @@
  */
 namespace Magento\Catalog\Service\V1\Product;
 
+/**
+ * @todo remove this interface
+ * @see \Magento\Catalog\Api\ProductGroupPriceManagementInterface
+ */
 interface GroupPriceServiceInterface
 {
     /**
@@ -34,6 +38,8 @@ interface GroupPriceServiceInterface
      * @return boolean
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @deprecated
+     * @see \Magento\Catalog\Api\ProductGroupPriceManagementInterface::add
      */
     public function set($productSku, \Magento\Catalog\Service\V1\Data\Product\GroupPrice $price);
 
@@ -45,6 +51,8 @@ interface GroupPriceServiceInterface
      * @return boolean
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @deprecated
+     * @see \Magento\Catalog\Api\ProductGroupPriceManagementInterface::remove
      */
     public function delete($productSku, $customerGroupId);
 
@@ -54,6 +62,8 @@ interface GroupPriceServiceInterface
      * @param string $productSku
      * @return \Magento\Catalog\Service\V1\Data\Product\GroupPrice[]
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @deprecated
+     * @see \Magento\Catalog\Api\ProductGroupPriceManagementInterface::getList
      */
     public function getList($productSku);
 }

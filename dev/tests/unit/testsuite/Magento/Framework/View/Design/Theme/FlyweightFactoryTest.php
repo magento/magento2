@@ -83,7 +83,7 @@ class FlyweightFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateByPath()
     {
-        $path = 'frontend/Magento/plushe';
+        $path = 'frontend/Magento/luma';
         $themeId = 7;
         $theme = $this->getMock('Magento\Core\Model\Theme', array(), array(), '', false);
         $theme->expects($this->exactly(3))->method('getId')->will($this->returnValue($themeId));
@@ -95,7 +95,7 @@ class FlyweightFactoryTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getThemeByFullPath'
         )->with(
-            'frontend/frontend/Magento/plushe'
+            'frontend/frontend/Magento/luma'
         )->will(
             $this->returnValue($theme)
         );

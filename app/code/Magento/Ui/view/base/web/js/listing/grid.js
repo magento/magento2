@@ -90,7 +90,7 @@ define([
                 'refresh':          this.onRefresh
             });
 
-            dump.on('update:extenders', this.updateExtenders);
+            dump.when('update:extenders', this.updateExtenders);
             meta.on('update:colspan', this.updateColspan);
 
             return this;

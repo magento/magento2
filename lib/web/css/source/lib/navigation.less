@@ -62,7 +62,7 @@
     .navigation {
         .css(background, @_nav-bg);
         .css(border, @_nav-border);
-        .box-sizing();
+        box-sizing: border-box;
         ul {
             margin: 0;
             padding: 0;
@@ -98,7 +98,7 @@
             .css(font-weight, @_submenu-font-weight);
             overflow-x: hidden;
             position: relative;
-            .transition(left .3s ease-out 0);
+            transition: left .3s ease-out 0;
             top: auto !important;
             left: auto !important;
             padding: 10px 20px;
@@ -226,7 +226,7 @@
                 padding-right: 0;
             }
             > .level-top {
-                .box-sizing();
+                box-sizing: border-box;
                 .css(background, @_nav-level0-item-bg);
                 .css(border, @_nav-level0-item-border);
                 .css(color, @_nav-level0-item-color);

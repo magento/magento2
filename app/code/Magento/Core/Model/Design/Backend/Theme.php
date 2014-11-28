@@ -59,12 +59,12 @@ class Theme extends \Magento\Framework\App\Config\Value
      *
      * @return $this
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
         if ('' != $this->getValue()) {
             $design = clone $this->_design;
             $design->setDesignTheme($this->getValue(), \Magento\Framework\App\Area::AREA_FRONTEND);
         }
-        return parent::_beforeSave();
+        return parent::beforeSave();
     }
 }

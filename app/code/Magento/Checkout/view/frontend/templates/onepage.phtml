@@ -24,29 +24,6 @@
 
 /** @var \Magento\Checkout\Block\Onepage\Payment $_paymentBlock */
 $_paymentBlock = $this->getLayout()->getBlock('checkout.onepage.payment');
-$_loadingImage = $this->getViewFileUrl('images/loader-2.gif');
-?>
-<script id="loader-template" type="text/x-handlebars-template">
-    <div class="loading-mask" data-role="loader">
-        <div class="loader">
-            <img alt="{{imgAlt}}" src="{{icon}}">
-            <p>{{loaderText}}</p>
-        </div>
-    </div>
-</script>
-
-<?php
-$config = array(
-    'loader' => array(
-        'template' => '#loader-template',
-        'icon' => $_loadingImage,
-        'texts' => array(
-           'loaderText' => __('Loading next step...'),
-           'imgAlt' => __('Loading...')
-        )
-    )
-);
-$mageConfig = json_encode($config);
 ?>
 
 <div class="opc-wrapper">
@@ -58,7 +35,7 @@ $mageConfig = json_encode($config);
                 <span class="number"><?php echo $i ?></span>
                 <h2><?php echo $_stepInfo['label'] ?></h2>
             </div>
-            <div id="checkout-step-<?php echo $_stepId ?>" class="step-content" data-role="content" data-mage-init='<?php echo $mageConfig;?>'>
+            <div id="checkout-step-<?php echo $_stepId ?>" class="step-content" data-role="content">
                 <?php echo $this->getChildHtml($_stepId) ?>
             </div>
         </li>

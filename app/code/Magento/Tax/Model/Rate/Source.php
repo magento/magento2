@@ -24,10 +24,10 @@
 
 namespace Magento\Tax\Model\Rate;
 
-use Magento\Tax\Service\V1\TaxRateServiceInterface;
+use Magento\Tax\Api\TaxRateRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Convert\Object as Converter;
-use Magento\Tax\Service\V1\Data\TaxRate;
+use Magento\Tax\Api\Data\TaxRateInterface as TaxRate;
 
 /**
  * Tax rate source model.
@@ -37,8 +37,8 @@ class Source implements \Magento\Framework\Data\OptionSourceInterface
     /** @var array */
     protected $options;
 
-    /** @var TaxRateServiceInterface */
-    protected $taxRateService;
+    /** @var TaxRateRepositoryInterface */
+    protected $taxRateRepository;
 
     /** @var SearchCriteriaBuilder */
     protected $searchCriteriaBuilder;
@@ -49,16 +49,16 @@ class Source implements \Magento\Framework\Data\OptionSourceInterface
     /**
      * Initialize dependencies.
      *
-     * @param TaxRateServiceInterface $taxRateService
+     * @param TaxRateRepositoryInterface $taxRateRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param Converter $converter
      */
     public function __construct(
-        TaxRateServiceInterface $taxRateService,
+        TaxRateRepositoryInterface $taxRateRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         Converter $converter
     ) {
-        $this->taxRateService = $taxRateService;
+        $this->taxRateRepository = $taxRateRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->converter = $converter;
     }
@@ -72,7 +72,7 @@ class Source implements \Magento\Framework\Data\OptionSourceInterface
     {
         if (!$this->options) {
             $searchCriteria = $this->searchCriteriaBuilder->create();
-            $searchResults = $this->taxRateService->searchTaxRates($searchCriteria);
+            $searchResults = $this->taxRateRepository->getList($searchCriteria);
             $this->options = $this->converter->toOptionArray(
                 $searchResults->getItems(),
                 TaxRate::KEY_ID,

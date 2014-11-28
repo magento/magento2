@@ -61,7 +61,7 @@ class CategoryUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->category = $this->getMock('Magento\Catalog\Model\Category', $categoryMethods, [], '', false);
         $this->storeManager = $this->getMock('Magento\Framework\StoreManagerInterface');
         $this->scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->categoryFactory = $this->getMock('Magento\Catalog\Model\CategoryFactory', ['create']);
+        $this->categoryFactory = $this->getMock('Magento\Catalog\Model\CategoryFactory', ['create'], [], '', false);
 
         $this->categoryUrlPathGenerator = (new ObjectManager($this))->getObject(
             'Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator',

@@ -80,9 +80,9 @@ class Update extends \Magento\Framework\Model\AbstractModel
      *
      * @return \Magento\Framework\Model\AbstractModel
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
         $this->setUpdatedAt($this->_dateTime->formatDate(time()));
-        return parent::_beforeSave();
+        return parent::beforeSave();
     }
 }

@@ -257,8 +257,8 @@ class Translate implements \Magento\Framework\TranslateInterface
      */
     protected function _loadModuleTranslation()
     {
-        foreach ($this->_moduleList->getModules() as $module) {
-            $moduleFilePath = $this->_getModuleTranslationFile($module['name'], $this->getLocale());
+        foreach ($this->_moduleList->getNames() as $module) {
+            $moduleFilePath = $this->_getModuleTranslationFile($module, $this->getLocale());
             $this->_addData($this->_getFileData($moduleFilePath));
         }
         return $this;

@@ -39,6 +39,7 @@
                 <field id="default_product_tax_class" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Default Tax Class for Product</label>
                     <source_model>Magento\Tax\Model\TaxClass\Source\Product</source_model>
+                    <backend_model>Magento\Tax\Model\Config\TaxClass</backend_model>
                 </field>
                 <field id="default_customer_tax_class" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Default Tax Class for Customer</label>

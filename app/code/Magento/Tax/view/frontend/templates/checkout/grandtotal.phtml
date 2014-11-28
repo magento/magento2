@@ -27,28 +27,28 @@
 ?>
 <?php if ($this->includeTax() && $this->getTotalExclTax()>=0):?>
 <tr class="grand totals excl">
-    <td style="<?php echo $this->getStyle() ?>" class="mark" colspan="<?php echo $this->getColspan(); ?>">
+    <th style="<?php echo $this->getStyle() ?>" class="mark" colspan="<?php echo $this->getColspan(); ?>" scope="row">
         <strong><?php echo __('Grand Total Excl. Tax')?></strong>
-    </td>
-    <td style="<?php echo $this->getStyle() ?>" class="amount">
+    </th>
+    <td style="<?php echo $this->getStyle() ?>" class="amount" data-th="<?php echo $this->escapeHtml(__('Grand Total Excl. Tax')); ?>">
         <strong><?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($this->getTotalExclTax()) ?></strong>
     </td>
 </tr>
 <?php echo $this->renderTotals('taxes', $this->getColspan()); ?>
 <tr class="grand totals incl">
-    <td style="<?php echo $this->getStyle() ?>" class="mark" colspan="<?php echo $this->getColspan(); ?>">
+    <th style="<?php echo $this->getStyle() ?>" class="mark" colspan="<?php echo $this->getColspan(); ?>" scope="row">
         <strong><?php echo __('Grand Total Incl. Tax')?></strong>
-    </td>
-    <td style="<?php echo $this->getStyle() ?>" class="amount">
+    </th>
+    <td style="<?php echo $this->getStyle() ?>" class="amount" data-th="<?php echo $this->escapeHtml(__('Grand Total Incl. Tax')); ?>">
         <strong><?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($this->getTotal()->getValue()) ?></strong>
     </td>
 </tr>
 <?php else:?>
 <tr class="grand totals">
-    <td style="<?php echo $this->getStyle() ?>" class="mark" colspan="<?php echo $this->getColspan(); ?>">
+    <th style="<?php echo $this->getStyle() ?>" class="mark" colspan="<?php echo $this->getColspan(); ?>" scope="row">
         <strong><?php echo $this->getTotal()->getTitle() ?></strong>
-    </td>
-    <td style="<?php echo $this->getStyle() ?>" class="amount">
+    </th>
+    <td style="<?php echo $this->getStyle() ?>" class="amount" data-th="<?php echo $this->escapeHtml($this->getTotal()->getTitle()); ?>">
         <strong><?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($this->getTotal()->getValue()) ?></strong>
     </td>
 </tr>

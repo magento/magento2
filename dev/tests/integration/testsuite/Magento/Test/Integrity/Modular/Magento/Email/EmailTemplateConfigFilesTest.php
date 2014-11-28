@@ -44,7 +44,7 @@ class EmailTemplateConfigFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function fileFormatDataProvider()
     {
-        return \Magento\TestFramework\Utility\Files::init()->getConfigFiles('email_templates.xml');
+        return \Magento\Framework\Test\Utility\Files::init()->getConfigFiles('email_templates.xml');
     }
 
     /**

@@ -23,6 +23,8 @@
  */
 namespace Magento\Backend\Helper\Dashboard;
 
+use \Magento\Framework\App\DeploymentConfig;
+
 /**
  * Data helper for dashboard
  */
@@ -39,12 +41,17 @@ class Data extends \Magento\Core\Helper\Data
     protected $_installDate;
 
     /**
+     * Configuration key to installation date
+     */
+    const INSTALL_DATE = 'install/date';
+    
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
-     * @param string $installDate
+     * @param DeploymentConfig $deploymentConfig
      * @param bool $dbCompatibleMode
      */
     public function __construct(
@@ -53,7 +60,7 @@ class Data extends \Magento\Core\Helper\Data
         \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Framework\App\State $appState,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
-        $installDate,
+        DeploymentConfig $deploymentConfig,
         $dbCompatibleMode = true
     ) {
         parent::__construct(
@@ -64,7 +71,7 @@ class Data extends \Magento\Core\Helper\Data
             $priceCurrency,
             $dbCompatibleMode
         );
-        $this->_installDate = $installDate;
+        $this->_installDate = $deploymentConfig->get(self::INSTALL_DATE);
     }
 
     /**

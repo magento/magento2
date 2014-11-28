@@ -23,8 +23,8 @@
  */
 namespace Magento\Customer\Controller\Adminhtml;
 
-use Magento\Customer\Service\V1\CustomerGroupServiceInterface;
-use Magento\Customer\Service\V1\Data\CustomerGroupBuilder;
+use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Customer\Api\Data\GroupDataBuilder;
 
 /**
  * Customer groups controller
@@ -39,32 +39,32 @@ class Group extends \Magento\Backend\App\Action
     protected $_coreRegistry;
 
     /**
-     * @var CustomerGroupServiceInterface
+     * @var GroupRepositoryInterface
      */
-    protected $_groupService;
+    protected $groupRepository;
 
     /**
-     * @var CustomerGroupBuilder
+     * @var GroupDataBuilder
      */
-    protected $_customerGroupBuilder;
+    protected $groupDataBuilder;
 
     /**
      * Initialize Group Controller
      *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param CustomerGroupServiceInterface $groupService
-     * @param CustomerGroupBuilder $customerGroupBuilder
+     * @param GroupRepositoryInterface $groupRepository
+     * @param GroupDataBuilder $groupDataBuilder
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
-        CustomerGroupServiceInterface $groupService,
-        CustomerGroupBuilder $customerGroupBuilder
+        GroupRepositoryInterface $groupRepository,
+        GroupDataBuilder $groupDataBuilder
     ) {
         $this->_coreRegistry = $coreRegistry;
-        $this->_groupService = $groupService;
-        $this->_customerGroupBuilder = $customerGroupBuilder;
+        $this->groupRepository = $groupRepository;
+        $this->groupDataBuilder = $groupDataBuilder;
         parent::__construct($context);
     }
 

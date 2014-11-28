@@ -28,6 +28,8 @@ use Magento\Framework\Api\AbstractExtensibleObject;
 
 /**
  * @codeCoverageIgnore
+ * @deprecated
+ * @see \Magento\Catalog\Api\Data\ProductGroupPriceInterface
  */
 class GroupPrice extends AbstractExtensibleObject
 {

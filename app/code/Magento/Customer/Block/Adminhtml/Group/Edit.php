@@ -24,6 +24,8 @@
 namespace Magento\Customer\Block\Adminhtml\Group;
 
 use Magento\Customer\Controller\RegistryConstants;
+use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Customer\Api\GroupManagementInterface;
 
 /**
  * Customer group edit block
@@ -35,31 +37,37 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $coreRegistry;
 
     /**
-     * Customer Group Service
-     *
-     * @var \Magento\Customer\Service\V1\CustomerGroupServiceInterface
+     * @var GroupRepositoryInterface
      */
-    protected $_groupService = null;
+    protected $groupRepository;
+
+    /**
+     * @var GroupManagementInterface
+     */
+    protected $groupManagement;
 
     /**
      * Constructor
      *
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService
+     * @param GroupRepositoryInterface $groupRepository
+     * @param GroupManagementInterface $groupManagement
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService,
+        GroupRepositoryInterface $groupRepository,
+        GroupManagementInterface $groupManagement,
         array $data = array()
     ) {
-        $this->_coreRegistry = $registry;
-        $this->_groupService = $groupService;
+        $this->coreRegistry = $registry;
+        $this->groupRepository = $groupRepository;
+        $this->groupManagement = $groupManagement;
         parent::__construct($context, $data);
     }
 
@@ -79,8 +87,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         $this->buttonList->update('save', 'label', __('Save Customer Group'));
         $this->buttonList->update('delete', 'label', __('Delete Customer Group'));
 
-        $groupId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_GROUP_ID);
-        if (!$groupId || !$this->_groupService->canDelete($groupId)) {
+        $groupId = $this->coreRegistry->registry(RegistryConstants::CURRENT_GROUP_ID);
+        if (!$groupId || $this->groupManagement->isReadonly($groupId)) {
             $this->buttonList->remove('delete');
         }
     }
@@ -92,11 +100,11 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getHeaderText()
     {
-        $groupId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_GROUP_ID);
+        $groupId = $this->coreRegistry->registry(RegistryConstants::CURRENT_GROUP_ID);
         if (is_null($groupId)) {
             return __('New Customer Group');
         } else {
-            $group = $this->_groupService->getGroup($groupId);
+            $group = $this->groupRepository->getById($groupId);
             return __('Edit Customer Group "%1"', $this->escapeHtml($group->getCode()));
         }
     }

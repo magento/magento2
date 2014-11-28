@@ -248,11 +248,11 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
             return $this;
         }
         try {
-            $this->_validateBeforeSave();
-            $this->_beforeSave();
+            $this->validateBeforeSave();
+            $this->beforeSave();
             if ($this->_dataSaveAllowed) {
                 $this->_getResource()->save($this);
-                $this->_afterSave();
+                $this->afterSave();
             }
             $this->_hasDataChanges = false;
         } catch (\Exception $e) {

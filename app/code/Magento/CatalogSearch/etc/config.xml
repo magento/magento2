@@ -30,12 +30,10 @@
                 <search_terms>1</search_terms>
             </seo>
             <search>
-                <engine>Magento\CatalogSearch\Model\Resource\Fulltext\Engine</engine>
+                <engine>Magento\CatalogSearch\Model\Resource\Engine</engine>
                 <min_query_length>1</min_query_length>
                 <max_query_length>128</max_query_length>
-                <max_query_words>10</max_query_words>
-                <search_type>1</search_type>
-                <use_layered_navigation_count>2000</use_layered_navigation_count>
+                <use_layered_navigation_count>0</use_layered_navigation_count>
             </search>
         </catalog>
     </default>

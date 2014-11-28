@@ -45,9 +45,8 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $object = new \Magento\TestFramework\Application(
             $shell,
             $tempDir,
-            'local.xml',
+            'config.php',
             '',
-            array(),
             $appMode,
             $autoloadWrapper
         );

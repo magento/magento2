@@ -97,7 +97,7 @@
                 </div>
                 <div class="box box-items">
                     <div class="box-content">
-                        <div class="table-wrapper">
+                        <div class="order-review-wrapper table-wrapper">
                             <table class="items data table table-order-review" id="overview-table-<?php echo $_address->getId() ?>">
                                 <caption class="table-caption"><?php echo __('Order Review') ?></caption>
                                 <thead>
@@ -135,7 +135,7 @@
                 <a href="<?php echo $this->getVirtualProductEditUrl() ?>" class="action edit"><span><?php echo __('Edit Items') ?></span></a>
             </strong>
             <?php $mergedCells = ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices() ? 2 : 1); ?>
-            <div class="table-wrapper">
+            <div class="order-review-wrapper table-wrapper">
                 <table class="items data table table-order-review" id="virtual-overview-table">
                     <caption class="table-caption"><?php echo __('Items') ?></caption>
                     <thead>

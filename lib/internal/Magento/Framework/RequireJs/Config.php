@@ -41,15 +41,11 @@ class Config
     const CONFIG_FILE_NAME = 'requirejs-config.js';
 
     /**
-     * Path to normalization plugin in RequireJs format
-     */
-    const NORMALIZE_PLUGIN_PATH = 'mage/requirejs/plugin/id-normalizer';
-
-    /**
      * Template for combined RequireJs config file
      */
     const FULL_CONFIG_TEMPLATE = <<<config
 (function(require){
+%base%
 %function%
 
 %usages%
@@ -62,7 +58,7 @@ config;
     const PARTIAL_CONFIG_TEMPLATE = <<<config
 (function() {
 %config%
-require.config(mageUpdateConfigPaths(config, '%context%'))
+require.config(config);
 })();
 
 config;
@@ -113,10 +109,8 @@ config;
      */
     public function getConfig()
     {
-        $functionSource = __DIR__ . '/paths-updater.js';
-        $functionDeclaration = $this->baseDir->readFile($this->baseDir->getRelativePath($functionSource));
-
         $distributedConfig = '';
+        $baseConfig = $this->getBaseConfig();
         $customConfigFiles = $this->fileSource->getFiles($this->design->getDesignTheme(), self::CONFIG_FILE_NAME);
         foreach ($customConfigFiles as $file) {
             $config = $this->baseDir->readFile($this->baseDir->getRelativePath($file->getFilename()));
@@ -128,8 +122,8 @@ config;
         }
 
         $fullConfig = str_replace(
-            array('%function%', '%usages%'),
-            array($functionDeclaration, $distributedConfig),
+            array('%function%', '%base%', '%usages%'),
+            array($distributedConfig, $baseConfig),
             self::FULL_CONFIG_TEMPLATE
         );
 
@@ -154,15 +148,9 @@ config;
     public function getBaseConfig()
     {
         $config = array(
-            'baseUrl' => $this->staticContext->getBaseUrl() . $this->staticContext->getPath(),
-            'paths' => array(
-                'magento' => self::NORMALIZE_PLUGIN_PATH,
-            ),
-            //Disable the timeout, so that normalizer plugin and other JS modules are waited to be loaded
-            // independent of server load time and network speed
-            'waitSeconds' => 0,
+            'baseUrl' => $this->staticContext->getBaseUrl() . $this->staticContext->getPath()
         );
-        $config = json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-        return "require.config($config);\n";
+        $config = json_encode($config, JSON_UNESCAPED_SLASHES);
+        return "require.config($config);";
     }
 }

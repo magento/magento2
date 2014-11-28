@@ -202,7 +202,7 @@ class TypeProcessor
             || (strpos($methodReflection->getName(), 'is') === 0)
             || (strpos($methodReflection->getName(), 'has') === 0);
         /** Field will not be added to WSDL if getter has params */
-        if ($isGetter && !$methodReflection->getNumberOfParameters()) {
+        if ($isGetter && !$methodReflection->getNumberOfRequiredParameters()) {
             $returnMetadata = $this->getGetterReturnType($methodReflection);
             $fieldName = $this->dataObjectGetterNameToFieldName($methodReflection->getName());
             $this->_types[$typeName]['parameters'][$fieldName] = array(
@@ -298,7 +298,7 @@ class TypeProcessor
             'type' => $returnType,
             'isRequired' => $isRequired,
             'description' => $returnAnnotation->getDescription(),
-            'parameterCount' => $methodReflection->getNumberOfParameters()
+            'parameterCount' => $methodReflection->getNumberOfRequiredParameters()
         ];
     }
 
@@ -399,7 +399,7 @@ class TypeProcessor
      *
      * Example:
      * <pre>
-     *  \Magento\Customer\Service\V1\Data\Customer => CustomerV1DataCustomer
+     *  \Magento\Customer\Api\Data\CustomerInterface => CustomerV1DataCustomer
      *  \Magento\Catalog\Service\V2\Data\Product => CatalogV2DataProduct
      * </pre>
      *

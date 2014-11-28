@@ -37,9 +37,9 @@
 </div>
 <script type="text/javascript">
 require([
-    "prototype",
-    "Magento_Rule/rules"
-], function(){
+    "Magento_Rule/rules",
+    "prototype"
+], function(VarienRulesForm){
 
 window.<?php echo $_element->getHtmlId() ?> = new VarienRulesForm('<?php echo $_element->getHtmlId() ?>', '<?php echo $this->getNewChildUrl() ?>');
 <?php if ($_element->getReadonly()): ?>

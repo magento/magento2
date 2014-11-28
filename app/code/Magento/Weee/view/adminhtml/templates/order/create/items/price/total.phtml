@@ -30,7 +30,7 @@ $_item = $this->getItem();
 ?>
 
 <?php if ($this->displayPriceExclTax() || $this->displayBothPrices()): ?>
-    <?php $_rowTotalWithoutDiscount = $this->getRowDisplayPriceExclTax() - $_item->getDiscountAmount(); ?>
+    <?php $_rowTotalWithoutDiscount = $this->getRowDisplayPriceExclTax() - $_item->getTotalDiscountAmount(); ?>
     <?php if ($this->displayBothPrices()): ?>
         <span class="label"><?php echo __('Excl. Tax'); ?>:</span>
     <?php endif; ?>
@@ -50,7 +50,7 @@ $_item = $this->getItem();
         <?php if ($this->displayFinalPrice()): ?>
             <br />
             <span class="nobr"><?php echo __('Total'); ?>:<br />
-                <?php echo $this->formatPrice($this->getFinalRowDisplayPriceExclTax() - $_item->getDiscountAmount()); ?>
+                <?php echo $this->formatPrice($this->getFinalRowDisplayPriceExclTax() - $_item->getTotalDiscountAmount()); ?>
             </span>
         <?php endif; ?>
     <?php endif; ?>
@@ -61,7 +61,7 @@ $_item = $this->getItem();
     <?php if ($this->displayBothPrices()): ?>
         <br /><span class="label"><?php echo __('Incl. Tax'); ?>:</span>
     <?php endif; ?>
-    <?php $_incl = $this->getRowDisplayPriceInclTax() - $_item->getDiscountAmount(); ?>
+    <?php $_incl = $this->getRowDisplayPriceInclTax() - $_item->getTotalDiscountAmount(); ?>
     <?php echo $this->formatPrice(max(0, $_incl)) ?>
     <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item)): ?>
         <br />
@@ -75,7 +75,7 @@ $_item = $this->getItem();
 
         <?php if ($this->displayFinalPrice()): ?>
             <span class="nobr"><?php echo __('Total incl. tax'); ?>:<br />
-                <?php echo $this->formatPrice($this->getFinalRowDisplayPriceInclTax() - $_item->getDiscountAmount()); ?>
+                <?php echo $this->formatPrice($this->getFinalRowDisplayPriceInclTax() - $_item->getTotalDiscountAmount()); ?>
             </span>
         <?php endif; ?>
     <?php endif; ?>

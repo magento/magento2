@@ -35,98 +35,43 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\Object\Copy\Config\Reader
      */
-    protected $_model;
+    private $model;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $fileResolver;
 
     public function setUp()
     {
+        $this->fileResolver = $this->getMockForAbstractClass('Magento\Framework\Config\FileResolverInterface');
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\Framework\Filesystem $filesystem */
-        $filesystem = $objectManager->create(
-            'Magento\Framework\Filesystem',
-            array(
-                'directoryList' => $objectManager->create(
-                    'Magento\Framework\App\Filesystem\DirectoryList',
-                    array(
-                        'root' => BP,
-                        'config' => array(
-                            DirectoryList::MODULES => array(DirectoryList::PATH => __DIR__ . '/_files'),
-                            DirectoryList::CONFIG => array(DirectoryList::PATH => __DIR__ . '/_files')
-                        )
-                    )
-                )
-            )
-        );
-
-        /** @var \Magento\Framework\Module\Declaration\FileResolver $modulesDeclarations */
-        $modulesDeclarations = $objectManager->create(
-            'Magento\Framework\Module\Declaration\FileResolver',
-            array('filesystem' => $filesystem)
-        );
-
-
-        /** @var \Magento\Framework\Module\Declaration\Reader\Filesystem $filesystemReader */
-        $filesystemReader = $objectManager->create(
-            'Magento\Framework\Module\Declaration\Reader\Filesystem',
-            array('fileResolver' => $modulesDeclarations)
-        );
-
-        /** @var \Magento\Framework\Module\ModuleList $modulesList */
-        $modulesList = $objectManager
-            ->create('Magento\Framework\Module\ModuleList', array('reader' => $filesystemReader));
-
-        /** @var \Magento\Framework\Module\Dir\Reader $moduleReader */
-        $moduleReader = $objectManager->create(
-            'Magento\Framework\Module\Dir\Reader',
-            array('moduleList' => $modulesList, 'filesystem' => $filesystem)
-        );
-        $moduleReader->setModuleDir('Magento_Test', 'etc', __DIR__ . '/_files/Magento/Test/etc');
-
-        /** @var \Magento\Framework\App\Config\FileResolver $fileResolver */
-        $fileResolver = $objectManager->create(
-            'Magento\Framework\App\Config\FileResolver',
-            array('moduleReader' => $moduleReader)
-        );
-
-        $this->_model = $objectManager->create(
+        $this->model = $objectManager->create(
             'Magento\Framework\Object\Copy\Config\Reader',
-            array('fileResolver' => $fileResolver)
+            array('fileResolver' => $this->fileResolver)
         );
     }
 
     public function testRead()
     {
-        $result = $this->_model->read('global');
-        $expected = include '_files/expectedArray.php';
-        $this->assertEquals($expected, $result);
+        $this->fileResolver->expects($this->once())
+            ->method('get')
+            ->with('fieldset.xml', 'global')
+            ->willReturn([file_get_contents(__DIR__ . '/_files/fieldset.xml')]);
+        $expected = include __DIR__ . '/_files/expectedArray.php';
+        $this->assertEquals($expected, $this->model->read('global'));
     }
 
     public function testMergeCompleteAndPartial()
     {
-        $fileList = array(
+        $fileList = [
             file_get_contents(__DIR__ . '/_files/partialFieldsetFirst.xml'),
             file_get_contents(__DIR__ . '/_files/partialFieldsetSecond.xml')
-        );
-        $fileResolverMock = $this->getMockBuilder(
-            'Magento\Framework\Config\FileResolverInterface'
-        )->setMethods(
-            array('get')
-        )->disableOriginalConstructor()->getMock();
-        $fileResolverMock->expects(
-            $this->once()
-        )->method(
-            'get'
-        )->with(
-            $this->equalTo('fieldset.xml'),
-            $this->equalTo('global')
-        )->will(
-            $this->returnValue($fileList)
-        );
-
-        /** @var \Magento\Framework\Object\Copy\Config\Reader $model */
-        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Object\Copy\Config\Reader',
-            array('fileResolver' => $fileResolverMock)
-        );
+        ];
+        $this->fileResolver->expects($this->once())
+            ->method('get')
+            ->with('fieldset.xml', 'global')
+            ->willReturn($fileList);
         $expected = array(
             'global' => array(
                 'sales_convert_quote_item' => array(
@@ -136,6 +81,6 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
                 )
             )
         );
-        $this->assertEquals($expected, $model->read('global'));
+        $this->assertEquals($expected, $this->model->read('global'));
     }
 }

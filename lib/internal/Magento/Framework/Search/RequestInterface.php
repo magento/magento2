@@ -54,13 +54,6 @@ interface RequestInterface
     public function getDimensions();
 
     /**
-     * Get scope dimension
-     *
-     * @return Dimension
-     */
-    public function getScopeDimension();
-
-    /**
      * Get Aggregation Buckets
      *
      * @return BucketInterface[]

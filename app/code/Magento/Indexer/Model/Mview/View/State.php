@@ -85,10 +85,10 @@ class State extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      *
      * @return $this
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
         $this->setUpdated(time());
-        return parent::_beforeSave();
+        return parent::beforeSave();
     }
 
     /**

@@ -34,5 +34,4 @@ define([
         );
         return allowedStorages.include(storage);
     }, 'Synchronization is required.');
-
 });

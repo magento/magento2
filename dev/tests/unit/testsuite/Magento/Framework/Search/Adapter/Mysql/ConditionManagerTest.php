@@ -71,9 +71,6 @@ class ConditionManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->resource = $this->getMockBuilder('Magento\Framework\App\Resource')
             ->disableOriginalConstructor()
-            ->setMethods(
-                ['getConnection']
-            )
             ->getMock();
         $this->resource->expects($this->once())
             ->method('getConnection')

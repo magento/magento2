@@ -23,6 +23,8 @@
  */
 namespace Magento\Customer\Model\Customer\Attribute\Source;
 
+use Magento\Customer\Api\GroupManagementInterface;
+
 /**
  * Customer group attribute source
  *
@@ -31,9 +33,9 @@ namespace Magento\Customer\Model\Customer\Attribute\Source;
 class Group extends \Magento\Eav\Model\Entity\Attribute\Source\Table
 {
     /**
-     * @var \Magento\Customer\Service\V1\CustomerGroupServiceInterface
+     * @var GroupManagementInterface
      */
-    protected $_groupService;
+    protected $_groupManagement;
 
     /**
      * @var \Magento\Framework\Convert\Object
@@ -44,17 +46,17 @@ class Group extends \Magento\Eav\Model\Entity\Attribute\Source\Table
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $attrOptionFactory
-     * @param \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService
+     * @param GroupManagementInterface $groupManagement
      * @param \Magento\Framework\Convert\Object $converter
      */
     public function __construct(
         \Magento\Core\Helper\Data $coreData,
         \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $attrOptionFactory,
-        \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService,
+        GroupManagementInterface $groupManagement,
         \Magento\Framework\Convert\Object $converter
     ) {
-        $this->_groupService = $groupService;
+        $this->_groupManagement = $groupManagement;
         $this->_converter = $converter;
         parent::__construct($coreData, $attrOptionCollectionFactory, $attrOptionFactory);
     }
@@ -65,7 +67,7 @@ class Group extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     public function getAllOptions()
     {
         if (!$this->_options) {
-            $groups = $this->_groupService->getGroups(false);
+            $groups = $this->_groupManagement->getLoggedInGroups();
             $this->_options = $this->_converter->toOptionArray($groups, 'id', 'code');
         }
         return $this->_options;

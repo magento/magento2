@@ -49,15 +49,17 @@ class SpecialPrice extends AbstractPrice implements SpecialPriceInterface, BaseP
      * @param Product $saleableItem
      * @param float $quantity
      * @param CalculatorInterface $calculator
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param TimezoneInterface $localeDate
      */
     public function __construct(
         Product $saleableItem,
         $quantity,
         CalculatorInterface $calculator,
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         TimezoneInterface $localeDate
     ) {
-        parent::__construct($saleableItem, $quantity, $calculator);
+        parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
         $this->localeDate = $localeDate;
     }
 
@@ -84,7 +86,11 @@ class SpecialPrice extends AbstractPrice implements SpecialPriceInterface, BaseP
      */
     public function getSpecialPrice()
     {
-        return $this->product->getSpecialPrice();
+        $specialPrice = $this->product->getSpecialPrice();
+        if (!is_null($specialPrice) && $specialPrice !== false && !$this->isPercentageDiscount()) {
+            $specialPrice = $this->priceCurrency->convertAndRound($specialPrice);
+        }
+        return $specialPrice;
     }
 
     /**
@@ -117,5 +123,13 @@ class SpecialPrice extends AbstractPrice implements SpecialPriceInterface, BaseP
             $this->getSpecialFromDate(),
             $this->getSpecialToDate()
         );
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPercentageDiscount()
+    {
+        return false;
     }
 }

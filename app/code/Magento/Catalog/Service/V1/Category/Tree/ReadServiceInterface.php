@@ -28,6 +28,8 @@ use Magento\Catalog\Service\V1\Data\Eav\Category\Tree;
 /**
  * Class ReadServiceInterface
  * @package Magento\Catalog\Service\V1\Category
+ *
+ * @todo remove this interface
  */
 interface ReadServiceInterface
 {
@@ -38,6 +40,8 @@ interface ReadServiceInterface
      * @param int $rootCategoryId
      * @param int $depth
      * @return \Magento\Catalog\Service\V1\Data\Eav\Category\Tree containing Tree objects
+     * @deprecated
+     * @see \Magento\Catalog\Api\CategoryManagementInterface::getTree
      */
     public function tree($rootCategoryId = null, $depth = null);
 }

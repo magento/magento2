@@ -136,10 +136,10 @@ abstract class AbstractAgreement extends \Magento\Framework\Model\AbstractModel
      * @throws \Magento\Framework\Model\Exception
      * @return \Magento\Framework\Model\AbstractModel
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
         if ($this->isValid()) {
-            return parent::_beforeSave();
+            return parent::beforeSave();
         }
         array_unshift($this->_errors, __('Unable to save Billing Agreement:'));
         throw new \Magento\Framework\Model\Exception(implode(' ', $this->_errors));

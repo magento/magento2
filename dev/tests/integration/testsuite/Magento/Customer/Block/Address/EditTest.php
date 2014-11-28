@@ -69,7 +69,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_customerSession->unsCustomerId();
+        $this->_customerSession->setCustomerId(null);
         $this->_context->getRequest()->setParam('id', $this->_requestId);
         /** @var \Magento\Customer\Model\AddressRegistry $addressRegistry */
         $addressRegistry = $objectManager->get('Magento\Customer\Model\AddressRegistry');

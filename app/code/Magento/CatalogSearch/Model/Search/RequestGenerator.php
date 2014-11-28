@@ -25,6 +25,7 @@ namespace Magento\CatalogSearch\Model\Search;
 
 use Magento\Catalog\Model\Entity\Attribute;
 use Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory;
+use Magento\Framework\Search\Request\BucketInterface;
 
 class RequestGenerator
 {
@@ -63,12 +64,61 @@ class RequestGenerator
     {
         $request = [];
         foreach ($this->getSearchableAttributes() as $attribute) {
+            if ($attribute->getIsFilterable()) {
+                if (!in_array($attribute->getAttributeCode(), ['price', 'category_ids'])) {
+
+                    $queryName = $attribute->getAttributeCode() . '_query';
+
+                    $request['queries']['quick_search_container']['queryReference'][] = [
+                        'clause' => 'should',
+                        'ref' => $queryName,
+                    ];
+                    $filterName = $attribute->getAttributeCode() . '_filter';
+                    $request['queries'][$queryName] = [
+                        'name' => $queryName,
+                        'type' => 'filteredQuery',
+                        'filterReference' => [['ref' => $filterName]]
+                    ];
+                    $bucketName = $attribute->getAttributeCode() . '_bucket';
+                    if ($attribute->getBackendType() == 'decimal') {
+                        $request['filters'][$filterName] = [
+                            'type' => 'rangeFilter',
+                            'name' => $filterName,
+                            'field' => $attribute->getAttributeCode(),
+                            'from' => '$' . $attribute->getAttributeCode() . '.from$',
+                            'to' => '$' . $attribute->getAttributeCode() . '.to$',
+                        ];
+                        $request['aggregations'][$bucketName] = [
+                            'type' => BucketInterface::TYPE_DYNAMIC,
+                            'name' => $bucketName,
+                            'field' => $attribute->getAttributeCode(),
+                            'method' => 'manual',
+                            'metric' => [["type" => "count"]],
+                        ];
+                    } else {
+                        $request['filters'][$filterName] = [
+                            'type' => 'termFilter',
+                            'name' => $filterName,
+                            'field' => $attribute->getAttributeCode(),
+                            'value' => '$' . $attribute->getAttributeCode() . '$',
+                        ];
+                        $request['aggregations'][$bucketName] = [
+                            'type' => 'termBucket',
+                            'name' => $bucketName,
+                            'field' => $attribute->getAttributeCode(),
+                            'metric' => [["type" => "count"]],
+                        ];
+                    }
+                }
+            }
             /** @var $attribute Attribute */
-            if (in_array($attribute->getAttributeCode(), ['price', 'sku'])) {
+            if (in_array($attribute->getAttributeCode(), ['price', 'sku'])
+                || !$attribute->getIsSearchable()
+            ) {
                 //same fields have special semantics
                 continue;
             }
-            $request['queries']['quick_search_container']['match'][] = [
+            $request['queries']['search']['match'][] = [
                 'field' => $attribute->getAttributeCode(),
                 'boost' => $attribute->getSearchWeight() ?: 1,
             ];
@@ -79,13 +129,16 @@ class RequestGenerator
     /**
      * Retrieve searchable attributes
      *
-     * @return \Traversable
+     * @return \Magento\Catalog\Model\Entity\Attribute[]
      */
     protected function getSearchableAttributes()
     {
         /** @var \Magento\Catalog\Model\Resource\Product\Attribute\Collection $productAttributes */
         $productAttributes = $this->productAttributeCollectionFactory->create();
-        $productAttributes->addFieldToFilter(['is_searchable', 'is_visible_in_advanced_search'], [1, 1]);
+        $productAttributes->addFieldToFilter(
+            ['is_searchable', 'is_visible_in_advanced_search', 'is_filterable'],
+            [1, 1, 1]
+        );
 
         return $productAttributes;
     }
@@ -136,7 +189,7 @@ class RequestGenerator
                         $request['queries'][$queryName] = [
                             'name' => $queryName,
                             'type' => 'matchQuery',
-                            'value' => '$' . $attribute->getAttributeCode() . '$',
+                            'value' => '$' . $attribute->getAttributeCode() . '$*',
                             'match' => [
                                 [
                                     'field' => $attribute->getAttributeCode(),

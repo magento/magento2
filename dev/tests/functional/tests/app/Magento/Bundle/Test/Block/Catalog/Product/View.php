@@ -58,6 +58,13 @@ class View extends \Magento\Catalog\Test\Block\Product\View
     protected $visibleOptions = '//*[@class="product-add-form"][contains(@style,"block")]';
 
     /**
+     * Selector for newsletter form.
+     *
+     * @var string
+     */
+    protected $newsletterFormSelector = '#newsletter-validate-detail[novalidate="novalidate"]';
+
+    /**
      * Get bundle options block.
      *
      * @return Bundle
@@ -71,12 +78,21 @@ class View extends \Magento\Catalog\Test\Block\Product\View
     }
 
     /**
-     * Click "Customize and add to cart button"
+     * Click "Customize and add to cart button".
      *
      * @return void
      */
     public function clickCustomize()
     {
+        $browser = $this->browser;
+        $selector = $this->newsletterFormSelector;
+        $this->browser->waitUntil(
+            function () use ($browser, $selector) {
+                $this->reinitRootElement();
+                $element = $browser->find($selector);
+                return $element->isVisible() ? true : null;
+            }
+        );
         $this->_rootElement->find($this->customizeButton)->click();
         $this->waitForElementVisible($this->addToCart);
     }

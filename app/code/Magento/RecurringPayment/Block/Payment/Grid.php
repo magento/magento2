@@ -27,6 +27,8 @@ use Magento\Customer\Controller\RegistryConstants;
 
 /**
  * Recurring payment view grid
+ *
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Grid extends \Magento\RecurringPayment\Block\Payments
 {

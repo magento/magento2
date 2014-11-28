@@ -24,7 +24,7 @@
 
 namespace Magento\Tools\View;
 
-use Magento\TestFramework\Utility\Files;
+use Magento\Framework\Test\Utility\Files;
 use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\App\View\Deployment\Version;
 

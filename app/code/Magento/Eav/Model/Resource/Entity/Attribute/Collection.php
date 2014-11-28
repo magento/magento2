@@ -40,6 +40,33 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     protected $_addSetInfoFlag = false;
 
     /**
+     * @var \Magento\Eav\Model\Config
+     */
+    protected $eavConfig;
+
+    /**
+     * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
+     * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Eav\Model\Config $eavConfig
+     * @param \Zend_Db_Adapter_Abstract|null $connection
+     * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
+     */
+    public function __construct(
+        \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
+        \Magento\Framework\Logger $logger,
+        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Eav\Model\Config $eavConfig,
+        $connection = null,
+        \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
+    ) {
+        $this->eavConfig = $eavConfig;
+        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
+    }
+
+    /**
      * Resource model initialization
      *
      * @return void
@@ -136,6 +163,30 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         }
 
         return $this;
+    }
+
+    /**
+     * Add attribute set filter to collection based on attribute set name and corresponding entity type.
+     *
+     * @param string $attributeSetName
+     * @param string $entityTypeCode
+     * @return void
+     */
+    public function setAttributeSetFilterBySetName($attributeSetName, $entityTypeCode)
+    {
+        $entityTypeId = $this->eavConfig->getEntityType($entityTypeCode)->getId();
+        $this->join(
+            array('entity_attribute' => $this->getTable('eav_entity_attribute')),
+            'entity_attribute.attribute_id = main_table.attribute_id'
+        );
+        $this->join(
+            array('attribute_set' => $this->getTable('eav_attribute_set')),
+            'attribute_set.attribute_set_id = entity_attribute.attribute_set_id',
+            array()
+        );
+        $this->addFieldToFilter('attribute_set.entity_type_id', $entityTypeId);
+        $this->addFieldToFilter('attribute_set.attribute_set_name', $attributeSetName);
+        $this->setOrder('entity_attribute.sort_order', self::SORT_ORDER_ASC);
     }
 
     /**

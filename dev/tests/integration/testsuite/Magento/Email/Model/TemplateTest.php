@@ -117,7 +117,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\App\Area::AREA_FRONTEND
         )->load();
         $this->_setNotDefaultThemeForFixtureStore();
-        $expectedViewUrl = 'static/frontend/Magento/plushe/en_US/Magento_Theme/favicon.ico';
+        $expectedViewUrl = 'static/frontend/Magento/luma/en_US/Magento_Theme/favicon.ico';
         $this->_model->setTemplateText('{{view url="Magento_Theme::favicon.ico"}}');
         $this->assertStringEndsNotWith($expectedViewUrl, $this->_model->getProcessedTemplate());
         $this->_model->setDesignConfig(
@@ -134,7 +134,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Set 'Magento/plushe' for the 'fixturestore' store.
+     * Set 'Magento/luma' for the 'fixturestore' store.
      * Application isolation is required, if a test uses this method.
      */
     protected function _setNotDefaultThemeForFixtureStore()
@@ -142,7 +142,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Framework\View\Design\ThemeInterface'
         );
-        $theme->load('Magento/plushe', 'theme_path');
+        $theme->load('Magento/luma', 'theme_path');
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\App\Config\MutableScopeConfigInterface'
         )->setValue(
@@ -165,7 +165,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\App\Area::AREA_FRONTEND
         )->load();
         $this->_setNotDefaultThemeForFixtureStore();
-        $expectedViewUrl = 'static/frontend/Magento/plushe/en_US/Magento_Theme/favicon.ico';
+        $expectedViewUrl = 'static/frontend/Magento/luma/en_US/Magento_Theme/favicon.ico';
         $this->_model->setTemplateSubject('{{view url="Magento_Theme::favicon.ico"}}');
         $this->assertStringEndsNotWith($expectedViewUrl, $this->_model->getProcessedTemplateSubject(array()));
         $this->_model->setDesignConfig(

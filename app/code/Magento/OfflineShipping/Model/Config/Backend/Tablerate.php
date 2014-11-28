@@ -62,7 +62,7 @@ class Tablerate extends \Magento\Framework\App\Config\Value
     /**
      * @return \Magento\Framework\Model\AbstractModel|void
      */
-    public function _afterSave()
+    public function afterSave()
     {
         $this->_tablerateFactory->create()->uploadAndImport($this);
     }

@@ -21,7 +21,13 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /*jshint browser:true jquery:true*/
-define(["jquery", "jquery/ui", "mage/dropdown"], function($) {
+define([
+    "jquery",
+    "jquery/ui",
+    "mage/dropdown"
+], function($){
+    'use strict';
+
     $.widget('mage.addToCart', {
         options: {
             showAddToCart: true,
@@ -94,4 +100,6 @@ define(["jquery", "jquery/ui", "mage/dropdown"], function($) {
             $(this.options.cartForm).submit();
         }
     });
+    
+    return $.mage.addToCart;
 });

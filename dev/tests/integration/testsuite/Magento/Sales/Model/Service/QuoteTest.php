@@ -24,11 +24,11 @@
 namespace Magento\Sales\Model\Service;
 
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Customer\Service\V1\Data\CustomerBuilder;
+use Magento\Customer\Api\Data\CustomerDataBuilder;
 use Magento\Customer\Service\V1\Data\CustomerDetailsBuilder;
 use Magento\Customer\Service\V1\Data\AddressBuilder;
 use Magento\Customer\Service\V1\Data\RegionBuilder;
-use Magento\Customer\Service\V1\Data\Customer as CustomerData;
+use Magento\Customer\Api\Data\CustomerInterface as CustomerData;
 use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
 use Magento\Customer\Service\V1\CustomerAddressServiceInterface;
 
@@ -43,7 +43,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     protected $_serviceQuote;
 
     /**
-     * @var CustomerBuilder
+     * @var CustomerDataBuilder
      */
     private $_customerBuilder;
 
@@ -73,7 +73,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             'Magento\Customer\Service\V1\Data\AddressBuilder'
         );
         $this->_customerBuilder = Bootstrap::getObjectManager()->get(
-            'Magento\Customer\Service\V1\Data\CustomerBuilder'
+            'Magento\Customer\Api\Data\CustomerDataBuilder'
         );
         $this->_customerDetailsBuilder = Bootstrap::getObjectManager()->get(
             'Magento\Customer\Service\V1\Data\CustomerDetailsBuilder'

@@ -26,24 +26,24 @@ namespace Magento\Customer\Controller\Account;
 
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
+use Magento\Customer\Api\AccountManagementInterface;
 
 class CreatePassword extends \Magento\Customer\Controller\Account
 {
-    /** @var CustomerAccountServiceInterface  */
-    protected $customerAccountService;
+    /** @var AccountManagementInterface */
+    protected $customerAccountManagement;
 
     /**
      * @param Context $context
      * @param Session $customerSession
-     * @param CustomerAccountServiceInterface $customerAccountService
+     * @param AccountManagementInterface $customerAccountManagement
      */
     public function __construct(
         Context $context,
         Session $customerSession,
-        CustomerAccountServiceInterface $customerAccountService
+        AccountManagementInterface $customerAccountManagement
     ) {
-        $this->customerAccountService = $customerAccountService;
+        $this->customerAccountManagement = $customerAccountManagement;
         parent::__construct($context, $customerSession);
     }
 
@@ -57,7 +57,7 @@ class CreatePassword extends \Magento\Customer\Controller\Account
         $resetPasswordToken = (string)$this->getRequest()->getParam('token');
         $customerId = (int)$this->getRequest()->getParam('id');
         try {
-            $this->customerAccountService->validateResetPasswordLinkToken($customerId, $resetPasswordToken);
+            $this->customerAccountManagement->validateResetPasswordLinkToken($customerId, $resetPasswordToken);
             $this->_view->loadLayout();
             // Pass received parameters to the reset forgotten password form
             $this->_view->getLayout()->getBlock(

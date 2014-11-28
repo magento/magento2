@@ -158,4 +158,14 @@ class Address extends \Magento\Eav\Model\Entity\AbstractEntity
     {
         return $this->_customerFactory->create();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function delete($object)
+    {
+        $result = parent::delete($object);
+        $object->setData([]);
+        return $result;
+    }
 }

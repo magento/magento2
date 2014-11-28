@@ -24,7 +24,8 @@
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Group;
 
 use Magento\Backend\Block\Widget;
-use Magento\Customer\Service\V1\CustomerGroupServiceInterface;
+use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 
 /**
@@ -73,30 +74,46 @@ abstract class AbstractGroup extends Widget implements RendererInterface
     protected $_directoryHelper;
 
     /**
-     * @var CustomerGroupServiceInterface
+     * @var GroupRepositoryInterface
      */
-    protected $_groupService;
+    protected $_groupRepository;
+
+    /**
+     * @var GroupManagementInterface
+     */
+    protected $_groupManagement;
+
+    /**
+     * @var \Magento\Framework\Api\SearchCriteriaDataBuilder
+     */
+    protected $_searchCriteriaDataBuilder;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param CustomerGroupServiceInterface $groupService
+     * @param GroupRepositoryInterface $groupRepository
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Framework\Registry $registry
+     * @param GroupManagementInterface $groupManagement
+     * @param \Magento\Framework\Api\SearchCriteriaDataBuilder $searchCriteriaDataBuilder
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        CustomerGroupServiceInterface $groupService,
+        GroupRepositoryInterface $groupRepository,
         \Magento\Directory\Helper\Data $directoryHelper,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Framework\Registry $registry,
+        GroupManagementInterface $groupManagement,
+        \Magento\Framework\Api\SearchCriteriaDataBuilder $searchCriteriaDataBuilder,
         array $data = array()
     ) {
-        $this->_groupService = $groupService;
+        $this->_groupRepository = $groupRepository;
         $this->_directoryHelper = $directoryHelper;
         $this->_catalogData = $catalogData;
         $this->_coreRegistry = $registry;
+        $this->_groupManagement = $groupManagement;
+        $this->_searchCriteriaDataBuilder = $searchCriteriaDataBuilder;
         parent::__construct($context, $data);
     }
 
@@ -190,7 +207,8 @@ abstract class AbstractGroup extends Widget implements RendererInterface
             if (!$this->_catalogData->isModuleEnabled('Magento_Customer')) {
                 return array();
             }
-            $groups = $this->_groupService->getGroups();
+            /** @var \Magento\Customer\Api\Data\GroupInterface[] $groups */
+            $groups = $this->_groupRepository->getList($this->_searchCriteriaDataBuilder->create());
             $this->_customerGroups = $this->_getInitialCustomerGroups();
 
             foreach ($groups as $group) {
@@ -283,7 +301,7 @@ abstract class AbstractGroup extends Widget implements RendererInterface
      */
     public function getDefaultCustomerGroup()
     {
-        return CustomerGroupServiceInterface::CUST_GROUP_ALL;
+        return $this->_groupManagement->getAllCustomersGroup()->getId();
     }
 
     /**

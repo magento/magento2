@@ -40,8 +40,8 @@ class Index extends \Magento\Newsletter\Controller\Adminhtml\Problem
             return;
         }
 
-        $this->_view->getLayout()->getMessagesBlock()->setMessages($this->messageManager->getMessages(true));
         $this->_view->loadLayout();
+        $this->_view->getLayout()->getMessagesBlock()->setMessages($this->messageManager->getMessages(true));
 
         $this->_setActiveMenu('Magento_Newsletter::newsletter_problem');
         $this->_addBreadcrumb(__('Newsletter Problem Reports'), __('Newsletter Problem Reports'));

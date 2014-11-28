@@ -274,19 +274,29 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * Save in set including
      *
      * @param AbstractModel $object
+     * @param null $attributeEntityId
+     * @param null $attributeSetId
+     * @param null $attributeGroupId
+     * @param null $attributeSortOrder
      * @return $this
      */
-    public function saveInSetIncluding(AbstractModel $object)
-    {
-        $attributeId = (int)$object->getId();
-        $setId = (int)$object->getAttributeSetId();
-        $groupId = (int)$object->getAttributeGroupId();
+    public function saveInSetIncluding(
+        AbstractModel $object,
+        $attributeEntityId = null,
+        $attributeSetId = null,
+        $attributeGroupId = null,
+        $attributeSortOrder = null
+    ) {
+        $attributeId = is_null($attributeEntityId) ? (int)$object->getId() : (int)$attributeEntityId;
+        $setId = is_null($attributeSetId) ? (int)$object->getAttributeSetId() : (int)$attributeSetId;
+        $groupId = is_null($attributeGroupId) ? (int)$object->getAttributeGroupId() : (int)$attributeGroupId;
+        $attributeSortOrder = is_null($attributeSortOrder) ? (int)$object->getSortOrder() : (int)$attributeSortOrder;
 
         if ($setId && $groupId && $object->getEntityTypeId()) {
             $adapter = $this->_getWriteAdapter();
             $table = $this->getTable('eav_entity_attribute');
 
-            $sortOrder = $object->getSortOrder() ?: $this->_getMaxSortOrder($object) + 1;
+            $sortOrder = $attributeSortOrder ?: $this->_getMaxSortOrder($object) + 1;
             $data = array(
                 'entity_type_id' => $object->getEntityTypeId(),
                 'attribute_set_id' => $setId,
@@ -300,7 +310,6 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $adapter->delete($table, $where);
             $adapter->insert($table, $data);
         }
-
         return $this;
     }
 

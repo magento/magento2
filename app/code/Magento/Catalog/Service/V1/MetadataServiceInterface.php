@@ -39,6 +39,7 @@ interface MetadataServiceInterface
      * @param  string $attributeCode
      * @return AttributeMetadata
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @see \Magento\Eav\Api\AttributeRepositoryInterface::get
      */
     public function getAttributeMetadata($entityType, $attributeCode);
 
@@ -48,6 +49,7 @@ interface MetadataServiceInterface
      * @param  string $entityType
      * @param SearchCriteria $searchCriteria
      * @return SearchResults
+     * @see \Magento\Eav\Api\AttributeRepositoryInterface::getList
      */
     public function getAllAttributeMetadata($entityType, SearchCriteria $searchCriteria);
 }

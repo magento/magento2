@@ -42,6 +42,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param PriceCurrencyInterface $priceCurrency
+     * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      * @param PriceModifierInterface $priceModifier
      */
     public function __construct(
@@ -51,10 +52,19 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         PriceCurrencyInterface $priceCurrency,
+        \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         PriceModifierInterface $priceModifier
     ) {
         $this->priceModifier = $priceModifier;
-        parent::__construct($ruleFactory, $storeManager, $localeDate, $customerSession, $eventManager, $priceCurrency);
+        parent::__construct(
+            $ruleFactory,
+            $storeManager,
+            $localeDate,
+            $customerSession,
+            $eventManager,
+            $priceCurrency,
+            $groupManagement
+        );
     }
 
     /**

@@ -308,5 +308,6 @@ define([
             }
         }
     });
-
+    
+    return $.mage.orderReview;
 });

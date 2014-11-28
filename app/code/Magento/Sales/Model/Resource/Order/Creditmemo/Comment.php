@@ -23,12 +23,15 @@
  */
 namespace Magento\Sales\Model\Resource\Order\Creditmemo;
 
+use Magento\Sales\Model\Resource\Entity;
+use Magento\Sales\Model\Spi\CreditmemoCommentResourceInterface;
+
 /**
  * Flat sales order creditmemo comment resource
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Comment extends \Magento\Sales\Model\Resource\Entity
+class Comment extends Entity implements CreditmemoCommentResourceInterface
 {
     /**
      * Event prefix
@@ -83,6 +86,11 @@ class Comment extends \Magento\Sales\Model\Resource\Entity
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
+        /**@var $object \Magento\Sales\Model\Order\Creditmemo\Comment*/
+        if (!$object->getParentId() && $object->getCreditmemo()) {
+            $object->setParentId($object->getCreditmemo()->getId());
+        }
+
         parent::_beforeSave($object);
         $errors = $this->validator->validate($object);
         if (!empty($errors)) {
@@ -90,7 +98,6 @@ class Comment extends \Magento\Sales\Model\Resource\Entity
                 __("Cannot save comment") . ":\n" . implode("\n", $errors)
             );
         }
-
         return $this;
     }
 }

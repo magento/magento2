@@ -37,7 +37,7 @@ class MassSubscribe extends \Magento\Customer\Controller\Adminhtml\Index
         $customersUpdated = $this->actUponMultipleCustomers(
             function ($customerId) {
                 // Verify customer exists
-                $this->_customerAccountService->getCustomer($customerId);
+                $this->_customerRepository->getById($customerId);
                 $this->_subscriberFactory->create()->subscribeCustomerById($customerId);
             },
             $customerIds

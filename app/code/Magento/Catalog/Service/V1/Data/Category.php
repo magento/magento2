@@ -27,6 +27,8 @@ use \Magento\Framework\Api\AbstractExtensibleObject;
 
 /**
  * @codeCoverageIgnore
+ * @deprecated
+ * @see \Magento\Catalog\Api\Data\CategoryInterface
  */
 class Category extends AbstractExtensibleObject
 {

@@ -23,7 +23,7 @@
  */
 namespace Magento\Sales\Model\Observer\Backend;
 
-use Magento\Customer\Service\V1\Data\Customer as CustomerData;
+use Magento\Customer\Api\Data\CustomerInterface as CustomerData;
 
 class CustomerQuote
 {

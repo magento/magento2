@@ -24,56 +24,61 @@
 
 namespace Magento\Tax\Test\Block\Adminhtml\Rule\Edit;
 
-use Magento\Tax\Test\Fixture\TaxRule;
-use Mtf\Block\Form as FormInterface;
-use Mtf\Client\Browser;
 use Mtf\Client\Element;
 use Mtf\Client\Element\Locator;
 use Mtf\Fixture\FixtureInterface;
+use Mtf\Block\Form as FormInterface;
+use Magento\Tax\Test\Fixture\TaxRule;
 
 /**
- * Class Form
- * Form for tax rule creation
+ * Form for tax rule creation.
  */
 class Form extends FormInterface
 {
     /**
-     * The root element of the browser
-     *
-     * @var Browser
-     */
-    protected $browser;
-
-    /**
-     * 'Additional Settings' link
+     * 'Additional Settings' link.
      *
      * @var string
      */
     protected $additionalSettings = '#details-summarybase_fieldset';
 
     /**
-     * Tax rate block
+     * 'Additional setings' block selector.
+     *
+     * @var string
+     */
+    protected $additionalSettingsBlock = '#details-contentbase_fieldset';
+
+    /**
+     * Tax rate block.
      *
      * @var string
      */
     protected $taxRateBlock = '[class*="tax_rate"]';
 
     /**
-     * Tax rate form
+     * Tax rate default multiple select selector.
      *
      * @var string
      */
-    protected $taxRateForm = '//*[contains(@class, "tax-rate-popup")]';
+    protected $taxRateDefaultMultiSelect = '#tax_rate';
 
     /**
-     * Customer Tax Class block
+     * Tax rate form.
+     *
+     * @var string
+     */
+    protected $taxRateForm = '[class*="tax-rate-popup"]';
+
+    /**
+     * Customer Tax Class block.
      *
      * @var string
      */
     protected $taxCustomerBlock = '[class*=tax_customer_class]';
 
     /**
-     * Product Tax Class block
+     * Product Tax Class block.
      *
      * @var string
      */
@@ -87,35 +92,42 @@ class Form extends FormInterface
     protected $optionMaskElement = './/*[contains(@class, "mselect-list-item")]//label/span[text()="%s"]';
 
     /**
-     * Multi select list items
+     * CSS selector for "Add New Tax Rate" button.
      *
      * @var string
      */
-    protected $maskElement = '.mselect-list-item:first-child label';
+    protected $addNewButton = '[class*="mselect-button-add"]';
 
     /**
-     * XPath selector for "Add New Tax Rate" button
-     *
-     * @var string
-     */
-    protected $addNewButton = './/*[contains(@class,"mselect-button-add")]';
-
-    /**
-     * Css selector for Add New tax class input
+     * Css selector for Add New tax class input.
      *
      * @var string
      */
     protected $addNewInput = '.mselect-input';
 
     /**
-     * Css selector for Add New save button
+     * Css selector for Add New save button.
      *
      * @var string
      */
     protected $saveButton = '.mselect-save';
 
     /**
-     * Fill the root form
+     * Selector for multi select list with tax rates.
+     *
+     * @var string
+     */
+    protected $taxRateMultiSelectList = "[class*='tax_rate'] .block.mselect-list .mselect-items-wrapper";
+
+    /**
+     * Selector for multi select list with tax classes.
+     *
+     * @var string
+     */
+    protected $taxClassMultiSelectList = ".//*[contains(@class, 'tax_%s_class')]//*[@class='block mselect-list']";
+
+    /**
+     * Fill the root form.
      *
      * @param FixtureInterface $fixture
      * @param Element $element
@@ -125,43 +137,67 @@ class Form extends FormInterface
      */
     public function fill(FixtureInterface $fixture, Element $element = null)
     {
+        $this->openAdditionalSettings();
+        $this->_rootElement->click();
+
         /** @var TaxRule $fixture */
         $this->addNewTaxRates($fixture);
-        $this->openAdditionalSettings();
         if ($fixture->hasData('tax_customer_class')) {
+            $this->_rootElement->click();
             $taxCustomerBlock = $this->_rootElement->find(
                 $this->taxCustomerBlock,
                 Locator::SELECTOR_CSS,
                 'multiselectlist'
             );
+            $this->waitForElementVisible(sprintf($this->taxClassMultiSelectList, 'customer'), Locator::SELECTOR_XPATH);
             $this->addNewTaxClass($fixture->getTaxCustomerClass(), $taxCustomerBlock);
         }
         if ($fixture->hasData('tax_product_class')) {
+            $this->_rootElement->click();
             $taxProductBlock = $this->_rootElement->find(
                 $this->taxProductBlock,
                 Locator::SELECTOR_CSS,
                 'multiselectlist'
             );
+            $this->waitForElementVisible(sprintf($this->taxClassMultiSelectList, 'product'), Locator::SELECTOR_XPATH);
             $this->addNewTaxClass($fixture->getTaxProductClass(), $taxProductBlock);
         }
 
+        $this->_rootElement->click();
         parent::fill($fixture);
     }
 
     /**
-     * Method to add new tax rate
+     * Method to add new tax rate.
      *
      * @param TaxRule $taxRule
      * @return void
      */
     protected function addNewTaxRates($taxRule)
     {
-        $this->waitForElementVisible($this->taxRateBlock);
+        $rootForm = $this;
+        $taxRateMultiSelectList = $this->taxRateMultiSelectList;
+        $taxRateDefaultMultiSelect = $this->taxRateDefaultMultiSelect;
+        $this->browser->waitUntil(
+            function () use ($rootForm, $taxRateDefaultMultiSelect) {
+                $rootForm->reinitRootElement();
+                $element = $rootForm->browser->find($taxRateDefaultMultiSelect);
+                return $element->isVisible() ? null : true;
+            }
+        );
+        $this->browser->waitUntil(
+            function () use ($rootForm, $taxRateMultiSelectList) {
+                $rootForm->reinitRootElement();
+                $element = $rootForm->browser->find($taxRateMultiSelectList);
+                return $element->isVisible() ? true : null;
+            }
+        );
+
         $taxRateBlock = $this->_rootElement->find($this->taxRateBlock, Locator::SELECTOR_CSS, 'multiselectlist');
         /** @var \Magento\Tax\Test\Block\Adminhtml\Rule\Edit\TaxRate $taxRateForm */
         $taxRateForm = $this->blockFactory->create(
             'Magento\Tax\Test\Block\Adminhtml\Rule\Edit\TaxRate',
-            ['element' => $this->browser->find($this->taxRateForm, Locator::SELECTOR_XPATH)]
+            ['element' => $this->browser->find($this->taxRateForm)]
         );
 
         /** @var \Magento\Tax\Test\Fixture\TaxRule\TaxRate $taxRatesFixture */
@@ -169,7 +205,6 @@ class Form extends FormInterface
         $taxRatesFixture = $taxRatesFixture->getFixture();
         $taxRatesData = $taxRule->getTaxRate();
 
-        $this->waitForElementVisible($this->maskElement);
         foreach ($taxRatesData as $key => $taxRate) {
             $option = $taxRateBlock->find(sprintf($this->optionMaskElement, $taxRate), Locator::SELECTOR_XPATH);
             if (!$option->isVisible()) {
@@ -186,7 +221,7 @@ class Form extends FormInterface
     }
 
     /**
-     * Method to add new tax classes
+     * Method to add new tax classes.
      *
      * @param array $taxClasses
      * @param Element $element
@@ -197,7 +232,14 @@ class Form extends FormInterface
         foreach ($taxClasses as $taxClass) {
             $option = $element->find(sprintf($this->optionMaskElement, $taxClass), Locator::SELECTOR_XPATH);
             if (!$option->isVisible()) {
-                $element->find($this->addNewButton, Locator::SELECTOR_XPATH)->click();
+                $this->clickAddNewButton($element);
+                $inputSelector = $this->addNewInput;
+                $element->waitUntil(
+                    function () use ($element, $inputSelector) {
+                        $input = $element->find($inputSelector);
+                        return $input->isVisible() ? true : null;
+                    }
+                );
                 $element->find($this->addNewInput)->setValue($taxClass);
                 $element->find($this->saveButton)->click();
                 $this->waitUntilOptionIsVisible($element, $taxClass);
@@ -206,7 +248,7 @@ class Form extends FormInterface
     }
 
     /**
-     * Waiting until option in list is visible
+     * Waiting until option in list is visible.
      *
      * @param Element $element
      * @param string $value
@@ -216,51 +258,63 @@ class Form extends FormInterface
     {
         $element->waitUntil(
             function () use ($element, $value) {
-                $productSavedMessage = $element->find(
-                    sprintf($this->optionMaskElement, $value),
-                    Locator::SELECTOR_XPATH
-                );
-                return $productSavedMessage->isVisible() ? true : null;
+                $option = $element->find(sprintf($this->optionMaskElement, $value), Locator::SELECTOR_XPATH);
+                return $option->isVisible() ? true : null;
             }
         );
     }
 
     /**
-     * Open Additional Settings on Form
+     * Open Additional Settings on Form.
      *
      * @return void
      */
     public function openAdditionalSettings()
     {
         $this->_rootElement->find($this->additionalSettings)->click();
+        $browser = $this->browser;
+        $browser->waitUntil(
+            function () use ($browser) {
+                $element = $browser->find($this->additionalSettingsBlock);
+                return $element->isVisible() ? true : null;
+            }
+        );
     }
 
     /**
-     * Getting all options in Tax Rate multi select list
+     * Getting all options in Tax Rate multi select list.
      *
      * @return array
      */
     public function getAllTaxRates()
     {
+        $browser = $this->browser;
+        $taxRateMultiSelectList = $this->taxRateMultiSelectList;
+        $browser->waitUntil(
+            function () use ($browser, $taxRateMultiSelectList) {
+                $element = $browser->find($taxRateMultiSelectList);
+                return $element->isVisible() ? true : null;
+            }
+        );
         /** @var \Mtf\Client\Driver\Selenium\Element\MultiselectlistElement $taxRates */
         $taxRates = $this->_rootElement->find($this->taxRateBlock, Locator::SELECTOR_CSS, 'multiselectlist');
         return $taxRates->getAllValues();
     }
 
     /**
-     * Click 'Add New Tax Rate' button
+     * Click 'Add New' button.
      *
-     * @param Element $taxRateBlock
+     * @param Element $element
      * @return void
      */
-    protected function clickAddNewButton(Element $taxRateBlock)
+    protected function clickAddNewButton(Element $element)
     {
         $addNewButton = $this->addNewButton;
-        $taxRateBlock->waitUntil(
-            function () use ($taxRateBlock, $addNewButton) {
-                return $taxRateBlock->find($addNewButton, Locator::SELECTOR_XPATH)->isVisible() ? true : null;
+        $element->waitUntil(
+            function () use ($element, $addNewButton) {
+                return $element->find($addNewButton)->isVisible() ? true : null;
             }
         );
-        $taxRateBlock->find($this->addNewButton, Locator::SELECTOR_XPATH)->click();
+        $element->find($this->addNewButton)->click();
     }
 }

@@ -35,7 +35,7 @@
     <div class="actions dropdown options switcher-options">
         <?php foreach ($this->getGroups() as $_group): ?>
         <?php if ($_group->getId()==$this->getCurrentGroupId()): ?>
-            <div class="action toggle switcher-trigger" data-toggle="dropdown" id="switcher-store-trigger">
+            <div class="action toggle switcher-trigger" data-mage-init='{"dropdown":{}}' data-toggle="dropdown" id="switcher-store-trigger">
                 <strong>
                     <span><?php echo $this->escapeHtml($_group->getName()) ?></span>
                 </strong>

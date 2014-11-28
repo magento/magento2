@@ -39,7 +39,7 @@ class CircularDependencyTest extends \PHPUnit_Framework_TestCase
     public function testCircularDependencies()
     {
         $package = new Package();
-        $rootDirectory = \Magento\TestFramework\Utility\Files::init()->getPathToSource();
+        $rootDirectory = \Magento\Framework\Test\Utility\Files::init()->getPathToSource();
         $declaredLanguages = $package->readDeclarationFiles($rootDirectory);
         $packs = [];
         foreach ($declaredLanguages as $language) {

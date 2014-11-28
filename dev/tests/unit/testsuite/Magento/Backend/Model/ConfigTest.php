@@ -288,4 +288,58 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $this->_model->save();
     }
+
+    public function testSetDataByPath()
+    {
+        $value = 'value';
+        $path = '<section>/<group>/<field>';
+        $this->_model->setDataByPath($path, $value);
+        $expected = [
+            'section' => '<section>',
+            'groups' => [
+                '<group>' => [
+                    'fields' => [
+                        '<field>' => ['value' => $value],
+                    ],
+                ],
+            ],
+        ];
+        $this->assertSame($expected, $this->_model->getData());
+    }
+
+    /**
+     * @expectedException \UnexpectedValueException
+     * @expectedExceptionMessage Path must not be empty
+     */
+    public function testSetDataByPathEmpty()
+    {
+        $this->_model->setDataByPath('', 'value');
+    }
+
+    /**
+     * @param string $path
+     * @param string $expectedException
+     *
+     * @dataProvider setDataByPathWrongDepthDataProvider
+     */
+    public function testSetDataByPathWrongDepth($path, $expectedException)
+    {
+        $expectedException = 'Allowed depth of configuration is 3 (<section>/<group>/<field>). ' . $expectedException;
+        $this->setExpectedException('\UnexpectedValueException', $expectedException);
+        $value = 'value';
+        $this->_model->setDataByPath($path, $value);
+    }
+
+    /**
+     * @return array
+     */
+    public function setDataByPathWrongDepthDataProvider()
+    {
+        return [
+            'depth 2' => ['section/group', "Your configuration depth is 2 for path 'section/group'"],
+            'depth 1' => ['section', "Your configuration depth is 1 for path 'section'"],
+            'depth 4' => ['section/group/field/sub-field', "Your configuration depth is 4 for path"
+            . " 'section/group/field/sub-field'"],
+        ];
+    }
 }

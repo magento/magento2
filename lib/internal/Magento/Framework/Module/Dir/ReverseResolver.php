@@ -59,7 +59,7 @@ class ReverseResolver
     public function getModuleName($path)
     {
         $path = str_replace('\\', '/', $path);
-        foreach (array_keys($this->_moduleList->getModules()) as $moduleName) {
+        foreach ($this->_moduleList->getNames() as $moduleName) {
             $moduleDir = $this->_moduleDirs->getDir($moduleName);
             $moduleDir = str_replace('\\', '/', $moduleDir);
             if ($path == $moduleDir || strpos($path, $moduleDir . '/') === 0) {

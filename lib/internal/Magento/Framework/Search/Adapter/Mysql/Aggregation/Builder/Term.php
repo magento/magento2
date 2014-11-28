@@ -24,6 +24,7 @@
 namespace Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder;
 
 use Magento\Framework\DB\Select;
+use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface;
 use Magento\Framework\Search\Request\BucketInterface as RequestBucketInterface;
 
 class Term implements BucketInterface
@@ -44,14 +45,19 @@ class Term implements BucketInterface
     /**
      * {@inheritdoc}
      */
-    public function build(Select $baseQuery, RequestBucketInterface $bucket, array $entityIds)
-    {
+    public function build(
+        DataProviderInterface $dataProvider,
+        array $dimensions,
+        RequestBucketInterface $bucket,
+        array $entityIds
+    ) {
         $metrics = $this->metricsBuilder->build($bucket);
 
-        $baseQuery->where('main_table.entity_id IN (?)', $entityIds);
-        $baseQuery->columns($metrics);
-        $baseQuery->group(RequestBucketInterface::FIELD_VALUE);
+        $select = $dataProvider->getDataSet($bucket, $dimensions);
+        $select->where('main_table.entity_id IN (?)', $entityIds);
+        $select->columns($metrics);
+        $select->group(RequestBucketInterface::FIELD_VALUE);
 
-        return $baseQuery;
+        return $dataProvider->execute($select);
     }
 }

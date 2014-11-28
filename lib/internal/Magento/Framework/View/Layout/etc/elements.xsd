@@ -355,6 +355,7 @@
             <xs:enumeration value="div"/>
             <xs:enumeration value="dl"/>
             <xs:enumeration value="fieldset"/>
+            <xs:enumeration value="main"/>
             <xs:enumeration value="header"/>
             <xs:enumeration value="footer"/>
             <xs:enumeration value="hgroup"/>

@@ -27,52 +27,26 @@
 
 // Shortcuts --------------------------------
 
-.border-radius(@radius:5px) {
-    -webkit-border-radius: @arguments;
-    -moz-border-radius: @arguments;
-    border-radius: @arguments;
+.filter(@_filter: grayscale(100%)) {
+    -webkit-filter: @_filter; // Use in 41 Chrome
+    filter: @_filter;
 }
 
-.box-sizing(@type: border-box) {
-    -moz-box-sizing: @type;
-    -webkit-box-sizing: @type;
-    -ms-box-sizing: @type;
-    box-sizing: @type;
+.rotate(@_rotation) {
+    -webkit-transform: rotate(@_rotation); // Use in 8 Safari
+    -ms-transform: rotate(@_rotation); // Use in 9 IE
+    transform: rotate(@_rotation);
 }
 
-.box-shadow(@shadow: 1px 1px 2px rgba(0,0,0,0.25)) {
-    -webkit-box-shadow: @shadow;
-    -moz-box-shadow: @shadow;
-    box-shadow: @shadow;
-}
-
-.filter(@filter: grayscale(100%)) {
-    -webkit-filter: @filter;
-    -moz-filter: @filter;
-    -ms-filter: @filter;
-    -o-filter: @filter;
-    filter: @filter;
-}
-
-.transition(@transition) {
-    -webkit-transition: @transition;
-    -moz-transition: @transition;
-    transition: @transition;
-}
-
-.rotate(@rotation) {
-    -webkit-transform: rotate(@rotation);
-    -moz-transform: rotate(@rotation);
-    -o-transform: rotate(@rotation);
-    transform: rotate(@rotation);
-}
-
-.placeholder(@color: #DDD) {
+.placeholder(@_color: #ddd) {
     :-moz-placeholder {
-        color: @color;
+        color: @_color;
     }
     ::-webkit-input-placeholder {
-        color: @color;
+        color: @_color;
+    }
+    :-ms-input-placeholder {
+        color: @_color;
     }
 }
 
@@ -80,54 +54,30 @@
     .horizontal (@start-color, @end-color) when not (@disable-filters) {
         background-color: @end-color;
         background-repeat: repeat-x;
-        background-image: -khtml-gradient(linear, left top, right top, from(@start-color), to(@end-color)); /* Konqueror */
-        background-image: -moz-linear-gradient(left, @start-color, @end-color); /* FF 3.6+ */
-        background-image: -ms-linear-gradient(left, @start-color, @end-color); /* IE10 */
-        background-image: -webkit-gradient(linear, left top, right top, color-stop(0%, @start-color), color-stop(100%, @end-color)); /* Safari 4+, Chrome 2+ */
-        background-image: -webkit-linear-gradient(left, @start-color, @end-color); /* Safari 5.1+, Chrome 10+ */
-        background-image: -o-linear-gradient(left, @start-color, @end-color); /* Opera 11.10 */
-        background-image: -ms-linear-gradient(left, @start-color 0%, @end-color 100%); /* IE10+ */
-        background-image: linear-gradient(left, @start-color, @end-color); /* the standard */
-        filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=1)",@start-color,@end-color)); /* IE6 & IE7 */
-        -ms-filter: %("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=1)",@start-color,@end-color); /* IE8+ */
+        background-image: -webkit-linear-gradient(left, @start-color, @end-color); // Use in 4.3 Android
+        background-image: -ms-linear-gradient(left, @start-color 0%, @end-color 100%); // Use in 10 IE
+        background-image: linear-gradient(left, @start-color, @end-color);
     }
     .horizontal (@start-color, @end-color) when (@disable-filters) {
         background-color: @end-color;
         background-repeat: repeat-x;
-        background-image: -khtml-gradient(linear, left top, right top, from(@start-color), to(@end-color)); /* Konqueror */
-        background-image: -moz-linear-gradient(left, @start-color, @end-color); /* FF 3.6+ */
-        background-image: -ms-linear-gradient(left, @start-color, @end-color); /* IE10 */
-        background-image: -webkit-gradient(linear, left top, right top, color-stop(0%, @start-color), color-stop(100%, @end-color)); /* Safari 4+, Chrome 2+ */
-        background-image: -webkit-linear-gradient(left, @start-color, @end-color); /* Safari 5.1+, Chrome 10+ */
-        background-image: -o-linear-gradient(left, @start-color, @end-color); /* Opera 11.10 */
-        background-image: -ms-linear-gradient(left, @start-color 0%, @end-color 100%); /* IE10+ */
-        background-image: linear-gradient(left, @start-color, @end-color); /* the standard */
+        background-image: -webkit-linear-gradient(left, @start-color, @end-color); // Use in 4.3 Android
+        background-image: -ms-linear-gradient(left, @start-color 0%, @end-color 100%); // Use in 10 IE
+        background-image: linear-gradient(left, @start-color, @end-color);
     }
     .vertical (@start-color, @end-color) when (@disable-filters) {
         background-color: @end-color;
         background-repeat: repeat-x;
-        background-image: -khtml-gradient(linear, left top, left bottom, from(@start-color), to(@end-color)); /* Konqueror */
-        background-image: -moz-linear-gradient(@start-color, @end-color); /* FF 3.6+ */
-        background-image: -ms-linear-gradient(@start-color, @end-color); /* IE10 */
-        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, @start-color), color-stop(100%, @end-color)); /* Safari 4+, Chrome 2+ */
-        background-image: -webkit-linear-gradient(@start-color, @end-color); /* Safari 5.1+, Chrome 10+ */
-        background-image: -o-linear-gradient(@start-color, @end-color); /* Opera 11.10 */
-        background-image: -ms-linear-gradient(top, @start-color 0%, @end-color 100%); /* IE10+ */
-        background-image: linear-gradient(@start-color, @end-color); /* the standard */
+        background-image: -webkit-linear-gradient(@start-color, @end-color); // Use in 4.3 Android
+        background-image: -ms-linear-gradient(top, @start-color 0%, @end-color 100%); // Use in 10 IE
+        background-image: linear-gradient(@start-color, @end-color);
     }
     .vertical (@start-color, @end-color) when not (@disable-filters) {
         background-color: @end-color;
         background-repeat: repeat-x;
-        background-image: -khtml-gradient(linear, left top, left bottom, from(@start-color), to(@end-color)); /* Konqueror */
-        background-image: -moz-linear-gradient(@start-color, @end-color); /* FF 3.6+ */
-        background-image: -ms-linear-gradient(@start-color, @end-color); /* IE10 */
-        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, @start-color), color-stop(100%, @end-color)); /* Safari 4+, Chrome 2+ */
-        background-image: -webkit-linear-gradient(@start-color, @end-color); /* Safari 5.1+, Chrome 10+ */
-        background-image: -o-linear-gradient(@start-color, @end-color); /* Opera 11.10 */
-        background-image: -ms-linear-gradient(top, @start-color 0%, @end-color 100%); /* IE10+ */
-        background-image: linear-gradient(@start-color, @end-color); /* the standard */
-        filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",@start-color,@end-color)); /* IE6 & IE7 */
-        -ms-filter: %("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",@start-color,@end-color); /* IE8+ */
+        background-image: -webkit-linear-gradient(@start-color, @end-color); // Use in 4.3 Android
+        background-image: -ms-linear-gradient(top, @start-color 0%, @end-color 100%); // Use in 10 IE
+        background-image: linear-gradient(@start-color, @end-color);
     }
 }
 
@@ -142,7 +92,6 @@
     &:after {
         clear: both;
     }
-    *zoom: 1;
 }
 
 .clearfix() when (@using-ieclasses) {
@@ -154,23 +103,14 @@
     &:after {
         clear: both;
     }
-    .ie6 &, .ie7 & {
-        zoom: 1;
-    }
 }
 
 .inline-block() when (@using-ieclasses) {
     display: inline-block;
-    .ie7 & {
-        display: inline;
-        zoom: 1;
-    }
 }
 
 .inline-block() when not (@using-ieclasses) {
     display: inline-block;
-    *display: inline;
-    *zoom: 1;
 }
 
 .ir() {

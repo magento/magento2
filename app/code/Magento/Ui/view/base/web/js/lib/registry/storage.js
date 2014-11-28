@@ -23,36 +23,43 @@
 define([], function(){
     'use strict';
     
-    var data = {};
+    function Storage(){
+        this.data = {};
+    }
 
-    return {
+    Storage.prototype = {
+        constructor: Storage,
+
         /**
          * Retrieves values of the specified elements.
+         *
          * @param {Array} elems - An array of elements.
          * @returns {Array} Array of values. 
          */
         get: function(elems) {
-            var result = [],
+            var data = this.data,
                 record;
 
-            elems.forEach(function(elem) {
+            elems = elems || [];
+
+            return elems.map(function(elem) {
                 record = data[elem];
 
-                result.push(record ? record.value : undefined);
+                return record ? record.value : undefined;
             });
-
-            return result;
         },
 
 
         /**
          * Sets key -> value pair.
+         *
          * @param {String} elem - Elements' name.
          * @param {*} value - Value of the element.
          * returns {storage} Chainable.
          */
         set: function(elem, value) {
-            var record = data[elem] = data[elem] || {};
+            var data    = this.data,
+                record  = data[elem] = data[elem] || {};
 
             record.value = value;
 
@@ -62,10 +69,13 @@ define([], function(){
 
         /**
          * Removes specified elements from storage.
+         *
          * @param {Array} elems - An array of elements to be removed.
          * returns {storage} Chainable.
          */
         remove: function(elems) {
+            var data = this.data;
+
             elems.forEach(function(elem) {
                 delete data[elem];
             });
@@ -76,13 +86,19 @@ define([], function(){
 
         /**
          * Checks whether all of the specified elements has been registered.
+         *
          * @param {Array} elems - An array of elements.
          * @returns {Boolean}
          */
         has: function(elems) {
+            var data = this.data;
+
             return elems.every(function(elem) {
                 return typeof data[elem] !== 'undefined';
             });
         }
     };
+
+    return Storage;
 });
+

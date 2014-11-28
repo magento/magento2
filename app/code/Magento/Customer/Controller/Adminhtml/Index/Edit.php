@@ -24,9 +24,9 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
-use Magento\Customer\Service\V1\Data\Customer;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Framework\Convert\ConvertArray;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Customer\Service\V1\Data\AddressConverter;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 
 class Edit extends \Magento\Customer\Controller\Adminhtml\Index
@@ -42,8 +42,6 @@ class Edit extends \Magento\Customer\Controller\Adminhtml\Index
     public function execute()
     {
         $customerId = $this->_initCustomer();
-        $this->_view->loadLayout();
-        $this->_setActiveMenu('Magento_Customer::customer_manage');
 
         $customerData = array();
         $customerData['account'] = array();
@@ -52,13 +50,13 @@ class Edit extends \Magento\Customer\Controller\Adminhtml\Index
         $isExistingCustomer = (bool)$customerId;
         if ($isExistingCustomer) {
             try {
-                $customer = $this->_customerAccountService->getCustomer($customerId);
-                $customerData['account'] = ExtensibleDataObjectConverter::toFlatArray($customer);
-                $customerData['account']['id'] = $customerId;
+                $customer = $this->_customerRepository->getById($customerId);
+                $customerData['account'] = $this->customerMapper->toFlatArray($customer);
+                $customerData['account'][CustomerInterface::ID] = $customerId;
                 try {
-                    $addresses = $this->_addressService->getAddresses($customerId);
+                    $addresses = $customer->getAddresses();
                     foreach ($addresses as $address) {
-                        $customerData['address'][$address->getId()] = AddressConverter::toFlatArray($address);
+                        $customerData['address'][$address->getId()] = $this->addressMapper->toFlatArray($address);
                         $customerData['address'][$address->getId()]['id'] = $address->getId();
                     }
                 } catch (NoSuchEntityException $e) {
@@ -94,7 +92,7 @@ class Edit extends \Magento\Customer\Controller\Adminhtml\Index
                 );
                 $formData = $customerForm->extractData($request, 'account');
                 $customerData['account'] = $customerForm->restoreData($formData);
-                $customer = $this->_customerBuilder->populateWithArray($customerData['account'])->create();
+                $customer = $this->customerDataBuilder->populateWithArray($customerData['account'])->create();
             }
 
             if (isset($data['address']) && is_array($data['address'])) {
@@ -104,39 +102,41 @@ class Edit extends \Magento\Customer\Controller\Adminhtml\Index
                     }
 
                     try {
-                        $address = $this->_addressService->getAddress($addressId);
+                        $address = $this->addressRepository->getById($addressId);
                         if (!empty($customerId) && $address->getCustomerId() == $customerId) {
-                            $this->_addressBuilder->populate($address);
+                            $this->addressDataBuilder->populateWithArray($this->addressMapper->toFlatArray($address));
                         }
                     } catch (NoSuchEntityException $e) {
-                        $this->_addressBuilder->setId($addressId);
+                        $this->addressDataBuilder->setId($addressId);
                     }
                     if (!empty($customerId)) {
-                        $this->_addressBuilder->setCustomerId($customerId);
+                        $this->addressDataBuilder->setCustomerId($customerId);
                     }
-                    $this->_addressBuilder->setDefaultBilling(
-                        !empty($data['account'][Customer::DEFAULT_BILLING]) &&
-                        $data['account'][Customer::DEFAULT_BILLING] == $addressId
+                    $this->addressDataBuilder->setDefaultBilling(
+                        !empty($data['account'][CustomerInterface::DEFAULT_BILLING]) &&
+                        $data['account'][CustomerInterface::DEFAULT_BILLING] == $addressId
                     );
-                    $this->_addressBuilder->setDefaultShipping(
-                        !empty($data['account'][Customer::DEFAULT_SHIPPING]) &&
-                        $data['account'][Customer::DEFAULT_SHIPPING] == $addressId
+                    $this->addressDataBuilder->setDefaultShipping(
+                        !empty($data['account'][CustomerInterface::DEFAULT_SHIPPING]) &&
+                        $data['account'][CustomerInterface::DEFAULT_SHIPPING] == $addressId
                     );
-                    $address = $this->_addressBuilder->create();
+                    $address = $this->addressDataBuilder->create();
                     $requestScope = sprintf('address/%s', $addressId);
                     $addressForm = $this->_formFactory->create(
                         'customer_address',
                         'adminhtml_customer_address',
-                        AddressConverter::toFlatArray($address)
+                        $this->addressMapper->toFlatArray($address)
                     );
                     $formData = $addressForm->extractData($request, $requestScope);
                     $customerData['address'][$addressId] = $addressForm->restoreData($formData);
-                    $customerData['address'][$addressId]['id'] = $addressId;
+                    $customerData['address'][$addressId][\Magento\Customer\Api\Data\AddressInterface::ID] = $addressId;
                 }
             }
         }
 
         $this->_getSession()->setCustomerData($customerData);
+
+        $this->_view->loadLayout();
 
         if ($isExistingCustomer) {
             $this->_title->add($this->_viewHelper->getCustomerName($customer));

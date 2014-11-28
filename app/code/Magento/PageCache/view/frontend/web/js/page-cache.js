@@ -138,4 +138,6 @@ define([
             });
         }
     });
+    
+    return $.mage.pageCache;
 });

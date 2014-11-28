@@ -77,7 +77,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $this->_converterMock =
             $this->getMock('Magento\Framework\App\Resource\Config\Converter', array(), array(), '', false);
 
-        $this->_configLocalMock = $this->getMock('Magento\Framework\App\Arguments', array(), array(), '', false);
+        $this->_configLocalMock = $this->getMock('Magento\Framework\App\DeploymentConfig', array(), array(), '', false);
 
         $this->_model = new \Magento\Framework\App\Resource\Config\Reader(
             $this->_fileResolverMock,

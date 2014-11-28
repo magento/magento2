@@ -57,12 +57,11 @@ interface CustomerRepositoryInterface
      * Retrieve customer.
      *
      * @param int $customerId
-     * @param int|null $websiteId
      * @return \Magento\Customer\Api\Data\CustomerInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException If customer with the specified ID does not exist.
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getById($customerId, $websiteId = null);
+    public function getById($customerId);
 
     /**
      * Retrieve customers which match a specified criteria.

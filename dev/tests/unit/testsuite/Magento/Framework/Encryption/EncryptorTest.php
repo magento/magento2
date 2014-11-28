@@ -23,6 +23,8 @@
  */
 namespace Magento\Framework\Encryption;
 
+use Magento\Framework\App\DeploymentConfig;
+
 class EncryptorTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -44,7 +46,12 @@ class EncryptorTest extends \PHPUnit_Framework_TestCase
     {
         $this->_randomGenerator = $this->getMock('Magento\Framework\Math\Random', array(), array(), '', false);
         $this->_cryptFactory = $this->getMock('Magento\Framework\Encryption\CryptFactory', array(), array(), '', false);
-        $this->_model = new Encryptor($this->_randomGenerator, $this->_cryptFactory, 'cryptKey');
+        $deploymentConfigMock = $this->getMock('\Magento\Framework\App\DeploymentConfig', array(), array(), '', false);
+        $deploymentConfigMock->expects($this->any())
+            ->method('get')
+            ->with(Encryptor::PARAM_CRYPT_KEY)
+            ->will($this->returnValue('cryptKey'));
+        $this->_model = new Encryptor($this->_randomGenerator, $this->_cryptFactory, $deploymentConfigMock);
     }
 
     public function testGetHashNoSalt()
@@ -143,7 +150,12 @@ class EncryptorTest extends \PHPUnit_Framework_TestCase
      */
     public function testEncryptWithEmptyKey($key)
     {
-        $model = new Encryptor($this->_randomGenerator, $this->_cryptFactory, $key);
+        $deploymentConfigMock = $this->getMock('\Magento\Framework\App\DeploymentConfig', array(), array(), '', false);
+        $deploymentConfigMock->expects($this->any())
+            ->method('get')
+            ->with(Encryptor::PARAM_CRYPT_KEY)
+            ->will($this->returnValue($key));
+        $model = new Encryptor($this->_randomGenerator, $this->_cryptFactory, $deploymentConfigMock);
         $value = 'arbitrary_string';
         $this->assertEquals($value, $model->encrypt($value));
     }

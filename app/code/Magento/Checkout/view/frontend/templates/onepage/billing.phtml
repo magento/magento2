@@ -66,7 +66,7 @@
         <div class="field street required">
             <label class="label" for="billing:street1"><span><?php echo __('Address') ?></span></label>
             <div class="control">
-                <input type="text" title="<?php echo __('Street Address') ?>" name="billing[street][]" id="billing:street1" value="<?php echo $this->escapeHtml($this->getAddress()->getStreet(1)) ?>" class="input-text <?php echo $_streetValidationClass ?>" />
+                <input type="text" title="<?php echo __('Street Address') ?>" name="billing[street][]" id="billing:street1" value="<?php echo $this->escapeHtml($this->getAddress()->getStreetLine(1)) ?>" class="input-text <?php echo $_streetValidationClass ?>" />
                 <div class="nested">
                     <?php $_streetValidationClass = trim(str_replace('required-entry', '', $_streetValidationClass)); ?>
                     <?php for ($_i = 2, $_n = $this->helper('Magento\Customer\Helper\Address')->getStreetLines(); $_i <= $_n; $_i++): ?>
@@ -75,7 +75,7 @@
                                 <span><?php echo __('Address') ?></span>
                             </label>
                             <div class="control">
-                                <input type="text" title="<?php echo __('Street Address %1', $_i) ?>" name="billing[street][]" id="billing:street<?php echo $_i ?>" value="<?php echo $this->escapeHtml($this->getAddress()->getStreet($_i)) ?>" class="input-text <?php echo $_streetValidationClass ?>" />
+                                <input type="text" title="<?php echo __('Street Address %1', $_i) ?>" name="billing[street][]" id="billing:street<?php echo $_i ?>" value="<?php echo $this->escapeHtml($this->getAddress()->getStreetLine($_i)) ?>" class="input-text <?php echo $_streetValidationClass ?>" />
                             </div>
                         </div>
                     <?php endfor; ?>

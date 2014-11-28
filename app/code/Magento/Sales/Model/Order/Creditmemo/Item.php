@@ -23,74 +23,45 @@
  */
 namespace Magento\Sales\Model\Order\Creditmemo;
 
+use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Sales\Api\Data\CreditmemoItemInterface;
+
 /**
  * @method \Magento\Sales\Model\Resource\Order\Creditmemo\Item _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Creditmemo\Item getResource()
- * @method int getParentId()
  * @method \Magento\Sales\Model\Order\Creditmemo\Item setParentId(int $value)
- * @method float getWeeeTaxAppliedRowAmount()
  * @method \Magento\Sales\Model\Order\Creditmemo\Item setWeeeTaxAppliedRowAmount(float $value)
- * @method float getBasePrice()
  * @method \Magento\Sales\Model\Order\Creditmemo\Item setBasePrice(float $value)
- * @method float getBaseWeeeTaxRowDisposition()
  * @method \Magento\Sales\Model\Order\Creditmemo\Item setBaseWeeeTaxRowDisposition(float $value)
- * @method float getTaxAmount()
  * @method \Magento\Sales\Model\Order\Creditmemo\Item setTaxAmount(float $value)
- * @method float getBaseWeeeTaxAppliedAmount()
  * @method \Magento\Sales\Model\Order\Creditmemo\Item setBaseWeeeTaxAppliedAmount(float $value)
- * @method float getWeeeTaxRowDisposition()
  * @method \Magento\Sales\Model\Order\Creditmemo\Item setWeeeTaxRowDisposition(float $value)
- * @method float getBaseRowTotal()
  * @method \Magento\Sales\Model\Order\Creditmemo\Item setBaseRowTotal(float $value)
- * @method float getDiscountAmount()
  * @method \Magento\Sales\Model\Order\Creditmemo\Item setDiscountAmount(float $value)
- * @method float getRowTotal()
  * @method \Magento\Sales\Model\Order\Creditmemo\Item setRowTotal(float $value)
- * @method float getWeeeTaxAppliedAmount()
  * @method \Magento\Sales\Model\Order\Creditmemo\Item setWeeeTaxAppliedAmount(float $value)
- * @method float getBaseDiscountAmount()
  * @method \Magento\Sales\Model\Order\Creditmemo\Item setBaseDiscountAmount(float $value)
- * @method float getBaseWeeeTaxDisposition()
  * @method \Magento\Sales\Model\Order\Creditmemo\Item setBaseWeeeTaxDisposition(float $value)
- * @method float getPriceInclTax()
  * @method \Magento\Sales\Model\Order\Creditmemo\Item setPriceInclTax(float $value)
- * @method float getBaseTaxAmount()
  * @method \Magento\Sales\Model\Order\Creditmemo\Item setBaseTaxAmount(float $value)
- * @method float getWeeeTaxDisposition()
  * @method \Magento\Sales\Model\Order\Creditmemo\Item setWeeeTaxDisposition(float $value)
- * @method float getBasePriceInclTax()
  * @method \Magento\Sales\Model\Order\Creditmemo\Item setBasePriceInclTax(float $value)
- * @method float getQty()
- * @method float getBaseCost()
  * @method \Magento\Sales\Model\Order\Creditmemo\Item setBaseCost(float $value)
- * @method float getBaseWeeeTaxAppliedRowAmnt()
  * @method \Magento\Sales\Model\Order\Creditmemo\Item setBaseWeeeTaxAppliedRowAmnt(float $value)
- * @method float getPrice()
  * @method \Magento\Sales\Model\Order\Creditmemo\Item setPrice(float $value)
- * @method float getBaseRowTotalInclTax()
  * @method \Magento\Sales\Model\Order\Creditmemo\Item setBaseRowTotalInclTax(float $value)
- * @method float getRowTotalInclTax()
  * @method \Magento\Sales\Model\Order\Creditmemo\Item setRowTotalInclTax(float $value)
- * @method int getProductId()
  * @method \Magento\Sales\Model\Order\Creditmemo\Item setProductId(int $value)
- * @method int getOrderItemId()
  * @method \Magento\Sales\Model\Order\Creditmemo\Item setOrderItemId(int $value)
- * @method string getAdditionalData()
  * @method \Magento\Sales\Model\Order\Creditmemo\Item setAdditionalData(string $value)
- * @method string getDescription()
  * @method \Magento\Sales\Model\Order\Creditmemo\Item setDescription(string $value)
- * @method string getWeeeTaxApplied()
  * @method \Magento\Sales\Model\Order\Creditmemo\Item setWeeeTaxApplied(string $value)
- * @method string getSku()
  * @method \Magento\Sales\Model\Order\Creditmemo\Item setSku(string $value)
- * @method string getName()
  * @method \Magento\Sales\Model\Order\Creditmemo\Item setName(string $value)
- * @method float getHiddenTaxAmount()
  * @method \Magento\Sales\Model\Order\Creditmemo\Item setHiddenTaxAmount(float $value)
- * @method float getBaseHiddenTaxAmount()
  * @method \Magento\Sales\Model\Order\Creditmemo\Item setBaseHiddenTaxAmount(float $value)
  */
-class Item extends \Magento\Framework\Model\AbstractModel
+class Item extends AbstractExtensibleModel implements CreditmemoItemInterface
 {
     /**
      * @var string
@@ -120,6 +91,7 @@ class Item extends \Magento\Framework\Model\AbstractModel
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
      * @param \Magento\Sales\Model\Order\ItemFactory $orderItemFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
@@ -128,12 +100,13 @@ class Item extends \Magento\Framework\Model\AbstractModel
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
+        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
         \Magento\Sales\Model\Order\ItemFactory $orderItemFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        array $data = []
     ) {
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        parent::__construct($context, $registry, $metadataService, $resource, $resourceCollection, $data);
         $this->_orderItemFactory = $orderItemFactory;
     }
 
@@ -317,18 +290,322 @@ class Item extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Before object save
+     * Returns additional_data
      *
-     * @return $this
+     * @return string
      */
-    protected function _beforeSave()
+    public function getAdditionalData()
     {
-        parent::_beforeSave();
+        return $this->getData(CreditmemoItemInterface::ADDITIONAL_DATA);
+    }
 
-        if (!$this->getParentId() && $this->getCreditmemo()) {
-            $this->setParentId($this->getCreditmemo()->getId());
-        }
+    /**
+     * Returns base_cost
+     *
+     * @return float
+     */
+    public function getBaseCost()
+    {
+        return $this->getData(CreditmemoItemInterface::BASE_COST);
+    }
 
-        return $this;
+    /**
+     * Returns base_discount_amount
+     *
+     * @return float
+     */
+    public function getBaseDiscountAmount()
+    {
+        return $this->getData(CreditmemoItemInterface::BASE_DISCOUNT_AMOUNT);
+    }
+
+    /**
+     * Returns base_hidden_tax_amount
+     *
+     * @return float
+     */
+    public function getBaseHiddenTaxAmount()
+    {
+        return $this->getData(CreditmemoItemInterface::BASE_HIDDEN_TAX_AMOUNT);
+    }
+
+    /**
+     * Returns base_price
+     *
+     * @return float
+     */
+    public function getBasePrice()
+    {
+        return $this->getData(CreditmemoItemInterface::BASE_PRICE);
+    }
+
+    /**
+     * Returns base_price_incl_tax
+     *
+     * @return float
+     */
+    public function getBasePriceInclTax()
+    {
+        return $this->getData(CreditmemoItemInterface::BASE_PRICE_INCL_TAX);
+    }
+
+    /**
+     * Returns base_row_total
+     *
+     * @return float
+     */
+    public function getBaseRowTotal()
+    {
+        return $this->getData(CreditmemoItemInterface::BASE_ROW_TOTAL);
+    }
+
+    /**
+     * Returns base_row_total_incl_tax
+     *
+     * @return float
+     */
+    public function getBaseRowTotalInclTax()
+    {
+        return $this->getData(CreditmemoItemInterface::BASE_ROW_TOTAL_INCL_TAX);
+    }
+
+    /**
+     * Returns base_tax_amount
+     *
+     * @return float
+     */
+    public function getBaseTaxAmount()
+    {
+        return $this->getData(CreditmemoItemInterface::BASE_TAX_AMOUNT);
+    }
+
+    /**
+     * Returns base_weee_tax_applied_amount
+     *
+     * @return float
+     */
+    public function getBaseWeeeTaxAppliedAmount()
+    {
+        return $this->getData(CreditmemoItemInterface::BASE_WEEE_TAX_APPLIED_AMOUNT);
+    }
+
+    /**
+     * Returns base_weee_tax_applied_row_amnt
+     *
+     * @return float
+     */
+    public function getBaseWeeeTaxAppliedRowAmnt()
+    {
+        return $this->getData(CreditmemoItemInterface::BASE_WEEE_TAX_APPLIED_ROW_AMNT);
+    }
+
+    /**
+     * Returns base_weee_tax_disposition
+     *
+     * @return float
+     */
+    public function getBaseWeeeTaxDisposition()
+    {
+        return $this->getData(CreditmemoItemInterface::BASE_WEEE_TAX_DISPOSITION);
+    }
+
+    /**
+     * Returns base_weee_tax_row_disposition
+     *
+     * @return float
+     */
+    public function getBaseWeeeTaxRowDisposition()
+    {
+        return $this->getData(CreditmemoItemInterface::BASE_WEEE_TAX_ROW_DISPOSITION);
+    }
+
+    /**
+     * Returns description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->getData(CreditmemoItemInterface::DESCRIPTION);
+    }
+
+    /**
+     * Returns discount_amount
+     *
+     * @return float
+     */
+    public function getDiscountAmount()
+    {
+        return $this->getData(CreditmemoItemInterface::DISCOUNT_AMOUNT);
+    }
+
+    /**
+     * Returns hidden_tax_amount
+     *
+     * @return float
+     */
+    public function getHiddenTaxAmount()
+    {
+        return $this->getData(CreditmemoItemInterface::HIDDEN_TAX_AMOUNT);
+    }
+
+    /**
+     * Returns name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->getData(CreditmemoItemInterface::NAME);
+    }
+
+    /**
+     * Returns order_item_id
+     *
+     * @return int
+     */
+    public function getOrderItemId()
+    {
+        return $this->getData(CreditmemoItemInterface::ORDER_ITEM_ID);
+    }
+
+    /**
+     * Returns parent_id
+     *
+     * @return int
+     */
+    public function getParentId()
+    {
+        return $this->getData(CreditmemoItemInterface::PARENT_ID);
+    }
+
+    /**
+     * Returns price
+     *
+     * @return float
+     */
+    public function getPrice()
+    {
+        return $this->getData(CreditmemoItemInterface::PRICE);
+    }
+
+    /**
+     * Returns price_incl_tax
+     *
+     * @return float
+     */
+    public function getPriceInclTax()
+    {
+        return $this->getData(CreditmemoItemInterface::PRICE_INCL_TAX);
+    }
+
+    /**
+     * Returns product_id
+     *
+     * @return int
+     */
+    public function getProductId()
+    {
+        return $this->getData(CreditmemoItemInterface::PRODUCT_ID);
+    }
+
+    /**
+     * Returns qty
+     *
+     * @return float
+     */
+    public function getQty()
+    {
+        return $this->getData(CreditmemoItemInterface::QTY);
+    }
+
+    /**
+     * Returns row_total
+     *
+     * @return float
+     */
+    public function getRowTotal()
+    {
+        return $this->getData(CreditmemoItemInterface::ROW_TOTAL);
+    }
+
+    /**
+     * Returns row_total_incl_tax
+     *
+     * @return float
+     */
+    public function getRowTotalInclTax()
+    {
+        return $this->getData(CreditmemoItemInterface::ROW_TOTAL_INCL_TAX);
+    }
+
+    /**
+     * Returns sku
+     *
+     * @return string
+     */
+    public function getSku()
+    {
+        return $this->getData(CreditmemoItemInterface::SKU);
+    }
+
+    /**
+     * Returns tax_amount
+     *
+     * @return float
+     */
+    public function getTaxAmount()
+    {
+        return $this->getData(CreditmemoItemInterface::TAX_AMOUNT);
+    }
+
+    /**
+     * Returns weee_tax_applied
+     *
+     * @return string
+     */
+    public function getWeeeTaxApplied()
+    {
+        return $this->getData(CreditmemoItemInterface::WEEE_TAX_APPLIED);
+    }
+
+    /**
+     * Returns weee_tax_applied_amount
+     *
+     * @return float
+     */
+    public function getWeeeTaxAppliedAmount()
+    {
+        return $this->getData(CreditmemoItemInterface::WEEE_TAX_APPLIED_AMOUNT);
+    }
+
+    /**
+     * Returns weee_tax_applied_row_amount
+     *
+     * @return float
+     */
+    public function getWeeeTaxAppliedRowAmount()
+    {
+        return $this->getData(CreditmemoItemInterface::WEEE_TAX_APPLIED_ROW_AMOUNT);
+    }
+
+    /**
+     * Returns weee_tax_disposition
+     *
+     * @return float
+     */
+    public function getWeeeTaxDisposition()
+    {
+        return $this->getData(CreditmemoItemInterface::WEEE_TAX_DISPOSITION);
+    }
+
+    /**
+     * Returns weee_tax_row_disposition
+     *
+     * @return float
+     */
+    public function getWeeeTaxRowDisposition()
+    {
+        return $this->getData(CreditmemoItemInterface::WEEE_TAX_ROW_DISPOSITION);
     }
 }

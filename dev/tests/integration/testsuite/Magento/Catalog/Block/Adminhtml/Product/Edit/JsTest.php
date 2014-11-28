@@ -40,9 +40,9 @@ class JsTest extends \PHPUnit_Framework_TestCase
         $fixtureTaxRule->load('Test Rule', 'code');
         $defaultCustomerTaxClass = 3;
         $fixtureTaxRule
-            ->setTaxCustomerClass(array_merge($fixtureTaxRule->getCustomerTaxClasses(), [$defaultCustomerTaxClass]))
-            ->setTaxProductClass($fixtureTaxRule->getProductTaxClasses())
-            ->setTaxRate($fixtureTaxRule->getRates())
+            ->setCustomerTaxClassIds(array_merge($fixtureTaxRule->getCustomerTaxClasses(), [$defaultCustomerTaxClass]))
+            ->setProductTaxClassIds($fixtureTaxRule->getProductTaxClasses())
+            ->setTaxRateIds($fixtureTaxRule->getRates())
             ->saveCalculationData();
         /** @var \Magento\Catalog\Block\Adminhtml\Product\Edit\Js $block */
         $block = $objectManager->create('Magento\Catalog\Block\Adminhtml\Product\Edit\Js');
@@ -50,9 +50,10 @@ class JsTest extends \PHPUnit_Framework_TestCase
         $decodedResult = json_decode($jsonResult);
         $this->assertNotEmpty($decodedResult, 'Resulting JSON is invalid.');
         $taxClassesArray = (array)$decodedResult;
+        $noneTaxClass = 0;
         $defaultProductTaxClass = 2;
         $expectedProductTaxClasses = array_unique(
-            array_merge($fixtureTaxRule->getProductTaxClasses(), [$defaultProductTaxClass])
+            array_merge($fixtureTaxRule->getProductTaxClasses(), [$defaultProductTaxClass, $noneTaxClass])
         );
         $this->assertCount(
             count($expectedProductTaxClasses),

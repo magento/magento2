@@ -35,7 +35,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         $expectedResult = [];
         /** @var \Magento\Tax\Model\ClassModel $taxClass */
         foreach ($collection as $taxClass) {
-            if ($taxClass->getClassType() == \Magento\Tax\Service\V1\TaxClassServiceInterface::TYPE_CUSTOMER) {
+            if ($taxClass->getClassType() == \Magento\Tax\Api\TaxClassManagementInterface::TYPE_CUSTOMER) {
                 $expectedResult[] = ['value' => $taxClass->getId(), 'label' => $taxClass->getClassName()];
             }
         }
@@ -46,7 +46,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         $source = Bootstrap::getObjectManager()->get('Magento\Tax\Model\TaxClass\Source\Customer');
         $this->assertEquals(
             $expectedResult,
-            $source->getAllOptions(),
+            $source->getAllOptions(false),
             'Tax Class options are invalid.'
         );
     }
@@ -58,7 +58,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         $expectedResult = [];
         /** @var \Magento\Tax\Model\ClassModel $taxClass */
         foreach ($collection as $taxClass) {
-            if ($taxClass->getClassType() == \Magento\Tax\Service\V1\TaxClassServiceInterface::TYPE_CUSTOMER) {
+            if ($taxClass->getClassType() == \Magento\Tax\Api\TaxClassManagementInterface::TYPE_CUSTOMER) {
                 $expectedResult[] = ['value' => $taxClass->getId(), 'label' => $taxClass->getClassName()];
             }
         }

@@ -67,11 +67,11 @@ class Purchased extends \Magento\Framework\Model\AbstractModel
      *
      * @return $this
      */
-    public function _beforeSave()
+    public function beforeSave()
     {
         if (null == $this->getOrderId()) {
             throw new \Exception(__('Order id cannot be null'));
         }
-        return parent::_beforeSave();
+        return parent::beforeSave();
     }
 }

@@ -74,7 +74,8 @@ class User extends AbstractRepository
             'password' => '123123q',
             'password_confirmation' => '123123q',
             'role_id' => ['dataSet' => 'default'],
-            'current_password' => $superAdminPassword
+            'current_password' => $superAdminPassword,
+            'is_active' => 'Active'
         ];
     }
 }

@@ -132,7 +132,7 @@ class WriteService implements WriteServiceInterface
      */
     public function update($id, AttributeMetadata $attribute)
     {
-        /** @var \Magento\Catalog\Model\Resource\Eav\Attribute $attributeModel */
+        /** @var \Magento\Catalog\Model\Resource\Eav\Attribute $model */
         $model = $this->attributeFactory->create();
         $model->loadByCode(\Magento\Catalog\Model\Product::ENTITY, $id);
         if (!$model->getId()) {

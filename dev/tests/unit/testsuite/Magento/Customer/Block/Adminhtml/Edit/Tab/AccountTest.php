@@ -24,11 +24,10 @@
 
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
 
+use Magento\Customer\Model\AccountManagement;
 use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
 use Magento\Framework\Api\AbstractExtensibleObject;
 use Magento\Framework\Api\AttributeValue;
-use Magento\Framework\Api\ExtensibleDataObjectConverter;
 
 class AccountTest extends \PHPUnit_Framework_TestCase
 {
@@ -56,14 +55,17 @@ class AccountTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Model\Options|\PHPUnit_Framework_MockObject_MockObject */
     protected $options;
 
-    /** @var \Magento\Customer\Service\V1\CustomerAccountServiceInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $customerAccountServiceInterfaceMock;
+    /** @var \Magento\Customer\Api\AccountManagementInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $accountManagementMock;
 
-    /** @var \Magento\Customer\Service\V1\CustomerMetadataServiceInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $customerMetadataServiceInterfaceMock;
+    /** @var \Magento\Customer\Api\CustomerMetadataInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $customerMetadataMock;
 
-    /** @var \Magento\Customer\Service\V1\Data\CustomerBuilder|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Api\Data\CustomerDataBuilder|\PHPUnit_Framework_MockObject_MockObject */
     protected $customerBuilderMock;
+
+    /** @var \Magento\Framework\Api\ExtensibleDataObjectConverter|\PHPUnit_Framework_MockObject_MockObject */
+    protected $extensibleDataObjectConverterMock;
 
     protected function setUp()
     {
@@ -83,16 +85,19 @@ class AccountTest extends \PHPUnit_Framework_TestCase
         $this->options = $this->getMockBuilder('Magento\Customer\Model\Options')
             ->setMethods(['getNamePrefixOptions', 'getNameSuffixOptions'])
             ->disableOriginalConstructor()->getMock();
-        $this->customerAccountServiceInterfaceMock = $this->getMock(
-            'Magento\Customer\Service\V1\CustomerAccountServiceInterface'
+        $this->accountManagementMock = $this->getMock(
+            'Magento\Customer\Api\AccountManagementInterface'
         );
-        $this->customerMetadataServiceInterfaceMock = $this->getMock(
-            'Magento\Customer\Service\V1\CustomerMetadataServiceInterface'
+        $this->customerMetadataMock = $this->getMock(
+            'Magento\Customer\Api\CustomerMetadataInterface'
         );
-        $this->customerBuilderMock = $this->getMockBuilder('Magento\Customer\Service\V1\Data\CustomerBuilder')
+        $this->customerBuilderMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerDataBuilder')
             ->setMethods(['populateWithArray', 'create'])
             ->disableOriginalConstructor()
             ->getMock();
+        $this->extensibleDataObjectConverterMock = $this->getMockBuilder(
+            'Magento\Framework\Api\ExtensibleDataObjectConverter'
+        )->setMethods(['toFlatArray'])->disableOriginalConstructor()->getMock();
     }
 
     /**
@@ -134,11 +139,7 @@ class AccountTest extends \PHPUnit_Framework_TestCase
         $storeManagerMock->expects($this->any())->method('isSingleStoreMode')
             ->will($this->returnValue($isSingleStoreMode));
 
-        $customerObject = $this->getMockBuilder('\Magento\Customer\Service\V1\Data\Customer')
-            ->setMethods(['__toArray', 'getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $customerObject->expects($this->any())->method('__toArray')->will($this->returnValue($customerData));
+        $customerObject = $this->getMock('\Magento\Customer\Api\Data\CustomerInterface');
         if (!empty($customerData['id'])) {
             $customerObject->expects($this->any())->method('getId')->will($this->returnValue($customerData['id']));
         }
@@ -189,16 +190,25 @@ class AccountTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(['Suf1', 'Suf2']));
         $this->formFactoryMock->expects($this->any())->method('create')
             ->will($this->returnValue($accountForm));
+        $this->extensibleDataObjectConverterMock->expects($this->any())->method('toFlatArray')
+            ->will($this->returnValue($customerData));
         $this->customerFormFactoryMock
             ->expects($this->any())
             ->method('create')
-            ->with('customer', 'adminhtml_customer', ExtensibleDataObjectConverter::toFlatArray($customerObject))
+            ->with(
+                'customer',
+                'adminhtml_customer',
+                $this->extensibleDataObjectConverterMock->toFlatArray(
+                    $customerObject,
+                    '\Magento\Customer\Api\Data\CustomerInterface'
+                )
+            )
             ->will($this->returnValue($customerForm));
-        $this->customerAccountServiceInterfaceMock->expects($this->any())->method('canModify')->withAnyParameters()
-            ->will($this->returnValue($canModifyCustomer));
-        $this->customerAccountServiceInterfaceMock->expects($this->any())->method('getConfirmationStatus')
+        $this->accountManagementMock->expects($this->any())->method('isReadOnly')->withAnyParameters()
+            ->will($this->returnValue(!$canModifyCustomer));
+        $this->accountManagementMock->expects($this->any())->method('getConfirmationStatus')
             ->withAnyParameters()
-            ->will($this->returnValue(CustomerAccountServiceInterface::ACCOUNT_CONFIRMED));
+            ->will($this->returnValue(AccountManagement::ACCOUNT_CONFIRMED));
     }
 
     /**
@@ -217,9 +227,10 @@ class AccountTest extends \PHPUnit_Framework_TestCase
                 'customerFormFactory' => $this->customerFormFactoryMock,
                 'systemStore' => $this->storeMock,
                 'options' => $this->options,
-                'customerAccountService' => $this->customerAccountServiceInterfaceMock,
-                'customerMetadataService' => $this->customerMetadataServiceInterfaceMock,
-                'customerBuilder' => $this->customerBuilderMock
+                'accountManagement' => $this->accountManagementMock,
+                'customerMetadata' => $this->customerMetadataMock,
+                'customerBuilder' => $this->customerBuilderMock,
+                'extensibleDataObjectConverter' => $this->extensibleDataObjectConverterMock
             ]
         )->initForm();
     }

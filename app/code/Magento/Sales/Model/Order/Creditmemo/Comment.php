@@ -23,21 +23,19 @@
  */
 namespace Magento\Sales\Model\Order\Creditmemo;
 
+use Magento\Sales\Model\AbstractModel;
+use Magento\Sales\Api\Data\CreditmemoCommentInterface;
+
 /**
  * @method \Magento\Sales\Model\Resource\Order\Creditmemo\Comment _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Creditmemo\Comment getResource()
- * @method int getParentId()
  * @method \Magento\Sales\Model\Order\Creditmemo\Comment setParentId(int $value)
- * @method int getIsCustomerNotified()
  * @method \Magento\Sales\Model\Order\Creditmemo\Comment setIsCustomerNotified(int $value)
- * @method int getIsVisibleOnFront()
  * @method \Magento\Sales\Model\Order\Creditmemo\Comment setIsVisibleOnFront(int $value)
- * @method string getComment()
  * @method \Magento\Sales\Model\Order\Creditmemo\Comment setComment(string $value)
- * @method string getCreatedAt()
  * @method \Magento\Sales\Model\Order\Creditmemo\Comment setCreatedAt(string $value)
  */
-class Comment extends \Magento\Sales\Model\AbstractModel
+class Comment extends AbstractModel implements CreditmemoCommentInterface
 {
     /**
      * Creditmemo instance
@@ -54,6 +52,7 @@ class Comment extends \Magento\Sales\Model\AbstractModel
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\StoreManagerInterface $storeManager
@@ -64,14 +63,24 @@ class Comment extends \Magento\Sales\Model\AbstractModel
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
+        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        array $data = []
     ) {
-        parent::__construct($context, $registry, $localeDate, $dateTime, $resource, $resourceCollection, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $metadataService,
+            $localeDate,
+            $dateTime,
+            $resource,
+            $resourceCollection,
+            $data
+        );
         $this->_storeManager = $storeManager;
     }
 
@@ -120,19 +129,54 @@ class Comment extends \Magento\Sales\Model\AbstractModel
         return $this->_storeManager->getStore();
     }
 
+
     /**
-     * Before object save
+     * Returns comment
      *
-     * @return $this
+     * @return string
      */
-    protected function _beforeSave()
+    public function getComment()
     {
-        parent::_beforeSave();
+        return $this->getData(CreditmemoCommentInterface::COMMENT);
+    }
 
-        if (!$this->getParentId() && $this->getCreditmemo()) {
-            $this->setParentId($this->getCreditmemo()->getId());
-        }
+    /**
+     * Returns created_at
+     *
+     * @return string
+     */
+    public function getCreatedAt()
+    {
+        return $this->getData(CreditmemoCommentInterface::CREATED_AT);
+    }
 
-        return $this;
+    /**
+     * Returns is_customer_notified
+     *
+     * @return int
+     */
+    public function getIsCustomerNotified()
+    {
+        return $this->getData(CreditmemoCommentInterface::IS_CUSTOMER_NOTIFIED);
+    }
+
+    /**
+     * Returns is_visible_on_front
+     *
+     * @return int
+     */
+    public function getIsVisibleOnFront()
+    {
+        return $this->getData(CreditmemoCommentInterface::IS_VISIBLE_ON_FRONT);
+    }
+
+    /**
+     * Returns parent_id
+     *
+     * @return int
+     */
+    public function getParentId()
+    {
+        return $this->getData(CreditmemoCommentInterface::PARENT_ID);
     }
 }

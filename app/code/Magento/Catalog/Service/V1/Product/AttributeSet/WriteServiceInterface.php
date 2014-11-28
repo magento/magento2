@@ -39,6 +39,8 @@ interface WriteServiceInterface
      * @return int
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @deprecated
+     * @see \Magento\Eav\Api\AttributeSetManagementInterface::create
      */
     public function create(AttributeSet $attributeSet, $skeletonId);
 
@@ -48,6 +50,8 @@ interface WriteServiceInterface
      * @param \Magento\Catalog\Service\V1\Data\Eav\AttributeSet $attributeSetData
      * @return int attribute set ID
      * @throws \Magento\Framework\Model\Exception If attribute set is not found
+     * @deprecated
+     * @see \Magento\Eav\Api\AttributeSetRepositoryInterface::save
      */
     public function update(AttributeSet $attributeSetData);
 
@@ -58,6 +62,8 @@ interface WriteServiceInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\InputException
      * @return bool
+     * @deprecated
+     * @see \Magento\Eav\Api\AttributeSetRepositoryInterface::delete
      */
     public function remove($attributeSetId);
 }

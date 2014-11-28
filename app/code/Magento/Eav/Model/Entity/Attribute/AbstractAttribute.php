@@ -26,7 +26,9 @@ namespace Magento\Eav\Model\Entity\Attribute;
 /**
  * Entity/Attribute/Model - attribute abstract
  */
-abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractModel implements AttributeInterface
+abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtensibleModel implements
+    AttributeInterface,
+    \Magento\Eav\Api\Data\AttributeInterface
 {
     const TYPE_STATIC = 'static';
 
@@ -112,14 +114,21 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractModel 
     protected $_universalFactory;
 
     /**
+     * @var \Magento\Eav\Api\Data\AttributeOptionDataBuilder
+     */
+    protected $optionDataBuilder;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Eav\Model\Entity\TypeFactory $eavTypeFactory
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
+     * @param \Magento\Eav\Api\Data\AttributeOptionDataBuilder $optionDataBuilder
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -127,23 +136,26 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractModel 
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
+        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Entity\TypeFactory $eavTypeFactory,
         \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
+        \Magento\Eav\Api\Data\AttributeOptionDataBuilder $optionDataBuilder,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        parent::__construct($context, $registry, $metadataService, $resource, $resourceCollection, $data);
         $this->_coreData = $coreData;
         $this->_eavConfig = $eavConfig;
         $this->_eavTypeFactory = $eavTypeFactory;
         $this->_storeManager = $storeManager;
         $this->_resourceHelper = $resourceHelper;
         $this->_universalFactory = $universalFactory;
+        $this->optionDataBuilder = $optionDataBuilder;
     }
 
     /**
@@ -207,9 +219,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractModel 
     }
 
     /**
-     * Get attribute identifuer
-     *
-     * @return int | null
+     * {@inheritdoc}
      */
     public function getAttributeId()
     {
@@ -226,7 +236,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractModel 
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getAttributeCode()
     {
@@ -260,7 +270,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractModel 
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getBackendType()
     {
@@ -277,7 +287,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractModel 
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getBackendModel()
     {
@@ -328,7 +338,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractModel 
     }
 
     /**
-     * @return int|string
+     * {@inheritdoc}
      */
     public function getEntityTypeId()
     {
@@ -898,5 +908,119 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractModel 
             return $this->getSource()->getFlatUpdateSelect($store);
         }
         return $this->_getResource()->getFlatUpdateSelect($this, $store);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIsUnique()
+    {
+        return $this->getData(self::IS_UNIQUE);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFrontendClass()
+    {
+        return $this->getData(self::FRONTEND_CLASS);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFrontendInput()
+    {
+        return $this->getData(self::FRONTEND_INPUT);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIsRequired()
+    {
+        return $this->getData(self::IS_REQUIRED);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOptions()
+    {
+        $options = $this->getData(self::OPTIONS);
+        if (!$options) {
+            $options = $this->usesSource() ? $this->getSource()->getAllOptions() : array();
+        }
+
+        return $this->convertToObjects($options);
+    }
+
+    /**
+     * Convert option values from arrays to data objects
+     *
+     * @param array $options
+     * @return \Magento\Eav\Api\Data\AttributeOptionInterface[]
+     */
+    protected function convertToObjects(array $options)
+    {
+        $dataObjects = [];
+        foreach ($options as $option) {
+            $dataObjects[] = $this->optionDataBuilder->populateWithArray($option)->create();
+        }
+        return $dataObjects;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIsUserDefined()
+    {
+        return $this->getData(self::IS_USER_DEFINED);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefaultFrontendLabel()
+    {
+        return $this->getData(self::FRONTEND_LABEL);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFrontendLabels()
+    {
+        return $this->getData(self::FRONTEND_LABELS);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getNote()
+    {
+        return $this->getData(self::NOTE);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSourceModel()
+    {
+        return $this->getData(self::SOURCE_MODEL);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getValidationRules()
+    {
+        $rules = $this->getData(self::VALIDATE_RULES);
+        if (is_array($rules)) {
+            return $rules;
+        } else if (!empty($rules)) {
+            return unserialize($rules);
+        }
+        return array();
     }
 }

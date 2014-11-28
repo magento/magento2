@@ -63,11 +63,20 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Layer\Resolver $layerResolver */
+        $layerResolver = $this->getMockBuilder('\Magento\Catalog\Model\Layer\Resolver')
+            ->disableOriginalConstructor()
+            ->setMethods(['get', 'create'])
+            ->getMock();
+        $layerResolver->expects($this->any())
+            ->method($this->anything())
+            ->will($this->returnValue($this->catalogLayerMock));
+
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
             '\Magento\LayeredNavigation\Block\Navigation',
             array(
-                'catalogLayer' => $this->catalogLayerMock,
+                'layerResolver' => $layerResolver,
                 'filterList' => $this->filterListMock,
                 'visibilityFlag' => $this->visibilityFlagMock
             )

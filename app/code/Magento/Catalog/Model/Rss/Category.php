@@ -45,16 +45,16 @@ class Category
     protected $visibility;
 
     /**
-     * @param \Magento\Catalog\Model\Layer\Category $catalogLayer
+     * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $collectionFactory
      * @param \Magento\Catalog\Model\Product\Visibility $visibility
      */
     public function __construct(
-        \Magento\Catalog\Model\Layer\Category $catalogLayer,
+        \Magento\Catalog\Model\Layer\Resolver $layerResolver,
         \Magento\Catalog\Model\Resource\Product\CollectionFactory $collectionFactory,
         \Magento\Catalog\Model\Product\Visibility $visibility
     ) {
-        $this->catalogLayer = $catalogLayer;
+        $this->catalogLayer = $layerResolver->get();
         $this->collectionFactory = $collectionFactory;
         $this->visibility = $visibility;
     }

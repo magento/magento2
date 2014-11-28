@@ -138,6 +138,33 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     ];
 
     /**
+     * Placeholder for fpt data sent Curl
+     *
+     * @var array
+     */
+    protected $fptData = [
+        'website' => [
+            'name' => 'website_id',
+            'data' => [
+                'All Websites [USD]' => 0
+            ]
+        ],
+        'country_name' => [
+            'name' => 'country',
+            'data' => [
+                'United States' => 'US'
+            ]
+        ],
+        'state_name' => [
+            'name' => 'state',
+            'data' => [
+                'California' => 12,
+                '*' => 0
+            ]
+        ]
+    ];
+
+    /**
      * Select custom options.
      *
      * @var array
@@ -194,6 +221,12 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
         }
         if (isset($fields['group_price'])) {
             $fields['group_price'] = $this->preparePriceData($fields['group_price']);
+        }
+        if (isset($fields['fpt'])) {
+            $attributeLabel = $fixture->getDataFieldConfig('attribute_set_id')['source']
+                ->getAttributeSet()->getDataFieldConfig('assigned_attributes')['source']
+                ->getAttributes()[0]->getFrontendLabel();
+            $fields[$attributeLabel] = $this->prepareFptData($fields['fpt']);
         }
         if ($isCustomOptions = isset($fields['custom_options'])) {
             $fields = $this->prepareCustomOptionsData($fields);
@@ -330,6 +363,24 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
         foreach ($fields as &$field) {
             foreach ($this->priceData as $key => $data) {
                 $field[$data['name']] = $this->priceData[$key]['data'][$field[$key]];
+                unset($field[$key]);
+            }
+            $field['delete'] = '';
+        }
+        return $fields;
+    }
+
+    /**
+     * Preparation of fpt data
+     *
+     * @param array $fields
+     * @return array
+     */
+    protected function prepareFptData(array $fields)
+    {
+        foreach ($fields as &$field) {
+            foreach ($this->fptData as $key => $data) {
+                $field[$data['name']] = $this->fptData[$key]['data'][$field[$key]];
                 unset($field[$key]);
             }
             $field['delete'] = '';

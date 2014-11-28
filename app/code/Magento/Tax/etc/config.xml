@@ -27,7 +27,9 @@
     <default>
         <tax>
             <classes>
-                <shipping_tax_class />
+                <shipping_tax_class>0</shipping_tax_class>
+                <default_product_tax_class>2</default_product_tax_class>
+                <default_customer_tax_class>3</default_customer_tax_class>
             </classes>
             <calculation>
                 <algorithm>TOTAL_BASE_CALCULATION</algorithm>

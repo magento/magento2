@@ -33,6 +33,9 @@ use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Model\Metadata\Validator;
 use Magento\Customer\Model\Resource\Customer\Collection;
 use Magento\Customer\Service\V1\Data\CustomerDetails;
+use Magento\Framework\Api\Search\FilterGroup;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Encryption\EncryptorInterface as Encryptor;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\AuthenticationException;
@@ -47,12 +50,9 @@ use Magento\Framework\Exception\StateException;
 use Magento\Framework\Logger;
 use Magento\Framework\Mail\Exception as MailException;
 use Magento\Framework\Math\Random;
-use Magento\Framework\Api\Search\FilterGroup;
-use Magento\Framework\Api\SearchCriteria;
-use Magento\Framework\Api\SortOrder;
-use Magento\Framework\UrlInterface;
-use Magento\Framework\StoreManagerInterface;
 use Magento\Framework\Stdlib\String as StringHelper;
+use Magento\Framework\StoreManagerInterface;
+use Magento\Framework\UrlInterface;
 
 /**
  * Handle various customer account actions
@@ -69,7 +69,7 @@ class CustomerAccountService implements CustomerAccountServiceInterface
     private $customerFactory;
 
     /**
-     * @var Data\CustomerBuilder
+     * @var \Magento\Customer\Api\Data\CustomerDataBuilder
      */
     private $customerBuilder;
 
@@ -154,13 +154,18 @@ class CustomerAccountService implements CustomerAccountServiceInterface
     private $stringHelper;
 
     /**
+     * @var \Magento\Framework\Api\ExtensibleDataObjectConverter
+     */
+    private $extensibleDataObjectConverter;
+
+    /**
      * @param CustomerFactory $customerFactory
      * @param ManagerInterface $eventManager
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param Random $mathRandom
      * @param Converter $converter
      * @param Validator $validator
-     * @param Data\CustomerBuilder $customerBuilder
+     * @param \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder
      * @param Data\CustomerDetailsBuilder $customerDetailsBuilder
      * @param Data\SearchResultsBuilder $searchResultsBuilder
      * @param Data\CustomerValidationResultsBuilder $customerValidationResultsBuilder
@@ -173,6 +178,7 @@ class CustomerAccountService implements CustomerAccountServiceInterface
      * @param Encryptor $encryptor
      * @param ConfigShare $configShare
      * @param StringHelper $stringHelper
+     * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -183,7 +189,7 @@ class CustomerAccountService implements CustomerAccountServiceInterface
         Random $mathRandom,
         Converter $converter,
         Validator $validator,
-        Data\CustomerBuilder $customerBuilder,
+        \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder,
         Data\CustomerDetailsBuilder $customerDetailsBuilder,
         Data\SearchResultsBuilder $searchResultsBuilder,
         Data\CustomerValidationResultsBuilder $customerValidationResultsBuilder,
@@ -195,7 +201,8 @@ class CustomerAccountService implements CustomerAccountServiceInterface
         Logger $logger,
         Encryptor $encryptor,
         ConfigShare $configShare,
-        StringHelper $stringHelper
+        StringHelper $stringHelper,
+        \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
     ) {
         $this->customerFactory = $customerFactory;
         $this->eventManager = $eventManager;
@@ -216,6 +223,7 @@ class CustomerAccountService implements CustomerAccountServiceInterface
         $this->encryptor = $encryptor;
         $this->configShare = $configShare;
         $this->stringHelper = $stringHelper;
+        $this->extensibleDataObjectConverter = $extensibleDataObjectConverter;
     }
 
     /**
@@ -450,12 +458,15 @@ class CustomerAccountService implements CustomerAccountServiceInterface
      * Send either confirmation or welcome email after an account creation
      *
      * @param CustomerModel $customerModel
-     * @param Data\Customer $customer
+     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @param string $redirectUrl
      * @return void
      */
-    protected function _sendEmailConfirmation(CustomerModel $customerModel, Data\Customer $customer, $redirectUrl)
-    {
+    protected function _sendEmailConfirmation(
+        CustomerModel $customerModel,
+        \Magento\Customer\Api\Data\CustomerInterface $customer,
+        $redirectUrl
+    ) {
         try {
             if ($customerModel->isConfirmationRequired()) {
                 $customerModel->sendNewAccountEmail(
@@ -597,14 +608,14 @@ class CustomerAccountService implements CustomerAccountServiceInterface
     /**
      * Create or update customer information
      *
-     * @param \Magento\Customer\Service\V1\Data\Customer $customer
+     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @param string $hash Hashed password ready to be saved
      * @throws \Magento\Customer\Exception If something goes wrong during save
      * @throws \Magento\Framework\Exception\InputException If bad input is provided
      * @return int customer ID
      */
     protected function saveCustomer(
-        \Magento\Customer\Service\V1\Data\Customer $customer,
+        \Magento\Customer\Api\Data\CustomerInterface $customer,
         $hash
     ) {
         $customerModel = $this->converter->createCustomerModel($customer);
@@ -685,10 +696,10 @@ class CustomerAccountService implements CustomerAccountServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function validateCustomerData(Data\Customer $customer, array $attributes = [])
+    public function validateCustomerData(\Magento\Customer\Api\Data\CustomerInterface $customer, array $attributes = [])
     {
         $customerErrors = $this->validator->validateData(
-            \Magento\Framework\Api\ExtensibleDataObjectConverter::toFlatArray($customer),
+            $this->extensibleDataObjectConverter->toFlatArray($customer),
             $attributes,
             'customer'
         );

@@ -40,9 +40,9 @@
                        value="<?php echo $this->getProductDefaultQty() * 1 ?>"
                        title="<?php echo __('Qty') ?>" class="input-text qty"
                     <?php if ($_product->getStockItem() && $_product->getStockItem()->getIsQtyDecimal()) : ?>
-                        data-validate="{required:true, 'validate-greater-than-zero':true}"
+                        data-validate="{'required-number':true, 'validate-greater-than-zero':true}"
                     <?php else: ?>
-                        data-validate="{required:true, digits:true}"
+                        data-validate="{'required-number':true, digits:true}"
                     <?php endif; ?> />
             </div>
         </div>

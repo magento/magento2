@@ -24,7 +24,6 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 class ResetPassword extends \Magento\Customer\Controller\Adminhtml\Index
@@ -42,10 +41,10 @@ class ResetPassword extends \Magento\Customer\Controller\Adminhtml\Index
         }
 
         try {
-            $customer = $this->_customerAccountService->getCustomer($customerId);
-            $this->_customerAccountService->initiatePasswordReset(
+            $customer = $this->_customerRepository->getById($customerId);
+            $this->customerAccountManagement->initiatePasswordReset(
                 $customer->getEmail(),
-                CustomerAccountServiceInterface::EMAIL_REMINDER,
+                \Magento\Customer\Model\AccountManagement::EMAIL_REMINDER,
                 $customer->getWebsiteId()
             );
             $this->messageManager->addSuccess(__('Customer will receive an email with a link to reset password.'));

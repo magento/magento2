@@ -26,7 +26,7 @@
 <?php $notificationCount = $this->getUnreadNotificationCount(); ?>
 <div class="notifications-summary" data-notification-count="<?php echo $this->escapeHtml($notificationCount); ?>">
     <?php if ($notificationCount > 0) : ?>
-        <a href="<?php echo $this->getUrl('adminhtml/notification/index'); ?>" class="action notifications-action" title="<?php echo __('Notifications'); ?>" data-toggle="dropdown">
+        <a href="<?php echo $this->getUrl('adminhtml/notification/index'); ?>" class="action notifications-action" data-mage-init='{"dropdown":{}}' title="<?php echo __('Notifications'); ?>" data-toggle="dropdown">
             <span class="text"><?php echo __('Notifications'); ?></span>
             <span class="counter qty"><?php echo $this->escapeHtml($notificationCount); ?></span>
         </a>

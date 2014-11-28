@@ -23,12 +23,15 @@
  */
 namespace Magento\Sales\Model\Resource\Order;
 
+use Magento\Sales\Api\Data\OrderSearchResultInterface;
+use Magento\Sales\Model\Resource\Collection\AbstractCollection;
+
 /**
  * Flat sales order collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\Sales\Model\Resource\Collection\AbstractCollection
+class Collection extends AbstractCollection implements OrderSearchResultInterface
 {
     /**
      * Event prefix
@@ -100,7 +103,7 @@ class Collection extends \Magento\Sales\Model\Resource\Collection\AbstractCollec
     {
         if (is_null($this->_fieldsToSelect)) {
             // If we select all fields from table, we need to add column alias
-            $this->getSelect()->columns(array('items_count' => 'total_item_count'));
+            $this->getSelect()->columns(['items_count' => 'total_item_count']);
         } else {
             $this->addFieldToSelect('total_item_count', 'items_count');
         }
@@ -173,25 +176,25 @@ class Collection extends \Magento\Sales\Model\Resource\Collection\AbstractCollec
         );
 
         $this->getSelect()->joinLeft(
-            array($billingAliasName => $joinTable),
+            [$billingAliasName => $joinTable],
             "(main_table.entity_id = {$billingAliasName}.parent_id" .
             " AND {$billingAliasName}.address_type = 'billing')",
-            array(
+            [
                 $billingAliasName . '.firstname',
                 $billingAliasName . '.lastname',
                 $billingAliasName . '.telephone',
                 $billingAliasName . '.postcode'
-            )
+            ]
         )->joinLeft(
-            array($shippingAliasName => $joinTable),
+            [$shippingAliasName => $joinTable],
             "(main_table.entity_id = {$shippingAliasName}.parent_id" .
             " AND {$shippingAliasName}.address_type = 'shipping')",
-            array(
+            [
                 $shippingAliasName . '.firstname',
                 $shippingAliasName . '.lastname',
                 $shippingAliasName . '.telephone',
                 $shippingAliasName . '.postcode'
-            )
+            ]
         );
         $this->_coreResourceHelper->prepareColumnsList($this->getSelect());
         return $this;
@@ -253,11 +256,11 @@ class Collection extends \Magento\Sales\Model\Resource\Collection\AbstractCollec
      */
     public function addBillingAgreementsFilter($agreements)
     {
-        $agreements = is_array($agreements) ? $agreements : array($agreements);
+        $agreements = is_array($agreements) ? $agreements : [$agreements];
         $this->getSelect()->joinInner(
-            array('sbao' => $this->getTable('sales_billing_agreement_order')),
+            ['sbao' => $this->getTable('sales_billing_agreement_order')],
             'main_table.entity_id = sbao.order_id',
-            array()
+            []
         )->where(
             'sbao.agreement_id IN(?)',
             $agreements

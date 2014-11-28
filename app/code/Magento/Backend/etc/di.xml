@@ -61,11 +61,6 @@
             <argument name="menuDirector" xsi:type="object">Magento\Backend\Model\Menu\Director\Director</argument>
         </arguments>
     </type>
-    <type name="Magento\Backend\App\Area\FrontNameResolver">
-        <arguments>
-            <argument name="defaultFrontName" xsi:type="init_parameter">Magento\Backend\App\Area\FrontNameResolver::PARAM_BACKEND_FRONT_NAME</argument>
-        </arguments>
-    </type>
     <type name="Magento\Backend\Helper\Data">
         <arguments>
             <argument name="backendUrl" xsi:type="object">Magento\Backend\Model\UrlInterface\Proxy</argument>
@@ -105,11 +100,6 @@
             <argument name="formKey" xsi:type="object">Magento\Framework\Data\Form\FormKey\Proxy</argument>
             <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
             <argument name="backendHelper" xsi:type="object">Magento\Backend\Helper\Data\Proxy</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Backend\Helper\Dashboard\Data">
-        <arguments>
-            <argument name="installDate" xsi:type="init_parameter">Magento\Framework\App\State::PARAM_INSTALL_DATE</argument>
         </arguments>
     </type>
     <preference for="Magento\Framework\Authorization\RoleLocatorInterface" type="Magento\Backend\Model\Authorization\RoleLocator" />

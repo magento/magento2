@@ -70,7 +70,8 @@ class Textarea extends AbstractElement
             'readonly',
             'disabled',
             'onkeyup',
-            'tabindex'
+            'tabindex',
+            'data-form-part'
         );
     }
 

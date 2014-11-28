@@ -1,0 +1,14 @@
+{
+  "name": "Magento2",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-less": "^0.12.0",
+    "grunt-styledocco": "^0.1.4",
+    "load-grunt-tasks": "^1.0.0",
+    "time-grunt": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  }
+}

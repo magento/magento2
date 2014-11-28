@@ -54,7 +54,18 @@ class Checkbox extends AbstractElement
      */
     public function getHtmlAttributes()
     {
-        return array('type', 'title', 'class', 'style', 'checked', 'onclick', 'onchange', 'disabled', 'tabindex');
+        return array(
+            'type',
+            'title',
+            'class',
+            'style',
+            'checked',
+            'onclick',
+            'onchange',
+            'disabled',
+            'tabindex',
+            'data-form-part'
+        );
     }
 
     /**

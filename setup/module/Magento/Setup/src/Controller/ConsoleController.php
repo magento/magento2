@@ -24,17 +24,17 @@
 
 namespace Magento\Setup\Controller;
 
-use Magento\Locale\Lists;
-use Magento\Setup\Module\Setup\Config;
+use Magento\Setup\Model\Lists;
 use Magento\Setup\Model\InstallerFactory;
 use Magento\Setup\Model\Installer;
 use Magento\Setup\Model\ConsoleLogger;
 use Zend\Console\Request as ConsoleRequest;
 use Zend\EventManager\EventManagerInterface;
 use Zend\Mvc\Controller\AbstractActionController;
-use Magento\Setup\Model\UserConfigurationData as UserConfig;
+use Magento\Setup\Model\UserConfigurationDataMapper as UserConfig;
 use Magento\Setup\Model\AdminAccount;
 use Magento\Framework\App\MaintenanceMode;
+use Magento\Setup\Module\Setup\ConfigMapper;
 
 /**
  * Controller that handles all setup commands via command line interface.
@@ -56,14 +56,6 @@ class ConsoleController extends AbstractActionController
     const CMD_UPDATE = 'update';
     const CMD_UNINSTALL = 'uninstall';
     const CMD_MAINTENANCE = 'maintenance';
-    /**#@- */
-
-    /**#@+
-     * Additional keys for "info" command
-     */
-    const INFO_LOCALES = 'languages';
-    const INFO_CURRENCIES = 'currencies';
-    const INFO_TIMEZONES = 'timezones';
     /**#@- */
 
     /**
@@ -99,9 +91,9 @@ class ConsoleController extends AbstractActionController
         self::CMD_UPDATE,
         self::CMD_UNINSTALL,
         self::CMD_MAINTENANCE,
-        self::INFO_LOCALES,
-        self::INFO_CURRENCIES,
-        self::INFO_TIMEZONES,
+        UserConfig::KEY_LANGUAGE,
+        UserConfig::KEY_CURRENCY,
+        UserConfig::KEY_TIMEZONE,
     ];
 
     /**
@@ -167,16 +159,18 @@ class ConsoleController extends AbstractActionController
      */
     private static function getCliConfig()
     {
-        $deployConfig = '--' . Config::KEY_DB_HOST . '='
-            . ' --' . Config::KEY_DB_NAME . '='
-            . ' --' . Config::KEY_DB_USER . '='
-            . ' --' . Config::KEY_BACKEND_FRONTNAME . '='
-            . ' [--' . Config::KEY_DB_PASS . '=]'
-            . ' [--' . Config::KEY_DB_PREFIX . '=]'
-            . ' [--' . Config::KEY_DB_MODEL . '=]'
-            . ' [--' . Config::KEY_DB_INIT_STATEMENTS . '=]'
-            . ' [--' . Config::KEY_SESSION_SAVE . '=]'
-            . ' [--' . Config::KEY_ENCRYPTION_KEY . '=]';
+        $deployConfig = '--' . ConfigMapper::KEY_DB_HOST . '='
+            . ' --' . ConfigMapper::KEY_DB_NAME . '='
+            . ' --' . ConfigMapper::KEY_DB_USER . '='
+            . ' --' . ConfigMapper::KEY_BACKEND_FRONTNAME . '='
+            . ' [--' . ConfigMapper::KEY_DB_PASS . '=]'
+            . ' [--' . ConfigMapper::KEY_DB_PREFIX . '=]'
+            . ' [--' . ConfigMapper::KEY_DB_MODEL . '=]'
+            . ' [--' . ConfigMapper::KEY_DB_INIT_STATEMENTS . '=]'
+            . ' [--' . ConfigMapper::KEY_SESSION_SAVE . '=]'
+            . ' [--' . ConfigMapper::KEY_ENCRYPTION_KEY . '=]'
+            . ' [--' . Installer::ENABLE_MODULES . '=]'
+            . ' [--' . Installer::DISABLE_MODULES . '=]';
         $userConfig = '[--' . UserConfig::KEY_BASE_URL . '=]'
             . ' [--' . UserConfig::KEY_LANGUAGE . '=]'
             . ' [--' . UserConfig::KEY_TIMEZONE . '=]'
@@ -313,7 +307,7 @@ class ConsoleController extends AbstractActionController
     }
 
     /**
-     * Creates the local.xml file
+     * Creates the config.php file
      *
      * @return void
      * @throws \Exception
@@ -439,11 +433,11 @@ class ConsoleController extends AbstractActionController
         $type = $this->getRequest()->getParam('type');
         $details = self::getCliConfig();
         switch($type) {
-            case self::INFO_LOCALES:
+            case UserConfig::KEY_LANGUAGE:
                 return $this->arrayToString($this->options->getLocaleList());
-            case self::INFO_CURRENCIES:
+            case UserConfig::KEY_CURRENCY:
                 return $this->arrayToString($this->options->getCurrencyList());
-            case self::INFO_TIMEZONES:
+            case UserConfig::KEY_TIMEZONE:
                 return $this->arrayToString($this->options->getTimezoneList());
             default:
                 if (isset($details[$type])) {
@@ -466,7 +460,7 @@ class ConsoleController extends AbstractActionController
     private function formatCliUsage($text)
     {
         $result = ['required' => [], 'optional' => []];
-        foreach (explode(' ', $text) as  $value) {
+        foreach (explode(' ', $text) as $value) {
             if (empty($value)) {
                 continue;
             }

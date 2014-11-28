@@ -23,14 +23,20 @@
  */
 namespace Magento\Setup\Module;
 
-use Magento\Setup\Module\Setup\ConnectionFactory;
+use Magento\Framework\Module\Resource;
+use Magento\Framework\Module\Updater\SetupInterface;
 use Magento\Setup\Module\Setup\FileResolver as SetupFileResolver;
-use Magento\Setup\Module\Resource\Resource;
 use Magento\Setup\Model\LoggerInterface;
-use Magento\Setup\Module\Setup\Config;
+use Magento\Framework\Module\ModuleListInterface;
 
 class SetupModule extends Setup
 {
+    const TYPE_DB_INSTALL = 'install';
+
+    const TYPE_DB_UPGRADE = 'upgrade';
+
+    const TYPE_DB_RECURRING = 'recurring';
+
     /**
      * Setup resource name
      * @var string
@@ -54,32 +60,38 @@ class SetupModule extends Setup
     /**
      * Resource
      *
-     * @var ResourceInterface
+     * @var Resource
      */
     protected $resource;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * Constructor
      *
-     * @param ConnectionFactory $connectionFactory
      * @param LoggerInterface $log
-     * @param Config $config
      * @param ModuleListInterface $moduleList
      * @param SetupFileResolver $fileResolver
-     * @param $moduleName
+     * @param string $moduleName
+     * @param \Magento\Framework\App\Resource $resource
+     * @param string $connectionName
      */
     public function __construct(
-        ConnectionFactory $connectionFactory,
         LoggerInterface $log,
-        Config $config,
         ModuleListInterface $moduleList,
         SetupFileResolver $fileResolver,
-        $moduleName
+        $moduleName,
+        \Magento\Framework\App\Resource $resource,
+        $connectionName = SetupInterface::DEFAULT_SETUP_CONNECTION
     ) {
-        parent::__construct($connectionFactory, $log, $config);
+        parent::__construct($resource, $connectionName);
+        $this->logger = $log;
         $this->fileResolver = $fileResolver;
-        $this->moduleConfig = $moduleList->getModule($moduleName);
-        $this->resource = new Resource($this->connection, $config->get(Config::KEY_DB_PREFIX));
+        $this->moduleConfig = $moduleList->getOne($moduleName);
+        $this->resource = new Resource($resource);
         $this->resourceName = $this->fileResolver->getResourceCode($moduleName);
     }
 
@@ -113,12 +125,12 @@ class SetupModule extends Setup
     protected function getAvailableDbFiles($actionType, $fromVersion, $toVersion)
     {
         $moduleName = (string)$this->moduleConfig['name'];
-        $dbFiles = array();
-        $typeFiles = array();
+        $dbFiles = [];
+        $typeFiles = [];
         $regExpDb = sprintf('#%s-(.*)\.(php|sql)$#i', $actionType);
         $regExpType = sprintf('#%s-%s-(.*)\.(php|sql)$#i', 'mysql4', $actionType);
         foreach ($this->fileResolver->getSqlSetupFiles($moduleName, '*.{php,sql}') as $file) {
-            $matches = array();
+            $matches = [];
             if (preg_match($regExpDb, $file, $matches)) {
                 $dbFiles[$matches[1]] = $file;
             } elseif (preg_match($regExpType, $file, $matches)) {
@@ -127,7 +139,7 @@ class SetupModule extends Setup
         }
 
         if (empty($typeFiles) && empty($dbFiles)) {
-            return array();
+            return [];
         }
 
         foreach ($typeFiles as $version => $file) {
@@ -152,7 +164,7 @@ class SetupModule extends Setup
 
         // Module is installed
         if ($dbVer !== false) {
-            if (version_compare($configVer, $dbVer) == self::VERSION_COMPARE_GREATER) {
+            if (version_compare($configVer, $dbVer, '>')) {
                 $this->applySchemaUpdates(self::TYPE_DB_UPGRADE, $dbVer, $configVer);
                 $this->resource->setDbVersion($this->resourceName, $configVer);
             }
@@ -224,7 +236,7 @@ class SetupModule extends Setup
             case self::TYPE_DB_INSTALL:
                 uksort($arrFiles, 'version_compare');
                 foreach ($arrFiles as $version => $file) {
-                    if (version_compare($version, $toVersion) !== self::VERSION_COMPARE_GREATER) {
+                    if (version_compare($version, $toVersion, '<=')) {
                         $arrRes[0] = [
                             'toVersion' => $version,
                             'fileName'  => $file
@@ -261,5 +273,20 @@ class SetupModule extends Setup
                 break;
         }
         return $arrRes;
+    }
+
+    /**
+     * Include file by path
+     * This method should perform only file inclusion.
+     * Implemented to prevent possibility of changing important and used variables
+     * inside the setup model while installing
+     *
+     * @param string $fileName
+     * @return mixed
+     */
+    private function includeFile($fileName)
+    {
+        $this->logger->log("Include {$fileName}");
+        return include $fileName;
     }
 }

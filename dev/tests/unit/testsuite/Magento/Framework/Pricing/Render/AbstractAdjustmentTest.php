@@ -198,4 +198,21 @@ class AbstractAdjustmentTest extends \PHPUnit_Framework_TestCase
         $this->model->render($amountRender);
         $this->assertEquals($adjustment, $this->model->getAdjustment());
     }
+
+    public function testFormatCurrency()
+    {
+        $amount = 5.3456;
+        $includeContainer = false;
+        $precision = 3;
+
+        $expected = 5.346;
+
+        $this->priceCurrency->expects($this->once())
+            ->method('format')
+            ->with($amount, $includeContainer, $precision)
+            ->will($this->returnValue($expected));
+
+        $result = $this->model->formatCurrency($amount, $includeContainer, $precision);
+        $this->assertEquals($expected, $result, 'formatCurrent returned unexpected result');
+    }
 }

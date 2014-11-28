@@ -31,7 +31,7 @@
     <?php break; ?>
     <?php case 'user': ?>
         <div class="admin-user">
-            <a href="<?php echo $this->getUrl('adminhtml/system_account/index') ?>" class="admin-user-account" title="<?php echo __('My Account') ?>" data-toggle="dropdown">
+            <a href="<?php echo $this->getUrl('adminhtml/system_account/index') ?>" class="admin-user-account" title="<?php echo __('My Account') ?>" data-mage-init='{"dropdown":{}}' data-toggle="dropdown">
                 <?php echo $this->escapeHtml($this->getUser()->getUsername()); ?>
             </a>
             <ul class="dropdown-menu admin-user-menu">

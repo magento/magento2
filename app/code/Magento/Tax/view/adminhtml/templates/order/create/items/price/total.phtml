@@ -29,7 +29,7 @@ $_item = $this->getItem();
 ?>
 
 <?php if ($this->displayPriceExclTax() || $this->displayBothPrices()): ?>
-    <?php $_rowTotalWithoutDiscount = $_item->getRowTotal() - $_item->getDiscountAmount(); ?>
+    <?php $_rowTotalWithoutDiscount = $_item->getRowTotal() - $_item->getTotalDiscountAmount(); ?>
     <?php if ($this->displayBothPrices()): ?>
         <span class="label"><?php echo __('Excl. Tax'); ?>:</span>
     <?php endif; ?>
@@ -41,6 +41,6 @@ $_item = $this->getItem();
     <?php if ($this->displayBothPrices($this->getStore())): ?>
         <br /><span class="label"><?php echo __('Incl. Tax'); ?>:</span>
     <?php endif; ?>
-    <?php $_incl = $_item->getPriceInclTax() * $_item->getQty() - $_item->getDiscountAmount(); ?>
+    <?php $_incl = $_item->getPriceInclTax() * $_item->getQty() - $_item->getTotalDiscountAmount(); ?>
     <?php echo $this->formatPrice($_incl) ?>
 <?php endif; ?>

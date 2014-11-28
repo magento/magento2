@@ -28,6 +28,20 @@
     @_breadcrumbs-container-margin: @breadcrumbs-container-margin,
     @_breadcrumbs-padding: @breadcrumbs-padding,
 
+    // Breadcrumbs separating symbol
+    @_breadcrumbs-separator-symbol: @breadcrumbs-separator-symbol,
+    @_breadcrumbs-separator-color: @breadcrumbs-separator-color,
+
+    // Use icon as a separating symbol
+    @_breadcrumbs-icon-use: @breadcrumbs-icon-use,
+    @_breadcrumbs-icon-font-content: @breadcrumbs-icon-font-content,
+    @_icon-font: @breadcrumbs-icon-font,
+    @_icon-font-size: @breadcrumbs-icon-font-size,
+    @_icon-font-line-height: @breadcrumbs-icon-font-line-height,
+    @_icon-font-color: @breadcrumbs-icon-font-color,
+    @_icon-font-margin: @breadcrumbs-icon-font-margin,
+    @_icon-font-vertical-align: @breadcrumbs-icon-font-vertical-align,
+
     // Breadcrumbs current
     @_breadcrumbs-current-color: @breadcrumbs-current-color,
     @_breadcrumbs-current-font-weight: @breadcrumbs-current-font-weight,
@@ -72,21 +86,7 @@
     @_breadcrumbs-link-border-active: @breadcrumbs-link-border-active,
     @_breadcrumbs-link-text-decoration-active: @breadcrumbs-link-text-decoration-active,
     @_breadcrumbs-link-gradient-start-color-active: @breadcrumbs-link-gradient-start-color-active,
-    @_breadcrumbs-link-gradient-end-color-active: @breadcrumbs-link-gradient-end-color-active,
-
-    // Breadcrumbs separating symbol
-    @_breadcrumbs-separator-symbol: @breadcrumbs-separator-symbol,
-    @_breadcrumbs-separator-color: @breadcrumbs-separator-color,
-
-    // Use icon as a separating symbol
-    @_breadcrumbs-icon-use: @breadcrumbs-icon-use,
-    @_breadcrumbs-icon-font-content: @breadcrumbs-icon-font-content,
-    @_icon-font: @breadcrumbs-icon-font,
-    @_icon-font-size: @breadcrumbs-icon-font-size,
-    @_icon-font-line-height: @breadcrumbs-icon-font-line-height,
-    @_icon-font-color: @breadcrumbs-icon-font-color,
-    @_icon-font-margin: @breadcrumbs-icon-font-margin,
-    @_icon-font-vertical-align: @breadcrumbs-icon-font-vertical-align
+    @_breadcrumbs-link-gradient-end-color-active: @breadcrumbs-link-gradient-end-color-active
 ) {
     .css(margin, @_breadcrumbs-container-margin);
     .items {
@@ -136,7 +136,6 @@
         }
         &:active {
             .css(background, @_breadcrumbs-link-background-active);
-            .add-background(@_breadcrumbs-link-background-active);
             .background-gradient(
                 @_breadcrumbs-link-gradient-start-color-active,
                 @_breadcrumbs-link-gradient-end-color-active,

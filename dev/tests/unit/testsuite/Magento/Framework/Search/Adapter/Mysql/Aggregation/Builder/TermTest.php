@@ -23,6 +23,7 @@
  */
 namespace Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder;
 
+use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface;
 use Magento\Framework\Search\Request\BucketInterface as RequestBucketInterface;
 use Magento\TestFramework\Helper\ObjectManager;
 
@@ -48,6 +49,14 @@ class TermTest extends \PHPUnit_Framework_TestCase
      */
     private $bucket;
 
+    /**
+     * @var DataProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dataProvider;
+
+    /**
+     * SetUP method
+     */
     protected function setUp()
     {
         $helper = new ObjectManager($this);
@@ -68,26 +77,47 @@ class TermTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
+        $this->dataProvider = $this->getMockBuilder(
+            'Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface'
+        )
+            ->setMethods(['getDataSet', 'execute'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
         $this->term = $helper->getObject(
             'Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Term',
             ['metricsBuilder' => $this->metricsBuilder]
         );
     }
 
+    /**
+     * Test for method "build"
+     */
     public function testBuild()
     {
         $productIds = [1, 2, 3];
         $metrics = ['count' => 'count(*)'];
 
-        $this->select->expects($this->once())->method('where')->withConsecutive(
-            ['main_table.entity_id IN (?)', $productIds]
-        );
-        $this->select->expects($this->once())->method('columns')->withConsecutive([$metrics]);
-        $this->select->expects($this->once())->method('group')->withConsecutive(['value']);
+        $this->select->expects($this->once())
+            ->method('where')
+            ->withConsecutive(
+                ['main_table.entity_id IN (?)', $productIds]
+            );
+        $this->select->expects($this->once())
+            ->method('columns')
+            ->withConsecutive([$metrics]);
+        $this->select->expects($this->once())
+            ->method('group')
+            ->withConsecutive(['value']);
 
-        $this->metricsBuilder->expects($this->once())->method('build')->willReturn($metrics);
+        $this->metricsBuilder->expects($this->once())
+            ->method('build')
+            ->willReturn($metrics);
 
-        $result = $this->term->build($this->select, $this->bucket, $productIds);
+        $this->dataProvider->expects($this->once())->method('getDataSet')->willReturn($this->select);
+        $this->dataProvider->expects($this->once())->method('execute')->willReturn($this->select);
+
+        $result = $this->term->build($this->dataProvider, [], $this->bucket, $productIds);
 
         $this->assertEquals($this->select, $result);
     }

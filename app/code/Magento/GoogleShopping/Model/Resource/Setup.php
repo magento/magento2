@@ -23,7 +23,7 @@
  */
 namespace Magento\GoogleShopping\Model\Resource;
 
-class Setup extends \Magento\Framework\Module\Setup
+class Setup extends \Magento\Framework\Module\DataSetup
 {
     /**
      * @var \Magento\GoogleShopping\Helper\Data

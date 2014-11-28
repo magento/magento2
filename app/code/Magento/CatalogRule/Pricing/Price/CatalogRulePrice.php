@@ -67,21 +67,23 @@ class CatalogRulePrice extends AbstractPrice implements BasePriceProviderInterfa
      * @param Product $saleableItem
      * @param float $quantity
      * @param Calculator $calculator
+     * @param RuleFactory $catalogRuleResourceFactory
      * @param TimezoneInterface $dateTime
      * @param StoreManager $storeManager
      * @param Session $customerSession
-     * @param RuleFactory $catalogRuleResourceFactory
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      */
     public function __construct(
         Product $saleableItem,
         $quantity,
         Calculator $calculator,
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         TimezoneInterface $dateTime,
         StoreManager $storeManager,
         Session $customerSession,
         RuleFactory $catalogRuleResourceFactory
     ) {
-        parent::__construct($saleableItem, $quantity, $calculator);
+        parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
         $this->dateTime = $dateTime;
         $this->storeManager = $storeManager;
         $this->customerSession = $customerSession;
@@ -104,6 +106,9 @@ class CatalogRulePrice extends AbstractPrice implements BasePriceProviderInterfa
                     $this->product->getId()
                 );
             $this->value = $this->value ? floatval($this->value) : false;
+            if ($this->value) {
+                $this->value = $this->priceCurrency->convertAndRound($this->value);
+            }
         }
         return $this->value;
     }

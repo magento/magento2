@@ -27,7 +27,7 @@ use Magento\TestFramework\CodingStandard\Tool\CodeMessDetector;
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper;
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer;
 use Magento\TestFramework\CodingStandard\Tool\CopyPasteDetector;
-use Magento\TestFramework\Utility;
+use Magento\Framework\Test\Utility;
 use PHP_PMD_TextUI_Command;
 use PHPUnit_Framework_TestCase;
 

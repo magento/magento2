@@ -128,7 +128,7 @@ class AmountTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testConvertAndFormatCurrency()
+    public function testFormatCurrency()
     {
         $amount = '100';
         $includeContainer = true;
@@ -137,11 +137,11 @@ class AmountTest extends \PHPUnit_Framework_TestCase
         $result = '100.0 grn';
 
         $this->priceCurrency->expects($this->once())
-            ->method('convertAndFormat')
+            ->method('format')
             ->with($amount, $includeContainer, $precision)
             ->will($this->returnValue($result));
 
-        $this->assertEquals($result, $this->model->convertAndFormatCurrency($amount, $includeContainer, $precision));
+        $this->assertEquals($result, $this->model->formatCurrency($amount, $includeContainer, $precision));
     }
 
     /**

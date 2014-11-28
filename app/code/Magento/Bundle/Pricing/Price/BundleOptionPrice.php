@@ -56,16 +56,18 @@ class BundleOptionPrice extends AbstractPrice implements BundleOptionPriceInterf
      * @param Product $saleableItem
      * @param float $quantity
      * @param BundleCalculatorInterface $calculator
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param BundleSelectionFactory $bundleSelectionFactory
      */
     public function __construct(
         Product $saleableItem,
         $quantity,
         BundleCalculatorInterface $calculator,
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         BundleSelectionFactory $bundleSelectionFactory
     ) {
         $this->selectionFactory = $bundleSelectionFactory;
-        parent::__construct($saleableItem, $quantity, $calculator);
+        parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
         $this->product->setQty($this->quantity);
     }
 

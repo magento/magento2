@@ -1,0 +1,209 @@
+// /**
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+.gift-message {
+    margin: 0;
+    .fieldset& {
+        > .legend {
+            &:extend(.abstract-methods-shipping-title all);
+            border-bottom: 0;
+        }
+    }
+    .product-image-wrapper {
+        &:extend(.abstract-reset-image-wrapper all);
+    }
+    .activate.message {
+        border-top: @border-width-base solid @border-color-base;
+        border-bottom: @border-width-base solid @border-color-base;
+        color: @color-primary;
+        display: block;
+        font-weight: @font-weight-semibold;
+        line-height: 36px;
+        margin: 0 0 10px;
+        padding: 0 25px 0 0;
+        position: relative;
+        .icon-font(
+            @_icon-font-content: @icon-down,
+            @_icon-font-size: 10px,
+            @_icon-font-position: after,
+            @_icon-font-display: block
+        );
+        &:after {
+            position: absolute;
+            right: 12px;
+            top: 0;
+        }
+        &:hover {
+            color: @filter-link-hover;
+        }
+        &.active {
+            border-bottom: 0;
+            .icon-font-symbol(
+                @_icon-font-content: @icon-up,
+                @_icon-font-position: after
+            );
+        }
+    }
+    .options-items {
+        margin-top: 40px;
+        .order-title {
+            margin: 0 0 15px;
+            > .field.choice {
+                .font-size(18);
+                font-weight: @font-weight-light;
+                border-bottom: @border-width-base solid @border-color-base;
+                padding-bottom: 5px;
+            }
+        }
+        .order-options {
+            margin: 0 0 20px;
+        }
+        .fieldset {
+            .field.text {
+                padding-right: 0;
+                width: 100%;
+                .input-text {
+                    height: 90px;
+                }
+            }
+        }
+        .field.to {
+            padding-right: 0;
+        }
+        .extra-options-container {
+            font-weight: @font-weight-base;
+            .field.choice {
+                margin: 20px 0 15px;
+            }
+        }
+    }
+    .options-order-container,
+    .options-items-container {
+        margin-bottom: 10px;
+    }
+    .gift-messages-order {
+        margin-bottom: 25px;
+    }
+    .items {
+        .list-reset-styles();
+        .item {
+            border-bottom: @border-width-base solid @border-color-base;
+            padding: 0 0 20px;
+            &:extend(.abstract-add-clearfix all);
+        }
+        .product {
+            margin: 0 0 20px;
+            .number {
+                color: @color-primary-light;
+                span {
+                    color: @color-primary;
+                    font-weight: @font-weight-semibold;
+                }
+            }
+            .name {
+                .font-size(16);
+                font-weight: @font-weight-base;
+            }
+            .photo.container {
+                margin: 15px 0;
+                img {
+                    display: block;
+                }
+            }
+        }
+    }
+    .regular-price,
+    .price-including-tax,
+    .price-excluding-tax {
+        &:before {
+            content: attr(data-label) ": ";
+        }
+        .price {
+            font-weight: @font-weight-bold;
+        }
+    }
+    .price-including-tax {
+        .font-size(14);
+    }
+}
+
+//
+//    Account order gift message
+//--------------------------------------
+.order-details-items {
+    .order-gift-message,
+    .block-order-details-gift-message {
+        .item-options {
+            dt {
+                margin: @indent-s-base 0;
+                font-weight: @font-weight-base;
+            }
+        }
+        &:extend(.abstract-add-clearfix all);
+        dt:after {
+            content: "";
+        }
+        .label {
+            &:extend(.abstract-colon all);
+        }
+        .item-message {
+            clear: left;
+        }
+    }
+}
+
+.order-details-items .order-items .order-gift-message {
+    &:not(.expanded-content) {
+        &:extend(.abstract-hidden);
+    }
+    .action.close {
+        &:extend(.abstract-no-display all);
+    }
+}
+
+.responsive(@break) when (@break = @screen-m) {
+    .gift-message {
+        .items {
+            .item {
+                margin: 0 0 20px;
+                &:extend(.abstract-add-clearfix-desktop all);
+            }
+            .product {
+                float: left;
+                margin: 0 30px 0 0;
+                width: 145px;
+                .name {
+                    .font-size(16);
+                    font-weight: @font-weight-base;
+                    max-width: 145px;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                }
+            }
+            .options {
+                overflow: hidden;
+            }
+        }
+    }
+}

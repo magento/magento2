@@ -74,11 +74,11 @@ class Block extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      * @return \Magento\Framework\Model\AbstractModel
      * @throws \Magento\Framework\Model\Exception
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
         $needle = 'block_id="' . $this->getBlockId() . '"';
         if (false == strstr($this->getContent(), $needle)) {
-            return parent::_beforeSave();
+            return parent::beforeSave();
         }
         throw new \Magento\Framework\Model\Exception(
             __('Make sure that static block content does not reference the block itself.')

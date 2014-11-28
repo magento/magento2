@@ -87,8 +87,11 @@ class Helper
         Layout\Element $parentNode
     ) {
         // if it hasn't a name it must be generated
-        $path = $name = (string)$currentNode->getAttribute('name')
-            ?: $this->_generateAnonymousName($parentNode->getElementName() . '_schedule_block');
+        if (!(string)$currentNode->getAttribute('name')) {
+            $name = $this->_generateAnonymousName($parentNode->getElementName() . '_schedule_block');
+            $currentNode->setAttribute('name', $name);
+        }
+        $path = $name = (string)$currentNode->getAttribute('name');
 
         // Prepare scheduled element with default parameters [type, alias, parentName, siblingName, isAfter]
         $row = [

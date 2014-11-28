@@ -59,23 +59,4 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf('Magento\CatalogSearch\Helper\Data', $this->_helper->checkNotes());
     }
-
-    /**
-     * @magentoConfigFixture current_store catalog/search/search_type 1
-     * @magentoConfigFixture current_store catalog/search/max_query_words 3
-     */
-    public function testCheckNotesEscapesHtmlWhenQueryIsCut()
-    {
-        /** @var \Magento\TestFramework\ObjectManager  $objectManager */
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-
-        /** @var \Magento\CatalogSearch\Helper\Data $catalogSearchHelper */
-        $catalogSearchHelper = $objectManager->create('Magento\CatalogSearch\Helper\Data');
-
-        $catalogSearchHelper->checkNotes();
-
-        $notes = implode($catalogSearchHelper->getNoteMessages());
-        $this->assertContains('&lt;being&gt;', $notes);
-        $this->assertNotContains('<being>', $notes);
-    }
 }

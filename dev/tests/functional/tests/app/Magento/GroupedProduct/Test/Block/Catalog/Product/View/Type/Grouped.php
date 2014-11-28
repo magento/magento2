@@ -57,7 +57,7 @@ class Grouped extends Block
      *
      * @var string
      */
-    protected $productName = '.product.name';
+    protected $productName = '.product-item-name';
 
     /**
      * Selector for sub product price.

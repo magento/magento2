@@ -78,7 +78,7 @@
         }
     }
     &-menu {
-        .box-sizing();
+        box-sizing: border-box;
         display: block;
         width: 100%;
     }
@@ -90,7 +90,6 @@
         text-align: left;
         position: relative;
         z-index: 1;
-        margin: 0 10px;
         &.active {
             z-index: 999;
         }
@@ -98,7 +97,7 @@
     &-action {
         color: @primary7;
         display: inline-block;
-        padding: 12px 5px 11px;
+        padding: 12px 22px 11px 22px;
         text-transform: capitalize;
         .icon-font(
             "\e06e",
@@ -276,7 +275,7 @@
 
 .mage-suggest {
     text-align: left;
-    .box-sizing();
+    box-sizing: border-box;
     position: relative;
     display: inline-block;
     vertical-align: top;

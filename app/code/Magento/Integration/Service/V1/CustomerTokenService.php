@@ -24,7 +24,7 @@
 
 namespace Magento\Integration\Service\V1;
 
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface as CustomerAccountService;
+use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Integration\Helper\Validator;
 use Magento\Integration\Model\Oauth\Token\Factory as TokenModelFactory;
@@ -43,9 +43,9 @@ class CustomerTokenService implements CustomerTokenServiceInterface
     /**
      * Customer Account Service
      *
-     * @var CustomerAccountService
+     * @var AccountManagementInterface
      */
-    private $customerAccountService;
+    private $accountManagement;
 
     /**
      * @var \Magento\Integration\Helper\Validator
@@ -63,18 +63,18 @@ class CustomerTokenService implements CustomerTokenServiceInterface
      * Initialize service
      *
      * @param TokenModelFactory $tokenModelFactory
-     * @param CustomerAccountService $customerAccountService
+     * @param AccountManagementInterface $accountManagement
      * @param TokenCollectionFactory $tokenModelCollectionFactory
      * @param \Magento\Integration\Helper\Validator $validatorHelper
      */
     public function __construct(
         TokenModelFactory $tokenModelFactory,
-        CustomerAccountService $customerAccountService,
+        AccountManagementInterface $accountManagement,
         TokenCollectionFactory $tokenModelCollectionFactory,
         Validator $validatorHelper
     ) {
         $this->tokenModelFactory = $tokenModelFactory;
-        $this->customerAccountService = $customerAccountService;
+        $this->accountManagement = $accountManagement;
         $this->tokenModelCollectionFactory = $tokenModelCollectionFactory;
         $this->validatorHelper = $validatorHelper;
     }
@@ -85,7 +85,7 @@ class CustomerTokenService implements CustomerTokenServiceInterface
     public function createCustomerAccessToken($username, $password)
     {
         $this->validatorHelper->validateCredentials($username, $password);
-        $customerDataObject = $this->customerAccountService->authenticate($username, $password);
+        $customerDataObject = $this->accountManagement->authenticate($username, $password);
         return $this->tokenModelFactory->create()->createCustomerToken($customerDataObject->getId())->getToken();
     }
 

@@ -188,7 +188,7 @@
     padding: 4px;
     display: block;
 }
-.ui-datepicker .ui-datepicker-calendar td .ui-state-hover:hover {
+.ui-datepicker .ui-datepicker-calendar td .ui-state-hover {
     background: #f9eae7;
 }
 .ui-datepicker .ui-datepicker-calendar {

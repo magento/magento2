@@ -127,20 +127,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($return, $this->_model->getMaxQueryLength());
     }
 
-    public function testGetMaxQueryWords()
-    {
-        $return = 'some_value';
-        $this->_scopeConfigMock->expects($this->once())
-            ->method('getValue')
-            ->with(
-                \Magento\Search\Model\Query::XML_PATH_MAX_QUERY_WORDS,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                null
-            )
-            ->will($this->returnValue($return));
-        $this->assertEquals($return, $this->_model->getMaxQueryWords());
-    }
-
     /**
      * @return array
      */

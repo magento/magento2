@@ -59,12 +59,14 @@
 <?php else: ?>
 <tr class="totals-tax">
 <?php endif; ?>
-    <td <?php echo $this->getLabelProperties()?>>
+    <th <?php echo $this->getLabelProperties()?> scope="row">
         <?php if ($this->displayFullSummary()): ?>
             <div class="detailed"><?php echo __('Tax'); ?></div>
         <?php else: ?>
             <?php echo __('Tax'); ?>
         <?php endif;?>
+    </th>
+    <td <?php echo $this->getValueProperties()?> data-th="<?php echo $this->escapeHtml(__('Tax')); ?>">
+        <?php echo $_order->formatPrice($_source->getTaxAmount()) ?>
     </td>
-    <td <?php echo $this->getValueProperties()?>><?php echo $_order->formatPrice($_source->getTaxAmount()) ?></td>
 </tr>

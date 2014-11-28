@@ -64,7 +64,7 @@
     <virtualType name="Magento\Bundle\Pricing\Price\Pool" type="Magento\Framework\Pricing\Price\Pool">
         <arguments>
             <argument name="prices" xsi:type="array">
-                <item name="regular_price" xsi:type="string">Magento\Catalog\Pricing\Price\RegularPrice</item>
+                <item name="regular_price" xsi:type="string">Magento\Bundle\Pricing\Price\BundleRegularPrice</item>
                 <item name="final_price" xsi:type="string">Magento\Bundle\Pricing\Price\FinalPrice</item>
                 <item name="tier_price" xsi:type="string">Magento\Bundle\Pricing\Price\TierPrice</item>
                 <item name="group_price" xsi:type="string">Magento\Bundle\Pricing\Price\GroupPrice</item>
@@ -118,5 +118,17 @@
     </type>
     <type name="Magento\Catalog\Model\Product\Attribute\Backend\Price">
         <plugin name="bundle" type="Magento\Bundle\Model\Plugin\PriceBackend" sortOrder="100" />
+    </type>
+    <type name="Magento\Catalog\Api\ProductRepositoryInterface">
+        <plugin name="bundleOptions" type="\Magento\Bundle\Model\Plugin\BundleOptions"/>
+    </type>
+    <type name="Magento\Bundle\Model\Product\Type">
+        <arguments>
+            <argument name="stockRegistry" xsi:type="object">Magento\CatalogInventory\Api\StockRegistryInterface\Proxy</argument>
+            <argument name="stockState" xsi:type="object">Magento\CatalogInventory\Api\StockStateInterface\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product">
+        <plugin name="bundle" type="Magento\Bundle\Model\Plugin\Product" sortOrder="100" />
     </type>
 </config>

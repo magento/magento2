@@ -34,7 +34,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
     protected $indexer;
 
     /**
-     * @var \Magento\CatalogSearch\Model\Resource\Fulltext\Engine
+     * @var \Magento\CatalogSearch\Model\Resource\Engine
      */
     protected $engine;
 
@@ -84,7 +84,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
         $this->indexer->load('catalogsearch_fulltext');
 
         $this->engine = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\CatalogSearch\Model\Resource\Fulltext\Engine'
+            'Magento\CatalogSearch\Model\Resource\Engine'
         );
 
         $this->resourceFulltext = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(

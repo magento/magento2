@@ -49,4 +49,5 @@ define([
         }
     });
 
+    return $.mage.paymentAuthentication;
 });

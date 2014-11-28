@@ -33,15 +33,20 @@ class MainTest extends \PHPUnit_Framework_TestCase
     public function testConstruct()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\Customer\Service\V1\CustomerAccountService $service */
-        $service = $objectManager->create('Magento\Customer\Service\V1\CustomerAccountService');
-        $customer = $service->authenticate('customer@example.com', 'password');
+
+        /** @var \Magento\Customer\Api\AccountManagementInterface $accountManagement */
+        $accountManagement = $objectManager->create('Magento\Customer\Api\AccountManagementInterface');
+
+        /** @var \Magento\Customer\Helper\View $customerViewHelper */
+        $customerViewHelper = $objectManager->create('Magento\Customer\Helper\View');
+
+        $customer = $accountManagement->authenticate('customer@example.com', 'password');
         $request = $objectManager->get('Magento\Framework\App\RequestInterface');
         $request->setParam('customerId', $customer->getId());
         /** @var \Magento\Framework\View\LayoutInterface $layout */
         $layout = $objectManager->get('Magento\Framework\View\LayoutInterface');
         $block = $layout->createBlock('Magento\Review\Block\Adminhtml\Main');
-        $customerName = $customer->getFirstname() . ' ' . $customer->getLastname();
+        $customerName = $customerViewHelper->getCustomerName($customer);
         /** @var \Magento\Framework\Escaper $escaper */
         $escaper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\Framework\Escaper');

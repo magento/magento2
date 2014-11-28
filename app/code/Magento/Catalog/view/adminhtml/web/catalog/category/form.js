@@ -24,13 +24,13 @@
 /*global Ajax:true alert:true*/
 define([
     "jquery",
-    "jquery/ui",
     "mage/backend/form",
+    "jquery/ui",
     "prototype"
-], function($){
+], function($, form){
     "use strict";
 
-    $.widget("mage.categoryForm", $.mage.form, {
+    $.widget("mage.categoryForm", form, {
         options: {
             categoryIdSelector : 'input[name="general[id]"]',
             categoryPathSelector : 'input[name="general[path]"]'
@@ -83,5 +83,6 @@ define([
             }
         }
     });
-
+    
+    return $.mage.categoryForm;
 });

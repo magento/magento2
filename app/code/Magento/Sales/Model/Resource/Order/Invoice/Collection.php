@@ -23,12 +23,15 @@
  */
 namespace Magento\Sales\Model\Resource\Order\Invoice;
 
+use Magento\Sales\Api\Data\InvoiceSearchResultInterface;
+use Magento\Sales\Model\Resource\Order\Collection\AbstractCollection;
+
 /**
  * Flat sales order invoice collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\Sales\Model\Resource\Order\Collection\AbstractCollection
+class Collection extends AbstractCollection implements InvoiceSearchResultInterface
 {
     /**
      * Event prefix

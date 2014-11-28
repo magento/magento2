@@ -81,7 +81,7 @@ abstract class AbstractData
     protected $_logger;
 
     /**
-     * @var \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata
+     * @var \Magento\Customer\Api\Data\AttributeMetadataInterface
      */
     protected $_attribute;
 
@@ -98,7 +98,7 @@ abstract class AbstractData
     /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Logger $logger
-     * @param \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata $attribute
+     * @param \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param string|int|bool $value
      * @param string $entityTypeCode
@@ -107,7 +107,7 @@ abstract class AbstractData
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Logger $logger,
-        \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata $attribute,
+        \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         $value,
         $entityTypeCode,
@@ -125,7 +125,7 @@ abstract class AbstractData
     /**
      * Return Attribute instance
      *
-     * @return \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata
+     * @return \Magento\Customer\Api\Data\AttributeMetadataInterface
      * @throws \Magento\Framework\Model\Exception
      */
     public function getAttribute()

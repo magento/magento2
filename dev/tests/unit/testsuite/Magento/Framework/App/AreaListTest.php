@@ -102,15 +102,17 @@ class AreaListTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFrontNameWhenAreaCodeAndFrontNameArentSet()
     {
-        $this->_model = new \Magento\Framework\App\AreaList(
-            $this->objectManagerMock,
-            $this->_resolverFactory,
-            array(),
-            ''
-        );
-
-        $actual = $this->_model->getFrontName('testAreaCode');
-        $this->assertNull($actual);
+        $model = new \Magento\Framework\App\AreaList($this->objectManagerMock, $this->_resolverFactory);
+        $code = 'testAreaCode';
+        $this->assertNull($model->getCodeByFrontName($code));
+        $this->assertNull($model->getFrontName($code));
+        $this->assertSame([], $model->getCodes());
+        $this->assertNull($model->getDefaultRouter($code));
+        $this->objectManagerMock->expects($this->once())
+            ->method('create')
+            ->with('Magento\Framework\App\AreaInterface', ['areaCode' => $code])
+            ->willReturn('test');
+        $this->assertSame('test', $model->getArea($code));
     }
 
     public function testGetCodes()

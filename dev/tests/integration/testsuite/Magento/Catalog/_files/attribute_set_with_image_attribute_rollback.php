@@ -43,7 +43,7 @@ $attribute->delete();
 
 /** @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection $attributeSetCollection */
 $attributeSetCollection = $objectManager->create('\Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection');
-$attributeSetCollection->addFilter('attribute_set_name', 'custom attribute set 531');
+$attributeSetCollection->addFilter('attribute_set_name', 'attribute_set_with_media_attribute');
 $attributeSetCollection->addFilter('entity_type_id', $entityType->getId());
 $attributeSetCollection->setOrder('attribute_set_id'); // descending is default value
 $attributeSetCollection->setPageSize(1);

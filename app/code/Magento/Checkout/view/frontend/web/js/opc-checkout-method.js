@@ -276,4 +276,6 @@ define([
             });
         }
     });
+    
+    return $.mage.opcCheckoutMethod;
 });

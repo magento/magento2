@@ -139,13 +139,6 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetConfigurationFiles()
     {
-        $modules = array(
-            'Test_Module' => array(
-                'name' => 'Test_Module',
-                'version' => '1.0.0.0',
-                'active' => true,
-            ),
-        );
         $configPath = 'app/code/Test/Module/etc/config.xml';
         $modulesDirectoryMock = $this->getMock('Magento\Framework\Filesystem\Directory\ReadInterface');
         $modulesDirectoryMock->expects($this->any())->method('getRelativePath')->will($this->returnArgument(0));
@@ -155,7 +148,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $this->_filesystemMock->expects($this->any())->method('getDirectoryRead')->with(DirectoryList::MODULES)
             ->will($this->returnValue($modulesDirectoryMock));
 
-        $this->_moduleListMock->expects($this->once())->method('getModules')->will($this->returnValue($modules));
+        $this->_moduleListMock->expects($this->once())->method('getNames')->will($this->returnValue(['Test_Module']));
         $model = new \Magento\Framework\Module\Dir\Reader(
             $this->_dirsMock,
             $this->_moduleListMock,

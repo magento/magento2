@@ -38,6 +38,13 @@ class Item extends SalesResource
     protected $_eventPrefix = 'sales_order_item_resource';
 
     /**
+     * Fields that should be serialized before persistence
+     *
+     * @var array
+     */
+    protected $_serializableFields = ['product_options' => [[], []]];
+
+    /**
      * Model initialization
      *
      * @return void
@@ -45,5 +52,24 @@ class Item extends SalesResource
     protected function _construct()
     {
         $this->_init('sales_order_item', 'item_id');
+    }
+
+    /**
+     * Perform actions before object save
+     *
+     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\Object $object
+     * @return $this
+     */
+    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
+    {
+        /**@var $object \Magento\Sales\Model\Order\Item */
+        if (!$object->getOrderId() && $object->getOrder()) {
+            $object->setOrderId($object->getOrder()->getId());
+        }
+        if ($object->getParentItem()) {
+            $object->setParentItemId($object->getParentItem()->getId());
+        }
+
+        return parent::_beforeSave($object);
     }
 }

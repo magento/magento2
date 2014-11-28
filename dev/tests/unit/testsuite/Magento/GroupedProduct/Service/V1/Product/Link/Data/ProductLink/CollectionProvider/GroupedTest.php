@@ -24,6 +24,8 @@
 
 namespace Magento\GroupedProduct\Service\V1\Product\Link\Data\ProductLink\CollectionProvider;
 
+use Magento\GroupedProduct\Model\Product\Link\CollectionProvider\Grouped;
+
 class GroupedTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetLinkedProducts()

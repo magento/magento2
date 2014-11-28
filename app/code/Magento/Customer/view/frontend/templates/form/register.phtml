@@ -99,7 +99,7 @@
                                     <span><?php echo __('Address') ?></span>
                                 </label>
                                 <div class="control">
-                                    <input type="text" name="street[]" value="<?php echo $this->escapeHtml($this->getFormData()->getStreet($_i - 1)) ?>" title="<?php echo __('Street Address %1', $_i) ?>" id="street_<?php echo $_i ?>" class="input-text <?php echo $_streetValidationClass ?>">
+                                    <input type="text" name="street[]" value="<?php echo $this->escapeHtml($this->getFormData()->getStreetLine($_i - 1)) ?>" title="<?php echo __('Street Address %1', $_i) ?>" id="street_<?php echo $_i ?>" class="input-text <?php echo $_streetValidationClass ?>">
                                 </div>
                             </div>
                         <?php endfor; ?>

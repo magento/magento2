@@ -37,7 +37,7 @@ class MassUnsubscribe extends \Magento\Customer\Controller\Adminhtml\Index
         $customersUpdated = $this->actUponMultipleCustomers(
             function ($customerId) {
                 // Verify customer exists
-                $this->_customerAccountService->getCustomer($customerId);
+                $this->_customerRepository->getById($customerId);
                 $this->_subscriberFactory->create()->unsubscribeCustomerById($customerId);
             },
             $customerIds

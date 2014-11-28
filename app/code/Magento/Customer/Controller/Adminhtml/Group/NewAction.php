@@ -62,7 +62,7 @@ class NewAction extends \Magento\Customer\Controller\Adminhtml\Group
             $this->_title->add(__('New Customer Group'));
         } else {
             $this->_addBreadcrumb(__('Edit Group'), __('Edit Customer Groups'));
-            $this->_title->add($this->_groupService->getGroup($groupId)->getCode());
+            $this->_title->add($this->groupRepository->getById($groupId)->getCode());
         }
 
         $this->_view->getLayout()->addBlock(

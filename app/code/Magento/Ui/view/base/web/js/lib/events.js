@@ -25,14 +25,40 @@ define([
 ], function(_) {
     'use strict';
 
-    function addHandler(events, callback, name) {
-        (events[name] = events[name] || []).push(callback);
+    function addHandler(events, ns, callback, name) {
+        (events[name] = events[name] || []).push({
+            callback: callback,
+            ns: ns
+        });
     }
 
     function getEvents(obj, name) {
         var events = obj._events = obj._events || {};
 
         return name ? events[name] : events;
+    }
+
+    function keepHandler(ns, handler){
+        if(!ns){
+            return false;
+        }
+
+        return handler.ns !== ns;
+    }
+
+    function trigger(handlers, args){
+        var bubble  = true,
+            callback;
+
+        handlers.forEach(function(handler){
+            callback = handler.callback;
+
+            if (callback.apply(null, args) === false) {
+                bubble = false;
+            }
+        });
+
+        return bubble;
     }
 
     return {
@@ -42,12 +68,19 @@ define([
          * @param  {Function} callback
          * @return {Object} reference to this
          */
-        on: function(name, callback) {
-            var events = getEvents(this);
+        on: function(events, callback, ns) {
+            var storage = getEvents(this),
+                iterator; 
 
-            typeof name === 'object' ?
-                _.each(name, addHandler.bind(window, events)) :
-                addHandler(events, callback, name);
+            if( arguments.length < 2 ){
+                ns = callback;
+            }
+
+            iterator = addHandler.bind(null, storage, ns);
+
+            _.isObject(events) ? 
+                _.each(events, iterator) :
+                iterator(callback, events);
 
             return this;
         },
@@ -57,13 +90,17 @@ define([
          * @param  {String} name
          * @return {Object} reference to this
          */
-        off: function(name) {
-            var events      = getEvents(this),
-                handlers    = events[name];
+        off: function(ns) {
+            var storage = getEvents(this),
+                filter  = keepHandler.bind(null, ns);
 
-            if (Array.isArray(handlers)) {
-                delete events[name];
-            }
+            _.each(storage, function(handlers, name){
+                handlers = handlers.filter(filter);
+
+                handlers.length ? 
+                    (storage[name] = handlers) :
+                    (delete storage[name]);
+            });
 
             return this;
         },
@@ -75,17 +112,13 @@ define([
          */
         trigger: function(name) {
             var handlers = getEvents(this, name),
-                args;
+                args     = _.toArray(arguments).slice(1);
 
-            if (typeof handlers !== 'undefined') {
-                args = Array.prototype.slice.call(arguments, 1);
+            if (_.isUndefined(handlers)) {
+                return true;
+            }  
 
-                handlers.forEach(function(callback) {
-                    callback.apply(this, args);
-                });
-            }
-
-            return this;
+            return trigger(handlers, args);
         }
     }
 });

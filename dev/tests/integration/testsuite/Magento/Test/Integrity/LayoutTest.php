@@ -111,7 +111,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function testHandleLabels()
     {
-        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * @param \Magento\Framework\View\Design\ThemeInterface $theme
@@ -145,7 +145,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function testPageTypesDeclaration()
     {
-        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * Check whether page types are declared only in layout update files allowed for it - base ones
@@ -198,7 +198,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function testOverrideBaseFiles()
     {
-        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * Check, that for an overriding file ($themeFile) in a theme ($theme), there is a corresponding base file
@@ -225,7 +225,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function testOverrideThemeFiles()
     {
-        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * Check, that for an ancestor-overriding file ($themeFile) in a theme ($theme),

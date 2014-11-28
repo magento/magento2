@@ -197,12 +197,12 @@
 
 // Popup fade
 ._popup-fade(@_popup-fade) when not (@_popup-fade = '') {
-    .transition(@_popup-fade);
+    .css(transition, @_popup-fade);
 }
 
 // Popup shadow
 ._popup-shadow(@_popup-shadow) when not (@_popup-shadow = '') and not (@_popup-shadow = none)  {
-    .box-shadow(@_popup-shadow);
+    .css(box-shadow, @_popup-shadow);
 }
 
 // Popup height

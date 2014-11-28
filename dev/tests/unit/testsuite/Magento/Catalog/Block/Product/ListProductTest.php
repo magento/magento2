@@ -65,6 +65,14 @@ class ListProductTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->registryMock = $this->getMock('Magento\Framework\Registry', array(), array(), '', false);
         $this->layerMock = $this->getMock('Magento\Catalog\Model\Layer', array(), array(), '', false);
+        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Layer\Resolver $layerResolver */
+        $layerResolver = $this->getMockBuilder('\Magento\Catalog\Model\Layer\Resolver')
+            ->disableOriginalConstructor()
+            ->setMethods(['get', 'create'])
+            ->getMock();
+        $layerResolver->expects($this->any())
+            ->method($this->anything())
+            ->will($this->returnValue($this->layerMock));
         $this->postDataHelperMock = $this->getMock(
             'Magento\Core\Helper\PostData',
             array(),
@@ -98,7 +106,7 @@ class ListProductTest extends \PHPUnit_Framework_TestCase
             'Magento\Catalog\Block\Product\ListProduct',
             array(
                 'registry' => $this->registryMock,
-                'catalogLayer' => $this->layerMock,
+                'layerResolver' => $layerResolver,
                 'cartHelper' => $this->cartHelperMock,
                 'postDataHelper' => $this->postDataHelperMock
             )

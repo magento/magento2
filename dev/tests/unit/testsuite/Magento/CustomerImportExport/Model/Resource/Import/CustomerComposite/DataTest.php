@@ -83,7 +83,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         /** @var $resourceModelMock \Magento\Framework\App\Resource */
         $resourceModelMock = $this->getMock(
             'Magento\Framework\App\Resource',
-            array('getConnection', '_newConnection', 'getTableName'),
+            array(),
             array(),
             '',
             false

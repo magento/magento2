@@ -71,11 +71,11 @@ class Dimensions
         $field = $dimension->getName();
         $value = $dimension->getValue();
 
-        if (Dimension::SCOPE === $field) {
+        if ('scope' === $field) {
             $field = self::STORE_FIELD_NAME;
             $value = $this->scopeResolver->getScope($value)->getId();
         }
 
-        return $this->conditionManager->generateCondition($field, '=', $value);
+        return $this->conditionManager->generateCondition('search_index.' . $field, '=', $value);
     }
 }

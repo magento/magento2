@@ -85,6 +85,11 @@ class CatalogRulePriceTest extends \PHPUnit_Framework_TestCase
     protected $calculator;
 
     /**
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $priceCurrencyMock;
+
+    /**
      * Set up
      */
     public function setUp()
@@ -152,10 +157,14 @@ class CatalogRulePriceTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $qty = 1;
+
+        $this->priceCurrencyMock = $this->getMock('\Magento\Framework\Pricing\PriceCurrencyInterface');
+
         $this->object = new CatalogRulePrice(
             $this->saleableItemMock,
             $qty,
             $this->calculator,
+            $this->priceCurrencyMock,
             $this->dataTimeMock,
             $this->storeManagerMock,
             $this->customerSessionMock,
@@ -174,7 +183,8 @@ class CatalogRulePriceTest extends \PHPUnit_Framework_TestCase
         $customerGroupId = 1;
         $dateTime = time();
 
-        $expectedValue = 55.12;
+        $catalogRulePrice = 55.12;
+        $convertedPrice = 45.34;
 
         $this->coreStoreMock->expects($this->once())
             ->method('getId')
@@ -191,12 +201,16 @@ class CatalogRulePriceTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($customerGroupId));
         $this->catalogRuleResourceMock->expects($this->once())
             ->method('getRulePrice')
-            ->will($this->returnValue($expectedValue));
+            ->will($this->returnValue($catalogRulePrice));
         $this->saleableItemMock->expects($this->any())
             ->method('getId')
             ->will($this->returnValue($productId));
+        $this->priceCurrencyMock->expects($this->any())
+            ->method('convertAndRound')
+            ->with($catalogRulePrice)
+            ->will($this->returnValue($convertedPrice));
 
-        $this->assertEquals($expectedValue, $this->object->getValue());
+        $this->assertEquals($convertedPrice, $this->object->getValue());
     }
 
     public function testGetAmountNoBaseAmount()

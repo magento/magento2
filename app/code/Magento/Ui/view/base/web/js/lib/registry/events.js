@@ -21,73 +21,36 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 define([
-    './storage'
-], function(storage) {
+    'underscore',
+    'mage/utils'
+], function(_, utils) {
     'use strict';
 
-    var id = 0,
-        requests = {},
-        map = {};
+    function Events(storage){
+        this.id = 0,
+        
+        this.requests   = {};
+        this.map        = {};
+        this.storage    = storage;
 
-    /**
-     * Clears all of the entries of a specified request.
-     * @param {Number} id - Id of request.
-     */
-    function clear(id) {
-        var ei,
-            elems,
-            index,
-            handlers;
-
-        elems = requests[id].deps;
-
-        for (ei = elems.length; ei--;) {
-            handlers = map[elems[ei]];
-
-            index = handlers.indexOf(id);
-
-            if (~index) {
-                handlers.splice(index, 1);
-            }
-        }
-
-        delete requests[id];
+        _.bindAll(this, '_resolve', '_clear');
     }
 
+    Events.prototype = {
+        constructor: Events,
 
-    /**
-     * Tries to resolve pending request.
-     * @param {Number} id - Id of request.
-     * @returns {Boolean} Whether specified request was successfully resolved.
-     */
-    function resolve(id) {
-        var request = requests[id],
-            elems = request.deps,
-            callback = request.callback,
-            isResolved;
-
-        isResolved = storage.has(elems);
-
-        if (isResolved) {
-            callback.apply(window, storage.get(elems));
-        }
-
-        return isResolved;
-    }
-
-    return {
         /**
          * Tries to resolve dependencies affected by the scpecified element.
          * @param {String} elem - Elements' name.
          * @returns {events} Chainable.
          */
         resolve: function(elem) {
-            var pending = map[elem];
+            var pending = this.map[elem];
 
-            if (typeof pending !== 'undefined') {
+            if (Array.isArray(pending)) {
                 pending
-                    .filter(resolve)
-                    .forEach(clear);
+                    .filter(this._resolve)
+                    .forEach(this._clear);
             }
 
             return this;
@@ -105,20 +68,63 @@ define([
          * @returns {events} Chainable.
          */
         wait: function(elems, callback) {
+            var storage = this.storage,
+                map     = this.map;
+
             if (storage.has(elems)) {
-                return callback.apply(window, storage.get(elems));
+                return callback.apply(null, storage.get(elems));
             }
 
             elems.forEach(function(elem) {
-                (map[elem] = map[elem] || []).push(id);
-            });
+                (map[elem] = map[elem] || []).push(this.id);
+            }, this);
 
-            requests[id++] = {
-                callback: callback,
-                deps: elems
+            this.requests[this.id++] = {
+                callback:   callback,
+                deps:       elems
             };
 
             return this;
+        },
+
+        /**
+         * Tries to resolve pending request.
+         * @private
+         * @param {Number} id - Id of request.
+         * @returns {Boolean} Whether specified request was successfully resolved.
+         */
+        _resolve: function(id) {
+            var request     = this.requests[id],
+                elems       = request.deps,
+                storage     = this.storage,
+                isResolved;
+
+            isResolved = storage.has(elems);
+
+            if (isResolved) {
+                request.callback.apply(null, storage.get(elems));
+            }
+
+            return isResolved;
+        },
+
+        /**
+         * Clears all of the entries of a specified request.
+         * @private
+         * @param {Number} id - Id of request.
+         */
+        _clear: function(id) {
+            var map     = this.map,
+                elems   = this.requests[id].deps;
+
+            elems.forEach(function(elem){
+                utils.remove(map[elem], id);
+            });
+
+            delete this.requests[id];
         }
     };
+
+    return Events;
 });
+

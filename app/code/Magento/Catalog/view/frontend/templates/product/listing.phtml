@@ -77,7 +77,7 @@ $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Im
 
                     if ($_product->isSaleable()) {
                         $info['button'] = '<button type="button" title="' . __('Add to Cart') . '" class="action tocart"'
-                                        . ' data-mage-redirect="{event: \'click\', url: \'' . $this->getAddToCartUrl($_product) . '\'}">'
+                                        . ' data-mage-init=\'{ "redirectUrl": { "event": "click", url: "' . $this->getAddToCartUrl($_product) . '"} }\'>'
                                         . '<span>' . __('Add to Cart') . '</span></button>';
                     } else {
                         $info['button'] = $_product->getIsSalable() ?   '<div class="stock available"><span>' . __('In stock') . '</span></div>' :

@@ -69,7 +69,7 @@
                     <range from="18" to=""/>
                 </ranges>
             </bucket>
-            <bucket xsi:type="dynamicBucket" method="dynamic1" name="dynamic_price" field="price" />
+            <bucket xsi:type="dynamicBucket" method="manual" name="dynamic_price" field="price" />
         </aggregations>
         <from>10</from>
         <size>10</size>

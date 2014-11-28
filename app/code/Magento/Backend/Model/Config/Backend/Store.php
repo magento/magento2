@@ -59,7 +59,7 @@ class Store extends \Magento\Framework\App\Config\Value
     /**
      * @return void
      */
-    protected function _afterSave()
+    public function afterSave()
     {
         $this->_mutableConfig->setValue(
             \Magento\Store\Model\Store::XML_PATH_STORE_IN_URL,

@@ -26,7 +26,7 @@
 $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Customer\Model\Attribute');
 
 $model->setName(
-    'custom_attribute'
+    'custom_attribute1'
 )->setEntityTypeId(
     1
 )->setIsUserDefined(
@@ -48,7 +48,7 @@ $model->save();
 $model2 = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Customer\Model\Attribute');
 
 $model2->setName(
-    'custom_attributes'
+    'custom_attribute2'
 )->setEntityTypeId(
     1
 )->setIsUserDefined(

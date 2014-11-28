@@ -30,6 +30,8 @@ use Magento\Customer\Controller\RegistryConstants;
  *
  * @method \Magento\Framework\Object[] getGridElements()
  * @method Grid setGridElements($orders)
+ *
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Grid extends \Magento\RecurringPayment\Block\Payment\View
 {

@@ -29,7 +29,8 @@ use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\StoreManagerInterface;
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
+use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Helper\Address;
 use Magento\Framework\UrlFactory;
 use Magento\Framework\Exception\StateException;
@@ -48,8 +49,11 @@ class Confirm extends \Magento\Customer\Controller\Account
     /** @var StoreManagerInterface */
     protected $storeManager;
 
-    /** @var CustomerAccountServiceInterface  */
-    protected $customerAccountService;
+    /** @var AccountManagementInterface  */
+    protected $customerAccountManagement;
+
+    /** @var CustomerRepositoryInterface  */
+    protected $customerRepository;
 
     /** @var Address */
     protected $addressHelper;
@@ -62,7 +66,8 @@ class Confirm extends \Magento\Customer\Controller\Account
      * @param Session $customerSession
      * @param ScopeConfigInterface $scopeConfig
      * @param StoreManagerInterface $storeManager
-     * @param CustomerAccountServiceInterface $customerAccountService
+     * @param AccountManagementInterface $customerAccountManagement
+     * @param CustomerRepositoryInterface $customerRepository
      * @param Address $addressHelper
      * @param UrlFactory $urlFactory
      */
@@ -71,13 +76,15 @@ class Confirm extends \Magento\Customer\Controller\Account
         Session $customerSession,
         ScopeConfigInterface $scopeConfig,
         StoreManagerInterface $storeManager,
-        CustomerAccountServiceInterface $customerAccountService,
+        AccountManagementInterface $customerAccountManagement,
+        CustomerRepositoryInterface $customerRepository,
         Address $addressHelper,
         UrlFactory $urlFactory
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->storeManager = $storeManager;
-        $this->customerAccountService = $customerAccountService;
+        $this->customerAccountManagement = $customerAccountManagement;
+        $this->customerRepository = $customerRepository;
         $this->addressHelper = $addressHelper;
         $this->urlModel = $urlFactory->create();
         parent::__construct($context, $customerSession);
@@ -101,8 +108,9 @@ class Confirm extends \Magento\Customer\Controller\Account
                 throw new \Exception(__('Bad request.'));
             }
 
-            // log in and send greeting email, then die happy
-            $customer = $this->customerAccountService->activateCustomer($customerId, $key);
+            // log in and send greeting email
+            $customerEmail = $this->customerRepository->getById($customerId)->getEmail();
+            $customer = $this->customerAccountManagement->activate($customerEmail, $key);
             $this->_getSession()->setCustomerDataAsLoggedIn($customer);
 
             $this->messageManager->addSuccess($this->getSuccessMessage());

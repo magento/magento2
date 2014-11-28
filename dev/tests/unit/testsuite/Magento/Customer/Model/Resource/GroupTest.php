@@ -43,6 +43,9 @@ class GroupTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $customersFactory;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $groupManagement;
+
     protected function setUp()
     {
         $this->resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
@@ -54,13 +57,20 @@ class GroupTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->groupManagement = $this->getMock(
+            'Magento\Customer\Api\GroupManagementInterface',
+            array('getDefaultGroup','getNotLoggedInGroup','isReadOnly','getLoggedInGroups','getAllCustomersGroup'),
+            array(),
+            '',
+            false);
+
         $this->groupModel = $this->getMock('Magento\Customer\Model\Group', [], [], '', false);
 
         $this->groupResourceModel = (new ObjectManagerHelper($this))->getObject(
             'Magento\Customer\Model\Resource\Group',
             [
                 'resource' => $this->resource,
-                'customerVat' => $this->customerVat,
+                'groupManagement' => $this->groupManagement,
                 'customersFactory' => $this->customersFactory,
             ]
         );
@@ -81,10 +91,18 @@ class GroupTest extends \PHPUnit_Framework_TestCase
         $customerId = 1;
         $customer->expects($this->once())->method('getId')->will($this->returnValue($customerId));
         $customer->expects($this->once())->method('load')->with($customerId)->will($this->returnSelf());
-        $defaultCustomerGroup = 1;
-        $this->customerVat->expects($this->once())->method('getDefaultCustomerGroupId')
+        $defaultCustomerGroup = $this->getMock(
+            'Magento\Customer\Model\Group',
+            ['getId'],
+            [],
+            '',
+            false
+        );
+        $this->groupManagement->expects($this->once())->method('getDefaultGroup')
             ->will($this->returnValue($defaultCustomerGroup));
-        $customer->expects($this->once())->method('setGroupId')->with($defaultCustomerGroup);
+        $defaultCustomerGroup->expects($this->once())->method('getId')
+            ->will($this->returnValue(1));
+        $customer->expects($this->once())->method('setGroupId')->with(1);
         $customerCollection = $this->getMock('Magento\Customer\Model\Resource\Customer\Collection', [], [], '', false);
         $customerCollection->expects($this->once())->method('addAttributeToFilter')->will($this->returnSelf());
         $customerCollection->expects($this->once())->method('load')->will($this->returnValue([$customer]));

@@ -64,6 +64,9 @@ abstract class AbstractExtensibleModel extends AbstractModel implements Extensib
         $this->metadataService = $metadataService;
         $data = $this->filterCustomAttributes($data);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        if (isset($data['id'])) {
+            $this->setId($data['id']);
+        }
     }
 
     /**
@@ -110,26 +113,6 @@ abstract class AbstractExtensibleModel extends AbstractModel implements Extensib
     }
 
     /**
-     * Overwrite data in the object.
-     *
-     * The $key parameter can be string or array.
-     * If $key is string, the attribute value will be overwritten by $value
-     *
-     * If $key is an array, it will overwrite all the data in the object.
-     *
-     * @param string|array  $key
-     * @param mixed         $value
-     * @return $this
-     */
-    public function setData($key, $value = null)
-    {
-        if ($key === self::CUSTOM_ATTRIBUTES) {
-            throw new \LogicException("Custom attributes must be set only using setCustomAttribute() method.");
-        }
-        return parent::setData($key, $value);
-    }
-
-    /**
      * Object data getter
      *
      * If $key is not defined will return all the data as an array.
@@ -148,9 +131,9 @@ abstract class AbstractExtensibleModel extends AbstractModel implements Extensib
      */
     public function getData($key = '', $index = null)
     {
-        if ($key == self::CUSTOM_ATTRIBUTES) {
+        if ($key === self::CUSTOM_ATTRIBUTES) {
             throw new \LogicException("Custom attributes array should be retrieved via getCustomAttributes() only.");
-        } else if ($key == '') {
+        } else if ($key === '') {
             /** Represent model data and custom attributes as a flat array */
             $data = array_merge($this->_data, $this->getCustomAttributes());
             unset($data[self::CUSTOM_ATTRIBUTES]);
@@ -186,5 +169,17 @@ abstract class AbstractExtensibleModel extends AbstractModel implements Extensib
         }
         $this->customAttributesCodes = $attributeCodes;
         return $attributeCodes;
+    }
+
+    /**
+     * Identifier setter
+     *
+     * @param mixed $value
+     * @return $this
+     */
+    public function setId($value)
+    {
+        parent::setId($value);
+        return $this->setData('id', $value);
     }
 }

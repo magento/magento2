@@ -29,6 +29,158 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 class AttributeTest extends \Magento\Backend\Utility\Controller
 {
     /**
+     * @return void
+     */
+    public function testWrongFrontendInput()
+    {
+        $postData = $this->_getAttributeData() + [
+                'attribute_id' => 100500,
+                'frontend_input' => 'some_input',
+            ];
+        $this->getRequest()->setPost($postData);
+        $this->dispatch('backend/catalog/product_attribute/save');
+        $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
+        $this->assertContains(
+            'catalog/product_attribute/edit/attribute_id/100500',
+            $this->getResponse()->getHeader('Location')['value']
+        );
+        /** @var \Magento\Framework\Message\Collection $messages */
+        $messages = $this->_objectManager->create('Magento\Framework\Message\ManagerInterface')->getMessages();
+        $this->assertEquals(1, $messages->getCountByType('error'));
+        $message = $messages->getItemsByType('error')[0];
+        $this->assertEquals('Input type "some_input" not found in the input types list.', $message->getText());
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/controllers/_files/attribute_system_popup.php
+     * @return void
+     */
+    public function testWithPopup()
+    {
+        $postData = $this->_getAttributeData() + [
+            'attribute_id' => 5,
+            'popup' => 'true',
+            'new_attribute_set_name' => 'new_attribute_set',
+        ];
+        $this->getRequest()->setPost($postData);
+        $this->dispatch('backend/catalog/product_attribute/save');
+        $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
+        $this->assertContains(
+            'catalog/product/addAttribute/attribute/5',
+            $this->getResponse()->getHeader('Location')['value']
+        );
+        /** @var \Magento\Framework\Message\Collection $messages */
+        $messages = $this->_objectManager->create('Magento\Framework\Message\ManagerInterface')->getMessages();
+        $this->assertEquals(1, $messages->getCountByType('success'));
+        $message = $messages->getItemsByType('success')[0];
+        $this->assertEquals('You saved the product attribute.', $message->getText());
+    }
+
+    /**
+     * @return void
+     */
+    public function testWithExceptionWhenSaveAttribute()
+    {
+        $postData = $this->_getAttributeData() + ['attribute_id' => 0, 'frontend_input' => 'boolean'];
+        $this->getRequest()->setPost($postData);
+        $this->dispatch('backend/catalog/product_attribute/save');
+        $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
+        $this->assertContains(
+            'catalog/product_attribute/edit/attribute_id/0',
+            $this->getResponse()->getHeader('Location')['value']
+        );
+        /** @var \Magento\Framework\Message\Collection $messages */
+        $messages = $this->_objectManager->create('Magento\Framework\Message\ManagerInterface')->getMessages();
+        $this->assertEquals(1, $messages->getCountByType('error'));
+    }
+
+    /**
+     * @return void
+     */
+    public function testWrongAttributeId()
+    {
+        $postData = $this->_getAttributeData() + ['attribute_id' => 100500];
+        $this->getRequest()->setPost($postData);
+        $this->dispatch('backend/catalog/product_attribute/save');
+        $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
+        $this->assertContains(
+            'catalog/product_attribute/index',
+            $this->getResponse()->getHeader('Location')['value']
+        );
+        /** @var \Magento\Framework\Message\Collection $messages */
+        $messages = $this->_objectManager->create('Magento\Framework\Message\ManagerInterface')->getMessages();
+        $this->assertEquals(1, $messages->getCountByType('error'));
+        /** @var \Magento\Framework\Message\Error $message */
+        $message = $messages->getItemsByType('error')[0];
+        $this->assertEquals('This attribute no longer exists.', $message->getText());
+    }
+
+    /**
+     * @return void
+     */
+    public function testAttributeWithoutId()
+    {
+        $postData = $this->_getAttributeData() + [
+                'attribute_code' => uniqid('attribute_'),
+                'set' => 4,
+                'frontend_input' => 'boolean',
+            ];
+        $this->getRequest()->setPost($postData);
+        $this->dispatch('backend/catalog/product_attribute/save');
+        $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
+        $this->assertContains(
+            'catalog/product_attribute/index',
+            $this->getResponse()->getHeader('Location')['value']
+        );
+        /** @var \Magento\Framework\Message\Collection $messages */
+        $messages = $this->_objectManager->create('Magento\Framework\Message\ManagerInterface')->getMessages();
+        $this->assertEquals(1, $messages->getCountByType('success'));
+        /** @var \Magento\Framework\Message\Success $message */
+        $message = $messages->getItemsByType('success')[0];
+        $this->assertEquals('You saved the product attribute.', $message->getText());
+    }
+
+    /**
+     * @return void
+     */
+    public function testWrongAttributeCode()
+    {
+        $postData = $this->_getAttributeData() + array('attribute_id' => '2', 'attribute_code' => '_()&&&?');
+        $this->getRequest()->setPost($postData);
+        $this->dispatch('backend/catalog/product_attribute/save');
+        $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
+        $this->assertContains(
+            'catalog/product_attribute/edit/attribute_id/2',
+            $this->getResponse()->getHeader('Location')['value']
+        );
+        /** @var \Magento\Framework\Message\Collection $messages */
+        $messages = $this->_objectManager->create('Magento\Framework\Message\ManagerInterface')->getMessages();
+        $this->assertEquals(1, $messages->getCountByType('error'));
+        /** @var \Magento\Framework\Message\Error $message */
+        $message = $messages->getItemsByType('error')[0];
+        $this->assertEquals(
+            'Attribute code "_()&&&?" is invalid. Please use only letters (a-z),'
+            . ' numbers (0-9) or underscore(_) in this field, first character should be a letter.',
+            $message->getText()
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testAttributeWithoutEntityTypeId()
+    {
+        $postData = $this->_getAttributeData() + array('attribute_id' => '2', 'new_attribute_set_name' => ' ');
+        $this->getRequest()->setPost($postData);
+        $this->dispatch('backend/catalog/product_attribute/save');
+        $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
+        $this->assertContains(
+            'catalog/product_attribute/index',
+            $this->getResponse()->getHeader('Location')['value']
+        );
+    }
+
+    /**
      * @magentoDataFixture Magento/Catalog/controllers/_files/attribute_system.php
      */
     public function testSaveActionApplyToDataSystemAttribute()

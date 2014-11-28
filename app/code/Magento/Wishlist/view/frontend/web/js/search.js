@@ -56,4 +56,5 @@ define([
         }
     });
 
+    return $.mage.wishlistSearch;
 });

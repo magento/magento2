@@ -36,15 +36,23 @@ class Set extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $_attrGroupFactory;
 
     /**
+     * @var \Magento\Eav\Model\Config
+     */
+    protected $eavConfig;
+
+    /**
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\GroupFactory $attrGroupFactory
+     * @param GroupFactory $attrGroupFactory
+     * @param \Magento\Eav\Model\Config $eavConfig
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        \Magento\Eav\Model\Resource\Entity\Attribute\GroupFactory $attrGroupFactory
+        \Magento\Eav\Model\Resource\Entity\Attribute\GroupFactory $attrGroupFactory,
+        \Magento\Eav\Model\Config $eavConfig
     ) {
         parent::__construct($resource);
         $this->_attrGroupFactory = $attrGroupFactory;
+        $this->eavConfig = $eavConfig;
     }
 
     /**
@@ -90,6 +98,26 @@ class Set extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
 
         return parent::_afterSave($object);
+    }
+
+    /**
+     * Perform actions before object delete
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return $this
+     * @throws \Magento\Framework\Exception\StateException
+     * @throws \Magento\Framework\Model\Exception
+     */
+    protected function _beforeDelete(\Magento\Framework\Model\AbstractModel $object)
+    {
+        /** @var \Magento\Eav\Api\Data\AttributeSetInterface $object */
+        $defaultAttributeSetId = $this->eavConfig
+            ->getEntityType($object->getEntityTypeId())
+            ->getDefaultAttributeSetId();
+        if ($object->getAttributeSetId() == $defaultAttributeSetId) {
+            throw new \Magento\Framework\Exception\StateException('Default attribute set can not be deleted');
+        }
+        return parent::_beforeDelete($object);
     }
 
     /**

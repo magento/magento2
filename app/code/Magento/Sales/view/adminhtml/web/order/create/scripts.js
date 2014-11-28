@@ -49,6 +49,7 @@ AdminOrder.prototype = {
         this.productConfigureAddFields = {};
         this.productPriceBase = {};
         this.collectElementsValue = true;
+        this.isOnlyVirtualProduct = false;
         Event.observe(window, 'load',  (function(){
             this.dataArea = new OrderFormArea('data', $(this.getAreaId('data')), this);
             this.itemsArea = Object.extend(new OrderFormArea('items', $(this.getAreaId('items')), this), {
@@ -219,8 +220,7 @@ AdminOrder.prototype = {
 
         if (data['reset_shipping']) {
             this.resetShippingMethod(data);
-        }
-        else {
+        } else {
             this.saveData(data);
             if (name == 'country_id' || name == 'customer_address_id') {
                 this.loadArea(['shipping_method', 'billing_method', 'totals', 'items'], true, data);
@@ -287,6 +287,10 @@ AdminOrder.prototype = {
             var dataFields = $(this.shippingAddressContainer).select('input', 'select', 'textarea');
             for (var i = 0; i < dataFields.length; i++) {
                 dataFields[i].disabled = flag;
+
+                if(this.isOnlyVirtualProduct) {
+                    dataFields[i].setValue('');
+                }
             }
             var buttons = $(this.shippingAddressContainer).select('button');
             // Add corresponding class to buttons while disabling them
@@ -302,23 +306,31 @@ AdminOrder.prototype = {
     },
 
     setShippingAsBilling : function(flag){
+        var data;
+        var areasToLoad = ['billing_method', 'shipping_address', 'totals', 'giftmessage'];
         this.disableShippingAddress(flag);
         if(flag){
-            var data = this.serializeData(this.billingAddressContainer);
-        }
-        else{
-            var data = this.serializeData(this.shippingAddressContainer);
+            data = this.serializeData(this.billingAddressContainer);
+        } else {
+            data = this.serializeData(this.shippingAddressContainer);
+            areasToLoad.push('shipping_method');
         }
         data = data.toObject();
         data['shipping_as_billing'] = flag ? 1 : 0;
         data['reset_shipping'] = 1;
-        this.loadArea(['shipping_method', 'billing_method', 'shipping_address', 'totals', 'giftmessage'], true, data);
+        this.loadArea( areasToLoad, true, data);
     },
 
     resetShippingMethod : function(data){
+        var areasToLoad = ['billing_method', 'shipping_address', 'totals', 'giftmessage', 'items'];
+        if(!this.isOnlyVirtualProduct) {
+            areasToLoad.push('shipping_method');
+            areasToLoad.push('shipping_address');
+        }
+
         data['reset_shipping'] = 1;
         this.isShippingMethodReseted = true;
-        this.loadArea(['shipping_method', 'billing_method', 'shipping_address', 'totals', 'giftmessage', 'items'], true, data);
+        this.loadArea(areasToLoad, true, data);
     },
 
     loadShippingRates : function(){
@@ -1093,12 +1105,11 @@ AdminOrder.prototype = {
         }
     },
 
-    overlay : function(elId, show, observe)
-    {
+    overlay : function(elId, show, observe) {
         if (typeof(show) == 'undefined') { show = true; }
 
         var orderObj = this;
-        var obj = this.overlayData.get(elId)
+        var obj = this.overlayData.get(elId);
         if (!obj) {
             obj = {
                 show: show,
@@ -1107,11 +1118,10 @@ AdminOrder.prototype = {
                 fx: function(event) {
                     this.order.processOverlay(this.el, this.show);
                 }
-            }
+            };
             obj.bfx = obj.fx.bindAsEventListener(obj);
             this.overlayData.set(elId, obj);
-        }
-        else {
+        } else {
             obj.show = show;
             Event.stopObserving(window, 'resize', obj.bfx);
         }
@@ -1121,19 +1131,17 @@ AdminOrder.prototype = {
         this.processOverlay(elId, show);
     },
 
-    processOverlay : function(elId, show)
-    {
+    processOverlay : function(elId, show) {
         var el = $(elId);
 
         if (!el) {
-            return false;
+            return;
         }
 
         var parentEl = el.up(1);
         if (show) {
             parentEl.removeClassName('ignore-validate');
-        }
-        else {
+        } else {
             parentEl.addClassName('ignore-validate');
         }
 

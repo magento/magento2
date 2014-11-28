@@ -27,7 +27,7 @@
 
 <?php $children = $this->getChildNames(); ?>
 <?php if ($children): ?>
-    <div class="product-item-actions">
+    <div class="<?php echo $this->getCssClass() ?>">
         <?php foreach($children as $childName):?>
             <?php echo $this->getLayout()->renderElement($childName, false);?>
         <?php endforeach;?>

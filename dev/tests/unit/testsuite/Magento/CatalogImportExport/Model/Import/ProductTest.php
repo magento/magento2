@@ -93,11 +93,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     protected $_product;
 
     /**
-     * @var \Magento\Customer\Service\V1\CustomerGroupServiceInterface
-     */
-    protected $_customerGroupService;
-
-    /**
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -266,16 +261,27 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->_product)
         );
 
-        $this->_customerGroupService = $this->getMock(
-            'Magento\Customer\Service\V1\CustomerGroupService',
-            array('getGroups'),
-            array(),
-            '',
-            false
-        );
-        $this->_customerGroupService->expects($this->atLeastOnce())
-            ->method('getGroups')
-            ->will($this->returnValue(array()));
+        $groupRepository = $this->getMockBuilder('Magento\Customer\Api\GroupRepositoryInterface')
+            ->setMethods(['getList'])
+            ->getMockForAbstractClass();
+        $searchResults = $this->getMockBuilder('Magento\Customer\Api\Data\GroupSearchResultsInterface')
+            ->setMethods(['getItems'])
+            ->getMockForAbstractClass();
+        $searchResults->expects($this->once())
+            ->method('getItems')
+            ->will($this->returnValue([]));
+        $groupRepository->expects($this->once())
+            ->method('getList')
+            ->will($this->returnValue($searchResults));
+        $searchCriteriaBuilder = $this->getMockBuilder('Magento\Framework\Api\SearchCriteriaBuilder')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $searchCriteria = $this->getMockBuilder('Magento\Framework\Api\SearchCriteriaInterface')
+            ->getMockForAbstractClass();
+        $searchCriteriaBuilder->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($searchCriteria));
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
 
@@ -289,7 +295,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 'importConfig' => $this->_importConfig,
                 'categoryColFactory' => $this->_categoryColFactory,
                 'productFactory' => $this->_productFactory,
-                'customerGroupService' => $this->_customerGroupService
+                'groupRepository' => $groupRepository,
+                'searchCriteriaBuilder' => $searchCriteriaBuilder
             )
         );
     }

@@ -65,7 +65,7 @@
             </action>
         </referenceBlock>
         <referenceContainer name="content">
-            <container name="bundle.options.container" htmlTag="div" htmlClass="bundle-options-container" after="product.info.main"/>
+            <container name="bundle.options.container" htmlTag="div" htmlClass="bundle-options-container" after="product.info.media"/>
         </referenceContainer>
         <referenceContainer name="product.info.type">
             <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle" name="product.info.bundle" as="product_type_data" template="catalog/product/view/type/bundle.phtml"/>

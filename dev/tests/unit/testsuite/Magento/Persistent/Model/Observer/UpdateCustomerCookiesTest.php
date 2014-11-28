@@ -71,7 +71,7 @@ class UpdateCustomerCookiesTest extends \PHPUnit_Framework_TestCase
         $this->observerMock = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
         $this->eventManagerMock = $this->getMock('\Magento\Framework\Event', $eventMethods, [], '', false);
         $this->sessionMock = $this->getMock('Magento\Persistent\Model\Session', $sessionMethods, [], '', false);
-        $this->customerMock = $this->getMock('Magento\Customer\Service\V1\Data\Customer', [], [], '', false);
+        $this->customerMock = $this->getMock('Magento\Customer\Api\Data\CustomerInterface', [], [], '', false);
         $this->model = new \Magento\Persistent\Model\Observer\UpdateCustomerCookies(
           $this->sessionHelperMock,
           $this->accountServiceMock

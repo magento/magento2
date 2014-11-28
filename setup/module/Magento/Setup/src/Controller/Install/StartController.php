@@ -24,17 +24,15 @@
 
 namespace Magento\Setup\Controller\Install;
 
-use Magento\Setup\Module\Setup\Config;
-use Magento\Setup\Module\Setup\ConfigFactory as DeploymentConfigFactory;
 use Zend\Mvc\Controller\AbstractActionController;
 use Magento\Setup\Model\WebLogger;
 use Zend\Json\Json;
 use Zend\View\Model\JsonModel;
 use Magento\Setup\Model\InstallerFactory;
 use Magento\Setup\Model\Installer;
-use Zend\Stdlib\Parameters;
-use Magento\Setup\Model\UserConfigurationData as UserConfig;
+use Magento\Setup\Model\UserConfigurationDataMapper as UserConfig;
 use Magento\Setup\Model\AdminAccount;
+use Magento\Setup\Module\Setup\ConfigMapper;
 
 /**
  * UI Controller that handles installation
@@ -61,28 +59,20 @@ class StartController extends AbstractActionController
     private $installer;
 
     /**
-     * @var DeploymentConfigFactory
-     */
-    private $deploymentConfigFactory;
-
-    /**
      * Default Constructor
      *
      * @param JsonModel $view
      * @param WebLogger $logger
      * @param InstallerFactory $installerFactory
-     * @param DeploymentConfigFactory $deploymentConfigFactory
      */
     public function __construct(
         JsonModel $view,
         WebLogger $logger,
-        InstallerFactory $installerFactory,
-        DeploymentConfigFactory $deploymentConfigFactory
+        InstallerFactory $installerFactory
     ) {
         $this->json = $view;
         $this->log = $logger;
         $this->installer = $installerFactory->create($logger);
-        $this->deploymentConfigFactory = $deploymentConfigFactory;
     }
 
     /**
@@ -100,11 +90,14 @@ class StartController extends AbstractActionController
                 $this->importAdminUserForm()
             );
             $this->installer->install($data);
-            $config = $this->deploymentConfigFactory->create();
-            $config->loadFromFile();
-            $this->json->setVariable('key', $config->get(Config::KEY_ENCRYPTION_KEY));
+            $this->json->setVariable(
+                'key',
+                $this->installer->getInstallInfo()[
+                    \Magento\Framework\App\DeploymentConfig\EncryptConfig::KEY_ENCRYPTION_KEY
+                ]
+            );
             $this->json->setVariable('success', true);
-            $this->json->setVariable('messages', $this->installer->getMessages());
+            $this->json->setVariable('messages', $this->installer->getInstallInfo()[Installer::INFO_MESSAGE]);
         } catch(\Exception $e) {
             $this->log->logError($e);
             $this->json->setVariable('success', false);
@@ -121,15 +114,15 @@ class StartController extends AbstractActionController
     {
         $source = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
         $result = [];
-        $result[Config::KEY_DB_HOST] = isset($source['db']['host']) ? $source['db']['host'] : '';
-        $result[Config::KEY_DB_NAME] = isset($source['db']['name']) ? $source['db']['name'] : '';
-        $result[Config::KEY_DB_USER] = isset($source['db']['user']) ? $source['db']['user'] :'';
-        $result[Config::KEY_DB_PASS] = isset($source['db']['password']) ? $source['db']['password'] : '';
-        $result[Config::KEY_DB_PREFIX] = isset($source['db']['tablePrefix']) ? $source['db']['tablePrefix'] : '';
-        $result[Config::KEY_BACKEND_FRONTNAME] = isset($source['config']['address']['admin'])
+        $result[ConfigMapper::KEY_DB_HOST] = isset($source['db']['host']) ? $source['db']['host'] : '';
+        $result[ConfigMapper::KEY_DB_NAME] = isset($source['db']['name']) ? $source['db']['name'] : '';
+        $result[ConfigMapper::KEY_DB_USER] = isset($source['db']['user']) ? $source['db']['user'] :'';
+        $result[ConfigMapper::KEY_DB_PASS] = isset($source['db']['password']) ? $source['db']['password'] : '';
+        $result[ConfigMapper::KEY_DB_PREFIX] = isset($source['db']['tablePrefix']) ? $source['db']['tablePrefix'] : '';
+        $result[ConfigMapper::KEY_BACKEND_FRONTNAME] = isset($source['config']['address']['admin'])
             ? $source['config']['address']['admin']
             : '';
-        $result[Config::KEY_ENCRYPTION_KEY] = isset($source['config']['encrypt']['key'])
+        $result[ConfigMapper::KEY_ENCRYPTION_KEY] = isset($source['config']['encrypt']['key'])
             ? $source['config']['encrypt']['key']
             : '';
         return $result;
@@ -150,10 +143,11 @@ class StartController extends AbstractActionController
             ? $source['config']['address']['web'] : '';
         $result[UserConfig::KEY_IS_SECURE] = isset($source['config']['https']['front'])
             ? $source['config']['https']['front'] : '';
-        $result[UserConfig::KEY_BASE_URL_SECURE] = isset($source['config']['address']['web'])
-            ? $source['config']['address']['web'] : '';
         $result[UserConfig::KEY_IS_SECURE_ADMIN] = isset($source['config']['https']['admin'])
             ? $source['config']['https']['admin'] : '';
+        $result[UserConfig::KEY_BASE_URL_SECURE] = (isset($source['config']['https']['front'])
+            || isset($source['config']['https']['admin']))
+            ? str_replace('http:', 'https:', $source['config']['address']['web']) : '';
         $result[UserConfig::KEY_LANGUAGE] = isset($source['store']['language'])
             ? $source['store']['language'] : '';
         $result[UserConfig::KEY_TIMEZONE] = isset($source['store']['timezone'])

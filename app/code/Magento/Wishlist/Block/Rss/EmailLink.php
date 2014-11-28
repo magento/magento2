@@ -22,12 +22,16 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
 /**
  * Wishlist RSS URL to Email Block
  */
 namespace Magento\Wishlist\Block\Rss;
 
+/**
+ * Class EmailLink
+ *
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ */
 class EmailLink extends Link
 {
     /**

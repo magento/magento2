@@ -26,6 +26,8 @@
 //
 //  Magento UI library provides a set of mixins for forms elements customization. You can customize your forms globally by configuring global variables, or you can customize every form separately using appropriate mixin.
 //
+//  **Note**: in variables lists allowable values are in "[]" brackets. If there are no allowable values provided, for this variable you can use: '' | false | value.
+//
 //  # Global forms elements customization
 //  The <code>.form-element-all()</code> mixin is used to set default styles for all form elements in the theme. To configure these elements global variables are used.
 //
@@ -270,7 +272,7 @@
 //        <tr>
 //            <th>@_margin</th>
 //            <td class="vars_value">@form-fieldset-margin</td>
-//            <td class="vars_value">0 0 40px</td>
+//            <td class="vars_value"> 0 0 @indent-xl-base</td>
 //            <td>Fieldset margin</td>
 //        </tr>
 //        <tr>
@@ -282,7 +284,7 @@
 //        <tr>
 //            <th>@_legend-color</th>
 //            <td class="vars_value">@form-fieldset-legend-color</td>
-//            <td class="vars_value">inherit</td>
+//            <td class="vars_value">false</td>
 //            <td>Legend color</td>
 //        </tr>
 //        <tr>
@@ -294,19 +296,19 @@
 //        <tr>
 //            <th>@_legend-font-family</th>
 //            <td class="vars_value">@form-fieldset-legend-font-family</td>
-//            <td class="vars_value">@font-family-base</td>
+//            <td class="vars_value">false</td>
 //            <td>Legend font family</td>
 //        </tr>
 //        <tr>
 //            <th>@_legend-font-weight</th>
 //            <td class="vars_value">@form-fieldset-legend-font-weight</td>
-//            <td class="vars_value">@font-weight-base</td>
+//            <td class="vars_value">false</td>
 //            <td>Legend font weight</td>
 //        </tr>
 //        <tr>
 //            <th>@_legend-font-style</th>
 //            <td class="vars_value">@form-fieldset-legend-font-style</td>
-//            <td class="vars_value">normal</td>
+//            <td class="vars_value">false</td>
 //            <td>Legend font style</td>
 //        </tr>
 //        <tr>
@@ -318,7 +320,7 @@
 //        <tr>
 //            <th>@_legend-margin</th>
 //            <td class="vars_value">@form-fieldset-legend-margin</td>
-//            <td class="vars_value">0 0 25px @form-field-type-inline-label-width</td>
+//            <td class="vars_value">0 0 @indent-m-base</td>
 //            <td>Legend margin</td>
 //        </tr>
 //        <tr>
@@ -330,7 +332,7 @@
 //        <tr>
 //            <th>@_legend-width</th>
 //            <td class="vars_value">@form-fieldset-legend-width</td>
-//            <td class="vars_value">0 0 25px @form-field-type-inline-label-width</td>
+//            <td class="vars_value">false</td>
 //            <td>Legend width</td>
 //        </tr>
 //    </table>
@@ -345,7 +347,7 @@
 //        <tr>
 //            <th class="vars_head">Mixin variable</th>
 //            <th class="vars_head">Global variable</th>
-//            <th class="vars_head">Default values [Allowed values]</th>
+//            <th class="vars_head">Default values [Allowable values]</th>
 //            <th class="vars_head">Comment</th>
 //        </tr>
 //        <tr>
@@ -357,7 +359,7 @@
 //        <tr>
 //            <th>@_border</th>
 //            <td class="vars_value">@form-field-border</td>
-//            <td class="vars_value">none</td>
+//            <td class="vars_value">false</td>
 //            <td>Border of the &lt;div class=&quot;field&quot;&gt; element</td>
 //        </tr>
 //        <tr>
@@ -369,19 +371,19 @@
 //        <tr>
 //            <th>@_column-padding</th>
 //            <td class="vars_value">@form-field-column-padding</td>
-//            <td class="vars_value">0 20px 0 0</td>
+//            <td class="vars_value">0 12px 0 0</td>
 //            <td>Form fields column padding</td>
 //        </tr>
 //        <tr>
-//            <th>@_column-width</th>
-//            <td class="vars_value">@form-field-column-width</td>
-//            <td class="vars_value">50%</td>
-//            <td>Form fields column width</td>
+//            <th>@_column-number</th>
+//            <td class="vars_value">@form-field-column-number</td>
+//            <td class="vars_value">2</td>
+//            <td>Form fields number of columns</td>
 //        </tr>
 //        <tr>
 //            <th>@_type-block-margin</th>
 //            <td class="vars_value">@form-field-type-block-margin</td>
-//            <td class="vars_value">0 0 20px</td>
+//            <td class="vars_value">0 0 @form-field-vertical-indent</td>
 //            <td>Form fields margin if @form-field-type set to is 'block'</td>
 //        </tr>
 //        <tr>
@@ -395,20 +397,26 @@
 //        </tr>
 //        <tr>
 //            <th>@_label-color</th>
+//            <td class="vars_value">@form-field-label-align</td>
+//            <td class="vars_value">false</td>
+//            <td>Field label text color</td>
+//        </tr>
+//        <tr>
+//            <th>@_label-color</th>
 //            <td class="vars_value">@form-field-label-color</td>
-//            <td class="vars_value">''</td>
+//            <td class="vars_value">false</td>
 //            <td>Field label text color</td>
 //        </tr>
 //        <tr>
 //            <th>@_label-font-size</th>
 //            <td class="vars_value">@form-field-label-font-size</td>
-//            <td class="vars_value">@font-size-base</td>
+//            <td class="vars_value">false</td>
 //            <td>Field label font size</td>
 //        </tr>
 //        <tr>
 //            <th>@_label-font-family</th>
 //            <td class="vars_value">@form-field-label-font-family</td>
-//            <td class="vars_value">''</td>
+//            <td class="vars_value">false</td>
 //            <td>Field label font family</td>
 //        </tr>
 //        <tr>
@@ -420,25 +428,25 @@
 //        <tr>
 //            <th> @_label-font-style</th>
 //            <td class="vars_value">@form-field-label-font-style</td>
-//            <td class="vars_value">''</td>
+//            <td class="vars_value">false</td>
 //            <td>Field label font style</td>
 //        </tr>
 //        <tr>
 //            <th>@_label-line-height</th>
 //            <td class="vars_value">@form-field-label-line-height</td>
-//            <td class="vars_value">''</td>
+//            <td class="vars_value">false</td>
 //            <td>Field label line height</td>
 //        </tr>
 //        <tr>
 //            <th>@_type-block-label-margin</th>
 //            <td class="vars_value">@form-field-type-block-label-margin</td>
-//            <td class="vars_value">0 0 5px</td>
+//            <td class="vars_value">0 0 @indent-xs-base</td>
 //            <td>Field label margin if @form-field-type is set to 'block'</td>
 //        </tr>
 //        <tr>
 //            <th>@_type-inline-label-padding</th>
 //            <td class="vars_value">@form-field-type-inline-label-padding</td>
-//            <td class="vars_value">6px 15px 0 0</td>
+//            <td class="vars_value" nowrap>@form-field-type-inline-label-padding-top 15px 0 0</td>
 //            <td>Field label padding if @form-field-type is set to 'inline'</td>
 //        </tr>
 //        <tr>
@@ -471,31 +479,31 @@
 //        <tr>
 //            <th>@_label-asterisk-font-family</th>
 //            <td class="vars_value">@form-field-label-asterisk-font-family</td>
-//            <td class="vars_value">''</td>
+//            <td class="vars_value">false</td>
 //            <td>Label asterisk font family</td>
 //        </tr>
 //        <tr>
 //            <th>@_label-asterisk-font-weight</th>
-//            <td class="vars_value" >@form-field-label-asterisk-font-weight</td>
-//            <td class="vars_value">''</td>
+//            <td class="vars_value">@form-field-label-asterisk-font-weight</td>
+//            <td class="vars_value">false</td>
 //            <td>Label asterisk font weight</td>
 //        </tr>
 //        <tr>
 //            <th>@_label-asterisk-font-style</th>
 //            <td class="vars_value">@form-field-label-asterisk-font-style</td>
-//            <td class="vars_value">''</td>
+//            <td class="vars_value">false</td>
 //            <td>Label asterisk font style</td>
 //        </tr>
 //        <tr>
 //            <th>@_label-asterisk-line-height</th>
 //            <td class="vars_value">@form-field-label-asterisk-line-height</td>
-//            <td class="vars_value">''</td>
+//            <td class="vars_value">false</td>
 //            <td>Label asterisk line height</td>
 //        </tr>
 //        <tr>
 //            <th>@_label-asterisk-margin</th>
 //            <td class="vars_value">@form-field-label-asterisk-margin</td>
-//            <td class="vars_value">0 0 0 5px</td>
+//            <td class="vars_value">0 0 0 @indent-xs-base</td>
 //            <td>Label asterisk margin</td>
 //        </tr>
 //        <tr>
@@ -504,7 +512,7 @@
 //        <tr>
 //            <th>@_note-color</th>
 //            <td class="vars_value">@form-field-note-color</td>
-//            <td class="vars_value">''</td>
+//            <td class="vars_value">false</td>
 //            <td>Field note text color</td>
 //        </tr>
 //        <tr>
@@ -516,25 +524,25 @@
 //        <tr>
 //            <th>@_note-font-family</th>
 //            <td class="vars_value">@form-field-note-font-family</td>
-//            <td class="vars_value">''</td>
+//            <td class="vars_value">false</td>
 //            <td>Field note font family</td>
 //        </tr>
 //        <tr>
 //            <th>@_note-font-weight</th>
 //            <td class="vars_value">@form-field-note-font-weight</td>
-//            <td class="vars_value">''</td>
+//            <td class="vars_value">false</td>
 //            <td>Field note font weight</td>
 //        </tr>
 //        <tr>
 //            <th>@_note-font-style</th>
 //            <td class="vars_value">@form-field-note-font-style</td>
-//            <td class="vars_value">''</td>
+//            <td class="vars_value">false</td>
 //            <td>Field note font style</td>
 //        </tr>
 //        <tr>
 //            <th>@_note-line-height</th>
 //            <td class="vars_value">@form-field-note-line-height</td>
-//            <td class="vars_value">''</td>
+//            <td class="vars_value">false</td>
 //            <td>Field note line height</td>
 //        </tr>
 //        <tr>
@@ -582,19 +590,19 @@
 //        <tr>
 //            <th>@_note-icon-font-color-hover</th>
 //            <td class="vars_value">@form-field-note-icon-font-color-hover</td>
-//            <td class="vars_value">''</td>
+//            <td class="vars_value">false</td>
 //            <td>Field note icon hovered color</td>
 //        </tr>
 //        <tr>
 //            <th>@_note-icon-font-color-active</th>
 //            <td class="vars_value">@form-field-note-icon-font-color-active</td>
-//            <td class="vars_value">''</td>
+//            <td class="vars_value">false</td>
 //            <td>Field note icon active color</td>
 //        </tr>
 //        <tr>
 //            <th>@_note-icon-font-margin</th>
 //            <td class="vars_value">@form-field-note-icon-font-margin</td>
-//            <td class="vars_value">''</td>
+//            <td class="vars_value">false</td>
 //            <td>Field note icon margin</td>
 //        </tr>
 //        <tr>
@@ -618,7 +626,6 @@
 //    </table>
 //  </pre>
 //
-//
 //  # Required fields message customization variables
 //
 //  The <code>.form-hasrequired()</code> mixin variables
@@ -628,7 +635,7 @@
 //        <tr>
 //            <th class="vars_head">Mixin variable</th>
 //            <th class="vars_head">Global variable</th>
-//            <th class="vars_head">Default values [Allowed values]</th>
+//            <th class="vars_head">Default values [Allowable values]</th>
 //            <th class="vars_head">Comment</th>
 //        </tr>
 //        <tr>
@@ -640,60 +647,60 @@
 //        <tr>
 //            <th>@_color</th>
 //            <td class="vars_value">@form-hasrequired-color</td>
-//            <td class="vars_value">#da370a</td>
+//            <td class="vars_value">@form-field-label-asterisk-color</td>
 //            <td>Text color of &quot;required fields&quot; notice</td>
 //        </tr>
 //        <tr>
 //            <th>@_font-size</th>
 //            <td class="vars_value">@form-hasrequired-font-size</td>
-//            <td class="vars_value">@font-size-base</td>
+//            <td class="vars_value">@font-size-s</td>
 //            <td>Font size of &quot;required fields&quot; notice</td>
 //        </tr>
 //        <tr>
 //            <th>@_font-family</th>
 //            <td class="vars_value">@form-hasrequired-font-family</td>
-//            <td class="vars_value">''</td>
+//            <td class="vars_value">false</td>
 //            <td>Font family of &quot;required fields&quot; notice</td>
 //        </tr>
 //        <tr>
 //            <th>@_font-weight</th>
 //            <td class="vars_value">@form-hasrequired-font-weight</td>
-//            <td class="vars_value">''</td>
+//            <td class="vars_value">false</td>
 //            <td>Font weight of &quot;required fields&quot; notice</td>
 //        </tr>
 //        <tr>
 //            <th>@_font-style</th>
 //            <td class="vars_value">@form-hasrequired-font-style</td>
-//            <td class="vars_value">''</td>
+//            <td class="vars_value">false</td>
 //            <td>Font style of &quot;required fields&quot; notice</td>
 //        </tr>
 //        <tr>
 //            <th>@_line-height</th>
 //            <td class="vars_value">@form-hasrequired-line-height</td>
-//            <td class="vars_value">''</td>
+//            <td class="vars_value">false</td>
 //            <td>Line height of &quot;required fields&quot; notice</td>
 //        </tr>
 //        <tr>
 //            <th>@_border</th>
 //            <td class="vars_value">@form-hasrequired-border</td>
-//            <td class="vars_value">''</td>
+//            <td class="vars_value">false</td>
 //            <td>Border of &quot;required fields&quot; notice</td>
 //        </tr>
 //        <tr>
 //            <th>@_margin</th>
 //            <td class="vars_value">@form-hasrequired-margin</td>
-//            <td class="vars_value">10px 0 0</td>
+//            <td class="vars_value">@indent-s-base 0 0</td>
 //            <td>Margin of &quot;required fields&quot; notice</td>
 //        </tr>
 //        <tr>
 //            <th>@_padding</th>
 //            <td class="vars_value">@form-hasrequired-padding</td>
-//            <td class="vars_value">''</td>
+//            <td class="vars_value">false</td>
 //            <td>Padding of &quot;required fields&quot; notice</td>
 //        </tr>
 //    </table>
 // </pre>
-
+//
 //  # Form element inputs customization
 //
 //  The <code>.form-element-input(@_type: *type*)</code> mixin is used to style form controls. This mixin accepts 1 mandatory parameter - the control type. This can be:
@@ -734,7 +741,7 @@ select {
 }
 
 select[multiple="multiple"] {
-    .add-height(auto);
+    .css(height, auto);
     margin-bottom: 20px;
 }
 
@@ -750,31 +757,31 @@ textarea {
 //        <tr>
 //            <th class="vars_head">Mixin variable</th>
 //            <th class="vars_head">Global variable</th>
-//            <th class="vars_head">Default value [Allowed value]</th>
+//            <th class="vars_head">Default value [Allowable value]</th>
 //            <th class="vars_head">Comment</th>
 //        </tr>
 //        <tr>
 //            <th>@_type</th>
-//            <td class="vars_value">@form-element-input-type<br/></td>
+//            <td class="vars_value">@form-element-input-type</td>
 //            <td class="vars_value">'' [input-text | select | textarea | input-radio | input-checkbox]</td>
-//            <td>Form control type.<br/>@form-element-input-[] global variables are used to set up all form elements style. Control-specific global variables use these @form-element-input-[] variables by default. Control-specific global variables can be set up separately.<br/>@input-text-[] is used to set up input-text controls style<br/>@select-[] is used to set up selects style<br/>@textarea-[] is used to set up textarea style</td>
+//            <td>Form control type.<br/><b>@form-element-input-[]</b> global variables are used to set up all form elements style. Control-specific global variables use these <b>@form-element-input-[]</b> variables by default. Control-specific global variables can be set up separately.<br/><b>@input-text-[]</b> is used to set up input-text controls style<br/><b>@select-[]</b> is used to set up selects style<br/><b>@textarea-[]</b> is used to set up textarea style</td>
 //        </tr>
 //        <tr>
 //            <th>@_background</th>
 //            <td class="vars_value">@form-element-input-background<br/>@input-text-background<br/>@selectbackground<br/>@textarea-background</td>
-//            <td class="vars_value">#fff</td>
+//            <td class="vars_value">#fff<br/>@form-element-input-background<br/>@form-element-input-background<br/>@form-element-input-background</td>
 //            <td>Form control background</td>
 //        </tr>
 //        <tr>
 //            <th>@_border</th>
-//            <td class="vars_value">@form-element-input-border<br/>@input-text-border<br/>@select-borderbr>@textarea-border</td>
-//            <td class="vars_value" nowrap="nowrap">1px solid @form-element-input-border-color</td>
+//            <td class="vars_value">@form-element-input-border<br/>@input-text-border<br/>@select-border<br/>@textarea-border</td>
+//            <td class="vars_value" nowrap="nowrap">1px solid @form-element-input-border-color<br/>@form-element-input-border<br/>@form-element-input-border<br/>@form-element-input-border</td>
 //            <td>Form control border</td>
 //        </tr>
 //        <tr>
 //            <th>@_border-radius</th>
 //            <td class="vars_value" nowrap="nowrap">@form-element-input-border-radius<br/>@input-textborder-radius<br/>@select-border-radius<br/>@textarea-border-radius</td>
-//            <td class="vars_value">1px</td>
+//            <td class="vars_value">1px<br/>@form-element-input-border-radius<br/>@form-element-input-border-radius<br/>@form-element-input-border-radius</td>
 //            <td>Form control border radius</td>
 //        </tr>
 //        <tr>
@@ -786,31 +793,31 @@ textarea {
 //        <tr>
 //            <th>@_width</th>
 //            <td class="vars_value">@form-element-input-width<br/>@input-text-width<br/>@select-width<br/>@textarea-width</td>
-//            <td class="vars_value">100%</td>
+//            <td class="vars_value">100%<br/>@form-element-input-width<br/>@form-element-input-width<br/>@form-element-input-width</td>
 //            <td>Form control width</td>
-//        </tr>
-//        <tr>
-//            <th>@_padding</th>
-//            <td class="vars_value">@form-element-input-padding<br/>@input-text-padding <br/>@select-padding<br/>@textarea-padding</td>
-//            <td class="vars_value">0 10px<br/>@form-element-input-padding<br/>5px 10px 4px<br/>10px</td>
-//            <td>Form control padding</td>
 //        </tr>
 //        <tr>
 //            <th>@_margin</th>
 //            <td class="vars_value">@form-element-input-margin<br/>@input-text-margin<br/>@select-margin<br/>@textarea-margin</td>
-//            <td class="vars_value">false [true | false]</td>
+//            <td class="vars_value">false [true | false]<br/>@form-element-input-margin<br/>@form-element-input-margin<br/>0</td>
 //            <td>Form control margin</td>
+//        </tr>
+//        <tr>
+//            <th>@_padding</th>
+//            <td class="vars_value">@form-element-input-padding<br/>@input-text-padding <br/>@select-padding<br/>@textarea-padding</td>
+//            <td class="vars_value">0 9px<br/>@form-element-input-padding<br/>5px 10px 4px<br/>@indent-s-base</td>
+//            <td>Form control padding</td>
 //        </tr>
 //        <tr>
 //            <th>@_vertical-align</th>
 //            <td class="vars_value">@form-element-input-vertical-align<br/>@input-text-vertical-align<br/>@select-vertical-align<br/>@textarea-vertical-align</td>
-//            <td class="vars_value">baseline</td>
+//            <td class="vars_value">baseline<br/>@form-element-input-vertical-align<br/>@form-element-input-vertical-align<br/>@form-element-input-vertical-align</td>
 //            <td>Form control vertical align</td>
 //        </tr>
 //        <tr>
 //            <th>@_background-clip</th>
-//            <td class="vars_value">@form-element-input-background-clip<br/>@input-text-background-clip<br/>@select-background-clip<br/>@textarea-background-clip</td>
-//            <td class="vars_value">padding-box [padding-box | border-box | content-box]</td>
+//            <td class="vars_value">@form-element-input-background-clip<br/><br/>@input-text-background-clip<br/>@select-background-clip<br/>@textarea-background-clip</td>
+//            <td class="vars_value">padding-box<br/>[padding-box | border-box | content-box]<br/>@form-element-input-background-clip<br/>@form-element-input-background-clip<br/>@form-element-input-background-clip</td>
 //            <td>Form control background clip</td>
 //        </tr>
 //        <tr>
@@ -819,37 +826,37 @@ textarea {
 //        <tr>
 //            <th>@_color</th>
 //            <td class="vars_value">@form-element-input-color<br/>@input-text-color<br/>@select-color<br/>@textarea-color</td>
-//            <td class="vars_value">@text-color</td>
+//            <td class="vars_value">false<br/>@form-element-input-color<br/>@form-element-input-color<br/>@form-element-input-color</td>
 //            <td>Form control text color</td>
 //        </tr>
 //        <tr>
 //            <th>@_font-size</th>
 //            <td class="vars_value">@form-element-input-font-size<br/>@input-text-font-size<br/>@select-font-size<br/>@textarea-font-size</td>
-//            <td class="vars_value">@font-size-base</td>
+//            <td class="vars_value">@font-size-base<br/>@form-element-input-font-size<br/>@form-element-input-font-size<br/>@form-element-input-font-size</td>
 //            <td>Form control font size</td>
 //        </tr>
 //        <tr>
 //            <th>@_font-family</th>
 //            <td class="vars_value">@form-element-input-font-family<br/>@input-text-font-family<br/>@select-font-family<br/>@textarea-font-family</td>
-//            <td class="vars_value">@font-family-base</td>
+//            <td class="vars_value">@font-family-base<br/>@form-element-input-font-family<br/>@form-element-input-font-family<br/>@form-element-input-font-family</td>
 //            <td>Form control font family</td>
 //        </tr>
 //        <tr>
 //            <th>@_font-weight</th>
 //            <td class="vars_value">@form-element-input-font-weight<br/>@input-text-font-weight<br/>@select-font-weight<br/>@textarea-font-weight</td>
-//            <td class="vars_value">@font-weight-base</td>
+//            <td class="vars_value">false<br/>@form-element-input-font-weight<br/>@form-element-input-font-weight<br/>@form-element-input-font-weight</td>
 //            <td>Form control font weight</td>
 //        </tr>
 //        <tr>
 //            <th>@_font-style</th>
 //            <td class="vars_value">@form-element-input-font-style<br/>@input-text-font-style<br/>@selectfont-style<br/>@textarea-font-style</td>
-//            <td class="vars_value">@font-style-base</td>
+//            <td class="vars_value">false<br/>@form-element-input-font-style<br/>@form-element-input-font-style<br/>@form-element-input-font-style</td>
 //            <td>Form control font style</td>
 //        </tr>
 //        <tr>
 //            <th>@_line-height</th>
-//            <td class="vars_value">@form-element-input-line-height<br/>@input-text-line-height<br/>@select-line-height<br/>@textarea-line-height <br/></td>
-//            <td class="vars_value">@line-height-base</td>
+//            <td class="vars_value">@form-element-input-line-height<br/>@input-text-line-height<br/>@select-line-height<br/>@textarea-line-height</td>
+//            <td class="vars_value">@line-height-base<br/>@form-element-input-line-height<br/>@form-element-input-line-height<br/>@form-element-input-line-height</td>
 //            <td>Form control line height</td>
 //        </tr>
 //        <tr>
@@ -858,13 +865,13 @@ textarea {
 //        <tr>
 //            <th>@_placeholder-color</th>
 //            <td class="vars_value">@form-element-input-placeholder-color<br/>@input-text-placeholder-color<br/>@select-placeholder-color<br/>@textarea-placeholder-color</td>
-//            <td class="vars_value">false [false | '' | color code]</td>
+//            <td class="vars_value">#c2c2c2<br/>@form-element-input-placeholder-color<br/>@form-element-input-placeholder-color<br/>@form-element-input-placeholder-color</td>
 //            <td>Form control placeholder color</td>
 //        </tr>
 //        <tr>
-//            <th>@_placeholder-font-style</th>
+//            <th nowrap>@_placeholder-font-style</th>
 //            <td class="vars_value" nowrap="nowrap">@form-element-input-placeholder-font-style<br/>@inputtext-placeholder-font-style<br/>@select-placeholder-font-style<br/>@textarea-placeholder-font-style</td>
-//            <td class="vars_value">@form-element-input-font-style</td>
+//            <td class="vars_value">@form-element-input-font-style<br/>@form-element-input-placeholder-font-style<br/>@form-element-input-placeholder-font-style<br/>@form-element-input-placeholder-font-style</td>
 //            <td>Form control placeholder font style</td>
 //        </tr>
 //        <tr>
@@ -873,31 +880,31 @@ textarea {
 //        <tr>
 //            <th>@_disabled-background</th>
 //            <td class="vars_value" nowrap="nowrap">@form-element-input-disabled-background<br/>@inputtextdisabled-background<br/>@select-disabled-background<br/>@textarea-disabled-background</td>
-//            <td class="vars_value"> @form-element-input-background</td>
+//            <td class="vars_value">@form-element-input-background<br/>@form-element-input-disabled-background<br/>@form-element-input-disabled-background<br/>@form-element-input-disabled-background</td>
 //            <td>Disabled form element background</td>
 //        </tr>
 //        <tr>
 //            <th>@_disabled-border</th>
 //            <td class="vars_value">@form-element-input-disabled-border<br/>@input-text-disabled-border<br/>@select-disabled-border<br/>@textarea-disabled-border</td>
-//            <td class="vars_value">@form-element-input-border</td>
+//            <td class="vars_value">@form-element-input-border<br/>@form-element-input-disabled-border<br/>@form-element-input-disabled-border<br/>@form-element-input-disabled-border</td>
 //            <td>Disabled form element border</td>
 //        </tr>
 //        <tr>
 //            <th>@_disabled-opacity</th>
 //            <td class="vars_value">@form-element-input-disabled-opacity<br/>@input-text-disabled-opacity<br/>@select-disabled-opacity<br/>@textarea-disabled-opacity</td>
-//            <td class="vars_value">0.5</td>
+//            <td class="vars_value">0.5<br/>@form-element-input-disabled-opacity<br/>@form-element-input-disabled-opacity<br/>@form-element-input-disabled-opacity</td>
 //            <td>Disabled form element opacity</td>
 //        </tr>
 //        <tr>
 //            <th>@_disabled-color</th>
 //            <td class="vars_value">@form-element-input-disabled-color<br/>@input-text-disabled-color<br/>@select-disabled-color<br/>@textarea-disabled-color</td>
-//            <td class="vars_value">@form-element-input-color</td>
+//            <td class="vars_value">@form-element-input-color<br/>@form-element-input-disabled-color<br/>@form-element-input-disabled-color<br/>@form-element-input-disabled-color</td>
 //            <td>Disabled form element text color</td>
 //        </tr>
 //        <tr>
 //            <th nowrap="nowrap">@_disabled-font-style</th>
 //            <td class="vars_value">@form-element-input-disabled-font-style<br/>@input-text-disabled-font-style<br/>@select-disabled-font-style<br/>@textarea-disabled-font-style</td>
-//            <td class="vars_value">@form-element-input-font-style</td>
+//            <td class="vars_value">@form-element-input-font-style<br/>@form-element-input-disabled-font-style<br/>@form-element-input-disabled-font-style<br/>@form-element-input-disabled-font-style</td>
 //            <td>Disabled form element font style</td>
 //        </tr>
 //        <tr>
@@ -906,25 +913,25 @@ textarea {
 //        <tr>
 //            <th>@_focus-background</th>
 //            <td class="vars_value">@form-element-input-focus-background<br/>@input-text-focus-background<br/>@select-focus-background<br/>@textarea-focus-background</td>
-//            <td class="vars_value">@form-element-input-background</td>
+//            <td class="vars_value">@form-element-input-background<br/>@form-element-input-focus-background<br/>@form-element-input-focus-background<br/>@form-element-input-focus-background</td>
 //            <td>Focused form element background</td>
 //        </tr>
 //        <tr>
 //            <th>@_focus-border</th>
 //            <td class="vars_value">@form-element-input-focus-border<br/>@input-text-focus-border<br/>@select-focus-border<br/>@textarea-focus-border</td>
-//            <td class="vars_value">@form-element-input-border</td>
+//            <td class="vars_value">@form-element-input-border<br/>@form-element-input-focus-border<br/>@form-element-input-focus-border<br/>@form-element-input-focus-border</td>
 //            <td>Focused form element border</td>
 //        </tr>
 //        <tr>
 //            <th>@_focus-color</th>
 //            <td class="vars_value">@form-element-input-focus-color<br/>@input-text-focus-color<br/>@select-focus-color<br/>@textarea-focus-color</td>
-//            <td class="vars_value">@form-element-input-color</td>
+//            <td class="vars_value">@form-element-input-color<br/>@form-element-input-focus-color<br/>@form-element-input-focus-color<br/>@form-element-input-focus-color</td>
 //            <td>Focused form element color</td>
 //        </tr>
 //        <tr>
 //            <th>@_focus-font-style</th>
 //            <td class="vars_value">@form-element-input-focus-font-style<br/>@input-text-focus-font-style<br/>@select-focus-font-style<br/>@textarea-focus-font-style</td>
-//            <td class="vars_value">@form-element-input-font-style</td>
+//            <td class="vars_value">@form-element-input-font-style<br/>@form-element-input-focus-font-style<br/>@form-element-input-focus-font-style<br/>@form-element-input-focus-font-style</td>
 //            <td>Focused form element font style</td>
 //        </tr>
 //    </table>
@@ -933,9 +940,10 @@ textarea {
 //  # Form element choice
 //  The <code>.form-element-choise()</code> mixin is used to customize checkboxes and radio buttons.
 //  ```html
-//    <input type="checkbox" name="checkbox-example" /><br />
-//    <input type="radio" name="radio-example"  />
+//    <input type="checkbox" name="checkbox-example" /><label for="checkbox-example">Label for checkbox</label><br />
+//    <input type="radio" name="radio-example"  /><label for="radio-example">Label for radio button</label>
 //  ```
+
 input[type="checkbox"] {
     .form-element-choice(@_type: input-checkbox);
 }
@@ -945,12 +953,13 @@ input[type="radio"] {
 }
 
 //  # Form element choice variables
+//
 //  <pre>
 //    <table>
 //        <tr>
 //            <th class="vars_head">Mixin variable</th>
 //            <th class="vars_head">Global variable</th>
-//            <th class="vars_head">Default values [Allowed values]</th>
+//            <th class="vars_head">Default values [Allowable values]</th>
 //            <th class="vars_head">Comment</th>
 //        </tr>
 //        <tr>
@@ -962,49 +971,23 @@ input[type="radio"] {
 //        <tr>
 //            <th>@_vertical-align</th>
 //            <td class="vars_value">@form-element-choice-vertical-align<br>@input-radio-vertical-align<br>@input-checkbox-vertical-align</td>
-//            <td class="vars_value">top</td>
+//            <td class="vars_value">false<br/>@form-element-choice-vertical-align<br/>@form-element-choice-vertical-align</td>
 //            <td>Choice element vertical align</td>
 //        </tr>
 //        <tr>
 //            <th>@_margin</th>
 //            <td class="vars_value">@form-element-choice-margin<br>@input-radio-margin<br>@input-checkbox-margin</td>
-//            <td class="vars_value"> 2px 5px 0 0</td>
+//            <td class="vars_value">2px @indent-xs-base 0 0<br/>@form-element-choice-margin<br/>@form-element-choice-margin</td>
 //            <td>Choice element margin</td>
 //        </tr>
 //        <tr>
 //            <th>@_disabled-opacity</th>
 //            <td class="vars_value">@form-element-choice-disabled-opacity<br>@input-radio-disabled-opacity<br>@input-checkbox-disabled-opacity</td>
-//            <td class="vars_value">@form-element-input-disabled-opacity</td>
+//            <td class="vars_value">@form-element-input-disabled-opacity<br/>@form-element-choice-disabled-opacity<br/>@form-element-choice-disabled-opacity</td>
 //            <td>Disabled choice element opacity</td>
 //        </tr>
 //    </table>
 //  </pre>
-
-//  # Custom indents for element inputs
-//  The <code>.form-element-indent()</code> mixin is used to set form elements background and color.
-//  ```css
-//  @_margin: ''
-//  @_padding: ''
-//  ```
-//  ```html
-//  <input type="text" class="text text-example-2" placeholder="placeholder, type = text" /><br /><br />
-//  <select class="select-example-2"><option>type = select</option><option>option</option></select><br /><br />
-//  <textarea class="textarea-example-2" placeholder="placeholder, type = textarea"></textarea>
-// ```
-input.text-example-2,
-select.select-example-2 {
-    .form-element-size(
-        @_height: 42px
-    );
-}
-input.text-example-2,
-select.select-example-2,
-textarea.textarea-example-2 {
-    .form-element-indent(
-        @_margin: 0 0 50px 0,
-        @_padding: 5px 25px
-    );
-}
 
 //  # Custom color
 //  The <code>.form-element-color()</code> mixin is used to set form elements background and color.
@@ -1026,53 +1009,24 @@ textarea.textarea-example-2 {
 //  <select class="select-example-1"><option>type = select</option><option>option</option></select><br /><br />
 //  <textarea class="textarea-example-1" placeholder="placeholder, type = textarea"></textarea>
 //  ```
+
 input.text-example-1,
 select.select-example-1,
 textarea.textarea-example-1 {
     .form-element-color(
-        @_background: #fffced,
-        @_border-color: #24ADB2,
-        @_focus-color: green,
-        @_focus-border-color: blue,
-        @_disabled-color: red
+        @_background: #fdf0d5,
+        @_border-color: #fc0,
+        @_color: #b30000,
+        @_focus-color: #060,
+        @_focus-border-color: #cff,
+        @_disabled-color: #fcc
     );
 }
 
 input.text-example-1,
 textarea.textarea-example-1 {
     .form-element-color(
-        @_placeholder-color: darkgray
-    );
-}
-
-//  # Custom indents for choice inputs
-//   ```html
-//  <input type="checkbox" name="checkbox-example-1"class="checkbox-example-1"  /><br />
-//  <input type="radio" name="radio-example-1" class="radio-example-1"  />
-//  ```
-input.checkbox-example-1,
-input.radio-example-1 {
-    .add-margin(@_add-margin: 15px);
-}
-
-//  # Form elements custom size
-//  The <code>.form-element-size()</code> mixin is used to set form elements custom size.
-//  ```html
-//  <input type="text" class="text text-example-3" placeholder="placeholder, type = text" /><br /><br />
-//  <select class="select-example-3"><option>type = select</option><option>option</option></select><br /><br />
-//  <textarea class="textarea-example-3" placeholder="placeholder, type = textarea"></textarea>
-//  ```
-input.text-example-3,
-select.select-example-3 {
-    .form-element-size(
-        @_height: 42px,
-        @_width: 50%
-    );
-}
-
-textarea.textarea-example-3 {
-    .form-element-size(
-        @_width: 50%
+        @_placeholder-color: #ccc
     );
 }
 
@@ -1128,13 +1082,12 @@ select {
     .form-validation-note();
 }
 
-//  #  Form validation variables
-//  <pre>
+//  #  Form validation variables//  <pre>
 //    <table>
 //        <tr>
 //            <th class="vars_head">Mixin variable</th>
 //            <th class="vars_head">Global variable</th>
-//            <th class="vars_head">Default values [Allowed values]</th>
+//            <th class="vars_head">Default values [Allowable values]</th>
 //            <th class="vars_head">Comment</th>
 //        </tr>
 //        <tr>
@@ -1242,7 +1195,7 @@ select {
 //        <tr>
 //            <th>@_note-icon-font-vertical-align</th>
 //            <td class="vars_value">@form-validation-note-icon-font-vertical-align</td>
-//            <td class="vars_value"> @icon-font-vertical-align</td>
+//            <td class="vars_value">@icon-font-vertical-align</td>
 //            <td>Validation note icon vertical align</td>
 //        </tr>
 //        <tr>

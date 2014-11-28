@@ -31,34 +31,33 @@ use Magento\Customer\Test\Page\CustomerAccountLogout;
 use Magento\Customer\Test\Fixture\CustomerInjectable;
 
 /**
- * Class LoginCustomerOnFrontendStep
- * Login customer on frontend
+ * Login customer on frontend.
  */
 class LoginCustomerOnFrontendStep implements TestStepInterface
 {
     /**
-     * Customer fixture
+     * Customer fixture.
      *
      * @var CustomerInjectable
      */
     protected $customer;
 
     /**
-     * Cms index page
+     * Cms index page.
      *
      * @var CmsIndex
      */
     protected $cmsIndex;
 
     /**
-     * Customer login page
+     * Customer login page.
      *
      * @var CustomerAccountLogin
      */
     protected $customerAccountLogin;
 
     /**
-     * Customer account logout page
+     * Customer account logout page.
      *
      * @var CustomerAccountLogout
      */
@@ -84,14 +83,18 @@ class LoginCustomerOnFrontendStep implements TestStepInterface
     }
 
     /**
-     * Login customer
+     * Login customer.
      *
      * @return void
      */
     public function run()
     {
-        $this->customerAccountLogout->open();
         $this->cmsIndex->open();
+        $this->cmsIndex->getLinksBlock()->waitWelcomeMessage();
+        if ($this->cmsIndex->getLinksBlock()->isLinkVisible("Log Out")) {
+            $this->cmsIndex->getLinksBlock()->openLink("Log Out");
+            $this->cmsIndex->getCmsPageBlock()->waitUntilTextIsVisible('Home Page');
+        }
         $this->cmsIndex->getLinksBlock()->openLink("Log In");
         $this->customerAccountLogin->getLoginBlock()->login($this->customer);
     }

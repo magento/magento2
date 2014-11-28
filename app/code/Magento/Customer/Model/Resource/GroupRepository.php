@@ -30,11 +30,13 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Framework\Api\Search\FilterGroup;
-use Magento\Tax\Service\V1\Data\TaxClass;
-use Magento\Tax\Service\V1\TaxClassServiceInterface;
+use Magento\Tax\Api\Data\TaxClassInterface;
+use Magento\Tax\Api\TaxClassManagementInterface;
 
 /**
  * Customer group CRUD class
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
 {
@@ -75,9 +77,9 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
     protected $searchResultsBuilder;
 
     /**
-     * @var TaxClassServiceInterface
+     * @var \Magento\Tax\Api\TaxClassRepositoryInterface
      */
-    private $taxClassService;
+    private $taxClassRepository;
 
     /**
      * @param \Magento\Customer\Model\GroupRegistry $groupRegistry
@@ -86,7 +88,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
      * @param \Magento\Customer\Model\Resource\Group $groupResourceModel
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
      * @param \Magento\Customer\Api\Data\GroupSearchResultsDataBuilder $searchResultsBuilder
-     * @param TaxClassServiceInterface $taxClassServiceInterface
+     * @param \Magento\Tax\Api\TaxClassRepositoryInterface $taxClassRepositoryInterface
      */
     public function __construct(
         \Magento\Customer\Model\GroupRegistry $groupRegistry,
@@ -95,7 +97,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
         \Magento\Customer\Model\Resource\Group $groupResourceModel,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
         \Magento\Customer\Api\Data\GroupSearchResultsDataBuilder $searchResultsBuilder,
-        TaxClassServiceInterface $taxClassServiceInterface
+        \Magento\Tax\Api\TaxClassRepositoryInterface $taxClassRepositoryInterface
     ) {
         $this->groupRegistry = $groupRegistry;
         $this->groupFactory = $groupFactory;
@@ -103,7 +105,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
         $this->groupResourceModel = $groupResourceModel;
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->searchResultsBuilder = $searchResultsBuilder;
-        $this->taxClassService = $taxClassServiceInterface;
+        $this->taxClassRepository = $taxClassRepositoryInterface;
     }
 
     /**
@@ -159,7 +161,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function get($id)
+    public function getById($id)
     {
         $groupModel = $this->groupRegistry->retrieve($id);
         return $this->groupBuilder->setId($groupModel->getId())
@@ -320,12 +322,12 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
     protected function _verifyTaxClassModel($taxClassId, $group)
     {
         try {
-            /* @var TaxClass $taxClassData */
-            $taxClassData = $this->taxClassService->getTaxClass($taxClassId);
+            /* @var TaxClassInterface $taxClassData */
+            $taxClassData = $this->taxClassRepository->get($taxClassId);
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             throw InputException::invalidFieldValue('taxClassId', $group->getTaxClassId());
         }
-        if ($taxClassData->getClassType() !== TaxClassServiceInterface::TYPE_CUSTOMER) {
+        if ($taxClassData->getClassType() !== TaxClassManagementInterface::TYPE_CUSTOMER) {
             throw InputException::invalidFieldValue('taxClassId', $group->getTaxClassId());
         }
     }

@@ -460,4 +460,6 @@ define([
             return price;
         }
     });
+    
+    return $.mage.configurable;
 });

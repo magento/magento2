@@ -45,15 +45,15 @@ $taxCalculationData['multi_tax_rule_two_row_calculate_subtotal_yes_total'] = [
             [
                 //tax rule 1 for product
                 'code' => 'Product Tax Rule TX',
-                'tax_product_class' => [SetupUtil::PRODUCT_TAX_CLASS_1],
-                'tax_rate' => [SetupUtil::TAX_RATE_TX],
+                'product_tax_class_ids' => [SetupUtil::PRODUCT_TAX_CLASS_1],
+                'tax_rate_ids' => [SetupUtil::TAX_RATE_TX],
                 'priority' => 1,
             ],
             [
                 //tax rule 2 for product
                 'code' => 'Product Tax Rule AUSTIN',
-                'tax_product_class' => [SetupUtil::PRODUCT_TAX_CLASS_1],
-                'tax_rate' => [SetupUtil::TAX_RATE_AUSTIN],
+                'product_tax_class_ids' => [SetupUtil::PRODUCT_TAX_CLASS_1],
+                'tax_rate_ids' => [SetupUtil::TAX_RATE_AUSTIN],
                 'priority' => 2,
                 'calculate_subtotal' => 1,
             ],

@@ -106,7 +106,7 @@ class Fieldset extends \Magento\Framework\Model\AbstractModel
      * @throws \Magento\Framework\Model\Exception
      * @return $this
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
         if (!$this->getTypeId()) {
             throw new \Magento\Framework\Model\Exception(__('Invalid form type.'));
@@ -115,7 +115,7 @@ class Fieldset extends \Magento\Framework\Model\AbstractModel
             $this->setStoreLabel($this->getStoreId(), $this->getLabel());
         }
 
-        return parent::_beforeSave();
+        return parent::beforeSave();
     }
 
     /**

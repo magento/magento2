@@ -9,8 +9,7 @@ atlassian*
 /.idea
 /.gitattributes
 /app/config_sandbox
-/app/etc/local.xml
-/app/etc/*/module.xml
+/app/etc/config.php
 /lib/internal/flex/uploader/.actionScriptProperties
 /lib/internal/flex/uploader/.flexProperties
 /lib/internal/flex/uploader/.project
@@ -19,6 +18,7 @@ atlassian*
 /lib/internal/flex/varien/.flexLibProperties
 /lib/internal/flex/varien/.project
 /lib/internal/flex/varien/.settings
+/node_modules
 
 /pub/media/*.*
 !/pub/media/.htaccess

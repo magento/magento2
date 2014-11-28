@@ -91,7 +91,7 @@ class GroupManagementTest extends \PHPUnit_Framework_TestCase
     public function testIsReadonlyWithGroupId()
     {
         $testGroup = ['id' => 3, 'code' => 'General', 'tax_class_id' => 3, 'tax_class_name' => 'Retail Customer'];
-        $this->assertEquals(true, $this->groupManagement->isReadonly($testGroup['id']));
+        $this->assertEquals(false, $this->groupManagement->isReadonly($testGroup['id']));
     }
 
     /**
@@ -101,6 +101,27 @@ class GroupManagementTest extends \PHPUnit_Framework_TestCase
     {
         $testGroup = ['id' => 4, 'code' => 'General', 'tax_class_id' => 3, 'tax_class_name' => 'Retail Customer'];
         $this->groupManagement->isReadonly($testGroup['id']);
+    }
+
+    public function testGetNotLoggedInGroup()
+    {
+        $notLoggedInGroup = $this->groupManagement->getNotLoggedInGroup();
+        $this->assertEquals(GroupManagement::NOT_LOGGED_IN_ID, $notLoggedInGroup->getId());
+    }
+
+    public function testGetLoggedInGroups()
+    {
+        $loggedInGroups = $this->groupManagement->getLoggedInGroups();
+        foreach ($loggedInGroups as $group) {
+            $this->assertNotEquals(GroupManagement::NOT_LOGGED_IN_ID, $group->getId());
+            $this->assertNotEquals(GroupManagement::CUST_GROUP_ALL, $group->getId());
+        }
+    }
+
+    public function testGetAllGroup()
+    {
+        $allGroup = $this->groupManagement->getAllCustomersGroup();
+        $this->assertEquals(32000, $allGroup->getId());
     }
 
     /**

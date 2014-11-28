@@ -25,7 +25,7 @@
  */
 namespace Magento\Eav\Model\Entity;
 
-class Setup extends \Magento\Framework\Module\Setup
+class Setup extends \Magento\Framework\Module\DataSetup
 {
     /**
      * @var \Magento\Framework\App\CacheInterface

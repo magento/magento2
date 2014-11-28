@@ -76,7 +76,6 @@ button {
 }
 
 //  # Button variables
-//
 //  <pre>
 //    <table>
 //      <tr>
@@ -88,74 +87,74 @@ button {
 //      <tr>
 //        <th>@_button-font-family</th>
 //        <td class="vars_value">@font-family-base</td>
-//        <td class="vars_value">&nbsp;</td>
-//        <td>button font family</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Button font family</td>
 //      </tr>
 //      <tr>
 //        <th>@_button-font-size</th>
 //        <td class="vars_value">@font-size-base</td>
-//        <td class="vars_value">&nbsp;</td>
-//        <td>button font size</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Button font size</td>
 //      </tr>
 //      <tr>
 //        <th>@_button-font-weight</th>
 //        <td class="vars_value">@font-weight-bold</td>
-//        <td class="vars_value">&nbsp;</td>
-//        <td>button font weight</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Button font weight</td>
 //      </tr>
 //      <tr>
 //        <th>@_button-cursor</th>
 //        <td class="vars_value">pointer</td>
-//        <td class="vars_value">&nbsp;</td>
-//        <td>button cursor</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Button cursor</td>
 //      </tr>
 //      <tr>
 //        <th>@_button-display</th>
 //        <td class="vars_value">inline-block</td>
-//        <td class="vars_value">&nbsp;</td>
-//        <td>button display</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Button display</td>
 //      </tr>
 //      <tr>
 //        <th>@_button-disabled-opacity</th>
 //        <td class="vars_value">0.5</td>
-//        <td class="vars_value">&nbsp;</td>
-//        <td>button disabled opacity</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Button disabled opacity</td>
 //      </tr>
 //      <tr>
-//        <th>@_button-height</th>
-//        <td class="vars_value">36px</td>
-//        <td class="vars_value">&nbsp;</td>
-//        <td>button height</td>
+//        <th>@_button-line-height</th>
+//        <td class="vars_value">@font-size-base + 2</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Button height</td>
 //      </tr>
 //      <tr>
 //        <th>@_button-width</th>
-//        <td class="vars_value">''</td>
-//        <td class="vars_value">&nbsp;</td>
-//        <td>button height</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Button width</td>
 //      </tr>
 //      <tr>
 //        <th>@_button-margin</th>
-//        <td class="vars_value">''</td>
-//        <td class="vars_value">&nbsp;</td>
-//        <td>button margin</td>
+//        <td class="vars_value">0</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Button margin</td>
 //      </tr>
 //      <tr>
 //        <th>@_button-padding</th>
-//        <td class="vars_value">0 15px</td>
-//        <td class="vars_value">&nbsp;</td>
-//        <td>button padding</td>
+//        <td class="vars_value">7px 15px</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Button padding</td>
 //      </tr>
 //      <tr>
 //        <th>@_button-gradient</th>
 //        <td class="vars_value">false</td>
-//        <td class="vars_value">true | false</td>
-//        <td>button has gradient background</td>
+//        <td class="vars_value">'' | false | true</td>
+//        <td>Button has gradient background</td>
 //      </tr>
 //      <tr>
 //        <th>@_button-gradient-direction</th>
-//        <td class="vars_value">''</td>
-//        <td class="vars_value">'' | vertical | horizontal</td>
-//        <td>direction of button background gradient (if there is any)</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | vertical | horizontal</td>
+//        <td>Direction of button background gradient (if there is any)</td>
 //      </tr>
 //      <tr>
 //        <th colspan="4" class="vars_section">Button default state</th>
@@ -163,32 +162,32 @@ button {
 //      <tr>
 //        <th>@_button-color</th>
 //        <td class="vars_value">#333</td>
-//        <td class="vars_value">&nbsp;</td>
-//        <td>button text color</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Button text color</td>
 //      </tr>
 //      <tr>
 //        <th>@_button-background</th>
 //        <td class="vars_value">#f2f2f2</td>
-//        <td class="vars_value">&nbsp;</td>
-//        <td>button background</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Button background</td>
 //      </tr>
 //      <tr>
 //        <th>@_button-border</th>
 //        <td class="vars_value">1px solid #cdcdcd</td>
-//        <td class="vars_value">&nbsp;</td>
-//        <td>button border</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Button border</td>
 //      </tr>
 //      <tr>
 //        <th>@_button-gradient-start-color</th>
-//        <td class="vars_value">#1979c3</td>
-//        <td class="vars_value">&nbsp;</td>
-//        <td>gradient background start color</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Gradient background start color</td>
 //      </tr>
 //      <tr>
 //        <th>@_button-gradient-end-color</th>
-//        <td class="vars_value">#006bb4</td>
-//        <td class="vars_value">&nbsp;</td>
-//        <td>gradient background end color</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Gradient background end color</td>
 //      </tr>
 //      <tr>
 //        <th colspan="4" class="vars_section">Button hover state</th>
@@ -196,140 +195,140 @@ button {
 //      <tr>
 //        <th>@_button-color-hover</th>
 //        <td class="vars_value">#555</td>
-//        <td class="vars_value">&nbsp;</td>
-//        <td>hovered button text color</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Hovered button text color</td>
 //      </tr>
 //      <tr>
 //        <th>@_button-background-hover</th>
-//        <td class="vars_value">#f2f2f2</td>
-//        <td class="vars_value">&nbsp;</td>
-//        <td>hovered button background</td>
+//        <td class="vars_value">#e2e2e2</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Hovered button background</td>
 //      </tr>
 //      <tr>
 //        <th>@_button-border-hover</th>
-//        <td class="vars_value">1px solid #cdcdcd</td>
-//        <td class="vars_value">&nbsp;</td>
-//        <td>hovered button border</td>
+//        <td class="vars_value">v</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Hovered button border</td>
 //      </tr>
 //      <tr>
-//        <th nowrap="nowrap">@_button-gradient-start-color-hover<br /></th>
-//        <td class="vars_value">#006bb4</td>
-//        <td class="vars_value">&nbsp;</td>
-//        <td>hovered button gradient background start color</td>
+//        <th nowrap="nowrap">@_button-gradient-start-color-hover</th>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Hovered button gradient background start color</td>
 //      </tr>
 //      <tr>
 //        <th>@_button-gradient-end-color-hover</th>
-//        <td class="vars_value">#1979c3</td>
-//        <td class="vars_value">&nbsp;</td>
-//        <td>hovered button gradient background end color</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Hovered button gradient background end color</td>
 //      </tr>
 //      <tr>
 //        <th colspan="4" class="vars_section">Button active state</th>
 //      </tr>
 //      <tr>
 //        <th>@_button-color-active</th>
-//        <td class="vars_value">#333</td>
-//        <td class="vars_value">&nbsp;</td>
-//        <td>active button text color</td>
+//        <td class="vars_value">@button-color</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Active button text color</td>
 //      </tr>
 //      <tr>
 //        <th>@_button-background-active</th>
-//        <td class="vars_value">#f2f2f2</td>
-//        <td class="vars_value">&nbsp;</td>
-//        <td>active button background</td>
+//        <td class="vars_value">@button-background-hover</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Active button background</td>
 //      </tr>
 //      <tr>
 //        <th>@_button-border-active</th>
-//        <td class="vars_value">1px solid #cdcdcd</td>
-//        <td class="vars_value">&nbsp;</td>
-//        <td>active button border</td>
+//        <td class="vars_value">@button-border</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Active button border</td>
 //      </tr>
 //      <tr>
 //        <th>@_button-gradient-start-color-active<br /></th>
-//        <td class="vars_value">#006bb4</td>
-//        <td class="vars_value">&nbsp;</td>
-//        <td>active button gradient background start color</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Active button gradient background start color</td>
 //      </tr>
 //      <tr>
 //        <th>@_button-gradient-end-color-active</th>
-//        <td class="vars_value">#006bb4</td>
-//        <td class="vars_value">&nbsp;</td>
-//        <td>active button gradient background end color</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Active button gradient background end color</td>
 //      </tr>
 //      <tr>
 //        <th colspan="4" class="vars_section">Button with icon</th>
 //      </tr>
 //      <tr>
 //        <th>@_button-icon-use</th>
-//        <td class="vars_value">true</td>
-//        <td class="vars_value">true | false</td>
-//        <td>button has an icon</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | true</td>
+//        <td>Button has an icon</td>
 //      </tr>
 //      <tr>
 //        <th>@_button-font-content</th>
 //        <td class="vars_value">@icon-settings</td>
-//        <td class="vars_value">&nbsp;</td>
-//        <td>button icon symbol</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Button icon symbol</td>
 //      </tr>
 //      <tr>
 //        <th>@_button-icon-font</th>
 //        <td class="vars_value">@icon-font</td>
-//        <td class="vars_value">&nbsp;</td>
-//        <td>button icon font</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Button icon font</td>
 //      </tr>
 //      <tr>
 //        <th>@_button-icon-font-size</th>
 //        <td class="vars_value">22px</td>
-//        <td class="vars_value">&nbsp;</td>
-//        <td>button icon font size</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Button icon font size</td>
 //      </tr>
 //      <tr>
 //        <th>@_button-icon-font-line-height</th>
-//        <td class="vars_value" nowrap="nowrap">@icon-font-line-height</td>
-//        <td class="vars_value">&nbsp;</td>
-//        <td>button icon line height</td>
+//        <td class="vars_value" nowrap="nowrap">@button-icon-font-size</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Button icon line height</td>
 //      </tr>
 //      <tr>
 //        <th>@_button-icon-font-color</th>
 //        <td class="vars_value">inherit</td>
-//        <td class="vars_value">&nbsp;</td>
-//        <td>button icon color</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Button icon color</td>
 //      </tr>
 //      <tr>
 //        <th>@_button-icon-font-color-hover</th>
 //        <td class="vars_value">inherit</td>
-//        <td class="vars_value">&nbsp;</td>
-//        <td>hovered button icon color</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Hovered button icon color</td>
 //      </tr>
 //      <tr>
 //        <th>@_button-icon-font-color-active</th>
 //        <td class="vars_value">inherit</td>
-//        <td class="vars_value">&nbsp;</td>
-//        <td>active button icon color</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Active button icon color</td>
 //      </tr>
 //      <tr>
 //        <th>@_button-icon-font-margin</th>
 //        <td class="vars_value">0</td>
-//        <td class="vars_value">&nbsp;</td>
-//        <td>button icon margin</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Button icon margin</td>
 //      </tr>
 //      <tr>
 //        <th>@_button-icon-font-vertical-align</th>
 //        <td class="vars_value">top</td>
-//        <td class="vars_value">&nbsp;</td>
-//        <td>button icon vertical align</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Button icon vertical align</td>
 //      </tr>
 //      <tr>
 //        <th>@_button-icon-font-position</th>
 //        <td class="vars_value">@icon-position</td>
-//        <td class="vars_value">before | after</td>
-//        <td>button icon font position</td>
+//        <td class="vars_value">'' | false | before | after</td>
+//        <td>Button icon font position</td>
 //      </tr>
 //      <tr>
 //        <th>@_button-icon-font-text-hide</th>
 //        <td class="vars_value">false</td>
-//        <td class="vars_value">true | false</td>
-//        <td>button icon text hide</td>
+//        <td class="vars_value">'' | false | true</td>
+//        <td>Button icon text hide</td>
 //      </tr>
 //    </table>
 //  </pre>
@@ -484,7 +483,7 @@ button {
 //
 //  ##Primary button small
 //  ```html
-//  <button class="example-button-4 example-button-6" type="button"><span>Buttonn</span></button>
+//  <button class="example-button-4 example-button-6" type="button"><span>Button</span></button>
 //  <button class="example-button-4 example-button-6 :hover" type="button"><span>Hover</span></button>
 //  <button class="example-button-4 example-button-6 :active" type="button"><span>Active</span></button>
 //  <button class="example-button-4 example-button-6" type="button" disabled><span>Disabled</span></button>
@@ -499,10 +498,10 @@ button {
         box-shadow: inset 0 3px 1px rgba(0,0,0,.29);
     }
     &.example-button-5 {
-        .button-l(@_button-l-padding: 0 35px);
+        .button-l(@_button-l-padding: 7px 35px);
     }
     &.example-button-6 {
-        .button-s(@_button-s-padding: 0 14px);
+        .button-s();
         color: #fff;
         &:hover,
         &.active {
@@ -513,148 +512,149 @@ button {
 
 //  # Primary button variables
 //
+//  In the variables list primary buttons are configured with @button-primary- prefix. So for example to configure primary button background you should use @_button-background variable of the mixin or @button-primary-background of the global variables list.
 //  <pre>
 //    <table>
 //        <tr>
 //            <th class="vars_head">Mixin variable</th>
-//            <th class="vars_head">Default vars_value</th>
-//            <th class="vars_head">Allowed vars_values</th>
+//            <th class="vars_head">Default value</th>
+//            <th class="vars_head">Allowed values</th>
 //            <th class="vars_head">Comment</th>
 //        </tr>
 //        <tr>
-//            <th>@_button-primary-height</th>
-//            <td class="vars_value">36px</td>
-//            <td class="vars_value">&nbsp;</td>
-//            <td>button height</td>
-//        </tr>
-//        <tr>
-//            <th>@_button-primary-width</th>
-//            <td class="vars_value">''</td>
-//            <td class="vars_value">'' | value</td>
-//            <td>button height</td>
-//        </tr>
-//        <tr>
-//            <th>@_button-primary-margin</th>
-//            <td class="vars_value">0</td>
-//            <td class="vars_value">&nbsp;</td>
-//            <td>button margin</td>
-//        </tr>
-//        <tr>
-//            <th>@_button-primary-padding</th>
-//            <td class="vars_value">@button-padding</td>
-//            <td class="vars_value">&nbsp;</td>
-//            <td>button padding</td>
-//        </tr>
-//        <tr>
-//            <th>@_button-primary-gradient</th>
+//            <th>@_button-line-height</th>
 //            <td class="vars_value">false</td>
-//            <td class="vars_value">true | false</td>
-//            <td>button has gradient background</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Button line-height</td>
 //        </tr>
 //        <tr>
-//            <th>@_button-primary-gradient-direction</th>
-//            <td class="vars_value">''</td>
-//            <td class="vars_value">'' | vertical | horizontal</td>
-//            <td>direction of button background gradient (if there is any)</td>
+//            <th>@_button-width</th>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Button width</td>
+//        </tr>
+//        <tr>
+//            <th>@_button-margin</th>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Button margin</td>
+//        </tr>
+//        <tr>
+//            <th>@_button-padding</th>
+//            <td class="vars_value">@button-padding</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Button padding</td>
+//        </tr>
+//        <tr>
+//            <th>@_button-gradient</th>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | true</td>
+//            <td>Button has gradient background</td>
+//        </tr>
+//        <tr>
+//            <th>@_button-gradient-direction</th>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | vertical | horizontal</td>
+//            <td>Direction of button background gradient (if there is any)</td>
 //        </tr>
 //        <tr>
 //            <th colspan="4" class="vars_section">Button default state</th>
 //        </tr>
 //        <tr>
-//            <th>@_button-primary-color</th>
-//            <td class="vars_value">#fff</td>
-//            <td class="vars_value">&nbsp;</td>
-//            <td>button text color</td>
-//        </tr>
-//        <tr>
-//            <th>@_button-primary-background</th>
+//            <th>@_button-background</th>
 //            <td class="vars_value">#1979c3</td>
-//            <td class="vars_value">&nbsp;</td>
-//            <td>button background</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Button background</td>
 //        </tr>
 //        <tr>
-//            <th>@_button-primary-border</th>
-//            <td class="vars_value">none</td>
-//            <td class="vars_value">&nbsp;</td>
-//            <td>button border</td>
+//            <th>@_button-border</th>
+//            <td class="vars_value">1px solid #1979c3</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Button border</td>
 //        </tr>
 //        <tr>
-//            <th>@_button-primary-gradient-start-color</th>
-//            <td class="vars_value">''</td>
-//            <td class="vars_value">'' | value</td>
-//            <td>gradient background start color</td>
+//            <th>@_button-color</th>
+//            <td class="vars_value">#fff</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Button text color</td>
 //        </tr>
 //        <tr>
-//            <th>@_button-primary-gradient-end-color</th>
-//            <td class="vars_value">''</td>
-//            <td class="vars_value">'' | value</td>
-//            <td>gradient background end color</td>
+//            <th>@_button-gradient-start-color</th>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Gradient background start color</td>
+//        </tr>
+//        <tr>
+//            <th>@_button-gradient-end-color</th>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Gradient background end color</td>
 //        </tr>
 //        <tr>
 //            <th colspan="4" class="vars_section">Button hover state</th>
 //        </tr>
 //        <tr>
-//            <th>@_button-primary-color-hover</th>
-//            <td class="vars_value">#fff</td>
-//            <td class="vars_value">&nbsp;</td>
-//            <td>hovered button text color</td>
-//        </tr>
-//        <tr>
-//            <th>@_button-primary-background-hover</th>
+//            <th>@_button-background-hover</th>
 //            <td class="vars_value">#006bb4</td>
-//            <td class="vars_value">&nbsp;</td>
-//            <td>hovered button background</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Hovered button background</td>
 //        </tr>
 //        <tr>
-//            <th>@_button-primary-border-hover</th>
-//            <td class="vars_value">none</td>
-//            <td class="vars_value">&nbsp;</td>
-//            <td>hovered button border</td>
+//            <th>@_button-border-hover</th>
+//            <td class="vars_value">1px solid #006bb4</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Hovered button border</td>
 //        </tr>
 //        <tr>
-//            <th nowrap="nowrap">@_button-primary-gradient-start-color-hover</th>
-//            <td class="vars_value">''</td>
-//            <td class="vars_value">'' | value</td>
-//            <td>hovered button gradient background start color</td>
+//            <th>@_button-color-hover</th>
+//            <td class="vars_value">@button-primary-color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Hovered button text color</td>
 //        </tr>
 //        <tr>
-//            <th>@_button-primary-gradient-end-color-hover</th>
-//            <td class="vars_value">''</td>
-//            <td class="vars_value">'' | value</td>
-//            <td>hovered button gradient background end color</td>
+//            <th nowrap="nowrap">@_button-gradient-start-color-hover</th>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Hovered button gradient background start color</td>
+//        </tr>
+//        <tr>
+//            <th>@_button-gradient-end-color-hover</th>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Hovered button gradient background end color</td>
 //        </tr>
 //        <tr>
 //            <th colspan="4" class="vars_section">Button active state</th>
 //        </tr>
 //        <tr>
-//            <th>@_button-color-active</th>
-//            <td class="vars_value">#006bb4</td>
-//            <td class="vars_value">&nbsp;</td>
-//            <td>active button text color</td>
-//        </tr>
-//        <tr>
 //            <th>@_button-background-active</th>
-//            <td class="vars_value">#fff</td>
-//            <td class="vars_value">&nbsp;</td>
-//            <td>active button background</td>
+//            <td class="vars_value">@button-primary-background-hover</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Active button background</td>
 //        </tr>
 //        <tr>
 //            <th>@_button-border-active</th>
-//            <td class="vars_value">none</td>
-//            <td class="vars_value">&nbsp;</td>
-//            <td>active button border</td>
+//            <td class="vars_value">@button-primary-border-hover</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Active button border</td>
+//        </tr>
+//        <tr>
+//            <th>@_button-color-active</th>
+//            <td class="vars_value">@button-primary-color</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Active button text color</td>
 //        </tr>
 //        <tr>
 //            <th>@_button-gradient-start-color-active</th>
-//            <td class="vars_value">''</td>
-//            <td class="vars_value">'' | value</td>
-//            <td>active button gradient background start color</td>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Active button gradient background start color</td>
 //        </tr>
 //        <tr>
 //            <th>@_button-gradient-end-color-active</th>
-//            <td class="vars_value">''</td>
-//            <td class="vars_value">'' | value</td>
-//            <td>active button gradient background end color</td>
+//            <td class="vars_value">false</td>
+//            <td class="vars_value">'' | false | value</td>
+//            <td>Active button gradient background end color</td>
 //        </tr>
 //    </table>
 //  </pre>
@@ -738,3 +738,151 @@ button {
         box-shadow: inset 0 3px 1px rgba(0,0,0,.29);
     }
 }
+
+//  # Button reset
+//
+//  The <code>.button-reset()</code> mixin is used to fully reset button styles.
+//
+//  ```html
+//  <button class="example-button-14" type="button"><span>Button with reset styles</span></button>
+//  ```
+//
+
+.example-button-14 {
+    .button-reset();
+}
+
+//  # Button revert secondary color
+//
+//  The <code>.button-revert-secondary-color()</code> mixin is used to revert button styles (primary for example) to secondary color styles.
+//  Also can be passed any color, background and border if needed.
+//
+//  ```html
+//  <button class="example-button-15" type="button"><span>Reverted color</span></button>
+//  <button class="example-button-16" type="button"><span>Custom colors</span></button>
+//  ```
+//
+
+.example-button-15 {
+    .button-primary();
+    .button-revert-secondary-color();
+}
+
+//  # Button revert secondary color variables
+//  <pre>
+//    <table>
+//      <tr>
+//        <th class="vars_head">Mixin variable</th>
+//        <th class="vars_head">Default value</th>
+//        <th class="vars_head">Allowed values</th>
+//        <th class="vars_head">Comment</th>
+//      </tr>
+//      <tr>
+//        <th>@_button-color</th>
+//        <td class="vars_value">@button-color</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Button color</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-background</th>
+//        <td class="vars_value">@button-background</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Button background</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-border</th>
+//        <td class="vars_value">@button-border</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Button border</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-color-hover</th>
+//        <td class="vars_value">@button-color-hover</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Button hover color</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-background-hover</th>
+//        <td class="vars_value">@button-background-hover</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Button hover background</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-border-hover</th>
+//        <td class="vars_value">@button-border-hover</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Button hover border</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-color-active</th>
+//        <td class="vars_value">@button-color-active</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Button active color</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-background-active</th>
+//        <td class="vars_value">@button-background-active</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Button active background</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-border-active</th>
+//        <td class="vars_value">@button-border-active</td>
+//        <td class="vars_value">'' | false | value</td>
+//        <td>Button active border</td>
+//      </tr>
+//    </table>
+//  </pre>
+
+//  # Button revert secondary size
+//
+//  The <code>.button-revert-secondary-size()</code> mixin is used to revert button sizes to secondary button sizes.
+//  Also can be passed font-size, line-height and padding if needed.
+//
+//  ```html
+//  <button class="example-button-17" type="button"><span>Reverted size</span></button>
+//  <button class="example-button-18" type="button"><span>Custom sizes</span></button>
+//  ```
+//
+
+.example-button-17 {
+    .button-l();
+    .button-revert-secondary-size();
+}
+.example-button-18 {
+    .button-revert-secondary-size(
+        @_button-font-size: 10px,
+        @_button-line-height: 12px,
+        @_button-padding: 4px 10px
+    );
+}
+
+//  # Button revert secondary size variables
+//  <pre>
+//    <table>
+//      <tr>
+//        <th class="vars_head">Mixin variable</th>
+//        <th class="vars_head">Default value</th>
+//        <th class="vars_head">Allowed values</th>
+//        <th class="vars_head">Comment</th>
+//      </tr>
+//      <tr>
+//        <th>@_button-font-size</th>
+//        <td class="vars_value">@button-font-size</td>
+//        <td class="vars_value">'' | value</td>
+//        <td>Button font size</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-line-height</th>
+//        <td class="vars_value">@button-line-height</td>
+//        <td class="vars_value">'' | value</td>
+//        <td>Button line-height</td>
+//      </tr>
+//      <tr>
+//        <th>@_button-padding</th>
+//        <td class="vars_value">@button-padding</td>
+//        <td class="vars_value">'' | value</td>
+//        <td>Button padding</td>
+//      </tr>
+//    </table>
+//  </pre>

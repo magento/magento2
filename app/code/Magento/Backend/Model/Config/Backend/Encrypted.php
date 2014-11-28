@@ -94,7 +94,7 @@ class Encrypted extends \Magento\Framework\App\Config\Value implements \Magento\
      *
      * @return void
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
         $value = (string)$this->getValue();
         // don't change value, if an obscured value came

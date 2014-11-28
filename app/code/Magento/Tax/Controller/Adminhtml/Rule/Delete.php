@@ -35,7 +35,7 @@ class Delete extends \Magento\Tax\Controller\Adminhtml\Rule
     {
         $ruleId = (int)$this->getRequest()->getParam('rule');
         try {
-            $this->ruleService->deleteTaxRule($ruleId);
+            $this->ruleService->deleteById($ruleId);
             $this->messageManager->addSuccess(__('The tax rule has been deleted.'));
             $this->_redirect('tax/*/');
             return;

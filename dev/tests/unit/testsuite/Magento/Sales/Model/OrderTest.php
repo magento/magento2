@@ -44,9 +44,19 @@ class OrderTest extends \PHPUnit_Framework_TestCase
     protected $order;
 
     /**
+     * @var \Magento\Framework\Event\Manager | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $eventManager;
+
+    /**
      * @var string
      */
     protected $incrementId;
+
+    /**
+     * @var \Magento\Sales\Model\Resource\Order\Item | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $item;
 
     protected function setUp()
     {
@@ -65,14 +75,41 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->item = $this->getMock(
+            'Magento\Sales\Model\Resource\Order\Item',
+            ['isDeleted', 'getQtyToInvoice'],
+            [],
+            '',
+            false
+        );
+        $this->item->expects($this->any())
+            ->method('isDeleted')
+            ->willReturn(false);
+        $collection = $this->getMock('Magento\Sales\Model\Resource\Order\Item\Collection', [], [], '', false);
+        $collection->expects($this->any())
+            ->method('setOrderFilter')
+            ->willReturnSelf();
+        $collection->expects($this->any())
+            ->method('getItems')
+            ->willReturn([$this->item]);
+        $this->orderItemCollectionFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($collection);
+
         $this->incrementId = '#00000001';
+        $this->eventManager = $this->getMock('Magento\Framework\Event\Manager', [], [], '', false);
+        $context = $this->getMock('Magento\Framework\Model\Context', ['getEventDispatcher'], [], '', false);
+        $context->expects($this->any())
+            ->method('getEventDispatcher')
+            ->willReturn($this->eventManager);
 
         $this->order = $helper->getObject(
             'Magento\Sales\Model\Order',
             [
                 'paymentCollectionFactory' => $this->paymentCollectionFactoryMock,
                 'orderItemCollectionFactory' => $this->orderItemCollectionFactoryMock,
-                'data' => ['increment_id' => $this->incrementId]
+                'data' => ['increment_id' => $this->incrementId],
+                'context' => $context
             ]
         );
     }
@@ -121,13 +158,30 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         $paymentMock->expects($this->any())
             ->method('canFetchTransactionInfo')
             ->will($this->returnValue(false));
-
+        $collectionMock = $this->getMock(
+            'Magento\Sales\Model\Resource\Order\Item\Collection',
+            ['getItems', 'setOrderFilter'],
+            [],
+            '',
+            false
+        );
+        $this->orderItemCollectionFactoryMock->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($collectionMock));
+        $collectionMock->expects($this->any())
+            ->method('setOrderFilter')
+            ->willReturnSelf();
         $this->preparePaymentMock($paymentMock);
 
         $this->prepareItemMock(0);
 
         $this->order->setActionFlag(\Magento\Sales\Model\Order::ACTION_FLAG_UNHOLD, false);
         $this->order->setState(\Magento\Sales\Model\Order::STATE_NEW);
+
+        $this->item->expects($this->any())
+            ->method('getQtyToInvoice')
+            ->willReturn(0);
+
         $this->assertFalse($this->order->canCancel());
     }
 
@@ -180,7 +234,12 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         foreach ($actionFlags as $action => $flag) {
             $this->order->setActionFlag($action, $flag);
         }
-        $this->order->setState(\Magento\Sales\Model\Order::STATE_NEW);
+        $this->order->setData('state', \Magento\Sales\Model\Order::STATE_NEW);
+
+        $this->item->expects($this->any())
+            ->method('getQtyToInvoice')
+            ->willReturn(42);
+
         $this->assertEquals($cancelActionFlag, $this->order->canCancel());
     }
 
@@ -254,7 +313,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
     /**
      * Prepare payment for the order
      *
-     * @param \PHPUnit_Framework_MockObject_MockObject $order
+     * @param \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject $order
      * @param array $mockedMethods
      * @return \Magento\Sales\Model\Order\Payment|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -266,9 +325,8 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         }
         $payment->expects($this->any())->method('isDeleted')->will($this->returnValue(false));
 
-        $itemsProperty = new \ReflectionProperty('Magento\Sales\Model\Order', '_payments');
-        $itemsProperty->setAccessible(true);
-        $itemsProperty->setValue($order, array($payment));
+        $order->setData(\Magento\Sales\Api\Data\OrderInterface::PAYMENTS, [$payment]);
+
         return $payment;
     }
 
@@ -327,7 +385,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
 
         $itemCollectionMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Item\Collection')
             ->disableOriginalConstructor()
-            ->setMethods(['setOrderFilter', 'getIterator'])
+            ->setMethods(['setOrderFilter', 'getIterator', 'getItems'])
             ->getMock();
         $itemCollectionMock->expects($this->any())
             ->method('getIterator')

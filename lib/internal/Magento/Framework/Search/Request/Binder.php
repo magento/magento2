@@ -38,6 +38,7 @@ class Binder
         $data['dimensions'] = $this->processDimensions($requestData['dimensions'], $bindData['dimensions']);
         $data['queries'] = $this->processData($requestData['queries'], $bindData['placeholder']);
         $data['filters'] = $this->processData($requestData['filters'], $bindData['placeholder']);
+        $data['aggregations'] = $this->processData($requestData['aggregations'], $bindData['placeholder']);
 
         return $data;
     }

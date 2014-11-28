@@ -93,9 +93,7 @@
     bottom: @gallery-lightbox-offset;
     border: @gallery-lightbox-border-width solid @gallery-lightbox-border-color;
     background-color: @page-bg-color;
-    .box-shadow(
-        @shadow: 0 5px 5px rgba(0,0,0,0.2)
-    );
+    box-shadow: 0 5px 5px rgba(0,0,0,0.2);
     z-index: @loader-overlay-z-index;
 
     .img.photo.container img {
@@ -134,9 +132,9 @@
 
     .gallery.control {
         -webkit-touch-callout: none;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
+        -webkit-user-select: none; // use in 41 Chrome
+        -moz-user-select: none; // use in 36 Firefox
+        -ms-user-select: none; // use in 11 IE
         user-select: none;
         &.prev,
         &.next {
@@ -187,7 +185,7 @@
         background: @page-bg-color;
         position: absolute;
         bottom:0;
-        .box-sizing();
+        box-sizing: border-box;
         ul {
             .list-reset-styles();
             white-space: nowrap;

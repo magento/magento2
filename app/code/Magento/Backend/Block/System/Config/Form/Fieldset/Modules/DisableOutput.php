@@ -75,7 +75,7 @@ class DisableOutput extends \Magento\Backend\Block\System\Config\Form\Fieldset
     {
         $html = $this->_getHeaderHtml($element);
 
-        $modules = array_keys($this->_moduleList->getModules());
+        $modules = $this->_moduleList->getNames();
 
         $dispatchResult = new \Magento\Framework\Object($modules);
         $this->_eventManager->dispatch(

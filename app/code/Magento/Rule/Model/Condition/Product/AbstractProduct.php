@@ -238,7 +238,21 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
             }
         }
 
-        // Set new values only if we really got them
+        $this->_setSelectOptions($selectOptions, $selectReady, $hashedReady);
+
+        return $this;
+    }
+
+    /**
+     * Set new values only if we really got them
+     *
+     * @param array $selectOptions
+     * @param array $selectReady
+     * @param array $hashedReady
+     * @return $this
+     */
+    protected function _setSelectOptions($selectOptions, $selectReady, $hashedReady)
+    {
         if ($selectOptions !== null) {
             // Overwrite only not already existing values
             if (!$selectReady) {
@@ -255,7 +269,6 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
                 $this->setData('value_option', $hashedOptions);
             }
         }
-
         return $this;
     }
 

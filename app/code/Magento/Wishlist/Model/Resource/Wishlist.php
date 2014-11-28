@@ -94,4 +94,13 @@ class Wishlist extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $this->_customerIdFieldName = $fieldName;
         return $this;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function save(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $object->setHasDataChanges(true);
+        return parent::save($object);
+    }
 }

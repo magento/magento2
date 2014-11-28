@@ -26,11 +26,13 @@
 require(['jquery', "prototype"], function(jQuery){
 
 //<![CDATA[
-var couponTypeSpecific = '<?php echo \Magento\SalesRule\Model\Rule::COUPON_TYPE_SPECIFIC ?>';
-var tmpButtonsActionsStorage = [];
+var couponTypeSpecific = '<?php echo \Magento\SalesRule\Model\Rule::COUPON_TYPE_SPECIFIC ?>',
+    tmpButtonsActionsStorage = [];
 
 function disableEnableCouponsTabContent(disable) {
-    var containerId = 'promo_catalog_edit_tabs_coupons_section_content';
+    var containerId = 'promo_catalog_edit_tabs_coupons_section_content',
+        couponCode = $('rule_coupon_code');
+
     if($(containerId)){
         var dataFields = $(containerId).select('input', 'select', 'textarea', 'button');
         for(var i = 0; i < dataFields.length; i++) {
@@ -38,7 +40,8 @@ function disableEnableCouponsTabContent(disable) {
                 : dataFields[i].enable().removeClassName('disabled');
         }
     }
-    disable ? $('rule_coupon_code').enable() : $('rule_coupon_code').disable();
+
+    couponCode.disabled = !disable;
 }
 
 function handleCouponsTabContentActivity() {
@@ -122,9 +125,10 @@ window.handleCouponTypeChange = handleCouponTypeChange;
 window.handleCouponsTabContentActivity = handleCouponsTabContentActivity;
 window.disableEnableCouponsTabContent = disableEnableCouponsTabContent;
 
-document.observe("dom:loaded", handleCouponsTabContentActivity);
-document.observe("dom:loaded", handleCouponTypeChange);
-//]]>
+jQuery(window).load(function(){
+    handleCouponsTabContentActivity();
+    handleCouponTypeChange();
+});
 
 });
 </script>

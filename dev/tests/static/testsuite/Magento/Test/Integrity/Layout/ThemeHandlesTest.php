@@ -34,7 +34,7 @@ class ThemeHandlesTest extends \PHPUnit_Framework_TestCase
 
     public function testIsDesignHandleDeclaredInCode()
     {
-        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * Check that all handles declared in a theme layout are declared in base layouts
@@ -57,7 +57,7 @@ class ThemeHandlesTest extends \PHPUnit_Framework_TestCase
      */
     public function designHandlesDataProvider()
     {
-        $files = \Magento\TestFramework\Utility\Files::init()->getLayoutFiles(
+        $files = \Magento\Framework\Test\Utility\Files::init()->getLayoutFiles(
             array('include_code' => false, 'area' => 'frontend'),
             false
         );
@@ -77,7 +77,7 @@ class ThemeHandlesTest extends \PHPUnit_Framework_TestCase
     protected function _getBaseFrontendHandles()
     {
         if ($this->_baseFrontendHandles === null) {
-            $files = \Magento\TestFramework\Utility\Files::init()->getLayoutFiles(
+            $files = \Magento\Framework\Test\Utility\Files::init()->getLayoutFiles(
                 array('include_design' => false, 'area' => 'frontend'),
                 false
             );

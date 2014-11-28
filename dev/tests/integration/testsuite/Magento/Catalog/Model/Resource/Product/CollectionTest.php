@@ -23,7 +23,7 @@
  */
 namespace Magento\Catalog\Model\Resource\Product;
 
-use Magento\Customer\Service\V1\CustomerGroupServiceInterface;
+use Magento\Customer\Api\GroupManagementInterface;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,6 +33,11 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $_collection;
 
     /**
+     * @var GroupManagementInterface
+     */
+    protected $_groupManagement;
+
+    /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
@@ -40,6 +45,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     {
         $this->_collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Catalog\Model\Resource\Product\Collection'
+        );
+        $this->_groupManagement = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Customer\Api\GroupManagementInterface'
         );
     }
 
@@ -102,8 +110,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             $this->_collection->addTierPriceData()
         );
         $tierPrice = $this->_collection->getFirstItem()->getDataByKey('tier_price');
-        $this->assertEquals(CustomerGroupServiceInterface::NOT_LOGGED_IN_ID, current($tierPrice)['cust_group']);
-        $this->assertEquals(CustomerGroupServiceInterface::CUST_GROUP_ALL, next($tierPrice)['cust_group']);
+        $this->assertEquals($this->_groupManagement->getNotLoggedInGroup()->getId(), current($tierPrice)['cust_group']);
+        $this->assertEquals($this->_groupManagement->getAllCustomersGroup()->getId(), next($tierPrice)['cust_group']);
         $this->assertTrue($this->_collection->getFlag('tier_price_added'));
     }
 

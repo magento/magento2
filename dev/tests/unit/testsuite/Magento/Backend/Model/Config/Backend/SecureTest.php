@@ -61,6 +61,6 @@ class SecureTest extends \PHPUnit_Framework_TestCase
         $mergeService->expects($this->once())->method('cleanMergedJsCss');
 
         $model->setValue('new_value');
-        $model->save();
+        $model->afterSave();
     }
 }

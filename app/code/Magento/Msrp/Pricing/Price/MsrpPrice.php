@@ -52,6 +52,7 @@ class MsrpPrice extends FinalPrice implements MsrpPriceInterface
      * @param Product $saleableItem
      * @param float $quantity
      * @param CalculatorInterface $calculator
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param \Magento\Msrp\Helper\Data $msrpData
      * @param \Magento\Msrp\Model\Config $config
      */
@@ -59,10 +60,11 @@ class MsrpPrice extends FinalPrice implements MsrpPriceInterface
         Product $saleableItem,
         $quantity,
         CalculatorInterface $calculator,
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         \Magento\Msrp\Helper\Data $msrpData,
         \Magento\Msrp\Model\Config $config
     ) {
-        parent::__construct($saleableItem, $quantity, $calculator);
+        parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
         $this->msrpData = $msrpData;
         $this->config = $config;
     }

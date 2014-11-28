@@ -29,6 +29,7 @@ define([
     "mage/adminhtml/grid"
 ], function($){
     'use strict';
+
     $.widget('mage.groupedProduct', {
         /**
          * Create widget
@@ -202,4 +203,6 @@ define([
             this.element.find('.no-products-message').toggle(!showGrid);
         }
     });
+    
+    return $.mage.groupedProduct;
 });

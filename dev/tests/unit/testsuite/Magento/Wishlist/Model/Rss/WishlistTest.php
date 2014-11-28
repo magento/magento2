@@ -145,7 +145,7 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $customerServiceMock = $this->getMock('Magento\Customer\Service\V1\Data\Customer', [], [], '', false);
+        $customerServiceMock = $this->getMock('Magento\Customer\Api\Data\CustomerInterface', [], [], '', false);
         $wishlistSharingUrl = 'wishlist/shared/index/1';
         $locale = 'en_US';
         $productUrl = 'http://product.url/';

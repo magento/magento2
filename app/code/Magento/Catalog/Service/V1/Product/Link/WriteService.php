@@ -55,23 +55,23 @@ class WriteService implements WriteServiceInterface
     protected $productResource;
 
     /**
-     * @var Data\ProductLink\DataMapperInterface
+     * @var \Magento\Catalog\Service\V1\Product\Link\Data\ProductLink\DataMapperInterface
      */
     protected $dataMapper;
 
     /**
      * @param LinksInitializer $linkInitializer
-     * @param ProductLink\CollectionProvider $entityCollectionProvider
+     * @param \Magento\Catalog\Model\ProductLink\CollectionProvider $entityCollectionProvider
      * @param ProductLoader $productLoader
      * @param ProductResource $productResource
-     * @param ProductLink\DataMapperInterface $dataMapper
+     * @param \Magento\Catalog\Service\V1\Product\Link\Data\ProductLink\DataMapperInterface $dataMapper
      */
     public function __construct(
         LinksInitializer $linkInitializer,
-        ProductLink\CollectionProvider $entityCollectionProvider,
+        \Magento\Catalog\Model\ProductLink\CollectionProvider $entityCollectionProvider,
         ProductLoader $productLoader,
         ProductResource $productResource,
-        Data\ProductLink\DataMapperInterface $dataMapper
+        \Magento\Catalog\Service\V1\Product\Link\Data\ProductLink\DataMapperInterface $dataMapper
     ) {
         $this->linkInitializer = $linkInitializer;
         $this->entityCollectionProvider = $entityCollectionProvider;
@@ -175,8 +175,12 @@ class WriteService implements WriteServiceInterface
         //Remove product from the linked product list
         unset($links[$linkedProduct->getId()]);
 
-        $this->saveLinks($product, [$type => $links]);
-
+        $this->linkInitializer->initializeLinks($product, $links);
+        try {
+            $product->save();
+        } catch (\Exception $exception) {
+            throw new CouldNotSaveException('Invalid data provided for linked products');
+        }
         return true;
     }
 }

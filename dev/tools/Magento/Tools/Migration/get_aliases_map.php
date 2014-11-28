@@ -46,9 +46,6 @@ if (isset($options['h'])) {
 require_once realpath(
     dirname(dirname(dirname(dirname(dirname(__DIR__)))))
 ) . '/dev/tests/static/framework/bootstrap.php';
-require_once realpath(
-    dirname(dirname(dirname(dirname(dirname(__DIR__)))))
-) . '/dev/tests/static/framework/Magento/TestFramework/Utility/Classes.php';
 require_once realpath(dirname(dirname(dirname(dirname(dirname(__DIR__)))))) . '/lib/internal/Zend/Json.php';
 
 $magentoBaseDir = dirname(__DIR__) . '/../../../../';
@@ -56,13 +53,13 @@ if (isset($options['p'])) {
     $magentoBaseDir = $options['p'];
 }
 
-$utilityFiles = new Magento\TestFramework\Utility\Files($magentoBaseDir);
+$utilityFiles = new Magento\Framework\Test\Utility\Files($magentoBaseDir);
 $map = array();
 $compositeModules = getFilesCombinedArray(__DIR__ . '/aliases_map', '/^composite_modules_.*\.php$/');
 // PHP code
 foreach ($utilityFiles->getPhpFiles(true, true, true, false) as $file) {
     $content = file_get_contents($file);
-    $classes = \Magento\TestFramework\Utility\Classes::collectPhpCodeClasses($content);
+    $classes = \Magento\Framework\Test\Utility\Classes::collectPhpCodeClasses($content);
     if ($classes) {
         $factoryNames = array_filter($classes, 'isFactoryName');
         foreach ($factoryNames as $factoryName) {
@@ -96,7 +93,7 @@ $classType = 'Block';
 $layouts = $utilityFiles->getLayoutFiles(array(), false);
 foreach ($layouts as $file) {
     $xml = simplexml_load_file($file);
-    $classes = \Magento\TestFramework\Utility\Classes::collectLayoutClasses($xml);
+    $classes = \Magento\Framework\Test\Utility\Classes::collectLayoutClasses($xml);
     $factoryNames = array_filter($classes, 'isFactoryName');
     if (!$factoryNames) {
         continue;

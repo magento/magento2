@@ -36,9 +36,9 @@ class Expirationperiod extends \Magento\Framework\App\Config\Value
      *
      * @return $this
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
-        parent::_beforeSave();
+        parent::beforeSave();
         $expirationPeriod = (int)$this->getValue();
 
         if ($expirationPeriod < 1) {

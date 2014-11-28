@@ -1377,6 +1377,7 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
      */
     protected function _buildRequest(\Magento\Framework\Object $payment)
     {
+        /** @var \Magento\Sales\Model\Order $order */
         $order = $payment->getOrder();
 
         $this->setStore($order->getStoreId());
@@ -1439,7 +1440,7 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
                 )->setXCompany(
                     $billing->getCompany()
                 )->setXAddress(
-                    $billing->getStreet(1)
+                    $billing->getStreetLine(1)
                 )->setXCity(
                     $billing->getCity()
                 )->setXState(
@@ -1476,7 +1477,7 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
                 )->setXShipToCompany(
                     $shipping->getCompany()
                 )->setXShipToAddress(
-                    $shipping->getStreet(1)
+                    $shipping->getStreetLine(1)
                 )->setXShipToCity(
                     $shipping->getCity()
                 )->setXShipToState(

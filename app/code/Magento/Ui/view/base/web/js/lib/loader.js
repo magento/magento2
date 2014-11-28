@@ -20,23 +20,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-define(['jquery'], function($) {
+define([
+    'underscore',
+    'jquery'
+], function(_, $) {
     'use strict';
     
     var storage = window.localStorage;
-
-    function getStoragePathFor(name, entity) {
-        return '__' + entity + 'Cache__' + name;
-    }
-
-    /**
-     * Converts arrayLikeObject to array
-     * @param  {Object|Array} arrayLikeObject - target
-     * @return {Array} - result array
-     */
-    function toArray(arrayLikeObject) {
-        return Array.prototype.slice.call(arrayLikeObject);
-    }
 
     /**
      * Formats path of type "path.to.template" to RequireJS compatible
@@ -56,46 +46,73 @@ define(['jquery'], function($) {
         return $.when.apply(this, promises);
     }
 
+    /**
+     * Removes license from incoming template
+     * 
+     * @param  {String} tmpl
+     * @return {String} - template without license
+     */
+    function removeLicense(tmpl){
+        var regEx = /<!--[\s\S]*?-->/;
+
+        return tmpl.replace(regEx, function(match){
+            return ~match.indexOf('/**') ? '' : match;
+        });
+    }
+
+    /**
+     * Loads template by path, resolves promise with it if defined
+     * 
+     * @param  {String} path
+     * @param  {Deferred} promise
+     */
+    function load(path, promise){
+        require([path], function (template) {
+            template = removeLicense(template);
+
+            storage.setItem(path, template);
+
+            if (promise) {
+                promise.resolve(template);
+            }
+        });
+    }
+
     return {
         /**
          * Loops over arguments and loads template for each.
          * @return {Deferred} - promise of templates to be loaded
          */
         loadTemplate: function() {
-            var isLoaded  = $.Deferred(),
-                templates = toArray(arguments);
+            var isLoaded    = $.Deferred(),
+                templates   = _.toArray(arguments);
 
             waitFor(templates.map(this._loadTemplate)).done(function () {
-                templates = toArray(arguments);
-                isLoaded.resolve.apply(isLoaded, templates);
+                isLoaded.resolve.apply(isLoaded, arguments);
             });
 
             return isLoaded.promise();
         },
 
+        /**
+         * Loads template by it's name
+         * 
+         * @param  {String} name
+         * @return {Deferred}
+         */
         _loadTemplate: function (name) {
             var isLoaded    = $.Deferred(),
-                storagePath = getStoragePathFor(name, 'template'),
                 path        = formatTemplatePath(name),
-                cached;
-
-            if (allowLocalCache) {
-                cached = storage.getItem(storagePath) || null;
-            }
+                cached      = storage.getItem(path);
 
             if (cached) {
-                setTimeout(function () {
-                    isLoaded.resolve(cached);    
-                }, 0)
+                isLoaded.resolve(cached);
+                load(path);
             } else {
-                require([path], function (template) {
-                    storage.setItem(storagePath, template);
-                    isLoaded.resolve(template);
-                });
+                load(path, isLoaded);
             }
 
             return isLoaded.promise();
-
         }
     }
 });

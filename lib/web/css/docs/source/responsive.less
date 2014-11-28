@@ -1,0 +1,97 @@
+// /**
+////  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+// *
+// * @category design
+// * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+// * @license http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+// */
+
+//  # Responsive
+//  Magento UI library provides a strong approach for working with media queries. It`s based on recursive call of <nobr><code>.responsive-smaller()</code></nobr> and <code>.responsive()</code> mixins defined anywhere in project but invoked in one place in <nobr><code>lib/web/css/source/lib/responsive.less</code></nobr>. That's why in the resulting styles.css we have every media query only ones and all the rules there, not a multiple calls for the same query.
+//
+//
+//  To see the media queries work resize window to understand which breakpoint is applied.
+//  ```
+//  <div class="example-responsive-block">
+//      are applied.
+//  </div>
+//  ```
+
+.example-responsive-block {
+    padding: 10px;
+}
+.responsive-smaller(@break) when (@break = @screen-m) {
+    .example-responsive-block {
+        background: #ffc;
+    }
+    .example-responsive-block:before {
+        content: 'Mobile styles ';
+        font-weight: bold;
+    }
+}
+.responsive(@break) when (@break = @screen-m) {
+    .example-responsive-block {
+        background: #ccf;
+    }
+    .example-responsive-block:before {
+        content: 'Desktop styles ';
+        font-weight: bold;
+    }
+}
+
+
+//  # Responsive mixins usage
+//
+//  Every time you want to add some media queries you should write:
+//  ```css
+//  .responsive-smaller(@break) when (@break = @screen-s) {
+//      your styles
+//  }
+//  ```
+//  It will be complied to:
+//  ```css
+//  @media only screen and (max-width: 640px) {
+//      your styles
+//  }
+//  ```
+//  Or:
+//  ```css
+//  .responsive(@break) when (@break = @screen-m) {
+//      your styles
+//  }
+//  ```
+//  will be compiled to
+//  ```css
+//  @media only screen and (min-width: 768px) {
+//      your styles
+//  }
+//  ```
+//  &nbsp;
+
+//  # Responsive breakpoints
+//  In Magento UI library there are predefined variables for breakpoints.
+//  ```css
+//  @screen-xxs: 320px;
+//  @screen-xs: 400px;
+//  @screen-s: 640px;
+//  @screen-m: 768px;
+//  @screen-l: 1000px;
+//  @screen-xl: 1440px;
+//  ```
+//  &nbsp;

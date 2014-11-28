@@ -61,8 +61,8 @@ class Grid extends \Magento\Newsletter\Controller\Adminhtml\Problem
 
             $this->messageManager->addSuccess(__('The problems you identified have been deleted.'));
         }
-        $this->_view->getLayout()->getMessagesBlock()->setMessages($this->messageManager->getMessages(true));
         $this->_view->loadLayout(false);
+        $this->_view->getLayout()->getMessagesBlock()->setMessages($this->messageManager->getMessages(true));
         $this->_view->renderLayout();
     }
 }

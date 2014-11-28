@@ -26,7 +26,7 @@ namespace Magento\Test\Integrity\Library;
 use Magento\TestFramework\Integrity\Library\Injectable;
 use Magento\TestFramework\Integrity\Library\PhpParser\ParserFactory;
 use Magento\TestFramework\Integrity\Library\PhpParser\Tokens;
-use Magento\TestFramework\Utility\Files;
+use Magento\Framework\Test\Utility\Files;
 use Zend\Code\Reflection\FileReflection;
 
 /**
@@ -54,7 +54,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
 
     public function testCheckDependencies()
     {
-        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * @param string $file

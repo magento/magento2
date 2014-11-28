@@ -95,7 +95,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         );
         $this->coreResourceMock = $this->getMock(
             'Magento\Framework\App\Resource',
-            array('getConnection', 'getTableName'),
+            array(),
             array(),
             '',
             false

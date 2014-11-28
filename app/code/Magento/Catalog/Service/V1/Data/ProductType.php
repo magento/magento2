@@ -29,6 +29,8 @@ use \Magento\Framework\Api\AbstractExtensibleObject;
 
 /**
  * @codeCoverageIgnore
+ * @deprecated
+ * @see \Magento\Catalog\Api\Data\ProductTypeInterface
  */
 class ProductType extends AbstractExtensibleObject
 {

@@ -92,6 +92,7 @@ class DimensionsTest extends \PHPUnit_Framework_TestCase
 
     public function testBuildDimensionWithCustomScope()
     {
+        $tableAlias = 'search_index';
         $name = 'customScopeName';
         $value = 'customScopeId';
 
@@ -110,13 +111,14 @@ class DimensionsTest extends \PHPUnit_Framework_TestCase
 
         $query = $this->builder->build($this->dimension);
         $this->assertEquals(
-            sprintf('`%s` = `%s`', $name, $value),
+            sprintf('`%s.%s` = `%s`', $tableAlias, $name, $value),
             $query
         );
     }
 
     public function testBuildDimensionWithDefaultScope()
     {
+        $tableAlias = 'search_index';
         $name = 'scope';
         $value = \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT;
         $scopeId = -123456;
@@ -139,7 +141,12 @@ class DimensionsTest extends \PHPUnit_Framework_TestCase
 
         $query = $this->builder->build($this->dimension);
         $this->assertEquals(
-            sprintf('`%s` = `%s`', \Magento\Framework\Search\Adapter\Mysql\Dimensions::STORE_FIELD_NAME, $scopeId),
+            sprintf(
+                '`%s.%s` = `%s`',
+                $tableAlias,
+                \Magento\Framework\Search\Adapter\Mysql\Dimensions::STORE_FIELD_NAME,
+                $scopeId
+            ),
             $query
         );
     }

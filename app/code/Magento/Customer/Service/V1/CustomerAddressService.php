@@ -245,7 +245,7 @@ class CustomerAddressService implements CustomerAddressServiceInterface
             $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'lastname', 'index' => $index]);
         }
 
-        if (!\Zend_Validate::is($customerAddressModel->getStreet(1), 'NotEmpty')) {
+        if (!\Zend_Validate::is($customerAddressModel->getStreetLine(1), 'NotEmpty')) {
             $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'street', 'index' => $index]);
         }
 

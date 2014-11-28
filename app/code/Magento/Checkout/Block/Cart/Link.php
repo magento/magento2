@@ -25,6 +25,8 @@ namespace Magento\Checkout\Block\Cart;
 
 /**
  * "My Cart" link
+ *
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Link extends \Magento\Framework\View\Element\Html\Link
 {

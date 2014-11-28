@@ -26,182 +26,199 @@ namespace Magento\Framework\App;
 
 class ResourceTest extends \PHPUnit_Framework_TestCase
 {
+    const RESOURCE_NAME = \Magento\Framework\App\Resource::DEFAULT_READ_RESOURCE;
+    const CONNECTION_NAME = 'Connection Name';
+    const TABLE_PREFIX = 'prefix_';
+
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Resource\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_config;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\Resource\Type\Db\ConnectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_connectionFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_cache;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_connection;
+    private $deploymentConfig;
 
     /**
      * @var \Magento\Framework\App\Resource
      */
-    protected $_resorce;
+    protected $resource;
 
-    const RESOURCE_NAME = \Magento\Framework\App\Resource::DEFAULT_READ_RESOURCE;
-
-    const CONNECTION_NAME = 'Connection Name';
+    /**
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $connection;
 
     public function setUp()
     {
-        $this->_cache = $this->getMockBuilder('Magento\Framework\App\CacheInterface')
+        $this->_connectionFactory = $this->getMockBuilder('Magento\Framework\Model\Resource\Type\Db\ConnectionFactory')
             ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-        $this->_connectionFactory = $this->getMockBuilder(
-            'Magento\Framework\App\Resource\ConnectionFactory'
-        )->disableOriginalConstructor()->setMethods(['create'])->getMock();
-        $this->_connection = $this->getMockBuilder(
-            'Magento\Framework\DB\Adapter\AdapterInterface'
-        )->disableOriginalConstructor()->setMethods(
-            []
-        )->getMock();
-        $this->_config = $this->getMockBuilder(
-            'Magento\Framework\App\Resource\ConfigInterface'
-        )->disableOriginalConstructor()->setMethods(['getConnectionName'])->getMock();
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_resorce = $objectManager->getObject(
-            'Magento\Framework\App\Resource',
-            [
-                'cache' => $this->_cache,
-                'resourceConfig' => $this->_config,
-                'adapterFactory' => $this->_connectionFactory
-            ]
-        );
-        $this->_config->expects($this->any())->method('getConnectionName')->with(self::RESOURCE_NAME)->will(
-            $this->returnValue(self::CONNECTION_NAME)
+            ->setMethods(['create'])
+            ->getMock()
+        ;
+        $this->_config = $this->getMockBuilder('Magento\Framework\App\Resource\ConfigInterface')
+            ->disableOriginalConstructor()
+            ->setMethods(['getConnectionName'])
+            ->getMock()
+        ;
+        $this->_config->expects($this->any())
+            ->method('getConnectionName')
+            ->with(self::RESOURCE_NAME)
+            ->will($this->returnValue(self::CONNECTION_NAME))
+        ;
+
+        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $this->deploymentConfig->expects($this->any())
+            ->method('getSegment')
+            ->with(\Magento\Framework\App\DeploymentConfig\DbConfig::CONFIG_KEY)
+            ->will($this->returnValue(
+                    [
+                        'connection' =>
+                        [
+                            'default' =>
+                            [
+                                'host' => 'localhost',
+                                'dbname' => 'magento',
+                                'username' => 'username',
+                            ],
+                            self::CONNECTION_NAME =>
+                            [
+                                'host' => 'localhost',
+                                'dbname' => 'magento',
+                                'username' => 'username',
+                            ]
+                        ]
+                    ]
+                )
+            );
+
+        $this->connection = $this->getMockForAbstractClass('Magento\Framework\DB\Adapter\AdapterInterface');
+        $this->connection->expects($this->any())
+            ->method('getTableName')
+            ->will($this->returnArgument(0));
+
+        $this->resource = new Resource(
+            $this->_config,
+            $this->_connectionFactory,
+            $this->deploymentConfig,
+            self::TABLE_PREFIX
         );
     }
 
     public function testGetConnectionFail()
     {
-        $this->_connectionFactory->expects($this->once())->method('create')->with(self::CONNECTION_NAME)->will(
-            $this->returnValue(null)
-        );
-        $this->assertFalse($this->_resorce->getConnection(self::RESOURCE_NAME));
+        $this->_connectionFactory->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue(null));
+        $this->assertFalse($this->resource->getConnection(self::RESOURCE_NAME));
     }
 
     public function testGetConnectionInitConnection()
     {
-        $this->_connectionFactory->expects($this->once())->method('create')->with(self::CONNECTION_NAME)->will(
-            $this->returnValue($this->_connection)
-        );
-        $this->_connection->expects($this->once())->method('setCacheAdapter')->with(
-            $this->isInstanceOf('Magento\Framework\Cache\FrontendInterface')
-        );
-        $frontendInterface = $this->getMockBuilder(
-            'Magento\Framework\Cache\FrontendInterface'
-        )->disableOriginalConstructor()->setMethods([])->getMock();
-        $this->_cache->expects($this->once())->method('getFrontend')->will($this->returnValue($frontendInterface));
-
-        $this->assertInstanceOf(
-            'Magento\Framework\DB\Adapter\AdapterInterface',
-            $this->_resorce->getConnection(self::RESOURCE_NAME)
-        );
-        $this->assertInstanceOf(
-            'Magento\Framework\DB\Adapter\AdapterInterface',
-            $this->_resorce->getConnection(self::RESOURCE_NAME)
-        );
+        $this->_connectionFactory->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($this->connection));
+        $this->assertSame($this->connection, $this->resource->getConnection(self::RESOURCE_NAME));
+        $this->assertSame($this->connection, $this->resource->getConnection(self::RESOURCE_NAME));
     }
 
-    public function testGetTableName()
+    /**
+     * @param array|string $modelEntity
+     * @param string $expected
+     *
+     * @dataProvider getTableNameDataProvider
+     */
+    public function testGetTableName($modelEntity, $expected)
     {
-        $expected = 'tableName';
-        $modelEntity = $this->prepareTableName($expected);
-        $this->assertEquals($expected, $this->_resorce->getTableName($modelEntity));
+        $this->_connectionFactory->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($this->connection));
+        $this->assertSame($expected, $this->resource->getTableName($modelEntity));
     }
 
-    public function testGetTableNameWithPrefix()
+    /**
+     * @return array
+     */
+    public function getTableNameDataProvider()
     {
-        $this->setConnection();
-        $modelEntity = ['modelEntity', 'tableSuffix'];
-        $expected = 'tablename';
-        $tablePrefix = 'tablePrefix';
-        $this->_resorce->setTablePrefix($tablePrefix);
+        return [
+            ['tableName', self::TABLE_PREFIX . 'tableName'],
+            [['tableName', 'tableSuffix'], self::TABLE_PREFIX . 'tableName_tableSuffix'],
+        ];
+    }
 
-        $this->_connection->expects($this->once())->method('getTableName')->with(
-            $tablePrefix . $modelEntity[0] . '_' . $modelEntity[1]
-        )->will($this->returnValue($expected));
+    /**
+     * @param array|string $modelEntity
+     * @param string $tableName
+     * @param string $mappedName
+     * @param string $expected
+     *
+     * @dataProvider getTableNameMappedDataProvider
+     */
+    public function testGetTableNameMapped($modelEntity, $tableName, $mappedName, $expected)
+    {
+        $this->_connectionFactory->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($this->connection));
+        $this->resource->setMappedTableName($tableName, $mappedName);
+        $this->assertSame($expected, $this->resource->getTableName($modelEntity));
+    }
 
-        $this->assertEquals($expected, $this->_resorce->getTableName($modelEntity));
+    /**
+     * @return array
+     */
+    public function getTableNameMappedDataProvider()
+    {
+        return [
+            ['tableName', 'tableName', 'mappedTableName', 'mappedTableName'],
+            [['tableName', 'tableSuffix'], 'tableName', 'mappedTableName', 'mappedTableName_tableSuffix'],
+        ];
     }
 
     public function testGetIdxName()
     {
-        $expectedTableName = 'tablename';
-        $modelEntity = $this->prepareTableName($expectedTableName);
-
+        $table = 'table';
+        $calculatedTableName = self::TABLE_PREFIX . 'table';
         $fields = ['field'];
-        $this->_connection->expects($this->once())->method('getIndexName')->with(
-            $expectedTableName, $fields, \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX
-        )->will($this->returnValue('idxName'));
-        $this->assertEquals(
-            'idxName',
-            $this->_resorce->getIdxName(
-                $modelEntity,
-                $fields,
-                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX
-            )
-        );
+        $indexType = 'index_type';
+        $expectedIdxName = 'idxName';
+
+        $this->connection->expects($this->once())
+            ->method('getIndexName')
+            ->with($calculatedTableName, $fields, $indexType)
+            ->will($this->returnValue($expectedIdxName))
+        ;
+        $this->_connectionFactory->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($this->connection));
+
+        $this->assertEquals('idxName', $this->resource->getIdxName($table, $fields, $indexType));
     }
 
     public function testGetFkName()
     {
-        $expectedTableName = 'tablename';
-        $modelEntity = $this->prepareTableName($expectedTableName, false);
+        $table = 'table';
+        $calculatedTableName = self::TABLE_PREFIX . 'table';
+        $refTable = 'ref_table';
+        $calculatedRefTableName = self::TABLE_PREFIX . 'ref_table';
         $columnName = 'columnName';
+        $refColumnName = 'refColumnName';
 
-        $this->_connection->expects($this->once())->method('getForeignKeyName')->with(
-            $expectedTableName, $columnName, $expectedTableName, $columnName
-        )->will($this->returnValue('fkName'));
+        $this->connection->expects($this->once())
+            ->method('getForeignKeyName')
+            ->with($calculatedTableName, $columnName, $calculatedRefTableName, $refColumnName)
+            ->will($this->returnValue('fkName'))
+        ;
+        $this->_connectionFactory->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($this->connection));
 
-        $this->assertEquals('fkName', $this->_resorce->getFkName($modelEntity, $columnName, $modelEntity, $columnName));
-    }
-
-    /**
-     * Prepares data for \Resource::getTableName($modelEntity)
-     *
-     * @param string $expected
-     * @param bool $useSuffix does an entity has a suffix
-     * @return array $modelEntity
-     */
-    private function prepareTableName($expected, $useSuffix = true)
-    {
-        $this->setConnection();
-        $modelEntity = ['modelEntity', 'tableSuffix'];
-        $mappedName = 'mappedName';
-        $this->_resorce->setMappedTableName($modelEntity[0], $mappedName);
-
-        $this->_connection->expects($this->any())->method('getTableName')->with(
-            $useSuffix ? $mappedName . '_' . $modelEntity[1] : $mappedName
-        )->will($this->returnValue($expected));
-        return $useSuffix ? $modelEntity : $modelEntity[0];
-    }
-
-    /**
-     * Sets connection for resource
-     */
-    private function setConnection()
-    {
-        $connectionSetter = \Closure::bind(
-            function (\Magento\Framework\App\Resource $resource, $connection, $connectionName) {
-                $resource->_connections[$connectionName] = $connection;
-            }, null, 'Magento\Framework\App\Resource'
-        );
-
-        $connectionSetter($this->_resorce, $this->_connection, self::CONNECTION_NAME);
+        $this->assertEquals('fkName', $this->resource->getFkName($table, $columnName, $refTable, $refColumnName));
     }
 }

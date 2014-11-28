@@ -1121,11 +1121,11 @@ class Store extends AbstractModel implements
      *
      * @return $this
      */
-    protected function _beforeDelete()
+    public function beforeDelete()
     {
         $this->_configDataResource->clearScopeData(\Magento\Store\Model\ScopeInterface::SCOPE_STORES, $this->getId());
 
-        return parent::_beforeDelete();
+        return parent::beforeDelete();
     }
 
     /**
@@ -1133,9 +1133,9 @@ class Store extends AbstractModel implements
      *
      * @return $this
      */
-    protected function _afterDelete()
+    public function afterDelete()
     {
-        parent::_afterDelete();
+        parent::afterDelete();
         $this->_configCacheType->clean();
         return $this;
     }

@@ -211,19 +211,27 @@ define([
                 },
 
                 success: function (result) {
-                    if (result.indexOf('_redirect') !== -1) {
-                        window.location.href = JSON.parse(result)['_redirect'];
+                    var redirect = result._redirect;
+
+                    if (redirect) {
+                        window.location.href = redirect;
                         return;
                     }
+
                     var identityLinkUrl = null,
                         consumerId = null,
                         popupHtml = null,
                         popup = $('#integration-popup-container');
+
                     try {
-                        var resultObj = $.parseJSON(result);
+                        var resultObj = typeof result === 'string' ?
+                            JSON.parse(result) :
+                            result;
+
                         identityLinkUrl = resultObj['identity_link_url'];
-                        consumerId = resultObj['consumer_id'];
-                        popupHtml = resultObj['popup_content'];
+                        consumerId      = resultObj['consumer_id'];
+                        popupHtml       = resultObj['popup_content'];
+                        
                     } catch (e) {
                         //This is expected if result is not json. Do nothing.
                     }
@@ -348,4 +356,5 @@ define([
         };
     };
 
+    return $.mage.integration;
 });

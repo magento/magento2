@@ -26,36 +26,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\Module\SomeInterface" type="Magento\Framework\Module\ClassOne" />
     <preference for="Magento\Framework\Module\SomeInterfaceTwo" type="Magento\Framework\Module\ClassTwo" />
-    <type name="Magento\Framework\App\Arguments\Loader" shared="false">
-        <arguments>
-            <argument name="customFile" xsi:type="init_parameter">Magento\Framework\App\Arguments\Loader::PARAM_CUSTOM_FILE</argument>
-            <argument name="customConfig" xsi:type="object" shared="false">Magento\Core\Model\Config\Storage\Modules</argument>
-            <argument name="customValue" xsi:type="string">someCustomValue</argument>
-            <argument name="customComplexValue" xsi:type="array">
-                <item name="one" xsi:type="string">one</item>
-                <item name="two" xsi:type="string">two</item>
-                <item name="three" xsi:type="string">three</item>
-            </argument>
-            <argument name="newParam" xsi:type="string">paramValue</argument>
-        </arguments>
-        <plugin name="one" type="somePluginOne" sortOrder="800"/>
-        <plugin name="two" type="somePluginTwo" sortOrder="20" disabled="true"/>
-        <plugin name="three" type="somePluginThree"/>
-    </type>
-    <virtualType name="Magento\Framework\App\Arguments\LoaderVirtual" type="Magento\Framework\App\Arguments\Loader\Local" shared="true">
-        <arguments>
-            <argument name="customFile" xsi:type="init_parameter">Magento\Framework\App\Arguments\Loader::PARAM_CUSTOM_FILE</argument>
-            <argument name="customConfig" xsi:type="object">Magento\Core\Model\Config\Storage\Modules</argument>
-            <argument name="customValue" xsi:type="string">someValue</argument>
-            <argument name="customComplexValue" xsi:type="array">
-                <item name="one" xsi:type="string">one</item>
-                <item name="two" xsi:type="string">one</item>
-            </argument>
-        </arguments>
-        <plugin name="one" type="somePluginOne" sortOrder="800" />
-        <plugin name="two" type="somePluginTwo" sortOrder="20" disabled="true"/>
-        <plugin name="three" type="somePluginThree"/>
-    </virtualType>
     <type name="Magento\Framework\Data\Collection\Db\FetchStrategy\Cache">
         <arguments>
             <argument name="cacheIdPrefix" xsi:type="string"><![CDATA[collection_]]></argument>

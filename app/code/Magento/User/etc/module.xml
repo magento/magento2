@@ -24,7 +24,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Module/etc/module.xsd">
-    <module name="Magento_User" schema_version="1.6.1.6" active="true">
+    <module name="Magento_User" schema_version="1.6.1.6">
         <sequence>
             <module name="Magento_Backend"/>
         </sequence>
@@ -34,6 +34,7 @@
             <module name="Magento_Core"/>
             <module name="Magento_Integration"/>
             <module name="Magento_Theme"/>
+            <module name="Magento_RequireJs"/>
         </depends>
     </module>
 </config>

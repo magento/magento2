@@ -47,22 +47,9 @@
             </arguments>
         </referenceBlock>
         <referenceContainer name="content">
-            <container name="product.info.media" htmlTag="div" htmlClass="product media" before="-">
-                <block class="Magento\Catalog\Block\Product\View\Gallery" name="product.info.media.image" template="product/view/base-image.phtml">
-                    <block class="Magento\Catalog\Block\Product\Image" name="product.image.main"/>
-                    <block class="Magento\Catalog\Block\Product\Image" name="product.image.thumbs"/>
-                </block>
-            </container>
-            <container name="product.info.main" htmlTag="div" htmlClass="product-info-main" after="product.info.media">
+            <container name="product.info.main" htmlTag="div" htmlClass="product-info-main" before="-">
                 <block class="Magento\Catalog\Block\Product\View" name="product.info.review" template="product/view/review.phtml" before="-" />
                 <container name="product.info.price" label="Product info auxiliary container" htmlTag="div" htmlClass="product-info-price" after="product.info.review">
-                    <block class="Magento\Catalog\Pricing\Render" name="product.price.final" after="product.info.sku">
-                        <arguments>
-                            <argument name="price_render" xsi:type="string">product.price.render.default</argument>
-                            <argument name="price_type_code" xsi:type="string">final_price</argument>
-                            <argument name="zone" xsi:type="string">item_view</argument>
-                        </arguments>
-                    </block>
                     <container name="product.info.stock.sku" label="Product auxiliary info" htmlTag="div" htmlClass="product-info-stock-sku">
                         <container name="product.info.type" before="-"/>
                         <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.sku" template="product/view/attribute.phtml" after="product.info.type">
@@ -75,6 +62,13 @@
                             </arguments>
                         </block>
                     </container>
+                    <block class="Magento\Catalog\Pricing\Render" name="product.price.final" after="product.info.sku">
+                        <arguments>
+                            <argument name="price_render" xsi:type="string">product.price.render.default</argument>
+                            <argument name="price_type_code" xsi:type="string">final_price</argument>
+                            <argument name="zone" xsi:type="string">item_view</argument>
+                        </arguments>
+                    </block>
                 </container>
                 <block class="Magento\Catalog\Pricing\Render" name="product.price.tier" after="product.info.price">
                     <arguments>
@@ -121,7 +115,13 @@
                     </arguments>
                 </block>
             </container>
-            <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.details" template="product/view/details.phtml" after="product.info.main">
+            <container name="product.info.media" htmlTag="div" htmlClass="product media" after="product.info.main">
+                <block class="Magento\Catalog\Block\Product\View\Gallery" name="product.info.media.image" template="product/view/base-image.phtml">
+                    <block class="Magento\Catalog\Block\Product\Image" name="product.image.main"/>
+                    <block class="Magento\Catalog\Block\Product\Image" name="product.image.thumbs"/>
+                </block>
+            </container>
+            <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.details" template="product/view/details.phtml" after="product.info.media">
                 <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.description" template="product/view/attribute.phtml" group="detailed_info">
                     <arguments>
                         <argument name="at_call" xsi:type="string">getDescription</argument>

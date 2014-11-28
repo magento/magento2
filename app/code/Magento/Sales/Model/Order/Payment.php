@@ -23,6 +23,8 @@
  */
 namespace Magento\Sales\Model\Order;
 
+use Magento\Payment\Model\Info;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
@@ -30,112 +32,60 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  *
  * @method \Magento\Sales\Model\Resource\Order\Payment _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Payment getResource()
- * @method int getParentId()
  * @method \Magento\Sales\Model\Order\Payment setParentId(int $value)
- * @method float getBaseShippingCaptured()
  * @method \Magento\Sales\Model\Order\Payment setBaseShippingCaptured(float $value)
- * @method float getShippingCaptured()
  * @method \Magento\Sales\Model\Order\Payment setShippingCaptured(float $value)
- * @method float getAmountRefunded()
  * @method \Magento\Sales\Model\Order\Payment setAmountRefunded(float $value)
- * @method float getBaseAmountPaid()
  * @method \Magento\Sales\Model\Order\Payment setBaseAmountPaid(float $value)
- * @method float getAmountCanceled()
  * @method \Magento\Sales\Model\Order\Payment setAmountCanceled(float $value)
- * @method float getBaseAmountAuthorized()
  * @method \Magento\Sales\Model\Order\Payment setBaseAmountAuthorized(float $value)
- * @method float getBaseAmountPaidOnline()
  * @method \Magento\Sales\Model\Order\Payment setBaseAmountPaidOnline(float $value)
- * @method float getBaseAmountRefundedOnline()
  * @method \Magento\Sales\Model\Order\Payment setBaseAmountRefundedOnline(float $value)
- * @method float getBaseShippingAmount()
  * @method \Magento\Sales\Model\Order\Payment setBaseShippingAmount(float $value)
- * @method float getShippingAmount()
  * @method \Magento\Sales\Model\Order\Payment setShippingAmount(float $value)
- * @method float getAmountPaid()
  * @method \Magento\Sales\Model\Order\Payment setAmountPaid(float $value)
- * @method float getAmountAuthorized()
  * @method \Magento\Sales\Model\Order\Payment setAmountAuthorized(float $value)
- * @method float getBaseAmountOrdered()
  * @method \Magento\Sales\Model\Order\Payment setBaseAmountOrdered(float $value)
- * @method float getBaseShippingRefunded()
  * @method \Magento\Sales\Model\Order\Payment setBaseShippingRefunded(float $value)
- * @method float getShippingRefunded()
  * @method \Magento\Sales\Model\Order\Payment setShippingRefunded(float $value)
- * @method float getBaseAmountRefunded()
  * @method \Magento\Sales\Model\Order\Payment setBaseAmountRefunded(float $value)
- * @method float getAmountOrdered()
  * @method \Magento\Sales\Model\Order\Payment setAmountOrdered(float $value)
- * @method float getBaseAmountCanceled()
  * @method \Magento\Sales\Model\Order\Payment setBaseAmountCanceled(float $value)
- * @method int getQuotePaymentId()
  * @method \Magento\Sales\Model\Order\Payment setQuotePaymentId(int $value)
- * @method string getAdditionalData()
  * @method \Magento\Sales\Model\Order\Payment setAdditionalData(string $value)
- * @method string getCcExpMonth()
  * @method \Magento\Sales\Model\Order\Payment setCcExpMonth(string $value)
- * @method string getCcSsStartYear()
  * @method \Magento\Sales\Model\Order\Payment setCcSsStartYear(string $value)
- * @method string getEcheckBankName()
  * @method \Magento\Sales\Model\Order\Payment setEcheckBankName(string $value)
- * @method string getMethod()
  * @method \Magento\Sales\Model\Order\Payment setMethod(string $value)
- * @method string getCcDebugRequestBody()
  * @method \Magento\Sales\Model\Order\Payment setCcDebugRequestBody(string $value)
- * @method string getCcSecureVerify()
  * @method \Magento\Sales\Model\Order\Payment setCcSecureVerify(string $value)
- * @method string getProtectionEligibility()
  * @method \Magento\Sales\Model\Order\Payment setProtectionEligibility(string $value)
- * @method string getCcApproval()
  * @method \Magento\Sales\Model\Order\Payment setCcApproval(string $value)
- * @method string getCcLast4()
  * @method \Magento\Sales\Model\Order\Payment setCcLast4(string $value)
- * @method string getCcStatusDescription()
  * @method \Magento\Sales\Model\Order\Payment setCcStatusDescription(string $value)
- * @method string getEcheckType()
  * @method \Magento\Sales\Model\Order\Payment setEcheckType(string $value)
- * @method string getCcDebugResponseSerialized()
  * @method \Magento\Sales\Model\Order\Payment setCcDebugResponseSerialized(string $value)
- * @method string getCcSsStartMonth()
  * @method \Magento\Sales\Model\Order\Payment setCcSsStartMonth(string $value)
- * @method string getEcheckAccountType()
  * @method \Magento\Sales\Model\Order\Payment setEcheckAccountType(string $value)
- * @method string getLastTransId()
  * @method \Magento\Sales\Model\Order\Payment setLastTransId(string $value)
- * @method string getCcCidStatus()
  * @method \Magento\Sales\Model\Order\Payment setCcCidStatus(string $value)
- * @method string getCcOwner()
  * @method \Magento\Sales\Model\Order\Payment setCcOwner(string $value)
- * @method string getCcType()
  * @method \Magento\Sales\Model\Order\Payment setCcType(string $value)
- * @method string getPoNumber()
  * @method \Magento\Sales\Model\Order\Payment setPoNumber(string $value)
- * @method string getCcExpYear()
  * @method \Magento\Sales\Model\Order\Payment setCcExpYear(string $value)
- * @method string getCcStatus()
  * @method \Magento\Sales\Model\Order\Payment setCcStatus(string $value)
- * @method string getEcheckRoutingNumber()
  * @method \Magento\Sales\Model\Order\Payment setEcheckRoutingNumber(string $value)
- * @method string getAccountStatus()
  * @method \Magento\Sales\Model\Order\Payment setAccountStatus(string $value)
- * @method string getAnetTransMethod()
  * @method \Magento\Sales\Model\Order\Payment setAnetTransMethod(string $value)
- * @method string getCcDebugResponseBody()
  * @method \Magento\Sales\Model\Order\Payment setCcDebugResponseBody(string $value)
- * @method string getCcSsIssue()
  * @method \Magento\Sales\Model\Order\Payment setCcSsIssue(string $value)
- * @method string getEcheckAccountName()
  * @method \Magento\Sales\Model\Order\Payment setEcheckAccountName(string $value)
- * @method string getCcAvsStatus()
  * @method \Magento\Sales\Model\Order\Payment setCcAvsStatus(string $value)
- * @method string getCcNumberEnc()
  * @method \Magento\Sales\Model\Order\Payment setCcNumberEnc(string $value)
- * @method string getCcTransId()
  * @method \Magento\Sales\Model\Order\Payment setCcTransId(string $value)
- * @method string getAddressStatus()
  * @method \Magento\Sales\Model\Order\Payment setAddressStatus(string $value)
  */
-class Payment extends \Magento\Payment\Model\Info
+class Payment extends Info implements OrderPaymentInterface
 {
     /**
      * Actions for payment when it triggered review state
@@ -167,7 +117,7 @@ class Payment extends \Magento\Payment\Model\Info
      *
      * @var array
      */
-    protected $_transactionsLookup = array();
+    protected $_transactionsLookup = [];
 
     /**
      * @var string
@@ -184,7 +134,7 @@ class Payment extends \Magento\Payment\Model\Info
      *
      * @var array
      */
-    protected $_transactionAdditionalInfo = array();
+    protected $_transactionAdditionalInfo = [];
 
     /**
      * @var \Magento\Sales\Model\Service\Order
@@ -214,6 +164,7 @@ class Payment extends \Magento\Payment\Model\Info
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Sales\Model\Service\OrderFactory $serviceOrderFactory
@@ -228,6 +179,7 @@ class Payment extends \Magento\Payment\Model\Info
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
+        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Sales\Model\Service\OrderFactory $serviceOrderFactory,
@@ -237,14 +189,23 @@ class Payment extends \Magento\Payment\Model\Info
         PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        array $data = []
     ) {
         $this->priceCurrency = $priceCurrency;
         $this->_serviceOrderFactory = $serviceOrderFactory;
         $this->_transactionFactory = $transactionFactory;
         $this->_transactionCollectionFactory = $transactionCollectionFactory;
         $this->_storeManager = $storeManager;
-        parent::__construct($context, $registry, $paymentData, $encryptor, $resource, $resourceCollection, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $metadataService,
+            $paymentData,
+            $encryptor,
+            $resource,
+            $resourceCollection,
+            $data
+        );
     }
 
     /**
@@ -335,7 +296,7 @@ class Payment extends \Magento\Payment\Model\Info
      */
     public function place()
     {
-        $this->_eventManager->dispatch('sales_order_payment_place_start', array('payment' => $this));
+        $this->_eventManager->dispatch('sales_order_payment_place_start', ['payment' => $this]);
         $order = $this->getOrder();
 
         $this->setAmountOrdered($order->getTotalDue());
@@ -378,7 +339,7 @@ class Payment extends \Magento\Payment\Model\Info
 
         $this->updateOrder($order, $orderState, $orderStatus, $isCustomerNotified);
 
-        $this->_eventManager->dispatch('sales_order_payment_place_end', array('payment' => $this));
+        $this->_eventManager->dispatch('sales_order_payment_place_end', ['payment' => $this]);
 
         return $this;
     }
@@ -481,7 +442,7 @@ class Payment extends \Magento\Payment\Model\Info
 
         $this->_eventManager->dispatch(
             'sales_order_payment_capture',
-            array('payment' => $this, 'invoice' => $invoice)
+            ['payment' => $this, 'invoice' => $invoice]
         );
 
         /**
@@ -522,7 +483,7 @@ class Payment extends \Magento\Payment\Model\Info
                 $message = __('Captured amount of %1 online', $this->_formatPrice($amountToCapture));
                 $state = \Magento\Sales\Model\Order::STATE_PROCESSING;
                 $invoice->setIsPaid(true);
-                $this->_updateTotals(array('base_amount_paid_online' => $amountToCapture));
+                $this->_updateTotals(['base_amount_paid_online' => $amountToCapture]);
             }
             if ($order->isNominal()) {
                 $message = $this->_prependMessage(__('An order with subscription items was registered.'));
@@ -571,7 +532,7 @@ class Payment extends \Magento\Payment\Model\Info
                 $this->setCreatedInvoice($invoice);
             } else {
                 $this->setIsFraudDetected(!$skipFraudDetection);
-                $this->_updateTotals(array('base_amount_paid_online' => $amount));
+                $this->_updateTotals(['base_amount_paid_online' => $amount]);
             }
         }
 
@@ -603,7 +564,7 @@ class Payment extends \Magento\Payment\Model\Info
             // register capture for an existing invoice
             if ($invoice && Invoice::STATE_OPEN == $invoice->getState()) {
                 $invoice->pay();
-                $this->_updateTotals(array('base_amount_paid_online' => $amount));
+                $this->_updateTotals(['base_amount_paid_online' => $amount]);
                 $order->addRelatedObject($invoice);
             }
         }
@@ -640,14 +601,14 @@ class Payment extends \Magento\Payment\Model\Info
     public function pay($invoice)
     {
         $this->_updateTotals(
-            array(
+            [
                 'amount_paid' => $invoice->getGrandTotal(),
                 'base_amount_paid' => $invoice->getBaseGrandTotal(),
                 'shipping_captured' => $invoice->getShippingAmount(),
                 'base_shipping_captured' => $invoice->getBaseShippingAmount()
-            )
+            ]
         );
-        $this->_eventManager->dispatch('sales_order_payment_pay', array('payment' => $this, 'invoice' => $invoice));
+        $this->_eventManager->dispatch('sales_order_payment_pay', ['payment' => $this, 'invoice' => $invoice]);
         return $this;
     }
 
@@ -660,16 +621,16 @@ class Payment extends \Magento\Payment\Model\Info
     public function cancelInvoice($invoice)
     {
         $this->_updateTotals(
-            array(
+            [
                 'amount_paid' => -1 * $invoice->getGrandTotal(),
                 'base_amount_paid' => -1 * $invoice->getBaseGrandTotal(),
                 'shipping_captured' => -1 * $invoice->getShippingAmount(),
                 'base_shipping_captured' => -1 * $invoice->getBaseShippingAmount()
-            )
+            ]
         );
         $this->_eventManager->dispatch(
             'sales_order_payment_cancel_invoice',
-            array('payment' => $this, 'invoice' => $invoice)
+            ['payment' => $this, 'invoice' => $invoice]
         );
         return $this;
     }
@@ -721,7 +682,7 @@ class Payment extends \Magento\Payment\Model\Info
     public function void(\Magento\Framework\Object $document)
     {
         $this->_void(true);
-        $this->_eventManager->dispatch('sales_order_payment_void', array('payment' => $this, 'invoice' => $document));
+        $this->_eventManager->dispatch('sales_order_payment_void', ['payment' => $this, 'invoice' => $document]);
         return $this;
     }
 
@@ -799,13 +760,13 @@ class Payment extends \Magento\Payment\Model\Info
 
         // update self totals from creditmemo
         $this->_updateTotals(
-            array(
+            [
                 'amount_refunded' => $creditmemo->getGrandTotal(),
                 'base_amount_refunded' => $baseAmountToRefund,
                 'base_amount_refunded_online' => $isOnline ? $baseAmountToRefund : null,
                 'shipping_refunded' => $creditmemo->getShippingAmount(),
                 'base_shipping_refunded' => $creditmemo->getBaseShippingAmount()
-            )
+            ]
         );
 
         // update transactions and order state
@@ -828,7 +789,7 @@ class Payment extends \Magento\Payment\Model\Info
 
         $this->_eventManager->dispatch(
             'sales_order_payment_refund',
-            array('payment' => $this, 'creditmemo' => $creditmemo)
+            ['payment' => $this, 'creditmemo' => $creditmemo]
         );
         return $this;
     }
@@ -882,12 +843,12 @@ class Payment extends \Magento\Payment\Model\Info
             return $this;
         }
 
-        $serviceModel = $this->_serviceOrderFactory->create(array('order' => $order));
+        $serviceModel = $this->_serviceOrderFactory->create(['order' => $order]);
         if ($invoice) {
             if ($invoice->getBaseTotalRefunded() > 0) {
-                $adjustment = array('adjustment_positive' => $amount);
+                $adjustment = ['adjustment_positive' => $amount];
             } else {
-                $adjustment = array('adjustment_negative' => $baseGrandTotal - $amount);
+                $adjustment = ['adjustment_negative' => $baseGrandTotal - $amount];
             }
             $creditmemo = $serviceModel->prepareInvoiceCreditmemo($invoice, $adjustment);
             if ($creditmemo) {
@@ -896,9 +857,9 @@ class Payment extends \Magento\Payment\Model\Info
             }
         } else {
             if ($order->getBaseTotalRefunded() > 0) {
-                $adjustment = array('adjustment_positive' => $amount);
+                $adjustment = ['adjustment_positive' => $amount];
             } else {
-                $adjustment = array('adjustment_negative' => $baseGrandTotal - $amount);
+                $adjustment = ['adjustment_negative' => $baseGrandTotal - $amount];
             }
             $creditmemo = $serviceModel->prepareCreditmemo($adjustment);
             if ($creditmemo) {
@@ -917,7 +878,7 @@ class Payment extends \Magento\Payment\Model\Info
         $creditmemo->save();
 
         $this->_updateTotals(
-            array('amount_refunded' => $creditmemo->getGrandTotal(), 'base_amount_refunded_online' => $amount)
+            ['amount_refunded' => $creditmemo->getGrandTotal(), 'base_amount_refunded_online' => $amount]
         );
 
         $this->setCreatedCreditmemo($creditmemo);
@@ -943,16 +904,16 @@ class Payment extends \Magento\Payment\Model\Info
     public function cancelCreditmemo($creditmemo)
     {
         $this->_updateTotals(
-            array(
+            [
                 'amount_refunded' => -1 * $creditmemo->getGrandTotal(),
                 'base_amount_refunded' => -1 * $creditmemo->getBaseGrandTotal(),
                 'shipping_refunded' => -1 * $creditmemo->getShippingAmount(),
                 'base_shipping_refunded' => -1 * $creditmemo->getBaseShippingAmount()
-            )
+            ]
         );
         $this->_eventManager->dispatch(
             'sales_order_payment_cancel_creditmemo',
-            array('payment' => $this, 'creditmemo' => $creditmemo)
+            ['payment' => $this, 'creditmemo' => $creditmemo]
         );
         return $this;
     }
@@ -978,7 +939,7 @@ class Payment extends \Magento\Payment\Model\Info
             $this->_void($isOnline, null, 'cancel');
         }
 
-        $this->_eventManager->dispatch('sales_order_payment_cancel', array('payment' => $this));
+        $this->_eventManager->dispatch('sales_order_payment_cancel', ['payment' => $this]);
 
         return $this;
     }
@@ -1114,7 +1075,7 @@ class Payment extends \Magento\Payment\Model\Info
         } elseif (true === $result) {
             if ($invoice) {
                 $invoice->pay();
-                $this->_updateTotals(array('base_amount_paid_online' => $invoice->getBaseGrandTotal()));
+                $this->_updateTotals(['base_amount_paid_online' => $invoice->getBaseGrandTotal()]);
                 $order->addRelatedObject($invoice);
             }
             $order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING, true, $message);
@@ -1395,6 +1356,8 @@ class Payment extends \Magento\Payment\Model\Info
             }
             return $transaction;
         }
+
+        return null;
     }
 
     /**
@@ -1671,22 +1634,6 @@ class Payment extends \Magento\Payment\Model\Info
     }
 
     /**
-     * Before object save manipulations
-     *
-     * @return $this
-     */
-    protected function _beforeSave()
-    {
-        parent::_beforeSave();
-
-        if (!$this->getParentId() && $this->getOrder()) {
-            $this->setParentId($this->getOrder()->getId());
-        }
-
-        return $this;
-    }
-
-    /**
      * Additional transaction info setter
      *
      * @param string $key
@@ -1723,7 +1670,7 @@ class Payment extends \Magento\Payment\Model\Info
      */
     public function resetTransactionAdditionalInfo()
     {
-        $this->_transactionAdditionalInfo = array();
+        $this->_transactionAdditionalInfo = [];
         return $this;
     }
 
@@ -1752,5 +1699,525 @@ class Payment extends \Magento\Payment\Model\Info
             }
         }
         return false;
+    }
+
+    /**
+     * Returns account_status
+     *
+     * @return string
+     */
+    public function getAccountStatus()
+    {
+        return $this->getData(OrderPaymentInterface::ACCOUNT_STATUS);
+    }
+
+    /**
+     * Returns additional_data
+     *
+     * @return string
+     */
+    public function getAdditionalData()
+    {
+        return $this->getData(OrderPaymentInterface::ADDITIONAL_DATA);
+    }
+
+    /**
+     * Returns address_status
+     *
+     * @return string
+     */
+    public function getAddressStatus()
+    {
+        return $this->getData(OrderPaymentInterface::ADDRESS_STATUS);
+    }
+
+    /**
+     * Returns amount_authorized
+     *
+     * @return float
+     */
+    public function getAmountAuthorized()
+    {
+        return $this->getData(OrderPaymentInterface::AMOUNT_AUTHORIZED);
+    }
+
+    /**
+     * Returns amount_canceled
+     *
+     * @return float
+     */
+    public function getAmountCanceled()
+    {
+        return $this->getData(OrderPaymentInterface::AMOUNT_CANCELED);
+    }
+
+    /**
+     * Returns amount_ordered
+     *
+     * @return float
+     */
+    public function getAmountOrdered()
+    {
+        return $this->getData(OrderPaymentInterface::AMOUNT_ORDERED);
+    }
+
+    /**
+     * Returns amount_paid
+     *
+     * @return float
+     */
+    public function getAmountPaid()
+    {
+        return $this->getData(OrderPaymentInterface::AMOUNT_PAID);
+    }
+
+    /**
+     * Returns amount_refunded
+     *
+     * @return float
+     */
+    public function getAmountRefunded()
+    {
+        return $this->getData(OrderPaymentInterface::AMOUNT_REFUNDED);
+    }
+
+    /**
+     * Returns anet_trans_method
+     *
+     * @return string
+     */
+    public function getAnetTransMethod()
+    {
+        return $this->getData(OrderPaymentInterface::ANET_TRANS_METHOD);
+    }
+
+    /**
+     * Returns base_amount_authorized
+     *
+     * @return float
+     */
+    public function getBaseAmountAuthorized()
+    {
+        return $this->getData(OrderPaymentInterface::BASE_AMOUNT_AUTHORIZED);
+    }
+
+    /**
+     * Returns base_amount_canceled
+     *
+     * @return float
+     */
+    public function getBaseAmountCanceled()
+    {
+        return $this->getData(OrderPaymentInterface::BASE_AMOUNT_CANCELED);
+    }
+
+    /**
+     * Returns base_amount_ordered
+     *
+     * @return float
+     */
+    public function getBaseAmountOrdered()
+    {
+        return $this->getData(OrderPaymentInterface::BASE_AMOUNT_ORDERED);
+    }
+
+    /**
+     * Returns base_amount_paid
+     *
+     * @return float
+     */
+    public function getBaseAmountPaid()
+    {
+        return $this->getData(OrderPaymentInterface::BASE_AMOUNT_PAID);
+    }
+
+    /**
+     * Returns base_amount_paid_online
+     *
+     * @return float
+     */
+    public function getBaseAmountPaidOnline()
+    {
+        return $this->getData(OrderPaymentInterface::BASE_AMOUNT_PAID_ONLINE);
+    }
+
+    /**
+     * Returns base_amount_refunded
+     *
+     * @return float
+     */
+    public function getBaseAmountRefunded()
+    {
+        return $this->getData(OrderPaymentInterface::BASE_AMOUNT_REFUNDED);
+    }
+
+    /**
+     * Returns base_amount_refunded_online
+     *
+     * @return float
+     */
+    public function getBaseAmountRefundedOnline()
+    {
+        return $this->getData(OrderPaymentInterface::BASE_AMOUNT_REFUNDED_ONLINE);
+    }
+
+    /**
+     * Returns base_shipping_amount
+     *
+     * @return float
+     */
+    public function getBaseShippingAmount()
+    {
+        return $this->getData(OrderPaymentInterface::BASE_SHIPPING_AMOUNT);
+    }
+
+    /**
+     * Returns base_shipping_captured
+     *
+     * @return float
+     */
+    public function getBaseShippingCaptured()
+    {
+        return $this->getData(OrderPaymentInterface::BASE_SHIPPING_CAPTURED);
+    }
+
+    /**
+     * Returns base_shipping_refunded
+     *
+     * @return float
+     */
+    public function getBaseShippingRefunded()
+    {
+        return $this->getData(OrderPaymentInterface::BASE_SHIPPING_REFUNDED);
+    }
+
+    /**
+     * Returns cc_approval
+     *
+     * @return string
+     */
+    public function getCcApproval()
+    {
+        return $this->getData(OrderPaymentInterface::CC_APPROVAL);
+    }
+
+    /**
+     * Returns cc_avs_status
+     *
+     * @return string
+     */
+    public function getCcAvsStatus()
+    {
+        return $this->getData(OrderPaymentInterface::CC_AVS_STATUS);
+    }
+
+    /**
+     * Returns cc_cid_status
+     *
+     * @return string
+     */
+    public function getCcCidStatus()
+    {
+        return $this->getData(OrderPaymentInterface::CC_CID_STATUS);
+    }
+
+    /**
+     * Returns cc_debug_request_body
+     *
+     * @return string
+     */
+    public function getCcDebugRequestBody()
+    {
+        return $this->getData(OrderPaymentInterface::CC_DEBUG_REQUEST_BODY);
+    }
+
+    /**
+     * Returns cc_debug_response_body
+     *
+     * @return string
+     */
+    public function getCcDebugResponseBody()
+    {
+        return $this->getData(OrderPaymentInterface::CC_DEBUG_RESPONSE_BODY);
+    }
+
+    /**
+     * Returns cc_debug_response_serialized
+     *
+     * @return string
+     */
+    public function getCcDebugResponseSerialized()
+    {
+        return $this->getData(OrderPaymentInterface::CC_DEBUG_RESPONSE_SERIALIZED);
+    }
+
+    /**
+     * Returns cc_exp_month
+     *
+     * @return string
+     */
+    public function getCcExpMonth()
+    {
+        return $this->getData(OrderPaymentInterface::CC_EXP_MONTH);
+    }
+
+    /**
+     * Returns cc_exp_year
+     *
+     * @return string
+     */
+    public function getCcExpYear()
+    {
+        return $this->getData(OrderPaymentInterface::CC_EXP_YEAR);
+    }
+
+    /**
+     * Returns cc_last4
+     *
+     * @return string
+     */
+    public function getCcLast4()
+    {
+        return $this->getData(OrderPaymentInterface::CC_LAST4);
+    }
+
+    /**
+     * Returns cc_number_enc
+     *
+     * @return string
+     */
+    public function getCcNumberEnc()
+    {
+        return $this->getData(OrderPaymentInterface::CC_NUMBER_ENC);
+    }
+
+    /**
+     * Returns cc_owner
+     *
+     * @return string
+     */
+    public function getCcOwner()
+    {
+        return $this->getData(OrderPaymentInterface::CC_OWNER);
+    }
+
+    /**
+     * Returns cc_secure_verify
+     *
+     * @return string
+     */
+    public function getCcSecureVerify()
+    {
+        return $this->getData(OrderPaymentInterface::CC_SECURE_VERIFY);
+    }
+
+    /**
+     * Returns cc_ss_issue
+     *
+     * @return string
+     */
+    public function getCcSsIssue()
+    {
+        return $this->getData(OrderPaymentInterface::CC_SS_ISSUE);
+    }
+
+    /**
+     * Returns cc_ss_start_month
+     *
+     * @return string
+     */
+    public function getCcSsStartMonth()
+    {
+        return $this->getData(OrderPaymentInterface::CC_SS_START_MONTH);
+    }
+
+    /**
+     * Returns cc_ss_start_year
+     *
+     * @return string
+     */
+    public function getCcSsStartYear()
+    {
+        return $this->getData(OrderPaymentInterface::CC_SS_START_YEAR);
+    }
+
+    /**
+     * Returns cc_status
+     *
+     * @return string
+     */
+    public function getCcStatus()
+    {
+        return $this->getData(OrderPaymentInterface::CC_STATUS);
+    }
+
+    /**
+     * Returns cc_status_description
+     *
+     * @return string
+     */
+    public function getCcStatusDescription()
+    {
+        return $this->getData(OrderPaymentInterface::CC_STATUS_DESCRIPTION);
+    }
+
+    /**
+     * Returns cc_trans_id
+     *
+     * @return string
+     */
+    public function getCcTransId()
+    {
+        return $this->getData(OrderPaymentInterface::CC_TRANS_ID);
+    }
+
+    /**
+     * Returns cc_type
+     *
+     * @return string
+     */
+    public function getCcType()
+    {
+        return $this->getData(OrderPaymentInterface::CC_TYPE);
+    }
+
+    /**
+     * Returns echeck_account_name
+     *
+     * @return string
+     */
+    public function getEcheckAccountName()
+    {
+        return $this->getData(OrderPaymentInterface::ECHECK_ACCOUNT_NAME);
+    }
+
+    /**
+     * Returns echeck_account_type
+     *
+     * @return string
+     */
+    public function getEcheckAccountType()
+    {
+        return $this->getData(OrderPaymentInterface::ECHECK_ACCOUNT_TYPE);
+    }
+
+    /**
+     * Returns echeck_bank_name
+     *
+     * @return string
+     */
+    public function getEcheckBankName()
+    {
+        return $this->getData(OrderPaymentInterface::ECHECK_BANK_NAME);
+    }
+
+    /**
+     * Returns echeck_routing_number
+     *
+     * @return string
+     */
+    public function getEcheckRoutingNumber()
+    {
+        return $this->getData(OrderPaymentInterface::ECHECK_ROUTING_NUMBER);
+    }
+
+    /**
+     * Returns echeck_type
+     *
+     * @return string
+     */
+    public function getEcheckType()
+    {
+        return $this->getData(OrderPaymentInterface::ECHECK_TYPE);
+    }
+
+    /**
+     * Returns last_trans_id
+     *
+     * @return string
+     */
+    public function getLastTransId()
+    {
+        return $this->getData(OrderPaymentInterface::LAST_TRANS_ID);
+    }
+
+    /**
+     * Returns method
+     *
+     * @return string
+     */
+    public function getMethod()
+    {
+        return $this->getData(OrderPaymentInterface::METHOD);
+    }
+
+    /**
+     * Returns parent_id
+     *
+     * @return int
+     */
+    public function getParentId()
+    {
+        return $this->getData(OrderPaymentInterface::PARENT_ID);
+    }
+
+    /**
+     * Returns po_number
+     *
+     * @return string
+     */
+    public function getPoNumber()
+    {
+        return $this->getData(OrderPaymentInterface::PO_NUMBER);
+    }
+
+    /**
+     * Returns protection_eligibility
+     *
+     * @return string
+     */
+    public function getProtectionEligibility()
+    {
+        return $this->getData(OrderPaymentInterface::PROTECTION_ELIGIBILITY);
+    }
+
+    /**
+     * Returns quote_payment_id
+     *
+     * @return int
+     */
+    public function getQuotePaymentId()
+    {
+        return $this->getData(OrderPaymentInterface::QUOTE_PAYMENT_ID);
+    }
+
+    /**
+     * Returns shipping_amount
+     *
+     * @return float
+     */
+    public function getShippingAmount()
+    {
+        return $this->getData(OrderPaymentInterface::SHIPPING_AMOUNT);
+    }
+
+    /**
+     * Returns shipping_captured
+     *
+     * @return float
+     */
+    public function getShippingCaptured()
+    {
+        return $this->getData(OrderPaymentInterface::SHIPPING_CAPTURED);
+    }
+
+    /**
+     * Returns shipping_refunded
+     *
+     * @return float
+     */
+    public function getShippingRefunded()
+    {
+        return $this->getData(OrderPaymentInterface::SHIPPING_REFUNDED);
     }
 }

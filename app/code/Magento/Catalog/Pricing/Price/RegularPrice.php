@@ -46,7 +46,8 @@ class RegularPrice extends AbstractPrice implements BasePriceProviderInterface
     {
         if ($this->value === null) {
             $price = $this->product->getPrice();
-            $this->value = $price ? floatval($price) : false;
+            $priceInCurrentCurrency = $this->priceCurrency->convertAndRound($price);
+            $this->value = $priceInCurrentCurrency ? floatval($priceInCurrentCurrency) : false;
         }
         return $this->value;
     }

@@ -40,19 +40,19 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
         array(
             array(
                 'website_id' => 0,
-                'cust_group' => \Magento\Customer\Service\V1\CustomerGroupServiceInterface::CUST_GROUP_ALL,
+                'cust_group' => \Magento\Customer\Model\Group::CUST_GROUP_ALL,
                 'price_qty'  => 2,
                 'price'      => 8,
             ),
             array(
                 'website_id' => 0,
-                'cust_group' => \Magento\Customer\Service\V1\CustomerGroupServiceInterface::CUST_GROUP_ALL,
+                'cust_group' => \Magento\Customer\Model\Group::CUST_GROUP_ALL,
                 'price_qty'  => 5,
                 'price'      => 5,
             ),
             array(
                 'website_id' => 0,
-                'cust_group' => \Magento\Customer\Service\V1\CustomerGroupServiceInterface::NOT_LOGGED_IN_ID,
+                'cust_group' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
                 'price_qty'  => 3,
                 'price'      => 5,
             ),

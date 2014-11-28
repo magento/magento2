@@ -253,7 +253,8 @@ class Stock extends \Magento\Framework\Data\Form\Element\Select
                             filler.call($('#' + generalTabField));
                             filler.call($('#' + advancedTabField));
                         });
-                        disabler();
+                        
+                        $(window).load(disabler);
                     });
                 })
             </script>

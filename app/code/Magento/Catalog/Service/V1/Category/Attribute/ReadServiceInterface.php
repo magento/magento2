@@ -35,6 +35,7 @@ interface ReadServiceInterface
      * @return \Magento\Catalog\Service\V1\Data\Eav\Option[]
      *
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @deprecated
      */
     public function options($id);
 
@@ -45,6 +46,7 @@ interface ReadServiceInterface
      * @return \Magento\Catalog\Service\V1\Data\Eav\AttributeMetadata
      *
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @see \Magento\Catalog\Api\CategoryAttributeRepositoryInterface::get
      */
     public function info($id);
 
@@ -53,6 +55,7 @@ interface ReadServiceInterface
      *
      * @param \Magento\Framework\Api\SearchCriteria $searchCriteria
      * @return \Magento\Catalog\Service\V1\Data\Product\Attribute\SearchResults containing Data\Eav\Attribute objects
+     * @see \Magento\Catalog\Api\CategoryAttributeRepositoryInterface::getList
      */
     public function search(\Magento\Framework\Api\SearchCriteria $searchCriteria);
 }

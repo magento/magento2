@@ -28,7 +28,6 @@ namespace Magento\Tax\Model\Sales\Total\Quote;
  */
 use Magento\Tax\Model\Calculation;
 use Magento\TestFramework\Helper\ObjectManager;
-use Magento\Tax\Model\Sales\Total\Quote\CommonTaxCollector;
 
 class CommonTaxCollectorTest extends \PHPUnit_Framework_TestCase
 {
@@ -57,6 +56,16 @@ class CommonTaxCollectorTest extends \PHPUnit_Framework_TestCase
      */
     private $store;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|
+     */
+    protected $taxClassKeyBuilderMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|
+     */
+    protected $quoteDetailsItemBuilderMock;
+
     public function setUp()
     {
         $objectManager = new ObjectManager($this);
@@ -82,16 +91,26 @@ class CommonTaxCollectorTest extends \PHPUnit_Framework_TestCase
 
         $this->address = $this->getMockBuilder('\Magento\Sales\Model\Quote\Address')
             ->disableOriginalConstructor()
-            ->setMethods(['__wakeup', 'getQuote'])
+            ->setMethods(['__wakeup', 'getQuote', 'getShippingDiscountAmount', 'getBaseShippingDiscountAmount'])
             ->getMock();
 
         $this->address->expects($this->any())
             ->method('getQuote')
             ->will($this->returnValue($this->quote));
-
+        $methods = ['setType', 'setCode', 'setQuantity', 'setUnitPrice', 'setDiscountAmount',
+            'setTaxClassKey', 'setTaxIncluded', 'create'];
+        $this->quoteDetailsItemBuilderMock
+            = $this->getMock('Magento\Tax\Api\Data\QuoteDetailsItemDataBuilder', $methods, [], '', false);
+        $classMethods = ['setType', 'setValue', 'create'];
+        $this->taxClassKeyBuilderMock =
+            $this->getMock('Magento\Tax\Api\Data\TaxClassKeyDataBuilder', $classMethods, [], '', false);
         $this->commonTaxCollector = $objectManager->getObject(
             'Magento\Tax\Model\Sales\Total\Quote\CommonTaxCollector',
-            ['taxConfig' => $this->taxConfig]
+            [
+                'taxConfig' => $this->taxConfig,
+                'quoteDetailsItemBuilder' => $this->quoteDetailsItemBuilderMock,
+                'taxClassKeyBuilder' => $this->taxClassKeyBuilderMock
+            ]
         );
     }
 
@@ -107,9 +126,12 @@ class CommonTaxCollectorTest extends \PHPUnit_Framework_TestCase
         array $addressData,
         $useBaseCurrency,
         $shippingTaxClass,
-        $shippingPriceInclTax,
-        array $expectedValue
+        $shippingPriceInclTax
     ) {
+
+        $baseShippingAmount = $addressData['base_shipping_amount'];
+        $shippingAmount = $addressData['shipping_amount'];
+        $itemMock = $this->getMock('Magento\Tax\Api\Data\QuoteDetailsItemInterface');
         $this->taxConfig->expects($this->any())
             ->method('getShippingTaxClass')
             ->with($this->store)
@@ -118,17 +140,39 @@ class CommonTaxCollectorTest extends \PHPUnit_Framework_TestCase
             ->method('shippingPriceIncludesTax')
             ->with($this->store)
             ->will($this->returnValue($shippingPriceInclTax));
-
+         $this->address
+             ->expects($this->atLeastOnce())
+             ->method('getShippingDiscountAmount')
+             ->willReturn($shippingAmount);
+        if ($shippingAmount) {
+            if ($useBaseCurrency && $shippingAmount != 0) {
+                $this->address
+                    ->expects($this->once())
+                    ->method('getBaseShippingDiscountAmount')
+                    ->willReturn($baseShippingAmount);
+                $this->quoteDetailsItemBuilderMock
+                    ->expects($this->once())
+                    ->method('setDiscountAmount')
+                    ->with($baseShippingAmount);
+            } else {
+                $this->address->expects($this->never())->method('getBaseShippingDiscountAmount');
+                $this->quoteDetailsItemBuilderMock
+                    ->expects($this->once())
+                    ->method('setDiscountAmount')
+                    ->with($shippingAmount);
+            }
+        }
         foreach ($addressData as $key => $value) {
             $this->address->setData($key, $value);
         }
-
-        $shippingDataObject = $this->commonTaxCollector->getShippingDataObject($this->address, $useBaseCurrency);
-        $this->assertEquals($expectedValue, $shippingDataObject->__toArray());
-
-        //call it again, make sure we get the same output
-        $shippingDataObject = $this->commonTaxCollector->getShippingDataObject($this->address, $useBaseCurrency);
-        $this->assertEquals($expectedValue, $shippingDataObject->__toArray());
+        $this->taxClassKeyBuilderMock->expects($this->any())->method('setType')->willReturnSelf();
+        $this->taxClassKeyBuilderMock
+            ->expects($this->any())
+            ->method('setValue')
+            ->with($shippingTaxClass)->willReturnSelf();
+        $this->quoteDetailsItemBuilderMock->expects($this->once())->method('create')->willReturn($itemMock);
+        $this->assertEquals($itemMock,
+            $this->commonTaxCollector->getShippingDataObject($this->address, $useBaseCurrency));
     }
 
     public function getShippingDataObjectDataProvider()
@@ -143,17 +187,6 @@ class CommonTaxCollectorTest extends \PHPUnit_Framework_TestCase
                 'use_base_currency' => false,
                 'shipping_tax_class' => 'shippingTaxClass',
                 'shippingPriceInclTax' => true,
-                'expected_value' => [
-                    'type' => CommonTaxCollector::ITEM_TYPE_SHIPPING,
-                    'code' => CommonTaxCollector::ITEM_CODE_SHIPPING,
-                    'quantity' => 1,
-                    'unit_price' => 0,
-                    'tax_class_key' => [
-                        'type' => 'id',
-                        'value' => 'shippingTaxClass',
-                    ],
-                    'tax_included' => true,
-                ]
             ],
             'none_zero_none_base' => [
                 'address' => [
@@ -163,17 +196,6 @@ class CommonTaxCollectorTest extends \PHPUnit_Framework_TestCase
                 'use_base_currency' => false,
                 'shipping_tax_class' => 'shippingTaxClass',
                 'shippingPriceInclTax' => true,
-                'expected_value' => [
-                    'type' => CommonTaxCollector::ITEM_TYPE_SHIPPING,
-                    'code' => CommonTaxCollector::ITEM_CODE_SHIPPING,
-                    'quantity' => 1,
-                    'unit_price' => 10,
-                    'tax_class_key' => [
-                        'type' => 'id',
-                        'value' => 'shippingTaxClass',
-                    ],
-                    'tax_included' => true,
-                ]
             ],
             'none_zero_base' => [
                 'address' => [
@@ -183,17 +205,6 @@ class CommonTaxCollectorTest extends \PHPUnit_Framework_TestCase
                 'use_base_currency' => true,
                 'shipping_tax_class' => 'shippingTaxClass',
                 'shippingPriceInclTax' => true,
-                'expected_value' => [
-                    'type' => CommonTaxCollector::ITEM_TYPE_SHIPPING,
-                    'code' => CommonTaxCollector::ITEM_CODE_SHIPPING,
-                    'quantity' => 1,
-                    'unit_price' => 5,
-                    'tax_class_key' => [
-                        'type' => 'id',
-                        'value' => 'shippingTaxClass',
-                    ],
-                    'tax_included' => true,
-                ]
             ],
         ];
 

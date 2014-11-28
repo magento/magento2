@@ -186,4 +186,24 @@ abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\C
     {
         return $this;
     }
+
+    /**
+     * Get search criteria.
+     *
+     * @return \Magento\Framework\Api\SearchCriteriaInterface|null
+     */
+    public function getSearchCriteria()
+    {
+        return null;
+    }
+
+    /**
+     * Get total count.
+     *
+     * @return int
+     */
+    public function getTotalCount()
+    {
+        return $this->getSize();
+    }
 }

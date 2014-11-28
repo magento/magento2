@@ -21,7 +21,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /*jshint browser:true jquery:true*/
-define(["jquery","jquery/ui"], function($){
+define([
+    "jquery",
+    "jquery/ui"
+], function($){
+    "use strict";
+
     $.widget('mage.tierPrice', {
         options: {
             popupHeading: '#map-popup-heading',
@@ -68,4 +73,6 @@ define(["jquery","jquery/ui"], function($){
             return false;
         }
     });
+    
+    return $.mage.tierPrice;
 });

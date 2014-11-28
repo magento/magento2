@@ -24,9 +24,9 @@
 namespace Magento\Customer\Model\Resource\Customer\Grid;
 
 use Magento\Core\Model\EntityFactory;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Api\AbstractServiceCollection;
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
-use Magento\Customer\Service\V1\Data\CustomerDetails;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrderBuilder;
@@ -37,15 +37,15 @@ use Magento\Framework\Api\SortOrderBuilder;
 class ServiceCollection extends AbstractServiceCollection
 {
     /**
-     * @var CustomerAccountServiceInterface
+     * @var CustomerRepository
      */
-    protected $accountService;
+    protected $customerRepository;
 
     /**
      * @param EntityFactory $entityFactory
      * @param FilterBuilder $filterBuilder
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param CustomerAccountServiceInterface $accountService
+     * @param CustomerRepositoryInterface $customerRepository
      * @param SortOrderBuilder $sortOrderBuilder
      */
     public function __construct(
@@ -53,10 +53,10 @@ class ServiceCollection extends AbstractServiceCollection
         FilterBuilder $filterBuilder,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         SortOrderBuilder $sortOrderBuilder,
-        CustomerAccountServiceInterface $accountService
+        CustomerRepositoryInterface $customerRepository
     ) {
         parent::__construct($entityFactory, $filterBuilder, $searchCriteriaBuilder, $sortOrderBuilder);
-        $this->accountService = $accountService;
+        $this->customerRepository = $customerRepository;
     }
 
     /**
@@ -66,12 +66,12 @@ class ServiceCollection extends AbstractServiceCollection
     {
         if (!$this->isLoaded()) {
             $searchCriteria = $this->getSearchCriteria();
-            $searchResults = $this->accountService->searchCustomers($searchCriteria);
+            $searchResults = $this->customerRepository->getList($searchCriteria);
             $this->_totalRecords = $searchResults->getTotalCount();
-            /** @var CustomerDetails[] $customers */
+            /** @var CustomerInterface[] $customers */
             $customers = $searchResults->getItems();
             foreach ($customers as $customer) {
-                $this->_addItem($this->createCustomerDetailItem($customer));
+                $this->_addItem($this->createCustomerItem($customer));
             }
             $this->_setIsLoaded();
         }
@@ -81,12 +81,11 @@ class ServiceCollection extends AbstractServiceCollection
     /**
      * Creates a collection item that represents a customer for the customer Grid.
      *
-     * @param CustomerDetails $customerDetail Input data for creating the item.
+     * @param CustomerInterface $customer Input data for creating the item.
      * @return \Magento\Framework\Object Collection item that represents a customer
      */
-    protected function createCustomerDetailItem(CustomerDetails $customerDetail)
+    protected function createCustomerItem(CustomerInterface $customer)
     {
-        $customer = $customerDetail->getCustomer();
         $customerNameParts = array(
             $customer->getPrefix(),
             $customer->getFirstname(),
@@ -105,7 +104,7 @@ class ServiceCollection extends AbstractServiceCollection
         $customerItem->setGroupId($customer->getGroupId());
 
         $billingAddress = null;
-        foreach ($customerDetail->getAddresses() as $address) {
+        foreach ($customer->getAddresses() as $address) {
             if ($address->isDefaultBilling()) {
                 $billingAddress = $address;
                 break;

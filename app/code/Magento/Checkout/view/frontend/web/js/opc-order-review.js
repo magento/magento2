@@ -71,5 +71,6 @@ define([
             }
         }
     });
-
+    
+    return $.mage.opcOrderReview;
 });

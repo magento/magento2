@@ -147,7 +147,7 @@ class Cert extends \Magento\Framework\Model\AbstractModel
      *
      * @return $this
      */
-    protected function _afterDelete()
+    public function afterDelete()
     {
         $this->_removeOutdatedCertFile();
         return $this;

@@ -79,4 +79,12 @@ class SpecialPrice extends \Magento\Catalog\Pricing\Price\SpecialPrice implement
     {
         return $this->priceInfo->getPrice(RegularPrice::PRICE_CODE)->getValue();
     }
+
+    /**
+     * @return bool
+     */
+    public function isPercentageDiscount()
+    {
+        return true;
+    }
 }

@@ -23,11 +23,9 @@
  */
 namespace Magento\Customer\Model;
 
-use Magento\Customer\Service\V1\CustomerMetadataServiceInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Customer\Service\V1\Data\Customer as CustomerDataObject;
-use Magento\Customer\Service\V1\Data\CustomerBuilder as CustomerDataObjectBuilder;
-use Magento\Framework\Api\ExtensibleDataObjectConverter;
+use Magento\Customer\Api\Data\CustomerInterface as CustomerDataObject;
+use Magento\Customer\Api\Data\CustomerDataBuilder as CustomerDataObjectBuilder;
 use Magento\Framework\StoreManagerInterface;
 
 /**
@@ -53,18 +51,26 @@ class Converter
     protected $storeManager;
 
     /**
+     * @var \Magento\Framework\Api\ExtensibleDataObjectConverter
+     */
+    protected $extensibleDataObjectConverter;
+
+    /**
      * @param CustomerDataObjectBuilder $customerBuilder
      * @param CustomerFactory $customerFactory
      * @param StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
      */
     public function __construct(
         CustomerDataObjectBuilder $customerBuilder,
         CustomerFactory $customerFactory,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
     ) {
         $this->_customerBuilder = $customerBuilder;
         $this->_customerFactory = $customerFactory;
         $this->storeManager = $storeManager;
+        $this->extensibleDataObjectConverter = $extensibleDataObjectConverter;
     }
 
     /**
@@ -156,7 +162,7 @@ class Converter
     {
         $customerModel = $this->_customerFactory->create();
 
-        $attributes = ExtensibleDataObjectConverter::toFlatArray($customer);
+        $attributes = $this->extensibleDataObjectConverter->toFlatArray($customer);
         foreach ($attributes as $attributeCode => $attributeValue) {
             // avoid setting password through set attribute
             if ($attributeCode == 'password') {
@@ -173,7 +179,9 @@ class Converter
 
         // Need to use attribute set or future updates can cause data loss
         if (!$customerModel->getAttributeSetId()) {
-            $customerModel->setAttributeSetId(CustomerMetadataServiceInterface::ATTRIBUTE_SET_ID_CUSTOMER);
+            $customerModel->setAttributeSetId(
+                \Magento\Customer\Api\CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER
+            );
         }
 
         return $customerModel;
@@ -190,7 +198,7 @@ class Converter
         \Magento\Customer\Model\Customer $customerModel,
         CustomerDataObject $customerData
     ) {
-        $attributes = ExtensibleDataObjectConverter::toFlatArray($customerData);
+        $attributes = $this->extensibleDataObjectConverter->toFlatArray($customerData);
         foreach ($attributes as $attributeCode => $attributeValue) {
             $customerModel->setDataUsingMethod($attributeCode, $attributeValue);
         }
@@ -200,7 +208,9 @@ class Converter
         }
         // Need to use attribute set or future calls to customerModel::save can cause data loss
         if (!$customerModel->getAttributeSetId()) {
-            $customerModel->setAttributeSetId(CustomerMetadataServiceInterface::ATTRIBUTE_SET_ID_CUSTOMER);
+            $customerModel->setAttributeSetId(
+                \Magento\Customer\Api\CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER
+            );
         }
     }
 
@@ -219,7 +229,7 @@ class Converter
             $value = $value ? $value : $customerModel->getData($attrCode);
             if (null !== $value) {
                 if ($attrCode == 'entity_id') {
-                    $attributes[CustomerDataObject::ID] = $value;
+                    $attributes[\Magento\Customer\Model\Data\Customer::ID] = $value;
                 } else {
                     $attributes[$attrCode] = $value;
                 }

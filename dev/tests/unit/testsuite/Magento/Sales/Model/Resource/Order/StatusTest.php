@@ -72,7 +72,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
 
         $this->resourceMock = $this->getMock(
             '\Magento\Framework\App\Resource',
-            ['getTableName', 'getConnection'],
+            [],
             [],
             '',
             false

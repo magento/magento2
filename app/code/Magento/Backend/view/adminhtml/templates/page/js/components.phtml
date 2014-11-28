@@ -30,19 +30,4 @@
 ?>
 
 <?php /** @var $this \Magento\Framework\View\Element\Js\Components */ ?>
-
-<script type="text/javascript">
-    require([
-        "jquery",
-        "mage/mage"
-    ], function($){
-        'use strict';
-        $.mage.isDevMode(<?php echo $this->isDeveloperMode() ?>);
-
-        /**
-         * Declaration of resources needed for defined components
-         */
-        $.mage.load('loader');
-    });
-</script>
 <?php echo $this->getChildHtml() ?>

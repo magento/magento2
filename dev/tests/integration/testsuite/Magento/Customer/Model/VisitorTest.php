@@ -114,13 +114,13 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
      * Authenticate customer and return its DTO
      * @param string $username
      * @param string $password
-     * @return \Magento\Customer\Service\V1\Data\Customer
+     * @return \Magento\Customer\Api\Data\CustomerInterface
      */
     protected function _loginCustomer($username, $password)
     {
-        /** @var \Magento\Customer\Service\V1\CustomerAccountService $service */
-        $service = Bootstrap::getObjectManager()->create('Magento\Customer\Service\V1\CustomerAccountServiceInterface');
-        return $service->authenticate($username, $password);
+        /** @var \Magento\Customer\Api\AccountManagementInterface $accountManagement */
+        $accountManagement = Bootstrap::getObjectManager()->create('Magento\Customer\Api\AccountManagementInterface');
+        return $accountManagement->authenticate($username, $password);
     }
 
     /**

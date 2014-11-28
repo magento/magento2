@@ -24,10 +24,7 @@
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab\View;
 
 use Magento\Customer\Controller\RegistryConstants;
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
-use Magento\Customer\Service\V1\CustomerGroupServiceInterface;
-use Magento\Customer\Service\V1\Data\Customer;
-use Magento\Customer\Service\V1\Data\CustomerBuilder;
+use Magento\Customer\Api\Data\CustomerDataBuilder;
 
 /**
  * Magento\Customer\Block\Adminhtml\Edit\Tab\View
@@ -43,20 +40,23 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Framework\Registry */
     private $_coreRegistry;
 
-    /** @var  CustomerBuilder */
+    /** @var  CustomerDataBuilder */
     private $_customerBuilder;
 
-    /** @var  CustomerAccountServiceInterface */
-    private $_customerAccountService;
+    /** @var  \Magento\Customer\Api\CustomerRepositoryInterface */
+    private $_customerRepository;
 
-    /** @var  CustomerGroupServiceInterface */
-    private $_groupService;
+    /** @var  \Magento\Customer\Api\GroupRepositoryInterface */
+    private $_groupRepository;
 
     /** @var \Magento\Framework\StoreManagerInterface */
     private $_storeManager;
 
     /** @var \Magento\Framework\ObjectManagerInterface */
     private $_objectManager;
+
+    /** @var \Magento\Framework\Reflection\DataObjectProcessor */
+    private $_dataObjectProcessor;
 
     /** @var  PersonalInfo */
     private $_block;
@@ -76,12 +76,14 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
             array('storeManager' => $this->_storeManager)
         );
 
-        $this->_customerBuilder = $this->_objectManager->get('Magento\Customer\Service\V1\Data\CustomerBuilder');
+        $this->_customerBuilder = $this->_objectManager->get('Magento\Customer\Api\Data\CustomerDataBuilder');
         $this->_coreRegistry = $this->_objectManager->get('Magento\Framework\Registry');
-        $this->_customerAccountService = $this->_objectManager->get(
-            'Magento\Customer\Service\V1\CustomerAccountServiceInterface'
+        $this->_customerRepository = $this->_objectManager->get(
+            'Magento\Customer\Api\CustomerRepositoryInterface'
         );
-        $this->_groupService = $this->_objectManager->get('Magento\Customer\Service\V1\CustomerGroupServiceInterface');
+        $this->_dataObjectProcessor = $this->_objectManager->get('Magento\Framework\Reflection\DataObjectProcessor');
+
+        $this->_groupRepository = $this->_objectManager->get('Magento\Customer\Api\GroupRepositoryInterface');
         $this->dateTime = $this->_objectManager->get('\Magento\Framework\Stdlib\DateTime');
 
         $this->_block = $this->_objectManager->get(
@@ -91,7 +93,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
             '',
             array(
                 'context' => $this->_context,
-                'groupService' => $this->_groupService,
+                'groupService' => $this->_groupRepository,
                 'registry' => $this->_coreRegistry
             )
         );
@@ -100,6 +102,10 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
     public function tearDown()
     {
         $this->_coreRegistry->unregister(RegistryConstants::CURRENT_CUSTOMER_ID);
+        /** @var \Magento\Customer\Model\CustomerRegistry $customerRegistry */
+        $customerRegistry = $this->_objectManager->get('Magento\Customer\Model\CustomerRegistry');
+        //Cleanup customer from registry
+        $customerRegistry->remove(1);
     }
 
     /**
@@ -120,7 +126,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetGroupName()
     {
-        $groupName = $this->_groupService->getGroup($this->_loadCustomer()->getGroupId())->getCode();
+        $groupName = $this->_groupRepository->getById($this->_loadCustomer()->getGroupId())->getCode();
         $this->assertEquals($groupName, $this->_block->getGroupName());
     }
 
@@ -195,7 +201,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
     public function testIsConfirmedStatusConfirmationIsNotRequired()
     {
         $password = 'password';
-        /** @var Customer $customer */
+        /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
         $customer = $this->_customerBuilder->setConfirmation(
             true
         )->setFirstname(
@@ -205,11 +211,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
         )->setEmail(
             'email@email.com'
         )->create();
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\Customer\Service\V1\Data\CustomerDetailsBuilder $customerDetailsBuilder */
-        $customerDetailsBuilder = $objectManager->create('Magento\Customer\Service\V1\Data\CustomerDetailsBuilder');
-        $customerDetails = $customerDetailsBuilder->setCustomer($customer)->create();
-        $customer = $this->_customerAccountService->createCustomer($customerDetails, $password);
+        $customer = $this->_customerRepository->save($customer, $password);
         $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, $customer->getId());
         $this->assertEquals('Confirmation Not Required', $this->_block->getIsConfirmedStatus());
     }
@@ -246,11 +248,11 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return Customer
+     * @return \Magento\Customer\Api\Data\CustomerInterface
      */
     private function _createCustomer()
     {
-        /** @var \Magento\Customer\Service\V1\Data\Customer $customer */
+        /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
         $customer = $this->_customerBuilder->setFirstname(
             'firstname'
         )->setLastname(
@@ -258,18 +260,20 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
         )->setEmail(
             'email@email.com'
         )->create();
-        $data = array('account' => $customer->__toArray());
+        $data = array('account' => $this->_dataObjectProcessor
+            ->buildOutputDataArray($customer, 'Magento\Customer\Api\Data\CustomerInterface'));
         $this->_context->getBackendSession()->setCustomerData($data);
         return $customer;
     }
 
     /**
-     * @return Customer
+     * @return \Magento\Customer\Api\Data\CustomerInterface
      */
     private function _loadCustomer()
     {
-        $customer = $this->_customerAccountService->getCustomer(1);
-        $data = array('account' => $customer->__toArray());
+        $customer = $this->_customerRepository->getById(1);
+        $data = array('account' => $this->_dataObjectProcessor
+            ->buildOutputDataArray($customer, 'Magento\Customer\Api\Data\CustomerInterface'));
         $this->_context->getBackendSession()->setCustomerData($data);
         $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, $customer->getId());
         return $customer;

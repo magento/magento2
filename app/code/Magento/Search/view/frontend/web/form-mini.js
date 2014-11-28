@@ -221,5 +221,6 @@ define([
             }
         }
     });
-
+    
+    return $.mage.quickSearch;
 });

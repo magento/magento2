@@ -301,4 +301,16 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             'negative' => array(false, array('super_group' => array()))
         );
     }
+
+    public function testGetChildrenMsrpWhenNoChildrenWithMsrp()
+    {
+        $key = '_cache_instance_associated_products';
+        $cachedData = [];
+
+        $this->product->expects($this->once())->method('hasData')->with($key)->will($this->returnValue(true));
+        $this->product->expects($this->never())->method('setData');
+        $this->product->expects($this->once())->method('getData')->with($key)->will($this->returnValue([]));
+
+        $this->assertEquals(0, $this->_model->getChildrenMsrp($this->product));
+    }
 }

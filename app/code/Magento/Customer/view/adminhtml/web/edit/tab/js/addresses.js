@@ -528,5 +528,10 @@ define([
         }
     });
 
-
+    return {
+        addressTabs:            $.mage.addressTabs,
+        addressCountry:         $.mage.addressCountry,
+        observableInputs:       $.mage.observableInputs,
+        dataItemDeleteButton:   $.mage.dataItemDeleteButton
+    };
 });

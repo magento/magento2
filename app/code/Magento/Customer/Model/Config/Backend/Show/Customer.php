@@ -90,9 +90,9 @@ class Customer extends \Magento\Framework\App\Config\Value
      *
      * @return $this
      */
-    protected function _afterSave()
+    public function afterSave()
     {
-        $result = parent::_afterSave();
+        $result = parent::afterSave();
 
         $valueConfig = array(
             '' => array('is_required' => 0, 'is_visible' => 0),
@@ -134,9 +134,9 @@ class Customer extends \Magento\Framework\App\Config\Value
      *
      * @return \Magento\Framework\Model\AbstractModel
      */
-    protected function _afterDelete()
+    public function afterDelete()
     {
-        $result = parent::_afterDelete();
+        $result = parent::afterDelete();
 
         if ($this->getScope() == 'websites') {
             $website = $this->storeManager->getWebsite($this->getScopeCode());

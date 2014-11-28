@@ -96,12 +96,12 @@ class Robots extends \Magento\Framework\App\Config\Value
      *
      * @return $this
      */
-    protected function _afterSave()
+    public function afterSave()
     {
         if ($this->getValue()) {
             $this->_directory->writeFile($this->_file, $this->getValue());
         }
 
-        return parent::_afterSave();
+        return parent::afterSave();
     }
 }

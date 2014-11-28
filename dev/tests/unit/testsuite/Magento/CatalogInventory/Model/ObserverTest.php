@@ -110,8 +110,21 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->priceIndexer = $this->getMock(
-            '\Magento\Catalog\Model\Indexer\Product\Price\Processor',
+        $this->stockItemRegistry = $this->getMockBuilder('Magento\CatalogInventory\Model\Stock\ItemRegistry')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->stockStatus = $this->getMockBuilder('Magento\CatalogInventory\Model\Stock\Status')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->stockFactory = $this->getMockBuilder('Magento\CatalogInventory\Model\StockFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
+        $this->catalogInventoryData = $this->getMock('Magento\CatalogInventory\Helper\Data', [], [], '', false);
+        $this->stock = $this->getMock('Magento\CatalogInventory\Model\Stock', [], [], '', false);
+        $this->stockIndexProcessor = $this->getMock(
+            '\Magento\Catalog\Model\Indexer\Product\Stock\Processor',
             ['reindexList', 'reindexRow'],
             [],
             '',
@@ -190,6 +203,9 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->priceIndexer = $this->getMockBuilder('Magento\Catalog\Model\Indexer\Product\Price\Processor')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->observer = $objectManagerHelper->getObject(

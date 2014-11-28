@@ -39,7 +39,7 @@ class Delete extends \Magento\Customer\Controller\Adminhtml\Index
         $customerId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
         if (!empty($customerId)) {
             try {
-                $this->_customerAccountService->deleteCustomer($customerId);
+                $this->_customerRepository->deleteById($customerId);
                 $this->messageManager->addSuccess(__('You deleted the customer.'));
             } catch (\Exception $exception) {
                 $this->messageManager->addError($exception->getMessage());

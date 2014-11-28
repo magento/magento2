@@ -60,4 +60,6 @@
             window.resizeTo(width + this.options.widthOffset, img.height() + this.options.heightOffset);
         }
     });
+    
+    return $.mage.gallery;
 }));

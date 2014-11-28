@@ -303,7 +303,7 @@ bOption = new Bundle.Option(optionTemplate);
 function togglePriceType() {
     bOption['priceType' + ($('price_type').value == '1' ? 'Fixed' : 'Dynamic')]();
 }
-document.observe("dom:loaded", function() {
+jQuery(window).load(function() {
     togglePriceType();
     Event.observe('price_type', 'change', togglePriceType);
 });

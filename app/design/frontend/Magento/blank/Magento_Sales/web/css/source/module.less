@@ -65,11 +65,6 @@
         tbody + tbody {
             border-top: @border-width-base solid @border-color-base;
         }
-        .columns & {
-            tfoot {
-                &:extend(.abstract-account-summary all);
-            }
-        }
     }
     .item-options {
         dt {
@@ -223,56 +218,12 @@
     .account {
         .order-details-items {
             .table-order-items {
-                tr {
-                    display: block;
-                }
-                tbody,
-                tfoot {
-                    > tr > td {
-                        border: none;
-                    }
-                }
-                .col {
-                    &.price,
-                    &.subtotal {
-                        .price-including-tax,
-                        .price-excluding-tax,
-                        .weee {
-                            display: inline-block;
-                        }
-                    }
-                    &.name,
-                    &.sku,
-                    &.qty,
-                    &.price,
-                    &.subtotal {
-                        &:before {
-                            content: attr(data-th) ":";
-                            vertical-align: top;
-                        }
-                    }
-                }
-                .options-label,
-                .col.options:before  {
-                    display: none;
-                }
-                .options-label + .item-options-container,
-                .item-options-container + .item-options-container {
-                    &:before {
-                        content: attr(data-th) ":";
-                        display: block;
-                        font-weight: bold;
-                    }
-                    .col {
-                        .font-size(12);
-                        padding: 0;
-                        &:first-child {
-                            padding-top: 3px;
-                        }
-                        &:last-child {
-                            padding-bottom: 20px;
-                        }
-                    }
+                .product-item-name,
+                .price-including-tax,
+                .price-excluding-tax,
+                .items-qty {
+                    display: inline-block;
+                    vertical-align: top;
                 }
             }
             .action.print {
@@ -296,14 +247,21 @@
 //--------------------------------------
 .responsive(@break) when (@break = @screen-m) {
     .table-order-items {
-        .col {
-            &.subtotal {
-                text-align: right;
-            }
-        }
-        .mark,
+        .subtotal,
         .amount {
             text-align: right;
+        }
+        &.creditmemo {
+            .col {
+                &.qty,
+                &.discount,
+                &.subtotal {
+                    text-align: center;
+                }
+                &.total {
+                    text-align: right;
+                }
+            }
         }
     }
 

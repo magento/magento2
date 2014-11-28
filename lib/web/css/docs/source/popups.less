@@ -88,61 +88,60 @@
 }
 
 //  #Popup variables
-//
 // <pre>
 //    <table>
 //      <tr>
 //        <th class="vars_head">Mixin variable</th>
 //        <th class="vars_head">Default value</th>
-//        <th class="vars_head">Allowed values</th>
+//        <th class="vars_head">Allowable values</th>
 //        <th class="vars_head">Comment</th>
 //      </tr>
 //      <tr>
 //        <th>@_popup-width</th>
-//        <td class="vars_value">380px</td>
-//        <td class="vars_value">'' | value</td>
+//        <td class="vars_value">auto</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Popup width</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-height</th>
 //        <td class="vars_value">auto</td>
-//        <td class="vars_value">'' | auto | value</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Popup height</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-padding</th>
 //        <td class="vars_value">22px</td>
-//        <td class="vars_value">&nbsp;</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Inner popup padding</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-background</th>
 //        <td class="vars_value">#fff</td>
-//        <td class="vars_value">&nbsp;</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Popup background</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-border</th>
 //        <td class="vars_value">1px solid #aeaeae</td>
-//        <td class="vars_value">&nbsp;</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Popup border</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-shadow</th>
 //        <td class="vars_value">0 3px 3px rgba(0,0,0,.15)</td>
-//        <td class="vars_value">'' | none | value</td>
+//        <td class="vars_value">'' | false | none | value</td>
 //        <td>Popup shadow</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-fade</th>
 //        <td class="vars_value">opacity 0.3s linear</td>
-//        <td class="vars_value">'' | value</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Popup overlay opacity</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-z-index</th>
 //        <td class="vars_value">1001</td>
-//        <td class="vars_value">&nbsp;</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Popup z-index</td>
 //      </tr>
 //      <tr>
@@ -151,31 +150,31 @@
 //      <tr>
 //        <th>@_popup-position</th>
 //        <td class="vars_value">fixed</td>
-//        <td class="vars_value">&nbsp;</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Popup position</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-position-top</th>
-//        <td class="vars_value">20%</td>
-//        <td class="vars_value">'' | value</td>
+//        <td class="vars_value">0</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Popup top</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-position-right</th>
-//        <td class="vars_value">''</td>
-//        <td class="vars_value">'' | value</td>
+//        <td class="vars_value">0</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Popup right</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-position-bottom</th>
-//        <td class="vars_value">''</td>
-//        <td class="vars_value">'' | value</td>
+//        <td class="vars_value">0</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Popup bottom</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-position-left</th>
-//        <td class="vars_value">50%</td>
-//        <td class="vars_value">'' | value</td>
+//        <td class="vars_value">0</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Popup left</td>
 //      </tr>
 //      <tr>
@@ -184,50 +183,50 @@
 //
 //      <tr>
 //        <th>@_popup-margin-top</th>
-//        <td class="vars_value">''</td>
-//        <td class="vars_value">'' | value</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Popup top margin</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-margin-right</th>
-//        <td class="vars_value">''</td>
-//        <td class="vars_value">'' | value</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Popup right margin</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-margin-bottom</th>
-//        <td class="vars_value">''</td>
-//        <td class="vars_value">'' | value</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Popup bottom margin</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-margin-left</th>
-//        <td class="vars_value">-((@popup-width+(@popup-padding*2))/2)</td>
-//        <td class="vars_value">'' | value</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Popup left margin</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-content-height</th>
 //        <td class="vars_value">auto</td>
-//        <td class="vars_value">'' | auto | value</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Popup content height</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-header-margin</th>
-//        <td class="vars_value">''</td>
-//        <td class="vars_value">&nbsp;</td>
+//        <td class="vars_value">0 0 25px</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Popup header margin</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-content-margin</th>
-//        <td class="vars_value">''</td>
-//        <td class="vars_value">&nbsp;</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Popup content margin</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-footer-margin</th>
-//        <td class="vars_value">''</td>
-//        <td class="vars_value">&nbsp;</td>
+//        <td class="vars_value">false</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Popup footer margin</td>
 //      </tr>
 //      <tr>
@@ -260,31 +259,31 @@
 //      <tr>
 //        <th>@_popup-button-close-position</th>
 //        <td class="vars_value">absolute</td>
-//        <td class="vars_value">&nbsp;</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Popup button close position</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-button-close-position-top</th>
 //        <td class="vars_value">10px</td>
-//        <td class="vars_value">'' | value</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Popup button close top position</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-button-close-position-right</th>
 //        <td class="vars_value">10px</td>
-//        <td class="vars_value">'' | value</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Popup button close right position</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-button-close-position-bottom</th>
 //        <td class="vars_value">''</td>
-//        <td class="vars_value">'' | value</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Popup button close bottom position</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-button-close-position-left</th>
 //        <td class="vars_value">''</td>
-//        <td class="vars_value">'' | value</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Popup button close left position</td>
 //      </tr>
 //      <tr>
@@ -293,61 +292,61 @@
 //      <tr>
 //        <th>@_popup-icon-font-content</th>
 //        <td class="vars_value">@icon-remove</td>
-//        <td class="vars_value">&nbsp;</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Popup icon code</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-icon-font</th>
 //        <td class="vars_value">@button-icon-font</td>
-//        <td class="vars_value">&nbsp;</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Popup icon font</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-icon-font-size</th>
 //        <td class="vars_value">@button-icon-font-size</td>
-//        <td class="vars_value">&nbsp;</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Popup icon font size</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-icon-font-line-height</th>
 //        <td class="vars_value">@button-icon-font-line-height</td>
-//        <td class="vars_value">&nbsp;</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Popup icon line height</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-icon-font-color</th>
 //        <td class="vars_value">@button-icon-font-color</td>
-//        <td class="vars_value">&nbsp;</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Popup icon color</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-icon-font-color-hover</th>
 //        <td class="vars_value">@button-icon-font-color-hover</td>
-//        <td class="vars_value">&nbsp;</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Hovered popup icon color</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-icon-font-color-active</th>
 //        <td class="vars_value">@popup-icon-font-color-active</td>
-//        <td class="vars_value">&nbsp;</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Active popup icon color</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-icon-font-margin</th>
 //        <td class="vars_value">@button-icon-font-margin</td>
-//        <td class="vars_value">&nbsp;</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Popup icon  margin</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-icon-font-vertical-align</th>
 //        <td class="vars_value">@button-icon-font-vertical-align</td>
-//        <td class="vars_value">&nbsp;</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Popup icon vertical align</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-icon-font-position</th>
 //        <td class="vars_value">@button-icon-font-position</td>
-//        <td class="vars_value">&nbsp;</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Popup icon position</td>
 //      </tr>
 //      <tr>
@@ -380,85 +379,85 @@
 //      <tr>
 //        <th>@_popup-actions-toolbar-margin</th>
 //        <td class="vars_value">@actions-toolbar-margin</td>
-//        <td class="vars_value">'' | value</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Actions toolbar margin</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-actions-toolbar-padding</th>
 //        <td class="vars_value">@actions-toolbar-padding</td>
-//        <td class="vars_value">'' | value</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Actions toolbar padding</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-actions-toolbar-actions-margin</th>
 //        <td class="vars_value">@actions-toolbar-actions-margin</td>
-//        <td class="vars_value">'' | value</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Actions toolbar actions margin</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-actions-toolbar-primary-actions-margin</th>
 //        <td class="vars_value">@actions-toolbar-primary-actions-margin</td>
-//        <td class="vars_value">'' | value</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Actions toolbar primary actions margin</td>
 //      </tr>
 //      <tr>
 //        <th nowrap="nowrap">@_popup-actions-toolbar-secondary-actions-margin</th>
 //        <td class="vars_value"nowrap="nowrap">@actions-toolbar-secondary-actions-margin</td>
-//        <td class="vars_value">'' | value</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Actions toolbar secondary actions margin</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-actions-toolbar-actions-links-margin-top</th>
 //        <td class="vars_value">@actions-toolbar-actions-links-margin-top</td>
-//        <td class="vars_value">'' | value</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Actions toolbar links top margin</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-actions-toolbar-primary-actions-links-margin-top</th>
 //        <td class="vars_value">@actions-toolbar-primary-actions-links-margin-top</td>
-//        <td class="vars_value">'' | value</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Actions toolbar primary actions links top margin</td>
 //      </tr>
 //      <tr>
 //        <th>@_popup-actions-toolbar-secondary-links-margin-top</th>
 //        <td class="vars_value">@actions-toolbar-secondary-actions-links-margin-top</td>
-//        <td class="vars_value">'' | value</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Actions toolbar secondary links top margin</td>
 //      </tr>
 //    </table>
 // </pre>
 //
 //  # Window overlay mixin variables
-//   <pre>
+//  <pre>
 //    <table>
 //      <tr>
 //        <th class="vars_head">Mixin variable</th>
 //        <th class="vars_head">Default value</th>
-//        <th class="vars_head">Allowed values</th>
+//        <th class="vars_head">Allowable values</th>
 //        <th class="vars_head">Comment</th>
 //      </tr>
 //      <tr>
 //        <th>@_overlay-background</th>
 //        <td class="vars_value">#000</td>
-//        <td class="vars_value">'' | value</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Overlay background color</td>
 //      </tr>
 //      <tr>
 //        <th>@_overlay-opacity</th>
 //        <td class="vars_value">0.5</td>
-//        <td class="vars_value">'' | value</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Overlay opacity</td>
 //      </tr>
 //      <tr>
 //        <th>@_overlay-opacity-old</th>
 //        <td class="vars_value">50</td>
-//        <td class="vars_value">'' | value</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Overlay opacity for old browsers</td>
 //      </tr>
 //      <tr>
 //        <th>@_overlay-fade</th>
 //        <td class="vars_value">opacity 0.15s linear</td>
-//        <td class="vars_value">'' | value</td>
+//        <td class="vars_value">'' | false | value</td>
 //        <td>Overlay fade</td>
 //      </tr>
 //      <tr>
@@ -729,9 +728,9 @@
 .window.popup.popup-example-8 {
     .popup(
         @_popup-icon-font-content: @icon-arrow-up,
-        @_popup-icon-font-color: red,
-        @_popup-icon-font-color-hover: green,
-        @_popup-icon-font-color-active: blue,
+        @_popup-icon-font-color: #f00,
+        @_popup-icon-font-color-hover: #090,
+        @_popup-icon-font-color-active: #00f,
         @_popup-icon-font-size: 30px,
         @_popup-icon-font-vertical-align: middle,
         @_popup-icon-font-text-hide: false

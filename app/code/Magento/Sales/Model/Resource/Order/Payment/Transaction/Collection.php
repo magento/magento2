@@ -23,12 +23,15 @@
  */
 namespace Magento\Sales\Model\Resource\Order\Payment\Transaction;
 
+use Magento\Sales\Model\Resource\Order\Collection\AbstractCollection;
+use Magento\Sales\Api\Data\TransactionSearchResultInterface;
+
 /**
  * Payment transactions collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\Sales\Model\Resource\Order\Collection\AbstractCollection
+class Collection extends AbstractCollection implements TransactionSearchResultInterface
 {
     /**
      * Order ID filter

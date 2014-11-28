@@ -89,7 +89,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
      * @param \Magento\Store\Model\StoresConfig $storesConfig
      * @param GroupDataBuilder $groupBuilder
-     * @param \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor
+     * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
      * @param \Magento\Tax\Model\ClassModelFactory $classModelFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
@@ -169,7 +169,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel
     public function usesAsDefault()
     {
         $data = $this->_storesConfig->getStoresConfigByPath(
-            \Magento\Customer\Service\V1\CustomerGroupServiceInterface::XML_PATH_DEFAULT_ID
+            GroupManagement::XML_PATH_DEFAULT_ID
         );
         if (in_array($this->getId(), $data)) {
             return true;
@@ -182,10 +182,10 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel
      *
      * @return $this
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
         $this->_prepareData();
-        return parent::_beforeSave();
+        return parent::beforeSave();
     }
 
     /**

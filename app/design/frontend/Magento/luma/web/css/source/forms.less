@@ -1,0 +1,161 @@
+// /**
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+@legend-border-bottom: 1px solid #c5c5c5;
+@form-field-vertical-indent-desktop: 29px;
+
+.fieldset {
+    .form-fieldset();
+    &:last-child {
+        margin-bottom: 0;
+    }
+    > .field,
+    > .fields > .field {
+        .form-field();
+        &.no-label {
+            > .label {
+                .visually-hidden();
+            }
+        }
+        &.choice {
+            .label {
+                font-weight: normal;
+                margin: 0;
+                display: inline;
+            }
+        }
+        .label {
+            .column:not(.main) & {
+                font-weight: normal;
+            }
+        }
+        .field.choice {
+            margin-bottom: @indent-s-base;
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+}
+.legend + .fieldset,
+.legend + div {
+    clear: both;
+}
+.legend {
+    span {
+        margin-right: @indent-xs-base;
+    }
+}
+fieldset.field {
+    border: 0;
+    padding: 0;
+}
+.field.date {
+    .time-picker {
+        white-space: nowrap;
+        margin-top: @indent-s-base;
+        display: inline-block;
+    }
+}
+
+.select-styling() {
+    .css(appearance, none, 1);
+    appearance: none;
+    border: 1px solid @border-color-base;
+    background: transparent;
+    height: 32px;
+    .url("images/select-bg.svg");
+    background-color: @select-background;
+    background-image: url("@{url}");
+    background-repeat: no-repeat;
+    background-position: 100% 45%;
+    background-size: 30px 60px;
+    padding-right: 25px;
+    text-indent: 0.01em;
+    text-overflow: '';
+    &::-ms-expand{
+        display:none;
+    }
+    .lt-ie10 & {
+        background-image: none;
+        padding-right: 4px;
+    }
+}
+select {
+    .select-styling();
+}
+@-moz-document url-prefix() {
+    select {
+        background-image: none;
+    }
+}
+
+div.mage-error[generated] {
+    margin-top: 7px;
+}
+
+// TEMP
+
+.field .tooltip {
+    .tooltip(right);
+    .tooltip-content {
+        min-width: 200px;
+        white-space: normal;
+    }
+}
+
+input:focus ~ .tooltip .tooltip-content,
+select:focus ~ .tooltip .tooltip-content {
+    display: block;
+}
+
+//
+//    Sidebar forms
+//--------------------------------------
+.sidebar {
+    .fieldset {
+        margin: 0;
+        > .field:not(.choice) >,
+        .fields > .field {
+            margin: 0 0 @form-field-vertical-indent;
+            .label {
+                padding: 0 0 5px;
+                text-align: left;
+                width: 100%
+            }
+            .control {
+                width: 100%;
+            }
+        }
+    }
+}
+
+//
+//    Desktop
+//--------------------------------------
+.responsive(@break) when (@break = @screen-m) {
+    .legend {
+        .css(border-bottom, @legend-border-bottom);
+    }
+}

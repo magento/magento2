@@ -144,7 +144,7 @@ class Request extends \Magento\Framework\Object
             )->setXCompany(
                 strval($billing->getCompany())
             )->setXAddress(
-                strval($billing->getStreet(1))
+                strval($billing->getStreetLine(1))
             )->setXCity(
                 strval($billing->getCity())
             )->setXState(
@@ -181,7 +181,7 @@ class Request extends \Magento\Framework\Object
             )->setXShipToCompany(
                 strval($shipping->getCompany())
             )->setXShipToAddress(
-                strval($shipping->getStreet(1))
+                strval($shipping->getStreetLine(1))
             )->setXShipToCity(
                 strval($shipping->getCity())
             )->setXShipToState(

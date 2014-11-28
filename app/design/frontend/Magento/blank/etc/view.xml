@@ -45,14 +45,14 @@
         <var name="customer_account_product_review_page:height">285</var>
 
         <var name="category_page_list:type">small_image</var>
-        <var name="category_page_list:width">270</var>
+        <var name="category_page_list:width">250</var>
         <var name="category_page_list:ratio">1</var>
-        <var name="category_page_list:height">270</var>
+        <var name="category_page_list:height">310</var>
 
         <var name="category_page_grid:type">small_image</var>
-        <var name="category_page_grid:width">220</var>
+        <var name="category_page_grid:width">250</var>
         <var name="category_page_grid:ratio">1</var>
-        <var name="category_page_grid:height">220</var>
+        <var name="category_page_grid:height">310</var>
 
         <var name="product_comparison_list:type">small_image</var>
         <var name="product_comparison_list:width">140</var>
@@ -95,9 +95,9 @@
         <var name="new_products_content_widget_list:height">270</var>
 
         <var name="new_products_content_widget_grid:type">small_image</var>
-        <var name="new_products_content_widget_grid:width">220</var>
+        <var name="new_products_content_widget_grid:width">250</var>
         <var name="new_products_content_widget_grid:ratio">1</var>
-        <var name="new_products_content_widget_grid:height">220</var>
+        <var name="new_products_content_widget_grid:height">310</var>
 
         <var name="recently_compared_products_images_names_widget:type">thumbnail</var>
         <var name="recently_compared_products_images_names_widget:width">75</var>
@@ -125,9 +125,9 @@
         <var name="bundled_product_customization_page:height">140</var>
 
         <var name="recently_compared_products_grid_content_widget:type">small_image</var>
-        <var name="recently_compared_products_grid_content_widget:width">220</var>
+        <var name="recently_compared_products_grid_content_widget:width">250</var>
         <var name="recently_compared_products_grid_content_widget:ratio">1</var>
-        <var name="recently_compared_products_grid_content_widget:height">220</var>
+        <var name="recently_compared_products_grid_content_widget:height">310</var>
 
         <var name="recently_compared_products_list_content_widget:type">small_image</var>
         <var name="recently_compared_products_list_content_widget:width">270</var>
@@ -135,9 +135,9 @@
         <var name="recently_compared_products_list_content_widget:height">207</var>
 
         <var name="recently_viewed_products_grid_content_widget:type">small_image</var>
-        <var name="recently_viewed_products_grid_content_widget:width">220</var>
+        <var name="recently_viewed_products_grid_content_widget:width">250</var>
         <var name="recently_viewed_products_grid_content_widget:ratio">1</var>
-        <var name="recently_viewed_products_grid_content_widget:height">220</var>
+        <var name="recently_viewed_products_grid_content_widget:height">310</var>
 
         <var name="recently_viewed_products_list_content_widget:type">small_image</var>
         <var name="recently_viewed_products_list_content_widget:width">270</var>
@@ -150,9 +150,9 @@
         <var name="customer_shared_wishlist:height">113</var>
 
         <var name="wishlist_thumbnail:type">small_image</var>
-        <var name="wishlist_thumbnail:width">200</var>
+        <var name="wishlist_thumbnail:width">250</var>
         <var name="wishlist_thumbnail:ratio">1</var>
-        <var name="wishlist_thumbnail:height">200</var>
+        <var name="wishlist_thumbnail:height">310</var>
 
         <var name="wishlist_sidebar_block:type">thumbnail</var>
         <var name="wishlist_sidebar_block:width">75</var>

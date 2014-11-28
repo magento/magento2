@@ -57,7 +57,7 @@
                     <td data-th="<?php echo $this->escapeHtml(__('Review')) ?>" class="col description">
                         <?php echo $this->helper('Magento\Review\Helper\Data')->getDetailHtml($_review->getDetail()) ?>
                     </td>
-                    <td data-th="" class="col actions">
+                    <td data-th="<?php echo $this->escapeHtml(__('Actions')) ?>" class="col actions">
                         <a href="<?php echo $this->getReviewLink() ?>id/<?php echo $_review->getReviewId() ?>" class="action more">
                             <span><?php echo __('View Details') ?></span>
                         </a>

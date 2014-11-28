@@ -23,11 +23,13 @@
  */
 namespace Magento\Customer\Block\Form;
 
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
-use Magento\Customer\Service\V1\CustomerAddressServiceInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\AccountManagementInterface;
 
 /**
  * Customer edit form block
+ *
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Edit extends \Magento\Customer\Block\Account\Dashboard
 {
@@ -37,24 +39,24 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
-     * @param CustomerAccountServiceInterface $customerAccountService
-     * @param CustomerAddressServiceInterface $addressService
+     * @param CustomerRepositoryInterface $customerRepository
+     * @param AccountManagementInterface $customerAccountManagement
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
-        CustomerAccountServiceInterface $customerAccountService,
-        CustomerAddressServiceInterface $addressService,
+        CustomerRepositoryInterface $customerRepository,
+        AccountManagementInterface $customerAccountManagement,
         array $data = array()
     ) {
         parent::__construct(
             $context,
             $customerSession,
             $subscriberFactory,
-            $customerAccountService,
-            $addressService,
+            $customerRepository,
+            $customerAccountManagement,
             $data
         );
         $this->_isScopePrivate = true;
@@ -69,7 +71,7 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
     {
         $data = $this->getData('form_data');
         if (is_null($data)) {
-            $formData = $this->_customerSession->getCustomerFormData(true);
+            $formData = $this->customerSession->getCustomerFormData(true);
             $data = array();
             if ($formData) {
                 $data['data'] = $formData;
@@ -108,6 +110,6 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
      */
     public function getChangePassword()
     {
-        return $this->_customerSession->getChangePassword();
+        return $this->customerSession->getChangePassword();
     }
 }

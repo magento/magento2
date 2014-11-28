@@ -50,4 +50,5 @@ define([
         }
     });
 
+    return $.mage.ordersReturns;
 });

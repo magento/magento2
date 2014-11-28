@@ -68,7 +68,7 @@ class Street extends \Magento\Framework\App\Config\Value
      *
      * @return $this
      */
-    protected function _afterSave()
+    public function afterSave()
     {
         $attribute = $this->_eavConfig->getAttribute('customer_address', 'street');
         $value = $this->getValue();
@@ -95,9 +95,9 @@ class Street extends \Magento\Framework\App\Config\Value
      *
      * @return \Magento\Framework\Model\AbstractModel
      */
-    protected function _afterDelete()
+    public function afterDelete()
     {
-        $result = parent::_afterDelete();
+        $result = parent::afterDelete();
 
         if ($this->getScope() == \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES) {
             $attribute = $this->_eavConfig->getAttribute('customer_address', 'street');

@@ -602,7 +602,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
      * @throws \Magento\Framework\Mail\Exception
      * @return $this
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
         $code = $this->getTemplateCode();
         if (empty($code)) {
@@ -611,7 +611,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
         if ($this->_getResource()->checkCodeUsage($this)) {
             throw new \Magento\Framework\Mail\Exception(__('Duplicate Of Template Name'));
         }
-        return parent::_beforeSave();
+        return parent::beforeSave();
     }
 
     /**

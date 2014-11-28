@@ -60,18 +60,28 @@ class Observer
     protected $_customerVat;
 
     /**
+     * Group Management
+     *
+     * @var \Magento\Customer\Api\GroupManagementInterface
+     */
+    protected $_groupManagement;
+
+    /**
      * @param \Magento\Customer\Model\Vat $customerVat
      * @param \Magento\Customer\Helper\Address $customerAddress
      * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      */
     public function __construct(
         \Magento\Customer\Model\Vat $customerVat,
         \Magento\Customer\Helper\Address $customerAddress,
-        \Magento\Framework\Registry $coreRegistry
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\Customer\Api\GroupManagementInterface $groupManagement
     ) {
         $this->_customerVat = $customerVat;
         $this->_customerAddress = $customerAddress;
         $this->_coreRegistry = $coreRegistry;
+        $this->_groupManagement = $groupManagement;
     }
 
     /**
@@ -184,7 +194,7 @@ class Observer
                 $customerAddress->getCountry()
             )
             ) {
-                $defaultGroupId = $this->_customerVat->getDefaultCustomerGroupId($customer->getStore());
+                $defaultGroupId = $this->_groupManagement->getDefaultGroup($customer->getStore())->getId();
 
                 if (!$customer->getDisableAutoGroupChange() && $customer->getGroupId() != $defaultGroupId) {
                     $customer->setGroupId($defaultGroupId);

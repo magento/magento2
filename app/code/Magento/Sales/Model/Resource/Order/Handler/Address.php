@@ -73,8 +73,10 @@ class Address
      */
     public function process(Order $order)
     {
-        if (null !== $order->getAddressesCollection()) {
-            $order->getAddressesCollection()->save();
+        if (null !== $order->getAddresses()) {
+            foreach ($order->getAddresses() as $address) {
+                $address->save();
+            }
             $billingAddress = $order->getBillingAddress();
             $attributesForSave = [];
             if ($billingAddress && $order->getBillingAddressId() != $billingAddress->getId()) {

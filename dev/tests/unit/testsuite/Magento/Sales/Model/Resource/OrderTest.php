@@ -110,7 +110,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         $this->attributeMock = $this->getMock('Magento\Sales\Model\Resource\Attribute', [], [], '', false);
         $this->addressHandlerMock = $this->getMock(
             'Magento\Sales\Model\Resource\Order\Handler\Address',
-            [],
+            ['removeEmptyAddresses'],
             [],
             '',
             false
@@ -120,11 +120,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         $this->gridAggregatorMock = $this->getMock('Magento\Sales\Model\Resource\Order\Grid', [], [], '', false);
         $this->orderMock = $this->getMock(
             'Magento\Sales\Model\Order',
-            [
-                '__wakeup', 'getId', 'getStore', 'getGroup', 'getName', 'setStoreName', 'setTotalItemCount', 'setData',
-                'getCustomerId', 'getCustomer', 'setCustomerId', 'getItemsCollection', 'getPaymentsCollection',
-                'getStatusHistoryCollection', 'getRelatedObjects', 'save'
-            ],
+            [],
             [],
             '',
             false
@@ -196,20 +192,10 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             ->method('update');
         $this->adapterMock->expects($this->any())
             ->method('lastInsertId');
-        $this->addressHandlerMock->expects($this->once())
-            ->method('removeEmptyAddresses')
-            ->with($this->equalTo($this->orderMock))
-            ->will($this->returnSelf());
-        $this->stateHandlerMock->expects($this->once())
-            ->method('check')
-            ->with($this->equalTo($this->orderMock))
-            ->will($this->returnSelf());
         $this->orderMock->expects($this->any())
             ->method('getId')
             ->will($this->returnValue(1));
-        $this->orderMock->expects($this->once())
-            ->method('getRelatedObjects')
-            ->willReturn([]);
+        $this->orderMock->expects($this->once())->method('hasDataChanges')->will($this->returnValue(true));
         $this->resource->save($this->orderMock);
     }
 }

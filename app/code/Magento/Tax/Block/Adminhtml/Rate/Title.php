@@ -54,9 +54,9 @@ class Title extends \Magento\Framework\View\Element\Template
     protected $_coreRegistry;
 
     /**
-     * @var \Magento\Tax\Service\V1\TaxRateServiceInterface
+     * @var \Magento\Tax\Api\TaxRateRepositoryInterface
      */
-    protected $_taxRateService;
+    protected $_taxRateRepository;
 
     /**
      * Initialize dependencies
@@ -64,18 +64,18 @@ class Title extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Store\Model\StoreFactory $storeFactory
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Tax\Service\V1\TaxRateServiceInterface $taxRateService
+     * @param \Magento\Tax\Api\TaxRateRepositoryInterface $taxRateRepository
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Store\Model\StoreFactory $storeFactory,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Tax\Service\V1\TaxRateServiceInterface $taxRateService,
+        \Magento\Tax\Api\TaxRateRepositoryInterface $taxRateRepository,
         array $data = array()
     ) {
         $this->_coreRegistry = $coreRegistry;
-        $this->_taxRateService = $taxRateService;
+        $this->_taxRateRepository = $taxRateRepository;
         $this->_storeFactory = $storeFactory;
         parent::__construct($context, $data);
     }
@@ -93,7 +93,7 @@ class Title extends \Magento\Framework\View\Element\Template
             $taxRateId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_TAX_RATE_ID);
             $titles = array();
             if ($taxRateId) {
-                $rate = $this->_taxRateService->getTaxRate($taxRateId);
+                $rate = $this->_taxRateRepository->get($taxRateId);
                 $titles = $rate->getTitles();
             }
 

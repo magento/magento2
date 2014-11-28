@@ -28,6 +28,7 @@ namespace Magento\Framework\Session;
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Session\Config\ConfigInterface;
+use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Magento session configuration
@@ -39,17 +40,17 @@ class Config implements ConfigInterface
     /**
      * Configuration path for session save method
      */
-    const PARAM_SESSION_SAVE_METHOD = 'session_save';
+    const PARAM_SESSION_SAVE_METHOD = 'session/save';
 
     /**
      * Configuration path for session save path
      */
-    const PARAM_SESSION_SAVE_PATH = 'session_save_path';
+    const PARAM_SESSION_SAVE_PATH = 'session/save_path';
 
     /**
      * Configuration path for session cache limiter
      */
-    const PARAM_SESSION_CACHE_LIMITER = 'session_cache_limiter';
+    const PARAM_SESSION_CACHE_LIMITER = 'session/cache_limiter';
 
     /**
      * Configuration path for cookie domain
@@ -124,10 +125,8 @@ class Config implements ConfigInterface
      * @param \Magento\Framework\Stdlib\String $stringHelper
      * @param \Magento\Framework\App\RequestInterface $request
      * @param Filesystem $filesystem
+     * @param DeploymentConfig $deploymentConfig
      * @param string $scopeType
-     * @param string $saveMethod
-     * @param null|string $savePath
-     * @param null|string $cacheLimiter
      * @param string $lifetimePath
      */
     public function __construct(
@@ -136,10 +135,8 @@ class Config implements ConfigInterface
         \Magento\Framework\Stdlib\String $stringHelper,
         \Magento\Framework\App\RequestInterface $request,
         Filesystem $filesystem,
+        DeploymentConfig $deploymentConfig,
         $scopeType,
-        $saveMethod = \Magento\Framework\Session\SaveHandlerInterface::DEFAULT_HANDLER,
-        $savePath = null,
-        $cacheLimiter = null,
         $lifetimePath = self::XML_PATH_COOKIE_LIFETIME
     ) {
         $this->_validatorFactory = $validatorFactory;
@@ -147,6 +144,13 @@ class Config implements ConfigInterface
         $this->_stringHelper = $stringHelper;
         $this->_httpRequest = $request;
         $this->_scopeType = $scopeType;
+
+        $saveMethod = $deploymentConfig->get(
+            self::PARAM_SESSION_SAVE_METHOD,
+            \Magento\Framework\Session\SaveHandlerInterface::DEFAULT_HANDLER
+        );
+        $savePath = $deploymentConfig->get(self::PARAM_SESSION_SAVE_PATH);
+        $cacheLimiter = $deploymentConfig->get(self::PARAM_SESSION_CACHE_LIMITER);
 
         $this->setSaveHandler($saveMethod === 'db' ? 'user' : $saveMethod);
 

@@ -24,7 +24,7 @@
 
 namespace Magento\Bundle\Model\Product;
 
-use Magento\Customer\Service\V1\CustomerGroupServiceInterface;
+use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
@@ -63,6 +63,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param PriceCurrencyInterface $priceCurrency
+     * @param GroupManagementInterface $groupManagement
      * @param \Magento\Catalog\Helper\Data $catalogData
      */
     public function __construct(
@@ -72,10 +73,19 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         PriceCurrencyInterface $priceCurrency,
+        GroupManagementInterface $groupManagement,
         \Magento\Catalog\Helper\Data $catalogData
     ) {
         $this->_catalogData = $catalogData;
-        parent::__construct($ruleFactory, $storeManager, $localeDate, $customerSession, $eventManager, $priceCurrency);
+        parent::__construct(
+            $ruleFactory,
+            $storeManager,
+            $localeDate,
+            $customerSession,
+            $eventManager,
+            $priceCurrency,
+            $groupManagement
+        );
     }
 
     /**
@@ -339,28 +349,6 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
     }
 
     /**
-     * Calculate Minimal price of bundle (counting all required options)
-     *
-     * @param  \Magento\Catalog\Model\Product $product
-     * @return float
-     */
-    public function getMinimalPrice($product)
-    {
-        return $this->getPricesTierPrice($product, 'min');
-    }
-
-    /**
-     * Calculate maximal price of bundle
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return float
-     */
-    public function getMaximalPrice($product)
-    {
-        return $this->getPricesTierPrice($product, 'max');
-    }
-
-    /**
      * Get Options with attached Selections collection
      *
      * @param \Magento\Catalog\Model\Product $product
@@ -556,7 +544,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      */
     public function getTierPrice($qty, $product)
     {
-        $allGroups = CustomerGroupServiceInterface::CUST_GROUP_ALL;
+        $allCustomersGroupId = $this->_groupManagement->getAllCustomersGroup()->getId();
         $prices = $product->getData('tier_price');
 
         if (is_null($prices)) {
@@ -575,7 +563,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
                     'price' => $product->getPrice(),
                     'website_price' => $product->getPrice(),
                     'price_qty' => 1,
-                    'cust_group' => $allGroups
+                    'cust_group' => $allCustomersGroupId
                 )
             );
         }
@@ -584,10 +572,10 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
         if ($qty) {
             $prevQty = 1;
             $prevPrice = 0;
-            $prevGroup = $allGroups;
+            $prevGroup = $allCustomersGroupId;
 
             foreach ($prices as $price) {
-                if ($price['cust_group'] != $custGroup && $price['cust_group'] != $allGroups) {
+                if ($price['cust_group'] != $custGroup && $price['cust_group'] != $allCustomersGroupId) {
                     // tier not for current customer group nor is for all groups
                     continue;
                 }
@@ -599,7 +587,9 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
                     // higher tier qty already found
                     continue;
                 }
-                if ($price['price_qty'] == $prevQty && $prevGroup != $allGroups && $price['cust_group'] == $allGroups
+                if ($price['price_qty'] == $prevQty
+                    && $prevGroup != $allCustomersGroupId
+                    && $price['cust_group'] == $allCustomersGroupId
                 ) {
                     // found tier qty is same as current tier qty but current tier group is ALL_GROUPS
                     continue;
@@ -616,7 +606,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
         } else {
             $qtyCache = array();
             foreach ($prices as $i => $price) {
-                if ($price['cust_group'] != $custGroup && $price['cust_group'] != $allGroups) {
+                if ($price['cust_group'] != $custGroup && $price['cust_group'] != $allCustomersGroupId) {
                     unset($prices[$i]);
                 } else if (isset($qtyCache[$price['price_qty']])) {
                     $j = $qtyCache[$price['price_qty']];

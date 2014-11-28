@@ -37,14 +37,14 @@
                                              "type": "<?php echo $this->getFormId() ?>"}}'>
                 <div class="control captcha-image">
                     <img alt="<?php echo __('Please type the letters below')?>" class="captcha-img" height="<?php echo $this->getImgHeight() ?>" src="<?php echo $captcha->getImgSrc() ?>"/>
-                    <?php if ($captcha->isCaseSensitive()) :?>
-                        <div class="captcha-note note">
-                            <?php echo __('<strong>Attention</strong>: Captcha is case sensitive.') ?>
-                        </div>
-                    <?php endif; ?>
                     <button type="button" class="action reload captcha-reload" title="<?php echo __('Reload captcha') ?>"><span><?php echo __('Reload captcha') ?></span></button>
                 </div>
             </div>
+            <?php if ($captcha->isCaseSensitive()) :?>
+                <div class="captcha-note note">
+                    <?php echo __('<strong>Attention</strong>: Captcha is case sensitive.') ?>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 </div>

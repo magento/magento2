@@ -44,27 +44,19 @@ define([
     /**
      * Creates new instance of a grids' component.
      * @param {Object} data -
-            Data object that was passed while creating component initializer. 
-     * @param {HTMLElement} el -
-            Element upon which compononet is going to be initialized.
+            Data object that was passed while creating component initializer.
      * @param {Object} base -
             Basic configuration.
      */
-    function init(data, el, base) {
+    function init(data, base) {
         var providerName    = base.parent_name,
-            component       = providerName + ':' + base.name,
-            mainComponent   = providerName + ':' + providerName,
-            deps            = [providerName];
+            component       = providerName + ':' + base.name;
 
         if (registry.has(component)) {
             return;
         }
 
-        if (component !== mainComponent) {
-            deps.push(mainComponent);
-        }
-
-        registry.get(deps, function(provider) {
+        registry.get(providerName, function(provider) {
             var config = getConfig(provider, base);
 
             registry.set(component, new data.constr(config));

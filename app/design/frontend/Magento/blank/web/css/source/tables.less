@@ -30,30 +30,51 @@ table {
     .table-caption();
 }
 
-//
-//    Mobile
-//--------------------------------------
-.responsive-smaller(@break) when (@break = @screen-m) {
-    .table-wrapper {
-        .table-overflow();
-        position: relative; // to hide unnecessary horizontal scrollbar in Safari
+.table:not(.cart):not(.totals) {
+    .table-bordered(
+        @_table_type: light,
+        @_table_border-width: @table-border-width
+    );
+    tfoot {
+        > tr:first-child {
+            th,
+            td {
+                border-top: @table-border-width @table-border-style @table-border-color;
+                padding-top: @indent-base;
+            }
+        }
+        .mark {
+            font-weight: @font-weight-base;
+            text-align: right;
+        }
     }
 }
 
 //
-//    Desktop
+//    Mobile
 //--------------------------------------
-.responsive(@break) when (@break = @screen-m) {
+.responsive-smaller(@break) when (@break = @screen-s) {
     .table-wrapper {
-        > table {
-            > thead,
-            > tbody,
-            > tfoot {
-                > tr {
-                    > th,
-                    > td {
-                        //white-space: normal;
+        .table-overflow();
+        position: relative; // to hide unnecessary horizontal scrollbar in Safari
+        .table:not(.cart):not(.totals) {
+            .table-responsive();
+            tbody > tr {
+                > td:first-child {
+                    padding-top: @indent-base;
+                }
+                > td:last-child {
+                    padding-bottom: @indent-base;
+                }
+            }
+            tfoot {
+                > tr:first-child {
+                    td {
+                        padding-top: @indent-base;
                     }
+                }
+                .mark {
+                    display: none;
                 }
             }
         }

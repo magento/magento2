@@ -28,7 +28,6 @@
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
 use Magento\Sales\Model\Quote\Address;
-use Magento\Sales\Model\Quote\Item\AbstractItem;
 use Magento\Tax\Model\Calculation;
 
 class Subtotal extends CommonTaxCollector

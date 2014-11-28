@@ -38,11 +38,7 @@ class Save extends \Magento\Tax\Controller\Adminhtml\Rule
             $postData['calculate_subtotal'] = $this->getRequest()->getParam('calculate_subtotal', 0);
             $taxRule = $this->populateTaxRule($postData);
             try {
-                if ($taxRule->getId()) {
-                    $this->ruleService->updateTaxRule($taxRule);
-                } else {
-                    $taxRule = $this->ruleService->createTaxRule($taxRule);
-                }
+                $taxRule = $this->ruleService->save($taxRule);
 
                 $this->messageManager->addSuccess(__('The tax rule has been saved.'));
 

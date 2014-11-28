@@ -52,7 +52,6 @@ class LockValidatorTest extends \PHPUnit_Framework_TestCase
         $helper = new ObjectManager($this);
 
         $this->resource = $this->getMockBuilder('Magento\Framework\App\Resource')
-            ->setMethods(['getConnection', 'getTableName'])
             ->disableOriginalConstructor()
             ->getMock();
 

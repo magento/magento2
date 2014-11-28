@@ -29,14 +29,14 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
     {
         $customerName = 'John Doe';
 
-        $customer = $this->getMockBuilder('Magento\Customer\Service\V1\Data\Customer')
+        $customer = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
             ->disableOriginalConstructor()
             ->getMock();
 
         $customerServiceMock = $this->getMockBuilder(
-            '\Magento\Customer\Service\V1\CustomerAccountServiceInterface'
+            '\Magento\Customer\Api\CustomerRepositoryInterface'
         )->disableOriginalConstructor()->getMock();
-        $customerServiceMock->expects($this->any())->method('getCustomer')->will($this->returnValue($customer));
+        $customerServiceMock->expects($this->any())->method('getById')->will($this->returnValue($customer));
 
         $viewHelperMock = $this->getMockBuilder(
             'Magento\Customer\Helper\View'

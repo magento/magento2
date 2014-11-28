@@ -29,7 +29,7 @@ class PhtmlTemplateTest extends \PHPUnit_Framework_TestCase
 {
     public function testObsoleteBlockMethods()
     {
-        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * Test usage of protected and private methods and variables in template
@@ -50,7 +50,7 @@ class PhtmlTemplateTest extends \PHPUnit_Framework_TestCase
                     'obsolete in phtml templates. Use only public members.'
                 );
             },
-            \Magento\TestFramework\Utility\Files::init()->getPhtmlFiles()
+            \Magento\Framework\Test\Utility\Files::init()->getPhtmlFiles()
         );
     }
 }

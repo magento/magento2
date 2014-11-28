@@ -58,7 +58,7 @@ class Manage extends \Magento\Framework\App\Action\Action
     protected $_customerDetailsBuilder;
 
     /**
-     * @var \Magento\Customer\Service\V1\Data\CustomerBuilder
+     * @var \Magento\Customer\Api\Data\CustomerDataBuilder
      */
     protected $_customerBuilder;
 
@@ -74,7 +74,7 @@ class Manage extends \Magento\Framework\App\Action\Action
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService
      * @param \Magento\Customer\Service\V1\Data\CustomerDetailsBuilder $customerDetailsBuilder
-     * @param \Magento\Customer\Service\V1\Data\CustomerBuilder $customerBuilder
+     * @param \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder
      * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
      */
     public function __construct(
@@ -84,7 +84,7 @@ class Manage extends \Magento\Framework\App\Action\Action
         \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService,
         \Magento\Customer\Service\V1\Data\CustomerDetailsBuilder $customerDetailsBuilder,
-        \Magento\Customer\Service\V1\Data\CustomerBuilder $customerBuilder,
+        \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder,
         \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
     ) {
         $this->_storeManager = $storeManager;

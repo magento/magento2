@@ -21,8 +21,9 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 define([
-    'underscore'
-], function(_) {
+    'underscore',
+    'mage/utils'
+], function(_, utils) {
     'use strict';
 
     var utils = {},

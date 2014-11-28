@@ -125,14 +125,6 @@ class Request implements RequestInterface
     /**
      * {@inheritdoc}
      */
-    public function getScopeDimension()
-    {
-        return $this->dimensions[Dimension::SCOPE];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getAggregation()
     {
         return $this->buckets;

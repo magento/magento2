@@ -26,7 +26,7 @@ namespace Magento\Cms\Model\Resource;
 /**
  * Cms resource setup
  */
-class Setup extends \Magento\Framework\Module\Setup
+class Setup extends \Magento\Framework\Module\DataSetup
 {
     /**
      * Block factory

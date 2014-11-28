@@ -38,7 +38,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->_collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Reports\Model\Resource\Report\Product\Viewed\Collection'
         );
-        $this->_collection->setPeriod('day')->setDateRange(null, null)->addStoreFilter(array(1));
+        $this->_collection->setPeriod('day')
+            ->setDateRange(null, null)
+            ->addStoreFilter(array(1));
     }
 
     /**
@@ -62,22 +64,48 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      * @param $expectedTable
      * @param $dateFrom
      * @param $dateTo
+     * @param $isTotal
      */
-    public function testTableSelection($period, $expectedTable, $dateFrom, $dateTo)
+    public function testTableSelection($period, $expectedTable, $dateFrom, $dateTo, $isTotal = false)
     {
         $dbTableName = $this->_collection->getTable($expectedTable);
         $this->_collection->setPeriod($period);
+        if ($isTotal != false) {
+            $this->_collection->setAggregatedColumns(array('id'));
+            $this->_collection->isTotals(true);
+        }
         $this->_collection->setDateRange($dateFrom, $dateTo);
         $this->_collection->load();
         $from = $this->_collection->getSelect()->getPart('from');
 
-        $this->assertArrayHasKey($dbTableName, $from);
-
-        $this->assertArrayHasKey('tableName', $from[$dbTableName]);
-        $actualTable = $from[$dbTableName]['tableName'];
-
-        $this->assertEquals($dbTableName, $actualTable);
+        if ($isTotal != false) {
+            $this->assertArrayHasKey('t', $from);
+            $this->assertArrayHasKey('tableName', $from['t']);
+        } elseif (!empty($from) && is_array($from)) {
+            $this->assertArrayHasKey($dbTableName, $from);
+            $actualTable = $from[$dbTableName]['tableName'];
+            $this->assertEquals($dbTableName, $actualTable);
+            $this->assertArrayHasKey('tableName', $from[$dbTableName]);
+        } else {
+            $union = $this->_collection->getSelect()->getPart('union');
+            if (!is_null($period) && !is_null($dateFrom) && !is_null($dateTo) && $period != 'month') {
+                $count = count($union);
+                if ($period == 'year') {
+                    if ($dbTableName == "report_viewed_product_aggregated_daily") {
+                        $this->assertEquals($count, 2);
+                    }
+                    if ($dbTableName == "report_viewed_product_aggregated_yearly") {
+                        $this->assertEquals($count, 3);
+                    }
+                } else {
+                    $this->assertEquals($count, 3);
+                }
+            } else {
+                $this->assertEquals(count($union), 2);
+            }
+        }
     }
+
 
     /**
      * Data provider for testTableSelection
@@ -93,50 +121,111 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
                 'period'    => 'year',
                 'table'     => 'report_viewed_product_aggregated_yearly',
                 'date_from' => null,
-                'date_to'   => null
+                'date_to'   => null,
+                'is_total'  => true,
+            ],
+            [
+                'period'    => 'year',
+                'table'     => 'report_viewed_product_aggregated_yearly',
+                'date_from' => $dateYearAgo,
+                'date_to'   => $dateNow,
+            ],
+            [
+                'period'    => 'year',
+                'table'     => 'report_viewed_product_aggregated_yearly',
+                'date_from' => $dateYearAgo,
+                'date_to'   => null,
+            ],
+            [
+                'period'    => 'month',
+                'table'     => 'report_viewed_product_aggregated_yearly',
+                'date_from' => null,
+                'date_to'   => $dateNow,
+            ],
+            [
+                'period'    => 'year',
+                'table'     => 'report_viewed_product_aggregated_yearly',
+                'date_from' => $dateYearAgo,
+                'date_to'   => null,
+            ],
+            [
+                'period'    => 'year',
+                'table'     => 'report_viewed_product_aggregated_yearly',
+                'date_from' => null,
+                'date_to'   => $dateNow,
             ],
             [
                 'period'    => 'month',
                 'table'     => 'report_viewed_product_aggregated_monthly',
                 'date_from' => null,
-                'date_to'   => null
+                'date_to'   => null,
+            ],
+            [
+                'period'    => 'month',
+                'table'     => 'report_viewed_product_aggregated_monthly',
+                'date_from' => $dateYearAgo,
+                'date_to'   => $dateYearAgo,
+            ],
+            [
+                'period'    => 'month',
+                'table'     => 'report_viewed_product_aggregated_monthly',
+                'date_from' => null,
+                'date_to'   => $dateYearAgo,
+            ],
+            [
+                'period'    => 'month',
+                'table'     => 'report_viewed_product_aggregated_monthly',
+                'date_from' => $dateYearAgo,
+                'date_to'   => null,
             ],
             [
                 'period'    => 'day',
                 'table'     => 'report_viewed_product_aggregated_daily',
                 'date_from' => null,
-                'date_to'   => null
+                'date_to'   => null,
             ],
             [
                 'period'    => 'undefinedPeriod',
                 'table'     => 'report_viewed_product_aggregated_daily',
                 'date_from' => null,
-                'date_to'   => null
+                'date_to'   => null,
             ],
             [
                 'period'    => null,
                 'table'     => 'report_viewed_product_aggregated_daily',
                 'date_from' => $dateYearAgo,
-                'date_to'   => $dateNow
+                'date_to'   => $dateNow,
             ],
             [
                 'period'    => null,
                 'table'     => 'report_viewed_product_aggregated_daily',
                 'date_from' => $dateNow,
-                'date_to'   => $dateNow
+                'date_to'   => $dateNow,
             ],
             [
-                'period'    => null,
+                'period'    => 'day',
                 'table'     => 'report_viewed_product_aggregated_daily',
                 'date_from' => $dateYearAgo,
-                'date_to'   => $dateYearAgo
+                'date_to'   => $dateYearAgo,
+            ],
+            [
+                'period'    => 'year',
+                'table'     => 'report_viewed_product_aggregated_daily',
+                'date_from' => $dateYearAgo,
+                'date_to'   => $dateYearAgo,
+            ],
+            [
+                'period'    => 'year',
+                'table'     => 'report_viewed_product_aggregated_daily',
+                'date_from' => null,
+                'date_to'   => $dateYearAgo,
             ],
             [
                 'period'    => null,
                 'table'     => 'report_viewed_product_aggregated_yearly',
                 'date_from' => null,
-                'date_to'   => null
-            ],
+                'date_to'   => null,
+            ]
         );
     }
 }

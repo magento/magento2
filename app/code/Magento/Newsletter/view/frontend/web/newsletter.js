@@ -26,7 +26,8 @@ define([
     "jquery/ui",
     "mage/validation/validation"
 ], function($){
-
+    "use strict";
+    
     $.widget('mage.newsletter', {
         options: {
             errorClass: 'mage-error'
@@ -47,4 +48,6 @@ define([
             }, this));
         }
     });
+
+    return $.mage.newsletter;
 });

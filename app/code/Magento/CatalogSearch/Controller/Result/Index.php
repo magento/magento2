@@ -28,6 +28,7 @@ use Magento\Catalog\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\StoreManagerInterface;
 use Magento\Search\Model\QueryFactory;
+use Magento\Catalog\Model\Layer\Resolver;
 
 class Index extends \Magento\Framework\App\Action\Action
 {
@@ -49,21 +50,31 @@ class Index extends \Magento\Framework\App\Action\Action
     private $_queryFactory;
 
     /**
+     * Catalog Layer Resolver
+     *
+     * @var Resolver
+     */
+    private $layerResolver;
+
+    /**
      * @param Context $context
      * @param Session $catalogSession
      * @param StoreManagerInterface $storeManager
      * @param QueryFactory $queryFactory
+     * @param Resolver $layerResolver
      */
     public function __construct(
         Context $context,
         Session $catalogSession,
         StoreManagerInterface $storeManager,
-        QueryFactory $queryFactory
+        QueryFactory $queryFactory,
+        Resolver $layerResolver
     ) {
+        parent::__construct($context);
         $this->_storeManager = $storeManager;
         $this->_catalogSession = $catalogSession;
         $this->_queryFactory = $queryFactory;
-        parent::__construct($context);
+        $this->layerResolver = $layerResolver;
     }
 
     /**
@@ -73,6 +84,7 @@ class Index extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
+        $this->layerResolver->create(Resolver::CATALOG_LAYER_SEARCH);
         /* @var $query \Magento\Search\Model\Query */
         $query = $this->_queryFactory->get();
 

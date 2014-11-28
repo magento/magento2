@@ -1,0 +1,372 @@
+// /**
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+@account-title-border-color: #c6c6c6;
+@account-table-border-bottom-color: #e4e4e4;
+@account-table-action-delete: #d10029;
+
+.login-container {
+    .block {
+        &-new-customer {
+            .actions-toolbar {
+                margin-top: 25px;
+            }
+        }
+        .block-title {
+            &:extend(.abstract-login-block-title all);
+            .font-size(18);
+        }
+    }
+    .fieldset {
+        .form-hasrequired(bottom);
+        &:after {
+            margin-top: 35px;
+        }
+    }
+}
+
+.block-addresses-list {
+    .items.addresses {
+        > .item {
+            margin-bottom: @indent-base;
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+        .item.actions {
+            margin-top: @indent-xs-base;
+            .action {
+                &:extend(.abstract-account-actions all);
+            }
+        }
+    }
+    address {
+        &:extend(.abstract-account-block-line-height all);
+    }
+}
+
+.form-address-edit {
+    #region_id {
+        display: none;
+    }
+    .actions-toolbar .action.primary {
+        &:extend(.abstract-button-l all);
+    }
+}
+
+.form-edit-account {
+    .fieldset.password {
+        display: none;
+    }
+}
+
+.box-address-billing,
+.box-address-shipping,
+.box-information,
+.box-newsletter {
+    .box-content {
+        &:extend(.abstract-account-block-line-height all);
+    }
+}
+
+// My account
+.account {
+    .page-title {
+        .title {
+            display: inline-block;
+        }
+    }
+    .messages {
+        margin-bottom: @indent-base;
+    }
+    .column.main {
+        margin-bottom: @indent-l-base;
+        h2 {
+            margin-top: 0;
+        }
+        .block:not(.widget) {
+            &:extend(.abstract-account-blocks all);
+        }
+    }
+    .sidebar-additional {
+        margin-top: @indent-xl-base;
+    }
+
+    .table-wrapper {
+        .css(margin-bottom, @indent-base);
+        border-bottom: 1px solid @account-table-border-bottom-color;
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+    .data.table {
+        &:extend(.abstract-table-striped all);
+        .col.actions {
+            .action {
+                &:extend(.abstract-account-actions all);
+                &.delete {
+                    color: @account-table-action-delete;
+                }
+            }
+        }
+    }
+    .legend {
+        &:extend(.abstract-account-title all);
+    }
+}
+
+// Checkout address (create shipping address)
+.field.street {
+    .field.additional {
+        .label {
+            &:extend(.abstract-visually-hidden all);
+        }
+    }
+}
+
+//
+//    Blocks & Widgets
+//--------------------------------------
+.block {
+    &:extend(.abstract-margin-for-blocks-and-widgets all);
+    &:last-child {
+        margin-bottom: 0;
+    }
+    .title {
+        strong {
+            .heading(h4);
+            .column.main & {
+            }
+        }
+        margin-bottom: @indent-s-base;
+    }
+    p:last-child {
+        margin: 0;
+    }
+    .box-actions {
+        margin-top: @indent-xs-base;
+        .action {
+            &:extend(.abstract-account-actions all);
+        }
+    }
+}
+
+.control.captcha-image {
+    .css(margin-top, @indent-s-base);
+    .captcha-img {
+        vertical-align: middle;
+    }
+}
+
+.account {
+    .data.table-return-items {
+        .qty {
+            .input-text {
+                &:extend(.abstract-input-qty all);
+            }
+        }
+    }
+}
+
+//
+//    Desktop
+//--------------------------------------
+.responsive(@break) when (@break = @screen-m) {
+    .login-container {
+        &:extend(.abstract-add-clearfix-desktop all);
+        .block {
+            &:extend(.abstract-blocks-2columns all);
+            &.login {
+                .actions-toolbar {
+                    > .primary {
+                        margin-bottom: 0;
+                        margin-right: @indent-l-base;
+                    }
+                    > .secondary {
+                        float: left;
+                    }
+                }
+            }
+        }
+        .fieldset {
+            > .field {
+                > .control {
+                    width: 55%;
+                }
+            }
+        }
+    }
+
+    .form.password.reset,
+    .form.send.confirmation,
+    .form.password.forget,
+    .form.create.account {
+        width: 50%;
+        min-width: 600px;
+    }
+
+    // My account
+    .account.page-layout-2columns-left {
+        .sidebar-main,
+        .sidebar-additional {
+            width: 22.3%;
+        }
+        .column.main {
+            width: 77.7%;
+        }
+    }
+
+    .account {
+        .page-title {
+            &:extend(.abstract-add-clearfix-desktop all);
+        }
+        .column.main {
+            .block:not(.widget) {
+                .block-content {
+                    &:extend(.abstract-add-clearfix-desktop all);
+                    .box {
+                        &:extend(.abstract-blocks-2columns all);
+                    }
+                }
+            }
+        }
+        .data.table {
+            margin-bottom: 0;
+            .col {
+                &.actions {
+                    white-space: nowrap;
+                }
+            }
+        }
+        .toolbar {
+            &:extend(.abstract-pager-toolbar all);
+        }
+    }
+
+    .block-addresses-list {
+        .items.addresses {
+            &:extend(.abstract-add-clearfix-desktop all);
+            > .item {
+                &:extend(.abstract-blocks-2columns all);
+                margin-bottom: @indent-base;
+                &:nth-last-child(1),
+                &:nth-last-child(2) {
+                    margin-bottom: 0;
+                }
+            }
+        }
+        address {
+            &:extend(.abstract-account-block-font-size all);
+        }
+    }
+
+    .page-main .block {
+        &:extend(.abstract-margin-for-blocks-and-widgets-desktop all);
+    }
+
+    .form-edit-account,
+    .form-address-edit {
+        .fieldset {
+            &:extend(.abstract-blocks-2columns all);
+        }
+    }
+
+    .box-address-billing,
+    .box-address-shipping,
+    .box-information {
+        .box-content {
+            &:extend(.abstract-account-block-font-size all);
+        }
+    }
+
+    .control.captcha-image {
+        .captcha-img {
+            margin: 0 @indent-s-base @indent-s-base 0;
+        }
+    }
+}
+
+//
+//    Mobile @screen-s
+//--------------------------------------
+.responsive-smaller(@break) when (@break = @screen-s) {
+    .account {
+        .column.main,
+        .sidebar-additional {
+            margin: 0;
+        }
+        .data.table {
+            &:extend(.abstract-table-striped-mobile all);
+        }
+    }
+}
+
+//
+//    Mobile @screen-m
+//--------------------------------------
+.responsive-smaller(@break) when (@break = @screen-m) {
+    .login-container {
+        .fieldset {
+            &:after {
+                text-align: center;
+            }
+        }
+    }
+
+    .account {
+        .page.messages {
+            margin-bottom: @indent-xl-base;
+        }
+        .column.main {
+            .block:not(.widget) {
+                .block-title {
+                    &:extend(.abstract-add-clearfix-mobile-m all);
+                    > .action {
+                        float: right;
+                        .css(margin-top, @indent-xs-base);
+                    }
+                }
+                .block-content {
+                    .box {
+                        .css(margin-bottom, @indent-base);
+                        &:last-child {
+                            margin-bottom: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .control.captcha-image {
+        .captcha-img {
+            display: block;
+            .css(margin-bottom, @indent-s-base);
+        }
+    }
+    .customer-account-index {
+        .page-title {
+            position: relative;
+        }
+    }
+}

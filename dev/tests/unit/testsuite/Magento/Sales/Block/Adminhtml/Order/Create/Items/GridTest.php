@@ -95,6 +95,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
         $quoteMock->expects($this->any())->method('getStore')->will($this->returnValue($storeMock));
         $sessionMock->expects($this->any())->method('getQuote')->will($this->returnValue($quoteMock));
         $wishlistFactoryMock = $this->getMockBuilder('Magento\Wishlist\Model\WishlistFactory')
+            ->disableOriginalConstructor()
             ->setMethods(array('methods', '__wakeup'))
             ->getMock();
 

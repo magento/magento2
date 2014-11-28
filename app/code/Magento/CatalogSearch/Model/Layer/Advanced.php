@@ -28,11 +28,12 @@ use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\Layer;
 use Magento\Catalog\Model\Resource;
 use Magento\Framework\Object;
+use Magento\Catalog\Model\Layer\ContextInterface;
 
 class Advanced extends \Magento\Catalog\Model\Layer
 {
     /**
-     * @param Advanced\Context $context
+     * @param ContextInterface $context
      * @param \Magento\Catalog\Model\Layer\StateFactory $layerStateFactory
      * @param CategoryFactory $categoryFactory
      * @param Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory
@@ -42,7 +43,7 @@ class Advanced extends \Magento\Catalog\Model\Layer
      * @param array $data
      */
     public function __construct(
-        Advanced\Context $context,
+        ContextInterface $context,
         \Magento\Catalog\Model\Layer\StateFactory $layerStateFactory,
         CategoryFactory $categoryFactory,
         Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory,

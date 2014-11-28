@@ -163,7 +163,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         $priceCurrencyMock = $this->getMockBuilder('Magento\Directory\Model\PriceCurrency')
             ->disableOriginalConstructor()
             ->getMock();
-        $priceCurrencyMock->expects($this->any())
+        $priceCurrencyMock->expects($this->never())
             ->method('convert')
             ->will($this->returnArgument(0));
 

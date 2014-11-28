@@ -201,12 +201,12 @@ class File extends AbstractModel implements FileInterface
      *
      * @return $this
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
         $fileService = $this->getCustomizationService();
         $fileService->prepareFile($this);
         $fileService->save($this);
-        return parent::_beforeSave();
+        return parent::beforeSave();
     }
 
     /**
@@ -214,10 +214,10 @@ class File extends AbstractModel implements FileInterface
      *
      * @return $this
      */
-    protected function _beforeDelete()
+    public function beforeDelete()
     {
         $fileService = $this->getCustomizationService();
         $fileService->delete($this);
-        return parent::_beforeDelete();
+        return parent::beforeDelete();
     }
 }

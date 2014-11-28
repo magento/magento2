@@ -69,7 +69,8 @@ class Obscure extends \Magento\Framework\Data\Form\Element\Password
             'disabled',
             'readonly',
             'maxlength',
-            'tabindex'
+            'tabindex',
+            'data-form-part'
         );
     }
 }

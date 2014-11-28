@@ -23,8 +23,8 @@
  */
 namespace Magento\Customer\Block\Account;
 
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
-use Magento\Customer\Service\V1\CustomerAddressServiceInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\AccountManagementInterface;
 
 /**
  * Customer dashboard block
@@ -34,27 +34,27 @@ class Dashboard extends \Magento\Framework\View\Element\Template
     /**
      * @var \Magento\Newsletter\Model\Subscriber
      */
-    protected $_subscription;
+    protected $subscription;
 
     /**
      * @var \Magento\Customer\Model\Session
      */
-    protected $_customerSession;
+    protected $customerSession;
 
     /**
      * @var \Magento\Newsletter\Model\SubscriberFactory
      */
-    protected $_subscriberFactory;
+    protected $subscriberFactory;
 
     /**
-     * @var CustomerAccountServiceInterface
+     * @var CustomerRepositoryInterface
      */
-    protected $_customerAccountService;
+    protected $customerRepository;
 
     /**
-     * @var CustomerAddressServiceInterface
+     * @var AccountManagementInterface
      */
-    protected $_addressService;
+    protected $customerAccountManagement;
 
     /**
      * Constructor
@@ -62,22 +62,22 @@ class Dashboard extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
-     * @param CustomerAccountServiceInterface $customerService
-     * @param CustomerAddressServiceInterface $addressService
+     * @param CustomerRepositoryInterface $customerRepository
+     * @param AccountManagementInterface $customerAccountManagement
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
-        CustomerAccountServiceInterface $customerAccountService,
-        CustomerAddressServiceInterface $addressService,
+        CustomerRepositoryInterface $customerRepository,
+        AccountManagementInterface $customerAccountManagement,
         array $data = array()
     ) {
-        $this->_customerSession = $customerSession;
-        $this->_subscriberFactory = $subscriberFactory;
-        $this->_customerAccountService = $customerAccountService;
-        $this->_addressService = $addressService;
+        $this->customerSession = $customerSession;
+        $this->subscriberFactory = $subscriberFactory;
+        $this->customerRepository = $customerRepository;
+        $this->customerAccountManagement = $customerAccountManagement;
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
     }
@@ -85,11 +85,11 @@ class Dashboard extends \Magento\Framework\View\Element\Template
     /**
      * Return the Customer given the customer Id stored in the session.
      *
-     * @return \Magento\Customer\Service\V1\Data\Customer
+     * @return \Magento\Customer\Api\Data\CustomerInterface
      */
     public function getCustomer()
     {
-        return $this->_customerAccountService->getCustomer($this->_customerSession->getCustomerId());
+        return $this->customerRepository->getById($this->customerSession->getCustomerId());
     }
 
     /**
@@ -115,7 +115,7 @@ class Dashboard extends \Magento\Framework\View\Element\Template
     /**
      * Retrieve the Url for editing the specified address.
      *
-     * @param \Magento\Customer\Service\V1\Data\Address $address
+     * @param \Magento\Customer\Api\Data\AddressInterface $address
      * @return string
      */
     public function getAddressEditUrl($address)
@@ -163,12 +163,12 @@ class Dashboard extends \Magento\Framework\View\Element\Template
      */
     public function getSubscriptionObject()
     {
-        if (is_null($this->_subscription)) {
-            $this->_subscription =
-                $this->_createSubscriber()->loadByCustomerId($this->_customerSession->getCustomerId());
+        if (is_null($this->subscription)) {
+            $this->subscription =
+                $this->_createSubscriber()->loadByCustomerId($this->customerSession->getCustomerId());
         }
 
-        return $this->_subscription;
+        return $this->subscription;
     }
 
     /**
@@ -198,18 +198,18 @@ class Dashboard extends \Magento\Framework\View\Element\Template
     /**
      * Retrieve the customer's primary addresses (i.e. default billing and shipping).
      *
-     * @return \Magento\Customer\Service\V1\Data\Address[]|bool
+     * @return \Magento\Customer\Api\Data\AddressInterface[]|bool
      */
     public function getPrimaryAddresses()
     {
         $addresses = array();
         $customerId = $this->getCustomer()->getId();
 
-        if ($defaultBilling = $this->_addressService->getDefaultBillingAddress($customerId)) {
+        if ($defaultBilling = $this->customerAccountManagement->getDefaultBillingAddress($customerId)) {
             $addresses[] = $defaultBilling;
         }
 
-        if ($defaultShipping = $this->_addressService->getDefaultShippingAddress($customerId)) {
+        if ($defaultShipping = $this->customerAccountManagement->getDefaultShippingAddress($customerId)) {
             if ($defaultBilling) {
                 if ($defaultBilling->getId() != $defaultShipping->getId()) {
                     $addresses[] = $defaultShipping;
@@ -247,6 +247,6 @@ class Dashboard extends \Magento\Framework\View\Element\Template
      */
     protected function _createSubscriber()
     {
-        return $this->_subscriberFactory->create();
+        return $this->subscriberFactory->create();
     }
 }

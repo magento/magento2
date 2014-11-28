@@ -31,7 +31,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetChildHtml()
     {
-        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * Tests if methods are used with correct count of parameters
@@ -39,7 +39,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
              * @param string $file
              */
             function ($file) {
-                $result = \Magento\TestFramework\Utility\Classes::getAllMatches(
+                $result = \Magento\Framework\Test\Utility\Classes::getAllMatches(
                     file_get_contents($file),
                     "/(->getChildHtml\([^,()]+, ?[^,()]+,)/i"
                 );
@@ -47,7 +47,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
                     $result,
                     "3rd parameter is not needed anymore for getChildHtml() in '{$file}': " . print_r($result, true)
                 );
-                $result = \Magento\TestFramework\Utility\Classes::getAllMatches(
+                $result = \Magento\Framework\Test\Utility\Classes::getAllMatches(
                     file_get_contents($file),
                     "/(->getChildChildHtml\([^,()]+, ?[^,()]+, ?[^,()]+,)/i"
                 );
@@ -59,7 +59,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
                     )
                 );
             },
-            \Magento\TestFramework\Utility\Files::init()->getPhpFiles()
+            \Magento\Framework\Test\Utility\Files::init()->getPhpFiles()
         );
     }
 }

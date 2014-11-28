@@ -32,7 +32,7 @@ $entityType = $objectManager->create('Magento\Eav\Model\Entity\Type')->loadByCod
 $defaultSetId = $objectManager->create('\Magento\Catalog\Model\Product')->getDefaultAttributeSetid();
 
 $data = [
-    'attribute_set_name' => 'custom attribute set 531',
+    'attribute_set_name' => 'attribute_set_with_media_attribute',
     'entity_type_id' => $entityType->getId(),
     'sort_order' => 200,
 ];

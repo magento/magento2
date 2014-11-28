@@ -38,21 +38,21 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
 
         $taxRule = $objectManager->get('Magento\Framework\Registry')
             ->registry('_fixture/Magento_Tax_Model_Calculation_Rule');
-        $customerTaxClasses = $taxRule->getTaxCustomerClass();
-        $productTaxClasses = $taxRule->getTaxProductClass();
+        $customerTaxClasses = $taxRule->getCustomerTaxClassIds();
+        $productTaxClasses = $taxRule->getProductTaxClassIds();
         $taxRate = $objectManager->get('Magento\Framework\Registry')
             ->registry('_fixture/Magento_Tax_Model_Calculation_Rate');
         $data = new \Magento\Framework\Object();
         $data->setData(
             array(
-                'country_id' => 'US',
-                'region_id' => '12',
-                'postcode' => '5555',
+                'tax_country_id' => 'US',
+                'taxregion_id' => '12',
+                'tax_postcode' => '5555',
                 'customer_class_id' => $customerTaxClasses[0],
                 'product_class_id' => $productTaxClasses[0]
             )
         );
         $taxCalculation = $objectManager->get('Magento\Tax\Model\Resource\Calculation');
-        $this->assertEquals($taxRate->getRate(), $taxCalculation->getRate($data));
+        $this->assertEquals($taxRate->getRateIds(), $taxCalculation->getRate($data));
     }
 }

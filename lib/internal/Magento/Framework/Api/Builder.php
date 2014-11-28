@@ -163,10 +163,12 @@ class Builder implements BuilderInterface
     public function create()
     {
         if ($this->getDataType() == self::TYPE_DATA_MODEL) {
+            /** @var \Magento\Framework\Model\AbstractExtensibleModel $dataObject */
             $dataObject = $this->objectFactory->create(
                 $this->_getDataObjectType(),
                 ['data' => $this->data]
             );
+            $dataObject->setDataChanges(true);
         } else {
             $dataObjectType = $this->_getDataObjectType();
             $dataObject = $this->objectFactory->create(
@@ -174,7 +176,10 @@ class Builder implements BuilderInterface
                 ['builder' => $this]
             );
         }
-        $this->data = array();
+        if ($dataObject instanceof \Magento\Framework\Object) {
+            $dataObject->setDataChanges(true);
+        }
+        $this->data = [];
         return $dataObject;
     }
 

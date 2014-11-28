@@ -29,6 +29,7 @@ use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Session\Config;
 use Magento\Framework\UrlInterface;
+use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Magento Backend session configuration
@@ -58,12 +59,10 @@ class AdminConfig extends Config
      * @param \Magento\Framework\Stdlib\String $stringHelper
      * @param \Magento\Framework\App\RequestInterface $request
      * @param Filesystem $filesystem
+     * @param DeploymentConfig $deploymentConfig
      * @param string $scopeType
      * @param FrontNameResolver $frontNameResolver
      * @param \Magento\Framework\StoreManagerInterface $storeManager
-     * @param string $saveMethod
-     * @param null|string $savePath
-     * @param null|string $cacheLimiter
      * @param string $lifetimePath
      * @param string $sessionName
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -74,12 +73,10 @@ class AdminConfig extends Config
         \Magento\Framework\Stdlib\String $stringHelper,
         \Magento\Framework\App\RequestInterface $request,
         Filesystem $filesystem,
+        DeploymentConfig $deploymentConfig,
         $scopeType,
         FrontNameResolver $frontNameResolver,
         \Magento\Framework\StoreManagerInterface $storeManager,
-        $saveMethod = \Magento\Framework\Session\SaveHandlerInterface::DEFAULT_HANDLER,
-        $savePath = null,
-        $cacheLimiter = null,
         $lifetimePath = self::XML_PATH_COOKIE_LIFETIME,
         $sessionName = self::SESSION_NAME_ADMIN
     ) {
@@ -89,10 +86,8 @@ class AdminConfig extends Config
             $stringHelper,
             $request,
             $filesystem,
+            $deploymentConfig,
             $scopeType,
-            $saveMethod,
-            $savePath,
-            $cacheLimiter,
             $lifetimePath
         );
 

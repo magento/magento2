@@ -379,6 +379,23 @@ abstract class AbstractModel extends \Magento\Framework\Object
     }
 
     /**
+     * @return bool
+     */
+    public function isSaveAllowed()
+    {
+        return (bool) $this->_dataSaveAllowed;
+    }
+
+    /**
+     * @param bool $flag
+     * @return void
+     */
+    public function setHasDataChanges($flag)
+    {
+        $this->_hasDataChanges = $flag;
+    }
+
+    /**
      * Save object data
      *
      * @return $this
@@ -386,30 +403,7 @@ abstract class AbstractModel extends \Magento\Framework\Object
      */
     public function save()
     {
-        /**
-         * Direct deleted items to delete method
-         */
-        if ($this->isDeleted()) {
-            return $this->delete();
-        }
-        if (!$this->_hasModelChanged()) {
-            return $this;
-        }
-        $this->_getResource()->beginTransaction();
-        try {
-            $this->_validateBeforeSave();
-            $this->_beforeSave();
-            if ($this->_dataSaveAllowed) {
-                $this->_getResource()->save($this);
-                $this->_afterSave();
-            }
-            $this->_getResource()->addCommitCallback(array($this, 'afterCommitCallback'))->commit();
-            $this->_hasDataChanges = false;
-        } catch (\Exception $e) {
-            $this->_getResource()->rollBack();
-            $this->_hasDataChanges = true;
-            throw $e;
-        }
+        $this->_getResource()->save($this);
         return $this;
     }
 
@@ -450,7 +444,7 @@ abstract class AbstractModel extends \Magento\Framework\Object
      *
      * @return $this
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
         if (!$this->getId()) {
             $this->isObjectNew(true);
@@ -466,7 +460,7 @@ abstract class AbstractModel extends \Magento\Framework\Object
      * @return $this
      * @throws \Magento\Framework\Model\Exception
      */
-    protected function _validateBeforeSave()
+    public function validateBeforeSave()
     {
         $validator = $this->_getValidatorBeforeSave();
         if ($validator && !$validator->isValid($this)) {
@@ -573,7 +567,7 @@ abstract class AbstractModel extends \Magento\Framework\Object
      *
      * @return $this
      */
-    protected function _afterSave()
+    public function afterSave()
     {
         $this->cleanModelCache();
         $this->_eventManager->dispatch('model_save_after', array('object' => $this));
@@ -590,19 +584,7 @@ abstract class AbstractModel extends \Magento\Framework\Object
      */
     public function delete()
     {
-        $this->_getResource()->beginTransaction();
-        try {
-            $this->_beforeDelete();
-            $this->_getResource()->delete($this);
-            $this->isDeleted(true);
-            $this->_afterDelete();
-
-            $this->_getResource()->commit();
-            $this->_afterDeleteCommit();
-        } catch (\Exception $e) {
-            $this->_getResource()->rollBack();
-            throw $e;
-        }
+        $this->_getResource()->delete($this);
         return $this;
     }
 
@@ -612,7 +594,7 @@ abstract class AbstractModel extends \Magento\Framework\Object
      * @return $this
      * @throws Exception
      */
-    protected function _beforeDelete()
+    public function beforeDelete()
     {
         if (!$this->_actionValidator->isAllowed($this)) {
             throw new Exception(__('Delete operation is forbidden for current area'));
@@ -629,7 +611,7 @@ abstract class AbstractModel extends \Magento\Framework\Object
      *
      * @return $this
      */
-    protected function _afterDelete()
+    public function afterDelete()
     {
         $this->_eventManager->dispatch('model_delete_after', array('object' => $this));
         $this->_eventManager->dispatch('clean_cache_by_tags', array('object' => $this));
@@ -642,7 +624,7 @@ abstract class AbstractModel extends \Magento\Framework\Object
      *
      * @return $this
      */
-    protected function _afterDeleteCommit()
+    public function afterDeleteCommit()
     {
         $this->_eventManager->dispatch('model_delete_commit_after', array('object' => $this));
         $this->_eventManager->dispatch($this->_eventPrefix . '_delete_commit_after', $this->_getEventData());

@@ -37,7 +37,7 @@
         <?php if ($this->getRatings() && $this->getRatings()->getSize()): ?>
         <span id="input-message-box"></span>
         <fieldset class="field required review-field-ratings">
-            <legend class="label"><span><?php echo __('How do you rate this product?') ?><span></legend><br/>
+            <legend class="label"><span><?php echo __('Your Rating') ?><span></legend><br/>
             <div class="control">
                 <div class="nested" id="product-review-table">
                     <?php foreach ($this->getRatings() as $_rating): ?>
@@ -78,7 +78,7 @@
             </div>
         </div>
         <div class="field review-field-summary required">
-            <label for="summary_field" class="label"><span><?php echo __('Summary of Your Review') ?></span></label>
+            <label for="summary_field" class="label"><span><?php echo __('Summary') ?></span></label>
             <div class="control">
                 <input type="text" name="title" id="summary_field" class="input-text" data-validate="{required:true}" value="<?php echo $this->escapeHtml($data->getTitle()) ?>" />
             </div>

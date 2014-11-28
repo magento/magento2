@@ -27,6 +27,11 @@
  */
 namespace Magento\Wishlist\Block;
 
+/**
+ * Class Link
+ *
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ */
 class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento\Framework\View\Block\IdentityInterface
 {
     /**

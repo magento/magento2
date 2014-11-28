@@ -86,7 +86,7 @@ class Locale extends \Magento\Framework\App\Config\Value
      * @return $this
      * @throws \Magento\Framework\Model\Exception
      */
-    protected function _afterSave()
+    public function afterSave()
     {
         /** @var $collection \Magento\Core\Model\Resource\Config\Data\Collection */
         $collection = $this->_configsFactory->create();

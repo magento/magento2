@@ -27,7 +27,7 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetByFullPath()
     {
-        $path = 'frontend/Magento/plushe';
+        $path = 'frontend/Magento/luma';
         $collectionFactory = $this->getMock(
             'Magento\Core\Model\Resource\Theme\CollectionFactory',
             array('create'),

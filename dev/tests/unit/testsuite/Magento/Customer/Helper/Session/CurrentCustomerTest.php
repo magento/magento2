@@ -41,17 +41,17 @@ class CurrentCustomerTest extends \PHPUnit_Framework_TestCase
     protected $layoutMock;
 
     /**
-     * @var \Magento\Customer\Service\V1\Data\CustomerBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\Data\CustomerDataBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $customerDataBuilderMock;
 
     /**
-     * @var \Magento\Customer\Service\V1\Data\Customer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\Data\CustomerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $customerDataMock;
 
     /**
-     * @var \Magento\Customer\Service\V1\CustomerAccountServiceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $customerServiceMock;
 
@@ -88,21 +88,21 @@ class CurrentCustomerTest extends \PHPUnit_Framework_TestCase
         $this->customerSessionMock = $this->getMock('Magento\Customer\Model\Session', array(), array(), '', false);
         $this->layoutMock = $this->getMock('Magento\Framework\View\Layout', array(), array(), '', false);
         $this->customerDataBuilderMock = $this->getMock(
-            'Magento\Customer\Service\V1\Data\CustomerBuilder',
+            'Magento\Customer\Api\Data\CustomerDataBuilder',
             array('create', 'setGroupId'),
             array(),
             '',
             false
         );
         $this->customerDataMock = $this->getMock(
-            'Magento\Customer\Service\V1\Data\Customer',
+            'Magento\Customer\Api\Data\CustomerInterface',
             array(),
             array(),
             '',
             false
         );
         $this->customerServiceMock = $this->getMock(
-            'Magento\Customer\Service\V1\CustomerAccountServiceInterface',
+            'Magento\Customer\Api\CustomerRepositoryInterface',
             array(),
             array(),
             '',
@@ -190,7 +190,7 @@ class CurrentCustomerTest extends \PHPUnit_Framework_TestCase
         $this->customerServiceMock->expects(
             $this->once()
         )->method(
-                'getCustomer'
+            'getById'
             )->with(
                 $this->equalTo($this->customerId)
             )->will(

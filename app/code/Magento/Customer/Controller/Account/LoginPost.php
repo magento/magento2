@@ -28,7 +28,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\StoreManagerInterface;
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
+use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Core\Helper\Data as CoreHelper;
 use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Framework\Exception\EmailNotConfirmedException;
@@ -46,8 +46,8 @@ class LoginPost extends \Magento\Customer\Controller\Account
     /** @var StoreManagerInterface */
     protected $storeManager;
 
-    /** @var CustomerAccountServiceInterface  */
-    protected $customerAccountService;
+    /** @var AccountManagementInterface */
+    protected $customerAccountManagement;
 
     /** @var CoreHelper */
     protected $coreHelperData;
@@ -63,7 +63,7 @@ class LoginPost extends \Magento\Customer\Controller\Account
      * @param Session $customerSession
      * @param ScopeConfigInterface $scopeConfig
      * @param StoreManagerInterface $storeManager
-     * @param CustomerAccountServiceInterface $customerAccountService
+     * @param AccountManagementInterface $customerAccountManagement
      * @param CoreHelper $coreHelperData
      * @param CustomerUrl $customerHelperData
      * @param FormKeyValidator $formKeyValidator
@@ -75,14 +75,14 @@ class LoginPost extends \Magento\Customer\Controller\Account
         Session $customerSession,
         ScopeConfigInterface $scopeConfig,
         StoreManagerInterface $storeManager,
-        CustomerAccountServiceInterface $customerAccountService,
+        AccountManagementInterface $customerAccountManagement,
         CoreHelper $coreHelperData,
         CustomerUrl $customerHelperData,
         FormKeyValidator $formKeyValidator
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->storeManager = $storeManager;
-        $this->customerAccountService = $customerAccountService;
+        $this->customerAccountManagement = $customerAccountManagement;
         $this->coreHelperData = $coreHelperData;
         $this->customerUrl = $customerHelperData;
         $this->formKeyValidator = $formKeyValidator;
@@ -159,7 +159,7 @@ class LoginPost extends \Magento\Customer\Controller\Account
             $login = $this->getRequest()->getPost('login');
             if (!empty($login['username']) && !empty($login['password'])) {
                 try {
-                    $customer = $this->customerAccountService->authenticate($login['username'], $login['password']);
+                    $customer = $this->customerAccountManagement->authenticate($login['username'], $login['password']);
                     $this->_getSession()->setCustomerDataAsLoggedIn($customer);
                     $this->_getSession()->regenerateId();
                 } catch (EmailNotConfirmedException $e) {

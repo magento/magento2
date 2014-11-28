@@ -24,11 +24,11 @@
 ?>
 <?php
 /**
- * @var \Magento\Ui\ListingContainer\Massaction\View $this
+ * @var \Magento\Ui\Component\MassAction $this
  */
 ?>
-<script data-mage-apply='{ "Magento_Ui/js/listing/massaction": "" }' type="application/json">
-    <?php echo $this->getConfigurationBuilder()->toJson($this->getConfiguration()); ?>
+<script data-mage-init='{ "Magento_Ui/js/listing/massaction": "" }' type="application/json">
+    <?php echo $this->getConfigBuilder()->toJson($this->getConfig()); ?>
 </script>
 <div data-bind="scope: '<?php echo $this->getParentName(); ?>:<?php echo $this->getName(); ?>'">
     <!-- ko template: 'ui/pageactions' --><!-- /ko -->

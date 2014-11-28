@@ -27,8 +27,8 @@ define([
     "mage/translate",
     "Magento_DesignEditor/js/dialog"
 ], function($){
-
     'use strict';
+    
     /**
      * Widget theme edit
      */
@@ -107,5 +107,6 @@ define([
             }
         }
     });
-
+    
+    return $.vde.themeEdit;
 });

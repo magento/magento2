@@ -50,14 +50,25 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->option = $this->getMock('Magento\Eav\Model\Resource\Entity\Attribute\Option', [], [], '', false);
-        $this->optionFactory = $this->getMock('Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory', ['create']);
-        $this->optionFactory->expects($this->any())->method('create')->will($this->returnValue($this->option));
+        $this->optionFactory = $this->getMock(
+            'Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $this->optionFactory->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($this->option));
         $this->attribute = $this->getMock('Magento\Eav\Model\Entity\Attribute\AbstractAttribute', [], [], '', false);
 
         $this->model = (new ObjectManager($this))
-            ->getObject('Magento\Bundle\Model\Product\Attribute\Source\Price\View', [
-                'optionFactory' => $this->optionFactory,
-            ]);
+            ->getObject(
+                'Magento\Bundle\Model\Product\Attribute\Source\Price\View',
+                [
+                    'optionFactory' => $this->optionFactory,
+                ]
+            );
         $this->model->setAttribute($this->attribute);
     }
 
@@ -97,7 +108,9 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     public function testGetFlatColumns()
     {
         $code = 'attribute-code';
-        $this->attribute->expects($this->any())->method('getAttributeCode')->will($this->returnValue($code));
+        $this->attribute->expects($this->any())
+            ->method('getAttributeCode')
+            ->will($this->returnValue($code));
 
         $columns = $this->model->getFlatColumns();
 
@@ -119,7 +132,9 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $store = 1;
         $select = 'select';
 
-        $this->option->expects($this->once())->method('getFlatUpdateSelect')->with($this->attribute, $store, false)
+        $this->option->expects($this->once())
+            ->method('getFlatUpdateSelect')
+            ->with($this->attribute, $store, false)
             ->will($this->returnValue($select));
 
         $this->assertEquals($select, $this->model->getFlatUpdateSelect($store));

@@ -25,7 +25,7 @@
  */
 namespace Magento\Catalog\Model\Product;
 
-class LinkTypeProvider
+class LinkTypeProvider implements \Magento\Catalog\Api\ProductLinkTypeListInterface
 {
     /**
      * Available product link types
@@ -34,14 +34,39 @@ class LinkTypeProvider
      *
      * @var array
      */
-    protected $_linkTypes;
+    protected $linkTypes;
 
     /**
+     * @var \Magento\Catalog\Api\Data\ProductLinkTypeDataBuilder
+     */
+    protected $linkTypeBuilder;
+
+    /**
+     * @var \Magento\Catalog\Api\Data\ProductLinkAttributeDataBuilder
+     */
+    protected $linkAttributeBuilder;
+
+    /**
+     * @var \Magento\Catalog\Model\Product\LinkFactory
+     */
+    protected $linkFactory;
+
+    /**
+     * @param \Magento\Catalog\Api\Data\ProductLinkTypeDataBuilder $linkTypeBuilder
+     * @param \Magento\Catalog\Api\Data\ProductLinkAttributeDataBuilder $linkAttributeBuilder
+     * @param LinkFactory $linkFactory
      * @param array $linkTypes
      */
-    public function __construct(array $linkTypes = array())
-    {
-        $this->_linkTypes = $linkTypes;
+    public function __construct(
+        \Magento\Catalog\Api\Data\ProductLinkTypeDataBuilder $linkTypeBuilder,
+        \Magento\Catalog\Api\Data\ProductLinkAttributeDataBuilder $linkAttributeBuilder,
+        \Magento\Catalog\Model\Product\LinkFactory $linkFactory,
+        array $linkTypes = array()
+    ) {
+        $this->linkTypes = $linkTypes;
+        $this->linkTypeBuilder = $linkTypeBuilder;
+        $this->linkAttributeBuilder = $linkAttributeBuilder;
+        $this->linkFactory = $linkFactory;
     }
 
     /**
@@ -51,6 +76,39 @@ class LinkTypeProvider
      */
     public function getLinkTypes()
     {
-        return $this->_linkTypes;
+        return $this->linkTypes;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getItems()
+    {
+        $output = [];
+        foreach ($this->getLinkTypes() as $type => $typeCode) {
+            $output[] = $this->linkTypeBuilder
+                ->populateWithArray(['name' => $type, 'code' => $typeCode])
+                ->create();
+        }
+        return $output;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getItemAttributes($type)
+    {
+        $output = [];
+        $types = $this->getLinkTypes();
+        $typeId = isset($types[$type]) ? $types[$type] : null;
+
+        /** @var \Magento\Catalog\Model\Product\Link $link */
+        $link = $this->linkFactory->create(['data' => ['link_type_id' => $typeId]]);
+        $attributes = $link->getAttributes();
+        foreach ($attributes as $item) {
+            $data = ['code' => $item['code'], 'type' => $item['type']];
+            $output[] = $this->linkAttributeBuilder->populateWithArray($data)->create();
+        }
+        return $output;
     }
 }

@@ -26,36 +26,38 @@ namespace Magento\Backend\Test\Block\Page;
 
 use Mtf\Block\Block;
 use Mtf\Client\Element\Locator;
+use Mtf\Client\Driver\Selenium\Element\GlobalsearchElement;
 
 /**
- * Header block
- *
+ * Header block.
  */
 class Header extends Block
 {
     /**
-     * Selector for Account Avatar
+     * Selector for Account Avatar.
      *
      * @var string
      */
     protected $adminAccountLink = '.admin-user-account';
 
     /**
-     * Selector for Log Out Link
+     * Selector for Log Out Link.
      *
      * @var string
      */
     protected $signOutLink = '.account-signout';
 
     /**
-     * Selector for Search Link
+     * Selector for Search Link.
      *
      * @var string
      */
-    protected $searchSelector = '#form-search';
+    protected $searchSelector = '.search-global.miniform';
 
     /**
-     * Log out Admin User
+     * Log out Admin User.
+     *
+     * @return void
      */
     public function logOut()
     {
@@ -67,7 +69,7 @@ class Header extends Block
     }
 
     /**
-     * Get admin account link visibility
+     * Get admin account link visibility.
      *
      * @return bool
      */
@@ -77,28 +79,28 @@ class Header extends Block
     }
 
     /**
-     * Search the query text
+     * Search the query text.
      *
      * @param string $query
      * @return void
      */
     public function search($query)
     {
-        /** @var \Mtf\Client\Driver\Selenium\Element\GlobalSearchElement $search */
-        $search = $this->_rootElement->find($this->searchSelector, Locator::SELECTOR_CSS, 'globalSearch');
+        /** @var GlobalsearchElement $search */
+        $search = $this->_rootElement->find($this->searchSelector, Locator::SELECTOR_CSS, 'globalsearch');
         $search->setValue($query);
     }
 
     /**
-     * Is search result is visible in suggestion dropdown
+     * Is search result is visible in suggestion dropdown.
      *
      * @param string $query
      * @return bool
      */
     public function isSearchResultVisible($query)
     {
-        /** @var \Mtf\Client\Driver\Selenium\Element\GlobalSearchElement $search */
-        $search = $this->_rootElement->find($this->searchSelector, Locator::SELECTOR_CSS, 'globalSearch');
+        /** @var GlobalsearchElement $search */
+        $search = $this->_rootElement->find($this->searchSelector, Locator::SELECTOR_CSS, 'globalsearch');
         return $search->isExistValueInSearchResult($query);
     }
 }

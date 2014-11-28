@@ -35,10 +35,10 @@ class Context extends \Magento\Framework\Module\Setup\Context
     /**
      * @param \Magento\Framework\Logger $logger
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\Resource $appResource
      * @param \Magento\Framework\Module\Dir\Reader $modulesReader
      * @param \Magento\Framework\Module\ModuleListInterface $moduleList
-     * @param \Magento\Framework\Module\ResourceInterface $resourceResource
+     * @param \Magento\Framework\Module\ResourceInterface $resource
      * @param \Magento\Framework\Module\Setup\MigrationFactory $migrationFactory
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Framework\Filesystem $filesystem
@@ -47,10 +47,10 @@ class Context extends \Magento\Framework\Module\Setup\Context
     public function __construct(
         \Magento\Framework\Logger $logger,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\App\Resource $appResource,
         \Magento\Framework\Module\Dir\Reader $modulesReader,
         \Magento\Framework\Module\ModuleListInterface $moduleList,
-        \Magento\Framework\Module\ResourceInterface $resourceResource,
+        \Magento\Framework\Module\ResourceInterface $resource,
         \Magento\Framework\Module\Setup\MigrationFactory $migrationFactory,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Framework\Filesystem $filesystem,
@@ -60,10 +60,10 @@ class Context extends \Magento\Framework\Module\Setup\Context
         parent::__construct(
             $logger,
             $eventManager,
-            $resource,
+            $appResource,
             $modulesReader,
             $moduleList,
-            $resourceResource,
+            $resource,
             $migrationFactory,
             $encryptor,
             $filesystem

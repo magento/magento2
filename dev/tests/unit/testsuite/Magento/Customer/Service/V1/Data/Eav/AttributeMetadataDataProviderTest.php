@@ -83,7 +83,7 @@ class AttributeMetadataDataProviderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->attributeMetadataProvider = $this->objectManager->getObject(
-            'Magento\Customer\Service\V1\Data\Eav\AttributeMetadataDataProvider',
+            'Magento\Customer\Model\AttributeMetadataDataProvider',
             [
                 'eavConfig' => $this->configEav,
                 'attrFormCollectionFactory' => $this->attrFormCollectionFactory,

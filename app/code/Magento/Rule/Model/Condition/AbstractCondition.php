@@ -777,7 +777,7 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
             case '!{}':
                 if (is_scalar($validatedValue) && is_array($value)) {
                     foreach ($value as $item) {
-                        if (stripos($validatedValue, $item) !== false) {
+                        if (stripos($validatedValue, (string)$item) !== false) {
                             $result = true;
                             break;
                         }

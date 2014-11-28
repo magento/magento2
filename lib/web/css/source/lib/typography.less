@@ -67,7 +67,6 @@
 }
 
 .wrap-words() {
-    -ms-word-break: break-all;
     word-break: break-all;
     word-break: break-word;
     .hyphens();
@@ -93,7 +92,6 @@
     -webkit-hyphens: @mode;
     -moz-hyphens: @mode;
     -ms-hyphens: @mode; // IE10+
-    -o-hyphens: @mode;
     hyphens: @mode;
 }
 
@@ -106,16 +104,16 @@
     @_font-style: @font-style-base
 ) {
     .font-size(@_font-size);
-    .add-color(@_color);
-    .add-font-family(@_font-family);
-    .add-font-weight(@_font-weight);
-    .add-font-style(@_font-style);
-    .add-line-height(@_line-height);
+    .css(color, @_color);
+    .css(font-family, @_font-family);
+    .css(font-weight, @_font-weight);
+    .css(font-style, @_font-style);
+    .css(line-height, @_line-height);
 }
 
 .list-reset-styles(@_margin: 0, @_padding: 0) {
-    .add-margin(@_margin);
-    .add-padding(@_padding);
+    .css(margin, @_margin);
+    .css(padding, @_padding);
     list-style-type: none;
     list-style-image: none;
 }
@@ -138,19 +136,19 @@
     @_link-color-active: @link-color-active,
     @_link-text-decoration-active: @link-text-decoration-active
 ) {
-    .add-color(@_link-color);
-    text-decoration: @_link-text-decoration;
+    .css(color, @_link-color);
+    .css(text-decoration, @_link-text-decoration);
     &:visited {
-        .add-color(@_link-color-visited);
-        text-decoration: @_link-text-decoration-visited;
+        .css(color, @_link-color-visited);
+        .css(text-decoration, @_link-text-decoration-visited);
     }
     &:hover {
-        .add-color(@_link-color-hover);
-        text-decoration: @_link-text-decoration-hover;
+        .css(color, @_link-color-hover);
+        .css(text-decoration, @_link-text-decoration-hover);
     }
     &:active {
-        .add-color(@_link-color-active);
-        text-decoration: @_link-text-decoration-active;
+        .css(color,@_link-color-active);
+        .css(text-decoration, @_link-text-decoration-active);
     }
 }
 
@@ -182,6 +180,7 @@
         font-size: @font-size-root;
         -webkit-text-size-adjust: 100%;
         -ms-text-size-adjust: 100%;
+        font-size-adjust: 100%;
     }
     body {
         .typography();
@@ -208,8 +207,8 @@
     }
 
     mark {
-        .add-background(@mark-bg);
-        .add-color(@mark-color);
+        .css(background, @mark-bg);
+        .css(color, @mark-color);
     }
 
     small,
@@ -315,13 +314,14 @@
         margin-bottom: @dl-margin-bottom;
     }
     dt {
-        .add-font-weight(@dt-font-weight);
+        .css(font-weight, @dt-font-weight);
         margin-top: @dt-margin-top;
         margin-bottom: @dt-margin-bottom;
     }
     dd {
         margin-top: @dd-margin-top;
         margin-bottom: @dd-margin-bottom;
+        margin-left: 0;
     }
 }
 
@@ -338,31 +338,31 @@
 
     // Inline code
     code {
-        .add-padding(@code-padding);
+        .css(background, @code-bg);
+        .css(color, @code-color);
         .font-size(@code-font-size);
-        .add-color(@code-color);
-        .add-background(@code-bg);
+        .css(padding, @code-padding);
         white-space: nowrap;
     }
 
     // User input typically entered via keyboard
     kbd {
-        .add-padding(@code-padding);
+        .css(background, @kbd-bg);
+        .css(color, @kbd-color);
+        .css(padding, @code-padding);
         .font-size(@code-font-size);
-        .add-color(@kbd-color);
-        .add-background(@kbd-bg);
     }
 
     // Blocks of code
     pre {
-        .add-background(@pre-bg);
+        .css(background, @pre-bg);
         border: @pre-border-width solid @pre-border-color;
-        .add-color(@pre-color);
+        .css(color, @pre-color);
         display: block;
         .font-size (@code-font-size);
         margin: 0 0 @indent-s-base;
         line-height: @line-height-base;
-        .add-padding(@indent-s-base);
+        .css(padding, @indent-s-base);
         word-break: break-all;
         word-wrap: break-word;
         code {
@@ -381,8 +381,8 @@
 // --------------------------------------------------
 .typography-blockquote() {
     blockquote {
-        .add-padding(@blockquote-padding);
-        .add-margin(@blockquote-margin);
+        .css(margin, @blockquote-margin);
+        .css(padding, @blockquote-padding);
         .typography(
               @_font-size: @blockquote-font-size,
               @_font-style: @blockquote-font-style
@@ -400,7 +400,7 @@
         footer,
         small,
         .small {
-            .add-color(@blockquote-small-color);
+            .css(color, @blockquote-small-color);
             display: block;
             .font-size(@blockquote-small-font-size);
             line-height: @line-height-base;
@@ -409,7 +409,7 @@
             }
         }
         cite {
-            .add-font-style(@cite-font-style);
+            .css(font-style, @cite-font-style);
         }
     }
 
@@ -430,7 +430,7 @@
 
     // Undo browser default styling
     cite {
-        .add-font-style(@cite-font-style);
+        .css(font-style, @cite-font-style);
     }
 }
 

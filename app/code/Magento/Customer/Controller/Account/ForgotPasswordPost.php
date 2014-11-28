@@ -24,16 +24,17 @@
  */
 namespace Magento\Customer\Controller\Account;
 
-use Magento\Framework\App\Action\Context;
+use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Model\AccountManagement;
 use Magento\Customer\Model\Session;
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 class ForgotPasswordPost extends \Magento\Customer\Controller\Account
 {
-    /** @var CustomerAccountServiceInterface  */
-    protected $customerAccountService;
+    /** @var AccountManagementInterface */
+    protected $customerAccountManagement;
 
     /** @var Escaper */
     protected $escaper;
@@ -41,16 +42,16 @@ class ForgotPasswordPost extends \Magento\Customer\Controller\Account
     /**
      * @param Context $context
      * @param Session $customerSession
-     * @param CustomerAccountServiceInterface $customerAccountService
+     * @param AccountManagementInterface $customerAccountManagement
      * @param Escaper $escaper
      */
     public function __construct(
         Context $context,
         Session $customerSession,
-        CustomerAccountServiceInterface $customerAccountService,
+        AccountManagementInterface $customerAccountManagement,
         Escaper $escaper
     ) {
-        $this->customerAccountService = $customerAccountService;
+        $this->customerAccountManagement = $customerAccountManagement;
         $this->escaper = $escaper;
         parent::__construct($context, $customerSession);
     }
@@ -72,9 +73,9 @@ class ForgotPasswordPost extends \Magento\Customer\Controller\Account
             }
 
             try {
-                $this->customerAccountService->initiatePasswordReset(
+                $this->customerAccountManagement->initiatePasswordReset(
                     $email,
-                    CustomerAccountServiceInterface::EMAIL_RESET
+                    AccountManagement::EMAIL_RESET
                 );
             } catch (NoSuchEntityException $e) {
                 // Do nothing, we don't want anyone to use this action to determine which email accounts are registered.

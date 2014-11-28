@@ -23,32 +23,24 @@
  */
 namespace Magento\Sales\Model\Order\Shipment;
 
+use Magento\Sales\Api\Data\ShipmentItemInterface;
+use Magento\Framework\Model\AbstractExtensibleModel;
+
 /**
  * @method \Magento\Sales\Model\Resource\Order\Shipment\Item _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Shipment\Item getResource()
- * @method int getParentId()
  * @method \Magento\Sales\Model\Order\Shipment\Item setParentId(int $value)
- * @method float getRowTotal()
  * @method \Magento\Sales\Model\Order\Shipment\Item setRowTotal(float $value)
- * @method float getPrice()
  * @method \Magento\Sales\Model\Order\Shipment\Item setPrice(float $value)
- * @method float getWeight()
  * @method \Magento\Sales\Model\Order\Shipment\Item setWeight(float $value)
- * @method float getQty()
- * @method int getProductId()
  * @method \Magento\Sales\Model\Order\Shipment\Item setProductId(int $value)
- * @method int getOrderItemId()
  * @method \Magento\Sales\Model\Order\Shipment\Item setOrderItemId(int $value)
- * @method string getAdditionalData()
  * @method \Magento\Sales\Model\Order\Shipment\Item setAdditionalData(string $value)
- * @method string getDescription()
  * @method \Magento\Sales\Model\Order\Shipment\Item setDescription(string $value)
- * @method string getName()
  * @method \Magento\Sales\Model\Order\Shipment\Item setName(string $value)
- * @method string getSku()
  * @method \Magento\Sales\Model\Order\Shipment\Item setSku(string $value)
  */
-class Item extends \Magento\Framework\Model\AbstractModel
+class Item extends AbstractExtensibleModel implements ShipmentItemInterface
 {
     /**
      * @var string
@@ -78,6 +70,7 @@ class Item extends \Magento\Framework\Model\AbstractModel
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
      * @param \Magento\Sales\Model\Order\ItemFactory $orderItemFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
@@ -86,12 +79,13 @@ class Item extends \Magento\Framework\Model\AbstractModel
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
+        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
         \Magento\Sales\Model\Order\ItemFactory $orderItemFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        array $data = []
     ) {
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        parent::__construct($context, $registry, $metadataService, $resource, $resourceCollection, $data);
         $this->_orderItemFactory = $orderItemFactory;
     }
 
@@ -195,17 +189,112 @@ class Item extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Before object save
+     * Returns additional_data
      *
-     * @return $this
+     * @return string
      */
-    protected function _beforeSave()
+    public function getAdditionalData()
     {
-        parent::_beforeSave();
+        return $this->getData(ShipmentItemInterface::ADDITIONAL_DATA);
+    }
 
-        if (!$this->getParentId() && $this->getShipment()) {
-            $this->setParentId($this->getShipment()->getId());
-        }
-        return $this;
+    /**
+     * Returns description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->getData(ShipmentItemInterface::DESCRIPTION);
+    }
+
+    /**
+     * Returns name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->getData(ShipmentItemInterface::NAME);
+    }
+
+    /**
+     * Returns order_item_id
+     *
+     * @return int
+     */
+    public function getOrderItemId()
+    {
+        return $this->getData(ShipmentItemInterface::ORDER_ITEM_ID);
+    }
+
+    /**
+     * Returns parent_id
+     *
+     * @return int
+     */
+    public function getParentId()
+    {
+        return $this->getData(ShipmentItemInterface::PARENT_ID);
+    }
+
+    /**
+     * Returns price
+     *
+     * @return float
+     */
+    public function getPrice()
+    {
+        return $this->getData(ShipmentItemInterface::PRICE);
+    }
+
+    /**
+     * Returns product_id
+     *
+     * @return int
+     */
+    public function getProductId()
+    {
+        return $this->getData(ShipmentItemInterface::PRODUCT_ID);
+    }
+
+    /**
+     * Returns qty
+     *
+     * @return float
+     */
+    public function getQty()
+    {
+        return $this->getData(ShipmentItemInterface::QTY);
+    }
+
+    /**
+     * Returns row_total
+     *
+     * @return float
+     */
+    public function getRowTotal()
+    {
+        return $this->getData(ShipmentItemInterface::ROW_TOTAL);
+    }
+
+    /**
+     * Returns sku
+     *
+     * @return string
+     */
+    public function getSku()
+    {
+        return $this->getData(ShipmentItemInterface::SKU);
+    }
+
+    /**
+     * Returns weight
+     *
+     * @return float
+     */
+    public function getWeight()
+    {
+        return $this->getData(ShipmentItemInterface::WEIGHT);
     }
 }

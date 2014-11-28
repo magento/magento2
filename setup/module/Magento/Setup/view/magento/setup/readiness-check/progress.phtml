@@ -56,7 +56,7 @@
                 <div class="rediness-check-info">
                     <p>
                         Your PHP version is {{version.data.current}}. The required PHP version is {{version.data.required}}.
-                        <a href="#" ng-click="updateOnExpand(version)">
+                        <a href="#php-version" ng-click="updateOnExpand(version)">
                             <span ng-hide="version.expanded">More detail</span>
                             <span ng-show="version.expanded">Less detail</span>
                         </a>
@@ -81,7 +81,7 @@
                 <div class="rediness-check-info">
                     <p>
                         You meet {{extensions.data.current.length}} out of {{extensions.data.required.length}} PHP extensions requirements.
-                        <a href="#" ng-click="updateOnExpand(extensions)">
+                        <a href="#php-extensions" ng-click="updateOnExpand(extensions)">
                             <span ng-hide="extensions.expanded">More detail</span>
                             <span ng-show="extensions.expanded">Less detail</span>
                         </a>
@@ -106,7 +106,7 @@
                 <div class="rediness-check-info">
                     <p>
                         {{extensions.data.required.length - extensions.data.current.length}} missing PHP extensions.
-                        <a href="#" ng-click="updateOnExpand(extensions)">
+                        <a href="#php-extensions" ng-click="updateOnExpand(extensions)">
                             <span ng-hide="extensions.expanded">More detail</span>
                             <span ng-show="extensions.expanded">Less detail</span>
                         </a>
@@ -138,7 +138,7 @@
                 <div class="rediness-check-info">
                     <p>
                         You meet {{permissions.data.current.length}} out of {{permissions.data.required.length}} writable file permission requirements.
-                        <a href="#" ng-click="updateOnExpand(permissions)">
+                        <a href="#php-permissions" ng-click="updateOnExpand(permissions)">
                             <span ng-hide="permissions.expanded">More detail</span>
                             <span ng-show="permissions.expanded">Less detail</span>
                         </a>
@@ -163,7 +163,7 @@
                 <div class="rediness-check-info">
                     <p>
                         {{permissions.data.required.length - permissions.data.current.length}} file permission not met.
-                        <a href="#" ng-click="updateOnExpand(permissions)">
+                        <a href="#php-permissions" ng-click="updateOnExpand(permissions)">
                             <span ng-hide="permissions.expanded">More detail</span>
                             <span ng-show="permissions.expanded">Less detail</span>
                         </a>

@@ -25,7 +25,13 @@ namespace Magento\Customer\Block\Widget;
 
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\Api\ArrayObjectSearch;
+use Magento\Customer\Api\CustomerMetadataInterface;
 
+/**
+ * Class Dob
+ *
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ */
 class Dob extends AbstractWidget
 {
     /**
@@ -50,19 +56,19 @@ class Dob extends AbstractWidget
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Helper\Address $addressHelper
-     * @param \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $customerMetadataService
+     * @param CustomerMetadataInterface $customerMetadata
      * @param \Magento\Framework\View\Element\Html\Date $dateElement
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Helper\Address $addressHelper,
-        \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $customerMetadataService,
+        CustomerMetadataInterface $customerMetadata,
         \Magento\Framework\View\Element\Html\Date $dateElement,
         array $data = array()
     ) {
         $this->dateElement = $dateElement;
-        parent::__construct($context, $addressHelper, $customerMetadataService, $data);
+        parent::__construct($context, $addressHelper, $customerMetadata, $data);
     }
 
     /**

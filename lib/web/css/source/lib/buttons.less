@@ -84,8 +84,7 @@
     .font-size(@_button-font-size);
     .css(font-weight, @_button-font-weight);
     .line-height(@_button-line-height);
-    //-moz-box-sizing: content-box; // fix Firefox button line-height problem
-    .box-sizing();
+    box-sizing: border-box;
     .css(margin, @_button-margin);
     vertical-align: middle;
     ._button-icon (
@@ -240,7 +239,7 @@
     border: 0;
     margin: 0;
     padding: 0;
-    -moz-box-sizing: content-box; // fix Firefox button line-height problem
+    -moz-box-sizing: content-box; // hack: fix Firefox button line-height problem
     box-shadow: none;
     text-shadow: none;
     text-decoration: none;

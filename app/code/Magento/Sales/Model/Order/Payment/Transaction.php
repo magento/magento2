@@ -23,6 +23,9 @@
  */
 namespace Magento\Sales\Model\Order\Payment;
 
+use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Sales\Api\Data\TransactionInterface;
+
 /**
  * Payment transaction model
  * Tracks transaction history, allows to build transactions hierarchy
@@ -30,22 +33,15 @@ namespace Magento\Sales\Model\Order\Payment;
  *
  * @method \Magento\Sales\Model\Resource\Order\Payment\Transaction _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Payment\Transaction getResource()
- * @method int getParentId()
  * @method \Magento\Sales\Model\Order\Payment\Transaction setParentId(int $value)
  * @method \Magento\Sales\Model\Order\Payment\Transaction setOrderId(int $value)
- * @method int getPaymentId()
  * @method \Magento\Sales\Model\Order\Payment\Transaction setPaymentId(int $value)
- * @method string getTxnId()
- * @method string getParentTxnId()
- * @method string getTxnType()
- * @method int getIsClosed()
  * @method \Magento\Sales\Model\Order\Payment\Transaction setIsClosed(int $value)
- * @method string getCreatedAt()
  * @method \Magento\Sales\Model\Order\Payment\Transaction setCreatedAt(string $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Transaction extends \Magento\Framework\Model\AbstractModel
+class Transaction extends AbstractExtensibleModel implements TransactionInterface
 {
     /**#@+
      * Supported transaction types
@@ -173,6 +169,7 @@ class Transaction extends \Magento\Framework\Model\AbstractModel
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
      * @param \Magento\Sales\Model\Order\PaymentFactory $paymentFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateFactory
@@ -184,19 +181,22 @@ class Transaction extends \Magento\Framework\Model\AbstractModel
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
+        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
         \Magento\Sales\Model\Order\PaymentFactory $paymentFactory,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateFactory,
         TransactionFactory $transactionFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        array $data = []
     ) {
         $this->_paymentFactory = $paymentFactory;
         $this->_orderFactory = $orderFactory;
         $this->_dateFactory = $dateFactory;
         $this->_transactionFactory = $transactionFactory;
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        parent::__construct(
+            $context, $registry, $metadataService, $resource, $resourceCollection, $data
+        );
     }
 
     /**
@@ -308,7 +308,7 @@ class Transaction extends \Magento\Framework\Model\AbstractModel
      * @param array|string $types
      * @param string $txnId
      * @param bool $recursive
-     * @return array|void
+     * @return Transaction[]
      */
     public function getChildTransactions($types = null, $txnId = null, $recursive = false)
     {
@@ -318,13 +318,13 @@ class Transaction extends \Magento\Framework\Model\AbstractModel
         if (empty($types) && null === $txnId) {
             return $this->_children;
         } elseif ($types && !is_array($types)) {
-            $types = array($types);
+            $types = [$types];
         }
 
         // get a specific transaction
         if ($txnId) {
             if (empty($this->_children)) {
-                return;
+                return null;
             }
             $transaction = null;
             if ($this->_identifiedChildren) {
@@ -341,13 +341,13 @@ class Transaction extends \Magento\Framework\Model\AbstractModel
             }
             // return transaction only if type matches
             if (!$transaction || $types && !in_array($transaction->getType(), $types, true)) {
-                return;
+                return null;
             }
             return $transaction;
         }
 
         // filter transactions by types
-        $result = array();
+        $result = [];
         foreach ($this->_children as $child) {
             if (in_array($child->getType(), $types, true)) {
                 $result[$child->getId()] = $child;
@@ -480,7 +480,7 @@ class Transaction extends \Magento\Framework\Model\AbstractModel
         $this->_verifyPaymentObject();
         $this->_eventManager->dispatch(
             $this->_eventPrefix . '_load_by_txn_id_before',
-            $this->_getEventData() + array('txn_id' => $txnId)
+            $this->_getEventData() + ['txn_id' => $txnId]
         );
         return $this;
     }
@@ -527,7 +527,7 @@ class Transaction extends \Magento\Framework\Model\AbstractModel
         }
         $info = $this->_getData('additional_information');
         if (!$info) {
-            $info = array();
+            $info = [];
         }
         $info[$key] = $value;
         return $this->setData('additional_information', $info);
@@ -543,7 +543,7 @@ class Transaction extends \Magento\Framework\Model\AbstractModel
     {
         $info = $this->_getData('additional_information');
         if (!$info) {
-            $info = array();
+            $info = [];
         }
         if ($key) {
             return isset($info[$key]) ? $info[$key] : null;
@@ -565,7 +565,7 @@ class Transaction extends \Magento\Framework\Model\AbstractModel
                 unset($info[$key]);
             }
         } else {
-            $info = array();
+            $info = [];
         }
         return $this->setData('additional_information', $info);
     }
@@ -639,7 +639,7 @@ class Transaction extends \Magento\Framework\Model\AbstractModel
             return $orderId;
         }
         if ($this->_paymentObject) {
-            return $this->_paymentObject
+            $orderId = $this->_paymentObject
                 ->getOrder() ? $this
                 ->_paymentObject
                 ->getOrder()
@@ -647,6 +647,8 @@ class Transaction extends \Magento\Framework\Model\AbstractModel
                 ->_paymentObject
                 ->getParentId();
         }
+
+        return $orderId;
     }
 
     /**
@@ -710,7 +712,7 @@ class Transaction extends \Magento\Framework\Model\AbstractModel
      *
      * @return $this
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
         // set parent id
         $this->_verifyPaymentObject();
@@ -726,7 +728,7 @@ class Transaction extends \Magento\Framework\Model\AbstractModel
 
             $this->setCreatedAt($this->_dateFactory->create()->gmtDate());
         }
-        return parent::_beforeSave();
+        return parent::beforeSave();
     }
 
     /**
@@ -767,8 +769,8 @@ class Transaction extends \Magento\Framework\Model\AbstractModel
         );
 
         // set basic children array and attempt to map them per txn_id, if all of them have txn_id
-        $this->_children = array();
-        $this->_identifiedChildren = array();
+        $this->_children = [];
+        $this->_identifiedChildren = [];
         foreach ($children as $child) {
             if ($payment) {
                 $child->setOrderPaymentObject($payment);
@@ -784,7 +786,7 @@ class Transaction extends \Magento\Framework\Model\AbstractModel
             }
         }
         if (false === $this->_identifiedChildren) {
-            $this->_identifiedChildren = array();
+            $this->_identifiedChildren = [];
         }
     }
 
@@ -817,13 +819,13 @@ class Transaction extends \Magento\Framework\Model\AbstractModel
      */
     public function getTransactionTypes()
     {
-        return array(
+        return [
             \Magento\Sales\Model\Order\Payment\Transaction::TYPE_ORDER => __('Order'),
             \Magento\Sales\Model\Order\Payment\Transaction::TYPE_AUTH => __('Authorization'),
             \Magento\Sales\Model\Order\Payment\Transaction::TYPE_CAPTURE => __('Capture'),
             \Magento\Sales\Model\Order\Payment\Transaction::TYPE_VOID => __('Void'),
             \Magento\Sales\Model\Order\Payment\Transaction::TYPE_REFUND => __('Refund')
-        );
+        ];
     }
 
     /**
@@ -909,5 +911,105 @@ class Transaction extends \Magento\Framework\Model\AbstractModel
             throw new \Magento\Framework\Model\Exception(__('You can\'t do this without a transaction object.'));
         }
         $this->_verifyTxnType();
+    }
+
+    /**
+     * Returns transaction_id
+     *
+     * @return int
+     */
+    public function getTransactionId()
+    {
+        return $this->getData(TransactionInterface::TRANSACTION_ID);
+    }
+
+    /**
+     * Returns method
+     *
+     * @return string
+     */
+    public function getMethod()
+    {
+        return $this->getData(TransactionInterface::METHOD);
+    }
+
+    /**
+     * Returns increment_id
+     *
+     * @return string
+     */
+    public function getIncrementId()
+    {
+        return $this->getData(TransactionInterface::INCREMENT_ID);
+    }
+
+    /**
+     * Returns parent_id
+     *
+     * @return int|null
+     */
+    public function getParentId()
+    {
+        return $this->getData(TransactionInterface::PARENT_ID);
+    }
+
+    /**
+     * Returns payment_id
+     *
+     * @return int
+     */
+    public function getPaymentId()
+    {
+        return $this->getData(TransactionInterface::PAYMENT_ID);
+    }
+
+    /**
+     * Returns txn_id
+     *
+     * @return string
+     */
+    public function getTxnId()
+    {
+        return $this->getData(TransactionInterface::TXN_ID);
+    }
+
+    /**
+     * Returns parent_txn_id
+     *
+     * @return string
+     */
+    public function getParentTxnId()
+    {
+        return $this->getData(TransactionInterface::PARENT_TXN_ID);
+    }
+
+    /**
+     * Returns txn_type
+     *
+     * @return string
+     */
+    public function getTxnType()
+    {
+        return $this->getData(TransactionInterface::TXN_TYPE);
+    }
+
+    /**
+     * Returns is_closed
+     *
+     * @return int
+     */
+    public function getIsClosed()
+    {
+        return $this->getData(TransactionInterface::IS_CLOSED);
+    }
+
+    /**
+     * Returns created_at
+     *
+     * @return string
+     */
+    public function getCreatedAt()
+    {
+        return $this->getData(TransactionInterface::CREATED_AT);
     }
 }

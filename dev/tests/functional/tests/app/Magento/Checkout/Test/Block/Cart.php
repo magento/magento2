@@ -135,7 +135,7 @@ class Cart extends Block
     {
         $element = $this->_rootElement->find(
             '//table[@id="shopping-cart-totals-table"]' .
-            '//tr[normalize-space(td)="Discount"]' .
+            '//tr[@class="totals"]' .
             '//td[@class="amount"]//span[@class="price"]',
             Locator::SELECTOR_XPATH
         );

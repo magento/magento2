@@ -21,17 +21,14 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-/**
- * Category abstract block
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Block\Adminhtml\Category;
 
 use Magento\Store\Model\Store;
 use Magento\Framework\Data\Tree\Node;
 
+/**
+ * Class AbstractCategory
+ */
 class AbstractCategory extends \Magento\Backend\Block\Template
 {
     /**
@@ -68,7 +65,7 @@ class AbstractCategory extends \Magento\Backend\Block\Template
         \Magento\Catalog\Model\Resource\Category\Tree $categoryTree,
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
-        array $data = array()
+        array $data = []
     ) {
         $this->_categoryTree = $categoryTree;
         $this->_coreRegistry = $registry;
@@ -254,8 +251,6 @@ class AbstractCategory extends \Magento\Backend\Block\Template
     public function getNode($parentNodeCategory, $recursionLevel = 2)
     {
         $nodeId = $parentNodeCategory->getId();
-        $parentId = $parentNodeCategory->getParentId();
-
         $node = $this->_categoryTree->loadNode($nodeId);
         $node->loadChildren($recursionLevel);
 
@@ -274,9 +269,9 @@ class AbstractCategory extends \Magento\Backend\Block\Template
      * @param array $args
      * @return string
      */
-    public function getSaveUrl(array $args = array())
+    public function getSaveUrl(array $args = [])
     {
-        $params = array('_current' => true);
+        $params = ['_current' => false, '_query' => false];
         $params = array_merge($params, $args);
         return $this->getUrl('catalog/*/save', $params);
     }
@@ -288,7 +283,7 @@ class AbstractCategory extends \Magento\Backend\Block\Template
     {
         return $this->getUrl(
             'catalog/category/edit',
-            array('_current' => true, 'store' => null, '_query' => false, 'id' => null, 'parent' => null)
+            ['store' => null, '_query' => false, 'id' => null, 'parent' => null]
         );
     }
 
@@ -301,7 +296,7 @@ class AbstractCategory extends \Magento\Backend\Block\Template
     {
         $ids = $this->getData('root_ids');
         if (is_null($ids)) {
-            $ids = array();
+            $ids = [];
             foreach ($this->_storeManager->getGroups() as $store) {
                 $ids[] = $store->getRootCategoryId();
             }

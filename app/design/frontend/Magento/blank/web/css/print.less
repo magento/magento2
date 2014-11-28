@@ -34,8 +34,8 @@
     *{background: transparent !important;
         color: black !important;
         text-shadow: none !important;
+        -webkit-filter: none !important; // Use in 41 Chrome
         filter: none !important;
-        -ms-filter: none !important;
     }
 
     // Black prints faster:h5bp.com/s
@@ -100,6 +100,17 @@
     .footer .copyright {
         display: block !important;
         margin: 10px 0;
+    }
+
+    .order-details-items {
+        .order-items {
+            .order-gift-message {
+                &:not(.expanded-content) {
+                    visibility: visible;
+                    height: auto;
+                }
+            }
+        }
     }
     .column.main {
         width: 100% !important;

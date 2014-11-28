@@ -75,7 +75,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             'Magento\Customer\Service\V1\CustomerAccountServiceInterface'
         );
 
-        /** @var $customer \Magento\Customer\Service\V1\Data\Customer */
+        /** @var $customer \Magento\Customer\Api\Data\CustomerInterface */
         $customer = $customerAccountService->getCustomer(1);
         $event->setData('customer', $customer);
         $this->_persistentSession->setRememberMeChecked(true);

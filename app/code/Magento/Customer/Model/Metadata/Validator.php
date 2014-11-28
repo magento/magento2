@@ -62,7 +62,7 @@ class Validator extends \Magento\Eav\Model\Validator\Attribute\Data
 
     /**
      * @param array                                                    $data
-     * @param \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata[] $attributes
+     * @param \Magento\Customer\Api\Data\AttributeMetadataInterface[] $attributes
      * @param string                                                   $entityType
      * @return bool
      */

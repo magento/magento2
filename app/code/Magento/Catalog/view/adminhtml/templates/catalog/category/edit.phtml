@@ -57,7 +57,7 @@ require([
         if (confirm('<?php echo __('Are you sure you want to delete this category?') ?>')){
             if (useAjax){
                 tree.nodeForDelete = categoryId;
-                updateContent(url, {}, true);
+                updateContent(url, {}, true, true);
             } else {
                 location.href = url;
             }
@@ -67,14 +67,19 @@ require([
     /**
      * Update category content area
      */
-    function updateContent(url, params, refreshTree) {
-        var win = this;
-        var params = jQuery.extend(params || {}, {
+    function updateContent(url, params, refreshTree, deleteAction) {
+        var node        = tree.getNodeById(tree.currentNodeId),
+            parentNode  = node && node.parentNode,
+            parentId,
+            redirectUrl,
+            params;
+
+        params = jQuery.extend(params || {}, {
             form_key: FORM_KEY
         });
-
+        
         if (params.node_name) {
-            this.tree.getNodeById(tree.currentNodeId).currentNode.setText(params.node_name);
+            node.setText(params.node_name);
         }
 
         (function($){
@@ -85,6 +90,16 @@ require([
                 context: $('body'),
                 showLoader: true
             }).done(function(data){
+                if (deleteAction && parentNode) {
+                    parentId    = parentNode.id;
+
+                    redirectUrl = !parentNode.isRoot ?
+                        tree.buildUrl(parentId) :
+                        tree.getBaseUrl();
+
+                    location.href = redirectUrl;
+                }
+
                 if (data.content) {
                     $('.page-actions').floatingHeader('destroy');
                     try {
@@ -92,7 +107,7 @@ require([
                             tinyMCE.execCommand('mceRemoveControl', false, $(element).attr('id'));
                         });
                         $categoryContainer.html('');
-                    } catch(e) {
+                    } catch (e) {
                         alert(e.message);
                     }
                     $categoryContainer.html(data.content).trigger('contentUpdated');
@@ -101,16 +116,19 @@ require([
                             tinyMCE.execCommand('mceRemoveControl', false, $(element).attr('id'));
                             tinyMCE.execCommand('mceAddControl', true, $(element).attr('id'));
                         });
-                        $('.page-actions').floatingHeader({ 'title': '.category-edit-title'});
+                        $('.page-actions').floatingHeader({
+                            'title': '.category-edit-title'
+                        });
                         try {
                             if (refreshTree) {
-                                win.refreshTreeArea();
+                                window.refreshTreeArea();
                             }
                         } catch (e) {
                             alert(e.message);
                         };
                     }, 25);
                 }
+
                 if (data.messages && data.messages.length > 0) {
                     $('.messages').html(data.messages);
                 }
@@ -123,6 +141,9 @@ require([
      */
     function refreshTreeArea(transport)
     {
+        var config,
+            url;
+
         if (tree && window.editingCategoryBreadcrumbs) {
             // category deleted - delete its node
             if (tree.nodeForDelete) {
@@ -140,24 +161,9 @@ require([
                 tree.addNodeTo = false;
 
                 if (parent) { // Check maybe tree became somehow not synced with ajax and we're trying to add to unknown node
-                    var node = new Ext.tree.AsyncTreeNode(editingCategoryBreadcrumbs[editingCategoryBreadcrumbs.length - 1]);
-                    node.loaded = true;
-                    tree.currentNodeId = node.id;
-                    parent.appendChild(node);
+                    config = editingCategoryBreadcrumbs[editingCategoryBreadcrumbs.length - 1];
 
-                    if (parent.expanded) {
-                        tree.selectCurrentNode();
-                    } else {
-                        var timer;
-                        parent.expand();
-                        var f = function(){
-                            if(parent.expanded){ // done expanding
-                                clearInterval(timer);
-                                tree.selectCurrentNode();
-                            }
-                        };
-                        timer = setInterval(f, 200);
-                    }
+                    window.location.href = tree.buildUrl(config.id);
                 }
             }
 

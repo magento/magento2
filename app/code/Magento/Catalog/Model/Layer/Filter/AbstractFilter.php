@@ -25,11 +25,11 @@ namespace Magento\Catalog\Model\Layer\Filter;
 
 /**
  * Layer category filter abstract model
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
-abstract class AbstractFilter extends \Magento\Framework\Object
+abstract class AbstractFilter extends \Magento\Framework\Object implements FilterInterface
 {
+    const ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS = 1;
+
     /**
      * Request variable name with filter value
      *
@@ -66,22 +66,33 @@ abstract class AbstractFilter extends \Magento\Framework\Object
     protected $_filterItemFactory;
 
     /**
+     * Item Data Builder
+     *
+     * @var \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder
+     */
+    protected $itemDataBuilder;
+
+    /**
      * Constructor
      *
      * @param \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Layer $layer
+     * @param \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder $itemDataBuilder
      * @param array $data
+     * @throws \Magento\Framework\Model\Exception
      */
     public function __construct(
         \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory,
         \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Layer $layer,
+        \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder $itemDataBuilder,
         array $data = array()
     ) {
         $this->_filterItemFactory = $filterItemFactory;
         $this->_storeManager = $storeManager;
         $this->_catalogLayer = $layer;
+        $this->itemDataBuilder = $itemDataBuilder;
         parent::__construct($data);
         if ($this->hasAttributeModel()) {
             $this->_requestVar = $this->getAttributeModel()->getAttributeCode();
@@ -133,10 +144,10 @@ abstract class AbstractFilter extends \Magento\Framework\Object
     /**
      * Apply filter to collection
      *
-     * @param \Zend_Controller_Request_Abstract $request
+     * @param \Magento\Framework\App\RequestInterface $request
      * @return $this
      */
-    public function apply(\Zend_Controller_Request_Abstract $request)
+    public function apply(\Magento\Framework\App\RequestInterface $request)
     {
         return $this;
     }
@@ -162,6 +173,18 @@ abstract class AbstractFilter extends \Magento\Framework\Object
             $this->_initItems();
         }
         return $this->_items;
+    }
+
+    /**
+     * Set all filter items
+     *
+     * @param array $items
+     * @return $this
+     */
+    public function setItems(array $items)
+    {
+        $this->_items = $items;
+        return $this;
     }
 
     /**
@@ -224,15 +247,11 @@ abstract class AbstractFilter extends \Magento\Framework\Object
      */
     protected function _createItem($label, $value, $count = 0)
     {
-        return $this->_filterItemFactory->create()->setFilter(
-            $this
-        )->setLabel(
-            $label
-        )->setValue(
-            $value
-        )->setCount(
-            $count
-        );
+        return $this->_filterItemFactory->create()
+            ->setFilter($this)
+            ->setLabel($label)
+            ->setValue($value)
+            ->setCount($count);
     }
 
     /**
@@ -287,6 +306,7 @@ abstract class AbstractFilter extends \Magento\Framework\Object
      * Get filter text label
      *
      * @return string
+     * @throws \Magento\Framework\Model\Exception
      */
     public function getName()
     {
@@ -351,5 +371,28 @@ abstract class AbstractFilter extends \Magento\Framework\Object
     public function getClearLinkText()
     {
         return false;
+    }
+
+    /**
+     * Get option text from frontend model by option id
+     *
+     * @param   int $optionId
+     * @throws \Magento\Framework\Model\Exception
+     * @return  string|bool
+     */
+    protected function getOptionText($optionId)
+    {
+        return $this->getAttributeModel()->getFrontend()->getOption($optionId);
+    }
+
+    /**
+     * Check whether specified attribute can be used in LN
+     *
+     * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
+     * @return int
+     */
+    protected function getAttributeIsFilterable($attribute)
+    {
+        return $attribute->getIsFilterable();
     }
 }

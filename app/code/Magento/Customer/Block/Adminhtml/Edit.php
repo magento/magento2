@@ -24,7 +24,8 @@
 namespace Magento\Customer\Block\Adminhtml;
 
 use Magento\Customer\Controller\RegistryConstants;
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
+use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
  * Customer edit block
@@ -38,8 +39,15 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      */
     protected $_coreRegistry = null;
 
-    /** @var CustomerAccountServiceInterface */
-    protected $_customerAccountService;
+    /**
+     * @var AccountManagementInterface
+     */
+    protected $customerAccountManagement;
+
+    /**
+     * @var CustomerRepositoryInterface
+     */
+    protected $customerRepository;
 
     /**
      * Customer view helper
@@ -53,19 +61,22 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      *
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param CustomerAccountServiceInterface $customerAccountService
+     * @param AccountManagementInterface $customerAccountManagement
+     * @param CustomerRepositoryInterface $customerRepository
      * @param \Magento\Customer\Helper\View $viewHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
         \Magento\Framework\Registry $registry,
-        CustomerAccountServiceInterface $customerAccountService,
+        AccountManagementInterface $customerAccountManagement,
+        CustomerRepositoryInterface $customerRepository,
         \Magento\Customer\Helper\View $viewHelper,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
-        $this->_customerAccountService = $customerAccountService;
+        $this->customerAccountManagement = $customerAccountManagement;
+        $this->customerRepository = $customerRepository;
         $this->_viewHelper = $viewHelper;
         parent::__construct($context, $data);
     }
@@ -98,12 +109,12 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         $this->buttonList->update('save', 'label', __('Save Customer'));
         $this->buttonList->update('delete', 'label', __('Delete Customer'));
 
-        if ($customerId && !$this->_customerAccountService->canModify($customerId)) {
+        if ($customerId && $this->customerAccountManagement->isReadonly($customerId)) {
             $this->buttonList->remove('save');
             $this->buttonList->remove('reset');
         }
 
-        if (!$customerId || !$this->_customerAccountService->canDelete($customerId)) {
+        if (!$customerId || $this->customerAccountManagement->isReadonly($customerId)) {
             $this->buttonList->remove('delete');
         }
 
@@ -165,7 +176,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     {
         $customerId = $this->getCustomerId();
         if ($customerId) {
-            $customerData = $this->_customerAccountService->getCustomer($customerId);
+            $customerData = $this->customerRepository->getById($customerId);
             return $this->escapeHtml($this->_viewHelper->getCustomerName($customerData));
         } else {
             return __('New Customer');
@@ -204,7 +215,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     protected function _prepareLayout()
     {
         $customerId = $this->getCustomerId();
-        if (!$customerId || $this->_customerAccountService->canModify($customerId)) {
+        if (!$customerId || !$this->customerAccountManagement->isReadonly($customerId)) {
             $this->buttonList->add(
                 'save_and_continue',
                 array(

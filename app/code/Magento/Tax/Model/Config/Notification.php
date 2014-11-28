@@ -60,13 +60,13 @@ class Notification extends \Magento\Framework\App\Config\Value
      *
      * @return \Magento\Tax\Model\Config\Notification
      */
-    protected function _afterSave()
+    public function afterSave()
     {
         if ($this->isValueChanged()) {
             $this->_resetNotificationFlag(\Magento\Tax\Model\Config::XML_PATH_TAX_NOTIFICATION_IGNORE_DISCOUNT);
             $this->_resetNotificationFlag(\Magento\Tax\Model\Config::XML_PATH_TAX_NOTIFICATION_IGNORE_PRICE_DISPLAY);
         }
-        return parent::_afterSave($this);
+        return parent::afterSave($this);
     }
 
     /**

@@ -39,12 +39,6 @@ use Magento\Search\Model\Resource\Query\Collection;
  */
 class Data extends AbstractHelper
 {
-    const XML_PATH_CATALOG_SEARCH_TYPE = 'catalog/search/search_type';
-
-    const SEARCH_TYPE_LIKE = 1;
-    const SEARCH_TYPE_FULLTEXT = 2;
-    const SEARCH_TYPE_COMBINE = 3;
-
     /**
      * @var array
      */
@@ -237,21 +231,6 @@ class Data extends AbstractHelper
     }
 
     /**
-     * Retrieve maximum query words count for like search
-     *
-     * @param mixed $store
-     * @return int
-     */
-    public function getMaxQueryWords($store = null)
-    {
-        return $this->_scopeConfig->getValue(
-            SearchQuery::XML_PATH_MAX_QUERY_WORDS,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $store
-        );
-    }
-
-    /**
      * Add Note message
      *
      * @param string $message
@@ -302,27 +281,6 @@ class Data extends AbstractHelper
             );
         }
 
-        $searchType = $this->_scopeConfig->getValue(
-            self::XML_PATH_CATALOG_SEARCH_TYPE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
-        if ($searchType == self::SEARCH_TYPE_COMBINE || $searchType == self::SEARCH_TYPE_LIKE) {
-            $wordsFull = $this->filter->splitWords($this->_queryFactory->get()->getQueryText(), array('uniqueOnly' => true));
-            $wordsLike = $this->filter->splitWords(
-                $this->_queryFactory->get()->getQueryText(),
-                array('uniqueOnly' => true, 'wordsQty' => $this->getMaxQueryWords())
-            );
-            if (count($wordsFull) > count($wordsLike)) {
-                $wordsCut = array_map(array($this->_escaper, 'escapeHtml'), array_diff($wordsFull, $wordsLike));
-                $this->addNoteMessage(
-                    __(
-                        'Sorry, but the maximum word count is %1. We left out this part of your search: %2.',
-                        $this->getMaxQueryWords(),
-                        join(' ', $wordsCut)
-                    )
-                );
-            }
-        }
         return $this;
     }
 
@@ -344,7 +302,7 @@ class Data extends AbstractHelper
                 $_index = array_merge($_index, $value);
             }
         }
-        return join($separator, $_index);
+        return join($separator, array_filter($_index));
     }
 
     /**

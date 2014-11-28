@@ -33,7 +33,7 @@ class AttributePriceTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Tax\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
     protected $taxHelperMock;
 
-    /** @var \Magento\Tax\Service\V1\TaxCalculationServiceInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Tax\Api\TaxCalculationInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $calculationServiceMock;
 
     /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject */
@@ -67,14 +67,7 @@ class AttributePriceTest extends \PHPUnit_Framework_TestCase
             false,
             false
         );
-        $this->calculationServiceMock = $this->getMock(
-            'Magento\Tax\Service\V1\TaxCalculationService',
-            ['getDefaultCalculatedRate', 'getCalculatedRate'],
-            [],
-            '',
-            false,
-            false
-        );
+        $this->calculationServiceMock = $this->getMock('Magento\Tax\Api\TaxCalculationInterface');
         $this->productMock = $this->getMock(
             'Magento\Catalog\Model\Product',
             ['__wakeup', 'getTaxClassId', 'getPriceInfo'],

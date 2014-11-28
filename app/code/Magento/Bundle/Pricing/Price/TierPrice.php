@@ -99,4 +99,12 @@ class TierPrice extends \Magento\Catalog\Pricing\Price\TierPrice implements Disc
     {
         return $firstPrice > $secondPrice;
     }
+
+    /**
+     * @return bool
+     */
+    public function isPercentageDiscount()
+    {
+        return true;
+    }
 }

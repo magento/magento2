@@ -193,10 +193,10 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      *
      * @return $this
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
         $this->validate();
-        return parent::_beforeSave();
+        return parent::beforeSave();
     }
 
     /**

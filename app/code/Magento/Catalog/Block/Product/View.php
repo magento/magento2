@@ -24,7 +24,7 @@
 namespace Magento\Catalog\Block\Product;
 
 use Magento\Catalog\Model\Product;
-use Magento\Tax\Service\V1\TaxCalculationServiceInterface;
+use Magento\Tax\Api\TaxCalculationInterface;
 
 /**
  * Product View block
@@ -76,7 +76,7 @@ class View extends AbstractProduct implements \Magento\Framework\View\Block\Iden
     protected $customerSession;
 
     /**
-     * @var TaxCalculationServiceInterface
+     * @var TaxCalculationInterface
      */
     protected $taxCalculationService;
 
@@ -90,7 +90,7 @@ class View extends AbstractProduct implements \Magento\Framework\View\Block\Iden
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param TaxCalculationServiceInterface $taxCalculationService
+     * @param TaxCalculationInterface $taxCalculationService
      * @param array $data
      */
     public function __construct(
@@ -103,7 +103,7 @@ class View extends AbstractProduct implements \Magento\Framework\View\Block\Iden
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Customer\Model\Session $customerSession,
-        TaxCalculationServiceInterface $taxCalculationService,
+        TaxCalculationInterface $taxCalculationService,
         array $data = array()
     ) {
         $this->_productHelper = $productHelper;
@@ -253,7 +253,7 @@ class View extends AbstractProduct implements \Magento\Framework\View\Block\Iden
         $tierPricesList = $product->getPriceInfo()->getPrice('tier_price')->getTierPriceList();
 
         foreach ($tierPricesList as $tierPrice) {
-            $tierPrices[] = $this->_coreData->currency($tierPrice['price']->getValue(), false, false);
+            $tierPrices[] = $tierPrice['price']->getValue();
         }
         $config = array(
             'productId' => $product->getId(),
@@ -261,26 +261,10 @@ class View extends AbstractProduct implements \Magento\Framework\View\Block\Iden
             'includeTax' => $this->_taxData->priceIncludesTax() ? 'true' : 'false',
             'showIncludeTax' => $this->_taxData->displayPriceIncludingTax(),
             'showBothPrices' => $this->_taxData->displayBothPrices(),
-            'productPrice' => $this->_coreData->currency(
-                $product->getPriceInfo()->getPrice('final_price')->getValue(),
-                false,
-                false
-            ),
-            'productOldPrice' => $this->_coreData->currency(
-                $product->getPriceInfo()->getPrice('regular_price')->getAmount()->getValue(),
-                false,
-                false
-            ),
-            'inclTaxPrice' => $this->_coreData->currency(
-                $product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue(),
-                false,
-                false
-            ),
-            'exclTaxPrice' => $this->_coreData->currency(
-                $product->getPriceInfo()->getPrice('final_price')->getAmount()->getBaseAmount(),
-                false,
-                false
-            ),
+            'productPrice' => $product->getPriceInfo()->getPrice('final_price')->getValue(),
+            'productOldPrice' => $product->getPriceInfo()->getPrice('regular_price')->getAmount()->getValue(),
+            'inclTaxPrice' => $product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue(),
+            'exclTaxPrice' => $product->getPriceInfo()->getPrice('final_price')->getAmount()->getBaseAmount(),
             'defaultTax' => $defaultTax,
             'currentTax' => $currentTax,
             'idSuffix' => '_clone',

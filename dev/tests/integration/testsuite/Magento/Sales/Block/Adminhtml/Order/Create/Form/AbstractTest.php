@@ -48,7 +48,8 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             $objectManager->get('Magento\Backend\Model\Session\Quote'),
             $objectManager->get('Magento\Sales\Model\AdminOrder\Create'),
             $objectManager->get('Magento\Framework\Pricing\PriceCurrencyInterface'),
-            $objectManager->get('Magento\Framework\Data\FormFactory')
+            $objectManager->get('Magento\Framework\Data\FormFactory'),
+            $objectManager->get('Magento\Framework\Reflection\DataObjectProcessor')
         );
 
         /** @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractForm */

@@ -34,9 +34,9 @@ class Attribute extends \Magento\Catalog\Model\Layer\Filter\Attribute
      * Check whether specified attribute can be used in LN
      *
      * @param \Magento\Catalog\Model\Resource\Eav\Attribute  $attribute
-     * @return bool
+     * @return int
      */
-    protected function _getIsFilterableAttribute($attribute)
+    protected function getAttributeIsFilterable($attribute)
     {
         return $attribute->getIsFilterableInSearch();
     }

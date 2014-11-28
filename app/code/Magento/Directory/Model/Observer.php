@@ -93,7 +93,6 @@ class Observer
     ) {
         $this->_importFactory = $importFactory;
         $this->_scopeConfig = $scopeConfig;
-        $this->_importFactory = $importFactory;
         $this->_transportBuilder = $transportBuilder;
         $this->_storeManager = $storeManager;
         $this->_currencyFactory = $currencyFactory;

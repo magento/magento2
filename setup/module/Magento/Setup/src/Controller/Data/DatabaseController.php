@@ -25,7 +25,6 @@ namespace Magento\Setup\Controller\Data;
 
 use Magento\Setup\Model\InstallerFactory;
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Stdlib\ResponseInterface as Response;
 use Zend\View\Model\JsonModel;
 use Zend\Json\Json;
 use Magento\Setup\Model\WebLogger;
@@ -72,7 +71,7 @@ class DatabaseController extends AbstractActionController
             $installer->checkDatabaseConnection($params['name'], $params['host'], $params['user'], $password);
             return $this->jsonResponse->setVariables(['success' => true]);
         } catch (\Exception $e) {
-            return $this->jsonResponse->setVariables(['success' => false]);
+            return $this->jsonResponse->setVariables(['success' => false, 'error' => $e->getMessage()]);
         }
     }
 

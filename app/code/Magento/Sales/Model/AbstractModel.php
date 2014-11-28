@@ -23,11 +23,13 @@
  */
 namespace Magento\Sales\Model;
 
+use Magento\Framework\Model\AbstractExtensibleModel;
+
 /**
  * Sales abstract model
  * Provide date processing functionality
  */
-abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
+abstract class AbstractModel extends AbstractExtensibleModel
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
@@ -42,6 +44,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
@@ -51,13 +54,14 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
+        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        parent::__construct($context, $registry, $metadataService, $resource, $resourceCollection, $data);
         $this->_localeDate = $localeDate;
         $this->dateTime = $dateTime;
     }

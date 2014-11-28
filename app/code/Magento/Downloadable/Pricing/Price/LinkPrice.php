@@ -44,6 +44,8 @@ class LinkPrice extends RegularPrice implements LinkPriceInterface
      */
     public function getLinkAmount(Link $link)
     {
-        return $this->calculator->getAmount($link->getPrice(), $link->getProduct());
+        $price = $link->getPrice();
+        $convertedPrice = $this->priceCurrency->convertAndRound($price);
+        return $this->calculator->getAmount($convertedPrice, $link->getProduct());
     }
 }

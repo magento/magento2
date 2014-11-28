@@ -22,15 +22,18 @@
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
-.widget.product.link {
-    a {
-        &:extend(.abstract-product-link all);
+.block-product-link,
+.block-category-link {
+    &.widget {
+        display: block;
+        margin-bottom: @indent-base;
     }
 }
 
-div.widget.product.link,
-div.widget.category.link {
-    &:extend(.abstract-margin-for-blocks-and-widgets all);
+.block-product-link-inline {
+    &.widget {
+        margin: 0;
+    }
 }
 
 .block.widget {
@@ -71,9 +74,8 @@ div.widget.category.link {
     .layout-3 .block.widget .products-grid .product-item { width: 100%/4 }
     .block.widget .products-grid .product-items { margin: 0; }
     .block.widget .products-grid .product-item {
-        width: 100%/4;
-        width: 200px;
-        margin-left: calc(~"(100% - 4 * 200px) / 3");
+        width: 22%;
+        margin-left: calc(~"(100% - 4 * 22%) / 3");
         padding: 0;
         &:nth-child(4n+1) {
             margin-left: 0;

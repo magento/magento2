@@ -72,7 +72,7 @@
         </currencyBlock>
         <cmsPageBlock>
             <class>Magento\Cms\Test\Block\Page</class>
-            <locator>.page.main</locator>
+            <locator>.page-main</locator>
             <strategy>css selector</strategy>
         </cmsPageBlock>
         <widgetView>

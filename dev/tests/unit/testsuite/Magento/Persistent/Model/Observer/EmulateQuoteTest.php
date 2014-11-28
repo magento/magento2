@@ -93,7 +93,7 @@ class EmulateQuoteTest extends \PHPUnit_Framework_TestCase
         $this->checkoutSessionMock = $this->getMock('\Magento\Checkout\Model\Session', [], [], '', false);
         $this->eventMock = $this->getMock('Magento\Framework\Event', $eventMethods, [], '', false);
         $this->requestMock = $this->getMock('\Magento\Framework\App\Request\Http', [], [], '', false);
-        $this->customerMock = $this->getMock('Magento\Customer\Service\V1\Data\Customer', [], [], '', false);
+        $this->customerMock = $this->getMock('Magento\Customer\Api\Data\CustomerInterface', [], [], '', false);
         $this->sessionMock =
             $this->getMock('\Magento\Persistent\Model\Session', ['getCustomerId', '__wakeUp'], [], '', false);
         $this->model = new \Magento\Persistent\Model\Observer\EmulateQuote(

@@ -23,13 +23,19 @@
 //  */
 
 @widgets-indent-bottom: @indent-base;
-.widget.static.block {}
 
-.widget-cms-link {
-    display: block;
-    .css(margin-bottom, @widgets-indent-bottom);
+.block-static-block,
+.block-cms-link {
+    &.widget {
+        display: block;
+        .css(margin-bottom, @widgets-indent-bottom);
+    }
+
 }
 
-.widget-cms-link-inline {
-    margin: 0;
+.block-cms-link-inline {
+    &.widget {
+        margin: 0;
+    }
+
 }

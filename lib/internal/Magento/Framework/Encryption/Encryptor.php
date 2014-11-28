@@ -23,6 +23,8 @@
  */
 namespace Magento\Framework\Encryption;
 
+use Magento\Framework\App\DeploymentConfig;
+
 /**
  * Provides basic logic for hashing passwords and encrypting/decrypting misc data
  */
@@ -31,7 +33,7 @@ class Encryptor implements EncryptorInterface
     /**
      * Crypt key
      */
-    const PARAM_CRYPT_KEY = 'crypt.key';
+    const PARAM_CRYPT_KEY = 'crypt/key';
 
     /**
      * Default length of salt in bytes
@@ -63,16 +65,16 @@ class Encryptor implements EncryptorInterface
     /**
      * @param \Magento\Framework\Math\Random $randomGenerator
      * @param \Magento\Framework\Encryption\CryptFactory $cryptFactory
-     * @param string $cryptKey
+     * @param DeploymentConfig $deploymentConfig
      */
     public function __construct(
         \Magento\Framework\Math\Random $randomGenerator,
         \Magento\Framework\Encryption\CryptFactory $cryptFactory,
-        $cryptKey
+        DeploymentConfig $deploymentConfig
     ) {
         $this->_randomGenerator = $randomGenerator;
         $this->_cryptFactory = $cryptFactory;
-        $this->_cryptKey = $cryptKey;
+        $this->_cryptKey = $deploymentConfig->get(self::PARAM_CRYPT_KEY);
     }
 
     /**

@@ -35,7 +35,7 @@ class AjaxDelete extends \Magento\Tax\Controller\Adminhtml\Tax
     {
         $classId = (int)$this->getRequest()->getParam('class_id');
         try {
-            $this->taxClassService->deleteTaxClass($classId);
+            $this->taxClassRepository->deleteById($classId);
             $responseContent = $this->_objectManager->get(
                 'Magento\Core\Helper\Data'
             )->jsonEncode(

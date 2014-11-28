@@ -80,9 +80,9 @@ if ($product->isSaleable()) {
             'addToCartUrl' => $addToCartUrl,
         ]];
         if ($this->getRequest()->getFullActionName() === 'catalog_product_view') {
-            $data['addToCartButton'] = '#product_addtocart_form [type=submit]';
+            $data['addToCart']['addToCartButton'] = '#product_addtocart_form [type=submit]';
         } else {
-            $data['cartForm'] = '#product_addtocart_form_from_popup';
+            $data['addToCart']['cartForm'] = '#product_addtocart_form_from_popup';
         }
     ?>
     <span id="<?php echo $this->getPriceId() ? $this->getPriceId() : $priceElementId ?>" style="display:none"></span>
@@ -96,7 +96,7 @@ if ($product->isSaleable()) {
     </span>
 <?php endif; ?>
 
-<?php if ($this->getZone() == \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW): ?>
+<?php if ($block->getZone() == \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW): ?>
     <?php $helpLinkId = 'msrp-help-' . $productId . $this->getRandomString(20); ?>
     <a href="#"
        id="<?php echo $helpLinkId;?>"

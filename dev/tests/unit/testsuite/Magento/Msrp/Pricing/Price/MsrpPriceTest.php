@@ -65,6 +65,11 @@ class MsrpPriceTest extends \PHPUnit_Framework_TestCase
      */
     protected $config;
 
+    /**
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $priceCurrencyMock;
+
     protected function setUp()
     {
         $this->saleableItem = $this->getMock(
@@ -103,10 +108,14 @@ class MsrpPriceTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->config = $this->getMock('Magento\Msrp\Model\Config', ['isEnabled'], [], '', false);
+
+        $this->priceCurrencyMock = $this->getMock('\Magento\Framework\Pricing\PriceCurrencyInterface');
+
         $this->object = new MsrpPrice(
             $this->saleableItem,
             PriceInfoInterface::PRODUCT_QUANTITY_DEFAULT,
             $this->calculator,
+            $this->priceCurrencyMock,
             $this->helper,
             $this->config
         );

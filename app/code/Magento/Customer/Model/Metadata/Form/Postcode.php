@@ -24,7 +24,7 @@
 namespace Magento\Customer\Model\Metadata\Form;
 
 use Magento\Customer\Model\Metadata\ElementFactory;
-use Magento\Customer\Service\V1\Data\Eav\AttributeMetadata;
+use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Logger;
@@ -43,7 +43,7 @@ class Postcode extends AbstractData
     /**
      * @param MagentoTimezone $localeDate
      * @param Logger $logger
-     * @param AttributeMetadata $attribute
+     * @param AttributeMetadataInterface $attribute
      * @param ResolverInterface $localeResolver
      * @param string $value
      * @param string $entityTypeCode
@@ -53,7 +53,7 @@ class Postcode extends AbstractData
     public function __construct(
         MagentoTimezone $localeDate,
         Logger $logger,
-        AttributeMetadata $attribute,
+        AttributeMetadataInterface $attribute,
         ResolverInterface $localeResolver,
         $value,
         $entityTypeCode,

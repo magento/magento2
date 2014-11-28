@@ -35,7 +35,7 @@ class Security implements \Magento\Framework\Notification\MessageInterface
      *
      * @var string
      */
-    private $_filePath = 'app/etc/local.xml';
+    private $_filePath = 'app/etc/config.php';
 
     /**
      * Time out for HTTP verification request

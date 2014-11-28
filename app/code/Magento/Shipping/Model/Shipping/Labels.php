@@ -198,9 +198,9 @@ class Labels extends \Magento\Shipping\Model\Shipping
         $request->setRecipientContactCompanyName($address->getCompany());
         $request->setRecipientContactPhoneNumber($address->getTelephone());
         $request->setRecipientEmail($address->getEmail());
-        $request->setRecipientAddressStreet(trim($address->getStreet1() . ' ' . $address->getStreet2()));
-        $request->setRecipientAddressStreet1($address->getStreet1());
-        $request->setRecipientAddressStreet2($address->getStreet2());
+        $request->setRecipientAddressStreet(trim($address->getStreetLine(1) . ' ' . $address->getStreetLine(2)));
+        $request->setRecipientAddressStreet1($address->getStreetLine(1));
+        $request->setRecipientAddressStreet2($address->getStreetLine(2));
         $request->setRecipientAddressCity($address->getCity());
         $request->setRecipientAddressStateOrProvinceCode($address->getRegionCode());
         $request->setRecipientAddressRegionCode($recipientRegionCode);

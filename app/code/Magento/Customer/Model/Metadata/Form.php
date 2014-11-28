@@ -23,8 +23,8 @@
  */
 namespace Magento\Customer\Model\Metadata;
 
-use Magento\Customer\Service\V1\AddressMetadataServiceInterface;
-use Magento\Customer\Service\V1\CustomerMetadataServiceInterface;
+use Magento\Customer\Api\AddressMetadataInterface;
+use Magento\Customer\Api\CustomerMetadataInterface;
 
 class Form
 {
@@ -38,12 +38,12 @@ class Form
     /**#@-*/
 
     /**
-     * @var CustomerMetadataServiceInterface
+     * @var CustomerMetadataInterface
      */
     protected $_customerMetadataService;
 
     /**
-     * @var AddressMetadataServiceInterface
+     * @var AddressMetadataInterface
      */
     protected $_addressMetadataService;
 
@@ -105,13 +105,13 @@ class Form
     protected $_validator;
 
     /**
-     * @var \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata[]
+     * @var \Magento\Customer\Api\Data\AttributeMetadataInterface[]
      */
     protected $_attributes;
 
     /**
-     * @param CustomerMetadataServiceInterface $customerMetadataService
-     * @param AddressMetadataServiceInterface $addressMetadataService
+     * @param CustomerMetadataInterface $customerMetadataService
+     * @param AddressMetadataInterface $addressMetadataService
      * @param ElementFactory $elementFactory
      * @param \Magento\Framework\App\RequestInterface $httpRequest
      * @param \Magento\Framework\Module\Dir\Reader $modulesReader
@@ -126,8 +126,8 @@ class Form
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        CustomerMetadataServiceInterface $customerMetadataService,
-        AddressMetadataServiceInterface $addressMetadataService,
+        CustomerMetadataInterface $customerMetadataService,
+        AddressMetadataInterface $addressMetadataService,
         ElementFactory $elementFactory,
         \Magento\Framework\App\RequestInterface $httpRequest,
         \Magento\Framework\Module\Dir\Reader $modulesReader,
@@ -156,13 +156,13 @@ class Form
     /**
      * Retrieve attributes metadata for the form
      *
-     * @return \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata[]
+     * @return \Magento\Customer\Api\Data\AttributeMetadataInterface[]
      * @throws \LogicException For undefined entity type
      */
     public function getAttributes()
     {
         if (!isset($this->_attributes)) {
-            if ($this->_entityType === CustomerMetadataServiceInterface::ENTITY_TYPE_CUSTOMER) {
+            if ($this->_entityType === \Magento\Customer\Api\CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER) {
                 $this->_attributes = $this->_customerMetadataService->getAttributes($this->_formCode);
             } else if ($this->_entityType === \Magento\Customer\Api\AddressMetadataInterface::ENTITY_TYPE_ADDRESS) {
                 $this->_attributes = $this->_addressMetadataService->getAttributes($this->_formCode);
@@ -177,7 +177,7 @@ class Form
      * Return attribute instance by code or false
      *
      * @param string $attributeCode
-     * @return \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata|false
+     * @return \Magento\Customer\Api\Data\AttributeMetadataInterface|false
      */
     public function getAttribute($attributeCode)
     {
@@ -191,7 +191,7 @@ class Form
     /**
      * Retrieve user defined attributes
      *
-     * @return \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata[]
+     * @return \Magento\Customer\Api\Data\AttributeMetadataInterface[]
      */
     public function getUserAttributes()
     {
@@ -207,7 +207,7 @@ class Form
     /**
      * Retrieve system required attributes
      *
-     * @return \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata[]
+     * @return \Magento\Customer\Api\Data\AttributeMetadataInterface[]
      */
     public function getSystemAttributes()
     {
@@ -223,7 +223,7 @@ class Form
     /**
      * Retrieve filtered attributes
      *
-     * @return \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata[]
+     * @return \Magento\Customer\Api\Data\AttributeMetadataInterface[]
      */
     public function getAllowedAttributes()
     {
@@ -304,7 +304,7 @@ class Form
     /**
      * Return attribute data model by attribute
      *
-     * @param \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata $attribute
+     * @param \Magento\Customer\Api\Data\AttributeMetadataInterface $attribute
      * @return \Magento\Eav\Model\Attribute\Data\AbstractData
      */
     protected function _getAttributeDataModel($attribute)

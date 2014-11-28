@@ -62,7 +62,7 @@ class DynamicBucket implements BucketInterface
      */
     public function getType()
     {
-        return BucketInterface::TYPE_TERM;
+        return BucketInterface::TYPE_DYNAMIC;
     }
 
     /**

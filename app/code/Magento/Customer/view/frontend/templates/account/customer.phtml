@@ -24,7 +24,7 @@
 ?>
 <?php if($this->customerLoggedIn()): ?>
     <li class="customer welcome customer-welcome">
-        <span class="customer name" data-toggle="dropdown">
+        <span class="customer name" data-mage-init='{"dropdown":{}}' data-toggle="dropdown">
             <span><?php echo $this->getCustomerName(); ?></span>
             <button type="button" class="action switch"><span><?php echo __('Change')?></span></button>
         </span>

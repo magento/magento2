@@ -82,6 +82,9 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
      */
     private $builder;
 
+    /**
+     * SetUP method
+     */
     protected function setUp()
     {
         $helper = new ObjectManager($this);
@@ -141,10 +144,9 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $this->dataProviderContainer->expects($this->any())->method('get')->willReturn($this->dataProvider);
 
         $this->resource = $this->getMockBuilder('Magento\Framework\App\Resource')
-            ->setMethods(['getConnection'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resource->expects($this->once())->method('getConnection')->willReturn($this->adapter);
+        $this->resource->expects($this->any())->method('getConnection')->willReturn($this->adapter);
 
         $this->builder = $helper->getObject(
             'Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder',
@@ -157,6 +159,9 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Test for method "build"
+     */
     public function testBuild()
     {
         $fetchResult = ['name' => ['some', 'result']];
@@ -168,11 +173,10 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->bucket->expects($this->once())->method('getName')->willReturn('name');
-        $this->dataProvider->expects($this->once())->method('getDataSet')->willReturn($this->select);
         $this->entityMetadata->expects($this->once())->method('getEntityId')->willReturn('product_id');
-        $this->adapter->expects($this->once())->method('fetchAssoc')->willReturn($fetchResult['name']);
         $this->request->expects($this->once())->method('getAggregation')->willReturn([$this->bucket]);
-        $this->bucketBuilder->expects($this->once())->method('build')->willReturn($this->select);
+        $this->request->expects($this->once())->method('getDimensions')->willReturn([]);
+        $this->bucketBuilder->expects($this->once())->method('build')->willReturn($fetchResult['name']);
 
         $result = $this->builder->build($this->request, $documents);
 

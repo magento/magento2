@@ -23,8 +23,9 @@
 define([
     'underscore',
     '../class',
-    '../events'
-], function(_, Class, EventsBus) {
+    '../events',
+    'mage/utils'
+], function(_, Class, EventsBus, utils) {
     'use strict';
 
     return Class.extend({
@@ -43,13 +44,14 @@ define([
          * @return {*} this.data[path] or simply this.data
          */
         get: function(path) {
-            return !path ? this.data : this.data[path];
+            return utils.nested(this.data, path);
         },
 
         /**
          * Sets value property to path and triggers update by path, passing result
          * @param {String|*} path
-         * @param {Object} reference to instance
+         * @param {String|*} value
+         * @return {Object} reference to instance
          */
         set: function(path, value){
             var result = this._override.apply(this, arguments);
@@ -65,6 +67,12 @@ define([
 
             return this;
         },
+
+        remove: function (path) {
+            utils.nestedRemove(this.data, path);
+
+            return this;
+        },
         
         /**
          * Assignes props to this.data based on incoming params
@@ -74,7 +82,7 @@ define([
          */
         _override: function(path, value) {
             if (arguments.length > 1) {
-                this.data[path] = value;
+                utils.nested(this.data, path, value);
             } else {
                 value = path;
                 path = false;

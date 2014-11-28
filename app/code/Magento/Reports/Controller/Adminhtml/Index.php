@@ -55,13 +55,6 @@ class Index extends \Magento\Backend\App\Action
      */
     protected function _isAllowed()
     {
-        switch ($this->getRequest()->getActionName()) {
-            case 'search':
-                return $this->_authorization->isAllowed('Magento_Reports::report_search');
-                break;
-            default:
-                return $this->_authorization->isAllowed('Magento_Reports::report');
-                break;
-        }
+        return $this->_authorization->isAllowed('Magento_Reports::report');
     }
 }

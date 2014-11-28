@@ -23,13 +23,15 @@
  */
 namespace Magento\Customer\Block\Widget;
 
-use Magento\Customer\Service\V1\CustomerMetadataServiceInterface;
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
-use Magento\Customer\Service\V1\Data\Customer;
+use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\OptionInterface;
 
 /**
  * Block to render customer's gender attribute
+ *
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Gender extends AbstractWidget
 {
@@ -39,31 +41,31 @@ class Gender extends AbstractWidget
     protected $_customerSession;
 
     /**
-     * @var CustomerAccountServiceInterface
+     * @var CustomerRepositoryInterface
      */
-    protected $_customerAccountService;
+    protected $customerRepository;
 
     /**
      * Create an instance of the Gender widget
      *
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Helper\Address $addressHelper
-     * @param CustomerMetadataServiceInterface $customerMetadataService
-     * @param CustomerAccountServiceInterface $customerAccountService
+     * @param CustomerMetadataInterface $customerMetadata
+     * @param CustomerRepositoryInterface $customerRepository
      * @param \Magento\Customer\Model\Session $customerSession
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Helper\Address $addressHelper,
-        CustomerMetadataServiceInterface $customerMetadataService,
-        CustomerAccountServiceInterface $customerAccountService,
+        CustomerMetadataInterface $customerMetadata,
+        CustomerRepositoryInterface $customerRepository,
         \Magento\Customer\Model\Session $customerSession,
         array $data = array()
     ) {
         $this->_customerSession = $customerSession;
-        $this->_customerAccountService = $customerAccountService;
-        parent::__construct($context, $addressHelper, $customerMetadataService, $data);
+        $this->customerRepository = $customerRepository;
+        parent::__construct($context, $addressHelper, $customerMetadata, $data);
         $this->_isScopePrivate = true;
     }
 
@@ -97,12 +99,13 @@ class Gender extends AbstractWidget
     }
 
     /**
-     * Get current customer from session using the customer service
-     * @return Customer
+     * Get current customer from session
+     *
+     * @return CustomerInterface
      */
     public function getCustomer()
     {
-        return $this->_customerAccountService->getCustomer($this->_customerSession->getCustomerId());
+        return $this->customerRepository->getById($this->_customerSession->getCustomerId());
     }
 
     /**

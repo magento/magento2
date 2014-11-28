@@ -215,7 +215,7 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
      */
     public function bindCustomerLogin($observer)
     {
-        /** @var \Magento\Customer\Service\V1\Data\Customer $customer */
+        /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
         $customer = $observer->getEvent()->getCustomer();
         if (!$this->getCustomerId()) {
             $this->setDoCustomerLogin(true);

@@ -94,11 +94,11 @@ class Item extends \Magento\Framework\Model\AbstractModel
      * @return $this
      * @throws \Exception
      */
-    public function _beforeSave()
+    public function beforeSave()
     {
         if (null == $this->getOrderItemId()) {
             throw new \Exception(__('Order item id cannot be null'));
         }
-        return parent::_beforeSave();
+        return parent::beforeSave();
     }
 }

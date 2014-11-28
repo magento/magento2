@@ -22,51 +22,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /**
- * @var \Magento\Ui\FilterPool\View $this
+ * @var \Magento\Ui\Component\FilterPool $this
  */
 ?>
-<?php if (true): ?>
-    <script data-mage-apply='{"Magento_Ui/js/listing/filter": ""}' type="application/json">
-        <?php echo $this->getConfigurationBuilder()->toJson($this->getConfiguration()); ?>
-    </script>
-    <div data-bind="scope: '<?php echo $this->getParentName(); ?>:<?php echo $this->getName(); ?>'">
-        <!-- ko template: 'ui/filter' --><!-- /ko -->
-    </div>
-<?php else: ?>
-    <div class="filters" data-mage-apply='{"Magento_Ui/js/listing/filter": ""}'
-         data-bind="scope: '<?php echo $this->getParentName(); ?>:<?php echo $this->getName(); ?>'">
-        <button class="action filters-toggle" data-bind="click: toggle"><span
-                data-bind-="text: $t('Filter')">Filter</span></button>
-        <div class="form filters-form" data-bind-="visible: isVisible" data-part-="filter-form">
-            <fieldset class="filters-fieldset fieldset">
-                <legend class="legend filters-legend">
-                    <span data-bind-="text: $t('Advanced filter')"></span>
-                </legend>
-                <br/>
-                <?php foreach ($this->getFields() as $field): ?>
-                    <?php echo $this->renderElement($field['filter_type'], $field); ?>
-                <?php endforeach; ?>
-            </fieldset>
-            <div class="actions filters-actions">
-                <button class="action primary action-apply" data-bind-="click: apply" type="button"><span
-                        data-bind-="text: $t('Apply')"></span></button>
-                <button class="action secondary action-reset" data-bind-="click: reset" type="button"><span
-                        data-bind-="text: $t('Reset')"></span></button>
-                <button class="action secondary action-close" data-bind-="click: close" type="button"><span
-                        data-bind-="text: $t('Close')"></span></button>
-            </div>
-        </div>
-        <div class="filters-current">
-            <ul class="filters-items items">
-                <?php foreach ($this->getActiveFilters() as $filter): ?>
-                    <li class="filters-item item">
-                        <?php echo $this->renderElement('filter', $filter); ?>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-            <button data-bind-="click: reset" class="action action-clear">
-                <span data-bind-="text: $t('Clear all')"></span>
-            </button>
-        </div>
-    </div>
-<?php endif; ?>
+<script data-mage-init='{"Magento_Ui/js/listing/filter": ""}' type="application/json">
+    <?php echo $this->getConfigBuilder()->toJson($this->getConfig()); ?>
+</script>
+<div data-bind="scope: '<?php echo $this->getParentName(); ?>:<?php echo $this->getName(); ?>'">
+    <!-- ko template: 'ui/filter' --><!-- /ko -->
+</div>

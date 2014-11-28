@@ -32,31 +32,31 @@ abstract class AbstractConfig extends \PHPUnit_Framework_TestCase
         if (null === $this->_getXmlName()) {
             $this->markTestSkipped('No XML validation of files requested');
         }
-        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * @param string $configFile
              */
             function ($configFile) {
-                $schema = \Magento\TestFramework\Utility\Files::init()->getPathToSource() . $this->_getXsd();
-                $fileSchema = \Magento\TestFramework\Utility\Files::init()->getPathToSource() . $this->_getFileXsd();
+                $schema = \Magento\Framework\Test\Utility\Files::init()->getPathToSource() . $this->_getXsd();
+                $fileSchema = \Magento\Framework\Test\Utility\Files::init()->getPathToSource() . $this->_getFileXsd();
                 $this->_validateFileExpectSuccess($configFile, $schema, $fileSchema);
             },
-            \Magento\TestFramework\Utility\Files::init()->getConfigFiles($this->_getXmlName())
+            \Magento\Framework\Test\Utility\Files::init()->getConfigFiles($this->_getXmlName())
         );
     }
 
     public function testSchemaUsingValidXml()
     {
         $xmlFile = $this->_getKnownValidXml();
-        $schema = \Magento\TestFramework\Utility\Files::init()->getPathToSource() . $this->_getXsd();
+        $schema = \Magento\Framework\Test\Utility\Files::init()->getPathToSource() . $this->_getXsd();
         $this->_validateFileExpectSuccess($xmlFile, $schema);
     }
 
     public function testSchemaUsingInvalidXml($expectedErrors = null)
     {
         $xmlFile = $this->_getKnownInvalidXml();
-        $schema = \Magento\TestFramework\Utility\Files::init()->getPathToSource() . $this->_getXsd();
+        $schema = \Magento\Framework\Test\Utility\Files::init()->getPathToSource() . $this->_getXsd();
         $this->_validateFileExpectFailure($xmlFile, $schema, $expectedErrors);
     }
 
@@ -67,7 +67,7 @@ abstract class AbstractConfig extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('No Partial File');
             return;
         }
-        $schema = \Magento\TestFramework\Utility\Files::init()->getPathToSource() . $this->_getFileXsd();
+        $schema = \Magento\Framework\Test\Utility\Files::init()->getPathToSource() . $this->_getFileXsd();
         $this->_validateFileExpectSuccess($xmlFile, $schema);
     }
 
@@ -78,7 +78,7 @@ abstract class AbstractConfig extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('No Partial File');
             return;
         }
-        $schema = \Magento\TestFramework\Utility\Files::init()->getPathToSource() . $this->_getFileXsd();
+        $schema = \Magento\Framework\Test\Utility\Files::init()->getPathToSource() . $this->_getFileXsd();
         $this->_validateFileExpectFailure($xmlFile, $schema, $expectedErrors);
     }
 
@@ -89,7 +89,7 @@ abstract class AbstractConfig extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('No Partial File');
             return;
         }
-        $schema = \Magento\TestFramework\Utility\Files::init()->getPathToSource() . $this->_getXsd();
+        $schema = \Magento\Framework\Test\Utility\Files::init()->getPathToSource() . $this->_getXsd();
         $this->_validateFileExpectFailure($xmlFile, $schema, $expectedErrors);
     }
 

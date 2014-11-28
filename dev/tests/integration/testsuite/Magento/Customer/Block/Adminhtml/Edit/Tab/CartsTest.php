@@ -35,8 +35,8 @@ class CartsTest extends \PHPUnit_Framework_TestCase
     /** @var Carts */
     private $_block;
 
-    /** @var \Magento\Customer\Service\V1\CustomerAccountServiceInterface */
-    private $_customerAccountService;
+    /** @var \Magento\Customer\Api\CustomerRepositoryInterface */
+    private $_customerRepository;
 
     /** @var \Magento\Backend\Block\Template\Context */
     private $_context;
@@ -47,8 +47,8 @@ class CartsTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_customerAccountService = $this->_objectManager->get(
-            'Magento\Customer\Service\V1\CustomerAccountServiceInterface'
+        $this->_customerRepository = $this->_objectManager->get(
+            'Magento\Customer\Api\CustomerRepositoryInterface'
         );
         $storeManager = $this->_objectManager->get('Magento\Store\Model\StoreManager');
         $this->_context = $this->_objectManager->get(
@@ -62,7 +62,7 @@ class CartsTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetHtml()
     {
-        $customer = $this->_customerAccountService->getCustomer(1);
+        $customer = $this->_customerRepository->getById(1);
         $data = array('account' => $customer->__toArray());
         $this->_context->getBackendSession()->setCustomerData($data);
 
@@ -95,9 +95,9 @@ class CartsTest extends \PHPUnit_Framework_TestCase
         );
 
         $html = $this->_block->toHtml();
-        $this->assertContains("<div id=\"customer_cart_grid0\">", $html);
+        $this->assertContains("<div id=\"customer_cart_grid\">", $html);
         $this->assertContains("<div class=\"grid-actions\">", $html);
-        $this->assertContains("customer_cart_grid0JsObject = new varienGrid('customer_cart_grid0',", $html);
-        $this->assertContains("backend/customer/cart_product_composite_cart/configure/website_id/0/key/", $html);
+        $this->assertContains("customer_cart_gridJsObject = new varienGrid('customer_cart_grid',", $html);
+        $this->assertContains("backend/customer/cart_product_composite_cart/configure/key/", $html);
     }
 }

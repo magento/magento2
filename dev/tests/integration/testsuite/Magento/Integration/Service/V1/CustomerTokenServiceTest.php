@@ -24,7 +24,7 @@
 
 namespace Magento\Integration\Service\V1;
 
-use Magento\Customer\Service\V1\CustomerAccountService;
+use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Integration\Model\Oauth\Token as TokenModel;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -40,9 +40,9 @@ class CustomerTokenServiceTest extends \PHPUnit_Framework_TestCase
     private $tokenService;
 
     /**
-     * @var CustomerAccountService
+     * @var AccountManagementInterface
      */
-    private $customerAccountService;
+    private $accountManagement;
 
     /**
      * @var TokenModel
@@ -55,8 +55,8 @@ class CustomerTokenServiceTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->tokenService = Bootstrap::getObjectManager()->get('Magento\Integration\Service\V1\CustomerTokenService');
-        $this->customerAccountService = Bootstrap::getObjectManager()->get(
-            'Magento\Customer\Service\V1\CustomerAccountService'
+        $this->accountManagement = Bootstrap::getObjectManager()->get(
+            'Magento\Customer\Api\AccountManagementInterface'
         );
         $this->tokenModel = Bootstrap::getObjectManager()->get('Magento\Integration\Model\Oauth\Token');
     }
@@ -69,7 +69,7 @@ class CustomerTokenServiceTest extends \PHPUnit_Framework_TestCase
         $customerUserName = 'customer@example.com';
         $password = 'password';
         $accessToken = $this->tokenService->createCustomerAccessToken($customerUserName, $password);
-        $customerData = $this->customerAccountService->authenticate($customerUserName, $password);
+        $customerData = $this->accountManagement->authenticate($customerUserName, $password);
         /** @var $token TokenModel */
         $token = $this->tokenModel->loadByCustomerId($customerData->getId())->getToken();
         $this->assertEquals($accessToken, $token);

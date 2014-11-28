@@ -57,12 +57,12 @@ class ReadService implements ReadServiceInterface
     protected $linkTypeResolver;
 
     /**
-     * @var Data\ProductLinkBuilder
+     * @var \Magento\Catalog\Model\Product\Link\ProductLinkBuilder
      */
     protected $productEntityBuilder;
 
     /**
-     * @var Data\ProductLink\CollectionProvider
+     * @var \Magento\Catalog\Model\ProductLink\CollectionProvider
      */
     protected $entityCollectionProvider;
 
@@ -79,9 +79,9 @@ class ReadService implements ReadServiceInterface
     /**
      * @param LinkTypeProvider $linkTypeProvider
      * @param Data\LinkTypeBuilder $builder
-     * @param Data\ProductLinkBuilder $productEntityBuilder
+     * @param \Magento\Catalog\Service\V1\Product\Link\Data\ProductLinkBuilder $productEntityBuilder
      * @param ProductLoader $productLoader
-     * @param ProductLink\CollectionProvider $entityCollectionProvider
+     * @param \Magento\Catalog\Model\ProductLink\CollectionProvider $entityCollectionProvider
      * @param Data\LinkAttributeBuilder $linkAttributeBuilder
      * @param \Magento\Catalog\Model\Product\LinkFactory $linkFactory
      * @param LinkTypeResolver $linkTypeResolver
@@ -89,9 +89,9 @@ class ReadService implements ReadServiceInterface
     public function __construct(
         LinkTypeProvider $linkTypeProvider,
         Data\LinkTypeBuilder $builder,
-        Data\ProductLinkBuilder $productEntityBuilder,
+        \Magento\Catalog\Service\V1\Product\Link\Data\ProductLinkBuilder $productEntityBuilder,
         ProductLoader $productLoader,
-        Data\ProductLink\CollectionProvider $entityCollectionProvider,
+        \Magento\Catalog\Model\ProductLink\CollectionProvider $entityCollectionProvider,
         Data\LinkAttributeBuilder $linkAttributeBuilder,
         \Magento\Catalog\Model\Product\LinkFactory $linkFactory,
         LinkTypeResolver $linkTypeResolver

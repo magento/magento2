@@ -24,15 +24,14 @@
 
 namespace Magento\Tax\Test\TestCase;
 
-use Magento\Tax\Test\Fixture\TaxRate;
-use Magento\Tax\Test\Page\Adminhtml\TaxRateIndex;
-use Magento\Tax\Test\Page\Adminhtml\TaxRateNew;
 use Mtf\TestCase\Injectable;
+use Magento\Tax\Test\Fixture\TaxRate;
+use Magento\Tax\Test\Page\Adminhtml\TaxRateNew;
+use Magento\Tax\Test\Page\Adminhtml\TaxRateIndex;
 
 /**
- * Test Creation for UpdateTaxRateEntity
- *
  * Test Flow:
+ *
  * Preconditions:
  * 1. Create Tax Rate.
  *
@@ -51,21 +50,21 @@ use Mtf\TestCase\Injectable;
 class UpdateTaxRateEntityTest extends Injectable
 {
     /**
-     * Tax Rate grid page
+     * Tax Rate grid page.
      *
      * @var TaxRateIndex
      */
     protected $taxRateIndex;
 
     /**
-     * Tax Rate new/edit page
+     * Tax Rate new/edit page.
      *
      * @var TaxRateNew
      */
     protected $taxRateNew;
 
     /**
-     * Injection data
+     * Injection data.
      *
      * @param TaxRateIndex $taxRateIndex
      * @param TaxRateNew $taxRateNew
@@ -80,7 +79,7 @@ class UpdateTaxRateEntityTest extends Injectable
     }
 
     /**
-     * Update Tax Rate Entity test
+     * Update Tax Rate Entity test.
      *
      * @param TaxRate $initialTaxRate
      * @param TaxRate $taxRate

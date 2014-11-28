@@ -96,10 +96,8 @@ class CategoryTest extends \Magento\Backend\Utility\Controller
         $body = $this->getResponse()->getBody();
 
         if (empty($postData['return_session_messages_only'])) {
-            $this->assertRegExp(
-                '~<script type="text/javascript">parent\.updateContent\("[^"]+/backend/catalog/category/edit/' .
-                'id/\d+/key/[0-9a-f]+/", {}, true\);</script>~',
-                $body
+            $this->assertRedirect(
+                $this->stringContains('http://localhost/index.php/backend/catalog/category/edit/id/')
             );
         } else {
             $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(

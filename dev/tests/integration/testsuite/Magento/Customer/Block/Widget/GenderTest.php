@@ -54,7 +54,7 @@ class GenderTest extends \PHPUnit_Framework_TestCase
         $options = $this->_block->getGenderOptions();
         $this->assertInternalType('array', $options);
         $this->assertNotEmpty($options);
-        $this->assertContainsOnlyInstancesOf('Magento\Customer\Service\V1\Data\Eav\Option', $options);
+        $this->assertContainsOnlyInstancesOf('Magento\Customer\Model\Data\Option', $options);
     }
 
     /**

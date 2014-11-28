@@ -23,11 +23,67 @@
  */
 namespace Magento\CatalogInventory\Model\Adminhtml\Stock;
 
+use Magento\Framework\Api\MetadataServiceInterface;
+use Magento\CatalogInventory\Api\StockConfigurationInterface as StockConfigurationInterface;
+use Magento\CatalogInventory\Api\StockItemRepositoryInterface as StockItemRepositoryInterface;
+use Magento\CatalogInventory\Api\StockRegistryInterface;
+use Magento\Customer\Api\GroupManagementInterface;
+
 /**
  * Catalog Inventory Stock Model for adminhtml area
  */
 class Item extends \Magento\CatalogInventory\Model\Stock\Item
 {
+    /**
+     * @var GroupManagementInterface
+     */
+    protected $groupManagement;
+
+    /**
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param MetadataServiceInterface $metadataService
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param StockConfigurationInterface $stockConfiguration
+     * @param StockRegistryInterface $stockRegistry
+     * @param StockItemRepositoryInterface $stockItemRepository
+     * @param GroupManagementInterface $groupManagement,
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        MetadataServiceInterface $metadataService,
+        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Framework\StoreManagerInterface $storeManager,
+        StockConfigurationInterface $stockConfiguration,
+        StockRegistryInterface $stockRegistry,
+        StockItemRepositoryInterface $stockItemRepository,
+        GroupManagementInterface $groupManagement,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        array $data = []
+    ) {
+        parent::__construct(
+            $context,
+            $registry,
+            $metadataService,
+            $customerSession,
+            $storeManager,
+            $stockConfiguration,
+            $stockRegistry,
+            $stockItemRepository,
+            $resource,
+            $resourceCollection,
+            $data
+        );
+
+        $this->groupManagement = $groupManagement;
+    }
+
     /**
      * Getter for customer group id, return default group if not set
      *
@@ -36,7 +92,7 @@ class Item extends \Magento\CatalogInventory\Model\Stock\Item
     public function getCustomerGroupId()
     {
         if ($this->customerGroupId === null) {
-            return \Magento\Customer\Service\V1\CustomerGroupServiceInterface::CUST_GROUP_ALL;
+            return $this->groupManagement->getAllCustomersGroup()->getId();
         }
         return parent::getCustomerGroupId();
     }

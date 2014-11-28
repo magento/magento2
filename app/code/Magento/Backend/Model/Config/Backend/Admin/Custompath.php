@@ -36,7 +36,7 @@ class Custompath extends \Magento\Framework\App\Config\Value
      *
      * @return $this
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
         if ($this->getOldValue() != $this->getValue()) {
             $this->_registry->register('custom_admin_path_redirect', true, true);

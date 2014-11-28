@@ -1,0 +1,66 @@
+// /**
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+.pages {
+    .pager();
+    .action {
+        border-radius: 3px;
+        @_shadow: inset 0 1px 0 0 rgba(255,255,255,1), inset 0 -1px 0 0 fade(@border-color-base, 30);
+        .css(box-shadow, @_shadow);
+        padding: 0 8px;
+        &.previous {
+            margin-right: 8px;
+        }
+        &.next {
+            margin-left: 8px;
+        }
+    }
+}
+
+//
+//    Small Screen
+//--------------------------------------
+.responsive-smaller(@break) when (@break = @screen-s) {
+    .pages {
+        & &-items {
+            display: block;
+            position: relative;
+            z-index: 1;
+            padding: 2px 40px 0;
+            white-space: normal;
+        }
+        &-item-previous {
+            position: absolute;
+            z-index: 1;
+            left: 0;
+            top: 0;
+        }
+        &-item-next {
+            position: absolute;
+            z-index: 1;
+            right: 0;
+            top: 0;
+        }
+    }
+}

@@ -29,12 +29,12 @@
             <th>
                 <!-- ko if: field.sortable -->
                 <span>
-                    <a href="#" data-bind="text: field.title, css: $parent.setClass(field.index), click: $parent.onClick(field)"></a>
+                    <a href="#" data-bind="text: field.label, css: $parent.setClass(field.index), click: $parent.onClick(field)"></a>
                 </span>
                 <!-- /ko -->
                 
                 <!-- ko ifnot: field.sortable -->
-                <span data-bind="text: field.title"></span>
+                <span data-bind="text: field.label"></span>
                 <!-- /ko -->
             </th>
             <!-- /ko -->

@@ -34,6 +34,7 @@ use Magento\Framework\Api\SortOrder;
 
 /**
  * Class ProductService
+ * @deprecated
  * @package Magento\Catalog\Service\V1
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

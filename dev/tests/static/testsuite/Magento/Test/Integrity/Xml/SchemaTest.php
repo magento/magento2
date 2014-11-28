@@ -28,7 +28,7 @@ class SchemaTest extends \PHPUnit_Framework_TestCase
 {
     public function testXmlFiles()
     {
-        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * @param string $filename
@@ -99,8 +99,6 @@ class SchemaTest extends \PHPUnit_Framework_TestCase
     {
         $list = [
             '#Dhl/etc/countries.xml$#',
-            '#app/etc/local.xml$#',
-            '#app/etc/[a-z]+/module.xml$#'
         ];
         foreach ($list as $pattern) {
             foreach ($files as $key => $value) {

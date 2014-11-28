@@ -32,7 +32,7 @@ $helper = $this->helper('Magento\Msrp\Helper\Data');
 $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinimalPriceLessMsrp($product);
 ?>
 <tbody class="cart item">
-<tr class="item info item-info">
+<tr class="item-info">
     <td data-th="<?php echo $this->escapeHtml(__('Item')); ?>" class="col item">
         <?php if ($this->hasProductUrl()):?><a href="<?php echo $this->getProductUrl() ?>" title="<?php echo $this->escapeHtml($this->getProductName()) ?>" class="product-item-photo">
             <?php else:?>

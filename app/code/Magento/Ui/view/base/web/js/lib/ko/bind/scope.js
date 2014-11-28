@@ -68,7 +68,7 @@ define([
         component = bindingContext.createChildContext(component);
         
         ko.utils.extend(component, { $t: i18n });
-
+        ko.cleanNode(el);
         ko.applyBindingsToDescendants(component, el);
     }
 

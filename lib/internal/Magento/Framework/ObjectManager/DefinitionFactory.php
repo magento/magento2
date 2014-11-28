@@ -132,6 +132,8 @@ class DefinitionFactory
                         => '\Magento\Framework\ObjectManager\Code\Generator\Proxy',
                     Generator\Repository::ENTITY_TYPE
                         => '\Magento\Framework\ObjectManager\Code\Generator\Repository',
+                    Generator\Persistor::ENTITY_TYPE
+                    => '\Magento\Framework\ObjectManager\Code\Generator\Persistor',
                     InterceptionGenerator\Interceptor::ENTITY_TYPE
                         => '\Magento\Framework\Interception\Code\Generator\Interceptor',
                     DataBuilderGenerator::ENTITY_TYPE

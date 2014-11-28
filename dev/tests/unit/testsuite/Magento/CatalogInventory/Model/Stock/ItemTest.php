@@ -41,6 +41,11 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     protected $item;
 
     /**
+     * @var \Magento\Framework\Event\Manager|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $eventManager;
+
+    /**
      * @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $context;

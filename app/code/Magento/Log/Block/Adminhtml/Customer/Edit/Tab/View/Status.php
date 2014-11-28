@@ -32,7 +32,7 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 class Status extends \Magento\Backend\Block\Template
 {
     /**
-     * @var \Magento\Customer\Service\V1\Data\Customer
+     * @var \Magento\Customer\Api\Data\CustomerInterface
      */
     protected $customer;
 
@@ -52,7 +52,7 @@ class Status extends \Magento\Backend\Block\Template
     protected $logFactory;
 
     /**
-     * @var \Magento\Customer\Service\V1\Data\CustomerBuilder
+     * @var \Magento\Customer\Api\Data\CustomerDataBuilder
      */
     protected $customerBuilder;
 
@@ -61,7 +61,7 @@ class Status extends \Magento\Backend\Block\Template
      * @param \Magento\Log\Model\CustomerFactory $logFactory
      * @param \Magento\Log\Model\Log $modelLog
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param \Magento\Customer\Service\V1\Data\CustomerBuilder $customerBuilder
+     * @param \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder
      * @param array $data
      */
     public function __construct(
@@ -69,7 +69,7 @@ class Status extends \Magento\Backend\Block\Template
         \Magento\Log\Model\CustomerFactory $logFactory,
         \Magento\Log\Model\Log $modelLog,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Customer\Service\V1\Data\CustomerBuilder $customerBuilder,
+        \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder,
         array $data = array()
     ) {
         $this->logFactory = $logFactory;
@@ -92,7 +92,7 @@ class Status extends \Magento\Backend\Block\Template
     }
 
     /**
-     * @return \Magento\Customer\Service\V1\Data\Customer
+     * @return \Magento\Customer\Api\Data\CustomerInterface
      */
     public function getCustomer()
     {

@@ -92,18 +92,8 @@ class Builder
         foreach ($documents as $document) {
             $entityIds[] = $document[$fieldName];
         }
-        return $entityIds;
-    }
 
-    /**
-     * Executes query and return raw response
-     *
-     * @param Select $select
-     * @return array
-     */
-    private function executeQuery(Select $select)
-    {
-        return $this->resource->getConnection(Resource::DEFAULT_READ_RESOURCE)->fetchAssoc($select);
+        return $entityIds;
     }
 
     /**
@@ -118,11 +108,14 @@ class Builder
         $dataProvider = $this->dataProviderContainer->get($request->getIndex());
         foreach ($buckets as $bucket) {
             $aggregationBuilder = $this->aggregationContainer->get($bucket->getType());
-
-            $select = $dataProvider->getDataSet($bucket, $request);
-            $select = $aggregationBuilder->build($select, $bucket, $entityIds);
-            $aggregations[$bucket->getName()] = $this->executeQuery($select);
+            $aggregations[$bucket->getName()] = $aggregationBuilder->build(
+                $dataProvider,
+                $request->getDimensions(),
+                $bucket,
+                $entityIds
+            );
         }
+
         return $aggregations;
     }
 }

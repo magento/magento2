@@ -110,4 +110,28 @@ XML;
         $this->assertNotEmpty($xml->xpath('/root/node1/node2'));
         $this->assertEquals($value, (string)$xml->xpath('/root/node1/node2')[0]);
     }
+
+    /**
+     * @dataProvider setAttributeDataProvider
+     * @param string $name
+     * @param string $value
+     */
+    public function testSetAttribute($name, $value)
+    {
+        /** @var \Magento\Framework\Simplexml\Element $xml */
+        $xml = simplexml_load_string('<root name="test2" data=""/>', 'Magento\Framework\Simplexml\Element');
+        $this->assertEquals($xml->getAttribute('name'), 'test2');
+        $this->assertNull($xml->getAttribute('new'));
+        $xml->setAttribute($name, $value);
+        $this->assertEquals($xml->getAttribute($name), $value);
+    }
+
+    public function setAttributeDataProvider()
+    {
+        return [
+            ['name', 'test'],
+            ['new', 'beard'],
+            ['data', 'some-data']
+        ];
+    }
 }

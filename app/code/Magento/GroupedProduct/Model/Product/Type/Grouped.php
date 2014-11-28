@@ -499,6 +499,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
                 $prices[] = $item->getMsrp();
             }
         }
-        return min($prices);
+        return $prices ? min($prices) : 0;
     }
 }

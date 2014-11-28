@@ -62,7 +62,7 @@ class ConfigFactory
      * Create class instance with specified parameters
      *
      * @param array $data
-     * @return \Magento\Ui\Configuration
+     * @return \Magento\Framework\View\Element\UiComponent\ConfigInterface
      */
     public function create(array $data = [])
     {

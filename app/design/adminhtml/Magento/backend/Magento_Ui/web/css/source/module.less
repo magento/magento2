@@ -22,6 +22,145 @@
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
+@import "formelements.less";
+
+//colors
+
+@admin__color1: #adadad;
+@admin__color2: #d3d3d3;
+@admin__color3: #e0e0e0;
+@admin__color4: #666666;
+
+//Spacing
+@spacing-base: 10px;
+@spacing-xs: @spacing-base;
+@spacing-s: @spacing-base;
+@spacing-m: 15px;
+@spacing-l: @spacing-base;
+@spacing-xl: @spacing-base;
+
+//Fonts
+@size-base: 1rem;
+@size-xs: @size-base;
+@size-s: @size-base;
+@size-m: @size-base * 1.2;
+@size-l: @size-base;
+@size-xl: @size-base;
+
+[class*="tab-nav-item"]:not(ul):active,
+[class*="tab-nav-item"]:not(ul):focus {
+    box-shadow: none;
+    outline: none;
+}
+.customer-index-edit {
+.col-2-left-layout, .col-1-layout {
+    background: #fff;
+}
+}
+.customer-index-edit {
+    background: #fff;
+    .col-2-left-layout {
+        background: #fff;
+    }
+    .main-col {
+        padding-left: 40px;
+    }
+    .page-main-actions {
+        background: transparent;
+    }
+}
+
+
+.tab-nav {
+    &.block {
+        margin-bottom: 40px;
+        &:first-child {
+            margin-top: 16px;
+        }
+        .block-title {
+            padding: 7px 20px;
+        }
+    }
+    &-items {
+        padding: 0;
+        margin: 0;
+        border: 1px solid @admin__color2;
+        @_shadow: 0px 0px 4px rgba(50, 50, 50, 0.35);
+        .css(box-shadow, @_shadow);
+        margin-bottom: 40px;
+        background: #f7f7f7;
+    }
+    &-item {
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+        border-bottom: 1px solid @admin__color3;
+        margin-bottom: 1px;
+        position: relative;
+        margin: 0 @spacing-m;
+        z-index: 1;
+        &:last-child {
+            border-bottom: 0;
+        }
+
+        &.ui-state-active {
+            z-index: 2;
+            background: #FFF;
+            padding: 1px (@spacing-m - 1px);
+            border: 2px solid #eb5202;
+            margin: -1px;
+            .tab-nav-item-link {
+                padding: (@spacing-m - 2px) @spacing-m (@spacing-m - 2px);
+                color: #eb5202;
+            }
+        }
+        &.ui-tabs-loading {
+            position: relative;
+            z-index: 1;
+            &:before {
+                content: "";
+                display: block;
+                position: absolute;
+                z-index: 2;
+                .url('images/loader-2.gif');
+                background: url("@{url}") no-repeat 50% 50%;
+                background-size: 120px;
+                width: 20px;
+                height: 20px;
+                top: 13px;
+                left: -10px;
+            }
+            &.ui-state-active:before {
+                top: 12px;
+                left: 4px;
+            }
+        }
+
+        &-link {
+            display: block;
+            padding: @spacing-m;
+            color: @admin__color4;
+            line-height: 1;
+            &:focus,
+            &:active,
+            &:hover {
+                outline: 0;
+                color: #eb5202;
+                text-decoration: none;
+            }
+            .ui-state-active & {
+                color: @admin__color4;
+                font-weight: 600;
+            }
+            &.changed {
+                font-style: italic;
+            }
+        }
+    }
+}
+
+
+
 .listing-tiles {
   overflow: hidden;
   margin-top: -10px;
@@ -75,9 +214,10 @@
         width: 45%;
         text-align: right;
         float: right;
-        -moz-user-select: none;
-        -webkit-user-select: none;
-        -ms-user-select: none;
+        -moz-user-select: none; // use in 36 Firefox
+        -webkit-user-select: none; // use in 41 Chrome
+        -ms-user-select: none; // use in 11 IE
+        user-select: none;
     }
 
     .action-next{
@@ -214,8 +354,6 @@
         margin: 14px 0;
         background: #ffffff;
         border: 1px solid #bbbbbb;
-        -webkit-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.15);
-        -moz-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.15);
         box-shadow: 0 3px 3px rgba(0, 0, 0, 0.15);
         .action-close {
             position: absolute;
@@ -290,7 +428,7 @@
         }
         .control {
             width: 100%;
-            .box-sizing();
+            box-sizing: border-box;
             padding-right: 20px;
             position: relative;
             z-index: 1;
@@ -307,8 +445,6 @@
   border: 1px solid #bbbbbb;
   position: absolute;
   z-index: 100;
-  -webkit-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.15);
-  -moz-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.15);
   box-shadow: 0 3px 3px rgba(0, 0, 0, 0.15);
   margin-top: 4px;
 
@@ -383,8 +519,6 @@
         background: #ffffff;
         border: 1px solid #bbbbbb;
         min-width: 175px;
-        -webkit-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.15);
-        -moz-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.15);
         box-shadow: 0 3px 3px rgba(0, 0, 0, 0.15);
         li {
           margin: 0;
@@ -426,4 +560,110 @@
         height: 149px;
         background: url('@{baseDir}images/loader-2.gif') 50% 50% no-repeat;
     }
+}
+
+
+//
+// Form Component
+//
+
+/* Price field */
+
+.addon {
+  input {
+    border-width: 1px 0 1px 1px;
+    ~ .addafter strong {
+      display: inline-block;
+      background: #fff;
+      line-height: 24px;
+      margin: 0 3px 0 -2px;
+      padding-left: 4px;
+      padding-right: 4px;
+      position: relative;
+      font-size: 12px;
+      top: 0;
+    }
+    &:focus ~ .addafter {
+      border-color: #75b9f0;
+      box-shadow: 0 0 8px rgba(82, 168, 236, 0.6);
+      strong {
+        margin-top: 0;
+      }
+    }
+  }
+  .addafter {
+    background: none;
+    color: #a6a6a6;
+    border-width: 1px 1px 1px 0;
+    border-radius: 2px 2px 0 0;
+    padding: 0;
+    border-color: #ada89e;
+  }
+  .pager input {
+    border-width: 1px;
+  }
+}
+
+.field .control input[type='text'][disabled],
+.field .control input[type='text'][disabled] ~ .addafter,
+.field .control select[disabled],
+.field .control select[disabled] ~ .addafter {
+  background-color: #fff;
+  border-color: #eee;
+  box-shadow: none;
+  color: #999;
+}
+
+.field .control input[type='text'][disabled] ~ .addafter strong,
+.field .control select[disabled] ~ .addafter strong {
+  background-color: #fff;
+}
+
+.field-price.addon {
+  direction: rtl;
+}
+
+.field-price.addon > * {
+  direction: ltr;
+}
+
+.field-price.addon .addafter {
+  border-width: 1px 0 1px 1px;
+  border-radius: 2px 0 0 2px;
+}
+
+.field-price.addon input:first-child {
+  border-radius: 0 2px 2px 0;
+}
+
+.field-price input {
+  border-width: 1px 1px 1px 0;
+}
+
+.field-price input:focus {
+  box-shadow: 0 0 8px rgba(82, 168, 236, 0.6);
+}
+
+.field-price input:focus ~ label.addafter {
+  box-shadow: 0 0 8px rgba(82, 168, 236, 0.6);
+}
+
+.field-price input ~ label.addafter strong {
+  margin-left: 2px;
+  margin-right: -2px;
+}
+
+.field-price.addon > input {
+  width: 99px;
+  float: left;
+}
+
+.field-price .control {
+  position: relative;
+}
+
+.field-price label.mage-error {
+  position: absolute;
+  left: 0;
+  top: 30px;
 }

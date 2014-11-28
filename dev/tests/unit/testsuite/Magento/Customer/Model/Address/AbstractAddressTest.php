@@ -103,9 +103,10 @@ class AbstractAddressTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->model = $this->getMockForAbstractClass(
+        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->model = $objectManager->getObject(
             'Magento\Customer\Model\Address\AbstractAddress',
-            array(
+            [
                 'context' => $this->contextMock,
                 'registry' => $this->registryMock,
                 'directoryData' => $this->directoryDataMock,
@@ -114,12 +115,8 @@ class AbstractAddressTest extends \PHPUnit_Framework_TestCase
                 'regionFactory' => $this->regionFactoryMock,
                 'countryFactory' => $this->countryFactoryMock,
                 'resource' => $this->resourceMock,
-                'resourceCollection' => $this->resourceCollectionMock,
-            ),
-            '',
-            true,
-            false
-
+                'resourceCollection' => $this->resourceCollectionMock
+            ]
         );
     }
 

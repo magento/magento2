@@ -26,7 +26,8 @@ define([
     "jquery/template",
     "js/theme"
 ], function($){
-
+    "use strict";
+    
     $.widget('mage.variationsAttributes', {
         _create: function () {
             var widgetContainer = $(this.element);
@@ -115,5 +116,6 @@ define([
             );
         }
     });
-
+    
+    return $.mage.variationsAttributes;
 });

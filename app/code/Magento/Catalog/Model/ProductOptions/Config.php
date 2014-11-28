@@ -23,7 +23,8 @@
  */
 namespace Magento\Catalog\Model\ProductOptions;
 
-class Config extends \Magento\Framework\Config\Data implements \Magento\Catalog\Model\ProductOptions\ConfigInterface
+class Config extends \Magento\Framework\Config\Data implements
+    \Magento\Catalog\Model\ProductOptions\ConfigInterface
 {
     /**
      * @param \Magento\Catalog\Model\ProductOptions\Config\Reader $reader

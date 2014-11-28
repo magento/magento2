@@ -122,6 +122,9 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected $_filesystem;
 
+    /** @var Filesystem\File\ReadFactory */
+    protected $fileReadFactory;
+
     /**
      * Working Directory (valid for LINK_TYPE_FILE only).
      * @var \Magento\Framework\Filesystem\Directory\Read
@@ -136,11 +139,12 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Downloadable\Helper\File $downloadableFile
+     * @param File $downloadableFile
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Filesystem $filesystem
+     * @param Filesystem $filesystem
      * @param \Magento\Framework\Session\SessionManagerInterface $session
+     * @param Filesystem\File\ReadFactory $fileReadFactory
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -149,16 +153,17 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Filesystem $filesystem,
-        \Magento\Framework\Session\SessionManagerInterface $session
+        \Magento\Framework\Session\SessionManagerInterface $session,
+        \Magento\Framework\Filesystem\File\ReadFactory $fileReadFactory
     ) {
+        parent::__construct($context);
         $this->_coreData = $coreData;
         $this->_downloadableFile = $downloadableFile;
         $this->_coreFileStorageDb = $coreFileStorageDb;
         $this->_scopeConfig = $scopeConfig;
         $this->_filesystem = $filesystem;
         $this->_session = $session;
-
-        parent::__construct($context);
+        $this->fileReadFactory = $fileReadFactory;
     }
 
     /**
@@ -175,7 +180,13 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
 
         if (is_null($this->_handle)) {
             if ($this->_linkType == self::LINK_TYPE_URL) {
-                $this->_handle = $this->_filesystem->getRemoteResource($this->_resourceFile);
+                $path = $this->_resourceFile;
+                $protocol = strtolower(parse_url($path, PHP_URL_SCHEME));
+                if ($protocol) {
+                    // Strip down protocol from path
+                    $path = preg_replace('#.+://#', '', $path);
+                }
+                $this->_handle = $this->fileReadFactory->create($path, $protocol);
             } elseif ($this->_linkType == self::LINK_TYPE_FILE) {
                 $this->_workingDirectory = $this->_filesystem->getDirectoryRead(DirectoryList::MEDIA);
                 $fileExists = $this->_downloadableFile->ensureFileInFilesystem($this->_resourceFile);

@@ -45,7 +45,7 @@ interface AddressRepositoryInterface
      * @return \Magento\Customer\Api\Data\AddressInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function get($addressId);
+    public function getById($addressId);
 
     /**
      * Retrieve customers addresses matching the specified criteria.

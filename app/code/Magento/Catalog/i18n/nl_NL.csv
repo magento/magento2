@@ -255,7 +255,6 @@ Categories,Categoriën
 "A total of %1 record(s) have been updated.","A total of %1 record(s) have been updated."
 "Something went wrong while updating the product(s) status.","Something went wrong while updating the product(s) status."
 "Please make sure to define SKU values for all processed products.","Please make sure to define SKU values for all processed products."
-"Please refresh "Product EAV" in System -> <a href="%1">Index Management</a>.","Please refresh "Product EAV" in System -> <a href="%1">Index Management</a>."
 "A total of %1 record(s) were updated.","A total of %1 record(s) were updated."
 "Something went wrong while updating the product(s) attributes.","Something went wrong while updating the product(s) attributes."
 "Please select products for attributes update.","Please select products for attributes update."

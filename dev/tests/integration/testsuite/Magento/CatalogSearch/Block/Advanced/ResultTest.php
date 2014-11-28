@@ -53,6 +53,7 @@ class ResultTest extends \PHPUnit_Framework_TestCase
             'position' => 'Label Position',
             'option3' => 'Label Option 2'
         );
+        /** @var \Magento\Catalog\Model\Category $category */
         $category = $this->getMock(
             'Magento\Catalog\Model\Category',
             array('getAvailableSortByOptions'),
@@ -64,8 +65,10 @@ class ResultTest extends \PHPUnit_Framework_TestCase
             ->method('getAvailableSortByOptions')
             ->will($this->returnValue($sortOptions));
         $category->setId(100500); // Any id - just for layer navigation
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Catalog\Model\Layer\Search')
-            ->setCurrentCategory($category);
+        /** @var \Magento\Catalog\Model\Layer\Resolver $resolver */
+        $resolver = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('\Magento\Catalog\Model\Layer\Resolver');
+        $resolver->get()->setCurrentCategory($category);
 
         $childBlock = $this->_layout->addBlock('Magento\Framework\View\Element\Text', 'search_result_list', 'block');
 

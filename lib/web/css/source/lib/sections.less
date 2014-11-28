@@ -37,7 +37,7 @@
         }
     }
     > .item.content {
-        .box-sizing();
+        box-sizing: border-box;
         .clearfix();
         float: right;
         margin-top: @_tab-control-height-base;
@@ -137,7 +137,7 @@
         }
     }
     > .item.content {
-        .add-background(@_tab-content-bg);
+        .css(background, @_tab-content-bg);
         margin-top: @_tab-content-margin-top;
         padding: @_tab-content-padding-top @_tab-content-padding-right @_tab-content-padding-bottom @_tab-content-padding-left;
         ._tab-content-border(
@@ -166,7 +166,7 @@
     margin: 0;
     padding: 0;
     > .item.title {
-        .box-sizing();
+        box-sizing: border-box;
         float: none;
         width: 100%;
         > .switch {
@@ -175,7 +175,7 @@
     }
     > .item.content {
         .clearfix();
-        .box-sizing();
+        box-sizing: border-box;
         float: none;
         margin: 0;
         display: block;

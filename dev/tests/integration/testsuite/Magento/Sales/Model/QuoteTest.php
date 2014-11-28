@@ -23,8 +23,8 @@
  */
 namespace Magento\Sales\Model;
 
-use Magento\Customer\Service\V1\Data\CustomerBuilder;
-use Magento\Customer\Service\V1\Data\Customer;
+use Magento\Customer\Api\Data\CustomerDataBuilder;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 class QuoteTest extends \PHPUnit_Framework_TestCase
@@ -57,7 +57,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             'Magento\Customer\Service\V1\CustomerMetadataService'
         );
         $customerBuilder = Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Service\V1\Data\CustomerBuilder',
+            'Magento\Customer\Api\Data\CustomerDataBuilder',
             [
                 'metadataService' => $customerMetadataService
             ]
@@ -82,7 +82,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             'Magento\Customer\Service\V1\CustomerMetadataService'
         );
         $customerBuilder = Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Service\V1\Data\CustomerBuilder',
+            'Magento\Customer\Api\Data\CustomerDataBuilder',
             [
                 'metadataService' => $customerMetadataService
             ]
@@ -94,7 +94,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $customerDataSet->__toArray());
         $quote->setCustomerData($customerDataSet);
 
-        $expected[Customer::EMAIL] = 'test@example.com';
+        $expected[\Magento\Customer\Model\Data\Customer::EMAIL] = 'test@example.com';
         $customerBuilder->populateWithArray($expected);
         $customerDataUpdated = $customerBuilder->create();
 
@@ -110,8 +110,8 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     public function testGetCustomerGroupFromCustomer()
     {
         /** Preconditions */
-        /** @var \Magento\Customer\Service\V1\Data\CustomerBuilder $customerBuilder */
-        $customerBuilder = Bootstrap::getObjectManager()->create('Magento\Customer\Service\V1\Data\CustomerBuilder');
+        /** @var \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder */
+        $customerBuilder = Bootstrap::getObjectManager()->create('Magento\Customer\Api\Data\CustomerDataBuilder');
         $customerGroupId = 3;
         $customerData = $customerBuilder->setId(1)->setGroupId($customerGroupId)->create();
         /** @var \Magento\Sales\Model\Quote $quote */
@@ -284,7 +284,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
      * Customer with two addresses created. First address is default billing, second is default shipping.
      *
      * @param \Magento\Sales\Model\Quote $quote
-     * @return \Magento\Customer\Service\V1\Data\Customer
+     * @return \Magento\Customer\Api\Data\CustomerInterface
      */
     protected function _prepareQuoteForTestAssignCustomerWithAddressChange($quote)
     {
@@ -311,24 +311,25 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     protected function _getCustomerDataArray()
     {
         return array(
-            Customer::ID => 1,
-            Customer::CONFIRMATION => 'test',
-            Customer::CREATED_AT => '2/3/2014',
-            Customer::CREATED_IN => 'Default',
-            Customer::DEFAULT_BILLING => 'test',
-            Customer::DEFAULT_SHIPPING => 'test',
-            Customer::DOB => '2/3/2014',
-            Customer::EMAIL => 'qa@example.com',
-            Customer::FIRSTNAME => 'Joe',
-            Customer::GENDER => 'Male',
-            Customer::GROUP_ID => \Magento\Customer\Service\V1\CustomerGroupServiceInterface::NOT_LOGGED_IN_ID,
-            Customer::LASTNAME => 'Dou',
-            Customer::MIDDLENAME => 'Ivan',
-            Customer::PREFIX => 'Dr.',
-            Customer::STORE_ID => 1,
-            Customer::SUFFIX => 'Jr.',
-            Customer::TAXVAT => 1,
-            Customer::WEBSITE_ID => 1
+            \Magento\Customer\Model\Data\Customer::ID => 1,
+            \Magento\Customer\Model\Data\Customer::CONFIRMATION => 'test',
+            \Magento\Customer\Model\Data\Customer::CREATED_AT => '2/3/2014',
+            \Magento\Customer\Model\Data\Customer::CREATED_IN => 'Default',
+            \Magento\Customer\Model\Data\Customer::DEFAULT_BILLING => 'test',
+            \Magento\Customer\Model\Data\Customer::DEFAULT_SHIPPING => 'test',
+            \Magento\Customer\Model\Data\Customer::DOB => '2/3/2014',
+            \Magento\Customer\Model\Data\Customer::EMAIL => 'qa@example.com',
+            \Magento\Customer\Model\Data\Customer::FIRSTNAME => 'Joe',
+            \Magento\Customer\Model\Data\Customer::GENDER => 'Male',
+            \Magento\Customer\Model\Data\Customer::GROUP_ID =>
+                \Magento\Customer\Service\V1\CustomerGroupServiceInterface::NOT_LOGGED_IN_ID,
+            \Magento\Customer\Model\Data\Customer::LASTNAME => 'Dou',
+            \Magento\Customer\Model\Data\Customer::MIDDLENAME => 'Ivan',
+            \Magento\Customer\Model\Data\Customer::PREFIX => 'Dr.',
+            \Magento\Customer\Model\Data\Customer::STORE_ID => 1,
+            \Magento\Customer\Model\Data\Customer::SUFFIX => 'Jr.',
+            \Magento\Customer\Model\Data\Customer::TAXVAT => 1,
+            \Magento\Customer\Model\Data\Customer::WEBSITE_ID => 1
         );
     }
 }

@@ -118,7 +118,7 @@ class Share extends \Magento\Framework\App\Config\Value implements \Magento\Fram
      * @return $this
      * @throws \Magento\Framework\Model\Exception
      */
-    public function _beforeSave()
+    public function beforeSave()
     {
         $value = $this->getValue();
         if ($value == self::SHARE_GLOBAL) {

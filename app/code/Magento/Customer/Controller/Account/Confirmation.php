@@ -27,7 +27,7 @@ namespace Magento\Customer\Controller\Account;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
 use Magento\Framework\StoreManagerInterface;
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
+use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Framework\UrlFactory;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 
@@ -36,8 +36,8 @@ class Confirmation extends \Magento\Customer\Controller\Account
     /** @var StoreManagerInterface */
     protected $storeManager;
 
-    /** @var CustomerAccountServiceInterface  */
-    protected $customerAccountService;
+    /** @var AccountManagementInterface  */
+    protected $customerAccountManagement;
 
     /** @var \Magento\Framework\UrlInterface */
     protected $urlModel;
@@ -46,18 +46,18 @@ class Confirmation extends \Magento\Customer\Controller\Account
      * @param Context $context
      * @param Session $customerSession
      * @param StoreManagerInterface $storeManager
-     * @param CustomerAccountServiceInterface $customerAccountService
+     * @param AccountManagementInterface $customerAccountManagement
      * @param UrlFactory $urlFactory
      */
     public function __construct(
         Context $context,
         Session $customerSession,
         StoreManagerInterface $storeManager,
-        CustomerAccountServiceInterface $customerAccountService,
+        AccountManagementInterface $customerAccountManagement,
         UrlFactory $urlFactory
     ) {
         $this->storeManager = $storeManager;
-        $this->customerAccountService = $customerAccountService;
+        $this->customerAccountManagement = $customerAccountManagement;
         $this->urlModel = $urlFactory->create();
         parent::__construct($context, $customerSession);
     }
@@ -78,7 +78,7 @@ class Confirmation extends \Magento\Customer\Controller\Account
         $email = $this->getRequest()->getPost('email');
         if ($email) {
             try {
-                $this->customerAccountService->resendConfirmation(
+                $this->customerAccountManagement->resendConfirmation(
                     $email,
                     $this->storeManager->getStore()->getWebsiteId()
                 );

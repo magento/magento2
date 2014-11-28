@@ -23,9 +23,12 @@
  */
 namespace Magento\TestFramework;
 
+use Magento\Framework\Code\Generator\FileResolver;
 use Magento\Framework\Autoload\AutoloaderInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\DeploymentConfig\DbConfig;
 
 /**
  * Encapsulates application installation, initialization and uninstall
@@ -73,13 +76,6 @@ class Application
      * @var array
      */
     protected $_globalConfigDir;
-
-    /**
-     * Module declaration *.xml configuration files
-     *
-     * @var array
-     */
-    protected $_moduleEtcFiles;
 
     /**
      * Installation destination directory
@@ -131,41 +127,11 @@ class Application
     protected $_factory;
 
     /**
-     * A factory method
+     * Directory List
      *
-     * @param string $installConfigFile
-     * @param string $globalConfigDir
-     * @param array $moduleConfigFiles
-     * @param string $appMode
-     * @param string $tmpDir
-     * @param \Magento\Framework\Shell $shell
-     * @param AutoloaderInterface $autoloadWrapper
-     * @return Application
+     * @var \Magento\Framework\App\Filesystem\DirectoryList
      */
-    public static function getInstance(
-        $installConfigFile,
-        $globalConfigDir,
-        array $moduleConfigFiles,
-        $appMode,
-        $tmpDir,
-        \Magento\Framework\Shell $shell,
-        AutoloaderInterface $autoloadWrapper
-    ) {
-        if (!file_exists($installConfigFile)) {
-            $installConfigFile = $installConfigFile . '.dist';
-        }
-        $sandboxUniqueId = md5(sha1_file($installConfigFile));
-        $installDir = "{$tmpDir}/sandbox-{$sandboxUniqueId}";
-        return new \Magento\TestFramework\Application(
-            $shell,
-            $installDir,
-            $installConfigFile,
-            $globalConfigDir,
-            $moduleConfigFiles,
-            $appMode,
-            $autoloadWrapper
-        );
-    }
+    protected $dirList;
 
     /**
      * Constructor
@@ -174,7 +140,6 @@ class Application
      * @param string $installDir
      * @param array $installConfigFile
      * @param string $globalConfigDir
-     * @param array $moduleEtcFiles
      * @param string $appMode
      * @param AutoloaderInterface $autoloadWrapper
      */
@@ -183,28 +148,26 @@ class Application
         $installDir,
         $installConfigFile,
         $globalConfigDir,
-        array $moduleEtcFiles,
         $appMode,
         AutoloaderInterface $autoloadWrapper
     ) {
         $this->_shell = $shell;
         $this->installConfigFile = $installConfigFile;
         $this->_globalConfigDir = realpath($globalConfigDir);
-        $this->_moduleEtcFiles = $moduleEtcFiles;
         $this->_appMode = $appMode;
         $this->installDir = $installDir;
 
         $customDirs = $this->getCustomDirs();
-        $dirList = new \Magento\Framework\App\Filesystem\DirectoryList(BP, $customDirs);
-        \Magento\Framework\Autoload\Populator::populateMappings($autoloadWrapper, $dirList);
+        $this->dirList = new \Magento\Framework\App\Filesystem\DirectoryList(BP, $customDirs);
+        \Magento\Framework\Autoload\Populator::populateMappings($autoloadWrapper, $this->dirList);
         $this->_initParams = array(
             \Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => $customDirs,
             \Magento\Framework\App\State::PARAM_MODE => $appMode
         );
         $driverPool = new \Magento\Framework\Filesystem\DriverPool;
-        $this->_factory = new \Magento\TestFramework\ObjectManagerFactory($dirList, $driverPool);
+        $this->_factory = new \Magento\TestFramework\ObjectManagerFactory($this->dirList, $driverPool);
 
-        $this->_configDir = $dirList->getPath(DirectoryList::CONFIG);
+        $this->_configDir = $this->dirList->getPath(DirectoryList::CONFIG);
     }
 
     /**
@@ -216,12 +179,16 @@ class Application
     {
         if (null === $this->_db) {
             if ($this->isInstalled()) {
-                $localConfigFile = $this->getLocalConfig();
-                $localConfig = simplexml_load_file($localConfigFile);
-                $host = (string)$localConfig->connection->host;
-                $user = (string)$localConfig->connection->username;
-                $password = (string)$localConfig->connection->password;
-                $dbName = (string)$localConfig->connection->dbName;
+                $deploymentConfig = new DeploymentConfig(
+                    new \Magento\Framework\App\DeploymentConfig\Reader($this->dirList),
+                    []
+                );
+                $dbConfig = new DbConfig($deploymentConfig->getSegment(DbConfig::CONFIG_KEY));
+                $dbInfo = $dbConfig->getConnection('default');
+                $host = $dbInfo['host'];
+                $user = $dbInfo['username'];
+                $password = $dbInfo['password'];
+                $dbName = $dbInfo['dbname'];
             } else {
                 $installConfig = $this->getInstallConfig();
                 $host = $installConfig['db_host'];
@@ -261,7 +228,7 @@ class Application
      */
     private function getLocalConfig()
     {
-        return $this->_configDir . '/local.xml';
+        return $this->_configDir . '/config.php';
     }
 
     /**
@@ -328,9 +295,12 @@ class Application
 
         $objectManager->configure(
             array(
-                'preferences' => array(
-                    'Magento\Framework\App\State' => 'Magento\TestFramework\App\State'
-                )
+                'preferences' => [
+                    'Magento\Framework\App\State' => 'Magento\TestFramework\App\State',
+                    'Magento\Framework\Mail\TransportInterface' => 'Magento\TestFramework\Mail\TransportInterfaceMock',
+                    'Magento\Framework\Mail\Template\TransportBuilder' =>
+                        'Magento\TestFramework\Mail\Template\TransportBuilderMock',
+                ],
             )
         );
 
@@ -457,17 +427,14 @@ class Application
      */
     private function copyAppConfigFiles()
     {
-        $globalConfigFiles = glob($this->_globalConfigDir . '/{di.xml,local.xml.template,*/*.xml}', GLOB_BRACE);
+        $globalConfigFiles = glob(
+            $this->_globalConfigDir . '/{di.xml}',
+            GLOB_BRACE
+        );
         foreach ($globalConfigFiles as $file) {
             $targetFile = $this->_configDir . str_replace($this->_globalConfigDir, '', $file);
             $this->_ensureDirExists(dirname($targetFile));
             copy($file, $targetFile);
-        }
-
-        foreach ($this->_moduleEtcFiles as $file) {
-            $targetModulesDir = $this->_configDir . '/modules';
-            $this->_ensureDirExists($targetModulesDir);
-            copy($file, $targetModulesDir . '/' . basename($file));
         }
     }
 

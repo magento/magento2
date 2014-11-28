@@ -134,12 +134,12 @@ class Option extends \Magento\Framework\Model\AbstractModel implements
      *
      * @return $this
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
         if ($this->getItem()) {
             $this->setItemId($this->getItem()->getId());
         }
-        return parent::_beforeSave();
+        return parent::beforeSave();
     }
 
     /**

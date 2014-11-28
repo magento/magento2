@@ -24,7 +24,7 @@
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
 
 use Magento\Customer\Controller\RegistryConstants;
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
  * Test for Account
@@ -48,8 +48,11 @@ class AccountTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Backend\Block\Template\Context */
     protected $context;
 
-    /** @var CustomerAccountServiceInterface */
-    protected $customerAccountService;
+    /** @var CustomerRepositoryInterface */
+    protected $customerRepository;
+
+    /** @var \Magento\Framework\Reflection\DataObjectProcessor */
+    protected $dataObjectProcessor;
 
     public function setUp()
     {
@@ -57,6 +60,7 @@ class AccountTest extends \PHPUnit_Framework_TestCase
         $this->coreRegistry = $this->objectManager->get('Magento\Framework\Registry');
         $this->coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, 1);
         $this->backendSession = $this->objectManager->get('Magento\Backend\Model\Session');
+        $this->dataObjectProcessor = $this->objectManager->get('Magento\Framework\Reflection\DataObjectProcessor');
 
         $this->context = $this->objectManager->get(
             'Magento\Backend\Block\Template\Context',
@@ -71,8 +75,8 @@ class AccountTest extends \PHPUnit_Framework_TestCase
             array('context' => $this->context)
         );
 
-        $this->customerAccountService = $this->objectManager->get(
-            'Magento\Customer\Service\V1\CustomerAccountServiceInterface'
+        $this->customerRepository = $this->objectManager->get(
+            'Magento\Customer\Api\CustomerRepositoryInterface'
         );
     }
 
@@ -90,8 +94,11 @@ class AccountTest extends \PHPUnit_Framework_TestCase
      */
     public function testToHtml()
     {
+        /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
+        $customer = $this->customerRepository->getById(1);
+        $customerData = $this->dataObjectProcessor->buildOutputDataArray($customer, get_class($customer));
         $this->backendSession->setCustomerData(
-            array('customer_id' => 1, 'account' => $this->customerAccountService->getCustomer(1)->__toArray())
+            array('customer_id' => 1, 'account' => $customerData)
         );
 
         $result = $this->accountBlock->initForm()->toHtml();
@@ -117,8 +124,11 @@ class AccountTest extends \PHPUnit_Framework_TestCase
      */
     public function testNeedsConfirmation()
     {
+        /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
+        $customer = $this->customerRepository->getById(1);
+        $customerData = $this->dataObjectProcessor->buildOutputDataArray($customer, get_class($customer));
         $this->backendSession->setCustomerData(
-            array('customer_id' => 1, 'account' => $this->customerAccountService->getCustomer(1)->__toArray())
+            array('customer_id' => 1, 'account' => $customerData)
         );
 
         $result = $this->accountBlock->initForm()->toHtml();
@@ -133,11 +143,14 @@ class AccountTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrefix()
     {
+        /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
+        $customer = $this->customerRepository->getById(1);
+        $customerData = $this->dataObjectProcessor->buildOutputDataArray($customer, get_class($customer));
         $this->backendSession->setCustomerData(
             array(
                 'customer_id' => 1,
                 'account' => array_merge(
-                    $this->customerAccountService->getCustomer(1)->__toArray(),
+                    $customerData,
                     array('prefix' => 'Mr')
                 )
             )
@@ -153,8 +166,11 @@ class AccountTest extends \PHPUnit_Framework_TestCase
      */
     public function testNotReadOnly()
     {
+        /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
+        $customer = $this->customerRepository->getById(1);
+        $customerData = $this->dataObjectProcessor->buildOutputDataArray($customer, get_class($customer));
         $this->backendSession->setCustomerData(
-            array('customer_id' => 1, 'account' => $this->customerAccountService->getCustomer(1)->__toArray())
+            array('customer_id' => 1, 'account' => $customerData)
         );
 
         $this->accountBlock->initForm()->toHtml();
@@ -169,9 +185,12 @@ class AccountTest extends \PHPUnit_Framework_TestCase
      */
     public function testNewCustomer()
     {
-        $customerBuilder = $this->objectManager->get('\Magento\Customer\Service\V1\Data\CustomerBuilder');
+        /** @var \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder */
+        $customerBuilder = $this->objectManager->get('\Magento\Customer\Api\Data\CustomerDataBuilder');
+        $customerData = $this->dataObjectProcessor
+            ->buildOutputDataArray($customerBuilder->create(), '\Magento\Customer\Api\Data\CustomerInterface');
         $this->backendSession->setCustomerData(
-            array('customer_id' => 0, 'account' => $customerBuilder->create()->__toArray())
+            array('customer_id' => 0, 'account' => $customerData)
         );
         $result = $this->accountBlock->initForm()->toHtml();
 

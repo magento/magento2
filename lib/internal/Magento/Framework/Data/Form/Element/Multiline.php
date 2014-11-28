@@ -55,7 +55,17 @@ class Multiline extends AbstractElement
      */
     public function getHtmlAttributes()
     {
-        return array('type', 'title', 'class', 'style', 'onclick', 'onchange', 'disabled', 'maxlength');
+        return array(
+            'type',
+            'title',
+            'class',
+            'style',
+            'onclick',
+            'onchange',
+            'disabled',
+            'maxlength',
+            'data-form-part'
+        );
     }
 
     /**

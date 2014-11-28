@@ -23,51 +23,37 @@
  */
 namespace Magento\Sales\Model\Order;
 
+use Magento\Sales\Api\Data\OrderAddressInterface;
+use Magento\Customer\Model\Address\AbstractAddress;
+
 /**
  * Sales order address model
  *
  * @method \Magento\Sales\Model\Resource\Order\Address _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Address getResource()
- * @method int getParentId()
  * @method Address setParentId(int $value)
- * @method int getCustomerAddressId()
  * @method Address setCustomerAddressId(int $value)
  * @method \Magento\Customer\Service\V1\Data\Address getCustomerAddressData()
  * @method Address setCustomerAddressData(\Magento\Customer\Service\V1\Data\Address $value)
- * @method int getQuoteAddressId()
  * @method Address setQuoteAddressId(int $value)
  * @method Address setRegionId(int $value)
- * @method int getCustomerId()
  * @method Address setCustomerId(int $value)
- * @method string getFax()
  * @method Address setFax(string $value)
  * @method Address setRegion(string $value)
- * @method string getPostcode()
  * @method Address setPostcode(string $value)
- * @method string getLastname()
  * @method Address setLastname(string $value)
- * @method string getCity()
  * @method Address setCity(string $value)
- * @method string getEmail()
  * @method Address setEmail(string $value)
- * @method string getTelephone()
  * @method Address setTelephone(string $value)
- * @method string getCountryId()
  * @method Address setCountryId(string $value)
- * @method string getFirstname()
  * @method Address setFirstname(string $value)
- * @method string getAddressType()
  * @method Address setAddressType(string $value)
- * @method string getPrefix()
  * @method Address setPrefix(string $value)
- * @method string getMiddlename()
  * @method Address setMiddlename(string $value)
- * @method string getSuffix()
  * @method Address setSuffix(string $value)
- * @method string getCompany()
  * @method Address setCompany(string $value)
  */
-class Address extends \Magento\Customer\Model\Address\AbstractAddress
+class Address extends AbstractAddress implements OrderAddressInterface
 {
     /**
      * @var \Magento\Sales\Model\Order
@@ -92,6 +78,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
      * @param \Magento\Directory\Helper\Data $directoryData
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Customer\Model\Address\Config $addressConfig
@@ -105,6 +92,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
+        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
         \Magento\Directory\Helper\Data $directoryData,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Customer\Model\Address\Config $addressConfig,
@@ -118,6 +106,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
         parent::__construct(
             $context,
             $registry,
+            $metadataService,
             $directoryData,
             $eavConfig,
             $addressConfig,
@@ -166,24 +155,262 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     }
 
     /**
-     * Before object save manipulations
+     * Returns address_type
      *
-     * @return $this
+     * @return string
      */
-    protected function _beforeSave()
+    public function getAddressType()
     {
-        parent::_beforeSave();
+        return $this->getData(OrderAddressInterface::ADDRESS_TYPE);
+    }
 
-        if (!$this->getParentId() && $this->getOrder()) {
-            $this->setParentId($this->getOrder()->getId());
-        }
+    /**
+     * Returns city
+     *
+     * @return string
+     */
+    public function getCity()
+    {
+        return $this->getData(OrderAddressInterface::CITY);
+    }
 
-        // Init customer address id if customer address is assigned
-        $customerData = $this->getCustomerAddressData();
-        if ($customerData) {
-            $this->setCustomerAddressId($customerData->getId());
-        }
+    /**
+     * Returns company
+     *
+     * @return string
+     */
+    public function getCompany()
+    {
+        return $this->getData(OrderAddressInterface::COMPANY);
+    }
 
-        return $this;
+    /**
+     * Returns country_id
+     *
+     * @return string
+     */
+    public function getCountryId()
+    {
+        return $this->getData(OrderAddressInterface::COUNTRY_ID);
+    }
+
+    /**
+     * Returns customer_address_id
+     *
+     * @return int
+     */
+    public function getCustomerAddressId()
+    {
+        return $this->getData(OrderAddressInterface::CUSTOMER_ADDRESS_ID);
+    }
+
+    /**
+     * Returns customer_id
+     *
+     * @return int
+     */
+    public function getCustomerId()
+    {
+        return $this->getData(OrderAddressInterface::CUSTOMER_ID);
+    }
+
+    /**
+     * Returns email
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->getData(OrderAddressInterface::EMAIL);
+    }
+
+    /**
+     * Returns entity_id
+     *
+     * @return int
+     */
+    public function getEntityId()
+    {
+        return $this->getData(OrderAddressInterface::ENTITY_ID);
+    }
+
+    /**
+     * Returns fax
+     *
+     * @return string
+     */
+    public function getFax()
+    {
+        return $this->getData(OrderAddressInterface::FAX);
+    }
+
+    /**
+     * Returns firstname
+     *
+     * @return string
+     */
+    public function getFirstname()
+    {
+        return $this->getData(OrderAddressInterface::FIRSTNAME);
+    }
+
+    /**
+     * Returns lastname
+     *
+     * @return string
+     */
+    public function getLastname()
+    {
+        return $this->getData(OrderAddressInterface::LASTNAME);
+    }
+
+    /**
+     * Returns middlename
+     *
+     * @return string
+     */
+    public function getMiddlename()
+    {
+        return $this->getData(OrderAddressInterface::MIDDLENAME);
+    }
+
+    /**
+     * Returns parent_id
+     *
+     * @return int
+     */
+    public function getParentId()
+    {
+        return $this->getData(OrderAddressInterface::PARENT_ID);
+    }
+
+    /**
+     * Returns postcode
+     *
+     * @return string
+     */
+    public function getPostcode()
+    {
+        return $this->getData(OrderAddressInterface::POSTCODE);
+    }
+
+    /**
+     * Returns prefix
+     *
+     * @return string
+     */
+    public function getPrefix()
+    {
+        return $this->getData(OrderAddressInterface::PREFIX);
+    }
+
+    /**
+     * Returns quote_address_id
+     *
+     * @return int
+     */
+    public function getQuoteAddressId()
+    {
+        return $this->getData(OrderAddressInterface::QUOTE_ADDRESS_ID);
+    }
+
+    /**
+     * Returns region
+     *
+     * @return string
+     */
+    public function getRegion()
+    {
+        return $this->getData(OrderAddressInterface::REGION);
+    }
+
+    /**
+     * Returns region_id
+     *
+     * @return int
+     */
+    public function getRegionId()
+    {
+        return $this->getData(OrderAddressInterface::REGION_ID);
+    }
+
+    /**
+     * Returns street
+     *
+     * @return string[]
+     */
+    public function getStreet()
+    {
+        return parent::getStreet();
+    }
+
+    /**
+     * Returns suffix
+     *
+     * @return string
+     */
+    public function getSuffix()
+    {
+        return $this->getData(OrderAddressInterface::SUFFIX);
+    }
+
+    /**
+     * Returns telephone
+     *
+     * @return string
+     */
+    public function getTelephone()
+    {
+        return $this->getData(OrderAddressInterface::TELEPHONE);
+    }
+
+    /**
+     * Returns vat_id
+     *
+     * @return string
+     */
+    public function getVatId()
+    {
+        return $this->getData(OrderAddressInterface::VAT_ID);
+    }
+
+    /**
+     * Returns vat_is_valid
+     *
+     * @return int
+     */
+    public function getVatIsValid()
+    {
+        return $this->getData(OrderAddressInterface::VAT_IS_VALID);
+    }
+
+    /**
+     * Returns vat_request_date
+     *
+     * @return string
+     */
+    public function getVatRequestDate()
+    {
+        return $this->getData(OrderAddressInterface::VAT_REQUEST_DATE);
+    }
+
+    /**
+     * Returns vat_request_id
+     *
+     * @return string
+     */
+    public function getVatRequestId()
+    {
+        return $this->getData(OrderAddressInterface::VAT_REQUEST_ID);
+    }
+
+    /**
+     * Returns vat_request_success
+     *
+     * @return int
+     */
+    public function getVatRequestSuccess()
+    {
+        return $this->getData(OrderAddressInterface::VAT_REQUEST_SUCCESS);
     }
 }

@@ -23,15 +23,17 @@
  */
 namespace Magento\Sales\Model\Resource\Order\Status\History;
 
-use Magento\Sales\Model\AbstractModel;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\AbstractModel;
+use Magento\Sales\Api\Data\OrderStatusHistorySearchResultInterface;
+use Magento\Sales\Model\Resource\Order\Collection\AbstractCollection;
 
 /**
  * Flat sales order status history collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\Sales\Model\Resource\Order\Collection\AbstractCollection
+class Collection extends AbstractCollection implements OrderStatusHistorySearchResultInterface
 {
     /**
      * Event prefix

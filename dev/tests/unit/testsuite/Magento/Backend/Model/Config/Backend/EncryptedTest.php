@@ -103,7 +103,7 @@ class EncryptedTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Backend\Model\Config\Backend\Encrypted::_beforeSave
+     * @covers \Magento\Backend\Model\Config\Backend\Encrypted::beforeSave
      * @dataProvider beforeSaveDataProvider
      *
      * @param $value
@@ -135,7 +135,7 @@ class EncryptedTest extends \PHPUnit_Framework_TestCase
 
         $this->_model->setValue($value);
         $this->_model->setPath('some/path');
-        $this->_model->save();
+        $this->_model->beforeSave();
         $this->assertEquals($this->_model->getValue(), 'encrypted');
     }
 

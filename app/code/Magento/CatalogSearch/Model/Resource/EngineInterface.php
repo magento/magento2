@@ -64,6 +64,16 @@ interface EngineInterface
      */
     public function allowAdvancedIndex();
 
+
+    /**
+     * Proepare attribute value to store in index
+     *
+     * @param \Magento\Eav\Model\Entity\Attribute $attribute
+     * @param mixed $value
+     * @return mixed
+     */
+    public function processAttributeValue($attribute, $value);
+
     /**
      * Remove entity data from fulltext search table
      *

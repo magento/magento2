@@ -31,11 +31,11 @@ namespace Magento\Customer\Model\Resource;
 class Group extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
-     * Customer VAT
+     * Group Management
      *
-     * @var \Magento\Customer\Model\Vat
+     * @var \Magento\Customer\Api\GroupManagementInterface
      */
-    protected $_customerVat;
+    protected $_groupManagement;
 
     /**
      * @var \Magento\Customer\Model\Resource\Customer\CollectionFactory
@@ -44,15 +44,15 @@ class Group extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
     /**
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Customer\Model\Vat $customerVat
+     * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      * @param Customer\CollectionFactory $customersFactory
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        \Magento\Customer\Model\Vat $customerVat,
+        \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\Customer\Model\Resource\Customer\CollectionFactory $customersFactory
     ) {
-        $this->_customerVat = $customerVat;
+        $this->_groupManagement = $groupManagement;
         $this->_customersFactory = $customersFactory;
         parent::__construct($resource);
     }
@@ -109,7 +109,7 @@ class Group extends \Magento\Framework\Model\Resource\Db\AbstractDb
         foreach ($customerCollection as $customer) {
             /** @var $customer \Magento\Customer\Model\Customer */
             $customer->load($customer->getId());
-            $defaultGroupId = $this->_customerVat->getDefaultCustomerGroupId($customer->getStoreId());
+            $defaultGroupId = $this->_groupManagement->getDefaultGroup($customer->getStoreId())->getId();
             $customer->setGroupId($defaultGroupId);
             $customer->save();
         }

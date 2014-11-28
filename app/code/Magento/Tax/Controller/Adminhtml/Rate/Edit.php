@@ -41,7 +41,7 @@ class Edit extends \Magento\Tax\Controller\Adminhtml\Rate
         $rateId = (int)$this->getRequest()->getParam('rate');
         $this->_coreRegistry->register(RegistryConstants::CURRENT_TAX_RATE_ID, $rateId);
         try {
-            $taxRateDataObject = $this->_taxRateService->getTaxRate($rateId);
+            $taxRateDataObject = $this->_taxRateRepository->get($rateId);
         } catch (NoSuchEntityException $e) {
             $this->getResponse()->setRedirect($this->getUrl("*/*/"));
             return;

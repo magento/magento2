@@ -36,7 +36,7 @@ class MetadataServiceTest extends \PHPUnit_Framework_TestCase
             [
                 'Magento\Framework\Api\Config\Reader' => [
                     'arguments' => [
-                        'fileResolver' => ['instance' => 'Magento\Customer\Service\V1\FileResolverStub']
+                        'fileResolver' => ['instance' => 'Magento\Catalog\Service\V1\FileResolverStub']
                     ]
                 ]
             ]

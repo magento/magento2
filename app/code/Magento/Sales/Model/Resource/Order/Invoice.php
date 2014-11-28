@@ -26,6 +26,7 @@ namespace Magento\Sales\Model\Resource\Order;
 use Magento\Framework\App\Resource;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Sales\Model\Resource\Attribute;
+use Magento\Sales\Model\Spi\InvoiceResourceInterface;
 use Magento\Sales\Model\Increment as SalesIncrement;
 use Magento\Sales\Model\Resource\Entity as SalesResource;
 use Magento\Sales\Model\Resource\Order\Invoice\Grid as InvoiceGrid;
@@ -33,7 +34,7 @@ use Magento\Sales\Model\Resource\Order\Invoice\Grid as InvoiceGrid;
 /**
  * Flat sales order invoice resource
  */
-class Invoice extends SalesResource
+class Invoice extends SalesResource implements InvoiceResourceInterface
 {
     /**
      * Event prefix
@@ -67,5 +68,50 @@ class Invoice extends SalesResource
         InvoiceGrid $gridAggregator
     ) {
         parent::__construct($resource, $dateTime, $attribute, $salesIncrement, $gridAggregator);
+    }
+
+    /**
+     * Perform actions before object save
+     *
+     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\Object $object
+     * @return $this
+     */
+    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
+    {
+        /** @var \Magento\Sales\Model\Order\Invoice $object */
+        if (!$object->getOrderId() && $object->getOrder()) {
+            $object->setOrderId($object->getOrder()->getId());
+            $object->setBillingAddressId($object->getOrder()->getBillingAddress()->getId());
+        }
+
+        return parent::_beforeSave($object);
+    }
+
+    /**
+     * Perform actions before object save
+     *
+     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\Object $object
+     * @return $this
+     */
+    protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
+    {
+        /** @var \Magento\Sales\Model\Order\Invoice $object */
+        if (null !== $object->getItems()) {
+            /**
+             * Save invoice items
+             */
+            foreach ($object->getItems() as $item) {
+                $item->setParentId($object->getId());
+                $item->setOrderItem($item->getOrderItem());
+                $item->save();
+            }
+        }
+
+        if (null !== $object->getComments()) {
+            foreach ($object->getComments() as $comment) {
+                $comment->save();
+            }
+        }
+        return parent::_beforeSave($object);
     }
 }

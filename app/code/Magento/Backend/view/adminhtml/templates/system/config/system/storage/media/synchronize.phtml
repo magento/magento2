@@ -32,8 +32,6 @@ require([
     'mage/backend/validation'
 ], function(jQuery){
 
-    jQuery.mage.extend('validation', 'validation', 'Magento_Backend/system/validation-rules');
-
     allowedStorages = [];
     addAllowedStorage(
         $('system_media_storage_configuration_media_storage').value,

@@ -31,6 +31,8 @@
         factory(jQuery);
     }
 }(function ($) {
+    "use strict";
+    
     $.widget("mage.validation", $.mage.validation, {
         options: {
             radioCheckboxClosest: 'ul',
@@ -76,4 +78,6 @@
             }
         }
     });
+
+    return $.mage.validation;
 }));

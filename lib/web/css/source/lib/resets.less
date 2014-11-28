@@ -36,6 +36,7 @@
     details,
     figcaption,
     figure,
+    main,
     footer,
     header,
     hgroup,
@@ -49,8 +50,6 @@
     canvas,
     video {
         display: inline-block;
-        *display: inline;
-        *zoom: 1;
     }
 
     audio:not([controls]) {
@@ -66,7 +65,6 @@
 
     img {
         border: 0;
-        -ms-interpolation-mode: bicubic;
     }
 
     svg:not(:root) {
@@ -126,6 +124,7 @@
         font-family: sans-serif;
         -ms-text-size-adjust: 100%;
         -webkit-text-size-adjust: 100%;
+        font-size-adjust: 100%;
     }
     body {
         margin: 0;
@@ -136,6 +135,7 @@
     details,
     figcaption,
     figure,
+    main,
     footer,
     header,
     hgroup,
@@ -211,7 +211,6 @@
         margin: 1em 40px;
     }
     hr {
-        -moz-box-sizing: content-box;
         box-sizing: content-box;
         height: 0;
     }
@@ -270,9 +269,6 @@
         height: auto;
     }
     input[type="search"] {
-        -webkit-appearance: textfield;
-        -moz-box-sizing: content-box;
-        -webkit-box-sizing: content-box;
         box-sizing: content-box;
     }
     input[type="search"]::-webkit-search-cancel-button,
@@ -322,7 +318,7 @@
     fieldset, form, label, legend,
     table, caption, tbody, tfoot, thead, tr, th, td,
     article, aside, canvas, details, embed,
-    figure, figcaption, footer, header, hgroup,
+    figure, figcaption, main, footer, header, hgroup,
     menu, nav, output, ruby, section, summary,
     time, mark, audio, video {
         margin: 0;
@@ -332,7 +328,7 @@
         font: inherit;
         vertical-align: baseline;
     }
-    article, aside, details, figcaption, figure,
+    article, aside, details, figcaption, figure, main,
     footer, header, hgroup, menu, nav, section {
         display: block;
     }
@@ -386,7 +382,7 @@
     dl, dt, dd, ol, ul, li,
     fieldset, form, label, legend,
     table, caption, tbody, tfoot, thead, tr, th, td,
-    article, aside, canvas, details, figcaption, figure,
+    article, aside, canvas, details, figcaption, figure, main,
     footer, header, hgroup, menu, nav, section, summary,
     time, mark, audio, video {
         margin: 0;
@@ -400,7 +396,7 @@
     body {
         line-height: 1;
     }
-    article, aside, details, figcaption, figure,
+    article, aside, details, figcaption, figure, main,
     footer, header, hgroup, menu, nav, section {
         display: block;
     }

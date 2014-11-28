@@ -25,7 +25,7 @@
 namespace Magento\CatalogInventory\Helper;
 
 use Magento\Store\Model\Store;
-use Magento\Customer\Service\V1\CustomerGroupServiceInterface as CustomerGroupService;
+use Magento\Customer\Api\GroupManagementInterface;
 
 /**
  * MinSaleQty value manipulation helper
@@ -45,15 +45,23 @@ class Minsaleqty
     protected $mathRandom;
 
     /**
+     * @var GroupManagementInterface
+     */
+    protected $groupManagement;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Math\Random $mathRandom
+     * @param GroupManagementInterface $groupManagement
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Math\Random $mathRandom
+        \Magento\Framework\Math\Random $mathRandom,
+        GroupManagementInterface $groupManagement
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->mathRandom = $mathRandom;
+        $this->groupManagement = $groupManagement;
     }
 
     /**
@@ -85,8 +93,8 @@ class Minsaleqty
                     $data[$groupId] = $this->fixQty($qty);
                 }
             }
-            if (count($data) == 1 && array_key_exists(CustomerGroupService::CUST_GROUP_ALL, $data)) {
-                return (string) $data[CustomerGroupService::CUST_GROUP_ALL];
+            if (count($data) == 1 && array_key_exists($this->getAllCustomersGroupId(), $data)) {
+                return (string) $data[$this->getAllCustomersGroupId()];
             }
             return serialize($data);
         } else {
@@ -103,7 +111,7 @@ class Minsaleqty
     protected function unserializeValue($value)
     {
         if (is_numeric($value)) {
-            return array(CustomerGroupService::CUST_GROUP_ALL => $this->fixQty($value));
+            return array($this->getAllCustomersGroupId() => $this->fixQty($value));
         } elseif (is_string($value) && !empty($value)) {
             return unserialize($value);
         } else {
@@ -197,7 +205,7 @@ class Minsaleqty
             if ($groupId == $customerGroupId) {
                 $result = $qty;
                 break;
-            } elseif ($groupId == CustomerGroupService::CUST_GROUP_ALL) {
+            } elseif ($groupId == $this->getAllCustomersGroupId()) {
                 $result = $qty;
             }
         }
@@ -232,5 +240,15 @@ class Minsaleqty
         }
         $value = $this->serializeValue($value);
         return $value;
+    }
+
+    /**
+     * Return the all customer group id
+     *
+     * @return int
+     */
+    protected function getAllCustomersGroupId()
+    {
+        return $this->groupManagement->getAllCustomersGroup()->getId();
     }
 }

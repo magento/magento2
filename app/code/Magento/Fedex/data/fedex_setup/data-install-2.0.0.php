@@ -22,7 +22,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/** @var $this \Magento\Framework\Module\Setup */
+/** @var $this \Magento\Framework\Module\DataSetup */
 $codes = array(
     'method' => array(
         'EUROPEFIRSTINTERNATIONALPRIORITY' => 'EUROPE_FIRST_INTERNATIONAL_PRIORITY',
@@ -64,7 +64,7 @@ $codes = array(
     )
 );
 
-/* @var $installer \Magento\Framework\Module\Setup */
+/* @var $installer \Magento\Framework\Module\DataSetup */
 $installer = $this;
 $configDataTable = $installer->getTable('core_config_data');
 $conn = $installer->getConnection();

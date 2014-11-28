@@ -41,7 +41,7 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Logger */
     protected $_loggerMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata */
+    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Api\Data\AttributeMetadataInterface */
     protected $_attributeMock;
 
     /** @var string */
@@ -62,9 +62,7 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\Locale\ResolverInterface'
         )->disableOriginalConstructor()->getMock();
         $this->_loggerMock = $this->getMockBuilder('Magento\Framework\Logger')->disableOriginalConstructor()->getMock();
-        $this->_attributeMock = $this->getMockBuilder(
-            'Magento\Customer\Service\V1\Data\Eav\AttributeMetadata'
-        )->disableOriginalConstructor()->getMock();
+        $this->_attributeMock = $this->getMock('Magento\Customer\Api\Data\AttributeMetadataInterface');
         $this->_value = 'VALUE';
         $this->_entityTypeCode = 'ENTITY_TYPE_CODE';
         $this->_isAjax = false;

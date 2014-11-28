@@ -220,7 +220,19 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     {
         $adapter = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
-            array('_connect', 'delete', 'describeTable', 'fetchRow', 'insert', 'lastInsertId', 'quote', 'update'),
+            array(
+                '_connect',
+                'delete',
+                'describeTable',
+                'fetchRow',
+                'insert',
+                'lastInsertId',
+                'quote',
+                'update',
+                'beginTransaction',
+                'commit',
+                'rollback',
+            ),
             array(),
             '',
             false
@@ -266,7 +278,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         /** @var $resource \Magento\Framework\App\Resource */
         $resource = $this->getMock(
             'Magento\Framework\App\Resource',
-            array('getTableName', 'getConnection'),
+            array(),
             array(),
             '',
             false,

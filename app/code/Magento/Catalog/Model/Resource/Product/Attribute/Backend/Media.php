@@ -63,26 +63,33 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
         // Select gallery images for product
         $select = $adapter->select()->from(
-            array('main' => $this->getMainTable()),
-            array('value_id', 'value AS file')
+            ['main' => $this->getMainTable()],
+            [
+                'value_id',
+                'file' => 'value'
+            ]
         )->joinLeft(
-            array('value' => $this->getTable(self::GALLERY_VALUE_TABLE)),
+            ['value' => $this->getTable(self::GALLERY_VALUE_TABLE)],
             $adapter->quoteInto('main.value_id = value.value_id AND value.store_id = ?', (int)$product->getStoreId()),
-            array('label', 'position', 'disabled')
+            [
+                'label',
+                'position',
+                'disabled'
+            ]
         )->joinLeft(
             // Joining default values
-            array('default_value' => $this->getTable(self::GALLERY_VALUE_TABLE)),
+            ['default_value' => $this->getTable(self::GALLERY_VALUE_TABLE)],
             'main.value_id = default_value.value_id AND default_value.store_id = 0',
-            array('label_default' => 'label', 'position_default' => 'position', 'disabled_default' => 'disabled')
+            ['label_default' => 'label', 'position_default' => 'position', 'disabled_default' => 'disabled']
         )->where(
             'main.attribute_id = ?',
             $object->getAttribute()->getId()
         )->where(
             'main.entity_id = ?',
             $product->getId()
-        )->order(
-            $positionCheckSql . ' ' . \Magento\Framework\DB\Select::SQL_ASC
-        );
+        )
+        ->where($positionCheckSql . ' IS NOT NULL')
+        ->order($positionCheckSql . ' ' . \Magento\Framework\DB\Select::SQL_ASC);
 
         $result = $adapter->fetchAll($select);
         $this->_removeDuplicates($result);

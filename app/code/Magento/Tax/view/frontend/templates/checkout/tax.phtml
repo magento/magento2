@@ -40,14 +40,16 @@
 ?>
 
 <tr <?php echo $attributes; ?>>
-    <td style="<?php echo $_style ?>" class="mark" colspan="<?php echo $this->getColspan(); ?>">
+    <th style="<?php echo $_style ?>" class="mark" colspan="<?php echo $this->getColspan(); ?>" scope="row">
         <?php if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary()): ?>
             <span class="detailed"><?php echo $this->getTotal()->getTitle() ?></span>
         <?php else: ?>
             <?php echo $this->getTotal()->getTitle() ?>
         <?php endif;?>
+    </th>
+    <td style="<?php echo $_style ?>" class="amount" data-th="<?php echo $this->escapeHtml($this->getTotal()->getTitle()); ?>">
+        <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_value) ?>
     </td>
-    <td style="<?php echo $_style ?>" class="amount"><?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_value) ?></td>
 </tr>
 
 <?php if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary() && $_value!=0): ?>
@@ -61,15 +63,15 @@
 
         <?php foreach ($rates as $rate): ?>
             <tr class="totals-tax-details details-<?php echo $taxIter; ?>">
-                <td class="mark" style="<?php echo $_style ?>" colspan="<?php echo $this->getColspan(); ?>">
+                <th class="mark" style="<?php echo $_style ?>" colspan="<?php echo $this->getColspan(); ?>" scope="row">
                     <?php echo $this->escapeHtml($rate['title']); ?>
                     <?php if (!is_null($rate['percent'])): ?>
                         (<?php echo (float)$rate['percent']; ?>%)
                     <?php endif; ?>
-                    <br />
-                </td>
+                </th>
                 <?php if ($isFirst): ?>
-                    <td style="<?php echo $_style ?>" class="amount" rowspan="<?php echo count($rates); ?>">
+                    <td style="<?php echo $_style ?>" class="amount" rowspan="<?php echo count($rates); ?>"
+                       data-th="<?php echo $this->escapeHtml($rate['title']); ?><?php if (!is_null($rate['percent'])): ?>(<?php echo (float)$rate['percent']; ?>%)<?php endif; ?>">
                         <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($amount); ?>
                     </td>
                 <?php endif; ?>

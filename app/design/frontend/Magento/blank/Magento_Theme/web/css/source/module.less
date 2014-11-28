@@ -42,7 +42,7 @@
 
 @addto-color: @text-color-muted;
 @addto-hover-color: @color-primary;
-@minicart-icons-color: #8f8f8f;
+@minicart-icons-color: @color-gray56;
 
 @h1-margin-bottom-desktop: @indent-xl-base;
 
@@ -83,7 +83,7 @@ body {
     }
 }
 
-.page.main {
+.page-main {
     > .page-title {
         .title + .action {
             margin-top: @indent-l-base;
@@ -132,13 +132,14 @@ body {
 @footer-bg-color: false;
 
 .page-footer {
-    margin-top: 25px;
+    margin-top: auto;
     .css(background-color, @footer-bg-color);
 }
 
 .footer {
     &.content {
         padding-top: 25px;
+        margin-top: 25px;
         padding-bottom: 25px;
         border-top: 1px solid @border-color-base;
         ul {
@@ -149,7 +150,7 @@ body {
             vertical-align: top;
             margin-bottom: 20px;
             padding: 0 50px 0 0;
-            li {
+            > li {
                 margin: 0 0 8px;
             }
         }
@@ -226,6 +227,27 @@ body {
 //    Desktop
 //--------------------------------------
 .responsive(@break) when (@break = @screen-m) {
+
+    html,
+    body {
+        height: 100%; // stretch screen area for sticky footer
+    }
+
+    .page-wrapper {
+        .vendor-prefix-display(flex);
+        .vendor-prefix-flex-direction(column);
+        min-height: 100%; // stretch content area for sticky footer
+        > .breadcrumbs,
+        > .top-container {
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .ie10 &,
+        .ie11 & {
+            height: 100%;
+        }
+    }
+
     .navigation ul {
         padding: 0 8px;
     }
@@ -266,7 +288,7 @@ body {
         }
     }
 
-    .page.main {
+    .page-main {
         > .page-title {
             .title {
                 display: inline-block;

@@ -24,19 +24,33 @@
 namespace Magento\Framework\Api;
 
 use Magento\Framework\Convert\ConvertArray;
-use Magento\Framework\Api\AbstractExtensibleObject;
+use Magento\Framework\Reflection\DataObjectProcessor;
 
 class SimpleDataObjectConverter
 {
     /**
+     * @var DataObjectProcessor
+     */
+    protected $dataObjectProcessor;
+
+    /**
+     * @param DataObjectProcessor $dataObjectProcessor
+     */
+    public function __construct(DataObjectProcessor $dataObjectProcessor)
+    {
+        $this->dataObjectProcessor = $dataObjectProcessor;
+    }
+
+    /**
      * Convert nested array into flat array.
      *
-     * @param AbstractExtensibleObject $dataObject
+     * @param ExtensibleDataInterface $dataObject
      * @return array
      */
-    public static function toFlatArray(AbstractExtensibleObject $dataObject)
+    public function toFlatArray(ExtensibleDataInterface $dataObject)
     {
-        $data = $dataObject->__toArray();
+        $dataObjectType = get_class($dataObject);
+        $data = $this->dataObjectProcessor->buildOutputDataArray($dataObject, $dataObjectType);
         return ConvertArray::toFlatArray($data);
     }
 

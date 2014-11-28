@@ -24,10 +24,8 @@
 ?>
 <?php /* @var $this \Magento\RecurringPayment\Block\Catalog\Product\View\Payment */ ?>
 <?php if ($dateHtml = $this->getDateHtml()): ?>
-<dl class="payment product options">
-    <dt class="title">
-        <label for="<?php echo $this->getDateHtmlId() ?>"><?php echo __('Recurring Payment Start Date') ?></label>
-    </dt>
-    <dd class="content"><?php echo $dateHtml ?></dd>
-</dl>
+	<div class="field payment-product-options date">
+		<label class="label" for="<?php echo $this->getDateHtmlId() ?>"><span><?php echo __('Recurring Payment Start Date') ?></span></label>
+		<div class="control"><?php echo $dateHtml ?></div>
+	</div>
 <?php endif; ?>

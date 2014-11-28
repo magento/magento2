@@ -53,9 +53,23 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         if ($sessionManager->isSessionExists()) {
             $sessionManager->writeClose();
         }
+        $deploymentConfigMock = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $deploymentConfigMock->expects($this->at(0))
+            ->method('get')
+            ->with(Config::PARAM_SESSION_SAVE_METHOD, 'files')
+            ->will($this->returnValue('files'));
+        $deploymentConfigMock->expects($this->at(1))
+            ->method('get')
+            ->with(Config::PARAM_SESSION_SAVE_PATH)
+            ->will($this->returnValue(null));
+        $deploymentConfigMock->expects($this->at(2))
+            ->method('get')
+            ->with(Config::PARAM_SESSION_CACHE_LIMITER)
+            ->will($this->returnValue($this->_cacheLimiter));
+
         $this->_model = $this->_objectManager->create(
             'Magento\Framework\Session\Config',
-            array('saveMethod' => 'files', 'cacheLimiter' => $this->_cacheLimiter)
+            array('deploymentConfig' => $deploymentConfigMock)
         );
     }
 

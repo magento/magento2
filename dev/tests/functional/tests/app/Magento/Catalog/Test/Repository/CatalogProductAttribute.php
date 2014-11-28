@@ -149,5 +149,10 @@ class CatalogProductAttribute extends AbstractRepository
                 ]
             ]
         ];
+
+        $this->_data['attribute_type_fpt'] = [
+            'frontend_label' => 'fpt_%isolation%',
+            'frontend_input' => 'Fixed Product Tax'
+        ];
     }
 }

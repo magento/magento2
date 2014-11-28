@@ -122,7 +122,9 @@
 
 .order-details-items .order-items {
     .order-gift-message {
-        &:extend(.abstract-no-display all);
+        &:not(.expanded-content) {
+            &:extend(.abstract-hidden);
+        }
         .action.close {
             &:extend(.abstract-no-display all);
         }

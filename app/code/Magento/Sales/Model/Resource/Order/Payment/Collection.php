@@ -23,10 +23,13 @@
  */
 namespace Magento\Sales\Model\Resource\Order\Payment;
 
+use Magento\Sales\Api\Data\OrderPaymentSearchResultInterface;
+use Magento\Sales\Model\Resource\Order\Collection\AbstractCollection;
+
 /**
  * Flat sales order payment collection
  */
-class Collection extends \Magento\Sales\Model\Resource\Order\Collection\AbstractCollection
+class Collection extends AbstractCollection implements OrderPaymentSearchResultInterface
 {
     /**
      * Event prefix

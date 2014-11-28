@@ -74,7 +74,7 @@ class Cron extends \Magento\Framework\App\Config\Value
      * @return void
      * @throws \Magento\Framework\Model\Exception
      */
-    protected function _afterSave()
+    public function afterSave()
     {
         $enabled = $this->getData('groups/log/fields/enabled/value');
         $time = $this->getData('groups/log/fields/time/value');

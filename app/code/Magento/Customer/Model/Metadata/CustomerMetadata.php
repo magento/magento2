@@ -24,13 +24,13 @@
 
 namespace Magento\Customer\Model\Metadata;
 
-use Magento\Customer\Service\V1\Data\Eav\AttributeMetadataConverter;
-use Magento\Customer\Service\V1\Data\Eav\AttributeMetadataDataProvider;
+use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Model\AttributeMetadataConverter;
+use Magento\Customer\Model\AttributeMetadataDataProvider;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Api\Config\MetadataConfig;
 use Magento\Framework\Api\SimpleDataObjectConverter;
-use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Service to fetch customer related custom attributes

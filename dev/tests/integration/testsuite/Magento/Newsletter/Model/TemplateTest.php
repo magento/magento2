@@ -43,7 +43,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     /**
      * This test expects next themes for areas:
      * current_store design/theme/full_name Magento/blank
-     * fixturestore_store design/theme/full_name Magento/plushe
+     * fixturestore_store design/theme/full_name Magento/luma
      *
      * @magentoAppIsolation  enabled
      * @magentoAppArea adminhtml
@@ -81,7 +81,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             'frontend' => array('default', 'Magento/blank'),
-            'frontend store' => array('fixturestore', 'Magento/plushe')
+            'frontend store' => array('fixturestore', 'Magento/luma')
         );
     }
 

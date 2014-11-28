@@ -23,12 +23,15 @@
  */
 namespace Magento\Sales\Model\Resource\Order\Creditmemo;
 
+use Magento\Sales\Api\Data\CreditmemoSearchResultInterface;
+use Magento\Sales\Model\Resource\Order\Collection\AbstractCollection;
+
 /**
  * Flat sales order creditmemo collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\Sales\Model\Resource\Order\Collection\AbstractCollection
+class Collection extends AbstractCollection implements CreditmemoSearchResultInterface
 {
     /**
      * Event prefix

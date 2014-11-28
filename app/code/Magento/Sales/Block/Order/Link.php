@@ -25,6 +25,8 @@ namespace Magento\Sales\Block\Order;
 
 /**
  * Sales order link
+ *
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Link extends \Magento\Framework\View\Element\Html\Link\Current
 {

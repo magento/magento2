@@ -24,7 +24,7 @@
 
 namespace Magento\Customer\Model;
 
-use Magento\Customer\Service\V1\Data\CustomerGroup;
+use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Customer\Model\GroupFactory;
 use Magento\Customer\Model\Group;
@@ -67,7 +67,7 @@ class GroupRegistry
         $group = $this->groupFactory->create();
         $group->load($groupId);
         if (is_null($group->getId()) || $group->getId() != $groupId) {
-            throw NoSuchEntityException::singleField(CustomerGroup::ID, $groupId);
+            throw NoSuchEntityException::singleField(GroupInterface::ID, $groupId);
         }
         $this->registry[$groupId] = $group;
         return $group;

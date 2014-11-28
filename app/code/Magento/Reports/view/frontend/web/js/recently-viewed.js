@@ -67,5 +67,6 @@ define([
             window.localStorage.setItem(this.options.localStorageKey, JSON.stringify(products));
         }
     });
-
+    
+    return $.mage.recentlyViewedProducts;
 });

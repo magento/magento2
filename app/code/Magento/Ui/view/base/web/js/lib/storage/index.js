@@ -25,8 +25,9 @@
  */
 define([
     './storage',
-    './meta'
-], function(Storage, MetaStorage){
+    './meta',
+    './dump'
+], function(Storage, MetaStorage, DumpStorage){
     'use strict';
 
     return {
@@ -34,6 +35,6 @@ define([
         params: Storage,
         config: Storage,
         data:   Storage,
-        dump:   Storage
+        dump:   DumpStorage
     }
 });

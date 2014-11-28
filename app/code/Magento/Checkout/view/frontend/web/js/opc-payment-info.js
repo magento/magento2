@@ -163,5 +163,6 @@ define([
             paymentForm.find(this.options.payment.freeInput.selector).remove();
         }
     });
-
+    
+    return $.mage.opcPaymentInfo;
 });

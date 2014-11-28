@@ -229,7 +229,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     {
         $object = $this->getMock(
             'Magento\Catalog\Model\Product',
-            array('getOrigData', '__wakeup'),
+            array('getOrigData', '__wakeup', 'beforeSave', 'afterSave', 'validateBeforeSave'),
             array(),
             '',
             false
@@ -303,7 +303,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         /** @var $model \Magento\Framework\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject */
         $model = $this->getMockBuilder('Magento\Eav\Model\Entity\AbstractEntity')
             ->setConstructorArgs($data)
-            ->setMethods(['_getValue'])
+            ->setMethods(['_getValue', 'beginTransaction', 'commit', 'rollback'])
             ->getMock();
 
         $model->expects($this->any())->method('_getValue')->will($this->returnValue($eavConfig));

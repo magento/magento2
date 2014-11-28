@@ -28,7 +28,7 @@
     <?php $_links = $this->getLinks(); ?>
     <?php $_isRequired = $this->getLinkSelectionRequired(); ?>
     <legend class="legend links-title"><span><?php echo $this->getLinksTitle() ?></span></legend><br>
-    <div class="field downloads<?php if ($_isRequired) echo ' required' ?>">
+    <div class="field downloads<?php if ($_isRequired) echo ' required' ?><?php if (!$_linksPurchasedSeparately) echo ' downloads-no-separately' ?>">
         <label class="label"><span><?php echo $this->getLinksTitle() ?></span></label>
         <div class="control" id="downloadable-links-list"
              data-mage-init='{"downloadable":{
@@ -60,13 +60,15 @@
                     </label>
                 </div>
             <?php endforeach; ?>
-            <div class="field choice downloads-all">
-                <input type="checkbox"
-                       data-notchecked="<?php echo __('Select all')?>"
-                       data-checked="<?php echo __('Unselect all')?>"
-                       id="links_all" />
-                <label class="label" for="links_all"><span><?php echo __('Select all')?></span></label>
-            </div>
+            <?php if ($_linksPurchasedSeparately): ?>
+                <div class="field choice downloads-all">
+                    <input type="checkbox"
+                           data-notchecked="<?php echo __('Select all')?>"
+                           data-checked="<?php echo __('Unselect all')?>"
+                           id="links_all" />
+                    <label class="label" for="links_all"><span><?php echo __('Select all')?></span></label>
+                </div>
+            <?php endif; ?>
         </div>
         <?php if ($_isRequired): ?>
             <span id="links-advice-container"></span>

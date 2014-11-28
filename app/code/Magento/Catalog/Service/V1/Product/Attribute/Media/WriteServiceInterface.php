@@ -28,6 +28,9 @@ namespace Magento\Catalog\Service\V1\Product\Attribute\Media;
 use \Magento\Catalog\Service\V1\Product\Attribute\Media\Data\GalleryEntry;
 use \Magento\Catalog\Service\V1\Product\Attribute\Media\Data\GalleryEntryContent;
 
+/**
+ * @deprecated
+ */
 interface WriteServiceInterface
 {
     /**
@@ -41,6 +44,7 @@ interface WriteServiceInterface
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\StateException
+     * @see \Magento\Catalog\Api\ProductAttributeMediaGalleryManagementInterface::create
      */
     public function create($productSku, GalleryEntry $entry, GalleryEntryContent $entryContent, $storeId = 0);
 
@@ -53,6 +57,7 @@ interface WriteServiceInterface
      * @return bool
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\StateException
+     * @see \Magento\Catalog\Api\ProductAttributeMediaGalleryManagementInterface::update
      */
     public function update($productSku, GalleryEntry $entry, $storeId = 0);
 
@@ -64,6 +69,7 @@ interface WriteServiceInterface
      * @return bool
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\StateException
+     * @see \Magento\Catalog\Api\ProductAttributeMediaGalleryManagementInterface::remove
      */
     public function delete($productSku, $entryId);
 }

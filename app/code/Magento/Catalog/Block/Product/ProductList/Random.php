@@ -38,18 +38,10 @@ class Random extends \Magento\Catalog\Block\Product\ListProduct
     protected $_productCollectionFactory;
 
     /**
-     * Layer factory
-     *
-     * @var \Magento\Catalog\Model\LayerFactory
-     */
-    protected $_layerFactory;
-
-    /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Core\Helper\PostData $postDataHelper
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
-     * @param \Magento\Catalog\Model\Layer\Category $catalogLayer
-     * @param \Magento\Catalog\Model\LayerFactory $layerFactory
+     * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
      * @param array $data
      */
@@ -57,18 +49,16 @@ class Random extends \Magento\Catalog\Block\Product\ListProduct
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Core\Helper\PostData $postDataHelper,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
-        \Magento\Catalog\Model\Layer\Category $catalogLayer,
-        \Magento\Catalog\Model\LayerFactory $layerFactory,
+        \Magento\Catalog\Model\Layer\Resolver $layerResolver,
         \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
         array $data = array()
     ) {
-        $this->_layerFactory = $layerFactory;
         $this->_productCollectionFactory = $productCollectionFactory;
         parent::__construct(
             $context,
             $postDataHelper,
             $categoryFactory,
-            $catalogLayer,
+            $layerResolver,
             $data
         );
     }
@@ -81,7 +71,7 @@ class Random extends \Magento\Catalog\Block\Product\ListProduct
         if (is_null($this->_productCollection)) {
             /** @var \Magento\Catalog\Model\Resource\Product\Collection $collection */
             $collection = $this->_productCollectionFactory->create();
-            $this->_layerFactory->create()->prepareProductCollection($collection);
+            $this->_catalogLayer->prepareProductCollection($collection);
             $collection->getSelect()->order('rand()');
             $collection->addStoreFilter();
             $numProducts = $this->getNumProducts() ? $this->getNumProducts() : 0;

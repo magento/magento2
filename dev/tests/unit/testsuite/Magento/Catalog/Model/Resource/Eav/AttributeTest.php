@@ -90,25 +90,16 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
 
         $resourceMock->expects($this->any())->method('_getWriteAdapter')->will($this->returnValue($dbAdapterMock));
 
-        $this->_model = new \Magento\Catalog\Model\Resource\Eav\Attribute(
-            $contextMock,
-            $this->getMock('Magento\Framework\Registry', array(), array(), '', false),
-            $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false),
-            $this->getMock('Magento\Eav\Model\Config', array(), array(), '', false),
-            $this->getMock('Magento\Eav\Model\Entity\TypeFactory', array(), array(), '', false),
-            $this->getMock('Magento\Framework\StoreManagerInterface', array(), array(), '', false),
-            $this->getMock('Magento\Eav\Model\Resource\Helper', array(), array(), '', false),
-            $this->getMock('Magento\Framework\Validator\UniversalFactory', array(), array(), '', false),
-            $this->getMock('Magento\Framework\Stdlib\DateTime\TimezoneInterface', array(), array(), '', false),
-            $this->getMock('Magento\Catalog\Model\Product\ReservedAttributeList', array(), array(), '', false),
-            $this->getMock('Magento\Framework\Locale\ResolverInterface', array(), array(), '', false),
-            $this->_processor,
-            $this->_eavProcessor,
-            $this->getMock('\Magento\Catalog\Helper\Product\Flat\Indexer', array(), array(), '', false),
-            $this->getMock('\Magento\Catalog\Model\Attribute\LockValidatorInterface'),
-            $resourceMock,
-            $this->getMock('\Magento\Framework\Data\Collection\Db', array(), array(), '', false),
-            array('id' => 1)
+        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->_model = $objectManager->getObject(
+                '\Magento\Catalog\Model\Resource\Eav\Attribute',
+                [
+                    'context' => $contextMock,
+                    'productFlatIndexerProcessor' => $this->_processor,
+                    'indexerEavProcessor' => $this->_eavProcessor,
+                    'resource' => $resourceMock,
+                    'data' => array('id' => 1)
+                ]
         );
     }
 
@@ -118,7 +109,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
 
         $this->_model->setData(array('id' => 2, 'used_in_product_listing' => 1));
 
-        $this->_model->save();
+        $this->_model->afterSave();
     }
 
     public function testIndexerAfterSaveScopeChangeAttribute()
@@ -128,7 +119,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $this->_model->setOrigData('is_global', \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_STORE);
         $this->_model->setOrigData('used_in_product_listing', 1);
         $this->_model->setIsGlobal(\Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_GLOBAL);
-        $this->_model->save();
+        $this->_model->afterSave();
 
     }
 
@@ -137,6 +128,6 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $this->_processor->expects($this->once())->method('markIndexerAsInvalid');
         $this->_model->setOrigData('id', 2);
         $this->_model->setOrigData('used_in_product_listing', 1);
-        $this->_model->delete();
+        $this->_model->afterDeleteCommit();
     }
 }

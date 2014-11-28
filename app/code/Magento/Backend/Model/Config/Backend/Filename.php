@@ -28,7 +28,7 @@ class Filename extends \Magento\Framework\App\Config\Value
     /**
      * @return $this
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
         $value = $this->getValue();
         $value = basename($value);

@@ -27,8 +27,8 @@ define([
     "mage/translate",
     "Magento_DesignEditor/js/dialog"
 ], function($){
-
     'use strict';
+    
     /**
      * VDE revert theme button widget
      */
@@ -144,5 +144,6 @@ define([
             return this.options.dialog;
         }
     });
-
+    
+    return $.vde['vde-edit-button'];
 });

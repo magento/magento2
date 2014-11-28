@@ -105,16 +105,17 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $expected = <<<expected
 (function(require){
-relative/%s/paths-updater.js content
-
+require.config({"baseUrl":""});
 (function() {
 relative/file_one.js content
-require.config(mageUpdateConfigPaths(config, 'Module_One'))
+require.config(config);
 })();
 (function() {
 relative/file_two.js content
-require.config(mageUpdateConfigPaths(config, ''))
+require.config(config);
 })();
+
+
 
 })(require);
 expected;
@@ -137,14 +138,7 @@ expected;
             ->method('getBaseUrl')
             ->will($this->returnValue('http://base.url/'));
         $expected = <<<expected
-require.config({
-    "baseUrl": "http://base.url/area/theme/locale",
-    "paths": {
-        "magento": "mage/requirejs/plugin/id-normalizer"
-    },
-    "waitSeconds": 0
-});
-
+require.config({"baseUrl":"http://base.url/area/theme/locale"});
 expected;
         $actual = $this->object->getBaseConfig();
         $this->assertSame($expected, $actual);

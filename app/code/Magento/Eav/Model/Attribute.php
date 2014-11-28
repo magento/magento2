@@ -26,7 +26,6 @@
  * EAV attribute resource model (Using Forms)
  *
  * @method \Magento\Eav\Model\Attribute\Data\AbstractData|null getDataModel() Get data model linked to attribute or null.
- * @method string|null getFrontendInput() Get attribute type for user interface form or null
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
@@ -87,10 +86,10 @@ abstract class Attribute extends \Magento\Eav\Model\Entity\Attribute
      *
      * @return $this
      */
-    protected function _afterSave()
+    public function afterSave()
     {
         $this->_eavConfig->clear();
-        return parent::_afterSave();
+        return parent::afterSave();
     }
 
     /**

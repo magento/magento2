@@ -45,24 +45,16 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
     protected $coreData;
 
     /**
-     * @var \Magento\Customer\Service\V1\CustomerAccountServiceInterface
-     */
-    protected $accountService;
-
-    /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Customer\Service\V1\CustomerAccountServiceInterface $accountService
      * @param array $data
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Customer\Service\V1\CustomerAccountServiceInterface $accountService,
         array $data = array()
     ) {
         $this->coreData = $coreData;
-        $this->accountService = $accountService;
         parent::__construct(
             $context,
             $data
@@ -125,16 +117,8 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
         $finalPrice = $priceInfo->getPrice(FinalPrice::PRICE_CODE);
         $regularPrice = $priceInfo->getPrice(RegularPrice::PRICE_CODE);
         $config = [
-            'price' => $this->coreData->currency(
-                $finalPrice->getAmount()->getValue(),
-                false,
-                false
-            ),
-            'oldPrice' => $this->coreData->currency(
-                $regularPrice->getValue(),
-                false,
-                false
-            )
+            'price' => $finalPrice->getAmount()->getValue(),
+            'oldPrice' => $regularPrice->getValue(),
         ];
         $config['links'] = $this->getLinksConfig();
 
@@ -156,16 +140,8 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
             $linksConfig[$link->getId()] = [
                 'price' => $price,
                 'oldPrice' => $price,
-                'inclTaxPrice' => $this->coreData->currency(
-                    $amount->getValue(),
-                    false,
-                    false
-                ),
-                'exclTaxPrice' => $this->coreData->currency(
-                    $amount->getBaseAmount(),
-                    false,
-                    false
-                )
+                'inclTaxPrice' => $amount->getValue(),
+                'exclTaxPrice' => $amount->getBaseAmount()
             ];
         }
         return $linksConfig;
@@ -191,7 +167,10 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
         if ($this->getProduct()->getLinksTitle()) {
             return $this->getProduct()->getLinksTitle();
         }
-        return $this->_scopeConfig->getValue(\Magento\Downloadable\Model\Link::XML_PATH_LINKS_TITLE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->getValue(
+            \Magento\Downloadable\Model\Link::XML_PATH_LINKS_TITLE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
@@ -201,7 +180,10 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
      */
     public function getIsOpenInNewWindow()
     {
-        return $this->_scopeConfig->isSetFlag(\Magento\Downloadable\Model\Link::XML_PATH_TARGET_NEW_WINDOW, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->isSetFlag(
+            \Magento\Downloadable\Model\Link::XML_PATH_TARGET_NEW_WINDOW,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**

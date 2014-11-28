@@ -53,15 +53,16 @@
 
 #layout-columns() {
     & when (@use-flex = true) {
-        .box-sizing();
-        .mix-flex(flex, row wrap);
+        box-sizing: border-box;
+        .vendor-prefix-display(flex);
+        flex-wrap: wrap;
     };
     &:after {
         content: " ";
         display: block;
         height: 0;
         clear: both;
-        overlow: hidden;
+        overflow: hidden;
         visibility: hidden;
     }
     .main() {
@@ -124,7 +125,7 @@
     ._set-column-width(length(@_units), @_width);
     .flex-degradation(@_total-columns, @_order);
     & when (@use-flex = true) {
-        order: @_order;
+        .vendor-prefix-order(@_order);
     }
 }
 

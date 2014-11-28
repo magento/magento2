@@ -1,0 +1,203 @@
+// /**
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+@toolbar-mode-icon-font-size: 16px;
+@toolbar-background: transparent;
+@toolbar-element-background: #f0f0f0;
+@pager-action-background: @toolbar-element-background;
+@pager-action-background-hover: darken(@toolbar-element-background, 7%);
+@pager-font-weight: @font-weight-bold;
+
+.page-products .columns {
+    position: relative;
+    z-index: 1;
+    padding-top: 60px;
+}
+
+.toolbar {
+    select {
+        background-color: @toolbar-element-background;
+        border-radius: 3px;
+        .css(box-shadow, @button-shadow);
+    }
+
+    text-align: center;
+    &:extend(.abstract-add-clearfix all);
+    &-amount {
+        line-height: @toolbar-mode-icon-font-size+2;
+        padding: 7px 0;
+        margin: 0;
+        vertical-align: middle;
+        .products.wrapper ~ .toolbar & {
+            display: none;
+        }
+    }
+    margin-bottom: @indent-l-base;
+    &-products {
+        .css(background-color, @toolbar-background);
+        .pages {
+            display: none;
+            .products.wrapper ~ & {
+                display: block;
+            }
+        }
+    }
+    .pages {
+        margin-bottom: @indent-m-base;
+    }
+}
+
+.sorter {
+    float: right;
+    .page-products & {
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        right: @indent-s-base;
+    }
+    .products.wrapper ~ .toolbar & {
+        display: none;
+    }
+    &-options {
+        margin: 0 5px 0 7px;
+        width: auto;
+    }
+    &-action {
+        .icon-font(
+            @icon-arrow-down,
+            @_icon-font-size: 16px,
+            @_icon-font-color: @text-color-muted
+        );
+        .icon-text-hide();
+        &.sort-desc:before {
+            content: @icon-arrow-down;
+        }
+    }
+}
+
+.modes {
+    display: none;
+}
+
+.limiter {
+    display: none;
+    &-options {
+        width: auto;
+        margin: 0 5px 0 7px;
+    }
+    &-label {
+        font-weight: 400;
+    }
+    .page-products .toolbar & {
+        display: none;
+    }
+    .control {
+        display: inline-block;
+    }
+}
+
+.responsive-smaller(@break) when (@break = @screen-s) {
+    .toolbar-products {
+        margin-bottom: 0;
+    }
+}
+
+.responsive(@break) when (@break = @screen-s) {
+    .page-products .columns {
+        position: relative;
+        z-index: 1;
+        padding-top: 0;
+    }
+    .toolbar {
+        &-amount {
+            display: block;
+            float: left;
+        }
+        .products.wrapper ~ & .pages {
+            float: left;
+            margin-bottom: 0;
+        }
+    }
+    .modes {
+        float: left;
+        display: inline-block;
+        margin-right: @indent-base;
+        overflow: hidden;
+        .products.wrapper ~ .toolbar & {
+            display: none;
+        }
+
+        &-label {
+            &:extend(.abstract-visually-hidden-desktop-s all);
+        }
+
+        &-mode {
+            float: left;
+            border: 1px solid @border-color-base;
+            font-weight: @font-weight-base;
+            color: @text-color-muted;
+            text-align: center;
+            padding: 7px 10px;
+            line-height: 1;
+            border-right: 0;
+            .css(background-color, @toolbar-element-background);
+            .css(box-shadow, @button-shadow);
+            .icon-text-hide();
+            .modes-label + & {
+                border-radius: 3px 0 0 3px;
+            }
+            &:hover {
+                background: darken(@toolbar-element-background, 2%);
+                color: @text-color-muted;
+            }
+            &:last-child {
+                border-radius: 0 3px 3px 0;
+                border-right: 1px solid @border-color-base;
+            }
+            &.active {
+                .css(box-shadow, @button-shadow-active);
+                background: darken(@toolbar-element-background, 7%);
+                color: #9e9e9e;
+            }
+            .icon-font(
+                @icon-grid,
+                @_icon-font-size: @toolbar-mode-icon-font-size
+            );
+        }
+    }
+    .sorter {
+        .page-products & {
+            position: static;
+        }
+    }
+    .mode-list:before {
+        content: @icon-list;
+    }
+    .limiter {
+        float: right;
+        .products.wrapper ~ .toolbar & {
+            display: block;
+        }
+    }
+}

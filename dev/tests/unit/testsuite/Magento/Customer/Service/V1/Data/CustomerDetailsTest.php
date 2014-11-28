@@ -38,7 +38,7 @@ class CustomerDetailsTest extends \PHPUnit_Framework_TestCase
     /**
      * Customer mock
      *
-     * @var Customer | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Data\Customer | \PHPUnit_Framework_MockObject_MockObject
      */
     private $_customerMock;
 
@@ -52,18 +52,17 @@ class CustomerDetailsTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->_customerMock = $this->getMockBuilder(
-            '\Magento\Customer\Service\V1\Data\Customer'
+            '\Magento\Customer\Model\Data\Customer'
         )->disableOriginalConstructor()->getMock();
         $this->_addressMock = $this->getMockBuilder(
             '\Magento\Customer\Service\V1\Data\Address'
         )->disableOriginalConstructor()->getMock();
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        /** @var Magento\Customer\Service\V1\Data\CustomerDetailsBuilder $customerDetailsBuilder */
+        /** @var \Magento\Customer\Service\V1\Data\CustomerDetailsBuilder $customerDetailsBuilder */
         $customerDetailsBuilder = $objectManager->getObject('Magento\Customer\Service\V1\Data\CustomerDetailsBuilder');
-        $customerDetailsBuilder->setCustomer(
-            $this->_customerMock
-        )->setAddresses(
-            array($this->_addressMock, $this->_addressMock)
+        $customerDetailsBuilder
+            ->setCustomer($this->_customerMock)
+            ->setAddresses(array($this->_addressMock, $this->_addressMock)
         );
         $this->_customerDetails = new CustomerDetails($customerDetailsBuilder);
     }

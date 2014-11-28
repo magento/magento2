@@ -162,7 +162,7 @@ class StaticResource implements \Magento\Framework\AppInterface
         $result['area'] = $parts[0];
         $result['theme'] = $parts[1] . '/' . $parts[2];
         $result['locale'] = $parts[3];
-        if (count($parts) >= 6 && $this->isModule($parts[4])) {
+        if (count($parts) >= 6 && $this->moduleList->has($parts[4])) {
             $result['module'] = $parts[4];
         } else {
             $result['module'] = '';
@@ -174,16 +174,5 @@ class StaticResource implements \Magento\Framework\AppInterface
         }
         $result['file'] = $parts[5];
         return $result;
-    }
-
-    /**
-     * Check if active module 'name' exists
-     *
-     * @param string $name
-     * @return bool
-     */
-    protected function isModule($name)
-    {
-        return null !== $this->moduleList->getModule($name);
     }
 }

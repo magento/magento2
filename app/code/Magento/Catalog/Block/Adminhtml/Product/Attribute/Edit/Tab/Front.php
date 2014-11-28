@@ -32,6 +32,7 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab;
 use Magento\Backend\Block\Widget\Form;
 use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Backend\Model\Config\Source\Yesno;
+use Magento\Catalog\Model\Entity\Attribute;
 
 class Front extends Generic
 {
@@ -64,6 +65,7 @@ class Front extends Generic
      */
     protected function _prepareForm()
     {
+        /** @var Attribute $attributeObject */
         $attributeObject = $this->_coreRegistry->registry('entity_attribute');
 
         /** @var \Magento\Framework\Data\Form $form */
@@ -211,6 +213,19 @@ class Front extends Generic
                 'html_allowed_on_front',
                 'wysiwyg_enabled',
                 '0'
+            )
+            ->addFieldMap(
+                "is_searchable",
+                'searchable'
+            )
+            ->addFieldMap(
+                "is_visible_in_advanced_search",
+                'advanced_search'
+            )
+            ->addFieldDependence(
+                'advanced_search',
+                'searchable',
+                '1'
             )
         );
 

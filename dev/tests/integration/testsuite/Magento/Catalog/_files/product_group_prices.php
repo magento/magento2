@@ -40,12 +40,12 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
         array(
             array(
                 'website_id' => 0,
-                'cust_group' => \Magento\Customer\Service\V1\CustomerGroupServiceInterface::NOT_LOGGED_IN_ID,
+                'cust_group' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
                 'price'      => 9,
             ),
             array(
                 'website_id' => 0,
-                'cust_group' => \Magento\Customer\Service\V1\CustomerGroupServiceInterface::CUST_GROUP_ALL,
+                'cust_group' => \Magento\Customer\Model\Group::CUST_GROUP_ALL,
                 'price'      => 7,
             ),
         )

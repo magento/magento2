@@ -24,18 +24,9 @@
 
 namespace Magento\Tax\Model\Calculation;
 
-
-use Magento\Tax\Model\Calculation;
-use Magento\TestFramework\Helper\ObjectManager;
-use Magento\Tax\Service\V1\Data\QuoteDetails;
-
-/**
- * Class TotalBaseCalculatorTest
- *
- */
 class TotalBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
 {
-    /** @var TotalBaseCalculator | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $totalBaseCalculator;
 
     public function testCalculateWithTaxInPrice()
@@ -66,17 +57,20 @@ class TotalBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
 
     private function initTotalBaseCalculator()
     {
-        $taxClassService = $this->objectManager->getObject('Magento\Tax\Service\V1\TaxClassService');
-        $this->totalBaseCalculator = $this->getMockBuilder('Magento\Tax\Model\Calculation\TotalBaseCalculator')
-            ->setConstructorArgs(
-                [
-                    'taxClassService' => $taxClassService,
-                    'taxDetailsItemBuilder' => $this->mockTaxItemDetailsBuilder,
-                    'calculationTool' => $this->mockCalculationTool,
-                    'config' => $this->mockConfig,
-                    'storeId' => self::STORE_ID,
-                    'addressRateRequest' => $this->addressRateRequest
-                ]
-            )->setMethods(['deltaRound'])->getMock();
+        $taxClassService = $this->getMock('Magento\Tax\Api\TaxClassManagementInterface');
+        $this->totalBaseCalculator = $this->getMock(
+            'Magento\Tax\Model\Calculation\TotalBaseCalculator',
+            ['deltaRound'],
+            [
+                'taxClassService' => $taxClassService,
+                'taxDetailsItemBuilder' => $this->taxItemDetailsBuilder,
+                'appliedTaxBuilder' => $this->appliedTaxBuilder,
+                'appliedRateBuilder' => $this->appliedTaxRateBuilder,
+                'calculationTool' => $this->mockCalculationTool,
+                'config' => $this->mockConfig,
+                'storeId' => self::STORE_ID,
+                'addressRateRequest' => $this->addressRateRequest
+            ]
+        );
     }
 }

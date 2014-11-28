@@ -162,29 +162,12 @@
     // Order review
     .data.table {
         &:extend(.abstract-product-options-list all);
-        tbody tr:first-child td {
-            border-top: @border-width-base solid @border-color-base;
-        }
         .col {
             &.price,
             &.qty {
                 text-align: center;
                 white-space: nowrap;
             }
-            &.subtotal {
-                text-align: right;
-                white-space: nowrap;
-            }
-        }
-        .mark,
-        .amount {
-            text-align: right;
-        }
-        td {
-            padding: 7px 10px;
-        }
-        tbody tr:last-child td {
-            border-bottom: @border-width-base solid @border-color-base;
         }
         .item-options {
             font-size: @font-size-s;
@@ -207,7 +190,7 @@
     //  Customer login
     .login-wrapper {
         .block {
-            > .title {
+            .block-title {
                 &:extend(.abstract-login-block-title all);
             }
             .fieldset.guest {
@@ -240,6 +223,8 @@
         &:extend(.abstract-adjustment-incl-excl-tax all);
     }
     .price-box {
+        margin-top: @indent-s-base;
+        margin-bottom: @indent-xs-base;
         margin-left: 20px;
         .label + .price {
             font-weight: @font-weight-bold;
@@ -259,12 +244,20 @@
         font-weight: @font-weight-base;
     }
     .item-content {
-        margin-bottom: 0;
+        margin: 0 0 0 @indent-xl-base;
         .fieldset {
             padding: 15px 0;
-            .field:first-child,
-            .field.year {
-                margin-top: 0;
+            .field {
+                .font-size(@font-size-base);
+                &:first-child,
+                &.year {
+                    margin-top: 0;
+                }
+            }
+            &.redirect {
+                margin-left: -17px;
+                padding: 0 0 15px;
+                .font-size(@font-size-s);
             }
         }
         .label {
@@ -372,18 +365,7 @@
 .responsive-smaller(@break) when (@break = @screen-s) {
     .opc-wrapper {
         .data.table {
-            &:extend(.abstract-table-vertical-mobile-s all);
-            &:extend(.abstract-product-items-summary all);
             tbody tr {
-                &:first-child,
-                &:last-child {
-                    td {
-                        border: 0;
-                    }
-                }
-                td:last-child {
-                    border-bottom: @border-width-base solid @border-color-base;
-                }
                 .product-item-name {
                     display: inline-block;
                 }
@@ -400,10 +382,9 @@
                         }
                     }
                 }
-            }
-            .mark,
-            .amount {
-                padding-left: 0;
+                .product-item-name {
+                    margin: 0;
+                }
             }
         }
     }
@@ -479,9 +460,16 @@
         .page-title {
             .print {
                 display: inline-block;
-                margin-left: 40px;
+                margin-left: @indent-xl-base;
                 .font-size(14);
             }
+        }
+    }
+
+    .table-order-review {
+        .col.subtotal,
+        .amount {
+            text-align: right;
         }
     }
 }

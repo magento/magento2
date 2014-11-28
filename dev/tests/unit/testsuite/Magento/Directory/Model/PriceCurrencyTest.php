@@ -220,4 +220,26 @@ class PriceCurrencyTest extends \PHPUnit_Framework_TestCase
 
         return $baseCurrency;
     }
+
+    public function testConvertAndRound()
+    {
+        $amount = 5.6;
+        $storeCode = 2;
+        $convertedAmount = 9.326;
+        $roundedConvertedAmount = 9.33;
+
+        $currency = $this->getCurrentCurrencyMock();
+        $baseCurrency = $this->getBaseCurrencyMock($amount, $convertedAmount, $currency);
+        $store = $this->getStoreMock($baseCurrency);
+
+        $this->storeManager->expects($this->once())
+            ->method('getStore')
+            ->with($storeCode)
+            ->will($this->returnValue($store));
+
+        $this->assertEquals(
+            $roundedConvertedAmount,
+            $this->priceCurrency->convertAndRound($amount, $storeCode, $currency)
+        );
+    }
 }

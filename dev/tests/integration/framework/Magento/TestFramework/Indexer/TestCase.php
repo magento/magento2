@@ -33,7 +33,6 @@ class TestCase extends \PHPUnit_Framework_TestCase
         if (!$db->isDbDumpExists()) {
             throw new \LogicException('DB dump does not exist.');
         }
-        $db->cleanup();
         $db->restoreFromDbDump();
     }
 }

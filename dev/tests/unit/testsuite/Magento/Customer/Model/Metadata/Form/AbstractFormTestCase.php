@@ -35,7 +35,7 @@ abstract class AbstractFormTestCase extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Logger */
     protected $loggerMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata */
+    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Api\Data\AttributeMetadataInterface */
     protected $attributeMetadataMock;
 
     protected function setUp()
@@ -43,8 +43,6 @@ abstract class AbstractFormTestCase extends \PHPUnit_Framework_TestCase
         $this->localeMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\TimezoneInterface')->getMock();
         $this->localeResolverMock = $this->getMockBuilder('Magento\Framework\Locale\ResolverInterface')->getMock();
         $this->loggerMock = $this->getMockBuilder('Magento\Framework\Logger')->disableOriginalConstructor()->getMock();
-        $this->attributeMetadataMock = $this->getMockBuilder(
-            'Magento\Customer\Service\V1\Data\Eav\AttributeMetadata'
-        )->disableOriginalConstructor()->getMock();
+        $this->attributeMetadataMock = $this->getMock('Magento\Customer\Api\Data\AttributeMetadataInterface');
     }
 }

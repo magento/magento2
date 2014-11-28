@@ -64,7 +64,7 @@ class Category extends \Magento\Framework\App\Config\Value
     /**
      * {@inheritdoc}
      */
-    protected function _afterSave()
+    public function afterSave()
     {
         if ($this->getScope() == 'stores') {
             $rootId = $this->getValue();

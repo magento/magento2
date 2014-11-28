@@ -489,21 +489,6 @@ class Context
     }
 
     /**
-     * Retrieve design theme instance
-     *
-     * @return Design\ThemeInterface
-     */
-    public function getDesignTheme()
-    {
-        $theme = $this->design->getDesignTheme();
-        $theme->setCode('Magento/plushe');
-        $theme->setThemePath('Magento/plushe');
-        $theme->setId(8);
-
-        return $this->getPhysicalTheme($theme);
-    }
-
-    /**
      * Retrieve parent theme instance
      *
      * @param Design\ThemeInterface $theme

@@ -40,6 +40,11 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
     protected $weeeHelper;
 
     /**
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $priceCurrencyMock;
+
+    /**
      * @var int
      */
     protected $sortOrder = 5;
@@ -47,7 +52,17 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->weeeHelper = $this->getMock('Magento\Weee\Helper\Data', [], [], '', false);
-        $this->adjustment = new Adjustment($this->weeeHelper, $this->sortOrder);
+        $this->priceCurrencyMock = $this->getMock('\Magento\Framework\Pricing\PriceCurrencyInterface');
+        $this->priceCurrencyMock->expects($this->any())
+            ->method('convertAndRound')
+            ->will($this->returnCallback(
+                    function ($arg) {
+                        return round($arg * 0.5, 2);
+                    }
+                )
+            );
+
+        $this->adjustment = new Adjustment($this->weeeHelper, $this->priceCurrencyMock, $this->sortOrder);
     }
 
     public function testGetAdjustmentCode()
@@ -109,7 +124,7 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
     public function extractAdjustmentDataProvider()
     {
         return [
-            [1.1, 1.1],
+            [1.1, 0.55],
             [0.0, 0.0],
         ];
     }
@@ -137,8 +152,8 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
     public function applyAdjustmentDataProvider()
     {
         return [
-            [1.1, 2.2, 3.3],
-            [0.0, 2.2, 2.2],
+            [1.1, 2.4, 2.3],
+            [0.0, 2.2, 1.1],
             [1.1, 0.0, 1.1],
         ];
     }

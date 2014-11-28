@@ -39,25 +39,25 @@ class EngineProvider
     protected $_engine;
 
     /**
-     * @var \Magento\CatalogSearch\Model\Resource\EngineFactory
-     */
-    protected $_engineFactory;
-
-    /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
-     * @param \Magento\CatalogSearch\Model\Resource\EngineFactory $engineFactory
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    private $_objectManager;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      */
     public function __construct(
-        \Magento\CatalogSearch\Model\Resource\EngineFactory $engineFactory,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\ObjectManagerInterface $objectManager
     ) {
-        $this->_engineFactory = $engineFactory;
         $this->_scopeConfig = $scopeConfig;
+        $this->_objectManager = $objectManager;
     }
 
     /**
@@ -76,7 +76,13 @@ class EngineProvider
              * Problem is in this engine in database configuration still set.
              */
             if ($engineClassName) {
-                $engine = $this->_engineFactory->create($engineClassName);
+                $engine = $this->_objectManager->create($engineClassName);
+
+                if (false === $engine instanceof \Magento\CatalogSearch\Model\Resource\EngineInterface) {
+                    throw new \LogicException(
+                        $engineClassName . ' doesn\'t implement \Magento\CatalogSearch\Model\Resource\EngineInterface'
+                    );
+                }
                 if ($engine && $engine->test()) {
                     $this->_engine = $engine;
                 }

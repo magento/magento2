@@ -80,7 +80,8 @@ class Text extends AbstractElement
             'readonly',
             'maxlength',
             'tabindex',
-            'placeholder'
+            'placeholder',
+            'data-form-part'
         );
     }
 }

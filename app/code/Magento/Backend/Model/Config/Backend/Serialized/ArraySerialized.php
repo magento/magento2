@@ -35,13 +35,13 @@ class ArraySerialized extends \Magento\Backend\Model\Config\Backend\Serialized
      *
      * @return void
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
         $value = $this->getValue();
         if (is_array($value)) {
             unset($value['__empty']);
         }
         $this->setValue($value);
-        parent::_beforeSave();
+        parent::beforeSave();
     }
 }

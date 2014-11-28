@@ -55,7 +55,7 @@
     @_focus-color: ~"@{@{_type}-focus-color}",
     @_focus-font-style: ~"@{@{_type}-focus-font-style}"
 ) {
-    .box-sizing();
+    box-sizing: border-box;
     .css(background, @_background);
     .css(border, @_border);
     .css(border-radius, @_border-radius);
@@ -175,22 +175,6 @@
     &:-ms-input-placeholder {
         .css(color, @_placeholder-color);
     }
-}
-
-.form-element-indent(
-    @_margin: '',
-    @_padding: ''
-) {
-    .css(margin, @_margin);
-    .css(padding, @_padding);
-}
-
-.form-element-size(
-    @_height: '',
-    @_width: ''
-) {
-    .css(height, @_height);
-    .css(width, @_width);
 }
 
 .form-validation(
@@ -314,7 +298,8 @@
     }
 
     select[multiple="multiple"] {
-        .add-height(auto);
+        .css(height, auto);
+        background-image: none;
     }
 
     textarea {
@@ -505,7 +490,7 @@
             @_line-height: @_legend-line-height,
             @_font-style: @_legend-font-style
         );
-        .box-sizing();
+        box-sizing: border-box;
         float: left;
         .css(width, @_legend-width);
         & + br {
@@ -623,7 +608,7 @@
     .fields.group {
         .clearfix();
         .field {
-            .box-sizing();
+            box-sizing: border-box;
             float: left;
         }
         &.group-2 .field {
@@ -648,7 +633,7 @@
         textarea,
         select,
         input {
-            order: 2;
+            .vendor-prefix-order(2);
             box-shadow: none;
             display: inline-block;
             margin: 0;
@@ -657,7 +642,7 @@
         }
         .addbefore,
         .addafter {
-            order:3;
+            .vendor-prefix-order(3);
             display: inline-block;
             .form-element-input(@_type: input-text);
             width: auto;
@@ -666,7 +651,7 @@
         }
         .addbefore {
             float: left;
-            order: 1;
+            .vendor-prefix-order(1);
         }
     }
 
@@ -764,13 +749,13 @@
     @_type-inline-label-align,
     @_vertical-indent
 ) {
-    .box-sizing();
+    box-sizing: border-box;
     .clearfix();
     .css(margin, @_type-inline-margin);
 
     &.choice:before,
     &.no-label:before {
-        .box-sizing();
+        box-sizing: border-box;
         content: " ";
         height: 1px;
         float: left;
@@ -778,7 +763,7 @@
         .css(width, @_type-inline-label-width);
     }
     .description {
-        .box-sizing();
+        box-sizing: border-box;
         float: left;
         .css(padding, @_type-inline-label-padding);
         .css(text-align, @_type-inline-label-align);
@@ -786,7 +771,7 @@
     }
     &:not(.choice) {
         > .label {
-            .box-sizing();
+            box-sizing: border-box;
             float: left;
             .css(margin, @_type-inline-label-margin);
             .css(padding, @_type-inline-label-padding);
@@ -869,8 +854,8 @@
             @_line-height: @_note-line-height,
             @_font-style: @_note-font-style
         );
-        .add-margin(@_note-margin);
-        .add-padding(@_note-padding);
+        .css(margin, @_note-margin);
+        .css(padding, @_note-padding);
         .icon-font(
             @_icon-font-content: @_note-icon-font-content,
             @_icon-font: @_note-icon-font,
@@ -905,7 +890,7 @@
         > .label {
             width: auto;
             float: none;
-            .box-sizing(content-box);
+            box-sizing: content-box;
             ._revert-type-block-label-align(
                 @_type-block-label-align
             );
@@ -966,7 +951,7 @@
     @_column-number: @form-field-column-number
 ) when (@_column = true) {
 
-    .box-sizing();
+    box-sizing: border-box;
     //float: left;
     display: inline-block;
     .css(padding, @_column-padding);

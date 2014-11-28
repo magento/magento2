@@ -52,11 +52,6 @@ abstract class Collection extends \Magento\Eav\Model\Resource\Entity\Attribute\C
     protected $_entityType;
 
     /**
-     * @var \Magento\Eav\Model\Config
-     */
-    protected $_eavConfig;
-
-    /**
      * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
@@ -82,8 +77,7 @@ abstract class Collection extends \Magento\Eav\Model\Resource\Entity\Attribute\C
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         $this->_storeManager = $storeManager;
-        $this->_eavConfig = $eavConfig;
-        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
+        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $eavConfig, $connection, $resource);
     }
 
     /**
@@ -121,7 +115,7 @@ abstract class Collection extends \Magento\Eav\Model\Resource\Entity\Attribute\C
     public function getEntityType()
     {
         if ($this->_entityType === null) {
-            $this->_entityType = $this->_eavConfig->getEntityType($this->_getEntityTypeCode());
+            $this->_entityType = $this->eavConfig->getEntityType($this->_getEntityTypeCode());
         }
         return $this->_entityType;
     }

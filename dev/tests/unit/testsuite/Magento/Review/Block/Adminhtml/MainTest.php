@@ -39,17 +39,29 @@ class MainTest extends \PHPUnit_Framework_TestCase
     protected $request;
 
     /**
-     * @var \Magento\Customer\Service\V1\CustomerAccountServiceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerAccount;
+    protected $customerRepository;
+
+    /**
+     * @var \Magento\Customer\Helper\View|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $customerViewHelper;
 
     public function testConstruct()
     {
-        $this->customerAccount = $this
-            ->getMockForAbstractClass('Magento\Customer\Service\V1\CustomerAccountServiceInterface');
-        $this->customerAccount->expects($this->once())
-            ->method('getCustomer')
+        $this->customerRepository = $this
+            ->getMockForAbstractClass('Magento\Customer\Api\CustomerRepositoryInterface');
+        $this->customerViewHelper = $this->getMock('Magento\Customer\Helper\View', [], [], '', false);
+        $dummyCustomer = $this->getMockForAbstractClass('Magento\Customer\Api\Data\CustomerInterface');
+
+        $this->customerRepository->expects($this->once())
+            ->method('getById')
             ->with('customer id')
+            ->will($this->returnValue($dummyCustomer));
+        $this->customerViewHelper->expects($this->once())
+            ->method('getCustomerName')
+            ->with($dummyCustomer)
             ->will($this->returnValue(new \Magento\Framework\Object()));
         $this->request = $this->getMockForAbstractClass('Magento\Framework\App\RequestInterface');
         $this->request->expects($this->at(0))
@@ -67,7 +79,8 @@ class MainTest extends \PHPUnit_Framework_TestCase
             'Magento\Review\Block\Adminhtml\Main',
             [
                 'request' => $this->request,
-                'customerAccount' => $this->customerAccount
+                'customerRepository' => $this->customerRepository,
+                'customerViewHelper' => $this->customerViewHelper
             ]
         );
     }

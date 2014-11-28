@@ -53,9 +53,13 @@ class GroupRegistryTest extends \PHPUnit_Framework_TestCase
      */
     protected function _findGroupIdWithCode($code)
     {
-        $groupService = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Service\V1\CustomerGroupService');
-        foreach ($groupService->getGroups() as $group) {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var \Magento\Customer\Api\GroupRepositoryInterface $groupRepository */
+        $groupRepository = $objectManager->create('Magento\Customer\Api\GroupRepositoryInterface');
+        /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchBuilder */
+        $searchBuilder = $objectManager->create('Magento\Framework\Api\SearchCriteriaBuilder');
+
+        foreach ($groupRepository->getList($searchBuilder->create())->getItems() as $group) {
             if ($group->getCode() === $code) {
                 return $group->getId();
             }

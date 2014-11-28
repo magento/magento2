@@ -37,9 +37,9 @@ class Main extends \Magento\Backend\Block\Widget\Grid\Container
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Customer\Service\V1\CustomerAccountServiceInterface
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
      */
-    protected $customerAccount;
+    protected $customerRepository;
 
     /**
      * Catalog product model factory
@@ -49,22 +49,32 @@ class Main extends \Magento\Backend\Block\Widget\Grid\Container
     protected $_productFactory;
 
     /**
+     * Customer View Helper
+     *
+     * @var \Magento\Customer\Helper\View
+     */
+    protected $_customerViewHelper;
+
+    /**
      * @param \Magento\Backend\Block\Widget\Context $context
-     * @param \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccount
+     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Customer\Helper\View $customerViewHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
-        \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccount,
+        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Framework\Registry $registry,
+        \Magento\Customer\Helper\View $customerViewHelper,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
-        $this->customerAccount = $customerAccount;
+        $this->customerRepository = $customerRepository;
         $this->_productFactory = $productFactory;
+        $this->_customerViewHelper = $customerViewHelper;
         parent::__construct($context, $data);
     }
 
@@ -85,9 +95,8 @@ class Main extends \Magento\Backend\Block\Widget\Grid\Container
         $customerId = $this->getRequest()->getParam('customerId', false);
         $customerName = '';
         if ($customerId) {
-            $customer = $this->customerAccount->getCustomer($customerId);
-            $customerName = $customer->getFirstname() . ' ' . $customer->getLastname();
-            $customerName = $this->escapeHtml($customerName);
+            $customer = $this->customerRepository->getById($customerId);
+            $customerName = $this->escapeHtml($this->_customerViewHelper->getCustomerName($customer));
         }
         $productId = $this->getRequest()->getParam('productId', false);
         $productName = null;

@@ -28,8 +28,8 @@
  * @see \Magento\PayPal\Block\Standard\Form
  */
 ?>
-<div class="paypal choice field items" id="payment_form_<?php echo $this->getMethodCode() ?>" style="display:none;">
-    <p><?php echo $this->getRedirectMessage(); ?></p>
+<fieldset class="fieldset paypal items redirect" id="payment_form_<?php echo $this->getMethodCode() ?>" style="display:none;">
+    <div><?php echo $this->getRedirectMessage(); ?></div>
     <?php $code = $this->getBillingAgreementCode(); ?>
     <?php if ($code): ?>
         <input type="checkbox" id="<?php echo $code ?>" value="1" name="payment[<?php echo $code ?>]" class="checkbox">
@@ -37,4 +37,4 @@
             <span><?php echo __('Sign a billing agreement to streamline further purchases with PayPal.') ?></span>
         </label>
     <?php endif; ?>
-</div>
+</fieldset>

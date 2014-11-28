@@ -23,12 +23,15 @@
  */
 namespace Magento\Sales\Model\Resource\Order\Invoice\Comment;
 
+use Magento\Sales\Api\Data\InvoiceCommentSearchResultInterface;
+use Magento\Sales\Model\Resource\Order\Comment\Collection\AbstractCollection;
+
 /**
  * Flat sales order invoice comment collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\Sales\Model\Resource\Order\Comment\Collection\AbstractCollection
+class Collection extends AbstractCollection implements InvoiceCommentSearchResultInterface
 {
     /**
      * Event prefix

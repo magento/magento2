@@ -27,6 +27,8 @@ use Magento\Customer\Model\Context;
 
 /**
  * Customer authorization link
+ *
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class AuthorizationLink extends \Magento\Framework\View\Element\Html\Link
 {

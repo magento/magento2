@@ -124,42 +124,7 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
 
     public function testDelete()
     {
-        $this->actionValidatorMock->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
-        $this->adapterMock->expects($this->once())
-            ->method('beginTransaction');
-        $this->resourceMock->expects($this->once())
-            ->method('delete');
-        $this->resourceMock->expects($this->once())
-            ->method('commit');
-        $this->model->delete();
-        $this->assertTrue($this->model->isDeleted());
-    }
-
-    /**
-     * @expectedException \Exception
-     */
-    public function testDeleteRaiseException()
-    {
-        $this->actionValidatorMock->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
-        $this->adapterMock->expects($this->once())
-            ->method('beginTransaction');
-        $this->resourceMock->expects($this->once())
-            ->method('delete')
-            ->will($this->throwException(new \Exception));
-        $this->resourceMock->expects($this->never())
-            ->method('commit');
-        $this->resourceMock->expects($this->once())
-            ->method('rollBack');
-        $this->model->delete();
-    }
-
-    /**
-     * @expectedException \Magento\Framework\Model\Exception
-     * @expectedExceptionMessage Delete operation is forbidden for current area
-     */
-    public function testDeleteOnModelThatCanNotBeRemoved()
-    {
-        $this->actionValidatorMock->expects($this->any())->method('isAllowed')->will($this->returnValue(false));
+        $this->resourceMock->expects($this->once())->method('delete')->with($this->model);
         $this->model->delete();
     }
 }

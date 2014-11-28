@@ -20,27 +20,29 @@ The library provides the ability to customize all of the following user interfac
 * layout
 * loaders
 * messages
-* navigation
 * pagination
 * popups
 * ratings
-* tabs and accordions (sections)
+* resets
+* responsive
+* sections -  tabs and accordions
 * tables
 * tooltips
 * typography
+* utilities
 * list of theme variables
 
 # Magento UI library file structure
-Magento UI library is located under `pub/lib/` folder. It and employs:
+Magento UI library is located under `/lib/web/` folder. It and employs:
 * `css/` folder where the library files are placed
-* `fonts/` folder where default and  icon fonts are placed
+* `fonts/` folder where default and icon fonts are placed
 * `images/` folder where default images are placed
 * `jquery/` folder where jQuery and jQuery widgets are placed
 
 ###Magento UI library structure
 
 ```css
-pub/lib/
+/lib/web/
     ├── css/
     │    ├── docs/ (Library documentation)
     │    │    ├── source/
@@ -56,11 +58,11 @@ pub/lib/
     │    │    │    ├── lib.less
     │    │    │    ├── loaders.less
     │    │    │    ├── messages.less
-    │    │    │    ├── navigation.less
     │    │    │    ├── pages.less
     │    │    │    ├── popups.less
     │    │    │    ├── rating.less
     │    │    │    ├── resets.less
+    │    │    │    ├── responsive.less
     │    │    │    ├── sections.less
     │    │    │    ├── tables.less
     │    │    │    ├── tooltips.less
@@ -82,11 +84,11 @@ pub/lib/
     │    │    ├─── lib.html
     │    │    ├─── loaders.html
     │    │    ├─── messages.html
-    │    │    ├─── navigation.html
     │    │    ├─── pages.html
     │    │    ├─── popups.html
     │    │    ├─── rating.html
     │    │    ├─── resets.html
+    │    │    ├─── responsive.html
     │    │    ├─── sections.html
     │    │    ├─── tables.html
     │    │    ├─── tooltips.html

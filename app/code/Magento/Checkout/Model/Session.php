@@ -23,8 +23,7 @@
  */
 namespace Magento\Checkout\Model;
 
-use Magento\Customer\Service\V1\Data\Customer as CustomerDataObject;
-use Magento\Customer\Service\V1\Data\CustomerBuilder;
+use Magento\Customer\Api\Data\CustomerInterface as CustomerDataObject;
 use Magento\Sales\Model\Quote;
 
 class Session extends \Magento\Framework\Session\SessionManager

@@ -58,7 +58,7 @@ class Baseurl extends \Magento\Framework\App\Config\Value
      * @return void
      * @throws \Magento\Framework\Model\Exception
      */
-    protected function _beforeSave()
+    public function beforeSave()
     {
         $value = $this->getValue();
         try {
@@ -218,7 +218,7 @@ class Baseurl extends \Magento\Framework\App\Config\Value
      *
      * @return void
      */
-    protected function _afterSave()
+    public function afterSave()
     {
         if ($this->isValueChanged()) {
             switch ($this->getPath()) {

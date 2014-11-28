@@ -23,9 +23,8 @@
  */
 namespace Magento\Customer\Helper\Session;
 
-use Magento\Customer\Helper\Session\CurrentCustomer;
-use Magento\Customer\Service\V1\CustomerAddressServiceInterface;
-use Magento\Customer\Service\V1\Data\Address;
+use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Api\Data\AddressInterface;
 
 /**
  * Class CurrentCustomerAddress
@@ -38,50 +37,40 @@ class CurrentCustomerAddress
     protected $currentCustomer;
 
     /**
-     * @var \Magento\Customer\Service\V1\CustomerAddressServiceInterface
+     * @var AccountManagementInterface
      */
-    protected $customerAddressService;
+    protected $accountManagement;
 
     /**
      * @param CurrentCustomer $currentCustomer
-     * @param CustomerAddressServiceInterface $customerAddressService
+     * @param AccountManagementInterface $accountManagement
      */
     public function __construct(
         CurrentCustomer $currentCustomer,
-        CustomerAddressServiceInterface $customerAddressService
+        AccountManagementInterface $accountManagement
     ) {
         $this->currentCustomer = $currentCustomer;
-        $this->customerAddressService = $customerAddressService;
-    }
-
-    /**
-     * Returns all addresses for current customer
-     *
-     * @return Address[]
-     */
-    public function getCustomerAddresses()
-    {
-        return $this->customerAddressService->getAddresses($this->currentCustomer->getCustomerId());
+        $this->accountManagement = $accountManagement;
     }
 
     /**
      * Returns default billing address form current customer
      *
-     * @return Address|null
+     * @return AddressInterface|null
      */
     public function getDefaultBillingAddress()
     {
-        return $this->customerAddressService->getDefaultBillingAddress($this->currentCustomer->getCustomerId());
+        return $this->accountManagement->getDefaultBillingAddress($this->currentCustomer->getCustomerId());
     }
 
     /**
      * Returns default shipping address for current customer
      *
-     * @return Address|null
+     * @return AddressInterface|null
      */
     public function getDefaultShippingAddress()
     {
-        return $this->customerAddressService->getDefaultShippingAddress(
+        return $this->accountManagement->getDefaultShippingAddress(
             $this->currentCustomer->getCustomerId()
         );
     }

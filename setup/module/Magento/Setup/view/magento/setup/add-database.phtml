@@ -23,8 +23,8 @@
  */
 ?>
 <div class="step-controls">
-    <a href="#" class="btn btn-primary" ng-click="previousState()">Previous</a>
-    <a href="#" class="btn btn-primary" ng-click="nextState()">Next</a>
+    <a href="" class="btn btn-primary" ng-click="previousState()">Previous</a>
+    <a href="" class="btn btn-primary" ng-click="nextState()">Next</a>
 </div>
 
 <div class="page-header">
@@ -134,13 +134,13 @@
                    tooltip-append-to-body="true"
                    class="form-control"
                    type="text"
-                   name="dbName"
+                   name="dbname"
                    ng-model="db.name"
                    required />
         </div>
-        <div class="col-sm-offset-4 col-sm-4" ng-show="database.dbName.$invalid && database.submitted">
+        <div class="col-sm-offset-4 col-sm-4" ng-show="database.dbname.$invalid && database.submitted">
             <div class="error-container">
-                <span ng-show="database.dbName.$error.required">You must enter a valid database name. Please check the syntax and try again.</span>
+                <span ng-show="database.dbname.$error.required">You must enter a valid database name. Please check the syntax and try again.</span>
             </div>
         </div>
     </div>
@@ -156,7 +156,7 @@
                 <span class="glyphicon glyphicon-ok-sign text-success"></span>&nbsp;Test connection successful.
             </div>
             <div ng-show="!testConnection.result.success && testConnection.pressed" class="animate-show text-danger">
-                <span class="glyphicon glyphicon-remove-sign"></span>&nbsp;Cannot connect to server.
+                <span class="glyphicon glyphicon-remove-sign"></span>&nbsp;{{testConnection.result.error}}
             </div>
         </div>
     </div>
@@ -265,6 +265,6 @@
 </form>
 
 <div class="step-controls">
-    <a href="#" class="btn btn-primary" ng-click="previousState()">Previous</a>
-    <a href="#" class="btn btn-primary" ng-click="nextState()">Next</a>
+    <a href="" class="btn btn-primary" ng-click="previousState()">Previous</a>
+    <a href="" class="btn btn-primary" ng-click="nextState()">Next</a>
 </div>

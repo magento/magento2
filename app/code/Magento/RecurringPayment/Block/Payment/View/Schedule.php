@@ -25,6 +25,8 @@ namespace Magento\RecurringPayment\Block\Payment\View;
 
 /**
  * Recurring payment view schedule
+ *
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Schedule extends \Magento\RecurringPayment\Block\Payment\View
 {

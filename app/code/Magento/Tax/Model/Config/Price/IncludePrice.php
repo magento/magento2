@@ -28,9 +28,9 @@ class IncludePrice extends \Magento\Framework\App\Config\Value
     /**
      * @return void
      */
-    public function _afterSave()
+    public function afterSave()
     {
-        parent::_afterSave();
+        parent::afterSave();
         $this->_cacheManager->clean(array('checkout_quote'));
     }
 }

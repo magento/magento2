@@ -46,7 +46,6 @@
         <link src="extjs/ext-tree-checkbox.js"/>
         <css src="extjs/resources/css/ext-all.css"/>
         <css src="extjs/resources/css/ytheme-magento.css"/>
-        <link src="Magento_Rule::rules.js"/>
     </head>
     <body>
         <attribute name="id" value="html-body"/>

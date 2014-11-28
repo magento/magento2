@@ -87,9 +87,11 @@
 //--------------------------------------
 .responsive-smaller(@break) when (@break = @screen-m) {
     .block-collapsible-nav {
-        margin-left: -@layout-width-xs-indent;
-        margin-right: -@layout-width-xs-indent;
-        margin-bottom: 20px !important;
+        position: absolute;
+        top: -21px;
+        left: 0;
+        width: 100%;
+        z-index: 5;
         .title {
             &:extend(.abstract-toggling-title-mobile all);
         }

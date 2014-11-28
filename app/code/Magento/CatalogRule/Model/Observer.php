@@ -35,7 +35,7 @@ use Magento\CatalogRule\Model\Rule\Product\Price;
 use Magento\Framework\Registry;
 use Magento\Framework\StoreManagerInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
-use Magento\Customer\Service\V1\CustomerGroupServiceInterface as Group;
+use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Model\Session as CustomerModelSession;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Stdlib\DateTime;
@@ -93,6 +93,11 @@ class Observer
     protected $_resourceRule;
 
     /**
+     * @var GroupManagementInterface
+     */
+    protected $groupManagement;
+
+    /**
      * @param Resource\RuleFactory $resourceRuleFactory
      * @param Resource\Rule $resourceRule
      * @param Resource\Rule\CollectionFactory $ruleCollectionFactory
@@ -102,6 +107,7 @@ class Observer
      * @param CustomerModelSession $customerSession
      * @param Registry $coreRegistry
      * @param DateTime $dateTime
+     * @param GroupManagementInterface $groupManagement
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -114,7 +120,8 @@ class Observer
         TimezoneInterface $localeDate,
         CustomerModelSession $customerSession,
         Registry $coreRegistry,
-        DateTime $dateTime
+        DateTime $dateTime,
+        GroupManagementInterface $groupManagement
     ) {
         $this->_resourceRuleFactory = $resourceRuleFactory;
         $this->_resourceRule = $resourceRule;
@@ -125,7 +132,9 @@ class Observer
         $this->_customerSession = $customerSession;
         $this->_coreRegistry = $coreRegistry;
         $this->dateTime = $dateTime;
+        $this->groupManagement = $groupManagement;
     }
+
     /**
      * Apply catalog price rules to product on frontend
      *
@@ -267,7 +276,7 @@ class Observer
             if ($this->_customerSession->isLoggedIn()) {
                 $groupId = $this->_customerSession->getCustomerGroupId();
             } else {
-                $groupId = Group::NOT_LOGGED_IN_ID;
+                $groupId = $this->groupManagement->getNotLoggedInGroup()->getId();
             }
         }
         if ($observer->getEvent()->hasDate()) {

@@ -134,20 +134,6 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testSendAction()
     {
-        $this->_objectManager->configure(
-            [
-                'Magento\Wishlist\Controller\Index\Send' => [
-                    'arguments' => [
-                        'transportBuilder' => [
-                            'instance' => 'Magento\TestFramework\Mail\Template\TransportBuilderMock'
-                        ]
-                    ]
-                ],
-                'preferences' => [
-                    'Magento\Framework\Mail\TransportInterface' => 'Magento\TestFramework\Mail\TransportInterfaceMock'
-                ]
-            ]
-        );
         \Magento\TestFramework\Helper\Bootstrap::getInstance()
             ->loadArea(\Magento\Framework\App\Area::AREA_FRONTEND);
 

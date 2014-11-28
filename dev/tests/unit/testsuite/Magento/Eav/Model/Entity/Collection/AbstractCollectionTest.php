@@ -96,7 +96,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
         $this->configMock = $this->getMock('Magento\Eav\Model\Config', array(), array(), '', false);
         $this->coreResourceMock = $this->getMock(
             'Magento\Framework\App\Resource',
-            array('getConnection'),
+            array(),
             array(),
             '',
             false

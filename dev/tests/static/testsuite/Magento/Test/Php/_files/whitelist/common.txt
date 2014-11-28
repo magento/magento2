@@ -70,7 +70,6 @@ app/code/Magento/GiftMessage/Service
 app/code/Magento/GoogleShopping/Block/SiteVerification.php
 app/code/Magento/GoogleShopping/Model/AttributeFactory.php
 app/code/Magento/GroupedImportExport
-app/code/Magento/GroupedProduct/Service
 app/code/Magento/Eav/Model/Entity/Attribute/Config
 app/code/Magento/Eav/Model/Entity/Attribute/Config.php
 app/code/Magento/Email

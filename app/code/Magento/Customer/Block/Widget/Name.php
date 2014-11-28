@@ -23,9 +23,9 @@
  */
 namespace Magento\Customer\Block\Widget;
 
-use Magento\Customer\Service\V1\AddressMetadataServiceInterface;
-use Magento\Customer\Service\V1\CustomerMetadataServiceInterface;
-use Magento\Customer\Service\V1\Data\Customer;
+use Magento\Customer\Api\AddressMetadataInterface;
+use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Customer\Helper\Address as AddressHelper;
 use Magento\Customer\Model\Options;
@@ -33,15 +33,17 @@ use Magento\Customer\Model\Options;
 /**
  * Widget for showing customer name.
  *
- * @method Customer getObject()
- * @method Name setObject(Customer $customer)
+ * @method CustomerInterface getObject()
+ * @method Name setObject(CustomerInterface $customer)
+ *
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Name extends AbstractWidget
 {
     /**
-     * @var \Magento\Customer\Service\V1\AddressMetadataServiceInterface
+     * @var AddressMetadataInterface
      */
-    protected $_addressMetadataService;
+    protected $addressMetadata;
 
     /**
      * @var Options
@@ -51,22 +53,22 @@ class Name extends AbstractWidget
     /**
      * @param Context $context
      * @param AddressHelper $addressHelper
-     * @param CustomerMetadataServiceInterface $customerMetadataService
-     * @param AddressMetadataServiceInterface $addressMetadataService
+     * @param CustomerMetadataInterface $customerMetadata
+     * @param AddressMetadataInterface $addressMetadata
      * @param Options $options
      * @param array $data
      */
     public function __construct(
         Context $context,
         AddressHelper $addressHelper,
-        CustomerMetadataServiceInterface $customerMetadataService,
-        AddressMetadataServiceInterface $addressMetadataService,
+        CustomerMetadataInterface $customerMetadata,
+        AddressMetadataInterface $addressMetadata,
         Options $options,
         array $data = array()
     ) {
         $this->options = $options;
-        parent::__construct($context, $addressHelper, $customerMetadataService, $data);
-        $this->_addressMetadataService = $addressMetadataService;
+        parent::__construct($context, $addressHelper, $customerMetadata, $data);
+        $this->addressMetadata = $addressMetadata;
         $this->_isScopePrivate = true;
     }
 
@@ -211,21 +213,16 @@ class Name extends AbstractWidget
     }
 
     /**
-     * Retrieve customer or customer address attribute instance
-     *
-     * @param string $attributeCode
-     * @return \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata|null
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * {@inheritdoc}
      */
     protected function _getAttribute($attributeCode)
     {
-        if ($this->getForceUseCustomerAttributes() || $this->getObject() instanceof Customer) {
+        if ($this->getForceUseCustomerAttributes() || $this->getObject() instanceof CustomerInterface) {
             return parent::_getAttribute($attributeCode);
         }
 
         try {
-            $attribute = $this->_addressMetadataService->getAttributeMetadata($attributeCode);
+            $attribute = $this->addressMetadata->getAttributeMetadata($attributeCode);
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             return null;
         }

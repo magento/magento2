@@ -123,6 +123,7 @@
         border-top: 1px solid @border-color-base;
         padding-top: 10px;
         .mark {
+            font-weight: @font-weight-base;
             padding-left: 4px;
         }
         .amount {
@@ -203,16 +204,11 @@
             }
         }
         .col {
-            &.qty,
-            &.price,
-            &.subtotal,
-            &.msrp {
-                padding-top: 20px;
-            }
+            padding-top: 20px;
             &.qty {
                 .input-text {
                     margin-top: -5px;
-                    width: 45px;
+                    &:extend(.abstract-input-qty all);
                 }
                 .label {
                     &:extend(.abstract-visually-hidden all);
@@ -231,11 +227,6 @@
                     padding: 25px 0 10px 75px;
                     position: relative;
                     min-height: 75px;
-                }
-                &.qty {
-                    .input-text {
-                        &:extend(.abstract-input-qty all);
-                    }
                 }
             }
         }
@@ -328,13 +319,8 @@
     .cart {
         &.table-wrapper {
             thead {
-                .col {
-                    &.price,
-                    &.qty,
-                    &.subtotal,
-                    &.msrp {
-                        display: none;
-                    }
+                .col:not(.item) {
+                    display: none;
                 }
             }
             .col {
@@ -342,7 +328,7 @@
                 &.price,
                 &.subtotal,
                 &.msrp {
-                    .box-sizing();
+                    box-sizing: border-box;
                     display: block;
                     float: left;
                     text-align: center;

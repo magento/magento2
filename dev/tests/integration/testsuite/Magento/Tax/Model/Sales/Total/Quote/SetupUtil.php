@@ -265,26 +265,26 @@ class SetupUtil
      */
     protected function processTaxRuleOverrides($taxRuleOverrideData, $taxRateIds)
     {
-        if (!empty($taxRuleOverrideData['tax_customer_class'])) {
+        if (!empty($taxRuleOverrideData['customer_tax_class_ids'])) {
             $customerTaxClassIds = [];
-            foreach ($taxRuleOverrideData['tax_customer_class'] as $customerClassCode) {
+            foreach ($taxRuleOverrideData['customer_tax_class_ids'] as $customerClassCode) {
                 $customerTaxClassIds[] = $this->customerTaxClasses[$customerClassCode];
             }
-            $taxRuleOverrideData['tax_customer_class'] = $customerTaxClassIds;
+            $taxRuleOverrideData['customer_tax_class_ids'] = $customerTaxClassIds;
         }
-        if (!empty($taxRuleOverrideData['tax_product_class'])) {
+        if (!empty($taxRuleOverrideData['product_tax_class_ids'])) {
             $productTaxClassIds = [];
-            foreach ($taxRuleOverrideData['tax_product_class'] as $productClassCode) {
+            foreach ($taxRuleOverrideData['product_tax_class_ids'] as $productClassCode) {
                 $productTaxClassIds[] = $this->productTaxClasses[$productClassCode];
             }
-            $taxRuleOverrideData['tax_product_class'] = $productTaxClassIds;
+            $taxRuleOverrideData['product_tax_class_ids'] = $productTaxClassIds;
         }
-        if (!empty($taxRuleOverrideData['tax_rate'])) {
+        if (!empty($taxRuleOverrideData['tax_rate_ids'])) {
             $taxRateIdsForRule = [];
-            foreach ($taxRuleOverrideData['tax_rate'] as $taxRateCode) {
+            foreach ($taxRuleOverrideData['tax_rate_ids'] as $taxRateCode) {
                 $taxRateIdsForRule[] = $taxRateIds[$taxRateCode];
             }
-            $taxRuleOverrideData['tax_rate'] = $taxRateIdsForRule;
+            $taxRuleOverrideData['tax_rate_ids'] = $taxRateIdsForRule;
         }
 
         return $taxRuleOverrideData;
@@ -360,9 +360,9 @@ class SetupUtil
             'code' => 'Test Rule',
             'priority' => '0',
             'position' => '0',
-            'tax_customer_class' => $customerClassIds,
-            'tax_product_class' => $this->getProductTaxClassIds(),
-            'tax_rate' => $this->getDefaultTaxRateIds(),
+            'customer_tax_class_ids' => $customerClassIds,
+            'product_tax_class_ids' => $this->getProductTaxClassIds(),
+            'tax_rate_ids' => $this->getDefaultTaxRateIds(),
         ];
 
         //Create tax rules
@@ -372,9 +372,9 @@ class SetupUtil
                 'code' => 'Shipping Tax Rule',
                 'priority' => '0',
                 'position' => '0',
-                'tax_customer_class' => $customerClassIds,
-                'tax_product_class' => [$this->productTaxClasses[self::SHIPPING_TAX_CLASS]],
-                'tax_rate' => [$this->taxRates[self::TAX_RATE_SHIPPING]['id']],
+                'customer_tax_class_ids' => $customerClassIds,
+                'product_tax_class_ids' => [$this->productTaxClasses[self::SHIPPING_TAX_CLASS]],
+                'tax_rate_ids' => [$this->taxRates[self::TAX_RATE_SHIPPING]['id']],
             ];
             $this->taxRules[$shippingTaxRuleData['code']] = $this->objectManager
                 ->create('Magento\Tax\Model\Calculation\Rule')

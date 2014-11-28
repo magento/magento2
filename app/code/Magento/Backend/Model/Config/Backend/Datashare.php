@@ -34,7 +34,7 @@ class Datashare extends \Magento\Framework\App\Config\Value
     /**
      * @return void
      */
-    protected function _afterSave()
+    public function afterSave()
     {
     }
 }

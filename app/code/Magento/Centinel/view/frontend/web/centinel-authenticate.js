@@ -87,5 +87,6 @@ define([
             this._isAuthenticationStarted = true;
         }
     });
-
+    
+    return $.mage.centinelAuthenticate;
 });

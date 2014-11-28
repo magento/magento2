@@ -35,7 +35,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     /**
      * Customer instance
      *
-     * @var \Magento\Customer\Service\V1\Data\Customer
+     * @var \Magento\Customer\Api\Data\CustomerInterface
      */
     protected $_customer = null;
 
@@ -83,7 +83,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     /**
      * Retrieve Shared Wishlist Customer instance
      *
-     * @return \Magento\Customer\Service\V1\Data\Customer
+     * @return \Magento\Customer\Api\Data\CustomerInterface
      */
     public function getWishlistCustomer()
     {

@@ -72,6 +72,6 @@ class MviewConfigFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function mviewConfigFileDataProvider()
     {
-        return \Magento\TestFramework\Utility\Files::init()->getConfigFiles('mview.xml');
+        return \Magento\Framework\Test\Utility\Files::init()->getConfigFiles('mview.xml');
     }
 }
