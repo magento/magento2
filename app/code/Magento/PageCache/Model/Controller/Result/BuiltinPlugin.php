@@ -82,6 +82,11 @@ class BuiltinPlugin
         ResponseHttp $response
     ) {
         $proceed($response);
+
+        if (!$this->config->isEnabled() || $this->config->getType() != \Magento\PageCache\Model\Config::BUILT_IN) {
+            return $subject;
+        }
+
         if ($this->state->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
             $cacheControl = $response->getHeader('Cache-Control')['value'];
             $response->setHeader('X-Magento-Cache-Control', $cacheControl);
