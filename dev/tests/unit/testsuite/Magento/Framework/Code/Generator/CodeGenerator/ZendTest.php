@@ -78,7 +78,7 @@ class ZendTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_methodData = array(
-        'testMethod1' => array(
+        'testmethod1' => array(
             'name' => 'testMethod1',
             'final' => true,
             'static' => true,
@@ -88,7 +88,7 @@ class ZendTest extends \PHPUnit_Framework_TestCase
             'body' => 'return 1;',
             'docblock' => array('shortDescription' => 'test short description')
         ),
-        '_testMethod2' => array(
+        '_testmethod2' => array(
             'name' => '_testMethod2',
             'visibility' => 'private',
             'abstract' => true,
@@ -106,7 +106,7 @@ class ZendTest extends \PHPUnit_Framework_TestCase
                 )
             )
         ),
-        'testMethod3' => array('name' => 'testMethod3', 'body' => 'return 3;')
+        'testmethod3' => array('name' => 'testMethod3', 'body' => 'return 3;')
     );
 
     /**

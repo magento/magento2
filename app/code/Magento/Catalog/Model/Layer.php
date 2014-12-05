@@ -23,6 +23,9 @@
  */
 namespace Magento\Catalog\Model;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+
 /**
  * Catalog view layer model
  *
@@ -73,13 +76,6 @@ class Layer extends \Magento\Framework\Object
     protected $_attributeCollectionFactory;
 
     /**
-     * Category factory
-     *
-     * @var \Magento\Catalog\Model\CategoryFactory
-     */
-    protected $_categoryFactory;
-
-    /**
      * Layer state factory
      *
      * @var \Magento\Catalog\Model\Layer\StateFactory
@@ -102,31 +98,36 @@ class Layer extends \Magento\Framework\Object
     protected $collectionFilter;
 
     /**
+     * @var CategoryRepositoryInterface
+     */
+    protected $categoryRepository;
+
+    /**
      * @param Layer\ContextInterface $context
      * @param Layer\StateFactory $layerStateFactory
-     * @param CategoryFactory $categoryFactory
      * @param Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory
      * @param Resource\Product $catalogProduct
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Registry $registry
+     * @param CategoryRepositoryInterface $categoryRepository
      * @param array $data
      */
     public function __construct(
         \Magento\Catalog\Model\Layer\ContextInterface $context,
         \Magento\Catalog\Model\Layer\StateFactory $layerStateFactory,
-        \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory,
         \Magento\Catalog\Model\Resource\Product $catalogProduct,
         \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Framework\Registry $registry,
+        CategoryRepositoryInterface $categoryRepository,
         array $data = array()
     ) {
         $this->_layerStateFactory = $layerStateFactory;
-        $this->_categoryFactory = $categoryFactory;
         $this->_attributeCollectionFactory = $attributeCollectionFactory;
         $this->_catalogProduct = $catalogProduct;
         $this->_storeManager = $storeManager;
         $this->registry = $registry;
+        $this->categoryRepository = $categoryRepository;
         $this->collectionProvider = $context->getCollectionProvider();
         $this->stateKeyGenerator = $context->getStateKey();
         $this->collectionFilter = $context->getCollectionFilter();
@@ -212,8 +213,7 @@ class Layer extends \Magento\Framework\Object
             if ($category) {
                 $this->setData('current_category', $category);
             } else {
-                /** @var \Magento\Catalog\Model\Category $category */
-                $category = $this->_categoryFactory->create()->load($this->getCurrentStore()->getRootCategoryId());
+                $category = $this->categoryRepository->get($this->getCurrentStore()->getRootCategoryId());
                 $this->setData('current_category', $category);
             }
         }
@@ -231,15 +231,19 @@ class Layer extends \Magento\Framework\Object
     public function setCurrentCategory($category)
     {
         if (is_numeric($category)) {
-            $category = $this->_categoryFactory->create()->load($category);
-        }
-        if (!$category instanceof \Magento\Catalog\Model\Category) {
+            try {
+                $category = $this->categoryRepository->get($category);
+            } catch (NoSuchEntityException $e) {
+                throw new \Magento\Framework\Model\Exception(__('Please correct the category.'), 0, $e);
+            }
+        } elseif ($category instanceof \Magento\Catalog\Model\Category) {
+            if (!$category->getId()) {
+                throw new \Magento\Framework\Model\Exception(__('Please correct the category.'));
+            }
+        } else {
             throw new \Magento\Framework\Model\Exception(
-                __('The category must be an instance of \Magento\Catalog\Model\Category.')
+                __('Must be category model instance or its id.')
             );
-        }
-        if (!$category->getId()) {
-            throw new \Magento\Framework\Model\Exception(__('Please correct the category.'));
         }
 
         if ($category->getId() != $this->getCurrentCategory()->getId()) {

@@ -27,7 +27,9 @@
  */
 namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -45,11 +47,6 @@ class Matrix extends \Magento\Backend\Block\Template
      * @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable
      */
     protected $_configurableType;
-
-    /**
-     * @var \Magento\Catalog\Model\ProductFactory
-     */
-    protected $_productFactory;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
@@ -72,36 +69,41 @@ class Matrix extends \Magento\Backend\Block\Template
     protected $variationMatrix;
 
     /**
+     * @var ProductRepositoryInterface
+     */
+    protected $productRepository;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable $configurableType
      * @param \Magento\Catalog\Model\Config $config
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\Locale\CurrencyInterface $localeCurrency
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\ConfigurableProduct\Model\Product\Type\VariationMatrix $variationMatrix
+     * @param ProductRepositoryInterface $productRepository
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\ConfigurableProduct\Model\Product\Type\Configurable $configurableType,
         \Magento\Catalog\Model\Config $config,
-        \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\ConfigurableProduct\Model\Product\Type\VariationMatrix $variationMatrix,
+        ProductRepositoryInterface $productRepository,
         array $data = array()
     ) {
         parent::__construct($context, $data);
         $this->_configurableType = $configurableType;
-        $this->_productFactory = $productFactory;
         $this->_config = $config;
         $this->_coreRegistry = $coreRegistry;
         $this->_localeCurrency = $localeCurrency;
         $this->stockRegistry = $stockRegistry;
         parent::__construct($context, $data);
         $this->variationMatrix = $variationMatrix;
+        $this->productRepository = $productRepository;
     }
 
     /**
@@ -224,10 +226,10 @@ class Matrix extends \Magento\Backend\Block\Template
         }
         $products = array();
         foreach ($ids as $productId) {
-            /** @var $product Product */
-            $product = $this->_productFactory->create()->load($productId);
-            if ($product->getId()) {
-                $products[] = $product;
+            try {
+                $products[] = $this->productRepository->getById($productId);
+            } catch (NoSuchEntityException $e) {
+                continue;
             }
         }
         return $products;

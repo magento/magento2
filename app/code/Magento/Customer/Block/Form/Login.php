@@ -99,7 +99,7 @@ class Login extends \Magento\Framework\View\Element\Template
      */
     protected function _prepareLayout()
     {
-        $this->pageConfig->setTitle(__('Customer Login'));
+        $this->pageConfig->getTitle()->set(__('Customer Login'));
         return parent::_prepareLayout();
     }
 

@@ -33,7 +33,18 @@
 <?php if (!$this->getIsLinkMode() || !$this->getIsNeedToDisplaySideBar()): ?>
     <a class="action showcart" href="<?php echo $this->getUrl('checkout/cart'); ?>">
         <span class="text"><?php echo __('My Cart'); ?></span>
-        <span class="counter qty<?php echo ($_cartQty > 0) ? '' : ' empty'; ?>"><?php echo ($_cartQty == 1) ? __('1 item') : __('%1 items',$_cartQty) ?></span>
+        <span class="counter qty<?php echo ($_cartQty > 0) ? '' : ' empty'; ?>">
+            <span class="counter-number">
+                <?php echo $_cartQty;?>
+            </span>
+            <span class="counter-label">
+                <?php if ($_cartQty == 1):?>
+                    <?php echo __('item');?>
+                <?php else:?>
+                    <?php echo __('items');?>
+                <?php endif;?>
+            </span>
+        </span>
     </a>
     <?php if ($this->getIsNeedToDisplaySideBar()): ?>
         <div class="block block-minicart<?php echo ($_cartQty > 0) ? '' : ' empty'; ?>" <?php if ($this->getIsNeedToDisplaySideBar()): ?> data-mage-init='{"dropdownDialog":{"appendTo":"[data-block=minicart]", "triggerTarget":".showcart", "timeout": "2000", "triggerClass":"active", "parentClass":"active"}}'<?php endif ?>>

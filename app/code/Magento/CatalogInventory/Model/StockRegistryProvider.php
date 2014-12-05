@@ -37,8 +37,6 @@ use Magento\Framework\StoreManagerInterface;
 
 /**
  * Class StockRegistryProvider
- * @package Magento\CatalogInventory\Model
- * @spi
  */
 class StockRegistryProvider implements StockRegistryProviderInterface
 {
@@ -147,7 +145,7 @@ class StockRegistryProvider implements StockRegistryProviderInterface
             $criteria->setWebsiteFilter($websiteId);
             $collection = $this->stockRepository->getList($criteria);
             $stock = current($collection->getItems());
-            if ($stock && $stock->getId()) {
+            if ($stock && $stock->getStockId()) {
                 $this->stocks[$websiteId] = $stock;
             } else {
                 return $this->stockFactory->create();
@@ -170,7 +168,7 @@ class StockRegistryProvider implements StockRegistryProviderInterface
             $criteria->setWebsiteFilter($websiteId);
             $collection = $this->stockItemRepository->getList($criteria);
             $stockItem = current($collection->getItems());
-            if ($stockItem && $stockItem->getId()) {
+            if ($stockItem && $stockItem->getItemId()) {
                 $this->stockItems[$key] = $stockItem;
             } else {
                 return $this->stockItemFactory->create();

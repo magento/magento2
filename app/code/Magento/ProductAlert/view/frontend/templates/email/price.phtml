@@ -31,8 +31,8 @@
 <?php foreach ($_products as $_product): ?>
     <tr>
         <td class="col photo">
-            <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->escapeHtml($_product->getName()) ?>">
-                <img src="<?php echo $_product->getThumbnailUrl() ?>" height="75" width="75" alt="<?php echo $this->escapeHtml($_product->getName()) ?>" />
+            <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->escapeHtml($_product->getName()) ?>" class="product photo">
+                <img src="<?php echo $this->getThumbnailUrl($_product) ?>" width="<?php echo $this->getThumbnailSize()?>" height="<?php echo $this->getThumbnailSize()?>" alt="<?php echo $this->escapeHtml($_product->getName()) ?>" class="photo image" />
             </a>
         </td>
         <td class="col item">

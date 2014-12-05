@@ -32,7 +32,10 @@
 <?php $_filters = $this->getActiveFilters() ?>
 <?php if(!empty($_filters)): ?>
 <div class="filter-current">
-    <strong class="block-subtitle filter-current-subtitle" data-count="<?php echo count($_filters); ?>"><?php echo __('Currently Shopping by') ?></strong>
+    <strong class="block-subtitle filter-current-subtitle"
+            role="heading"
+            aria-level="2"
+            data-count="<?php echo count($_filters); ?>"><?php echo __('Currently Shopping by') ?></strong>
     <ol class="items">
         <?php foreach ($_filters as $_filter): ?>
             <li class="item">

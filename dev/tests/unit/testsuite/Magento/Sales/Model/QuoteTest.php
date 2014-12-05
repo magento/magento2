@@ -23,9 +23,9 @@
  */
 namespace Magento\Sales\Model;
 
-use Magento\TestFramework\Helper\ObjectManager;
 use Magento\Sales\Model\Quote\Address;
 use Magento\Store\Model\ScopeInterface;
+use Magento\TestFramework\Helper\ObjectManager;
 
 /**
  * Test class for \Magento\Sales\Model\Order
@@ -82,7 +82,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerGroupServiceMock;
+    protected $groupRepositoryMock;
 
     /**
      * @var \Magento\Sales\Model\Quote
@@ -118,13 +118,56 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\App\Config | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $scopeConfig;
+    
+    /**
+     * @var \Magento\Customer\Api\AddressRepositoryInterface | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $addressRepositoryMock;
 
+    /**
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $criteriaBuilderMock;
+
+    /**
+     * @var \Magento\Framework\Api\FilterBuilder | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $filterBuilderMock;
+
+    /**
+     * @var \Magento\Customer\Api\Data\AddressDataBuilder | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $addressBuilderMock;
+
+    /**
+     * @var \Magento\Customer\Api\Data\CustomerDataBuilder | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $customerBuilderMock;
+
+    /**
+     * @var \Magento\Framework\Api\ExtensibleDataObjectConverter | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $extensibleDataObjectConverterMock;
+
+    /**
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $customerRepositoryMock;
+
+    /**
+     * @var \Magento\Framework\Object\Copy | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $objectCopyServiceMock;
+
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->quoteAddressFactoryMock = $this->getMock(
             'Magento\Sales\Model\Quote\AddressFactory',
-            array('create'),
-            array(),
+            ['create'],
+            [],
             '',
             false
         );
@@ -140,8 +183,31 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         );
         $this->quoteAddressCollectionMock = $this->getMock(
             'Magento\Sales\Model\Resource\Quote\Address\Collection',
-            array(),
-            array(),
+            [],
+            [],
+            '',
+            false
+        );
+        $this->extensibleDataObjectConverterMock = $this->getMock(
+            'Magento\Framework\Api\ExtensibleDataObjectConverter',
+            ['toFlatArray'],
+            [],
+            '',
+            false
+        );
+        $this->customerRepositoryMock = $this->getMockForAbstractClass(
+            'Magento\Customer\Api\CustomerRepositoryInterface',
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['getById']
+        );
+        $this->objectCopyServiceMock = $this->getMock(
+            'Magento\Framework\Object\Copy',
+            ['copyFieldsetToTarget'],
+            [],
             '',
             false
         );
@@ -180,7 +246,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->addressConverterMock = $this->getMockBuilder('Magento\Customer\Model\Address\Converter')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->customerGroupServiceMock = $this->getMockBuilder('Magento\Customer\Service\V1\CustomerGroupService')
+        $this->groupRepositoryMock = $this->getMockBuilder('Magento\Customer\Api\GroupRepositoryInterface')
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock->expects($this->any())
@@ -210,11 +276,33 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfig = $this->getMockBuilder('Magento\Framework\App\Config')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->quote = (
-        new ObjectManager(
-            $this
-        )
-        )->getObject(
+
+        $this->addressRepositoryMock = $this->getMockForAbstractClass('Magento\Customer\Api\AddressRepositoryInterface',
+            [],
+            '',
+            false
+        );
+
+        $this->criteriaBuilderMock = $this->getMockBuilder('Magento\Framework\Api\SearchCriteriaBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->filterBuilderMock = $this->getMockBuilder('Magento\Framework\Api\FilterBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->addressBuilderMock = $this->getMockBuilder('Magento\Customer\Api\Data\AddressDataBuilder')
+            ->disableOriginalConstructor()
+            ->setMethods(['mergeDataObjectWithArray', 'create'])
+            ->getMock();
+
+        $this->customerBuilderMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerDataBuilder')
+            ->disableOriginalConstructor()
+            ->setMethods(['populate', 'setAddresses', 'create'])
+            ->getMock();
+
+        $this->quote = (new ObjectManager($this))
+            ->getObject(
                 'Magento\Sales\Model\Quote',
                 [
                     'quoteAddressFactory' => $this->quoteAddressFactoryMock,
@@ -223,12 +311,20 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
                     'context' => $this->contextMock,
                     'customerFactory' => $this->customerFactoryMock,
                     'addressConverter' => $this->addressConverterMock,
-                    'customerGroupService' => $this->customerGroupServiceMock,
+                    'groupRepository' => $this->groupRepositoryMock,
                     'objectFactory' => $this->objectFactoryMock,
+                    'addressRepository' => $this->addressRepositoryMock,
+                    'criteriaBuilder' => $this->criteriaBuilderMock,
+                    'filterBuilder' => $this->filterBuilderMock,
+                    'addressBuilder' => $this->addressBuilderMock,
+                    'customerBuilder' => $this->customerBuilderMock,
                     'quoteItemCollectionFactory' => $this->quoteItemCollectionFactoryMock,
                     'quotePaymentCollectionFactory' => $this->quotePaymentCollectionFactoryMock,
                     'quotePaymentFactory' => $this->paymentFactoryMock,
-                    'scopeConfig' => $this->scopeConfig
+                    'scopeConfig' => $this->scopeConfig,
+                    'extensibleDataObjectConverter' => $this->extensibleDataObjectConverterMock,
+                    'customerRepository' => $this->customerRepositoryMock,
+                    'objectCopyService' => $this->objectCopyServiceMock
                 ]
             );
     }
@@ -288,16 +384,16 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
      */
     public function dataProviderForTestIsMultipleShippingAddresses()
     {
-        return array(
-            array(
-                array($this->getAddressMock(Address::TYPE_SHIPPING), $this->getAddressMock(Address::TYPE_SHIPPING)),
+        return [
+            [
+                [$this->getAddressMock(Address::TYPE_SHIPPING), $this->getAddressMock(Address::TYPE_SHIPPING)],
                 true
-            ),
-            array(
-                array($this->getAddressMock(Address::TYPE_SHIPPING), $this->getAddressMock(Address::TYPE_BILLING)),
+            ],
+            [
+                [$this->getAddressMock(Address::TYPE_SHIPPING), $this->getAddressMock(Address::TYPE_BILLING)],
                 false
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -308,8 +404,8 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     {
         $shippingAddressMock = $this->getMock(
             'Magento\Sales\Model\Quote\Address',
-            array('getAddressType', '__wakeup'),
-            array(),
+            ['getAddressType', '__wakeup'],
+            [],
             '',
             false
         );
@@ -457,69 +553,79 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     public function testSetCustomerAddressData()
     {
         $customerId = 1;
-
-        $addressItemMock = $this->getMockBuilder('Magento\Customer\Service\V1\Data\Address')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $addresses = [$addressItemMock];
-
-        $addressModelMock = $this->getMockBuilder('Magento\Customer\Model\Address')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->addressConverterMock->expects($this->once())
-            ->method('createAddressModel')
-            ->with($addressItemMock)
-            ->will($this->returnValue($addressModelMock));
-
-        $addressCollectionMock = $this->getMockBuilder('Magento\Customer\Model\Resource\Address\Collection')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $addressCollectionMock->expects($this->once())
-            ->method('removeAllItems');
-
-        $customerMock = $this->getMockBuilder('Magento\Customer\Model\Customer')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $customerMock->expects($this->once())
-            ->method('load')
-            ->with($customerId);
-        $customerMock->expects($this->once())
+        $addressMock = $this->getMockForAbstractClass(
+            'Magento\Customer\Api\Data\AddressInterface',
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['getId']
+        );
+        $addressMock->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(false));
-        $customerMock->expects($this->once())
-            ->method('getAddressesCollection')
-            ->will($this->returnValue($addressCollectionMock));
-        $customerMock->expects($this->once())
-            ->method('addAddress')
-            ->with($addressModelMock);
+            ->will($this->returnValue(null));
 
-        $this->customerFactoryMock->expects($this->once())
-            ->method('create')
+        $addresses = [$addressMock];
+
+        $customerMock = $this->getMockForAbstractClass('Magento\Customer\Api\Data\CustomerInterface', [], '', false);
+        $customerResultMock = $this->getMockForAbstractClass(
+            'Magento\Customer\Api\Data\CustomerInterface',
+            [],
+            '',
+            false
+        );
+        $customerMock->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue($customerId));
+
+        $this->customerRepositoryMock->expects($this->once())
+            ->method('getById')
             ->will($this->returnValue($customerMock));
-        $this->quote->setCustomerId($customerId);
+        $customerMock->expects($this->once())
+            ->method('getAddresses')
+            ->will($this->returnValue($addresses));
 
-        $result = $this->quote->setCustomerAddressData($addresses);
+        $this->customerBuilderMock->expects($this->atLeastOnce())
+            ->method('populate')
+            ->with($customerMock)
+            ->will($this->returnSelf());
+        $addresses[] = $addressMock;
+        $this->customerBuilderMock->expects($this->atLeastOnce())
+            ->method('setAddresses')
+            ->will($this->returnSelf());
+        $this->customerBuilderMock->expects($this->atLeastOnce())
+            ->method('create')
+            ->will($this->returnValue($customerResultMock));
+        $this->objectFactoryMock->expects($this->once())
+        ->method('create')
+        ->with(['create-result'])
+        ->will($this->returnValue('return-value'));
+        $this->extensibleDataObjectConverterMock->expects($this->once())
+            ->method('toFlatArray')
+            ->with($customerMock)
+            ->will($this->returnValue(['create-result']));
+        $this->objectCopyServiceMock->expects($this->once())
+            ->method('copyFieldsetToTarget')
+            ->with('customer_account', 'to_quote', 'return-value', $this->quote);
+
+        $result = $this->quote->setCustomerAddressData([$addressMock]);
         $this->assertInstanceOf('Magento\Sales\Model\Quote', $result);
+        $this->assertEquals($customerResultMock, $this->quote->getCustomer());
     }
 
     public function testGetCustomerTaxClassId()
     {
         $groupId = 1;
         $taxClassId = 1;
-
-        $customerGroupMock = $this->getMockBuilder('Magento\Customer\Service\V1\Data\CustomerGroup')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $customerGroupMock->expects($this->once())
+        $groupMock = $this->getMockForAbstractClass('Magento\Customer\Api\Data\GroupInterface', [], '', false);
+        $groupMock->expects($this->once())
             ->method('getTaxClassId')
-            ->will($this->returnValue($taxClassId));
-
-        $this->customerGroupServiceMock->expects($this->once())
-            ->method('getGroup')
+            ->willReturn($taxClassId);
+        $this->groupRepositoryMock->expects($this->once())
+            ->method('getById')
             ->with($groupId)
-            ->will($this->returnValue($customerGroupMock));
-
+            ->will($this->returnValue($groupMock));
         $this->quote->setData('customer_group_id', $groupId);
         $result = $this->quote->getCustomerTaxClassId();
         $this->assertEquals($taxClassId, $result);

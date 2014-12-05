@@ -68,6 +68,21 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
      */
     protected $viewMock;
 
+    /**
+     * @var \Magento\Framework\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultPageMock;
+
+    /**
+     * @var \Magento\Framework\View\Page\Config|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $pageConfigMock;
+
+    /**
+     * @var \Magento\Framework\View\Page\Title|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $pageTitleMock;
+
     public function setUp()
     {
         $titleMock = $this->getMockBuilder('Magento\Framework\App\Action\Title')
@@ -85,7 +100,6 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->viewMock = $this->getMockBuilder('Magento\Backend\Model\View')
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $this->contextMock = $this->getMockBuilder('Magento\Backend\App\Action\Context')
             ->disableOriginalConstructor()
@@ -114,11 +128,32 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
+        $this->resultPageMock = $this->getMockBuilder('Magento\Framework\View\Result\Page')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->pageConfigMock = $this->getMockBuilder('Magento\Framework\View\Page\Config')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->pageTitleMock = $this->getMockBuilder('Magento\Framework\View\Page\Title')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->controller = new \Magento\Sales\Controller\Adminhtml\Order\Creditmemo\AddComment(
             $this->contextMock,
             $this->loaderMock,
             $this->senderMock
         );
+
+        $this->viewMock->expects($this->any())
+            ->method('getPage')
+            ->willReturn($this->resultPageMock);
+        $this->resultPageMock->expects($this->any())
+            ->method('getConfig')
+            ->willReturn($this->pageConfigMock);
+        $this->pageConfigMock->expects($this->any())
+            ->method('getTitle')
+            ->willReturn($this->pageTitleMock);
+        $this->pageTitleMock->expects($this->any())
+            ->method('prepend');
     }
 
     public function testExecuteModelException()

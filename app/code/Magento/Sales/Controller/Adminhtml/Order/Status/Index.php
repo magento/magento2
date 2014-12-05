@@ -33,9 +33,9 @@ class Index extends \Magento\Sales\Controller\Adminhtml\Order\Status
      */
     public function execute()
     {
-        $this->_title->add(__('Order Status'));
         $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_Sales::system_order_statuses');
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Order Status'));
         $this->_view->renderLayout();
     }
 }

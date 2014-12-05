@@ -44,14 +44,51 @@ class CreateTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Api\Data\CustomerDataBuilder|\PHPUnit_Framework_MockObject_MockObject */
     protected $customerBuilderMock;
 
-    /** @var \Magento\Customer\Service\V1\CustomerGroupServiceInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $customerGroupServiceMock;
-
     /** @var \Magento\Sales\Model\Quote\Item\Updater|\PHPUnit_Framework_MockObject_MockObject */
     protected $itemUpdater;
 
     /** @var \Magento\Framework\Api\ExtensibleDataObjectConverter|\PHPUnit_Framework_MockObject_MockObject */
     protected $extensibleDataObjectConverterMock;
+
+    /**
+     * @var Product\Quote\Initializer|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $quoteInitializerMock;
+
+    /**
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $customerRepositoryMock;
+
+    /**
+     * @var \Magento\Customer\Api\AddressRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $addressRepositoryMock;
+
+    /**
+     * @var \Magento\Customer\Api\Data\AddressDataBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $addressBuilderMock;
+
+    /**
+     * @var \Magento\Customer\Api\GroupRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $groupRepositoryMock;
+
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $scopeConfigMock;
+
+    /**
+     * @var \Magento\Sales\Model\AdminOrder\EmailSender|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $emailSenderMock;
+
+    /**
+     * @var \Magento\Customer\Api\AccountManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $accountManagementMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -63,20 +100,11 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
         $registryMock = $this->getMock('Magento\Framework\Registry');
-        $configMock = $this->getMock('Magento\Sales\Model\Config', array(), array(), '', false);
-        $this->sessionQuoteMock = $this->getMock('Magento\Backend\Model\Session\Quote', array(), array(), '', false);
-        $loggerMock = $this->getMock('Magento\Framework\Logger', array(), array(), '', false);
-        $copyMock = $this->getMock('Magento\Framework\Object\Copy', array(), array(), '', false);
+        $configMock = $this->getMock('Magento\Sales\Model\Config', [], [], '', false);
+        $this->sessionQuoteMock = $this->getMock('Magento\Backend\Model\Session\Quote', [], [], '', false);
+        $loggerMock = $this->getMock('Magento\Framework\Logger', [], [], '', false);
+        $copyMock = $this->getMock('Magento\Framework\Object\Copy', [], [], '', false);
         $messageManagerMock = $this->getMock('Magento\Framework\Message\ManagerInterface');
-        $customerAccountServiceMock = $this->getMock('Magento\Customer\Service\V1\CustomerAccountServiceInterface');
-        $customerAddressServiceMock = $this->getMock('Magento\Customer\Service\V1\CustomerAddressServiceInterface');
-        $addressBuilderMock = $this->getMock(
-            'Magento\Customer\Service\V1\Data\AddressBuilder',
-            array(),
-            array(),
-            '',
-            false
-        );
         $this->formFactoryMock = $this->getMock(
             'Magento\Customer\Model\Metadata\FormFactory',
             ['create'],
@@ -87,13 +115,13 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $this->customerBuilderMock = $this->getMock(
             'Magento\Customer\Api\Data\CustomerDataBuilder',
             ['mergeDataObjectWithArray', 'populateWithArray', 'create'],
-            array(),
+            [],
             '',
             false
         );
         $this->customerGroupServiceMock = $this->getMock('Magento\Customer\Service\V1\CustomerGroupServiceInterface');
 
-        $this->itemUpdater = $this->getMock('Magento\Sales\Model\Quote\Item\Updater', array(), array(), '', false);
+        $this->itemUpdater = $this->getMock('Magento\Sales\Model\Quote\Item\Updater', [], [], '', false);
 
         $this->objectFactory = $this->getMockBuilder('\Magento\Framework\Object\Factory')
             ->disableOriginalConstructor()
@@ -104,10 +132,62 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\Api\ExtensibleDataObjectConverter'
         )->setMethods(['toFlatArray'])->disableOriginalConstructor()->getMock();
 
+        $this->quoteInitializerMock = $this->getMock(
+            'Magento\Sales\Model\AdminOrder\Product\Quote\Initializer',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->customerRepositoryMock = $this->getMockForAbstractClass(
+            'Magento\Customer\Api\CustomerRepositoryInterface',
+            [],
+            '',
+            false
+        );
+        $this->addressRepositoryMock = $this->getMockForAbstractClass(
+            'Magento\Customer\Api\AddressRepositoryInterface',
+            [],
+            '',
+            false
+        );
+        $this->addressBuilderMock = $this->getMock(
+            'Magento\Customer\Api\Data\AddressDataBuilder',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->groupRepositoryMock = $this->getMockForAbstractClass(
+            'Magento\Customer\Api\GroupRepositoryInterface',
+            [],
+            '',
+            false
+        );
+        $this->scopeConfigMock = $this->getMockForAbstractClass(
+            'Magento\Framework\App\Config\ScopeConfigInterface',
+            [],
+            '',
+            false
+        );
+        $this->emailSenderMock = $this->getMock(
+            'Magento\Sales\Model\AdminOrder\EmailSender',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->accountManagementMock = $this->getMockForAbstractClass(
+            'Magento\Customer\Api\AccountManagementInterface',
+            [],
+            '',
+            false
+        );
+
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->adminOrderCreate = $objectManagerHelper->getObject(
             'Magento\Sales\Model\AdminOrder\Create',
-            array(
+            [
                 'objectManager' => $objectManagerMock,
                 'eventManager' => $eventManagerMock,
                 'coreRegistry' => $registryMock,
@@ -116,30 +196,35 @@ class CreateTest extends \PHPUnit_Framework_TestCase
                 'logger' => $loggerMock,
                 'objectCopyService' => $copyMock,
                 'messageManager' => $messageManagerMock,
-                'customerAccountService' => $customerAccountServiceMock,
-                'customerAddressService' => $customerAddressServiceMock,
-                'customerAddressBuilder' => $addressBuilderMock,
+                'quoteInitializer' => $this->quoteInitializerMock,
+                'customerRepository' => $this->customerRepositoryMock,
+                'addressRepository' => $this->addressRepositoryMock,
+                'addressBuilder' => $this->addressBuilderMock,
                 'metadataFormFactory' => $this->formFactoryMock,
                 'customerBuilder' => $this->customerBuilderMock,
-                'customerGroupService' => $this->customerGroupServiceMock,
+                'groupRepository' => $this->groupRepositoryMock,
                 'quoteItemUpdater' => $this->itemUpdater,
                 'extensibleDataObjectConverter' => $this->extensibleDataObjectConverterMock,
-                'objectFactory' => $this->objectFactory
-            )
+                'objectFactory' => $this->objectFactory,
+                'accountManagement' => $this->accountManagementMock,
+            ]
         );
     }
 
     public function testSetAccountData()
     {
         $taxClassId = 1;
-        $attributes = array(array('email', 'user@example.com'), array('group_id', 1));
-        $attributeMocks = array();
+        $attributes = [
+            ['email', 'user@example.com'],
+            ['group_id', 1]
+        ];
+        $attributeMocks = [];
 
         foreach ($attributes as $attribute) {
             $attributeMock = $this->getMock(
                 'Magento\Customer\Service\V1\Data\Eav\AttributeMetadata',
-                array(),
-                array(),
+                [],
+                [],
                 '',
                 false
             );
@@ -149,66 +234,52 @@ class CreateTest extends \PHPUnit_Framework_TestCase
             $attributeMocks[] = $attributeMock;
         }
 
-        $customerGroupMock = $this->getMock(
-            'Magento\Customer\Service\V1\Data\CustomerGroup',
-            array(),
-            array(),
+        $customerGroupMock = $this->getMockForAbstractClass(
+            'Magento\Customer\Api\Data\GroupInterface',
+            [],
             '',
-            false
+            false,
+            true,
+            true,
+            ['getTaxClassId']
         );
         $customerGroupMock->expects($this->once())->method('getTaxClassId')->will($this->returnValue($taxClassId));
-        $customerFormMock = $this->getMock('Magento\Customer\Model\Metadata\Form', array(), array(), '', false);
+        $customerFormMock = $this->getMock('Magento\Customer\Model\Metadata\Form', [], [], '', false);
         $customerFormMock->expects($this->any())->method('getAttributes')->will($this->returnValue($attributeMocks));
-        $customerFormMock->expects($this->any())->method('extractData')->will($this->returnValue(array()));
-        $customerFormMock->expects($this->any())->method('restoreData')->will($this->returnValue(array()));
+        $customerFormMock->expects($this->any())->method('extractData')->will($this->returnValue([]));
+        $customerFormMock->expects($this->any())->method('restoreData')->will($this->returnValue([]));
 
-        $customerFormMock->expects(
-            $this->any()
-        )->method(
-            'prepareRequest'
-        )->will(
-            $this->returnValue($this->getMock('Magento\Framework\App\RequestInterface'))
-        );
+        $customerFormMock->expects($this->any())
+            ->method('prepareRequest')
+            ->will($this->returnValue($this->getMock('Magento\Framework\App\RequestInterface')));
 
         $customerMock = $this->getMock('Magento\Customer\Api\Data\CustomerInterface', array(), array(), '', false);
         $this->extensibleDataObjectConverterMock->expects($this->any())->method('toFlatArray')
             ->will($this->returnValue(array('email' => 'user@example.com', 'group_id' => 1)));
         $quoteMock = $this->getMock('Magento\Sales\Model\Quote', array(), array(), '', false);
-        $quoteMock->expects($this->any())->method('getCustomerData')->will($this->returnValue($customerMock));
-
-        $quoteMock->expects(
-            $this->once()
-        )->method(
-            'addData'
-        )->with(
-            array(
+        $quoteMock->expects($this->any())->method('getCustomer')->will($this->returnValue($customerMock));
+        $quoteMock->expects($this->once())
+            ->method('addData')
+            ->with(
+            [
                 'customer_email' => $attributes[0][1],
                 'customer_group_id' => $attributes[1][1],
                 'customer_tax_class_id' => $taxClassId
-            )
+            ]
         );
 
         $this->formFactoryMock->expects($this->any())->method('create')->will($this->returnValue($customerFormMock));
         $this->sessionQuoteMock->expects($this->any())->method('getQuote')->will($this->returnValue($quoteMock));
-        $this->customerBuilderMock->expects($this->any())->method('populateWithArray')->will($this->returnSelf());
+        $this->customerBuilderMock->expects($this->any())
+            ->method('mergeDataObjectWithArray')
+            ->will($this->returnSelf());
         $this->customerBuilderMock->expects($this->any())->method('create')->will($this->returnValue($customerMock));
-        $this->customerBuilderMock->expects(
-            $this->any()
-        )->method(
-            'mergeDataObjectWithArray'
-        )->will(
-            $this->returnValue($this->customerBuilderMock)
-        );
 
-        $this->customerGroupServiceMock->expects(
-            $this->once()
-        )->method(
-            'getGroup'
-        )->will(
-            $this->returnValue($customerGroupMock)
-        );
+        $this->groupRepositoryMock->expects($this->once())
+            ->method('getById')
+            ->will($this->returnValue($customerGroupMock));
 
-        $this->adminOrderCreate->setAccountData(array());
+        $this->adminOrderCreate->setAccountData([]);
     }
 
     public function testUpdateQuoteItemsNotArray()
@@ -218,17 +289,17 @@ class CreateTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateQuoteItemsEmptyConfiguredOption()
     {
-        $items = array(
-            1 => array(
+        $items = [
+            1 => [
                 'qty' => 10,
                 'configured' => false,
                 'action' => false
-            )
-        );
+            ]
+        ];
 
-        $itemMock = $this->getMock('Magento\Sales\Model\Quote\Item', array(), array(), '', false);
+        $itemMock = $this->getMock('Magento\Sales\Model\Quote\Item', [], [], '', false);
 
-        $quoteMock = $this->getMock('Magento\Sales\Model\Quote', array(), array(), '', false);
+        $quoteMock = $this->getMock('Magento\Sales\Model\Quote', [], [], '', false);
         $quoteMock->expects($this->once())
             ->method('getItemById')
             ->will($this->returnValue($itemMock));
@@ -246,20 +317,20 @@ class CreateTest extends \PHPUnit_Framework_TestCase
     public function testUpdateQuoteItemsWithConfiguredOption()
     {
         $qty = 100000000;
-        $items = array(
-            1 => array(
+        $items = [
+            1 => [
                 'qty' => 10,
                 'configured' => true,
                 'action' => false
-            )
-        );
+            ]
+        ];
 
-        $itemMock = $this->getMock('Magento\Sales\Model\Quote\Item', array(), array(), '', false);
+        $itemMock = $this->getMock('Magento\Sales\Model\Quote\Item', [], [], '', false);
         $itemMock->expects($this->once())
             ->method('getQty')
             ->will($this->returnValue($qty));
 
-        $quoteMock = $this->getMock('Magento\Sales\Model\Quote', array(), array(), '', false);
+        $quoteMock = $this->getMock('Magento\Sales\Model\Quote', [], [], '', false);
         $quoteMock->expects($this->once())
             ->method('updateItem')
             ->will($this->returnValue($itemMock));

@@ -2910,4 +2910,28 @@ return array(
     ['Magento\Framework\Module\DependencyManagerInterface'],
     ['Magento\Framework\App\Arguments\Loader'],
     ['Magento\Framework\App\Arguments', 'Magento\Framework\App\DeploymentConfig'],
+    ['Magento\Bundle\Service\V1\Data\Product\Link', 'Magento\Bundle\Api\Data\LinkInterface'],
+    ['Magento\Bundle\Service\V1\Data\Product\Option', 'Magento\Bundle\Api\Data\OptionInterface'],
+    [
+        'Magento\Bundle\Service\V1\Product\Link\ReadServiceInterface',
+        'Magento\Bundle\Api\ProductLinkManagementInterface'
+    ],
+    [
+        'Magento\Bundle\Service\V1\Product\Link\WriteServiceInterface',
+        'Magento\Bundle\Api\ProductLinkManagementInterface'
+    ],
+    [
+        'Magento\Bundle\Service\V1\Product\Option\ReadServiceInterface',
+        'Magento\Bundle\Api\ProductOptionRepositoryInterface'
+    ],
+    [
+        'Magento\Bundle\Service\V1\Product\Option\WriteServiceInterface',
+        'Magento\Bundle\Api\ProductOptionRepositoryInterface'
+    ],
+    [
+        'Magento\Bundle\Service\V1\Product\Option\Type\ReadServiceInterface',
+        'Magento\Bundle\Api\ProductOptionTypeListInterface'
+    ],
+    ['Magento\Sales\Controller\Adminhtml\Order\InvoiceLoader'],
+    ['Magento\Sales\Model\Resource\AbstractResource', 'Magento\Framework\Model\Resource\Db\AbstractDb'],
 );

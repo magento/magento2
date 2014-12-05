@@ -28,15 +28,5 @@
         <sequence>
             <module name="Magento_Catalog"/>
         </sequence>
-        <depends>
-            <module name="Magento_Store"/>
-            <module name="Magento_Core"/>
-            <module name="Magento_Backend"/>
-            <module name="Magento_Catalog"/>
-            <module name="Magento_Customer"/>
-            <module name="Magento_Directory"/>
-            <module name="Magento_Eav"/>
-            <module name="Magento_Tax"/>
-        </depends>
     </module>
 </config>

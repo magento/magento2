@@ -31,8 +31,6 @@ class Index extends \Magento\AdminNotification\Controller\Adminhtml\Notification
      */
     public function execute()
     {
-        $this->_title->add(__('Notifications'));
-
         $this->_view->loadLayout();
         $this->_setActiveMenu(
             'Magento_AdminNotification::system_adminnotification'
@@ -40,6 +38,7 @@ class Index extends \Magento\AdminNotification\Controller\Adminhtml\Notification
             __('Messages Inbox'),
             __('Messages Inbox')
         );
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Notifications'));
         $this->_view->renderLayout();
     }
 }

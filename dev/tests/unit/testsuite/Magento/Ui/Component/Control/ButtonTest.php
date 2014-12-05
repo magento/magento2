@@ -74,13 +74,52 @@ class ButtonTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAttributesHtml()
     {
-        $expected = 'type="button" class="action- scalable classValue disabled" ' .
-            'disabled="disabled" data-attributeKey="attributeValue" ';
+        $expected = 'type="button" class="action- scalable classValue disabled" '
+            . 'onclick="setLocation(\'url2\');" disabled="disabled" data-attributeKey="attributeValue" ';
         $this->button->setDisabled(true);
         $this->button->setData('url', 'url2');
         $this->button->setData('class', 'classValue');
         $this->button->setDataAttribute(['attributeKey' => 'attributeValue']);
         $this->escaperMock->expects($this->any())->method('escapeHtml')->withAnyParameters()->willReturnArgument(0);
         $this->assertEquals($expected, $this->button->getAttributesHtml());
+    }
+
+    /**
+     * @param string|null $onClick
+     * @param string|null $url
+     * @param string $getUrl
+     * @param string|null $result
+     * @dataProvider dataProviderGetOnClick
+     */
+    public function testGetOnClick($onClick, $url, $getUrl, $result)
+    {
+        if (!is_null($onClick)) {
+            $this->button->setData('on_click', $onClick);
+        }
+        if (!is_null($url)) {
+            $this->button->setData('url', $url);
+        }
+        $this->urlBuilderMock->expects($this->any())
+            ->method('getUrl')
+            ->with('', [])
+            ->willReturn($getUrl);
+
+        $this->assertEquals($result, $this->button->getOnClick());
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderGetOnClick()
+    {
+        return [
+            [null, null, '', null],
+            [null, null, 'get_url', 'setLocation(\'get_url\');'],
+            ['on_click', null, null, 'on_click'],
+            ['on_click', 'url', 'get_url', 'on_click'],
+            ['on_click', null, '', 'on_click'],
+            [null, 'url', 'get_url', 'setLocation(\'url\');'],
+            [null, 'url', '', 'setLocation(\'url\');'],
+        ];
     }
 }

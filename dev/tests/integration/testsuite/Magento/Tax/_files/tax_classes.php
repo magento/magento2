@@ -56,13 +56,13 @@ $productTaxClass2 = $objectManager->create(
     \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_PRODUCT
 )->save();
 
-$taxRate = array(
+$taxRate = [
     'tax_country_id' => 'US',
     'tax_region_id' => '12',
     'tax_postcode' => '*',
     'code' => '*',
     'rate' => '7.5'
-);
+];
 $rate = $objectManager->create('Magento\Tax\Model\Calculation\Rate')->setData($taxRate)->save();
 
 /** @var Magento\Framework\Registry $registry */
@@ -70,14 +70,14 @@ $registry = $objectManager->get('Magento\Framework\Registry');
 $registry->unregister('_fixture/Magento_Tax_Model_Calculation_Rate');
 $registry->register('_fixture/Magento_Tax_Model_Calculation_Rate', $rate);
 
-$ruleData = array(
+$ruleData = [
     'code' => 'Test Rule',
     'priority' => '0',
     'position' => '0',
-    'customer_tax_class_ids' => array($customerTaxClass1->getId(), $customerTaxClass2->getId()),
-    'product_tax_class_ids' => array($productTaxClass1->getId(), $productTaxClass2->getId()),
-    'tax_rate_ids' => array($rate->getId())
-);
+    'customer_tax_class_ids' => [$customerTaxClass1->getId(), $customerTaxClass2->getId()],
+    'product_tax_class_ids' => [$productTaxClass1->getId(), $productTaxClass2->getId()],
+    'tax_rate_ids' => [$rate->getId()]
+];
 
 $taxRule = $objectManager->create('Magento\Tax\Model\Calculation\Rule')->setData($ruleData)->save();
 

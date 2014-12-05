@@ -22,9 +22,14 @@
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
+//
+//    Common
+//--------------------------------------
+
+.responsive-common() {
 
 .form.send.friend {
-    &:extend(.abstract-add-fields all);
+    &:extend(.abs-add-fields all);
 }
 
 .action.mailto.friend {
@@ -42,11 +47,13 @@
     }
 }
 
+}
+
 //
 //    Desktop
 //--------------------------------------
-.responsive(@break) when (@break = @screen-m) {
+.responsive-min-l(@break) when (@break = @screen-m) {
     .form.send.friend {
-        &:extend(.abstract-add-fields-desktop all);
+        &:extend(.abs-add-fields-desktop all);
     }
 }

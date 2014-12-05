@@ -24,9 +24,9 @@
  */
 namespace Magento\Customer\Controller\Account;
 
+use Magento\Customer\Model\AccountManagement;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Model\Url;
-use Magento\Customer\Model\AccountManagement;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -243,7 +243,7 @@ class CreatePost extends \Magento\Customer\Controller\Account
             );
 
             $confirmationStatus = $this->accountManagement->getConfirmationStatus($customer->getId());
-            if ($confirmationStatus === AccountManagement::ACCOUNT_CONFIRMATION_REQUIRED) {
+            if ($confirmationStatus === AccountManagementInterface::ACCOUNT_CONFIRMATION_REQUIRED) {
                 $email = $this->customerUrl->getEmailConfirmationUrl($customer->getEmail());
                 // @codingStandardsIgnoreStart
                 $this->messageManager->addSuccess(

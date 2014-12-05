@@ -59,7 +59,7 @@ class GridOnly extends \Magento\Catalog\Controller\Adminhtml\Product
      */
     public function execute()
     {
-        $this->_title->add(__('Products'));
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Products'));
 
         $this->productBuilder->build($this->getRequest());
 

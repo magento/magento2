@@ -35,8 +35,6 @@ class Tax extends \Magento\Reports\Controller\Adminhtml\Report\Sales
      */
     public function execute()
     {
-        $this->_title->add(__('Tax Report'));
-
         $this->_showLastExecutionTime(Flag::REPORT_TAX_FLAG_CODE, 'tax');
 
         $this->_initAction()->_setActiveMenu(
@@ -45,6 +43,7 @@ class Tax extends \Magento\Reports\Controller\Adminhtml\Report\Sales
             __('Tax'),
             __('Tax')
         );
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Tax Report'));
 
         $gridBlock = $this->_view->getLayout()->getBlock('adminhtml_sales_tax.grid');
         $filterFormBlock = $this->_view->getLayout()->getBlock('grid.filter.form');

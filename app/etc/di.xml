@@ -24,6 +24,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Magento\Framework\ObjectManager\FactoryInterface" type="Magento\Framework\ObjectManager\Factory\Dynamic\Developer" />
     <preference for="Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface" type="Magento\Framework\Search\Adapter\Mysql\Filter\Preprocessor" />
     <preference for="Magento\Framework\Search\Adapter\Mysql\Field\ResolverInterface" type="Magento\Framework\Search\Adapter\Mysql\Field\Resolver" />
     <preference for="Magento\Framework\App\RequestInterface" type="Magento\Framework\App\Request\Http" />
@@ -40,6 +41,7 @@
     <preference for="Magento\Framework\View\Design\Theme\ResolverInterface" type="Magento\Core\Model\Theme\Resolver" />
     <preference for="Magento\Framework\View\ConfigInterface" type="Magento\Framework\View\Config" />
     <preference for="Magento\Framework\Locale\ListsInterface" type="Magento\Framework\Locale\Lists" />
+    <preference for="Magento\Framework\Api\AttributeTypeResolverInterface" type="Magento\Framework\Reflection\AttributeTypeResolver" />
     <type name="Magento\Store\Model\Store">
         <arguments>
             <argument name="currencyInstalled" xsi:type="string">system/currency/installed</argument>
@@ -304,7 +306,7 @@
     </virtualType>
     <virtualType name="layoutObjectArgumentInterpreter" type="Magento\Framework\View\Layout\Argument\Interpreter\Object">
         <arguments>
-            <argument name="expectedClass" xsi:type="string">Magento\Framework\Data\DataSourceInterface</argument>
+            <argument name="expectedClass" xsi:type="string">Magento\Framework\Data\CollectionDataSourceInterface</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Framework\View\Layout\Argument\Interpreter\NamedParams">
@@ -312,7 +314,7 @@
             <argument name="paramInterpreter" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\String</argument>
         </arguments>
     </type>
-    <virtualType name="containerRenderPool" type="Magento\Framework\View\Layout\Reader\Pool">
+    <virtualType name="containerRenderPool" type="Magento\Framework\View\Layout\ReaderPool">
         <arguments>
             <argument name="readers" xsi:type="array">
                 <item name="container" xsi:type="string">Magento\Framework\View\Layout\Reader\Container</item>
@@ -326,7 +328,7 @@
             <argument name="readerPool" xsi:type="object">containerRenderPool</argument>
         </arguments>
     </type>
-    <virtualType name="blockRenderPool" type="Magento\Framework\View\Layout\Reader\Pool">
+    <virtualType name="blockRenderPool" type="Magento\Framework\View\Layout\ReaderPool">
         <arguments>
             <argument name="readers" xsi:type="array">
                 <item name="container" xsi:type="string">Magento\Framework\View\Layout\Reader\Container</item>
@@ -348,7 +350,7 @@
             <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
-    <virtualType name="bodyRenderPool" type="Magento\Framework\View\Layout\Reader\Pool">
+    <virtualType name="bodyRenderPool" type="Magento\Framework\View\Layout\ReaderPool">
         <arguments>
             <argument name="readers" xsi:type="array">
                 <item name="container" xsi:type="string">Magento\Framework\View\Layout\Reader\Container</item>
@@ -364,7 +366,7 @@
             <argument name="readerPool" xsi:type="object">bodyRenderPool</argument>
         </arguments>
     </type>
-    <virtualType name="commonRenderPool" type="Magento\Framework\View\Layout\Reader\Pool">
+    <virtualType name="commonRenderPool" type="Magento\Framework\View\Layout\ReaderPool">
         <arguments>
             <argument name="readers" xsi:type="array">
                 <item name="html" xsi:type="string">Magento\Framework\View\Page\Config\Reader\Html</item>
@@ -380,10 +382,10 @@
     </virtualType>
     <type name="Magento\Framework\View\Layout">
         <arguments>
-            <argument name="reader" xsi:type="object" shared="false">commonRenderPool</argument>
+            <argument name="readerPool" xsi:type="object" shared="false">commonRenderPool</argument>
         </arguments>
     </type>
-    <virtualType name="genericLayoutRenderPool" type="Magento\Framework\View\Layout\Reader\Pool">
+    <virtualType name="genericLayoutRenderPool" type="Magento\Framework\View\Layout\ReaderPool">
         <arguments>
             <argument name="readers" xsi:type="array">
                 <item name="container" xsi:type="string">Magento\Framework\View\Layout\Reader\Container</item>
@@ -399,7 +401,7 @@
             <argument name="layoutReaderPool" xsi:type="object">genericLayoutRenderPool</argument>
         </arguments>
     </type>
-    <virtualType name="pageConfigRenderPool" type="Magento\Framework\View\Layout\Reader\Pool">
+    <virtualType name="pageConfigRenderPool" type="Magento\Framework\View\Layout\ReaderPool">
         <arguments>
             <argument name="readers" xsi:type="array">
                 <item name="html" xsi:type="string">Magento\Framework\View\Page\Config\Reader\Html</item>
@@ -419,9 +421,21 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="pageLayoutGeneratorPool" type="Magento\Framework\View\Layout\GeneratorPool">
+        <arguments>
+            <argument name="generators" xsi:type="array">
+                <item name="head" xsi:type="object">Magento\Framework\View\Page\Config\Generator\Head</item>
+                <item name="body" xsi:type="object">Magento\Framework\View\Page\Config\Generator\Body</item>
+                <item name="block" xsi:type="object">Magento\Framework\View\Layout\Generator\Block</item>
+                <item name="container" xsi:type="object">Magento\Framework\View\Layout\Generator\Container</item>
+                <item name="ui_component" xsi:type="object">Magento\Framework\View\Layout\Generator\UiComponent</item>
+            </argument>
+        </arguments>
+    </virtualType>
     <type name="Magento\Framework\View\Result\Page">
         <arguments>
             <argument name="layoutReaderPool" xsi:type="object">pageConfigRenderPool</argument>
+            <argument name="generatorPool" xsi:type="object">pageLayoutGeneratorPool</argument>
             <argument name="template" xsi:type="string">Magento_Theme::root.phtml</argument>
         </arguments>
     </type>

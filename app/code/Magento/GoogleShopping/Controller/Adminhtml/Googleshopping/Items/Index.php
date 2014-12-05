@@ -53,8 +53,6 @@ class Index extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\
      */
     public function execute()
     {
-        $this->_title->add(__('Google Content Items'));
-
         if (0 === (int)$this->getRequest()->getParam('store')) {
             $this->_redirect(
                 'adminhtml/*/',
@@ -69,6 +67,7 @@ class Index extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\
         }
 
         $this->_initAction();
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Google Content Items'));
 
         $contentBlock = $this->_view->getLayout()->createBlock(
             'Magento\GoogleShopping\Block\Adminhtml\Items'

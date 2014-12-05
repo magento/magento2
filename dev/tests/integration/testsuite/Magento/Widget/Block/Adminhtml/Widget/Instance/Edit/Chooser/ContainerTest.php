@@ -31,13 +31,13 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Container
      */
-    protected $_block = null;
+    protected $block = null;
 
     protected function setUp()
     {
         parent::setUp();
 
-        $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+        $this->block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\View\LayoutInterface'
         )->createBlock(
             'Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Container'
@@ -46,9 +46,21 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     public function testSetGetAllowedContainers()
     {
-        $this->assertEmpty($this->_block->getAllowedContainers());
+        $this->assertEmpty($this->block->getAllowedContainers());
         $containers = array('some_container', 'another_container');
-        $this->_block->setAllowedContainers($containers);
-        $this->assertEquals($containers, $this->_block->getAllowedContainers());
+        $this->block->setAllowedContainers($containers);
+        $this->assertEquals($containers, $this->block->getAllowedContainers());
+    }
+
+    /**
+     * Test verify that theme contains available containers for widget
+     */
+    public function testAvailableContainers()
+    {
+        $design = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\View\DesignInterface'
+        );
+        $this->block->setTheme($design->getDesignTheme()->getId());
+        $this->assertContains('<option value="before.body.end" >', $this->block->toHtml());
     }
 }

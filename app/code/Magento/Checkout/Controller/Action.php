@@ -23,8 +23,8 @@
  */
 namespace Magento\Checkout\Controller;
 
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface as CustomerAccountService;
-use Magento\Customer\Service\V1\CustomerMetadataServiceInterface as CustomerMetadataService;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
@@ -38,30 +38,30 @@ abstract class Action extends \Magento\Framework\App\Action\Action
     protected $_customerSession;
 
     /**
-     * @var CustomerAccountService
+     * @var CustomerRepositoryInterface
      */
-    protected $_customerAccountService;
+    protected $customerRepository;
 
     /**
-     * @var CustomerMetadataService
+     * @var AccountManagementInterface
      */
-    protected $_customerMetadataService;
+    protected $accountManagement;
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param CustomerAccountService $customerAccountService
-     * @param CustomerMetadataService $customerMetadataService
+     * @param CustomerRepositoryInterface $customerRepository
+     * @param AccountManagementInterface $accountManagement
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
-        CustomerAccountService $customerAccountService,
-        CustomerMetadataService $customerMetadataService
+        CustomerRepositoryInterface $customerRepository,
+        AccountManagementInterface $accountManagement
     ) {
         $this->_customerSession = $customerSession;
-        $this->_customerAccountService = $customerAccountService;
-        $this->_customerMetadataService = $customerMetadataService;
+        $this->customerRepository = $customerRepository;
+        $this->accountManagement = $accountManagement;
         parent::__construct($context);
     }
 
@@ -77,17 +77,13 @@ abstract class Action extends \Magento\Framework\App\Action\Action
     protected function _preDispatchValidateCustomer($redirect = true, $addErrors = true)
     {
         try {
-            $customerId = $this->_customerSession->getCustomerId();
-            $customer = $this->_customerAccountService->getCustomer($customerId);
+            $customer = $this->customerRepository->getById($this->_customerSession->getCustomerId());
         } catch (NoSuchEntityException $e) {
             return true;
         }
 
         if (isset($customer)) {
-            $validationResult = $this->_customerAccountService->validateCustomerData(
-                $customer,
-                $this->_customerMetadataService->getAllAttributesMetadata()
-            );
+            $validationResult = $this->accountManagement->validate($customer);
             if (!$validationResult->isValid()) {
                 if ($addErrors) {
                     foreach ($validationResult->getMessages() as $error) {

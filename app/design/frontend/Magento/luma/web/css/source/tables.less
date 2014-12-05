@@ -22,6 +22,12 @@
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
+//
+//    Common
+//--------------------------------------
+
+.responsive-common() {
+
 .table-wrapper {
     margin-bottom: @indent-base;
 }
@@ -32,6 +38,7 @@ table {
 
 .table {
     tfoot {
+        background: @sidebar-background;
         > tr:first-child {
             th,
             td {
@@ -41,7 +48,6 @@ table {
         }
         th,
         td {
-            background: @sidebar-background;
             border: 0;
         }
         .mark {
@@ -51,15 +57,17 @@ table {
     }
 }
 
+}
+
 //
 //    Mobile
 //--------------------------------------
-.responsive-smaller(@break) when (@break = @screen-s) {
+.responsive-max-m(@break) when (@break = @screen-s) {
     .table-wrapper {
         border-top: @table-border-width @table-border-style @table-border-color;
         .table-overflow();
         position: relative; // to hide unnecessary horizontal scrollbar in Safari
-        .table {
+        .table:not(.totals):not(.cart) {
             .table-responsive();
             tbody {
                 > tr {
@@ -76,18 +84,28 @@ table {
                 }
             }
             tfoot {
-                > tr:first-child {
-                    td {
-                        border-top: 0;
-                        padding-top: 15px;
+                display: block;
+                tr {
+                    display: block;
+                    &:extend(.abs-add-clearfix-mobile all);
+                    &:first-child {
+                        th,
+                        td {
+                            padding-top: @indent-base;
+                        }
                     }
                 }
                 .mark {
-                    display: none;
+                    box-sizing: border-box;
+                    float: left;
+                    text-align: left;
+                    width: 70%;
                 }
                 .amount {
-                    padding-top: 0;
-                    text-align: left;
+                    box-sizing: border-box;
+                    float: left;
+                    text-align: right;
+                    width: 30%;
                 }
                 .grand.totals {
                     .font-size(16);
@@ -103,7 +121,7 @@ table {
 //
 //    Desktop
 //--------------------------------------
-.responsive(@break) when (@break = @screen-s) {
+.responsive-min-m(@break) when (@break = @screen-s) {
     .table {
         .table-bordered(
             @_table_type: horizontal_body

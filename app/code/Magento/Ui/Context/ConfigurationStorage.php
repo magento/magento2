@@ -23,7 +23,7 @@
  */
 namespace Magento\Ui\Context;
 
-use Magento\Framework\Data\Collection as DataCollection;
+use Magento\Framework\Data\CollectionDataSourceInterface;
 use Magento\Framework\View\Element\UiComponent\ConfigInterface;
 use Magento\Framework\View\Element\UiComponent\ConfigStorageInterface;
 use Magento\Framework\View\Element\UiComponent\DataProviderInterface;
@@ -57,7 +57,7 @@ class ConfigurationStorage implements ConfigStorageInterface
     /**
      * Data collection storage
      *
-     * @var DataCollection[]
+     * @var CollectionDataSourceInterface[]
      */
     protected $collectionStorage = [];
 
@@ -219,7 +219,7 @@ class ConfigurationStorage implements ConfigStorageInterface
     /**
      * @inheritdoc
      */
-    public function addDataCollection($key, DataCollection $dataCollection)
+    public function addDataCollection($key, CollectionDataSourceInterface $dataCollection)
     {
         if (!isset($this->collectionStorage[$key])) {
             $this->collectionStorage[$key] = $dataCollection;
@@ -240,7 +240,7 @@ class ConfigurationStorage implements ConfigStorageInterface
     /**
      * @inheritdoc
      */
-    public function updateDataCollection($key, DataCollection $dataCollection)
+    public function updateDataCollection($key, CollectionDataSourceInterface $dataCollection)
     {
         if (isset($this->collectionStorage[$key])) {
             $this->collectionStorage[$key] = $dataCollection;

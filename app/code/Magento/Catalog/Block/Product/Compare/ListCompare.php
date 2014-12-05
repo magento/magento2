@@ -153,7 +153,9 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
      */
     protected function _prepareLayout()
     {
-        $this->pageConfig->setTitle(__('Products Comparison List') . ' - ' . $this->pageConfig->getDefaultTitle());
+        $this->pageConfig->getTitle()->set(
+            __('Products Comparison List') . ' - ' . $this->pageConfig->getTitle()->getDefault()
+        );
         return parent::_prepareLayout();
     }
 

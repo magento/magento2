@@ -53,12 +53,12 @@ class CircularTest extends \PHPUnit_Framework_TestCase
     public function testBuild()
     {
         $this->builder->build(
-            array(
-                'parse' => array(
-                    'files_for_parse' => array($this->fixtureDir . 'config4.xml', $this->fixtureDir . 'config5.xml')
-                ),
-                'write' => array('report_filename' => $this->sourceFilename)
-            )
+            [
+                'parse' => [
+                    'files_for_parse' => [$this->fixtureDir . 'composer4.json', $this->fixtureDir . 'composer5.json']
+                ],
+                'write' => ['report_filename' => $this->sourceFilename]
+            ]
         );
 
         $this->assertFileEquals($this->fixtureDir . 'expected/circular-dependencies.csv', $this->sourceFilename);
@@ -67,10 +67,10 @@ class CircularTest extends \PHPUnit_Framework_TestCase
     public function testBuildWithoutDependencies()
     {
         $this->builder->build(
-            array(
-                'parse' => array('files_for_parse' => array($this->fixtureDir . 'config3.xml')),
-                'write' => array('report_filename' => $this->sourceFilename)
-            )
+            [
+                'parse' => ['files_for_parse' => [$this->fixtureDir . 'composer3.json']],
+                'write' => ['report_filename' => $this->sourceFilename]
+            ]
         );
 
         $this->assertFileEquals(

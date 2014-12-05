@@ -64,9 +64,9 @@ class MassOperations
     /**
      * Product factory
      *
-     * @var \Magento\Catalog\Model\ProductFactory
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
-    protected $_productFactory;
+    protected $productRepository;
 
     /**
      * Notifier
@@ -85,7 +85,7 @@ class MassOperations
     /**
      * @param \Magento\GoogleShopping\Model\Resource\Item\CollectionFactory $collectionFactory
      * @param \Magento\GoogleShopping\Model\ItemFactory $itemFactory
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
+     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Framework\Notification\NotifierInterface $notifier
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Logger $logger
@@ -96,7 +96,7 @@ class MassOperations
     public function __construct(
         \Magento\GoogleShopping\Model\Resource\Item\CollectionFactory $collectionFactory,
         \Magento\GoogleShopping\Model\ItemFactory $itemFactory,
-        \Magento\Catalog\Model\ProductFactory $productFactory,
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Framework\Notification\NotifierInterface $notifier,
         \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Framework\Logger $logger,
@@ -106,7 +106,7 @@ class MassOperations
     ) {
         $this->_collectionFactory = $collectionFactory;
         $this->_itemFactory = $itemFactory;
-        $this->_productFactory = $productFactory;
+        $this->productRepository = $productRepository;
         $this->_notifier = $notifier;
         $this->_storeManager = $storeManager;
         $this->_gleShoppingData = $gleShoppingData;
@@ -172,15 +172,14 @@ class MassOperations
                     break;
                 }
                 try {
-                    $product = $this->_productFactory->create()->setStoreId($storeId)->load($productId);
-
-                    if ($product->getId()) {
-                        $item = $this->_itemFactory->create();
-                        $item->insertItem($product)->save();
-                        // The product was added successfully
-                        $totalAdded++;
-                    }
-                } catch (\Zend_Gdata_App_CaptchaRequiredException $e) {
+                    $product = $this->productRepository->getById($productId, false, $storeId);
+                    $item = $this->_itemFactory->create();
+                    $item->insertItem($product)->save();
+                    // The product was added successfully
+                    $totalAdded++;
+                } catch (\Magento\Framework\Exception\NoSuchEntityException $noEntityException) {
+                }
+                catch (\Zend_Gdata_App_CaptchaRequiredException $e) {
                     throw $e;
                 } catch (\Zend_Gdata_App_Exception $e) {
                     $errors[] = $this->_gleShoppingData->parseGdataExceptionMessage($e->getMessage(), $product);

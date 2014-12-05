@@ -33,7 +33,6 @@ class Preview extends \Magento\Newsletter\Controller\Adminhtml\Template
      */
     public function execute()
     {
-        $this->_setTitle();
         $this->_view->loadLayout();
 
         $data = $this->getRequest()->getParams();
@@ -46,8 +45,8 @@ class Preview extends \Magento\Newsletter\Controller\Adminhtml\Template
         $data['preview_store_id'] = $this->_objectManager->get(
             'Magento\Store\Model\StoreManager'
         )->getDefaultStoreView()->getId();
-
         $this->_view->getLayout()->getBlock('preview_form')->setFormData($data);
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Newsletter Templates'));
         $this->_view->renderLayout();
     }
 }

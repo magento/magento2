@@ -41,7 +41,6 @@ use Magento\CatalogInventory\Api\StockItemRepositoryInterface as StockItemReposi
 
 /**
  * Class StockItemRepository
- * @api
  */
 class StockItemRepository implements StockItemRepositoryInterface
 {
@@ -186,7 +185,7 @@ class StockItemRepository implements StockItemRepositoryInterface
     {
         $stockItem = $this->stockItemFactory->create();
         $this->resource->load($stockItem, $stockItemId);
-        if (!$stockItem->getId()) {
+        if (!$stockItem->getItemId()) {
             throw new NoSuchEntityException(sprintf('Stock Item with id "%s" does not exist.', $stockItemId));
         }
         return $stockItem;

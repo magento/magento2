@@ -40,7 +40,7 @@ class Sample_Proxy extends \Magento\Framework\ObjectManager\Code\Generator\Sampl
      * @param string $instanceName
      * @param bool $shared
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, $instanceName = 'Magento\Framework\ObjectManager\Code\Generator\Sample', $shared = true)
+    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, $instanceName = 'Magento\\Framework\\ObjectManager\\Code\\Generator\\Sample', $shared = true)
     {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;

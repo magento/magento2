@@ -56,7 +56,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $object->getProduct();
         if (!$product instanceof \Magento\Catalog\Model\Product) {
-            $product = $this->_productFactory->create()->load($object->getProductId());
+            $product = $this->productRepository->getById($object->getProductId());
         }
 
         $product->setQuoteItemQty(

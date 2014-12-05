@@ -51,12 +51,12 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             ->addFilter([$filterBuilder->setField('tax_class_id')->setValue(5)->create()])
             ->create();
 
-        $customerGroupServiceMock = $this->getMockBuilder('Magento\Customer\Service\V1\CustomerGroupService')
-            ->setMethods(['searchGroups'])
+        $customerGroupServiceMock = $this->getMockBuilder('Magento\Customer\Api\GroupRepositoryInterface')
+            ->setMethods(['getList'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $customerGroupServiceMock->expects($this->once())
-            ->method('searchGroups')
+            ->method('getList')
             ->with($expectedSearchCriteria)
             ->willReturn($searchResultsMock);
 
@@ -64,7 +64,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         $model = $objectManagerHelper->getObject(
             'Magento\Tax\Model\TaxClass\Type\Customer',
             [
-                'groupService' => $customerGroupServiceMock,
+                'customerGroupRepository' => $customerGroupServiceMock,
                 'searchCriteriaBuilder' => $searchCriteriaBuilder,
                 'filterBuilder' => $filterBuilder,
                 'data' => ['id' => 5]

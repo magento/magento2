@@ -66,12 +66,6 @@ class View extends \Magento\Backend\App\Action
         $this->creditmemoLoader->setInvoiceId($this->getRequest()->getParam('invoice_id'));
         $creditmemo = $this->creditmemoLoader->load();
         if ($creditmemo) {
-            if ($creditmemo->getInvoice()) {
-                $this->_title->add(__("View Memo for #%1", $creditmemo->getInvoice()->getIncrementId()));
-            } else {
-                $this->_title->add(__("View Memo"));
-            }
-
             $this->_view->loadLayout();
             $this->_view->getLayout()->getBlock(
                 'sales_creditmemo_view'
@@ -79,6 +73,13 @@ class View extends \Magento\Backend\App\Action
                 $this->getRequest()->getParam('come_from')
             );
             $this->_setActiveMenu('Magento_Sales::sales_creditmemo');
+            if ($creditmemo->getInvoice()) {
+                $this->_view->getPage()->getConfig()->getTitle()->prepend(
+                    __("View Memo for #%1", $creditmemo->getInvoice()->getIncrementId())
+                );
+            } else {
+                $this->_view->getPage()->getConfig()->getTitle()->prepend(__("View Memo"));
+            }
             $this->_view->renderLayout();
         } else {
             $this->_forward('noroute');

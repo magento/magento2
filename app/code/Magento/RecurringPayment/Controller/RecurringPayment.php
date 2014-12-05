@@ -46,27 +46,19 @@ class RecurringPayment extends \Magento\Framework\App\Action\Action
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Framework\App\Action\Title
-     */
-    protected $_title;
-
-    /**
      * Initialize dependencies
      *
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\App\Action\Title $title
      * @param \Magento\Customer\Model\Session $customerSession
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\App\Action\Title $title,
         \Magento\Customer\Model\Session $customerSession
     ) {
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($context);
-        $this->_title = $title;
         $this->_customerSession = $customerSession;
     }
 
@@ -103,7 +95,7 @@ class RecurringPayment extends \Magento\Framework\App\Action\Action
             $this->_view->getLayout()->initMessages();
 
             $title = __('Recurring Payment #%1', $payment->getReferenceId());
-            $this->_view->getPage()->getConfig()->setTitle($title);
+            $this->_view->getPage()->getConfig()->getTitle()->set($title);
 
             $this->_view->renderLayout();
             return;

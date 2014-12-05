@@ -83,5 +83,6 @@ return [
     ['Magento\Object', 'Magento\Framework\Object'],
     ['Magento\Connect'],
     ['Magento\Framework\Connect'],
+    ['Magento\Bundle\Service'],
     ['Magento\Tax\Service'],
 ];

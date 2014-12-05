@@ -25,5 +25,4 @@
 -->
 <theme xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../../../../lib/internal/Magento/Framework/Config/etc/theme.xsd">
     <title>Theme E</title>
-    <version>0.0.0.1</version>
 </theme>

@@ -55,6 +55,11 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $pageConfig;
 
+    /**
+     * @var \Magento\Framework\View\Page\Title|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $pageTitleMock;
+
     public function setUp()
     {
         $this->context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false, false);
@@ -67,8 +72,11 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
         $this->orderConfig = $this->getMockBuilder('Magento\Sales\Model\Order\Config')
             ->setMethods(['getVisibleOnFrontStatuses'])->disableOriginalConstructor()->getMock();
 
-        $this->pageConfig = $this->getMockBuilder('Magento\Framework\View\Page\Config')->setMethods(['setTitle'])
+        $this->pageConfig = $this->getMockBuilder('Magento\Framework\View\Page\Config')
             ->disableOriginalConstructor()->getMock();
+        $this->pageTitleMock = $this->getMockBuilder('Magento\Framework\View\Page\Title')
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     public function testConstructMethod()
@@ -93,13 +101,10 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
             false,
             false
         );
-        $this->pageConfig->expects($this->any())
-            ->method('setTitle')
-            ->will($this->returnSelf());
 
         $this->context->expects($this->any())
             ->method('getPageConfig')
-            ->will($this->returnValue($this->pageConfig));
+            ->willReturn($this->pageConfig);
 
         $orderCollection->expects($this->at(0))
             ->method('addFieldToSelect')
@@ -120,6 +125,13 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
         $this->orderCollectionFactory->expects($this->atLeastOnce())
             ->method('create')
             ->will($this->returnValue($orderCollection));
+        $this->pageConfig->expects($this->atLeastOnce())
+            ->method('getTitle')
+            ->willReturn($this->pageTitleMock);
+        $this->pageTitleMock->expects($this->atLeastOnce())
+            ->method('set')
+            ->willReturnSelf();
+
 
         $this->model = new \Magento\Sales\Block\Order\History(
             $this->context,

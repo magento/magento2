@@ -37,7 +37,7 @@ class Updatedat extends \Magento\SalesRule\Model\Resource\Report\Rule\Createdat
      */
     protected function _construct()
     {
-        $this->_init('coupon_aggregated_updated', 'id');
+        $this->_init('salesrule_coupon_aggregated_updated', 'id');
     }
 
     /**

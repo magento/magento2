@@ -23,10 +23,12 @@
  */
 namespace Magento\Sales\Model\Resource;
 
+use \Magento\Framework\Model\Resource\Db\AbstractDb;
+
 /**
  * Quote resource model
  */
-class Quote extends AbstractResource
+class Quote extends AbstractDb
 {
     /**
      * @var \Magento\Eav\Model\Config
@@ -35,15 +37,13 @@ class Quote extends AbstractResource
 
     /**
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Eav\Model\Config $config
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Eav\Model\Config $config
     ) {
-        parent::__construct($resource, $dateTime);
+        parent::__construct($resource);
         $this->_config = $config;
     }
 

@@ -35,7 +35,7 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
     protected $categoryRepository;
 
     /**
-     * @var ProductRepository
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
     protected $productRepository;
 

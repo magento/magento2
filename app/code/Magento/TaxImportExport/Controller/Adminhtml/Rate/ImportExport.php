@@ -33,10 +33,6 @@ class ImportExport extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
      */
     public function execute()
     {
-        $this->_title->add(__('Tax Zones and Rates'));
-
-        $this->_title->add(__('Import and Export Tax Rates'));
-
         $this->_view->loadLayout();
         $this->_setActiveMenu(
             'Magento_TaxImportExport::system_convert_tax'
@@ -45,6 +41,8 @@ class ImportExport extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
         )->_addContent(
             $this->_view->getLayout()->createBlock('Magento\TaxImportExport\Block\Adminhtml\Rate\ImportExport')
         );
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Tax Zones and Rates'));
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Import and Export Tax Rates'));
         $this->_view->renderLayout();
     }
 }

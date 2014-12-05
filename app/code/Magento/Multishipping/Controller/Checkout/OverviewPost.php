@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -24,11 +23,13 @@
  */
 namespace Magento\Multishipping\Controller\Checkout;
 
-use Magento\Checkout\Controller\Action;
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface as CustomerAccountService;
-use Magento\Customer\Service\V1\CustomerMetadataServiceInterface as CustomerMetadataService;
+use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use \Magento\Multishipping\Model\Checkout\Type\Multishipping\State;
 
+/**
+ * Class OverviewPost
+ */
 class OverviewPost extends \Magento\Multishipping\Controller\Checkout
 {
     /**
@@ -37,21 +38,23 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout
     protected $formKeyValidator;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param CustomerAccountService $customerAccountService
-     * @param CustomerMetadataService $customerMetadataService
+     * @param CustomerRepositoryInterface $customerRepository
+     * @param AccountManagementInterface $accountManagement
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
-        CustomerAccountService $customerAccountService,
-        CustomerMetadataService $customerMetadataService,
+        CustomerRepositoryInterface $customerRepository,
+        AccountManagementInterface $accountManagement,
         \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
     ) {
         $this->formKeyValidator = $formKeyValidator;
-        parent::__construct($context, $customerSession, $customerAccountService, $customerMetadataService);
+        parent::__construct($context, $customerSession, $customerRepository, $accountManagement);
     }
 
     /**

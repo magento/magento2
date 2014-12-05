@@ -50,7 +50,6 @@ class Address extends SalesResource implements OrderAddressResourceInterface
 
     /**
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Sales\Model\Resource\Attribute $attribute
      * @param \Magento\Sales\Model\Increment $salesIncrement
      * @param \Magento\Sales\Model\Order\Address\Validator $validator
@@ -59,7 +58,6 @@ class Address extends SalesResource implements OrderAddressResourceInterface
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Sales\Model\Resource\Attribute $attribute,
         \Magento\Sales\Model\Increment $salesIncrement,
         \Magento\Sales\Model\Order\Address\Validator $validator,
@@ -68,7 +66,7 @@ class Address extends SalesResource implements OrderAddressResourceInterface
     ) {
         $this->_validator = $validator;
         $this->gridPool = $gridPool;
-        parent::__construct($resource, $dateTime, $attribute, $salesIncrement, $gridAggregator);
+        parent::__construct($resource, $attribute, $salesIncrement, $gridAggregator);
 
     }
 

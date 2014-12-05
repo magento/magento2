@@ -22,6 +22,12 @@
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
+//
+//    Common
+//--------------------------------------
+
+.responsive-common() {
+
 .load.indicator {
     .loader();
     position: absolute;
@@ -32,7 +38,7 @@
 
 .loading-mask {
     .loading-mask();
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, .5);
     .loader {
         > img {
             .loading-mask();
@@ -41,4 +47,6 @@
             display: none;
         }
     }
+}
+
 }

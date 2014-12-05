@@ -26,6 +26,9 @@ namespace Magento\Framework\View\Page\Config\Reader;
 use Magento\Framework\View\Layout;
 use Magento\Framework\View\Page\Config as PageConfig;
 
+/**
+ * Body structure reader
+ */
 class Body implements Layout\ReaderInterface
 {
     /**#@+
@@ -35,25 +38,29 @@ class Body implements Layout\ReaderInterface
     /**#@-*/
 
     /**#@+
-     * Supported body elements
+     * Supported body sub elements
      */
     const BODY_ATTRIBUTE = 'attribute';
     /**#@-*/
 
     /**
-     * @var \Magento\Framework\View\Layout\Reader\Pool
+     * @var Layout\ReaderPool
      */
     protected $readerPool;
 
     /**
-     * @param Layout\Reader\Pool $readerPool
+     * Constructor
+     *
+     * @param Layout\ReaderPool $readerPool
      */
-    public function __construct(Layout\Reader\Pool $readerPool)
+    public function __construct(Layout\ReaderPool $readerPool)
     {
         $this->readerPool = $readerPool;
     }
 
     /**
+     * {@inheritdoc}
+     *
      * @return string[]
      */
     public function getSupportedNodes()
@@ -62,33 +69,28 @@ class Body implements Layout\ReaderInterface
     }
 
     /**
-     * Process Body structure
+     * {@inheritdoc}
      *
      * @param Layout\Reader\Context $readerContext
      * @param Layout\Element $bodyElement
-     * @param Layout\Element $parentElement
      * @return $this
      */
-    public function process(
+    public function interpret(
         Layout\Reader\Context $readerContext,
-        Layout\Element $bodyElement,
-        Layout\Element $parentElement
+        Layout\Element $bodyElement
     ) {
         /** @var \Magento\Framework\View\Layout\Element $element */
         foreach ($bodyElement as $element) {
-            switch ($element->getName()) {
-                case self::BODY_ATTRIBUTE:
-                    $this->setBodyAttributeTosStructure($readerContext, $element);
-                    break;
-
-                default:
-                    break;
+            if ($element->getName() === self::BODY_ATTRIBUTE) {
+                $this->setBodyAttributeTosStructure($readerContext, $element);
             }
         }
-        return $this->readerPool->readStructure($readerContext, $bodyElement);
+        return $this->readerPool->interpret($readerContext, $bodyElement);
     }
 
     /**
+     * Schedule attributes to the page config structure
+     *
      * @param Layout\Reader\Context $readerContext
      * @param Layout\Element $element
      * @return $this

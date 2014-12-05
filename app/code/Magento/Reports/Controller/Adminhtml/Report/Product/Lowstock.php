@@ -43,14 +43,13 @@ class Lowstock extends \Magento\Reports\Controller\Adminhtml\Report\Product
      */
     public function execute()
     {
-        $this->_title->add(__('Low Stock Report'));
-
         $this->_initAction()->_setActiveMenu(
             'Magento_Reports::report_products_lowstock'
         )->_addBreadcrumb(
             __('Low Stock'),
             __('Low Stock')
         );
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Low Stock Report'));
         $this->_view->renderLayout();
     }
 }

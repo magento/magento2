@@ -50,8 +50,6 @@ class Edit extends \Magento\Newsletter\Controller\Adminhtml\Queue
      */
     public function execute()
     {
-        $this->_title->add(__('Newsletter Queue'));
-
         $this->_coreRegistry->register('current_queue', $this->_objectManager->get('Magento\Newsletter\Model\Queue'));
 
         $id = $this->getRequest()->getParam('id');
@@ -64,11 +62,12 @@ class Edit extends \Magento\Newsletter\Controller\Adminhtml\Queue
             $queue = $this->_coreRegistry->registry('current_queue')->setTemplateId($template->getId());
         }
 
-        $this->_title->add(__('Edit Queue'));
 
         $this->_view->loadLayout();
 
         $this->_setActiveMenu('Magento_Newsletter::newsletter_queue');
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Newsletter Queue'));
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Edit Queue'));
 
         $this->_addBreadcrumb(__('Newsletter Queue'), __('Newsletter Queue'), $this->getUrl('*/*'));
         $this->_addBreadcrumb(__('Edit Queue'), __('Edit Queue'));

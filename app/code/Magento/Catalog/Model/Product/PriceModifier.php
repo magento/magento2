@@ -30,15 +30,15 @@ use Magento\Framework\Exception\CouldNotSaveException;
 class PriceModifier
 {
     /**
-     * @var \Magento\Catalog\Model\ProductRepository
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
     protected $productRepository;
 
     /**
-     * @param \Magento\Catalog\Model\ProductRepository $productRepository
+     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      */
     public function __construct(
-        \Magento\Catalog\Model\ProductRepository $productRepository
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
     ) {
         $this->productRepository = $productRepository;
     }

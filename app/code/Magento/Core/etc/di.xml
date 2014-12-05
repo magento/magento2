@@ -342,7 +342,7 @@
         </arguments>
     </virtualType>
 
-    <virtualType name="pageLayoutRenderPool" type="Magento\Framework\View\Layout\Reader\Pool">
+    <virtualType name="pageLayoutRenderPool" type="Magento\Framework\View\Layout\ReaderPool">
         <arguments>
             <argument name="readers" xsi:type="array">
                 <item name="container" xsi:type="string">Magento\Framework\View\Layout\Reader\Container</item>

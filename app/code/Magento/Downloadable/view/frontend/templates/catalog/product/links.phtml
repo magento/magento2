@@ -26,6 +26,7 @@
 <?php $_linksPurchasedSeparately = $this->getLinksPurchasedSeparately(); ?>
 <?php if ($this->getProduct()->isSaleable() && $this->hasLinks()):?>
     <?php $_links = $this->getLinks(); ?>
+    <?php $_linksLength = 0; ?>
     <?php $_isRequired = $this->getLinkSelectionRequired(); ?>
     <legend class="legend links-title"><span><?php echo $this->getLinksTitle() ?></span></legend><br>
     <div class="field downloads<?php if ($_isRequired) echo ' required' ?><?php if (!$_linksPurchasedSeparately) echo ' downloads-no-separately' ?>">
@@ -38,6 +39,7 @@
              }'
              data-container-for="downloadable-links">
             <?php foreach ($_links as $_link): ?>
+                <?php $_linksLength++;?>
                 <div class="field choice" data-role="link">
                     <?php if ($_linksPurchasedSeparately): ?>
                         <input type="checkbox"
@@ -60,7 +62,7 @@
                     </label>
                 </div>
             <?php endforeach; ?>
-            <?php if ($_linksPurchasedSeparately): ?>
+            <?php if ($_linksPurchasedSeparately && $_linksLength > 1): ?>
                 <div class="field choice downloads-all">
                     <input type="checkbox"
                            data-notchecked="<?php echo __('Select all')?>"

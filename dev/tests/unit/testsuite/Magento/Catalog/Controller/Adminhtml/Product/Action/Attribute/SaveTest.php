@@ -125,7 +125,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
         $this->stockItemBuilder = $this->getMockBuilder('Magento\CatalogInventory\Api\Data\StockItemDataBuilder')
             ->disableOriginalConstructor()
-            ->setMethods(['mergeDataObjectWithArray'])
+            ->setMethods(['mergeDataObjectWithArray', 'create'])
             ->getMock();
 
         $this->stockIndexerProcessor = $this->getMock(
@@ -256,6 +256,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getStockItem', 'saveStockItem'])
             ->getMockForAbstractClass();
         $this->stockItem = $this->getMockBuilder('Magento\CatalogInventory\Api\Data\StockItemInterface')
+            ->setMethods(['getId', 'getProductId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -287,6 +288,9 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->stockItemBuilder->expects($this->any())
             ->method('mergeDataObjectWithArray')
             ->withAnyParameters()
+            ->willReturnSelf();
+        $this->stockItemBuilder->expects($this->any())
+            ->method('create')
             ->willReturn($itemToSave);
         $this->product->expects($this->any())->method('isProductsHasSku')->with([5])->will($this->returnValue(true));
         $this->stockItemService->expects($this->any())->method('getStockItem')->with(5, 1)

@@ -54,11 +54,6 @@ class UiComponentTest extends \PHPUnit_Framework_TestCase
      */
     protected $context;
 
-    /**
-     * @var \Magento\Framework\View\Layout\Element
-     */
-    protected $element;
-
     public function setUp()
     {
         $this->helper = $this->getMockBuilder('Magento\Framework\View\Layout\ScheduledStructure\Helper')
@@ -86,40 +81,54 @@ class UiComponentTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     *
+     * @param \Magento\Framework\View\Layout\Element $element
+     *
      * @dataProvider processDataProvider
      */
-    public function testProcess($xml)
+    public function testProcess($element)
     {
         $scope = $this->getMock('Magento\Framework\App\ScopeInterface', [], [], '', false);
         $this->scopeResolver->expects($this->any())->method('getScope')->will($this->returnValue($scope));
         $this->scopeConfig->expects($this->once())->method('isSetFlag')
             ->with('test', null, $scope)
             ->will($this->returnValue(false));
-        $this->element = new \Magento\Framework\View\Layout\Element($xml);
         $scheduleStructure = $this->getMock('\Magento\Framework\View\Layout\ScheduledStructure', [], [], '', false);
         $this->context->expects($this->any())->method('getScheduledStructure')->will(
             $this->returnValue($scheduleStructure)
         );
         $this->helper->expects($this->any())->method('scheduleStructure')->with(
             $scheduleStructure,
-            $this->element,
-            $this->element
-        )->willReturn($this->element->getAttribute('name'));
+            $element,
+            $element->getParent()
+        )->willReturn($element->getAttribute('name'));
 
         $this->helper->expects($this->any())->method('setStructureElementData')->with(
-            $this->element->getAttribute('name'),
+            $element->getAttribute('name'),
             ['attributes' => ['group' => '', 'component' => 'listing']]
         );
-
-        $this->model->process($this->context, $this->element, $this->element);
+        $this->model->interpret($this->context, $element);
     }
 
     public function processDataProvider()
     {
         return [
             [
-                '<ui_component name="cms_block_listing" component="listing" ifconfig="test"/>'
+                $this->getElement('<ui_component name="cms_block_listing" component="listing" ifconfig="test"/>')
             ]
         ];
+    }
+
+    /**
+     * @param string $xml
+     * @return \Magento\Framework\View\Layout\Element
+     */
+    protected function getElement($xml)
+    {
+        $xml = simplexml_load_string(
+            '<parent_element>' . $xml . '</parent_element>',
+            'Magento\Framework\View\Layout\Element'
+        );
+        return current($xml->children());
     }
 }

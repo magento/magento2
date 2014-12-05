@@ -28,12 +28,5 @@
         <sequence>
             <module name="Magento_Theme"/>
         </sequence>
-        <depends>
-            <module name="Magento_Store"/>
-            <module name="Magento_Theme"/>
-            <module name="Magento_Backend"/>
-            <module name="Magento_Core"/>
-            <module name="Magento_Eav"/>
-        </depends>
     </module>
 </config>

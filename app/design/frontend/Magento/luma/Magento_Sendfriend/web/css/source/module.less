@@ -22,32 +22,40 @@
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
+//
+//    Common
+//--------------------------------------
+
+.responsive-common() {
+
 .form.send.friend {
-   &:extend(.abstract-add-fields all);
+   &:extend(.abs-add-fields all);
 }
 
 .product-social-links .action.mailto.friend {
-    &:extend(.abstract-actions-addto all);
+    &:extend(.abs-actions-addto all);
     .icon-font-symbol(
         @_icon-font-content: @icon-envelope,
         @_icon-font-position: before
     );
 }
 
+}
+
 //
 //    Desktop
 //--------------------------------------
-.responsive(@break) when (@break = @screen-m) {
+.responsive-min-l(@break) when (@break = @screen-m) {
     .form.send.friend {
         width: 60%;
-        &:extend(.abstract-add-fields-desktop all);
-        &:extend(.abstract-form-field-column-2 all);
+        &:extend(.abs-add-fields-desktop all);
+        &:extend(.abs-form-field-column-2 all);
         .fieldset {
             .field {
                 width: 45%;
             }
             .field.text {
-                //&:extend(.abstract-form-field-revert-column-1 all);
+                //&:extend(.abs-form-field-revert-column-1 all);
                 width: 90%;
             }
         }

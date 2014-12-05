@@ -129,7 +129,7 @@ class BuiltinPluginTest extends \PHPUnit_Framework_TestCase
                 ->with('X-Magento-Cache-Control');
             $this->responseMock->expects($this->at(2))
                 ->method('setHeader')
-                ->with('X-Magento-Cache-Debug');
+                ->with('X-Magento-Cache-Debug', 'MISS', true);
         } else {
             $this->responseMock->expects($this->never())
                 ->method('setHeader');
@@ -138,7 +138,45 @@ class BuiltinPluginTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('process')
             ->with($this->responseMock);
-        $this->plugin->aroundDispatch($this->frontControllerMock, $this->closure, $this->requestMock);
+        $this->assertSame(
+            $this->responseMock,
+            $this->plugin->aroundDispatch($this->frontControllerMock, $this->closure, $this->requestMock)
+        );
+    }
+
+    /**
+     * @dataProvider dataProvider
+     */
+    public function testAroundDispatchReturnsResultInterfaceProcessIfCacheMissed($state)
+    {
+        $this->configMock
+            ->expects($this->once())
+            ->method('getType')
+            ->will($this->returnValue(\Magento\PageCache\Model\Config::BUILT_IN));
+        $this->configMock->expects($this->once())
+            ->method('isEnabled')
+            ->will($this->returnValue(true));
+        $this->versionMock
+            ->expects($this->once())
+            ->method('process');
+        $this->kernelMock
+            ->expects($this->once())
+            ->method('load')
+            ->will($this->returnValue(false));
+        $this->stateMock->expects($this->any())
+            ->method('getMode')
+            ->will($this->returnValue($state));
+
+        $result = $this->getMock('Magento\Framework\Controller\ResultInterface', [], [], '', false);
+        $result->expects($this->never())->method('setHeader');
+        $closure =  function () use ($result) {
+            return $result;
+        };
+
+        $this->assertSame(
+            $result,
+            $this->plugin->aroundDispatch($this->frontControllerMock, $closure, $this->requestMock)
+        );
     }
 
     /**
@@ -172,7 +210,10 @@ class BuiltinPluginTest extends \PHPUnit_Framework_TestCase
             $this->responseMock->expects($this->never())
                 ->method('setHeader');
         }
-        $this->plugin->aroundDispatch($this->frontControllerMock, $this->closure, $this->requestMock);
+        $this->assertSame(
+            $this->responseMock,
+            $this->plugin->aroundDispatch($this->frontControllerMock, $this->closure, $this->requestMock)
+        );
     }
 
     /**
@@ -195,7 +236,10 @@ class BuiltinPluginTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($state));
         $this->responseMock->expects($this->never())
             ->method('setHeader');
-        $this->plugin->aroundDispatch($this->frontControllerMock, $this->closure, $this->requestMock);
+        $this->assertSame(
+            $this->responseMock,
+            $this->plugin->aroundDispatch($this->frontControllerMock, $this->closure, $this->requestMock)
+        );
     }
 
     public function dataProvider()

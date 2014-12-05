@@ -27,16 +27,14 @@ namespace Magento\Bundle\Model;
  * Bundle Option Model
  *
  * @method int getParentId()
- * @method int getPosition()
- * @method int getRequired()
  * @method null|\Magento\Catalog\Model\Product[] getSelections()
- * @method string getType()
  * @method Option setParentId(int $value)
  * @method Option setPosition(int $value)
  * @method Option setRequired(int $value)
  * @method Option setType(string $value)
  */
-class Option extends \Magento\Framework\Model\AbstractModel
+class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
+    \Magento\Bundle\Api\Data\OptionInterface
 {
     /**
      * Default selection object
@@ -145,5 +143,61 @@ class Option extends \Magento\Framework\Model\AbstractModel
             }
         }
         return $foundSelection;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOptionId()
+    {
+        return $this->getData('option_id');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTitle()
+    {
+        return $this->getData('title');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRequired()
+    {
+        return $this->getData('required');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getType()
+    {
+        return $this->getData('type');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPosition()
+    {
+        return $this->getData('position');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSku()
+    {
+        return $this->getData('sku');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProductLinks()
+    {
+        return $this->getData('product_links');
     }
 }

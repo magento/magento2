@@ -62,7 +62,7 @@ class UiComponent implements Layout\ReaderInterface
     protected $scopeType;
 
     /**
-     * Construct
+     * Constructor
      *
      * @param Layout\ScheduledStructure\Helper $helper
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -96,16 +96,16 @@ class UiComponent implements Layout\ReaderInterface
      *
      * @param Context $readerContext
      * @param Layout\Element $currentElement
-     * @param Layout\Element $parentElement
      * @return $this
      */
-    public function process(Context $readerContext, Layout\Element $currentElement, Layout\Element $parentElement)
+    public function interpret(Context $readerContext, Layout\Element $currentElement)
     {
         $scheduledStructure = $readerContext->getScheduledStructure();
         $referenceName = $this->layoutHelper->scheduleStructure(
             $readerContext->getScheduledStructure(),
             $currentElement,
-            $parentElement
+            $currentElement->getParent(),
+            ['attributes' => $this->getAttributes($currentElement)]
         );
         $scheduledStructure->setStructureElementData($referenceName, [
             'attributes' => $this->getAttributes($currentElement)

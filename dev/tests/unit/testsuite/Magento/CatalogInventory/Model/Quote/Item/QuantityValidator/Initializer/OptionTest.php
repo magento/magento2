@@ -123,7 +123,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             'setSuppressCheckQtyIncrements',
             '__wakeup',
             'unsIsChildItem',
-            'getId'
+            'getItemId'
         );
 
         $this->stockItemMock = $this->getMock(
@@ -195,7 +195,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
 
         $this->stockItemMock->expects($this->once())->method('setIsChildItem')->with(true);
         $this->stockItemMock->expects($this->once())->method('setSuppressCheckQtyIncrements')->with(true);
-        $this->stockItemMock->expects($this->once())->method('getId')->will($this->returnValue(true));
+        $this->stockItemMock->expects($this->once())->method('getItemId')->will($this->returnValue(true));
 
         $this->stockRegistry
             ->expects($this->once())
@@ -266,7 +266,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
 
         $this->stockItemMock->expects($this->once())->method('setIsChildItem')->with(true);
         $this->stockItemMock->expects($this->once())->method('setSuppressCheckQtyIncrements')->with(true);
-        $this->stockItemMock->expects($this->once())->method('getId')->will($this->returnValue(true));
+        $this->stockItemMock->expects($this->once())->method('getItemId')->will($this->returnValue(true));
 
         $this->stockRegistry
             ->expects($this->once())
@@ -321,7 +321,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         $this->quoteItemMock->expects($this->once())->method('getQtyToAdd')->will($this->returnValue(false));
         $this->productMock->expects($this->any())->method('getId')->will($this->returnValue($this->productId));
         $this->optionMock->expects($this->any())->method('getProduct')->will($this->returnValue($this->productMock));
-        $this->stockItemMock->expects($this->once())->method('getId')->will($this->returnValue(false));
+        $this->stockItemMock->expects($this->once())->method('getItemId')->will($this->returnValue(false));
 
         $this->stockRegistry
             ->expects($this->once())

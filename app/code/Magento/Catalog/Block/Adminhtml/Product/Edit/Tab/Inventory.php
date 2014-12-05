@@ -152,7 +152,7 @@ class Inventory extends \Magento\Backend\Block\Widget
     public function getFieldValue($field)
     {
         $stockItem = $this->getStockItem();
-        if ($stockItem->getId()) {
+        if ($stockItem->getItemId()) {
             $method = 'get' . \Magento\Framework\Api\SimpleDataObjectConverter::snakeCaseToUpperCamelCase($field);
             if (method_exists($stockItem, $method)) {
                 return $stockItem->{$method}();
@@ -168,7 +168,7 @@ class Inventory extends \Magento\Backend\Block\Widget
     public function getConfigFieldValue($field)
     {
         $stockItem = $this->getStockItem();
-        if ($stockItem->getId()) {
+        if ($stockItem->getItemId()) {
             $method = 'getUseConfig' . \Magento\Framework\Api\SimpleDataObjectConverter::snakeCaseToUpperCamelCase(
                 $field
             );

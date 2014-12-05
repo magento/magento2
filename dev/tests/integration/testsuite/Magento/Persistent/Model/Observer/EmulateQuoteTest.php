@@ -30,9 +30,9 @@ namespace Magento\Persistent\Model\Observer;
 class EmulateQuoteTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Customer\Service\V1\CustomerAccountServiceInterface
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
      */
-    protected $_customerAccountService;
+    protected $customerRepository;
 
     /**
      * @var \Magento\Persistent\Helper\Session
@@ -65,8 +65,8 @@ class EmulateQuoteTest extends \PHPUnit_Framework_TestCase
 
         $this->_customerSession = $this->_objectManager->get('Magento\Customer\Model\Session');
 
-        $this->_customerAccountService = $this->_objectManager->create(
-            'Magento\Customer\Service\V1\CustomerAccountServiceInterface'
+        $this->customerRepository = $this->_objectManager->create(
+            'Magento\Customer\Api\CustomerRepositoryInterface'
         );
 
         $this->_checkoutSession = $this->getMockBuilder(
@@ -78,7 +78,7 @@ class EmulateQuoteTest extends \PHPUnit_Framework_TestCase
         $this->_observer = $this->_objectManager->create(
             'Magento\Persistent\Model\Observer\EmulateQuote',
             [
-                'customerAccountService' => $this->_customerAccountService,
+                'customerAccountService' => $this->customerRepository,
                 'checkoutSession' => $this->_checkoutSession,
                 'persistentSession' => $this->_persistentSessionHelper
             ]
@@ -107,7 +107,7 @@ class EmulateQuoteTest extends \PHPUnit_Framework_TestCase
 
         $this->_customerSession->loginById(1);
 
-        $customer = $this->_customerAccountService->getCustomer(
+        $customer = $this->customerRepository->getById(
             $this->_persistentSessionHelper->getSession()->getCustomerId()
         );
         $this->_checkoutSession->expects($this->once())->method('setCustomerData')->with($customer);

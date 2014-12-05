@@ -42,7 +42,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
      *
      * @var string
      */
-    protected $_aggregationTable = 'coupon_aggregated';
+    protected $_aggregationTable = 'salesrule_coupon_aggregated';
 
     /**
      * Array of columns that should be aggregated
@@ -134,7 +134,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
     /**
      * Add selected data
      *
-     * @return $this
+     * @return Collection
      */
     protected function _applyAggregatedTable()
     {
@@ -157,9 +157,9 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
      * Add filtering by rules ids
      *
      * @param array $rulesList
-     * @return $this
+     * @return Collection
      */
-    public function addRuleFilter($rulesList)
+    public function addRuleFilter(array $rulesList)
     {
         $this->_rulesIdsFilter = $rulesList;
         return $this;

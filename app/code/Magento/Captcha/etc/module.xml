@@ -29,12 +29,5 @@
             <module name="Magento_Customer"/>
             <module name="Magento_Checkout"/>
         </sequence>
-        <depends>
-            <module name="Magento_Store"/>
-            <module name="Magento_Customer"/>
-            <module name="Magento_Checkout"/>
-            <module name="Magento_Core"/>
-            <module name="Magento_Backend"/>
-        </depends>
     </module>
 </config>

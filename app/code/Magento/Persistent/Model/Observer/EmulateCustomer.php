@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -24,15 +23,11 @@
  */
 namespace Magento\Persistent\Model\Observer;
 
+/**
+ * Class EmulateCustomer
+ */
 class EmulateCustomer
 {
-    /**
-     * Customer account service
-     *
-     * @var \Magento\Customer\Service\V1\CustomerAccountServiceInterface
-     */
-    protected $_customerAccountService;
-
     /**
      * Customer session
      *
@@ -45,31 +40,40 @@ class EmulateCustomer
      *
      * @var \Magento\Persistent\Helper\Session
      */
-    protected $_persistentSession = null;
+    protected $_persistentSession;
 
     /**
      * Persistent data
      *
      * @var \Magento\Persistent\Helper\Data
      */
-    protected $_persistentData = null;
+    protected $_persistentData;
 
     /**
+     * Customer repository
+     *
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     */
+    protected $customerRepository;
+
+    /**
+     * Constructor
+     *
      * @param \Magento\Persistent\Helper\Session $persistentSession
      * @param \Magento\Persistent\Helper\Data $persistentData
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService
+     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      */
     public function __construct(
         \Magento\Persistent\Helper\Session $persistentSession,
         \Magento\Persistent\Helper\Data $persistentData,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService
+        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
     ) {
         $this->_persistentSession = $persistentSession;
         $this->_persistentData = $persistentData;
         $this->_customerSession = $customerSession;
-        $this->_customerAccountService = $customerAccountService;
+        $this->customerRepository = $customerRepository;
     }
 
     /**
@@ -85,9 +89,7 @@ class EmulateCustomer
         }
 
         if ($this->_persistentSession->isPersistent() && !$this->_customerSession->isLoggedIn()) {
-            $customer = $this->_customerAccountService->getCustomer(
-                $this->_persistentSession->getSession()->getCustomerId()
-            );
+            $customer = $this->customerRepository->getById($this->_persistentSession->getSession()->getCustomerId());
             $this->_customerSession->setCustomerId($customer->getId())->setCustomerGroupId($customer->getGroupId());
         }
         return $this;

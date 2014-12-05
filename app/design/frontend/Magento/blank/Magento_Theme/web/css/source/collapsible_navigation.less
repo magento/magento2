@@ -30,6 +30,13 @@
 @collapsible-nav-current-border: 3px solid transparent;
 @collapsible-nav-current-border-color: #ff5501;
 
+
+//
+//    Common
+//--------------------------------------
+
+.responsive-common() {
+
 //
 //    Collapsible navigation
 //--------------------------------------
@@ -71,13 +78,15 @@
     }
 }
 
+}
+
 //
 //    Desktop
 //--------------------------------------
-.responsive(@break) when (@break = @screen-m) {
+.responsive-min-l(@break) when (@break = @screen-m) {
     .block-collapsible-nav {
         .title {
-            &:extend(.abstract-visually-hidden-desktop all);
+            &:extend(.abs-visually-hidden-desktop all);
         }
     }
 }
@@ -85,7 +94,7 @@
 //
 //    Mobile
 //--------------------------------------
-.responsive-smaller(@break) when (@break = @screen-m) {
+.responsive-max-m(@break) when (@break = @screen-m) {
     .block-collapsible-nav {
         position: absolute;
         top: -21px;
@@ -93,7 +102,7 @@
         width: 100%;
         z-index: 5;
         .title {
-            &:extend(.abstract-toggling-title-mobile all);
+            &:extend(.abs-toggling-title-mobile all);
         }
         .content {
             border-bottom: @border-width-base solid @border-color-base;

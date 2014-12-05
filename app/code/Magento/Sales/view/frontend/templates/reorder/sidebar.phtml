@@ -33,9 +33,9 @@
 <?php if($_items): ?>
 <div class="block block-reorder">
     <div class="block-title">
-        <strong><?php echo __('My Orders') ?></strong>
+        <strong id="block-reorder-heading" role="heading" aria-level="2"><?php echo __('My Orders') ?></strong>
     </div>
-    <div class="block-content">
+    <div class="block-content" aria-labelledby="block-reorder-heading">
         <form method="post" class="form reorder" action="<?php echo $this->getFormActionUrl() ?>" id="reorder-validate-detail">
             <strong class="subtitle"><?php echo __('Last Ordered Items') ?></strong>
             <ol id="cart-sidebar-reorder" class="product-items product-items-names">

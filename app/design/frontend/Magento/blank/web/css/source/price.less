@@ -22,6 +22,11 @@
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
+//
+//    Common
+//--------------------------------------
+
+.responsive-common() {
 
 // Prices
 .price-style-1() {
@@ -58,9 +63,9 @@
             font-weight: @font-weight-bold;
         }
         .cart-tax-total {
-            &:extend(.abstract-tax-total all);
+            &:extend(.abs-tax-total all);
             &-expanded {
-                &:extend(.abstract-tax-total-expanded all);
+                &:extend(.abs-tax-total-expanded all);
             }
         }
     }
@@ -80,3 +85,5 @@
 
 .price-style-1();
 .price-style-3();
+
+}

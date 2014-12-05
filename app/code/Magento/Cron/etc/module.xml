@@ -28,9 +28,5 @@
         <sequence>
             <module name="Magento_Store"/>
         </sequence>
-        <depends>
-            <module name="Magento_Store"/>
-            <module name="Magento_Backend"/>
-        </depends>
     </module>
 </config>

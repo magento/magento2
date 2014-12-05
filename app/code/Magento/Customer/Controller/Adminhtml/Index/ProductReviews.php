@@ -37,6 +37,7 @@ class ProductReviews extends \Magento\Customer\Controller\Adminhtml\Index
     {
         $this->_initCustomer();
         $this->_view->loadLayout();
+        $this->prepareDefaultCustomerTitle();
         $this->_view->getLayout()->getBlock('admin.customer.reviews')->setCustomerId(
             $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID)
         )

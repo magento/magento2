@@ -40,9 +40,31 @@ class DefinedClasses
      */
     public function classLoadable($className)
     {
-        if (class_exists($className, false) || interface_exists($className, false)) {
+        if ($this->isAlreadyDefined($className)) {
             return true;
         }
+        return $this->performAutoload($className);
+    }
+
+    /**
+     * Checks whether class is already defined
+     *
+     * @param string $className
+     * @return bool
+     */
+    protected function isAlreadyDefined($className)
+    {
+        return class_exists($className, false) || interface_exists($className, false);
+    }
+
+    /**
+     * Performs autoload for given class name
+     *
+     * @param string $className
+     * @return bool
+     */
+    protected function performAutoload($className)
+    {
         try {
             return AutoloaderRegistry::getAutoloader()->loadClass($className);
         } catch (\Exception $e) {

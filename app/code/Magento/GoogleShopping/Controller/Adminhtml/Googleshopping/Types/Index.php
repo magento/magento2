@@ -33,9 +33,8 @@ class Index extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\
      */
     public function execute()
     {
-        $this->_title->add(__('Google Content Attributes'));
-
         $this->_initAction()->_addBreadcrumb(__('Attribute Maps'), __('Attribute Maps'));
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Google Content Attributes'));
         $this->_view->renderLayout();
     }
 }

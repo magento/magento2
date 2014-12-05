@@ -72,7 +72,6 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
 
         $this->_model = new \Magento\Sales\Model\Resource\Quote(
             $this->_resourceMock,
-            new \Magento\Framework\Stdlib\DateTime(),
             $this->_configMock
         );
     }

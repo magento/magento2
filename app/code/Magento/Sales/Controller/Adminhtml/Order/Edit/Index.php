@@ -43,11 +43,11 @@ class Index extends \Magento\Sales\Controller\Adminhtml\Order\Create\Index
      */
     public function execute()
     {
-        $this->_title->add(__('Orders'));
-        $this->_title->add(__('Edit Order'));
         $this->_view->loadLayout();
 
         $this->_initSession()->_setActiveMenu('Magento_Sales::sales_order');
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Orders'));
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Edit Order'));
         $this->_view->renderLayout();
     }
 }

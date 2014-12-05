@@ -236,7 +236,7 @@
     @_dropdown-list-pointer-border,
     @_dropdown-list-pointer-position,
     @_dropdown-list-pointer-position-top,
-    @_dropdown-list-pointer-position-left-right,
+    @_dropdown-list-pointer-position-left-right
 ) {
     @{_options-selector} {
         .list-reset-styles();
@@ -272,7 +272,7 @@
             @_dropdown-list-pointer-border,
             @_dropdown-list-pointer-position,
             @_dropdown-list-pointer-position-top,
-            @_dropdown-list-pointer-position-left-right,
+            @_dropdown-list-pointer-position-left-right
         );
     }
     &.active {
@@ -288,7 +288,7 @@
     @_dropdown-list-position-top,
     @_dropdown-list-position-bottom,
     @_dropdown-list-position-left,
-    @_dropdown-list-position-right,
+    @_dropdown-list-position-right
 ) when not (@_dropdown-list-position-top = false) and not (@_dropdown-list-position-top = auto) {
     .css(top, @_dropdown-list-position-top);
 }

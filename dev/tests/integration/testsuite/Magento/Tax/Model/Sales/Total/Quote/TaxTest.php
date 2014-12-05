@@ -23,13 +23,16 @@
  */
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Tax\Model\Config;
 use Magento\Tax\Model\Calculation;
+use Magento\TestFramework\Helper\Bootstrap;
 
 require_once __DIR__ . '/SetupUtil.php';
 require_once __DIR__ . '/../../../../_files/tax_calculation_data_aggregated.php';
 
+/**
+ * Class TaxTest
+ */
 class TaxTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -65,12 +68,8 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Customer\Model\Customer $customer */
         $customer = $objectManager->create('Magento\Customer\Model\Customer')->load($fixtureCustomerId);
         /** @var \Magento\Customer\Model\Group $customerGroup */
-        $customerGroup = $objectManager->create(
-            'Magento\Customer\Model\Group'
-        )->load(
-            'custom_group',
-            'customer_group_code'
-        );
+        $customerGroup = $objectManager->create('Magento\Customer\Model\Group')
+            ->load('custom_group', 'customer_group_code');
         $customerGroup->setTaxClassId($customerTaxClass->getId())->save();
         $customer->setGroupId($customerGroup->getId())->save();
 
@@ -89,32 +88,23 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $customerAddress->setCountryId('US')->setRegionId(12)->save();
         /** @var \Magento\Sales\Model\Quote\Address $quoteShippingAddress */
         $quoteShippingAddress = $objectManager->create('Magento\Sales\Model\Quote\Address');
-        /** @var \Magento\Customer\Service\V1\CustomerAddressServiceInterface $addressService */
-        $addressService = $objectManager->create('Magento\Customer\Service\V1\CustomerAddressServiceInterface');
-        $quoteShippingAddress->importCustomerAddressData($addressService->getAddress($fixtureCustomerAddressId));
+        /** @var \Magento\Customer\Api\AddressRepositoryInterface $addressRepository */
+        $addressRepository = $objectManager->create('Magento\Customer\Api\AddressRepositoryInterface');
+        $quoteShippingAddress->importCustomerAddressData($addressRepository->getById($fixtureCustomerAddressId));
 
+        /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
+        $customerRepository = $objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
         /** @var \Magento\Sales\Model\Quote $quote */
         $quote = $objectManager->create('Magento\Sales\Model\Quote');
-        $quote->setStoreId(
-            1
-        )->setIsActive(
-            true
-        )->setIsMultiShipping(
-            false
-        )->assignCustomerWithAddressChange(
-            $customer
-        )->setShippingAddress(
-            $quoteShippingAddress
-        )->setBillingAddress(
-            $quoteShippingAddress
-        )->setCheckoutMethod(
-            $customer->getMode()
-        )->setPasswordHash(
-            $customer->encryptPassword($customer->getPassword())
-        )->addProduct(
-            $product->load($product->getId()),
-            2
-        );
+        $quote->setStoreId(1)
+            ->setIsActive(true)
+            ->setIsMultiShipping(false)
+            ->assignCustomerWithAddressChange($customerRepository->getById($customer->getId()))
+            ->setShippingAddress($quoteShippingAddress)
+            ->setBillingAddress($quoteShippingAddress)
+            ->setCheckoutMethod($customer->getMode())
+            ->setPasswordHash($customer->encryptPassword($customer->getPassword()))
+            ->addProduct($product->load($product->getId()), 2);
 
         /**
          * Execute SUT.
@@ -214,7 +204,6 @@ class TaxTest extends \PHPUnit_Framework_TestCase
      */
     protected function verifyQuoteAddress($quoteAddress, $expectedAddressData)
     {
-
         foreach ($expectedAddressData as $key => $value) {
             if ($key == 'applied_taxes') {
                 $this->verifyAppliedTaxes($quoteAddress->getAppliedTaxes(), $value);

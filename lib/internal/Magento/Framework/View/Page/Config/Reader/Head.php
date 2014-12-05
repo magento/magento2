@@ -26,6 +26,9 @@ namespace Magento\Framework\View\Page\Config\Reader;
 use Magento\Framework\View\Layout;
 use Magento\Framework\View\Page\Config as PageConfig;
 
+/**
+ * Head structure reader is intended for collecting assets, title and metadata
+ */
 class Head implements Layout\ReaderInterface
 {
     /**#@+
@@ -38,21 +41,17 @@ class Head implements Layout\ReaderInterface
      * Supported head elements
      */
     const HEAD_CSS = 'css';
-
     const HEAD_SCRIPT = 'script';
-
     const HEAD_LINK = 'link';
-
     const HEAD_REMOVE = 'remove';
-
     const HEAD_TITLE = 'title';
-
     const HEAD_META = 'meta';
-
     const HEAD_ATTRIBUTE = 'attribute';
     /**#@-*/
 
     /**
+     * {@inheritdoc}
+     *
      * @return string[]
      */
     public function getSupportedNodes()
@@ -61,43 +60,40 @@ class Head implements Layout\ReaderInterface
     }
 
     /**
-     * Process Head structure
+     * {@inheritdoc}
      *
      * @param Layout\Reader\Context $readerContext
      * @param Layout\Element $headElement
-     * @param Layout\Element $parentElement
      * @return $this
      */
-    public function process(
+    public function interpret(
         Layout\Reader\Context $readerContext,
-        Layout\Element $headElement,
-        Layout\Element $parentElement
+        Layout\Element $headElement
     ) {
+        $pageConfigStructure = $readerContext->getPageConfigStructure();
         /** @var \Magento\Framework\View\Layout\Element $node */
         foreach ($headElement as $node) {
             switch ($node->getName()) {
                 case self::HEAD_CSS:
                 case self::HEAD_SCRIPT:
                 case self::HEAD_LINK:
-                    $readerContext->getPageConfigStructure()
-                        ->addAssets($node->getAttribute('src'), $this->getAttributes($node));
+                    $pageConfigStructure->addAssets($node->getAttribute('src'), $this->getAttributes($node));
                     break;
 
                 case self::HEAD_REMOVE:
-                    $readerContext->getPageConfigStructure()->removeAssets($node->getAttribute('src'));
+                    $pageConfigStructure->removeAssets($node->getAttribute('src'));
                     break;
 
                 case self::HEAD_TITLE:
-                    $readerContext->getPageConfigStructure()->setTitle($node);
+                    $pageConfigStructure->setTitle($node);
                     break;
 
                 case self::HEAD_META:
-                    $readerContext->getPageConfigStructure()
-                        ->setMetaData($node->getAttribute('name'), $node->getAttribute('content'));
+                    $pageConfigStructure->setMetaData($node->getAttribute('name'), $node->getAttribute('content'));
                     break;
 
                 case self::HEAD_ATTRIBUTE:
-                    $readerContext->getPageConfigStructure()->setElementAttribute(
+                    $pageConfigStructure->setElementAttribute(
                         PageConfig::ELEMENT_TYPE_HEAD,
                         $node->getAttribute('name'),
                         $node->getAttribute('value')
@@ -112,6 +108,8 @@ class Head implements Layout\ReaderInterface
     }
 
     /**
+     * Get all attributes for current dom element
+     *
      * @param \Magento\Framework\View\Layout\Element $element
      * @return array
      */

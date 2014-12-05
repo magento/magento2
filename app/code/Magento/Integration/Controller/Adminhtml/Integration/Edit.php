@@ -74,7 +74,7 @@ class Edit extends \Magento\Integration\Controller\Adminhtml\Integration
         }
 
         $this->_addBreadcrumb($title, $title);
-        $this->_title->add($title);
+        $this->_view->getPage()->getConfig()->getTitle()->prepend($title);
         $this->_view->renderLayout();
     }
 }

@@ -35,6 +35,7 @@ class LastOrders extends \Magento\Customer\Controller\Adminhtml\Index
     {
         $this->_initCustomer();
         $this->_view->loadLayout();
+        $this->prepareDefaultCustomerTitle();
         $this->_view->renderLayout();
     }
 }

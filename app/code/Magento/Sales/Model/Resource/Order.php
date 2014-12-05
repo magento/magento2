@@ -76,7 +76,6 @@ class Order extends SalesResource implements OrderResourceInterface
 
     /**
      * @param AppResource $resource
-     * @param DateTime $dateTime
      * @param Attribute $attribute
      * @param SalesIncrement $salesIncrement
      * @param AddressHandler $addressHandler
@@ -85,7 +84,6 @@ class Order extends SalesResource implements OrderResourceInterface
      */
     public function __construct(
         AppResource $resource,
-        DateTime $dateTime,
         Attribute $attribute,
         SalesIncrement $salesIncrement,
         AddressHandler $addressHandler,
@@ -94,7 +92,7 @@ class Order extends SalesResource implements OrderResourceInterface
     ) {
         $this->stateHandler = $stateHandler;
         $this->addressHandler = $addressHandler;
-        parent::__construct($resource, $dateTime, $attribute, $salesIncrement, $gridAggregator);
+        parent::__construct($resource, $attribute, $salesIncrement, $gridAggregator);
     }
 
     /**

@@ -25,10 +25,12 @@
 /** @var $this \Magento\Cms\Model\Resource\Setup */
 
 $pageContent = <<<EOD
-<p style="color: #ff0000; font-weight: bold; font-size: 13px">
-    Please replace this text with you Privacy Policy.
-    Please add any additional cookies your website uses below (e.g., Google Analytics)
-</p>
+<div class="message info">
+    <span>
+        Please replace this text with you Privacy Policy.
+        Please add any additional cookies your website uses below (e.g., Google Analytics)
+    </span>
+</div>
 <p>
     This privacy policy sets out how {{config path="general/store_information/name"}} uses and protects any information
     that you give {{config path="general/store_information/name"}} when you use this website.
@@ -232,8 +234,8 @@ $pageContent = <<<EOD
 EOD;
 
 $privacyPageData = array(
-    'title' => 'Privacy Policy',
-    'content_heading' => 'Privacy Policy',
+    'title' => 'Privacy and Cookie Policy',
+    'content_heading' => 'Privacy and Cookie Policy',
     'page_layout' => '1column',
     'identifier' => 'privacy-policy-cookie-restriction-mode',
     'content' => $pageContent,
@@ -252,7 +254,7 @@ if ($footerLinksBlock->getId()) {
         $content = preg_replace('/<li class="last">/ims', '<li>', $content);
         $replacment = '<li class="last privacy">' .
             "<a href=\"{{store direct_url=\"privacy-policy-cookie-restriction-mode\"}}\">" .
-            "Privacy Policy</a></li>\r\n</ul>";
+            "Privacy and Cookie Policy</a></li>\r\n</ul>";
         $content = preg_replace('/<\\/ul>/ims', $replacment, $content);
         $footerLinksBlock->setContent($content)->save();
     }

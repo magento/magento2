@@ -250,7 +250,7 @@ class Observer
         if (!isset($stockItemData['website_id'])) {
             $stockItemData['website_id'] = $this->stockConfiguration->getDefaultWebsiteId();
         }
-        $stockItemData['stock_id'] = $this->stockRegistry->getStock($stockItemData['website_id'])->getId();
+        $stockItemData['stock_id'] = $this->stockRegistry->getStock($stockItemData['website_id'])->getStockId();
 
         foreach ($this->paramListToCheck as $dataKey => $configPath) {
             if (null !== $product->getData($configPath['item']) && null === $product->getData($configPath['config'])) {

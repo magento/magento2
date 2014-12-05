@@ -33,10 +33,9 @@ class Index extends \Magento\Sales\Controller\Adminhtml\Transactions
      */
     public function execute()
     {
-        $this->_title->add(__('Transactions'));
-
         $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_Sales::sales_transactions');
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Transactions'));
         $this->_view->renderLayout();
     }
 }

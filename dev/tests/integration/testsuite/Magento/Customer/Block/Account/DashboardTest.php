@@ -23,7 +23,7 @@
  */
 namespace Magento\Customer\Block\Account;
 
-use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 class DashboardTest extends \PHPUnit_Framework_TestCase
@@ -34,7 +34,7 @@ class DashboardTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Model\Session */
     private $customerSession;
 
-    /** @var CustomerRepositoryInterface */
+    /** @var \Magento\Customer\Api\CustomerRepositoryInterface */
     private $customerRepository;
 
     /**
@@ -52,10 +52,10 @@ class DashboardTest extends \PHPUnit_Framework_TestCase
         )->createBlock(
             'Magento\Customer\Block\Account\Dashboard',
             '',
-            array(
+            [
                 'customerSession' => $this->customerSession,
                 'customerRepository' => $this->customerRepository
-            )
+            ]
         );
     }
 
@@ -112,8 +112,8 @@ class DashboardTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $addresses);
         $address = $addresses[0];
         $this->assertInstanceOf('Magento\Customer\Api\Data\AddressInterface', $address);
-        $this->assertEquals($customer->getDefaultBilling(), $address->getId());
-        $this->assertEquals($customer->getDefaultShipping(), $address->getId());
+        $this->assertEquals((int)$customer->getDefaultBilling(), $address->getId());
+        $this->assertEquals((int)$customer->getDefaultShipping(), $address->getId());
     }
 
     /**

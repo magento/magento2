@@ -33,8 +33,6 @@ class Index extends \Magento\Backup\Controller\Adminhtml\Index
      */
     public function execute()
     {
-        $this->_title->add(__('Backups'));
-
         if ($this->getRequest()->getParam('ajax')) {
             $this->_forward('grid');
             return;
@@ -42,6 +40,7 @@ class Index extends \Magento\Backup\Controller\Adminhtml\Index
 
         $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_Backup::system_tools_backup');
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Backups'));
         $this->_addBreadcrumb(__('System'), __('System'));
         $this->_addBreadcrumb(__('Tools'), __('Tools'));
         $this->_addBreadcrumb(__('Backups'), __('Backup'));

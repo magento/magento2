@@ -125,6 +125,9 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $this->requestBuilder->create();
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testCreate()
     {
         $data = [
@@ -207,9 +210,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             'index' => 'catalogsearch_fulltext',
             'aggregations' => [],
         ];
-
         $requestName = 'rn';
-
         $this->requestBuilder->bind('fulltext_search_query', 'socks');
         $this->requestBuilder->bind('pidsh', 4);
         $this->requestBuilder->bind('pidm_from', 1);
@@ -218,19 +219,13 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $this->requestBuilder->setSize(10);
         $this->requestBuilder->setFrom(10);
         $this->requestBuilder->bindDimension('scope', 'default');
-
         $this->binder->expects($this->once())->method('bind')->willReturn($data);
-
         $this->cleaner->expects($this->once())->method('clean')->willReturn($data);
-
         $this->requestMapper->expects($this->once())->method('getRootQuery')->willReturn([]);
-
         $this->objectManager->expects($this->at(0))->method('create')->willReturn($this->requestMapper);
         $this->objectManager->expects($this->at(2))->method('create')->willReturn($this->request);
         $this->config->expects($this->once())->method('get')->with($this->equalTo($requestName))->willReturn($data);
-
         $result = $this->requestBuilder->create();
-
         $this->assertInstanceOf('\Magento\Framework\Search\Request', $result);
     }
 }

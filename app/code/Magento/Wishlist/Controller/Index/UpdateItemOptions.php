@@ -26,6 +26,8 @@ namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Wishlist\Controller\IndexInterface;
 use Magento\Framework\App\Action;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 class UpdateItemOptions extends Action\Action implements IndexInterface
 {
@@ -40,18 +42,26 @@ class UpdateItemOptions extends Action\Action implements IndexInterface
     protected $_customerSession;
 
     /**
+     * @var ProductRepositoryInterface
+     */
+    protected $productRepository;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider
+     * @param ProductRepositoryInterface $productRepository
      */
     public function __construct(
         Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider
+        \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider,
+        ProductRepositoryInterface $productRepository
     ) {
         $this->_customerSession = $customerSession;
         $this->wishlistProvider = $wishlistProvider;
         parent::__construct($context);
+        $this->productRepository = $productRepository;
     }
 
     /**
@@ -67,8 +77,13 @@ class UpdateItemOptions extends Action\Action implements IndexInterface
             return;
         }
 
-        $product = $this->_objectManager->create('Magento\Catalog\Model\Product')->load($productId);
-        if (!$product->getId() || !$product->isVisibleInCatalog()) {
+        try {
+            $product = $this->productRepository->getById($productId);
+        } catch (NoSuchEntityException $e) {
+            $product = null;
+        }
+
+        if (!$product || !$product->isVisibleInCatalog()) {
             $this->messageManager->addError(__('We can\'t specify a product.'));
             $this->_redirect('*/');
             return;

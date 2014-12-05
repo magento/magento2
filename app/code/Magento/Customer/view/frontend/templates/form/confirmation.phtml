@@ -26,7 +26,7 @@
     <fieldset class="fieldset" data-hasrequired="<?php echo __('* Required Fields') ?>">
         <p class="field note"><?php echo __('Please enter your email below and we will send you the confirmation link for it.') ?></p>
         <div class="field email required">
-            <label for="email_address" class="label"><span><?php echo __('Email Address') ?></span></label>
+            <label for="email_address" class="label"><span><?php echo __('Email') ?></span></label>
             <div class="control">
                 <input type="email" name="email" id="email_address" class="input-text" value="<?php echo $this->escapeHtml($this->getEmail()) ?>" data-validate="{required:true, 'validate-email':true}">
             </div>

@@ -45,7 +45,7 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
         $config = new \Magento\Framework\ObjectManager\Config\Config(
             new \Magento\Framework\ObjectManager\Relations\Runtime()
         );
-        $factory = new \Magento\Framework\ObjectManager\Factory\Factory($config, null, null, array(
+        $factory = new Factory\Dynamic\Developer($config, null, null, array(
             'first_param' => 'first_param_value',
             'second_param' => 'second_param_value'
         ));

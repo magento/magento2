@@ -31,8 +31,6 @@ class DeleteStore extends \Magento\Backend\Controller\Adminhtml\System\Store
      */
     public function execute()
     {
-        $this->_title->add(__('Delete Store View'));
-
         $itemId = $this->getRequest()->getParam('item_id', null);
         if (!($model = $this->_objectManager->create('Magento\Store\Model\Store')->load($itemId))) {
             $this->messageManager->addError(__('Unable to proceed. Please, try again.'));
@@ -51,6 +49,7 @@ class DeleteStore extends \Magento\Backend\Controller\Adminhtml\System\Store
         $this->_addDeletionNotice('store view');
 
         $resultPage = $this->createPage();
+        $resultPage->getConfig()->getTitle()->prepend(__('Delete Store View'));
         $resultPage->addBreadcrumb(__('Delete Store View'), __('Delete Store View'))
             ->addContent(
                 $resultPage->getLayout()->createBlock('Magento\Backend\Block\System\Store\Delete')

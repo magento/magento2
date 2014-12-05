@@ -35,8 +35,6 @@ class Coupons extends \Magento\Reports\Controller\Adminhtml\Report\Sales
      */
     public function execute()
     {
-        $this->_title->add(__('Coupons Report'));
-
         $this->_showLastExecutionTime(Flag::REPORT_COUPONS_FLAG_CODE, 'coupons');
 
         $this->_initAction()->_setActiveMenu(
@@ -45,6 +43,7 @@ class Coupons extends \Magento\Reports\Controller\Adminhtml\Report\Sales
             __('Coupons'),
             __('Coupons')
         );
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Coupons Report'));
 
         $gridBlock = $this->_view->getLayout()->getBlock('adminhtml_sales_coupons.grid');
         $filterFormBlock = $this->_view->getLayout()->getBlock('grid.filter.form');

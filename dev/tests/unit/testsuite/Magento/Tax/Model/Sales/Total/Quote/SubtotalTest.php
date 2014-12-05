@@ -100,6 +100,21 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $customerAddressBuilderMock = $this->getMock(
+            'Magento\Customer\Api\Data\AddressDataBuilder',
+            ['setCountryId', 'setRegion', 'setPostcode', 'setCity', 'setStreet', 'create'],
+            [],
+            '',
+            false
+        );
+        $customerAddressRegionBuilderMock = $this->getMock(
+            'Magento\Customer\Api\Data\RegionDataBuilder',
+            ['setRegionId', 'create'],
+            [],
+            '',
+            false
+        );
+        $customerAddressRegionBuilderMock->expects($this->any())->method('setRegionId')->willReturnSelf();
 
         $this->model = $this->objectManager->getObject(
             '\Magento\Tax\Model\Sales\Total\Quote\Subtotal',
@@ -108,6 +123,8 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
                 'taxCalculationService' => $this->taxCalculationMock,
                 'quoteDetailsBuilder' => $this->quoteDetailsBuilder,
                 'taxClassKeyBuilder' => $this->keyBuilderMock,
+                'customerAddressBuilder' => $customerAddressBuilderMock,
+                'customerAddressRegionBuilder' => $customerAddressRegionBuilderMock,
             ]
         );
 

@@ -48,17 +48,6 @@
             </xs:documentation>
         </xs:annotation>
         <xs:all>
-            <xs:element minOccurs="0" maxOccurs="1" name="depends" type="moduleDependency">
-                <xs:unique name="uniqueDependencyName">
-                    <xs:annotation>
-                        <xs:documentation>
-                            Dependency name must be unique.
-                        </xs:documentation>
-                    </xs:annotation>
-                    <xs:selector xpath=".//*" />
-                    <xs:field xpath="@name" />
-                </xs:unique>
-            </xs:element>
             <xs:element minOccurs="0" maxOccurs="1" name="sequence" type="moduleSequence">
                 <xs:unique name="uniqueSequenceName">
                     <xs:annotation>
@@ -73,40 +62,6 @@
         </xs:all>
         <xs:attribute name="name" type="moduleName" use="required" />
         <xs:attribute name="schema_version" type="schemaVersion" use="optional" />
-    </xs:complexType>
-
-    <xs:complexType name="moduleDependency">
-        <xs:annotation>
-            <xs:documentation>
-                Module dependency root element.
-            </xs:documentation>
-        </xs:annotation>
-        <xs:choice maxOccurs="unbounded">
-            <xs:element minOccurs="0" maxOccurs="unbounded" name="module">
-                <xs:complexType>
-                    <xs:annotation>
-                        <xs:documentation>
-                            Module dependency that represents another module.
-                        </xs:documentation>
-                    </xs:annotation>
-                    <xs:attribute name="name" type="moduleName" use="required" />
-                    <xs:attribute name="type" type="moduleDependencyType" use="optional" />
-                </xs:complexType>
-            </xs:element>
-            <xs:element minOccurs="0" maxOccurs="unbounded" name="extension" type="extensionElement" />
-            <xs:element minOccurs="0" maxOccurs="unbounded" name="choice">
-                <xs:complexType>
-                    <xs:annotation>
-                        <xs:documentation>
-                            Element that holds alternative extension dependencies.
-                        </xs:documentation>
-                    </xs:annotation>
-                    <xs:sequence>
-                        <xs:element minOccurs="2" maxOccurs="unbounded" name="extension" type="extensionElement" />
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-        </xs:choice>
     </xs:complexType>
 
     <xs:complexType name="moduleSequence">
@@ -127,27 +82,6 @@
                 </xs:complexType>
             </xs:element>
         </xs:sequence>
-    </xs:complexType>
-
-    <xs:simpleType name="moduleDependencyType">
-        <xs:annotation>
-            <xs:documentation>
-                Module dependency type can only be hard or soft.
-            </xs:documentation>
-        </xs:annotation>
-        <xs:restriction base="xs:string">
-            <xs:pattern value="(hard|soft)?" />
-        </xs:restriction>
-    </xs:simpleType>
-
-    <xs:complexType name="extensionElement">
-        <xs:annotation>
-            <xs:documentation>
-                Module dependency that represents PHP extension.
-            </xs:documentation>
-        </xs:annotation>
-        <xs:attribute name="name" type="xs:string" use="required" />
-        <xs:attribute name="minVersion" type="xs:string" use="optional" />
     </xs:complexType>
 
     <xs:simpleType name="moduleName">

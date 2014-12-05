@@ -27,9 +27,7 @@
  */
 $titleId = ($this->getTitleId()) ? ' id="' . $this->getTitleId() . '"' : '';
 $titleClass = ($this->getTitleClass()) ? ' ' . $this->getTitleClass() : '';
-$titlePrefix = ($this->getTitlePrefix()) ? '<span class="page-title-prefix">' . $this->getTitlePrefix() . '</span>' : '';
-$titleSuffix = ($this->getTitleSuffix()) ? '<span class="page-title-suffix">' . $this->getTitleSuffix() . '</span>' : '';
-$title = $titlePrefix . $this->escapeHtml($this->getPageTitle()) . $titleSuffix;
+$title = $this->escapeHtml($this->getPageTitle());
 ?>
 <div class="page-title<?php echo $titleClass; ?>">
     <div class="page-title-inner">

@@ -191,6 +191,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {
@@ -217,6 +218,12 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                 $customerBuilder->populateWithArray($customerData);
                 $addresses = array();
                 foreach ($addressesData as $addressData) {
+                    $region = isset($addressData['region']) ? $addressData['region'] : null;
+                    $regionId = isset($addressData['region_id']) ? $addressData['region_id'] : null;
+                    $addressData['region'] = [
+                        'region' => $region,
+                        'region_id' => $regionId,
+                    ];
                     $addresses[] = $this->addressDataBuilder->populateWithArray($addressData)->create();
                 }
 

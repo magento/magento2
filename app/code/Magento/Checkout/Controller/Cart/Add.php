@@ -24,8 +24,39 @@
  */
 namespace Magento\Checkout\Controller\Cart;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Checkout\Model\Cart as CustomerCart;
+use Magento\Framework\Exception\NoSuchEntityException;
+
 class Add extends \Magento\Checkout\Controller\Cart
 {
+    /**
+     * @var ProductRepositoryInterface
+     */
+    protected $productRepository;
+
+    /**
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
+     * @param CustomerCart $cart
+     * @param ProductRepositoryInterface $productRepository
+     */
+    public function __construct(
+        \Magento\Framework\App\Action\Context $context,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
+        CustomerCart $cart,
+        ProductRepositoryInterface $productRepository
+    ) {
+        parent::__construct($context, $scopeConfig, $checkoutSession, $storeManager, $formKeyValidator, $cart);
+        $this->productRepository = $productRepository;
+    }
+
     /**
      * Initialize product instance from request data
      *
@@ -36,15 +67,10 @@ class Add extends \Magento\Checkout\Controller\Cart
         $productId = (int)$this->getRequest()->getParam('product');
         if ($productId) {
             $storeId = $this->_objectManager->get('Magento\Framework\StoreManagerInterface')->getStore()->getId();
-            $product = $this->_objectManager->create(
-                'Magento\Catalog\Model\Product'
-            )->setStoreId(
-                $storeId
-            )->load(
-                $productId
-            );
-            if ($product->getId()) {
-                return $product;
+            try {
+                return $this->productRepository->getById($productId, false, $storeId);
+            } catch (NoSuchEntityException $e) {
+                return false;
             }
         }
         return false;

@@ -44,7 +44,7 @@ class Index extends \Magento\Integration\Controller\Adminhtml\Integration
         $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_Integration::system_integrations');
         $this->_addBreadcrumb(__('Integrations'), __('Integrations'));
-        $this->_title->add(__('Integrations'));
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Integrations'));
         $this->_view->renderLayout();
     }
 }

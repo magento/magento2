@@ -62,14 +62,20 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $this->readerMock = $this->getMock(
             '\Magento\Framework\ObjectManager\Config\Reader\Dom',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
         $this->configScopeMock = $this->getMock('Magento\Framework\Config\ScopeListInterface');
         $this->cacheMock = $this->getMock('Magento\Framework\Cache\FrontendInterface');
-        $this->omConfigMock = $this->getMock('Magento\Framework\Interception\ObjectManager\Config');
+        $this->omConfigMock = $this->getMock(
+            'Magento\Framework\Interception\ObjectManager\Config',
+            [],
+            [],
+            '',
+            false
+        );
         $this->definitionMock = $this->getMock('Magento\Framework\ObjectManager\DefinitionInterface');
     }
 

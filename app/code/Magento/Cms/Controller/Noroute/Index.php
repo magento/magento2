@@ -46,7 +46,7 @@ class Index extends \Magento\Framework\App\Action\Action
         /** @var \Magento\Cms\Helper\Page $pageHelper */
         $pageHelper = $this->_objectManager->get('Magento\Cms\Helper\Page');
         if (!$pageHelper->renderPage($this, $pageId)) {
-            $this->_forward('defaultNoRoute');
+            $this->_forward('defaultNoRoute', 'index');
         }
     }
 }

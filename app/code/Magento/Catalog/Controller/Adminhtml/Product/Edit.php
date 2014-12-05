@@ -68,7 +68,6 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product
      */
     public function execute()
     {
-        $this->_title->add(__('Products'));
         $productId = (int) $this->getRequest()->getParam('id');
         $product = $this->productBuilder->build($this->getRequest());
 
@@ -79,14 +78,14 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product
             return $resultRedirect->setPath('catalog/*/');
         }
 
-        $this->_title->add($product->getName());
-
         $this->_eventManager->dispatch('catalog_product_edit_action', array('product' => $product));
 
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->addHandle('catalog_product_' . $product->getTypeId());
         $resultPage->setActiveMenu('Magento_Catalog::catalog_products');
+        $resultPage->getConfig()->getTitle()->prepend(__('Products'));
+        $resultPage->getConfig()->getTitle()->prepend($product->getName());
 
         if (!$this->_objectManager->get('Magento\Framework\StoreManagerInterface')->isSingleStoreMode()
             &&

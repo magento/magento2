@@ -46,18 +46,12 @@ class Populator
         $frameworkDir = $dirList->getPath(DirectoryList::LIB_INTERNAL);
 
         $autoloader->addPsr4('Magento\\', [$modulesDir . '/Magento/', $generationDir . '/Magento/'], true);
-        $autoloader->addPsr4('Zend\\Soap\\', $modulesDir . '/Zend/Soap/', true);
-        $autoloader->addPsr4('Zend\\', $frameworkDir . '/Zend/', true);
 
         $autoloader->addPsr0('Apache_', $frameworkDir, true);
         $autoloader->addPsr0('Cm_', $frameworkDir, true);
         $autoloader->addPsr0('Credis_', $frameworkDir, true);
         $autoloader->addPsr0('Less_', $frameworkDir, true);
         $autoloader->addPsr0('Symfony\\', $frameworkDir, true);
-        $autoloader->addPsr0('Zend_Date', $modulesDir, true);
-        $autoloader->addPsr0('Zend_Mime', $modulesDir, true);
-        $autoloader->addPsr0('Zend_', $frameworkDir, true);
-        $autoloader->addPsr0('Zend\\', $frameworkDir, true);
 
         /** Required for Zend functionality */
         FileResolver::addIncludePath($frameworkDir);

@@ -39,7 +39,7 @@ interface StockRepositoryInterface
     /**
      * Load Stock data by given stockId and parameters
      *
-     * @param string $stockId
+     * @param int $stockId
      * @return \Magento\CatalogInventory\Api\Data\StockInterface
      */
     public function get($stockId);

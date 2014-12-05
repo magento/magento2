@@ -23,10 +23,12 @@
  */
 namespace Magento\RecurringPayment\Model\Resource;
 
+use \Magento\Framework\Model\Resource\Db\AbstractDb;
+
 /**
  * Recurring payment resource model
  */
-class Payment extends \Magento\Sales\Model\Resource\AbstractResource
+class Payment extends AbstractDb
 {
     /**
      * Initialize main table and column

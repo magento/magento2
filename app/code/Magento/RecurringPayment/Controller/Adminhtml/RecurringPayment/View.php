@@ -36,11 +36,11 @@ class View extends \Magento\RecurringPayment\Controller\Adminhtml\RecurringPayme
     public function execute()
     {
         try {
-            $this->_title->add(__('Recurring Billing Payments'));
             $payment = $this->_initPayment();
             $this->_view->loadLayout();
             $this->_setActiveMenu('Magento_RecurringPayment::recurring_payment');
-            $this->_title->add(__('Payment #%1', $payment->getReferenceId()));
+            $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Recurring Billing Payments'));
+            $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Payment #%1', $payment->getReferenceId()));
             $this->_view->renderLayout();
             return;
         } catch (CoreException $e) {

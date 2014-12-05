@@ -42,6 +42,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     protected $instances = array();
 
     /**
+     * @var Product[]
+     */
+    protected $instancesById = array();
+
+    /**
      * @var \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper
      */
     protected $initializationHelper;
@@ -117,9 +122,10 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     /**
      * {@inheritdoc}
      */
-    public function get($sku, $editMode = false)
+    public function get($sku, $editMode = false, $storeId = null)
     {
-        if (!isset($this->instances[$sku])) {
+        $cacheKey = $this->getCacheKey(func_get_args());
+        if (!isset($this->instances[$sku][$cacheKey])) {
             $product = $this->productFactory->create();
 
             $productId = $this->resourceModel->getIdBySku($sku);
@@ -130,9 +136,45 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 $product->setData('_edit_mode', true);
             }
             $product->load($productId);
-            $this->instances[$sku] = $product;
+            $this->instances[$sku][$cacheKey] = $product;
+            $this->instancesById[$product->getId()][$cacheKey] = $product;
         }
-        return $this->instances[$sku];
+        return $this->instances[$sku][$cacheKey];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getById($productId, $editMode = false, $storeId = null)
+    {
+        $cacheKey = $this->getCacheKey(func_get_args());
+        if (!isset($this->instancesById[$productId][$cacheKey])) {
+            $product = $this->productFactory->create();
+
+            if ($editMode) {
+                $product->setData('_edit_mode', true);
+            }
+            if ($storeId !== null) {
+                $product->setData('store_id', $storeId);
+            }
+            $product->load($productId);
+            if (!$product->getId()) {
+                throw new NoSuchEntityException('Requested product doesn\'t exist');
+            }
+            $this->instancesById[$productId][$cacheKey] = $product;
+            $this->instances[$product->getSku()][$cacheKey] = $product;
+        }
+        return $this->instancesById[$productId][$cacheKey];
+    }
+
+    /**
+     * @param array $data
+     * @return string
+     */
+    protected function getCacheKey($data)
+    {
+        unset($data[0]);
+        return md5(serialize($data));
     }
 
     /**
@@ -185,10 +227,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\CouldNotSaveException('Unable to save product');
         }
-        if (array_key_exists($product->getSku(), $this->instances)) {
-            unset($this->instances[$product->getSku()]);
-        }
-
+        unset($this->instances[$product->getSku()]);
+        unset($this->instancesById[$product->getId()]);
         return $product;
     }
 
@@ -198,14 +238,14 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     public function delete(\Magento\Catalog\Api\Data\ProductInterface $product)
     {
         $productSku = $product->getSku();
+        $productId = $product->getId();
         try {
             $this->resourceModel->delete($product);
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\StateException('Unable to remove product ' . $productSku);
         }
-        if (array_key_exists($productSku, $this->instances)) {
-            unset($this->instances[$productSku]);
-        }
+        unset($this->instances[$productSku]);
+        unset($this->instancesById[$productId]);
         return true;
     }
 

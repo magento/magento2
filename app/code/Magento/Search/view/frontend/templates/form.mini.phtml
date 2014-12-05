@@ -52,7 +52,7 @@ $helper = $this->helper('Magento\Search\Helper\Data');
             </div>
             <div class="actions">
                 <button type="submit"
-                        title="<?php echo __('Search'); ?>"
+                        title="<?php echo $this->escapeHtml(__('Search')) ?>"
                         class="action search">
                     <span><?php echo __('Search'); ?></span>
                 </button>

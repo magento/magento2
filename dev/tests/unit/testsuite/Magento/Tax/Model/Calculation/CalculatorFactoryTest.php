@@ -23,7 +23,7 @@
  */
 namespace Magento\Tax\Model\Calculation;
 
-use Magento\Customer\Service\V1\Data\Address;
+use Magento\Customer\Api\Data\AddressInterface as CustomerAddress;
 use Magento\TestFramework\Helper\ObjectManager;
 
 /**
@@ -44,8 +44,8 @@ class CalculatorFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $type Type of calculator
      * @param int $storeId
-     * @param Address $billingAddress
-     * @param Address $shippingAddress
+     * @param CustomerAddress $billingAddress
+     * @param CustomerAddress $shippingAddress
      * @param null|int $customerTaxClassId
      * @param null|int $customerId
      * @param \Magento\Tax\Model\Calculation\AbstractCalculator $expectedInstanceType
@@ -132,12 +132,12 @@ class CalculatorFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function createDataProvider()
     {
-        $billingAddressMock = $this->getMockBuilder('\Magento\Customer\Service\V1\Data\Address')
+        $billingAddressMock = $this->getMockBuilder('Magento\Customer\Api\Data\AddressInterface')
             ->disableOriginalConstructor()
-            ->getMock();
-        $shippingAddressMock = $this->getMockBuilder('\Magento\Customer\Service\V1\Data\Address')
+            ->getMockForAbstractClass();
+        $shippingAddressMock = $this->getMockBuilder('Magento\Customer\Api\Data\AddressInterface')
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         return [
             'Unit' => [

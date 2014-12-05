@@ -36,7 +36,7 @@ class EmulateCustomerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerAccountMock;
+    protected $customerRepositoryMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -60,7 +60,12 @@ class EmulateCustomerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->customerAccountMock = $this->getMock('Magento\Customer\Service\V1\CustomerAccountServiceInterface');
+        $this->customerRepositoryMock = $this->getMockForAbstractClass(
+            'Magento\Customer\Api\CustomerRepositoryInterface',
+            [],
+            '',
+            false
+        );
         $this->customerSessionMock = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
         $this->sessionHelperMock = $this->getMock('Magento\Persistent\Helper\Session', [], [], '', false);
         $this->helperMock = $this->getMock('Magento\Persistent\Helper\Data', [], [], '', false);
@@ -69,7 +74,7 @@ class EmulateCustomerTest extends \PHPUnit_Framework_TestCase
             $this->sessionHelperMock,
             $this->helperMock,
             $this->customerSessionMock,
-            $this->customerAccountMock
+            $this->customerRepositoryMock
         );
     }
 
@@ -113,9 +118,9 @@ class EmulateCustomerTest extends \PHPUnit_Framework_TestCase
         $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->will($this->returnValue(false));
         $this->sessionHelperMock->expects($this->once())->method('getSession')->will($this->returnValue($sessionMock));
         $sessionMock->expects($this->once())->method('getCustomerId')->will($this->returnValue($customerId));
-        $this->customerAccountMock
+        $this->customerRepositoryMock
             ->expects($this->once())
-            ->method('getCustomer')
+            ->method('getById')
             ->with(1)
             ->will($this->returnValue($customerMock));
         $customerMock->expects($this->once())->method('getId')->will($this->returnValue($customerId));
@@ -139,9 +144,9 @@ class EmulateCustomerTest extends \PHPUnit_Framework_TestCase
         $this->helperMock->expects($this->once())->method('isShoppingCartPersist')->will($this->returnValue(true));
         $this->sessionHelperMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));
         $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->will($this->returnValue(true));
-        $this->customerAccountMock
+        $this->customerRepositoryMock
             ->expects($this->never())
-            ->method('getCustomer');
+            ->method('get');
         $this->model->execute($this->observerMock);
     }
 }

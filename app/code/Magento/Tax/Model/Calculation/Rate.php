@@ -26,6 +26,7 @@ namespace Magento\Tax\Model\Calculation;
 
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Directory\Model\Region;
+use Magento\Framework\Api\AttributeDataBuilder;
 
 /**
  * Tax Rate Model
@@ -73,6 +74,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements \
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param AttributeDataBuilder $customAttributeBuilder
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param Rate\TitleFactory $taxTitleFactory
      * @param Region $directoryRegion
@@ -84,6 +86,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements \
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        AttributeDataBuilder $customAttributeBuilder,
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Tax\Model\Calculation\Rate\TitleFactory $taxTitleFactory,
         Region $directoryRegion,
@@ -94,7 +97,15 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements \
         $this->_regionFactory = $regionFactory;
         $this->_titleFactory = $taxTitleFactory;
         $this->directoryRegion = $directoryRegion;
-        parent::__construct($context, $registry, $metadataService, $resource, $resourceCollection, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $metadataService,
+            $customAttributeBuilder,
+            $resource,
+            $resourceCollection,
+            $data
+        );
     }
 
     /**

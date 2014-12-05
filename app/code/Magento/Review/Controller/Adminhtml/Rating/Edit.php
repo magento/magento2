@@ -39,9 +39,11 @@ class Edit extends \Magento\Review\Controller\Adminhtml\Rating
             $ratingModel->load($this->getRequest()->getParam('id'));
         }
 
-        $this->_title->add($ratingModel->getId() ? $ratingModel->getRatingCode() : __('New Rating'));
-
         $this->_setActiveMenu('Magento_Review::catalog_reviews_ratings_ratings');
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Ratings'));
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(
+            $ratingModel->getId() ? $ratingModel->getRatingCode() : __('New Rating')
+        );
         $this->_addBreadcrumb(__('Manage Ratings'), __('Manage Ratings'));
 
         $this->_addContent(

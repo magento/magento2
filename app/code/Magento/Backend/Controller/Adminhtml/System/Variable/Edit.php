@@ -35,9 +35,11 @@ class Edit extends \Magento\Backend\Controller\Adminhtml\System\Variable
     {
         $variable = $this->_initVariable();
 
-        $this->_title->add($variable->getId() ? $variable->getCode() : __('New Custom Variable'));
-
         $resultPage = $this->createPage();
+        $resultPage->getConfig()->getTitle()->prepend(__('Custom Variables'));
+        $resultPage->getConfig()->getTitle()->prepend(
+            $variable->getId() ? $variable->getCode() : __('New Custom Variable')
+        );
         $resultPage->addContent($resultPage->getLayout()->createBlock('Magento\Backend\Block\System\Variable\Edit'))
             ->addJs(
                 $resultPage->getLayout()->createBlock(

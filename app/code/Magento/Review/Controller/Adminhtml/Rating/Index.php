@@ -36,7 +36,7 @@ class Index extends \Magento\Review\Controller\Adminhtml\Rating
 
         $this->_setActiveMenu('Magento_Review::catalog_reviews_ratings_ratings');
         $this->_addBreadcrumb(__('Manage Ratings'), __('Manage Ratings'));
-
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Ratings'));
         $this->_view->renderLayout();
     }
 }

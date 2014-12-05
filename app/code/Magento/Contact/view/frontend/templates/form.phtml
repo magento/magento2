@@ -38,9 +38,9 @@
             </div>
         </div>
         <div class="field email required">
-            <label class="label" for="email"><span><?php echo __('Email Address') ?></span></label>
+            <label class="label" for="email"><span><?php echo __('Email') ?></span></label>
             <div class="control">
-                <input name="email" id="email" title="<?php echo __('Email Address') ?>" value="<?php echo $this->escapeHtml($this->helper('Magento\Contact\Helper\Data')->getUserEmail()) ?>" class="input-text" type="text" data-validate="{required:true, 'validate-email':true}"/>
+                <input name="email" id="email" title="<?php echo __('Email') ?>" value="<?php echo $this->escapeHtml($this->helper('Magento\Contact\Helper\Data')->getUserEmail()) ?>" class="input-text" type="email" data-validate="{required:true, 'validate-email':true}"/>
             </div>
         </div>
         <div class="field telephone">

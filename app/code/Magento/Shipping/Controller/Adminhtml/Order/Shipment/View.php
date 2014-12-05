@@ -60,15 +60,12 @@ class View extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        $this->_title->add(__('Shipments'));
-
         $this->shipmentLoader->setOrderId($this->getRequest()->getParam('order_id'));
         $this->shipmentLoader->setShipmentId($this->getRequest()->getParam('shipment_id'));
         $this->shipmentLoader->setShipment($this->getRequest()->getParam('shipment'));
         $this->shipmentLoader->setTracking($this->getRequest()->getParam('tracking'));
         $shipment = $this->shipmentLoader->load();
         if ($shipment) {
-            $this->_title->add("#" . $shipment->getIncrementId());
             $this->_view->loadLayout();
             $this->_view->getLayout()->getBlock(
                 'sales_shipment_view'
@@ -76,6 +73,8 @@ class View extends \Magento\Backend\App\Action
                 $this->getRequest()->getParam('come_from')
             );
             $this->_setActiveMenu('Magento_Sales::sales_order');
+            $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Shipments'));
+            $this->_view->getPage()->getConfig()->getTitle()->prepend("#" . $shipment->getIncrementId());
             $this->_view->renderLayout();
         } else {
             $this->_forward('noroute');

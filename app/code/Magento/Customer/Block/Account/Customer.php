@@ -24,7 +24,6 @@
 namespace Magento\Customer\Block\Account;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Model\Context;
 
 class Customer extends \Magento\Framework\View\Element\Template
 {
@@ -75,7 +74,7 @@ class Customer extends \Magento\Framework\View\Element\Template
      */
     public function customerLoggedIn()
     {
-        return (bool)$this->httpContext->getValue(Context::CONTEXT_AUTH);
+        return (bool)$this->httpContext->getValue(\Magento\Customer\Model\Context::CONTEXT_AUTH);
     }
 
     /**

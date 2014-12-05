@@ -56,13 +56,22 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive(@break) when (@break = @screen-m) {
+.responsive-min-l(@break) when (@break = @screen-m) {
     h1 {
         .css(font-size, @h1-font-size-desktop);
         .css(margin-bottom, @h1-margin-bottom-desktop);
     }
 }
 
+
+//
+//    Common
+//--------------------------------------
+
+.responsive-common() {
+
 .items {
     .list-reset-styles();
+}
+
 }

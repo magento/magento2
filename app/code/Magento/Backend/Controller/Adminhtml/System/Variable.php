@@ -112,8 +112,6 @@ class Variable extends Action
      */
     protected function _initVariable()
     {
-        $this->_title->add(__('Custom Variables'));
-
         $variableId = $this->getRequest()->getParam('variable_id', null);
         $storeId = (int)$this->getRequest()->getParam('store', 0);
         /* @var $variable \Magento\Core\Model\Variable */

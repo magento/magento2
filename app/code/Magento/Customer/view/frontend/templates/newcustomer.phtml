@@ -31,8 +31,10 @@
 ?>
 <?php if ($this->getRegistration()->isAllowed()): ?>
 <div class="block block-new-customer">
-    <div class="block-title"><strong><?php echo __('New Customers') ?></strong></div>
-    <div class="block-content">
+    <div class="block-title">
+        <strong id="block-new-customer-heading" role="heading" aria-level="2"><?php echo __('New Customers') ?></strong>
+    </div>
+    <div class="block-content" aria-labelledby="block-new-customer-heading">
         <p><?php echo __('By creating an account with our store, you will be able to move through the checkout process faster, store multiple shipping addresses, view and track your orders in your account and more.') ?></p>
         <div class="actions-toolbar">
             <div class="primary">

@@ -49,6 +49,7 @@ Magento/CatalogImportExport/Model/Import
 Magento/CatalogRule/Block/Adminhtml/Promo/Catalog/Edit/Tab
 Magento/Checkout/Block/Onepage
 Magento/Checkout/Service/V1/Data/Cart
+app/code/Magento/Cms/Api/Data
 Magento/Cms/Block/Adminhtml/Page/Edit
 Magento/Core/Model/Design/Backend
 Magento/Core/Model/Layout/File/Source/Override
@@ -146,3 +147,4 @@ app/code/Magento/CatalogInventory/Api/Data
 app/code/Magento/Sales/Model/Spi
 Magento/Catalog/Service
 Magento/Catalog/Model/ProductLink
+Magento/GroupedProduct/Model/Resource/Product/Type/Grouped

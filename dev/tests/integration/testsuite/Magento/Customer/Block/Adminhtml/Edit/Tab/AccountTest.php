@@ -105,7 +105,7 @@ class AccountTest extends \PHPUnit_Framework_TestCase
 
         // Verify account email
         $this->assertRegExp('/id="_accountemail"[^>]*value="customer@example.com"/', $result);
-        $this->assertRegExp('/input id="_accountfirstname"[^>]*value="Firstname"/', $result);
+        $this->assertRegExp('/input id="_accountfirstname"[^>]*value="John"/', $result);
 
         // Verify confirmation controls are not present
         $this->assertNotContains('field-confirmation', $result);

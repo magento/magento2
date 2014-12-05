@@ -30,12 +30,12 @@ $count = $_helper->getItemCount();
 ?>
 <div class="block block-compare">
     <div class="block-title">
-        <strong><?php echo __('Compare Products') ?></strong>
+        <strong id="block-compare-heading" role="heading" aria-level="2"><?php echo __('Compare Products') ?></strong>
         <?php if($count > 0): ?>
         <span class="counter qty"><?php echo ($count == 1) ? __('1 item') : __('%1 items',$count) ?></span>
         <?php endif; ?>
     </div>
-    <div class="block-content">
+    <div class="block-content" aria-labelledby="block-compare-heading">
         <?php if($_helper->getItemCount() > 0): ?>
             <ol id="compare-items" class="product-items product-items-names"
                 data-mage-init='{"compareItems":{

@@ -23,9 +23,11 @@
  */
 namespace Magento\Checkout\Model;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Object;
 use Magento\Checkout\Model\Cart\CartInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Shopping cart model
@@ -66,11 +68,6 @@ class Cart extends Object implements CartInterface
     protected $_storeManager;
 
     /**
-     * @var \Magento\Catalog\Model\ProductFactory
-     */
-    protected $_productFactory;
-
-    /**
      * @var \Magento\Checkout\Model\Resource\Cart
      */
     protected $_resourceCart;
@@ -106,9 +103,13 @@ class Cart extends Object implements CartInterface
     protected $quoteRepository;
 
     /**
+     * @var ProductRepositoryInterface
+     */
+    protected $productRepository;
+
+    /**
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param Resource\Cart $resourceCart
      * @param Session $checkoutSession
@@ -117,12 +118,12 @@ class Cart extends Object implements CartInterface
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\CatalogInventory\Api\StockStateInterface $stockState
      * @param \Magento\Sales\Model\QuoteRepository $quoteRepository
+     * @param ProductRepositoryInterface $productRepository
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Checkout\Model\Resource\Cart $resourceCart,
         Session $checkoutSession,
@@ -131,11 +132,11 @@ class Cart extends Object implements CartInterface
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\CatalogInventory\Api\StockStateInterface $stockState,
         \Magento\Sales\Model\QuoteRepository $quoteRepository,
+        ProductRepositoryInterface $productRepository,
         array $data = array()
     ) {
         $this->_eventManager = $eventManager;
         $this->_scopeConfig = $scopeConfig;
-        $this->_productFactory = $productFactory;
         $this->_storeManager = $storeManager;
         $this->_resourceCart = $resourceCart;
         $this->_checkoutSession = $checkoutSession;
@@ -145,6 +146,7 @@ class Cart extends Object implements CartInterface
         $this->stockState = $stockState;
         $this->quoteRepository = $quoteRepository;
         parent::__construct($data);
+        $this->productRepository = $productRepository;
     }
 
     /**
@@ -265,13 +267,12 @@ class Cart extends Object implements CartInterface
     {
         /* @var $orderItem \Magento\Sales\Model\Order\Item */
         if (is_null($orderItem->getParentItem())) {
-            $product = $this->_productFactory->create()
-                ->setStoreId($this->_storeManager->getStore()->getId())
-                ->load($orderItem->getProductId());
-            if (!$product->getId()) {
+            $storeId = $this->_storeManager->getStore()->getId();
+            try {
+                $product = $this->productRepository->getById($orderItem->getProductId(), false, $storeId);
+            } catch (NoSuchEntityException $e) {
                 return $this;
             }
-
             $info = $orderItem->getProductOptionByCode('info_buyRequest');
             $info = new \Magento\Framework\Object($info);
             if (is_null($qtyFlag)) {
@@ -297,17 +298,21 @@ class Cart extends Object implements CartInterface
         $product = null;
         if ($productInfo instanceof Product) {
             $product = $productInfo;
+            if (!$product->getId()) {
+                throw new \Magento\Framework\Model\Exception(__('We can\'t find the product.'));
+            }
         } elseif (is_int($productInfo) || is_string($productInfo)) {
-            $product = $this->_productFactory->create()
-                ->setStoreId($this->_storeManager->getStore()->getId())
-                ->load($productInfo);
+            $storeId = $this->_storeManager->getStore()->getId();
+            try {
+                $product = $this->productRepository->getById($productInfo, false, $storeId);
+            } catch (NoSuchEntityException $e) {
+                throw new \Magento\Framework\Model\Exception(__('We can\'t find the product.'), 0, $e);
+            }
+        } else {
+            throw new \Magento\Framework\Model\Exception(__('We can\'t find the product.'));
         }
         $currentWebsiteId = $this->_storeManager->getStore()->getWebsiteId();
-        if (!$product
-            || !$product->getId()
-            || !is_array($product->getWebsiteIds())
-            || !in_array($currentWebsiteId, $product->getWebsiteIds())
-        ) {
+        if (!is_array($product->getWebsiteIds()) || !in_array($currentWebsiteId, $product->getWebsiteIds())) {
             throw new \Magento\Framework\Model\Exception(__('We can\'t find the product.'));
         }
         return $product;

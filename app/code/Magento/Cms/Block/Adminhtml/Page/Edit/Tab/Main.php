@@ -78,7 +78,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
 
         $fieldset = $form->addFieldset('base_fieldset', array('legend' => __('Page Information')));
 
-        if ($model->getPageId()) {
+        if ($model->getId()) {
             $fieldset->addField('page_id', 'hidden', array('name' => 'page_id'));
         }
 

@@ -35,12 +35,12 @@ class Index extends \Magento\Sales\Controller\Adminhtml\Order\Create
      */
     public function execute()
     {
-        $this->_title->add(__('Orders'));
-        $this->_title->add(__('New Order'));
         $this->_initSession();
         $this->_view->loadLayout();
 
         $this->_setActiveMenu('Magento_Sales::sales_order');
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Orders'));
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('New Order'));
         $this->_view->renderLayout();
     }
 }

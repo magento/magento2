@@ -44,7 +44,7 @@ class NewBilling extends \Magento\Multishipping\Controller\Checkout\Address
                 $this->_url->getUrl('*/*/selectBilling')
             );
 
-            $this->_view->getPage()->getConfig()->setTitle(
+            $this->_view->getPage()->getConfig()->getTitle()->set(
                 $addressForm->getTitle() . ' - ' . $this->_view->getPage()->getConfig()->getDefaultTitle()
             );
         }

@@ -85,8 +85,8 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $linkedProductMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
         $this->productRepositoryMock->expects($this->exactly(2))->method('get')->will($this->returnValueMap(
             [
-                ['product', false, $productMock],
-                ['linkedProduct', false, $linkedProductMock]
+                ['product', false, null, $productMock],
+                ['linkedProduct', false, null, $linkedProductMock]
             ]
         ));
         $customAttributeMock = $this->getMock('\Magento\Framework\Api\AttributeInterface');
@@ -116,8 +116,8 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $linkedProductMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
         $this->productRepositoryMock->expects($this->exactly(2))->method('get')->will($this->returnValueMap(
             [
-                ['product', false, $productMock],
-                ['linkedProduct', false, $linkedProductMock]
+                ['product', false, null, $productMock],
+                ['linkedProduct', false, null, $linkedProductMock]
             ]
         ));
         $customAttributeMock = $this->getMock('\Magento\Framework\Api\AttributeInterface');
@@ -144,8 +144,8 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $linkedProductMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
         $this->productRepositoryMock->expects($this->exactly(2))->method('get')->will($this->returnValueMap(
             [
-                ['product', false, $productMock],
-                ['linkedProduct', false, $linkedProductMock]
+                ['product', false, null, $productMock],
+                ['linkedProduct', false, null, $linkedProductMock]
             ]
         ));
         $entityMock->expects($this->once())->method('getLinkedProductSku')->willReturn('linkedProduct');
@@ -172,8 +172,8 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $linkedProductMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
         $this->productRepositoryMock->expects($this->exactly(2))->method('get')->will($this->returnValueMap(
             [
-                ['product', false, $productMock],
-                ['linkedProduct', false, $linkedProductMock]
+                ['product', false, null, $productMock],
+                ['linkedProduct', false, null, $linkedProductMock]
             ]
         ));
         $entityMock->expects($this->once())->method('getLinkedProductSku')->willReturn('linkedProduct');
@@ -201,8 +201,8 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $linkedProductMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
         $this->productRepositoryMock->expects($this->exactly(2))->method('get')->will($this->returnValueMap(
             [
-                ['product', false, $productMock],
-                ['linkedProduct', false, $linkedProductMock]
+                ['product', false, null, $productMock],
+                ['linkedProduct', false, null, $linkedProductMock]
             ]
         ));
         $entityMock->expects($this->exactly(2))->method('getLinkedProductSku')->willReturn('linkedProduct');

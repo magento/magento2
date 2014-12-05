@@ -131,8 +131,7 @@
 }
 
 .section-config.complex .section-config.with-button > .entry-edit-head {
-    padding:0;
-    padding-left:25px;
+    padding: 0 0 0 25px;
     border:0;
 }
 
@@ -241,8 +240,7 @@
 }
 .section-config.config-advanced > .entry-edit-head {
     border:0;
-    padding:0;
-    padding-left:25%;
+    padding: 0 0 0 25%;
 }
 .section-config.config-advanced > .entry-edit-head a {
     border:0 !important;
@@ -375,7 +373,7 @@
 .accordion .config select,
 .accordion .config textarea {
     width: 100%;
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
 }
 
 .accordion .config input.input-file {
@@ -400,10 +398,8 @@
     left:0;
     right:0;
     bottom:0;
-    margin:0;
     float:right;
-    margin-right:-20px;
-    margin-top:6px;
+    margin: 6px -20px 0 0;
 }
 .accordion .config .value.with-tooltip .tooltip-content {
     padding: 18px;
@@ -443,7 +439,7 @@
 .accordion .config .scope-label {
     color: #999;
     font-size: 12px;
-    letter-spacing: 0.05em;
+    letter-spacing: .05em;
     padding: 15px 15px 0 0;
 }
 
@@ -564,8 +560,8 @@
 .attribute-set-col {
     display: block;
     float: left;
-    width: 100%;
     margin-left: 2.127659574%;
+    -moz-box-sizing: border-box;
     box-sizing: border-box;
     width: 31.9149%;
 }
@@ -638,6 +634,19 @@
 .rule-param .element,
 .rule-param-edit .label {
     display: none;
+}
+
+.rule-chooser .field-row {
+    .clearfix();
+    display: block;
+    margin-bottom: 17px;
+    .input-text {
+        margin-top: 5px;
+    }
+    .ui-datepicker-trigger {
+        margin-left: 5px;
+        margin-top:-2px;
+    }
 }
 
 .rule-param input,

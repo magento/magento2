@@ -40,29 +40,29 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     protected $_customer = null;
 
     /**
-     * @var \Magento\Customer\Service\V1\CustomerAccountServiceInterface
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
      */
-    protected $_customerAccountService;
+    protected $customerRepository;
 
     /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\App\Http\Context $httpContext
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService
+     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param array $data
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Framework\App\Http\Context $httpContext,
-        \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService,
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
+        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         array $data = array()
     ) {
-        $this->_customerAccountService = $customerAccountService;
+        $this->customerRepository = $customerRepository;
         parent::__construct(
             $context,
             $httpContext,
-            $productFactory,
+            $productRepository,
             $data
         );
     }
@@ -76,7 +76,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
-        $this->pageConfig->setTitle($this->getHeader());
+        $this->pageConfig->getTitle()->set($this->getHeader());
         return $this;
     }
 
@@ -88,7 +88,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     public function getWishlistCustomer()
     {
         if (is_null($this->_customer)) {
-            $this->_customer = $this->_customerAccountService->getCustomer($this->_getWishlist()->getCustomerId());
+            $this->_customer = $this->customerRepository->getById($this->_getWishlist()->getCustomerId());
         }
 
         return $this->_customer;

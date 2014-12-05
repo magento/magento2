@@ -33,14 +33,13 @@ class Totals extends \Magento\Reports\Controller\Adminhtml\Report\Customer
      */
     public function execute()
     {
-        $this->_title->add(__('Order Total Report'));
-
         $this->_initAction()->_setActiveMenu(
             'Magento_Reports::report_customers_totals'
         )->_addBreadcrumb(
             __('Customers by Orders Total'),
             __('Customers by Orders Total')
         );
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Order Total Report'));
         $this->_view->renderLayout();
     }
 }

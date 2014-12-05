@@ -48,12 +48,12 @@ class Index extends \Magento\Backend\Controller\Adminhtml\Dashboard
      */
     public function execute()
     {
-        $this->_title->add(__('Dashboard'));
-
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Magento_Backend::dashboard');
         $resultPage->addBreadcrumb(__('Dashboard'), __('Dashboard'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Dashboard'));
+
         return $resultPage;
     }
 }

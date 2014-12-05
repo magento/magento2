@@ -36,14 +36,11 @@
                 <th class="col subtotal"><?php echo __('Subtotal') ?></th>
             </tr>
         </thead>
-        <tfoot>
-            <?php echo $this->getChildHtml('order_totals') ?>
-        </tfoot>
-            <?php $_items = $_order->getItemsCollection(); ?>
-            <?php $_index = 0; ?>
-            <?php $_count = $_items->count(); ?>
-            <?php $_giftMessage = ''?>
-            <?php foreach ($_items as $_item): ?>
+        <?php $_items = $_order->getItemsCollection(); ?>
+        <?php $_index = 0; ?>
+        <?php $_count = $_items->count(); ?>
+        <?php $_giftMessage = ''?>
+        <?php foreach ($_items as $_item): ?>
             <?php if ($_item->getParentItem()) continue; ?>
             <tbody>
                 <?php echo $this->getItemHtml($_item) ?>
@@ -77,7 +74,10 @@
                     </tr>
                 <?php endif ?>
             </tbody>
-            <?php endforeach; ?>
+        <?php endforeach; ?>
+        <tfoot>
+            <?php echo $this->getChildHtml('order_totals') ?>
+        </tfoot>
     </table>
 </div>
 <?php if ($_giftMessage): ?>

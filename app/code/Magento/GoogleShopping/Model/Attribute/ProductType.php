@@ -33,9 +33,9 @@ class ProductType extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribu
     /**
      * Category factory
      *
-     * @var \Magento\Catalog\Model\CategoryFactory
+     * @var \Magento\Catalog\Api\CategoryRepositoryInterface
      */
-    protected $_categoryFactory;
+    protected $categoryRepository;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -45,7 +45,7 @@ class ProductType extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribu
      * @param \Magento\GoogleShopping\Helper\Product $gsProduct
      * @param \Magento\Catalog\Model\Product\CatalogPrice $catalogPrice
      * @param \Magento\GoogleShopping\Model\Resource\Attribute $resource
-     * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
+     * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
@@ -57,11 +57,11 @@ class ProductType extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribu
         \Magento\GoogleShopping\Helper\Product $gsProduct,
         \Magento\Catalog\Model\Product\CatalogPrice $catalogPrice,
         \Magento\GoogleShopping\Model\Resource\Attribute $resource,
-        \Magento\Catalog\Model\CategoryFactory $categoryFactory,
+        \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        $this->_categoryFactory = $categoryFactory;
+        $this->categoryRepository = $categoryRepository;
         parent::__construct(
             $context,
             $registry,
@@ -91,7 +91,7 @@ class ProductType extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribu
         $value = 'Shop';
 
         if (!empty($productCategories)) {
-            $category = $this->_categoryFactory->create()->load(array_shift($productCategories));
+            $category = $this->categoryRepository->get(array_shift($productCategories));
 
             $breadcrumbs = array();
 

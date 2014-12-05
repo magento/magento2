@@ -151,6 +151,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      * Run test toOptionIdArray method
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testToOptionIdArray()
     {
@@ -164,29 +166,13 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
         $objectMock = $this->getMock(
             'Magento\Framework\Object',
-            ['getData', 'getPageId', 'setData', 'getTitle', 'getIdentifier'],
+            ['getData', 'getId', 'setData', 'getTitle', 'getIdentifier'],
             [],
             '',
             false
         );
-        $criteriaMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Api\CriteriaInterface',
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getPart']
-        );
-        $connectionMock = $this->getMockForAbstractClass(
-            'Magento\Framework\DB\Adapter\AdapterInterface',
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['fetchPairs', 'select']
-        );
+        $criteriaMock = $this->getMockForAbstractClass('Magento\Framework\Api\CriteriaInterface');
+        $connectionMock = $this->getMockForAbstractClass('Magento\Framework\DB\Adapter\AdapterInterface');
         $resourceMock = $this->getMockForAbstractClass(
             'Magento\Framework\Model\Resource\Db\AbstractDb',
             [],
@@ -269,7 +255,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->with($selectMock)
             ->will($this->returnValue([123 => 999]));
         $objectMock->expects($this->any())
-            ->method('getPageId')
+            ->method('getId')
             ->will($this->returnValue(123));
         $this->storeManagerMock->expects($this->any())
             ->method('getStore')

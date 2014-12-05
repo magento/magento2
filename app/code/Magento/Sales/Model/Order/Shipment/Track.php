@@ -25,6 +25,7 @@ namespace Magento\Sales\Model\Order\Shipment;
 
 use Magento\Sales\Model\AbstractModel;
 use Magento\Sales\Api\Data\ShipmentTrackInterface;
+use Magento\Framework\Api\AttributeDataBuilder;
 
 /**
  * @method \Magento\Sales\Model\Resource\Order\Shipment\Track _getResource()
@@ -77,6 +78,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param AttributeDataBuilder $customAttributeBuilder
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\StoreManagerInterface $storeManager
@@ -89,6 +91,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        AttributeDataBuilder $customAttributeBuilder,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\StoreManagerInterface $storeManager,
@@ -101,6 +104,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
             $context,
             $registry,
             $metadataService,
+            $customAttributeBuilder,
             $localeDate,
             $dateTime,
             $resource,

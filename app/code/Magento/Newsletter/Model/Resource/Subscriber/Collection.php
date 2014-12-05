@@ -24,7 +24,6 @@
 namespace Magento\Newsletter\Model\Resource\Subscriber;
 
 use Magento\Newsletter\Model\Queue as ModelQueue;
-use Magento\Customer\Service\V1\CustomerMetadataServiceInterface as CustomerMetadataService;
 
 /**
  * Newsletter subscribers collection

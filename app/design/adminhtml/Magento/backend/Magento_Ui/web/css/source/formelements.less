@@ -26,21 +26,21 @@
 @field-control_focus--border-color: #007BDB;
 @field-scope--color: #808080;
 @field-label--color: #007BDB;
-@field-divider--color: #cccccc;
+@field-divider--color: #ccc;
 @field-label--color: #303030;
-@field-label-disabled--color: #999999;
+@field-label-disabled--color: #999;
 @field-label_required--color: #EB5202;
 @field-note--color: #303030;
 @field-control--color: #303030;
-@field-control--bg-color: #ffffff;
+@field-control--bg-color: #fff;
 @field-control_disabled--bg-color: #E9E9E9;
 @field-control-addon--color: #858585;
 @field-date-icon--color: #514943;
-@field-tooltip-icon--color: #ffffff;
+@field-tooltip-icon--color: #fff;
 @field-tooltip-icon--bg-color: #514943;
 @field-tooltip-content--bg-color: #fff8d7;
 @field-tooltip-content--border-color: #adadad;
-@field-error--color: #555555;
+@field-error--color: #555;
 @field-error--bg-color: #FFF8D6;
 @field-error--border-color: #E22626;
 
@@ -112,7 +112,7 @@
         border: 1px solid @field-tooltip-content--border-color;
         border-radius: 1px;
         bottom: 42px;
-        @_shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.3);
+        @_shadow: 0 2px 8px 0 rgba(0, 0, 0, .3);
         .css(box-shadow, @_shadow);
         &:after,
         &:before {
@@ -183,7 +183,7 @@
     }
     &.field .control [class*="control-"][disabled] {
         background-color: @field-control_disabled--bg-color;
-        opacity: 0.5;
+        opacity: .5;
         color: @field-control--color;
         border-color: @field-control--border-color;
     }
@@ -291,13 +291,11 @@
         &-textarea,
         &-select,
         &-text {
-            border-width: 1px;
-            border-style: solid;
-            border-color: @field-control--border-color;
+            border: 1px solid @field-control--border-color;
             border-radius: 1px;
             padding: 0 10px;
             color: @field-control--color;
-            backround-color: @field-control--bg-color;
+            background-color: @field-control--bg-color;
             font-weight: 500;
             font-size: 15px;
             min-width: 11em;
@@ -340,7 +338,7 @@
             }
             optgroup {
               font-weight: 600;
-              dispblay: block;
+              display: block;
               padding: 4px 10px;
               line-height: 33px;
               list-style: inside;
@@ -380,7 +378,7 @@
             top: 8px;
             margin-top: 3px!important;
             &[disabled] + .label {
-                opacity: 0.5;
+                opacity: .5;
                 cursor: not-allowed;
             }
         }
@@ -424,7 +422,7 @@
         input:focus + .label:before {
             outline: 0;
             border-color: @field-control_focus--border-color;
-            //box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.3);
+            //box-shadow: 0 2px 8px 0 rgba(0, 0, 0, .3);
         }
         .control {
             &-radio + .label:before {
@@ -489,7 +487,7 @@
                     & + label:before {
                         outline: 0;
                         border-color: @field-control_focus--border-color;
-                        //box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+                        //box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(82, 168, 236, .6);
                     }
                 }
                 & + label {
@@ -504,11 +502,8 @@
                 }
                 & + label:before {
                     box-sizing: border-box;
-                    border-style: solid;
-                    border-color: @field-control--border-color;
                     border-radius: 1px;
-                    border-width: 1px;
-                    z-index: 1;
+                    border: 1px solid @field-control--border-color;
                     content: "";
                     display: block;
                     position: absolute;
@@ -520,7 +515,7 @@
                     background: #fff;
                 }
                 &[disabled] + label:before {
-                    opacity: 0.5;
+                    opacity: .5;
                     background: @field-control_disabled--bg-color;
                 }
             }

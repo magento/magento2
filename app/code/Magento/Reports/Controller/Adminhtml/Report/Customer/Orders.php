@@ -33,14 +33,13 @@ class Orders extends \Magento\Reports\Controller\Adminhtml\Report\Customer
      */
     public function execute()
     {
-        $this->_title->add(__('Order Count Report'));
-
         $this->_initAction()->_setActiveMenu(
             'Magento_Reports::report_customers_orders'
         )->_addBreadcrumb(
             __('Customers by Number of Orders'),
             __('Customers by Number of Orders')
         );
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Order Count Report'));
         $this->_view->renderLayout();
     }
 }

@@ -2,10 +2,16 @@
     "name": "magento/project-community-edition",
     "description": "Magento project (Community Edition)",
     "type": "project",
-    "version": "0.1.0-alpha106",
+    "version": "0.1.0-alpha107",
     "require": {
         "php": "~5.4.11|~5.5.0",
-        "zendframework/zend-stdlib": "2.0.3"
+        "zendframework/zend-stdlib": "2.3.1",
+        "zendframework/zend-code": "2.3.1",
+        "zendframework/zend-server": "2.3.1",
+        "zendframework/zend-soap": "2.3.1",
+        "zendframework/zend-uri": "2.3.1",
+        "zendframework/zend-validator": "2.3.1",
+        "magento/zendframework1": "1.12.9"
     },
     "require-dev": {
         "phpunit/phpunit": "4.1.0",
@@ -108,17 +114,6 @@
         "magento/language-zh_cn": "self.version",
         "magento/framework": "self.version",
         "magento/project-setup": "0.1.0",
-        "zendframework/zend-eventmanager": "2.0.3",
-        "zendframework/zend-di": "2.0.3",
-        "zendframework/zend-escaper": "2.0.3",
-        "zendframework/zend-i18n": "2.0.3",
-        "zendframework/zend-server": "2.0.3",
-        "zendframework/zend-soap": "2.0.3",
-        "zendframework/zend-uri": "2.0.3",
-        "zendframework/zend-validator": "2.0.3",
-        "zendframework/zend-servicemanager": "2.0.3",
-        "zendframework/zend-code": "2.0.3",
-        "zendframework/zendframework1": "1.12.0",
         "oyejorge/less.php": "1.7.0",
         "symfony/yaml": "2.3.x-dev",
         "trentrichardson/jquery-timepicker-addon": "1.4.3",
@@ -136,19 +131,6 @@
     },
     "extra": {
         "component_paths": {
-            "zendframework/zend-eventmanager": "lib/internal/Zend/EventManager",
-            "zendframework/zend-di": "lib/internal/Zend/Di",
-            "zendframework/zend-escaper": "lib/internal/Zend/Escaper",
-            "zendframework/zend-i18n": "lib/internal/Zend/I18n",
-            "zendframework/zend-server": "lib/internal/Zend/Server",
-            "zendframework/zend-soap": "lib/internal/Zend/Soap",
-            "zendframework/zend-uri": "lib/internal/Zend/Uri",
-            "zendframework/zend-validator": "lib/internal/Zend/Validator",
-            "zendframework/zend-code": "lib/internal/Zend/Code",
-            "zendframework/zendframework1": [
-                "lib/internal/Zend",
-                "app/code/Zend"
-            ],
             "oyejorge/less.php": "lib/internal/Less",
             "symfony/yaml": "lib/internal/Symfony/Component/Yaml",
             "trentrichardson/jquery-timepicker-addon": "lib/web/jquery/jquery-ui-timepicker-addon.js",

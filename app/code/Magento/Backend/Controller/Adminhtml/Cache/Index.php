@@ -33,11 +33,10 @@ class Index extends \Magento\Backend\Controller\Adminhtml\Cache
      */
     public function execute()
     {
-        $this->_title->add(__('Cache Management'));
-
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Magento_Backend::system_cache');
+        $resultPage->getConfig()->getTitle()->prepend(__('Cache Management'));
         return $resultPage;
     }
 }

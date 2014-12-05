@@ -66,7 +66,7 @@ class Editor extends \Magento\Backend\App\Action
      */
     protected function _setTitle()
     {
-        $this->_title->add(__('Store Designer'));
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Store Designer'));
     }
 
     /**
@@ -120,9 +120,9 @@ class Editor extends \Magento\Backend\App\Action
     protected function _renderStoreDesigner()
     {
         try {
-            $this->_setTitle();
             $this->_view->loadLayout();
             $this->_setActiveMenu('Magento_DesignEditor::system_design_editor');
+            $this->_setTitle();
             if (!$this->_isFirstEntrance()) {
                 /** @var $assignedThemeBlock
                  * \Magento\DesignEditor\Block\Adminhtml\Theme\Selector\SelectorList\Assigned */

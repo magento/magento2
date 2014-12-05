@@ -22,14 +22,22 @@
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
+//
+//    Common
+//--------------------------------------
+
+.responsive-common() {
+
 .breadcrumbs {
     .mixin-breadcrumbs();
+}
+
 }
 
 //
 //    Mobile
 //--------------------------------------
-.responsive-smaller(@break) when (@break = @screen-m) {
+.responsive-max-m(@break) when (@break = @screen-m) {
     .breadcrumbs {
         display: none;
     }

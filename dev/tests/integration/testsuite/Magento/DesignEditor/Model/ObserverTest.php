@@ -77,7 +77,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
         /** @var $eventManager \Magento\Framework\Event\ManagerInterface */
         $eventManager = $objectManager->get('Magento\Framework\Event\ManagerInterface');
-        $eventManager->dispatch('controller_action_layout_generate_blocks_after', array('layout' => $layout));
+        $eventManager->dispatch('layout_generate_blocks_after', array('layout' => $layout));
 
         $actualAssets = array_keys($pageAssets->getAll());
         $this->assertEquals($expectedAssets, $actualAssets);

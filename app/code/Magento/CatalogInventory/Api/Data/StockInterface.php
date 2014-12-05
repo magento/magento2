@@ -27,12 +27,10 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * Interface Stock
- * @package Magento\CatalogInventory\Api\Data
- * @data-api
  */
 interface StockInterface extends ExtensibleDataInterface
 {
-    const ID = 'stock_id';
+    const STOCK_ID = 'stock_id';
 
     const WEBSITE_ID = 'website_id';
 
@@ -41,9 +39,9 @@ interface StockInterface extends ExtensibleDataInterface
     /**
      * Retrieve stock identifier
      *
-     * @return int|null
+     * @return int
      */
-    public function getId();
+    public function getStockId();
 
     /**
      * Retrieve website identifier

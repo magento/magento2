@@ -104,6 +104,7 @@ directPost.prototype = {
                 case 'order_edit':
                     // Temporary solution will be removed after refactoring Authorize.Net (sales) functionality
                     jQuery('.scalable.save:not(disabled)').removeAttr('onclick');
+                    jQuery(document).off('click.directPost');
                     jQuery(document).on(
                         'click.directPost',
                         '.scalable.save:not(disabled)',
@@ -135,7 +136,7 @@ directPost.prototype = {
                             this.returnQuote();
                         } else {
                             this.changeInputOptions('disabled', false);
-                            $('loading-mask').hide();
+                            jQuery('body').trigger('processStop');
                             enableElements('save');
                         }
                     }
@@ -185,7 +186,7 @@ directPost.prototype = {
                     case 'order_edit':
                     case 'order_create':
                         this.changeInputOptions('disabled', false);
-                        $('loading-mask').hide();
+                        jQuery('body').trigger('processStop');
                         enableElements('save');
                         break;
                 }
@@ -275,7 +276,7 @@ directPost.prototype = {
             paymentMethodEl = editForm.find(':radio[name="payment[method]"]:checked');
             this.hasError = false;
             if (paymentMethodEl.val() == this.code) {
-                $('loading-mask').show();
+                jQuery('body').trigger('processStart');
                 setLoaderPosition();
                 this.changeInputOptions('disabled', 'disabled');
                 this.paymentRequestSent = true;

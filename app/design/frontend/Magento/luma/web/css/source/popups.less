@@ -22,6 +22,12 @@
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
+//
+//    Common
+//--------------------------------------
+
+.responsive-common() {
+
 // Popup working with dropdown dialog
 .ui-dialog.popup {
   width: 420px;
@@ -55,13 +61,19 @@
 .popup {
     .actions-toolbar {
         .action.cancel {
-            &:extend(.abstract-action-button-as-link all);
+            &:extend(.abs-action-button-as-link all);
             font-weight: @font-weight-base;
         }
     }
 }
 
-.responsive(@break) when (@break = @screen-m) {
+}
+
+//
+//    Mobile
+//--------------------------------------
+
+.responsive-min-l(@break) when (@break = @screen-m) {
     .popup .popup-content {
         .fieldset .actions-toolbar {
             .secondary {

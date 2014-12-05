@@ -33,10 +33,10 @@ class Index extends \Magento\ImportExport\Controller\Adminhtml\Export
      */
     public function execute()
     {
-        $this->_title->add(__('Import/Export'));
         $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_ImportExport::system_convert_export');
-        $this->_title->add(__('Export'));
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Import/Export'));
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Export'));
         $this->_addBreadcrumb(__('Export'), __('Export'));
 
         $this->_view->renderLayout();

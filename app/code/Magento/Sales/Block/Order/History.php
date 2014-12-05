@@ -90,7 +90,7 @@ class History extends \Magento\Framework\View\Element\Template
         );
 
         $this->setOrders($orders);
-        $this->pageConfig->setTitle(__('My Orders'));
+        $this->pageConfig->getTitle()->set(__('My Orders'));
     }
 
     /**

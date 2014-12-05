@@ -23,7 +23,6 @@
  */
 namespace Magento\Sales\Model\Resource\Order;
 
-use Magento\Framework\Stdlib\DateTime;
 use Magento\Sales\Model\Resource\Attribute;
 use Magento\Sales\Model\Spi\CreditmemoResourceInterface;
 use Magento\Framework\App\Resource as AppResource;
@@ -59,19 +58,17 @@ class Creditmemo extends SalesResource implements CreditmemoResourceInterface
      * Constructor
      *
      * @param AppResource $resource
-     * @param DateTime $dateTime
      * @param Attribute $attribute
      * @param SalesIncrement $salesIncrement
      * @param CreditmemoGrid $gridAggregator
      */
     public function __construct(
         AppResource $resource,
-        DateTime $dateTime,
         Attribute $attribute,
         SalesIncrement $salesIncrement,
         CreditmemoGrid $gridAggregator
     ) {
-        parent::__construct($resource, $dateTime, $attribute, $salesIncrement, $gridAggregator);
+        parent::__construct($resource, $attribute, $salesIncrement, $gridAggregator);
     }
 
     /**

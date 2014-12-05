@@ -29,12 +29,12 @@ namespace Magento\Cms\Model\DataSource;
 class PageCollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Cms\Api\PageCriteriaInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Cms\Model\Resource\PageCriteria|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $criteriaMock;
 
     /**
-     * @var \Magento\Cms\Api\PageRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Cms\Model\PageRepository|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $repositoryMock;
 
@@ -51,16 +51,6 @@ class PageCollectionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-
-        $this->criteriaMock = $this->getMockForAbstractClass(
-            'Magento\Cms\Api\PageCriteriaInterface',
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['addStoreFilter', 'addFilter', 'setFirstStoreFlag']
-        );
         $this->repositoryMock = $this->getMockForAbstractClass(
             'Magento\Cms\Api\PageRepositoryInterface',
             [],
@@ -68,15 +58,11 @@ class PageCollectionTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->criteriaMock->expects($this->once())
-            ->method('setFirstStoreFlag')
-            ->with(true);
-
         $this->pageCollection = $objectManager->getObject(
             'Magento\Cms\Model\DataSource\PageCollection',
             [
-                'criteria' => $this->criteriaMock,
-                'repository' => $this->repositoryMock
+                'repository' => $this->repositoryMock,
+                'mapper' => ''
             ]
         );
     }
@@ -94,16 +80,6 @@ class PageCollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddFilter($name, $field, $condition, $type)
     {
-        if ($field === 'store_id') {
-            $this->criteriaMock->expects($this->once())
-                ->method('addStoreFilter')
-                ->with($condition, false);
-        } else {
-            $this->criteriaMock->expects($this->once())
-                ->method('addFilter')
-                ->with($name, $field, $condition, $type);
-        }
-
         $this->pageCollection->addFilter($name, $field, $condition, $type);
     }
 
@@ -116,7 +92,7 @@ class PageCollectionTest extends \PHPUnit_Framework_TestCase
     {
         $this->repositoryMock->expects($this->once())
             ->method('getList')
-            ->with($this->criteriaMock)
+            ->with($this->pageCollection)
             ->will($this->returnValue('return-value'));
 
         $this->assertEquals('return-value', $this->pageCollection->getResultCollection());

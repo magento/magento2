@@ -38,8 +38,8 @@ class CategoryUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $scopeConfig;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $categoryFactory;
+    /** @var \Magento\Catalog\Api\CategoryRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $categoryRepository;
 
     /** @var \Magento\Catalog\Model\Category|\PHPUnit_Framework_MockObject_MockObject */
     protected $category;
@@ -61,14 +61,14 @@ class CategoryUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->category = $this->getMock('Magento\Catalog\Model\Category', $categoryMethods, [], '', false);
         $this->storeManager = $this->getMock('Magento\Framework\StoreManagerInterface');
         $this->scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->categoryFactory = $this->getMock('Magento\Catalog\Model\CategoryFactory', ['create'], [], '', false);
+        $this->categoryRepository = $this->getMock('Magento\Catalog\Api\CategoryRepositoryInterface');
 
         $this->categoryUrlPathGenerator = (new ObjectManager($this))->getObject(
             'Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator',
             [
                 'storeManager' => $this->storeManager,
                 'scopeConfig' => $this->scopeConfig,
-                'categoryFactory' => $this->categoryFactory
+                'categoryRepository' => $this->categoryRepository,
             ]
         );
     }
@@ -152,11 +152,10 @@ class CategoryUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($parentCategoryParentId));
         $parentCategory->expects($this->any())->method('getLevel')->will($this->returnValue($parentLevel));
         $parentCategory->expects($this->any())->method('getUrlPath')->will($this->returnValue($parentUrlPath));
-        $parentCategory->expects($this->any())->method('load')->with('parent_id')->will($this->returnSelf());
         $parentCategory->expects($this->any())->method('dataHasChangedFor')
             ->will($this->returnValueMap([['url_key', false], ['path_ids', false]]));
 
-        $this->categoryFactory->expects($this->once())->method('create')
+        $this->categoryRepository->expects($this->once())->method('get')->with('parent_id')
             ->will($this->returnValue($parentCategory));
 
         $this->assertEquals($result, $this->categoryUrlPathGenerator->getUrlPath($this->category));

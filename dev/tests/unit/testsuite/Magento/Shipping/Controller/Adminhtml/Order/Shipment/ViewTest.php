@@ -39,11 +39,6 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     protected $shipmentLoaderMock;
 
     /**
-     * @var \Magento\Framework\App\Action\Title|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $titleMock;
-
-    /**
      * @var \Magento\Sales\Model\Order\Shipment|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $shipmentMock;
@@ -74,6 +69,21 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     protected $actionFlag;
 
     /**
+     * @var \Magento\Framework\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultPageMock;
+
+    /**
+     * @var \Magento\Framework\View\Page\Config|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $pageConfigMock;
+
+    /**
+     * @var \Magento\Framework\View\Page\Title|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $pageTitleMock;
+
+    /**
      * @var \Magento\Shipping\Controller\Adminhtml\Order\Shipment\View
      */
     protected $controller;
@@ -101,16 +111,9 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->titleMock = $this->getMock(
-            'Magento\Framework\App\Action\Title',
-            ['add'],
-            [],
-            '',
-            false
-        );
         $this->viewMock = $this->getMock(
             'Magento\Backend\Model\View',
-            ['loadLayout', 'getLayout', 'renderLayout'],
+            ['loadLayout', 'getLayout', 'renderLayout', 'getPage'],
             [],
             '',
             false
@@ -136,9 +139,18 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->resultPageMock = $this->getMockBuilder('Magento\Framework\View\Result\Page')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->pageConfigMock = $this->getMockBuilder('Magento\Framework\View\Page\Config')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->pageTitleMock = $this->getMockBuilder('Magento\Framework\View\Page\Title')
+            ->disableOriginalConstructor()
+            ->getMock();
         $contextMock = $this->getMock(
             'Magento\Backend\App\Action\Context',
-            ['getRequest', 'getResponse', 'getTitle', 'getView', 'getSession', 'getActionFlag'],
+            ['getRequest', 'getResponse', 'getView', 'getSession', 'getActionFlag'],
             [],
             '',
             false
@@ -146,7 +158,6 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
         $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->requestMock));
         $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->responseMock));
-        $contextMock->expects($this->any())->method('getTitle')->will($this->returnValue($this->titleMock));
         $contextMock->expects($this->any())->method('getView')->will($this->returnValue($this->viewMock));
         $contextMock->expects($this->any())->method('getSession')->will($this->returnValue($this->sessionMock));
         $contextMock->expects($this->any())->method('getActionFlag')->will($this->returnValue($this->actionFlag));
@@ -155,6 +166,16 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             $contextMock,
             $this->shipmentLoaderMock
         );
+
+        $this->viewMock->expects($this->any())
+            ->method('getPage')
+            ->willReturn($this->resultPageMock);
+        $this->resultPageMock->expects($this->any())
+            ->method('getConfig')
+            ->willReturn($this->pageConfigMock);
+        $this->pageConfigMock->expects($this->any())
+            ->method('getTitle')
+            ->willReturn($this->pageTitleMock);
     }
 
     /**
@@ -197,8 +218,6 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->method('load')
             ->will($this->returnValue($this->shipmentMock));
         $this->shipmentMock->expects($this->once())->method('getIncrementId')->will($this->returnValue($incrementId));
-        $this->titleMock->expects($this->at(0))->method('add')->with('Shipments')->will($this->returnSelf());
-        $this->titleMock->expects($this->at(1))->method('add')->with('#' . $incrementId)->will($this->returnSelf());
 
         $menuBlockMock = $this->getMock(
             'Magento\Backend\Block\Menu',

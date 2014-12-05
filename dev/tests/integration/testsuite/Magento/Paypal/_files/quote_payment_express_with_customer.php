@@ -34,6 +34,10 @@ require __DIR__ . '/../../Customer/_files/customer_two_addresses.php';
     ->get('Magento\Framework\App\Config\MutableScopeConfigInterface')
     ->setValue('payment/paypal_express/active', 1, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
 
+/** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
+$customerRepository = $objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
+$customer = $customerRepository->getById(1);
+
 /** @var $product \Magento\Catalog\Model\Product */
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
 $product->setTypeId('simple')
@@ -42,33 +46,31 @@ $product->setTypeId('simple')
     ->setName('Simple Product')
     ->setSku('simple')
     ->setPrice(10)
-    ->setStockData(array(
+    ->setStockData([
     'use_config_manage_stock' => 1,
     'qty' => 100,
     'is_qty_decimal' => 0,
     'is_in_stock' => 100,
-))
+])
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
     ->save();
 $product->load(1);
 
-$addressConverter = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Customer\Model\Address\Converter');
-
 $customerBillingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create('Magento\Customer\Model\Address');
 $customerBillingAddress->load(1);
-$billingAddressDataObject = $addressConverter->createAddressFromModel($customerBillingAddress, false, false);
+$billingAddressDataObject = $customerBillingAddress->getDataModel();
 $billingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create('Magento\Sales\Model\Quote\Address');
 $billingAddress->importCustomerAddressData($billingAddressDataObject);
 $billingAddress->setAddressType('billing');
 
+/** @var \Magento\Customer\Model\Address $customerShippingAddress */
 $customerShippingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create('Magento\Customer\Model\Address');
 $customerShippingAddress->load(2);
-$shippingAddressDataObject = $addressConverter->createAddressFromModel($customerShippingAddress, false, false);
+$shippingAddressDataObject = $customerShippingAddress->getDataModel();
 $shippingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create('Magento\Sales\Model\Quote\Address');
 $shippingAddress->importCustomerAddressData($shippingAddressDataObject);
@@ -98,8 +100,8 @@ $quote->collectTotals()->save();
 
 /** @var $service \Magento\Sales\Model\Service\Quote */
 $service = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Sales\Model\Service\Quote', array('quote' => $quote));
-$service->setOrderData(array('increment_id' => '100000002'));
+    ->create('Magento\Sales\Model\Service\Quote', ['quote' => $quote]);
+$service->setOrderData(['increment_id' => '100000002']);
 $service->submitAllWithDataObject();
 
 $order = $service->getOrder();

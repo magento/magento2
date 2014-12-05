@@ -91,7 +91,7 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         $fixtureCustomerId = 1;
         $fixtureCustomerEmail = 'customer@example.com';
-        $fixtureCustomerFirstname = 'Firstname';
+        $fixtureCustomerFirstname = 'John';
         $fixtureQuoteReserveId = 'test01';
 
         /** Preconditions */
@@ -131,12 +131,12 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
         $updatedQuote->load($fixtureQuoteReserveId, 'reserved_order_id');
         $this->assertEquals(
             $fixtureCustomerEmail,
-            $updatedQuote->getCustomerEmail(),
+            $updatedQuote->getCustomer()->getEmail(),
             "Customer email in quote is invalid."
         );
         $this->assertEquals(
             $fixtureCustomerFirstname,
-            $updatedQuote->getCustomerFirstname(),
+            $updatedQuote->getCustomer()->getFirstname(),
             "Customer first name in quote is invalid."
         );
     }

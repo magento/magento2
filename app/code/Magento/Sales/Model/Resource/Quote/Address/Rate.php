@@ -23,12 +23,14 @@
  */
 namespace Magento\Sales\Model\Resource\Quote\Address;
 
+use \Magento\Framework\Model\Resource\Db\AbstractDb;
+
 /**
  * Quote address shipping rate resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Rate extends \Magento\Sales\Model\Resource\AbstractResource
+class Rate extends AbstractDb
 {
     /**
      * Main table and field initialization

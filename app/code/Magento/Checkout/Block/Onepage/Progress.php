@@ -24,8 +24,6 @@
 namespace Magento\Checkout\Block\Onepage;
 
 use Magento\Customer\Model\Address\Config as AddressConfig;
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface as CustomerAccountService;
-use Magento\Customer\Service\V1\CustomerAddressServiceInterface as CustomerAddressService;
 use Magento\Sales\Model\Quote\Address;
 
 /**

@@ -34,13 +34,6 @@ class View extends \Magento\Framework\View\Element\Template
     protected $_registry;
 
     /**
-     * Current product instance
-     *
-     * @var null|\Magento\Catalog\Model\Product
-     */
-    protected $_product = null;
-
-    /**
      * Helper instance
      *
      * @var \Magento\ProductAlert\Helper\Data
@@ -65,17 +58,16 @@ class View extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Get current product instance
+     * Retrieve currently edited product object
      *
-     * @return $this
+     * @return \Magento\Catalog\Model\Product|boolean
      */
-    protected function _prepareLayout()
+    protected function getProduct()
     {
         $product = $this->_registry->registry('current_product');
         if ($product && $product->getId()) {
-            $this->_product = $product;
+            return $product;
         }
-
-        return parent::_prepareLayout();
+        return false;
     }
 }

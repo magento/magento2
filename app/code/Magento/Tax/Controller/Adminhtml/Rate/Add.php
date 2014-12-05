@@ -35,10 +35,6 @@ class Add extends \Magento\Tax\Controller\Adminhtml\Rate
      */
     public function execute()
     {
-        $this->_title->add(__('Tax Zones and Rates'));
-
-        $this->_title->add(__('New Tax Rate'));
-
         $this->_coreRegistry->register(
             RegistryConstants::CURRENT_TAX_RATE_FORM_DATA,
             $this->_objectManager->get('Magento\Backend\Model\Session')->getFormData(true)
@@ -62,6 +58,8 @@ class Add extends \Magento\Tax\Controller\Adminhtml\Rate
                 $this->_view->getLayout()->createBlock('Magento\Tax\Block\Adminhtml\Rate\Form', 'tax_rate_form')
             )
         );
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Tax Zones and Rates'));
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('New Tax Rate'));
         $this->_view->renderLayout();
     }
 }

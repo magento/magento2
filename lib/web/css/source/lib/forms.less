@@ -471,8 +471,8 @@
     .css(padding, @_padding);
     .css(margin, @_margin);
     .css(border, @_border);
-    letter-spacing: -0.31em;
-    //word-spacing: -0.43em;
+    letter-spacing: -.31em;
+    //word-spacing: -.43em;
 
     > * {
         letter-spacing: normal;
@@ -626,19 +626,19 @@
     }
 
     .addon {
-        display: inline-flex;
-        flex-wrap: nowrap;
+        .vendor-prefix-display(inline-flex);
+        .vendor-prefix-flex-wrap(nowrap);
         padding: 0;
         width: 100%;
         textarea,
         select,
         input {
             .vendor-prefix-order(2);
+            .vendor-prefix-flex-basis(100%);
             box-shadow: none;
             display: inline-block;
             margin: 0;
             width: auto;
-            flex-basis: 100%;
         }
         .addbefore,
         .addafter {

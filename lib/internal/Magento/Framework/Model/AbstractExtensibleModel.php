@@ -26,6 +26,8 @@ namespace Magento\Framework\Model;
 
 use Magento\Framework\Api\MetadataServiceInterface;
 use Magento\Framework\Api\ExtensibleDataInterface;
+use Magento\Framework\Api\AttributeDataBuilder;
+use Symfony\Component\DependencyInjection\Exception\LogicException;
 
 /**
  * Abstract model with custom attributes support.
@@ -41,6 +43,11 @@ abstract class AbstractExtensibleModel extends AbstractModel implements Extensib
     protected $metadataService;
 
     /**
+     * @var AttributeDataBuilder
+     */
+    protected $customAttributeBuilder;
+
+    /**
      * @var string[]
      */
     protected $customAttributesCodes = null;
@@ -49,6 +56,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements Extensib
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param MetadataServiceInterface $metadataService
+     * @param AttributeDataBuilder $customAttributeBuilder
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -57,11 +65,13 @@ abstract class AbstractExtensibleModel extends AbstractModel implements Extensib
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         MetadataServiceInterface $metadataService,
+        AttributeDataBuilder $customAttributeBuilder,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->metadataService = $metadataService;
+        $this->customAttributeBuilder = $customAttributeBuilder;
         $data = $this->filterCustomAttributes($data);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         if (isset($data['id'])) {
@@ -81,8 +91,18 @@ abstract class AbstractExtensibleModel extends AbstractModel implements Extensib
             return $data;
         }
         $customAttributesCodes = $this->getCustomAttributesCodes();
-        $data[self::CUSTOM_ATTRIBUTES] =
-            array_intersect_key($data[self::CUSTOM_ATTRIBUTES], $customAttributesCodes);
+        $data[self::CUSTOM_ATTRIBUTES] = array_intersect_key(
+            (array)$data[self::CUSTOM_ATTRIBUTES],
+            $customAttributesCodes
+        );
+        foreach ($data[self::CUSTOM_ATTRIBUTES] as $code => $value) {
+            if (!($value instanceof \Magento\Framework\Api\AttributeInterface)) {
+                $data[self::CUSTOM_ATTRIBUTES][$code] = $this->customAttributeBuilder
+                    ->setAttributeCode($code)
+                    ->setValue($value)
+                    ->create();
+            }
+        }
         return $data;
     }
 
@@ -113,6 +133,22 @@ abstract class AbstractExtensibleModel extends AbstractModel implements Extensib
     }
 
     /**
+     * {@inheritdoc}
+     *
+     * Added custom attributes support.
+     */
+    public function setData($key, $value = null)
+    {
+        if (is_array($key)) {
+            $key = $this->filterCustomAttributes($key);
+        } else if ($key == self::CUSTOM_ATTRIBUTES) {
+            $filteredData = $this->filterCustomAttributes([self::CUSTOM_ATTRIBUTES => $value]);
+            $value = $filteredData[self::CUSTOM_ATTRIBUTES];
+        }
+        return parent::setData($key, $value);
+    }
+
+    /**
      * Object data getter
      *
      * If $key is not defined will return all the data as an array.
@@ -135,7 +171,10 @@ abstract class AbstractExtensibleModel extends AbstractModel implements Extensib
             throw new \LogicException("Custom attributes array should be retrieved via getCustomAttributes() only.");
         } else if ($key === '') {
             /** Represent model data and custom attributes as a flat array */
-            $data = array_merge($this->_data, $this->getCustomAttributes());
+            $customAttributes = isset($this->_data[self::CUSTOM_ATTRIBUTES])
+                ? $this->_data[self::CUSTOM_ATTRIBUTES]
+                : [];
+            $data = array_merge($this->_data, $customAttributes);
             unset($data[self::CUSTOM_ATTRIBUTES]);
         } else {
             $data = parent::getData($key, $index);

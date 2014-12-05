@@ -35,8 +35,6 @@ class Sales extends \Magento\Reports\Controller\Adminhtml\Report\Sales
      */
     public function execute()
     {
-        $this->_title->add(__('Sales Report'));
-
         $this->_showLastExecutionTime(Flag::REPORT_ORDER_FLAG_CODE, 'sales');
 
         $this->_initAction()->_setActiveMenu(
@@ -45,6 +43,7 @@ class Sales extends \Magento\Reports\Controller\Adminhtml\Report\Sales
             __('Sales Report'),
             __('Sales Report')
         );
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Sales Report'));
 
         $gridBlock = $this->_view->getLayout()->getBlock('adminhtml_sales_sales.grid');
         $filterFormBlock = $this->_view->getLayout()->getBlock('grid.filter.form');

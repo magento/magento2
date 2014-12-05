@@ -111,9 +111,6 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      */
     public function getProcessedTemplateAreaDataProvider()
     {
-        $design = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Core\Model\View\Design'
-        );
         return array(
             'backend' => array('adminhtml', 'Magento/backend')
         );

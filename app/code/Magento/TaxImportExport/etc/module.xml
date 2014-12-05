@@ -28,11 +28,5 @@
         <sequence>
             <module name="Magento_Tax"/>
         </sequence>
-        <depends>
-            <module name="Magento_Backend"/>
-            <module name="Magento_Directory"/>
-            <module name="Magento_Store"/>
-            <module name="Magento_Tax"/>
-        </depends>
     </module>
 </config>

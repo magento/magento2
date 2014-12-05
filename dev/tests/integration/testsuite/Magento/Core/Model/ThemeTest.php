@@ -92,12 +92,12 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $themeFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\View\Design\Theme\FlyweightFactory'
         );
-        $theme = $themeFactory->create('vendor_custom_theme');
+        $theme = $themeFactory->create('Vendor/custom_theme');
         $this->assertCount(2, $theme->getInheritedThemes());
         $expected = array();
         foreach ($theme->getInheritedThemes() as $someTheme) {
             $expected[] = $someTheme->getFullPath();
         }
-        $this->assertEquals(array('frontend/vendor_default', 'frontend/vendor_custom_theme'), $expected);
+        $this->assertEquals(array('frontend/Vendor/default', 'frontend/Vendor/custom_theme'), $expected);
     }
 }

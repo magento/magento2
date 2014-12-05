@@ -35,8 +35,6 @@ class Bestsellers extends \Magento\Reports\Controller\Adminhtml\Report\Sales
      */
     public function execute()
     {
-        $this->_title->add(__('Best Sellers Report'));
-
         $this->_showLastExecutionTime(Flag::REPORT_BESTSELLERS_FLAG_CODE, 'bestsellers');
 
         $this->_initAction()->_setActiveMenu(
@@ -45,6 +43,7 @@ class Bestsellers extends \Magento\Reports\Controller\Adminhtml\Report\Sales
             __('Products Bestsellers Report'),
             __('Products Bestsellers Report')
         );
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Best Sellers Report'));
 
         $gridBlock = $this->_view->getLayout()->getBlock('adminhtml_sales_bestsellers.grid');
         $filterFormBlock = $this->_view->getLayout()->getBlock('grid.filter.form');

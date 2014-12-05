@@ -31,7 +31,7 @@
 @message-global-note-link-color-active: @link-color-active;
 @message-global-note-border-color: #d6ca8e;
 
-@message-global-caution-color: #fff;
+@message-global-caution-color: @color-white;
 @message-global-caution-background: #ff0101;
 @message-global-caution-link-color: @link-color;
 @message-global-caution-link-color-hover: @link-color-hover;
@@ -40,26 +40,51 @@
 
 @header-bg-color: false;
 @header-panel-bg-color: #7e807e;
-@header-panel-text-color: #fff;
+@header-panel-text-color: @color-white;
+@header-icons-color: @color-gray56;
+@header-icons-color-hover: @color-gray20;
 
 @addto-color: #999;
 @addto-hover-color: @color-primary;
-@minicart-icons-color: @color-gray56;
+@minicart-icons-color: @header-icons-color;
+@minicart-icons-color-hover: @header-icons-color-hover;
 
 @price-color: #575757;
 @price-size: 22px;
 @price-size-desktop: 36px;
 
-@button-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 1), inset 0px -1px 0px 0px fade(@border-color-base, 30);  // Used for secondary button and catalog toolbar controls
-@button-shadow-active: inset 0px 1px 0px 0px fade(@border-color-base, 80), inset 0px -1px 0px 0px fade(@border-color-base, 30);  // Used for secondary button and catalog toolbar controls
+@button-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 1), inset 0 -1px 0 0 fade(@border-color-base, 30);  // Used for secondary button and catalog toolbar controls
+@button-shadow-active: inset 0 1px 0 0 fade(@border-color-base, 80), inset 0 -1px 0 0 fade(@border-color-base, 30);  // Used for secondary button and catalog toolbar controls
 
 @h1-margin-bottom-desktop: @indent-xl-base;
+
+// Footer
+
+@footer-bg-color: #f4f4f4;
+@footer-links-separator-border-color: #cecece;
+@footer-links-color: #575757;
+@footer-links-color-hover: #333;
+@footer-links-color-current: @color-primary-light;
+
+
+// Layered navigation
+
+@filter-title-bg: #f0f0f0;
+@filter-link: #494949;
+@filter-link-hover: darken(@filter-link, 30%);
+@filter-quantity: #858585;
+
+//
+//    Common
+//--------------------------------------
+
+.responsive-common() {
 
 body {
     .css(background-color, @page-bg-color);
 }
 
-// ToDo: move it directly to .page-wrapper (now it doesn't appear in mediaquery cuz of size of css)
+// ToDo UI: move it directly to .page-wrapper (now it doesn't appear in mediaquery cuz of size of css)
 .page-wrapper {
     .ie9 & {
         min-height: none;
@@ -108,7 +133,7 @@ body {
     &.content {
         padding-top: 10px;
         position: relative;
-        &:extend(.abstract-add-clearfix all);
+        &:extend(.abs-add-clearfix all);
     }
 }
 
@@ -117,7 +142,7 @@ body {
     z-index: 5;
     float: left;
     max-width: 50%;
-    margin: 0 0 10px 44px;
+    margin: 0 0 10px @indent-xl-base;
     img {
         max-height: 50px;
         max-width: 100%;
@@ -138,7 +163,7 @@ body {
 }
 
 .action.skip {
-    &:extend(.abstract-visually-hidden all);
+    &:extend(.abs-visually-hidden all);
 }
 
 //
@@ -178,19 +203,19 @@ body {
 @footer-bg-color: #f4f4f4;
 @footer-links-separator-border-color: #cecece;
 @footer-links-color: #575757;
-@footer-links-color-hover: #333;
+@footer-links-color-hover: @color-gray20;
 @footer-links-color-current: @color-primary-light;
 
 .page-footer {
-    margin-top: 25px;
+    margin-top: @indent-m-base;
 }
 
 .footer {
     &.content {
-        padding-top: 20px;
+        padding-top: @indent-base;
         border-top: 1px solid @footer-links-separator-border-color;
         ul {
-            &:extend(.abstract-reset-list all);
+            &:extend(.abs-reset-list all);
         }
         .links {
             > li {
@@ -230,7 +255,10 @@ body {
     padding: @indent-s-base;
     background-color: @color-background-copyright;
     text-align: center;
-    color: #fff;
+    color: @color-white;
+    .checkout-onepage-index & {
+        margin-top: auto;
+    }
 }
 
 .page-header,
@@ -250,13 +278,13 @@ body {
             ul.dropdown {
                 a {
                     .link(
-                         @_link-color: #333,
+                         @_link-color: @color-gray20,
                          @_link-text-decoration: none,
-                         @_link-color-visited: #333,
+                         @_link-color-visited: @color-gray20,
                          @_link-text-decoration-visited: none,
-                         @_link-color-hover: #333,
+                         @_link-color-hover: @color-gray20,
                          @_link-text-decoration-hover: none,
-                         @_link-color-active: #333,
+                         @_link-color-active: @color-gray20,
                          @_link-text-decoration-active: none
                     );
                     display: block;
@@ -268,15 +296,17 @@ body {
             font-weight: @font-weight-base;
         }
         .label {
-            &:extend(.abstract-visually-hidden all);
+            &:extend(.abs-visually-hidden all);
         }
     }
+}
+
 }
 
 //
 //    Navigation
 //--------------------------------------
-.responsive-smaller(@break) when (@break = @screen-m) {
+.responsive-max-m(@break) when (@break = @screen-m) {
     .customer.name,
     .customer-welcome + .authorization-link {
         display: none;
@@ -326,14 +356,22 @@ body {
     }
 }
 
+.responsive-max-m(@break) when (@break = @screen-s) {
+    .logo {
+        margin-top: 4px;
+        margin-bottom: 13px;
+    }
+}
+
+//
+//    Common
+//--------------------------------------
+
+.responsive-common() {
+
 //
 //    Layered navigation
 //--------------------------------------
-
-@filter-title-bg: #f0f0f0;
-@filter-link: #494949;
-@filter-link-hover: darken(@filter-link, 30%);
-@filter-quantity: #858585;
 
 //
 //    Widgets
@@ -351,14 +389,16 @@ body {
         max-width: 100%;
     }
     .block-title {
-        &:extend(.abstract-block-widget-title all);
+        &:extend(.abs-block-widget-title all);
     }
+}
+
 }
 
 //
 //    Desktop
 //--------------------------------------
-.responsive(@break) when (@break = @screen-m) {
+.responsive-min-l(@break) when (@break = @screen-m) {
 
     html,
     body {
@@ -384,7 +424,7 @@ body {
         .header.panel {
             padding-top: 10px;
             padding-bottom: 10px;
-            &:extend(.abstract-add-clearfix-desktop all);
+            &:extend(.abs-add-clearfix-desktop all);
         }
         .switcher {
             float: right;
@@ -420,20 +460,20 @@ body {
         );
         .action.switch {
             .button-reset();
-            color: #fff;
+            color: @color-white;
         }
         li {
             &:extend(.switcher li all);
             min-width: 120px;
             a {
                 .link(
-                      @_link-color: #333,
+                      @_link-color: @color-gray20,
                       @_link-text-decoration: none,
-                      @_link-color-visited: #333,
+                      @_link-color-visited: @color-gray20,
                       @_link-text-decoration-visited: none,
-                      @_link-color-hover: #333,
+                      @_link-color-hover: @color-gray20,
                       @_link-text-decoration-hover: none,
-                      @_link-color-active: #333,
+                      @_link-color-active: @color-gray20,
                       @_link-text-decoration-active: none
                  );
                 display: block;
@@ -486,7 +526,7 @@ body {
         }
         &.content {
             padding: 30px 20px 0;
-            &:extend(.abstract-add-clearfix-desktop all);
+            &:extend(.abs-add-clearfix-desktop all);
         }
     }
 
@@ -554,8 +594,14 @@ body {
     }
 }
 
+//
+//    Common
+//--------------------------------------
+
+.responsive-common() {
+
 .no-display {
-    &:extend(.abstract-no-display all);
+    &:extend(.abs-no-display all);
 }
 
 // Calendar
@@ -567,4 +613,6 @@ body {
     border: @tooltip-border-width solid @tooltip-border-color;
     background: @tooltip-background;
     padding: 10px;
+}
+
 }

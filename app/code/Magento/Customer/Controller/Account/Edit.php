@@ -79,7 +79,7 @@ class Edit extends \Magento\Customer\Controller\Account
         $this->_getSession()->setCustomerData($customerDataObject);
         $this->_getSession()->setChangePassword($this->getRequest()->getParam('changepass') == 1);
 
-        $this->_view->getPage()->getConfig()->setTitle(__('Account Information'));
+        $this->_view->getPage()->getConfig()->getTitle()->set(__('Account Information'));
         $this->_view->getLayout()->getBlock('messages')->setEscapeMessageFlag(true);
         $this->_view->renderLayout();
     }

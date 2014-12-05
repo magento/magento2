@@ -22,6 +22,12 @@
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
+//
+//    Common
+//--------------------------------------
+
+.responsive-common() {
+
 .block.filter {
     margin-bottom: 40px;
     .title {
@@ -57,7 +63,7 @@
         }
     }
     .items {
-        &:extend(.abstract-reset-list all);
+        &:extend(.abs-reset-list all);
     }
     .filtered {
         .items {
@@ -71,7 +77,7 @@
                 font-weight: @font-weight-bold;
             }
             .action.remove {
-                &:extend(.abstract-remove-button-for-blocks all);
+                &:extend(.abs-remove-button-for-blocks all);
                 position: absolute;
                 left: -6px;
                 top: 0;
@@ -81,4 +87,6 @@
             margin-bottom: 35px;
         }
     }
+}
+
 }

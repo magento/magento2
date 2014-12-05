@@ -30,6 +30,14 @@ namespace Magento\Customer\Api;
  */
 interface AccountManagementInterface
 {
+    /**#@+
+     * Constant for confirmation status
+     */
+    const ACCOUNT_CONFIRMED = 'account_confirmed';
+    const ACCOUNT_CONFIRMATION_REQUIRED = 'account_confirmation_required';
+    const ACCOUNT_CONFIRMATION_NOT_REQUIRED = 'account_confirmation_not_required';
+    /**#@-*/
+
     /**
      * Create customer account. Perform necessary business operations like sending email.
      *
@@ -208,4 +216,12 @@ interface AccountManagementInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getDefaultShippingAddress($customerId);
+
+    /**
+     * Return hashed password, which can be directly saved to database.
+     *
+     * @param string $password
+     * @return string
+     */
+    public function getPasswordHash($password);
 }

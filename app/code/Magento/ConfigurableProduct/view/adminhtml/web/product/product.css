@@ -97,10 +97,14 @@
 #product-variations-matrix img.variation {
     display: block;
     position: relative;
-    border: 0;
+    border: 1px solid #b7b2a7;
     width: 32px;
     height: 32px;
     z-index: 2;
+    background: #fff;
+}
+#product-variations-matrix .actions-image-uploader img.variation {
+    border: 0;
 }
 
 #product-variations-matrix .action-upload {

@@ -3,7 +3,8 @@
     "version": "0.1.0",
     "require": {
         "zendframework/zendframework": "2.3.1",
-        "composer/composer": "1.0.0-alpha8"
+        "composer/composer": "1.0.0-alpha8",
+        "magento/zendframework1": "1.12.9"
     },
     "require-dev": {
         "phpunit/phpunit": "4.1.*",
@@ -11,9 +12,6 @@
         "phpmd/phpmd" : "1.4.*"
     },
     "autoload": {
-        "psr-0":{
-            "Zend_": "../lib/internal/"
-        },
         "psr-4": {
             "Magento\\Composer\\": "module/Magento/Composer/src/",
             "Magento\\Filesystem\\": "module/Magento/Filesystem/src/",

@@ -22,6 +22,12 @@
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
+//
+//    Common
+//--------------------------------------
+
+.responsive-common() {
+
 .product.data.items {
     .data-accordion();
     border-bottom: @tab-control-border-width solid @tab-control-border-color;
@@ -61,10 +67,12 @@
     }
 }
 
+}
+
 //
 //    Desktop
 //--------------------------------------
-.responsive(@break) when (@break = @screen-m) {
+.responsive-min-l(@break) when (@break = @screen-m) {
     .product.data.items {
         .data-tabs();
         border-bottom: 0;

@@ -35,8 +35,8 @@ class Index extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
      */
     public function execute()
     {
-        $this->_title->add(__('Site Map'));
         $this->_initAction();
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Site Map'));
         $this->_view->renderLayout();
     }
 }

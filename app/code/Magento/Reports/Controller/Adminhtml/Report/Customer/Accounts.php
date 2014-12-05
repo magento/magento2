@@ -33,14 +33,13 @@ class Accounts extends \Magento\Reports\Controller\Adminhtml\Report\Customer
      */
     public function execute()
     {
-        $this->_title->add(__('New Accounts Report'));
-
         $this->_initAction()->_setActiveMenu(
             'Magento_Reports::report_customers_accounts'
         )->_addBreadcrumb(
             __('New Accounts'),
             __('New Accounts')
         );
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('New Accounts Report'));
         $this->_view->renderLayout();
     }
 }

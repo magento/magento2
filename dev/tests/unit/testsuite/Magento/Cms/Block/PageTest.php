@@ -23,6 +23,9 @@
  */
 namespace Magento\Cms\Block;
 
+/**
+ * Class PageTest
+ */
 class PageTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -40,6 +43,10 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->block = $objectManager->getObject('Magento\Cms\Block\Page');
         $this->page = $objectManager->getObject('Magento\Cms\Model\Page');
+        $reflection = new \ReflectionClass($this->page);
+        $reflectionProperty = $reflection->getProperty('_idFieldName');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->page, 'page_id');
         $this->page->setId(1);
     }
 
@@ -53,7 +60,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $id = 1;
         $this->block->setPage($this->page);
         $this->assertEquals(
-            array(\Magento\Cms\Model\Page::CACHE_TAG . '_' . $id),
+            [\Magento\Cms\Model\Page::CACHE_TAG . '_' . $id],
             $this->block->getIdentities()
         );
     }

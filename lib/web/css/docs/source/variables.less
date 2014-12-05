@@ -33,7 +33,7 @@
 //            <th class="vars_head">Comment</th>
 //        </tr>
 //        <tr>
-//            <th class="vars_section" colspan="3">Predefined font family and font colors</th>
+//            <th class="vars_section" colspan="3">Predefined font family</th>
 //        </tr>
 //        <tr>
 //            <th>@font-family-sans-serif</th>
@@ -54,6 +54,24 @@
 //            <th>@font-path</th>
 //            <td class="vars_value">&quot;../../fonts/&quot;</td>
 //            <td>Path to custom font</td>
+//        </tr>
+//        <tr>
+//            <th class="vars_section" colspan="3">Predefined colors</th>
+//        </tr>
+//        <tr>
+//            <th>@color-white</th>
+//            <td class="vars_value">#fff</td>
+//            <td>White</td>
+//        </tr>
+//        <tr>
+//            <th>@color-gray20</th>
+//            <td class="vars_value">#333</td>
+//            <td>Gray 20</td>
+//        </tr>
+//        <tr>
+//            <th>@color-gray56</th>
+//            <td class="vars_value">#8f8f8f</td>
+//            <td>Gray 56</td>
 //        </tr>
 //        <tr>
 //            <th>@color-primary</th>
@@ -125,12 +143,12 @@
 //        </tr>
 //        <tr>
 //            <th>@font-size-s</th>
-//            <td class="vars_value">ceil(0.85 * @font-size-base) // 12</td>
+//            <td class="vars_value">ceil(.85 * @font-size-base) // 12</td>
 //            <td>Small font size</td>
 //        </tr>
 //        <tr>
 //            <th>@font-size-xs</th>
-//            <td class="vars_value">floor(0.75 * @font-size-base) // 11</td>
+//            <td class="vars_value">floor(.75 * @font-size-base) // 11</td>
 //            <td>Extra small font size</td>
 //        </tr>
 //        <tr>
@@ -514,7 +532,7 @@
 //        </tr>
 //        <tr>
 //            <th>@h3-margin-top</th>
-//            <td class="vars_value">@indent-base * 0.75</td>
+//            <td class="vars_value">@indent-base * .75</td>
 //            <td>H3 margin top</td>
 //        </tr>
 //        <tr>
@@ -570,7 +588,7 @@
 //        </tr>
 //        <tr>
 //            <th>@h5-font-size</th>
-//            <td class="vars_value">ceil((@font-size-base * 0.85)) // 12px</td>
+//            <td class="vars_value">ceil((@font-size-base * .85)) // 12px</td>
 //            <td>H5 font size</td>
 //        </tr>
 //        <tr>
@@ -613,7 +631,7 @@
 //        </tr>
 //        <tr>
 //            <th>@h6-font-size</th>
-//            <td class="vars_value">ceil((@font-size-base * 0.7)) // 10px</td>
+//            <td class="vars_value">ceil((@font-size-base * .7)) // 10px</td>
 //            <td>H6 font size</td>
 //        </tr>
 //        <tr>
@@ -1264,7 +1282,7 @@
 //      </tr>
 //      <tr>
 //        <th>@_button-disabled-opacity</th>
-//        <td class="vars_value">0.5</td>
+//        <td class="vars_value">.5</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Button disabled opacity</td>
 //      </tr>
@@ -1309,7 +1327,7 @@
 //      </tr>
 //      <tr>
 //        <th>@_button-color</th>
-//        <td class="vars_value">#333</td>
+//        <td class="vars_value">@color-primary</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Button text color</td>
 //      </tr>
@@ -1772,7 +1790,7 @@
 //        </tr>
 //        <tr>
 //            <th>@_dropdown-list-background</th>
-//            <td class="vars_value">#fff</td>
+//            <td class="vars_value">@color-white</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Drop-down list background</td>
 //        </tr>
@@ -2561,7 +2579,7 @@
 //        <tr>
 //            <th>@_background</th>
 //            <td class="vars_value">@form-element-input-background<br/>@input-text-background<br/>@selectbackground<br/>@textarea-background</td>
-//            <td class="vars_value">#fff<br/>@form-element-input-background<br/>@form-element-input-background<br/>@form-element-input-background</td>
+//            <td class="vars_value">@color-white<br/>@form-element-input-background<br/>@form-element-input-background<br/>@form-element-input-background</td>
 //            <td>Form control background</td>
 //        </tr>
 //        <tr>
@@ -2684,7 +2702,7 @@
 //        <tr>
 //            <th>@_disabled-opacity</th>
 //            <td class="vars_value">@form-element-input-disabled-opacity<br/>@input-text-disabled-opacity<br/>@select-disabled-opacity<br/>@textarea-disabled-opacity</td>
-//            <td class="vars_value">0.5<br/>@form-element-input-disabled-opacity<br/>@form-element-input-disabled-opacity<br/>@form-element-input-disabled-opacity</td>
+//            <td class="vars_value">.5<br/>@form-element-input-disabled-opacity<br/>@form-element-input-disabled-opacity<br/>@form-element-input-disabled-opacity</td>
 //            <td>Disabled form element opacity</td>
 //        </tr>
 //        <tr>
@@ -3301,7 +3319,7 @@
 //      </tr>
 //      <tr>
 //        <th>@_loader-overlay-background-color</th>
-//        <td class="vars_value">rgba(255, 255, 255, 0.5)</td>
+//        <td class="vars_value">rgba(255, 255, 255, .5)</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Loader overlay background color</td>
 //      </tr>
@@ -3618,7 +3636,7 @@
 //        </tr>
 //        <tr>
 //            <th>@message-info-icon-color-lateral</th>
-//            <td class="vars_value">#fff</td>
+//            <td class="vars_value">@color-white</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Information message lateral icon symbol color</td>
 //        </tr>
@@ -3792,7 +3810,7 @@
 //        </tr>
 //        <tr>
 //            <th>@message-error-icon-color-lateral</th>
-//            <td class="vars_value">#fff</td>
+//            <td class="vars_value">@color-white</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Error message lateral icon symbol color</td>
 //        </tr>
@@ -3879,7 +3897,7 @@
 //        </tr>
 //        <tr>
 //            <th>@message-success-icon-color-lateral</th>
-//            <td class="vars_value">#fff</td>
+//            <td class="vars_value">@color-white</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Success message lateral icon symbol color</td>
 //        </tr>
@@ -4532,7 +4550,7 @@
 //      </tr>
 //      <tr>
 //        <th>@_popup-background</th>
-//        <td class="vars_value">#fff</td>
+//        <td class="vars_value">@color-white</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Popup background</td>
 //      </tr>
@@ -4550,7 +4568,7 @@
 //      </tr>
 //      <tr>
 //        <th>@_popup-fade</th>
-//        <td class="vars_value">opacity 0.3s linear</td>
+//        <td class="vars_value">opacity .3s linear</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Popup overlay opacity</td>
 //      </tr>
@@ -4860,7 +4878,7 @@
 //      </tr>
 //      <tr>
 //        <th>@_overlay-opacity</th>
-//        <td class="vars_value">0.5</td>
+//        <td class="vars_value">.5</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Overlay opacity</td>
 //      </tr>
@@ -4872,7 +4890,7 @@
 //      </tr>
 //      <tr>
 //        <th>@_overlay-fade</th>
-//        <td class="vars_value">opacity 0.15s linear</td>
+//        <td class="vars_value">opacity .15s linear</td>
 //        <td class="vars_value">'' | false | value</td>
 //        <td>Overlay fade</td>
 //      </tr>
@@ -5814,7 +5832,7 @@
 //        </tr>
 //        <tr>
 //            <th>@_tooltip-background</th>
-//            <td class="vars_value">#fff</td>
+//            <td class="vars_value">@color-white</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Tooltip background color</td>
 //        </tr>
@@ -5838,7 +5856,7 @@
 //        </tr>
 //        <tr>
 //            <th>@_tooltip-color</th>
-//            <td class="vars_value">#333</td>
+//            <td class="vars_value">@color-primary</td>
 //            <td class="vars_value">'' | false | value</td>
 //            <td>Tooltip text color</td>
 //        </tr>

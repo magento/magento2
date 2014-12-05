@@ -29,6 +29,12 @@
 @pager-action-background-hover: darken(@toolbar-element-background, 7%);
 @pager-font-weight: @font-weight-bold;
 
+//
+//    Common
+//--------------------------------------
+
+.responsive-common() {
+
 .page-products .columns {
     position: relative;
     z-index: 1;
@@ -43,14 +49,23 @@
     }
 
     text-align: center;
-    &:extend(.abstract-add-clearfix all);
+    &:extend(.abs-add-clearfix all);
     &-amount {
+        position: absolute;
+        left: 0;
+        top: 0;
         line-height: @toolbar-mode-icon-font-size+2;
         padding: 7px 0;
         margin: 0;
         vertical-align: middle;
+        text-align: left;
         .products.wrapper ~ .toolbar & {
             display: none;
+        }
+    }
+    .page-with-filter & {
+        &-amount {
+            position: static;
         }
     }
     margin-bottom: @indent-l-base;
@@ -80,14 +95,15 @@
         display: none;
     }
     &-options {
-        margin: 0 5px 0 7px;
+        margin: 0 @indent-xs-base 0 7px;
         width: auto;
     }
     &-action {
         .icon-font(
-            @icon-arrow-down,
+            @icon-arrow-up,
             @_icon-font-size: 16px,
-            @_icon-font-color: @text-color-muted
+            @_icon-font-color: @header-icons-color,
+            @_icon-font-color-hover: @header-icons-color-hover
         );
         .icon-text-hide();
         &.sort-desc:before {
@@ -117,13 +133,19 @@
     }
 }
 
-.responsive-smaller(@break) when (@break = @screen-s) {
+}
+
+//
+//    Mobile
+//--------------------------------------
+
+.responsive-max-m(@break) when (@break = @screen-s) {
     .toolbar-products {
         margin-bottom: 0;
     }
 }
 
-.responsive(@break) when (@break = @screen-s) {
+.responsive-min-m(@break) when (@break = @screen-s) {
     .page-products .columns {
         position: relative;
         z-index: 1;
@@ -131,6 +153,7 @@
     }
     .toolbar {
         &-amount {
+            position: static;
             display: block;
             float: left;
         }
@@ -149,7 +172,7 @@
         }
 
         &-label {
-            &:extend(.abstract-visually-hidden-desktop-s all);
+            &:extend(.abs-visually-hidden-desktop-s all);
         }
 
         &-mode {

@@ -62,6 +62,8 @@ define([
             this.observe('selected', '');
 
             this.options = this.options || [];
+
+            this.module = 'store';
         },
 
         /**

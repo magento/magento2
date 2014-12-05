@@ -78,12 +78,8 @@ class RowsTest extends \PHPUnit_Framework_TestCase
             'qty' => $stockItem->getQty() + 12
         ];
 
-        // todo fix builder
-        $id = $stockItem->getId();
         $stockItemBuilder = $stockItemBuilder->mergeDataObjectWithArray($stockItem, $stockItemData);
-        $stockItemBuilder->setId($id);
         $stockItemSave = $stockItemBuilder->create();
-        $stockItemSave->setItemId($id);
         $stockItemResource->setProcessIndexEvents(false);
 
         $stockItemRepository->save($stockItemSave);

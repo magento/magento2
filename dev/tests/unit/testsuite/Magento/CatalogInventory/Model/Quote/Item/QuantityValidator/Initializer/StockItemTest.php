@@ -73,25 +73,22 @@ class StockItemTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testInitializeWithSubitem()
     {
         $qty = 2;
         $parentItemQty = 3;
         $websiteId = 1;
 
-        $stockItem = $this->getMockBuilder('Magento\CatalogInventory\Model\Stock\Item')
-            ->setMethods(
-                [
-                    'checkQuoteItemQty',
-                    'setProductName',
-                    'setIsChildItem',
-                    'hasIsChildItem',
-                    'unsIsChildItem',
-                    '__wakeup'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $stockItem = $this->getMock(
+            'Magento\CatalogInventory\Model\Stock\Item',
+            ['checkQuoteItemQty', 'setProductName', 'setIsChildItem', 'hasIsChildItem', 'unsIsChildItem', '__wakeup'],
+            [],
+            '',
+            false
+        );
         $quoteItem = $this->getMockBuilder('Magento\Sales\Model\Quote\Item')
             ->setMethods(
                 [

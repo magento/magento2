@@ -25,6 +25,9 @@
  */
 namespace Magento\GoogleOptimizer\Model\Observer\CmsPage;
 
+/**
+ * Class Delete
+ */
 class Delete
 {
     /**

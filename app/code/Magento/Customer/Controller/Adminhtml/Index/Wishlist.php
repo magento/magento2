@@ -48,6 +48,7 @@ class Wishlist extends \Magento\Customer\Controller\Adminhtml\Index
 
         $this->_view->getLayout()->getUpdate()->addHandle(strtolower($this->_request->getFullActionName()));
         $this->_view->loadLayoutUpdates();
+        $this->prepareDefaultCustomerTitle();
         $this->_view->generateLayoutXml();
         $this->_view->generateLayoutBlocks();
         $this->_view->renderLayout();

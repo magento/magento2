@@ -24,6 +24,7 @@
 namespace Magento\Payment\Model;
 
 use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\Api\AttributeDataBuilder;
 
 /**
  * Payment information model
@@ -53,6 +54,7 @@ class Info extends AbstractExtensibleModel
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param AttributeDataBuilder $customAttributeBuilder
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
@@ -63,6 +65,7 @@ class Info extends AbstractExtensibleModel
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        AttributeDataBuilder $customAttributeBuilder,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
@@ -71,7 +74,15 @@ class Info extends AbstractExtensibleModel
     ) {
         $this->_paymentData = $paymentData;
         $this->_encryptor = $encryptor;
-        parent::__construct($context, $registry, $metadataService, $resource, $resourceCollection, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $metadataService,
+            $customAttributeBuilder,
+            $resource,
+            $resourceCollection,
+            $data
+        );
     }
 
     /**

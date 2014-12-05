@@ -26,7 +26,7 @@
 <?php if ($this->isEnable()): ?>
     <div class="widget block block-orders-returns">
         <div class="block-title">
-            <strong><?php echo __('Orders and Returns') ?></strong>
+            <strong role="heading" aria-level="2"><?php echo __('Orders and Returns') ?></strong>
         </div>
         <div class="block-content">
             <form id="oar-widget-orders-and-returns-form" data-mage-init='{"ordersReturns":{},"validation":{}}' action="<?php echo $this->getActionUrl() ?>" method="post"
@@ -37,7 +37,7 @@
 
                         <div class="control">
                             <select name="oar_type" id="quick-search-type-id" class="select" title="">
-                                <option value="email"><?php echo __('Email Address') ?></option>
+                                <option value="email"><?php echo __('Email') ?></option>
                                 <option value="zip"><?php echo __('ZIP Code') ?></option>
                             </select>
                         </div>
@@ -60,7 +60,7 @@
                         </div>
                     </div>
                     <div id="oar-email" class="field email required">
-                        <label for="oar_email" class="label"><span><?php echo __('Email Address') ?></span></label>
+                        <label for="oar_email" class="label"><span><?php echo __('Email') ?></span></label>
 
                         <div class="control">
                             <input type="email" class="input-text" id="oar_email" name="oar_email" autocomplete="off"
@@ -78,8 +78,8 @@
                 </fieldset>
                 <div class="actions-toolbar">
                     <div class="primary">
-                        <button type="submit" title="Continue" class="action search">
-                            <span><?php echo __('Find') ?></span>
+                        <button type="submit" title="<?php echo $this->escapeHtml(__('Search')) ?>" class="action search">
+                            <span><?php echo __('Search') ?></span>
                         </button>
                     </div>
                 </div>

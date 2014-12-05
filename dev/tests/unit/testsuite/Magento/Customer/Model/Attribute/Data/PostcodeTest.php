@@ -39,6 +39,21 @@ class PostcodeTest extends \PHPUnit_Framework_TestCase
      */
     protected $attributeMock;
 
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $localeMock;
+
+    /**
+     * @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $localeResolverMock;
+
+    /**
+     * @var \Magento\Framework\Logger|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $loggerMock;
+
     protected function setUp()
     {
         $this->localeMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\TimezoneInterface')
@@ -55,22 +70,6 @@ class PostcodeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getStoreLabel'])
             ->getMock();
-    }
-
-    /**
-     * Create an instance of the class that is being tested
-     *
-     * @param string|int|bool|null $value The value undergoing testing by a given test
-     * @return Postcode
-     */
-    protected function getClass($value)
-    {
-        return new Postcode(
-            $this->localeMock,
-            $this->loggerMock,
-            $this->localeResolverMock,
-            $this->directoryHelperMock
-        );
     }
 
     /**
@@ -94,7 +93,12 @@ class PostcodeTest extends \PHPUnit_Framework_TestCase
                 [$countryId, $isOptional]
             ]);
 
-        $object = $this->getClass($value);
+        $object = new Postcode(
+            $this->localeMock,
+            $this->loggerMock,
+            $this->localeResolverMock,
+            $this->directoryHelperMock
+        );
         $object->setAttribute($this->attributeMock);
         $object->setExtractedData(['country_id' => $countryId]);
 

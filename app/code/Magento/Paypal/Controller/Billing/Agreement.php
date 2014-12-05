@@ -38,23 +38,15 @@ class Agreement extends \Magento\Framework\App\Action\Action
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Framework\App\Action\Title
-     */
-    protected $_title;
-
-    /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\App\Action\Title $title
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\App\Action\Title $title
+        \Magento\Framework\Registry $coreRegistry
     ) {
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($context);
-        $this->_title = $title;
     }
 
     /**

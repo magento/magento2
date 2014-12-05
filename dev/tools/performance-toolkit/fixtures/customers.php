@@ -29,6 +29,10 @@ $this->resetObjectManager();
 $storeManager = $this->getObjectManager()->create('\Magento\Store\Model\StoreManager');
 /** @var $category \Magento\Catalog\Model\Category */
 $category = $this->getObjectManager()->get('Magento\Catalog\Model\Category');
+/** @var $defaultStoreView \Magento\Store\Model\Store */
+$defaultStoreView = $storeManager->getDefaultStoreView();
+$defaultStoreViewId = $defaultStoreView->getStoreId();
+$defaultStoreViewCode = $defaultStoreView->getCode();
 
 $result = array();
 //Get all websites
@@ -45,7 +49,7 @@ $productWebsite = function ($index) use ($result) {
 $pattern = array(
     'email'                       => 'user_%s@example.com',
     '_website'                    => $productWebsite,
-    '_store'                      => '',
+    '_store'                      => $defaultStoreViewCode,
     'confirmation'                => null,
     'created_at'                  => '30-08-2012 17:43',
     'created_in'                  => 'Default',
@@ -62,7 +66,7 @@ $pattern = array(
     'prefix'                      => null,
     'rp_token'                    => null,
     'rp_token_created_at'         => null,
-    'store_id'                    => '0',
+    'store_id'                    => $defaultStoreViewId,
     'suffix'                      => null,
     'taxvat'                      => null,
     'website_id'                  => '1',

@@ -23,10 +23,11 @@
  */
 namespace Magento\Catalog\Helper\Product;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\ViewInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Catalog\Helper\Product;
-use Magento\Catalog\Model\ProductFactory;
 use Magento\Framework\StoreManagerInterface;
 use Magento\Customer\Controller\RegistryConstants;
 use Magento\Customer\Model\Converter;
@@ -59,11 +60,6 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_storeManager;
 
     /**
-     * @var ProductFactory
-     */
-    protected $_productFactory;
-
-    /**
      * @var ViewInterface
      */
     protected $_view;
@@ -74,29 +70,34 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_converter;
 
     /**
+     * @var ProductRepositoryInterface
+     */
+    protected $productRepository;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param ProductFactory $productFactory
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param Product $catalogProduct
      * @param Registry $coreRegistry
      * @param ViewInterface $view
      * @param Converter $converter
+     * @param ProductRepositoryInterface $productRepository
      */
     public function __construct(
         Context $context,
-        ProductFactory $productFactory,
         StoreManagerInterface $storeManager,
         Product $catalogProduct,
         Registry $coreRegistry,
         ViewInterface $view,
-        Converter $converter
+        Converter $converter,
+        ProductRepositoryInterface $productRepository
     ) {
-        $this->_productFactory = $productFactory;
         $this->_storeManager = $storeManager;
         $this->_coreRegistry = $coreRegistry;
         $this->_catalogProduct = $catalogProduct;
         $this->_view = $view;
         $this->_converter = $converter;
+        $this->productRepository = $productRepository;
         parent::__construct($context);
     }
 
@@ -179,13 +180,10 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
                 $currentStoreId = $this->_storeManager->getStore()->getId();
             }
 
-            $product = $this->_productFactory->create()->setStoreId(
-                $currentStoreId
-            )->load(
-                $configureResult->getProductId()
-            );
-            if (!$product->getId()) {
-                throw new \Magento\Framework\Model\Exception(__('The product is not loaded.'));
+            try {
+                $product = $this->productRepository->getById($configureResult->getProductId(), false, $currentStoreId);
+            } catch (NoSuchEntityException $e) {
+                throw new \Magento\Framework\Model\Exception(__('The product is not loaded.'), 0, $e);
             }
             $this->_coreRegistry->register('current_product', $product);
             $this->_coreRegistry->register('product', $product);

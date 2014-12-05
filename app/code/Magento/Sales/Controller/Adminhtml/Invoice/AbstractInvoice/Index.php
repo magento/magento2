@@ -61,9 +61,8 @@ abstract class Index extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        $this->_title->add(__('Invoices'));
-
         $this->_initAction();
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Invoices'));
         $this->_view->renderLayout();
     }
 }

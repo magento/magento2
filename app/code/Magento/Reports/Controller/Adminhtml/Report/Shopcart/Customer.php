@@ -33,8 +33,6 @@ class Customer extends \Magento\Reports\Controller\Adminhtml\Report\Shopcart
      */
     public function execute()
     {
-        $this->_title->add(__('Customer Shopping Carts'));
-
         $this->_initAction()->_setActiveMenu(
             'Magento_Reports::report_shopcart_customer'
         )->_addBreadcrumb(
@@ -43,6 +41,7 @@ class Customer extends \Magento\Reports\Controller\Adminhtml\Report\Shopcart
         )->_addContent(
             $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Shopcart\Customer')
         );
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Customer Shopping Carts'));
         $this->_view->renderLayout();
     }
 }

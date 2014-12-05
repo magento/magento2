@@ -33,7 +33,9 @@ class Option extends \Magento\Framework\Api\AbstractExtensibleObject implements
     \Magento\Customer\Api\Data\OptionInterface
 {
     /**
-     * {@inheritdoc}
+     * Get option label
+     *
+     * @return string
      */
     public function getLabel()
     {
@@ -41,7 +43,9 @@ class Option extends \Magento\Framework\Api\AbstractExtensibleObject implements
     }
 
     /**
-     * {@inheritdoc}
+     * Get option value
+     *
+     * @return string|null
      */
     public function getValue()
     {
@@ -49,7 +53,9 @@ class Option extends \Magento\Framework\Api\AbstractExtensibleObject implements
     }
 
     /**
-     * {@inheritdoc}
+     * Get nested options
+     *
+     * @return \Magento\Customer\Api\Data\OptionInterface[]|null
      */
     public function getOptions()
     {

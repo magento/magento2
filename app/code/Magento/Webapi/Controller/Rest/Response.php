@@ -112,7 +112,9 @@ class Response extends \Magento\Webapi\Controller\Response
                 $messageData['parameters'] = $maskedException->getDetails();
             }
             if ($this->_appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
-                $messageData['trace'] = $exception->getTraceAsString();
+                $messageData['trace'] = $exception instanceof \Magento\Webapi\Exception
+                    ? $exception->getStackTrace()
+                    : $exception->getTraceAsString();
             }
             $responseHttpCode = $maskedException->getHttpCode();
         }

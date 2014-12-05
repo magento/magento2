@@ -24,7 +24,7 @@
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
 
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
-use Magento\Customer\Model\AccountManagement;
+use Magento\Customer\Api\AccountManagementInterface;
 
 /**
  * Customer account form block
@@ -94,10 +94,10 @@ class Account extends GenericMetadata
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
-     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Customer\Model\Metadata\FormFactory $customerFormFactory
-     * @param \Magento\Store\Model\System\Store $systemStore
      * @param \Magento\Customer\Model\Options $options
+     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
+     * @param \Magento\Store\Model\System\Store $systemStore
+     * @param \Magento\Customer\Model\Metadata\FormFactory $customerFormFactory
      * @param \Magento\Customer\Api\AccountManagementInterface $accountManagement
      * @param \Magento\Customer\Api\CustomerMetadataInterface $customerMetadata
      * @param \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder
@@ -111,10 +111,10 @@ class Account extends GenericMetadata
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
-        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        \Magento\Customer\Model\Metadata\FormFactory $customerFormFactory,
-        \Magento\Store\Model\System\Store $systemStore,
         \Magento\Customer\Model\Options $options,
+        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
+        \Magento\Store\Model\System\Store $systemStore,
+        \Magento\Customer\Model\Metadata\FormFactory $customerFormFactory,
         \Magento\Customer\Api\AccountManagementInterface $accountManagement,
         \Magento\Customer\Api\CustomerMetadataInterface $customerMetadata,
         \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder,
@@ -378,7 +378,7 @@ class Account extends GenericMetadata
         // Prepare customer confirmation control (only for existing customers)
         $confirmationStatus = $this->_accountManagement->getConfirmationStatus($customerData->getId());
         $confirmationKey = $customerData->getConfirmation();
-        if ($confirmationStatus != AccountManagement::ACCOUNT_CONFIRMED) {
+        if ($confirmationStatus != AccountManagementInterface::ACCOUNT_CONFIRMED) {
             $confirmationAttr = $this->_customerMetadata->getAttributeMetadata('confirmation');
             if (!$confirmationKey) {
                 $confirmationKey = $this->_getRandomConfirmationKey();

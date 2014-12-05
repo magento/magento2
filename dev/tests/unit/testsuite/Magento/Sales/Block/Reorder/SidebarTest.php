@@ -265,27 +265,22 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->orderCollection, $this->block->getOrders());
     }
 
-    /**
-     * @param int|bool $productId
-     * @param bool $result
-     * @dataProvider isItemAvailableForReorderDataProvider
-     */
-    public function testIsItemAvailableForReorder($productId, $result)
+    public function testIsItemAvailableForReorder()
     {
-        if ($productId) {
-            $product = $this->getMock('Magento\Catalog\Model\Product', ['getId', '__wakeup'], [], '', false);
-            $product->expects($this->once())
-                ->method('getId')
-                ->will($this->returnValue($productId));
-            $this->stockItemMock->expects($this->once())
-                ->method('getIsInStock')
-                ->will($this->returnValue($result));
-            $this->stockRegistry->expects($this->any())
-                ->method('getStockItem')
-                ->will($this->returnValue($this->stockItemMock));
-        } else {
-            $product = false;
-        }
+        $productId = 1;
+        $result = true;
+        $product = $this->getMock('Magento\Catalog\Model\Product', ['getId', '__wakeup'], [], '', false);
+        $product->expects($this->once())
+            ->method('getId')
+            ->will($this->returnValue($productId));
+        $this->stockItemMock->expects($this->once())
+            ->method('getIsInStock')
+            ->will($this->returnValue($result));
+        $this->stockRegistry->expects($this->any())
+            ->method('getStockItem')
+            ->will($this->returnValue($this->stockItemMock));
+
+
         $orderItem = $this->getMock('Magento\Sales\Model\Order\Item', ['getStore', 'getProduct'], [], '', false);
         $orderItem->expects($this->any())
             ->method('getProduct')
@@ -302,14 +297,19 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($result, $this->block->isItemAvailableForReorder($orderItem));
     }
 
-    /**
-     * @return array
-     */
-    public function isItemAvailableForReorderDataProvider()
+    public function testItemNotAvailableForReorderWhenProductNotExist()
     {
-        return [
-            [false, false],
-            [4, true],
-        ];
+        $this->stockItemMock->expects($this->never())->method('getIsInStock');
+        $this->stockRegistry->expects($this->any())
+            ->method('getStockItem')
+            ->will($this->returnValue($this->stockItemMock));
+
+
+        $orderItem = $this->getMock('Magento\Sales\Model\Order\Item', [], [], '', false);
+        $orderItem->expects($this->any())
+            ->method('getProduct')
+            ->willThrowException(new \Magento\Framework\Exception\NoSuchEntityException);
+        $this->createBlockObject();
+        $this->assertSame(false, $this->block->isItemAvailableForReorder($orderItem));
     }
 }

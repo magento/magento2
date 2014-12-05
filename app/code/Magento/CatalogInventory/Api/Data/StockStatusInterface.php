@@ -27,7 +27,6 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * Interface StockStatusInterface
- * @data-api
  */
 interface StockStatusInterface extends ExtensibleDataInterface
 {

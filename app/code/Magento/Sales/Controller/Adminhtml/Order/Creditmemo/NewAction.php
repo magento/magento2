@@ -60,25 +60,26 @@ class NewAction extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        $this->_title->add(__('Credit Memos'));
         $this->creditmemoLoader->setOrderId($this->getRequest()->getParam('order_id'));
         $this->creditmemoLoader->setCreditmemoId($this->getRequest()->getParam('creditmemo_id'));
         $this->creditmemoLoader->setCreditmemo($this->getRequest()->getParam('creditmemo'));
         $this->creditmemoLoader->setInvoiceId($this->getRequest()->getParam('invoice_id'));
         $creditmemo = $this->creditmemoLoader->load();
         if ($creditmemo) {
-            if ($creditmemo->getInvoice()) {
-                $this->_title->add(__("New Memo for #%1", $creditmemo->getInvoice()->getIncrementId()));
-            } else {
-                $this->_title->add(__("New Memo"));
-            }
-
             if ($comment = $this->_objectManager->get('Magento\Backend\Model\Session')->getCommentText(true)) {
                 $creditmemo->setCommentText($comment);
             }
-
             $this->_view->loadLayout();
             $this->_setActiveMenu('Magento_Sales::sales_order');
+            $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Credit Memos'));
+            if ($creditmemo->getInvoice()) {
+                $this->_view->getPage()->getConfig()->getTitle()->prepend(
+                    __("New Memo for #%1", $creditmemo->getInvoice()->getIncrementId())
+                );
+            } else {
+                $this->_view->getPage()->getConfig()->getTitle()->prepend(__("New Memo"));
+            }
+
             $this->_view->renderLayout();
         } else {
             $this->_forward('noroute');

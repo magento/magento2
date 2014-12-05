@@ -28,13 +28,5 @@
         <sequence>
             <module name="Magento_Backend"/>
         </sequence>
-        <depends>
-            <module name="Magento_Authorization"/>
-            <module name="Magento_Backend"/>
-            <module name="Magento_Core"/>
-            <module name="Magento_Integration"/>
-            <module name="Magento_Theme"/>
-            <module name="Magento_RequireJs"/>
-        </depends>
     </module>
 </config>

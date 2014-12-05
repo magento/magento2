@@ -39,6 +39,9 @@ interface GroupInterface extends ExtensibleDataInterface
     const CODE = 'code';
     const TAX_CLASS_ID = 'tax_class_id';
     const TAX_CLASS_NAME = 'tax_class_name';
+    const NOT_LOGGED_IN_ID = 0;
+    const CUST_GROUP_ALL = 32000;
+    const GROUP_CODE_MAX_LENGTH = 32;
     /**#@-*/
 
     /**

@@ -46,6 +46,6 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $block->setEntity(new \Magento\Framework\Object());
 
         /** SUT execution and assertions */
-        $this->assertEquals('Firstname Lastname', $block->getDefaultSender(), 'Sender name is invalid.');
+        $this->assertEquals('John Smith', $block->getDefaultSender(), 'Sender name is invalid.');
     }
 }

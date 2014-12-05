@@ -90,9 +90,9 @@ class RendererTest extends \PHPUnit_Framework_TestCase
     protected $propertyGroupMock;
 
     /**
-     * @var \Magento\Framework\App\Action\Title|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Page\Title|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $titlesMock;
+    protected $titleMock;
 
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
@@ -140,8 +140,8 @@ class RendererTest extends \PHPUnit_Framework_TestCase
 
         $this->assetInterfaceMock = $this->getMockForAbstractClass('Magento\Framework\View\Asset\AssetInterface');
 
-        $this->titlesMock = $this->getMockBuilder('Magento\Framework\App\Action\Title')
-            ->setMethods(['add', 'get'])
+        $this->titleMock = $this->getMockBuilder('Magento\Framework\View\Page\Title')
+            ->setMethods(['set', 'get'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -155,8 +155,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
                 'urlBuilder' => $this->urlBuilderMock,
                 'escaper' => $this->escaperMock,
                 'string' => $this->stringMock,
-                'logger' => $this->loggerMock,
-                'titles' => $this->titlesMock
+                'logger' => $this->loggerMock
             ]
         );
     }
@@ -215,21 +214,11 @@ class RendererTest extends \PHPUnit_Framework_TestCase
 
         $this->pageConfigMock->expects($this->any())
             ->method('getTitle')
-            ->will($this->returnValue($title));
+            ->will($this->returnValue($this->titleMock));
 
-        $this->titlesMock->expects($this->once())
-            ->method('add')
-            ->with($title, true)
-            ->will($this->returnSelf());
-
-        $this->titlesMock->expects($this->once())
+        $this->titleMock->expects($this->once())
             ->method('get')
-            ->will($this->returnValue([$title]));
-
-        $this->pageConfigMock->expects($this->once())
-            ->method('setTitle')
-            ->with([$title])
-            ->will($this->returnSelf());
+            ->will($this->returnValue($title));
 
         $this->assertEquals($expected, $this->renderer->renderTitle());
     }

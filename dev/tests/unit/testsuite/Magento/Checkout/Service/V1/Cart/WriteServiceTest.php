@@ -22,12 +22,14 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Checkout\Service\V1\Cart;
 
 use Magento\TestFramework\Helper\ObjectManager;
 use Magento\Framework\Exception\CouldNotSaveException;
 
+/**
+ * Class WriteServiceTest
+ */
 class WriteServiceTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -58,11 +60,6 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerRegistryMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $quoteRepositoryMock;
 
     /**
@@ -74,6 +71,16 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $quoteServiceFactory;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $customerRepositoryMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $customerFactoryMock;
 
     public function setUp()
     {
@@ -92,12 +99,22 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
                     'getCustomerId',
                     'setCustomer',
                     'setCustomerIsGuest',
-                    '__wakeup'
+                    '__wakeup',
                 ],
                 [], '', false);
 
-        $this->customerRegistryMock =
-            $this->getMock('\Magento\Customer\Model\CustomerRegistry', [], [], '', false);
+        $this->customerRepositoryMock = $this->getMock(
+            '\Magento\Customer\Api\CustomerRepositoryInterface', [], [], '', false
+        );
+
+        $this->customerFactoryMock = $this->getMock(
+            'Magento\Customer\Model\CustomerFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+
         $this->quoteServiceFactory = $this->getMock(
             'Magento\Sales\Model\Service\QuoteFactory',
             ['create'],
@@ -109,10 +126,11 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
             '\Magento\Checkout\Service\V1\Cart\WriteService',
             [
                 'storeManager' => $this->storeManagerMock,
-                'customerRegistry' => $this->customerRegistryMock,
+                'customerRepository' => $this->customerRepositoryMock,
                 'quoteRepository' => $this->quoteRepositoryMock,
                 'userContext' => $this->userContextMock,
-                'quoteServiceFactory' => $this->quoteServiceFactory
+                'quoteServiceFactory' => $this->quoteServiceFactory,
+                'customerModelFactory' => $this->customerFactoryMock
             ]
         );
     }
@@ -123,8 +141,12 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->userContextMock->expects($this->once())->method('getUserType')
             ->willReturn(\Magento\Authorization\Model\UserContextInterface::USER_TYPE_ADMIN);
-        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($this->storeMock));
-        $this->storeMock->expects($this->once())->method('getId')->will($this->returnValue($storeId));
+        $this->storeManagerMock->expects($this->once())
+            ->method('getStore')
+            ->will($this->returnValue($this->storeMock));
+        $this->storeMock->expects($this->once())
+            ->method('getId')
+            ->will($this->returnValue($storeId));
 
         $this->quoteRepositoryMock->expects($this->once())->method('create')->willReturn($this->quoteMock);
         $this->quoteMock->expects($this->once())->method('setStoreId')->with($storeId);
@@ -142,14 +164,23 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         $storeId = 345;
         $userId = 50;
 
-        $customerMock = $this->getMock('\Magento\Customer\Model\Customer', [], [], '', false);
-        $this->customerRegistryMock->expects($this->once())
-            ->method('retrieve')->with($userId)->will($this->returnValue($customerMock));
+        $customerMock = $this->getMockForAbstractClass(
+            'Magento\Customer\Api\Data\CustomerInterface',
+            [],
+            '',
+            false
+        );
+        $this->customerRepositoryMock->expects($this->once())
+            ->method('getById')
+            ->with($userId)
+            ->will($this->returnValue($customerMock));
 
         $this->userContextMock->expects($this->once())->method('getUserType')
             ->willReturn(\Magento\Authorization\Model\UserContextInterface::USER_TYPE_CUSTOMER);
-        $this->userContextMock->expects($this->exactly(2))->method('getUserId')->willReturn($userId);
-        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($this->storeMock));
+        $this->userContextMock->expects($this->any())->method('getUserId')->willReturn($userId);
+        $this->storeManagerMock->expects($this->once())
+            ->method('getStore')
+            ->will($this->returnValue($this->storeMock));
         $this->storeMock->expects($this->once())->method('getId')->will($this->returnValue($storeId));
 
         $customerQuoteMock = $this->getMock('\Magento\Sales\Model\Quote',
@@ -176,27 +207,22 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         $storeId = 345;
         $userId = 50;
 
-        $customerMock = $this->getMock('\Magento\Customer\Model\Customer', [], [], '', false);
-        $this->customerRegistryMock->expects($this->once())
-            ->method('retrieve')->with($userId)->will($this->returnValue($customerMock));
-
-        $this->userContextMock->expects($this->once())->method('getUserType')
-            ->willReturn(\Magento\Authorization\Model\UserContextInterface::USER_TYPE_CUSTOMER);
-        $this->userContextMock->expects($this->exactly(2))->method('getUserId')->willReturn($userId);
-        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($this->storeMock));
-        $this->storeMock->expects($this->once())->method('getId')->will($this->returnValue($storeId));
-
-        $customerQuoteMock = $this->getMock('\Magento\Sales\Model\Quote',
-            [
-                'loadByCustomer',
-                'getIsActive',
-                'getId',
-                '__wakeup'
-            ],
+        $customerMock = $this->getMockForAbstractClass(
+            'Magento\Customer\Api\Data\CustomerInterface',
             [],
             '',
             false
         );
+        $this->customerRepositoryMock->expects($this->once())
+            ->method('getById')->with($userId)->will($this->returnValue($customerMock));
+        $this->userContextMock->expects($this->once())->method('getUserType')
+            ->willReturn(\Magento\Authorization\Model\UserContextInterface::USER_TYPE_CUSTOMER);
+        $this->userContextMock->expects($this->any())->method('getUserId')->willReturn($userId);
+        $this->storeManagerMock->expects($this->once())
+            ->method('getStore')
+            ->will($this->returnValue($this->storeMock));
+        $this->storeMock->expects($this->once())->method('getId')->will($this->returnValue($storeId));
+
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActiveForCustomer')
             ->with($userId)
@@ -219,17 +245,22 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
     {
         $storeId = 345;
 
-        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($this->storeMock));
-        $this->storeMock->expects($this->once())->method('getId')->will($this->returnValue($storeId));
+        $this->storeManagerMock->expects($this->once())
+            ->method('getStore')
+            ->will($this->returnValue($this->storeMock));
+        $this->storeMock->expects($this->once())
+            ->method('getId')
+            ->will($this->returnValue($storeId));
 
-        $this->quoteRepositoryMock->expects($this->once())->method('create')->willReturn($this->quoteMock);
-        $this->quoteMock->expects($this->once())->method('setStoreId')->with($storeId);
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($this->quoteMock));
+        $this->quoteMock->expects($this->once())
+            ->method('setStoreId')
+            ->with($storeId);
         $this->quoteRepositoryMock->expects($this->once())
             ->method('save')
-            ->with($this->quoteMock)
-            ->willThrowException(
-                new CouldNotSaveException('Cannot create quote')
-            );
+            ->will($this->throwException(new CouldNotSaveException('Cannot create quote')));
 
         $this->service->create();
     }
@@ -248,10 +279,26 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         $this->storeMock->expects($this->once())->method('getId')->will($this->returnValue($storeId));
         $this->quoteRepositoryMock->expects($this->once())->method('getActive')->with($cartId)
             ->will($this->returnValue($this->quoteMock));
-        $customerMock = $this->getMock('\Magento\Customer\Model\Customer', [], [], '', false);
-        $this->customerRegistryMock->expects($this->once())
-            ->method('retrieve')->with($customerId)->will($this->returnValue($customerMock));
-        $customerMock->expects($this->once())->method('getSharedStoreIds')->will($this->returnValue([11]));
+        $customerMock = $this->getMockForAbstractClass(
+            'Magento\Customer\Api\Data\CustomerInterface',
+            [],
+            '',
+            false
+        );
+        $this->customerRepositoryMock->expects($this->once())
+            ->method('getById')->with($customerId)->will($this->returnValue($customerMock));
+        $customerModelMock = $this->getMockBuilder('Magento\Customer\Model\Customer')
+            ->disableOriginalConstructor()
+            ->setMethods(['load', 'getSharedStoreIds'])
+            ->getMock();
+        $this->customerFactoryMock->expects($this->once())->method('create')->willReturn($customerModelMock);
+        $customerModelMock->expects($this->once())
+            ->method('load')
+            ->with($customerId)
+            ->willReturnSelf();
+        $customerModelMock->expects($this->once())->method('getSharedStoreIds')->will(
+            $this->returnValue([11])
+        );
 
         $this->service->assignCustomer($cartId, $customerId);
     }
@@ -270,10 +317,27 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->quoteMock));
         $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($this->storeMock));
         $this->storeMock->expects($this->once())->method('getId')->will($this->returnValue($storeId));
-        $customerMock = $this->getMock('\Magento\Customer\Model\Customer', [], [], '', false);
-        $this->customerRegistryMock->expects($this->once())
-            ->method('retrieve')->with($customerId)->will($this->returnValue($customerMock));
-        $customerMock->expects($this->once())->method('getSharedStoreIds')->will($this->returnValue([$storeId]));
+        $customerMock = $this->getMockForAbstractClass(
+            'Magento\Customer\Api\Data\CustomerInterface',
+            [],
+            '',
+            false
+        );
+        $this->customerRepositoryMock->expects($this->once())
+            ->method('getById')->with($customerId)->will($this->returnValue($customerMock));
+
+        $customerModelMock = $this->getMockBuilder('Magento\Customer\Model\Customer')
+            ->disableOriginalConstructor()
+            ->setMethods(['load', 'getSharedStoreIds'])
+            ->getMock();
+        $this->customerFactoryMock->expects($this->once())->method('create')->willReturn($customerModelMock);
+        $customerModelMock->expects($this->once())
+            ->method('load')
+            ->with($customerId)
+            ->willReturnSelf();
+        $customerModelMock->expects($this->once())->method('getSharedStoreIds')->will(
+            $this->returnValue([$storeId])
+        );
         $this->quoteMock->expects($this->once())->method('getCustomerId')->will($this->returnValue($customerId));
         $this->quoteMock->expects($this->never())->method('setCustomer');
 
@@ -295,10 +359,16 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
 
-        $customerMock = $this->getMock('\Magento\Customer\Model\Customer', [], [], '', false);
-        $this->customerRegistryMock->expects($this->once())
-            ->method('retrieve')->with($customerId)->will($this->returnValue($customerMock));
-        $customerMock->expects($this->once())->method('getSharedStoreIds')->will($this->returnValue([$storeId]));
+        $customerModelMock = $this->getMockBuilder('Magento\Customer\Model\Customer')
+            ->disableOriginalConstructor()
+            ->setMethods(['load', 'getSharedStoreIds'])
+            ->getMock();
+        $this->customerFactoryMock->expects($this->once())->method('create')->willReturn($customerModelMock);
+        $customerModelMock->expects($this->once())->method('getSharedStoreIds')->will($this->returnValue([$storeId]));
+        $customerModelMock->expects($this->once())
+            ->method('load')
+            ->with($customerId)
+            ->willReturnSelf();
         $this->quoteMock->expects($this->once())->method('getCustomerId')->will($this->returnValue(null));
 
         $customerQuoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
@@ -322,16 +392,32 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         $this->storeMock->expects($this->once())->method('getId')->will($this->returnValue($storeId));
         $this->quoteRepositoryMock->expects($this->once())->method('getActive')->with($cartId)
             ->will($this->returnValue($this->quoteMock));
-        $customerMock = $this->getMock('\Magento\Customer\Model\Customer', [], [], '', false);
-        $this->customerRegistryMock->expects($this->once())
-            ->method('retrieve')->with($customerId)->will($this->returnValue($customerMock));
+        $customerMock = $this->getMockForAbstractClass(
+            'Magento\Customer\Api\Data\CustomerInterface',
+            [],
+            '',
+            false,
+            true,
+            true
+        );
+        $this->customerRepositoryMock->expects($this->once())
+            ->method('getById')->with($customerId)->will($this->returnValue($customerMock));
 
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getForCustomer')
             ->with($customerId)
             ->willThrowException(new \Magento\Framework\Exception\NoSuchEntityException());
 
-        $customerMock->expects($this->once())->method('getSharedStoreIds')->will($this->returnValue([$storeId]));
+        $customerModelMock = $this->getMockBuilder('Magento\Customer\Model\Customer')
+            ->disableOriginalConstructor()
+            ->setMethods(['load', 'getSharedStoreIds'])
+            ->getMock();
+        $this->customerFactoryMock->expects($this->once())->method('create')->willReturn($customerModelMock);
+        $customerModelMock->expects($this->once())->method('getSharedStoreIds')->will($this->returnValue([$storeId]));
+        $customerModelMock->expects($this->once())
+            ->method('load')
+            ->with($customerId)
+            ->willReturnSelf();
         $this->quoteMock->expects($this->once())->method('getCustomerId')->will($this->returnValue(false));
         $this->quoteMock->expects($this->once())
             ->method('setCustomer')->with($customerMock)->will($this->returnValue($this->quoteMock));

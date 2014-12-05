@@ -25,7 +25,6 @@
  */
 namespace Magento\Customer\Model\Metadata\Form;
 
-use Magento\Customer\Model\Data\ValidationRule;
 use Magento\Customer\Api\Data\ValidationRuleDataBuilder;
 
 class DateTest extends AbstractFormTestCase
@@ -90,8 +89,6 @@ class DateTest extends AbstractFormTestCase
     public function testValidateValue($value, $validation, $required, $expected)
     {
         $validationRules = array();
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-
         $validationRule = $this->getMockBuilder('Magento\Customer\Api\Data\ValidationRuleInterface')
             ->disableOriginalConstructor()
             ->setMethods(['getName', 'getValue'])

@@ -152,6 +152,7 @@ class Send extends Action\Action implements IndexInterface
             return;
         }
 
+        $this->addLayoutHandles();
         $this->inlineTranslation->suspend();
 
         $sent = 0;
@@ -159,19 +160,8 @@ class Send extends Action\Action implements IndexInterface
         try {
             $customer = $this->_customerSession->getCustomerDataObject();
             $customerName = $this->_customerHelperView->getCustomerName($customer);
-            /*if share rss added rss feed to email template*/
-            if ($this->getRequest()->getParam('rss_url')) {
-                $rss_url = $this->_view->getLayout()->createBlock(
-                    'Magento\Wishlist\Block\Rss\EmailLink'
-                )->setWishlistId(
-                    $wishlist->getId()
-                )->toHtml();
-                $message .= $rss_url;
-            }
-            $wishlistBlock = $this->_view->getLayout()->createBlock(
-                'Magento\Wishlist\Block\Share\Email\Items'
-            )->toHtml();
 
+            $message .= $this->getRssLink($wishlist->getId());
             $emails = array_unique($emails);
             $sharingCode = $wishlist->getSharingCode();
 
@@ -194,7 +184,7 @@ class Send extends Action\Action implements IndexInterface
                             'customer' => $customer,
                             'customerName' => $customerName,
                             'salable' => $wishlist->isSalable() ? 'yes' : '',
-                            'items' => $wishlistBlock,
+                            'items' => $this->getWishlistItems(),
                             'addAllLink' => $this->_url->getUrl('*/shared/allcart', array('code' => $sharingCode)),
                             'viewOnSiteLink' => $this->_url->getUrl('*/shared/index', array('code' => $sharingCode)),
                             'message' => $message,
@@ -236,5 +226,50 @@ class Send extends Action\Action implements IndexInterface
             );
             $this->_redirect('*/*/share');
         }
+    }
+
+    /**
+     * Prepare to load additional email blocks
+     *
+     * Add 'wishlist_email_rss' layout handle.
+     * Add 'wishlist_email_items' layout handle.
+     *
+     * @return void
+     */
+    protected function addLayoutHandles()
+    {
+        if ($this->getRequest()->getParam('rss_url')) {
+            $this->_view->getLayout()->getUpdate()->addHandle('wishlist_email_rss');
+        }
+        $this->_view->getLayout()->getUpdate()->addHandle('wishlist_email_items');
+        $this->_view->loadLayoutUpdates();
+    }
+
+    /**
+     * Retrieve RSS link content (html)
+     *
+     * @param int $wishlistId
+     * @return mixed
+     */
+    protected function getRssLink($wishlistId)
+    {
+        if ($this->getRequest()->getParam('rss_url')) {
+            return $this->_view->getLayout()
+                ->getBlock('wishlist.email.rss')
+                ->setWishlistId($wishlistId)
+                ->toHtml();
+        }
+    }
+
+    /**
+     * Retrieve wishlist items content (html)
+     *
+     * @return string
+     */
+    protected function getWishlistItems()
+    {
+        return $this->_view->getLayout()
+            ->getBlock('wishlist.email.items')
+            ->toHtml();
     }
 }

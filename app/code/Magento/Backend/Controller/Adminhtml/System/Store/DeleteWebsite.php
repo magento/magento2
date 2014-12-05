@@ -31,8 +31,6 @@ class DeleteWebsite extends \Magento\Backend\Controller\Adminhtml\System\Store
      */
     public function execute()
     {
-        $this->_title->add(__('Delete Web Site'));
-
         $itemId = $this->getRequest()->getParam('item_id', null);
         if (!($model = $this->_objectManager->create('Magento\Store\Model\Website')->load($itemId))) {
             $this->messageManager->addError(__('Unable to proceed. Please, try again.'));
@@ -50,6 +48,7 @@ class DeleteWebsite extends \Magento\Backend\Controller\Adminhtml\System\Store
         $this->_addDeletionNotice('website');
 
         $resultPage = $this->createPage();
+        $resultPage->getConfig()->getTitle()->prepend(__('Delete Web Site'));
         $resultPage->addBreadcrumb(__('Delete Web Site'), __('Delete Web Site'))
             ->addContent(
                 $resultPage->getLayout()->createBlock('Magento\Backend\Block\System\Store\Delete')

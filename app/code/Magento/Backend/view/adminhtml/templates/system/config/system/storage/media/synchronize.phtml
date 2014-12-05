@@ -29,7 +29,8 @@
 require([
     'jquery',
     'prototype',
-    'mage/backend/validation'
+    'mage/backend/validation',
+    'jquery/validate'
 ], function(jQuery){
 
     allowedStorages = [];
@@ -180,8 +181,14 @@ require([
         disableStorageSelection();
         disableSyncButton();
     }
-//]]>
 
+    jQuery.validator.addMethod('required-synchronize', function(){
+        storage = getConnectionName(
+            $('system_media_storage_configuration_media_storage').value,
+            $('system_media_storage_configuration_media_database').value
+        );
+        return allowedStorages.include(storage);
+    }, 'Synchronization is required.');
 });
 </script>
 

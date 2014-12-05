@@ -21,7 +21,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-$customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Customer\Model\Customer');
+
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+/** @var $repository \Magento\Customer\Api\CustomerRepositoryInterface */
+$repository = $objectManager->create('\Magento\Customer\Api\CustomerRepositoryInterface');
+$customer = $objectManager->create('Magento\Customer\Model\Customer');
+
 /** @var Magento\Customer\Model\Customer $customer */
 $customer->setWebsiteId(1)
     ->setId(1)
@@ -32,8 +37,8 @@ $customer->setWebsiteId(1)
     ->setGroupId(1)
     ->setStoreId(1)
     ->setIsActive(1)
-    ->setFirstname('Firstname')
-    ->setLastname('Lastname')
+    ->setFirstname('John')
+    ->setLastname('Smith')
     ->setDefaultBilling(1)
     ->setDefaultShipping(1);
 $customer->isObjectNew(true);

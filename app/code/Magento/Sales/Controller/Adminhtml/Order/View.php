@@ -35,12 +35,11 @@ class View extends \Magento\Sales\Controller\Adminhtml\Order
      */
     public function execute()
     {
-        $this->_title->add(__('Orders'));
-
         $order = $this->_initOrder();
         if ($order) {
             try {
                 $this->_initAction();
+                $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Orders'));
             } catch (\Magento\Framework\App\Action\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
                 $this->_redirect('sales/order/index');
@@ -51,7 +50,7 @@ class View extends \Magento\Sales\Controller\Adminhtml\Order
                 $this->_redirect('sales/order/index');
                 return;
             }
-            $this->_title->add(sprintf("#%s", $order->getRealOrderId()));
+            $this->_view->getPage()->getConfig()->getTitle()->prepend(sprintf("#%s", $order->getRealOrderId()));
             $this->_view->renderLayout();
         }
     }

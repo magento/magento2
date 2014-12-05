@@ -56,7 +56,7 @@ class ReadService implements ReadServiceInterface
     protected $eavConfig;
 
     /**
-     * @var \Magento\Catalog\Model\ProductRepository
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
     protected $productRepository;
 
@@ -88,7 +88,7 @@ class ReadService implements ReadServiceInterface
      * @param \Magento\Catalog\Model\Resource\Eav\AttributeFactory $attributeFactory
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param MediaImageBuilder $mediaImageBuilder
-     * @param \Magento\Catalog\Model\ProductRepository $productRepository
+     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param GalleryEntryBuilder $galleryEntryBuilder
      */
     public function __construct(
@@ -99,7 +99,7 @@ class ReadService implements ReadServiceInterface
         \Magento\Catalog\Model\Resource\Eav\AttributeFactory $attributeFactory,
         \Magento\Framework\StoreManagerInterface $storeManager,
         MediaImageBuilder $mediaImageBuilder,
-        \Magento\Catalog\Model\ProductRepository $productRepository,
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         GalleryEntryBuilder $galleryEntryBuilder
     ) {
         $this->collectionFactory = $collectionFactory;

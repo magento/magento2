@@ -36,7 +36,7 @@ class Stock extends \Magento\ProductAlert\Block\Product\View
      */
     public function setTemplate($template)
     {
-        if (!$this->_helper->isStockAlertAllowed() || !$this->_product || $this->_product->isAvailable()) {
+        if (!$this->_helper->isStockAlertAllowed() || !$this->getProduct() || $this->getProduct()->isAvailable()) {
             $template = '';
         } else {
             $this->setSignupUrl($this->_helper->getSaveUrl('stock'));

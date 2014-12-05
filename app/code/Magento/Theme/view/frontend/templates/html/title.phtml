@@ -26,11 +26,9 @@
  * @var $this \Magento\Theme\Block\Html\Title
  */
 $cssClass = $this->getCssClass() ? ' ' . $this->getCssClass() : '';
-$prefix = $this->getPrefix() ? '<span class="prefix">' . $this->getPrefix() . '</span>' : '';
-$suffix = $this->getSuffix() ? '<span class="suffix">' . $this->getSuffix() . '</span>' : '';
 $title = '';
 if (trim($this->getPageTitle())) {
-    $title = $prefix . '<span class="base" data-ui-id="page-title" ' .  $this->getAddBaseAttribute() . '>' . $this->escapeHtml($this->getPageTitle()) . '</span>' . $suffix;
+    $title = '<span class="base" data-ui-id="page-title" ' .  $this->getAddBaseAttribute() . '>' . $this->escapeHtml($this->getPageTitle()) . '</span>';
 }
 ?>
 <?php if ($title): ?>

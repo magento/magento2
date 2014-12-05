@@ -335,18 +335,6 @@ abstract class EntityAbstract
     }
 
     /**
-     * Escape method parameter default value
-     *
-     * @param string $value
-     * @return string
-     */
-    protected function _escapeDefaultValue($value)
-    {
-        // escape slashes
-        return str_replace('\\', '\\\\', $value);
-    }
-
-    /**
      * Get value generator for null default value
      *
      * @return \Zend\Code\Generator\ValueGenerator
@@ -380,7 +368,7 @@ abstract class EntityAbstract
         if ($parameter->isOptional() && $parameter->isDefaultValueAvailable()) {
             $defaultValue = $parameter->getDefaultValue();
             if (is_string($defaultValue)) {
-                $parameterInfo['defaultValue'] = $this->_escapeDefaultValue($parameter->getDefaultValue());
+                $parameterInfo['defaultValue'] = $parameter->getDefaultValue();
             } elseif ($defaultValue === null) {
                 $parameterInfo['defaultValue'] = $this->_getNullDefaultValue();
             } else {

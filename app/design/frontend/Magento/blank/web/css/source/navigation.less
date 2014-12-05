@@ -22,6 +22,12 @@
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
+//
+//    Common
+//--------------------------------------
+
+.responsive-common() {
+
 .panel.header {
     .links,
     .switcher {
@@ -36,23 +42,27 @@
 .nav-toggle {
     .icon-font(
         @icon-menu,
-        @_icon-font-size: 28px
+        @_icon-font-size: 28px,
+        @_icon-font-color: @header-icons-color,
+        @_icon-font-color-hover: @header-icons-color-hover
     );
     .icon-text-hide();
     display: block;
     position: absolute;
-    top: 12px;
+    top: 15px;
     left: 15px;
     font-size: 0;
     z-index: 14;
     cursor: pointer;
 }
 
+}
+
 //
 //    Mobile
 //--------------------------------------
 @active-nav-indent: 54px;
-.responsive-smaller(@break) when (@break = @screen-m) {
+.responsive-max-m(@break) when (@break = @screen-m) {
     .navigation {
         padding: 0;
         .parent .level-top {
@@ -179,7 +189,7 @@
         .nav-sections {
             left: 0;
             z-index: 99;
-            @_shadow:  0 0 5px 0 rgba(50, 50, 50, 0.75);
+            @_shadow:  0 0 5px 0 rgba(50, 50, 50, .75);
             .css(box-shadow, @_shadow, 1);
         }
         .nav-toggle {
@@ -192,7 +202,7 @@
                 height: 100%;
                 top: 0;
                 right:0;
-                background: rgba(0,0,0,0.01);
+                background: rgba(0,0,0,.01);
             }
         }
     }
@@ -236,7 +246,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive(@break) when (@break = @screen-m) {
+.responsive-min-l(@break) when (@break = @screen-m) {
     .nav-toggle {
         display: none;
     }

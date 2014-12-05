@@ -62,12 +62,11 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $layout->expects($this->atLeastOnce())->method('generateElements')->will($this->returnValue($processor));
 
         $data = ['full_action_name' => $fullActionName, 'layout' => $layout];
-        $prefix = 'controller_action_layout_';
         /** @var Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject $eventManager */
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
-        $eventManager->expects($this->at(0))->method('dispatch')->with($prefix . 'load_before', $data);
-        $eventManager->expects($this->at(1))->method('dispatch')->with($prefix . 'generate_blocks_before', $data);
-        $eventManager->expects($this->at(2))->method('dispatch')->with($prefix . 'generate_blocks_after', $data);
+        $eventManager->expects($this->at(0))->method('dispatch')->with('layout_load_before', $data);
+        $eventManager->expects($this->at(1))->method('dispatch')->with('layout_generate_blocks_before', $data);
+        $eventManager->expects($this->at(2))->method('dispatch')->with('layout_generate_blocks_after', $data);
         $builder = $this->getBuilder(['eventManager' => $eventManager, 'request' => $request, 'layout' => $layout]);
         $builder->build();
     }

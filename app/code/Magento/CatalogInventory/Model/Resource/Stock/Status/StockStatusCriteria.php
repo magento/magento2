@@ -64,10 +64,7 @@ class StockStatusCriteria extends AbstractCriteria implements \Magento\CatalogIn
     }
 
     /**
-     * Add Criteria object
-     *
-     * @param \Magento\CatalogInventory\Api\StockStatusCriteriaInterface $criteria
-     * @return void
+     * @inheritdoc
      */
     public function addCriteria(\Magento\CatalogInventory\Api\StockStatusCriteriaInterface $criteria)
     {

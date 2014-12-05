@@ -25,6 +25,9 @@ namespace Magento\Sales\Block\Adminhtml\Order\View;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Class InfoTests
+ */
 class InfoTest extends \PHPUnit_Framework_TestCase
 {
 
@@ -41,7 +44,7 @@ class InfoTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $groupServiceMock;
+    protected $groupRepositoryMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -70,14 +73,14 @@ class InfoTest extends \PHPUnit_Framework_TestCase
         $this->authorizationMock = $this->getMock('Magento\Framework\AuthorizationInterface', [], [], '', false);
         $this->contextMock
             ->expects($this->any())->method('getAuthorization')->will($this->returnValue($this->authorizationMock));
-        $this->groupServiceMock = $this->getMock('Magento\Customer\Service\V1\CustomerGroupServiceInterface');
+        $this->groupRepositoryMock = $this->getMockForAbstractClass('Magento\Customer\Api\GroupRepositoryInterface');
         $this->coreRegistryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false);
         $methods = ['getCustomerGroupId', '__wakeUp'];
         $this->orderMock = $this->getMock('\Magento\Sales\Model\Order', $methods, [], '', false);
-        $this->groupMock = $this->getMock('Magento\Customer\Service\V1\Data\CustomerGroup', [], [], '', false);
+        $this->groupMock = $this->getMockForAbstractClass('Magento\Customer\Api\Data\GroupInterface', [], '', false);
         $arguments = [
             'context' => $this->contextMock,
-            'groupService' => $this->groupServiceMock,
+            'groupRepository' => $this->groupRepositoryMock,
             'registry' => $this->coreRegistryMock
         ];
 
@@ -114,8 +117,8 @@ class InfoTest extends \PHPUnit_Framework_TestCase
             ->with('current_order')
             ->will($this->returnValue($this->orderMock));
         $this->orderMock->expects($this->once())->method('getCustomerGroupId')->will($this->returnValue(4));
-        $this->groupServiceMock
-            ->expects($this->once())->method('getGroup')->with(4)->will($this->returnValue($this->groupMock));
+        $this->groupRepositoryMock
+            ->expects($this->once())->method('getById')->with(4)->will($this->returnValue($this->groupMock));
         $this->groupMock
             ->expects($this->once())
             ->method('getCode')
@@ -131,8 +134,8 @@ class InfoTest extends \PHPUnit_Framework_TestCase
             ->with('current_order')
             ->will($this->returnValue($this->orderMock));
         $this->orderMock->expects($this->once())->method('getCustomerGroupId')->will($this->returnValue(4));
-        $this->groupServiceMock
-            ->expects($this->once())->method('getGroup')->with(4)->will($this->returnValue($this->groupMock));
+        $this->groupRepositoryMock
+            ->expects($this->once())->method('getById')->with(4)->will($this->returnValue($this->groupMock));
         $this->groupMock
             ->expects($this->once())
             ->method('getCode')

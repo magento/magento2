@@ -1,3 +1,85 @@
+0.1.0-alpha107
+=============
+* Various improvements:
+    * Removed deprecated code from the Sales and SalesRule modules
+    * Stabilized functional tests for the following modules:
+        * Centinel
+        * Core
+        * RecurringPayment
+        * Sales
+        * Multishipping
+        * Newsletter
+        * Widget
+* Fixed bugs:
+    * Fixed an issued where a product could not be found in customer wishlist when searched by name
+    * Fixed the invalid email template for Product Price Alert
+    * Fixed an issue where customer group did not change when invalid VAT number was specified
+    * Fixed integration tests coverage
+    * Fixed an issue where a customer was not redirected to the configurable product page after clicking Add to Card on the My Wish list page for a product which required configuration
+    * Fixed an issue where an error message was displayed when a customer tried to use checkout using PayPal Express Checkout
+    * Fixed an issue where it was impossible to place an order using Authorize Direct Post
+    * Fixed an issue where the page cache in Varnish mode didn’t perform caching as required the cache
+    * Fixed an issue where it was impossible to specify layout container when creating or editing a widget
+    * Fixed an issue where a widget set to be displayed on certain type of product page was not displayed
+    * Fixed an issue where it was impossible to create a widget to be displayed in a sidebar
+    * Fixed an issue where a fatal error was thrown when trying to open a not existing page after disabling the 404 Not Found CMS page
+    * Fixed an issue where it was impossible to refresh CAPTCHA in the Admin panel
+    * Fixed an issue where two CAPTCHAs were displayed during guest Checkout
+    * Fixed an issued where clicking the Preview button on revision preview page did not open the Preview page
+    * Fixed an issue where the Magento\Framework\View\Element\AbstractBlockTest::testFormatTime failed randomly
+    * Fixed logic duplication and the conflicting implementation of the title API in admin
+    * Fixed an issue where JavaScript validation did not recognize the fields filled by automatic tests in the Create Customer form in the Admin panel
+    * Fixed an issue where a fatal error was thrown after mass update of the Stock Availability product attribute
+    * Fixed an issue where the Magento\SalesRule\Model\Resource\Report\CollectionTest::testPeriod CollectionTest::testPeriod integration test failed randomly
+    * Fixed issues with expandable frontend elements
+    * Fixed Blank & Luma themes UI bugs
+    * Fixed an issue where the Packages pop-up displayed incorrect information
+    * Fixed an issue where admin path became hidden when store address was too long
+    * Fixed the styling of variations without base image
+    * Fixed an issue where the Back link on a customer edit page led to the home page
+    * Fixed an issue where it was impossible to save system config from Advanced->System
+    * Fixed an issue where it was impossible to save a Return in the Admin panel
+    * Fixed a JavaScript issue where it was impossible to expand nested categories if responsive
+    * Fixed an issue where it was impossible to place an order using Authorize.net Direct Post in the Admin panel
+* Framework improvements:
+    * Declaration of components in composer.json
+    * Added compiler for single-tenant mode
+    * Both ZF1 and ZF2 libraries are declared as Composer dependencies as "1.12.9" and "2.3.1" respectively
+    * ZF1 library is represented by 'magento/zendframework1', which is based on original "1.12.9" version and includes fixes for compatibility with Magento 2 application
+* Layout improvements:
+    * Refactored layout building
+* Performance improvements:
+    * Load product/category instances via repositories
+    * Mobile and Desktop CSS styles stored in separate files
+* Service Contracts:
+    * Refactored the following modules to use new Customer service interfaces:
+        * Checkout
+        * Sales
+        * Multishipping
+        * GoogleShopping
+        * Persistent
+        * SalesRule
+        * Paypal
+        * Invitation
+        * Tax
+        * Newsletter
+    * Code review changes for Service Contracts for the CatalogInventory module
+    * Stabilized code after refactoring the Sales module to use new Customer service
+    * Stabilized code after refactoring the Checkout module to use new Customer service
+    * Deleted old CustomerAccount service tests
+    * Fixed base service object class to populate custom attributes correctly
+    * Fixed processing of array parameters in service interface for consolidated builder
+    * Fixed trace information for service exceptions in dev mode
+    * Implemented Bundle product API
+* Accessibility improvements:
+    * Heading2-Heading6 hierarchy of content structure
+* UI improvements:
+    * Style independent Error page in pub/errors styles
+    * Updated the content of certain default CMS Pages
+* GitHub requests:
+    * [#691](https://github.com/magento/magento2/issues/691) -- Readonly inputs and after element html in the backend
+    * [#694](https://github.com/magento/magento2/issues/694) -- missing git tags in repo
+
 0.1.0-alpha106
 =============
 * Various improvements:

@@ -36,7 +36,7 @@ use Magento\Framework\Exception\InputException;
 class WriteService implements WriteServiceInterface
 {
     /**
-     * @var \Magento\Catalog\Model\ProductRepository
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
     protected $productRepository;
 
@@ -63,14 +63,14 @@ class WriteService implements WriteServiceInterface
     /**
      * @param OptionBuilder $optionBuilder
      * @param Data\Option\Converter $optionConverter
-     * @param \Magento\Catalog\Model\ProductRepository $productRepository
+     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param Data\Option\Metadata\ReaderInterface $optionMetadataReader
      * @param \Magento\Catalog\Model\Product\OptionFactory $optionFactory
      */
     public function __construct(
         OptionBuilder $optionBuilder,
         Data\Option\Converter $optionConverter,
-        \Magento\Catalog\Model\ProductRepository $productRepository,
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         Data\Option\Metadata\ReaderInterface $optionMetadataReader,
         \Magento\Catalog\Model\Product\OptionFactory $optionFactory
     ) {

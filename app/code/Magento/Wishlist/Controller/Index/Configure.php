@@ -43,17 +43,25 @@ class Configure extends Action\Action implements IndexInterface
     protected $wishlistProvider;
 
     /**
+     * @var \Magento\Framework\View\Result\PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider
      * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      */
     public function __construct(
         Action\Context $context,
         \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider,
-        \Magento\Framework\Registry $coreRegistry
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory
     ) {
         $this->wishlistProvider = $wishlistProvider;
         $this->_coreRegistry = $coreRegistry;
+        $this->resultPageFactory = $resultPageFactory;
         parent::__construct($context);
     }
 
@@ -92,13 +100,18 @@ class Configure extends Action\Action implements IndexInterface
                 $this->_objectManager->get('Magento\Wishlist\Helper\Data')->calculate();
             }
             $params->setBuyRequest($buyRequest);
+            /** @var \Magento\Framework\View\Result\Page $resultPage */
+            $resultPage = $this->resultPageFactory->create();
             $this->_objectManager->get(
                 'Magento\Catalog\Helper\Product\View'
             )->prepareAndRender(
+                $resultPage,
                 $item->getProductId(),
                 $this,
                 $params
             );
+
+            return $resultPage;
         } catch (\Magento\Framework\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
             $this->_redirect('*');

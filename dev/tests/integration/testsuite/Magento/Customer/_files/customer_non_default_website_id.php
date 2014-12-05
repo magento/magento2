@@ -22,7 +22,9 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
+/**
+ * @var \Magento\Store\Model\Website $website
+ */
 $website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Store\Model\Website');
 $website->setName('new Website')->setCode('newwebsite')->save();
 
@@ -46,7 +48,7 @@ $customer->setWebsiteId(
     )->setGroupId(
         1
     )->setStoreId(
-        1
+        $website->getStoreId()
     )->setIsActive(
         1
     )->setFirstname(
@@ -62,46 +64,46 @@ $customer->isObjectNew(true);
 
 /** @var \Magento\Customer\Model\Address $addressOne  */
 $addressOne = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Customer\Model\Address');
-$addressOneData = array(
+$addressOneData = [
     'firstname' => 'Firstname',
     'lastname' => 'LastName',
-    'street' => array('test street'),
+    'street' => ['test street'],
     'city' => 'test city',
     'country_id' => 'US',
     'postcode' => '01001',
     'telephone' => '+7000000001',
     'entity_id' => 1
-);
+];
 $addressOne->setData($addressOneData);
 $customer->addAddress($addressOne);
 
 /** @var \Magento\Customer\Model\Address $addressTwo  */
 $addressTwo = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Customer\Model\Address');
-$addressTwoData = array(
+$addressTwoData = [
     'firstname' => 'test firstname',
     'lastname' => 'test lastname',
-    'street' => array('test street'),
+    'street' => ['test street'],
     'city' => 'test city',
     'country_id' => 'US',
     'postcode' => '01001',
     'telephone' => '+7000000001',
     'entity_id' => 2
-);
+];
 $addressTwo->setData($addressTwoData);
 $customer->addAddress($addressTwo);
 
 /** @var \Magento\Customer\Model\Address $addressThree  */
 $addressThree = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Customer\Model\Address');
-$addressThreeData = array(
+$addressThreeData = [
     'firstname' => 'removed firstname',
     'lastname' => 'removed lastname',
-    'street' => array('removed street'),
+    'street' => ['removed street'],
     'city' => 'removed city',
     'country_id' => 'US',
     'postcode' => '01001',
     'telephone' => '+7000000001',
     'entity_id' => 3
-);
+];
 $addressThree->setData($addressThreeData);
 $customer->addAddress($addressThree);
 $customer->save();

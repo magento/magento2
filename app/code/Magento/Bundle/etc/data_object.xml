@@ -25,10 +25,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Api/etc/data_object.xsd">
     <custom_attributes for="Magento\Catalog\Api\Data\ProductInterface">
-        <attribute code="bundle_product_options" type="Magento\Bundle\Service\V1\Data\Product\Option[]" />
-    </custom_attributes>
-    <!-- Left old configuration for old services support -->
-    <custom_attributes for="Magento\Catalog\Service\V1\Data\Product">
-        <attribute code="bundle_product_options" type="Magento\Bundle\Service\V1\Data\Product\Option[]" />
+        <attribute code="bundle_product_options" type="Magento\Bundle\Api\Data\OptionInterface[]" />
     </custom_attributes>
 </config>

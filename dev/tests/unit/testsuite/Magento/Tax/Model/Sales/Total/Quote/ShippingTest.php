@@ -56,6 +56,11 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
     private $addressBuilderMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $regionBuilderMock;
+
+    /**
      * @var Shipping
      */
     private $model;
@@ -91,22 +96,29 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->addressBuilderMock = $this->getMock('Magento\Customer\Service\V1\Data\AddressBuilder',
+        $this->addressBuilderMock = $this->getMock('Magento\Customer\Api\Data\AddressDataBuilder',
             [],
             [],
             '',
             false
         );
-
+        $this->regionBuilderMock = $this->getMock('Magento\Customer\Api\Data\RegionDataBuilder',
+            [],
+            [],
+            '',
+            false
+        );
         $this->model = new Shipping(
             $this->taxConfigMock,
             $this->taxCalculationMock,
             $this->quoteDetailsBuilder,
             $this->itemDetailsBuilder,
             $this->taxClassKeyBuilder,
-            $this->addressBuilderMock
+            $this->addressBuilderMock,
+            $this->regionBuilderMock
         );
     }
+
     public function testCollectDoesNotCalculateTaxIfThereIsNoItemsRelatedToGivenAddress()
     {
         $storeId = 1;

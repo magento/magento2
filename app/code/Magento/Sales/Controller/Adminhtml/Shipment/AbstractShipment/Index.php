@@ -61,9 +61,8 @@ abstract class Index extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        $this->_title->add(__('Shipments'));
-
         $this->_initAction();
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Shipments'));
         $this->_view->renderLayout();
     }
 }

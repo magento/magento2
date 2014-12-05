@@ -33,9 +33,8 @@ class Index extends \Magento\Cms\Controller\Adminhtml\Block
      */
     public function execute()
     {
-        $this->_title->add(__('Blocks'));
-
         $this->_initAction();
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Blocks'));
         $this->_view->renderLayout();
     }
 }

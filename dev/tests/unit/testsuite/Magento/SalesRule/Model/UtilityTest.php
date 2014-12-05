@@ -144,7 +144,6 @@ class UtilityTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
         $this->address = $this->getMock(
             'Magento\Sales\Model\Quote\Address',
             [
@@ -180,7 +179,6 @@ class UtilityTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->priceCurrency = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
-
         $this->utility = new Utility(
             $this->usageFactory,
             $this->couponFactory,

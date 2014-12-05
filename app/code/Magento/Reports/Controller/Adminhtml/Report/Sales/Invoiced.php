@@ -35,8 +35,6 @@ class Invoiced extends \Magento\Reports\Controller\Adminhtml\Report\Sales
      */
     public function execute()
     {
-        $this->_title->add(__('Invoice Report'));
-
         $this->_showLastExecutionTime(Flag::REPORT_INVOICE_FLAG_CODE, 'invoiced');
 
         $this->_initAction()->_setActiveMenu(
@@ -45,6 +43,7 @@ class Invoiced extends \Magento\Reports\Controller\Adminhtml\Report\Sales
             __('Total Invoiced'),
             __('Total Invoiced')
         );
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Invoice Report'));
 
         $gridBlock = $this->_view->getLayout()->getBlock('adminhtml_sales_invoiced.grid');
         $filterFormBlock = $this->_view->getLayout()->getBlock('grid.filter.form');

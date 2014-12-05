@@ -25,7 +25,7 @@
 //
 //    List default styles reset
 //--------------------------------------
-.abstract-reset-list {
+.abs-reset-list {
     .list-reset-styles();
     > li {
         margin: 0;
@@ -35,7 +35,7 @@
 //
 //    Link as a button
 //--------------------------------------
-.abstract-action-link-button {
+.abs-action-link-button {
     .button();
     .link-as-button();
     border-radius: @button-border-radius;
@@ -48,7 +48,7 @@
 //
 //    Product options list
 //--------------------------------------
-@abstract-product-options-list: {
+@abs-product-options-list: {
     dt {
         float: left;
         clear: left;
@@ -64,43 +64,43 @@
     }
 };
 
-.abstract-product-options-list {
-    @abstract-product-options-list();
+.abs-product-options-list {
+    @abs-product-options-list();
 }
 
-.responsive(@break) when (@break = @screen-m) {
-    .abstract-product-options-list-desktop {
-        @abstract-product-options-list();
+.responsive-min-l(@break) when (@break = @screen-m) {
+    .abs-product-options-list-desktop {
+        @abs-product-options-list();
     }
 }
 
 //
 //    Button reset width, floats, margins
 //--------------------------------------
-@abstract-button-responsive: {
+@abs-button-responsive: {
     .button-responsive();
 };
 
-.abstract-button-responsive {
-    @abstract-button-responsive();
+.abs-button-responsive {
+    @abs-button-responsive();
 }
 
-.responsive(@break) when (@break = @screen-m) {
-    .abstract-button-desktop {
+.responsive-min-l(@break) when (@break = @screen-m) {
+    .abs-button-desktop {
         width: auto;
     }
 }
 
-.responsive-smaller(@break) when (@break = @screen-m) {
-    .abstract-button-responsive-smaller {
-        @abstract-button-responsive();
+.responsive-max-m(@break) when (@break = @screen-m) {
+    .abs-button-responsive-smaller {
+        @abs-button-responsive();
     }
 }
 
 //
 //    Blocks in 2 columns
 //--------------------------------------
-@abstract-blocks-2columns: {
+@abs-blocks-2columns: {
     width: 48.8%;
     &:nth-child(odd) {
         float: left;
@@ -111,22 +111,22 @@
     }
 };
 
-.responsive(@break) when (@break = @screen-m) {
-    .abstract-blocks-2columns {
-        @abstract-blocks-2columns();
+.responsive-min-l(@break) when (@break = @screen-m) {
+    .abs-blocks-2columns {
+        @abs-blocks-2columns();
     }
 }
 
-.responsive(@break) when (@break = @screen-s) {
-    .abstract-blocks-2columns-s {
-        @abstract-blocks-2columns();
+.responsive-min-m(@break) when (@break = @screen-s) {
+    .abs-blocks-2columns-s {
+        @abs-blocks-2columns();
     }
 }
 
 //
 //    Reset image alignment in container
 //--------------------------------------
-.abstract-reset-image-wrapper {
+.abs-reset-image-wrapper {
     height: auto;
     padding: 0!important;
     .product-image-photo {
@@ -137,13 +137,13 @@
 //
 //    Adaptive images
 //--------------------------------------
-.abstract-adaptive-images {
+.abs-adaptive-images {
     display: block;
     height: auto;
     max-width: 100%;
 }
 
-.abstract-adaptive-images-centered {
+.abs-adaptive-images-centered {
     display: block;
     height: auto;
     max-width: 100%;
@@ -153,7 +153,7 @@
 //
 //    Title for login blocks
 //--------------------------------------
-.abstract-login-block-title {
+.abs-login-block-title {
     strong {
         font-weight: 500;
     }
@@ -166,7 +166,7 @@
 //
 //    Abstract block title
 //--------------------------------------
-.abstract-block-title {
+.abs-block-title {
     > strong {
         .heading(h3);
     }
@@ -176,9 +176,9 @@
 //
 //    Account blocks
 //--------------------------------------
-.abstract-account-blocks {
+.abs-account-blocks {
     .block-title {
-        &:extend(.abstract-block-title all);
+        &:extend(.abs-block-title all);
         > .action {
             margin-left: 15px;
         }
@@ -207,7 +207,7 @@
 //
 //    Simple Dropdown
 //--------------------------------------
-.abstract-dropdown-simple {
+.abs-dropdown-simple {
     .dropdown(
         @_dropdown-list-item-padding: 5px 5px 5px 23px,
         @_dropdown-list-min-width: 200px,
@@ -219,7 +219,7 @@
 //
 //    Input quantity
 //--------------------------------------
-.abstract-input-qty {
+.abs-input-qty {
     width: 47px;
     text-align: center;
 }
@@ -227,14 +227,14 @@
 //
 //    Marging for blocks & widgets
 //--------------------------------------
-.abstract-margin-for-blocks-and-widgets {
+.abs-margin-for-blocks-and-widgets {
     margin-bottom: @indent-xl-base;
 }
 
 //
 //    Remove button for blocks
 //--------------------------------------
-.abstract-remove-button-for-blocks {
+.abs-remove-button-for-blocks {
     .icon-font(
         @icon-remove,
         @_icon-font-size: 26px,
@@ -249,7 +249,7 @@
 //
 //    Product link
 //--------------------------------------
-.abstract-product-link {
+.abs-product-link {
     .link(
         @_link-color: #303030,
         @_link-color-hover: #303030,
@@ -261,30 +261,30 @@
 //
 //   Reset left margin
 //--------------------------------------
-@abstract-reset-left-margin: {
+@abs-reset-left-margin: {
     margin-left: 0;
 };
 
-.abstract-reset-left-margin {
-    @abstract-reset-left-margin();
+.abs-reset-left-margin {
+    @abs-reset-left-margin();
 }
 
-.responsive(@break) when (@break = @screen-m) {
-    .abstract-reset-left-margin-desktop {
-        @abstract-reset-left-margin();
+.responsive-min-l(@break) when (@break = @screen-m) {
+    .abs-reset-left-margin-desktop {
+        @abs-reset-left-margin();
     }
 }
 
-.responsive(@break) when (@break = @screen-s) {
-    .abstract-reset-left-margin-desktop-s {
-        @abstract-reset-left-margin();
+.responsive-min-m(@break) when (@break = @screen-s) {
+    .abs-reset-left-margin-desktop-s {
+        @abs-reset-left-margin();
     }
 }
 
 //
 //    Action with icon remove with text
 //--------------------------------------
-.abstract-action-remove {
+.abs-action-remove {
     .button-reset();
     .link();
     cursor: pointer;
@@ -299,8 +299,8 @@
 //
 //    Action with icon remove with text for desktop
 //--------------------------------------
-.responsive(@break) when (@break = @screen-m) {
-    .abstract-action-remove-desktop when not (@form-field-type-inline-label-width = false) and not (@form-field-type-inline-label-width = '') {
+.responsive-min-l(@break) when (@break = @screen-m) {
+    .abs-action-remove-desktop when not (@form-field-type-inline-label-width = false) and not (@form-field-type-inline-label-width = '') {
         top: 6px;
         margin-left: @form-field-type-inline-label-width + 50%;
     }
@@ -309,7 +309,7 @@
 //
 //    Add Recipient
 //--------------------------------------
-.abstract-add-fields {
+.abs-add-fields {
     .fieldset {
         margin-bottom: 50px;
         > .field:not(.choice) {
@@ -321,7 +321,7 @@
             margin-top: 55px;
             position: relative;
             .action.remove {
-                &:extend(.abstract-action-remove all);
+                &:extend(.abs-action-remove all);
             }
         }
         .actions-toolbar {
@@ -338,7 +338,7 @@
             }
         }
         .message {
-            margin: @indent-l-base 0 0 0;
+            margin: @indent-l-base 0 0;
         }
     }
 }
@@ -346,8 +346,8 @@
 //
 //    Add Recipient for desktop
 //--------------------------------------
-.responsive(@break) when (@break = @screen-m) {
-    .abstract-add-fields-desktop {
+.responsive-min-l(@break) when (@break = @screen-m) {
+    .abs-add-fields-desktop {
         .fieldset {
             > .field:not(.choice) {
                 > .control {
@@ -356,7 +356,7 @@
             }
             .additional {
                 .action.remove {
-                    &:extend(.abstract-action-remove-desktop all);
+                    &:extend(.abs-action-remove-desktop all);
                 }
             }
         }
@@ -366,127 +366,127 @@
 //
 //    Margin for forms
 //--------------------------------------
-@abstract-margin-for-forms-desktop: {
+@abs-margin-for-forms-desktop: {
     .css(margin-left, @form-field-type-inline-label-width);
 };
 
-.responsive(@break) when (@break = @screen-m) {
-    .abstract-margin-for-forms-desktop {
-        @abstract-margin-for-forms-desktop();
+.responsive-min-l(@break) when (@break = @screen-m) {
+    .abs-margin-for-forms-desktop {
+        @abs-margin-for-forms-desktop();
     }
 }
 
-.responsive(@break) when (@break = @screen-s) {
-    .abstract-margin-for-forms-desktop-s {
-        @abstract-margin-for-forms-desktop();
+.responsive-min-m(@break) when (@break = @screen-s) {
+    .abs-margin-for-forms-desktop-s {
+        @abs-margin-for-forms-desktop();
     }
 }
 
 //
 //    Visibility hidden / show visibility hidden
 //--------------------------------------
-.abstract-hidden {
+.abs-hidden {
     .visibility-hidden();
 }
 
 //
 //    Visually hidden / show visually hidden
 //--------------------------------------
-@abstract-visually-hidden: {
+@abs-visually-hidden: {
     .visually-hidden();
 };
 
-.abstract-visually-hidden {
-    @abstract-visually-hidden();
+.abs-visually-hidden {
+    @abs-visually-hidden();
 }
 
-.responsive-smaller(@break) when (@break = @screen-s) {
-    .abstract-visually-hidden-mobile {
-        @abstract-visually-hidden();
+.responsive-max-m(@break) when (@break = @screen-s) {
+    .abs-visually-hidden-mobile {
+        @abs-visually-hidden();
     }
 }
 
-.responsive-smaller(@break) when (@break = @screen-m) {
-    .abstract-visually-hidden-mobile-m {
-        @abstract-visually-hidden();
+.responsive-max-m(@break) when (@break = @screen-m) {
+    .abs-visually-hidden-mobile-m {
+        @abs-visually-hidden();
     }
 }
 
-.responsive(@break) when (@break = @screen-s) {
-    .abstract-visually-hidden-desktop-s {
-        @abstract-visually-hidden();
+.responsive-min-m(@break) when (@break = @screen-s) {
+    .abs-visually-hidden-desktop-s {
+        @abs-visually-hidden();
     }
 }
 
-.responsive(@break) when (@break = @screen-m) {
-    .abstract-visually-hidden-desktop {
-        @abstract-visually-hidden();
+.responsive-min-l(@break) when (@break = @screen-m) {
+    .abs-visually-hidden-desktop {
+        @abs-visually-hidden();
     }
 }
 
 //
 //    Clearfix
 //--------------------------------------
-@abstract-add-clearfix: {
+@abs-add-clearfix: {
     .clearfix();
 };
 
-.abstract-add-clearfix {
-    @abstract-add-clearfix();
+.abs-add-clearfix {
+    @abs-add-clearfix();
 }
 
-.responsive(@break) when (@break = @screen-m) {
-    .abstract-add-clearfix-desktop {
-        @abstract-add-clearfix();
+.responsive-min-l(@break) when (@break = @screen-m) {
+    .abs-add-clearfix-desktop {
+        @abs-add-clearfix();
     }
 }
 
-.responsive(@break) when (@break = @screen-s) {
-    .abstract-add-clearfix-desktop-s {
-        @abstract-add-clearfix();
+.responsive-min-m(@break) when (@break = @screen-s) {
+    .abs-add-clearfix-desktop-s {
+        @abs-add-clearfix();
     }
 }
 
-.responsive-smaller(@break) when (@break = @screen-s) {
-    .abstract-add-clearfix-mobile {
-        @abstract-add-clearfix();
+.responsive-max-m(@break) when (@break = @screen-s) {
+    .abs-add-clearfix-mobile {
+        @abs-add-clearfix();
     }
 }
 
-.responsive-smaller(@break) when (@break = @screen-m) {
-    .abstract-add-clearfix-mobile-m {
-        @abstract-add-clearfix();
+.responsive-max-m(@break) when (@break = @screen-m) {
+    .abs-add-clearfix-mobile-m {
+        @abs-add-clearfix();
     }
 }
 
 //
 //    Box-sizing
 //--------------------------------------
-@abstract-add-box-sizing: {
+@abs-add-box-sizing: {
     box-sizing: border-box;
 };
 
-.abstract-add-box-sizing {
-    @abstract-add-box-sizing();
+.abs-add-box-sizing {
+    @abs-add-box-sizing();
 }
 
-.responsive(@break) when (@break = @screen-m) {
-    .abstract-add-box-sizing-desktop {
-        @abstract-add-box-sizing();
+.responsive-min-l(@break) when (@break = @screen-m) {
+    .abs-add-box-sizing-desktop {
+        @abs-add-box-sizing();
     }
 }
 
-.responsive(@break) when (@break = @screen-s) {
-    .abstract-add-box-sizing-desktop-s {
-        @abstract-add-box-sizing();
+.responsive-min-m(@break) when (@break = @screen-s) {
+    .abs-add-box-sizing-desktop-s {
+        @abs-add-box-sizing();
     }
 }
 
 //
 //    Revert field type
 //--------------------------------------
-.responsive(@break) when (@break = @screen-m) {
-    .abstract-revert-field-type-desktop {
+.responsive-min-l(@break) when (@break = @screen-m) {
+    .abs-revert-field-type-desktop {
         .fieldset {
             > .field,
             .fields > .field {
@@ -502,7 +502,7 @@
 //
 //    Settings icons
 //--------------------------------------
-.abstract-navigation-icon {
+.abs-navigation-icon {
     .icon-font(
         @_icon-font-content: @icon-down,
         @_icon-font-size: 34px,
@@ -520,7 +520,7 @@
 //
 //    Split button
 //--------------------------------------
-.abstract-split-button {
+.abs-split-button {
     .dropdown-split(
         @_options-selector : ~".items",
         @_dropdown-split-button-border-radius-fix: true
@@ -531,12 +531,12 @@
 //
 //    Action addto
 //--------------------------------------
-.abstract-action-addto-product {
-    &:extend(.abstract-action-link-button all);
+.abs-action-addto-product {
+    &:extend(.abs-action-link-button all);
     .button-s();
 }
 
-.abstract-actions-addto-gridlist {
+.abs-actions-addto-gridlist {
     .icon-font(
         @_icon-font-content: '',
         @_icon-font-size: 29px,
@@ -551,14 +551,14 @@
 //
 //    Large button
 //--------------------------------------
-.abstract-button-l {
+.abs-button-l {
     .button-l();
 }
 
 //
 //   Button as a link
 //--------------------------------------
-.abstract-action-button-as-link {
+.abs-action-button-as-link {
     .button-as-link();
     border-radius: 0;
     font-weight: @font-weight-base;
@@ -568,28 +568,28 @@
 //
 //   Button revert secondary color
 //--------------------------------------
-.abstract-revert-secondary-color {
+.abs-revert-secondary-color {
     .button-revert-secondary-color();
 }
 
 //
 //   Button revert secondary size
 //--------------------------------------
-.abstract-revert-secondary-size {
+.abs-revert-secondary-size {
     .button-revert-secondary-size();
 }
 
 //
 //    Box-tocart block
 //--------------------------------------
-.abstract-box-tocart {
+.abs-box-tocart {
     margin: @indent-s-base 0;
 }
 
 //
 //    Excl/Incl tax
 //--------------------------------------
-.abstract-adjustment-incl-excl-tax {
+.abs-adjustment-incl-excl-tax {
     .price-including-tax,
     .price-excluding-tax,
     .weee {
@@ -612,7 +612,7 @@
 //
 //    Cart tax total
 //--------------------------------------
-.abstract-tax-total {
+.abs-tax-total {
     cursor: pointer;
     position: relative;
     padding-right: 12px;
@@ -636,7 +636,7 @@
     }
 }
 
-.abstract-tax-total-expanded {
+.abs-tax-total-expanded {
     .icon-font-symbol(
         @_icon-font-content: @icon-up,
         @_icon-font-position: after
@@ -646,28 +646,67 @@
 //
 //    Checkout shipping methods title
 //--------------------------------------
-.abstract-methods-shipping-title {
+.abs-methods-shipping-title {
     .font-size(14);
-    margin: 20px 0 15px;
+    margin: 0 0 15px;
     font-weight: @font-weight-bold;
 }
 
 //
 //    Checkout order review price
 //--------------------------------------
-.abstract-checkout-cart-price {
+.abs-checkout-cart-price {
 }
 
 //
 //    Checkout order product name
 //--------------------------------------
-.abstract-checkout-product-name {
+.abs-checkout-product-name {
+}
+
+//
+//    Checkout order review
+//--------------------------------------
+.responsive-max-m(@break) when (@break = @screen-s) {
+    .abs-checkout-order-review {
+        tbody tr {
+            &:not(:last-child) {
+                border-bottom: @border-width-base solid @border-color-base;
+            }
+            &:extend(.abs-add-clearfix-mobile all);
+            .col {
+                &.item {
+                    &:before {
+                        display: none;
+                    }
+                }
+                &.qty,
+                &.price,
+                &.subtotal {
+                    box-sizing: border-box;
+                    float: left;
+                    text-align: center;
+                    white-space: nowrap;
+                    width: 33%;
+                    &:before {
+                        content: attr(data-th) ":";
+                        display: block;
+                        font-weight: @font-weight-bold;
+                        padding-bottom: @indent-s-base;
+                    }
+                }
+            }
+            .product-item-name {
+                margin: 0;
+            }
+        }
+    }
 }
 
 //
 //    Add colon
 //--------------------------------------
-.abstract-colon {
+.abs-colon {
     &:after {
         content: ": ";
     }
@@ -676,7 +715,7 @@
 //
 //    Icon - create add
 //--------------------------------------
-.abstract-icon-add {
+.abs-icon-add {
     .icon-font(
         @_icon-font-content: @icon-expand,
         @_icon-font-size: 10px,
@@ -685,8 +724,8 @@
     );
 }
 
-.responsive-smaller(@break) when (@break = @screen-m) {
-    .abstract-icon-add-mobile {
+.responsive-max-m(@break) when (@break = @screen-m) {
+    .abs-icon-add-mobile {
         .icon-font(
             @_icon-font-content: @icon-expand,
             @_icon-font-size: 10px,
@@ -701,14 +740,14 @@
 //
 //    Dropdown items - create new
 //--------------------------------------
-.abstract-dropdown-items-new {
+.abs-dropdown-items-new {
     .items .item:last-child {
         &:hover {
             .css(background, @dropdown-list-item-hover);
         }
     }
     .action.new {
-        &:extend(.abstract-icon-add all);
+        &:extend(.abs-icon-add all);
         &:before {
             margin-left: -17px;
             margin-right: 5px;
@@ -719,8 +758,8 @@
 //
 //    Abstract toggle title block
 //--------------------------------------
-.responsive-smaller(@break) when (@break = @screen-m) {
-    .abstract-toggling-title-mobile {
+.responsive-max-m(@break) when (@break = @screen-m) {
+    .abs-toggling-title-mobile {
         border-top: @border-width-base solid @border-color-base;
         border-bottom: @border-width-base solid @border-color-base;
         cursor: pointer;
@@ -751,30 +790,30 @@
 //
 //    Abstract no display
 //--------------------------------------
-@abstract-no-display: {
+@abs-no-display: {
     display: none;
 };
 
-.abstract-no-display {
-    @abstract-no-display();
+.abs-no-display {
+    @abs-no-display();
 }
 
-.responsive-smaller(@break) when (@break = @screen-s) {
-    .abstract-no-display-s {
-        @abstract-no-display();
+.responsive-max-m(@break) when (@break = @screen-s) {
+    .abs-no-display-s {
+        @abs-no-display();
     }
 }
 
-.responsive(@break) when (@break = @screen-m) {
-    .abstract-no-display-desktop {
-        @abstract-no-display();
+.responsive-min-l(@break) when (@break = @screen-m) {
+    .abs-no-display-desktop {
+        @abs-no-display();
     }
 }
 
 //
 //    Status
 //--------------------------------------
-.abstract-status {
+.abs-status {
     display: inline-block;
     margin-bottom: @indent-base;
 }
@@ -782,8 +821,8 @@
 //
 //    Pager toolbar for non-catalog pages mobile
 //--------------------------------------
-.responsive-smaller(@break) when (@break = @screen-m) {
-    .abstract-pager-toolbar-mobile {
+.responsive-max-m(@break) when (@break = @screen-m) {
+    .abs-pager-toolbar-mobile {
         .toolbar-amount,
         .limiter,
         .pages {
@@ -796,8 +835,8 @@
 //
 //    Pager toolbar for non-catalog pages mobile
 //--------------------------------------
-.responsive-smaller(@break) when (@break = @screen-s) {
-    .abstract-pager-toolbar-mobile-s {
+.responsive-max-m(@break) when (@break = @screen-s) {
+    .abs-pager-toolbar-mobile-s {
         .toolbar-amount,
         .limiter,
         .pages {
@@ -809,11 +848,11 @@
 //
 //    Pager toolbar for non-catalog pages desktop
 //--------------------------------------
-.responsive(@break) when (@break = @screen-m) {
-    .abstract-pager-toolbar {
+.responsive-min-l(@break) when (@break = @screen-m) {
+    .abs-pager-toolbar {
         margin-bottom: @indent-base;
         position: relative;
-        &:extend(.abstract-add-clearfix-desktop all);
+        &:extend(.abs-add-clearfix-desktop all);
         .limiter {
             float: right;
             position: relative;
@@ -837,7 +876,7 @@
 //
 //    Items counter in blocks
 //--------------------------------------
-.abstract-block-items-counter {
+.abs-block-items-counter {
     .css(color, @color-primary-lighter);
     .font-size(12px);
     white-space: nowrap;
@@ -846,7 +885,7 @@
 //
 //    Shopping cart items
 //--------------------------------------
-.abstract-shopping-cart-items {
+.abs-shopping-cart-items {
     .actions.main {
         text-align: center;
     }
@@ -887,8 +926,8 @@
     }
 }
 
-.responsive(@break) when (@break = @screen-m) {
-    .abstract-shopping-cart-items-desktop {
+.responsive-min-l(@break) when (@break = @screen-m) {
+    .abs-shopping-cart-items-desktop {
         float: left;
         width: 73%;
         position: relative;

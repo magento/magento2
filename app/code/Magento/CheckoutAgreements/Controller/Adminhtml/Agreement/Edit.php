@@ -31,8 +31,6 @@ class Edit extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
      */
     public function execute()
     {
-        $this->_title->add(__('Terms and Conditions'));
-
         $id = $this->getRequest()->getParam('id');
         $agreementModel = $this->_objectManager->create('Magento\CheckoutAgreements\Model\Agreement');
 
@@ -44,8 +42,6 @@ class Edit extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
                 return;
             }
         }
-
-        $this->_title->add($agreementModel->getId() ? $agreementModel->getName() : __('New Condition'));
 
         $data = $this->_objectManager->get('Magento\Backend\Model\Session')->getAgreementData(true);
         if (!empty($data)) {
@@ -64,6 +60,10 @@ class Edit extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
                 'action',
                 $this->getUrl('checkout/*/save')
             )
+        );
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Terms and Conditions'));
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(
+            $agreementModel->getId() ? $agreementModel->getName() : __('New Condition')
         );
         $this->_view->renderLayout();
     }

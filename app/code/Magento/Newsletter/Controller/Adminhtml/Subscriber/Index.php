@@ -33,8 +33,6 @@ class Index extends \Magento\Newsletter\Controller\Adminhtml\Subscriber
      */
     public function execute()
     {
-        $this->_title->add(__('Newsletter Subscribers'));
-
         if ($this->getRequest()->getParam('ajax')) {
             $this->_forward('grid');
             return;
@@ -43,6 +41,7 @@ class Index extends \Magento\Newsletter\Controller\Adminhtml\Subscriber
         $this->_view->loadLayout();
 
         $this->_setActiveMenu('Magento_Newsletter::newsletter_subscriber');
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Newsletter Subscribers'));
 
         $this->_addBreadcrumb(__('Newsletter'), __('Newsletter'));
         $this->_addBreadcrumb(__('Subscribers'), __('Subscribers'));

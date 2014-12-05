@@ -73,7 +73,7 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
      */
     protected function registerThemes()
     {
-        $pathPattern = 'frontend/*/theme.xml';
+        $pathPattern = 'frontend/*/*/theme.xml';
         $this->_model->register($pathPattern);
         return $this;
     }
@@ -86,7 +86,7 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
     protected function _getTestTheme()
     {
         $theme = $this->_theme->getCollection()->getThemeByFullPath(
-            implode(\Magento\Framework\View\Design\ThemeInterface::PATH_SEPARATOR, array('frontend', 'test_test_theme'))
+            implode(\Magento\Framework\View\Design\ThemeInterface::PATH_SEPARATOR, array('frontend', 'Test/test_theme'))
         );
         $this->assertNotEmpty($theme->getId());
         return $theme;
@@ -146,7 +146,7 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
         $this->registerThemes();
         $themePath = implode(
             \Magento\Framework\View\Design\ThemeInterface::PATH_SEPARATOR,
-            array('frontend', 'test_test_theme')
+            array('frontend', 'Test/test_theme')
         );
         $theme = $this->_model->getThemeFromDb($themePath);
         $this->assertEquals($themePath, $theme->getFullPath());

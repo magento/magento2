@@ -24,14 +24,17 @@
  */
 namespace Magento\Persistent\Model\Observer;
 
+/**
+ * Class EmulateQuote
+ */
 class EmulateQuote
 {
     /**
      * Customer account service
      *
-     * @var \Magento\Customer\Service\V1\CustomerAccountServiceInterface
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
      */
-    protected $_customerAccountService;
+    protected $customerRepository;
 
     /**
      * Customer session
@@ -66,20 +69,20 @@ class EmulateQuote
      * @param \Magento\Persistent\Helper\Data $persistentData
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService
+     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      */
     public function __construct(
         \Magento\Persistent\Helper\Session $persistentSession,
         \Magento\Persistent\Helper\Data $persistentData,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService
+        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
     ) {
         $this->_persistentSession = $persistentSession;
         $this->_persistentData = $persistentData;
         $this->_checkoutSession = $checkoutSession;
         $this->_customerSession = $customerSession;
-        $this->_customerAccountService = $customerAccountService;
+        $this->customerRepository = $customerRepository;
     }
 
     /**
@@ -107,7 +110,7 @@ class EmulateQuote
 
         if ($this->_persistentData->isShoppingCartPersist()) {
             $this->_checkoutSession->setCustomerData(
-                $this->_customerAccountService->getCustomer($this->_persistentSession->getSession()->getCustomerId())
+                $this->customerRepository->getById($this->_persistentSession->getSession()->getCustomerId())
             );
             if (!$this->_checkoutSession->hasQuote()) {
                 $this->_checkoutSession->getQuote();

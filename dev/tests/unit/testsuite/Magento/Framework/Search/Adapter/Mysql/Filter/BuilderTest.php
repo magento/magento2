@@ -48,7 +48,8 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     private $conditionManager;
 
     /**
-     * Set up
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
     {
@@ -283,6 +284,8 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function buildBoolFilterDataProvider()
     {

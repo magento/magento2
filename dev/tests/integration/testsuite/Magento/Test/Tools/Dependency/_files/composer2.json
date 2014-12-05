@@ -1,0 +1,11 @@
+{
+    "name": "magento/module-module2",
+    "description": "N/A",
+    "require": {
+        "php": "~5.4.11|~5.5.0",
+        "magento/module-core": "0.1.0-alpha103",
+        "magento/module-module3": "0.1.0-alpha103"
+    },
+    "type": "magento2-module",
+    "version": "0.1.0-alpha103"
+}

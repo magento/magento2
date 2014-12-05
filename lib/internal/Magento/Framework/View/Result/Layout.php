@@ -46,7 +46,7 @@ class Layout extends AbstractResult
     protected $layoutBuilderFactory;
 
     /**
-     * @var \Magento\Framework\View\Layout\Reader\Pool
+     * @var \Magento\Framework\View\Layout\ReaderPool
      */
     protected $layoutReaderPool;
 
@@ -75,17 +75,19 @@ class Layout extends AbstractResult
      *
      * @param View\Element\Template\Context $context
      * @param View\LayoutFactory $layoutFactory
-     * @param View\Layout\Reader\Pool $layoutReaderPool
+     * @param View\Layout\ReaderPool $layoutReaderPool
      * @param Framework\Translate\InlineInterface $translateInline
      * @param View\Layout\BuilderFactory $layoutBuilderFactory
+     * @param View\Layout\GeneratorPool $generatorPool
      * @param bool $isIsolated
      */
     public function __construct(
         View\Element\Template\Context $context,
         View\LayoutFactory $layoutFactory,
-        View\Layout\Reader\Pool $layoutReaderPool,
+        View\Layout\ReaderPool $layoutReaderPool,
         Framework\Translate\InlineInterface $translateInline,
         View\Layout\BuilderFactory $layoutBuilderFactory,
+        View\Layout\GeneratorPool $generatorPool,
         $isIsolated = false
     ) {
         $this->layoutFactory = $layoutFactory;
@@ -96,8 +98,9 @@ class Layout extends AbstractResult
         $this->translateInline = $translateInline;
         // TODO Shared layout object will be deleted in MAGETWO-28359
         $this->layout = $isIsolated
-            ? $this->layoutFactory->create(['reader' => $this->layoutReaderPool])
+            ? $this->layoutFactory->create(['reader' => $this->layoutReaderPool, 'generatorPool' => $generatorPool])
             : $context->getLayout();
+        $this->layout->setGeneratorPool($generatorPool);
         $this->initLayoutBuilder();
     }
 
@@ -119,14 +122,6 @@ class Layout extends AbstractResult
     public function getLayout()
     {
         return $this->layout;
-    }
-
-    /**
-     * @return $this
-     */
-    public function initLayout()
-    {
-        return $this;
     }
 
     /**
@@ -184,10 +179,8 @@ class Layout extends AbstractResult
         $this->applyHttpHeaders($response);
         $this->render($response);
 
-        $this->eventManager->dispatch('controller_action_layout_render_before');
-        $this->eventManager->dispatch(
-            'controller_action_layout_render_before_' . $this->request->getFullActionName()
-        );
+        $this->eventManager->dispatch('layout_render_before');
+        $this->eventManager->dispatch('layout_render_before_' . $this->request->getFullActionName());
         \Magento\Framework\Profiler::stop('layout_render');
         \Magento\Framework\Profiler::stop('LAYOUT');
         return $this;

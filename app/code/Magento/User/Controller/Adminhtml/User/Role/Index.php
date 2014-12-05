@@ -33,10 +33,8 @@ class Index extends \Magento\User\Controller\Adminhtml\User\Role
      */
     public function execute()
     {
-        $this->_title->add(__('Roles'));
-
         $this->_initAction();
-
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Roles'));
         $this->_view->renderLayout();
     }
 }

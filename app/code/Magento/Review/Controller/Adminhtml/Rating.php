@@ -52,8 +52,6 @@ class Rating extends \Magento\Backend\App\Action
      */
     protected function _initEnityId()
     {
-        $this->_title->add(__('Ratings'));
-
         $this->_coreRegistry->register(
             'entityId',
             $this->_objectManager->create('Magento\Review\Model\Rating\Entity')->getIdByCode('product')

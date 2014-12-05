@@ -30,11 +30,5 @@
             <module name="Magento_Store"/>
             <module name="Magento_Cms"/>
         </sequence>
-        <depends>
-            <module name="Magento_Store"/>
-            <module name="Magento_Core"/>
-            <module name="Magento_Cms"/>
-            <module name="Magento_Backend"/>
-        </depends>
     </module>
 </config>

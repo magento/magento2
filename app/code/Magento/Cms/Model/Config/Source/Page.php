@@ -34,22 +34,22 @@ class Page implements \Magento\Framework\Option\ArrayInterface
     protected $options;
 
     /**
-     * @var \Magento\Cms\Api\PageRepositoryInterface
+     * @var \Magento\Cms\Model\PageRepository
      */
     protected $pageRepository;
 
     /**
-     * @var \Magento\Cms\Api\PageCriteriaInterfaceFactory
+     * @var \Magento\Cms\Model\Resource\PageCriteria
      */
     protected $pageCriteriaFactory;
 
     /**
-     * @param \Magento\Cms\Api\PageRepositoryInterface $pageRepository
-     * @param \Magento\Cms\Api\PageCriteriaInterfaceFactory $pageCriteriaFactory
+     * @param \Magento\Cms\Model\PageRepository $pageRepository
+     * @param \Magento\Cms\Model\Resource\PageCriteriaFactory $pageCriteriaFactory
      */
     public function __construct(
-        \Magento\Cms\Api\PageRepositoryInterface $pageRepository,
-        \Magento\Cms\Api\PageCriteriaInterfaceFactory $pageCriteriaFactory
+        \Magento\Cms\Model\PageRepository $pageRepository,
+        \Magento\Cms\Model\Resource\PageCriteriaFactory $pageCriteriaFactory
     ) {
         $this->pageRepository = $pageRepository;
         $this->pageCriteriaFactory = $pageCriteriaFactory;

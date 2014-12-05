@@ -118,6 +118,7 @@ class SetupUtil
     ];
 
     const CUSTOMER_TAX_CLASS_1 = 'customer_tax_class_1';
+    const CUSTOMER_PASSWORD = 'password';
 
     /**
      * List of customer tax class to be created
@@ -160,7 +161,17 @@ class SetupUtil
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    var $objectManager;
+    public $objectManager;
+
+    /**
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     */
+    protected $customerRepository;
+
+    /**
+     * @var \Magento\Customer\Api\AccountManagementInterface
+     */
+    protected $accountManagement;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
@@ -168,6 +179,8 @@ class SetupUtil
     public function __construct($objectManager)
     {
         $this->objectManager = $objectManager;
+        $this->customerRepository = $this->objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
+        $this->accountManagement = $this->objectManager->create('Magento\Customer\Api\AccountManagementInterface');
     }
 
     /**
@@ -508,7 +521,7 @@ class SetupUtil
     /**
      * Create a customer
      *
-     * @return \Magento\Customer\Model\Customer
+     * @return \Magento\Customer\Api\Data\CustomerInterface
      */
     protected function createCustomer()
     {
@@ -528,7 +541,7 @@ class SetupUtil
             ->setLastname('Lastname')
             ->save();
 
-        return $customer;
+        return $this->customerRepository->getById($customer->getId());
     }
 
     /**
@@ -585,13 +598,13 @@ class SetupUtil
      * Create a quote object with customer
      *
      * @param array $quoteData
-     * @param \Magento\Customer\Model\Customer $customer
+     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @return \Magento\Sales\Model\Quote
      */
     protected function createQuote($quoteData, $customer)
     {
-        /** @var \Magento\Customer\Service\V1\CustomerAddressServiceInterface $addressService */
-        $addressService = $this->objectManager->create('Magento\Customer\Service\V1\CustomerAddressServiceInterface');
+        /** @var \Magento\Customer\Api\AddressRepositoryInterface $addressService */
+        $addressService = $this->objectManager->create('Magento\Customer\Api\AddressRepositoryInterface');
 
         /** @var array $shippingAddressOverride */
         $shippingAddressOverride = empty($quoteData['shipping_address']) ? [] : $quoteData['shipping_address'];
@@ -600,7 +613,7 @@ class SetupUtil
 
         /** @var \Magento\Sales\Model\Quote\Address $quoteShippingAddress */
         $quoteShippingAddress = $this->objectManager->create('Magento\Sales\Model\Quote\Address');
-        $quoteShippingAddress->importCustomerAddressData($addressService->getAddress($shippingAddress->getId()));
+        $quoteShippingAddress->importCustomerAddressData($addressService->getById($shippingAddress->getId()));
 
         /** @var array $billingAddressOverride */
         $billingAddressOverride = empty($quoteData['billing_address']) ? [] : $quoteData['billing_address'];
@@ -609,7 +622,7 @@ class SetupUtil
 
         /** @var \Magento\Sales\Model\Quote\Address $quoteBillingAddress */
         $quoteBillingAddress = $this->objectManager->create('Magento\Sales\Model\Quote\Address');
-        $quoteBillingAddress->importCustomerAddressData($addressService->getAddress($billingAddress->getId()));
+        $quoteBillingAddress->importCustomerAddressData($addressService->getById($billingAddress->getId()));
 
         /** @var \Magento\Sales\Model\Quote $quote */
         $quote = $this->objectManager->create('Magento\Sales\Model\Quote');
@@ -617,8 +630,8 @@ class SetupUtil
             ->setIsActive(true)
             ->setIsMultiShipping(false)
             ->assignCustomerWithAddressChange($customer, $quoteBillingAddress, $quoteShippingAddress)
-            ->setCheckoutMethod($customer->getMode())
-            ->setPasswordHash($customer->encryptPassword($customer->getPassword()));
+            ->setCheckoutMethod('register')
+            ->setPasswordHash($this->accountManagement->getPasswordHash(static::CUSTOMER_PASSWORD));
 
         return $quote;
     }

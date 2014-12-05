@@ -64,6 +64,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
 
         $this->customerFactory = $this->getMockBuilder('Magento\Customer\Model\CustomerFactory')
+            ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $this->customerFactory->expects($this->any())

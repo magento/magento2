@@ -90,7 +90,11 @@ class Container extends \Magento\Framework\View\Element\Html\Select
             $layoutProcessor->addPageHandles(array('default'));
             $layoutProcessor->load();
 
-            $containers = $layoutProcessor->getContainers();
+            $pageLayoutProcessor = $this->_layoutProcessorFactory->create($layoutMergeParams);
+            $pageLayoutProcessor->addHandle($layoutProcessor->getPageLayout());
+            $pageLayoutProcessor->load();
+
+            $containers = array_merge($pageLayoutProcessor->getContainers(), $layoutProcessor->getContainers());
             if ($this->getAllowedContainers()) {
                 foreach (array_keys($containers) as $containerName) {
                     if (!in_array($containerName, $this->getAllowedContainers())) {

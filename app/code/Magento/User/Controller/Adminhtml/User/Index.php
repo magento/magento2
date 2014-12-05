@@ -31,8 +31,8 @@ class Index extends \Magento\User\Controller\Adminhtml\User
      */
     public function execute()
     {
-        $this->_title->add(__('Users'));
         $this->_initAction();
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Users'));
         $this->_view->renderLayout();
     }
 }

@@ -119,6 +119,55 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->productMock, $this->model->get('test_sku', true));
     }
 
+    /**
+     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
+     * @expectedExceptionMessage Requested product doesn't exist
+     */
+    public function testGetByIdAbsentProduct()
+    {
+        $this->productFactoryMock->expects($this->once())->method('create')
+            ->will($this->returnValue($this->productMock));
+        $this->productMock->expects($this->once())->method('load')->with('product_id');
+        $this->productMock->expects($this->once())->method('getId')->willReturn(null);
+        $this->model->getById('product_id');
+    }
+
+    public function testGetByIdProductInEditMode()
+    {
+        $productId = 123;
+        $this->productFactoryMock->expects($this->once())->method('create')
+            ->will($this->returnValue($this->productMock));
+        $this->productMock->expects($this->once())->method('setData')->with('_edit_mode', true);
+        $this->productMock->expects($this->once())->method('load')->with($productId);
+        $this->productMock->expects($this->once())->method('getId')->willReturn($productId);
+        $this->assertEquals($this->productMock, $this->model->getById($productId, true));
+    }
+
+    public function testGetByIdWithSetStoreId()
+    {
+        $productId = 123;
+        $storeId = 1;
+        $this->productFactoryMock->expects($this->once())->method('create')
+            ->will($this->returnValue($this->productMock));
+        $this->productMock->expects($this->once())->method('setData')->with('store_id', $storeId);
+        $this->productMock->expects($this->once())->method('load')->with($productId);
+        $this->productMock->expects($this->once())->method('getId')->willReturn($productId);
+        $this->assertEquals($this->productMock, $this->model->getById($productId, false, $storeId));
+    }
+
+    public function testGetBySkuFromCacheInitializedInGetById()
+    {
+        $productId = 123;
+        $productSku = 'product_123';
+        $this->productFactoryMock->expects($this->once())->method('create')
+            ->will($this->returnValue($this->productMock));
+        $this->productMock->expects($this->once())->method('load')->with($productId);
+        $this->productMock->expects($this->once())->method('getId')->willReturn($productId);
+        $this->productMock->expects($this->once())->method('getSku')->willReturn($productSku);
+        $this->assertEquals($this->productMock, $this->model->getById($productId));
+        $this->assertEquals($this->productMock, $this->model->get($productSku));
+    }
+
     public function testSaveExisting()
     {
         $this->resourceModelMock->expects($this->exactly(2))->method('getIdBySku')->will($this->returnValue(100));

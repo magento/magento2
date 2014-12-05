@@ -95,7 +95,6 @@ class Attribute extends \Magento\Backend\App\Action
      */
     protected function createActionPage()
     {
-        $this->_title->add(__('Product Attributes'));
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         if ($this->getRequest()->getParam('popup')) {
@@ -111,6 +110,7 @@ class Attribute extends \Magento\Backend\App\Action
                 ->addBreadcrumb(__('Manage Product Attributes'), __('Manage Product Attributes'))
                 ->setActiveMenu('Magento_Catalog::catalog_attributes_attributes');
         }
+        $resultPage->getConfig()->getTitle()->prepend(__('Product Attributes'));
         return $resultPage;
     }
 

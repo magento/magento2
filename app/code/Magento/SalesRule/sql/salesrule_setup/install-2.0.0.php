@@ -504,10 +504,10 @@ $table = $this->getConnection()->newTable(
 $this->getConnection()->createTable($table);
 
 /**
- * Create table 'coupon_aggregated'
+ * Create table 'salesrule_coupon_aggregated'
  */
 $table = $this->getConnection()->newTable(
-    $this->getTable('coupon_aggregated')
+    $this->getTable('salesrule_coupon_aggregated')
 )->addColumn(
     'id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -588,20 +588,20 @@ $table = $this->getConnection()->newTable(
     'Rule Name'
 )->addIndex(
     $this->getIdxName(
-        'coupon_aggregated',
+        'salesrule_coupon_aggregated',
         array('period', 'store_id', 'order_status', 'coupon_code'),
         \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
     ),
     array('period', 'store_id', 'order_status', 'coupon_code'),
     array('type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE)
 )->addIndex(
-    $this->getIdxName('coupon_aggregated', array('store_id')),
+    $this->getIdxName('salesrule_coupon_aggregated', array('store_id')),
     array('store_id')
 )->addIndex(
-    $this->getIdxName('coupon_aggregated', array('rule_name')),
+    $this->getIdxName('salesrule_coupon_aggregated', array('rule_name')),
     array('rule_name')
 )->addForeignKey(
-    $this->getFkName('coupon_aggregated', 'store_id', 'store', 'store_id'),
+    $this->getFkName('salesrule_coupon_aggregated', 'store_id', 'store', 'store_id'),
     'store_id',
     $this->getTable('store'),
     'store_id',
@@ -614,16 +614,16 @@ $this->getConnection()->createTable($table);
 
 $this->getConnection()->createTable(
     $this->getConnection()->createTableByDdl(
-        $this->getTable('coupon_aggregated'),
-        $this->getTable('coupon_aggregated_updated')
+        $this->getTable('salesrule_coupon_aggregated'),
+        $this->getTable('salesrule_coupon_aggregated_updated')
     )
 );
 
 /**
- * Create table 'coupon_aggregated_order'
+ * Create table 'salesrule_coupon_aggregated_order'
  */
 $table = $this->getConnection()->newTable(
-    $this->getTable('coupon_aggregated_order')
+    $this->getTable('salesrule_coupon_aggregated_order')
 )->addColumn(
     'id',
     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -686,20 +686,20 @@ $table = $this->getConnection()->newTable(
     'Rule Name'
 )->addIndex(
     $this->getIdxName(
-        'coupon_aggregated_order',
+        'salesrule_coupon_aggregated_order',
         array('period', 'store_id', 'order_status', 'coupon_code'),
         \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
     ),
     array('period', 'store_id', 'order_status', 'coupon_code'),
     array('type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE)
 )->addIndex(
-    $this->getIdxName('coupon_aggregated_order', array('store_id')),
+    $this->getIdxName('salesrule_coupon_aggregated_order', array('store_id')),
     array('store_id')
 )->addIndex(
-    $this->getIdxName('coupon_aggregated_order', array('rule_name')),
+    $this->getIdxName('salesrule_coupon_aggregated_order', array('rule_name')),
     array('rule_name')
 )->addForeignKey(
-    $this->getFkName('coupon_aggregated_order', 'store_id', 'store', 'store_id'),
+    $this->getFkName('salesrule_coupon_aggregated_order', 'store_id', 'store', 'store_id'),
     'store_id',
     $this->getTable('store'),
     'store_id',

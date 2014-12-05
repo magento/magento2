@@ -31,16 +31,14 @@ class Index extends \Magento\Review\Controller\Adminhtml\Product
      */
     public function execute()
     {
-        $this->_title->add(__('Customer Reviews'));
-
-        $this->_title->add(__('Reviews'));
-
         if ($this->getRequest()->getParam('ajax')) {
             return $this->_forward('reviewGrid');
         }
 
         $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_Review::catalog_reviews_ratings_reviews_all');
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Customer Reviews'));
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Reviews'));
 
         $this->_addContent($this->_view->getLayout()->createBlock('Magento\Review\Block\Adminhtml\Main'));
 

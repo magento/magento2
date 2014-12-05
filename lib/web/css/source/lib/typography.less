@@ -45,7 +45,6 @@
     @value: unit(@sizeValue);
     @remValue: (@value / @font-rem-ratio);
     @pxValue: @value;
-    font-size: ~"@{pxValue}px";
     font-size: ~"@{remValue}rem";
 }
 
@@ -58,7 +57,6 @@
     @value: unit(@heightValue);
     @remValue: (@value / @font-rem-ratio);
     @pxValue: @value;
-    line-height: ~"@{pxValue}px";
     line-height: ~"@{remValue}rem";
 }
 
@@ -114,8 +112,7 @@
 .list-reset-styles(@_margin: 0, @_padding: 0) {
     .css(margin, @_margin);
     .css(padding, @_padding);
-    list-style-type: none;
-    list-style-image: none;
+    list-style: none none;
 }
 
 .list-inline() {
@@ -231,10 +228,10 @@
         vertical-align: baseline;
     }
     sup {
-        top: -0.5em;
+        top: -.5em;
     }
     sub {
-        bottom: -0.25em;
+        bottom: -.25em;
     }
 
     dfn {

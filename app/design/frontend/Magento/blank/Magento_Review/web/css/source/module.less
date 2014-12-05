@@ -22,6 +22,12 @@
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
+//
+//    Common
+//--------------------------------------
+
+.responsive-common() {
+
 .rating-summary {
     .mixin-rating-summary();
     .rating-result {
@@ -98,6 +104,7 @@
 
 .product-reviews-summary {
     display: table;
+    margin: @indent-s-base 0 12px;
     .products.wrapper.list & {
         margin: 0 auto;
     }
@@ -114,20 +121,19 @@
     .reviews-actions {
         display: table-cell;
         vertical-align: middle;
-        line-height: floor(@rating-icon-font-size * @line-height-base);
-        font-size: floor(0.8 * @font-size-base);
+        line-height: @rating-icon-font-size;
         a {
             margin-right: @indent-xs-base;
         }
-        .action.view span {
-        }
     }
+}
+
 }
 
 //
 //    Desktop
 //--------------------------------------
-.responsive(@break) when (@break = @screen-m) {
+.responsive-min-l(@break) when (@break = @screen-m) {
     .product-reviews-summary {
         .products.wrapper.list & {
             margin: 0;
@@ -135,9 +141,15 @@
     }
 }
 
+//
+//    Common
+//--------------------------------------
+
+.responsive-common() {
+
 .customer-review {
     .product-details {
-        &:extend(.abstract-add-clearfix all);
+        &:extend(.abs-add-clearfix all);
         margin-bottom: @indent-xl-base;
         .rating-average-label {
         }
@@ -238,7 +250,7 @@
     }
     &-fieldset {}
     .fieldset &-legend.legend {
-        &:extend(.abstract-reset-left-margin all);
+        &:extend(.abs-reset-left-margin all);
         strong {
             display: block;
             margin-left: 0;
@@ -279,7 +291,7 @@
         display: table;
         max-width: 100%;
         margin-bottom: @indent-s-base;
-        &:extend(.abstract-rating-summary all);
+        &:extend(.abs-rating-summary all);
     }
     &-author {
         display: inline;
@@ -299,10 +311,12 @@
     }
 }
 
+}
+
 //
 //    Desktop
 //--------------------------------------
-.responsive(@break) when (@break = @screen-s) {
+.responsive-min-m(@break) when (@break = @screen-s) {
     .review {
         &-form {
             max-width: 500px;

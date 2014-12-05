@@ -21,11 +21,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Backend\Model\Session;
 
 /**
- * @magentoAppArea adminhtml
+ * Class QuoteTest
  */
 class QuoteTest extends \PHPUnit_Framework_TestCase
 {
@@ -49,6 +48,10 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $quote = $quoteSession->getQuote();
 
         /** Ensure that customer data was added to quote correctly */
-        $this->assertEquals('Firstname', $quote->getCustomerFirstname(), 'Customer data was set to quote incorrectly.');
+        $this->assertEquals(
+            'John',
+            $quote->getCustomer()->getFirstname(),
+            'Customer data was set to quote incorrectly.'
+        );
     }
 }

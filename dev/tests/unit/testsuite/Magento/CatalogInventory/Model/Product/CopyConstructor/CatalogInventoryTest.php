@@ -85,7 +85,7 @@ class CatalogInventoryTest extends \PHPUnit_Framework_TestCase
         $this->stockItemDoMock = $this->getMockForAbstractClass(
             'Magento\CatalogInventory\Api\Data\StockItemInterface',
             [
-                'getId',
+                'getItemId',
                 'getUseConfigEnableQtyInc',
                 'getEnableQtyIncrements',
                 'gerUseConfigQtyIncrements',
@@ -141,7 +141,7 @@ class CatalogInventoryTest extends \PHPUnit_Framework_TestCase
             ->method('getStockItem')
             ->will($this->returnValue($this->stockItemDoMock));
 
-        $this->stockItemDoMock->expects($this->any())->method('getId')->will($this->returnValue(50));
+        $this->stockItemDoMock->expects($this->any())->method('getItemId')->will($this->returnValue(50));
         $this->stockItemDoMock->expects($this->any())
             ->method('getUseConfigEnableQtyInc')
             ->will($this->returnValue('use_config_enable_qty_inc'));

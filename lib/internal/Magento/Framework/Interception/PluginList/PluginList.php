@@ -291,20 +291,41 @@ class PluginList extends Scoped implements InterceptionPluginList
                             }
                         }
                     }
-                    if ($scopeCode == $scope) {
+                    if ($this->isCurrentScope($scopeCode)) {
                         break;
                     }
                 }
                 foreach ($virtualTypes as $class) {
                     $this->_inheritPlugins(ltrim($class, '\\'));
                 }
-                foreach ($this->_classDefinitions->getClasses() as $class) {
+                foreach ($this->getClassDefinitions() as $class) {
                     $this->_inheritPlugins($class);
                 }
                 $this->_cache->save(serialize(array($this->_data, $this->_inherited, $this->_processed)), $cacheId);
             }
             $this->_pluginInstances = array();
         }
+    }
+
+    /**
+     * Whether scope code is current scope code
+     *
+     * @param string $scopeCode
+     * @return bool
+     */
+    protected function isCurrentScope($scopeCode)
+    {
+        return $this->_configScope->getCurrentScope() == $scopeCode;
+    }
+
+    /**
+     * Returns class definitions
+     *
+     * @return array
+     */
+    protected function getClassDefinitions()
+    {
+        return $this->_classDefinitions->getClasses();
     }
 
     /**

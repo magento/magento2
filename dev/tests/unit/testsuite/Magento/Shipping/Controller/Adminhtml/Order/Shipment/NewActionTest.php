@@ -85,14 +85,24 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
     protected $helper;
 
     /**
-     * @var \Magento\Framework\App\Action\Title|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $title;
-
-    /**
      * @var  \Magento\Framework\App\ViewInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $view;
+
+    /**
+     * @var \Magento\Framework\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultPageMock;
+
+    /**
+     * @var \Magento\Framework\View\Page\Config|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $pageConfigMock;
+
+    /**
+     * @var \Magento\Framework\View\Page\Title|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $pageTitleMock;
 
     public function setUp()
     {
@@ -118,7 +128,7 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
             'Magento\Backend\App\Action\Context',
             [
                 'getRequest', 'getResponse', 'getMessageManager', 'getRedirect', 'getObjectManager',
-                'getSession', 'getActionFlag', 'getHelper', 'getTitle', 'getView'
+                'getSession', 'getActionFlag', 'getHelper', 'getView'
             ],
             [],
             '',
@@ -154,8 +164,16 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
         );
         $this->actionFlag = $this->getMock('Magento\Framework\App\ActionFlag', ['get'], [], '', false);
         $this->helper = $this->getMock('Magento\Backend\Helper\Data', ['getUrl'], [], '', false);
-        $this->title = $this->getMock('Magento\Framework\App\Action\Title', [], [], '', false);
         $this->view = $this->getMock('Magento\Framework\App\ViewInterface', [], [], '', false);
+        $this->resultPageMock = $this->getMockBuilder('Magento\Framework\View\Result\Page')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->pageConfigMock = $this->getMockBuilder('Magento\Framework\View\Page\Config')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->pageTitleMock = $this->getMockBuilder('Magento\Framework\View\Page\Title')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->context->expects($this->once())
             ->method('getMessageManager')
             ->will($this->returnValue($this->messageManager));
@@ -177,13 +195,12 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->once())
             ->method('getHelper')
             ->will($this->returnValue($this->helper));
-        $this->context->expects($this->once())->method('getTitle')->will($this->returnValue($this->title));
         $this->context->expects($this->once())->method('getView')->will($this->returnValue($this->view));
         $this->newAction = $objectManagerHelper->getObject(
             'Magento\Shipping\Controller\Adminhtml\Order\Shipment\NewAction',
             [
                 'context' => $this->context, 'shipmentLoader' => $this->shipmentLoader, 'request' => $this->request,
-                'response' => $this->response, 'title' => $this->title, 'view' => $this->view
+                'response' => $this->response, 'view' => $this->view
             ]
         );
     }
@@ -242,6 +259,15 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
         $this->view->expects($this->once())
             ->method('renderLayout')
             ->will($this->returnSelf());
+        $this->view->expects($this->any())
+            ->method('getPage')
+            ->willReturn($this->resultPageMock);
+        $this->resultPageMock->expects($this->any())
+            ->method('getConfig')
+            ->willReturn($this->pageConfigMock);
+        $this->pageConfigMock->expects($this->any())
+            ->method('getTitle')
+            ->willReturn($this->pageTitleMock);
         $layout = $this->getMock('Magento\Framework\View\Layout\Element\Layout', ['getBlock'], [], '', false);
         $menuBlock = $this->getMock(
             'Magento\Framework\View\Element\BlockInterface',
@@ -275,15 +301,6 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
             ->method('getBlock')
             ->with('menu')
             ->will($this->returnValue($menuBlock));
-
-        $this->title->expects($this->any())
-            ->method('add')
-            ->will($this->returnValueMap(
-                    ['Shipments', false, $this->title],
-                    [$parents[0]->getData('title'), true, $this->title],
-                    [$parents[1]->getData('title'), true, $this->title],
-                    [$parents[2]->getData('title'), true, $this->title]
-                ));
 
         $this->assertNull($this->newAction->execute());
     }

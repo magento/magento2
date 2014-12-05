@@ -42,10 +42,7 @@ class Xml implements ParserInterface
         $modules = array();
         foreach ($options['files_for_parse'] as $file) {
             $config = $this->getModuleConfig($file);
-            $modules[] = array(
-                'name' => $this->extractModuleName($config),
-                'dependencies' => $this->extractDependencies($config)
-            );
+            $modules[] = $this->extractModuleName($config);
         }
         return $modules;
     }
@@ -78,27 +75,6 @@ class Xml implements ParserInterface
     protected function extractModuleName($config)
     {
         return $this->prepareModuleName((string)$config->attributes()->name);
-    }
-
-    /**
-     * Template method. Extract dependencies step
-     *
-     * @param \SimpleXMLElement $config
-     * @return array
-     */
-    protected function extractDependencies($config)
-    {
-        $dependencies = array();
-        /** @var \SimpleXMLElement $dependency */
-        if ($config->depends) {
-            foreach ($config->depends->module as $dependency) {
-                $dependencies[] = array(
-                    'module' => $this->prepareModuleName((string)$dependency->attributes()->name),
-                    'type' => (string)$dependency->attributes()->type
-                );
-            }
-        }
-        return $dependencies;
     }
 
     /**

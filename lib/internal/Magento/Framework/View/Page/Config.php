@@ -67,19 +67,9 @@ class Config
     ];
 
     /**
-     * @var string
+     * @var Title
      */
     protected $title;
-
-    /**
-     * @var string
-     */
-    protected $titleChunks;
-
-    /**
-     * @var string
-     */
-    protected $pureTitle;
 
     /**
      * Asset service
@@ -140,17 +130,20 @@ class Config
      * @param \Magento\Framework\View\Asset\GroupedCollection $pageAssets
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\View\Page\FaviconInterface $favicon
+     * @param Title $title
      */
     public function __construct(
         View\Asset\Repository $assetRepo,
         View\Asset\GroupedCollection $pageAssets,
         App\Config\ScopeConfigInterface $scopeConfig,
-        View\Page\FaviconInterface $favicon
+        View\Page\FaviconInterface $favicon,
+        Title $title
     ) {
         $this->assetRepo = $assetRepo;
         $this->pageAssets = $pageAssets;
         $this->scopeConfig = $scopeConfig;
         $this->favicon = $favicon;
+        $this->title = $title;
     }
 
     /**
@@ -186,82 +179,14 @@ class Config
     }
 
     /**
-     * Set page title
-     *
-     * @param string|array $title
-     * @return $this
-     */
-    public function setTitle($title)
-    {
-        $this->build();
-        $this->title = $this->scopeConfig->getValue(
-            'design/head/title_prefix',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        ) . ' ' . $this->prepareTitle($title) . ' ' . $this->scopeConfig->getValue(
-            'design/head/title_suffix',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
-
-        return $this;
-    }
-
-    /**
-     * @param array|string $title
-     * @return string
-     */
-    protected function prepareTitle($title)
-    {
-        $this->titleChunks = '';
-        $this->pureTitle = '';
-
-        if (is_array($title)) {
-            $this->titleChunks = $title;
-            return implode(' / ', $title);
-        }
-        $this->pureTitle = $title;
-        return $this->pureTitle;
-    }
-
-    /**
      * Retrieve title element text (encoded)
      *
-     * @return string
+     * @return Title
      */
     public function getTitle()
     {
         $this->build();
-        if (empty($this->title)) {
-            $this->title = $this->getDefaultTitle();
-        }
-        return htmlspecialchars(html_entity_decode(trim($this->title), ENT_QUOTES, 'UTF-8'));
-    }
-
-    /**
-     * Same as getTitle(), but return only first item from chunk for backend pages
-     *
-     * @return mixed
-     */
-    public function getShortTitle()
-    {
-        $this->build();
-        if (!empty($this->titleChunks)) {
-            return reset($this->titleChunks);
-        } else {
-            return $this->pureTitle;
-        }
-    }
-
-    /**
-     * Retrieve default title text
-     *
-     * @return string
-     */
-    public function getDefaultTitle()
-    {
-        return $this->scopeConfig->getValue(
-            'design/head/default_title',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
+        return $this->title;
     }
 
     /**
@@ -462,6 +387,8 @@ class Config
     }
 
     /**
+     * Add remote page asset
+     *
      * @param string $url
      * @param string $contentType
      * @param array $properties

@@ -98,6 +98,11 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
      */
     protected $wishlist;
 
+    /**
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $productRepository;
+
     public function setUp()
     {
         $context = $this->getMockBuilder('Magento\Framework\Model\Context')
@@ -144,6 +149,7 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
         $this->dateTime = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->productRepository = $this->getMock('Magento\Catalog\Api\ProductRepositoryInterface');
 
         $context->expects($this->once())
             ->method('getEventDispatcher')
@@ -163,6 +169,7 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
             $this->productFactory,
             $this->mathRandom,
             $this->dateTime,
+            $this->productRepository,
             false
         );
     }
@@ -221,6 +228,7 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
 
         $product = $this->getMockBuilder('Magento\Catalog\Model\Product')->disableOriginalConstructor()->getMock();
         $product->expects($this->any())->method('getId')->will($this->returnValue($productId));
+        $product->expects($this->any())->method('getStoreId')->will($this->returnValue($storeId));
 
         $instanceType = $this->getMockBuilder('Magento\Catalog\Model\Product\Type\AbstractType')
             ->disableOriginalConstructor()
@@ -237,10 +245,6 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
         $newProduct->expects($this->any())
             ->method('setStoreId')
             ->with($storeId)
-            ->will($this->returnSelf());
-        $newProduct->expects($this->once())
-            ->method('load')
-            ->with($productId)
             ->will($this->returnSelf());
         $newProduct->expects($this->once())
             ->method('getTypeInstance')
@@ -275,8 +279,9 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($items));
 
-        $this->productFactory->expects($this->once())
-            ->method('create')
+        $this->productRepository->expects($this->once())
+            ->method('getById')
+            ->with($productId, false, $storeId)
             ->will($this->returnValue($newProduct));
 
         $this->assertInstanceOf(

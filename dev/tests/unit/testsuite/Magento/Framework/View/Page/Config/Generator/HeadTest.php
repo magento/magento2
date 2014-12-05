@@ -42,9 +42,17 @@ class HeadTest extends \PHPUnit_Framework_TestCase
      */
     protected $pageConfigMock;
 
+    /**
+     * @var \Magento\Framework\View\Page\Title|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $title;
+
     protected function setUp()
     {
         $this->pageConfigMock = $this->getMockBuilder('Magento\Framework\View\Page\Config')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->title = $this->getMockBuilder('Magento\Framework\View\Page\Title')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -62,7 +70,7 @@ class HeadTest extends \PHPUnit_Framework_TestCase
         $generatorContextMock = $this->getMockBuilder('Magento\Framework\View\Layout\Generator\Context')
             ->disableOriginalConstructor()
             ->getMock();
-
+        $this->title->expects($this->any())->method('set')->with()->will($this->returnSelf());
         $structureMock = $this->getMockBuilder('Magento\Framework\View\Page\Config\Structure')
             ->disableOriginalConstructor()
             ->getMock();
@@ -92,12 +100,10 @@ class HeadTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($assets));
 
         $title = 'Page title';
-        $structureMock->expects($this->once())
+        $structureMock->expects($this->atLeastOnce())
             ->method('getTitle')
             ->will($this->returnValue($title));
-        $this->pageConfigMock->expects($this->once())
-            ->method('setTitle')
-            ->with($title);
+        $this->pageConfigMock->expects($this->any())->method('getTitle')->will($this->returnValue($this->title));
 
         $metadata = ['name1' => 'content1', 'name2' => 'content2'];
         $structureMock->expects($this->once())

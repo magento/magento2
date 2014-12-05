@@ -111,20 +111,24 @@ class Page extends Layout
      *
      * @param View\Element\Template\Context $context
      * @param View\LayoutFactory $layoutFactory
-     * @param View\Layout\Reader\Pool $layoutReaderPool
+     * @param View\Layout\ReaderPool $layoutReaderPool
      * @param Framework\Translate\InlineInterface $translateInline
      * @param View\Layout\BuilderFactory $layoutBuilderFactory
+     * @param View\Layout\GeneratorPool $generatorPool
      * @param View\Page\Config\RendererFactory $pageConfigRendererFactory
      * @param View\Page\Layout\Reader $pageLayoutReader
      * @param string $template
      * @param bool $isIsolated
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         View\Element\Template\Context $context,
         View\LayoutFactory $layoutFactory,
-        View\Layout\Reader\Pool $layoutReaderPool,
+        View\Layout\ReaderPool $layoutReaderPool,
         Framework\Translate\InlineInterface $translateInline,
         View\Layout\BuilderFactory $layoutBuilderFactory,
+        View\Layout\GeneratorPool $generatorPool,
         View\Page\Config\RendererFactory $pageConfigRendererFactory,
         View\Page\Layout\Reader $pageLayoutReader,
         $template,
@@ -145,6 +149,7 @@ class Page extends Layout
             $layoutReaderPool,
             $translateInline,
             $layoutBuilderFactory,
+            $generatorPool,
             $isIsolated
         );
         $this->initPageConfigReader();
@@ -175,7 +180,9 @@ class Page extends Layout
     }
 
     /**
-     * {@inheritdoc}
+     * Set up default handles for current page
+     *
+     * @return $this
      */
     public function initLayout()
     {
@@ -185,7 +192,7 @@ class Page extends Layout
         if ($update->isLayoutDefined()) {
             $update->removeHandle('default');
         }
-        return parent::initLayout();
+        return $this;
     }
 
     /**
@@ -200,6 +207,8 @@ class Page extends Layout
     }
 
     /**
+     * Return page configuration
+     *
      * @return \Magento\Framework\View\Page\Config
      */
     public function getConfig()
@@ -287,7 +296,7 @@ class Page extends Layout
      * @param   mixed $value
      * @return  $this
      */
-    public function assign($key, $value = null)
+    protected function assign($key, $value = null)
     {
         if (is_array($key)) {
             foreach ($key as $subKey => $subValue) {

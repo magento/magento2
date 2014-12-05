@@ -185,11 +185,11 @@ class PersonalInfo extends \Magento\Backend\Block\Template
     {
         $id = $this->getCustomerId();
         switch ($this->accountManagement->getConfirmationStatus($id)) {
-            case AccountManagement::ACCOUNT_CONFIRMED:
+            case AccountManagementInterface::ACCOUNT_CONFIRMED:
                 return __('Confirmed');
-            case AccountManagement::ACCOUNT_CONFIRMATION_REQUIRED:
+            case AccountManagementInterface::ACCOUNT_CONFIRMATION_REQUIRED:
                 return __('Confirmation Required');
-            case AccountManagement::ACCOUNT_CONFIRMATION_NOT_REQUIRED:
+            case AccountManagementInterface::ACCOUNT_CONFIRMATION_NOT_REQUIRED:
                 return __('Confirmation Not Required');
         }
         return __('Indeterminate');

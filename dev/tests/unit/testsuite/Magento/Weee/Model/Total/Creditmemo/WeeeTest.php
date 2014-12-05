@@ -142,7 +142,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
         $this->creditmemo->expects($this->any())
             ->method('roundPrice')
             ->will($this->returnCallback(
-                function ($price, $type, $negative) use (&$roundingDelta) {
+                function ($price, $type) use (&$roundingDelta) {
                     if (!isset($roundingDelta[$type])) {
                         $roundingDelta[$type] = 0;
                     }

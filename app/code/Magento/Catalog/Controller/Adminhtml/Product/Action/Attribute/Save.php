@@ -180,7 +180,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
                     }
 
                     $stockItemId = $stockItemDo->getId();
-                    $stockItemToSave = $this->stockItemBuilder->mergeDataObjectWithArray($stockItemDo, $inventoryData);
+                    $stockItemBuilder = $this->stockItemBuilder->mergeDataObjectWithArray($stockItemDo, $inventoryData);
+                    $stockItemToSave = $stockItemBuilder->create();
                     $stockItemToSave->setItemId($stockItemId);
                     $stockItemRepository->save($stockItemToSave);
                 }

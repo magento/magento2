@@ -165,7 +165,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
         );
 
         $methods[] = array(
-            'name' => '___call',
+            'name' => '___callPlugins',
             'visibility' => 'protected',
             'parameters' => array(
                 array('name' => 'method', 'type' => 'string'),
@@ -175,6 +175,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
             'body' => "\$capMethod = ucfirst(\$method);\n" .
             "\$result = null;\n" .
             "if (isset(\$pluginInfo[\\Magento\\Framework\\Interception\\DefinitionInterface::LISTENER_BEFORE])) {\n" .
+            "    // Call 'before' listeners\n" .
             "    foreach (\$pluginInfo[\\Magento\\Framework\\Interception\\DefinitionInterface::LISTENER_BEFORE] as \$code) {\n" .
             "        \$beforeResult = call_user_func_array(\n" .
             "            array(\$this->pluginList->getPlugin(\$this->subjectType, \$code), 'before'" .
@@ -186,6 +187,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
             "    }\n" .
             "}\n" .
             "if (isset(\$pluginInfo[\\Magento\\Framework\\Interception\\DefinitionInterface::LISTENER_AROUND])) {\n" .
+            "    // Call 'around' listener\n" .
             "    \$chain = \$this->chain;\n" .
             "    \$type = \$this->subjectType;\n" .
             "    \$subject = \$this;\n" .
@@ -198,9 +200,11 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
             "        array_merge(array(\$this, \$next), \$arguments)\n" .
             "    );\n" .
             "} else {\n" .
+            "    // Call original method\n" .
             "    \$result = call_user_func_array(array('parent', \$method), \$arguments);\n" .
             "}\n" .
             "if (isset(\$pluginInfo[\\Magento\\Framework\\Interception\\DefinitionInterface::LISTENER_AFTER])) {\n" .
+            "    // Call 'after' listeners\n" .
             "    foreach (\$pluginInfo[\\Magento\\Framework\\Interception\\DefinitionInterface::LISTENER_AFTER] as \$code) {\n" .
             "        \$result = \$this->pluginList->getPlugin(\$this->subjectType, \$code)\n" .
             "            ->{'after' . \$capMethod}(\$this, \$result);\n" .
@@ -212,19 +216,29 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
         $reflectionClass = new \ReflectionClass($this->_getSourceClassName());
         $publicMethods = $reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC);
         foreach ($publicMethods as $method) {
-            if (!($method->isConstructor() ||
-                $method->isFinal() ||
-                $method->isStatic() ||
-                $method->isDestructor()) && !in_array(
-                    $method->getName(),
-                    array('__sleep', '__wakeup', '__clone')
-                )
-            ) {
+            if ($this->isInterceptedMethod($method)) {
                 $methods[] = $this->_getMethodInfo($method);
             }
         }
 
         return $methods;
+    }
+
+    /**
+     * Whether method is intercepted
+     *
+     * @param \ReflectionMethod $method
+     * @return bool
+     */
+    protected function isInterceptedMethod(\ReflectionMethod $method)
+    {
+        return !($method->isConstructor() ||
+            $method->isFinal() ||
+            $method->isStatic() ||
+            $method->isDestructor()) && !in_array(
+                $method->getName(),
+                array('__sleep', '__wakeup', '__clone')
+            );
     }
 
     /**
@@ -249,7 +263,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
                 $parameters
             )});\n" .
             "} else {\n" .
-            "    return \$this->___call('{$method->getName()}', func_get_args(), \$pluginInfo);\n" .
+            "    return \$this->___callPlugins('{$method->getName()}', func_get_args(), \$pluginInfo);\n" .
             "}",
             'docblock' => array('shortDescription' => '{@inheritdoc}')
         );

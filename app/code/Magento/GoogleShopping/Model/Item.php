@@ -70,16 +70,16 @@ class Item extends \Magento\Framework\Model\AbstractModel
     /**
      * Product factory
      *
-     * @var \Magento\Catalog\Model\ProductFactory
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
-    protected $_productFactory;
+    protected $productRepository;
 
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\GoogleShopping\Model\Service\ItemFactory $itemFactory
      * @param \Magento\GoogleShopping\Model\TypeFactory $typeFactory
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
+     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\GoogleShopping\Model\Resource\Item $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param \Magento\GoogleShopping\Model\Config $config
@@ -90,17 +90,17 @@ class Item extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Registry $registry,
         \Magento\GoogleShopping\Model\Service\ItemFactory $itemFactory,
         \Magento\GoogleShopping\Model\TypeFactory $typeFactory,
-        \Magento\Catalog\Model\ProductFactory $productFactory,
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\GoogleShopping\Model\Resource\Item $resource,
         \Magento\Framework\Data\Collection\Db $resourceCollection,
         \Magento\GoogleShopping\Model\Config $config,
         array $data = array()
     ) {
+        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_itemFactory = $itemFactory;
         $this->_typeFactory = $typeFactory;
-        $this->_productFactory = $productFactory;
+        $this->productRepository = $productRepository;
         $this->_config = $config;
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
     /**
@@ -231,7 +231,7 @@ class Item extends \Magento\Framework\Model\AbstractModel
     public function getProduct()
     {
         if (is_null($this->getData('product')) && !is_null($this->getProductId())) {
-            $product = $this->_productFactory->create()->setStoreId($this->getStoreId())->load($this->getProductId());
+            $product = $this->productRepository->getById($this->getProductId(), false, $this->getStoreId());
             $this->setData('product', $product);
         }
 

@@ -90,7 +90,7 @@ class Index extends \Magento\Checkout\Controller\Cart
         $this->_view->loadLayout();
         $layout = $this->_view->getLayout();
         $layout->initMessages();
-        $this->_view->getPage()->getConfig()->setTitle(__('Shopping Cart'));
+        $this->_view->getPage()->getConfig()->getTitle()->set(__('Shopping Cart'));
         $this->_view->renderLayout();
         \Magento\Framework\Profiler::stop(__METHOD__ . 'cart_display');
     }

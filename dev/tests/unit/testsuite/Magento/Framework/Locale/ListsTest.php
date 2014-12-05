@@ -81,9 +81,9 @@ class ListsTest extends \PHPUnit_Framework_TestCase
         // clearly english results
         $expectedResults = [
             'AD' => 'Andorra',
-            'ZZ' => 'Unknown or Invalid Region',
-            'VC' => 'Saint Vincent and the Grenadines',
-            'PU' => 'U.S. Miscellaneous Pacific Islands'
+            'ZZ' => 'Unknown Region',
+            'VC' => 'St. Vincent & Grenadines',
+            'PM' => 'Saint Pierre and Miquelon'
         ];
 
         $countryTranslationList = $this->listsModel->getCountryTranslationList();
@@ -118,9 +118,9 @@ class ListsTest extends \PHPUnit_Framework_TestCase
         // clearly english results
         $expectedResults = [
             'AD' => 'Andorra',
-            'ZZ' => 'Unknown or Invalid Region',
-            'VC' => 'Saint Vincent and the Grenadines',
-            'PU' => 'U.S. Miscellaneous Pacific Islands'
+            'ZZ' => 'Unknown Region',
+            'VC' => 'St. Vincent & Grenadines',
+            'PM' => 'Saint Pierre and Miquelon'
         ];
 
         $countryTranslationList = $this->listsModel->getTranslationList($path, $value);
@@ -187,9 +187,9 @@ class ListsTest extends \PHPUnit_Framework_TestCase
         $expectedResults = [
             ['value' => 'AG', 'label' => 'Antigua and Barbuda'],
             ['value' => 'BA', 'label' => 'Bosnia and Herzegovina'],
-            ['value' => 'CT', 'label' => 'Canton and Enderbury Islands'],
-            ['value' => 'GS', 'label' => 'South Georgia and the South Sandwich Islands'],
-            ['value' => 'PU', 'label' => 'U.S. Miscellaneous Pacific Islands']
+            ['value' => 'CC', 'label' => 'Cocos (Keeling) Islands'],
+            ['value' => 'GS', 'label' => 'South Georgia & South Sandwich Islands'],
+            ['value' => 'PM', 'label' => 'Saint Pierre and Miquelon']
         ];
 
         $optionCountries = $this->listsModel->getOptionCountries();

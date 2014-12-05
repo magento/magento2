@@ -237,11 +237,12 @@ class Http extends \Zend_Controller_Request_Http implements \Magento\Framework\A
     /**
      * Get base url
      *
-     * @return string
+     * @param bool $raw
+     * @return mixed|string
      */
-    public function getBaseUrl()
+    public function getBaseUrl($raw = false)
     {
-        $url = parent::getBaseUrl();
+        $url = parent::getBaseUrl($raw);
         $url = str_replace('\\', '/', $url);
         return $url;
     }

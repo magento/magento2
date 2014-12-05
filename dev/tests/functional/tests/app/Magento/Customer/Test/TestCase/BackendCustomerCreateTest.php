@@ -44,7 +44,6 @@ class BackendCustomerCreateTest extends Functional
      */
     public function testCreateCustomer()
     {
-        $this->markTestSkipped('MAGETWO-31121');
         //Data
         $customerFixture = Factory::getFixtureFactory()->getMagentoCustomerCustomer();
         $customerFixture->switchData('backend_customer');

@@ -39,11 +39,10 @@ class View extends \Magento\Sales\Controller\Adminhtml\Transactions
         if (!$txn) {
             return;
         }
-        $this->_title->add(__('Transactions'));
-        $this->_title->add(sprintf("#%s", $txn->getTxnId()));
-
         $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_Sales::sales_transactions');
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Transactions'));
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(sprintf("#%s", $txn->getTxnId()));
         $this->_view->renderLayout();
     }
 }

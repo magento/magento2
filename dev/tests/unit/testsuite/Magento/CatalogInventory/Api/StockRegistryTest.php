@@ -191,7 +191,7 @@ class StockRegistryTest extends \PHPUnit_Framework_TestCase
         $this->stockItem->expects($this->once())->method('setProductId')->willReturnSelf();
         $this->stockItem->expects($this->once())->method('getData')->willReturn([]);
         $this->stockItem->expects($this->once())->method('addData')->willReturnSelf();
-        $this->stockItem->expects($this->atLeastOnce())->method('getId')->willReturn($itemId);
+        $this->stockItem->expects($this->atLeastOnce())->method('getItemId')->willReturn($itemId);
         $this->assertEquals(
             $itemId,
             $this->stockRegistry->updateStockItemBySku($this->productSku, $this->stockItem)

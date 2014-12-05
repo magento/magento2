@@ -44,9 +44,9 @@
         </div>
 
         <div class="field email required">
-            <label for="recipients-email${_index_}" class="label"><span><?php echo __('Email Address') ?></span></label>
+            <label for="recipients-email${_index_}" class="label"><span><?php echo __('Email') ?></span></label>
             <div class="control">
-                <input name="recipients[email][${_index_}]" title="<?php echo __('Email Address') ?>"
+                <input name="recipients[email][${_index_}]" title="<?php echo __('Email') ?>"
                        id="recipients-email${_index_}" type="email" class="input-text"
                        data-validate="{required:true, 'validate-email':true}"/>
             </div>
@@ -85,7 +85,7 @@
             <label for="sender-email" class="label"><span><?php echo __('Email') ?></span></label>
             <div class="control">
                 <input name="sender[email]" value="<?php echo $this->escapeHtml($this->getEmail()) ?>"
-                       title="<?php echo __('Email Address') ?>" id="sender-email" type="text" class="input-text"
+                       title="<?php echo __('Email') ?>" id="sender-email" type="text" class="input-text"
                        data-validate="{required:true, 'validate-email':true}"/>
             </div>
         </div>

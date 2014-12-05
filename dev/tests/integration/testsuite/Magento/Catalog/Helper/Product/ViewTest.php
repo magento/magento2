@@ -121,6 +121,9 @@ class ViewTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepareAndRender()
     {
+        // need for \Magento\Review\Block\Form::getProductInfo()
+        $this->objectManager->get('Magento\Framework\App\RequestInterface')->setParam('id', 10);
+
         $this->_helper->prepareAndRender($this->page, 10, $this->_controller);
         /** @var \Magento\TestFramework\Response $response */
         $response = $this->objectManager->get('Magento\TestFramework\Response');

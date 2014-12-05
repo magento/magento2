@@ -25,8 +25,5 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Module/etc/module.xsd">
     <module name="Magento_Authorization" schema_version="1.0.0.0">
-        <depends>
-            <module name="Magento_Backend"/>
-        </depends>
     </module>
 </config>

@@ -50,13 +50,12 @@ class Add extends \Magento\Catalog\Controller\Adminhtml\Product\Set
      */
     public function execute()
     {
-        $this->_title->add(__('New Product Template'));
-
         $this->_setTypeId();
 
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Magento_Catalog::catalog_attributes_sets');
+        $resultPage->getConfig()->getTitle()->prepend(__('New Product Template'));
         $resultPage->addContent(
             $resultPage->getLayout()->createBlock('Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Toolbar\Add')
         );

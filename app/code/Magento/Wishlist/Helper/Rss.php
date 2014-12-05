@@ -37,6 +37,11 @@ class Rss extends \Magento\Wishlist\Helper\Data
     protected $_customerBuilder;
 
     /**
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     */
+    protected $_customerRepository;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Framework\Registry $coreRegistry
@@ -48,6 +53,7 @@ class Rss extends \Magento\Wishlist\Helper\Data
      * @param \Magento\Customer\Helper\View $customerViewHelper
      * @param \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider
      * @param \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder
+     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -60,9 +66,11 @@ class Rss extends \Magento\Wishlist\Helper\Data
         \Magento\Core\Helper\PostData $postDataHelper,
         \Magento\Customer\Helper\View $customerViewHelper,
         \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider,
-        \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder
+        \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder,
+        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
     ) {
         $this->_customerBuilder = $customerBuilder;
+        $this->_customerRepository = $customerRepository;
 
         parent::__construct(
             $context,
@@ -108,13 +116,13 @@ class Rss extends \Magento\Wishlist\Helper\Data
     public function getCustomer()
     {
         if (is_null($this->_customer)) {
-            $this->_customer = $this->_customerBuilder->create();
-
             $params = $this->_coreData->urlDecode($this->_getRequest()->getParam('data'));
             $data   = explode(',', $params);
-            $cId    = abs(intval($data[0]));
-            if ($cId && ($cId == $this->_customerSession->getCustomerId())) {
-                $this->_customer = $this->_customerSession->getCustomerDataObject();
+            $customerId    = abs(intval($data[0]));
+            if ($customerId && ($customerId == $this->_customerSession->getCustomerId())) {
+                $this->_customer = $this->_customerRepository->getById($customerId);
+            } else {
+                $this->_customer = $this->_customerBuilder->create();
             }
         }
 

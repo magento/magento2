@@ -24,7 +24,6 @@
 namespace Magento\Customer\Block\Account\Dashboard;
 
 use Magento\Customer\Api\Data\AddressInterface;
-use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Customer\Model\Address\Mapper;
 
@@ -80,7 +79,7 @@ class Address extends \Magento\Framework\View\Element\Template
     /**
      * Get the logged in customer
      *
-     * @return CustomerInterface|null
+     * @return \Magento\Customer\Api\Data\CustomerInterface|null
      */
     public function getCustomer()
     {

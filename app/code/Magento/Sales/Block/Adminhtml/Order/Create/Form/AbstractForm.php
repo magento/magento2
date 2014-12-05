@@ -135,11 +135,11 @@ abstract class AbstractForm extends \Magento\Sales\Block\Adminhtml\Order\Create\
      */
     protected function _getAdditionalFormElementTypes()
     {
-        return array(
+        return [
             'file' => 'Magento\Customer\Block\Adminhtml\Form\Element\File',
             'image' => 'Magento\Customer\Block\Adminhtml\Form\Element\Image',
             'boolean' => 'Magento\Customer\Block\Adminhtml\Form\Element\Boolean'
-        );
+        ];
     }
 
     /**
@@ -149,9 +149,9 @@ abstract class AbstractForm extends \Magento\Sales\Block\Adminhtml\Order\Create\
      */
     protected function _getAdditionalFormElementRenderers()
     {
-        return array(
+        return [
             'region' => $this->getLayout()->createBlock('Magento\Customer\Block\Adminhtml\Edit\Renderer\Region')
-        );
+        ];
     }
 
     /**
@@ -168,7 +168,7 @@ abstract class AbstractForm extends \Magento\Sales\Block\Adminhtml\Order\Create\
     /**
      * Add rendering EAV attributes to Form element
      *
-     * @param \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata[] $attributes
+     * @param \Magento\Customer\Api\Data\AttributeMetadataInterface[] $attributes
      * @param \Magento\Framework\Data\Form\AbstractForm $form
      * @return $this
      */
@@ -188,12 +188,12 @@ abstract class AbstractForm extends \Magento\Sales\Block\Adminhtml\Order\Create\
                 $element = $form->addField(
                     $attribute->getAttributeCode(),
                     $inputType,
-                    array(
+                    [
                         'name' => $attribute->getAttributeCode(),
                         'label' => __($attribute->getStoreLabel()),
                         'class' => $attribute->getFrontendClass(),
                         'required' => $attribute->isRequired()
-                    )
+                    ]
                 );
                 if ($inputType == 'multiline') {
                     $element->setLineCount($attribute->getMultilineCount());
@@ -206,7 +206,7 @@ abstract class AbstractForm extends \Magento\Sales\Block\Adminhtml\Order\Create\
                 }
 
                 if ($inputType == 'select' || $inputType == 'multiselect') {
-                    $options = array();
+                    $options = [];
                     foreach ($attribute->getOptions() as $optionData) {
                         $options[] = ConvertArray::toFlatArray(
                             $this->dataObjectProcessor->buildOutputDataArray(
@@ -236,6 +236,6 @@ abstract class AbstractForm extends \Magento\Sales\Block\Adminhtml\Order\Create\
      */
     public function getFormValues()
     {
-        return array();
+        return [];
     }
 }

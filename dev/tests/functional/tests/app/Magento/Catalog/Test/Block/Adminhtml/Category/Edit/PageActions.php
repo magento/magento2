@@ -46,7 +46,7 @@ class PageActions extends FormPageActions
      */
     public function save()
     {
-        $this->_rootElement->find($this->saveButton)->click();
+        parent::save();
         $warningBlock = $this->browser->find($this->warningBlock);
         if ($warningBlock->isVisible()) {
             $warningBlock->click();

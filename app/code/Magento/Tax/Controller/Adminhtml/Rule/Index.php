@@ -33,8 +33,8 @@ class Index extends \Magento\Tax\Controller\Adminhtml\Rule
      */
     public function execute()
     {
-        $this->_title->add(__('Tax Rules'));
         $this->_initAction();
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Tax Rules'));
         $this->_view->renderLayout();
     }
 }

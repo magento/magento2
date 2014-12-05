@@ -25,6 +25,7 @@ namespace Magento\Tax\Model\Calculation;
 
 use Magento\Framework\Api\MetadataServiceInterface;
 use Magento\Tax\Api\Data\TaxRuleInterface;
+use Magento\Framework\Api\AttributeDataBuilder;
 
 /**
  * Tax Rule Model
@@ -69,6 +70,7 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param MetadataServiceInterface $metadataService
+     * @param AttributeDataBuilder $customAttributeBuilder
      * @param \Magento\Tax\Model\ClassModel $taxClass
      * @param \Magento\Tax\Model\Calculation $calculation
      * @param Rule\Validator $validator
@@ -80,6 +82,7 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         MetadataServiceInterface $metadataService,
+        AttributeDataBuilder $customAttributeBuilder,
         \Magento\Tax\Model\ClassModel $taxClass,
         \Magento\Tax\Model\Calculation $calculation,
         \Magento\Tax\Model\Calculation\Rule\Validator $validator,
@@ -89,7 +92,15 @@ class Rule extends \Magento\Framework\Model\AbstractExtensibleModel implements T
     ) {
         $this->_calculation = $calculation;
         $this->validator = $validator;
-        parent::__construct($context, $registry, $metadataService, $resource, $resourceCollection, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $metadataService,
+            $customAttributeBuilder,
+            $resource,
+            $resourceCollection,
+            $data
+        );
         $this->_init('Magento\Tax\Model\Resource\Calculation\Rule');
         $this->_taxClass = $taxClass;
     }

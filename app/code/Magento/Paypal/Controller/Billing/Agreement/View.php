@@ -36,9 +36,11 @@ class View extends \Magento\Paypal\Controller\Billing\Agreement
         if (!($agreement = $this->_initAgreement())) {
             return;
         }
-        $this->_title->add(__('Billing Agreements'));
-        $this->_title->add(__('Billing Agreement # %1', $agreement->getReferenceId()));
         $this->_view->loadLayout();
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Billing Agreements'));
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(
+            __('Billing Agreement # %1', $agreement->getReferenceId())
+        );
         $this->_view->getLayout()->initMessages();
         $navigationBlock = $this->_view->getLayout()->getBlock('customer_account_navigation');
         if ($navigationBlock) {

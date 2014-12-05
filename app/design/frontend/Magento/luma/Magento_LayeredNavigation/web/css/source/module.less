@@ -22,6 +22,11 @@
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
+//
+//    Common
+//--------------------------------------
+
+.responsive-common() {
 
 .filter {
     &.block {
@@ -34,8 +39,8 @@
             line-height: 16px;
             border: 1px solid @border-color-base;
             text-align: center;
-            padding: 7px 10px 7px 10px;
-            @_shadow: inset 0px 1px 0px 0px rgba(255,255,255,1), inset 0px -1px 0px 0px fade(@border-color-base, 30);
+            padding: 7px 10px;
+            @_shadow: inset 0 1px 0 0 @color-white, inset 0 -1px 0 0 fade(@border-color-base, 30);
             background-color: @toolbar-element-background;
             .css(box-shadow, @_shadow);
             border-radius: 3px;
@@ -47,15 +52,15 @@
                 display: inline-block;
                 border-radius: 2px;
                 padding: 2px;
-                font-size: 0.8em;
-                margin:0 5px;
-                color: #fff;
+                font-size: .8em;
+                margin: 0 5px;
+                color: @color-white;
                 min-width: 1em;
                 line-height: 1;
                 background: #fc5e10;
             }
             &.disabled {
-                opacity: 0.5;
+                opacity: .5;
             }
         }
     }
@@ -70,7 +75,7 @@
             display: none;
     }
     &-current {
-        margin: 0 0 0;
+        margin: 0;
         .items {
             padding: @indent-xs-base @indent-s-base;
         }
@@ -85,7 +90,7 @@
             padding-bottom: @indent-s-base;
         }
         .action.remove {
-            &:extend(.abstract-remove-button-for-blocks all);
+            &:extend(.abs-remove-button-for-blocks all);
             position: absolute;
             left: -2px;
             top: -1px;
@@ -177,7 +182,13 @@
     }
 }
 
-.responsive-smaller(@break) when (@break = @screen-s) {
+}
+
+//
+//    Mobile
+//--------------------------------------
+
+.responsive-max-m(@break) when (@break = @screen-s) {
     body.filter-active {
         .page-wrapper {
             visibility: hidden;
@@ -240,7 +251,7 @@
                 right: 0;
                 bottom: 0;
                 overflow: scroll;
-                background: #fff;
+                background: @color-white;
                 z-index: 10;
             }
         }
@@ -263,7 +274,7 @@
             content: "";
             width: 100px;
             height: 40px;
-            background: rgba(255,255,255,0.5);
+            background: rgba(255,255,255,.5);
             display: block;
             position: relative;
             z-index: 99;
@@ -322,7 +333,7 @@
     }
 }
 
-.responsive(@break) when (@break = @screen-s) {
+.responsive-min-m(@break) when (@break = @screen-s) {
 
     .filter {
         &.block {
@@ -391,7 +402,7 @@
                         &:before {
                             content: "";
                             display: block;
-                            .arrow(up,8px,#000000);
+                            .arrow(up,8px,#000);
                             position: absolute;
                             left: 50%;
                             bottom: -1px;
@@ -399,7 +410,7 @@
                             margin-left: -20px;
                         }
                         &:after {
-                            border-bottom-color: #fff;
+                            border-bottom-color: @color-white;
                             margin-top:2px;
                             z-index: 4;
                         }
@@ -416,12 +427,12 @@
                 &-content {
                     position: absolute;
                     z-index: 2;
-                    background: #fff;
+                    background: @color-white;
                     width: 180px;
                     top: 100%;
                     border: 1px solid @border-color-base;
                     padding: @indent-xs-base 0;
-                    @_shadow:  0px 3px 5px 0px rgba(50, 50, 50, 0.75);
+                    @_shadow:  0 3px 5px 0 rgba(50, 50, 50, .75);
                     .css(box-shadow, @_shadow, 1);
                     .item {
                         padding: @indent-xs-base;

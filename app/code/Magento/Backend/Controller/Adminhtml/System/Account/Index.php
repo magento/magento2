@@ -48,8 +48,9 @@ class Index extends \Magento\Backend\Controller\Adminhtml\System\Account
      */
     public function execute()
     {
-        $this->_title->add(__('My Account'));
+        $resultPage = $this->resultPageFactory->create();
+        $resultPage->getConfig()->getTitle()->prepend(__('My Account'));
 
-        return $this->resultPageFactory->create();
+        return $resultPage;
     }
 }

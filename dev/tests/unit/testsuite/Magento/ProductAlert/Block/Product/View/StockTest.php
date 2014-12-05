@@ -99,7 +99,7 @@ class StockTest extends \PHPUnit_Framework_TestCase
         $this->_product->expects($this->once())->method('isAvailable')->will($this->returnValue(false));
 
         $this->_registry->expects(
-            $this->once()
+            $this->any()
         )->method(
             'registry'
         )->with(
@@ -134,7 +134,7 @@ class StockTest extends \PHPUnit_Framework_TestCase
         $this->_product->expects($this->any())->method('isAvailable')->will($this->returnValue($productAvailable));
 
         $this->_registry->expects(
-            $this->once()
+            $this->any()
         )->method(
             'registry'
         )->with(
@@ -165,7 +165,7 @@ class StockTest extends \PHPUnit_Framework_TestCase
         $this->_helper->expects($this->never())->method('getSaveUrl');
 
         $this->_registry->expects(
-            $this->once()
+            $this->any()
         )->method(
             'registry'
         )->with(

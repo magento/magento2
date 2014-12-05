@@ -33,8 +33,8 @@ class Index extends \Magento\Backend\Controller\Adminhtml\System\Variable
      */
     public function execute()
     {
-        $this->_title->add(__('Custom Variables'));
-
-        return $this->createPage();
+        $resultPage = $this->createPage();
+        $resultPage->getConfig()->getTitle()->prepend(__('Custom Variables'));
+        return $resultPage;
     }
 }

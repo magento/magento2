@@ -24,7 +24,7 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 
-class Start extends \Magento\Backend\App\Action
+class Start extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View
 {
     /**
      * Start create invoice action
@@ -37,6 +37,6 @@ class Start extends \Magento\Backend\App\Action
          * Clear old values for invoice qty's
          */
         $this->_getSession()->getInvoiceItemQtys(true);
-        $this->_redirect('sales/*/new', array('order_id' => $this->getRequest()->getParam('order_id')));
+        $this->_redirect('sales/*/new', ['order_id' => $this->getRequest()->getParam('order_id')]);
     }
 }

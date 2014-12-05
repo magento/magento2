@@ -120,6 +120,14 @@ class PageCriteriaMapperTest extends \PHPUnit_Framework_TestCase
      */
     public function testMapStoreFilter()
     {
+        $reflection = new \ReflectionClass($this->pageCriteria);
+        $reflectionProperty = $reflection->getProperty('storeTableName');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->pageCriteria, 'cms_page_store');
+        $reflectionProperty = $reflection->getProperty('linkFieldName');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->pageCriteria, 'page_id');
+
         $this->pageCriteria->expects($this->once())
             ->method('getTable')
             ->with('cms_page_store')

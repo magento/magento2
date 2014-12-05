@@ -22,52 +22,64 @@
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
+
+//
+//    Common
+//--------------------------------------
+
+.responsive-common() {
+
 .gift-message {
     margin: 0;
     .fieldset& {
         > .legend {
-            &:extend(.abstract-methods-shipping-title all);
+            &:extend(.abs-methods-shipping-title all);
+        }
+    }
+    .opc-wrapper .step-content .fieldset& {
+        br + .field {
+            margin: 0;
         }
     }
     .field.choice {
         font-weight: @font-weight-base;
-        margin: 0 0 20px;
+        margin: 0 0 @indent-base;
         &:before {
             display: none;
         }
     }
     .activate.message {
         display: inline-block;
-        margin: 0 0 10px;
+        margin: 0 0 @indent-s-base;
     }
     .product-image-wrapper {
-        &:extend(.abstract-reset-image-wrapper all);
+        &:extend(.abs-reset-image-wrapper all);
     }
     .options-items {
         background: @sidebar-background;
         display: block;
-        margin: 20px 0 0;
-        padding: 20px;
+        margin: @indent-base 0 0;
+        padding: @indent-base;
         .order-title:not(:first-child),
         .extra-options-container {
             font-weight: @font-weight-base;
-            margin: 20px 0 0;
+            margin: @indent-base 0 0;
         }
         .order-options {
-            margin: 0 0 20px 20px;
+            margin: 0 0 @indent-base @indent-base;
         }
         .block.message {
-            margin-bottom: 10px;
+            margin-bottom: @indent-s-base;
         }
         .items {
             .list-reset-styles();
             .item {
                 border-bottom: @border-width-base solid @border-color-base;
-                margin-bottom: 20px;
-                padding-bottom: 10px;
+                margin-bottom: @indent-base;
+                padding-bottom: @indent-s-base;
                 .product {
                     .photo {
-                        margin: 10px 0;
+                        margin: @indent-s-base 0;
                     }
                 }
                 &:last-child {
@@ -107,12 +119,12 @@
                 font-weight: @font-weight-base;
             }
         }
-        &:extend(.abstract-add-clearfix all);
+        &:extend(.abs-add-clearfix all);
         dt:after {
             content: "";
         }
         .label {
-            &:extend(.abstract-colon all);
+            &:extend(.abs-colon all);
         }
         .item-message {
             clear: left;
@@ -123,14 +135,14 @@
 .order-details-items .order-items {
     .order-gift-message {
         &:not(.expanded-content) {
-            &:extend(.abstract-hidden);
+            &:extend(.abs-hidden);
         }
         .action.close {
-            &:extend(.abstract-no-display all);
+            &:extend(.abs-no-display all);
         }
     }
     .action.show {
-        padding-right: 20px;
+        padding-right: @indent-base;
         position: relative;
         .icon-font(
             @_icon-font-content: @icon-down,
@@ -158,21 +170,23 @@
     padding-top: @indent-s-base;
 }
 
+}
+
 //
 //    Desktop
 //--------------------------------------
-.responsive(@break) when (@break = @screen-m) {
+.responsive-min-l(@break) when (@break = @screen-m) {
     .gift-message {
         .item {
             border-bottom: @border-width-base solid @border-color-base;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            &:extend(.abstract-add-clearfix-desktop all);
+            margin-bottom: @indent-base;
+            padding-bottom: @indent-s-base;
+            &:extend(.abs-add-clearfix-desktop all);
             .product {
                 float: left;
-                margin-right: 20px;
+                margin-right: @indent-base;
                 .photo {
-                    margin: 10px 0;
+                    margin: @indent-s-base 0;
                 }
                 .name {
                     text-overflow: ellipsis;

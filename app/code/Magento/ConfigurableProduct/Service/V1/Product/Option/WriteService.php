@@ -24,7 +24,7 @@
 
 namespace Magento\ConfigurableProduct\Service\V1\Product\Option;
 
-use Magento\Catalog\Model\ProductRepository;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\ConfigurableProduct\Service\V1\Data\Option;
 use Magento\ConfigurableProduct\Service\V1\Data\OptionConverter;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\AttributeFactory as ConfigurableAttributeFactory;
@@ -44,7 +44,7 @@ use Magento\Framework\Exception\CouldNotSaveException;
 class WriteService implements WriteServiceInterface
 {
     /**
-     * @var \Magento\Catalog\Model\ProductRepository
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
     protected $productRepository;
 
@@ -76,7 +76,7 @@ class WriteService implements WriteServiceInterface
     private $productType;
 
     /**
-     * @param ProductRepository $productRepository
+     * @param ProductRepositoryInterface $productRepository
      * @param ConfigurableAttributeFactory $configurableAttributeFactory
      * @param EavConfig $eavConfig
      * @param OptionConverter $optionConverter
@@ -84,7 +84,7 @@ class WriteService implements WriteServiceInterface
      * @param ConfigurableType $productType
      */
     public function __construct(
-        ProductRepository $productRepository,
+        ProductRepositoryInterface $productRepository,
         ConfigurableAttributeFactory $configurableAttributeFactory,
         EavConfig $eavConfig,
         OptionConverter $optionConverter,

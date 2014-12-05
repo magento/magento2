@@ -116,7 +116,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetHeaderTextExistingCustomer()
     {
-        $this->assertEquals('Firstname Lastname', $this->block->getHeaderText());
+        $this->assertEquals('John Smith', $this->block->getHeaderText());
     }
 
     /**

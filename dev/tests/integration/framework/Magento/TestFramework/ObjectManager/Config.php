@@ -26,16 +26,11 @@ namespace Magento\TestFramework\ObjectManager;
 class Config extends \Magento\Framework\Interception\ObjectManager\Config
 {
     /**
-     * Clean configuration
+     * Clean configuration by recreating subject for proxy config
      */
     public function clean()
     {
-        $this->_preferences = array();
-        $this->_virtualTypes = array();
-        $this->_arguments = array();
-        $this->_nonShared = array();
-        $this->_plugins = array();
-        $this->_mergedPlugins = array();
-        $this->_mergedArguments = array();
+        $className = get_class($this->subjectConfig);
+        $this->subjectConfig = new $className();
     }
 }

@@ -175,15 +175,21 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     {
         $addressModelMock = $this->getMock(
             'Magento\Customer\Model\Address',
-            array('setIsDefaultBilling', 'setIsDefaultShipping', 'setAttributeSetId', 'getAttributeSetId', '__wakeup'),
+            array(
+                'setIsDefaultBilling',
+                'setIsDefaultShipping',
+                'setAttributeSetId',
+                'getAttributeSetId',
+                '__wakeup',
+                'getCustomAttributesCodes'
+            ),
             array(),
             '',
             false
         );
-        $addressModelMock->expects($this->once())
-            ->method('setIsDefaultBilling');
-        $addressModelMock->expects($this->once())
-            ->method('setIsDefaultShipping');
+        $addressModelMock->expects($this->once())->method('setIsDefaultBilling');
+        $addressModelMock->expects($this->once())->method('setIsDefaultShipping');
+        $addressModelMock->expects($this->any())->method('getCustomAttributesCodes')->willReturn([]);
         return $addressModelMock;
     }
 

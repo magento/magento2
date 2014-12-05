@@ -31,16 +31,14 @@ class Pending extends \Magento\Review\Controller\Adminhtml\Product
      */
     public function execute()
     {
-        $this->_title->add(__('Customer Reviews'));
-
-        $this->_title->add(__('Pending Reviews'));
-
         if ($this->getRequest()->getParam('ajax')) {
             $this->_coreRegistry->register('usePendingFilter', true);
             return $this->_forward('reviewGrid');
         }
 
         $this->_view->loadLayout();
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Customer Reviews'));
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Pending Reviews'));
 
         $this->_coreRegistry->register('usePendingFilter', true);
         $this->_addContent($this->_view->getLayout()->createBlock('Magento\Review\Block\Adminhtml\Main'));

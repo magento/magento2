@@ -33,9 +33,8 @@ class Index extends \Magento\Tax\Controller\Adminhtml\Rate
      */
     public function execute()
     {
-        $this->_title->add(__('Tax Zones and Rates'));
-
         $this->_initAction()->_addBreadcrumb(__('Manage Tax Rates'), __('Manage Tax Rates'));
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Tax Zones and Rates'));
         $this->_view->renderLayout();
     }
 }

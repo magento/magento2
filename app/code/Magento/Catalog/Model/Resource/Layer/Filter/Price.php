@@ -98,7 +98,7 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $rangeExpr = new \Zend_Db_Expr("FLOOR(({$priceExpression}) / {$range}) + 1");
 
         $select->columns(array('range' => $rangeExpr, 'count' => $countExpr));
-        $select->group($rangeExpr)->order("{$rangeExpr} ASC");
+        $select->group($rangeExpr)->order("({$rangeExpr}) ASC");
 
         return $this->_getReadAdapter()->fetchPairs($select);
     }

@@ -26,6 +26,7 @@ namespace Magento\Sales\Model\Order;
 use Magento\Sales\Model\AbstractModel;
 use Magento\Sales\Model\EntityInterface;
 use Magento\Sales\Api\Data\ShipmentInterface;
+use Magento\Framework\Api\AttributeDataBuilder;
 
 /**
  * Sales order shipment model
@@ -119,6 +120,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param AttributeDataBuilder $customAttributeBuilder
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
@@ -134,6 +136,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        AttributeDataBuilder $customAttributeBuilder,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Sales\Model\OrderFactory $orderFactory,
@@ -154,6 +157,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
             $context,
             $registry,
             $metadataService,
+            $customAttributeBuilder,
             $localeDate,
             $dateTime,
             $resource,

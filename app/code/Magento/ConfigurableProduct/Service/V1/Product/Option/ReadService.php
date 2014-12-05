@@ -23,7 +23,7 @@
  */
 namespace Magento\ConfigurableProduct\Service\V1\Product\Option;
 
-use Magento\Catalog\Model\ProductRepository;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\System\Config\Source\Inputtype as InputType;
 use Magento\Catalog\Service\V1\Data\Product;
 use Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Collection;
@@ -40,7 +40,7 @@ class ReadService implements ReadServiceInterface
      */
     private $optionConverter;
     /**
-     * @var ProductRepository
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
     private $productRepository;
     /**
@@ -53,13 +53,13 @@ class ReadService implements ReadServiceInterface
     private $inputType;
 
     /**
-     * @param ProductRepository $productRepository
+     * @param ProductRepositoryInterface $productRepository
      * @param OptionConverter $optionConverter
      * @param ConfigurableType $configurableType
      * @param InputType $inputType
      */
     public function __construct(
-        ProductRepository $productRepository,
+        ProductRepositoryInterface $productRepository,
         OptionConverter $optionConverter,
         ConfigurableType $configurableType,
         InputType $inputType

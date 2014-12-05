@@ -24,7 +24,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
-    <event name="controller_action_layout_generate_blocks_after">
+    <event name="layout_generate_blocks_after">
         <observer name="vde_editor" instance="Magento\DesignEditor\Model\Observer" method="clearJs" />
     </event>
 </config>

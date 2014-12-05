@@ -55,7 +55,7 @@ class PrintAction extends \Magento\Sales\Controller\Adminhtml\Creditmemo\Abstrac
      */
     public function execute()
     {
-        $this->_title->add(__('Credit Memos'));
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Credit Memos'));
         $this->creditmemoLoader->setOrderId($this->getRequest()->getParam('order_id'));
         $this->creditmemoLoader->setCreditmemoId($this->getRequest()->getParam('creditmemo_id'));
         $this->creditmemoLoader->setCreditmemo($this->getRequest()->getParam('creditmemo'));

@@ -33,10 +33,9 @@ class Index extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
      */
     public function execute()
     {
-        $this->_title->add(__('URL Rewrites'));
-
         $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_UrlRewrite::urlrewrite');
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('URL Rewrites'));
         $this->_view->renderLayout();
     }
 }

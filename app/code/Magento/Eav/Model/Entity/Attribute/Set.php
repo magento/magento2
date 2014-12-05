@@ -39,6 +39,7 @@
 namespace Magento\Eav\Model\Entity\Attribute;
 
 use Magento\Eav\Model\Entity\Type;
+use Magento\Framework\Api\AttributeDataBuilder;
 
 class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Eav\Api\Data\AttributeSetInterface
@@ -80,6 +81,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param AttributeDataBuilder $customAttributeBuilder
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param GroupFactory $attrGroupFactory
      * @param \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory
@@ -92,6 +94,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        AttributeDataBuilder $customAttributeBuilder,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Entity\Attribute\GroupFactory $attrGroupFactory,
         \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory,
@@ -100,7 +103,15 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        parent::__construct($context, $registry, $metadataService, $resource, $resourceCollection, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $metadataService,
+            $customAttributeBuilder,
+            $resource,
+            $resourceCollection,
+            $data
+        );
         $this->_eavConfig = $eavConfig;
         $this->_attrGroupFactory = $attrGroupFactory;
         $this->_attributeFactory = $attributeFactory;

@@ -24,6 +24,7 @@
 namespace Magento\Eav\Model\Entity;
 
 use Magento\Eav\Exception;
+use Magento\Framework\Api\AttributeDataBuilder;
 
 /**
  * EAV Entity attribute model
@@ -83,6 +84,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param AttributeDataBuilder $customAttributeBuilder
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param TypeFactory $eavTypeFactory
@@ -101,6 +103,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        AttributeDataBuilder $customAttributeBuilder,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Entity\TypeFactory $eavTypeFactory,
@@ -119,6 +122,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
             $context,
             $registry,
             $metadataService,
+            $customAttributeBuilder,
             $coreData,
             $eavConfig,
             $eavTypeFactory,

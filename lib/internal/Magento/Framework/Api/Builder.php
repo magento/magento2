@@ -214,7 +214,7 @@ class Builder implements BuilderInterface
         ExtensibleDataInterface $secondDataObject
     ) {
         $objectType = $this->_getDataObjectType();
-        if (get_class($firstDataObject) != $objectType || get_class($secondDataObject) != $objectType) {
+        if (!$firstDataObject instanceof $objectType || !$secondDataObject instanceof $objectType) {
             throw new \LogicException('Wrong prototype object given. It can only be of "' . $objectType . '" type.');
         }
         $firstObjectArray = $this->objectProcessor->buildOutputDataArray($firstDataObject, $objectType);

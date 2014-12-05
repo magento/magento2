@@ -22,9 +22,15 @@
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
+//
+//    Common
+//--------------------------------------
+
+.responsive-common() {
+
 .form.wishlist.items {
     .actions-toolbar {
-        &:extend(.abstract-reset-left-margin all);
+        &:extend(.abs-reset-left-margin all);
     }
 }
 
@@ -33,7 +39,7 @@
 .product-item,
 .table-comparison {
     .action.towishlist {
-        &:extend(.abstract-actions-addto all);
+        &:extend(.abs-actions-addto all);
         .icon-font-symbol(
             @_icon-font-content: @icon-wishlist-full,
             @_icon-font-position: before
@@ -59,7 +65,7 @@
         margin: @indent-s-base 0;
         .qty {
             vertical-align: middle;
-            &:extend(.abstract-input-qty all);
+            &:extend(.abs-input-qty all);
         }
     }
     .col {
@@ -101,10 +107,10 @@
 
 .block-wishlist {
     .block-title {
-        &:extend(.abstract-block-widget-title all);
+        &:extend(.abs-block-widget-title all);
     }
     .counter {
-        &:extend(.abstract-block-items-counter all);
+        &:extend(.abs-block-items-counter all);
     }
     .product-item-name {
         margin-right: @indent-m-base;
@@ -126,7 +132,7 @@
             }
             .comment-box {
                 .label {
-                    &:extend(.abstract-visually-hidden all);
+                    &:extend(.abs-visually-hidden all);
                 }
             }
             &-comment {
@@ -144,20 +150,22 @@
             }
             .box-tocart {
                 input.qty {
-                    &:extend(.abstract-input-qty all);
+                    &:extend(.abs-input-qty all);
                 }
                 .tocart {
-                    &:extend(.abstract-revert-secondary-size all);
+                    &:extend(.abs-revert-secondary-size all);
                 }
             }
         }
     }
 }
 
+}
+
 //
 //    Mobile
 //--------------------------------------
-.responsive-smaller(@break) when (@break = @screen-m) {
+.responsive-max-m(@break) when (@break = @screen-m) {
     .products-grid.wishlist {
         margin-right: -@indent-s-base;
         margin-bottom: @indent-l-base;
@@ -234,7 +242,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive(@break) when (@break = @screen-m) {
+.responsive-min-l(@break) when (@break = @screen-m) {
     .products-grid.wishlist {
         .product {
             &-item {
@@ -288,7 +296,7 @@
     }
 }
 
-.responsive(@break) when (@break = @screen-s) {
+.responsive-min-m(@break) when (@break = @screen-s) {
     //.wishlist-index-index .products-grid .product-item { width: 100%/3 }
     .wishlist-index-index {
         .products-grid {
@@ -299,7 +307,7 @@
     }
 
 }
-.responsive(@break) when (@break = @screen-m) {
+.responsive-min-l(@break) when (@break = @screen-m) {
     //.wishlist-index-index .products-grid .product-item { width: 100%/3 }
     .wishlist-index-index {
         .product-item-inner {
@@ -308,12 +316,12 @@
             left: 0;
             right: -1px;
             z-index: 2;
-            background: #fff;
+            background: @color-white;
             padding: 0 9px 9px 9px;
             margin: 9px 0 0 -1px;
             border: 1px solid #bbb;
             border-top: none;
-            @_shadow: 3px 3px 4px 0px rgba(0, 0, 0, .3);
+            @_shadow: 3px 3px 4px 0 rgba(0, 0, 0, .3);
             .css(box-shadow, @_shadow);
             .comment-box {
                 margin-top: -18px;
@@ -321,7 +329,7 @@
         }
     }
 }
-.responsive(@break) when (@break = @screen-l) {
+.responsive-min-l(@break) when (@break = @screen-l) {
     .wishlist-index-index {
         .products-grid {
             .product-items {

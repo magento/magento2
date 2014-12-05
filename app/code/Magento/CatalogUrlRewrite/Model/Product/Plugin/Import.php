@@ -24,7 +24,7 @@
 namespace Magento\CatalogUrlRewrite\Model\Product\Plugin;
 
 use Magento\UrlRewrite\Model\UrlPersistInterface;
-use Magento\Catalog\Model\ProductFactory;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\ImportExport\Model\Import as ImportExport;
@@ -32,9 +32,6 @@ use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 
 class Import
 {
-    /** @var ProductFactory  */
-    protected $productFactory;
-
     /** @var UrlPersistInterface */
     protected $urlPersist;
 
@@ -42,18 +39,23 @@ class Import
     protected $productUrlRewriteGenerator;
 
     /**
-     * @param ProductFactory $productFactory
+     * @var ProductRepositoryInterface
+     */
+    protected $productRepository;
+
+    /**
      * @param UrlPersistInterface $urlPersist
      * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
+     * @param ProductRepositoryInterface $productRepository
      */
     public function __construct(
-        ProductFactory $productFactory,
         UrlPersistInterface $urlPersist,
-        ProductUrlRewriteGenerator $productUrlRewriteGenerator
+        ProductUrlRewriteGenerator $productUrlRewriteGenerator,
+        ProductRepositoryInterface $productRepository
     ) {
-        $this->productFactory = $productFactory;
         $this->urlPersist = $urlPersist;
         $this->productUrlRewriteGenerator = $productUrlRewriteGenerator;
+        $this->productRepository = $productRepository;
     }
 
     /**
@@ -65,7 +67,7 @@ class Import
     {
         if ($import->getAffectedEntityIds()) {
             foreach ($import->getAffectedEntityIds() as $productId) {
-                $product = $this->productFactory->create()->load($productId);
+                $product = $this->productRepository->getById($productId);
                 $productUrls = $this->productUrlRewriteGenerator->generate($product);
                 if ($productUrls) {
                     $this->urlPersist->replace($productUrls);

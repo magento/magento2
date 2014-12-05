@@ -121,13 +121,6 @@ class CategoryTreeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('category-1/category-1-1', $this->_model->getUrlPath());
     }
 
-    public function testGetParentCategory()
-    {
-        $category = $this->_model->getParentCategory();
-        $this->assertInstanceOf('Magento\Catalog\Model\Category', $category);
-        $this->assertSame($category, $this->_model->getParentCategory());
-    }
-
     public function testGetParentId()
     {
         $this->assertEquals(0, $this->_model->getParentId());

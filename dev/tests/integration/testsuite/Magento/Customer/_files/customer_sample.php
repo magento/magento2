@@ -27,6 +27,7 @@ $customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
 $customerData = array(
     'group_id' => 1,
     'website_id' => 1,
+    'store_id' => 1,
     'firstname' => 'test firstname',
     'lastname' => 'test lastname',
     'email' => 'customer@example.com',

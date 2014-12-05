@@ -26,19 +26,18 @@ namespace Magento\Framework\View\Layout;
 interface ReaderInterface
 {
     /**
-     * Get all supported nodes of this reader
+     * Read children elements structure and fill scheduled structure
+     *
+     * @param Reader\Context $readerContext
+     * @param Element $element
+     * @return $this
+     */
+    public function interpret(Reader\Context $readerContext, Element $element);
+
+    /**
+     * Get nodes types that current reader is support
      *
      * @return string[]
      */
     public function getSupportedNodes();
-
-    /**
-     * Process all structure
-     *
-     * @param Reader\Context $readerContext
-     * @param Element $element
-     * @param Element $parentElement
-     * @return $this
-     */
-    public function process(Reader\Context $readerContext, Element $element, Element $parentElement);
 }

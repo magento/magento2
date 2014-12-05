@@ -23,6 +23,7 @@
  */
 namespace Magento\Sales\Model\Quote;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -34,11 +35,14 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Sales\Model\Quote $quote */
     protected $_quote;
 
-    /** @var \Magento\Customer\Model\Customer $customer */
+    /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
     protected $_customer;
 
     /** @var \Magento\Sales\Model\Quote\Address */
     protected $_address;
+
+    /**@var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
+    protected $customerRepository;
 
     /**
      * Initialize quote and customer fixtures
@@ -51,17 +55,17 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $this->_quote->load('test01', 'reserved_order_id');
         $this->_quote->setIsMultiShipping('0');
 
-        /** @var \Magento\Customer\Model\Customer $customer */
-        $this->_customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\Customer'
+        $this->customerRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Customer\Api\CustomerRepositoryInterface'
         );
-        $this->_customer->load(1);
+        $this->_customer = $this->customerRepository->getById(1);
 
         /** @var \Magento\Sales\Model\Order\Address $address */
         $this->_address = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Sales\Model\Quote\Address'
         );
-        $this->_address->load(1);
+        $this->_address->setId(1);
+        $this->_address->load($this->_address->getId());
         $this->_address->setQuote($this->_quote);
     }
 
@@ -87,10 +91,10 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         if ($unsetId) {
             $address->setId(null);
         }
-        /** @var \Magento\Customer\Service\V1\CustomerAddressServiceInterface $addressService */
-        $addressService = Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Service\V1\CustomerAddressServiceInterface');
-        $customerAddressData = $addressService->getDefaultBillingAddress($this->_customer->getId());
+        /** @var \Magento\Customer\Api\AddressRepositoryInterface $addressRepository */
+        $addressRepository = Bootstrap::getObjectManager()
+            ->create('Magento\Customer\Api\AddressRepositoryInterface');
+        $customerAddressData = $addressRepository->getById($this->_customer->getDefaultBilling());
         $address->setSameAsBilling(0)->setCustomerAddressData($customerAddressData)->save();
         $this->assertEquals(0, $this->_quote->getBillingAddress()->getSameAsBilling());
     }
@@ -140,7 +144,21 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     public function testSameAsBillingWhenCustomerHasNoDefaultShippingAddress($unsetId)
     {
-        $this->_customer->setDefaultShipping(-1)->save();
+        /** @var \Magento\Customer\Api\Data\CustomerDataBuilder $customerDataBuilder*/
+        $customerDataBuilder = Bootstrap::getObjectManager()
+            ->create('Magento\Customer\Api\Data\CustomerDataBuilder');
+        /** @var \Magento\Customer\Api\AddressRepositoryInterface $addressRepository */
+        $addressRepository = Bootstrap::getObjectManager()
+            ->create('Magento\Customer\Api\AddressRepositoryInterface');
+        $this->_customer = $customerDataBuilder->populate($this->_customer)
+            ->setDefaultShipping(-1)
+            ->setAddresses(
+                [
+                    $addressRepository->getById($this->_address->getId())
+                ]
+            )->create();
+
+        $this->_customer = $this->customerRepository->save($this->_customer);
         // we should save the customer data in order to be able to use it
         $this->_quote->setCustomer($this->_customer);
         $this->_setCustomerAddressAndSave($unsetId);
@@ -165,18 +183,26 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     /**
      * same_as_billing must be equal 0 if customer has default shipping address that differs from default billing
      *
-     * @param bool $unsetId
-     * @dataProvider unsetAddressIdDataProvider
      * @magentoDbIsolation enabled
      */
-    public function testSameAsBillingWhenCustomerHasDefaultShippingAddress($unsetId)
+    public function testSameAsBillingWhenCustomerHasDefaultShippingAddress()
     {
-        $this->_customer->setDefaultShipping(2)->save();
+        /** @var \Magento\Customer\Api\Data\CustomerDataBuilder $customerDataBuilder*/
+        $customerDataBuilder = Bootstrap::getObjectManager()
+            ->create('Magento\Customer\Api\Data\CustomerDataBuilder');
+        /** @var \Magento\Customer\Api\AddressRepositoryInterface $addressRepository */
+        $addressRepository = Bootstrap::getObjectManager()
+            ->create('Magento\Customer\Api\AddressRepositoryInterface');
+        $this->_customer = $customerDataBuilder->populate($this->_customer)
+            ->setDefaultShipping(2)
+            ->setAddresses([$addressRepository->getById($this->_address->getId())])
+            ->create();
+        $this->_customer = $this->customerRepository->save($this->_customer);
         // we should save the customer data in order to be able to use it
         $this->_quote->setCustomer($this->_customer);
-        $this->_setCustomerAddressAndSave($unsetId);
+
         $sameAsBilling = $this->_quote->getShippingAddress()->getSameAsBilling();
-        $this->assertEquals(0, $sameAsBilling);
+        $this->assertEquals(1, $sameAsBilling);
     }
 
     /**
@@ -190,14 +216,17 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         if ($unsetId) {
             $shippingAddress->setId(null);
         }
+        /** @var \Magento\Customer\Api\AddressRepositoryInterface $addressRepository */
+        $addressRepository = Bootstrap::getObjectManager()
+            ->create('Magento\Customer\Api\AddressRepositoryInterface');
         $shippingAddress->setSameAsBilling(0)
-            ->setCustomerAddressData($this->_customer->getDefaultBillingAddress())
+            ->setCustomerAddressData($addressRepository->getById($this->_customer->getDefaultBilling()))
             ->save();
     }
 
     public function unsetAddressIdDataProvider()
     {
-        return array(array(true), array(false));
+        return [[true], [false]];
     }
 
     /**
@@ -210,15 +239,20 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $city = 'TestCity';
         $street = 'Street1';
 
-        /** @var \Magento\Customer\Service\V1\Data\AddressBuilder $addressBuilder */
-        $addressBuilder = Bootstrap::getObjectManager()->create('Magento\Customer\Service\V1\Data\AddressBuilder');
-        $addressData = $addressBuilder->setCustomerId(
-            $customerIdFromFixture
-        )->setCity(
-            $city
-        )->setStreet(
-            [$street]
-        )->create();
+        /** @var \Magento\Customer\Api\Data\AddressDataBuilder $addressBuilder */
+        $addressBuilder = Bootstrap::getObjectManager()->create('Magento\Customer\Api\Data\AddressDataBuilder');
+        /** @var \Magento\Customer\Api\AddressRepositoryInterface $addressRepository */
+        $addressRepository = Bootstrap::getObjectManager()->create('Magento\Customer\Api\AddressRepositoryInterface');
+        $addressData = $addressBuilder->setCustomerId($customerIdFromFixture)
+            ->setFirstname('John')
+            ->setLastname('Doe')
+            ->setTelephone('123456')
+            ->setPostcode('12345')
+            ->setCountryId(1)
+            ->setCity($city)
+            ->setStreet([$street])
+            ->create();
+        $addressData = $addressRepository->save($addressData);
         $this->_address->setQuote($this->_quote);
         $this->_address->importCustomerAddressData($addressData);
 
@@ -232,37 +266,16 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     public function testExportCustomerAddressData()
     {
-        $street = array('Street1');
+        $street = ['Street1'];
         $company = 'TestCompany';
 
         $this->_address->setStreet($street);
         $this->_address->setCompany($company);
 
-        $customerAddress = $this->_address->exportCustomerAddressData();
+        $customerAddress = $this->_address->exportCustomerAddress();
 
         $this->assertEquals($street, $customerAddress->getStreet(), 'Street was exported incorrectly.');
         $this->assertEquals($company, $customerAddress->getCompany(), 'Company was exported incorrectly.');
-    }
-
-    /**
-     * Import order address to quote address
-     */
-    public function testImportOrderAddress()
-    {
-        $street = 'Street1';
-        $email = 'test_email@example.com';
-
-        /** @var \Magento\Sales\Model\Order\Address $orderAddress */
-        $orderAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Sales\Model\Order\Address'
-        );
-
-        $orderAddress->setStreet($street);
-        $orderAddress->setEmail($email);
-        $this->_address->importOrderAddress($orderAddress);
-
-        $this->assertEquals($street, $this->_address->getStreetLine(1), 'Expected street does not exists');
-        $this->assertEquals($email, $orderAddress->getEmail(), 'Expected email does not exists');
     }
 
     public function testPopulateBeforeSaveData()

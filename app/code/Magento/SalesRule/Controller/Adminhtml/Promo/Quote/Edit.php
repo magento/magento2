@@ -45,8 +45,6 @@ class Edit extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
             }
         }
 
-        $this->_title->add($model->getRuleId() ? $model->getName() : __('New Cart Price Rule'));
-
         // set entered data if was error when we do save
         $data = $this->_objectManager->get('Magento\Backend\Model\Session')->getPageData(true);
         if (!empty($data)) {
@@ -62,6 +60,10 @@ class Edit extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
         $this->_view->getLayout()->getBlock('promo_quote_edit')->setData('action', $this->getUrl('sales_rule/*/save'));
 
         $this->_addBreadcrumb($id ? __('Edit Rule') : __('New Rule'), $id ? __('Edit Rule') : __('New Rule'));
+
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(
+            $model->getRuleId() ? $model->getName() : __('New Cart Price Rule')
+        );
         $this->_view->renderLayout();
     }
 }

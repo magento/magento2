@@ -31,6 +31,7 @@
     </type>
     <type name="Magento\Framework\Controller\ResultInterface">
         <plugin name="result-builtin-cache" type="Magento\PageCache\Model\Controller\Result\BuiltinPlugin"/>
+        <plugin name="result-varnish-cache" type="Magento\PageCache\Model\Controller\Result\VarnishPlugin"/>
     </type>
     <type name="Magento\Framework\View\Layout">
         <plugin name="layout-model-caching-unique-name" type="Magento\PageCache\Model\Layout\LayoutPlugin"/>

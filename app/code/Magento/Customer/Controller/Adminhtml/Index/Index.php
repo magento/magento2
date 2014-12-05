@@ -33,8 +33,6 @@ class Index extends \Magento\Customer\Controller\Adminhtml\Index
      */
     public function execute()
     {
-        $this->_title->add(__('Customers'));
-
         if ($this->getRequest()->getQuery('ajax')) {
             $this->_forward('grid');
             return;
@@ -45,6 +43,7 @@ class Index extends \Magento\Customer\Controller\Adminhtml\Index
          * Set active menu item
          */
         $this->_setActiveMenu('Magento_Customer::customer_manage');
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Customers'));
 
         /**
          * Add breadcrumb item

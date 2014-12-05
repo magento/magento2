@@ -25,6 +25,8 @@
  */
 namespace Magento\GroupedProduct\Model\Product\Type;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -97,7 +99,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected $msrpData;
 
     /**
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
@@ -107,17 +108,16 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\Logger $logger
+     * @param ProductRepositoryInterface $productRepository
      * @param \Magento\GroupedProduct\Model\Resource\Product\Link $catalogProductLink
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Msrp\Helper\Data $msrpData
-     * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Model\Product\Option $catalogProductOption,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
@@ -127,12 +127,12 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\Logger $logger,
+        ProductRepositoryInterface $productRepository,
         \Magento\GroupedProduct\Model\Resource\Product\Link $catalogProductLink,
         \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus,
         \Magento\Framework\App\State $appState,
-        \Magento\Msrp\Helper\Data $msrpData,
-        array $data = array()
+        \Magento\Msrp\Helper\Data $msrpData
     ) {
         $this->productLinks = $catalogProductLink;
         $this->_storeManager = $storeManager;
@@ -140,7 +140,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
         $this->_appState = $appState;
         $this->msrpData = $msrpData;
         parent::__construct(
-            $productFactory,
             $catalogProductOption,
             $eavConfig,
             $catalogProductType,
@@ -150,7 +149,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
             $filesystem,
             $coreRegistry,
             $logger,
-            $data
+            $productRepository
         );
     }
 

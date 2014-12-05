@@ -67,7 +67,7 @@ class NvpTest extends \PHPUnit_Framework_TestCase
         $this->logger = $this->getMock('Magento\Framework\Logger', [], [], '', false);
         $this->resolver = $this->getMock('Magento\Framework\Locale\ResolverInterface');
         $this->regionFactory = $this->getMock('Magento\Directory\Model\RegionFactory', [], [], '', false);
-        $this->adapterFactory = $this->getMock('Magento\Framework\Logger\AdapterFactory');
+        $this->adapterFactory = $this->getMock('Magento\Framework\Logger\AdapterFactory', [], [], '', false);
         $this->countryFactory = $this->getMock('Magento\Directory\Model\CountryFactory', [], [], '', false);
         $processableExceptionFactory = $this->getMock(
             'Magento\Paypal\Model\Api\ProcessableExceptionFactory',

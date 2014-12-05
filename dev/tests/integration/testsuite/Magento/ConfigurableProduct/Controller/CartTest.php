@@ -36,6 +36,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testConfigureActionWithConfigurableProduct()
     {
+        $this->markTestIncomplete('MAGETWO-30916');
         /** @var $session \Magento\Checkout\Model\Session  */
         $session = $this->_objectManager->create('Magento\Checkout\Model\Session');
 

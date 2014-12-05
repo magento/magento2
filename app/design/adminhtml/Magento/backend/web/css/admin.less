@@ -315,13 +315,13 @@
     display: none;
     list-style: none;
     min-width: 100px;
-    margin: 1px 0 0 0;
+    margin: 1px 0 0;
     padding: 0;
     right: 0;
     top: 100%;
     border: 1px solid #cac2b5;
     background: #fff;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .2);
     z-index: 990;
 }
 
@@ -352,7 +352,7 @@
 }
 
 .dropdown-menu-top {
-    margin: 0 0 3px 0;
+    margin: 0 0 3px;
     top: auto;
     bottom: 100%;
 }
@@ -633,7 +633,7 @@ input[type=color]:focus,
 textarea:focus,
 select:focus {
     border-color: #75b9f0;
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(82, 168, 236, .6);
 }
 
 input[type="radio"],
@@ -714,7 +714,7 @@ fieldset.field [class^='fields-group-'] .field .control {
     padding: 7px 0 0 15px;
     color: #999;
     font-size: 12px;
-    letter-spacing: 0.05em;
+    letter-spacing: .05em;
 }
 
 .form-inline .field-service[value-scope]:before {
@@ -781,19 +781,19 @@ label.mage-error {
     color: red;
     text-align: left;
     clear: both;
-    margin: 3px 0 0 0;
+    margin: 3px 0 0;
 }
 
 textarea.mage-error,
 select.mage-error,
 input.mage-error {
     border-color: #fa7973 !important;
-    box-shadow: 0 0 8px rgba(250, 121, 115, 0.6) !important;
+    box-shadow: 0 0 8px rgba(250, 121, 115, .6) !important;
 }
 
 input.mage-error ~ .addafter {
     border-color: #fa7973 !important;
-    box-shadow: 0 0 8px rgba(250, 121, 115, 0.6) !important;
+    box-shadow: 0 0 8px rgba(250, 121, 115, .6) !important;
 }
 
 /*
@@ -920,7 +920,7 @@ input.mage-error ~ .addafter {
 
 .fieldset .fieldset-wrapper .fieldset-wrapper-title .actions,
 .fieldset-wrapper .fieldset-wrapper .fieldset-wrapper-title .actions {
-    padding: 6px 0 0 0;
+    padding: 6px 0 0;
 }
 
 .fieldset .fieldset-wrapper .fieldset-wrapper-title .title,
@@ -1240,7 +1240,7 @@ input.mage-error ~ .addafter {
         }
         &:focus ~ .addafter {
             border-color: #75b9f0;
-            box-shadow: 0 0 8px rgba(82, 168, 236, 0.6);
+            box-shadow: 0 0 8px rgba(82, 168, 236, .6);
             strong {
                 margin-top: 0;
             }
@@ -1254,19 +1254,19 @@ input.mage-error ~ .addafter {
         padding: 0;
         border-color: #ada89e;
     }
+    input,
+    select {
+        &[disabled],
+        &[readonly] {
+            ~ .addafter {
+                border-color: #eee;
+                color: #999;
+            }
+        }
+    }
     .pager input {
         border-width: 1px;
     }
-}
-
-.field .control input[type='text'][disabled],
-.field .control input[type='text'][disabled] ~ .addafter,
-.field .control select[disabled],
-.field .control select[disabled] ~ .addafter {
-    background-color: #fff;
-    border-color: #eee;
-    box-shadow: none;
-    color: #999;
 }
 
 .field .control input[type='text'][disabled] ~ .addafter strong,
@@ -1314,14 +1314,14 @@ input.mage-error ~ .addafter {
 .field-price input:focus,
 .field-special_price input:focus,
 .field-msrp input:focus {
-    box-shadow: 0 0 8px rgba(82, 168, 236, 0.6);
+    box-shadow: 0 0 8px rgba(82, 168, 236, .6);
 }
 
 .field.type-price input:focus ~ label.addafter,
 .field-price input:focus ~ label.addafter,
 .field-special_price input:focus ~ label.addafter,
 .field-msrp input:focus ~ label.addafter {
-    box-shadow: 0 0 8px rgba(82, 168, 236, 0.6);
+    box-shadow: 0 0 8px rgba(82, 168, 236, .6);
 }
 
 .field.type-price input ~ label.addafter strong,
@@ -1434,7 +1434,7 @@ address {
     max-width: 185px;
     background: #faf8f6;
     border: 1px solid #dcd8ce;
-    box-shadow: 0 2px 5px rgba(49, 48, 43, 0.4);
+    box-shadow: 0 2px 5px rgba(49, 48, 43, .4);
 }
 
 .tipsy-inner .error {
@@ -1530,9 +1530,8 @@ address {
 .tipsy-e .tipsy-arrow:before {
     top: -8px;
     margin-top: 0;
-    margin-top: 0;
     border-top: 10px solid transparent;
-    border-right: 10px solid rgba(49, 48, 43, 0.1);
+    border-right: 10px solid rgba(49, 48, 43, .1);
     border-bottom: 10px solid transparent;
 }
 
@@ -1553,7 +1552,7 @@ address {
     border-top: 10px solid transparent;
     border-right: none;
     border-bottom: 10px solid transparent;
-    border-left: 10px solid rgba(49, 48, 43, 0.1);
+    border-left: 10px solid rgba(49, 48, 43, .1);
 }
 
 .tipsy-n .tipsy-arrow:after,
@@ -1573,7 +1572,7 @@ address {
     left: -10px;
     top: -8px;
     margin-top: 0;
-    border-top: 10px solid rgba(49, 48, 43, 0.1);
+    border-top: 10px solid rgba(49, 48, 43, .1);
     border-right: 10px solid transparent;
     border-left: 10px solid transparent;
 }
@@ -1842,13 +1841,13 @@ address {
     button:not(.primary)[disabled] {
       cursor: default;
       pointer-events: none;
-      opacity: 0.5;
+      opacity: .5;
     }
     button.primary {
       background-image: none;
       background-color: #007dbd;
       padding: 0 13px;
-      color: #ffffff;
+      color: #fff;
       border: 1px solid #0a6c9f;
       cursor: pointer;
       display: inline-block;
@@ -1863,7 +1862,7 @@ address {
     button.primary:active {
       background-color: #026294;
       border: 1px solid #004c74;
-      color: #ffffff;
+      color: #fff;
     }
     button.primary:hover {
       background-color: #026294;
@@ -1873,7 +1872,7 @@ address {
     button.primary[disabled] {
       cursor: default;
       pointer-events: none;
-      opacity: 0.5;
+      opacity: .5;
     }
 }
 
@@ -2531,7 +2530,7 @@ address {
     padding: 8px 18px;
     text-decoration: none;
     color: #676056;
-    transition: background 0.3s ease-in-out;
+    transition: background .3s ease-in-out;
 }
 
 .side-col .tabs > li a:hover {
@@ -2683,7 +2682,7 @@ address {
     padding: 8px 18px;
     text-decoration: none;
     color: #676056;
-    transition: background 0.3s ease-in-out;
+    transition: background .3s ease-in-out;
 }
 
 .config-nav .item-nav:hover {
@@ -2913,7 +2912,7 @@ tr.dynamic-grid input.input-text {
         padding: 0;
     }
     .field-rating {
-        margin: 15px 0 0 0;
+        margin: 15px 0 0;
         &:first-child {
             margin-top: 0;
         }

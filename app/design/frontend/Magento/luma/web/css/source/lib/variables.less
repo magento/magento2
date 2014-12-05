@@ -21,6 +21,7 @@
 //  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
+
 //
 //    Typography
 //--------------------------------------
@@ -35,22 +36,21 @@
 @icon-font-name: 'luma-icons';
 
 // Colors
-
-@color-white: #ffffff;
+@color-white: #fff;
+@color-gray20: #333;
 @color-gray56: #8f8f8f;
 
 // Color nesting
-
 @color-background-page: @color-white;
 @color-background-copyright: @color-gray56;
-@color-primary: #333;
+@color-primary: @color-gray20;
 @color-primary-dark: darken(@color-primary, 35%);  // #000
 @color-primary-darker: darken(@color-primary, 13.5%);  // #111
 @color-primary-lighter: lighten(@color-primary, 29%);  // #7d7d7d
 @color-primary-light: lighten(@color-primary, 45%);  // #a6a6a6
 @color-secondary: #e8e8e8;
 @color-secondary-light: lighten(@color-secondary, 5%);
-@page-bg-color: #fff;
+@page-bg-color: @color-white;
 @panel-bg: #f6f6f6;
 @color-active: #ff5501;
 @color-error: #e02b27;
@@ -66,8 +66,8 @@
 @font-size-base: unit((@font-size-root / 100) * 16 * @font-size-base-ratio, px); // Also used in: @loader-text-font-size
 @font-size-xl: ceil(1.5 * @font-size-base);  // 21
 @font-size-l: ceil(1.25 * @font-size-base);  // 18
-@font-size-s: ceil(0.85 * @font-size-base);  // 12 Also used in: Breadcrumbs and in Small button
-@font-size-xs: floor(0.75 * @font-size-base);  // 11
+@font-size-s: ceil(.85 * @font-size-base);  // 12 Also used in: Breadcrumbs and in Small button
+@font-size-xs: floor(.75 * @font-size-base);  // 11
 
 @font-weight-base: 400;
 @font-weight-light: 300;
@@ -173,7 +173,7 @@
 @h4-margin-top: @heading-margin-top-base;
 @h4-margin-bottom: @heading-margin-bottom-base;
 
-@h5-font-size: ceil((@font-size-base * 0.85)); // 12px
+@h5-font-size: ceil((@font-size-base * .85)); // 12px
 @h5-font-color: @heading-color-base;
 @h5-font-family: @heading-font-family-base;
 @h5-font-weight: @font-weight-bold;
@@ -182,7 +182,7 @@
 @h5-margin-top: @heading-margin-top-base;
 @h5-margin-bottom: @heading-margin-bottom-base;
 
-@h6-font-size: ceil((@font-size-base * 0.7)); // 10px
+@h6-font-size: ceil((@font-size-base * .7)); // 10px
 @h6-font-color: @heading-color-base;
 @h6-font-family: @heading-font-family-base;
 @h6-font-weight: @font-weight-bold;
@@ -359,7 +359,7 @@
 
 @navigation-level0-item-background-active: '';
 @navigation-level0-item-border-active: '';
-@navigation-level0-item-color-active: #333;
+@navigation-level0-item-color-active: @color-primary;
 @navigation-level0-item-text-decoration-active: '';
 
 @submenu-background: '';
@@ -396,7 +396,7 @@
 
 @navigation-desktop-level0-item-background-hover: '';
 @navigation-desktop-level0-item-border-hover: '';
-@navigation-desktop-level0-item-color-hover: #333;
+@navigation-desktop-level0-item-color-hover: @color-primary;
 @navigation-desktop-level0-item-text-decoration-hover: @navigation-desktop-level0-item-text-decoration;
 
 @navigation-desktop-level0-item-background-active: '';
@@ -546,7 +546,7 @@
 @button-display: inline-block;
 @button-default-border: @button-border;
 @button-cursor: pointer;
-@button-disabled-opacity: 0.5;
+@button-disabled-opacity: .5;
 
 // Default = secondary button
 @button-color: @color-primary;
@@ -577,19 +577,19 @@
 
 @button-primary-background: #1979c3;
 @button-primary-border: 1px solid #1979c3;
-@button-primary-color: #fff;
+@button-primary-color: @color-white;
 @button-primary-gradient-start-color: false;
 @button-primary-gradient-end-color: false;
 
 @button-primary-background-hover: #006bb4;
 @button-primary-border-hover: 1px solid #006bb4;
-@button-primary-color-hover: #fff;
+@button-primary-color-hover: @color-white;
 @button-primary-gradient-start-color-hover: false;
 @button-primary-gradient-end-color-hover: false;
 
 @button-primary-background-active: #006bb4;
 @button-primary-border-active: 1px solid #006bb4;
-@button-primary-color-active: #fff;
+@button-primary-color-active: @color-white;
 @button-primary-gradient-start-color-active: false;
 @button-primary-gradient-end-color-active: false;
 
@@ -731,7 +731,7 @@
 @message-info-border-color: @message-border-color;
 @message-info-icon: @icon-warning;
 @message-info-icon-color-inner: #c07600;
-@message-info-icon-color-lateral: #fff;
+@message-info-icon-color-lateral: @color-white;
 @message-info-icon-background: #6f4400;
 @message-info-icon-top: @message-icon-top;
 @message-info-icon-right: @message-icon-right;
@@ -763,7 +763,7 @@
 @message-error-border-color: @message-border-color;
 @message-error-icon: @icon-error;
 @message-error-icon-color-inner: #b30000;
-@message-error-icon-color-lateral: #fff;
+@message-error-icon-color-lateral: @color-white;
 @message-error-icon-background: #b30000;
 @message-error-icon-top: @message-icon-top;
 @message-error-icon-right: @message-icon-right;
@@ -779,7 +779,7 @@
 @message-success-border-color: @message-border-color;
 @message-success-icon: @icon-success;
 @message-success-icon-color-inner: #006400;
-@message-success-icon-color-lateral: #fff;
+@message-success-icon-color-lateral: @color-white;
 @message-success-icon-background: #006400;
 @message-success-icon-top: @message-icon-top;
 @message-success-icon-right: @message-icon-right;
@@ -805,11 +805,11 @@
 //
 //    Tooltips variables
 //--------------------------------------
-@tooltip-background: #fff;
+@tooltip-background: @color-white;
 @tooltip-border-color: #bbb;
 @tooltip-border-width: 1px;
 @tooltip-border-radius: false;
-@tooltip-color: #333;
+@tooltip-color: @color-primary;
 @tooltip-cursor: help;
 @tooltip-font-size: false;
 @tooltip-font-family: false;
@@ -827,7 +827,7 @@
 //
 //    Loaders variables
 //--------------------------------------
-@loader-overlay-background-color: rgba(255, 255, 255, 0.7); // also used in: @loading-background-color
+@loader-overlay-background-color: rgba(255, 255, 255, .7); // also used in: @loading-background-color
 @loader-overlay-z-index: 9999;
 @loader-icon-width: 160px;
 @loader-icon-height: 160px;
@@ -852,7 +852,7 @@
 
 // Form elements inputs default variables
 @form-element-input-type: ''; // input-text, select, textarea, input-radio, input-checkbox
-@form-element-input-background: #fff;
+@form-element-input-background: @color-white;
 @form-element-input-border-color: #c2c2c2;
 @form-element-input-border: 1px solid @form-element-input-border-color;
 @form-element-input-border-radius: 1px;
@@ -876,7 +876,7 @@
 // Disabled state
 @form-element-input-disabled-background: @form-element-input-background;
 @form-element-input-disabled-border: @form-element-input-border;
-@form-element-input-disabled-opacity: 0.5;
+@form-element-input-disabled-opacity: .5;
 @form-element-input-disabled-color: @form-element-input-color;
 @form-element-input-disabled-font-style: @form-element-input-font-style;
 
@@ -1257,7 +1257,7 @@
 @dropdown-list-position-bottom: false;
 @dropdown-list-position-left: false;
 @dropdown-list-pointer: true; // true | false
-@dropdown-list-background: #fff;
+@dropdown-list-background: @color-white;
 @dropdown-list-border: 1px solid #bbb;
 @dropdown-list-pointer-border: #bbb;
 @dropdown-list-pointer-position: left; // right
@@ -1413,11 +1413,11 @@
 @popup-width: auto;
 @popup-height: auto;
 @popup-padding: 22px;
-@popup-background: #fff;
+@popup-background: @color-white;
 @popup-border-color: #adadad;
 @popup-border: 1px solid @popup-border-color;
 @popup-shadow: 0 3px 3px rgba(0,0,0,.15);
-@popup-fade: opacity 0.3s linear;
+@popup-fade: opacity .3s linear;
 @popup-z-index: 1001;
 
 @popup-position: fixed;
@@ -1475,9 +1475,9 @@
 
 // Window overlay variables
 @overlay-background: #8c8c8c;
-@overlay-opacity: 0.7;
+@overlay-opacity: .7;
 @overlay-opacity-old: 70;
-@overlay-fade: opacity 0.15s linear;
+@overlay-fade: opacity .15s linear;
 @overlay-z-index: 1000;
 
 @gallery-thumb-border-color-active: #ff5700;

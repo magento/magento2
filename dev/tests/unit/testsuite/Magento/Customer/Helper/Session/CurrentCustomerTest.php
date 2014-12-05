@@ -53,7 +53,7 @@ class CurrentCustomerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerServiceMock;
+    protected $customerRepositoryMock;
 
     /**
      * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -101,7 +101,7 @@ class CurrentCustomerTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->customerServiceMock = $this->getMock(
+        $this->customerRepositoryMock = $this->getMock(
             'Magento\Customer\Api\CustomerRepositoryInterface',
             array(),
             array(),
@@ -116,7 +116,7 @@ class CurrentCustomerTest extends \PHPUnit_Framework_TestCase
             $this->customerSessionMock,
             $this->layoutMock,
             $this->customerDataBuilderMock,
-            $this->customerServiceMock,
+            $this->customerRepositoryMock,
             $this->requestMock,
             $this->moduleManagerMock,
             $this->viewMock
@@ -187,10 +187,10 @@ class CurrentCustomerTest extends \PHPUnit_Framework_TestCase
             )->will(
                 $this->returnValue($this->customerId)
             );
-        $this->customerServiceMock->expects(
+        $this->customerRepositoryMock->expects(
             $this->once()
         )->method(
-            'getById'
+                'getById'
             )->with(
                 $this->equalTo($this->customerId)
             )->will(

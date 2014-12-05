@@ -131,28 +131,28 @@ class AggregatedTest extends \PHPUnit_Framework_TestCase
         return array(
             'file in theme and parent theme' => array(
                 '1.file',
-                'test_default',
+                'Test/default',
                 array(
                     str_replace(
                         '\\',
                         '/',
-                         "$fixtureDir/_files/design/frontend/test_default/web/1.file"
+                         "$fixtureDir/_files/design/frontend/Test/default/web/1.file"
                     ),
                     str_replace(
                         '\\',
                         '/',
-                        "$fixtureDir/_files/design/frontend/test_parent/Magento_Second/web/1.file"
+                        "$fixtureDir/_files/design/frontend/Test/parent/Magento_Second/web/1.file"
                     ),
                     str_replace(
                         '\\',
                         '/',
-                        "$fixtureDir/_files/design/frontend/test_default/Magento_Module/web/1.file"
+                        "$fixtureDir/_files/design/frontend/Test/default/Magento_Module/web/1.file"
                     ),
                 )
             ),
             'file in library' => array(
                 '2.file',
-                'test_default',
+                'Test/default',
                 array(
                     str_replace(
                         '\\',
@@ -163,12 +163,12 @@ class AggregatedTest extends \PHPUnit_Framework_TestCase
             ),
             'non-existing file' => array(
                 'doesNotExist',
-                'test_default',
+                'Test/default',
                 array()
             ),
             'file in library, module, and theme' => array(
                 '3.less',
-                'test_default',
+                'Test/default',
                 array(
                     str_replace(
                         '\\',
@@ -183,7 +183,7 @@ class AggregatedTest extends \PHPUnit_Framework_TestCase
                     str_replace(
                         '\\',
                         '/',
-                        "$fixtureDir/_files/design/frontend/test_default/Magento_Third/web/3.less"
+                        "$fixtureDir/_files/design/frontend/Test/default/Magento_Third/web/3.less"
                     )
                 )
             ),

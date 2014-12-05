@@ -60,14 +60,12 @@ class NewAction extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        $this->_title->add(__('Shipments'));
         $this->shipmentLoader->setOrderId($this->getRequest()->getParam('order_id'));
         $this->shipmentLoader->setShipmentId($this->getRequest()->getParam('shipment_id'));
         $this->shipmentLoader->setShipment($this->getRequest()->getParam('shipment'));
         $this->shipmentLoader->setTracking($this->getRequest()->getParam('tracking'));
         $shipment = $this->shipmentLoader->load();
         if ($shipment) {
-            $this->_title->add(__('New Shipment'));
 
             $comment = $this->_objectManager->get('Magento\Backend\Model\Session')->getCommentText(true);
             if ($comment) {
@@ -76,6 +74,8 @@ class NewAction extends \Magento\Backend\App\Action
 
             $this->_view->loadLayout();
             $this->_setActiveMenu('Magento_Sales::sales_order');
+            $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Shipments'));
+            $this->_view->getPage()->getConfig()->getTitle()->prepend(__('New Shipment'));
             $this->_view->renderLayout();
         } else {
             $this->_redirect('*/order/view', array('order_id' => $this->getRequest()->getParam('order_id')));

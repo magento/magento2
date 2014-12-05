@@ -62,21 +62,21 @@ class VarnishPlugin
      * @param \Magento\Framework\App\FrontControllerInterface $subject
      * @param callable $proceed
      * @param \Magento\Framework\App\RequestInterface $request
-     * @return false|\Magento\Framework\App\Response\Http
+     * @return false|\Magento\Framework\App\Response\Http|\Magento\Framework\Controller\ResultInterface
      */
     public function aroundDispatch(
         \Magento\Framework\App\FrontControllerInterface $subject,
         \Closure $proceed,
         \Magento\Framework\App\RequestInterface $request
     ) {
-        if ($this->config->getType() == \Magento\PageCache\Model\Config::VARNISH && $this->config->isEnabled()) {
+        $response = $proceed($request);
+        if ($this->config->getType() == \Magento\PageCache\Model\Config::VARNISH && $this->config->isEnabled()
+            && $response instanceof \Magento\Framework\App\Response\Http) {
+
             $this->version->process();
-            $response = $proceed($request);
             if ($this->state->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
                 $response->setHeader('X-Magento-Debug', 1);
             }
-        } else {
-            $response = $proceed($request);
         }
         return $response;
     }

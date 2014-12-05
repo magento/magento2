@@ -24,6 +24,7 @@
 namespace Magento\Cms\Model;
 
 use Magento\Cms\Api\Data\PageInterface;
+use Magento\Framework\Object\IdentityInterface;
 
 /**
  * Cms Page Model
@@ -64,7 +65,7 @@ use Magento\Cms\Api\Data\PageInterface;
  * @method \Magento\Cms\Model\Page setCustomThemeTo(string $value)
  * @method int[] getStores()
  */
-class Page extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\Object\IdentityInterface, PageInterface
+class Page extends \Magento\Framework\Model\AbstractModel implements IdentityInterface, PageInterface
 {
     /**
      * No route page id
@@ -108,9 +109,9 @@ class Page extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
     /**
      * @return int
      */
-    public function getPageId()
+    public function getId()
     {
-        return (int) $this->_getData(PageInterface::PAGE_ID);
+        return $this->_getData(PageInterface::PAGE_ID);
     }
 
     /**

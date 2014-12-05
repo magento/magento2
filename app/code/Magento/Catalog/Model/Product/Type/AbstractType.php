@@ -23,6 +23,7 @@
  */
 namespace Magento\Catalog\Model\Product\Type;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
@@ -167,16 +168,13 @@ abstract class AbstractType
     protected $_catalogProductOption;
 
     /**
-     * Product factory
-     *
-     * @var \Magento\Catalog\Model\ProductFactory
+     * @var ProductRepositoryInterface
      */
-    protected $_productFactory;
+    protected $productRepository;
 
     /**
      * Construct
      *
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
@@ -186,10 +184,9 @@ abstract class AbstractType
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\Logger $logger
-     * @param array $data
+     * @param ProductRepositoryInterface $productRepository
      */
     public function __construct(
-        \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Model\Product\Option $catalogProductOption,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
@@ -199,9 +196,8 @@ abstract class AbstractType
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\Logger $logger,
-        array $data = array()
+        ProductRepositoryInterface $productRepository
     ) {
-        $this->_productFactory = $productFactory;
         $this->_catalogProductOption = $catalogProductOption;
         $this->_eavConfig = $eavConfig;
         $this->_catalogProductType = $catalogProductType;
@@ -211,6 +207,7 @@ abstract class AbstractType
         $this->_fileStorageDb = $fileStorageDb;
         $this->_filesystem = $filesystem;
         $this->_logger = $logger;
+        $this->productRepository = $productRepository;
     }
 
     /**
@@ -391,20 +388,18 @@ abstract class AbstractType
                 /** @var \Magento\Catalog\Model\Product $superProduct */
                 $superProduct = $this->_coreRegistry->registry('used_super_product_' . $superProductId);
                 if (!$superProduct) {
-                    $superProduct = $this->_productFactory->create()->load($superProductId);
+                    $superProduct = $this->productRepository->getById($superProductId);
                     $this->_coreRegistry->register('used_super_product_' . $superProductId, $superProduct);
                 }
-                if ($superProduct->getId()) {
-                    $assocProductIds = $superProduct->getTypeInstance()->getAssociatedProductIds($superProduct);
-                    if (in_array($product->getId(), $assocProductIds)) {
-                        $productType = $superProductConfig['product_type'];
-                        $product->addCustomOption('product_type', $productType, $superProduct);
+                $assocProductIds = $superProduct->getTypeInstance()->getAssociatedProductIds($superProduct);
+                if (in_array($product->getId(), $assocProductIds)) {
+                    $productType = $superProductConfig['product_type'];
+                    $product->addCustomOption('product_type', $productType, $superProduct);
 
-                        $buyRequest->setData(
-                            'super_product_config',
-                            array('product_type' => $productType, 'product_id' => $superProduct->getId())
-                        );
-                    }
+                    $buyRequest->setData(
+                        'super_product_config',
+                        array('product_type' => $productType, 'product_id' => $superProduct->getId())
+                    );
                 }
             }
         }

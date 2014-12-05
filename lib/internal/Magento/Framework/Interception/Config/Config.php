@@ -84,6 +84,11 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
     protected $_serviceClassTypes = array('Proxy', 'Interceptor');
 
     /**
+     * @var \Magento\Framework\Config\ScopeListInterface
+     */
+    protected $_scopeList;
+
+    /**
      * @param \Magento\Framework\Config\ReaderInterface $reader
      * @param \Magento\Framework\Config\ScopeListInterface $scopeList
      * @param \Magento\Framework\Cache\FrontendInterface $cache
@@ -107,29 +112,40 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
         $this->_cache = $cache;
         $this->_cacheId = $cacheId;
         $this->_reader = $reader;
+        $this->_scopeList = $scopeList;
 
         $intercepted = $this->_cache->load($this->_cacheId);
         if ($intercepted !== false) {
             $this->_intercepted = unserialize($intercepted);
         } else {
-            $config = array();
-            foreach ($scopeList->getAllScopes() as $scope) {
-                $config = array_replace_recursive($config, $this->_reader->read($scope));
-            }
-            unset($config['preferences']);
-            foreach ($config as $typeName => $typeConfig) {
-                if (!empty($typeConfig['plugins'])) {
-                    $this->_intercepted[ltrim($typeName, '\\')] = true;
-                }
-            }
-            foreach ($config as $typeName => $typeConfig) {
-                $this->hasPlugins(ltrim($typeName, '\\'));
-            }
-            foreach ($classDefinitions->getClasses() as $class) {
-                $this->hasPlugins($class);
-            }
-            $this->_cache->save(serialize($this->_intercepted), $this->_cacheId);
+            $this->initialize();
         }
+    }
+
+    /**
+     * Initialize interception config
+     *
+     * @return void
+     */
+    protected function initialize()
+    {
+        $config = array();
+        foreach ($this->_scopeList->getAllScopes() as $scope) {
+            $config = array_replace_recursive($config, $this->_reader->read($scope));
+        }
+        unset($config['preferences']);
+        foreach ($config as $typeName => $typeConfig) {
+            if (!empty($typeConfig['plugins'])) {
+                $this->_intercepted[ltrim($typeName, '\\')] = true;
+            }
+        }
+        foreach ($config as $typeName => $typeConfig) {
+            $this->hasPlugins(ltrim($typeName, '\\'));
+        }
+        foreach ($this->_classDefinitions->getClasses() as $class) {
+            $this->hasPlugins($class);
+        }
+        $this->_cache->save(serialize($this->_intercepted), $this->_cacheId);
     }
 
     /**

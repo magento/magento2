@@ -25,6 +25,12 @@
 @legend-border-bottom: 1px solid #c5c5c5;
 @form-field-vertical-indent-desktop: 29px;
 
+//
+//    Common
+//--------------------------------------
+
+.responsive-common() {
+
 .fieldset {
     .form-fieldset();
     &:last-child {
@@ -83,16 +89,12 @@ fieldset.field {
     .css(appearance, none, 1);
     appearance: none;
     border: 1px solid @border-color-base;
-    background: transparent;
     height: 32px;
     .url("images/select-bg.svg");
-    background-color: @select-background;
-    background-image: url("@{url}");
-    background-repeat: no-repeat;
-    background-position: 100% 45%;
+    background: @select-background url("@{url}") no-repeat 100% 45%;
     background-size: 30px 60px;
     padding-right: 25px;
-    text-indent: 0.01em;
+    text-indent: .01em;
     text-overflow: '';
     &::-ms-expand{
         display:none;
@@ -151,10 +153,12 @@ select:focus ~ .tooltip .tooltip-content {
     }
 }
 
+}
+
 //
 //    Desktop
 //--------------------------------------
-.responsive(@break) when (@break = @screen-m) {
+.responsive-min-l(@break) when (@break = @screen-m) {
     .legend {
         .css(border-bottom, @legend-border-bottom);
     }

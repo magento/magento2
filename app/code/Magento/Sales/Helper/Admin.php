@@ -69,9 +69,13 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function displayPriceAttribute($dataObject, $code, $strong = false, $separator = '<br/>')
     {
+        // Fix for 'bs_customer_bal_total_refunded' attribute
+        $baseValue = $dataObject->hasData('bs_' . $code)
+            ? $dataObject->getData('bs_' . $code)
+            : $dataObject->getData('base_' . $code);
         return $this->displayPrices(
             $dataObject,
-            $dataObject->getData('base_' . $code),
+            $baseValue,
             $dataObject->getData($code),
             $strong,
             $separator

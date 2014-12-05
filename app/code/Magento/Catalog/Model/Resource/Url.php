@@ -157,16 +157,6 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
     }
 
     /**
-     * Retrieve Category model singleton
-     *
-     * @return \Magento\Catalog\Model\Category
-     */
-    public function getCategoryModel()
-    {
-        return $this->_catalogCategory;
-    }
-
-    /**
      * Retrieve category attributes
      *
      * @param string $attributeCode
@@ -178,7 +168,7 @@ class Url extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $adapter = $this->_getWriteAdapter();
         if (!isset($this->_categoryAttributes[$attributeCode])) {
-            $attribute = $this->getCategoryModel()->getResource()->getAttribute($attributeCode);
+            $attribute = $this->_catalogCategory->getResource()->getAttribute($attributeCode);
 
             $this->_categoryAttributes[$attributeCode] = array(
                 'entity_type_id' => $attribute->getEntityTypeId(),

@@ -23,12 +23,14 @@
  */
 namespace Magento\Sales\Model\Resource\Quote;
 
+use \Magento\Framework\Model\Resource\Db\AbstractDb;
+
 /**
  * Quote address resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Address extends \Magento\Sales\Model\Resource\AbstractResource
+class Address extends AbstractDb
 {
     /**
      * Main table and field initialization

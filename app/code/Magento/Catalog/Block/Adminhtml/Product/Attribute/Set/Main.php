@@ -38,13 +38,6 @@ class Main extends \Magento\Backend\Block\Template
     protected $_template = 'catalog/product/attribute/set/main.phtml';
 
     /**
-     * Catalog product
-     *
-     * @var \Magento\Catalog\Helper\Product
-     */
-    protected $_catalogProduct = null;
-
-    /**
      * Core registry
      *
      * @var \Magento\Framework\Registry

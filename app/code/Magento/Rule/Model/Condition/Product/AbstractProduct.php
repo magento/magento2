@@ -74,6 +74,11 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     protected $_productFactory;
 
     /**
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     */
+    protected $productRepository;
+
+    /**
      * @var \Magento\Catalog\Model\Resource\Product
      */
     protected $_productResource;
@@ -93,6 +98,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * @param \Magento\Backend\Helper\Data $backendData
      * @param \Magento\Eav\Model\Config $config
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
+     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Catalog\Model\Resource\Product $productResource
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection $attrSetCollection
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
@@ -103,6 +109,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         \Magento\Backend\Helper\Data $backendData,
         \Magento\Eav\Model\Config $config,
         \Magento\Catalog\Model\ProductFactory $productFactory,
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Catalog\Model\Resource\Product $productResource,
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection $attrSetCollection,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
@@ -111,6 +118,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         $this->_backendData = $backendData;
         $this->_config = $config;
         $this->_productFactory = $productFactory;
+        $this->productRepository = $productRepository;
         $this->_productResource = $productResource;
         $this->_attrSetCollection = $attrSetCollection;
         $this->_localeFormat = $localeFormat;
@@ -649,7 +657,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         } elseif ('attribute_set_id' == $this->getAttribute()) {
             $result = $this->validateAttribute($this->_getAttributeSetId($productId));
         } else {
-            $product = $this->_productFactory->create()->load($productId);
+            $product = $this->productRepository->getById($productId);
             $result = $this->validate($product);
             unset($product);
         }

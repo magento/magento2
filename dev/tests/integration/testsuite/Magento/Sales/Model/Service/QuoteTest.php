@@ -24,13 +24,7 @@
 namespace Magento\Sales\Model\Service;
 
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Customer\Api\Data\CustomerDataBuilder;
-use Magento\Customer\Service\V1\Data\CustomerDetailsBuilder;
-use Magento\Customer\Service\V1\Data\AddressBuilder;
-use Magento\Customer\Service\V1\Data\RegionBuilder;
-use Magento\Customer\Api\Data\CustomerInterface as CustomerData;
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
-use Magento\Customer\Service\V1\CustomerAddressServiceInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
 
 /**
  * @magentoAppArea adminhtml
@@ -43,46 +37,51 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     protected $_serviceQuote;
 
     /**
-     * @var CustomerDataBuilder
+     * @var \Magento\Customer\Api\Data\CustomerDataBuilder
      */
-    private $_customerBuilder;
+    private $customerBuilder;
 
     /**
-     * @var CustomerAccountServiceInterface
+     * @var \Magento\Customer\Api\AccountManagementInterface
      */
-    protected $_customerAccountService;
+    protected $accountManagement;
 
     /**
-     * @var CustomerAddressServiceInterface
+     * @var \Magento\Customer\Api\AddressRepositoryInterface
      */
-    protected $_customerAddressService;
+    protected $addressRepository;
 
     /**
-     * @var AddressBuilder
+     * @var \Magento\Customer\Api\Data\AddressDataBuilder
      */
-    protected $_customerAddressBuilder;
+    protected $addressBuilder;
 
     /**
-     * @var CustomerDetailsBuilder
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
      */
-    protected $_customerDetailsBuilder;
+    protected $customerRepository;
 
+    /**
+     * Set up
+     *
+     * @return void
+     */
     public function setUp()
     {
-        $this->_customerAddressBuilder = Bootstrap::getObjectManager()->get(
-            'Magento\Customer\Service\V1\Data\AddressBuilder'
+        $this->addressBuilder = Bootstrap::getObjectManager()->get(
+            'Magento\Customer\Api\Data\AddressDataBuilder'
         );
-        $this->_customerBuilder = Bootstrap::getObjectManager()->get(
+        $this->customerBuilder = Bootstrap::getObjectManager()->get(
             'Magento\Customer\Api\Data\CustomerDataBuilder'
         );
-        $this->_customerDetailsBuilder = Bootstrap::getObjectManager()->get(
-            'Magento\Customer\Service\V1\Data\CustomerDetailsBuilder'
+        $this->accountManagement = Bootstrap::getObjectManager()->get(
+            'Magento\Customer\Api\AccountManagementInterface'
         );
-        $this->_customerAccountService = Bootstrap::getObjectManager()->get(
-            'Magento\Customer\Service\V1\CustomerAccountService'
+        $this->addressRepository = Bootstrap::getObjectManager()->get(
+            'Magento\Customer\Api\AddressRepositoryInterface'
         );
-        $this->_customerAddressService = Bootstrap::getObjectManager()->get(
-            'Magento\Customer\Service\V1\CustomerAddressService'
+        $this->customerRepository = Bootstrap::getObjectManager()->get(
+            'Magento\Customer\Api\CustomerRepositoryInterface'
         );
     }
 
@@ -117,28 +116,26 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     public function testSubmitOrderExistingCustomer()
     {
         $this->_prepareQuote(false);
+        $customer = $this->getSampleCustomerEntity();
+        $existingCustomerId = $customer->getId();
 
-        $customerDetails = $this->_customerDetailsBuilder->setCustomer(
-            $this->getSampleCustomerEntity()
-        )->setAddresses(
-            $this->getSampleAddressEntity()
-        )->create();
-        $customerData = $this->_customerAccountService->createCustomer($customerDetails, 'password');
+        $addresses = $this->getSampleAddressEntity($existingCustomerId);
 
-        $existingCustomerId = $customerData->getId();
-        $customerData = $this->_customerBuilder->mergeDataObjectWithArray(
-            $customerData,
-            array(CustomerData::EMAIL => 'new@example.com')
-        )->create();
-        $addresses = $this->_customerAddressService->getAddresses($existingCustomerId);
-        $this->_serviceQuote->getQuote()->setCustomerData($customerData);
+        $customer = $this->customerBuilder->mergeDataObjectWithArray(
+            $customer,
+            [CustomerInterface::EMAIL => 'new@example.com']
+        )->setAddresses($addresses)
+            ->create();
+        $customer = $this->customerRepository->save($customer);
+        $addresses = $customer->getAddresses();
+        $this->_serviceQuote->getQuote()->setCustomer($customer);
         $this->_serviceQuote->getQuote()->setCustomerAddressData($addresses);
         $this->_serviceQuote->submitOrderWithDataObject();
-        $customerId = $this->_serviceQuote->getQuote()->getCustomerData()->getId();
+        $customerId = $this->_serviceQuote->getQuote()->getCustomer()->getId();
         $this->assertNotNull($customerId);
         //Make sure no new customer is created
         $this->assertEquals($existingCustomerId, $customerId);
-        $customerData = $this->_customerAccountService->getCustomer($existingCustomerId);
+        $customerData = $this->customerRepository->getById($existingCustomerId);
         $this->assertEquals('new@example.com', $customerData->getEmail());
     }
 
@@ -149,12 +146,13 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     public function testSubmitOrderNewCustomer()
     {
         $this->_prepareQuote(false);
-        $this->_serviceQuote->getQuote()->setCustomerData($this->getSampleCustomerEntity());
-        $this->_serviceQuote->getQuote()->setCustomerAddressData($this->getSampleAddressEntity());
+        $customer = $this->getSampleCustomerEntity();
+        $this->_serviceQuote->getQuote()->setCustomer($customer);
+        $this->_serviceQuote->getQuote()->setCustomerAddressData($this->getSampleAddressEntity($customer->getId()));
         $this->_serviceQuote->submitOrderWithDataObject();
-        $customerId = $this->_serviceQuote->getQuote()->getCustomerData()->getId();
+        $customerId = $this->_serviceQuote->getQuote()->getCustomer()->getId();
         $this->assertNotNull($customerId);
-        foreach ($this->_serviceQuote->getQuote()->getCustomerAddressData() as $address) {
+        foreach ($this->_serviceQuote->getQuote()->getCustomer()->getAddresses() as $address) {
             $this->assertNotNull($address->getId());
             $this->assertEquals($customerId, $address->getCustomerId());
         }
@@ -171,7 +169,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $quoteFixture->setCustomerEmail('admin@example.com');
         $this->_serviceQuote = Bootstrap::getObjectManager()->create(
             'Magento\Sales\Model\Service\Quote',
-            array('quote' => $quoteFixture)
+            ['quote' => $quoteFixture]
         );
     }
 
@@ -198,7 +196,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     /**
      * Sample customer data
      *
-     * @return CustomerData
+     * @return CustomerInterface
      */
     private function getSampleCustomerEntity()
     {
@@ -207,19 +205,16 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $firstname = 'Tester';
         $lastname = 'McTest';
         $groupId = 1;
+        $password = 'password';
 
-        $this->_customerBuilder->setStoreId(
-            $storeId
-        )->setEmail(
-            $email
-        )->setFirstname(
-            $firstname
-        )->setLastname(
-            $lastname
-        )->setGroupId(
-            $groupId
-        );
-        return $this->_customerBuilder->create();
+        $customer = $this->customerBuilder->setStoreId($storeId)
+            ->setEmail($email)
+            ->setFirstname($firstname)
+            ->setLastname($lastname)
+            ->setGroupId($groupId)
+            ->create();
+
+        return $this->accountManagement->createAccount($customer, $password);
     }
 
     /**
@@ -227,55 +222,38 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
      *
      * @return array
      */
-    private function getSampleAddressEntity()
+    private function getSampleAddressEntity($customerId)
     {
-        $regionBuilder =  Bootstrap::getObjectManager()->create('\Magento\Customer\Service\V1\Data\RegionBuilder');
-        $this->_customerAddressBuilder->setCountryId(
-            'US'
-        )->setDefaultBilling(
-            true
-        )->setDefaultShipping(
-            true
-        )->setPostcode(
-            '75477'
-        )->setRegion(
-            $regionBuilder->setRegion('Alabama')->setRegionId(1)->setRegionCode('AL')->create()
-        )->setStreet(
-            array('Green str, 67')
-        )->setTelephone(
-            '3468676'
-        )->setCity(
-            'CityM'
-        )->setFirstname(
-            'John'
-        )->setLastname(
-            'Smith'
-        );
-        $address1 = $this->_customerAddressBuilder->create();
+        /** @var \Magento\Customer\Api\Data\RegionDataBuilder $regionBuilder */
+        $regionBuilder =  Bootstrap::getObjectManager()->get('Magento\Customer\Api\Data\RegionDataBuilder');
+        $address1 = $this->addressBuilder->setCountryId('US')
+            ->setCustomerId($customerId)
+            ->setDefaultBilling(true)
+            ->setDefaultShipping(true)
+            ->setPostcode(75477)
+            ->setRegion($regionBuilder->setRegion('Alabama')->setRegionId(1)->setRegionCode('AL')->create())
+            ->setStreet(['Green str, 67'])
+            ->setTelephone(3468676)
+            ->setCity('CityM')
+            ->setFirstname('John')
+            ->setLastname('Smith')
+            ->create();
+        $address1 = $this->addressRepository->save($address1);
 
-        $this->_customerAddressBuilder->setCountryId(
-            'US'
-        )->setDefaultBilling(
-            false
-        )->setDefaultShipping(
-            false
-        )->setPostcode(
-            '47676'
-        )->setRegion(
-            $regionBuilder->setRegion('Alabama')->setRegionId(1)->setRegionCode('AL')->create()
-        )->setStreet(
-            array('Black str, 48')
-        )->setCity(
-            'CityX'
-        )->setTelephone(
-            '3234676'
-        )->setFirstname(
-            'John'
-        )->setLastname(
-            'Smith'
-        );
-        $address2 = $this->_customerAddressBuilder->create();
+        $address2 = $this->addressBuilder->setCountryId('US')
+            ->setCustomerId($customerId)
+            ->setDefaultBilling(false)
+            ->setDefaultShipping(false)
+            ->setPostcode(47676)
+            ->setRegion($regionBuilder->setRegion('Alabama')->setRegionId(1)->setRegionCode('AL')->create())
+            ->setStreet(['Black str, 48'])
+            ->setCity('CityX')
+            ->setTelephone(3234676)
+            ->setFirstname('John')
+            ->setLastname('Smith')
+            ->create();
+        $address2 = $this->addressRepository->save($address2);
 
-        return array($address1, $address2);
+        return [$address1, $address2];
     }
 }

@@ -23,7 +23,7 @@
  */
 namespace Magento\Paypal\Block\Adminhtml\Billing\Agreement\View\Tab;
 
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
  * Adminhtml billing agreement info tab
@@ -43,26 +43,24 @@ class Info extends \Magento\Backend\Block\Template implements \Magento\Backend\B
     protected $_coreRegistry = null;
 
     /**
-     * Customer service
-     *
-     * @var CustomerAccountServiceInterface
+     * @var CustomerRepositoryInterface
      */
-    protected $_customerAccountService;
+    protected $_customerRepository;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param CustomerAccountServiceInterface $customerAccountService
+     * @param CustomerRepositoryInterface $customerRepository
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
-        CustomerAccountServiceInterface $customerAccountService,
+        CustomerRepositoryInterface $customerRepository,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
-        $this->_customerAccountService = $customerAccountService;
+        $this->_customerRepository = $customerRepository;
         parent::__construct($context, $data);
     }
 
@@ -118,8 +116,7 @@ class Info extends \Magento\Backend\Block\Template implements \Magento\Backend\B
         $agreement = $this->_getBillingAgreement();
         $this->setReferenceId($agreement->getReferenceId());
         $customerId = $agreement->getCustomerId();
-        $customer = $this->_customerAccountService->getCustomer($customerId);
-
+        $customer = $this->_customerRepository->getById($customerId);
         $this->setCustomerEmail($customer->getEmail());
         $this->setCustomerUrl($this->getUrl('customer/index/edit', array('id' => $customerId)));
         $this->setStatus($agreement->getStatusLabel());
@@ -127,7 +124,6 @@ class Info extends \Magento\Backend\Block\Template implements \Magento\Backend\B
         $this->setUpdatedAt(
             $agreement->getUpdatedAt() ? $this->formatDate($agreement->getUpdatedAt(), 'short', true) : __('N/A')
         );
-
         return parent::_toHtml();
     }
 }

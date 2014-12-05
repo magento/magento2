@@ -99,7 +99,7 @@ class Rule extends \Magento\Reports\Model\Resource\Report\AbstractReport
     public function getUniqRulesNamesList()
     {
         $adapter = $this->_getReadAdapter();
-        $tableName = $this->getTable('coupon_aggregated');
+        $tableName = $this->getTable('salesrule_coupon_aggregated');
         $select = $adapter->select()->from(
             $tableName,
             new \Zend_Db_Expr('DISTINCT rule_name')

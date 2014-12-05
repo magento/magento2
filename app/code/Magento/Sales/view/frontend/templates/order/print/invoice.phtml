@@ -46,9 +46,6 @@
                 <th class="col subtotal"><?php echo __('Subtotal') ?></th>
             </tr>
             </thead>
-            <tfoot>
-                <?php echo $this->getInvoiceTotalsHtml($_invoice)?>
-            </tfoot>
             <?php $_items = $_invoice->getItemsCollection(); ?>
             <?php $_count = $_items->count(); ?>
             <?php foreach ($_items as $_item): ?>
@@ -57,6 +54,9 @@
                 <?php echo $this->getItemHtml($_item) ?>
             </tbody>
             <?php endforeach; ?>
+            <tfoot>
+                <?php echo $this->getInvoiceTotalsHtml($_invoice)?>
+            </tfoot>
         </table>
     </div>
     <div class="block block-order-details-view">

@@ -1000,6 +1000,28 @@ class Files
     }
 
     /**
+     * Returns array of composer.json for specified app directory, such as code/Magento, design, i18n
+     *
+     * @param string $appDir
+     * @param bool $asDataSet
+     * @return array
+     */
+    public function getComposerFiles($appDir, $asDataSet = true)
+    {
+        $key = __METHOD__ . '|' . $this->_path . '|' . serialize(func_get_args());
+        if (!isset(self::$_cache[$key])) {
+            $files = self::getFiles(array("{$this->_path}/app/{$appDir}"), 'composer.json');
+            self::$_cache[$key] = $files;
+        }
+
+        if ($asDataSet) {
+            return self::composeDataSets(self::$_cache[$key]);
+        }
+
+        return self::$_cache[$key];
+    }
+
+    /**
      * Read all text files by specified glob pattern and combine them into an array of valid files/directories
      *
      * The Magento root path is prepended to all (non-empty) entries

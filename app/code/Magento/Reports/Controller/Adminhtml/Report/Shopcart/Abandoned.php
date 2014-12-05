@@ -33,8 +33,6 @@ class Abandoned extends \Magento\Reports\Controller\Adminhtml\Report\Shopcart
      */
     public function execute()
     {
-        $this->_title->add(__('Abandoned Carts'));
-
         $this->_initAction()->_setActiveMenu(
             'Magento_Reports::report_shopcart_abandoned'
         )->_addBreadcrumb(
@@ -43,6 +41,7 @@ class Abandoned extends \Magento\Reports\Controller\Adminhtml\Report\Shopcart
         )->_addContent(
             $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Shopcart\Abandoned')
         );
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Abandoned Carts'));
         $this->_view->renderLayout();
     }
 }

@@ -107,8 +107,6 @@ class Instance extends \Magento\Backend\App\Action
      */
     protected function _initWidgetInstance()
     {
-        $this->_title->add(__('Frontend Apps'));
-
         /** @var $widgetInstance \Magento\Widget\Model\Widget\Instance */
         $widgetInstance = $this->_widgetFactory->create();
 

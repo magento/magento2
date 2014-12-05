@@ -24,11 +24,12 @@
 namespace Magento\Sales\Model\Resource;
 
 use Magento\Sales\Model\EntityInterface;
+use \Magento\Framework\Model\Resource\Db\AbstractDb;
 
 /**
  * Flat sales resource abstract
  */
-abstract class Entity extends AbstractResource
+abstract class Entity extends AbstractDb
 {
     /**
      * Event prefix
@@ -73,14 +74,12 @@ abstract class Entity extends AbstractResource
 
     /**
      * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param Attribute $attribute
      * @param \Magento\Sales\Model\Increment $salesIncrement
      * @param GridInterface|null $gridAggregator
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Sales\Model\Resource\Attribute $attribute,
         \Magento\Sales\Model\Increment $salesIncrement,
         \Magento\Sales\Model\Resource\GridInterface $gridAggregator = null
@@ -88,7 +87,7 @@ abstract class Entity extends AbstractResource
         $this->attribute = $attribute;
         $this->salesIncrement = $salesIncrement;
         $this->gridAggregator = $gridAggregator;
-        parent::__construct($resource, $dateTime);
+        parent::__construct($resource);
     }
 
     /**

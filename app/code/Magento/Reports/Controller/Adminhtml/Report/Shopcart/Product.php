@@ -33,8 +33,6 @@ class Product extends \Magento\Reports\Controller\Adminhtml\Report\Shopcart
      */
     public function execute()
     {
-        $this->_title->add(__('Products in Carts'));
-
         $this->_initAction()->_setActiveMenu(
             'Magento_Reports::report_shopcart_product'
         )->_addBreadcrumb(
@@ -43,6 +41,7 @@ class Product extends \Magento\Reports\Controller\Adminhtml\Report\Shopcart
         )->_addContent(
             $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Shopcart\Product')
         );
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Products in Carts'));
         $this->_view->renderLayout();
     }
 }

@@ -45,7 +45,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     protected $helperMock;
 
     /**
-     * @var \Magento\Framework\View\Layout\Reader\Pool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout\ReaderPool|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $readerPoolMock;
 
@@ -55,7 +55,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
         $this->helperMock = $this->getMockBuilder('Magento\Framework\View\Layout\ScheduledStructure\Helper')
             ->disableOriginalConstructor()->getMock();
-        $this->readerPoolMock = $this->getMockBuilder('Magento\Framework\View\Layout\Reader\Pool')
+        $this->readerPoolMock = $this->getMockBuilder('Magento\Framework\View\Layout\ReaderPool')
             ->disableOriginalConstructor()->getMock();
 
         $this->container = $this->objectManagerHelper->getObject(
@@ -70,7 +70,6 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     /**
      * @param \Magento\Framework\View\Layout\Element $elementCurrent
      * @param string $containerName
-     * @param \Magento\Framework\View\Layout\Element $elementParent
      * @param array $structureElement
      * @param array $expectedData
      *
@@ -79,7 +78,6 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testProcess(
         $elementCurrent,
         $containerName,
-        $elementParent,
         $structureElement,
         $expectedData
     ) {
@@ -105,14 +103,14 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
         $this->helperMock
             ->method('scheduleStructure')
-            ->with($scheduledStructureMock, $elementCurrent, $elementParent);
+            ->with($scheduledStructureMock, $elementCurrent);
 
         $this->readerPoolMock->expects($this->once())
-            ->method('readStructure')
+            ->method('interpret')
             ->with($contextMock, $elementCurrent)
             ->willReturnSelf();
 
-        $this->container->process($contextMock, $elementCurrent, $elementParent);
+        $this->container->interpret($contextMock, $elementCurrent);
     }
 
     /**
@@ -122,11 +120,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'container' => [
-                'elementCurrent' => new \Magento\Framework\View\Layout\Element(
-                    '<container name="container" id="id_add" tag="body"/>'
-                ),
+                'elementCurrent' => $this->getElement('<container name="container" id="id_add" tag="body"/>'),
                 'containerName' => 'container',
-                'elementParent' => new \Magento\Framework\View\Layout\Element('<parent_element/>'),
                 'structureElement' => [
                     'attributes' => [
                         'id' => 'id_value',
@@ -143,11 +138,10 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
                 ]
             ],
             'referenceContainer' => [
-                'elementCurrent' => new \Magento\Framework\View\Layout\Element(
+                'elementCurrent' => $this->getElement(
                     '<referenceContainer name="reference" htmlTag="span" htmlId="id_add" htmlClass="new" label="Add"/>'
                 ),
                 'containerName' => 'reference',
-                'elementParent' => new \Magento\Framework\View\Layout\Element('<parent_element/>'),
                 'structureElement' => [],
                 'expectedData' => [
                     'attributes' => [
@@ -159,5 +153,18 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ];
+    }
+
+    /**
+     * @param string $xml
+     * @return \Magento\Framework\View\Layout\Element
+     */
+    protected function getElement($xml)
+    {
+        $xml = simplexml_load_string(
+            '<parent_element>' . $xml . '</parent_element>',
+            'Magento\Framework\View\Layout\Element'
+        );
+        return current($xml->children());
     }
 }

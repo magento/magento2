@@ -27,6 +27,8 @@
  */
 namespace Magento\Framework\Config;
 
+use Magento\Framework\Config\Composer\Package;
+
 class Theme
 {
     /**
@@ -45,13 +47,13 @@ class Theme
      * Constructor
      *
      * @param string $configContent
+     * @param string $composerContent
      */
-    public function __construct($configContent)
-    {
-        $config = new \DOMDocument();
-        $config->loadXML($configContent);
-        // todo: validation of the document
-        $this->_data = $this->_extractData($config);
+    public function __construct(
+        $configContent = null,
+        $composerContent = null
+    ) {
+        $this->_data = $this->_extractData($configContent, $composerContent);
     }
 
     /**
@@ -65,29 +67,45 @@ class Theme
     }
 
     /**
-     * Extract configuration data from the DOM structure
+     * Extract configuration data from theme.xml and composer.json
      *
-     * @param \DOMDocument $dom
+     * @param string $configContent
+     * @param string $composerContent
      * @return array
      */
-    protected function _extractData(\DOMDocument $dom)
+    protected function _extractData($configContent, $composerContent)
     {
-        /** @var $themeNode \DOMElement */
-        $themeNode = $dom->getElementsByTagName('theme')->item(0);
-        /** @var $mediaNode \DOMElement */
-        $mediaNode = $themeNode->getElementsByTagName('media')->item(0);
+        $data = [
+            'version' => null,
+            'title' => null,
+            'media' => null,
+            'parent' => null,
+        ];
 
-        $themeVersionNode = $themeNode->getElementsByTagName('version')->item(0);
-        $themeParentNode = $themeNode->getElementsByTagName('parent')->item(0);
-        $themeTitleNode = $themeNode->getElementsByTagName('title')->item(0);
-        $previewImage = $mediaNode ? $mediaNode->getElementsByTagName('preview_image')->item(0)->nodeValue : '';
+        if (!empty($configContent)) {
+            $dom = new \DOMDocument();
+            $dom->loadXML($configContent);
+            // todo: validation of the document
+            /** @var $themeNode \DOMElement */
+            $themeNode = $dom->getElementsByTagName('theme')->item(0);
+            $data['title'] = $themeNode->getElementsByTagName('title')->item(0)->nodeValue;
+            /** @var $mediaNode \DOMElement */
+            $mediaNode = $themeNode->getElementsByTagName('media')->item(0);
+            $previewImage = $mediaNode ? $mediaNode->getElementsByTagName('preview_image')->item(0)->nodeValue : '';
+            $data['media']['preview_image'] = $previewImage;
+        }
 
-        return array(
-            'title' => $themeTitleNode->nodeValue,
-            'parent' => $themeParentNode ? $themeParentNode->nodeValue : null,
-            'version' => $themeVersionNode ? $themeVersionNode->nodeValue : null,
-            'media' => array('preview_image' => $previewImage)
-        );
+        if (!empty($composerContent)) {
+            $json = json_decode($composerContent);
+            $package = new Package($json);
+            $data['version'] = $package->get('version');
+            $parents = (array)$package->get('require', '/.+\/theme-/');
+            $parents = empty($parents) ? null : array_keys($parents);
+            $data['parent'] = empty($parents) ? null : array_shift($parents);
+        }
+
+        return $data;
+
     }
 
     /**
@@ -131,6 +149,28 @@ class Theme
         if (!$parentTheme) {
             return null;
         }
-        return explode(self::THEME_PATH_SEPARATOR, $parentTheme);
+        $parent = $this->parseThemeName($parentTheme);
+        return [ucfirst($parent['vendor']), $parent['name']];
+    }
+
+    /**
+     * Parse theme name
+     *
+     * @param string $themeName
+     * @return array|null Return array if theme name is in the right format, otherwise null is returned, for example:
+     *   [
+     *     'vendor' => 'magento',
+     *     'area' => 'frontend',
+     *     'name' => 'luma'
+     *   ]
+     */
+    private function parseThemeName($themeName)
+    {
+        preg_match('/(?<vendor>.+)\/theme-(?<area>.+)-(?<name>.+)/', $themeName, $matches);
+        return [
+            'vendor' => $matches['vendor'],
+            'area' => $matches['area'],
+            'name' => $matches['name'],
+        ];
     }
 }

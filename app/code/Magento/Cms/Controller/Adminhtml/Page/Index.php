@@ -43,7 +43,6 @@ class Index extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        $this->_title->add(__('Pages'));
         $this->_view->loadLayout();
         $this->_setActiveMenu(
             'Magento_Cms::cms_page'
@@ -54,6 +53,7 @@ class Index extends \Magento\Backend\App\Action
             __('Manage Pages'),
             __('Manage Pages')
         );
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Pages'));
         $this->_view->renderLayout();
     }
 }

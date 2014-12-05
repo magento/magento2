@@ -75,7 +75,6 @@ class AddComment extends \Magento\Backend\App\Action
             if (empty($data['comment'])) {
                 throw new \Magento\Framework\Model\Exception(__("The comment text field cannot be empty."));
             }
-            $this->_title->add(__('Shipments'));
             $this->shipmentLoader->setOrderId($this->getRequest()->getParam('order_id'));
             $this->shipmentLoader->setShipmentId($this->getRequest()->getParam('shipment_id'));
             $this->shipmentLoader->setShipment($this->getRequest()->getParam('shipment'));
@@ -91,6 +90,7 @@ class AddComment extends \Magento\Backend\App\Action
             $shipment->save();
 
             $this->_view->loadLayout(false);
+            $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Shipments'));
             $response = $this->_view->getLayout()->getBlock('shipment_comments')->toHtml();
         } catch (\Magento\Framework\Model\Exception $e) {
             $response = ['error' => true, 'message' => $e->getMessage()];

@@ -61,8 +61,8 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
         $layout->createBlock('Magento\Catalog\Block\Product\View');
 
-        $this->assertNotEmpty($pageConfig->getTitle());
-        $this->assertEquals($this->_product->getMetaTitle(), $pageConfig->getTitle());
+        $this->assertNotEmpty($pageConfig->getTitle()->get());
+        $this->assertEquals($this->_product->getMetaTitle(), $pageConfig->getTitle()->get());
         $this->assertEquals($this->_product->getMetaKeyword(), $pageConfig->getKeywords());
         $this->assertEquals($this->_product->getMetaDescription(), $pageConfig->getDescription());
     }

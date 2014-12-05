@@ -53,10 +53,10 @@ $imageBlock = $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Ima
             </strong>
 
             <?php if ($_options = $this->getOptionList()):?>
-                <div class="product options wrapper tooltip">
-                    <span class="more tooltip toggle"><?php echo __('View Details') ?></span>
+                <div class="product options" data-mage-init='{"collapsible":{"openedState": "active", "saveState": false}}'>
+                    <span data-role="title" class="more toggle"><?php echo __('View Details') ?></span>
 
-                    <div class="product options details tooltip content">
+                    <div data-role="content" class="product options details content">
                         <strong class="subtitle"><?php echo __('Options Details'); ?></strong>
                         <dl class="product options list">
                             <?php foreach ($_options as $_option) : ?>

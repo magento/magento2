@@ -26,7 +26,7 @@ namespace Magento\Downloadable\Service\V1\DownloadableLink;
 
 use \Magento\Downloadable\Service\V1\Data\FileContentUploaderInterface;
 use \Magento\Downloadable\Service\V1\DownloadableLink\Data\DownloadableLinkContent;
-use \Magento\Catalog\Model\ProductRepository;
+use \Magento\Catalog\Api\ProductRepositoryInterface;
 use \Magento\Downloadable\Service\V1\DownloadableLink\Data\DownloadableLinkContentValidator;
 use \Magento\Downloadable\Model\Link;
 use \Magento\Framework\Exception\InputException;
@@ -37,7 +37,7 @@ use \Magento\Framework\Exception\NoSuchEntityException;
 class WriteService implements WriteServiceInterface
 {
     /**
-     * @var ProductRepository
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
     protected $productRepository;
 
@@ -62,14 +62,14 @@ class WriteService implements WriteServiceInterface
     protected $linkFactory;
 
     /**
-     * @param ProductRepository $productRepository
+     * @param ProductRepositoryInterface $productRepository
      * @param DownloadableLinkContentValidator $linkContentValidator
      * @param FileContentUploaderInterface $fileContentUploader
      * @param EncoderInterface $jsonEncoder
      * @param LinkFactory $linkFactory
      */
     public function __construct(
-        ProductRepository $productRepository,
+        ProductRepositoryInterface $productRepository,
         DownloadableLinkContentValidator $linkContentValidator,
         FileContentUploaderInterface $fileContentUploader,
         EncoderInterface $jsonEncoder,

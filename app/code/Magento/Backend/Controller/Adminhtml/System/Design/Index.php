@@ -31,10 +31,10 @@ class Index extends \Magento\Backend\Controller\Adminhtml\System\Design
      */
     public function execute()
     {
-        $this->_title->add(__('Store Design'));
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Magento_Backend::system_design_schedule');
+        $resultPage->getConfig()->getTitle()->prepend(__('Store Design'));
         return $resultPage;
     }
 }

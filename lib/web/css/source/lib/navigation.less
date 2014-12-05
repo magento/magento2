@@ -90,6 +90,9 @@
                 .css(color, @_nav-level0-item-color-active);
                 .css(text-decoration, @_nav-level0-item-text-decoration-active);
             }
+            &:last-child {
+                .css(border-bottom, @_nav-level0-item-border);
+            }
         }
         .ui-menu:not(:first-child) {
             .css(background, @_submenu-bg);

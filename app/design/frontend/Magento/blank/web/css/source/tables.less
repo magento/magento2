@@ -22,6 +22,12 @@
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
+//
+//    Common
+//--------------------------------------
+
+.responsive-common() {
+
 .table-wrapper {
     margin-bottom: @indent-base;
 }
@@ -50,10 +56,12 @@ table {
     }
 }
 
+}
+
 //
 //    Mobile
 //--------------------------------------
-.responsive-smaller(@break) when (@break = @screen-s) {
+.responsive-max-m(@break) when (@break = @screen-s) {
     .table-wrapper {
         .table-overflow();
         position: relative; // to hide unnecessary horizontal scrollbar in Safari
@@ -68,13 +76,32 @@ table {
                 }
             }
             tfoot {
-                > tr:first-child {
-                    td {
-                        padding-top: @indent-base;
+                display: block;
+                tr {
+                    display: block;
+                    &:extend(.abs-add-clearfix-mobile all);
+                    &:first-child {
+                        th,
+                        td {
+                            padding-top: @indent-base;
+                        }
                     }
                 }
-                .mark {
-                    display: none;
+                th {
+                    box-sizing: border-box;
+                    float: left;
+                    padding-left: 0;
+                    padding-right: 0;
+                    text-align: left;
+                    width: 70%;
+                }
+                td {
+                    box-sizing: border-box;
+                    float: left;
+                    padding-left: 0;
+                    padding-right: 0;
+                    text-align: right;
+                    width: 30%;
                 }
             }
         }

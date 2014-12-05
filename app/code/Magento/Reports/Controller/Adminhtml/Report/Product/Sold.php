@@ -43,13 +43,13 @@ class Sold extends \Magento\Reports\Controller\Adminhtml\Report\Product
      */
     public function execute()
     {
-        $this->_title->add(__('Ordered Products Report'));
         $this->_initAction()->_setActiveMenu(
             'Magento_Reports::report_products_sold'
         )->_addBreadcrumb(
             __('Products Ordered'),
             __('Products Ordered')
         );
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Ordered Products Report'));
         $this->_view->renderLayout();
     }
 }

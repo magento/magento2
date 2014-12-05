@@ -25,7 +25,7 @@
 namespace Magento\Catalog\Service\V1\Product;
 
 use Magento\Catalog\Model\ProductFactory;
-use Magento\Catalog\Model\ProductRepository;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 use Magento\Catalog\Service\V1\Data\Product;
@@ -33,7 +33,7 @@ use Magento\Catalog\Service\V1\Data\Product;
 class GroupPriceService implements GroupPriceServiceInterface
 {
     /**
-     * @var \Magento\Catalog\Model\ProductRepository
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
     protected $productRepository;
 
@@ -63,7 +63,7 @@ class GroupPriceService implements GroupPriceServiceInterface
     protected $config;
 
     /**
-     * @param ProductRepository $productRepository
+     * @param ProductRepositoryInterface $productRepository
      * @param Product\GroupPriceBuilder $groupPriceBuilder
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Api\GroupRepositoryInterface $groupRepository
@@ -71,7 +71,7 @@ class GroupPriceService implements GroupPriceServiceInterface
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      */
     public function __construct(
-        ProductRepository $productRepository,
+        ProductRepositoryInterface $productRepository,
         Product\GroupPriceBuilder $groupPriceBuilder,
         \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Customer\Api\GroupRepositoryInterface $groupRepository,

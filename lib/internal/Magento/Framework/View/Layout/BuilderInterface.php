@@ -23,13 +23,17 @@
  */
 namespace Magento\Framework\View\Layout;
 
+use Magento\Framework\View\LayoutInterface;
+
 /**
  * Interface BuilderInterface
  */
 interface BuilderInterface
 {
     /**
-     * @return \Magento\Framework\View\LayoutInterface
+     * Build structure
+     *
+     * @return LayoutInterface
      */
     public function build();
 }

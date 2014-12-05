@@ -26,7 +26,7 @@
 
 $cmsPages = array(
     array(
-        'title' => '404 Not Found 1',
+        'title' => '404 Not Found',
         'page_layout' => '2columns-right',
         'meta_keywords' => 'Page keywords',
         'meta_description' => 'Page description',

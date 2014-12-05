@@ -24,13 +24,16 @@ namespace Magento\Checkout\Block\Onepage;
 use Magento\Customer\Model\Context;
 use Magento\TestFramework\Helper\Bootstrap;
 
+/**
+ * Class BillingTest
+ */
 class BillingTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Checkout\Block\Onepage\Billing */
     protected $_block;
 
-    /** @var \Magento\Customer\Service\V1\CustomerAddressService */
-    protected $_addressService;
+    /** @var \Magento\Customer\Api\AddressRepositoryInterface */
+    protected $_addressRepository;
 
     /** @var \Magento\Sales\Model\Quote\AddressFactory */
     protected $_quoteAddressFactory;
@@ -38,8 +41,8 @@ class BillingTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Customer\Api\Data\CustomerDataBuilder */
     protected $_customerBuilder;
 
-    /** @var \Magento\Customer\Service\V1\CustomerAccountService */
-    protected $_customerService;
+    /** @var \Magento\Customer\Api\CustomerRepositoryInterface */
+    protected $_customerRepository;
 
     const FIXTURE_CUSTOMER_ID = 1;
 
@@ -54,28 +57,28 @@ class BillingTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
         $objectManager = Bootstrap::getObjectManager();
         $this->_customerBuilder = $objectManager->create('Magento\Customer\Api\Data\CustomerDataBuilder');
-        $this->_customerService = $objectManager->create('Magento\Customer\Service\V1\CustomerAccountService');
-        $customerData = $this->_customerService->getCustomer(self::FIXTURE_CUSTOMER_ID);
+        $this->_customerRepository = $objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
+        $customer = $this->_customerRepository->getById(self::FIXTURE_CUSTOMER_ID);
 
         $customerSession = $objectManager->get('\Magento\Customer\Model\Session');
-        $customerSession->setCustomerData($customerData);
+        $customerSession->setCustomerData($customer);
 
-        $this->_addressService = $objectManager->get('Magento\Customer\Service\V1\CustomerAddressService');
+        $this->_addressRepository = $objectManager->get('Magento\Customer\Api\AddressRepositoryInterface');
         //fetch sample address
-        $address = $this->_addressService->getAddress(self::FIXTURE_ADDRESS_ID);
+        $address = $this->_addressRepository->getById(self::FIXTURE_ADDRESS_ID);
 
         /** @var \Magento\Sales\Model\Resource\Quote\Collection $quoteCollection */
         $quoteCollection = $objectManager->get('Magento\Sales\Model\Resource\Quote\Collection');
         /** @var $quote \Magento\Sales\Model\Quote */
         $quote = $quoteCollection->getLastItem();
-        $quote->setCustomerData($customerData);
+        $quote->setCustomer($customer);
         /** @var $quoteAddressFactory \Magento\Sales\Model\Quote\AddressFactory */
         $this->_quoteAddressFactory = $objectManager->get('Magento\Sales\Model\Quote\AddressFactory');
         $billingAddress = $this->_quoteAddressFactory->create()->importCustomerAddressData($address);
         $quote->setBillingAddress($billingAddress);
         $quote->save();
 
-        /** @var $checkoutSession \Magento\Checkout\Model\Session */
+        /** @var \Magento\Checkout\Model\Session $checkoutSession */
         $checkoutSession = $objectManager->get('Magento\Checkout\Model\Session');
         $checkoutSession->setQuoteId($quote->getId());
         $checkoutSession->setLoadInactive(true);
@@ -97,7 +100,7 @@ class BillingTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAddress()
     {
-        $addressFromFixture = $this->_addressService->getAddress(self::FIXTURE_ADDRESS_ID);
+        $addressFromFixture = $this->_addressRepository->getById(self::FIXTURE_ADDRESS_ID);
         $address = $this->_block->getAddress();
         $this->assertEquals($addressFromFixture->getFirstname(), $address->getFirstname());
         $this->assertEquals($addressFromFixture->getLastname(), $address->getLastname());
@@ -141,15 +144,15 @@ class BillingTest extends \PHPUnit_Framework_TestCase
         $emptyAddress->setFirstname(null);
         $emptyAddress->setLastname(null);
         $this->_block->getQuote()->setBillingAddress($emptyAddress);
-        $customerData = $this->_customerService->getCustomer(self::FIXTURE_CUSTOMER_ID);
-        $customerData = $this->_customerBuilder->populate(
-            $customerData
+        $customer = $this->_customerRepository->getById(self::FIXTURE_CUSTOMER_ID);
+        $customer = $this->_customerBuilder->populate(
+            $customer
         )->setFirstname(
             self::SAMPLE_FIRST_NAME
         )->setLastname(
             self::SAMPLE_LAST_NAME
         )->create();
-        $this->_block->getQuote()->setCustomerData($customerData);
+        $this->_block->getQuote()->setCustomer($customer);
         $this->_block->getQuote()->save();
 
         $this->assertEquals(self::SAMPLE_FIRST_NAME, $this->_block->getFirstname());

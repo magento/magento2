@@ -39,4 +39,4 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 $registration = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     'Magento\Core\Model\Theme\Registration'
 );
-$registration->register(implode('/', array('*', '*', 'theme.xml')));
+$registration->register(implode('/', array('*', '*', '*', 'theme.xml')));

@@ -24,6 +24,12 @@
 
 @form-field-vertical-indent-desktop: 29px;
 
+//
+//    Common
+//--------------------------------------
+
+.responsive-common() {
+
 .fieldset {
     .form-fieldset();
     &:last-child {
@@ -34,7 +40,7 @@
         .form-field();
         &.no-label {
             > .label {
-                &:extend(.abstract-visually-hidden all);
+                &:extend(.abs-visually-hidden all);
             }
         }
         &.choice {
@@ -118,13 +124,15 @@ select:focus ~ .tooltip .tooltip-content {
     }
 }
 
+}
+
 //
 //    Desktop
 //--------------------------------------
-.responsive(@break) when (@break = @screen-m) {
+.responsive-min-l(@break) when (@break = @screen-m) {
     .fieldset {
         .legend {
-            &:extend(.abstract-margin-for-forms-desktop all);
+            &:extend(.abs-margin-for-forms-desktop all);
         }
         > .field {
             .form-field-type-revert();

@@ -315,9 +315,7 @@
     );
     .css(line-height, @_icon-image-height);
     .css(vertical-align, @_icon-image-vertical-align);
-    background-image: url(@_icon-image);
-    background-position: @_icon-image-position-x @_icon-image-position-y;
-    background-repeat: no-repeat;
+    background: url(@_icon-image) no-repeat @_icon-image-position-x @_icon-image-position-y;
     .css(margin, @_icon-image-margin);
 }
 

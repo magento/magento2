@@ -25,14 +25,5 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Module/etc/module.xsd">
     <module name="Magento_UrlRewrite" schema_version="2.0.0">
-        <depends>
-            <module name="Magento_Backend"/>
-            <module name="Magento_Catalog"/>
-            <module name="Magento_CatalogUrlRewrite"/>
-            <module name="Magento_Cms"/>
-            <module name="Magento_CmsUrlRewrite"/>
-            <module name="Magento_Core"/>
-            <module name="Magento_Store"/>
-        </depends>
     </module>
 </config>

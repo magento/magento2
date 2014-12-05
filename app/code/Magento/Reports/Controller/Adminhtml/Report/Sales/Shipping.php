@@ -35,8 +35,6 @@ class Shipping extends \Magento\Reports\Controller\Adminhtml\Report\Sales
      */
     public function execute()
     {
-        $this->_title->add(__('Shipping Report'));
-
         $this->_showLastExecutionTime(Flag::REPORT_SHIPPING_FLAG_CODE, 'shipping');
 
         $this->_initAction()->_setActiveMenu(
@@ -45,6 +43,7 @@ class Shipping extends \Magento\Reports\Controller\Adminhtml\Report\Sales
             __('Shipping'),
             __('Shipping')
         );
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Shipping Report'));
 
         $gridBlock = $this->_view->getLayout()->getBlock('adminhtml_sales_shipping.grid');
         $filterFormBlock = $this->_view->getLayout()->getBlock('grid.filter.form');

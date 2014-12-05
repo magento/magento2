@@ -31,9 +31,17 @@ $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\Sales\Model\Quote\Address $quoteShippingAddress */
 $quoteShippingAddress = $objectManager->create('Magento\Sales\Model\Quote\Address');
 
-/** @var \Magento\Customer\Service\V1\CustomerAddressServiceInterface $addressService */
-$addressService = $objectManager->create('Magento\Customer\Service\V1\CustomerAddressServiceInterface');
-$quoteShippingAddress->importCustomerAddressData($addressService->getAddress(1));
+/** @var \Magento\Customer\Api\AccountManagementInterface $accountManagement */
+$accountManagement = $objectManager->create('Magento\Customer\Api\AccountManagementInterface');
+
+/** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
+$customerRepository = $objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
+$customer = $customerRepository->getById(1);
+
+/** @var \Magento\Customer\Api\AddressRepositoryInterface $addressRepository */
+$addressRepository = $objectManager->create('Magento\Customer\Api\AddressRepositoryInterface');
+$quoteShippingAddress->importCustomerAddressData($addressRepository->getById(1));
+
 
 /** @var \Magento\Sales\Model\Quote $quote */
 $quote = $objectManager->create('Magento\Sales\Model\Quote');
@@ -50,12 +58,12 @@ $quote->setStoreId(
 )->setBillingAddress(
     $quoteShippingAddress
 )->setCheckoutMethod(
-    $customer->getMode()
+    'customer'
 )->setPasswordHash(
-    $customer->encryptPassword($customer->getPassword())
+    $accountManagement->getPasswordHash('password')
 )->setReservedOrderId(
     'test_order_1'
-)->setEmail(
+)->setCustomerEmail(
     'aaa@aaa.com'
 )->addProduct(
     $product->load($product->getId()),

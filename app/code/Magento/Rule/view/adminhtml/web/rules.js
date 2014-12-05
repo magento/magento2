@@ -132,6 +132,7 @@ define([
                     if (this._processSuccess(transport)) {
                         $(chooser).update(transport.responseText);
                         this.showChooserLoaded(chooser, transport);
+                        jQuery(chooser).trigger('contentUpdated');
                     }
                 }.bind(this),
                 onFailure: this._processFailure.bind(this)

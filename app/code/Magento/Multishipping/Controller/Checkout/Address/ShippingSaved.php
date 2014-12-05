@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -25,26 +24,20 @@
 namespace Magento\Multishipping\Controller\Checkout\Address;
 
 use Magento\Framework\App\Action\Context;
-use Magento\Customer\Service\V1\CustomerAddressServiceInterface;
+use Magento\Multishipping\Controller\Checkout\Address;
 
-class ShippingSaved extends \Magento\Multishipping\Controller\Checkout\Address
+/**
+ * Class ShippingSaved
+ */
+class ShippingSaved extends Address
 {
-    /**
-     * @var CustomerAddressServiceInterface
-     */
-    protected $_customerAddressService;
-
     /**
      * Initialize dependencies.
      *
      * @param Context $context
-     * @param CustomerAddressServiceInterface $customerAddressService
      */
-    public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        CustomerAddressServiceInterface $customerAddressService
-    ) {
-        $this->_customerAddressService = $customerAddressService;
+    public function __construct(Context $context)
+    {
         parent::__construct($context);
     }
 
@@ -56,8 +49,7 @@ class ShippingSaved extends \Magento\Multishipping\Controller\Checkout\Address
         /**
          * if we create first address we need reset emd init checkout
          */
-        $customerId = $this->_getCheckout()->getCustomer()->getId();
-        if (count($this->_customerAddressService->getAddresses($customerId)) == 1) {
+        if (count($this->_getCheckout()->getCustomer()->getAddresses()) === 1) {
             $this->_getCheckout()->reset();
         }
         $this->_redirect('*/checkout/addresses');

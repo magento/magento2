@@ -34,15 +34,11 @@ $_item = $this->getItem();
             <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>
             <?php if (!$this->getPrintStatus()): ?>
                 <?php $_formatedOptionValue = $this->getFormatedOptionValue($_option) ?>
-                <dd<?php if (isset($_formatedOptionValue['full_view'])): ?> class="tooltip wrapper"<?php endif; ?>>
-                    <?php echo $_formatedOptionValue['value'] ?>
+                <dd>
                     <?php if (isset($_formatedOptionValue['full_view'])): ?>
-                    <div class="tooltip content">
-                        <dl class="item options">
-                            <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>
-                            <dd><?php echo $_formatedOptionValue['full_view'] ?></dd>
-                        </dl>
-                    </div>
+                        <?php echo $_formatedOptionValue['full_view'] ?>
+                    <?php else: ?>
+                        <?php echo $_formatedOptionValue['value'] ?>
                     <?php endif; ?>
                 </dd>
             <?php else: ?>

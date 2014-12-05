@@ -33,8 +33,6 @@ use Magento\Catalog\Model\ProductFactory;
 
 /**
  * Class StockRegistry
- * @package Magento\CatalogInventory\Model
- * @api
  */
 class StockRegistry implements StockRegistryInterface
 {
@@ -204,14 +202,14 @@ class StockRegistry implements StockRegistryInterface
         $websiteId = $stockItem->getWebsiteId() ?: null;
         $origStockItem = $this->getStockItem($productId, $websiteId);
         $data = $stockItem->getData();
-        if ($origStockItem->getId()) {
+        if ($origStockItem->getItemId()) {
             if (isset($data['item_id'])) {
                 unset($data['item_id']);
             }
         }
         $origStockItem->addData($data);
         $origStockItem->setProductId($productId);
-        return $this->stockItemRepository->save($origStockItem)->getId();
+        return $this->stockItemRepository->save($origStockItem)->getItemId();
     }
 
     /**

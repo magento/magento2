@@ -81,8 +81,6 @@ class ConfigureProductInCustomerWishlistOnBackendTest extends AbstractWishlistTe
         CustomerIndex $customerIndex,
         CustomerIndexEdit $customerIndexEdit
     ) {
-        $this->markTestIncomplete('Bug: MAGETWO-27949');
-
         // Preconditions
         $product = $this->createProducts($product)[0];
         $this->loginCustomer($customer);

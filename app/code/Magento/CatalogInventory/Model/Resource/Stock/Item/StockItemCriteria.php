@@ -45,6 +45,7 @@ class StockItemCriteria extends AbstractCriteria implements \Magento\CatalogInve
     public function setStockStatus($storeId = null)
     {
         $this->data['stock_status'] = func_get_args();
+        return true;
     }
 
     /**
@@ -53,6 +54,7 @@ class StockItemCriteria extends AbstractCriteria implements \Magento\CatalogInve
     public function setStockFilter($stock)
     {
         $this->data['stock_filter'] = $stock;
+        return true;
     }
 
     /**
@@ -61,6 +63,7 @@ class StockItemCriteria extends AbstractCriteria implements \Magento\CatalogInve
     public function setWebsiteFilter($website)
     {
         $this->data['website_filter'] = $website;
+        return true;
     }
 
     /**
@@ -69,6 +72,7 @@ class StockItemCriteria extends AbstractCriteria implements \Magento\CatalogInve
     public function setProductsFilter($products)
     {
         $this->data['products_filter'] = $products;
+        return true;
     }
 
     /**
@@ -77,6 +81,7 @@ class StockItemCriteria extends AbstractCriteria implements \Magento\CatalogInve
     public function setManagedFilter($isStockManagedInConfig)
     {
         $this->data['managed_filter'] = $isStockManagedInConfig;
+        return true;
     }
 
     /**
@@ -85,16 +90,18 @@ class StockItemCriteria extends AbstractCriteria implements \Magento\CatalogInve
     public function setQtyFilter($comparisonMethod, $qty)
     {
         $this->data['qty_filter'] = [$comparisonMethod, $qty];
+        return true;
     }
 
     /**
      * Add Criteria object
      *
      * @param \Magento\CatalogInventory\Api\StockItemCriteriaInterface $criteria
-     * @return void
+     * @return bool
      */
     public function addCriteria(\Magento\CatalogInventory\Api\StockItemCriteriaInterface $criteria)
     {
         $this->data[self::PART_CRITERIA_LIST]['list'][] = $criteria;
+        return true;
     }
 }

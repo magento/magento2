@@ -47,7 +47,7 @@
             <?php $wrapOptions = false; ?>
             <?php foreach ($this->getFilters() as $filter): ?>
                 <?php if(!$wrapOptions): ?>
-                    <strong class="block-subtitle filter-subtitle"><?php echo __('Shopping Options') ?></strong>
+                    <strong role="heading" aria-level="2" class="block-subtitle filter-subtitle"><?php echo __('Shopping Options') ?></strong>
                     <dl class="filter-options" id="narrow-by-list">
                 <?php $wrapOptions = true; endif; ?>
                     <?php if ($filter->getItemsCount()): ?>

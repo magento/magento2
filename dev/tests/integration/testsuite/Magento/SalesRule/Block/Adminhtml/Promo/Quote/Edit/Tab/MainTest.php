@@ -58,7 +58,7 @@ class MainTest extends \PHPUnit_Framework_TestCase
         $prepareFormMethod->invoke($block);
 
         $form = $block->getForm();
-        foreach (array('from_date', 'to_date') as $id) {
+        foreach (['from_date', 'to_date'] as $id) {
             $element = $form->getElement($id);
             $this->assertNotNull($element);
             $this->assertNotEmpty($element->getDateFormat());
@@ -66,9 +66,13 @@ class MainTest extends \PHPUnit_Framework_TestCase
 
         // assert Customer Groups field
         $customerGroupsField = $form->getElement('customer_group_ids');
-        $customerGroupService = $objectManager->create('Magento\Customer\Service\V1\CustomerGroupServiceInterface');
+        /** @var \Magento\Customer\Api\GroupRepositoryInterface $groupRepository */
+        $groupRepository = $objectManager->create('Magento\Customer\Api\GroupRepositoryInterface');
+        /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteria */
+        $searchCriteria = $objectManager->create('Magento\Framework\Api\SearchCriteriaBuilder');
         $objectConverter = $objectManager->get('Magento\Framework\Convert\Object');
-        $groups = $customerGroupService->getGroups();
+        $groups = $groups = $groupRepository->getList($searchCriteria->create())
+            ->getItems();
         $expected = $objectConverter->toOptionArray($groups, 'id', 'code');
         $this->assertEquals($expected, $customerGroupsField->getValues());
     }

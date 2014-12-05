@@ -48,7 +48,6 @@
         </referenceBlock>
         <referenceContainer name="content">
             <container name="product.info.main" htmlTag="div" htmlClass="product-info-main" before="-">
-                <block class="Magento\Catalog\Block\Product\View" name="product.info.review" template="product/view/review.phtml" before="-" />
                 <container name="product.info.price" label="Product info auxiliary container" htmlTag="div" htmlClass="product-info-price" after="product.info.review">
                     <container name="product.info.stock.sku" label="Product auxiliary info" htmlTag="div" htmlClass="product-info-stock-sku">
                         <container name="product.info.type" before="-"/>
@@ -62,6 +61,7 @@
                             </arguments>
                         </block>
                     </container>
+                    <block class="Magento\Catalog\Block\Product\View" name="product.info.review" template="product/view/review.phtml" after="product.info.stock.sku" />
                     <block class="Magento\Catalog\Pricing\Render" name="product.price.final" after="product.info.sku">
                         <arguments>
                             <argument name="price_render" xsi:type="string">product.price.render.default</argument>

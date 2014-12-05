@@ -32,16 +32,5 @@
             <module name="Magento_Eav"/>
             <module name="Magento_Widget"/>
         </sequence>
-        <depends>
-            <module name="Magento_Store"/>
-            <module name="Magento_Core"/>
-            <module name="Magento_Customer"/>
-            <module name="Magento_Widget"/>
-            <module name="Magento_Backend"/>
-            <module name="Magento_Cms"/>
-            <module name="Magento_Email"/>
-            <module name="Magento_Cron"/>
-            <module name="Magento_Eav"/>
-        </depends>
     </module>
 </config>

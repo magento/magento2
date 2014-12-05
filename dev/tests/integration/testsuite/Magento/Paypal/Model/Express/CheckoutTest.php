@@ -48,8 +48,6 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepareCustomerQuote()
     {
-        /** @var \Magento\Customer\Service\V1\CustomerAddressServiceInterface $addressService */
-        $addressService = $this->_objectManager->get('Magento\Customer\Service\V1\CustomerAddressServiceInterface');
         /** @var Quote $quote */
         $quote = $this->_getFixtureQuote();
         $quote->setCheckoutMethod(Onepage::METHOD_CUSTOMER); // to dive into _prepareCustomerQuote() on switch
@@ -65,8 +63,12 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
         $checkout = $this->_getCheckout($quote);
         $checkout->place('token');
 
+        /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerService */
+        $customerService = $this->_objectManager->get('Magento\Customer\Api\CustomerRepositoryInterface');
+        $customer = $customerService->getById($quote->getCustomerId());
+
         $this->assertEquals(1, $quote->getCustomerId());
-        $this->assertEquals(2, count($addressService->getAddresses($quote->getCustomerId())));
+        $this->assertEquals(2, count($customer->getAddresses()));
 
         $this->assertEquals(1, $quote->getBillingAddress()->getCustomerAddressId());
         $this->assertEquals(2, $quote->getShippingAddress()->getCustomerAddressId());
@@ -85,8 +87,8 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepareNewCustomerQuote()
     {
-        /** @var \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerService */
-        $customerService = $this->_objectManager->get('Magento\Customer\Service\V1\CustomerAccountServiceInterface');
+        /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerService */
+        $customerService = $this->_objectManager->get('Magento\Customer\Api\CustomerRepositoryInterface');
 
         /** @var Quote $quote */
         $quote = $this->_getFixtureQuote();
@@ -98,10 +100,9 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
         $quote->setCustomerIsGuest(false);
         $checkout = $this->_getCheckout($quote);
         $checkout->place('token');
-        $customer = $customerService->getCustomer($quote->getCustomerId());
-        $customerDetails = $customerService->getCustomerDetails($customer->getId());
+        $customer = $customerService->getById($quote->getCustomerId());
         $this->assertEquals('user@example.com', $customer->getEmail());
-        $this->assertEquals('11111111', $customerDetails->getAddresses()[0]->getTelephone());
+        $this->assertEquals('11111111', $customer->getAddresses()[0]->getTelephone());
     }
 
     /**
@@ -114,8 +115,8 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepareNewCustomerQuoteConfirmationRequired()
     {
-        /** @var \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerService */
-        $customerService = $this->_objectManager->get('Magento\Customer\Service\V1\CustomerAccountServiceInterface');
+        /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerService */
+        $customerService = $this->_objectManager->get('Magento\Customer\Api\CustomerRepositoryInterface');
 
         /** @var Quote $quote */
         $quote = $this->_getFixtureQuote();
@@ -128,16 +129,15 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
 
         $checkout = $this->_getCheckout($quote);
         $checkout->place('token');
-        $customer = $customerService->getCustomer($quote->getCustomerId());
-        $customerDetails = $customerService->getCustomerDetails($customer->getId());
+        $customer = $customerService->getById($quote->getCustomerId());
         $this->assertEquals('user@example.com', $customer->getEmail());
-        $this->assertEquals('11111111', $customerDetails->getAddresses()[0]->getTelephone());
+        $this->assertEquals('11111111', $customer->getAddresses()[0]->getTelephone());
 
         /** @var \Magento\Framework\Message\ManagerInterface $messageManager */
         $messageManager = $this->_objectManager->get('\Magento\Framework\Message\ManagerInterface');
         $confirmationText = sprintf(
             'customer/account/confirmation/email/%s/key/',
-            $customerDetails->getCustomer()->getEmail()
+            $customer->getEmail()
         );
         /** @var \Magento\Framework\Message\MessageInterface $message */
         $message = $messageManager->getMessages()->getLastAddedMessage();

@@ -25,6 +25,13 @@
 @product-name-text-decoration: none;
 @product-name-text-decoration-hover: @link-text-decoration-hover;
 
+
+//
+//    Common
+//--------------------------------------
+
+.responsive-common() {
+
 .product-name() {
     font-weight: @font-weight-base;
     > a {
@@ -48,7 +55,7 @@
 
 .product {
     &-items {
-        &:extend(.abstract-reset-list all);
+        &:extend(.abs-reset-list all);
     }
     &-item {
         vertical-align: top;
@@ -56,7 +63,7 @@
             width: 100%/2;
             display: inline-block;
         }
-        &:extend(.abstract-add-box-sizing all);
+        &:extend(.abs-add-box-sizing all);
 
         &-name {
             .product-name();
@@ -83,12 +90,12 @@
             display: none;
             .actions-secondary {
                 > .action {
-                    &:extend(.abstract-actions-addto-gridlist all);
+                    &:extend(.abs-actions-addto-gridlist all);
                     &:before {
                         margin: 0;
                     }
                     span {
-                        &:extend(.abstract-visually-hidden all);
+                        &:extend(.abs-visually-hidden all);
                     }
                 }
             }
@@ -253,11 +260,17 @@
         }
     }
     .product-image-wrapper {
-        &:extend(.abstract-reset-image-wrapper all);
+        &:extend(.abs-reset-image-wrapper all);
     }
 }
 
-.responsive-smaller (@break) when (@break = @screen-s) {
+}
+
+//
+//    Mobile
+//--------------------------------------
+
+.responsive-max-m (@break) when (@break = @screen-s) {
     .products-list .product {
         &-item {
             table-layout: fixed;
@@ -269,7 +282,7 @@
     }
 }
 
-.responsive(@break) when (@break = @screen-s) {
+.responsive-min-m(@break) when (@break = @screen-s) {
     .product {
         &-item {
             .products-grid & {
@@ -298,9 +311,7 @@
             }
         }
     }
-}
 
-.responsive(@break) when (@break = @screen-s) {
     .products-grid .product-item { width: 100%/3 }
     .layout-1 .products-grid .product-item { width: 100%/3 }
     .layout-3 .products-grid .product-item { width: 100%/3 }
@@ -308,12 +319,17 @@
     .page-products.layout-1 .products-grid .product-item { width: 100%/3 }
     .page-products.layout-3 .products-grid .product-item { width: 100%/3 }
 }
-.responsive(@break) when (@break = @screen-m) {
+
+//
+//    Desktop
+//--------------------------------------
+
+.responsive-min-l(@break) when (@break = @screen-m) {
     .page-products .products-grid .product-item { width: 100%/3 }
     .page-products.layout-1 .products-grid .product-item { width: 100%/4 }
     .page-products.layout-3 .products-grid .product-item { width: 100%/2 }
 }
-.responsive(@break) when (@break = @screen-l) {
+.responsive-min-l(@break) when (@break = @screen-l) {
     .products-grid .product-item { width: 100%/5 }
     .layout-1 .products-grid .product-item { width: 100%/6 }
     .layout-3 .products-grid .product-item { width: 100%/4 }
@@ -329,7 +345,8 @@
     .page-products.layout-1 .products-grid .product-item { width: 100%/5 }
     .page-products.layout-3 .products-grid .product-item { width: 100%/4 }
 }
-.responsive(@break) when (@break = @screen-xl) {
+
+.responsive-min-l(@break) when (@break = @screen-xl) {
     .page-products .products-grid .product-item {
         width: 24.7%;
         margin-left: calc(~"(100% - 4 * 24.7%) / 3");

@@ -45,7 +45,7 @@ class FormPageActions extends AbstractFormPageActions
      *
      * @var string
      */
-    protected $storeViewButton = '[data-ui-id="language-switcher"] .toggle';
+    protected $storeViewButton = '.store-switcher .toggle';
 
     /**
      * Store View locator

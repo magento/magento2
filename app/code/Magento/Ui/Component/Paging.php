@@ -51,9 +51,11 @@ class Paging extends AbstractView
      */
     protected function updateDataCollection()
     {
-        $this->renderContext->getStorage()->getDataCollection($this->getParentName())
-            ->setCurPage($this->renderContext->getRequestParam('page', $this->config->getData('current')))
-            ->setPageSize($this->renderContext->getRequestParam('limit', $this->config->getData('pageSize')));
+        $defaultPage = $this->config->getData('current');
+        $offset = $this->renderContext->getRequestParam('page', $defaultPage);
+        $defaultLimit = $this->config->getData('pageSize');
+        $size = $this->renderContext->getRequestParam('limit', $defaultLimit);
+        $this->renderContext->getStorage()->getDataCollection($this->getParentName())->setLimit($offset, $size);
     }
 
     /**

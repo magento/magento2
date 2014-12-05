@@ -64,8 +64,8 @@ class MassOperationsTest extends \PHPUnit_Framework_TestCase
             'Magento\GoogleShopping\Model\Resource\Item\CollectionFactory'
         )->disableOriginalConstructor()->setMethods(array('create'))->getMock();
 
-        $this->itemFactory = $this->getMock('Magento\GoogleShopping\Model\ItemFactory');
-        $this->productFactory = $this->getMock('Magento\Catalog\Model\ProductFactory');
+        $this->itemFactory = $this->getMock('Magento\GoogleShopping\Model\ItemFactory', [], [], '', false);
+        $this->productFactory = $this->getMock('Magento\Catalog\Model\ProductFactory', [], [], '', false);
         $this->notificationInterface = $this->getMock('Magento\Framework\Notification\NotifierInterface');
         $this->storeManagerInterface = $this->getMock('Magento\Framework\StoreManagerInterface');
         $this->logger = $this->getMock('Magento\Framework\Logger', [], [], '', false);

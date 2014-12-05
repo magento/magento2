@@ -1806,7 +1806,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $productIdsToReindex[] = $row['product_id'];
 
                 $row['website_id'] = $this->stockConfiguration->getDefaultWebsiteId();
-                $row['stock_id'] = $this->stockRegistry->getStock($row['website_id'])->getId();
+                $row['stock_id'] = $this->stockRegistry->getStock($row['website_id'])->getStockId();
 
                 $stockItemDo = $this->stockRegistry->getStockItem($row['product_id'], $row['website_id']);
                 $existStockData = $stockItemDo->getData();

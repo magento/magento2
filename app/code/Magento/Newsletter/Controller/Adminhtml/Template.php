@@ -39,14 +39,4 @@ class Template extends \Magento\Backend\App\Action
     {
         return $this->_authorization->isAllowed('Magento_Newsletter::template');
     }
-
-    /**
-     * Set title of page
-     *
-     * @return $this
-     */
-    protected function _setTitle()
-    {
-        return $this->_title->add(__('Newsletter Templates'));
-    }
 }

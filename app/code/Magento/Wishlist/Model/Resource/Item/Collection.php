@@ -501,7 +501,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
             /** @var \Magento\Catalog\Model\Entity\Attribute $attribute */
             $attribute = $this->_catalogAttrFactory->create()->loadByCode($entityTypeId, 'name');
 
-            $storeId = $this->_storeManager->getStore()->getId();
+            $storeId = $this->_storeManager->getStore(\Magento\Store\Model\Store::ADMIN_CODE)->getId();
 
             $this->getSelect()->join(
                 array('product_name_table' => $attribute->getBackendTable()),

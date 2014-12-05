@@ -55,8 +55,6 @@ class Category extends \Magento\Backend\App\Action
      */
     protected function _initCategory($getRootInstead = false)
     {
-        $this->_title->add(__('Categories'));
-
         $categoryId = (int)$this->getRequest()->getParam('id', false);
         $storeId = (int)$this->getRequest()->getParam('store');
         $category = $this->_objectManager->create('Magento\Catalog\Model\Category');

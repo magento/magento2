@@ -27,10 +27,10 @@ define([
     "mage/backend/form",
     "jquery/ui",
     "prototype"
-], function($, form){
+], function($){
     "use strict";
 
-    $.widget("mage.categoryForm", form, {
+    $.widget("mage.categoryForm", $.mage.form, {
         options: {
             categoryIdSelector : 'input[name="general[id]"]',
             categoryPathSelector : 'input[name="general[path]"]'

@@ -23,6 +23,8 @@
  */
 namespace Magento\Sales\Model\Quote;
 
+use Magento\Framework\Api\AttributeDataBuilder;
+
 /**
  * Quote payment information
  *
@@ -87,6 +89,7 @@ class Payment extends \Magento\Payment\Model\Info
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param AttributeDataBuilder $customAttributeBuilder
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Payment\Model\Checks\SpecificationFactory $methodSpecificationFactory
@@ -98,6 +101,7 @@ class Payment extends \Magento\Payment\Model\Info
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        AttributeDataBuilder $customAttributeBuilder,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Payment\Model\Checks\SpecificationFactory $methodSpecificationFactory,
@@ -110,6 +114,7 @@ class Payment extends \Magento\Payment\Model\Info
             $context,
             $registry,
             $metadataService,
+            $customAttributeBuilder,
             $paymentData,
             $encryptor,
             $resource,

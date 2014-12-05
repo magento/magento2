@@ -48,7 +48,7 @@ if ($exist = $this->getRecentlyComparedProducts()) {
 <?php if ($exist):?>
     <div class="block widget block-compared-products-<?php echo $mode; ?>">
         <div class="block-title">
-            <strong><?php echo $title; ?></strong>
+            <strong role="heading" aria-level="2"><?php echo $title; ?></strong>
         </div>
         <div class="block-content">
             <?php echo '<!-- ' . $image . '-->' ?>

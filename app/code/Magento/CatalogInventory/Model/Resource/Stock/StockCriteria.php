@@ -45,16 +45,18 @@ class StockCriteria extends AbstractCriteria implements \Magento\CatalogInventor
     public function setWebsiteFilter($website)
     {
         $this->data['website_filter'] = $website;
+        return true;
     }
 
     /**
      * Add Criteria object
      *
      * @param \Magento\CatalogInventory\Api\StockCriteriaInterface $criteria
-     * @return void
+     * @return bool
      */
     public function addCriteria(\Magento\CatalogInventory\Api\StockCriteriaInterface $criteria)
     {
         $this->data[self::PART_CRITERIA_LIST]['list'][] = $criteria;
+        return true;
     }
 }

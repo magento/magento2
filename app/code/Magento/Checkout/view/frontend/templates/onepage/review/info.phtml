@@ -37,14 +37,14 @@
                 <th class="col subtotal" scope="col"><?php echo __('Subtotal') ?></th>
             </tr>
         </thead>
-        <tfoot>
-            <?php echo $this->getChildHtml('totals'); ?>
-        </tfoot>
         <tbody>
         <?php foreach($this->getItems() as $_item): ?>
             <?php echo $this->getItemHtml($_item)?>
         <?php endforeach ?>
         </tbody>
+        <tfoot>
+            <?php echo $this->getChildHtml('totals'); ?>
+        </tfoot>
     </table>
 </div>
 <?php echo $this->getChildHtml('items_after'); ?>

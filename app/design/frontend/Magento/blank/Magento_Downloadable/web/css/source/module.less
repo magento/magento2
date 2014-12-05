@@ -22,6 +22,13 @@
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
+
+//
+//    Common
+//--------------------------------------
+
+.responsive-common() {
+
 .downloadable.samples {
     margin-bottom: @indent-base;
     dd {
@@ -64,7 +71,7 @@
     .product-add-form {
         clear: both;
         margin-bottom: @indent-m-base;
-        &:extend(.abstract-add-clearfix all);
+        &:extend(.abs-add-clearfix all);
     }
     .product-options-bottom {
         .field.qty {
@@ -74,16 +81,18 @@
     .product-options-wrapper {
         .fieldset {
             .legend.links-title {
-                &:extend(.abstract-visually-hidden all);
+                &:extend(.abs-visually-hidden all);
             }
         }
     }
 }
 
+}
+
 //
 // Product view Desktop
 //--------------------------------------
-.responsive(@break) when (@break = @screen-m) {
+.responsive-min-l(@break) when (@break = @screen-m) {
     .page-product-downloadable {
         .product-add-form {
             &:extend(.clearer all);

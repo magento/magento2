@@ -36,26 +36,32 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address */
     protected $_addressBlock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Service\V1\CustomerAddressServiceInterface */
-    protected $_addressService;
+    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Api\AddressRepositoryInterface */
+    protected $addressRepository;
 
     protected function setUp()
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_addressService = $this->getMock('Magento\Customer\Service\V1\CustomerAddressServiceInterface');
+        $this->addressRepository = $this->getMockForAbstractClass(
+            'Magento\Customer\Api\AddressRepositoryInterface',
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['getList']
+        );
         /** @var \Magento\Framework\View\LayoutInterface $layout */
         $layout = $this->_objectManager->get('Magento\Framework\View\LayoutInterface');
-        $sessionQuoteMock = $this->getMockBuilder(
-            'Magento\Backend\Model\Session\Quote'
-        )->disableOriginalConstructor()->setMethods(
-            array('getCustomerId', 'getStore', 'getStoreId', 'getQuote')
-        )->getMock();
+        $sessionQuoteMock = $this->getMockBuilder('Magento\Backend\Model\Session\Quote')
+            ->disableOriginalConstructor()->setMethods(['getCustomerId', 'getStore', 'getStoreId', 'getQuote'])
+            ->getMock();
         $sessionQuoteMock->expects($this->any())->method('getCustomerId')->will($this->returnValue(1));
 
         $this->_addressBlock = $layout->createBlock(
             'Magento\Sales\Block\Adminhtml\Order\Create\Form\Address',
             'address_block' . rand(),
-            array('addressService' => $this->_addressService, 'sessionQuote' => $sessionQuoteMock)
+            ['addressService' => $this->addressRepository, 'sessionQuote' => $sessionQuoteMock]
         );
         parent::setUp();
     }
@@ -63,14 +69,42 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     public function testGetAddressCollection()
     {
         $addressData = $this->_getAddresses();
-        $this->_addressService->expects($this->any())->method('getAddresses')->will($this->returnValue($addressData));
+        $searchResult = $this->getMockForAbstractClass(
+            'Magento\Customer\Api\Data\AddressSearchResultsInterface',
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['getItems']
+        );
+        $searchResult->expects($this->any())
+            ->method('getItems')
+            ->will($this->returnValue($addressData));
+        $this->addressRepository->expects($this->any())
+            ->method('getList')
+            ->will($this->returnValue($searchResult));
         $this->assertEquals($addressData, $this->_addressBlock->getAddressCollection());
     }
 
     public function testGetAddressCollectionJson()
     {
         $addressData = $this->_getAddresses();
-        $this->_addressService->expects($this->any())->method('getAddresses')->will($this->returnValue($addressData));
+        $searchResult = $this->getMockForAbstractClass(
+            'Magento\Customer\Api\Data\AddressSearchResultsInterface',
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['getItems']
+        );
+        $searchResult->expects($this->any())
+            ->method('getItems')
+            ->will($this->returnValue($addressData));
+        $this->addressRepository->expects($this->any())
+            ->method('getList')
+            ->will($this->returnValue($searchResult));
         $expectedOutput = '[
             {
                 "firstname": false,
@@ -115,7 +149,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
                 "vat_id": false
             }
         ]';
-        $expectedOutput = str_replace(array('    ', "\n", "\r"), '', $expectedOutput);
+        $expectedOutput = str_replace(['    ', "\n", "\r"], '', $expectedOutput);
         $expectedOutput = str_replace(': ', ':', $expectedOutput);
 
         $this->assertEquals($expectedOutput, $this->_addressBlock->getAddressCollectionJson());
@@ -133,7 +167,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetForm()
     {
-        $expectedFields = array(
+        $expectedFields = [
             'prefix',
             'firstname',
             'middlename',
@@ -149,7 +183,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             'telephone',
             'fax',
             'vat_id'
-        );
+        ];
         $form = $this->_addressBlock->getForm();
         $this->assertEquals(1, $form->getElements()->count(), "Form has invalid number of fieldsets");
         /** @var \Magento\Framework\Data\Form\Element\Fieldset $fieldset */
@@ -177,14 +211,14 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getAddresses()
     {
-        /** @var \Magento\Customer\Service\V1\Data\AddressBuilder $addressBuilder */
-        $addressBuilder = $this->_objectManager->create('Magento\Customer\Service\V1\Data\AddressBuilder');
+        /** @var \Magento\Customer\Api\Data\AddressDataBuilder $addressBuilder */
+        $addressBuilder = $this->_objectManager->create('Magento\Customer\Api\Data\AddressDataBuilder');
         $addressBuilder->populateWithArray(
-            array('id' => 1, 'street' => ['Street1'], 'firstname' => 'FirstName1', 'lastname' => 'LastName1')
+            ['id' => 1, 'street' => ['Street1'], 'firstname' => 'FirstName1', 'lastname' => 'LastName1']
         );
         $addressData[] = $addressBuilder->create();
         $addressBuilder->populateWithArray(
-            array('id' => 2, 'street' => ['Street2'], 'firstname' => 'FirstName2', 'lastname' => 'LastName2')
+            ['id' => 2, 'street' => ['Street2'], 'firstname' => 'FirstName2', 'lastname' => 'LastName2']
         );
         $addressData[] = $addressBuilder->create();
         return $addressData;

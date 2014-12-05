@@ -121,8 +121,6 @@ class TextTest extends AbstractFormTestCase
      */
     public function testValidateValueLength($value, $expected)
     {
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-
         $minTextLengthRule = $this->getMockBuilder('Magento\Customer\Api\Data\ValidationRuleInterface')
             ->disableOriginalConstructor()
             ->setMethods(['getName', 'getValue'])

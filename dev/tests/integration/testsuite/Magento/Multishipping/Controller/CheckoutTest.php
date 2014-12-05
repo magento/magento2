@@ -45,21 +45,23 @@ class CheckoutTest extends \Magento\TestFramework\TestCase\AbstractController
         /** @var $quote \Magento\Sales\Model\Quote */
         $quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Quote');
         $quote->load('test01', 'reserved_order_id');
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Checkout\Model\Session'
-        )->setQuoteId(
-            $quote->getId()
-        );
+
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Checkout\Model\Session')
+            ->setQuoteId($quote->getId());
+
         $formKey = $this->_objectManager->get('Magento\Framework\Data\Form\FormKey');
-        $logger = $this->getMock('Magento\Framework\Logger', array(), array(), '', false);
+        $logger = $this->getMock('Magento\Framework\Logger', [], [], '', false);
+
         /** @var $session \Magento\Customer\Model\Session */
-        $session = Bootstrap::getObjectManager()->create('Magento\Customer\Model\Session', array($logger));
-        $service = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Service\V1\CustomerAccountService'
-        );
+        $session = Bootstrap::getObjectManager()->create('Magento\Customer\Model\Session', [$logger]);
+
+        /** @var \Magento\Customer\Api\AccountManagementInterface  $service */
+        $service = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Customer\Api\AccountManagementInterface');
         $customer = $service->authenticate('customer@example.com', 'password');
+
         $session->setCustomerDataAsLoggedIn($customer);
-        $this->getRequest()->setPost('payment', array('method' => 'checkmo'));
+        $this->getRequest()->setPost('payment', ['method' => 'checkmo']);
         $this->dispatch('multishipping/checkout/overview');
         $html = $this->getResponse()->getBody();
         $this->assertContains('<div class="box box-billing-method">', $html);

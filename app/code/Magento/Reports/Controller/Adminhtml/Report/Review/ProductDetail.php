@@ -33,8 +33,6 @@ class ProductDetail extends \Magento\Reports\Controller\Adminhtml\Report\Review
      */
     public function execute()
     {
-        $this->_title->add(__('Details'));
-
         $this->_initAction()->_setActiveMenu(
             'Magento_Review::report_review'
         )->_addBreadcrumb(
@@ -46,6 +44,7 @@ class ProductDetail extends \Magento\Reports\Controller\Adminhtml\Report\Review
         )->_addContent(
             $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Review\Detail')
         );
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Details'));
         $this->_view->renderLayout();
     }
 }

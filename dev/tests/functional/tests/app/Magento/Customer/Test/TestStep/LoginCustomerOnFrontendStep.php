@@ -27,7 +27,6 @@ namespace Magento\Customer\Test\TestStep;
 use Mtf\TestStep\TestStepInterface;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Customer\Test\Page\CustomerAccountLogin;
-use Magento\Customer\Test\Page\CustomerAccountLogout;
 use Magento\Customer\Test\Fixture\CustomerInjectable;
 
 /**
@@ -57,29 +56,19 @@ class LoginCustomerOnFrontendStep implements TestStepInterface
     protected $customerAccountLogin;
 
     /**
-     * Customer account logout page.
-     *
-     * @var CustomerAccountLogout
-     */
-    protected $customerAccountLogout;
-
-    /**
      * @constructor
      * @param CmsIndex $cmsIndex
      * @param CustomerAccountLogin $customerAccountLogin
-     * @param CustomerAccountLogout $customerAccountLogout
      * @param CustomerInjectable $customer
      */
     public function __construct(
         CmsIndex $cmsIndex,
         CustomerAccountLogin $customerAccountLogin,
-        CustomerAccountLogout $customerAccountLogout,
         CustomerInjectable $customer
     ) {
         $this->cmsIndex = $cmsIndex;
         $this->customerAccountLogin = $customerAccountLogin;
         $this->customer = $customer;
-        $this->customerAccountLogout = $customerAccountLogout;
     }
 
     /**

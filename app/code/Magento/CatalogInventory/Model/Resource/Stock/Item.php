@@ -81,6 +81,9 @@ class Item extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $data = $this->_getReadAdapter()->fetchRow($select, array(':website_id' => $websiteId));
         if ($data) {
             $item->setData($data);
+        } else {
+            // see \Magento\CatalogInventory\Model\Stock\Item::getStockQty
+            $item->setStockQty(0);
         }
         $this->_afterLoad($item);
         return $this;

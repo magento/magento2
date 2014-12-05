@@ -66,9 +66,9 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     private $formKeyValidatorMock;
 
     /**
-     * @var \Magento\Customer\Service\V1\CustomerAccountServiceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $customerAccountServiceMock;
+    private $customerRepositoryMock;
 
     protected function setUp()
     {
@@ -93,8 +93,8 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->formKeyValidatorMock = $this->getMockBuilder('Magento\Core\App\Action\FormKeyValidator')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->customerAccountServiceMock =
-            $this->getMockBuilder('Magento\Customer\Service\V1\CustomerAccountServiceInterface')
+        $this->customerRepositoryMock =
+            $this->getMockBuilder('Magento\Customer\Api\CustomerRepositoryInterface')
                 ->disableOriginalConstructor()
                 ->getMock();
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -106,7 +106,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 'redirect' => $this->redirectMock,
                 'customerSession' => $this->customerSessionMock,
                 'formKeyValidator' => $this->formKeyValidatorMock,
-                'customerAccountService' => $this->customerAccountServiceMock
+                'customerRepository' => $this->customerRepositoryMock
             ]);
     }
 
@@ -152,8 +152,8 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->customerSessionMock->expects($this->any())
             ->method('getCustomerId')
             ->will($this->returnValue(1));
-        $this->customerAccountServiceMock->expects($this->any())
-            ->method('getCustomer')
+        $this->customerRepositoryMock->expects($this->any())
+            ->method('getById')
             ->will($this->throwException(
                     new NoSuchEntityException(
                         NoSuchEntityException::MESSAGE_SINGLE_FIELD,

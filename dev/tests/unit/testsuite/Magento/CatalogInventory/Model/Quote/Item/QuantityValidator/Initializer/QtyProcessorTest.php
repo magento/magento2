@@ -50,7 +50,7 @@ class QtyProcessorTest extends \PHPUnit_Framework_TestCase
         $this->qtyProcessor = new QtyProcessor($this->quoteItemQtyList);
         $this->itemMock = $this->getMockBuilder('Magento\Sales\Model\Quote\Item')
             ->disableOriginalConstructor()
-            ->setMethods(['getParentItem', 'getProduct'])
+            ->setMethods(['getParentItem', 'getProduct', '__wakeup'])
             ->getMock();
     }
 
@@ -96,7 +96,7 @@ class QtyProcessorTest extends \PHPUnit_Framework_TestCase
 
         $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+            ->setMethods(['getId', '__wakeup'])
             ->getMock();
         $productMock->expects($this->once())
             ->method('getId')
@@ -123,7 +123,7 @@ class QtyProcessorTest extends \PHPUnit_Framework_TestCase
 
         $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+            ->setMethods(['getId', '__wakeup'])
             ->getMock();
         $productMock->expects($this->once())
             ->method('getId')

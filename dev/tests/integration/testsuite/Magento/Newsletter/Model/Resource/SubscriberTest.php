@@ -44,10 +44,10 @@ class SubscriberTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadByCustomerDataWithCustomerId()
     {
-        /** @var \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService */
+        /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerAccountService */
         $customerAccountService = Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Service\V1\CustomerAccountServiceInterface');
-        $customerData = $customerAccountService->getCustomerDetails(1)->getCustomer();
+            ->create('Magento\Customer\Api\CustomerRepositoryInterface');
+        $customerData = $customerAccountService->getById(1);
         $result = $this->_resourceModel->loadByCustomerData($customerData);
 
         $this->assertEquals(1, $result['customer_id']);
@@ -60,10 +60,10 @@ class SubscriberTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadByCustomerDataWithoutCustomerId()
     {
-        /** @var \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService */
+        /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerAccountService */
         $customerAccountService = Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Service\V1\CustomerAccountServiceInterface');
-        $customerData = $customerAccountService->getCustomerDetails(2)->getCustomer();
+            ->create('Magento\Customer\Api\CustomerRepositoryInterface');
+        $customerData = $customerAccountService->getById(2);
         $result = $this->_resourceModel->loadByCustomerData($customerData);
 
         $this->assertEquals(0, $result['customer_id']);

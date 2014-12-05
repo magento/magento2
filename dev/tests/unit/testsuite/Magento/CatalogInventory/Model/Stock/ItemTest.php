@@ -391,11 +391,10 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param int $storeId
-     * @param int $managerStoreId
      * @param int $expected
      * @dataProvider getStoreIdDataProvider
      */
-    public function testGetStoreId($storeId, $managerStoreId, $expected)
+    public function testGetStoreId($storeId, $expected)
     {
         if ($storeId) {
             $property = new \ReflectionProperty($this->item, 'storeId');
@@ -411,8 +410,8 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function getStoreIdDataProvider()
     {
         return [
-            [$this->storeId, 2, $this->storeId],
-            [0, 2, $this->storeId],
+            [$this->storeId, $this->storeId],
+            [0, $this->storeId],
         ];
     }
 }

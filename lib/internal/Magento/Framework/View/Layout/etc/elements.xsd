@@ -358,7 +358,6 @@
             <xs:enumeration value="main"/>
             <xs:enumeration value="header"/>
             <xs:enumeration value="footer"/>
-            <xs:enumeration value="hgroup"/>
             <xs:enumeration value="ol"/>
             <xs:enumeration value="p"/>
             <xs:enumeration value="section"/>

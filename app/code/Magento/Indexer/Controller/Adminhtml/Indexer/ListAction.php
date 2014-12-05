@@ -33,10 +33,9 @@ class ListAction extends \Magento\Indexer\Controller\Adminhtml\Indexer
      */
     public function execute()
     {
-        $this->_title->add(__('Index Management'));
-
         $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_Indexer::system_index');
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Index Management'));
         $this->_view->renderLayout();
     }
 }

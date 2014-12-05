@@ -75,9 +75,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     protected $itemOptFactory;
 
     /**
-     * @var \Magento\Catalog\Model\ProductFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $productFactory;
+    protected $productRepository;
 
     /**
      * @var Item
@@ -97,10 +97,6 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->date = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\DateTime')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->productFactory = $this->getMockBuilder('Magento\Catalog\Model\ProductFactory')
-            ->disableOriginalConstructor()
-            ->setMethods(array('create'))
-            ->getMock();
         $this->catalogUrl = $this->getMockBuilder('Magento\Catalog\Model\Resource\Url')
             ->disableOriginalConstructor()
             ->getMock();
@@ -114,6 +110,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->productTypeConfig = $this->getMockBuilder('Magento\Catalog\Model\ProductTypes\ConfigInterface')
             ->getMock();
+        $this->productRepository = $this->getMock('Magento\Catalog\Api\ProductRepositoryInterface');
         $this->resource = $this->getMockBuilder('Magento\Wishlist\Model\Resource\Item')
             ->disableOriginalConstructor()
             ->getMock();
@@ -126,11 +123,11 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             $this->registry,
             $this->storeManager,
             $this->date,
-            $this->productFactory,
             $this->catalogUrl,
             $this->optionFactory,
             $this->itemOptFactory,
             $this->productTypeConfig,
+            $this->productRepository,
             $this->resource,
             $this->collection,
             array()

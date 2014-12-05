@@ -43,7 +43,7 @@
     <event name="controller_action_postdispatch_checkout_onepage_saveBilling">
         <observer name="persistent" instance="Magento\Persistent\Model\Observer\Session" method="setRememberMeCheckedStatus" />
     </event>
-    <event name="controller_action_layout_generate_blocks_after">
+    <event name="layout_generate_blocks_after">
         <observer name="persistent" instance="Magento\Persistent\Model\Observer\ApplyPersistentData" method="execute" />
     </event>
     <event name="controller_action_predispatch">

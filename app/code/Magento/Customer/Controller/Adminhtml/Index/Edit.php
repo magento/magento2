@@ -137,16 +137,18 @@ class Edit extends \Magento\Customer\Controller\Adminhtml\Index
         $this->_getSession()->setCustomerData($customerData);
 
         $this->_view->loadLayout();
+        $this->_setActiveMenu('Magento_Customer::customer_manage');
+        $this->prepareDefaultCustomerTitle();
 
+        $this->_setActiveMenu('Magento_Customer::customer');
         if ($isExistingCustomer) {
-            $this->_title->add($this->_viewHelper->getCustomerName($customer));
+            $this->_view->getPage()->getConfig()->getTitle()->prepend($this->_viewHelper->getCustomerName($customer));
         } else {
-            $this->_title->add(__('New Customer'));
+            $this->_view->getPage()->getConfig()->getTitle()->prepend(__('New Customer'));
         }
         /**
          * Set active menu item
          */
-        $this->_setActiveMenu('Magento_Customer::customer');
 
         $this->_view->renderLayout();
     }

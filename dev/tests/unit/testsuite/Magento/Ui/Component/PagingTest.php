@@ -164,33 +164,37 @@ class PagingTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\View\Element\UiComponent\ConfigStorageInterface'
         );
         $dataCollectionMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Data\Collection',
-            ['setCurPage', 'setPageSize'],
+            '\Magento\Framework\Data\CollectionDataSourceInterface',
+            [],
             '',
-            false
+            false,
+            true,
+            true,
+            ['setLimit']
         );
 
         $this->renderContextMock->expects($this->any())->method('getStorage')->willReturn($storageMock);
-        $storageMock->expects($this->once())
-            ->method('addComponentsData')
-            ->with($configurationMock)
-            ->willReturnSelf();
+
         $storageMock->expects($this->once())->method('getDataCollection')->willReturn($dataCollectionMock);
 
-        $configurationMock->expects($this->at(1))->method('getData')->with('current')->willReturn($paramsPage);
-        $this->renderContextMock->expects($this->any())->method('getRequestParam')->willReturn($paramsPage);
+        $configurationMock->expects($this->at(0))->method('getData')->with('current')->willReturn($paramsPage);
 
-        $configurationMock->expects($this->at(2))->method('getData')->with('pageSize')->willReturn($paramsSize);
-        $this->renderContextMock->expects($this->any())->method('getRequestParam')->willReturn($paramsSize);
+
+
+        $configurationMock->expects($this->at(1))->method('getData')->with('pageSize')->willReturn($paramsSize);
+        $this->renderContextMock->expects($this->atLeastOnce())
+            ->method('getRequestParam')
+            ->willReturnMap(
+                [
+                    ['page', $paramsPage, $paramsPage],
+                    ['limit', $paramsSize, $paramsSize]
+                ]
+            );
 
         $dataCollectionMock->expects($this->any())
-            ->method('setCurPage')
-            ->with($paramsPage)->willReturnSelf();
-        $dataCollectionMock->expects($this->any())
-            ->method('setPageSize')
-            ->with($paramsSize)->willReturn(
-            null
-        );
+            ->method('setLimit')
+            ->with($paramsPage, $paramsSize)
+            ->willReturnSelf();
 
         $this->assertNull($this->view->prepare());
     }

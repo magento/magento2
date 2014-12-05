@@ -287,8 +287,10 @@ class TypeProcessor
          * eg @return \Magento\Webapi\Service\Entity\SimpleData[] is returned with type
          * \Magento\Webapi\Service\Entity\SimpleData instead of \Magento\Webapi\Service\Entity\SimpleData[]
          */
-        $escapedReturnType = str_replace('\\', '\\\\', $returnType);
-        if (preg_match("/.*\\@return\\s+({$escapedReturnType}\\[\\]).*/i", $methodDocBlock->getContents(), $matches)) {
+        $escapedReturnType = str_replace('[]', '\[\]', $returnType);
+        $escapedReturnType = str_replace('\\', '\\\\', $escapedReturnType);
+
+        if (preg_match("/.*\\@return\\s+({$escapedReturnType}).*/i", $methodDocBlock->getContents(), $matches)) {
             $returnType = $matches[1];
         }
         $isRequired = preg_match("/.*\@return\s+\S+\|null.*/i", $methodDocBlock->getContents(), $matches)

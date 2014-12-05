@@ -27,10 +27,13 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
 
-use Magento\Customer\Service\V1\Data\Eav\AttributeMetadataBuilder;
+use Magento\Customer\Api\Data\AttributeMetadataDataBuilder;
 use Magento\Customer\Api\Data\OptionDataBuilder;
 use Magento\Customer\Api\Data\ValidationRuleDataBuilder;
 
+/**
+ * Class AbstractTest
+ */
 class AbstractTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -43,14 +46,14 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
             ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
 
         $objectManager->get('Magento\Framework\View\DesignInterface')->setDefaultDesignTheme();
-        $arguments = array(
+        $arguments = [
             $objectManager->get('Magento\Backend\Block\Template\Context'),
             $objectManager->get('Magento\Backend\Model\Session\Quote'),
             $objectManager->get('Magento\Sales\Model\AdminOrder\Create'),
             $objectManager->get('Magento\Framework\Pricing\PriceCurrencyInterface'),
             $objectManager->get('Magento\Framework\Data\FormFactory'),
             $objectManager->get('Magento\Framework\Reflection\DataObjectProcessor')
-        );
+        ];
 
         /** @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractForm */
         $block = $this->getMockForAbstractClass(
@@ -68,26 +71,15 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         /** @var $formFactory \Magento\Framework\Data\FormFactory */
         $formFactory = $objectManager->get('Magento\Framework\Data\FormFactory');
         $form = $formFactory->create();
-        $fieldset = $form->addFieldset('test_fieldset', array());
-        $attributeBuilder = $objectManager->create(
-            '\Magento\Customer\Service\V1\Data\Eav\AttributeMetadataBuilder',
-            [
-                'optionBuilder' => $objectManager->create('Magento\Customer\Service\V1\Data\Eav\OptionBuilder'),
-                'validationRuleBuilder' => $objectManager->create(
-                    'Magento\Customer\Service\V1\Data\Eav\ValidationRuleBuilder'
-                ),
-            ]
-        );
-        $dateAttribute = $attributeBuilder->setAttributeCode(
-            'date'
-        )->setBackendType(
-            'datetime'
-        )->setFrontendInput(
-            'date'
-        )->setFrontendLabel(
-            'Date'
-        )->create();
-        $attributes = array('date' => $dateAttribute);
+        $fieldset = $form->addFieldset('test_fieldset', []);
+        /** @var \Magento\Customer\Api\Data\AttributeMetadataDataBuilder $attributeBuilder */
+        $attributeBuilder = $objectManager->create('Magento\Customer\Api\Data\AttributeMetadataDataBuilder');
+        $dateAttribute = $attributeBuilder->setAttributeCode('date')
+            ->setBackendType('datetime')
+            ->setFrontendInput('date')
+            ->setFrontendLabel('Date')
+            ->create();
+        $attributes = ['date' => $dateAttribute];
         $method->invoke($block, $attributes, $fieldset);
 
         $element = $form->getElement('date');

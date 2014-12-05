@@ -198,7 +198,7 @@ class ListingTest extends \PHPUnit_Framework_TestCase
             ->method('getUrl')
             ->with('*/*/new')
             ->willReturn('http://mage.local/category/new');
-        $dataCollection = $this->getMock('Magento\Framework\Data\Collection', [], [], '', false);
+        $dataCollection = $this->getMock('Magento\Framework\Data\CollectionDataSourceInterface', [], [], '', false);
         $this->listingView->setData('configuration', $config);
         $this->listingView->setData('name', 'someName');
         $this->listingView->setData('dataSource', $dataCollection);

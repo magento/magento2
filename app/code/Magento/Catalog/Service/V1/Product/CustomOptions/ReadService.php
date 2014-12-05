@@ -46,7 +46,7 @@ class ReadService implements \Magento\Catalog\Service\V1\Product\CustomOptions\R
     protected $optionBuilder;
 
     /**
-     * @var \Magento\Catalog\Model\ProductRepository
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
     protected $productRepository;
 
@@ -59,14 +59,14 @@ class ReadService implements \Magento\Catalog\Service\V1\Product\CustomOptions\R
      * @param \Magento\Catalog\Model\ProductOptions\ConfigInterface $productOptionConfig
      * @param Data\OptionTypeBuilder $optionTypeBuilder
      * @param Data\OptionBuilder $optionBuilder
-     * @param \Magento\Catalog\Model\ProductRepository $productRepository
+     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param Data\Option\Metadata\ReaderInterface $optionMetadataReader
      */
     public function __construct(
         \Magento\Catalog\Model\ProductOptions\ConfigInterface $productOptionConfig,
         Data\OptionTypeBuilder $optionTypeBuilder,
         Data\OptionBuilder $optionBuilder,
-        \Magento\Catalog\Model\ProductRepository $productRepository,
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         Data\Option\Metadata\ReaderInterface $optionMetadataReader
     ) {
         $this->productOptionConfig = $productOptionConfig;

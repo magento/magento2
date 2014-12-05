@@ -56,9 +56,10 @@ class DiscountsTest extends \PHPUnit_Framework_TestCase
         $this->dateTime = $this->getMock('Magento\Framework\Stdlib\DateTime');
         $this->collectionFactory = $this->getMock(
             'Magento\SalesRule\Model\Resource\Rule\CollectionFactory',
-            [
-                'create'
-            ]
+            ['create'],
+            [],
+            '',
+            false
         );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);

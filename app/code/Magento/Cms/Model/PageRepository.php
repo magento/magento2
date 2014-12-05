@@ -23,16 +23,14 @@
  */
 namespace Magento\Cms\Model;
 
-use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Class PageRepository
- * @api
  */
-class PageRepository implements PageRepositoryInterface
+class PageRepository implements \Magento\Cms\Api\PageRepositoryInterface
 {
     /**
      * @var \Magento\Cms\Model\Resource\Page
@@ -40,12 +38,12 @@ class PageRepository implements PageRepositoryInterface
     protected $resource;
 
     /**
-     * @var \Magento\Cms\Api\Data\PageInterfaceFactory
+     * @var \Magento\Cms\Model\PageFactory
      */
     protected $pageFactory;
 
     /**
-     * @var \Magento\Cms\Api\Data\PageCollectionInterfaceFactory
+     * @var \Magento\Cms\Model\Resource\Page\CollectionFactory
      */
     protected $pageCollectionFactory;
 
@@ -61,15 +59,15 @@ class PageRepository implements PageRepositoryInterface
 
     /**
      * @param Resource\Page $resource
-     * @param \Magento\Cms\Api\Data\PageInterfaceFactory $pageFactory
-     * @param \Magento\Cms\Api\Data\PageCollectionInterfaceFactory $pageCollectionFactory
+     * @param \Magento\Cms\Model\PageFactory $pageFactory
+     * @param \Magento\Cms\Model\Resource\Page\CollectionFactory $pageCollectionFactory
      * @param \Magento\Framework\DB\QueryBuilderFactory $queryBuilderFactory
      * @param \Magento\Framework\DB\MapperFactory $mapperFactory
      */
     public function __construct(
         \Magento\Cms\Model\Resource\Page $resource,
-        \Magento\Cms\Api\Data\PageInterfaceFactory $pageFactory,
-        \Magento\Cms\Api\Data\PageCollectionInterfaceFactory $pageCollectionFactory,
+        \Magento\Cms\Model\PageFactory $pageFactory,
+        \Magento\Cms\Model\Resource\Page\CollectionFactory $pageCollectionFactory,
         \Magento\Framework\DB\QueryBuilderFactory $queryBuilderFactory,
         \Magento\Framework\DB\MapperFactory $mapperFactory
     ) {
@@ -101,14 +99,14 @@ class PageRepository implements PageRepositoryInterface
      * Load Page data by given Page Identity
      *
      * @param string $pageId
-     * @return \Magento\Cms\Api\Data\PageInterface
+     * @return \Magento\Cms\Model\Page
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function get($pageId)
     {
         $page = $this->pageFactory->create();
         $this->resource->load($page, $pageId);
-        if (!$page->getPageId()) {
+        if (!$page->getId()) {
             throw new NoSuchEntityException(sprintf('CMS Page with id "%s" does not exist.', $pageId));
         }
         return $page;

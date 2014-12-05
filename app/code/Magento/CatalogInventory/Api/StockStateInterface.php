@@ -25,8 +25,6 @@ namespace Magento\CatalogInventory\Api;
 
 /**
  * Interface StockStateInterface
- * @package Magento\CatalogInventory\Api
- * @api
  */
 interface StockStateInterface
 {
@@ -46,9 +44,9 @@ interface StockStateInterface
 
     /**
      * @param int $productId
-     * @param int|float $itemQty
-     * @param int|float $qtyToCheck
-     * @param int|float $origQty
+     * @param float $itemQty
+     * @param float $qtyToCheck
+     * @param float $origQty
      * @param int $websiteId
      * @return int
      */
@@ -58,29 +56,21 @@ interface StockStateInterface
      * Check quantity
      *
      * @param int $productId
-     * @param int|float $qty
+     * @param float $qty
      * @param int $websiteId
-     * @exception \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Model\Exception
      * @return bool
      */
     public function checkQty($productId, $qty, $websiteId = null);
-
-    /**
-     * @param int $productId
-     * @param int|float $qty
-     * @param int $websiteId
-     * @return \Magento\Framework\Object
-     */
-    public function checkQtyIncrements($productId, $qty, $websiteId = null);
 
     /**
      * Returns suggested qty that satisfies qty increments and minQty/maxQty/minSaleQty/maxSaleQty conditions
      * or original qty if such value does not exist
      *
      * @param int $productId
-     * @param int|float $qty
+     * @param float $qty
      * @param int $websiteId
-     * @return int|float
+     * @return float
      */
     public function suggestQty($productId, $qty, $websiteId = null);
 

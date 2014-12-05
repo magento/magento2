@@ -36,7 +36,6 @@ use Magento\Framework\Exception\CouldNotDeleteException;
 
 /**
  * Class StockRepository
- * @api
  */
 class StockRepository implements StockRepositoryInterface
 {
@@ -102,8 +101,8 @@ class StockRepository implements StockRepositoryInterface
     }
 
     /**
-     * @param string $stockId
-     * @return StockInterface|\Magento\CatalogInventory\Model\Stock
+     * @param int $stockId
+     * @return StockInterface
      * @throws NoSuchEntityException
      */
     public function get($stockId)

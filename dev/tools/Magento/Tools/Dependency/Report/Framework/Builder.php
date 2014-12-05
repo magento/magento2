@@ -102,11 +102,6 @@ class Builder extends AbstractBuilder
      */
     protected function getAllowedModules()
     {
-        return array_map(
-            function ($element) {
-                return $element['name'];
-            },
-            $this->configParser->parse(array('files_for_parse' => $this->options['parse']['config_files']))
-        );
+        return $this->configParser->parse(array('files_for_parse' => $this->options['parse']['config_files']));
     }
 }

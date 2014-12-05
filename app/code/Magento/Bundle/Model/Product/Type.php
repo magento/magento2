@@ -23,6 +23,7 @@
  */
 namespace Magento\Bundle\Model\Product;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
@@ -151,7 +152,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected $_stockState;
 
     /**
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
@@ -161,6 +161,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\Logger $logger
+     * @param ProductRepositoryInterface $productRepository
      * @param \Magento\Catalog\Helper\Product $catalogProduct
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Bundle\Model\SelectionFactory $bundleModelSelection
@@ -173,12 +174,10 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\CatalogInventory\Api\StockStateInterface $stockState
-     * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Model\Product\Option $catalogProductOption,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
@@ -188,6 +187,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\Logger $logger,
+        ProductRepositoryInterface $productRepository,
         \Magento\Catalog\Helper\Product $catalogProduct,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Bundle\Model\SelectionFactory $bundleModelSelection,
@@ -199,8 +199,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\Framework\StoreManagerInterface $storeManager,
         PriceCurrencyInterface $priceCurrency,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
-        \Magento\CatalogInventory\Api\StockStateInterface $stockState,
-        array $data = array()
+        \Magento\CatalogInventory\Api\StockStateInterface $stockState
     ) {
         $this->_catalogProduct = $catalogProduct;
         $this->_catalogData = $catalogData;
@@ -215,7 +214,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         $this->_stockRegistry = $stockRegistry;
         $this->_stockState = $stockState;
         parent::__construct(
-            $productFactory,
             $catalogProductOption,
             $eavConfig,
             $catalogProductType,
@@ -225,7 +223,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             $filesystem,
             $coreRegistry,
             $logger,
-            $data
+            $productRepository
         );
     }
 
@@ -507,10 +505,11 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     public function getOptionsCollection($product)
     {
         if (!$product->hasData($this->_keyOptionsCollection)) {
-            $optionsCollection = $this->_bundleOption->create()
-                ->getResourceCollection()
-                ->setProductIdFilter($product->getId())
-                ->setPositionOrder();
+            /** @var \Magento\Bundle\Model\Resource\Option\Collection $optionsCollection */
+            $optionsCollection = $this->_bundleOption->create()->getResourceCollection();
+            $optionsCollection->setProductIdFilter($product->getId());
+            $this->setStoreFilter($product->getStoreId(), $product);
+            $optionsCollection->setPositionOrder();
             $storeId = $this->getStoreFilter($product);
             if ($storeId instanceof \Magento\Store\Model\Store) {
                 $storeId = $storeId->getId();

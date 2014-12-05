@@ -27,10 +27,12 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\Store;
 use Magento\Customer\Api\Data\CustomerInterface as CustomerDataObject;
 use Magento\Customer\Api\Data\CustomerDataBuilder;
-use Magento\Customer\Service\V1\Data\Region as RegionDataObject;
-use Magento\Customer\Service\V1\CustomerAddressServiceInterface as AddressServiceInterface;
-use Magento\Customer\Service\V1\CustomerGroupServiceInterface as GroupServiceInterface;
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
+use Magento\Customer\Api\Data\RegionInterface as AddressRegion;
+use Magento\Customer\Api\AccountManagementInterface as CustomerAccountManagement;
+use Magento\Customer\Api\GroupManagementInterface as CustomerGroupManagement;
+use Magento\Customer\Api\GroupRepositoryInterface as CustomerGroupRepository;
+use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
+use Magento\Customer\Api\Data\AddressInterface as CustomerAddress;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Tax\Model\Config;
 
@@ -156,14 +158,24 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
     protected $_config;
 
     /**
-     * @var GroupServiceInterface
+     * @var CustomerAccountManagement
      */
-    protected $_groupService;
+    protected $customerAccountManagement;
 
     /**
-     * @var CustomerAccountServiceInterface
+     * @var CustomerGroupManagement
      */
-    protected $customerAccountService;
+    protected $customerGroupManagement;
+
+    /**
+     * @var CustomerGroupRepository
+     */
+    protected $customerGroupRepository;
+
+    /**
+     * @var CustomerRepository
+     */
+    protected $customerRepository;
 
     /**
      * @var CustomerDataBuilder
@@ -185,9 +197,10 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param Resource\TaxClass\CollectionFactory $classesFactory
      * @param Resource\Calculation $resource
-     * @param AddressServiceInterface $addressService
-     * @param GroupServiceInterface $groupService
-     * @param CustomerAccountServiceInterface $customerAccount
+     * @param CustomerAccountManagement $customerAccountManagement
+     * @param CustomerGroupManagement $customerGroupManagement
+     * @param CustomerGroupRepository $customerGroupRepository
+     * @param CustomerRepository $customerRepository
      * @param CustomerDataBuilder $customerBuilder
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
@@ -203,9 +216,10 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Tax\Model\Resource\TaxClass\CollectionFactory $classesFactory,
         \Magento\Tax\Model\Resource\Calculation $resource,
-        AddressServiceInterface $addressService,
-        GroupServiceInterface $groupService,
-        CustomerAccountServiceInterface $customerAccount,
+        CustomerAccountManagement $customerAccountManagement,
+        CustomerGroupManagement $customerGroupManagement,
+        CustomerGroupRepository $customerGroupRepository,
+        CustomerRepository $customerRepository,
         CustomerDataBuilder $customerBuilder,
         PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
@@ -217,9 +231,10 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
         $this->_customerSession = $customerSession;
         $this->_customerFactory = $customerFactory;
         $this->_classesFactory = $classesFactory;
-        $this->_addressService = $addressService;
-        $this->_groupService = $groupService;
-        $this->customerAccountService = $customerAccount;
+        $this->customerAccountManagement = $customerAccountManagement;
+        $this->customerGroupManagement = $customerGroupManagement;
+        $this->customerGroupRepository = $customerGroupRepository;
+        $this->customerRepository = $customerRepository;
         $this->customerBuilder = $customerBuilder;
         $this->priceCurrency = $priceCurrency;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -243,7 +258,7 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
     {
         if ($this->_defaultCustomerTaxClass === null) {
             //Not catching the exception here since default group is expected
-            $defaultCustomerGroup = $this->_groupService->getDefaultGroup($store);
+            $defaultCustomerGroup = $this->customerGroupManagement->getDefaultGroup($store);
             $this->_defaultCustomerTaxClass = $defaultCustomerGroup->getTaxClassId();
         }
         return $this->_defaultCustomerTaxClass;
@@ -467,8 +482,8 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      *  customer_class_id (->getCustomerClassId())
      *  store (->getStore())
      *
-     * @param null|bool|\Magento\Framework\Object|\Magento\Customer\Service\V1\Data\Address $shippingAddress
-     * @param null|bool|\Magento\Framework\Object|\Magento\Customer\Service\V1\Data\Address $billingAddress
+     * @param null|bool|\Magento\Framework\Object|CustomerAddress $shippingAddress
+     * @param null|bool|\Magento\Framework\Object|CustomerAddress $billingAddress
      * @param null|int $customerTaxClass
      * @param null|int|\Magento\Store\Model\Store $store
      * @param int $customerId
@@ -503,12 +518,12 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
             ) {
                 if ($customerId) {
                     try {
-                        $defaultBilling = $this->_addressService->getDefaultBillingAddress($customerId);
+                        $defaultBilling = $this->customerAccountManagement->getDefaultBillingAddress($customerId);
                     } catch (NoSuchEntityException $e) {
                     }
 
                     try {
-                        $defaultShipping = $this->_addressService->getDefaultShippingAddress($customerId);
+                        $defaultShipping = $this->customerAccountManagement->getDefaultShippingAddress($customerId);
                     } catch (NoSuchEntityException $e) {
                     }
 
@@ -562,18 +577,18 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
 
         if (is_null($customerTaxClass) || $customerTaxClass === false) {
             if ($customerId) {
-                $customerData = $this->customerAccountService->getCustomer($customerId);
-                $customerTaxClass = $this->_groupService->getGroup($customerData->getGroupId())->getTaxClassId();
+                $customerData = $this->customerRepository->getById($customerId);
+                $customerTaxClass = $this->customerGroupRepository
+                    ->getById($customerData->getGroupId())
+                    ->getTaxClassId();
             } else {
-                $customerTaxClass = $this->_groupService->getGroup(
-                    GroupServiceInterface::NOT_LOGGED_IN_ID
-                )->getTaxClassId();
+                $customerTaxClass = $this->customerGroupManagement->getNotLoggedInGroup()->getTaxClassId();
             }
         }
 
         $request = new \Magento\Framework\Object();
         //TODO: Address is not completely refactored to use Data objects
-        if ($address->getRegion() instanceof RegionDataObject) {
+        if ($address->getRegion() instanceof AddressRegion) {
             $regionId = $address->getRegion()->getRegionId();
         } else {
             $regionId = $address->getRegionId();
@@ -591,7 +606,8 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      * Returns true if requests are similar (i.e. equal taxes rates will be applied to them)
      *
      * Notice:
-     * a) productClassId MUST be identical for both requests, because we intend to check selling SAME products to DIFFERENT locations
+     * a) productClassId MUST be identical for both requests,
+     *    because we intend to check selling SAME products to DIFFERENT locations
      * b) due to optimization productClassId can be array of ids, not only single id
      *
      * @param   \Magento\Framework\Object $first

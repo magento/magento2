@@ -109,8 +109,6 @@ class Role extends \Magento\Backend\App\AbstractAction
      */
     protected function _initRole($requestVariable = 'rid')
     {
-        $this->_title->add(__('Roles'));
-
         $role = $this->_roleFactory->create()->load($this->getRequest()->getParam($requestVariable));
         // preventing edit of relation role
         if ($role->getId() && $role->getRoleType() != RoleGroup::ROLE_TYPE) {

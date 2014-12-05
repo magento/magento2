@@ -110,10 +110,8 @@ class Discount extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
                             $child->setFreeShipping($item->getFreeShipping());
                         }
 
-                        /**
-                         * @todo Parent discount we apply for all children without discount
-                         */
                         if (!$child->getDiscountAmount() && $item->getDiscountPercent()) {
+                            $child->setDiscountAmount($child->getRowTotal() * $item->getDiscountPercent());
                         }
                         $totalDiscountAmount += $child->getDiscountAmount();
                         //*$item->getQty();

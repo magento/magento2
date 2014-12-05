@@ -24,13 +24,13 @@
 namespace Magento\ConfigurableProduct\Service\V1\Product\Link;
 
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\ProductRepository;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Service\V1\Data\Converter;
 
 class ReadService implements ReadServiceInterface
 {
     /**
-     * @var \Magento\Catalog\Model\ProductRepository
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
     private $productRepository;
 
@@ -40,11 +40,11 @@ class ReadService implements ReadServiceInterface
     private $productConverter;
 
     /**
-     * @param ProductRepository $productRepository
+     * @param ProductRepositoryInterface $productRepository
      * @param Converter $productConverter
      */
     public function __construct(
-        ProductRepository $productRepository,
+        ProductRepositoryInterface $productRepository,
         Converter $productConverter
     ) {
         $this->productRepository = $productRepository;

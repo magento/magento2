@@ -23,8 +23,8 @@
  */
 namespace Magento\Checkout\Model;
 
-use Magento\Customer\Api\Data\CustomerInterface as CustomerDataObject;
 use Magento\Sales\Model\Quote;
+use Magento\Customer\Api\Data\CustomerInterface;
 
 class Session extends \Magento\Framework\Session\SessionManager
 {
@@ -43,7 +43,7 @@ class Session extends \Magento\Framework\Session\SessionManager
     /**
      * Customer Data Object
      *
-     * @var null|CustomerDataObject
+     * @var CustomerInterface|null
      */
     protected $_customer;
 
@@ -92,6 +92,11 @@ class Session extends \Magento\Framework\Session\SessionManager
     protected $_storeManager;
 
     /**
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     */
+    protected $customerRepository;
+
+    /**
      * @param \Magento\Framework\App\Request\Http $request
      * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
      * @param \Magento\Framework\Session\Config\ConfigInterface $sessionConfig
@@ -106,7 +111,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @param \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\StoreManagerInterface $storeManager
-     * @param null $sessionName
+     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      */
     public function __construct(
         \Magento\Framework\App\Request\Http $request,
@@ -122,7 +127,8 @@ class Session extends \Magento\Framework\Session\SessionManager
         \Magento\Sales\Model\QuoteRepository $quoteRepository,
         \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\StoreManagerInterface $storeManager
+        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
     ) {
         $this->_orderFactory = $orderFactory;
         $this->_customerSession = $customerSession;
@@ -130,6 +136,7 @@ class Session extends \Magento\Framework\Session\SessionManager
         $this->_remoteAddress = $remoteAddress;
         $this->_eventManager = $eventManager;
         $this->_storeManager = $storeManager;
+        $this->customerRepository = $customerRepository;
         parent::__construct(
             $request,
             $sidResolver,
@@ -146,7 +153,7 @@ class Session extends \Magento\Framework\Session\SessionManager
     /**
      * Set customer data.
      *
-     * @param CustomerDataObject|null $customer
+     * @param CustomerInterface|null $customer
      * @return \Magento\Checkout\Model\Session
      */
     public function setCustomerData($customer)
@@ -234,9 +241,9 @@ class Session extends \Magento\Framework\Session\SessionManager
 
             if ($this->getQuoteId()) {
                 if ($this->_customer) {
-                    $quote->setCustomerData($this->_customer);
+                    $quote->setCustomer($this->_customer);
                 } else if ($this->_customerSession->isLoggedIn()) {
-                    $quote->setCustomerData($this->_customerSession->getCustomerDataObject());
+                    $quote->setCustomer($this->customerRepository->getById($this->_customerSession->getCustomerId()));
                 }
             }
 
@@ -244,11 +251,13 @@ class Session extends \Magento\Framework\Session\SessionManager
             $this->_quote = $quote;
         }
 
-        if ($remoteAddr = $this->_remoteAddress->getRemoteAddress()) {
-            $this->_quote->setRemoteIp($remoteAddr);
+        $remoteAddress = $this->_remoteAddress->getRemoteAddress();
+        if ($remoteAddress) {
+            $this->_quote->setRemoteIp($remoteAddress);
             $xForwardIp = $this->request->getServer('HTTP_X_FORWARDED_FOR');
             $this->_quote->setXForwardedFor($xForwardIp);
         }
+
         return $this->_quote;
     }
 
@@ -288,7 +297,7 @@ class Session extends \Magento\Framework\Session\SessionManager
             return $this;
         }
 
-        $this->_eventManager->dispatch('load_customer_quote_before', array('checkout_session' => $this));
+        $this->_eventManager->dispatch('load_customer_quote_before', ['checkout_session' => $this]);
 
         try {
             $customerQuote = $this->quoteRepository->getForCustomer($this->_customerSession->getCustomerId());
@@ -313,11 +322,9 @@ class Session extends \Magento\Framework\Session\SessionManager
         } else {
             $this->getQuote()->getBillingAddress();
             $this->getQuote()->getShippingAddress();
-            $this->getQuote()->setCustomerData(
-                $this->_customerSession->getCustomerDataObject()
-            )->setTotalsCollectedFlag(
-                false
-            )->collectTotals();
+            $this->getQuote()->setCustomer($this->_customerSession->getCustomerDataObject())
+                ->setTotalsCollectedFlag(false)
+                ->collectTotals();
             $this->quoteRepository->save($this->getQuote());
         }
         return $this;
@@ -380,7 +387,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      */
     public function clearQuote()
     {
-        $this->_eventManager->dispatch('checkout_quote_destroy', array('quote' => $this->getQuote()));
+        $this->_eventManager->dispatch('checkout_quote_destroy', ['quote' => $this->getQuote()]);
         $this->_quote = null;
         $this->setQuoteId(null);
         $this->setLastSuccessQuoteId(null);
@@ -462,7 +469,7 @@ class Session extends \Magento\Framework\Session\SessionManager
                 $quote->setIsActive(1)->setReservedOrderId(null);
                 $this->quoteRepository->save($quote);
                 $this->replaceQuote($quote)->unsLastRealOrderId();
-                $this->_eventManager->dispatch('restore_quote', array('order' => $order, 'quote' => $quote));
+                $this->_eventManager->dispatch('restore_quote', ['order' => $order, 'quote' => $quote]);
                 return true;
             } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
 

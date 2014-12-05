@@ -29,6 +29,7 @@ use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
  * Product Test
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  *
  */
 class ProductTest extends \PHPUnit_Framework_TestCase
@@ -104,11 +105,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     private $category;
 
     /**
-     * @var \Magento\Catalog\Model\CategoryFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $categoryFactory;
-
-    /**
      * @var \Magento\Store\Model\Website|\PHPUnit_Framework_MockObject_MockObject
      */
     private $website;
@@ -117,6 +113,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Indexer\Model\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $indexerRegistryMock;
+
+    /**
+     * @var \Magento\Catalog\Api\CategoryRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $categoryRepository;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -202,11 +203,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->categoryFactory = $this->getMockBuilder('Magento\Catalog\Model\CategoryFactory')
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->store = $this->getMockBuilder('Magento\Store\Model\Store')
             ->disableOriginalConstructor()
             ->getMock();
@@ -225,6 +221,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->method('getWebsite')
             ->will($this->returnValue($this->website));
         $this->indexerRegistryMock = $this->getMock('Magento\Indexer\Model\IndexerRegistry', ['get'], [], '', false);
+        $this->categoryRepository = $this->getMock('Magento\Catalog\Api\CategoryRepositoryInterface');
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
@@ -238,10 +235,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 'storeManager' => $storeManager,
                 'resource' => $this->resource,
                 'registry' => $this->registry,
-                'categoryFactory' => $this->categoryFactory,
                 'catalogData' => $this->catalogDataMock,
                 'stockItemBuilder' => $this->stockItemBuilderMock,
                 'indexerRegistry' => $this->indexerRegistryMock,
+                'categoryRepository' => $this->categoryRepository,
                 'data' => array('id' => 1)
             ]
         );
@@ -307,8 +304,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $this->category->expects($this->any())->method('getId')->will($this->returnValue(10));
         $this->registry->expects($this->any())->method('registry')->will($this->returnValue($this->category));
-        $this->categoryFactory->expects($this->any())->method('create')->will($this->returnValue($this->category));
-        $this->category->expects($this->once())->method('load')->will($this->returnValue($this->category));
+        $this->categoryRepository->expects($this->any())->method('get')->will($this->returnValue($this->category));
         $this->assertInstanceOf('\Magento\Catalog\Model\Category', $this->model->getCategory());
     }
 
@@ -376,7 +372,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 'catalogProductOption' => $this->optionInstanceMock,
                 'resource' => $this->resource,
                 'registry' => $this->registry,
-                'categoryFactory' => $this->categoryFactory,
+                'categoryRepository' => $this->categoryRepository,
                 'data' => []
             ]
         );
@@ -583,10 +579,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->method('isModuleEnabled')
             ->with('Magento_CatalogInventory')
             ->will($this->returnValue(true));
-        $this->stockItemBuilderMock->expects($this->once())
-            ->method('populateWithArray')
-            ->with($data['stock_item'])
-            ->will($this->returnSelf());
         $this->stockItemBuilderMock->expects($this->once())
             ->method('populateWithArray')
             ->with($data['stock_item'])

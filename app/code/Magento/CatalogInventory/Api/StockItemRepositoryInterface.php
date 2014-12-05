@@ -39,7 +39,7 @@ interface StockItemRepositoryInterface
     /**
      * Load Stock Item data by given stockId and parameters
      *
-     * @param string $stockId
+     * @param int $stockId
      * @return \Magento\CatalogInventory\Api\Data\StockItemInterface
      */
     public function get($stockId);
@@ -56,7 +56,7 @@ interface StockItemRepositoryInterface
      * Delete stock item
      *
      * @param \Magento\CatalogInventory\Api\Data\StockItemInterface $stockItem
-     * @return true
+     * @return bool
      */
     public function delete(\Magento\CatalogInventory\Api\Data\StockItemInterface $stockItem);
 

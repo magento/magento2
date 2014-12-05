@@ -69,8 +69,8 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('customer/address/edit');
 
         $body = $this->getResponse()->getBody();
-        $this->assertContains('value="Firstname"', $body);
-        $this->assertContains('value="Lastname"', $body);
+        $this->assertContains('value="John"', $body);
+        $this->assertContains('value="Smith"', $body);
     }
 
     /**

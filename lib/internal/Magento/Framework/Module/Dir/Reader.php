@@ -104,6 +104,24 @@ class Reader
     }
 
     /**
+     * Go through all modules and find composer.json files of active modules
+     *
+     * @return FileIterator
+     */
+    public function getComposerJsonFiles()
+    {
+        $result = array();
+        foreach ($this->modulesList->getNames() as $moduleName) {
+            $file = $this->getModuleDir('', $moduleName) . '/composer.json';
+            $path = $this->modulesDirectory->getRelativePath($file);
+            if ($this->modulesDirectory->isExist($path)) {
+                $result[] = $path;
+            }
+        }
+        return $this->fileIteratorFactory->create($this->modulesDirectory, $result);
+    }
+
+    /**
      * Retrieve list of module action files
      *
      * @return array

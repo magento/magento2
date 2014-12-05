@@ -97,7 +97,7 @@ class VarnishPluginTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider dataProvider
      */
-    public function testAroundDispatchReturnsCache($state)
+    public function testAroundDispatchReturnsCache($state, $countHeader, $countProcess, $countGetMode, $response)
     {
         $this->configMock
             ->expects($this->once())
@@ -108,19 +108,19 @@ class VarnishPluginTest extends \PHPUnit_Framework_TestCase
             ->method('getType')
             ->will($this->returnValue(\Magento\PageCache\Model\Config::VARNISH));
         $this->versionMock
-            ->expects($this->once())
+            ->expects($countProcess)
             ->method('process');
-        $this->stateMock->expects($this->any())
+        $this->stateMock->expects($countGetMode)
             ->method('getMode')
             ->will($this->returnValue($state));
-        if ($state == \Magento\Framework\App\State::MODE_DEVELOPER) {
-            $this->responseMock->expects($this->once())
-                ->method('setHeader')
-                ->with('X-Magento-Debug');
-        } else {
-            $this->responseMock->expects($this->never())
-                ->method('setHeader');
-        }
+        $response->expects($countHeader)
+            ->method('setHeader')
+            ->with('X-Magento-Debug');
+
+        $this->closure = function () use ($response) {
+            return $response;
+        };
+
         $this->plugin->aroundDispatch($this->frontControllerMock, $this->closure, $this->requestMock);
     }
 
@@ -147,8 +147,20 @@ class VarnishPluginTest extends \PHPUnit_Framework_TestCase
     public function dataProvider()
     {
         return array(
-            'developer_mode' => array(\Magento\Framework\App\State::MODE_DEVELOPER),
-            'production' => array(\Magento\Framework\App\State::MODE_PRODUCTION),
+            'developer_mode' => array(
+                \Magento\Framework\App\State::MODE_DEVELOPER,
+                $this->once(),
+                $this->once(),
+                $this->once(),
+                $this->getMock('Magento\Framework\App\Response\Http', array(), array(), '', false)
+            ),
+            'production' => array(
+                \Magento\Framework\App\State::MODE_PRODUCTION,
+                $this->never(),
+                $this->never(),
+                $this->never(),
+                $this->getMock('Magento\Framework\Controller\ResultInterface', array(), array(), '', false)
+            ),
         );
     }
 }

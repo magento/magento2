@@ -320,7 +320,7 @@ class InventoryTest extends \PHPUnit_Framework_TestCase
             ->with($productId, $websiteId)
             ->will($this->returnValue($stockItemMock));
         $stockItemMock->expects($this->once())
-            ->method('getId')
+            ->method('getItemId')
             ->will($this->returnValue($stockId));
 
         if (!empty($methods)) {
@@ -395,7 +395,7 @@ class InventoryTest extends \PHPUnit_Framework_TestCase
             ->with($productId, $websiteId)
             ->will($this->returnValue($stockItemMock));
         $stockItemMock->expects($this->once())
-            ->method('getId')
+            ->method('getItemId')
             ->will($this->returnValue($stockId));
 
         if (!empty($methods)) {

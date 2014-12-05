@@ -31,9 +31,6 @@ use Magento\Catalog\Model\Product\Type as ProductType;
 
 /**
  * Class StockIndex
- * @package Magento\CatalogInventory\Model
- * @api
- * @spi
  */
 class StockIndex implements StockIndexInterface
 {
@@ -132,7 +129,7 @@ class StockIndex implements StockIndexInterface
 
         $status = \Magento\CatalogInventory\Model\Stock\Status::STATUS_IN_STOCK;
         $qty = 0;
-        if ($item->getId()) {
+        if ($item->getItemId()) {
             $status = $item->getIsInStock();
             $qty = $item->getQty();
         }
@@ -256,7 +253,7 @@ class StockIndex implements StockIndexInterface
             $item = $this->stockRegistryProvider->getStockItem($parentId, $websiteId);
             $status = \Magento\CatalogInventory\Model\Stock\Status::STATUS_IN_STOCK;
             $qty = 0;
-            if ($item->getId()) {
+            if ($item->getItemId()) {
                 $status = $item->getIsInStock();
                 $qty = $item->getQty();
             }

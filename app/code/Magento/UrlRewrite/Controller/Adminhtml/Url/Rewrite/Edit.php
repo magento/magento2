@@ -109,7 +109,7 @@ class Edit extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
                 );
                 break;
         }
-        $this->_title->add($editBlock->getHeaderText());
+        $this->_view->getPage()->getConfig()->getTitle()->prepend($editBlock->getHeaderText());
         $this->_addContent($editBlock);
         $this->_view->renderLayout();
     }

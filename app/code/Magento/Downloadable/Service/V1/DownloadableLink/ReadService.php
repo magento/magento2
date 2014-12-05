@@ -27,7 +27,7 @@ namespace Magento\Downloadable\Service\V1\DownloadableLink;
 class ReadService implements ReadServiceInterface
 {
     /**
-     * @var \Magento\Catalog\Model\ProductRepository
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
     protected $productRepository;
 
@@ -52,14 +52,14 @@ class ReadService implements ReadServiceInterface
     protected $resourceBuilder;
 
     /**
-     * @param \Magento\Catalog\Model\ProductRepository $productRepository
+     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Downloadable\Model\Product\Type $downloadableType
      * @param Data\DownloadableLinkInfoBuilder $linkBuilder
      * @param Data\DownloadableSampleInfoBuilder $sampleBuilder
      * @param Data\DownloadableResourceInfoBuilder $resourceBuilder
      */
     public function __construct(
-        \Magento\Catalog\Model\ProductRepository $productRepository,
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Downloadable\Model\Product\Type $downloadableType,
         \Magento\Downloadable\Service\V1\DownloadableLink\Data\DownloadableLinkInfoBuilder $linkBuilder,
         \Magento\Downloadable\Service\V1\DownloadableLink\Data\DownloadableSampleInfoBuilder $sampleBuilder,

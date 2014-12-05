@@ -50,10 +50,7 @@
     &:before {
         box-sizing: border-box;
         .css(padding, @_loader-icon-padding);
-        background-color: @_loader-icon-background-color;
-        background-image: @_loader-icon-background-image;
-        background-position: @_loader-icon-background-position;
-        background-repeat: no-repeat;
+        background: @_loader-icon-background-color @_loader-icon-background-image no-repeat @_loader-icon-background-position;
         border-radius: @_loader-icon-border-radius;
         content: '';
         position: absolute;
@@ -97,10 +94,7 @@
         top: 0;
         right: 0;
         bottom: 0;
-        background-color: @_loading-background-color;
-        background-image: @_loading-background-image;
-        background-position: 50% 50%;
-        background-repeat: no-repeat;
+        background: @_loading-background-color @_loading-background-image no-repeat 50% 50%;
     }
 }
 

@@ -25,7 +25,7 @@
  */
 namespace Magento\Framework\Interception\ObjectManager;
 
-class Config extends \Magento\Framework\ObjectManager\Config\Config
+class Config extends \Magento\Framework\ObjectManager\Config\ProxyConfig
 {
     /**
      * @var \Magento\Framework\Interception\ConfigInterface

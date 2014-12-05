@@ -24,6 +24,8 @@
  */
 namespace Magento\Framework\Interception;
 
+use Magento\Framework\ObjectManager\Config\Config as ObjectManagerConfig;
+
 /**
  * Class GeneralTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -42,15 +44,8 @@ class GeneralTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $classReader = new \Magento\Framework\Code\Reader\ClassReader();
-        $relations = new \Magento\Framework\ObjectManager\Relations\Runtime($classReader);
-        $definitions = new \Magento\Framework\ObjectManager\Definition\Runtime($classReader);
-        $config = new \Magento\Framework\Interception\ObjectManager\Config($relations, $definitions);
-        $factory = new \Magento\Framework\ObjectManager\Factory\Factory(
-            $config,
-            null,
-            $definitions
-        );
+        $config = new \Magento\Framework\Interception\ObjectManager\Config(new ObjectManagerConfig());
+        $factory = new \Magento\Framework\ObjectManager\Factory\Dynamic\Developer($config, null);
 
         $this->_configReader = $this->getMock('Magento\Framework\Config\ReaderInterface');
         $this->_configReader->expects(
@@ -86,6 +81,7 @@ class GeneralTest extends \PHPUnit_Framework_TestCase
         $cache = $this->getMock('Magento\Framework\Config\CacheInterface');
         $cache->expects($this->any())->method('load')->will($this->returnValue(false));
         $definitions = new \Magento\Framework\ObjectManager\Definition\Runtime();
+        $relations = new \Magento\Framework\ObjectManager\Relations\Runtime();
         $interceptionConfig = new Config\Config(
             $this->_configReader,
             $configScope,
@@ -104,6 +100,7 @@ class GeneralTest extends \PHPUnit_Framework_TestCase
                 'Magento\Framework\Config\ReaderInterface' => $this->_configReader,
                 'Magento\Framework\ObjectManager\RelationsInterface' => $relations,
                 'Magento\Framework\ObjectManager\ConfigInterface' => $config,
+                'Magento\Framework\Interception\ObjectManager\Config' => $config,
                 'Magento\Framework\ObjectManager\DefinitionInterface' => $definitions,
                 'Magento\Framework\Interception\DefinitionInterface' => $interceptionDefinitions
             )

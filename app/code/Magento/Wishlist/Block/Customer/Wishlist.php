@@ -52,7 +52,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\App\Http\Context $httpContext
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
+     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Catalog\Helper\Product\ConfigurationPool $helperPool
      * @param \Magento\Framework\Data\Form\FormKey $formKey
      * @param array $data
@@ -60,7 +60,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Framework\App\Http\Context $httpContext,
-        \Magento\Catalog\Model\ProductFactory $productFactory,
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Catalog\Helper\Product\ConfigurationPool $helperPool,
         \Magento\Framework\Data\Form\FormKey $formKey,
         array $data = array()
@@ -70,7 +70,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
         parent::__construct(
             $context,
             $httpContext,
-            $productFactory,
+            $productRepository,
             $data
         );
     }
@@ -95,7 +95,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
-        $this->pageConfig->setTitle(__('My Wish List'));
+        $this->pageConfig->getTitle()->set(__('My Wish List'));
     }
 
     /**

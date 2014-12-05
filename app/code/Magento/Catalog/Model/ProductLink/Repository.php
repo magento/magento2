@@ -32,7 +32,7 @@ use \Magento\Framework\Exception\CouldNotSaveException;
 class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
 {
     /**
-     * @var \Magento\Catalog\Model\ProductRepository
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
     protected $productRepository;
 
@@ -52,13 +52,13 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
     protected $linkManagement;
 
     /**
-     * @param \Magento\Catalog\Model\ProductRepository $productRepository
+     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param CollectionProvider $entityCollectionProvider
      * @param LinksInitializer $linkInitializer
      * @param Management $linkManagement
      */
     public function __construct(
-        \Magento\Catalog\Model\ProductRepository $productRepository,
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Catalog\Model\ProductLink\CollectionProvider $entityCollectionProvider,
         \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $linkInitializer,
         \Magento\Catalog\Model\ProductLink\Management $linkManagement

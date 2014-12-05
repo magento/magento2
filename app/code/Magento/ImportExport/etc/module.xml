@@ -25,12 +25,5 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Module/etc/module.xsd">
     <module name="Magento_ImportExport" schema_version="2.0.0">
-        <depends>
-            <module name="Magento_Store"/>
-            <module name="Magento_Core"/>
-            <module name="Magento_Backend"/>
-            <module name="Magento_Eav"/>
-            <module name="Magento_Indexer"/>
-        </depends>
     </module>
 </config>

@@ -320,4 +320,14 @@ class Config implements \Magento\Framework\ObjectManager\ConfigInterface
             $this->_mergeConfiguration($configuration);
         }
     }
+
+    /**
+     * Returns list of virtual types
+     *
+     * @return array
+     */
+    public function getVirtualTypes()
+    {
+        return $this->_virtualTypes;
+    }
 }

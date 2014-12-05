@@ -185,9 +185,9 @@ switch($type = $this->getType()) {
         <div class="block <?php echo $class; ?>">
     <?php endif; ?>
     <div class="block-title title">
-        <strong><?php echo $title; ?></strong>
+        <strong id="block-<?php echo $class?>-heading" role="heading" aria-level="2"><?php echo $title; ?></strong>
     </div>
-    <div class="block-content content">
+    <div class="block-content content" aria-labelledby="block-<?php echo $class?>-heading">
         <?php if($type == 'related'): ?>
         <div class="block-actions">
             <?php echo __('Check items to add to the cart or') ?>

@@ -105,6 +105,11 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      */
     protected $pageConfigMock;
 
+    /**
+     * @var \Magento\Framework\View\Page\Title
+     */
+    protected $titleMock;
+
     public function setUp()
     {
         // mock objects
@@ -122,6 +127,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->redirectMock = $this->basicMock('\Magento\Framework\App\Response\RedirectInterface');
         $this->resultPageMock = $this->basicMock('\Magento\Framework\View\Result\Page');
         $this->pageConfigMock = $this->basicMock('\Magento\Framework\View\Page\Config');
+        $this->titleMock = $this->basicMock('\Magento\Framework\View\Page\Title');
 
         // stubs
         $this->basicStub($this->onepageMock, 'getQuote')->willReturn($this->quoteMock);
@@ -130,6 +136,8 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->basicStub($this->layoutMock, 'getBlock')
             ->willReturn($this->basicMock('Magento\Theme\Block\Html\Head'));
         $this->basicStub($this->resultPageMock, 'getConfig')->willReturn($this->pageConfigMock);
+        $this->basicStub($this->pageConfigMock, 'getTitle')->willReturn($this->titleMock);
+        $this->basicStub($this->titleMock, 'set')->willReturn($this->titleMock);
 
         // objectManagerMock
         $objectManagerReturns = [

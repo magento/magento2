@@ -25,8 +25,6 @@ namespace Magento\CatalogInventory\Api;
 
 /**
  * Interface StockRegistryInterface
- * @package Magento\CatalogInventory\Api
- * @api
  */
 interface StockRegistryInterface
 {
@@ -68,6 +66,7 @@ interface StockRegistryInterface
 
     /**
      * Retrieve Product stock status
+     *
      * @param int $productId
      * @param int $websiteId
      * @return int

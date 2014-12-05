@@ -23,6 +23,7 @@
  */
 namespace Magento\CatalogUrlRewrite\Model;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Category;
 
 class CategoryUrlPathGenerator
@@ -50,23 +51,30 @@ class CategoryUrlPathGenerator
     /** @var \Magento\Framework\StoreManagerInterface */
     protected $storeManager;
 
-    /** @var \Magento\Catalog\Model\CategoryFactory */
-    protected $categoryFactory;
+    /**
+     * @var CategoryRepositoryInterface
+     */
+    protected $categoryRepository;
 
+    /**
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param CategoryRepositoryInterface $categoryRepository
+     */
     public function __construct(
         \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Catalog\Model\CategoryFactory $categoryFactory
+        CategoryRepositoryInterface $categoryRepository
     ) {
         $this->storeManager = $storeManager;
         $this->scopeConfig = $scopeConfig;
-        $this->categoryFactory = $categoryFactory;
+        $this->categoryRepository = $categoryRepository;
     }
 
     /**
      * Build category URL path
      *
-     * @param \Magento\Catalog\Model\Category|\Magento\Framework\Object $category
+     * @param \Magento\Catalog\Api\Data\CategoryInterface|\Magento\Framework\Object $category
      * @return string
      */
     public function getUrlPath($category)
@@ -80,7 +88,7 @@ class CategoryUrlPathGenerator
         }
         $path = $category->getUrlKey();
         if ($this->isNeedToGenerateUrlPathForParent($category)) {
-            $parentPath = $this->getUrlPath($this->categoryFactory->create()->load($category->getParentId()));
+            $parentPath = $this->getUrlPath($this->categoryRepository->get($category->getParentId()));
             $path = $parentPath === '' ? $path : $parentPath . '/' . $path;
         }
         return $path;

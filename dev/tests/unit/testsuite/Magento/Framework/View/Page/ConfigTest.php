@@ -69,6 +69,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected $remoteAsset;
 
+    /**
+     * @var \Magento\Framework\View\Page\Title|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $title;
+
     public function setUp()
     {
         $this->assetRepo = $this->getMock('Magento\Framework\View\Asset\Repository', [], [], '', false);
@@ -78,6 +83,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->builder = $this->getMock('Magento\Framework\View\Layout\BuilderInterface', [], [], '', false);
         $this->asset = $this->getMock('Magento\Framework\View\Asset\File', [], [], '', false);
         $this->remoteAsset = $this->getMock('\Magento\Framework\View\Asset\Remote', [], [], '', false);
+        $this->title = $this->getMock('Magento\Framework\View\Page\Title', [], [], '', false);
         $this->model = (new \Magento\TestFramework\Helper\ObjectManager($this))
             ->getObject(
                 'Magento\Framework\View\Page\Config',
@@ -107,97 +113,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->model->publicBuild();
     }
 
-    /**
-     * @param string|[] $title
-     * @param string $expected
-     * @dataProvider setTitleDataProvider
-     */
-    public function testSetTitle($title, $expected)
+    public function testGetTitle()
     {
-        $this->scopeConfig->expects($this->at(0))->method('getValue')->with('design/head/title_prefix', 'store');
-        $this->scopeConfig->expects($this->at(1))->method('getValue')->with('design/head/title_suffix', 'store');
-        $this->assertInstanceOf('Magento\Framework\View\Page\Config', $this->model->setTitle($title));
-        $this->assertEquals($expected, $this->model->getTitle());
-    }
-
-    public function setTitleDataProvider()
-    {
-        return [
-            [
-                'test_title',
-                'test_title'
-            ],
-            [
-                [
-                    'test',
-                    '_',
-                    'title'
-                ],
-                'test / _ / title'
-            ]
-        ];
-    }
-
-    /**
-     * @param string $title
-     * @param string $expected
-     *
-     * @dataProvider getTitleDataProvider
-     */
-    public function testGetTitle($title, $expected)
-    {
-        $this->model->setTitle($title);
-        $this->assertEquals($expected, $this->model->getTitle());
-    }
-
-    public function getTitleDataProvider()
-    {
-        return [
-            [
-                'test_title',
-                'test_title'
-            ],
-            [
-                '<title>test</title>',
-                '&lt;title&gt;test&lt;/title&gt;'
-            ]
-        ];
-    }
-
-    public function testGetTitleEmpty()
-    {
-        $this->scopeConfig->expects($this->once())->method('getValue')->with('design/head/default_title', 'store')
-            ->will($this->returnValue('default_title'));
-        $this->assertEquals('default_title', $this->model->getTitle());
-    }
-
-    /**
-     * @param string|[] $title
-     * @param string $expected
-     *
-     * @dataProvider getShortTitleDataProvider
-     */
-    public function testGetShortTitle($title, $expected)
-    {
-        $this->model->setTitle($title);
-        $this->assertEquals($expected, $this->model->getShortTitle());
-    }
-
-    public function getShortTitleDataProvider()
-    {
-        return [
-            [
-                [
-                    'test',
-                    'title'
-                ],
-                'test'
-            ],
-            [
-                'test_title',
-                'test_title'
-            ]
-        ];
+        $this->assertInstanceOf('\Magento\Framework\View\Page\Title', $this->model->getTitle());
     }
 
     public function testMetadata()

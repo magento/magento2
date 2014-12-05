@@ -52,10 +52,10 @@ class Index extends \Magento\Catalog\Controller\Adminhtml\Product
      */
     public function execute()
     {
-        $this->_title->add(__('Products'));
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Magento_Catalog::catalog_products');
+        $resultPage->getConfig()->getTitle()->set((__('Products')));
         return $resultPage;
     }
 }

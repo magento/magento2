@@ -28,6 +28,8 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\Wishlist\Model\Item\Option;
 use Magento\Wishlist\Model\Item\OptionFactory;
 use Magento\Wishlist\Model\Resource\Item\Option\CollectionFactory;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Wishlist item model
@@ -111,11 +113,6 @@ class Item extends AbstractModel implements ItemInterface
     protected $_date;
 
     /**
-     * @var \Magento\Catalog\Model\ProductFactory
-     */
-    protected $_productFactory;
-
-    /**
      * @var \Magento\Catalog\Model\Resource\Url
      */
     protected $_catalogUrl;
@@ -136,15 +133,20 @@ class Item extends AbstractModel implements ItemInterface
     protected $productTypeConfig;
 
     /**
+     * @var ProductRepositoryInterface
+     */
+    protected $productRepository;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Model\Resource\Url $catalogUrl
      * @param OptionFactory $wishlistOptFactory
      * @param CollectionFactory $wishlOptionCollectionFactory
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig
+     * @param ProductRepositoryInterface $productRepository
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -154,11 +156,11 @@ class Item extends AbstractModel implements ItemInterface
         \Magento\Framework\Registry $registry,
         \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Model\Resource\Url $catalogUrl,
         OptionFactory $wishlistOptFactory,
         CollectionFactory $wishlOptionCollectionFactory,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig,
+        ProductRepositoryInterface $productRepository,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -166,11 +168,11 @@ class Item extends AbstractModel implements ItemInterface
         $this->productTypeConfig = $productTypeConfig;
         $this->_storeManager = $storeManager;
         $this->_date = $date;
-        $this->_productFactory = $productFactory;
         $this->_catalogUrl = $catalogUrl;
         $this->_wishlistOptFactory = $wishlistOptFactory;
         $this->_wishlOptionCollectionFactory = $wishlOptionCollectionFactory;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        $this->productRepository = $productRepository;
     }
 
     /**
@@ -386,9 +388,11 @@ class Item extends AbstractModel implements ItemInterface
             if (!$this->getProductId()) {
                 throw new \Magento\Framework\Model\Exception(__('Cannot specify product.'));
             }
-
-            $product = $this->_productFactory->create()->setStoreId($this->getStoreId())->load($this->getProductId());
-
+            try {
+                $product = $this->productRepository->getById($this->getProductId(), false, $this->getStoreId());
+            } catch (NoSuchEntityException $e) {
+                throw new \Magento\Framework\Model\Exception(__('Cannot specify product.'), 0, $e);
+            }
             $this->setData('product', $product);
         }
 

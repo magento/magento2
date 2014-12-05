@@ -23,9 +23,9 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
 
-use Magento\Framework\Data\Form\Element\AbstractElement;
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\Api\ExtensibleDataObjectConverter;
 
 /**
  * Create order account form
@@ -41,8 +41,12 @@ class Account extends AbstractForm
      */
     protected $_metadataFormFactory;
 
-    /** @var CustomerAccountServiceInterface */
-    protected $_customerAccountService;
+    /**
+     * Customer repository
+     *
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     */
+    protected $customerRepository;
 
     /**
      * @var \Magento\Framework\Api\ExtensibleDataObjectConverter
@@ -57,8 +61,8 @@ class Account extends AbstractForm
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
      * @param \Magento\Customer\Model\Metadata\FormFactory $metadataFormFactory
-     * @param CustomerAccountServiceInterface $customerAccountService
-     * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
+     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+     * @param ExtensibleDataObjectConverter $extensibleDataObjectConverter
      * @param array $data
      */
     public function __construct(
@@ -69,12 +73,12 @@ class Account extends AbstractForm
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
         \Magento\Customer\Model\Metadata\FormFactory $metadataFormFactory,
-        CustomerAccountServiceInterface $customerAccountService,
+        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
         array $data = array()
     ) {
         $this->_metadataFormFactory = $metadataFormFactory;
-        $this->_customerAccountService = $customerAccountService;
+        $this->customerRepository = $customerRepository;
         $this->_extensibleDataObjectConverter = $extensibleDataObjectConverter;
         parent::__construct(
             $context,
@@ -118,7 +122,7 @@ class Account extends AbstractForm
         $customerForm = $this->_metadataFormFactory->create('customer', 'adminhtml_checkout');
 
         // prepare customer attributes to show
-        $attributes = array();
+        $attributes = [];
 
         // add system required attributes
         foreach ($customerForm->getSystemAttributes() as $attribute) {
@@ -136,7 +140,7 @@ class Account extends AbstractForm
             $attributes[$attribute->getAttributeCode()] = $attribute;
         }
 
-        $fieldset = $this->_form->addFieldset('main', array());
+        $fieldset = $this->_form->addFieldset('main', []);
 
         $this->_addAttributesToForm($attributes, $fieldset);
 
@@ -171,7 +175,7 @@ class Account extends AbstractForm
     public function getFormValues()
     {
         try {
-            $customer = $this->_customerAccountService->getCustomer($this->getCustomerId());
+            $customer = $this->customerRepository->getById($this->getCustomerId());
         } catch (\Exception $e) {
             /** If customer does not exist do nothing. */
         }

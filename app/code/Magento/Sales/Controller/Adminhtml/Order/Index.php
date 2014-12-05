@@ -35,8 +35,8 @@ class Index extends \Magento\Sales\Controller\Adminhtml\Order
      */
     public function execute()
     {
-        $this->_title->add(__('Orders'));
         $this->_initAction();
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Orders'));
         $this->_view->renderLayout();
     }
 }

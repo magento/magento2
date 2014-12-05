@@ -34,7 +34,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_blockFactory;
 
     /**
-     * @var \Magento\Cms\Model\Resource\Block\CollectionFactory
+     * @var \Magento\Cms\Model\Resource\Block\Grid\CollectionFactory
      */
     protected $_collectionFactory;
 
@@ -42,14 +42,14 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Cms\Model\BlockFactory $blockFactory
-     * @param \Magento\Cms\Model\Resource\Block\CollectionFactory $collectionFactory
+     * @param \Magento\Cms\Model\Resource\Block\Grid\CollectionFactory $collectionFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Cms\Model\BlockFactory $blockFactory,
-        \Magento\Cms\Model\Resource\Block\CollectionFactory $collectionFactory,
+        \Magento\Cms\Model\Resource\Block\Grid\CollectionFactory $collectionFactory,
         array $data = array()
     ) {
         $this->_blockFactory = $blockFactory;

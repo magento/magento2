@@ -100,7 +100,7 @@ class Result extends Template
     protected function _prepareLayout()
     {
         $title = $this->getSearchQueryText();
-        $this->pageConfig->setTitle($title);
+        $this->pageConfig->getTitle()->set($title);
         // add Home breadcrumb
         $breadcrumbs = $this->getLayout()->getBlock('breadcrumbs');
         if ($breadcrumbs) {

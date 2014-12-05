@@ -52,7 +52,7 @@ class Container implements Layout\ReaderInterface
     protected $helper;
 
     /**
-     * @var \Magento\Framework\View\Layout\Reader\Pool
+     * @var \Magento\Framework\View\Layout\ReaderPool
      */
     protected $readerPool;
 
@@ -60,11 +60,11 @@ class Container implements Layout\ReaderInterface
      * Constructor
      *
      * @param Layout\ScheduledStructure\Helper $helper
-     * @param Layout\Reader\Pool $readerPool
+     * @param Layout\ReaderPool $readerPool
      */
     public function __construct(
         Layout\ScheduledStructure\Helper $helper,
-        Layout\Reader\Pool $readerPool
+        Layout\ReaderPool $readerPool
     ) {
         $this->helper = $helper;
         $this->readerPool = $readerPool;
@@ -86,14 +86,14 @@ class Container implements Layout\ReaderInterface
      * @param Layout\Element $parentElement
      * @return $this
      */
-    public function process(Context $readerContext, Layout\Element $currentElement, Layout\Element $parentElement)
+    public function interpret(Context $readerContext, Layout\Element $currentElement)
     {
         switch ($currentElement->getName()) {
             case self::TYPE_CONTAINER:
                 $this->helper->scheduleStructure(
                     $readerContext->getScheduledStructure(),
                     $currentElement,
-                    $parentElement
+                    $currentElement->getParent()
                 );
                 $this->mergeContainerAttributes($readerContext->getScheduledStructure(), $currentElement);
                 break;
@@ -105,7 +105,7 @@ class Container implements Layout\ReaderInterface
             default:
                 break;
         }
-        return $this->readerPool->readStructure($readerContext, $currentElement);
+        return $this->readerPool->interpret($readerContext, $currentElement);
     }
 
     /**

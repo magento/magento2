@@ -75,8 +75,8 @@ class SendTest extends \PHPUnit_Framework_TestCase
         $logger = $this->getMock('Magento\Framework\Logger', [], [], '', false);
         /** @var $session \Magento\Customer\Model\Session */
         $session = Bootstrap::getObjectManager()->create('Magento\Customer\Model\Session', array($logger));
-        /** @var \Magento\Customer\Service\V1\CustomerAccountService $service */
-        $service = Bootstrap::getObjectManager()->create('Magento\Customer\Service\V1\CustomerAccountServiceInterface');
+        /** @var \Magento\Customer\Api\AccountManagementInterface $service */
+        $service = Bootstrap::getObjectManager()->create('Magento\Customer\Api\AccountManagementInterface');
         $customer = $service->authenticate('customer@example.com', 'password');
         $session->setCustomerDataAsLoggedIn($customer);
         $this->assertEquals($value, $this->_callBlockMethod($field));
@@ -88,7 +88,7 @@ class SendTest extends \PHPUnit_Framework_TestCase
     public function customerSessionDataProvider()
     {
         return [
-            ['name', 'Firstname Lastname'],
+            ['name', 'John Smith'],
             ['email', 'customer@example.com']
         ];
 

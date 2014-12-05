@@ -64,6 +64,8 @@ class EditTest extends \Magento\Integration\Controller\Adminhtml\IntegrationTest
                     )
                 )
             );
+        $this->pageTitleMock->expects($this->atLeastOnce())
+            ->method('prepend');
         $this->_verifyLoadAndRenderLayout();
         $controller = $this->_createIntegrationController('Edit');
         $controller->execute();

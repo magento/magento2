@@ -25,18 +25,16 @@ namespace Magento\Cms\Helper;
 
 /**
  * @covers \Magento\Cms\Helper\Page
+ *
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PageTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Cms\Helper\Page
      */
-    protected $this;
-
-    /**
-     * @var \Magento\Framework\App\Helper\Context
-     */
-    protected $context;
+    protected $object;
 
     /**
      * @var \Magento\Framework\App\Action\Action|\PHPUnit_Framework_MockObject_MockObject
@@ -140,11 +138,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->pageFactoryMock = $this->getMockBuilder('Magento\Cms\Model\PageFactory')
             ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'create'
-                ]
-            )
+            ->setMethods(['create'])
             ->getMock();
         $this->pageMock = $this->getMockBuilder('Magento\Cms\Model\Page')
             ->disableOriginalConstructor()
@@ -166,29 +160,23 @@ class PageTest extends \PHPUnit_Framework_TestCase
             )
             ->getMock();
         $this->storeManagerMock = $this->getMockBuilder('Magento\Framework\StoreManagerInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->localeDateMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\TimezoneInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->designMock = $this->getMockBuilder('Magento\Framework\View\DesignInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->pageConfigMock = $this->getMockBuilder('Magento\Framework\View\Page\Config')
             ->disableOriginalConstructor()
             ->getMock();
         $this->viewMock = $this->getMockBuilder('Magento\Framework\App\ViewInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->escaperMock = $this->getMockBuilder('Magento\Framework\Escaper')
             ->disableOriginalConstructor()
             ->getMock();
         $this->eventManagerMock = $this->getMockBuilder('Magento\Framework\Event\ManagerInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->urlBuilderMock = $this->getMockBuilder('Magento\Framework\UrlInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
             ->disableOriginalConstructor()
             ->getMock();
@@ -196,42 +184,33 @@ class PageTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->layoutMock = $this->getMockBuilder('Magento\Framework\View\LayoutInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->layoutProcessorMock = $this->getMockBuilder('Magento\Framework\View\Layout\ProcessorInterface')
+            ->getMockForAbstractClass();
+        $this->blockMock = $this->getMockBuilder('Magento\Framework\View\Element\AbstractBlock')
             ->disableOriginalConstructor()
-            ->getMock();
-        $this->blockMock = $this->getMockBuilder('Magento\Framework\View\Element\BlockInterface')
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'setContentHeading',
-                    'toHtml'
-                ]
-            )
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->messagesBlockMock = $this->getMockBuilder('Magento\Framework\View\Element\Messages')
             ->disableOriginalConstructor()
             ->getMock();
         $this->messageManagerMock = $this->getMockBuilder('Magento\Framework\Message\ManagerInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->messageCollectionMock = $this->getMockBuilder('Magento\Framework\Message\Collection')
             ->disableOriginalConstructor()
             ->getMock();
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->context = $objectManager->getObject(
+        $context = $objectManager->getObject(
             'Magento\Framework\App\Helper\Context',
             [
                 'eventManager' => $this->eventManagerMock,
                 'urlBuilder' => $this->urlBuilderMock
             ]
         );
-        $this->this = $objectManager->getObject(
+        $this->object = $objectManager->getObject(
             'Magento\Cms\Helper\Page',
             [
-                'context' => $this->context,
+                'context' => $context,
                 'pageFactory' => $this->pageFactoryMock,
                 'page' => $this->pageMock,
                 'storeManager' => $this->storeManagerMock,
@@ -257,6 +236,8 @@ class PageTest extends \PHPUnit_Framework_TestCase
      * @param boolean $expectedResult
      *
      * @dataProvider renderPageExtendedDataProvider
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testRenderPageExtended(
         $pageId,
@@ -420,7 +401,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $expectedResult,
-            $this->this->renderPageExtended($this->actionMock, $pageId)
+            $this->object->renderPageExtended($this->actionMock, $pageId)
         );
     }
 
@@ -521,7 +502,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
             ->with(null, ['_direct' => $pageIdentifier])
             ->willReturn($url);
 
-        $this->assertEquals($expectedResult, $this->this->getPageUrl($pageId));
+        $this->assertEquals($expectedResult, $this->object->getPageUrl($pageId));
     }
 
     public function getPageUrlDataProvider()

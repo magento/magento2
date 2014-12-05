@@ -22,7 +22,7 @@
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
-.responsive(@break) when (@break = @screen-m) {
+.responsive-min-l(@break) when (@break = @screen-m) {
     ._rwd_width {
         min-width: 0 !important;
         max-width: auto !important;
@@ -31,7 +31,4 @@
         width: 100% !important;
         float: none !important;
     }
-}
-
-.responsive-smaller(@break) when (@break = @screen-s) {
 }

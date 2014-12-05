@@ -54,16 +54,16 @@ class Name extends AbstractWidget
      * @param Context $context
      * @param AddressHelper $addressHelper
      * @param CustomerMetadataInterface $customerMetadata
-     * @param AddressMetadataInterface $addressMetadata
      * @param Options $options
+     * @param AddressMetadataInterface $addressMetadata
      * @param array $data
      */
     public function __construct(
         Context $context,
         AddressHelper $addressHelper,
         CustomerMetadataInterface $customerMetadata,
-        AddressMetadataInterface $addressMetadata,
         Options $options,
+        AddressMetadataInterface $addressMetadata,
         array $data = array()
     ) {
         $this->options = $options;

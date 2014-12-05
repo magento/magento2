@@ -51,9 +51,9 @@ class Message extends \Magento\Core\Helper\Data
     protected $_innerCache = array();
 
     /**
-     * @var \Magento\Catalog\Model\ProductFactory
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
-    protected $_productFactory;
+    protected $productRepository;
 
     /**
      * @var \Magento\Framework\View\LayoutFactory
@@ -83,7 +83,7 @@ class Message extends \Magento\Core\Helper\Data
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
+     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Magento\GiftMessage\Model\MessageFactory $giftMessageFactory
      * @param \Magento\Framework\Escaper $escaper
@@ -96,7 +96,7 @@ class Message extends \Magento\Core\Helper\Data
         \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Framework\App\State $appState,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
-        \Magento\Catalog\Model\ProductFactory $productFactory,
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Magento\GiftMessage\Model\MessageFactory $giftMessageFactory,
         \Magento\Framework\Escaper $escaper,
@@ -104,7 +104,7 @@ class Message extends \Magento\Core\Helper\Data
         $dbCompatibleMode = true
     ) {
         $this->_escaper = $escaper;
-        $this->_productFactory = $productFactory;
+        $this->productRepository = $productRepository;
         $this->_layoutFactory = $layoutFactory;
         $this->_giftMessageFactory = $giftMessageFactory;
         $this->skipMessageCheck = $skipMessageCheck;
@@ -182,14 +182,13 @@ class Message extends \Magento\Core\Helper\Data
         } elseif ($type == 'address_item') {
             $storeId = is_numeric($store) ? $store : $this->_storeManager->getStore($store)->getId();
             if (!$this->isCached('address_item_' . $entity->getProductId())) {
-                $this->setCached(
-                    'address_item_' . $entity->getProductId(),
-                    $this->_productFactory->create()->setStoreId(
-                        $storeId
-                    )->load(
-                        $entity->getProductId()
-                    )->getGiftMessageAvailable()
-                );
+                try {
+                    $giftMessageAvailable = $this->productRepository->getById($entity->getProductId(), false, $storeId)
+                        ->getGiftMessageAvailable();
+                } catch (\Magento\Framework\Exception\NoSuchEntityException $noEntityException) {
+                    $giftMessageAvailable = null;
+                }
+                $this->setCached('address_item_' . $entity->getProductId(), $giftMessageAvailable);
             }
             return $this->_getDependenceFromStoreConfig(
                 $this->getCached('address_item_' . $entity->getProductId()),

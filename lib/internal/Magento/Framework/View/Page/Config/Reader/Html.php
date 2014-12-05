@@ -26,6 +26,9 @@ namespace Magento\Framework\View\Page\Config\Reader;
 use Magento\Framework\View\Layout;
 use Magento\Framework\View\Page\Config as PageConfig;
 
+/**
+ * Html reader is used for collecting attributes of html in to the scheduled page structure
+ */
 class Html implements Layout\ReaderInterface
 {
     /**#@+
@@ -41,6 +44,8 @@ class Html implements Layout\ReaderInterface
     /**#@-*/
 
     /**
+     * {@inheritdoc}
+     *
      * @return string[]
      */
     public function getSupportedNodes()
@@ -49,31 +54,24 @@ class Html implements Layout\ReaderInterface
     }
 
     /**
-     * Process Html structure
+     * {@inheritdoc}
      *
      * @param Layout\Reader\Context $readerContext
      * @param Layout\Element $htmlElement
-     * @param Layout\Element $parentElement
      * @return $this
      */
-    public function process(
+    public function interpret(
         Layout\Reader\Context $readerContext,
-        Layout\Element $htmlElement,
-        Layout\Element $parentElement
+        Layout\Element $htmlElement
     ) {
         /** @var \Magento\Framework\View\Layout\Element $element */
         foreach ($htmlElement as $element) {
-            switch ($element->getName()) {
-                case self::HTML_ATTRIBUTE:
-                    $$readerContext->getPageConfigStructure()->setElementAttribute(
-                        PageConfig::ELEMENT_TYPE_HTML,
-                        $element->getAttribute('name'),
-                        $element->getAttribute('value')
-                    );
-                    break;
-
-                default:
-                    break;
+            if ($element->getName() === self::HTML_ATTRIBUTE) {
+                $readerContext->getPageConfigStructure()->setElementAttribute(
+                    PageConfig::ELEMENT_TYPE_HTML,
+                    $element->getAttribute('name'),
+                    $element->getAttribute('value')
+                );
             }
         }
         return $this;

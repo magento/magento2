@@ -33,9 +33,9 @@ class Index extends \Magento\RecurringPayment\Controller\Adminhtml\RecurringPaym
      */
     public function execute()
     {
-        $this->_title->add(__('Recurring Billing Payments'));
         $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_RecurringPayment::recurring_payment');
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Recurring Billing Payments'));
         $this->_view->renderLayout();
     }
 }

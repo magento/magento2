@@ -76,7 +76,7 @@ class Sharing extends \Magento\Framework\View\Element\Template
      */
     protected function _prepareLayout()
     {
-        $this->pageConfig->setTitle(__('Wish List Sharing'));
+        $this->pageConfig->getTitle()->set(__('Wish List Sharing'));
     }
 
     /**

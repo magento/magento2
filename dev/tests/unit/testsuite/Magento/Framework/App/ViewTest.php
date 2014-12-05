@@ -96,14 +96,12 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->setConstructorArgs(
                 $helper->getConstructArguments('Magento\Framework\View\Result\Page', [
                 'request' => $this->_requestMock,
-                'pageConfigRendererFactory' => $pageConfigRendererFactory
+                'pageConfigRendererFactory' => $pageConfigRendererFactory,
+                'layout' => $this->_layoutMock
                 ])
             )
-            ->setMethods(['getLayout', 'renderResult', 'getConfig'])
+            ->setMethods(['renderResult', 'getConfig'])
             ->getMock();
-        $this->resultPage->expects($this->any())
-            ->method('getLayout')
-            ->will($this->returnValue($this->_layoutMock));
         $this->resultPage->expects($this->any())
             ->method('getConfig')
             ->will($this->returnValue($pageConfigMock));

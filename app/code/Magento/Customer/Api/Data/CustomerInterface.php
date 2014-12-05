@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -22,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Customer\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
@@ -73,14 +71,14 @@ interface CustomerInterface extends ExtensibleDataInterface
     /**
      * Get default billing address id
      *
-     * @return int|null
+     * @return string|null
      */
     public function getDefaultBilling();
 
     /**
      * Get default shipping address id
      *
-     * @return int|null
+     * @return string|null
      */
     public function getDefaultShipping();
 

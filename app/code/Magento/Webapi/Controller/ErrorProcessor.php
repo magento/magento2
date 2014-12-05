@@ -115,7 +115,7 @@ class ErrorProcessor
     public function maskException(\Exception $exception)
     {
         $isDevMode = $this->_appState->getMode() === State::MODE_DEVELOPER;
-        $stackTrace = $isDevMode ? $exception->getTrace() : null;
+        $stackTrace = $isDevMode ? $exception->getTraceAsString() : null;
 
         if ($exception instanceof LocalizedException) {
             // Map HTTP codes for LocalizedExceptions according to exception type

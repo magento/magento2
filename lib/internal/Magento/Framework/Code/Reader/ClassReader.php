@@ -23,7 +23,7 @@
  */
 namespace Magento\Framework\Code\Reader;
 
-class ClassReader
+class ClassReader implements ClassReaderInterface
 {
     /**
      * Read class constructor signature
@@ -46,9 +46,9 @@ class ClassReader
                         $parameter->getName(),
                         $parameter->getClass() !== null ? $parameter->getClass()->getName() : null,
                         !$parameter->isOptional(),
-                        $parameter->isOptional() ? $parameter
-                            ->isDefaultValueAvailable() ? $parameter
-                            ->getDefaultValue() : null : null
+                        $parameter->isOptional()
+                            ? ($parameter->isDefaultValueAvailable() ? $parameter->getDefaultValue() : null)
+                            : null
                     );
                 } catch (\ReflectionException $e) {
                     $message = $e->getMessage();

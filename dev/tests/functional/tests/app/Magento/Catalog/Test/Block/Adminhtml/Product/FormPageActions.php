@@ -89,9 +89,7 @@ class FormPageActions extends ParentFormPageActions
         if ($this->hasRender($typeId)) {
             $this->callRender($typeId, 'save', ['product' => $product]);
         } else {
-            $this->_rootElement->find($this->saveButton)->click();
-            $this->waitForElementNotVisible($this->loader, Locator::SELECTOR_XPATH);
-            $this->waitForElementNotVisible($this->loaderOld, Locator::SELECTOR_XPATH);
+            parent::save();
         }
     }
 

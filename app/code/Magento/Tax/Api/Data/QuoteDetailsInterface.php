@@ -24,6 +24,8 @@
 
 namespace Magento\Tax\Api\Data;
 
+use Magento\Customer\Api\Data\AddressInterface as CustomerAddress;
+
 interface QuoteDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+
@@ -45,14 +47,14 @@ interface QuoteDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Get customer billing address
      *
-     * @return \Magento\Customer\Service\V1\Data\Address|null
+     * @return \Magento\Customer\Api\Data\AddressInterface|null
      */
     public function getBillingAddress();
 
     /**
      * Get customer shipping address
      *
-     * @return \Magento\Customer\Service\V1\Data\Address|null
+     * @return \Magento\Customer\Api\Data\AddressInterface|null
      */
     public function getShippingAddress();
 

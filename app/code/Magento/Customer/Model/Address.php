@@ -23,12 +23,11 @@
  */
 namespace Magento\Customer\Model;
 
-use Magento\Customer\Model\Data\Address as AddressData;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\Data\AddressDataBuilder;
-use Magento\Customer\Api\Data\RegionInterface;
 use Magento\Customer\Api\Data\RegionDataBuilder;
+use Magento\Framework\Api\AttributeDataBuilder;
 
 /**
  * Customer address model
@@ -51,21 +50,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     protected $_customerFactory;
 
     /**
-     * @var AddressMetadataInterface
-     */
-    protected $_addressMetadataService;
-
-    /**
-     * @var AddressDataBuilder
-     */
-    protected $_addressBuilder;
-
-    /**
-     * @var RegionDataBuilder
-     */
-    protected $_regionBuilder;
-
-    /**
      * @var \Magento\Framework\Reflection\DataObjectProcessor
      */
     protected $dataProcessor;
@@ -74,15 +58,16 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param AttributeDataBuilder $customAttributeBuilder
      * @param \Magento\Directory\Helper\Data $directoryData
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param Address\Config $addressConfig
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
-     * @param CustomerFactory $customerFactory
      * @param AddressMetadataInterface $addressMetadataService
      * @param AddressDataBuilder $addressBuilder
      * @param RegionDataBuilder $regionBuilder
+     * @param CustomerFactory $customerFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
@@ -92,15 +77,16 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        AttributeDataBuilder $customAttributeBuilder,
         \Magento\Directory\Helper\Data $directoryData,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Customer\Model\Address\Config $addressConfig,
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Directory\Model\CountryFactory $countryFactory,
-        CustomerFactory $customerFactory,
         AddressMetadataInterface $addressMetadataService,
         AddressDataBuilder $addressBuilder,
         RegionDataBuilder $regionBuilder,
+        CustomerFactory $customerFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
@@ -108,18 +94,19 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     ) {
         $this->dataProcessor = $dataProcessor;
         $this->_customerFactory = $customerFactory;
-        $this->_addressMetadataService = $addressMetadataService;
-        $this->_addressBuilder = $addressBuilder;
-        $this->_regionBuilder = $regionBuilder;
         parent::__construct(
             $context,
             $registry,
             $metadataService,
+            $customAttributeBuilder,
             $directoryData,
             $eavConfig,
             $addressConfig,
             $regionFactory,
             $countryFactory,
+            $addressMetadataService,
+            $addressBuilder,
+            $regionBuilder,
             $resource,
             $resourceCollection,
             $data
@@ -168,60 +155,19 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     }
 
     /**
-     * Retrieve Data Model with the Address data
-     *
-     * @return AddressInterface
-     * @deprecated Use Api/Data/AddressInterface as a result of service operations. Don't rely on the model to provide
-     * the instance of Api/Data/AddressInterface
+     * {@inheritdoc}
      */
-    public function getDataModel()
+    public function getDataModel($defaultBillingAddressId = null, $defaultShippingAddressId = null)
     {
-        $addressId = $this->getId();
-
-        $attributes = $this->_addressMetadataService->getAllAttributesMetadata();
-        $addressData = array();
-        foreach ($attributes as $attribute) {
-            $code = $attribute->getAttributeCode();
-            if (!is_null($this->getData($code))) {
-                $addressData[$code] = $this->getDataUsingMethod($code);
-            }
-        }
-
-        /** @var RegionInterface $region */
-        $region = $this->_regionBuilder
-            ->populateWithArray(
-                array(
-                    RegionInterface::REGION => $this->getRegion(),
-                    RegionInterface::REGION_ID => $this->getRegionId(),
-                    RegionInterface::REGION_CODE => $this->getRegionCode()
-                )
-            )
-            ->create();
-
-        $addressData[AddressData::REGION] = $region;
-
-        $this->_addressBuilder->populateWithArray($addressData);
-        if ($addressId) {
-            $this->_addressBuilder->setId($addressId);
-        }
-
         if ($this->getCustomerId() || $this->getParentId()) {
-            $customerId = $this->getCustomerId() ?: $this->getParentId();
-            $this->_addressBuilder->setCustomerId($customerId);
-            if ($this->getCustomer()->getDefaultBillingAddress()
-                && ($this->getCustomer()->getDefaultBillingAddress()->getId() == $addressId)
-            ) {
-                $this->_addressBuilder->setDefaultBilling(true);
+            if ($this->getCustomer()->getDefaultBillingAddress()) {
+                $defaultBillingAddressId = $this->getCustomer()->getDefaultBillingAddress()->getId();
             }
-            if ($this->getCustomer()->getDefaultShippingAddress()
-                && ($this->getCustomer()->getDefaultShippingAddress()->getId() == $addressId)
-            ) {
-                $this->_addressBuilder->setDefaultShipping(true);
+            if ($this->getCustomer()->getDefaultShippingAddress()) {
+                $defaultShippingAddressId = $this->getCustomer()->getDefaultShippingAddress()->getId();
             }
         }
-
-        $addressDataObject = $this->_addressBuilder->create();
-        return $addressDataObject;
+        return parent::getDataModel($defaultBillingAddressId, $defaultShippingAddressId);
     }
 
     /**

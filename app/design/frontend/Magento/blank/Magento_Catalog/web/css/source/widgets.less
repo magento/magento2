@@ -22,6 +22,12 @@
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
+//
+//    Common
+//--------------------------------------
+
+.responsive-common() {
+
 .block-product-link,
 .block-category-link {
     &.widget {
@@ -58,17 +64,29 @@
     }
 }
 
-.responsive(@break) when (@break = @screen-s) {
+}
+
+//
+//    Mobile
+//--------------------------------------
+
+.responsive-min-m(@break) when (@break = @screen-s) {
     .block.widget .products-grid .product-item,
     .layout-1 .block.widget .products-grid .product-item,
     .layout-3 .block.widget .products-grid .product-item { width: 100%/3 }
 }
-.responsive(@break) when (@break = @screen-m) {
+
+//
+//    Desktop
+//--------------------------------------
+
+.responsive-min-l(@break) when (@break = @screen-m) {
     .block.widget .products-grid .product-item{ width: 100%/3 }
     .layout-1 .block.widget .products-grid .product-item { width: 100%/4 }
     .layout-3 .block.widget .products-grid .product-item { width: 100%/2 }
 }
-.responsive(@break) when (@break = @screen-l) {
+
+.responsive-min-l(@break) when (@break = @screen-l) {
     .block.widget .products-grid .product-item { width: 100%/5 }
     .layout-1 .block.widget .products-grid .product-item { width: 100%/6 }
     .layout-3 .block.widget .products-grid .product-item { width: 100%/4 }
@@ -83,13 +101,10 @@
     }
 }
 
-//
-//    Desktop
-//--------------------------------------
-.responsive(@break) when (@break = @screen-m) {
+.responsive-min-l(@break) when (@break = @screen-m) {
     .sidebar .block.widget .pager {
         .item:not(.pages-item-next):not(.pages-item-previous) {
-            &:extend(.abstract-no-display-desktop all);
+            &:extend(.abs-no-display-desktop all);
         }
         .pages-item-next {
             padding: 0;

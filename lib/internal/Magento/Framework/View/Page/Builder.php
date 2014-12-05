@@ -71,7 +71,6 @@ class Builder extends View\Layout\Builder
     protected function generateLayoutBlocks()
     {
         $this->readPageLayout();
-
         return parent::generateLayoutBlocks();
     }
 

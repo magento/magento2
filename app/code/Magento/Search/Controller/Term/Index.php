@@ -45,8 +45,6 @@ class Index extends \Magento\Reports\Controller\Adminhtml\Index
      */
     public function execute()
     {
-        $this->_title->add(__('Search Terms Report'));
-
         $this->_eventManager->dispatch('on_view_report', array('report' => 'search'));
 
         $this->_initAction()->_setActiveMenu(
@@ -55,6 +53,7 @@ class Index extends \Magento\Reports\Controller\Adminhtml\Index
             __('Search Terms'),
             __('Search Terms')
         );
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Search Terms Report'));
         $this->_view->renderLayout();
     }
 }

@@ -219,8 +219,6 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateInputRule($value, $label, $inputValidation, $expectedOutput)
     {
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-
         $validationRule = $this->getMockBuilder('Magento\Customer\Api\Data\ValidationRuleInterface')
             ->disableOriginalConstructor()
             ->setMethods(['getName', 'getValue'])

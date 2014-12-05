@@ -28,6 +28,9 @@ use Magento\Customer\Helper\Address;
 use Magento\Customer\Model\Url;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ConfirmTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -46,11 +49,6 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
     protected $responseMock;
 
     /**
-     * @var \Magento\Framework\App\ViewInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $viewMock;
-
-    /**
      * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $customerSessionMock;
@@ -59,11 +57,6 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $redirectMock;
-
-    /**
-     * @var \Magento\Framework\UrlFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $urlFactoryMock;
 
     /**
      * @var \Magento\Framework\Url|\PHPUnit_Framework_MockObject_MockObject
@@ -122,12 +115,12 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
         $this->responseMock = $this->getMock(
             'Magento\Framework\App\Response\Http', ['setRedirect', '__wakeup'], [], '', false
         );
-        $this->viewMock = $this->getMock('Magento\Framework\App\ViewInterface');
+        $viewMock = $this->getMock('Magento\Framework\App\ViewInterface');
         $this->redirectMock = $this->getMock('Magento\Framework\App\Response\RedirectInterface');
 
         $this->urlMock = $this->getMock('Magento\Framework\Url', [], [], '', false);
-        $this->urlFactoryMock = $this->getMock('Magento\Framework\UrlFactory', [], [], '', false);
-        $this->urlFactoryMock->expects($this->any())
+        $urlFactoryMock = $this->getMock('Magento\Framework\UrlFactory', [], [], '', false);
+        $urlFactoryMock->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->urlMock));
 
@@ -158,7 +151,7 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->redirectMock));
         $this->contextMock->expects($this->any())
             ->method('getView')
-            ->will($this->returnValue($this->viewMock));
+            ->will($this->returnValue($viewMock));
         $this->contextMock->expects($this->any())
             ->method('getMessageManager')
             ->will($this->returnValue($this->messageManagerMock));
@@ -171,7 +164,7 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
             $this->customerAccountManagementMock,
             $this->customerRepositoryMock,
             $this->addressHelperMock,
-            $this->urlFactoryMock
+            $urlFactoryMock
         );
     }
 

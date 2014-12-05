@@ -57,7 +57,6 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * @param \Magento\Sales\Model\AdminOrder\Create $orderCreate
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Tax\Helper\Data $taxData
-     * @param PriceCurrencyInterface $priceCurrency
      * @param array $data
      */
     public function __construct(
@@ -66,10 +65,8 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
         \Magento\Sales\Model\AdminOrder\Create $orderCreate,
         PriceCurrencyInterface $priceCurrency,
         \Magento\Tax\Helper\Data $taxData,
-        PriceCurrencyInterface $priceCurrency,
         array $data = array()
     ) {
-        $this->priceCurrency = $priceCurrency;
         $this->_taxData = $taxData;
         parent::__construct($context, $sessionQuote, $orderCreate, $priceCurrency, $data);
     }

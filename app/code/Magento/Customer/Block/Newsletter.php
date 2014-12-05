@@ -39,8 +39,6 @@ class Newsletter extends \Magento\Customer\Block\Account\Dashboard
     protected $_template = 'form/newsletter.phtml';
 
     /**
-     * Constructor
-     *
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory

@@ -133,6 +133,7 @@
                     <item name="tax_class_id" xsi:type="string">tax_class_id</item>
                 </item>
             </argument>
+            <argument name="productRepository" xsi:type="object">Magento\Catalog\Api\ProductRepositoryInterface\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Product">

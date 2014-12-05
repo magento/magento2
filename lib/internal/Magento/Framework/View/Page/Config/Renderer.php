@@ -68,11 +68,6 @@ class Renderer
     protected $urlBuilder;
 
     /**
-     * @var \Magento\Framework\App\Action\Title
-     */
-    protected $titles;
-
-    /**
      * @param \Magento\Framework\View\Page\Config $pageConfig
      * @param \Magento\Framework\View\Asset\MinifyService $assetMinifyService
      * @param \Magento\Framework\View\Asset\MergeService $assetMergeService
@@ -80,7 +75,6 @@ class Renderer
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\Stdlib\String $string
      * @param \Magento\Framework\Logger $logger
-     * @param \Magento\Framework\App\Action\Title $titles
      */
     public function __construct(
         Config $pageConfig,
@@ -89,8 +83,7 @@ class Renderer
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Framework\Escaper $escaper,
         \Magento\Framework\Stdlib\String $string,
-        \Magento\Framework\Logger $logger,
-        \Magento\Framework\App\Action\Title $titles
+        \Magento\Framework\Logger $logger
     ) {
         $this->pageConfig = $pageConfig;
         $this->assetMinifyService = $assetMinifyService;
@@ -99,7 +92,6 @@ class Renderer
         $this->escaper = $escaper;
         $this->string = $string;
         $this->logger = $logger;
-        $this->titles = $titles;
     }
 
     /**
@@ -134,10 +126,7 @@ class Renderer
      */
     public function renderTitle()
     {
-        $title = $this->pageConfig->getTitle();
-        $this->titles->add($title, true);
-        $this->pageConfig->setTitle(array_reverse($this->titles->get()));
-        return '<title>' . $this->pageConfig->getTitle() . '</title>' . "\n";
+        return '<title>' . $this->pageConfig->getTitle()->get() . '</title>' . "\n";
     }
 
     /**

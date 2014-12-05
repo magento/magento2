@@ -29,14 +29,5 @@
             <module name="Magento_Core"/>
             <module name="Magento_Store"/>
         </sequence>
-        <depends>
-            <module name="Magento_Store"/>
-            <module name="Magento_Core"/>
-            <module name="Magento_Customer"/>
-            <module name="Magento_Backend"/>
-            <module name="Magento_Cms"/>
-            <module name="Magento_RequireJs"/>
-            <module name="Magento_Translation" type="soft"/>
-        </depends>
     </module>
 </config>

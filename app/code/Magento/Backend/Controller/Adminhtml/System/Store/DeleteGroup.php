@@ -31,8 +31,6 @@ class DeleteGroup extends \Magento\Backend\Controller\Adminhtml\System\Store
      */
     public function execute()
     {
-        $this->_title->add(__('Delete Store'));
-
         $itemId = $this->getRequest()->getParam('item_id', null);
         if (!($model = $this->_objectManager->create('Magento\Store\Model\Group')->load($itemId))) {
             $this->messageManager->addError(__('Unable to proceed. Please, try again.'));
@@ -58,6 +56,7 @@ class DeleteGroup extends \Magento\Backend\Controller\Adminhtml\System\Store
                     ->setStoreTypeTitle(__('Store'))
                     ->setDataObject($model)
             );
+        $resultPage->getConfig()->getTitle()->prepend(__('Delete Store'));
         return $resultPage;
     }
 }

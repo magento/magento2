@@ -24,6 +24,8 @@
 namespace Magento\UrlRewrite\Block\Catalog\Category;
 
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Categories tree block for URL rewrites editing process
@@ -67,6 +69,11 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     protected $_jsonEncoder;
 
     /**
+     * @var CategoryRepositoryInterface
+     */
+    protected $categoryRepository;
+
+    /**
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Catalog\Model\Resource\Category\Tree $categoryTree
      * @param \Magento\Framework\Registry $registry
@@ -74,6 +81,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Backend\Helper\Data $adminhtmlData
+     * @param CategoryRepositoryInterface $categoryRepository
      * @param array $data
      */
     public function __construct(
@@ -84,6 +92,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Backend\Helper\Data $adminhtmlData,
+        CategoryRepositoryInterface $categoryRepository,
         array $data = array()
     ) {
         $this->_jsonEncoder = $jsonEncoder;
@@ -91,6 +100,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
         $this->_productFactory = $productFactory;
         $this->_adminhtmlData = $adminhtmlData;
         parent::__construct($context, $categoryTree, $registry, $categoryFactory, $data);
+        $this->categoryRepository = $categoryRepository;
     }
 
     /**
@@ -112,8 +122,12 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
 
         $result = array();
         if ($parentId) {
-            $category = $this->_categoryFactory->create()->load($parentId);
-            if (!empty($category)) {
+            try {
+                $category = $this->categoryRepository->get($parentId);
+            } catch (NoSuchEntityException $e) {
+                $category = null;
+            }
+            if ($category) {
                 $tree = $this->_getNodesArray($this->getNode($category, $recursionLevel));
                 if (!empty($tree) && !empty($tree['children'])) {
                     $result = $tree['children'];

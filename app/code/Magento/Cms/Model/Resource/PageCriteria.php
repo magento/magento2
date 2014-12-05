@@ -23,12 +23,12 @@
  */
 namespace Magento\Cms\Model\Resource;
 
-use Magento\Framework\Data\AbstractCriteria;
+use Magento\Cms\Api\PageCriteriaInterface;
 
 /**
  * Class PageCriteria
  */
-class PageCriteria extends AbstractCriteria implements \Magento\Cms\Api\PageCriteriaInterface
+class PageCriteria extends CmsAbstractCriteria implements PageCriteriaInterface
 {
     /**
      * @param string $mapper
@@ -44,6 +44,7 @@ class PageCriteria extends AbstractCriteria implements \Magento\Cms\Api\PageCrit
     public function setFirstStoreFlag($flag = false)
     {
         $this->data['first_store_flag'] = $flag;
+        return true;
     }
 
     /**
@@ -52,16 +53,18 @@ class PageCriteria extends AbstractCriteria implements \Magento\Cms\Api\PageCrit
     public function addStoreFilter($store, $withAdmin = true)
     {
         $this->data['store_filter'] = [$store, $withAdmin];
+        return true;
     }
 
     /**
      * Add Criteria object
      *
-     * @param \Magento\Cms\Api\PageCriteriaInterface $criteria
-     * @return void
+     * @param \Magento\Cms\Model\Resource\PageCriteria $criteria
+     * @return bool
      */
-    public function addCriteria(\Magento\Cms\Api\PageCriteriaInterface $criteria)
+    public function addCriteria(\Magento\Cms\Model\Resource\PageCriteria $criteria)
     {
         $this->data[self::PART_CRITERIA_LIST]['list'][] = $criteria;
+        return true;
     }
 }

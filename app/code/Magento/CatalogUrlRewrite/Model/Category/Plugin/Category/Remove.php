@@ -29,17 +29,12 @@ use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\Catalog\Model\Category;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
-use Magento\Catalog\Model\CategoryFactory;
-use Magento\Store\Model\Store;
 use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
 
 class Remove
 {
     /** @var UrlPersistInterface */
     protected $urlPersist;
-
-    /** @var  CategoryFactory */
-    protected $categoryFactory;
 
     /** @var ProductUrlRewriteGenerator */
     protected $productUrlRewriteGenerator;
@@ -49,18 +44,15 @@ class Remove
 
     /**
      * @param UrlPersistInterface $urlPersist
-     * @param CategoryFactory $categoryFactory
      * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
      * @param ChildrenCategoriesProvider $childrenCategoriesProvider
      */
     public function __construct(
         UrlPersistInterface $urlPersist,
-        CategoryFactory $categoryFactory,
         ProductUrlRewriteGenerator $productUrlRewriteGenerator,
         ChildrenCategoriesProvider $childrenCategoriesProvider
     ) {
         $this->urlPersist = $urlPersist;
-        $this->categoryFactory = $categoryFactory;
         $this->productUrlRewriteGenerator = $productUrlRewriteGenerator;
         $this->childrenCategoriesProvider = $childrenCategoriesProvider;
     }

@@ -56,7 +56,7 @@ interface StockStatusRepositoryInterface
      * Delete StockStatus entity
      *
      * @param \Magento\CatalogInventory\Api\Data\StockStatusInterface $stockStatus
-     * @return true
+     * @return bool
      */
     public function delete(\Magento\CatalogInventory\Api\Data\StockStatusInterface $stockStatus);
 }

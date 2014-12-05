@@ -64,7 +64,7 @@ class Creditmemo extends \Magento\Sales\Block\Items\AbstractItems
      */
     protected function _prepareLayout()
     {
-        $this->pageConfig->setTitle(__('Order # %1', $this->getOrder()->getRealOrderId()));
+        $this->pageConfig->getTitle()->set(__('Order # %1', $this->getOrder()->getRealOrderId()));
         $infoBlock = $this->_paymentHelper->getInfoBlock($this->getOrder()->getPayment(), $this->getLayout());
         $this->setChild('payment_info', $infoBlock);
     }

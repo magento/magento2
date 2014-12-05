@@ -57,10 +57,14 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
         $customer->setGroupId(2);
         $customer->save();
 
+        /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
+        $customerRepository = $objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
+        $customerData = $customerRepository->getById($customer->getId());
+
         /** @var $quote \Magento\Sales\Model\Quote */
         $quote = $objectManager->create('Magento\Sales\Model\Quote');
         $quote->load('test01', 'reserved_order_id');
-        $quote->setCustomer($customer);
+        $quote->setCustomer($customerData);
 
         $quoteAddress = $quote->getBillingAddress();
 
@@ -93,10 +97,18 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
         $customer->setGroupId(2);
         $customer->save();
 
+        /** @var \Magento\Customer\Model\CustomerRegistry $customerRegistry */
+        $customerRegistry = $objectManager->get('Magento\Customer\Model\CustomerRegistry');
+        $customerRegistry->remove($customer->getId());
+
+        /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
+        $customerRepository = $objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
+        $customerData = $customerRepository->getById($customer->getId());
+
         /** @var $quote \Magento\Sales\Model\Quote */
         $quote = $objectManager->create('Magento\Sales\Model\Quote');
         $quote->load('test01', 'reserved_order_id');
-        $quote->setCustomer($customer);
+        $quote->setCustomer($customerData);
 
         $quoteAddress = $quote->getBillingAddress();
 

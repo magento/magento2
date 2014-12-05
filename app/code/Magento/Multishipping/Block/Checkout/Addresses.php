@@ -26,6 +26,7 @@ namespace Magento\Multishipping\Block\Checkout;
 use Magento\Customer\Model\Address\Config as AddressConfig;
 
 /**
+ * Class Addresses
  * Multishipping checkout choose item addresses block
  */
 class Addresses extends \Magento\Sales\Block\Items\AbstractItems
@@ -41,9 +42,9 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
     protected $_multishipping;
 
     /**
-     * @var \Magento\Customer\Service\V1\CustomerAddressServiceInterface
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
      */
-    protected $_customerAddressService;
+    protected $customerRepository;
 
     /**
      * @var \Magento\Customer\Model\Address\Config
@@ -51,25 +52,35 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
     private $_addressConfig;
 
     /**
+     * @var \Magento\Customer\Model\Address\Mapper
+     */
+    protected $mapper;
+
+    /**
+     * Constructor
+     *
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Filter\Object\GridFactory $filterGridFactory
      * @param \Magento\Multishipping\Model\Checkout\Type\Multishipping $multishipping
-     * @param \Magento\Customer\Service\V1\CustomerAddressServiceInterface $customerAddressService
+     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param AddressConfig $addressConfig
+     * @param \Magento\Customer\Model\Address\Mapper $mapper
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Filter\Object\GridFactory $filterGridFactory,
         \Magento\Multishipping\Model\Checkout\Type\Multishipping $multishipping,
-        \Magento\Customer\Service\V1\CustomerAddressServiceInterface $customerAddressService,
+        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         AddressConfig $addressConfig,
-        array $data = array()
+        \Magento\Customer\Model\Address\Mapper $mapper,
+        array $data = []
     ) {
         $this->_filterGridFactory = $filterGridFactory;
         $this->_multishipping = $multishipping;
-        $this->_customerAddressService = $customerAddressService;
+        $this->customerRepository = $customerRepository;
         $this->_addressConfig = $addressConfig;
+        $this->mapper = $mapper;
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
     }
@@ -89,7 +100,9 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
      */
     protected function _prepareLayout()
     {
-        $this->pageConfig->setTitle(__('Ship to Multiple Addresses') . ' - ' . $this->pageConfig->getDefaultTitle());
+        $this->pageConfig->getTitle()->set(
+            __('Ship to Multiple Addresses') . ' - ' . $this->pageConfig->getTitle()->getDefault()
+        );
         return parent::_prepareLayout();
     }
 
@@ -136,16 +149,17 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
             $addresses = [];
 
             try {
-                $addresses = $this->_customerAddressService->getAddresses($this->getCustomerId());
+                $addresses = $this->customerRepository->getById($this->getCustomerId())->getAddresses();
             } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
                 /** Customer does not exist */
             }
-            /** @var \Magento\Customer\Service\V1\Data\Address $address */
+            /** @var \Magento\Customer\Api\Data\AddressInterface $address */
             foreach ($addresses as $address) {
+                $arrayData = $this->mapper->toFlatArray($address);
                 $label = $this->_addressConfig
                     ->getFormatByCode(AddressConfig::DEFAULT_ADDRESS_FORMAT)
                     ->getRenderer()
-                    ->renderArray(\Magento\Customer\Service\V1\Data\AddressConverter::toFlatArray($address));
+                    ->renderArray($arrayData);
 
                 $options[] = [
                     'value' => $address->getId(),
@@ -183,7 +197,7 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
      */
     public function getItemDeleteUrl($item)
     {
-        return $this->getUrl('*/*/removeItem', array('address' => $item->getQuoteAddressId(), 'id' => $item->getId()));
+        return $this->getUrl('*/*/removeItem', ['address' => $item->getQuoteAddressId(), 'id' => $item->getId()]);
     }
 
     /**

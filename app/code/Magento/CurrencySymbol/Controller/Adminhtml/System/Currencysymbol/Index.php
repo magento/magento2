@@ -45,7 +45,7 @@ class Index extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Currency
             __('Manage Currency Rates')
         );
 
-        $this->_title->add(__('Currency Symbols'));
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Currency Symbols'));
         $this->_view->renderLayout();
     }
 }

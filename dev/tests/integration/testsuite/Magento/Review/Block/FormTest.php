@@ -26,11 +26,16 @@ namespace Magento\Review\Block;
 class FormTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoAppArea frontend
      */
     public function testCustomerOnForm()
     {
+        // need for \Magento\Review\Block\Form::getProductInfo()
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Framework\App\RequestInterface')->setParam('id', 1);
+
         $session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\Customer\Model\Session');
         $service = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

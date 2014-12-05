@@ -44,7 +44,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Paypal\Model\Billing\Agreement $billingAgreement */
         $billingAgreement = $billingAgreementCollection->getFirstItem();
 
-        $expectedData = array(
+        $expectedData = [
             'customer_id' => 1,
             'method_code' => 'paypal_express',
             'reference_id' => 'REF-ID-TEST-678',
@@ -52,9 +52,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             'store_id' => 1,
             'agreement_label' => 'TEST',
             'customer_email' => 'customer@example.com',
-            'customer_firstname' => 'Firstname',
-            'customer_lastname' => 'Lastname'
-        );
+            'customer_firstname' => 'John',
+            'customer_lastname' => 'Smith'
+        ];
         foreach ($expectedData as $field => $expectedValue) {
             $this->assertEquals(
                 $expectedValue,

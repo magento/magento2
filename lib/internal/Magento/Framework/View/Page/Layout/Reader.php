@@ -24,6 +24,8 @@
 
 namespace Magento\Framework\View\Page\Layout;
 
+use Magento\Framework\View\Layout;
+
 /**
  * Class Page layout reader
  */
@@ -55,21 +57,23 @@ class Reader
     protected $pageLayoutMerge;
 
     /**
-     * @var \Magento\Framework\View\Layout\Reader\Pool
+     * @var \Magento\Framework\View\Layout\ReaderPool
      */
     protected $reader;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Framework\View\Design\Theme\ResolverInterface $themeResolver
      * @param \Magento\Framework\View\Layout\ProcessorFactory $processorFactory
      * @param \Magento\Framework\View\File\CollectorInterface $pageLayoutFileSource
-     * @param \Magento\Framework\View\Layout\Reader\Pool $reader
+     * @param \Magento\Framework\View\Layout\ReaderPool $reader
      */
     public function __construct(
         \Magento\Framework\View\Design\Theme\ResolverInterface $themeResolver,
         \Magento\Framework\View\Layout\ProcessorFactory $processorFactory,
         \Magento\Framework\View\File\CollectorInterface $pageLayoutFileSource,
-        \Magento\Framework\View\Layout\Reader\Pool $reader
+        \Magento\Framework\View\Layout\ReaderPool $reader
     ) {
         $this->themeResolver = $themeResolver;
         $this->processorFactory = $processorFactory;
@@ -84,25 +88,28 @@ class Reader
      */
     protected function getPageLayoutMerge()
     {
-        if (!$this->pageLayoutMerge) {
-            $this->pageLayoutMerge = $this->processorFactory->create([
-                'theme' => $this->themeResolver->get(),
-                'fileSource' => $this->pageLayoutFileSource,
-                'cacheSuffix' => self::MERGE_CACHE_SUFFIX
-            ]);
+        if ($this->pageLayoutMerge) {
+            return $this->pageLayoutMerge;
         }
+        $this->pageLayoutMerge = $this->processorFactory->create([
+            'theme'       => $this->themeResolver->get(),
+            'fileSource'  => $this->pageLayoutFileSource,
+            'cacheSuffix' => self::MERGE_CACHE_SUFFIX
+        ]);
         return $this->pageLayoutMerge;
     }
 
     /**
-     * @param \Magento\Framework\View\Layout\Reader\Context $readerContext
+     * Read page layout structure and fill reader context
+     *
+     * @param Layout\Reader\Context $readerContext
      * @param string $pageLayout
      * @return void
      */
-    public function read(\Magento\Framework\View\Layout\Reader\Context $readerContext, $pageLayout)
+    public function read(Layout\Reader\Context $readerContext, $pageLayout)
     {
         $this->getPageLayoutMerge()->load($pageLayout);
         $xml = $this->getPageLayoutMerge()->asSimplexml();
-        $this->reader->readStructure($readerContext, $xml);
+        $this->reader->interpret($readerContext, $xml);
     }
 }

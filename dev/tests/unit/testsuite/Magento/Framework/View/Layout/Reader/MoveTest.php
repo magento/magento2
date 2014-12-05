@@ -83,7 +83,7 @@ class MoveTest extends \PHPUnit_Framework_TestCase
                 (string)$currentElement->getAttribute('element'),
                 [$destination, $siblingName, $isAfter, $alias]
             );
-        $this->move->process($this->contextMock, $currentElement, $parentElement);
+        $this->move->interpret($this->contextMock, $currentElement, $parentElement);
     }
 
     /**
@@ -121,6 +121,6 @@ class MoveTest extends \PHPUnit_Framework_TestCase
     public function testProcessInvalidData()
     {
         $invalidElement = new \Magento\Framework\View\Layout\Element('<move element="product" into="product.info"/>');
-        $this->move->process($this->contextMock, $invalidElement, $invalidElement);
+        $this->move->interpret($this->contextMock, $invalidElement, $invalidElement);
     }
 }

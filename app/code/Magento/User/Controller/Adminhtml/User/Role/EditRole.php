@@ -44,7 +44,10 @@ class EditRole extends \Magento\User\Controller\Adminhtml\User\Role
             $breadCrumbTitle = __('Add New Role');
         }
 
-        $this->_title->add($role->getId() ? $role->getRoleName() : __('New Role'));
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Roles'));
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(
+            $role->getId() ? $role->getRoleName() : __('New Role')
+        );
 
         $this->_addBreadcrumb($breadCrumb, $breadCrumbTitle);
 

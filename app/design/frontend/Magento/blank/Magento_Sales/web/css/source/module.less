@@ -22,6 +22,12 @@
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
+//
+//    Common
+//--------------------------------------
+
+.responsive-common() {
+
 .order-links {
     border-bottom: @border-width-base solid @border-color-base;
     margin-bottom: 10px;
@@ -48,7 +54,7 @@
         }
     }
     .items-qty {
-        &:extend(.abstract-reset-list all);
+        &:extend(.abs-reset-list all);
         .item {
             white-space: nowrap;
         }
@@ -98,7 +104,7 @@
 }
 
 .order-status {
-    &:extend(.abstract-status all);
+    &:extend(.abs-status all);
 }
 
 .page-title {
@@ -127,7 +133,7 @@
 
 .block-reorder {
     .block-title {
-        &:extend(.abstract-block-title all);
+        &:extend(.abs-block-title all);
     }
     .product-item {
         .checkbox {
@@ -136,7 +142,7 @@
             vertical-align: baseline;
         }
         .label {
-            &:extend(.abstract-visually-hidden all);
+            &:extend(.abs-visually-hidden all);
         }
         .field.item {
             display: inline-block;
@@ -151,7 +157,7 @@
     }
     .sidebar-main & .subtitle,
     .sidebar-additional & .subtitle {
-        &:extend(.abstract-no-display all);
+        &:extend(.abs-no-display all);
     }
 }
 
@@ -206,15 +212,17 @@
 .sales-guest-view {
     .column.main {
         .block:not(.widget) {
-            &:extend(.abstract-account-blocks all);
+            &:extend(.abs-account-blocks all);
         }
     }
+}
+
 }
 
 //
 //    Mobile
 //--------------------------------------
-.responsive-smaller(@break) when (@break = @screen-s) {
+.responsive-max-m(@break) when (@break = @screen-s) {
     .account {
         .order-details-items {
             .table-order-items {
@@ -231,7 +239,7 @@
             }
         }
         .toolbar {
-            &:extend(.abstract-add-clearfix-desktop all);
+            &:extend(.abs-add-clearfix-desktop all);
             .pages {
                 float: right;
             }
@@ -245,7 +253,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive(@break) when (@break = @screen-m) {
+.responsive-min-l(@break) when (@break = @screen-m) {
     .table-order-items {
         .subtotal,
         .amount {
@@ -286,9 +294,9 @@
         .column.main {
             .block:not(.widget) {
                 .block-content {
-                    &:extend(.abstract-add-clearfix-desktop all);
+                    &:extend(.abs-add-clearfix-desktop all);
                     .box {
-                        &:extend(.abstract-blocks-2columns all);
+                        &:extend(.abs-blocks-2columns all);
                         margin-bottom: @indent-base;
                     }
                 }

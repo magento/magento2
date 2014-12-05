@@ -30,12 +30,8 @@ use Magento\Framework\View\Element\Template;
  *
  * @method $this setTitleId($titleId)
  * @method $this setTitleClass($titleClass)
- * @method $this setTitlePrefix($titlePrefix)
- * @method $this setTitleSuffix($titleSuffix)
  * @method string getTitleId()
  * @method string getTitleClass()
- * @method string getTitlePrefix()
- * @method string getTitleSuffix()
  */
 class Title extends \Magento\Framework\View\Element\Template
 {
@@ -56,7 +52,7 @@ class Title extends \Magento\Framework\View\Element\Template
         if (!empty($this->pageTitle)) {
             return $this->pageTitle;
         }
-        return $this->pageConfig->getShortTitle();
+        return $this->pageConfig->getTitle()->getShort();
     }
 
     /**

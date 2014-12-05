@@ -23,24 +23,31 @@
 //  */
 
 //
+//    Common
+//--------------------------------------
+
+.responsive-common() {
+
+//
 //    PayPal checkout button
 //--------------------------------------
 .paypal {
-    &.after:after {
+    &.after:before {
         content: "- " attr(data-label) " -";
         display: block;
-        margin: 0 5px 10px;
+        margin: 0 @indent-xs-base @indent-s-base;
         text-transform: uppercase;
     }
     &.before:before {
         content: "- " attr(data-label) " -";
         display: block;
-        margin: 10px 5px;
+        margin: @indent-s-base @indent-xs-base;
         text-align: center;
         text-transform: uppercase;
     }
     &.acceptance {
         display: block;
+        margin: 0 0 @indent-base;
         img {
             max-width: 100%;
         }
@@ -57,7 +64,7 @@
 
 .form-new-agreement {
     .actions-toolbar {
-        &:extend(.abstract-reset-left-margin all);
+        &:extend(.abs-reset-left-margin all);
     }
 }
 
@@ -66,10 +73,10 @@
 //--------------------------------------
 .paypal-review {
     .block {
-        &:extend(.abstract-account-blocks all);
+        &:extend(.abs-account-blocks all);
         .actions-toolbar {
             .action.primary {
-                &:extend(.abstract-revert-secondary-color all);
+                &:extend(.abs-revert-secondary-color all);
             }
         }
     }
@@ -82,7 +89,7 @@
     }
 
     .items-qty {
-        &:extend(.abstract-reset-list all);
+        &:extend(.abs-reset-list all);
         .item {
             white-space: nowrap;
         }
@@ -116,10 +123,12 @@
     }
 }
 
+}
+
 //
 //    Mobile
 //--------------------------------------
-.responsive-smaller(@break) when (@break = @screen-s) {
+.responsive-max-m(@break) when (@break = @screen-s) {
     .table-paypal-review-items {
         .product-item-name {
             display: inline-block;
@@ -130,10 +139,10 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive(@break) when (@break = @screen-m) {
+.responsive-min-l(@break) when (@break = @screen-m) {
     .paypal-review {
         .block-content {
-            &:extend(.abstract-add-clearfix-desktop all);
+            &:extend(.abs-add-clearfix-desktop all);
             .box-order-shipping-address,
             .box-order-shipping-method,
             .box-order-shipping-method + .box-order-billing-address {
@@ -148,7 +157,7 @@
         }
         .column.main & {
             .actions-toolbar {
-                &:extend(.abstract-reset-left-margin-desktop all);
+                &:extend(.abs-reset-left-margin-desktop all);
             }
         }
         .table-paypal-review-items {
@@ -173,7 +182,7 @@
     .form-new-agreement {
         .fieldset .legend,
         .actions-toolbar {
-            &:extend(.abstract-reset-left-margin-desktop all);
+            &:extend(.abs-reset-left-margin-desktop all);
         }
     }
 }

@@ -28,14 +28,10 @@ use Magento\Backend\App\Action;
 use \Magento\Framework\Model\Exception;
 use \Magento\Sales\Model\Order\Email\Sender\InvoiceCommentSender;
 use \Magento\Sales\Model\Order\Invoice;
+use Magento\Framework\Registry;
 
-class AddComment extends \Magento\Backend\App\Action
+class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View
 {
-    /**
-     * @var \Magento\Sales\Controller\Adminhtml\Order\InvoiceLoader
-     */
-    protected $invoiceLoader;
-
     /**
      * @var InvoiceCommentSender
      */
@@ -43,25 +39,16 @@ class AddComment extends \Magento\Backend\App\Action
 
     /**
      * @param Action\Context $context
-     * @param \Magento\Sales\Controller\Adminhtml\Order\InvoiceLoader $invoiceLoader
+     * @param Registry $registry
      * @param InvoiceCommentSender $invoiceCommentSender
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Sales\Controller\Adminhtml\Order\InvoiceLoader $invoiceLoader,
+        Registry $registry,
         InvoiceCommentSender $invoiceCommentSender
     ) {
-        $this->invoiceLoader = $invoiceLoader;
         $this->invoiceCommentSender = $invoiceCommentSender;
-        parent::__construct($context);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::sales_invoice');
+        parent::__construct($context, $registry);
     }
 
     /**
@@ -77,13 +64,11 @@ class AddComment extends \Magento\Backend\App\Action
             if (empty($data['comment'])) {
                 throw new Exception(__('The Comment Text field cannot be empty.'));
             }
-            $this->_title->add(__('Invoices'));
-            $orderId = $this->getRequest()->getParam('order_id');
-            $invoiceId = $this->getRequest()->getParam('invoice_id');
-            $invoiceData = $this->getRequest()->getParam('invoice', []);
-            $invoiceData = isset($invoiceData['items']) ? $invoiceData['items'] : [];
-            /** @var Invoice $invoice */
-            $invoice = $this->invoiceLoader->load($orderId, $invoiceId, $invoiceData);
+            $invoice = $this->getInvoice();
+            if (!$invoice) {
+                $this->_forward('noroute');
+                return;
+            }
             $invoice->addComment(
                 $data['comment'],
                 isset($data['is_customer_notified']),
@@ -94,11 +79,12 @@ class AddComment extends \Magento\Backend\App\Action
             $invoice->save();
 
             $this->_view->loadLayout();
+            $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Invoices'));
             $response = $this->_view->getLayout()->getBlock('invoice_comments')->toHtml();
         } catch (Exception $e) {
-            $response = array('error' => true, 'message' => $e->getMessage());
+            $response = ['error' => true, 'message' => $e->getMessage()];
         } catch (\Exception $e) {
-            $response = array('error' => true, 'message' => __('Cannot add new comment.'));
+            $response = ['error' => true, 'message' => __('Cannot add new comment.')];
         }
         if (is_array($response)) {
             $response = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response);

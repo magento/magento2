@@ -23,10 +23,10 @@
  */
 namespace Magento\GoogleShopping\Model\Attribute;
 
+use Magento\Tax\Model\Config;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Gdata\Gshopping\Entry;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Tax\Model\Config;
 
 /**
  * Price attribute model
@@ -35,7 +35,7 @@ use Magento\Tax\Model\Config;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Price extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
+class Price extends DefaultAttribute
 {
     /**
      * @var \Magento\Tax\Helper\Data|null
@@ -67,16 +67,18 @@ class Price extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
     protected $catalogPrice;
 
     /**
-     * @var  \Magento\Customer\Service\V1\CustomerGroupService
-     */
-    protected $_customerGroupService;
-
-    /**
      * @var PriceCurrencyInterface
      */
     protected $priceCurrency;
 
     /**
+     * @var \Magento\Customer\Api\GroupManagementInterface
+     */
+    protected $groupManagement;
+
+    /**
+     * Constructor
+     *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
@@ -87,10 +89,10 @@ class Price extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\GoogleShopping\Model\Config $config
-     * @param \Magento\Customer\Service\V1\CustomerGroupService $customerGroupService
      * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param PriceCurrencyInterface $priceCurrency
+     * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -106,17 +108,17 @@ class Price extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
         \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Tax\Helper\Data $taxData,
         \Magento\GoogleShopping\Model\Config $config,
-        \Magento\Customer\Service\V1\CustomerGroupService $customerGroupService,
         \Magento\Catalog\Helper\Data $catalogData,
         PriceCurrencyInterface $priceCurrency,
+        \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        array $data = []
     ) {
+        $this->groupManagement = $groupManagement;
         $this->priceCurrency = $priceCurrency;
         $this->_storeManager = $storeManager;
         $this->_config = $config;
         $this->_taxData = $taxData;
-        $this->_customerGroupService = $customerGroupService;
         $this->catalogPrice = $catalogPrice;
         $this->_catalogData = $catalogData;
         parent::__construct(
@@ -142,7 +144,7 @@ class Price extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
     public function convertAttribute($product, $entry)
     {
         $product->setWebsiteId($this->_storeManager->getStore($product->getStoreId())->getWebsiteId());
-        $defaultCustomerGroup = $this->_customerGroupService->getDefaultGroup($product->getStoreId());
+        $defaultCustomerGroup = $this->groupManagement->getDefaultGroup($product->getStoreId());
         $product->setCustomerGroupId($defaultCustomerGroup->getId());
 
         /** @var \Magento\Store\Model\Store $store */

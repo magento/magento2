@@ -22,11 +22,17 @@
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
-@autocomplete-background: #fff;
+@autocomplete-background: @color-white;
 @autocomplete-border: 1px solid @form-element-input-border-color;
 @autocomplete-item-border: 1px solid #e5e5e5;
 @autocomplete-item-hover: #e8e8e8;
 @autocomplete-item-amount-color: #999;
+
+//
+//    Common
+//--------------------------------------
+
+.responsive-common() {
 
 .block-search {
     margin-bottom: 0;
@@ -40,8 +46,11 @@
             @_icon-font-content: @icon-search,
             @_icon-font-size: 35px,
             @_icon-font-line-height: 33px,
+            @_icon-font-color: @minicart-icons-color,
+            @_icon-font-color-hover: @minicart-icons-color-hover,
+            @_icon-font-color-active: @minicart-icons-color-hover,
             @_icon-font-text-hide: true
-            );
+        );
         display: inline-block;
         float: right;
     }
@@ -66,7 +75,6 @@
     .nested {
         display: none;
     }
-
 }
 
 .search-autocomplete {
@@ -75,7 +83,7 @@
     z-index: 3;
     overflow: hidden;
     margin-top: -15px;
-    &:extend(.abstract-add-box-sizing all);
+    &:extend(.abs-add-box-sizing all);
     ul {
         .list-reset-styles();
         li {
@@ -86,7 +94,7 @@
             }
             border-top: @autocomplete-item-border;
             cursor: pointer;
-            padding: 5px 40px 5px 10px;
+            padding: @indent-xs-base @indent-xl-base @indent-xs-base @indent-s-base;
             margin: 0;
             position: relative;
             text-align: left;
@@ -102,7 +110,7 @@
                 color: @autocomplete-item-amount-color;
                 position: absolute;
                 right: 7px;
-                top: 5px;
+                top: @indent-xs-base;
             }
         }
     }
@@ -156,10 +164,29 @@
     }
 }
 
+}
+
+//
+//    Mobile
+//--------------------------------------
+.responsive-max-m(@break) when (@break = @screen-m) {
+    .block-search {
+        .block-content {
+            margin-bottom: 0;
+        }
+    }
+}
+
+.responsive-max-m(@break) when (@break = @screen-s) {
+    .block-search {
+        margin-top: @indent-s-base;
+    }
+}
+
 //
 //    Desktop
 //--------------------------------------
-.responsive(@break) when (@break = @screen-m) {
+.responsive-min-l(@break) when (@break = @screen-m) {
     .block-search {
         position: relative;
         float: right;
@@ -167,7 +194,7 @@
         width: 250px;
         z-index: 4;
         .label {
-            &:extend(.abstract-visually-hidden-desktop all);
+            &:extend(.abs-visually-hidden-desktop all);
         }
         .control {
             border-top: 0;
@@ -194,15 +221,15 @@
             .button-icon(
                 @_icon-font-content: @icon-search,
                 @_icon-font-text-hide: true,
-                @_icon-font-color: #666
+                @_icon-font-color: @header-icons-color
             );
             .button-reset();
             &:focus {
                 &:before {
-                    color: #333;
+                    color: @color-gray20;
                 }
             }
-            padding: 5px 0;
+            padding: @indent-xs-base 0;
         }
     }
     .search-autocomplete {

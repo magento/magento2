@@ -217,8 +217,8 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
                 'storage' => $this->storageMock,
                 'cookieManager' => $this->cookieManagerMock,
                 'cookieMetadataFactory' => $this->cookieMetadataFactoryMock,
-                'quoteRepository' => $this->quoteRepositoryMock,
                 'customerRepository' => $this->customerRepositoryMock,
+                'quoteRepository' => $this->quoteRepositoryMock,
                 'orderFactory' => $this->orderFactoryMock,
                 'storeManager' => $this->storeManagerMock,
                 'groupManagement' => $this->groupManagementMock
@@ -298,13 +298,16 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->quote->expects($this->any())
             ->method('getCustomerId')
             ->will($this->returnValue($customerId));
+        $dataCustomerMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->customerRepositoryMock->expects($this->once())
             ->method('getById')
             ->with($customerId)
-            ->will($this->returnValue('customer-result'));
+            ->willReturn($dataCustomerMock);
         $quoteMock->expects($this->once())
             ->method('assignCustomer')
-            ->with('customer-result');
+            ->with($dataCustomerMock);
         $quoteMock->expects($this->once())
             ->method('setIgnoreOldQty')
             ->with(true);
@@ -365,13 +368,16 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $this->quote->expects($this->any())
             ->method('getCustomerId')
             ->will($this->returnValue($customerId));
+        $dataCustomerMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->customerRepositoryMock->expects($this->once())
             ->method('getById')
             ->with($customerId)
-            ->will($this->returnValue('customer-result'));
+            ->willReturn($dataCustomerMock);
         $quoteMock->expects($this->once())
             ->method('assignCustomer')
-            ->with('customer-result');
+            ->with($dataCustomerMock);
         $quoteMock->expects($this->once())
             ->method('setIgnoreOldQty')
             ->with(true);

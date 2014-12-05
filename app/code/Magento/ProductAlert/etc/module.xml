@@ -29,11 +29,5 @@
             <module name="Magento_Catalog"/>
             <module name="Magento_Customer"/>
         </sequence>
-        <depends>
-            <module name="Magento_Store"/>
-            <module name="Magento_Catalog"/>
-            <module name="Magento_Customer"/>
-            <module name="Magento_Core"/>
-        </depends>
     </module>
 </config>

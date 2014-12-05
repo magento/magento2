@@ -31,9 +31,6 @@ use Magento\Catalog\Model\ProductFactory;
 
 /**
  * Class StockManagement
- * @package Magento\CatalogInventory\Model
- * @api
- * @spi
  */
 class StockManagement implements StockManagementInterface
 {
@@ -84,7 +81,7 @@ class StockManagement implements StockManagementInterface
      * Subtract product qtys from stock.
      * Return array of items that require full save
      *
-     * @param array $items
+     * @param string[] $items
      * @param int $websiteId
      * @return StockItemInterface[]
      * @throws \Magento\Framework\Model\Exception
@@ -102,7 +99,7 @@ class StockManagement implements StockManagementInterface
             /** @var StockItemInterface $stockItem */
             $orderedQty = $items[$productId];
             $stockItem = $this->stockRegistryProvider->getStockItem($productId, $websiteId);
-            $canSubtractQty = $stockItem->getId() && $this->canSubtractQty($stockItem);
+            $canSubtractQty = $stockItem->getItemId() && $this->canSubtractQty($stockItem);
             if (!$canSubtractQty || !$this->stockConfiguration->isQty($this->getProductType($productId))) {
                 continue;
             }
@@ -133,25 +130,26 @@ class StockManagement implements StockManagementInterface
     }
 
     /**
-     * @param array $items
+     * @param string[] $items
      * @param int $websiteId
-     * @return void
+     * @return bool
      */
-    public function revertProductsSale(array $items, $websiteId = null)
+    public function revertProductsSale($items, $websiteId = null)
     {
         //if (!$websiteId) {
         $websiteId = $this->stockConfiguration->getDefaultWebsiteId();
         //}
         $this->getResource()->correctItemsQty($items, $websiteId, '+');
+        return true;
     }
 
     /**
      * Get back to stock (when order is canceled or whatever else)
      *
      * @param int $productId
-     * @param int|float $qty
+     * @param float $qty
      * @param int $websiteId
-     * @return void
+     * @return bool
      */
     public function backItemQty($productId, $qty, $websiteId = null)
     {
@@ -159,7 +157,7 @@ class StockManagement implements StockManagementInterface
         $websiteId = $this->stockConfiguration->getDefaultWebsiteId();
         //}
         $stockItem = $this->stockRegistryProvider->getStockItem($productId, $websiteId);
-        if ($stockItem->getId() && $this->stockConfiguration->isQty($this->getProductType($productId))) {
+        if ($stockItem->getItemId() && $this->stockConfiguration->isQty($this->getProductType($productId))) {
             if ($this->canSubtractQty($stockItem)) {
                 $stockItem->setQty($stockItem->getQty() + $qty);
             }
@@ -171,6 +169,7 @@ class StockManagement implements StockManagementInterface
             }
             $stockItem->save();
         }
+        return true;
     }
 
     /**

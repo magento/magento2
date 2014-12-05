@@ -52,15 +52,23 @@ class Collection extends \Magento\Framework\Data\Collection implements ListInter
     protected $_targetDirs = array();
 
     /**
+     * @var \Magento\Framework\Config\ThemeFactory $themeConfigFactory
+     */
+    protected $themeConfigFactory;
+
+    /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
      * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Framework\Config\ThemeFactory $themeConfigFactory
      */
     public function __construct(
         \Magento\Core\Model\EntityFactory $entityFactory,
-        \Magento\Framework\Filesystem $filesystem
+        \Magento\Framework\Filesystem $filesystem,
+        \Magento\Framework\Config\ThemeFactory $themeConfigFactory
     ) {
         parent::__construct($entityFactory);
         $this->_directory = $filesystem->getDirectoryRead(DirectoryList::THEMES);
+        $this->themeConfigFactory = $themeConfigFactory;
     }
 
     /**
@@ -277,8 +285,17 @@ class Collection extends \Magento\Framework\Data\Collection implements ListInter
      */
     protected function _getConfigModel($configPath)
     {
-        return new \Magento\Framework\Config\Theme(
-            $this->_directory->readFile($this->_directory->getRelativePath($configPath))
+        $relativeConfigPath = $this->_directory->getRelativePath($configPath);
+        $configContent = $this->_directory->isExist($relativeConfigPath) ?
+            $this->_directory->readFile($relativeConfigPath) : null;
+        $relativeComposerPath = dirname($relativeConfigPath) . '/composer.json';
+        $composerContent = $this->_directory->isExist($relativeComposerPath) ?
+            $this->_directory->readFile($relativeComposerPath) : null;
+        return $this->themeConfigFactory->create(
+            [
+                'configContent' => $configContent,
+                'composerContent' => $composerContent,
+            ]
         );
     }
 

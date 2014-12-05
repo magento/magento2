@@ -60,21 +60,10 @@ class DomTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             'Module node without "name" attribute' => array('<?xml version="1.0"?><config><module /></config>'),
-            'Module node without "version" attribute' => array(
-                '<?xml version="1.0"?><config><module name="Module_One" /></config>'
-            ),
-            'Dependency module node without "name" attribute' => array(
+            'Sequence module node without "name" attribute' => array(
                 '<?xml dbversion="1.0"?><config><module name="Module_One" schema_version="1.0.0.0">' .
                 '<sequence><module/></sequence></module></config>'
             ),
-            'Dependency extension node without "name" attribute' => array(
-                '<?xml dbversion="1.0"?><config><module name="Module_One" schema_version="1.0.0.0">' .
-                '<depends><extension/></depends></module></config>'
-            ),
-            'Empty choice node' => array(
-                '<?xml dbversion="1.0"?><config><module name="Module_One" schema_version="1.0.0.0">' .
-                '<depends><choice/></depends></module></config>'
-            )
         );
     }
 }

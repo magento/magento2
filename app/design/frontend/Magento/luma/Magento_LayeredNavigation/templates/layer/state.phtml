@@ -32,7 +32,11 @@
 <?php $_filters = $this->getActiveFilters() ?>
 <?php if(!empty($_filters)): ?>
 <div class="filter-current" data-mage-init='{"collapsible":{"openedState": "active", "collapsible": true, "active": false }}'>
-    <strong class="block-subtitle filter-current-subtitle" data-role="title" data-count="<?php echo count($_filters); ?>"><?php echo __('Currently Shopping by') ?></strong>
+    <strong class="block-subtitle filter-current-subtitle"
+            role="heading"
+            aria-level="2"
+            data-role="title"
+            data-count="<?php echo count($_filters); ?>"><?php echo __('Currently Shopping by') ?></strong>
     <ol class="items">
         <?php foreach ($_filters as $_filter): ?>
             <li class="item">

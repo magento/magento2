@@ -31,7 +31,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\View\Layout\Reader\Pool */
+    /** @var \Magento\Framework\View\Layout\ReaderPool */
     protected $pool;
 
     /** @var \Magento\Framework\View\Layout\ReaderFactory|\PHPUnit_Framework_MockObject_MockObject */
@@ -44,7 +44,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
 
         $this->pool = $this->objectManagerHelper->getObject(
-            'Magento\Framework\View\Layout\Reader\Pool',
+            'Magento\Framework\View\Layout\ReaderPool',
             [
                 'readerFactory' => $this->readerFactoryMock,
                 'readers' => [
@@ -55,7 +55,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testReadStructure()
+    public function testInterpret()
     {
         /** @var Context $contextMock */
         $contextMock = $this->getMockBuilder('Magento\Framework\View\Layout\Reader\Context')
@@ -70,7 +70,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
          */
         $moveReaderMock = $this->getMockBuilder('Magento\Framework\View\Layout\Reader\Move')
             ->disableOriginalConstructor()->getMock();
-        $moveReaderMock->expects($this->once())->method('process')
+        $moveReaderMock->expects($this->once())->method('interpret')
             ->willReturn($this->returnSelf());
         $moveReaderMock->method('getSupportedNodes')
             ->willReturn(['move']);
@@ -80,7 +80,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
          */
         $removeReaderMock = $this->getMockBuilder('Magento\Framework\View\Layout\Reader\Remove')
             ->disableOriginalConstructor()->getMock();
-        $removeReaderMock->expects($this->once())->method('process')
+        $removeReaderMock->expects($this->once())->method('interpret')
             ->with()
             ->willReturn($this->returnSelf());
         $removeReaderMock->method('getSupportedNodes')
@@ -95,6 +95,6 @@ class PoolTest extends \PHPUnit_Framework_TestCase
                 ]
             ));
 
-        $this->pool->readStructure($contextMock, $currentElement);
+        $this->pool->interpret($contextMock, $currentElement);
     }
 }

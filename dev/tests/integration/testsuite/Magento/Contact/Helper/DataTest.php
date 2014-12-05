@@ -52,11 +52,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->contactsHelper = Bootstrap::getObjectManager()->create('Magento\Contact\Helper\Data');
         $this->customerSession = Bootstrap::getObjectManager()->create('Magento\Customer\Model\Session');
         /**
-         * @var $customerService \Magento\Customer\Service\V1\CustomerAccountServiceInterface
+         * @var $customerRepository \Magento\Customer\Api\CustomerRepositoryInterface
          */
-        $customerService = Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Service\V1\CustomerAccountServiceInterface');
-        $customerData = $customerService->getCustomer($customerIdFromFixture);
+        $customerRepository = Bootstrap::getObjectManager()->create('Magento\Customer\Api\CustomerRepositoryInterface');
+        $customerData = $customerRepository->getById($customerIdFromFixture);
         $this->customerSession->setCustomerDataObject($customerData);
     }
 
@@ -65,7 +64,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetUserName()
     {
-        $this->assertEquals('Firstname Lastname', $this->contactsHelper->getUserName());
+        $this->assertEquals('John Smith', $this->contactsHelper->getUserName());
     }
 
     /**

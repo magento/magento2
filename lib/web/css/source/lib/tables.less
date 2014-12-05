@@ -503,13 +503,15 @@
     @_table-responsive-cell-padding: @_table-responsive-cell-padding
 ) {
     border: none;
+    display: block;
     .css(background, @_table-bg-responsive);
     > thead > tr > th {
         display: none;
     }
-    > tbody,
-    > tfoot {
+    > tbody {
+        display: block;
         > tr {
+            display: block;
             td,
             th {
                 border-bottom: none;
@@ -529,9 +531,9 @@
                     );
                 }
             }
+            td {
+                .css(background, @_table-bg-responsive);
+            }
         }
-    }
-    > tbody > tr > td {
-        .css(background, @_table-bg-responsive);
     }
 }

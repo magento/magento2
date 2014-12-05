@@ -557,7 +557,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
             return '';
         }
         $parameters = $this->getWidgetParameters();
-        $xml = '<referenceContainer name="' . $container . '">';
+        $xml = '<body><referenceContainer name="' . $container . '">';
         $template = '';
         if (isset($parameters['template'])) {
             unset($parameters['template']);
@@ -583,7 +583,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
                     ) . '</argument>' . '</action>';
             }
         }
-        $xml .= '</block></referenceContainer>';
+        $xml .= '</block></referenceContainer></body>';
 
         return $xml;
     }

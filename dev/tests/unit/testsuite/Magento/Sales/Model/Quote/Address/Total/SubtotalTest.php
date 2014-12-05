@@ -73,6 +73,8 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
      * @param bool $itemHasParent
      * @param int $expectedPrice
      * @param int $expectedOriginalPrice
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testCollect($price, $originalPrice, $itemHasParent, $expectedPrice, $expectedOriginalPrice)
     {

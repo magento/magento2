@@ -88,7 +88,7 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
                 $title[] = $breadcrumb['label'];
             }
 
-            $this->pageConfig->setTitle(join($this->getTitleSeparator(), array_reverse($title)));
+            $this->pageConfig->getTitle()->set(join($this->getTitleSeparator(), array_reverse($title)));
         }
         return parent::_prepareLayout();
     }

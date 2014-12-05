@@ -53,12 +53,12 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
     public function testBuild()
     {
         $this->builder->build(
-            array(
-                'parse' => array(
-                    'files_for_parse' => array($this->fixtureDir . 'config1.xml', $this->fixtureDir . 'config2.xml')
-                ),
-                'write' => array('report_filename' => $this->sourceFilename)
-            )
+            [
+                'parse' => [
+                    'files_for_parse' => [$this->fixtureDir . 'composer1.json', $this->fixtureDir . 'composer2.json']
+                ],
+                'write' => ['report_filename' => $this->sourceFilename]
+            ]
         );
 
         $this->assertFileEquals($this->fixtureDir . 'expected/dependencies.csv', $this->sourceFilename);
@@ -67,10 +67,10 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
     public function testBuildWithoutDependencies()
     {
         $this->builder->build(
-            array(
-                'parse' => array('files_for_parse' => array($this->fixtureDir . 'config3.xml')),
-                'write' => array('report_filename' => $this->sourceFilename)
-            )
+            [
+                'parse' => ['files_for_parse' => [$this->fixtureDir . 'composer3.json']],
+                'write' => ['report_filename' => $this->sourceFilename]
+            ]
         );
 
         $this->assertFileEquals($this->fixtureDir . 'expected/without-dependencies.csv', $this->sourceFilename);

@@ -23,6 +23,8 @@
  */
 namespace Magento\Downloadable\Model\Product;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
+
 /**
  * Downloadable product type model
  *
@@ -72,7 +74,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
     /**
      * Construct
      *
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
@@ -82,6 +83,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\Logger $logger
+     * @param ProductRepositoryInterface $productRepository
      * @param \Magento\Downloadable\Helper\File $downloadableFile
      * @param \Magento\Downloadable\Model\Resource\SampleFactory $sampleResFactory
      * @param \Magento\Downloadable\Model\Resource\Link $linkResource
@@ -89,10 +91,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      * @param \Magento\Downloadable\Model\Resource\Sample\CollectionFactory $samplesFactory
      * @param \Magento\Downloadable\Model\SampleFactory $sampleFactory
      * @param \Magento\Downloadable\Model\LinkFactory $linkFactory
-     * @param array $data
      */
     public function __construct(
-        \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Model\Product\Option $catalogProductOption,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
@@ -102,14 +102,14 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\Logger $logger,
+        ProductRepositoryInterface $productRepository,
         \Magento\Downloadable\Helper\File $downloadableFile,
         \Magento\Downloadable\Model\Resource\SampleFactory $sampleResFactory,
         \Magento\Downloadable\Model\Resource\Link $linkResource,
         \Magento\Downloadable\Model\Resource\Link\CollectionFactory $linksFactory,
         \Magento\Downloadable\Model\Resource\Sample\CollectionFactory $samplesFactory,
         \Magento\Downloadable\Model\SampleFactory $sampleFactory,
-        \Magento\Downloadable\Model\LinkFactory $linkFactory,
-        array $data = array()
+        \Magento\Downloadable\Model\LinkFactory $linkFactory
     ) {
         $this->_downloadableFile = $downloadableFile;
         $this->_sampleResFactory = $sampleResFactory;
@@ -119,7 +119,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
         $this->_sampleFactory = $sampleFactory;
         $this->_linkFactory = $linkFactory;
         parent::__construct(
-            $productFactory,
             $catalogProductOption,
             $eavConfig,
             $catalogProductType,
@@ -129,7 +128,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
             $filesystem,
             $coreRegistry,
             $logger,
-            $data
+            $productRepository
         );
     }
 

@@ -1,7 +1,7 @@
-dev/tests/unit/testsuite/Magento/Test/Tools/Di/_files/app/code/Magento/SomeModule/Model/Test.php
-dev/tests/unit/testsuite/Magento/Test/Tools/Di/_files/app/code/Magento/SomeModule/Helper/Test.php
-dev/tests/unit/testsuite/Magento/Test/Tools/Di/_files/app/code/Magento/SomeModule/Element.php
-dev/tests/unit/testsuite/Magento/Test/Tools/Di/_files/app/code/Magento/SomeModule/ElementFactory.php
+dev/tests/unit/testsuite/Magento/Tools/Di/_files/app/code/Magento/SomeModule/Model/Test.php
+dev/tests/unit/testsuite/Magento/Tools/Di/_files/app/code/Magento/SomeModule/Helper/Test.php
+dev/tests/unit/testsuite/Magento/Tools/Di/_files/app/code/Magento/SomeModule/Element.php
+dev/tests/unit/testsuite/Magento/Tools/Di/_files/app/code/Magento/SomeModule/ElementFactory.php
 dev/tests/unit/testsuite/Magento/Framework/Code/_files/app/code/Magento/SomeModule/Model/Proxy.php
 dev/tests/unit/testsuite/Magento/Framework/Code/_files/app/code/Magento/SomeModule/Model/ElementFactory.php
 dev/tests/unit/testsuite/Magento/Framework/Code/_files/app/code/Magento/SomeModule/Model/One/Test.php

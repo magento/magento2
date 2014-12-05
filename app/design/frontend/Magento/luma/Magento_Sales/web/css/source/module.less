@@ -22,6 +22,12 @@
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
+//
+//    Common
+//--------------------------------------
+
+.responsive-common() {
+
 .order-links {
     .item {
         line-height: @tab-control-height;
@@ -148,20 +154,20 @@
     .col {
         &.price,
         &.subtotal {
-            &:extend(.abstract-incl-excl-tax all);
+            &:extend(.abs-incl-excl-tax all);
         }
         &.name {
             padding-top: 16px;
         }
     }
     .cart-tax-total {
-        &:extend(.abstract-tax-total all);
+        &:extend(.abs-tax-total all);
         &-expanded {
-            &:extend(.abstract-tax-total-expanded all);
+            &:extend(.abs-tax-total-expanded all);
         }
     }
     tfoot {
-        &:extend(.abstract-account-summary all);
+        &:extend(.abs-account-summary all);
     }
     .action {
         &.show {
@@ -186,7 +192,7 @@
         .font-size(18);
     }
     .items-qty {
-        &:extend(.abstract-reset-list all);
+        &:extend(.abs-reset-list all);
         .item {
             white-space: nowrap;
         }
@@ -269,7 +275,7 @@
     .action {
         margin-right: 30px;
         &.print {
-            &:extend(.abstract-action-print all);
+            &:extend(.abs-action-print all);
             display: none;
             margin: 0;
         }
@@ -277,16 +283,16 @@
 }
 
 .order-status {
-    &:extend(.abstract-status all);
+    &:extend(.abs-status all);
 }
 
 .account,
 .sales-guest-view {
-    &:extend(.abstract-title-orders all);
+    &:extend(.abs-title-orders all);
 }
 
 .form-orders-search {
-    &:extend(.abstract-forms-general-desktop all);
+    &:extend(.abs-forms-general-desktop all);
     .field {
         &.email,
         &.zip {
@@ -297,7 +303,7 @@
 
 .block-reorder {
     .block-title {
-        &:extend(.abstract-block-widget-title all);
+        &:extend(.abs-block-widget-title all);
     }
 
     .actions-toolbar {
@@ -309,7 +315,7 @@
     }
     .product-item {
         .label {
-            &:extend(.abstract-visually-hidden all);
+            &:extend(.abs-visually-hidden all);
         }
         .field.item {
             display: inline-block;
@@ -323,23 +329,25 @@
 .sales-guest-view {
     .column.main {
         .block:not(.widget) {
-            &:extend(.abstract-account-blocks all);
+            &:extend(.abs-account-blocks all);
         }
     }
+}
+
 }
 
 //
 //    Mobile
 //--------------------------------------
-.responsive-smaller(@break) when (@break = @screen-s) {
+.responsive-max-m(@break) when (@break = @screen-s) {
     .table-wrapper {
         &.orders-recent {
-            &:extend(.abstract-account-table-margin-mobile all);
+            &:extend(.abs-account-table-margin-mobile all);
         }
     }
     .table-wrapper {
         &.orders-recent {
-            &:extend(.abstract-no-border-top all);
+            &:extend(.abs-no-border-top all);
         }
     }
     .account {
@@ -357,18 +365,18 @@
             .col {
                 &.actions,
                 &.options {
-                    &:extend(.abstract-col-no-prefix all);
+                    &:extend(.abs-col-no-prefix all);
                 }
             }
         }
     }
     .account,
     .sales-guest-view {
-        &:extend(.abstract-title-orders-mobile all);
+        &:extend(.abs-title-orders-mobile all);
     }
     .order-details-items {
         .table-wrapper {
-            &:extend(.abstract-no-border-top all);
+            &:extend(.abs-no-border-top all);
         }
         .order-title {
             strong {
@@ -398,7 +406,7 @@
             }
         }
         .table-order-items .options-label {
-            &:extend(.abstract-no-display-s all);
+            &:extend(.abs-no-display-s all);
         }
         .options-label + .item-options-container,
         .item-options-container + .item-options-container {
@@ -425,7 +433,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive(@break) when (@break = @screen-s) {
+.responsive-min-m(@break) when (@break = @screen-s) {
     .order-details-items {
         .order-title {
             .action {
@@ -441,13 +449,13 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive(@break) when (@break = @screen-m) {
+.responsive-min-l(@break) when (@break = @screen-m) {
     .table-wrapper.orders-recent {
-        &:extend(.abstract-account-table-margin-desktop all);
+        &:extend(.abs-account-table-margin-desktop all);
     }
 
     .order-links {
-        &:extend(.abstract-add-clearfix-desktop all);
+        &:extend(.abs-add-clearfix-desktop all);
         .item {
             float: left;
             margin: 0 @tab-control-margin-right 0 0;
@@ -471,11 +479,11 @@
 
     .account,
     .sales-guest-view {
-        &:extend(.abstract-title-orders-desktop all);
+        &:extend(.abs-title-orders-desktop all);
         .column.main .block.block-order-details-view {
-            &:extend(.abstract-add-clearfix-desktop all);
+            &:extend(.abs-add-clearfix-desktop all);
             .block-content:not(.widget) .box {
-                &:extend(.abstract-add-box-sizing-desktop all);
+                &:extend(.abs-add-box-sizing-desktop all);
                 clear: none;
                 float: left;
                 width: 100%/4;
@@ -484,7 +492,7 @@
     }
 
     .order-status {
-        &:extend(.abstract-status-desktop all);
+        &:extend(.abs-status-desktop all);
     }
 
     .block-order-details-comments {

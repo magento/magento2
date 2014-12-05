@@ -102,19 +102,8 @@ $productByUsedAttributes = $this->getAssociatedProducts();
                                checked="checked"/>
                     </td>
                     <td class="col-image" data-column="image">
-                        <?php $image = $product->getImage(); if ($image == 'no_selection'): $image = ''; endif; ;?>
-                        <div class="action-upload<?php if ($image): ?> no-display<?php endif;?>" data-action="upload-image">
-                            <span><?php echo __('Upload Image'); ?></span>
-                            <input name="image" type="file" disabled="disabled" data-locked="1"
-                                   data-url="<?php echo $this->escapeHtml($this->getImageUploadUrl()) ?>"
-                                   title="<?php echo __('Upload Image'); ?>" />
-                            <input id="product-<?php echo $product->getId()?>-variation-image"
-                                   value="<?php echo $image?>" type="hidden"/>
-                        </div>
-                        <?php if ($image): ?>
-                            <img src="<?php echo $this->helper('Magento\Catalog\Helper\Product')->getImageUrl($product)?>"
-                                 class="variation" data-role="image"/>
-                        <?php endif; ?>
+                        <img src="<?php echo $this->helper('Magento\Catalog\Helper\Image')->init($product, 'image')->resize(32); ?>"
+                             class="variation" data-role="image"/>
                     </td>
                     <td class="col-name" data-column="name">
                         <a href="<?php echo $this->getEditProductUrl($product->getId())?>"

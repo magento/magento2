@@ -24,12 +24,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 /** @var \Magento\Customer\Model\Address $customerAddress */
-$customerAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Customer\Model\Address'
-);
+$customerAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create('Magento\Customer\Model\Address');
 $customerAddress->isObjectNew(true);
 $customerAddress->setData(
-    array(
+    [
         'entity_id' => 1,
         'attribute_set_id' => 2,
         'telephone' => 3468676,
@@ -37,17 +36,11 @@ $customerAddress->setData(
         'country_id' => 'US',
         'city' => 'CityM',
         'company' => 'CompanyName',
-        'street' => array('Green str, 67'),
+        'street' => ['Green str, 67'],
         'lastname' => 'Smith',
         'firstname' => 'John',
         'parent_id' => 1,
         'region_id' => 1
-    )
-)->setCustomerId(
-    1
-);
+    ]
+)->setCustomerId(1);
 $customerAddress->save();
-
-/** @var \Magento\Customer\Model\Customer $customer */
-$customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Customer\Model\Customer');
-$customer->load(1)->save();

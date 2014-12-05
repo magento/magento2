@@ -39,7 +39,20 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
     public function testClearCache()
     {
         $resource = new \stdClass();
-        $instanceConfig = new \Magento\TestFramework\ObjectManager\Config();
+
+        $configMock = $this->getMockBuilder('Magento\TestFramework\ObjectManager\Config')
+            ->disableOriginalConstructor()
+            ->setMethods(['getPreference', 'clean'])
+            ->getMock();
+
+        $configMock->expects($this->atLeastOnce())
+            ->method('getPreference')
+            ->will($this->returnCallback(
+                function ($className) {
+                    return $className;
+                }
+            ));
+
         $cache = $this->getMock('Magento\Framework\App\CacheInterface');
         $configLoader = $this->getMock('Magento\Framework\App\ObjectManager\ConfigLoader', array(), array(), '', false);
         $configCache = $this->getMock('Magento\Framework\App\ObjectManager\ConfigCache', array(), array(), '', false);
@@ -63,7 +76,7 @@ class ObjectManagerTest extends \PHPUnit_Framework_TestCase
 
         $model = new \Magento\TestFramework\ObjectManager(
             $factory,
-            $instanceConfig,
+            $configMock,
             array(
                 'Magento\Framework\App\Cache\Type\Config' => $cache,
                 'Magento\Framework\App\ObjectManager\ConfigLoader' => $configLoader,

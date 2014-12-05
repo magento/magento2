@@ -38,10 +38,10 @@ class NewAction extends \Magento\Sales\Controller\Adminhtml\Order\Status
             $status = $this->_objectManager->create('Magento\Sales\Model\Order\Status')->setData($data);
             $this->_coreRegistry->register('current_status', $status);
         }
-        $this->_title->add(__('Order Status'));
-        $this->_title->add(__('Create New Order Status'));
         $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_Sales::system_order_statuses');
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Order Status'));
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Create New Order Status'));
         $this->_view->renderLayout();
     }
 }

@@ -26,9 +26,10 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <type name="Magento\Tax\Model\Calculation">
         <arguments>
-            <argument name="addressService" xsi:type="object">Magento\Customer\Service\V1\CustomerAddressServiceInterface\Proxy</argument>
-            <argument name="groupService" xsi:type="object">Magento\Customer\Service\V1\CustomerGroupServiceInterface\Proxy</argument>
-            <argument name="customerAccount" xsi:type="object">Magento\Customer\Service\V1\CustomerAccountServiceInterface\Proxy</argument>
+            <argument name="customerAccountManagement" xsi:type="object">Magento\Customer\Api\AccountManagementInterface\Proxy</argument>
+            <argument name="customerGroupManagement" xsi:type="object">Magento\Customer\Api\GroupManagementInterface\Proxy</argument>
+            <argument name="customerGroupRepository" xsi:type="object">Magento\Customer\Api\GroupRepositoryInterface\Proxy</argument>
+            <argument name="customerRepository" xsi:type="object">Magento\Customer\Api\CustomerRepositoryInterface\Proxy</argument>
         </arguments>
     </type>
 </config>

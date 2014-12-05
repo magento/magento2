@@ -87,7 +87,7 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
     public function testGetWelcomeLoggedIn()
     {
         $this->context->setValue(Context::CONTEXT_AUTH, true, false);
-        $this->assertEquals('Welcome, Firstname Lastname!', $this->block->getWelcome());
+        $this->assertEquals('Welcome, John Smith!', $this->block->getWelcome());
     }
 
 }

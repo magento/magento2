@@ -77,6 +77,13 @@ interface ConfigInterface
     public function getPreference($type);
 
     /**
+     * Returns list of virtual types
+     *
+     * @return array
+     */
+    public function getVirtualTypes();
+
+    /**
      * Extend configuration
      *
      * @param array $configuration

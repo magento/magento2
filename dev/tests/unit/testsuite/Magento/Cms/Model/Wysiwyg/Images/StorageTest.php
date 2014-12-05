@@ -185,7 +185,13 @@ class StorageTest extends \PHPUnit_Framework_TestCase
             'Magento\Cms\Model\Wysiwyg\Images\Storage\CollectionFactory'
         );
         $this->_storageFileFactoryMock = $this->getMock('Magento\Core\Model\File\Storage\FileFactory');
-        $this->_storageDatabaseFactoryMock = $this->getMock('Magento\Core\Model\File\Storage\DatabaseFactory');
+        $this->_storageDatabaseFactoryMock = $this->getMock(
+            'Magento\Core\Model\File\Storage\DatabaseFactory',
+            [],
+            [],
+            '',
+            false
+        );
         $this->_directoryDatabaseFactoryMock = $this->getMock(
             'Magento\Core\Model\File\Storage\Directory\DatabaseFactory'
         );

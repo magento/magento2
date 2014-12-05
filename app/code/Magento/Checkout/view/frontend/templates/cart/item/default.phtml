@@ -53,15 +53,11 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
                     <?php foreach ($_options as $_option) : ?>
                         <?php $_formatedOptionValue = $this->getFormatedOptionValue($_option) ?>
                         <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>
-                        <dd<?php if (isset($_formatedOptionValue['full_view'])): ?> class="tooltip wrapper"<?php endif; ?>>
-                            <?php echo $_formatedOptionValue['value'] ?>
+                        <dd>
                             <?php if (isset($_formatedOptionValue['full_view'])): ?>
-                                <div class="tooltip content">
-                                    <dl class="item options">
-                                        <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>
-                                        <dd><?php echo $_formatedOptionValue['full_view'] ?></dd>
-                                    </dl>
-                                </div>
+                                <?php echo $_formatedOptionValue['full_view'] ?>
+                            <?php else: ?>
+                                <?php echo $_formatedOptionValue['value'] ?>
                             <?php endif; ?>
                         </dd>
                     <?php endforeach; ?>
@@ -119,9 +115,9 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
         <?php $cols++; ?>
     </td>
 </tr>
-<tr class="item actions item-actions">
+<tr class="item-actions">
     <td colspan="<?php echo $cols;?>">
-        <div class="actions">
+        <div class="actions-toolbar">
             <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllowInCart()) : ?>
                 <?php if ($isVisibleProduct): ?>
                     <a href="#" data-post='<?php echo $this->helper('Magento\Wishlist\Helper\Data')->getMoveFromCartParams($_item->getId()); ?>' class="use-ajax action towishlist">

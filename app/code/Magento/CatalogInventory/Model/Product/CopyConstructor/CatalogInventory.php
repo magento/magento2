@@ -59,7 +59,7 @@ class CatalogInventory implements \Magento\Catalog\Model\Product\CopyConstructor
             $product->getId(),
             $product->getStore()->getWebsiteId()
         );
-        if ($currentStockItemDo->getId()) {
+        if ($currentStockItemDo->getItemId()) {
             $stockData += [
                 'use_config_enable_qty_inc' => $currentStockItemDo->getUseConfigEnableQtyInc(),
                 'enable_qty_increments' => $currentStockItemDo->getEnableQtyIncrements(),

@@ -50,8 +50,6 @@ class Edit extends \Magento\Newsletter\Controller\Adminhtml\Template
      */
     public function execute()
     {
-        $this->_setTitle();
-
         $model = $this->_objectManager->create('Magento\Newsletter\Model\Template');
         $id = $this->getRequest()->getParam('id');
         if ($id) {
@@ -70,8 +68,10 @@ class Edit extends \Magento\Newsletter\Controller\Adminhtml\Template
             $breadcrumbTitle = __('New Template');
             $breadcrumbLabel = __('Create Newsletter Template');
         }
-
-        $this->_title->add($model->getId() ? $model->getTemplateCode() : __('New Template'));
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Newsletter Templates'));
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(
+            $model->getId() ? $model->getTemplateCode() : __('New Template')
+        );
 
         $this->_addBreadcrumb($breadcrumbLabel, $breadcrumbTitle);
 

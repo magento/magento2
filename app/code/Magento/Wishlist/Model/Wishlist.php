@@ -27,6 +27,8 @@ use Magento\Framework\Model\Exception;
 use Magento\Wishlist\Model\Resource\Item\CollectionFactory;
 use Magento\Wishlist\Model\Resource\Wishlist as ResourceWishlist;
 use Magento\Wishlist\Model\Resource\Wishlist\Collection;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Wishlist model
@@ -130,6 +132,11 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
     protected $_useCurrentWebsite;
 
     /**
+     * @var ProductRepositoryInterface
+     */
+    protected $productRepository;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Helper\Product $catalogProduct
@@ -143,6 +150,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param ProductRepositoryInterface $productRepository
      * @param bool $useCurrentWebsite
      * @param array $data
      */
@@ -160,6 +168,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Framework\Math\Random $mathRandom,
         \Magento\Framework\Stdlib\DateTime $dateTime,
+        ProductRepositoryInterface $productRepository,
         $useCurrentWebsite = true,
         array $data = array()
     ) {
@@ -174,6 +183,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
         $this->mathRandom = $mathRandom;
         $this->dateTime = $dateTime;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        $this->productRepository = $productRepository;
     }
 
     /**
@@ -376,6 +386,7 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      * @param int|\Magento\Catalog\Model\Product $product
      * @param \Magento\Framework\Object|array|string|null $buyRequest
      * @param bool $forciblySetQty
+     * @throws \Magento\Framework\Model\Exception
      * @return Item|string
      */
     public function addNewItem($product, $buyRequest = null, $forciblySetQty = false)
@@ -398,10 +409,11 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
             }
         }
 
-        /* @var $product \Magento\Catalog\Model\Product */
-        $product = $this->_productFactory->create();
-        $product->setStoreId($storeId);
-        $product->load($productId);
+        try {
+            $product = $this->productRepository->getById($productId, false, $storeId);
+        } catch (NoSuchEntityException $e) {
+            throw new \Magento\Framework\Model\Exception(__('Cannot specify product.'));
+        }
 
         if ($buyRequest instanceof \Magento\Framework\Object) {
             $_buyRequest = $buyRequest;
@@ -413,7 +425,8 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
             $_buyRequest = new \Magento\Framework\Object();
         }
 
-        $cartCandidates = $product->getTypeInstance()->processConfiguration($_buyRequest, $product);
+        /* @var $product \Magento\Catalog\Model\Product */
+        $cartCandidates = $product->getTypeInstance()->processConfiguration($_buyRequest, clone $product);
 
         /**
          * Error message

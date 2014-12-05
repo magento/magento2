@@ -25,6 +25,10 @@ namespace Magento\Sales\Model\Order;
 
 use Magento\Sales\Api\Data\OrderAddressInterface;
 use Magento\Customer\Model\Address\AbstractAddress;
+use Magento\Customer\Api\AddressMetadataInterface;
+use Magento\Customer\Api\Data\AddressDataBuilder;
+use Magento\Customer\Api\Data\RegionDataBuilder;
+use Magento\Framework\Api\AttributeDataBuilder;
 
 /**
  * Sales order address model
@@ -33,8 +37,8 @@ use Magento\Customer\Model\Address\AbstractAddress;
  * @method \Magento\Sales\Model\Resource\Order\Address getResource()
  * @method Address setParentId(int $value)
  * @method Address setCustomerAddressId(int $value)
- * @method \Magento\Customer\Service\V1\Data\Address getCustomerAddressData()
- * @method Address setCustomerAddressData(\Magento\Customer\Service\V1\Data\Address $value)
+ * @method \Magento\Customer\Api\Data\AddressInterface getCustomerAddressData()
+ * @method Address setCustomerAddressData(\Magento\Customer\Api\Data\AddressInterface $value)
  * @method Address setQuoteAddressId(int $value)
  * @method Address setRegionId(int $value)
  * @method Address setCustomerId(int $value)
@@ -79,11 +83,15 @@ class Address extends AbstractAddress implements OrderAddressInterface
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @param AttributeDataBuilder $customAttributeBuilder
      * @param \Magento\Directory\Helper\Data $directoryData
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Customer\Model\Address\Config $addressConfig
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
+     * @param AddressMetadataInterface $addressMetadataService
+     * @param AddressDataBuilder $addressBuilder
+     * @param RegionDataBuilder $regionBuilder
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
@@ -93,25 +101,33 @@ class Address extends AbstractAddress implements OrderAddressInterface
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\MetadataServiceInterface $metadataService,
+        AttributeDataBuilder $customAttributeBuilder,
         \Magento\Directory\Helper\Data $directoryData,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Customer\Model\Address\Config $addressConfig,
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Directory\Model\CountryFactory $countryFactory,
+        AddressMetadataInterface $addressMetadataService,
+        AddressDataBuilder $addressBuilder,
+        RegionDataBuilder $regionBuilder,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        array $data = []
     ) {
         parent::__construct(
             $context,
             $registry,
             $metadataService,
+            $customAttributeBuilder,
             $directoryData,
             $eavConfig,
             $addressConfig,
             $regionFactory,
             $countryFactory,
+            $addressMetadataService,
+            $addressBuilder,
+            $regionBuilder,
             $resource,
             $resourceCollection,
             $data

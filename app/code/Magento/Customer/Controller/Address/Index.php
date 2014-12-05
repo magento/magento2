@@ -43,9 +43,6 @@ class Index extends \Magento\Customer\Controller\Address
      * @param \Magento\Customer\Api\Data\RegionDataBuilder $regionDataBuilder
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor
      * @param CustomerRepositoryInterface $customerRepository
-     * @internal param \Magento\Customer\Helper\Data $customerData
-     * @internal param \Magento\Customer\Model\AddressFactory $addressFactory
-     * @internal param \Magento\Customer\Model\Address\FormFactory $addressFormFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(

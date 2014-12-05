@@ -28,8 +28,6 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
  * Class Stock
- * @package Magento\CatalogInventory\Model
- * @data-api
  */
 class Stock extends AbstractExtensibleModel implements StockInterface
 {
@@ -76,9 +74,9 @@ class Stock extends AbstractExtensibleModel implements StockInterface
      *
      * @return int|null
      */
-    public function getId()
+    public function getStockId()
     {
-        return $this->_getData(self::ID);
+        return $this->_getData(self::STOCK_ID);
     }
 
     /**

@@ -54,9 +54,6 @@
                 <th class="col total"><?php echo __('Row Total') ?></th>
             </tr>
         </thead>
-        <tfoot>
-           <?php echo $this->getTotalsHtml($_creditmemo);?>
-        </tfoot>
         <?php $_items = $_creditmemo->getAllItems(); ?>
         <?php $_count = count($_items) ?>
         <?php foreach ($_items as $_item): ?>
@@ -65,6 +62,9 @@
             <?php echo $this->getItemHtml($_item) ?>
         </tbody>
         <?php endforeach; ?>
+        <tfoot>
+            <?php echo $this->getTotalsHtml($_creditmemo);?>
+        </tfoot>
     </table>
 </div>
 <?php echo $this->getCommentsHtml($_creditmemo)?>

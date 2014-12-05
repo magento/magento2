@@ -46,8 +46,6 @@ class Viewed extends \Magento\Reports\Controller\Adminhtml\Report\Product
     public function execute()
     {
         try {
-            $this->_title->add(__('Product Views Report'));
-
             $this->_showLastExecutionTime(Flag::REPORT_PRODUCT_VIEWED_FLAG_CODE, 'viewed');
 
             $this->_initAction()->_setActiveMenu(
@@ -56,6 +54,7 @@ class Viewed extends \Magento\Reports\Controller\Adminhtml\Report\Product
                 __('Products Most Viewed Report'),
                 __('Products Most Viewed Report')
             );
+            $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Product Views Report'));
 
             $gridBlock = $this->_view->getLayout()->getBlock('adminhtml_product_viewed.grid');
             $filterFormBlock = $this->_view->getLayout()->getBlock('grid.filter.form');

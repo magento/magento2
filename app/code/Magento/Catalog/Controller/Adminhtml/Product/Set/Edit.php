@@ -58,8 +58,6 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Set
      */
     public function execute()
     {
-        $this->_title->add(__('Product Templates'));
-
         $this->_setTypeId();
         $attributeSet = $this->_objectManager->create('Magento\Eav\Model\Entity\Attribute\Set')
             ->load($this->getRequest()->getParam('id'));
@@ -68,13 +66,15 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Set
             return $this->resultRedirectFactory->create()->setPath('catalog/*/index');
         }
 
-        $this->_title->add($attributeSet->getId() ? $attributeSet->getAttributeSetName() : __('New Set'));
-
         $this->_coreRegistry->register('current_attribute_set', $attributeSet);
 
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Magento_Catalog::catalog_attributes_sets');
+        $resultPage->getConfig()->getTitle()->prepend(__('Product Templates'));
+        $resultPage->getConfig()->getTitle()->prepend(
+            $attributeSet->getId() ? $attributeSet->getAttributeSetName() : __('New Set')
+        );
         $resultPage->addBreadcrumb(__('Catalog'), __('Catalog'));
         $resultPage->addBreadcrumb(__('Manage Product Sets'), __('Manage Product Sets'));
         return $resultPage;

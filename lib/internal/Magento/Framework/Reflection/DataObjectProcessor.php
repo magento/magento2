@@ -29,7 +29,6 @@ use Zend\Code\Reflection\MethodReflection;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\ExtensibleDataInterface;
-use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Data object processor for de-serialization using class reflection
@@ -63,15 +62,23 @@ class DataObjectProcessor
     protected $serviceInterfaceMethodsMap = [];
 
     /**
-     * Initialize dependencies.
-     *
+     * @var \Magento\Framework\Api\AttributeTypeResolverInterface
+     */
+    protected $attributeTypeResolver;
+
+    /**
      * @param \Magento\Framework\Cache\FrontendInterface $cache
      * @param TypeProcessor $typeProcessor
+     * @param \Magento\Framework\Api\AttributeTypeResolverInterface $typeResolver
      */
-    public function __construct(\Magento\Framework\Cache\FrontendInterface $cache, TypeProcessor $typeProcessor)
-    {
+    public function __construct(
+        \Magento\Framework\Cache\FrontendInterface $cache,
+        TypeProcessor $typeProcessor,
+        \Magento\Framework\Api\AttributeTypeResolverInterface $typeResolver
+    ) {
         $this->cache = $cache;
         $this->typeProcessor = $typeProcessor;
+        $this->attributeTypeResolver = $typeResolver;
     }
 
     /**
@@ -119,7 +126,7 @@ class DataObjectProcessor
                 }
                 $key = SimpleDataObjectConverter::camelCaseToSnakeCase(substr($methodName, 3));
                 if ($key === ExtensibleDataInterface::CUSTOM_ATTRIBUTES) {
-                    $value = $this->convertCustomAttributes($value);
+                    $value = $this->convertCustomAttributes($value, $dataObjectType);
                 } else if (is_object($value)) {
                     $value = $this->buildOutputDataArray($value, $returnType);
                 } else if (is_array($value)) {
@@ -193,13 +200,14 @@ class DataObjectProcessor
      * Convert array of custom_attributes to use flat array structure
      *
      * @param \Magento\Framework\Api\AttributeInterface[] $customAttributes
+     * @param string $dataObjectType
      * @return array
      */
-    protected function convertCustomAttributes($customAttributes)
+    protected function convertCustomAttributes($customAttributes, $dataObjectType)
     {
         $result = array();
         foreach ((array)$customAttributes as $customAttribute) {
-            $result[] = $this->convertCustomAttribute($customAttribute);
+            $result[] = $this->convertCustomAttribute($customAttribute, $dataObjectType);
         }
         return $result;
     }
@@ -208,21 +216,31 @@ class DataObjectProcessor
      * Convert custom_attribute object to use flat array structure
      *
      * @param \Magento\Framework\Api\AttributeInterface $customAttribute
+     * @param string $dataObjectType
      * @return array
      */
-    protected function convertCustomAttribute($customAttribute)
+    protected function convertCustomAttribute($customAttribute, $dataObjectType)
     {
         $data = array();
         $data[AttributeValue::ATTRIBUTE_CODE] = $customAttribute->getAttributeCode();
         $value = $customAttribute->getValue();
         if (is_object($value)) {
-            $value = $this->buildOutputDataArray($value, get_class($value));
+            $type = $this->attributeTypeResolver->resolveObjectType(
+                $customAttribute->getAttributeCode(),
+                $value,
+                $dataObjectType
+            );
+            $value = $this->buildOutputDataArray($value, $type);
         } else if (is_array($value)) {
             $valueResult = array();
             foreach ($value as $singleValue) {
                 if (is_object($singleValue)) {
-                    $elementType = get_class($singleValue);
-                    $singleValue = $this->buildOutputDataArray($singleValue, $elementType);
+                    $type = $this->attributeTypeResolver->resolveObjectType(
+                        $customAttribute->getAttributeCode(),
+                        $singleValue,
+                        $dataObjectType
+                    );
+                    $singleValue = $this->buildOutputDataArray($singleValue, $type);
                 }
                 // Cannot cast to a type because the type is unknown
                 $valueResult[] = $singleValue;

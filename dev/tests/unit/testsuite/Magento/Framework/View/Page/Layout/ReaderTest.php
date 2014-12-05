@@ -60,7 +60,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     protected $readerContext;
 
     /**
-     * @var \Magento\Framework\View\Layout\Reader\Pool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout\ReaderPool|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $readerPool;
 
@@ -95,7 +95,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         );
         $this->pageLayoutFileSource = $this->getMockBuilder('Magento\Framework\View\File\CollectorInterface')
             ->getMock();
-        $this->readerPool = $this->getMockBuilder('Magento\Framework\View\Layout\Reader\Pool')
+        $this->readerPool = $this->getMockBuilder('Magento\Framework\View\Layout\ReaderPool')
             ->disableOriginalConstructor()
             ->getMock();
         $this->readerContext = $this->getMockBuilder('Magento\Framework\View\Layout\Reader\Context')
@@ -135,7 +135,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             ->with($createData)->will($this->returnValue($this->processorInterface));
         $element = new \Magento\Framework\View\Layout\Element($xml);
         $this->processorInterface->expects($this->once())->method('asSimplexml')->will($this->returnValue($element));
-        $this->readerPool->expects($this->once())->method('readStructure')->with($this->readerContext, $element);
+        $this->readerPool->expects($this->once())->method('interpret')->with($this->readerContext, $element);
         $this->model->read($this->readerContext, $data);
     }
 }

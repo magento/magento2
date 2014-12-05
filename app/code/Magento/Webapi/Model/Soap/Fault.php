@@ -140,7 +140,10 @@ class Fault extends \RuntimeException
     public function toXml()
     {
         if ($this->appState->getMode() == State::MODE_DEVELOPER) {
-            $this->addDetails(array(self::NODE_DETAIL_TRACE => "<![CDATA[{$this->getTraceAsString()}]]>"));
+            $traceDetail = $this->getPrevious()->getStackTrace()
+                ? $this->getPrevious()->getStackTrace()
+                : $this->getTraceAsString();
+            $this->addDetails(array(self::NODE_DETAIL_TRACE => "<![CDATA[{$traceDetail}]]>"));
         }
         if ($this->getParameters()) {
             $this->addDetails(array(self::NODE_DETAIL_PARAMETERS => $this->getParameters()));

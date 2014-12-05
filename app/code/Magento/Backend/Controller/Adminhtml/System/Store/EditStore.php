@@ -31,8 +31,6 @@ class EditStore extends \Magento\Backend\Controller\Adminhtml\System\Store
      */
     public function execute()
     {
-        $this->_title->add(__('Stores'));
-
         if ($this->_getSession()->getPostData()) {
             $this->_coreRegistry->register('store_post_data', $this->_getSession()->getPostData());
             $this->_getSession()->unsPostData();
@@ -76,18 +74,16 @@ class EditStore extends \Magento\Backend\Controller\Adminhtml\System\Store
 
         if ($model->getId() || $this->_coreRegistry->registry('store_action') == 'add') {
             $this->_coreRegistry->register('store_data', $model);
-
-            if ($this->_coreRegistry->registry('store_action') == 'add') {
-                $this->_title->add(__('New ') . $title);
-            } else {
-                $this->_title->add($model->getName());
-            }
-
             if ($this->_coreRegistry->registry('store_action') == 'edit' && $codeBase && !$model->isReadOnly()) {
                 $this->messageManager->addNotice($codeBase);
             }
-
             $resultPage = $this->createPage();
+            if ($this->_coreRegistry->registry('store_action') == 'add') {
+                $resultPage->getConfig()->getTitle()->prepend((__('New ') . $title));
+            } else {
+                $resultPage->getConfig()->getTitle()->prepend($model->getName());
+            }
+            $resultPage->getConfig()->getTitle()->prepend(__('Stores'));
             $resultPage->addContent($resultPage->getLayout()->createBlock('Magento\Backend\Block\System\Store\Edit'));
             return $resultPage;
         } else {

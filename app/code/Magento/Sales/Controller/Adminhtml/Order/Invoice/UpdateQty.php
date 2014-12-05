@@ -27,33 +27,8 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 use \Magento\Framework\Model\Exception;
 use Magento\Backend\App\Action;
 
-class UpdateQty extends \Magento\Backend\App\Action
+class UpdateQty extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View
 {
-    /**
-     * @var \Magento\Sales\Controller\Adminhtml\Order\InvoiceLoader
-     */
-    protected $invoiceLoader;
-
-    /**
-     * @param Action\Context $context
-     * @param \Magento\Sales\Controller\Adminhtml\Order\InvoiceLoader $invoiceLoader
-     */
-    public function __construct(
-        Action\Context $context,
-        \Magento\Sales\Controller\Adminhtml\Order\InvoiceLoader $invoiceLoader
-    ) {
-        $this->invoiceLoader = $invoiceLoader;
-        parent::__construct($context);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::sales_invoice');
-    }
-
     /**
      * Update items qty action
      *
@@ -62,17 +37,33 @@ class UpdateQty extends \Magento\Backend\App\Action
     public function execute()
     {
         try {
-            $this->_title->add(__('Invoices'));
             $orderId = $this->getRequest()->getParam('order_id');
-            $invoiceId = $this->getRequest()->getParam('invoice_id');
             $invoiceData = $this->getRequest()->getParam('invoice', []);
             $invoiceItems = isset($invoiceData['items']) ? $invoiceData['items'] : [];
-            $invoice = $this->invoiceLoader->load($orderId, $invoiceId, $invoiceItems);
+            /** @var \Magento\Sales\Model\Order $order */
+            $order = $this->_objectManager->create('Magento\Sales\Model\Order')->load($orderId);
+            if (!$order->getId()) {
+                throw new \Magento\Framework\Exception(__('The order no longer exists.'));
+            }
+
+            if (!$order->canInvoice()) {
+                throw new \Magento\Framework\Exception(__('The order does not allow an invoice to be created.'));
+            }
+
+            /** @var \Magento\Sales\Model\Order\Invoice $invoice */
+            $invoice = $this->_objectManager->create('Magento\Sales\Model\Service\Order', ['order' => $order])
+                ->prepareInvoice($invoiceItems);
+
+            if (!$invoice->getTotalQty()) {
+                throw new \Magento\Framework\Exception(__('Cannot create an invoice without products.'));
+            }
+            $this->registry->register('current_invoice', $invoice);
             // Save invoice comment text in current invoice object in order to display it in corresponding view
             $invoiceRawCommentText = $invoiceData['comment_text'];
             $invoice->setCommentText($invoiceRawCommentText);
 
             $this->_view->loadLayout();
+            $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Invoices'));
             $response = $this->_view->getLayout()->getBlock('order_items')->toHtml();
         } catch (Exception $e) {
             $response = array('error' => true, 'message' => $e->getMessage());

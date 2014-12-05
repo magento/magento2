@@ -87,11 +87,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->model = $objectHelper->getObject(
             'Magento\Bundle\Model\Product\Type',
             array(
-                'productFactory' => $this->getMockBuilder('Magento\Catalog\Model\ProductFactory')
-                    ->disableOriginalConstructor()
-                    ->getMock(),
-                'bundleModelSelection' => $this->getMock('Magento\Bundle\Model\SelectionFactory'),
-                'bundleFactory' => $this->getMock('Magento\Bundle\Model\Resource\BundleFactory'),
                 'bundleCollection' => $this->bundleCollection,
                 'bundleOption' => $this->bundleOptionFactory,
                 'catalogData' => $this->catalogData,
@@ -524,41 +519,52 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ])
             ->disableOriginalConstructor()
             ->getMock();
+        $productGetMap = [
+            ['_cache_instance_used_selections', null, null],
+            ['_cache_instance_used_selections_ids', null, $usedSelectionsIds],
+            ['_cache_instance_store_filter', null, $storeFilter],
+        ];
+        $productMock->expects($this->any())
+            ->method('getData')
+            ->will($this->returnValueMap($productGetMap));
+        $productSetMap = [
+            ['_cache_instance_used_selections', $usedSelectionsMock, $productMock],
+            ['_cache_instance_used_selections_ids', $selectionIds, $productMock],
+        ];
+        $productMock->expects($this->any())
+            ->method('setData')
+            ->will($this->returnValueMap($productSetMap));
+        $productMock->expects($this->once())
+            ->method('getStoreId')
+            ->will($this->returnValue($storeId));
+
         $storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
             ->setMethods(['getWebsiteId', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
+        $this->storeManager->expects($this->once())
+            ->method('getStore')
+            ->with($storeId)
+            ->will($this->returnValue($storeMock));
+        $storeMock->expects($this->once())
+            ->method('getWebsiteId')
+            ->will($this->returnValue($websiteId));
 
-        $productMock->expects($this->at(0))
-            ->method('getData')
-            ->with('_cache_instance_used_selections')
-            ->will($this->returnValue(null));
-        $productMock->expects($this->at(1))
-            ->method('getData')
-            ->with('_cache_instance_used_selections_ids')
-            ->will($this->returnValue($usedSelectionsIds));
-        $productMock->expects($this->once())
-            ->method('getStoreId')
-            ->will($this->returnValue($storeId));
         $this->bundleCollection->expects($this->once())
             ->method('create')
             ->will($this->returnValue($usedSelectionsMock));
+
         $usedSelectionsMock->expects($this->once())
             ->method('addAttributeToSelect')
             ->with('*')
             ->will($this->returnSelf());
-        $usedSelectionsMock->expects($this->at(1))
+        $flagMap = [
+            ['require_stock_items', true, $usedSelectionsMock],
+            ['product_children', true, $usedSelectionsMock],
+        ];
+        $usedSelectionsMock->expects($this->any())
             ->method('setFlag')
-            ->with('require_stock_items', true)
-            ->will($this->returnSelf());
-        $usedSelectionsMock->expects($this->at(2))
-            ->method('setFlag')
-            ->with('product_children', true)
-            ->will($this->returnSelf());
-        $productMock->expects($this->at(3))
-            ->method('getData')
-            ->with('_cache_instance_store_filter')
-            ->will($this->returnValue($storeFilter));
+            ->will($this->returnValueMap($flagMap));
         $usedSelectionsMock->expects($this->once())
             ->method('addStoreFilter')
             ->with($storeFilter)
@@ -577,28 +583,14 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->method('setSelectionIdsFilter')
             ->with($selectionIds)
             ->will($this->returnSelf());
-        $this->catalogData->expects($this->once())
-            ->method('isPriceGlobal')
-            ->will($this->returnValue(false));
-        $this->storeManager->expects($this->once())
-            ->method('getStore')
-            ->with($storeId)
-            ->will($this->returnValue($storeMock));
-        $storeMock->expects($this->once())
-            ->method('getWebsiteId')
-            ->will($this->returnValue($websiteId));
         $usedSelectionsMock->expects($this->once())
             ->method('joinPrices')
             ->with($websiteId)
             ->will($this->returnSelf());
-        $productMock->expects($this->at(4))
-            ->method('setData')
-            ->with('_cache_instance_used_selections', $usedSelectionsMock)
-            ->will($this->returnSelf());
-        $productMock->expects($this->at(5))
-            ->method('setData')
-            ->with('_cache_instance_used_selections_ids', $selectionIds)
-            ->will($this->returnSelf());
+
+        $this->catalogData->expects($this->once())
+            ->method('isPriceGlobal')
+            ->will($this->returnValue(false));
 
         $this->model->getSelectionsByIds($selectionIds, $productMock);
     }

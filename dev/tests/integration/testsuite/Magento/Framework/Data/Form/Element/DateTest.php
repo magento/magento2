@@ -67,25 +67,29 @@ class DateTest extends \PHPUnit_Framework_TestCase
      */
     public function getValueDataProvider()
     {
+        $currentTime = time();
         return array(
             array(
-                array('date_format' => \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT,
+                array(
+                    'date_format' => \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT,
                     'time_format' => \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT,
-                    'value' => '1397832240'
+                    'value' => $currentTime
                 ),
-                '4/18/14 2:44 PM'
+                date('m/j/y g:i A', $currentTime)
             ),
             array(
-                array('time_format' => \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT,
-                    'value' => '1397832240'
+                array(
+                    'time_format' => \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT,
+                    'value' => $currentTime
                 ),
-                '2:44 PM'
+                date('g:i A', $currentTime)
             ),
             array(
-                array('date_format' => \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT,
-                    'value' => '1397832240'
+                array(
+                    'date_format' => \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT,
+                    'value' => $currentTime
                 ),
-                '4/18/14'
+                date('m/j/y', $currentTime)
             )
         );
     }

@@ -24,6 +24,7 @@
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 
 use Magento\Backend\App\Action;
+use Magento\TestFramework\Helper\ObjectManager;
 
 /**
  * Class PrintActionTest
@@ -44,11 +45,6 @@ class PrintActionTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $invoiceLoaderMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $fileFactory;
 
     /**
@@ -62,12 +58,20 @@ class PrintActionTest extends \PHPUnit_Framework_TestCase
     protected $sessionMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManagerInterface
+     */
+    protected $objectManagerMock;
+
+
+    /**
      * @var \Magento\Sales\Controller\Adminhtml\Order\Invoice\PrintAction
      */
     protected $controller;
 
     public function setUp()
     {
+        $objectManager = new ObjectManager($this);
+
         $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -87,6 +91,8 @@ class PrintActionTest extends \PHPUnit_Framework_TestCase
             ->setMethods([])
             ->getMock();
 
+        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+
         $contextMock = $this->getMockBuilder('Magento\Backend\App\Action\Context')
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -103,46 +109,57 @@ class PrintActionTest extends \PHPUnit_Framework_TestCase
         $contextMock->expects($this->any())
             ->method('getActionFlag')
             ->will($this->returnValue($this->actionFlagMock));
-
-        $this->invoiceLoaderMock = $this->getMockBuilder('Magento\Sales\Controller\Adminhtml\Order\InvoiceLoader')
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
+        $contextMock->expects($this->any())
+            ->method('getObjectManager')
+            ->will($this->returnValue($this->objectManagerMock));
 
         $this->fileFactory = $this->getMockBuilder('Magento\Framework\App\Response\Http\FileFactory')
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $this->controller = new \Magento\Sales\Controller\Adminhtml\Order\Invoice\PrintAction(
-            $contextMock,
-            $this->fileFactory,
-            $this->invoiceLoaderMock
+        $this->controller = $objectManager->getObject(
+            'Magento\Sales\Controller\Adminhtml\Order\Invoice\PrintAction',
+            [
+                'context' => $contextMock,
+                'fileFactory' => $this->fileFactory
+            ]
         );
     }
 
     public function testExecute()
     {
-        $orderId = 1;
         $invoiceId = 2;
-        $invoiceData = [];
 
-        $this->requestMock->expects($this->at(0))
-            ->method('getParam')
-            ->with('order_id')
-            ->will($this->returnValue($orderId));
-        $this->requestMock->expects($this->at(1))
+        $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with('invoice_id')
             ->will($this->returnValue($invoiceId));
-        $this->requestMock->expects($this->at(2))
-            ->method('getParam')
-            ->with('invoice', [])
-            ->will($this->returnValue($invoiceData));
 
-        $this->invoiceLoaderMock->expects($this->once())
+        $invoiceMock = $this->getMock('Magento\Sales\Model\Order\Invoice', [], [], '', false);
+        $invoiceMock->expects($this->once())
             ->method('load')
-            ->with($orderId, $invoiceId, $invoiceData);
+            ->willReturnSelf();
+        $pdfMock = $this->getMock('Magento\Sales\Model\Order\Pdf\Invoice', ['render', 'getPdf'], [], '', false);
+        $pdfMock->expects($this->once())
+            ->method('getPdf')
+            ->willReturnSelf();
+        $pdfMock->expects($this->once())
+            ->method('render');
+        $dateTimeMock = $this->getMock('Magento\Framework\Stdlib\DateTime\DateTime', [], [], '', false);
+
+        $this->objectManagerMock->expects($this->at(0))
+            ->method('create')
+            ->with('Magento\Sales\Model\Order\Invoice')
+            ->willReturn($invoiceMock);
+        $this->objectManagerMock->expects($this->at(1))
+            ->method('create')
+            ->with('Magento\Sales\Model\Order\Pdf\Invoice')
+            ->willReturn($pdfMock);
+        $this->objectManagerMock->expects($this->at(2))
+            ->method('get')
+            ->with('Magento\Framework\Stdlib\DateTime\DateTime')
+            ->willReturn($dateTimeMock);
 
         $this->assertNull($this->controller->execute());
     }

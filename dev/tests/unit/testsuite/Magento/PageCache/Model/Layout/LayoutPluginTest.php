@@ -60,7 +60,6 @@ class LayoutPluginTest extends \PHPUnit_Framework_TestCase
         $this->configMock = $this->getMock('Magento\PageCache\Model\Config', array(), array(), '', false);
 
         $this->model = new \Magento\PageCache\Model\Layout\LayoutPlugin(
-            $this->layoutMock,
             $this->responseMock,
             $this->configMock
         );

@@ -38,6 +38,8 @@ class BlockTest extends \PHPUnit_Framework_TestCase
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $setTemplateCount
      * @param \PHPUnit_Framework_MockObject_Matcher_InvokedCount $setTtlCount
      * @dataProvider provider
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testProcess(
         $testGroup,

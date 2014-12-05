@@ -66,7 +66,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadThemesFromFileSystem()
     {
-        $pathPattern = implode('/', array('frontend', '*', 'theme.xml'));
+        $pathPattern = implode('/', array('frontend', '*', '*', 'theme.xml'));
         $this->_model->addTargetPattern($pathPattern);
         $this->assertEquals(8, count($this->_model));
     }
@@ -91,15 +91,15 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                'themePath' => implode('/', array('frontend', 'magento_default', 'theme.xml')),
+                'themePath' => implode('/', array('frontend', 'Magento', 'default', 'theme.xml')),
                 'expectedData' => array(
                     'area' => 'frontend',
                     'theme_title' => 'Default',
                     'theme_version' => '0.1.0',
                     'parent_id' => null,
                     'parent_theme_path' => null,
-                    'theme_path' => 'magento_default',
-                    'code' => 'magento_default',
+                    'theme_path' => 'Magento/default',
+                    'code' => 'Magento/default',
                     'preview_image' => null,
                     'type' => \Magento\Framework\View\Design\ThemeInterface::TYPE_PHYSICAL
                 )

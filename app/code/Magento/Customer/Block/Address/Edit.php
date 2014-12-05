@@ -117,6 +117,7 @@ class Edit extends \Magento\Directory\Block\Data
             try {
                 $this->_address = $this->_addressRepository->getById($addressId);
             } catch (NoSuchEntityException $e) {
+                $this->_address = null;
             }
         }
 
@@ -134,7 +135,7 @@ class Edit extends \Magento\Directory\Block\Data
             )->create();
         }
 
-        $this->pageConfig->setTitle($this->getTitle());
+        $this->pageConfig->getTitle()->set($this->getTitle());
 
         if ($postedData = $this->_customerSession->getAddressFormData(true)) {
             if (!empty($postedData['region_id']) || !empty($postedData['region'])) {

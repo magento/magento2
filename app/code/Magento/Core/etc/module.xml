@@ -25,25 +25,5 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Module/etc/module.xsd">
     <module name="Magento_Core" schema_version="1.6.0.16">
-        <depends>
-            <module name="Magento_Store"/>
-            <module name="Magento_Backend"/>
-            <module name="Magento_Cron"/>
-            <module name="Magento_Theme"/>
-            <module name="Magento_Eav"/>
-            <module name="Magento_PageCache"/>
-            <extension name="spl"/>
-            <extension name="dom"/>
-            <extension name="simplexml"/>
-            <extension name="mcrypt"/>
-            <extension name="hash"/>
-            <extension name="curl"/>
-            <extension name="iconv"/>
-            <extension name="ctype"/>
-            <choice>
-                <extension name="gd"/>
-                <extension name="imagick" minVersion="3.0.0"/>
-            </choice>
-        </depends>
     </module>
 </config>

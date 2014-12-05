@@ -77,8 +77,6 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
             return $resultRedirect->setPath('catalog/*/', ['_current' => true, 'id' => null]);
         }
 
-        $this->_title->add($categoryId ? $category->getName() : __('Categories'));
-
         /**
          * Check if we have data in session (if during category save was exception)
          */
@@ -89,7 +87,6 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
 
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
-
         /**
          * Build response for ajax request
          */
@@ -133,6 +130,8 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
         }
 
         $resultPage->setActiveMenu('Magento_Catalog::catalog_categories');
+        $resultPage->getConfig()->getTitle()->prepend(__('Categories'));
+        $resultPage->getConfig()->getTitle()->prepend($categoryId ? $category->getName() : __('Categories'));
         $resultPage->addBreadcrumb(__('Manage Catalog Categories'), __('Manage Categories'));
 
         $block = $resultPage->getLayout()->getBlock('catalog.wysiwyg.js');

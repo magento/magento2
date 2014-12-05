@@ -25,8 +25,6 @@ namespace Magento\CatalogInventory\Api;
 
 /**
  * Interface StockConfigurationInterface
- * @package Magento\CatalogInventory\Api
- * @api
  */
 interface StockConfigurationInterface
 {
@@ -38,8 +36,8 @@ interface StockConfigurationInterface
     public function getDefaultWebsiteId();
 
     /**
-     * @param int|null $filter
-     * @return array
+     * @param int $filter
+     * @return int[]
      */
     public function getIsQtyTypeIds($filter = null);
 
@@ -54,46 +52,46 @@ interface StockConfigurationInterface
     /**
      * Check if is possible subtract value from item qty
      *
-     * @param null|string|bool|int|\Magento\Store\Model\Store $store
+     * @param int $storeId
      * @return bool
      */
-    public function canSubtractQty($store = null);
+    public function canSubtractQty($storeId = null);
 
     /**
-     * @param null|string|bool|int|\Magento\Store\Model\Store $store
+     * @param int $storeId
      * @return float
      */
-    public function getMinQty($store = null);
+    public function getMinQty($storeId = null);
 
     /**
-     * @param null|string|bool|int|\Magento\Store\Model\Store $store
+     * @param int $storeId
      * @param int $customerGroupId
      * @return float
      */
-    public function getMinSaleQty($store = null, $customerGroupId = null);
+    public function getMinSaleQty($storeId = null, $customerGroupId = null);
 
     /**
-     * @param null|string|bool|int|\Magento\Store\Model\Store $store
-     * @return float|null
-     */
-    public function getMaxSaleQty($store = null);
-
-    /**
-     * @param null|string|bool|int|\Magento\Store\Model\Store $store
+     * @param int $storeId
      * @return float
      */
-    public function getNotifyStockQty($store = null);
+    public function getMaxSaleQty($storeId = null);
+
+    /**
+     * @param int $storeId
+     * @return float
+     */
+    public function getNotifyStockQty($storeId = null);
 
     /**
      * Retrieve whether Quantity Increments is enabled
      *
-     * @param null|string|bool|int|\Magento\Store\Model\Store $store
+     * @param int $storeId
      * @return bool
      */
-    public function getEnableQtyIncrements($store = null);
+    public function getEnableQtyIncrements($storeId = null);
 
     /**
-     * @param null|string|bool|int|\Magento\Store\Model\Store $store
+     * @param int $storeId
      * @return int
      */
     public function getQtyIncrements($store = null);
@@ -101,58 +99,58 @@ interface StockConfigurationInterface
     /**
      * Retrieve backorders status
      *
-     * @param null|string|bool|int|\Magento\Store\Model\Store $store
+     * @param int $storeId
      * @return int
      */
-    public function getBackorders($store = null);
+    public function getBackorders($storeId = null);
 
     /**
      * Retrieve Manage Stock data wrapper
      *
-     * @param null|string|bool|int|\Magento\Store\Model\Store $store
+     * @param int $storeId
      * @return int
      */
-    public function getManageStock($store = null);
+    public function getManageStock($storeId = null);
 
     /**
      * Retrieve can Back in stock
      *
-     * @param null|string|bool|int|\Magento\Store\Model\Store $store
+     * @param int $storeId
      * @return bool
      */
-    public function getCanBackInStock($store = null);
+    public function getCanBackInStock($storeId = null);
 
     /**
      * Display out of stock products option
      *
-     * @param null|string|bool|int|\Magento\Store\Model\Store $store
+     * @param int $storeId
      * @return bool
      */
-    public function isShowOutOfStock($store = null);
+    public function isShowOutOfStock($storeId = null);
 
     /**
      * Check if credit memo items auto return option is enabled
      *
-     * @param null|string|bool|int|\Magento\Store\Model\Store $store
+     * @param int $storeId
      * @return bool
      */
-    public function isAutoReturnEnabled($store = null);
+    public function isAutoReturnEnabled($storeId = null);
 
     /**
      * Get 'Display product stock status' option value
      * Shows if it is necessary to show product stock status ('in stock'/'out of stock')
      *
-     * @param null|string|bool|int|\Magento\Store\Model\Store $store
+     * @param int $storeId
      * @return bool
      */
-    public function isDisplayProductStockStatus($store = null);
+    public function isDisplayProductStockStatus($storeId = null);
 
     /**
      * @param string $field
-     * @param null|string|bool|int|\Magento\Store\Model\Store $store
-     * @return string|null
+     * @param int $storeId
+     * @return string
      */
-    public function getDefaultConfigValue($field, $store = null);
+    public function getDefaultConfigValue($field, $storeId = null);
 
     /**
      * Retrieve inventory item options (used in config)

@@ -31,7 +31,9 @@ class Index extends \Magento\Backend\Controller\Adminhtml\System\Store
      */
     public function execute()
     {
-        $this->_title->add(__('Stores'));
-        return $this->resultPageFactory->create();
+        $resultPage = $this->resultPageFactory->create();
+        $resultPage->getConfig()->getTitle()->prepend(__('Stores'));
+
+        return $resultPage;
     }
 }

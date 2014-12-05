@@ -32,6 +32,11 @@ use Magento\Framework\Exception\StateException;
 class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInterface
 {
     /**
+     * @var Category[]
+     */
+    protected $instances = array();
+
+    /**
      * @var \Magento\Framework\StoreManagerInterface
      */
     protected $storeManager;
@@ -108,21 +113,28 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
         } catch (\Exception $e) {
             throw new CouldNotSaveException('Could not save category: %message', ['message' => $e->getMessage()], $e);
         }
+        unset($this->instances[$category->getId()]);
         return $category;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function get($categoryId)
+    public function get($categoryId, $storeId = null)
     {
-        /** @var Category $category */
-        $category = $this->categoryFactory->create();
-        $category->load($categoryId);
-        if (!$category->getId()) {
-            throw NoSuchEntityException::singleField('id', $categoryId);
+        if (!isset($this->instances[$categoryId])) {
+            /** @var Category $category */
+            $category = $this->categoryFactory->create();
+            if (null !== $storeId) {
+                $category->setStoreId($storeId);
+            }
+            $category->load($categoryId);
+            if (!$category->getId()) {
+                throw NoSuchEntityException::singleField('id', $categoryId);
+            }
+            $this->instances[$categoryId] = $category;
         }
-        return $category;
+        return $this->instances[$categoryId];
     }
 
     /**
@@ -131,6 +143,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     public function delete(\Magento\Catalog\Api\Data\CategoryInterface $category)
     {
         try {
+            $categoryId = $category->getId();
             $this->categoryResource->delete($category);
         } catch (\Exception $e) {
             throw new StateException(
@@ -141,6 +154,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
                 $e
             );
         }
+        unset($this->instances[$categoryId]);
         return true;
     }
 

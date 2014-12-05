@@ -202,7 +202,6 @@ class AttributePriceTest extends \PHPUnit_Framework_TestCase
         $configuredValueMock->expects($this->any())
             ->method('getData')
             ->will($this->returnValue($optionId));
-
         $configurableProduct = $this->getMockBuilder('Magento\ConfigurableProduct\Model\Product\Type\Configurable')
             ->disableOriginalConstructor()
             ->getMock();

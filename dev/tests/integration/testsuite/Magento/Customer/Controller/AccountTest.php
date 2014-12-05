@@ -442,8 +442,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $customerRepository = Bootstrap::getObjectManager()
             ->get('Magento\Customer\Api\CustomerRepositoryInterface');
         $customer = $customerRepository->getById(1);
-        $this->assertEquals('Firstname', $customer->getFirstname());
-        $this->assertEquals('Lastname', $customer->getLastname());
+        $this->assertEquals('John', $customer->getFirstname());
+        $this->assertEquals('Smith', $customer->getLastname());
         $this->assertEquals('customer@example.com', $customer->getEmail());
 
         $this->login(1);
@@ -479,8 +479,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $customerRepository = Bootstrap::getObjectManager()
             ->get('Magento\Customer\Api\CustomerRepositoryInterface');
         $customer = $customerRepository->getById(1);
-        $this->assertEquals('Firstname', $customer->getFirstname());
-        $this->assertEquals('Lastname', $customer->getLastname());
+        $this->assertEquals('John', $customer->getFirstname());
+        $this->assertEquals('Smith', $customer->getLastname());
         $this->assertEquals('customer@example.com', $customer->getEmail());
 
 

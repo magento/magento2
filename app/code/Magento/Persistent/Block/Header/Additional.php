@@ -23,8 +23,6 @@
  */
 namespace Magento\Persistent\Block\Header;
 
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
-
 /**
  * Remember Me block
  *
@@ -43,27 +41,31 @@ class Additional extends \Magento\Framework\View\Element\Html\Link
     protected $_persistentSessionHelper;
 
     /**
-     * @var CustomerAccountServiceInterface
+     * Customer repository
+     *
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
      */
-    protected $_customerAccountService;
+    protected $customerRepository;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Helper\View $customerViewHelper
      * @param \Magento\Persistent\Helper\Session $persistentSessionHelper
-     * @param CustomerAccountServiceInterface $customerAccountService
+     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Helper\View $customerViewHelper,
         \Magento\Persistent\Helper\Session $persistentSessionHelper,
-        CustomerAccountServiceInterface $customerAccountService,
-        array $data = array()
+        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
+        array $data = []
     ) {
         $this->_customerViewHelper = $customerViewHelper;
         $this->_persistentSessionHelper = $persistentSessionHelper;
-        $this->_customerAccountService =  $customerAccountService;
+        $this->customerRepository = $customerRepository;
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
     }
@@ -87,9 +89,7 @@ class Additional extends \Magento\Framework\View\Element\Html\Link
     {
         $persistentName = $this->_escaper->escapeHtml(
             $this->_customerViewHelper->getCustomerName(
-                $this->_customerAccountService->getCustomer(
-                    $this->_persistentSessionHelper->getSession()->getCustomerId()
-                )
+                $this->customerRepository->getById($this->_persistentSessionHelper->getSession()->getCustomerId())
             )
         );
         return '<span><a ' . $this->getLinkAttributes() . ' >' . $this->escapeHtml(__('(Not %1?)', $persistentName))

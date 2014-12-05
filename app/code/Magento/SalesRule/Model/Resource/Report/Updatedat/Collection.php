@@ -35,5 +35,5 @@ class Collection extends \Magento\SalesRule\Model\Resource\Report\Collection
      *
      * @var string
      */
-    protected $_aggregationTable = 'coupon_aggregated_updated';
+    protected $_aggregationTable = 'salesrule_coupon_aggregated_updated';
 }

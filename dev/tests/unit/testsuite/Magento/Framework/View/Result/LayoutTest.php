@@ -31,48 +31,55 @@ namespace Magento\Framework\View\Result;
 class LayoutTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $request;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Event\ManagerInterface
+     */
+    protected $eventManager;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Layout
+     */
+    protected $layout;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Result\Layout
+     */
+    protected $resultLayout;
+
+    protected function setUp()
+    {
+        $this->layout = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
+        $this->request = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
+        $this->eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
+
+        $context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
+        $context->expects($this->any())->method('getLayout')->will($this->returnValue($this->layout));
+        $context->expects($this->any())->method('getRequest')->will($this->returnValue($this->request));
+        $context->expects($this->any())->method('getEventManager')->will($this->returnValue($this->eventManager));
+
+        $this->resultLayout = (new \Magento\TestFramework\Helper\ObjectManager($this))
+            ->getObject('Magento\Framework\View\Result\Layout', ['context' => $context]);
+    }
+
+    /**
      * @covers \Magento\Framework\View\Result\Layout::getLayout()
      */
     public function testGetLayout()
     {
-        /** @var \Magento\Framework\View\LayoutInterface $layout */
-        $layout = $this->getMock('Magento\Framework\View\LayoutInterface', [], [], '', false);
-
-        $context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
-        $context->expects($this->once())->method('getLayout')->will($this->returnValue($layout));
-
-        /** @var \Magento\Framework\View\Result\Layout $resultLayout */
-        $resultLayout = (new \Magento\TestFramework\Helper\ObjectManager($this))
-            ->getObject('Magento\Framework\View\Result\Layout', ['context' => $context]);
-        $this->assertSame($layout, $resultLayout->getLayout());
-    }
-
-    /**
-     * @covers \Magento\Framework\View\Result\Layout::initLayout()
-     */
-    public function testInitLayout()
-    {
-        /** @var \Magento\Framework\View\Result\Layout $resultLayout */
-        $resultLayout = (new \Magento\TestFramework\Helper\ObjectManager($this))
-            ->getObject('Magento\Framework\View\Result\Layout');
-        $this->assertSame($resultLayout, $resultLayout->initLayout());
+        $this->assertSame($this->layout, $this->resultLayout->getLayout());
     }
 
     public function testGetDefaultLayoutHandle()
     {
-        /** @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject $request */
-        $request = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $request->expects($this->once())->method('getFullActionName')
-            ->will($this->returnValue('Module_Controller_Action'));
+        $this->request->expects($this->once())
+            ->method('getFullActionName')
+            ->willReturn('Module_Controller_Action');
 
-        /** @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject $request */
-        $context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
-        $context->expects($this->once())->method('getRequest')->will($this->returnValue($request));
-
-        /** @var \Magento\Framework\View\Result\Layout $resultLayout */
-        $resultLayout = (new \Magento\TestFramework\Helper\ObjectManager($this))
-            ->getObject('Magento\Framework\View\Result\Layout', ['context' => $context]);
-        $this->assertEquals('module_controller_action', $resultLayout->getDefaultLayoutHandle());
+        $this->assertEquals('module_controller_action', $this->resultLayout->getDefaultLayoutHandle());
     }
 
     public function testAddHandle()
@@ -80,18 +87,9 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $processor = $this->getMock('Magento\Framework\View\Layout\ProcessorInterface', [], [], '', false);
         $processor->expects($this->once())->method('addHandle')->with('module_controller_action');
 
-        /** @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject $layout */
-        $layout = $this->getMock('Magento\Framework\View\LayoutInterface', [], [], '', false);
-        $layout->expects($this->once())->method('getUpdate')->will($this->returnValue($processor));
+        $this->layout->expects($this->once())->method('getUpdate')->will($this->returnValue($processor));
 
-        /** @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject $request */
-        $context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
-        $context->expects($this->once())->method('getLayout')->will($this->returnValue($layout));
-
-        /** @var \Magento\Framework\View\Result\Layout $resultLayout */
-        $resultLayout = (new \Magento\TestFramework\Helper\ObjectManager($this))
-            ->getObject('Magento\Framework\View\Result\Layout', ['context' => $context]);
-        $this->assertSame($resultLayout, $resultLayout->addHandle('module_controller_action'));
+        $this->assertSame($this->resultLayout, $this->resultLayout->addHandle('module_controller_action'));
     }
 
     public function testAddUpdate()
@@ -99,18 +97,9 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $processor = $this->getMock('Magento\Framework\View\Layout\ProcessorInterface', [], [], '', false);
         $processor->expects($this->once())->method('addUpdate')->with('handle_name');
 
-        /** @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject $layout */
-        $layout = $this->getMock('Magento\Framework\View\LayoutInterface', [], [], '', false);
-        $layout->expects($this->once())->method('getUpdate')->will($this->returnValue($processor));
+        $this->layout->expects($this->once())->method('getUpdate')->will($this->returnValue($processor));
 
-        /** @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject $request */
-        $context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
-        $context->expects($this->once())->method('getLayout')->will($this->returnValue($layout));
-
-        /** @var \Magento\Framework\View\Result\Layout $resultLayout */
-        $resultLayout = (new \Magento\TestFramework\Helper\ObjectManager($this))
-            ->getObject('Magento\Framework\View\Result\Layout', ['context' => $context]);
-        $resultLayout->addUpdate('handle_name');
+        $this->resultLayout->addUpdate('handle_name');
     }
 
     /**
@@ -125,26 +114,15 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     public function testRenderResult(
         $httpCode, $headerName, $headerValue, $replaceHeader, $setHttpResponseCodeCount, $setHeaderCount
     ) {
-        /** @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject $layout */
-        $layout = $this->getMock('Magento\Framework\View\LayoutInterface', [], [], '', false);
-        $layout->expects($this->once())->method('getOutput')->will($this->returnValue('output'));
+        $this->layout->expects($this->once())->method('getOutput')->will($this->returnValue('output'));
 
-        /** @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject $request */
-        $request = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $request->expects($this->once())->method('getFullActionName')
+        $this->request->expects($this->once())->method('getFullActionName')
             ->will($this->returnValue('Module_Controller_Action'));
 
-        $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
-        $eventManager->expects($this->exactly(2))->method('dispatch')->withConsecutive(
-            ['controller_action_layout_render_before'],
-            ['controller_action_layout_render_before_Module_Controller_Action']
+        $this->eventManager->expects($this->exactly(2))->method('dispatch')->withConsecutive(
+            ['layout_render_before'],
+            ['layout_render_before_Module_Controller_Action']
         );
-
-        /** @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject $request */
-        $context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
-        $context->expects($this->once())->method('getLayout')->will($this->returnValue($layout));
-        $context->expects($this->once())->method('getRequest')->will($this->returnValue($request));
-        $context->expects($this->once())->method('getEventManager')->will($this->returnValue($eventManager));
 
         /** @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject $response */
         $response = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
@@ -152,16 +130,13 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $response->expects($setHeaderCount)->method('setHeader')->with($headerName, $headerValue, $replaceHeader);
         $response->expects($this->once())->method('appendBody')->with('output');
 
-        /** @var \Magento\Framework\View\Result\Layout $resultLayout */
-        $resultLayout = (new \Magento\TestFramework\Helper\ObjectManager($this))
-            ->getObject('Magento\Framework\View\Result\Layout', ['context' => $context]);
-        $resultLayout->setHttpResponseCode($httpCode);
+        $this->resultLayout->setHttpResponseCode($httpCode);
 
         if ($headerName && $headerValue) {
-            $resultLayout->setHeader($headerName, $headerValue, $replaceHeader);
+            $this->resultLayout->setHeader($headerName, $headerValue, $replaceHeader);
         }
 
-        $resultLayout->renderResult($response);
+        $this->resultLayout->renderResult($response);
     }
 
     /**
@@ -180,23 +155,11 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $processor = $this->getMock('Magento\Framework\View\Layout\ProcessorInterface', [], [], '', false);
         $processor->expects($this->once())->method('addHandle')->with('module_controller_action');
 
-        /** @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject $layout */
-        $layout = $this->getMock('Magento\Framework\View\LayoutInterface', [], [], '', false);
-        $layout->expects($this->once())->method('getUpdate')->will($this->returnValue($processor));
+        $this->layout->expects($this->once())->method('getUpdate')->will($this->returnValue($processor));
 
-        /** @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject $request */
-        $request = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $request->expects($this->once())->method('getFullActionName')
+        $this->request->expects($this->once())->method('getFullActionName')
             ->will($this->returnValue('Module_Controller_Action'));
 
-        /** @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject $request */
-        $context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
-        $context->expects($this->once())->method('getRequest')->will($this->returnValue($request));
-        $context->expects($this->once())->method('getLayout')->will($this->returnValue($layout));
-
-        /** @var \Magento\Framework\View\Result\Layout $resultLayout */
-        $resultLayout = (new \Magento\TestFramework\Helper\ObjectManager($this))
-            ->getObject('Magento\Framework\View\Result\Layout', ['context' => $context]);
-        $this->assertSame($resultLayout, $resultLayout->addDefaultHandle());
+        $this->assertSame($this->resultLayout, $this->resultLayout->addDefaultHandle());
     }
 }

@@ -35,15 +35,14 @@ class NewAction extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopp
     {
         try {
             $this->_initItemType();
-
-            $this->_title->add(__('New Google Content Attribute Mapping'));
-
             $this->_initAction()->_addBreadcrumb(
                 __('New attribute set mapping'),
                 __('New attribute set mapping')
             )->_addContent(
                 $this->_view->getLayout()->createBlock('Magento\GoogleShopping\Block\Adminhtml\Types\Edit')
             );
+            $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Google Content Attributes'));
+            $this->_view->getPage()->getConfig()->getTitle()->prepend(__('New Google Content Attribute Mapping'));
             $this->_view->renderLayout();
         } catch (\Exception $e) {
             $this->_objectManager->get('Magento\Framework\Logger')->logException($e);

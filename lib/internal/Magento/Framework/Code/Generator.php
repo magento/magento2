@@ -115,8 +115,7 @@ class Generator
         }
         $generatorClass = $this->_generatedEntities[$entity];
         /** @var EntityAbstract $generator */
-        $generator = new $generatorClass($entityName, $className, $this->_ioObject);
-
+        $generator = $this->createGeneratorInstance($generatorClass, $entityName, $className);
         if (!($file = $generator->generate())) {
             $errors = $generator->getErrors();
             throw new \Magento\Framework\Exception(implode(' ', $errors));
@@ -132,5 +131,18 @@ class Generator
     public function includeFile($fileName)
     {
         include $fileName;
+    }
+
+    /**
+     * Create entity generator
+     *
+     * @param string $generatorClass
+     * @param string $entityName
+     * @param string $className
+     * @return \Magento\Framework\Code\Generator\EntityAbstract
+     */
+    protected function createGeneratorInstance($generatorClass, $entityName, $className)
+    {
+        return new $generatorClass($entityName, $className, $this->_ioObject);
     }
 }

@@ -110,14 +110,14 @@
                                     <th class="col subtotal" scope="col"><?php echo __('Subtotal') ?></th>
                                 </tr>
                                 </thead>
-                                <tfoot>
-                                <?php echo $this->renderTotals($this->getShippingAddressTotals($_address)); ?>
-                                </tfoot>
                                 <tbody>
                                 <?php foreach ($this->getShippingAddressItems($_address) as $_item): ?>
                                     <?php echo $this->getRowItemHtml($_item); ?>
                                 <?php endforeach; ?>
                                 </tbody>
+                                <tfoot>
+                                    <?php echo $this->renderTotals($this->getShippingAddressTotals($_address)); ?>
+                                </tfoot>
                             </table>
                         </div>
                     </div>
@@ -146,14 +146,14 @@
                             <th class="col subtotal" scope="col"><?php echo __('Subtotal') ?></th>
                         </tr>
                     </thead>
-                    <tfoot>
-                        <?php echo $this->renderTotals($this->getBillinAddressTotals()); ?>
-                    </tfoot>
                     <tbody>
                         <?php foreach ($this->getVirtualItems() as $_item): ?>
                             <?php echo $this->getRowItemHtml($_item); ?>
                         <?php endforeach; ?>
                     </tbody>
+                    <tfoot>
+                    <?php echo $this->renderTotals($this->getBillinAddressTotals()); ?>
+                    </tfoot>
                 </table>
             </div>
         </div>

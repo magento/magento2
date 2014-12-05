@@ -72,18 +72,14 @@ class RowTest extends \PHPUnit_Framework_TestCase
 
         $stockItem = $stockRegistry->getStockItem(1, 1);
 
-        $this->assertNotNull($stockItem->getId());
+        $this->assertNotNull($stockItem->getItemId());
 
         $stockItemData = [
             'qty' => $stockItem->getQty() + 11
         ];
 
-        // todo fix builder
-        $id = $stockItem->getId();
         $stockItemBuilder = $stockItemBuilder->mergeDataObjectWithArray($stockItem, $stockItemData);
-        $stockItemBuilder->setId($id);
         $stockItemSave = $stockItemBuilder->create();
-        $stockItemSave->setItemId($id);
         $stockItemRepository->save($stockItemSave);
 
         $category = $categoryFactory->create()->load(2);

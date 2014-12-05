@@ -33,8 +33,6 @@ class Index extends \Magento\Email\Controller\Adminhtml\Email\Template
      */
     public function execute()
     {
-        $this->_title->add(__('Email Templates'));
-
         if ($this->getRequest()->getQuery('ajax')) {
             $this->_forward('grid');
             return;
@@ -42,6 +40,7 @@ class Index extends \Magento\Email\Controller\Adminhtml\Email\Template
 
         $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_Email::template');
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Email Templates'));
         $this->_addBreadcrumb(__('Transactional Emails'), __('Transactional Emails'));
         $this->_view->renderLayout();
     }

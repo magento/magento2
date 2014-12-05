@@ -26,6 +26,12 @@
 @account-table-border-bottom-color: #e4e4e4;
 @account-table-action-delete: #d10029;
 
+//
+//    Common
+//--------------------------------------
+
+.responsive-common() {
+
 .login-container {
     .block {
         &-new-customer {
@@ -34,7 +40,7 @@
             }
         }
         .block-title {
-            &:extend(.abstract-login-block-title all);
+            &:extend(.abs-login-block-title all);
             .font-size(18);
         }
     }
@@ -57,12 +63,12 @@
         .item.actions {
             margin-top: @indent-xs-base;
             .action {
-                &:extend(.abstract-account-actions all);
+                &:extend(.abs-account-actions all);
             }
         }
     }
     address {
-        &:extend(.abstract-account-block-line-height all);
+        &:extend(.abs-account-block-line-height all);
     }
 }
 
@@ -71,7 +77,7 @@
         display: none;
     }
     .actions-toolbar .action.primary {
-        &:extend(.abstract-button-l all);
+        &:extend(.abs-button-l all);
     }
 }
 
@@ -86,7 +92,7 @@
 .box-information,
 .box-newsletter {
     .box-content {
-        &:extend(.abstract-account-block-line-height all);
+        &:extend(.abs-account-block-line-height all);
     }
 }
 
@@ -106,7 +112,7 @@
             margin-top: 0;
         }
         .block:not(.widget) {
-            &:extend(.abstract-account-blocks all);
+            &:extend(.abs-account-blocks all);
         }
     }
     .sidebar-additional {
@@ -121,10 +127,10 @@
         }
     }
     .data.table {
-        &:extend(.abstract-table-striped all);
+        &:extend(.abs-table-striped all);
         .col.actions {
             .action {
-                &:extend(.abstract-account-actions all);
+                &:extend(.abs-account-actions all);
                 &.delete {
                     color: @account-table-action-delete;
                 }
@@ -132,7 +138,7 @@
         }
     }
     .legend {
-        &:extend(.abstract-account-title all);
+        &:extend(.abs-account-title all);
     }
 }
 
@@ -140,7 +146,7 @@
 .field.street {
     .field.additional {
         .label {
-            &:extend(.abstract-visually-hidden all);
+            &:extend(.abs-visually-hidden all);
         }
     }
 }
@@ -149,7 +155,7 @@
 //    Blocks & Widgets
 //--------------------------------------
 .block {
-    &:extend(.abstract-margin-for-blocks-and-widgets all);
+    &:extend(.abs-margin-for-blocks-and-widgets all);
     &:last-child {
         margin-bottom: 0;
     }
@@ -167,7 +173,7 @@
     .box-actions {
         margin-top: @indent-xs-base;
         .action {
-            &:extend(.abstract-account-actions all);
+            &:extend(.abs-account-actions all);
         }
     }
 }
@@ -183,20 +189,22 @@
     .data.table-return-items {
         .qty {
             .input-text {
-                &:extend(.abstract-input-qty all);
+                &:extend(.abs-input-qty all);
             }
         }
     }
 }
 
+}
+
 //
 //    Desktop
 //--------------------------------------
-.responsive(@break) when (@break = @screen-m) {
+.responsive-min-l(@break) when (@break = @screen-m) {
     .login-container {
-        &:extend(.abstract-add-clearfix-desktop all);
+        &:extend(.abs-add-clearfix-desktop all);
         .block {
-            &:extend(.abstract-blocks-2columns all);
+            &:extend(.abs-blocks-2columns all);
             &.login {
                 .actions-toolbar {
                     > .primary {
@@ -239,14 +247,14 @@
 
     .account {
         .page-title {
-            &:extend(.abstract-add-clearfix-desktop all);
+            &:extend(.abs-add-clearfix-desktop all);
         }
         .column.main {
             .block:not(.widget) {
                 .block-content {
-                    &:extend(.abstract-add-clearfix-desktop all);
+                    &:extend(.abs-add-clearfix-desktop all);
                     .box {
-                        &:extend(.abstract-blocks-2columns all);
+                        &:extend(.abs-blocks-2columns all);
                     }
                 }
             }
@@ -260,15 +268,15 @@
             }
         }
         .toolbar {
-            &:extend(.abstract-pager-toolbar all);
+            &:extend(.abs-pager-toolbar all);
         }
     }
 
     .block-addresses-list {
         .items.addresses {
-            &:extend(.abstract-add-clearfix-desktop all);
+            &:extend(.abs-add-clearfix-desktop all);
             > .item {
-                &:extend(.abstract-blocks-2columns all);
+                &:extend(.abs-blocks-2columns all);
                 margin-bottom: @indent-base;
                 &:nth-last-child(1),
                 &:nth-last-child(2) {
@@ -277,18 +285,18 @@
             }
         }
         address {
-            &:extend(.abstract-account-block-font-size all);
+            &:extend(.abs-account-block-font-size all);
         }
     }
 
     .page-main .block {
-        &:extend(.abstract-margin-for-blocks-and-widgets-desktop all);
+        &:extend(.abs-margin-for-blocks-and-widgets-desktop all);
     }
 
     .form-edit-account,
     .form-address-edit {
         .fieldset {
-            &:extend(.abstract-blocks-2columns all);
+            &:extend(.abs-blocks-2columns all);
         }
     }
 
@@ -296,7 +304,7 @@
     .box-address-shipping,
     .box-information {
         .box-content {
-            &:extend(.abstract-account-block-font-size all);
+            &:extend(.abs-account-block-font-size all);
         }
     }
 
@@ -310,14 +318,14 @@
 //
 //    Mobile @screen-s
 //--------------------------------------
-.responsive-smaller(@break) when (@break = @screen-s) {
+.responsive-max-m(@break) when (@break = @screen-s) {
     .account {
         .column.main,
         .sidebar-additional {
             margin: 0;
         }
         .data.table {
-            &:extend(.abstract-table-striped-mobile all);
+            &:extend(.abs-table-striped-mobile all);
         }
     }
 }
@@ -325,7 +333,7 @@
 //
 //    Mobile @screen-m
 //--------------------------------------
-.responsive-smaller(@break) when (@break = @screen-m) {
+.responsive-max-m(@break) when (@break = @screen-m) {
     .login-container {
         .fieldset {
             &:after {
@@ -341,7 +349,7 @@
         .column.main {
             .block:not(.widget) {
                 .block-title {
-                    &:extend(.abstract-add-clearfix-mobile-m all);
+                    &:extend(.abs-add-clearfix-mobile-m all);
                     > .action {
                         float: right;
                         .css(margin-top, @indent-xs-base);

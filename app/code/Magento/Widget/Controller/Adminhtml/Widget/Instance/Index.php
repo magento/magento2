@@ -33,9 +33,8 @@ class Index extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
      */
     public function execute()
     {
-        $this->_title->add(__('Frontend Apps'));
-
         $this->_initAction();
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Frontend Apps'));
         $this->_view->renderLayout();
     }
 }
